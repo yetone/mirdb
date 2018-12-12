@@ -63,10 +63,8 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
             }
         };
 
-        break;
+        data.clear();
     }
-
-    stream.flush()?;
 
     Ok(())
 }
