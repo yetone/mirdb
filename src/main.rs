@@ -54,10 +54,12 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
                 }
             }
             Command::Setter {
-                key, value
+                key, flags, ttl, bytes, noreply, payload
             } => {
-                store.set(key, value);
-                stream.write(b"<ok>\r\n")?;
+                store.set(key, flags, ttl, bytes, noreply, payload);
+                if !noreply {
+                    stream.write(b"<ok>\r\n")?;
+                }
             }
         };
 

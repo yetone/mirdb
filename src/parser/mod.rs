@@ -32,14 +32,13 @@ pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
             start = end;
             continue;
         }
-        if c == '\r' {
-            if end < cs.len() && cs[end] as char == '\n' {
-                if start < end - 1 {
-                    tokens.push(&cs[start..end - 1]);
+        if c == '\n' {
+            if end > 1 && cs[end - 2] as char == '\r' {
+                if start < end - 2 {
+                    tokens.push(&cs[start..end - 2]);
                 }
-                start = end - 1;
-                end += 1;
-                break;
+                tokens.push(&cs[end - 2..end]);
+                start = end;
             }
         }
     }
@@ -60,13 +59,12 @@ pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
         return Command::Incomplete;
     }
 
-    tokens.pop();
-
     let cmd = tokens[0];
+    let l = tokens.len();
 
     match to_str(cmd) {
         "get" => {
-            if tokens.len() != 2 {
+            if l != 3 {
                 return Command::Error;
             }
             return Command::Getter {
@@ -74,12 +72,19 @@ pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
             };
         }
         "set" => {
-            if tokens.len() != 3 {
+            if l != 8 && l != 9 {
+                if l < 8 {
+                    return Command::Incomplete;
+                }
                 return Command::Error;
             }
             return Command::Setter {
                 key: tokens[1],
-                value: tokens[2]
+                flags: to_str(tokens[2]).parse::<u32>().unwrap_or(0),
+                ttl: to_str(tokens[3]).parse::<u32>().unwrap_or(0),
+                bytes: to_str(tokens[4]).parse::<u32>().unwrap_or(0),
+                noreply: if l == 8 {false} else {to_str(tokens[5]) == "noreply"},
+                payload: if l == 8 {tokens[6]} else {tokens[7]}
             };
         }
         _ => Command::Error
@@ -98,9 +103,13 @@ mod test {
         assert_eq!(parse(b"get \"a b c\"\r\n"), Command::Getter {
             key: b"a b c",
         });
-        assert_eq!(parse(b"set abc \"a b c\"\r\n"), Command::Setter {
+        assert_eq!(parse(b"set abc 1 0 5\r\n\"a b c\"\r\n"), Command::Setter {
             key: b"abc",
-            value: b"a b c",
+            flags: 1,
+            ttl: 0,
+            bytes: 5,
+            noreply: false,
+            payload: b"a b c",
         });
     }
 }
