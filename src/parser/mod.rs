@@ -3,6 +3,15 @@ pub mod command;
 use crate::utils::to_str;
 pub use self::command::Command;
 
+macro_rules! try_cmd {
+    ($e:expr, $err:expr) => {
+        match $e {
+            Ok(v) => v,
+            _ => return Command::Error($err),
+        }
+    }
+}
+
 pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
     let mut tokens: Vec<&'a [u8]> = vec![];
     let mut start = 0;
@@ -38,7 +47,7 @@ pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
                     tokens.push(&cs[start..end - 2]);
                 }
                 tokens.push(&cs[end - 2..end]);
-                if !hold && to_str(tokens[0]) == "set" {
+                if !hold && to_str(tokens[0]) == "set" && tokens.len() == 6 || tokens.len() == 7 {
                     hold = true;
                 }
                 start = end;
@@ -94,9 +103,9 @@ pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
                 return Command::Error("ARG COUNT ERROR");
             }
             let key = tokens[1];
-            let flags = to_str(tokens[2]).parse::<u32>().expect("flags is not int");
-            let ttl = to_str(tokens[3]).parse::<u32>().expect("ttl is not int");
-            let bytes = to_str(tokens[4]).parse::<usize>().expect("bytes is not int");
+            let flags = try_cmd!(to_str(tokens[2]).parse::<u32>(), "flags is not int");
+            let ttl = try_cmd!(to_str(tokens[3]).parse::<u32>(), "ttl is not int");
+            let bytes = try_cmd!(to_str(tokens[4]).parse::<usize>(), "bytes is not int");
             let noreply = if l == 8 {false} else {to_str(tokens[5]) == "noreply"};
             let payload = if l == 8 {tokens[6]} else {tokens[7]};
             if payload.len() < bytes {
