@@ -32,11 +32,15 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
             println!("disconnected");
             break;
         }
+
         data.extend_from_slice(&buffer[0..size]);
 
         match parse(&data) {
             Command::Error => {
                 stream.write(b"<error>\r\n")?;
+            }
+            Command::Incomplete => {
+                continue;
             }
             Command::Getter {
                 key

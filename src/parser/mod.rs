@@ -53,11 +53,11 @@ pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
     }
 
     if tokens.len() < 2 {
-        return Command::Error;
+        return Command::Incomplete;
     }
 
     if to_str(tokens[tokens.len() - 1]) != "\r\n" {
-        return Command::Error;
+        return Command::Incomplete;
     }
 
     tokens.pop();

@@ -11,4 +11,5 @@ pub enum Command<'a> {
         value: Value<'a>,
     },
     Error,
+    Incomplete,
 }
