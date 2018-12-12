@@ -136,12 +136,20 @@ mod test {
         assert_eq!(parse(b"get \"a b c\"\r\n"), Command::Getter {
             key: b"a b c",
         });
-        assert_eq!(parse(b"set abc 1 0 5\r\n\"a b c\"\r\n"), Command::Setter {
+        assert_eq!(parse(b"set abc 1 0 7\r\n\"a b c\"\r\n"), Command::Setter {
             key: b"abc",
             flags: 1,
             ttl: 0,
-            bytes: 5,
+            bytes: 7,
             noreply: false,
+            payload: b"\"a b c\"",
+        });
+        assert_eq!(parse(b"set abc 1 0 7 noreply\r\n\"a b c\"\r\n"), Command::Setter {
+            key: b"abc",
+            flags: 1,
+            ttl: 0,
+            bytes: 7,
+            noreply: true,
             payload: b"\"a b c\"",
         });
     }
