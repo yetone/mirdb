@@ -3,9 +3,11 @@ use std::net::{TcpListener, TcpStream};
 
 mod parser;
 mod store;
+mod utils;
 
 use crate::parser::{parse, Command};
 use crate::store::Store;
+use crate::utils::to_str;
 
 fn main() -> Result<()> {
     let listener = TcpListener::bind("127.0.0.1:12333").unwrap();
@@ -36,8 +38,8 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
         data.extend_from_slice(&buffer[0..size]);
 
         match parse(&data) {
-            Command::Error => {
-                stream.write(b"<error>\r\n")?;
+            Command::Error(e) => {
+                stream.write(format!("{}\r\n", e).as_bytes())?;
             }
             Command::Incomplete => {
                 continue;
@@ -46,8 +48,9 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
                 key
             } => {
                 match store.get(key) {
-                    Some(v) => {
-                        stream.write(v)?;
+                    Some(p) => {
+                        stream.write(format!("VALUE {} {} {}\r\n", to_str(key), p.flags, p.bytes).as_bytes())?;
+                        stream.write(&p.data[..])?;
                         stream.write(b"\r\n")?;
                     }
                     _ => {}
@@ -56,9 +59,17 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
             Command::Setter {
                 key, flags, ttl, bytes, noreply, payload
             } => {
-                store.set(key, flags, ttl, bytes, noreply, payload);
-                if !noreply {
-                    stream.write(b"<ok>\r\n")?;
+                let res = store.set(key, flags, ttl, bytes, noreply, payload);
+                match res {
+                    Err(e) => {
+                        stream.write(format!("{}", e).as_bytes())?;
+                        stream.write(b"\r\n")?;
+                    },
+                    _ => {
+                        if !noreply {
+                            stream.write(b"STORED\r\n")?;
+                        }
+                    }
                 }
             }
         };

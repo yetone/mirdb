@@ -10,10 +10,10 @@ pub enum Command<'a> {
         key: Key<'a>,
         flags: u32,
         ttl: u32,
-        bytes: u32,
+        bytes: usize,
         noreply: bool,
         payload: Payload<'a>,
     },
-    Error,
+    Error(&'a str),
     Incomplete,
 }

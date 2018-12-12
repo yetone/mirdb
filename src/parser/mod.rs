@@ -1,19 +1,19 @@
 pub mod command;
 
-use std::str;
+use crate::utils::to_str;
 pub use self::command::Command;
-
-fn to_str(cs: &[u8]) -> &str {
-    str::from_utf8(&cs).expect("not a valid utf8")
-}
 
 pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
     let mut tokens: Vec<&'a [u8]> = vec![];
     let mut start = 0;
     let mut end = 0;
     let mut quotes_count = 0;
+    let mut hold = false;
     for c in cs {
         end += 1;
+        if hold {
+            continue;
+        }
         let c = *c as char;
         if quotes_count > 0 {
             if c == '"' && end > 1 && cs[end - 2] as char != '\\' {
@@ -38,21 +38,36 @@ pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
                     tokens.push(&cs[start..end - 2]);
                 }
                 tokens.push(&cs[end - 2..end]);
+                if !hold && to_str(tokens[0]) == "set" {
+                    hold = true;
+                }
                 start = end;
             }
         }
-    }
-
-    if quotes_count > 0 {
-        return Command::Error;
     }
 
     if end > start {
         tokens.push(&cs[start..end]);
     }
 
+    if quotes_count != 0 {
+        return Command::Incomplete;
+    }
+
     if tokens.len() < 2 {
         return Command::Incomplete;
+    }
+
+    if hold {
+        let last = tokens.pop().unwrap();
+        if last.len() < 2 {
+            return Command::Incomplete;
+        }
+        if to_str(&last[last.len() - 2..last.len()]) != "\r\n" {
+            return Command::Incomplete;
+        }
+        tokens.push(&last[..last.len() - 2]);
+        tokens.push(&last[last.len() - 2..]);
     }
 
     if to_str(tokens[tokens.len() - 1]) != "\r\n" {
@@ -65,7 +80,7 @@ pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
     match to_str(cmd) {
         "get" => {
             if l != 3 {
-                return Command::Error;
+                return Command::Error("ARG COUNT ERROR");
             }
             return Command::Getter {
                 key: tokens[1],
@@ -76,18 +91,27 @@ pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
                 if l < 8 {
                     return Command::Incomplete;
                 }
-                return Command::Error;
+                return Command::Error("ARG COUNT ERROR");
+            }
+            let key = tokens[1];
+            let flags = to_str(tokens[2]).parse::<u32>().expect("flags is not int");
+            let ttl = to_str(tokens[3]).parse::<u32>().expect("ttl is not int");
+            let bytes = to_str(tokens[4]).parse::<usize>().expect("bytes is not int");
+            let noreply = if l == 8 {false} else {to_str(tokens[5]) == "noreply"};
+            let payload = if l == 8 {tokens[6]} else {tokens[7]};
+            if payload.len() < bytes {
+                return Command::Incomplete;
             }
             return Command::Setter {
-                key: tokens[1],
-                flags: to_str(tokens[2]).parse::<u32>().unwrap_or(0),
-                ttl: to_str(tokens[3]).parse::<u32>().unwrap_or(0),
-                bytes: to_str(tokens[4]).parse::<u32>().unwrap_or(0),
-                noreply: if l == 8 {false} else {to_str(tokens[5]) == "noreply"},
-                payload: if l == 8 {tokens[6]} else {tokens[7]}
+                key,
+                flags,
+                ttl,
+                bytes,
+                noreply,
+                payload
             };
         }
-        _ => Command::Error
+        _ => Command::Error("ERROR")
     }
 }
 
@@ -109,7 +133,7 @@ mod test {
             ttl: 0,
             bytes: 5,
             noreply: false,
-            payload: b"a b c",
+            payload: b"\"a b c\"",
         });
     }
 }
