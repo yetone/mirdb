@@ -20,12 +20,12 @@ gen_parser!(key_parser<&[u8], &[u8]>, is_not!(b" \t\r\n\0"));
 gen_parser!(getter<Command>,
       chain!(
           tag!(b"get") >>
-              tag!(b" ") >>
-              key: key_parser >>
-              tag!(b"\r\n") >>
-              ({
-                  Command::Getter{ key }
-              })
+          tag!(b" ") >>
+          key: key_parser >>
+          tag!(b"\r\n") >>
+          ({
+              Command::Getter{ key }
+          })
       )
 );
 
@@ -40,29 +40,29 @@ fn usize_parser(i: &[u8]) -> IRResult<usize> {
 gen_parser!(setter<Command>,
       chain!(
           tag!(b"set") >>
-              tag!(b" ") >>
-              key: key_parser >>
-              tag!(b" ") >>
-              flags: u32_parser >>
-              tag!(b" ") >>
-              ttl: u32_parser >>
-              tag!(b" ") >>
-              bytes: usize_parser >>
-              opt!(tag!(b" ")) >>
-              noreply: opt!(tag!(b"noreply")) >>
-              tag!(b"\r\n") >>
-              payload: take!(bytes) >>
-              tag!(b"\r\n") >>
-              (
-                  Command::Setter{
-                      key,
-                      flags,
-                      ttl,
-                      bytes,
-                      noreply: if let Some(_) = noreply { true } else { false },
-                      payload: payload
-                  }
-              )
+          tag!(b" ") >>
+          key: key_parser >>
+          tag!(b" ") >>
+          flags: u32_parser >>
+          tag!(b" ") >>
+          ttl: u32_parser >>
+          tag!(b" ") >>
+          bytes: usize_parser >>
+          opt!(tag!(b" ")) >>
+          noreply: opt!(tag!(b"noreply")) >>
+          tag!(b"\r\n") >>
+          payload: take!(bytes) >>
+          tag!(b"\r\n") >>
+          (
+              Command::Setter{
+                  key,
+                  flags,
+                  ttl,
+                  bytes,
+                  noreply: if let Some(_) = noreply { true } else { false },
+                  payload
+              }
+          )
       )
 );
 
