@@ -4,6 +4,7 @@
 use std::io::{Read, Write, Result};
 use std::net::{TcpListener, TcpStream};
 
+#[macro_use]
 mod parser;
 mod store;
 mod utils;
@@ -40,7 +41,9 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
 
         data.extend_from_slice(&buffer[0..size]);
 
-        match parse(&data) {
+        let cfg = parse(&data);
+
+        match cfg.command {
             Command::Error(e) => {
                 stream.write(format!("{}\r\n", e).as_bytes())?;
             }
@@ -60,16 +63,16 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
                 }
             }
             Command::Setter {
-                key, flags, ttl, bytes, noreply, payload
+                setter, key, flags, ttl, bytes, payload
             } => {
-                let res = store.set(key, flags, ttl, bytes, noreply, payload);
+                let res = store.set(setter, key, flags, ttl, bytes, cfg.noreply, payload);
                 match res {
                     Err(e) => {
                         stream.write(format!("{}", e).as_bytes())?;
                         stream.write(b"\r\n")?;
                     },
                     _ => {
-                        if !noreply {
+                        if !cfg.noreply {
                             stream.write(b"STORED\r\n")?;
                         }
                     }

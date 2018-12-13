@@ -3,6 +3,8 @@ use std::collections::HashMap;
 use std::error::Error;
 use std::convert::From;
 
+use crate::parser::command::SetterType;
+
 pub type StoreKey = Vec<u8>;
 
 #[allow(dead_code)]
@@ -38,15 +40,21 @@ impl Store {
         }
     }
 
-    pub fn set(&mut self, key: &[u8], flags: u32, ttl: u32, bytes: usize, noreply: bool, payload: &[u8]) -> Result<(), Box<dyn Error>> {
+    pub fn set(&mut self, setter: SetterType, key: &[u8], flags: u32, ttl: u32, bytes: usize, noreply: bool, payload: &[u8]) -> Result<(), Box<dyn Error>> {
         if payload.len() > bytes {
             return Err(From::from("CLIENT_ERROR bad data chunk"));
         }
-        self.data.insert(key.to_vec(), StorePayload {
+        let data = payload[..bytes as usize].to_vec();
+        let created_at = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+        let sp = StorePayload {
             flags, ttl, bytes, noreply,
-            data: payload[..bytes as usize].to_vec(),
-            created_at: SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs(),
-        });
+            data, created_at,
+        };
+        match setter {
+            SetterType::Set => {self.data.insert(key.to_vec(), sp);},
+            SetterType::Add => {self.data.entry(key.to_vec()).or_insert(sp);},
+            _ => ()
+        }
         Ok(())
     }
 }
