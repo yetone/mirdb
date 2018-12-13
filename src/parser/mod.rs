@@ -74,7 +74,7 @@ pub fn parse<'a>(i: &'a [u8]) -> Command<'a> {
     match _parse(i) {
         IRResult::Ok((_, o)) => o,
         IRResult::Incomplete(_) => Command::Incomplete,
-        IRResult::Err(_) => Command::Error("Error")
+        IRResult::Err(_) => Command::Error("ERROR")
     }
 }
 
