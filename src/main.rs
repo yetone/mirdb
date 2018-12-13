@@ -1,3 +1,6 @@
+#![feature(trace_macros, uniform_paths)]
+#![allow(unused_imports, unused_macros, dead_code)]
+
 use std::io::{Read, Write, Result};
 use std::net::{TcpListener, TcpStream};
 
