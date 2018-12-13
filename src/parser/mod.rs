@@ -4,12 +4,13 @@ use crate::utils::to_str;
 pub use self::command::Command;
 
 macro_rules! try_cmd {
-    ($e:expr, $err:expr) => {
+    ($e:expr, $err:expr) => {{
+        use $crate::parser::command::Command;
         match $e {
             Ok(v) => v,
             _ => return Command::Error($err),
         }
-    }
+    }}
 }
 
 pub fn parse<'a>(cs: &'a [u8]) -> Command<'a> {
