@@ -1,33 +1,42 @@
-#![feature(trace_macros, uniform_paths)]
+#![feature(trace_macros, uniform_paths, box_syntax)]
 #![allow(unused_imports, unused_macros, dead_code)]
 
 use std::io::{Read, Write, Result};
 use std::net::{TcpListener, TcpStream};
+use std::sync::{Arc, Mutex};
 
 #[macro_use]
 mod parser;
 mod store;
 mod utils;
+mod thread_pool;
 
 use crate::parser::{parse, Command};
 use crate::store::Store;
 use crate::utils::to_str;
+use crate::thread_pool::ThreadPool;
 
 fn main() -> Result<()> {
     let listener = TcpListener::bind("127.0.0.1:12333").unwrap();
 
-    let mut store = Store::new();
+    let store = Arc::new(Mutex::new(Store::new()));
+
+    let tp = ThreadPool::new(16);
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
 
-        handle_connection(stream, &mut store)?;
+        let store = store.clone();
+
+        tp.execute(|| {
+            handle_connection(stream, store).unwrap();
+        });
     }
 
     Ok(())
 }
 
-fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
+fn handle_connection(mut stream: TcpStream, store: Arc<Mutex<Store>>) -> Result<()> {
     let mut buffer = [0; 512];
 
     let mut data: Vec<u8> = Vec::with_capacity(buffer.len());
@@ -53,6 +62,7 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
             Command::Getter {
                 key
             } => {
+                let store = store.lock().unwrap();
                 match store.get(key) {
                     Some(p) => {
                         stream.write(format!("VALUE {} {} {}\r\n", to_str(key), p.flags, p.bytes).as_bytes())?;
@@ -65,6 +75,7 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
             Command::Setter {
                 setter, key, flags, ttl, bytes, payload
             } => {
+                let mut store = store.lock().unwrap();
                 let res = store.set(setter, key, flags, ttl, bytes, payload);
                 match res {
                     Err(e) => {
