@@ -13,7 +13,6 @@ pub struct StorePayload {
     pub flags: u32,
     ttl: u32,
     pub bytes: usize,
-    noreply: bool,
     created_at: u64,
 }
 
@@ -40,20 +39,51 @@ impl Store {
         }
     }
 
-    pub fn set(&mut self, setter: SetterType, key: &[u8], flags: u32, ttl: u32, bytes: usize, noreply: bool, payload: &[u8]) -> Result<(), Box<dyn Error>> {
+    pub fn set(&mut self, setter: SetterType, key: &[u8], flags: u32, ttl: u32, bytes: usize, payload: &[u8]) -> Result<(), Box<dyn Error>> {
         if payload.len() > bytes {
             return Err(From::from("CLIENT_ERROR bad data chunk"));
         }
         let data = payload[..bytes as usize].to_vec();
         let created_at = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
         let sp = StorePayload {
-            flags, ttl, bytes, noreply,
+            flags, ttl, bytes,
             data, created_at,
         };
+        let key = key.to_vec();
         match setter {
-            SetterType::Set => {self.data.insert(key.to_vec(), sp);},
-            SetterType::Add => {self.data.entry(key.to_vec()).or_insert(sp);},
-            _ => ()
+            SetterType::Set => {self.data.insert(key, sp);}
+            SetterType::Add => {self.data.entry(key).or_insert(sp);}
+            SetterType::Replace => {self.data.entry(key).and_modify(|e| *e = sp);}
+            SetterType::Append => {
+                match self.data.get_mut(&key) {
+                    Some(v) => {
+                        v.data.extend(sp.data);
+                        v.ttl = sp.ttl;
+                        v.created_at = sp.created_at;
+                        v.bytes += sp.bytes;
+                        v.flags = sp.flags;
+                    }
+                    None => {
+                        return Err(From::from("NOT_STORED"));
+                    }
+                }
+            }
+            SetterType::Prepend => {
+                match self.data.get_mut(&key) {
+                    Some(v) => {
+                        let mut tmp: Vec<_> = sp.data.to_owned();
+                        tmp.extend(&v.data);
+                        v.data = tmp;
+                        v.ttl = sp.ttl;
+                        v.created_at = sp.created_at;
+                        v.bytes += sp.bytes;
+                        v.flags = sp.flags;
+                    }
+                    None => {
+                        return Err(From::from("NOT_STORED"));
+                    }
+                }
+            }
         }
         Ok(())
     }

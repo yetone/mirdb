@@ -65,7 +65,7 @@ fn handle_connection(mut stream: TcpStream, store: &mut Store) -> Result<()> {
             Command::Setter {
                 setter, key, flags, ttl, bytes, payload
             } => {
-                let res = store.set(setter, key, flags, ttl, bytes, cfg.noreply, payload);
+                let res = store.set(setter, key, flags, ttl, bytes, payload);
                 match res {
                     Err(e) => {
                         stream.write(format!("{}", e).as_bytes())?;
