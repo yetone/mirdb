@@ -71,6 +71,7 @@ fn handle_connection(mut stream: TcpStream, store: Arc<Mutex<Store>>) -> Result<
                     }
                     _ => {}
                 }
+                stream.write(b"END\r\n")?;
             }
             Command::Setter {
                 setter, key, flags, ttl, bytes, payload
