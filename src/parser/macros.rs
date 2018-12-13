@@ -96,6 +96,39 @@ macro_rules! take {
 }
 
 #[macro_export]
+macro_rules! take_at_least {
+    ($i:expr, $size:expr, $tag:expr) => ({
+        use $crate::parser::macros::{take_split, IRResult};
+
+        (|| {
+            let l = $i.len();
+            let tl = $tag.len();
+            if l >= $size {
+                let ni = &$i[$size..];
+                let nl = ni.len();
+                if nl > 0 && tl > 0 && nl >= tl {
+                    let mut i = None;
+                    let mut ii = 0;
+                    while ii < nl - tl + 1 {
+                        if &ni[ii..ii + tl] == $tag {
+                            i = Some(ii);
+                            break;
+                        }
+                        ii += 1;
+                    }
+                    if let Some(i) = i {
+                        return IRResult::Ok(take_split($i, i + $size));
+                    }
+                }
+                IRResult::Ok(take_split($i, l))
+            } else {
+                IRResult::Incomplete($size - l)
+            }
+        })()
+    })
+}
+
+#[macro_export]
 macro_rules! call (
     ($i:expr, $fun:expr) => ($fun($i));
     ($i:expr, $fun:expr, $($args:expr),*) => ($fun($i, $($args),*));
@@ -312,6 +345,33 @@ mod test {
             12
         );
         assert_eq!(IRResult::Incomplete(1), r);
+    }
+    #[test]
+    fn test_at_least() {
+        let r = take_at_least!(
+            b"hello world",
+            3,
+            b""
+        ).unwrap();
+        assert_eq!(("".as_bytes(), "hello world".as_bytes()), r);
+        let r = take_at_least!(
+            b"hello world",
+            3,
+            b"we"
+        ).unwrap();
+        assert_eq!(("".as_bytes(), "hello world".as_bytes()), r);
+        let r = take_at_least!(
+            b"hello world",
+            3,
+            b"wo"
+        ).unwrap();
+        assert_eq!(("world".as_bytes(), "hello ".as_bytes()), r);
+        let r = take_at_least!(
+            b"hello world! hello world",
+            7,
+            b"wo"
+        ).unwrap();
+        assert_eq!(("world".as_bytes(), "hello world! hello ".as_bytes()), r);
     }
     #[test]
     fn test_alpha() {

@@ -67,7 +67,7 @@ gen_parser!(setter<CommandConf>,
           opt!(tag!(b" ")) >>
           noreply: opt!(tag!(b"noreply")) >>
           tag!(b"\r\n") >>
-          payload: take!(bytes) >>
+          payload: take_at_least!(bytes, b"\r\n") >>
           tag!(b"\r\n") >>
           (
               cc!(
@@ -93,7 +93,7 @@ pub fn parse<'a>(i: &'a [u8]) -> CommandConf<'a> {
     match _parse(i) {
         IRResult::Ok((_, o)) => o,
         IRResult::Incomplete(_) => cc!(Command::Incomplete),
-        IRResult::Err(_) => cc!(Command::Error("ERROR"))
+        IRResult::Err(e) => cc!(Command::Error(if e != "" { e } else { "ERROR" }))
     }
 }
 
@@ -106,6 +106,7 @@ mod test {
         assert_eq!(parse(b"get abc\r\n"), cc!(Command::Getter {
             key: b"abc",
         }));
+        assert_eq!(parse(b"set abc 1 0 7\r\n"), cc!(Command::Incomplete));
         assert_eq!(parse(b"set abc 1 0 7\r\n\"a b c\"\r\n"), cc!(Command::Setter {
             setter: SetterType::Set,
             key: b"abc",
@@ -122,5 +123,13 @@ mod test {
             bytes: 7,
             payload: b"\"a b c\"",
         }, true));
+        assert_eq!(parse(b"set abc 1 0 6\r\nabcd\r\n\r\n"), cc!(Command::Setter {
+            setter: SetterType::Set,
+            key: b"abc",
+            flags: 1,
+            ttl: 0,
+            bytes: 6,
+            payload: b"abcd\r\n",
+        }));
     }
 }
