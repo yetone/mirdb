@@ -53,43 +53,13 @@ fn handle_connection(mut stream: TcpStream, store: Arc<Mutex<Store>>) -> Result<
         let cfg = parse(&data);
 
         match cfg.command {
-            Command::Error(e) => {
-                stream.write(format!("{}\r\n", e).as_bytes())?;
-            }
-            Command::Incomplete => {
-                continue;
-            }
-            Command::Getter {
-                key
-            } => {
-                let store = store.lock().unwrap();
-                match store.get(key) {
-                    Some(p) => {
-                        stream.write(format!("VALUE {} {} {}\r\n", to_str(key), p.flags, p.bytes).as_bytes())?;
-                        stream.write(&p.data[..])?;
-                        stream.write(b"\r\n")?;
-                    }
-                    _ => {}
-                }
-                stream.write(b"END\r\n")?;
-            }
-            Command::Setter {
-                setter, key, flags, ttl, bytes, payload
-            } => {
-                let mut store = store.lock().unwrap();
-                let res = store.set(setter, key, flags, ttl, bytes, payload);
-                match res {
-                    Err(e) => {
-                        stream.write(format!("{}", e).as_bytes())?;
-                        stream.write(b"\r\n")?;
-                    },
-                    _ => {
-                        if !cfg.noreply {
-                            stream.write(b"STORED\r\n")?;
-                        }
-                    }
-                }
-            }
+            Command::Incomplete => continue,
+            _ => ()
+        };
+
+        match store.lock().unwrap().apply(cfg.command) {
+            Some(response) => response.write(&mut stream)?,
+            None => continue,
         };
 
         data.clear();
