@@ -52,8 +52,30 @@ impl Store {
         let key = key.to_vec();
         match setter {
             SetterType::Set => {self.data.insert(key, sp);}
-            SetterType::Add => {self.data.entry(key).or_insert(sp);}
-            SetterType::Replace => {self.data.entry(key).and_modify(|e| *e = sp);}
+            SetterType::Add => {
+                // cannot use self.data.entry(key).or_insert(sp);
+                // because of response NOT_STORED
+                match self.data.get_mut(&key) {
+                    Some(_) => {
+                        return Err(From::from("NOT_STORED"));
+                    }
+                    None => {
+                        self.data.insert(key, sp);
+                    }
+                }
+            }
+            SetterType::Replace => {
+                // cannot use self.data.entry(key).and_modify(|e| *e = sp);
+                // because of response NOT_STORED
+                match self.data.get_mut(&key) {
+                    Some(_) => {
+                        self.data.insert(key, sp);
+                    }
+                    None => {
+                        return Err(From::from("NOT_STORED"));
+                    }
+                }
+            }
             SetterType::Append => {
                 match self.data.get_mut(&key) {
                     Some(v) => {
