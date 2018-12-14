@@ -9,10 +9,10 @@ pub type StoreKey = Vec<u8>;
 
 #[allow(dead_code)]
 pub struct StorePayload {
-    pub data: Vec<u8>,
-    pub flags: u32,
+    pub(crate) data: Vec<u8>,
+    pub(crate) flags: u32,
     ttl: u32,
-    pub bytes: usize,
+    pub(crate) bytes: usize,
     created_at: u64,
 }
 
