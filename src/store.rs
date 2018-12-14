@@ -207,6 +207,12 @@ impl Store {
                 }
                 Some(Response::Stored)
             }
+            Command::Deleter{ key } => {
+                match self.data.remove(key) {
+                    Some(_) => Some(Response::Deleted),
+                    None => Some(Response::NotFound),
+                }
+            }
             Command::Error(_) => {
                 Some(Response::Error)
             }

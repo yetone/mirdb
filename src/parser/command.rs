@@ -25,6 +25,9 @@ pub enum Command<'a> {
         bytes: usize,
         payload: Payload<'a>,
     },
+    Deleter {
+        key: Key<'a>,
+    },
     Error(&'a str),
     Incomplete,
 }

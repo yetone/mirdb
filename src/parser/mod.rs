@@ -103,8 +103,27 @@ gen_parser!(setter<CommandConf>,
       )
 );
 
+gen_parser!(deleter<CommandConf>,
+            chain!(
+                tag!(b"delete") >>
+                space >>
+                key: key_parser >>
+                opt!(space) >>
+                noreply: opt!(tag!(b"noreply")) >>
+                tag!(b"\r\n") >>
+                (
+                    cc!(
+                        Command::Deleter {
+                            key
+                        },
+                        unwrap_noreply(noreply)
+                    )
+                )
+            )
+);
+
 gen_parser!(_parse<CommandConf>, alt!(
-    getter | setter
+    getter | setter | deleter
 ));
 
 pub fn parse<'a>(i: &'a [u8]) -> CommandConf<'a> {
@@ -187,5 +206,11 @@ mod test {
             bytes: 6,
             payload: b"abcd\r\n",
         }));
+        assert_eq!(parse(b"delete abc\r\n"), cc!(Command::Deleter {
+            key: b"abc"
+        }));
+        assert_eq!(parse(b"delete abc noreply\r\n"), cc!(Command::Deleter {
+            key: b"abc"
+        }, true));
     }
 }
