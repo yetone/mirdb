@@ -130,9 +130,39 @@ macro_rules! take_at_least {
 
 #[macro_export]
 macro_rules! split {
-    ($i:expr, $sep:expr, $fn:ident) => {
-        unimplemented!()
-    }
+    ($i:expr, $sep:ident, $fn:ident) => {{
+        (|| {
+            let mut res = vec![];
+            let mut input = &$i[..];
+            let mut i = 0;
+            loop {
+                if i % 2 == 0 {
+                    match call!(input, $fn) {
+                        IRResult::Incomplete(i) => return IRResult::Incomplete(i),
+                        IRResult::Err(_) => break,
+                        IRResult::Ok((i, o)) => {
+                            input = i;
+                            res.push(o);
+                        }
+                    };
+                } else {
+                    match call!(input, $sep) {
+                        IRResult::Incomplete(i) => return IRResult::Incomplete(i),
+                        IRResult::Err(_) => break,
+                        IRResult::Ok((i, _)) => {
+                            input = i
+                        }
+                    };
+                }
+                i += 1;
+            }
+            if res.len() > 0 {
+                IRResult::Ok((input, res))
+            } else {
+                IRResult::Err("")
+            }
+        })()
+    }}
 }
 
 #[macro_export]
@@ -301,6 +331,9 @@ pub fn is_space(chr: u8) -> bool {
 }
 
 pub fn alpha(i: &[u8]) -> IRResult<&[u8]> {
+    if i.len() == 0 {
+        return IRResult::Err("");
+    }
     let position = i.iter().position(|x| !is_alphabetic(*x));
     match position {
         None => IRResult::Ok(take_split(i, i.len())),
@@ -310,6 +343,9 @@ pub fn alpha(i: &[u8]) -> IRResult<&[u8]> {
 }
 
 pub fn digit<'a, T: FromStr>(i: &'a [u8]) -> IRResult<T> {
+    if i.len() == 0 {
+        return IRResult::Err("");
+    }
     let position = i.iter().position(|x| !is_digit(*x));
     let (i, o) = match position {
         None => {
@@ -331,6 +367,9 @@ pub fn digit<'a, T: FromStr>(i: &'a [u8]) -> IRResult<T> {
 }
 
 pub fn space(i: &[u8]) -> IRResult<&[u8]> {
+    if i.len() == 0 {
+        return IRResult::Err("");
+    }
     let position = i.iter().position(|x| !is_space(*x));
     match position {
         None => IRResult::Ok(take_split(i, i.len())),
@@ -413,6 +452,14 @@ mod test {
             b"hello world"
         ).unwrap();
         assert_eq!((" world".as_bytes(), "hello".as_bytes()), r);
+        let r = alpha(
+            b" hello world"
+        );
+        assert_eq!(IRResult::Err(""), r);
+        let r = alpha(
+            b""
+        );
+        assert_eq!(IRResult::Err(""), r);
     }
     #[test]
     fn test_digit() {
@@ -426,6 +473,10 @@ mod test {
         assert_eq!(("x".as_bytes(), 123usize), r);
         let r = digit::<usize>(
             b"x123"
+        );
+        assert_eq!(IRResult::Err(""), r);
+        let r = digit::<usize>(
+            b""
         );
         assert_eq!(IRResult::Err(""), r);
     }
@@ -445,6 +496,10 @@ mod test {
         assert_eq!(("x".as_bytes(), "   ".as_bytes()), r);
         let r = space(
             b"x "
+        );
+        assert_eq!(IRResult::Err(""), r);
+        let r = space(
+            b""
         );
         assert_eq!(IRResult::Err(""), r);
     }
@@ -482,6 +537,14 @@ mod test {
                )
         );
         assert_eq!(IRResult::Ok(("".as_bytes(), ("hello".as_bytes(), "world".as_bytes()))), test(b"hello world"));
+        gen_parser!(getter_name<&[u8]>,
+                    alt!(
+                        tag!(b"gets") |
+                        tag!(b"get")
+                    )
+        );
+        assert_eq!(IRResult::Ok((" hello world".as_bytes(), "get".as_bytes())), getter_name(b"get hello world"));
+        assert_eq!(IRResult::Ok((" hello world".as_bytes(), "gets".as_bytes())), getter_name(b"gets hello world"));
     }
     #[test]
     fn test_opt() {
@@ -515,5 +578,90 @@ mod test {
             custom_parser
         );
         assert_eq!(IRResult::Ok((" world".as_bytes(), "hello".as_bytes())), r);
+
+        let r = alt!(
+            b"xixi hello world",
+            tag!(b"xixi") |
+            tag!(b"hello") |
+            tag!(b"h") |
+            custom_parser
+        );
+        assert_eq!(IRResult::Ok((" hello world".as_bytes(), "xixi".as_bytes())), r);
+
+        let r = alt!(
+            b"get hello world",
+            tag!(b"get") |
+            tag!(b"gets")
+        );
+        assert_eq!(IRResult::Ok((" hello world".as_bytes(), "get".as_bytes())), r);
+
+        let r = alt!(
+            b"gets hello world",
+            tag!(b"get") |
+            tag!(b"gets")
+        );
+        assert_eq!(IRResult::Ok(("s hello world".as_bytes(), "get".as_bytes())), r);
+        let r = alt!(
+            b"gets hello world",
+            tag!(b"gets") |
+            tag!(b"get")
+        );
+        assert_eq!(IRResult::Ok((" hello world".as_bytes(), "gets".as_bytes())), r);
+    }
+    #[test]
+    fn test_split() {
+        let r = split!(
+            b"I love u",
+            space,
+            alpha
+        );
+        assert_eq!(IRResult::Ok(("".as_bytes(), vec!["I".as_bytes(), "love".as_bytes(), "u".as_bytes()])), r);
+        let r = split!(
+            b"I love u#",
+            space,
+            alpha
+        );
+        assert_eq!(IRResult::Ok(("#".as_bytes(), vec!["I".as_bytes(), "love".as_bytes(), "u".as_bytes()])), r);
+        let r = split!(
+            b"",
+            space,
+            alpha
+        );
+        assert_eq!(IRResult::Err(""), r);
+        let r = split!(
+            b" I love u",
+            space,
+            alpha
+        );
+        assert_eq!(IRResult::Err(""), r);
+        let r = chain!(
+            b" I love u",
+            space >>
+                keys: split!(space, alpha) >>
+                (keys)
+        ).unwrap();
+        assert_eq!(("".as_bytes(), vec!["I".as_bytes(), "love".as_bytes(), "u".as_bytes()]), r);
+        gen_parser!(getter_name<&[u8]>,
+                    alt!(
+                        tag!(b"gets") |
+                        tag!(b"get")
+                    )
+        );
+        let r = chain!(
+            b"get I love u",
+            getter: getter_name >>
+            space >>
+                keys: split!(space, alpha) >>
+                (getter, keys)
+        ).unwrap();
+        assert_eq!(("".as_bytes(), ("get".as_bytes(), vec!["I".as_bytes(), "love".as_bytes(), "u".as_bytes()])), r);
+        let r = chain!(
+            b"gets I love u",
+            getter: getter_name >>
+                space >>
+                keys: split!(space, alpha) >>
+                (getter, keys)
+        ).unwrap();
+        assert_eq!(("".as_bytes(), ("gets".as_bytes(), vec!["I".as_bytes(), "love".as_bytes(), "u".as_bytes()])), r);
     }
 }

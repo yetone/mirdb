@@ -10,8 +10,8 @@ gen_parser!(key_parser<&[u8], &[u8]>, is_not!(b" \t\r\n\0"));
 
 gen_parser!(getter_name_parser<&[u8]>,
             alt!(
-                tag!(b"get") |
-                tag!(b"gets")
+                tag!(b"gets") |
+                tag!(b"get")
             )
 );
 
@@ -29,12 +29,12 @@ gen_parser!(getter<CommandConf>,
       chain!(
           getter: getter_name_parser >>
           space >>
-          key: key_parser >>
+          keys: split!(space, key_parser) >>
           tag!(b"\r\n") >>
           (
               cc!(Command::Getter{
                   getter: to_getter_type(getter),
-                  keys: vec![key],
+                  keys,
               })
           )
       )
@@ -125,9 +125,25 @@ mod test {
             getter: GetterType::Get,
             keys: vec![b"abc"],
         }));
+        assert_eq!(parse(b"gets abc\r\n"), cc!(Command::Getter {
+            getter: GetterType::Gets,
+            keys: vec![b"abc"],
+        }));
         assert_eq!(parse(b"get  abc\r\n"), cc!(Command::Getter {
             getter: GetterType::Get,
             keys: vec![b"abc"],
+        }));
+        assert_eq!(parse(b"get abc def\r\n"), cc!(Command::Getter {
+            getter: GetterType::Get,
+            keys: vec![b"abc", b"def"],
+        }));
+        assert_eq!(parse(b"get    abc  def   ghi\r\n"), cc!(Command::Getter {
+            getter: GetterType::Get,
+            keys: vec![b"abc", b"def", b"ghi"],
+        }));
+        assert_eq!(parse(b"gets    abc  def   ghi\r\n"), cc!(Command::Getter {
+            getter: GetterType::Gets,
+            keys: vec![b"abc", b"def", b"ghi"],
         }));
         assert_eq!(parse(b"set abc 1 0 7\r\n"), cc!(Command::Incomplete));
         assert_eq!(parse(b"set abc   1 0 7\r\n"), cc!(Command::Incomplete));
@@ -157,6 +173,14 @@ mod test {
         }, true));
         assert_eq!(parse(b"set abc 1 0 6\r\nabcd\r\n\r\n"), cc!(Command::Setter {
             setter: SetterType::Set,
+            key: b"abc",
+            flags: 1,
+            ttl: 0,
+            bytes: 6,
+            payload: b"abcd\r\n",
+        }));
+        assert_eq!(parse(b"add abc 1 0 6\r\nabcd\r\n\r\n"), cc!(Command::Setter {
+            setter: SetterType::Add,
             key: b"abc",
             flags: 1,
             ttl: 0,
