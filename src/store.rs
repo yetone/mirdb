@@ -7,7 +7,7 @@ use crate::parser::command::SetterType;
 
 pub type StoreKey = Vec<u8>;
 
-#[allow(dead_code)]
+#[derive(Debug, PartialEq)]
 pub struct StorePayload {
     pub(crate) data: Vec<u8>,
     pub(crate) flags: u32,
@@ -108,5 +108,46 @@ impl Store {
             }
         }
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_get_none() {
+        let store = Store::new();
+        let r = store.get(b"a");
+        assert_eq!(None, r);
+    }
+
+    #[test]
+    fn test_get_some() {
+        let mut store = Store::new();
+        let key = b"a";
+        let payload = b"abc";
+        let r = store.set(SetterType::Set, key, 1, 10, payload.len(), payload);
+        assert!(r.is_ok(), "stored");
+        let r = store.get(key);
+        assert_eq!(r.unwrap().data, payload.to_vec());
+    }
+
+    #[test]
+    fn test_set() {
+        let mut store = Store::new();
+        let key = b"a";
+        let payload = b"abc";
+        let r = store.set(SetterType::Set, key, 1, 10, payload.len(), payload);
+        assert!(r.is_ok(), "stored");
+    }
+
+    #[test]
+    fn test_set_err() {
+        let mut store = Store::new();
+        let key = b"a";
+        let payload = b"abc";
+        let r = store.set(SetterType::Set, key, 1, 10, payload.len() - 1, payload);
+        assert!(r.is_err(), "err");
     }
 }
