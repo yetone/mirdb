@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::error::Error;
 use std::convert::From;
 
-use crate::parser::command::{SetterType, Command};
+use crate::parser::command::{SetterType, GetterType, Command};
 use crate::utils::to_str;
 
 pub type StoreKey = Vec<u8>;
@@ -36,8 +36,8 @@ pub enum Response<'a> {
     NotStored,
     Exists,
     NotFound,
-    Data(Vec<GetRespItem<'a>>),
-    MultiData(Vec<GetRespItem<'a>>),
+    Get(Vec<GetRespItem<'a>>),
+    Gets(Vec<GetRespItem<'a>>),
     Deleted,
     Touched,
     Ok,
@@ -67,7 +67,7 @@ impl<'a> Response<'a> {
             Response::NotFound => {
                 writer.write(b"NOT_FOUND\r\n")?;
             }
-            Response::Data(v) => {
+            Response::Get(v) => {
                 for GetRespItem{ key, data, flags, bytes } in v {
                     writer.write(format!(
                         "VALUE {} {} {}\r\n",
@@ -113,22 +113,27 @@ impl Store {
 
     pub fn apply<'a>(&mut self, command: Command<'a>) -> Option<Response<'a>> {
         match command {
-            Command::Getter{ key } => {
-                match self.data.get(key) {
-                    Some(p) => {
-                        let mut v = Vec::with_capacity(1);
-                        if p.created_at + p.ttl as u64 > SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() {
-                            v.push(GetRespItem {
-                                key,
-                                data: p.data.clone(),
-                                flags: p.flags,
-                                bytes: p.bytes,
-                            });
+            Command::Getter{ getter, keys } => {
+                let mut v = Vec::with_capacity(keys.len());
+                for key in keys {
+                    match self.data.get(key) {
+                        Some(p) => {
+                            if p.created_at + p.ttl as u64 > SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() {
+                                v.push(GetRespItem {
+                                    key,
+                                    data: p.data.clone(),
+                                    flags: p.flags,
+                                    bytes: p.bytes,
+                                });
+                            }
                         }
-                        Some(Response::Data(v))
-                    },
-                    _ => Some(Response::Data(vec![]))
+                        _ => ()
+                    }
                 }
+                Some(match getter {
+                    GetterType::Get => Response::Get(v),
+                    GetterType::Gets => Response::Gets(v),
+                })
             }
             Command::Setter{ setter, key, flags, ttl, bytes, payload } => {
                 if payload.len() > bytes {
@@ -219,8 +224,8 @@ mod test {
     #[test]
     fn test_get_none() {
         let mut store = Store::new();
-        let r = store.apply(Command::Getter{ key: b"a" });
-        assert_eq!(Some(Response::Data(vec![])), r);
+        let r = store.apply(Command::Getter{ getter: GetterType::Get, keys: vec![b"a"] });
+        assert_eq!(Some(Response::Get(vec![])), r);
     }
 
     #[test]
@@ -237,8 +242,8 @@ mod test {
             payload
         });
         assert!(r.is_some(), "stored");
-        let r = store.apply(Command::Getter{ key });
-        assert_eq!(Some(Response::Data(vec!(GetRespItem {
+        let r = store.apply(Command::Getter{ getter: GetterType::Get, keys: vec![key] });
+        assert_eq!(Some(Response::Get(vec!(GetRespItem {
             key,
             data: payload.to_vec(),
             flags: 1,

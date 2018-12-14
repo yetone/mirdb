@@ -129,6 +129,13 @@ macro_rules! take_at_least {
 }
 
 #[macro_export]
+macro_rules! split {
+    ($i:expr, $sep:expr, $fn:ident) => {
+        unimplemented!()
+    }
+}
+
+#[macro_export]
 macro_rules! call (
     ($i:expr, $fun:expr) => ($fun($i));
     ($i:expr, $fun:expr, $($args:expr),*) => ($fun($i, $($args),*));
@@ -229,6 +236,19 @@ macro_rules! gen_parser {
 
 #[macro_export]
 macro_rules! opt {
+    ($i:expr, $fn:ident) => {
+        opt!($i, $fn())
+    };
+    ($i:expr, $fn:ident($($args:tt)*)) => {
+        {
+            use $crate::parser::macros::IRResult;
+            match call!($i, $fn, $($args)*) {
+                IRResult::Ok((i, o)) => IRResult::Ok((i, Some(o))),
+                IRResult::Err(_) => IRResult::Ok(($i, None)),
+                IRResult::Incomplete(i) => IRResult::Incomplete(i)
+            }
+        }
+    };
     ($i:expr, $mac:ident!($($args:tt)*)) => {
         {
             use $crate::parser::macros::IRResult;
@@ -275,7 +295,12 @@ pub fn is_digit(chr: u8) -> bool {
     chr >= 0x30 && chr <= 0x39
 }
 
-pub fn alpha<'a>(i: &'a [u8]) -> IRResult<&'a [u8]> {
+#[inline]
+pub fn is_space(chr: u8) -> bool {
+    chr == 0x20
+}
+
+pub fn alpha(i: &[u8]) -> IRResult<&[u8]> {
     let position = i.iter().position(|x| !is_alphabetic(*x));
     match position {
         None => IRResult::Ok(take_split(i, i.len())),
@@ -301,7 +326,16 @@ pub fn digit<'a, T: FromStr>(i: &'a [u8]) -> IRResult<T> {
     };
     match FromStr::from_str(s) {
         Ok(v) => IRResult::Ok((i, v)),
-        Err(_e) => IRResult::Err("")
+        Err(_e) => IRResult::Err(""),
+    }
+}
+
+pub fn space(i: &[u8]) -> IRResult<&[u8]> {
+    let position = i.iter().position(|x| !is_space(*x));
+    match position {
+        None => IRResult::Ok(take_split(i, i.len())),
+        Some(v) if v > 0 => IRResult::Ok(take_split(i, v)),
+        _ => IRResult::Err(""),
     }
 }
 
@@ -392,6 +426,25 @@ mod test {
         assert_eq!(("x".as_bytes(), 123usize), r);
         let r = digit::<usize>(
             b"x123"
+        );
+        assert_eq!(IRResult::Err(""), r);
+    }
+    #[test]
+    fn test_space() {
+        let r = space(
+            b" "
+        ).unwrap();
+        assert_eq!(("".as_bytes(), " ".as_bytes()), r);
+        let r = space(
+            b"   "
+        ).unwrap();
+        assert_eq!(("".as_bytes(), "   ".as_bytes()), r);
+        let r = space(
+            b"   x"
+        ).unwrap();
+        assert_eq!(("x".as_bytes(), "   ".as_bytes()), r);
+        let r = space(
+            b"x "
         );
         assert_eq!(IRResult::Err(""), r);
     }

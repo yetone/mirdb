@@ -4,9 +4,16 @@ pub mod command;
 pub mod macros;
 
 use self::macros::*;
-pub use self::command::{Command, CommandConf, SetterType};
+pub use self::command::{Command, CommandConf, SetterType, GetterType};
 
 gen_parser!(key_parser<&[u8], &[u8]>, is_not!(b" \t\r\n\0"));
+
+gen_parser!(getter_name_parser<&[u8]>,
+            alt!(
+                tag!(b"get") |
+                tag!(b"gets")
+            )
+);
 
 gen_parser!(setter_name_parser<&[u8]>,
             alt!(
@@ -20,12 +27,15 @@ gen_parser!(setter_name_parser<&[u8]>,
 
 gen_parser!(getter<CommandConf>,
       chain!(
-          tag!(b"get") >>
-          tag!(b" ") >>
+          getter: getter_name_parser >>
+          space >>
           key: key_parser >>
           tag!(b"\r\n") >>
           (
-              cc!(Command::Getter{ key })
+              cc!(Command::Getter{
+                  getter: to_getter_type(getter),
+                  keys: vec![key],
+              })
           )
       )
 );
@@ -42,6 +52,14 @@ fn unwrap_noreply(x: Option<&[u8]>) -> bool {
     if let Some(_) = x { true } else { false }
 }
 
+fn to_getter_type(x: &[u8]) -> GetterType {
+    match x {
+        b"get" => GetterType::Get,
+        b"gets" => GetterType::Gets,
+        _ => panic!(format!("unknown getter {:?}", x))
+    }
+}
+
 fn to_setter_type(x: &[u8]) -> SetterType {
     match x {
         b"set" => SetterType::Set,
@@ -56,15 +74,15 @@ fn to_setter_type(x: &[u8]) -> SetterType {
 gen_parser!(setter<CommandConf>,
       chain!(
           setter: setter_name_parser >>
-          tag!(b" ") >>
+          space >>
           key: key_parser >>
-          tag!(b" ") >>
+          space >>
           flags: u32_parser >>
-          tag!(b" ") >>
+          space >>
           ttl: u32_parser >>
-          tag!(b" ") >>
+          space >>
           bytes: usize_parser >>
-          opt!(tag!(b" ")) >>
+          opt!(space) >>
           noreply: opt!(tag!(b"noreply")) >>
           tag!(b"\r\n") >>
           payload: take_at_least!(bytes, b"\r\n") >>
@@ -102,12 +120,26 @@ mod test {
     #[test]
     fn test() {
         use super::parse;
-        use super::command::{Command, SetterType};
+        use super::command::{Command, SetterType, GetterType};
         assert_eq!(parse(b"get abc\r\n"), cc!(Command::Getter {
-            key: b"abc",
+            getter: GetterType::Get,
+            keys: vec![b"abc"],
+        }));
+        assert_eq!(parse(b"get  abc\r\n"), cc!(Command::Getter {
+            getter: GetterType::Get,
+            keys: vec![b"abc"],
         }));
         assert_eq!(parse(b"set abc 1 0 7\r\n"), cc!(Command::Incomplete));
+        assert_eq!(parse(b"set abc   1 0 7\r\n"), cc!(Command::Incomplete));
         assert_eq!(parse(b"set abc 1 0 7\r\n\"a b c\"\r\n"), cc!(Command::Setter {
+            setter: SetterType::Set,
+            key: b"abc",
+            flags: 1,
+            ttl: 0,
+            bytes: 7,
+            payload: b"\"a b c\"",
+        }));
+        assert_eq!(parse(b"set    abc    1 0 7\r\n\"a b c\"\r\n"), cc!(Command::Setter {
             setter: SetterType::Set,
             key: b"abc",
             flags: 1,

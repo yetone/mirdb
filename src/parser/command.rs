@@ -7,9 +7,15 @@ pub enum SetterType {
 }
 
 #[derive(Debug, PartialEq)]
+pub enum GetterType {
+    Get, Gets
+}
+
+#[derive(Debug, PartialEq)]
 pub enum Command<'a> {
     Getter {
-        key: Key<'a>,
+        getter: GetterType,
+        keys: Vec<Key<'a>>,
     },
     Setter {
         setter: SetterType,
