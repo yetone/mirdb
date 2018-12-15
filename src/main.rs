@@ -59,14 +59,21 @@ fn handle_connection(mut stream: TcpStream, store: Arc<RwLock<Store>>) -> Result
         match cfg.command {
             Command::Incomplete => continue,
             Command::Getter{ .. } => {
-                let store = store.read().map_err(|_| IOError::new(ErrorKind::Other, "cannot get store"))?;
+                let store = match store.read() {
+                    Ok(guard) => guard,
+                    Err(poisoned) => poisoned.into_inner()
+                };
+
                 match store.apply(cfg.command) {
                     Some(response) => response.write(&mut stream)?,
                     None => continue,
                 };
             }
             _ => {
-                let mut store = store.write().map_err(|_| IOError::new(ErrorKind::Other, "cannot get store"))?;
+                let mut store = match store.write() {
+                    Ok(guard) => guard,
+                    Err(poisoned) => poisoned.into_inner()
+                };
 
                 match store.apply_mut(cfg.command) {
                     Some(response) => response.write(&mut stream)?,
