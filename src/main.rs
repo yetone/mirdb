@@ -1,7 +1,8 @@
 #![feature(trace_macros, uniform_paths, box_syntax)]
 #![allow(unused_imports, unused_macros, dead_code)]
 
-use std::io::{Read, Write, Result};
+use std::error::Error;
+use std::io::{Read, Write, Result, Error as IOError, ErrorKind};
 use std::net::{TcpListener, TcpStream};
 use std::sync::{Arc, Mutex};
 
@@ -29,7 +30,10 @@ fn main() -> Result<()> {
         let store = store.clone();
 
         tp.execute(|| {
-            handle_connection(stream, store).unwrap();
+            match handle_connection(stream, store) {
+                Err(e) => println!("{}", e),
+                _ => ()
+            }
         });
     }
 
@@ -57,7 +61,9 @@ fn handle_connection(mut stream: TcpStream, store: Arc<Mutex<Store>>) -> Result<
             _ => ()
         };
 
-        match store.lock().unwrap().apply(cfg.command) {
+        let mut store = store.lock().map_err(|_| IOError::new(ErrorKind::Other, "cannot get store"))?;
+
+        match store.apply(cfg.command) {
             Some(response) => response.write(&mut stream)?,
             None => continue,
         };
