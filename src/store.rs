@@ -111,7 +111,7 @@ impl Store {
         }
     }
 
-    pub fn apply<'a>(&mut self, command: Command<'a>) -> Option<Response<'a>> {
+    pub fn apply<'a>(&self, command: Command<'a>) -> Option<Response<'a>> {
         match command {
             Command::Getter{ getter, keys } => {
                 let mut v = Vec::with_capacity(keys.len());
@@ -135,6 +135,15 @@ impl Store {
                     GetterType::Gets => Response::Gets(v),
                 })
             }
+            Command::Error(_) => {
+                Some(Response::Error)
+            }
+            _ => None
+        }
+    }
+
+    pub fn apply_mut<'a>(&mut self, command: Command<'a>) -> Option<Response<'a>> {
+        match command {
             Command::Setter{ setter, key, flags, ttl, bytes, payload } => {
                 if payload.len() > bytes {
                     return Some(Response::ClientError("bad data chunk"));
@@ -216,9 +225,7 @@ impl Store {
             Command::Error(_) => {
                 Some(Response::Error)
             }
-            Command::Incomplete => {
-                None
-            }
+            _ => None
         }
     }
 }
@@ -229,7 +236,7 @@ mod test {
 
     #[test]
     fn test_get_none() {
-        let mut store = Store::new();
+        let store = Store::new();
         let r = store.apply(Command::Getter{ getter: GetterType::Get, keys: vec![b"a"] });
         assert_eq!(Some(Response::Get(vec![])), r);
     }
@@ -239,7 +246,7 @@ mod test {
         let mut store = Store::new();
         let key = b"a";
         let payload = b"abc";
-        let r = store.apply(Command::Setter{
+        let r = store.apply_mut(Command::Setter{
             setter: SetterType::Set,
             key,
             flags: 1,
@@ -262,7 +269,7 @@ mod test {
         let mut store = Store::new();
         let key = b"a";
         let payload = b"abc";
-        let r = store.apply(Command::Setter{
+        let r = store.apply_mut(Command::Setter{
             setter: SetterType::Set,
             key,
             flags: 1,
@@ -278,7 +285,7 @@ mod test {
         let mut store = Store::new();
         let key = b"a";
         let payload = b"abc";
-        let r = store.apply(Command::Setter{
+        let r = store.apply_mut(Command::Setter{
             setter: SetterType::Set,
             key,
             flags: 1,

@@ -4,7 +4,7 @@
 use std::error::Error;
 use std::io::{Read, Write, Result, Error as IOError, ErrorKind};
 use std::net::{TcpListener, TcpStream};
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, RwLock};
 
 #[macro_use]
 mod parser;
@@ -20,7 +20,7 @@ use crate::thread_pool::ThreadPool;
 fn main() -> Result<()> {
     let listener = TcpListener::bind("127.0.0.1:12333").unwrap();
 
-    let store = Arc::new(Mutex::new(Store::new()));
+    let store = Arc::new(RwLock::new(Store::new()));
 
     let tp = ThreadPool::new(16);
 
@@ -40,7 +40,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn handle_connection(mut stream: TcpStream, store: Arc<Mutex<Store>>) -> Result<()> {
+fn handle_connection(mut stream: TcpStream, store: Arc<RwLock<Store>>) -> Result<()> {
     let mut buffer = [0; 512];
 
     let mut data: Vec<u8> = Vec::with_capacity(buffer.len());
@@ -58,15 +58,23 @@ fn handle_connection(mut stream: TcpStream, store: Arc<Mutex<Store>>) -> Result<
 
         match cfg.command {
             Command::Incomplete => continue,
-            _ => ()
+            Command::Getter{ .. } => {
+                let store = store.read().map_err(|_| IOError::new(ErrorKind::Other, "cannot get store"))?;
+                match store.apply(cfg.command) {
+                    Some(response) => response.write(&mut stream)?,
+                    None => continue,
+                };
+            }
+            _ => {
+                let mut store = store.write().map_err(|_| IOError::new(ErrorKind::Other, "cannot get store"))?;
+
+                match store.apply_mut(cfg.command) {
+                    Some(response) => response.write(&mut stream)?,
+                    None => continue,
+                };
+            }
         };
 
-        let mut store = store.lock().map_err(|_| IOError::new(ErrorKind::Other, "cannot get store"))?;
-
-        match store.apply(cfg.command) {
-            Some(response) => response.write(&mut stream)?,
-            None => continue,
-        };
 
         data.clear();
     }
