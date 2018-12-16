@@ -3,9 +3,14 @@
 
 use rand::prelude::*;
 use std::cmp::Ordering;
-use std::fmt::Debug;
+use std::fmt::{Debug, Formatter, Result as FmtResult};
 use std::mem;
 use std::ptr;
+
+fn new_level() -> bool {
+    let mut rng = rand::thread_rng();
+    rng.gen_range::<usize, usize, usize>(0, 2) > 0
+}
 
 fn raw_to_mut<'a, T>(p: *mut T) -> Option<&'a mut T> {
     if p.is_null() {
@@ -96,16 +101,34 @@ impl<K: PartialOrd + Debug, V: Debug> SkipListNode<K, V> {
     }
 }
 
-#[derive(Debug, PartialEq)]
+pub struct NewLevel(Box<dyn Fn() -> bool>);
+
+impl Debug for NewLevel {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        write!(f, "<new_level>")
+    }
+}
+
+#[derive(Debug)]
 pub struct SkipList<K, V> {
     head: *mut SkipListNode<K, V>,
     max_level: usize,
     cur_level: usize,
+    new_level: NewLevel
 }
 
 impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
     fn new(max_level: usize) -> Self {
-        SkipList{ head: ptr::null_mut(), max_level, cur_level: 0 }
+        Self::new_with_new_level(max_level, box new_level)
+    }
+
+    fn new_with_new_level(max_level: usize, new_level: Box<dyn Fn() -> bool>) -> Self {
+        SkipList{
+            head: ptr::null_mut(),
+            max_level,
+            cur_level: 0,
+            new_level: NewLevel(new_level)
+        }
     }
 
     fn head(&self) -> Option<&mut SkipListNode<K, V>> {
@@ -151,7 +174,7 @@ impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
                     node.nexts.push(Box::into_raw(box new_node));
                     return;
                 }
-                let new_level = self.new_level();
+                let new_level = (self.new_level.0)();
                 if new_level && self.cur_level < self.max_level {
                     let last = node.nexts[node.nexts.len() - 1];
                     new_node.nexts.push(last);
@@ -184,6 +207,7 @@ impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
                         Box::from_raw(self.head);
                     }
                     self.head = ptr::null_mut();
+                    self.cur_level = 0;
                     return Some(value);
                 }
                 match head.find_lt_closest_mut(key) {
@@ -227,6 +251,7 @@ impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
                                     }
                                     _ => None
                                 };
+                                self.cur_level -= 1;
                                 node.nexts.remove(idx);
                                 return res;
                             }
@@ -237,11 +262,6 @@ impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
                 }
             }
         }
-    }
-
-    fn new_level(&self) -> bool {
-        let mut rng = rand::thread_rng();
-        rng.gen_range::<usize, usize, usize>(0, 2) > 0
     }
 }
 
@@ -257,7 +277,6 @@ mod test {
         println!("l: {:?}", l);
         assert_eq!(*l.get(&key).unwrap(), value);
         assert!(l.get(&(key - 1)).is_none());
-        println!("l: {:?}", l);
         assert_eq!(l.head().unwrap().key, key);
         let key1 = key - 1;
         let value1 = value - 1;
@@ -277,7 +296,6 @@ mod test {
         println!("l: {:?}", l);
         assert_eq!(*l.get(&key).unwrap(), value);
         assert!(l.get(&(key - 1)).is_none());
-        println!("l: {:?}", l);
         assert_eq!(l.head().unwrap().key, key);
         let key1 = key + 1;
         let value1 = value + 1;
@@ -343,5 +361,39 @@ mod test {
         println!("l: {:?}", l);
         assert_eq!(*l.get(&key1).unwrap(), value1);
         assert_eq!(l.head().unwrap().key, key1);
+    }
+
+    #[test]
+    fn test_with_new_level_false() {
+        let mut l: SkipList<i32, i32> = SkipList::new_with_new_level(10, box || false);
+        let key = 10;
+        let value = 233;
+        l.set(key, value);
+        assert_eq!(0, l.cur_level);
+        let key1 = key + 10;
+        let value1 = value + 10;
+        l.set(key1, value1);
+        assert_eq!(0, l.cur_level);
+        let key2 = key + 1;
+        let value2 = value + 1;
+        l.set(key2, value2);
+        assert_eq!(0, l.cur_level);
+    }
+
+    #[test]
+    fn test_with_new_level_true() {
+        let mut l: SkipList<i32, i32> = SkipList::new_with_new_level(10, box || true);
+        let key = 10;
+        let value = 233;
+        l.set(key, value);
+        assert_eq!(0, l.cur_level);
+        let key1 = key + 10;
+        let value1 = value + 10;
+        l.set(key1, value1);
+        assert_eq!(0, l.cur_level);
+        let key2 = key + 1;
+        let value2 = value + 1;
+        l.set(key2, value2);
+        assert_eq!(1, l.cur_level);
     }
 }
