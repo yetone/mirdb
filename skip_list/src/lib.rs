@@ -249,11 +249,12 @@ impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
 mod test {
     use super::*;
     #[test]
-    fn test() {
+    fn test_set_less() {
         let mut l: SkipList<i32, i32> = SkipList::new(10);
         let key = 10;
         let value = 233;
         l.set(key, value);
+        println!("l: {:?}", l);
         assert_eq!(*l.get(&key).unwrap(), value);
         assert!(l.get(&(key - 1)).is_none());
         println!("l: {:?}", l);
@@ -265,29 +266,82 @@ mod test {
         assert_eq!(*l.get(&key1).unwrap(), value1);
         assert_eq!(*l.get(&key).unwrap(), value);
         assert_eq!(l.head().unwrap().key, key1);
-        let key2 = key + 2;
-        let value2 = value + 2;
+    }
+
+    #[test]
+    fn test_set_more() {
+        let mut l: SkipList<i32, i32> = SkipList::new(10);
+        let key = 10;
+        let value = 233;
+        l.set(key, value);
+        println!("l: {:?}", l);
+        assert_eq!(*l.get(&key).unwrap(), value);
+        assert!(l.get(&(key - 1)).is_none());
+        println!("l: {:?}", l);
+        assert_eq!(l.head().unwrap().key, key);
+        let key1 = key + 1;
+        let value1 = value + 1;
+        l.set(key1, value1);
+        println!("l: {:?}", l);
+        assert_eq!(*l.get(&key1).unwrap(), value1);
+        assert_eq!(*l.get(&key).unwrap(), value);
+        assert_eq!(l.head().unwrap().key, key);
+    }
+
+    #[test]
+    fn test_set_inner() {
+        let mut l: SkipList<i32, i32> = SkipList::new(10);
+        let key = 10;
+        let value = 233;
+        l.set(key, value);
+        println!("l: {:?}", l);
+        assert_eq!(*l.get(&key).unwrap(), value);
+        assert!(l.get(&(key - 1)).is_none());
+        let key1 = key - 3;
+        let value1 = value - 3;
+        l.set(key1, value1);
+        println!("l: {:?}", l);
+        assert_eq!(*l.get(&key1).unwrap(), value1);
+        assert_eq!(*l.get(&key).unwrap(), value);
+        assert_eq!(l.head().unwrap().key, key1);
+        let key2 = key - 2;
+        let value2 = value - 2;
         l.set(key2, value2);
         println!("l: {:?}", l);
         assert_eq!(*l.get(&key2).unwrap(), value2);
         assert_eq!(*l.get(&key1).unwrap(), value1);
         assert_eq!(*l.get(&key).unwrap(), value);
-        let value2 = value2 + 1;
-        l.set(key2, value2);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key2).unwrap(), value2);
-        assert_eq!(*l.get(&key1).unwrap(), value1);
-        assert_eq!(*l.get(&key).unwrap(), value);
-        assert_eq!(Some(value2), l.remove(&key2));
-        assert_eq!(l.get(&key2), None);
-        l.set(key2, value2);
-        let key3 = key + 1;
-        let value3 = value + 1;
+        assert_eq!(l.head().unwrap().key, key1);
+        let key3 = key - 1;
+        let value3 = value - 1;
         l.set(key3, value3);
         println!("l: {:?}", l);
         assert_eq!(*l.get(&key3).unwrap(), value3);
         assert_eq!(*l.get(&key2).unwrap(), value2);
         assert_eq!(*l.get(&key1).unwrap(), value1);
         assert_eq!(*l.get(&key).unwrap(), value);
+        assert_eq!(l.head().unwrap().key, key1);
+    }
+
+    #[test]
+    fn test_remove() {
+        let mut l: SkipList<i32, i32> = SkipList::new(10);
+        let key = 10;
+        let value = 233;
+        l.set(key, value);
+        println!("l: {:?}", l);
+        assert_eq!(*l.get(&key).unwrap(), value);
+        assert!(l.get(&(key - 1)).is_none());
+        assert_eq!(l.head().unwrap().key, key);
+        assert_eq!(Some(value), l.remove(&key));
+        assert_eq!(None, l.get(&key));
+        assert_eq!(None, l.remove(&(key + 1)));
+
+        let key1 = key - 2;
+        let value1 = value - 2;
+        l.set(key1, value1);
+        println!("l: {:?}", l);
+        assert_eq!(*l.get(&key1).unwrap(), value1);
+        assert_eq!(l.head().unwrap().key, key1);
     }
 }
