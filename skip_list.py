@@ -9,10 +9,10 @@ def random_level(max_level):
 
 
 class Node:
-    def __init__(self, key, value, level):
+    def __init__(self, key, value, level, nexts=None):
         self.key = key
         self.value = value
-        self.nexts = []
+        self.nexts = [] if nexts is None else nexts
         self.level = level
 
     def find_lower_bound(self, key):
@@ -61,12 +61,13 @@ class List:
         while node.nexts:
             # print("node:", node)
             # print("node.nexts[-1].key:", node.nexts[-1].key)
-            if node.nexts[-1].key >= key:
-                break
+            # if node.nexts[-1].key >= key:
+            #     break
             for n in node.nexts:
                 if n.key < key:
                     node = n
                     break
+            break
 
         if node.key == key:
             return node.value
@@ -93,9 +94,7 @@ class List:
             self.head = new_node
             return
 
-        l = len(self.head.nexts)
-
-        if l == 0:
+        if not self.head.nexts:
             new_node = Node(key, value, 0)
             if self.head.key > key:
                 new_node.nexts.append(self.head)
@@ -106,6 +105,9 @@ class List:
 
         level = random_level(self.max_level)
 
+        if level > self.head.level:
+            level = self.head.level + 1
+
         updates = self.get_updates(key, level)
 
         if level > self.head.level:
@@ -113,14 +115,10 @@ class List:
             self.head.level += 1
 
         print("updates:", updates)
-
         new_node = Node(key, value, level)
 
         for update in updates:
-            if not update.nexts:
-                update.nexts.append(new_node)
-                continue
-            idx = len(update.nexts) - 1
+            idx = None
             for i, n in enumerate(update.nexts):
                 if n.key == key:
                     n.value = value
@@ -128,9 +126,15 @@ class List:
                 if n.key < key:
                     idx = i
                     break
-            n = update.nexts[i]
-            if n.level != level:
-                update.nexts.insert(i, new_node)
+
+            if not update.nexts:
+                update.nexts.append(new_node)
+            else:
+                if idx is None:
+                    idx = len(update.nexts) - 1
+                n = update.nexts[idx]
+                if n.level != level:
+                    update.nexts.insert(idx, new_node)
 
     def get_updates(self, key, level):
         updates = []
@@ -165,18 +169,12 @@ class List:
         if not node.nexts:
             node.nexts = node0.nexts
             return
+        last = node.nexts.pop()
+        node.nexts = []
         for n0 in node0.nexts:
-            idx = len(node.nexts) - 1
-            for i, n in enumerate(node.nexts):
-                if n0.key == n.key:
-                    break
-                if n0.key < n.key:
-                    idx = i
-                    break
-            n = node.nexts[idx]
-            if n.key == n0.key:
-                continue
-            node.nexts.insert(idx, n0)
+            if n0.key != last.key:
+                node.nexts.append(n0)
+        node.nexts.append(last)
 
     def remove(self, key):
         print("remove:", key)
@@ -192,11 +190,11 @@ class List:
                 self.head = None
                 return
             head = self.head.nexts.pop()
-            if not head.nexts:
-                head.nexts = self.head.nexts
-                head.level = self.head.level - 1
-                self.head = head
-                return
+            # if not head.nexts:
+            #     head.nexts = self.head.nexts
+            #     head.level = self.head.level - 1
+            #     self.head = head
+            #     return
             self.merge_nexts(head, self.head)
             self.head = head
 
@@ -204,8 +202,9 @@ class List:
         print("updates:", updates)
 
         for update in updates:
+
             if not update.nexts:
-                return
+                continue
 
             idx = None
 
@@ -226,6 +225,16 @@ class List:
 
 
 if __name__ == '__main__':
+    head = Node(key=1, value=1, level=2, nexts=[Node(key=7, value=7, level=2, nexts=[]), Node(key=4, value=1, level=1, nexts=[Node(key=7, value=7, level=2, nexts=[])]), Node(key=3, value=6, level=0, nexts=[Node(key=4, value=1, level=1, nexts=[Node(key=7, value=7, level=2, nexts=[])])])])
+    l = List(3)
+    l.head = head
+    print("head:", l.head)
+    l.remove(1)
+    print("head:", l.head)
+    print(l)
+
+
+if __name__ == '__main0__':
     l = List(3)
     print("head:", l.head)
     l.insert(3, 2)
