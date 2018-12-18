@@ -234,7 +234,21 @@ if __name__ == '__main__':
     print(l)
 
 
-if __name__ == '__main0__':
+if __name__ == '__main__':
+    l = List(10)
+    key = 10
+    value = 233
+    l.insert(key, value)
+    l.get(key)
+    l.get(key - 1)
+    key1 = key - 1
+    value1 = value - 1
+    l.insert(key1, value1)
+    l.get(key1)
+    l.get(key)
+
+
+if __name__ == '__main__':
     l = List(3)
     print("head:", l.head)
     l.insert(3, 2)
