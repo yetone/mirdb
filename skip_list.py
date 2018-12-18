@@ -152,18 +152,18 @@ class List:
             l = False
             for n in node.nexts:
                 if n.key < key:
-                    node = n
-                    if l and node.level <= level:
+                    if l and n.level <= level:
                         updates.append(node)
+                    node = n
                     break
                 l = True
 
         return updates
 
     def merge_nexts(self, node, node0):
+        node.level = node0.level
         if not node.nexts:
             node.nexts = node0.nexts
-            node.level += len(node0.nexts) - 1
             return
         for n0 in node0.nexts:
             idx = len(node.nexts) - 1
@@ -177,7 +177,6 @@ class List:
             if n.key == n0.key:
                 continue
             node.nexts.insert(idx, n0)
-            node.level += 1
 
     def remove(self, key):
         print("remove:", key)
