@@ -31,98 +31,52 @@ class Node:
 
 class List:
     def __init__(self, max_level):
-        self.head = None
+        self.head = Node(None, None, max_level)
         self.max_level = max_level
 
     def __repr__(self):
         r = []
-        if not self.head:
-            return repr(r)
-        node = self.head
-        r.append(node.value)
-        while node.nexts:
-            # print("node:", node)
-            node = node.nexts[-1]
-            r.append(node.value)
+        current = self.head
+        while current.nexts:
+            current = current.nexts[-1]
+            r.append((current.key, current.value))
         return repr(r)
 
     def get(self, key):
-        print(f"get {key}")
-        if self.head is None:
-            return None
 
-        if self.head.key > key:
-            return None
+        updates = self.get_updates(key)
 
-        if self.head.key == key:
-            return self.head.value
-
-        node = self.head
-        while node.nexts:
-            # print("node:", node)
-            # print("node.nexts[-1].key:", node.nexts[-1].key)
-            # if node.nexts[-1].key >= key:
-            #     break
-            for n in node.nexts:
-                if n.key < key:
-                    node = n
-                    break
-            break
-
-        if node.key == key:
-            return node.value
-
-        for n in node.nexts:
-            if n.key == key:
-                return n.value
+        for update in updates:
+            if update is None:
+                continue
+            for n in update.nexts:
+                if n.key == key:
+                    return n.value
 
         return None
 
     def insert(self, key, value):
-        print(f"insert {key} {value}")
-        if self.head is None:
-            self.head = Node(key, value, 0)
-            return
 
-        if self.head.key == key:
-            self.head.value = value
-            return
-
-        if self.head.key > key:
-            new_node = Node(key, value, 0)
-            new_node.nexts.append(self.head)
-            self.head = new_node
-            return
-
-        if not self.head.nexts:
-            new_node = Node(key, value, 0)
-            if self.head.key > key:
-                new_node.nexts.append(self.head)
-                self.head = new_node
-                return
-            self.head.nexts.append(new_node)
-            return
-
-        level = random_level(self.max_level)
-
-        if level > self.head.level:
-            level = self.head.level + 1
-
-        updates = self.get_updates(key, level)
-
-        if level > self.head.level:
-            updates.append(self.head)
-            self.head.level += 1
-
-        print("updates:", updates)
-        new_node = Node(key, value, level)
+        updates = self.get_updates(key)
 
         for update in updates:
-            idx = None
-            for i, n in enumerate(update.nexts):
+            if update is None:
+                continue
+            for n in update.nexts:
                 if n.key == key:
                     n.value = value
                     return
+
+        level = random_level(self.max_level)
+
+        new_node = Node(key, value, level)
+
+        for update in list(reversed(updates))[:level + 1]:
+            if update is None:
+                continue
+
+            idx = None
+            for i, n in enumerate(update.nexts):
                 if n.key < key:
                     idx = i
                     break
@@ -133,34 +87,29 @@ class List:
                 if idx is None:
                     idx = len(update.nexts) - 1
                 n = update.nexts[idx]
-                if n.level != level:
-                    update.nexts.insert(idx, new_node)
+                update.nexts[idx] = new_node
+                update.nexts.append(n)
 
-    def get_updates(self, key, level):
-        updates = []
+    def get_updates(self, key):
+        updates = [None] * (self.max_level + 1)
 
-        if not self.head or self.head.key >= key:
-            return updates
+        current = self.head
 
-        node = self.head
+        while current is not None:
 
-        while True:
-            if not node.nexts:
-                updates.append(node)
+            if not current.nexts:
+                updates[self.max_level - current.level] = current
                 break
 
-            if node.nexts[-1].key >= key:
-                updates.append(node)
+            if current.nexts[-1].key >= key:
+                updates[self.max_level - current.level] = current
                 break
 
-            l = False
-            for n in node.nexts:
+            for n in current.nexts:
                 if n.key < key:
-                    if l and n.level <= level:
-                        updates.append(node)
-                    node = n
+                    updates[self.max_level - current.level] = current
+                    current = n
                     break
-                l = True
 
         return updates
 
@@ -177,29 +126,8 @@ class List:
         node.nexts.append(last)
 
     def remove(self, key):
-        print("remove:", key)
 
-        if self.head is None:
-            return None
-
-        if self.head.key > key:
-            return None
-
-        if self.head.key == key:
-            if not self.head.nexts:
-                self.head = None
-                return
-            head = self.head.nexts.pop()
-            # if not head.nexts:
-            #     head.nexts = self.head.nexts
-            #     head.level = self.head.level - 1
-            #     self.head = head
-            #     return
-            self.merge_nexts(head, self.head)
-            self.head = head
-
-        updates = self.get_updates(key, self.head.level + 1)
-        print("updates:", updates)
+        updates = self.get_updates(key)
 
         for update in updates:
 
@@ -220,71 +148,16 @@ class List:
 
             node = update.nexts.pop(idx)
             self.merge_nexts(update, node)
-            if update.level > 0:
-                update.level -= 1
-
-
-if __name__ == '__main__':
-    head = Node(key=1, value=1, level=2, nexts=[Node(key=7, value=7, level=2, nexts=[]), Node(key=4, value=1, level=1, nexts=[Node(key=7, value=7, level=2, nexts=[])]), Node(key=3, value=6, level=0, nexts=[Node(key=4, value=1, level=1, nexts=[Node(key=7, value=7, level=2, nexts=[])])])])
-    l = List(3)
-    l.head = head
-    print("head:", l.head)
-    l.remove(1)
-    print("head:", l.head)
-    print(l)
 
 
 if __name__ == '__main__':
     l = List(10)
-    key = 10
-    value = 233
-    l.insert(key, value)
-    l.get(key)
-    l.get(key - 1)
-    key1 = key - 1
-    value1 = value - 1
-    l.insert(key1, value1)
-    l.get(key1)
-    l.get(key)
-
-
-if __name__ == '__main__':
-    l = List(3)
-    print("head:", l.head)
-    l.insert(3, 2)
-    print("head:", l.head)
-    print("l:", len(l.head.nexts))
-    l.insert(1, 3)
-    print("head:", l.head)
-    print("l:", len(l.head.nexts))
-    l.insert(4, 1)
-    print("head:", l.head)
-    print("l:", len(l.head.nexts))
-    l.insert(7, 4)
-    print("head:", l.head)
-    print("l:", len(l.head.nexts))
-    assert l.get(3) == 2
-    assert l.get(0) == None
-    print("l:", len(l.head.nexts))
-    print(l)
-    l.insert(7, 7)
-    print("head:", l.head)
-    print("l:", len(l.head.nexts))
-    assert l.get(3) == 2
-    assert l.get(0) == None
-    print("l:", len(l.head.nexts))
-    print(l)
-    l.insert(3, 6)
-    print(l)
-    l.insert(1, 1)
-    print("head:", l.head)
-    print(l)
-    l.remove(1)
-    print("head:", l.head)
-    print(l)
-    l.remove(7)
-    print("head:", l.head)
-    print(l)
-    l.remove(3)
-    print("head:", l.head)
-    print(l)
+    kvs = [(random.randint(0, 1000), random.randint(0, 1000)) for _ in range(10000)]
+    kvs = [(1,2), (3, 4), (0,3)]
+    for k, v in kvs:
+        l.insert(k, v)
+    print(l.head)
+    for k, v in kvs:
+        if l.get(k) != v:
+            print((k, v))
+        assert v == l.get(k)
