@@ -2,18 +2,9 @@
 #![allow(dead_code)]
 
 use rand::prelude::*;
-use std::fmt::{Debug, Formatter, Result as FmtResult};
+use std::fmt::{Debug, Display, Formatter, Result as FmtResult};
 use std::mem;
 use std::ptr;
-
-fn random_level(max_level: usize) -> usize {
-    let mut rng = rand::thread_rng();
-    let mut l = 0;
-    while rng.gen_range::<usize, usize, usize>(0, 101) > 0 && l < max_level {
-        l += 1;
-    }
-    l
-}
 
 fn from_raw_mut<'a, T>(p: *mut T) -> Option<&'a mut T> {
     if p.is_null() {
@@ -40,7 +31,6 @@ struct SkipListNode<K, V> {
     nexts: Vec<*mut SkipListNode<K, V>>,
     key: K,
     value: V,
-    level: usize,
 }
 
 impl<K: PartialOrd + Debug, V: Debug> SkipListNode<K, V> {
@@ -52,13 +42,24 @@ impl<K: PartialOrd + Debug, V: Debug> SkipListNode<K, V> {
         from_raw(node_ptr)
     }
 
+    fn allocate_dummy(level: usize) -> *mut SkipListNode<K, V> {
+        SkipListNode::allocate(
+            unsafe { mem::uninitialized() },
+            unsafe { mem::uninitialized() },
+            level
+        )
+    }
+
     fn allocate(key: K, value: V, level: usize) -> *mut SkipListNode<K, V> {
         Box::into_raw(box SkipListNode {
-            nexts: vec![],
+            nexts: vec![ptr::null_mut(); level + 1],
             key,
             value,
-            level,
         })
+    }
+
+    fn level(&self) -> usize {
+        self.nexts.len() - 1
     }
 
     fn free(node_ptr: *mut SkipListNode<K, V>) {
@@ -72,31 +73,48 @@ impl<K: PartialOrd + Debug, V: Debug> SkipListNode<K, V> {
     }
 }
 
-pub struct LevelGenerator(Box<dyn Fn(usize) -> usize>);
+pub trait LevelGenerator {
+    fn gen_level(&mut self, max: usize) -> usize;
+}
 
-impl Debug for LevelGenerator {
-    fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        write!(f, "<level_generator>")
+struct GenLevel {
+    rng: ThreadRng,
+}
+
+impl GenLevel {
+    fn new() -> Self {
+        GenLevel {
+            rng: rand::thread_rng()
+        }
     }
 }
 
-#[derive(Debug)]
+impl LevelGenerator for GenLevel {
+    fn gen_level(&mut self, max_level: usize) -> usize {
+        let mut l = 0;
+        while self.rng.gen_range::<usize, usize, usize>(0, 101) > 0 && l < max_level {
+            l += 1;
+        }
+        l
+    }
+}
+
 pub struct SkipList<K, V> {
     head: *mut SkipListNode<K, V>,
     max_level: usize,
-    level_generator: LevelGenerator
+    level_generator: Box<dyn LevelGenerator>
 }
 
 impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
     fn new(max_level: usize) -> Self {
-        Self::new_with_new_level(max_level, box random_level)
+        Self::new_with_new_level(max_level, box GenLevel::new())
     }
 
-    fn new_with_new_level(max_level: usize, level_generator: Box<dyn Fn(usize) -> usize>) -> Self {
+    fn new_with_new_level(max_level: usize, level_generator: Box<dyn LevelGenerator>) -> Self {
         SkipList{
-            head: ptr::null_mut(),
+            head: SkipListNode::allocate_dummy(max_level),
             max_level,
-            level_generator: LevelGenerator(level_generator)
+            level_generator
         }
     }
 
@@ -107,458 +125,196 @@ impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
         }
     }
 
-    fn level(&self) -> usize {
-        match self.head() {
-            None => 0,
-            Some(node) => node.level
-        }
-    }
-
     fn get(&self, key: &K) -> Option<&V> {
-        println!("get {:?}", key);
-        match self.head() {
-            None => None,
-            Some(head) => {
-                if head.key > *key {
-                    return None;
-                }
-                if head.key == *key {
-                    return Some(&head.value);
-                }
+        let updates = self.get_updates(key);
 
-                let mut node = head;
-
-                while node.nexts.len() > 0 {
-                    println!("node: {:?}", node.key);
-                    println!("node len: {}", node.nexts.len());
-                    for next_ptr in &node.nexts {
-                        match SkipListNode::from_raw_mut(*next_ptr) {
-                            Some(next) => {
-                                if next.key < *key {
-                                    node = next;
-                                    break;
-                                }
-                            }
-                            _ => ()
-                        };
-                    }
-                    break;
-                }
-
-                if node.key == *key {
-                    return Some(&node.value);
-                }
-
-                for next_ptr in &node.nexts {
-                    match SkipListNode::from_raw_mut(*next_ptr) {
-                        Some(next) => {
-                            if next.key == *key {
-                                return Some(&next.value);
-                            }
+        for update_ptr in updates {
+            if let Some(update) = SkipListNode::from_raw(update_ptr) {
+                for next_ptr in &update.nexts {
+                    if let Some(next) = SkipListNode::from_raw(*next_ptr) {
+                        if next.key == *key {
+                            return Some(&next.value);
                         }
-                        _ => ()
                     }
                 }
-
-                None
             }
         }
+
+        None
     }
 
-    fn insert(&mut self, key: K, value: V) {
-        match self.head() {
-            None => {
-                self.head = SkipListNode::allocate(
-                    key, value, 0
-                );
-            }
-            Some(head) => {
-                if head.key == key {
-                    head.value = value;
-                    return;
-                }
+    fn insert(&mut self, key: K, value: V) -> Option<V> {
+        let updates = self.get_updates(&key);
 
-                if head.key > key {
-                    let new_node_ptr = SkipListNode::allocate(
-                        key, value, 0
-                    );
-                    let new_node = SkipListNode::from_raw_mut(new_node_ptr).unwrap();
-                    new_node.nexts.push(self.head);
-                    self.head = new_node_ptr;
-                    return;
-                }
-
-                if head.nexts.len() == 0 {
-                    let new_node_ptr = SkipListNode::allocate(
-                        key, value, 0
-                    );
-                    let new_node = SkipListNode::from_raw_mut(new_node_ptr).unwrap();
-                    if head.key > new_node.key {
-                        new_node.nexts.push(self.head);
-                        self.head = new_node_ptr;
-                        return;
-                    }
-                    head.nexts.push(new_node_ptr);
-                    return;
-                }
-
-                let mut level = (self.level_generator.0)(self.max_level);
-
-                if level > head.level {
-                    level = head.level + 1;
-                }
-
-                let mut updates = self.get_updates(&key, level);
-
-                if level > head.level {
-                    updates.push(head);
-                    head.level += 1;
-                }
-
-                for update_ptr in &updates {
-                    let update = SkipListNode::from_raw_mut(*update_ptr).unwrap();
-                    for next_ptr in &update.nexts {
-                        let next = SkipListNode::from_raw_mut(*next_ptr).unwrap();
+        for update_ptr in &updates {
+            if let Some(update) = SkipListNode::from_raw(*update_ptr) {
+                for next_ptr in &update.nexts {
+                    if let Some(next) = SkipListNode::from_raw_mut(*next_ptr) {
                         if next.key == key {
-                            next.replace_value(value);
-                            return;
-                        }
-                    }
-                }
-
-                let new_node_ptr = SkipListNode::allocate(
-                    key, value, level
-                );
-
-                let new_node = SkipListNode::from_raw(new_node_ptr).unwrap();
-
-                for update_ptr in updates {
-                    let update = SkipListNode::from_raw_mut(update_ptr).unwrap();
-                    let mut idx = None;
-                    for (i, next_ptr) in update.nexts.iter().enumerate() {
-                        let next = SkipListNode::from_raw_mut(*next_ptr).unwrap();
-                        if next.key < new_node.key {
-                            idx = Some(i);
-                            break;
-                        }
-                    }
-
-                    if update.nexts.len() == 0 {
-                        update.nexts.push(new_node_ptr);
-                        continue;
-                    } else {
-                        let idx = match idx {
-                            None => update.nexts.len() - 1,
-                            Some(idx) => idx
-                        };
-                        let next_ptr = update.nexts[idx];
-                        let next = SkipListNode::from_raw_mut(next_ptr).unwrap();
-                        if next.level != level {
-                            update.nexts.insert(idx, new_node_ptr);
+                            let old_value = next.replace_value(value);
+                            return Some(old_value);
                         }
                     }
                 }
             }
         }
+
+        let level = self.level_generator.gen_level(self.max_level);
+
+        let node_ptr = SkipListNode::allocate(key, value, level);
+
+        for i in 0..=level {
+            let update_ptr = updates[self.max_level - i];
+            if let Some(update) = SkipListNode::from_raw_mut(update_ptr) {
+                let next_ptr = update.nexts[update.level() - i];
+                let node = SkipListNode::from_raw_mut(node_ptr).unwrap();
+                let i0 = update.level() - i;
+                unsafe {
+                    *(node.nexts.get_unchecked_mut(level - i)) = next_ptr;
+                    *(update.nexts.get_unchecked_mut(i0)) = node_ptr;
+                }
+            }
+        }
+
+        None
     }
 
-    fn get_updates(&self, key: &K, level: usize) -> Vec<*mut SkipListNode<K, V>> {
-        let mut updates = Vec::with_capacity(self.max_level);
+    fn get_updates(&self, key: &K) -> Vec<*mut SkipListNode<K, V>> {
+        let mut updates = vec![self.head; self.max_level + 1];
 
-        match self.head() {
-            None => {
-                return updates;
-            }
-            Some(head) => {
-                if head.key >= *key {
-                    return updates;
-                }
+        let mut current_ptr = self.head;
 
-                let mut node_ptr = self.head;
+        'outer: loop {
+            let current = SkipListNode::from_raw(current_ptr).unwrap();
 
-                loop {
-                    let node = SkipListNode::from_raw_mut(node_ptr).unwrap();
-
-                    if node.nexts.len() == 0 {
-                        updates.push(node_ptr);
-                        break;
-                    }
-
-                    if SkipListNode::from_raw_mut(node.nexts[node.nexts.len() - 1]).unwrap().key >= *key {
-                        updates.push(node_ptr);
-                        break;
-                    }
-
-                    let mut found = false;
-
-                    for next_ptr in &node.nexts {
-                        match SkipListNode::from_raw_mut(*next_ptr) {
-                            None => (),
-                            Some(next) => {
-                                if next.key < *key {
-                                    if found && next.level <= level {
-                                        updates.push(node_ptr);
-                                    }
-                                    node_ptr = *next_ptr;
-                                    break;
-                                }
-                                found = true;
-                            }
+            for next_ptr in &current.nexts {
+                if let Some(next) = SkipListNode::from_raw(*next_ptr) {
+                    if next.key < *key {
+                        for i in 0..=current.level() {
+                            updates[self.max_level - i] = current_ptr;
                         }
-                    }
-                }
-
-                updates
-            }
-        }
-    }
-
-    fn merge_nexts<'a, 'b>(&'a self, node: &'b mut SkipListNode<K, V>, node0: &'b mut SkipListNode<K, V>) {
-        node.level = node0.level;
-        if node.nexts.len() == 0 {
-            node.nexts = node0.nexts.clone();
-            return;
-        }
-        let last_ptr = node.nexts.pop().unwrap();
-        let last = SkipListNode::from_raw_mut(last_ptr).unwrap();
-        node.nexts = Vec::with_capacity(node0.nexts.len() + 1);
-        for next_ptr0 in &node0.nexts {
-            match SkipListNode::from_raw_mut(*next_ptr0) {
-                None => (),
-                Some(next0) => {
-                    if next0.key != last.key {
-                        node.nexts.push(*next_ptr0);
+                        current_ptr = *next_ptr;
+                        continue 'outer;
                     }
                 }
             }
+
+            for i in 0..=current.level() {
+                updates[self.max_level - i] = current_ptr;
+            }
+
+            break;
         }
-        node.nexts.push(last_ptr);
+
+        updates
     }
 
     fn remove(&mut self, key: &K) -> Option<V> {
-        match self.head() {
-            None => return None,
-            _ => ()
-        };
-        let head = self.head().unwrap();
-        if head.key > *key {
-            return None;
-        }
-        if head.key == *key {
-            let old_value = head.replace_value(unsafe { mem::uninitialized() });
-            if head.nexts.len() != 0 {
-                match head.nexts.pop() {
-                    None => return None,
-                    Some(new_head_ptr) => {
-                        match SkipListNode::from_raw_mut(new_head_ptr) {
-                            None => return None,
-                            Some(new_head) => {
-                                self.merge_nexts(new_head, head);
-                                self.head = new_head_ptr;
-                            }
-                        }
-                    }
-                };
-            }
-            SkipListNode::free(self.head);
-            self.head = ptr::null_mut();
-            return Some(old_value);
-        }
 
-        let updates = self.get_updates(key, head.level + 1);
+        let updates = self.get_updates(key);
 
-        let mut deleted_ptr = None;
+        let mut node_ptr = None;
 
+        let mut patch = vec![];
         for update_ptr in updates {
-            let update = SkipListNode::from_raw_mut(update_ptr).unwrap();
-
-            if update.nexts.len() == 0 {
-                continue;
-            }
-
-            let mut idx = None;
-
-            for (i, next_ptr) in update.nexts.iter().enumerate() {
-                match SkipListNode::from_raw_mut(*next_ptr) {
-                    None => (),
-                    Some(next) => {
+            if let Some(update) = SkipListNode::from_raw_mut(update_ptr) {
+                for (i, next_ptr) in update.nexts.iter().enumerate() {
+                    if let Some(next) = SkipListNode::from_raw_mut(*next_ptr) {
                         if next.key == *key {
-                            idx = Some(i);
-                            break;
-                        }
-                        if next.key < *key {
-                            break;
+                            let i0 = next.level() + i - update.level();
+                            patch.push((i, i0, update_ptr, *next_ptr));
+                            node_ptr = Some(*next_ptr);
+                        } else if next.key < *key {
+                            break
                         }
                     }
                 }
+
             }
+        }
 
-            let node_ptr = match idx {
-                None => continue,
-                Some(idx) => update.nexts.remove(idx)
-            };
-
-            deleted_ptr = Some(node_ptr);
-
-            match SkipListNode::from_raw_mut(node_ptr) {
-                None => (),
-                Some(node) => {
-                    self.merge_nexts(update, node);
-                    if update.level > 0 {
-                        update.level -= 1;
+        for (i, i0, update_ptr, next_ptr) in patch {
+            if let Some(update) = SkipListNode::from_raw_mut(update_ptr) {
+                if let Some(next) = SkipListNode::from_raw(next_ptr) {
+                    unsafe {
+                        *(update.nexts.get_unchecked_mut(i)) = next.nexts[i0];
                     }
                 }
             }
         }
 
-        if let Some(deleted_ptr) = deleted_ptr {
-            let deleted = SkipListNode::from_raw_mut(deleted_ptr).unwrap();
-            let old_value = deleted.replace_value(unsafe { mem::uninitialized() });
-            SkipListNode::free(deleted_ptr);
-            return Some(old_value);
-        } else {
-            None
+        // println!("1");
+        if let Some(node_ptr) = node_ptr {
+            // println!("2");
+            if let Some(node) = SkipListNode::from_raw_mut(node_ptr) {
+                // println!("3");
+                let value = node.replace_value(unsafe { mem::uninitialized() });
+                SkipListNode::free(node_ptr);
+                return Some(value);
+            }
         }
 
+        None
+    }
+}
+
+impl<K: PartialOrd + Debug, V: Display + Debug> Display for SkipList<K, V> {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        write!(f, "[").unwrap();
+        let mut flag = false;
+        let mut current_ptr = self.head;
+        while let Some(current) = SkipListNode::from_raw(current_ptr) {
+            current_ptr = current.nexts[current.level()];
+            if let Some(current) = SkipListNode::from_raw(current_ptr) {
+                if flag {
+                    write!(f, ", ").unwrap();
+                } else {
+                    flag = true
+                }
+                write!(f, "{}", current.value).unwrap();
+            }
+        }
+        write!(f, "]")
     }
 }
 
 #[cfg(test)]
 mod test {
+    use rand::prelude::*;
+    use std::collections::HashSet;
     use super::*;
-    #[test]
-    fn test_set_less() {
-        let mut l: SkipList<i32, i32> = SkipList::new(10);
-        println!("1");
-        let key = 10;
-        let value = 233;
-        l.insert(key, value);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key).unwrap(), value);
-        println!("2");
-        assert!(l.get(&(key - 1)).is_none());
-        println!("3");
-        assert_eq!(l.head().unwrap().key, key);
-        println!("4");
-        let key1 = key - 1;
-        let value1 = value - 1;
-        l.insert(key1, value1);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key1).unwrap(), value1);
-        println!("5");
-        assert_eq!(*l.get(&key).unwrap(), value);
-        println!("6");
-        assert_eq!(l.head().unwrap().key, key1);
-        println!("7");
-    }
 
     #[test]
-    fn test_set_more() {
-        let mut l: SkipList<i32, i32> = SkipList::new(10);
-        let key = 10;
-        let value = 233;
-        l.insert(key, value);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key).unwrap(), value);
-        assert!(l.get(&(key - 1)).is_none());
-        assert_eq!(l.head().unwrap().key, key);
-        let key1 = key + 1;
-        let value1 = value + 1;
-        l.insert(key1, value1);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key1).unwrap(), value1);
-        assert_eq!(*l.get(&key).unwrap(), value);
-        assert_eq!(l.head().unwrap().key, key);
-    }
-
-    #[test]
-    fn test_set_inner() {
-        let mut l: SkipList<i32, i32> = SkipList::new(10);
-        let key = 10;
-        let value = 233;
-        l.insert(key, value);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key).unwrap(), value);
-        assert!(l.get(&(key - 1)).is_none());
-        let key1 = key - 3;
-        let value1 = value - 3;
-        l.insert(key1, value1);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key1).unwrap(), value1);
-        assert_eq!(*l.get(&key).unwrap(), value);
-        assert_eq!(l.head().unwrap().key, key1);
-        let key2 = key - 2;
-        let value2 = value - 2;
-        l.insert(key2, value2);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key2).unwrap(), value2);
-        assert_eq!(*l.get(&key1).unwrap(), value1);
-        assert_eq!(*l.get(&key).unwrap(), value);
-        assert_eq!(l.head().unwrap().key, key1);
-        let key3 = key - 1;
-        let value3 = value - 1;
-        l.insert(key3, value3);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key3).unwrap(), value3);
-        assert_eq!(*l.get(&key2).unwrap(), value2);
-        assert_eq!(*l.get(&key1).unwrap(), value1);
-        assert_eq!(*l.get(&key).unwrap(), value);
-        assert_eq!(l.head().unwrap().key, key1);
-    }
-
-    #[test]
-    fn test_remove() {
-        let mut l: SkipList<i32, i32> = SkipList::new(10);
-        let key = 10;
-        let value = 233;
-        l.insert(key, value);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key).unwrap(), value);
-        assert!(l.get(&(key - 1)).is_none());
-        assert_eq!(l.head().unwrap().key, key);
-        assert_eq!(Some(value), l.remove(&key));
-        assert_eq!(None, l.get(&key));
-        assert_eq!(None, l.remove(&(key + 1)));
-
-        let key1 = key - 2;
-        let value1 = value - 2;
-        l.insert(key1, value1);
-        println!("l: {:?}", l);
-        assert_eq!(*l.get(&key1).unwrap(), value1);
-        assert_eq!(l.head().unwrap().key, key1);
-    }
-
-    #[test]
-    fn test_with_new_level_false() {
-        let mut l: SkipList<i32, i32> = SkipList::new_with_new_level(10, box |_| 0);
-        let key = 10;
-        let value = 233;
-        l.insert(key, value);
-        assert_eq!(0, l.level());
-        let key1 = key + 10;
-        let value1 = value + 10;
-        l.insert(key1, value1);
-        assert_eq!(0, l.level());
-        let key2 = key + 1;
-        let value2 = value + 1;
-        l.insert(key2, value2);
-        assert_eq!(0, l.level());
-    }
-
-    #[test]
-    fn test_with_new_level_true() {
-        let mut l: SkipList<i32, i32> = SkipList::new_with_new_level(10, box |_| 10);
-        let key = 10;
-        let value = 233;
-        l.insert(key, value);
-        assert_eq!(0, l.level());
-        let key1 = key + 10;
-        let value1 = value + 10;
-        l.insert(key1, value1);
-        assert_eq!(0, l.level());
-        let key2 = key + 1;
-        let value2 = value + 1;
-        l.insert(key2, value2);
-        assert_eq!(1, l.level());
+    fn test_random() {
+        let n = 10000;
+        let mut rng = rand::thread_rng();
+        let mut seen = HashSet::with_capacity(n);
+        let mut kvs = Vec::with_capacity(n);
+        for _ in 0..=n {
+            let k = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            if seen.contains(&k) {
+                continue;
+            }
+            let v = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            kvs.push((k, v));
+            seen.insert(k);
+        }
+        println!("kvs: {}", kvs.len());
+        let mut l = SkipList::new(10);
+        for (k, v) in &kvs {
+            l.insert(*k, *v);
+        }
+        println!("inserted: {}", kvs.len());
+        for (k, v) in &kvs {
+            assert_eq!(Some(v), l.get(k));
+        }
+        println!("getted: {}", kvs.len());
+        for (k, v) in &kvs {
+            assert_eq!(Some(*v), l.remove(k));
+        }
+        println!("removed: {}", kvs.len());
+        for (k, _) in &kvs {
+            assert_eq!(None, l.get(k));
+        }
     }
 }
