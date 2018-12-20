@@ -74,7 +74,7 @@ class List:
         for i in range(level + 1):
             current_idx = self.max_level - i
             update = updates[current_idx]
-            while update is None:
+            if update is None:
                 continue
             n = update.nexts[update.level - i]
             node.nexts[level - i] = n
