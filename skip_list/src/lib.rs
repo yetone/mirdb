@@ -2,9 +2,10 @@
 #![allow(dead_code)]
 
 use rand::prelude::*;
-use std::fmt::{Debug, Display, Formatter, Result as FmtResult};
+use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::mem;
 use std::ptr;
+use std::ops::Drop;
 
 fn from_raw_mut<'a, T>(p: *mut T) -> Option<&'a mut T> {
     if p.is_null() {
@@ -33,7 +34,7 @@ struct SkipListNode<K, V> {
     value: V,
 }
 
-impl<K: PartialOrd + Debug, V: Debug> SkipListNode<K, V> {
+impl<K, V> SkipListNode<K, V> {
     fn from_raw_mut<'a>(node_ptr: *mut SkipListNode<K, V>) -> Option<&'a mut SkipListNode<K, V>> {
         from_raw_mut(node_ptr)
     }
@@ -105,7 +106,7 @@ pub struct SkipList<K, V> {
     level_generator: Box<dyn LevelGenerator>
 }
 
-impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
+impl<K: PartialOrd, V> SkipList<K, V> {
     fn new(max_level: usize) -> Self {
         Self::new_with_new_level(max_level, box GenLevel::new())
     }
@@ -243,11 +244,8 @@ impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
             }
         }
 
-        // println!("1");
         if let Some(node_ptr) = node_ptr {
-            // println!("2");
             if let Some(node) = SkipListNode::from_raw_mut(node_ptr) {
-                // println!("3");
                 let value = node.replace_value(unsafe { mem::uninitialized() });
                 SkipListNode::free(node_ptr);
                 return Some(value);
@@ -258,7 +256,7 @@ impl<K: PartialOrd + Debug, V: Debug> SkipList<K, V> {
     }
 }
 
-impl<K: PartialOrd + Debug, V: Display + Debug> Display for SkipList<K, V> {
+impl<K, V: Display> Display for SkipList<K, V> {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         write!(f, "[").unwrap();
         let mut flag = false;
@@ -278,6 +276,18 @@ impl<K: PartialOrd + Debug, V: Display + Debug> Display for SkipList<K, V> {
     }
 }
 
+impl<K, V> Drop for SkipList<K, V> {
+    fn drop(&mut self) {
+        let mut current_ptr = self.head;
+        while let Some(current) = SkipListNode::from_raw(current_ptr) {
+            current_ptr = current.nexts[current.level()];
+            if let Some(_current) = SkipListNode::from_raw(current_ptr) {
+                SkipListNode::free(current_ptr);
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod test {
     use rand::prelude::*;
@@ -286,7 +296,7 @@ mod test {
 
     #[test]
     fn test_random() {
-        let n = 10000;
+        let n = 1000;
         let mut rng = rand::thread_rng();
         let mut seen = HashSet::with_capacity(n);
         let mut kvs = Vec::with_capacity(n);

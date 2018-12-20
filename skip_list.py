@@ -140,13 +140,15 @@ def test_random():
     l = List(10)
     seen = set()
     kvs = []
-    for _ in range(10000):
-        k = random.randint(0, 1000)
-        v = random.randint(0, 1000)
+    n = 100000
+    for _ in range(n):
+        k = random.randint(0, n + 1)
+        v = random.randint(0, n + 1)
         if k in seen:
             continue
         seen.add(k)
         kvs.append((k, v))
+    print('kvs:', len(kvs))
     for k, v in kvs:
         l.insert(k, v)
     for k, v in kvs:
