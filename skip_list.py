@@ -12,21 +12,15 @@ class Node:
     def __init__(self, key, value, level, nexts=None):
         self.key = key
         self.value = value
-        self.nexts = [] if nexts is None else nexts
-        self.level = level
+        self.nexts = [None] * (level + 1) if nexts is None else nexts
 
-    def find_lower_bound(self, key):
-        if self.key >= key:
-            return None
-
-        for n in self.nexts:
-            if n.key < key:
-                return n.find_lower_bound(key)
-
-        return self
+    @property
+    def level(self):
+        return len(self.nexts) - 1
 
     def __repr__(self):
-        return f'<Node(key={self.key}, value={self.value}, level={self.level}, nexts={self.nexts})>'
+        return f'{self.key} = {self.nexts}'
+        # return f'<Node(key={self.key}, value={self.value}, level={self.level}, nexts={self.nexts})>'
 
 
 class List:
@@ -39,6 +33,8 @@ class List:
         current = self.head
         while current.nexts:
             current = current.nexts[-1]
+            if current is None:
+                break
             r.append((current.key, current.value))
         return repr(r)
 
@@ -50,6 +46,8 @@ class List:
             if update is None:
                 continue
             for n in update.nexts:
+                if n is None:
+                    continue
                 if n.key == key:
                     return n.value
 
@@ -63,101 +61,107 @@ class List:
             if update is None:
                 continue
             for n in update.nexts:
+                if n is None:
+                    continue
                 if n.key == key:
                     n.value = value
                     return
 
         level = random_level(self.max_level)
 
-        new_node = Node(key, value, level)
+        node = Node(key, value, level)
 
-        for update in list(reversed(updates))[:level + 1]:
-            if update is None:
+        for i in range(level + 1):
+            current_idx = self.max_level - i
+            update = updates[current_idx]
+            while update is None:
                 continue
-
-            idx = None
-            for i, n in enumerate(update.nexts):
-                if n.key < key:
-                    idx = i
-                    break
-
-            if not update.nexts:
-                update.nexts.append(new_node)
-            else:
-                if idx is None:
-                    idx = len(update.nexts) - 1
-                n = update.nexts[idx]
-                update.nexts[idx] = new_node
-                update.nexts.append(n)
+            n = update.nexts[update.level - i]
+            node.nexts[level - i] = n
+            update.nexts[update.level - i] = node
 
     def get_updates(self, key):
-        updates = [None] * (self.max_level + 1)
+        updates = [self.head] * (self.max_level + 1)
 
         current = self.head
 
-        while current is not None:
+        while True:
 
-            if not current.nexts:
-                updates[self.max_level - current.level] = current
-                break
-
-            if current.nexts[-1].key >= key:
-                updates[self.max_level - current.level] = current
-                break
-
+            flag = False
             for n in current.nexts:
+                if n is None:
+                    continue
+
                 if n.key < key:
-                    updates[self.max_level - current.level] = current
+                    for i in range(current.level + 1):
+                        updates[self.max_level - i] = current
                     current = n
+                    flag = True
                     break
 
-        return updates
+            if flag:
+                continue
 
-    def merge_nexts(self, node, node0):
-        node.level = node0.level
-        if not node.nexts:
-            node.nexts = node0.nexts
-            return
-        last = node.nexts.pop()
-        node.nexts = []
-        for n0 in node0.nexts:
-            if n0.key != last.key:
-                node.nexts.append(n0)
-        node.nexts.append(last)
+            for i in range(current.level + 1):
+                updates[self.max_level - i] = current
+            break
+
+        return updates
 
     def remove(self, key):
 
         updates = self.get_updates(key)
 
+        node = None
+
         for update in updates:
 
-            if not update.nexts:
+            if update is None:
                 continue
 
-            idx = None
-
             for i, n in enumerate(update.nexts):
+                if n is None:
+                    continue
+
                 if n.key == key:
-                    idx = i
-                    break
+                    i0 = n.level - update.level + i
+                    update.nexts[i] = n.nexts[i0]
+                    if node is None:
+                        node = n
+
                 if n.key < key:
                     break
 
-            if idx is None:
-                continue
-
-            node = update.nexts.pop(idx)
-            self.merge_nexts(update, node)
+        if node is not None:
+            return node.value
 
 
-if __name__ == '__main__':
+def test_random():
     l = List(10)
-    kvs = [(random.randint(0, 1000), random.randint(0, 1000)) for _ in range(10000)]
-    kvs = [(1,2), (3, 4), (0,3)]
+    seen = set()
+    kvs = []
+    for _ in range(10000):
+        k = random.randint(0, 1000)
+        v = random.randint(0, 1000)
+        if k in seen:
+            continue
+        seen.add(k)
+        kvs.append((k, v))
     for k, v in kvs:
         l.insert(k, v)
-    print(l.head)
     for k, v in kvs:
         if l.get(k) != v:
             print((k, v))
         assert v == l.get(k)
+
+    for k, v in kvs:
+        assert v == l.remove(k)
+
+    for k, _ in kvs:
+        assert None == l.get(k)
+
+
+if __name__ == '__main__':
+    print('running...')
+    test_random()
+    print('done!')
