@@ -1,4 +1,4 @@
-#![feature(box_syntax, type_ascription, nll)]
+#![feature(box_syntax, type_ascription, nll, duration_as_u128)]
 #![allow(dead_code)]
 
 use rand::prelude::*;
@@ -93,7 +93,7 @@ impl GenLevel {
 impl LevelGenerator for GenLevel {
     fn gen_level(&mut self, max_level: usize) -> usize {
         let mut l = 0;
-        while self.rng.gen_range::<usize, usize, usize>(0, 101) > 0 && l < max_level {
+        while self.rng.gen_range::<usize, usize, usize>(0, 2) > 0 && l < max_level {
             l += 1;
         }
         l
@@ -296,7 +296,9 @@ mod test {
 
     #[test]
     fn test_random() {
-        let n = 1000;
+        use std::time;
+        let st = time::SystemTime::now();
+        let n = 100000;
         let mut rng = rand::thread_rng();
         let mut seen = HashSet::with_capacity(n);
         let mut kvs = Vec::with_capacity(n);
@@ -326,5 +328,6 @@ mod test {
         for (k, _) in &kvs {
             assert_eq!(None, l.get(k));
         }
+        println!("cost: {}ms", st.elapsed().unwrap().as_millis());
     }
 }
