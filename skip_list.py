@@ -19,14 +19,14 @@ class Node:
         return len(self.nexts) - 1
 
     def __repr__(self):
-        return f'{self.key} = {self.nexts}'
-        # return f'<Node(key={self.key}, value={self.value}, level={self.level}, nexts={self.nexts})>'
+        return '{self.key} = {self.nexts}'.format(self=self)
 
 
 class List:
     def __init__(self, max_level):
         self.head = Node(None, None, max_level)
         self.max_level = max_level
+        self.updates = [self.head] * (max_level + 1)
 
     def __repr__(self):
         r = []
@@ -80,7 +80,8 @@ class List:
             update.nexts[update.level - i] = node
 
     def get_updates(self, key):
-        updates = [self.head] * (self.max_level + 1)
+        # updates = [self.head] * (self.max_level + 1)
+        updates = self.updates
 
         current = self.head
 
@@ -163,6 +164,9 @@ def test_random():
 
 
 if __name__ == '__main__':
+    import time
+    st = time.time()
     print('running...')
     test_random()
     print('done!')
+    print('cost: %ss' % (time.time() - st))
