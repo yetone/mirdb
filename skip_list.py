@@ -3,7 +3,7 @@ import random
 
 def random_level(max_level):
     k = 0
-    while random.randint(1, 100) % 2 and k < max_level:
+    while random.randint(0, 1) > 0 and k < max_level:
         k += 1
     return k
 
