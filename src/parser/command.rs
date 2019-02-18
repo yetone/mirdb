@@ -48,10 +48,6 @@ macro_rules! cc {
         }
     }};
     ($c:expr) => {{
-        use $crate::parser::command::CommandConf;
-        CommandConf {
-            command: $c,
-            noreply: false,
-        }
+        cc!($c, false)
     }}
 }

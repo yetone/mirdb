@@ -47,14 +47,15 @@ fn handle_connection(mut stream: TcpStream, store: Arc<RwLock<Store>>) -> Result
 
     loop {
         let size = stream.read(&mut buffer)?;
+
         if size == 0 {
             println!("disconnected");
             break;
         }
 
-        data.extend_from_slice(&buffer[0..size]);
+        data.extend_from_slice(&buffer[..size]);
 
-        let cfg = parse(&data);
+        let (remain, cfg) = parse(&data);
 
         match cfg.command {
             Command::Incomplete => continue,
@@ -82,8 +83,7 @@ fn handle_connection(mut stream: TcpStream, store: Arc<RwLock<Store>>) -> Result
             }
         };
 
-
-        data.clear();
+        data = remain.to_vec();
     }
 
     Ok(())
