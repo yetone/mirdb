@@ -5,3 +5,4 @@ authors = ["yetone <yetoneful@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+skip-list = { path = "../skip-list" }

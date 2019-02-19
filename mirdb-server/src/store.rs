@@ -4,6 +4,8 @@ use std::collections::HashMap;
 use std::error::Error;
 use std::convert::From;
 
+use skip_list::SkipList;
+
 use crate::parser::command::{SetterType, GetterType, Command};
 use crate::utils::to_str;
 
@@ -27,7 +29,7 @@ pub struct GetRespItem<'a> {
 }
 
 pub struct Store {
-    data: HashMap<StoreKey, StorePayload>
+    data: SkipList<StoreKey, StorePayload>
 }
 
 #[derive(Debug, PartialEq)]
@@ -107,7 +109,7 @@ impl<'a> Response<'a> {
 impl Store {
     pub fn new() -> Self {
         Store {
-            data: HashMap::default()
+            data: SkipList::new(10)
         }
     }
 

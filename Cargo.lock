@@ -29,6 +29,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "mirdb-server"
 version = "0.1.0"
+dependencies = [
+ "skip-list 0.1.0",
+]
 
 [[package]]
 name = "rand"

@@ -7,6 +7,7 @@ use std::mem;
 use std::ptr;
 use std::ops::Drop;
 use std::borrow::Borrow;
+use std::ptr::NonNull;
 
 fn from_raw_mut<'a, T>(p: *mut T) -> Option<&'a mut T> {
     if p.is_null() {
@@ -35,6 +36,10 @@ struct SkipListNode<K, V> {
     value: V,
 }
 
+struct NodeWrapper<K, V>(NonNull<SkipListNode<K, V>>);
+
+unsafe impl<K, V> Send for NodeWrapper<K, V> {}
+
 impl<K, V> SkipListNode<K, V> {
     fn from_raw_mut<'a>(node_ptr: *mut SkipListNode<K, V>) -> Option<&'a mut SkipListNode<K, V>> {
         from_raw_mut(node_ptr)
@@ -44,23 +49,23 @@ impl<K, V> SkipListNode<K, V> {
         from_raw(node_ptr)
     }
 
-    fn allocate_dummy(level: usize) -> *mut SkipListNode<K, V> {
+    fn allocate_dummy(max_height: usize) -> *mut SkipListNode<K, V> {
         SkipListNode::allocate(
             unsafe { mem::uninitialized() },
             unsafe { mem::uninitialized() },
-            level
+            max_height
         )
     }
 
-    fn allocate(key: K, value: V, level: usize) -> *mut SkipListNode<K, V> {
+    fn allocate(key: K, value: V, height: usize) -> *mut SkipListNode<K, V> {
         Box::into_raw(box SkipListNode {
-            nexts: vec![ptr::null_mut(); level + 1],
+            nexts: vec![ptr::null_mut(); height + 1],
             key,
             value,
         })
     }
 
-    fn level(&self) -> usize {
+    fn height(&self) -> usize {
         self.nexts.len() - 1
     }
 
@@ -75,26 +80,28 @@ impl<K, V> SkipListNode<K, V> {
     }
 }
 
-pub trait LevelGenerator {
-    fn gen_level(&mut self, max: usize) -> usize;
+pub trait HeightGenerator {
+    fn gen_height(&mut self, max: usize) -> usize;
 }
 
-struct GenLevel {
+struct GenHeight {
     rng: ThreadRng,
 }
 
-impl GenLevel {
+unsafe impl Send for GenHeight {}
+
+impl GenHeight {
     fn new() -> Self {
-        GenLevel {
+        GenHeight {
             rng: rand::thread_rng()
         }
     }
 }
 
-impl LevelGenerator for GenLevel {
-    fn gen_level(&mut self, max_level: usize) -> usize {
+impl HeightGenerator for GenHeight {
+    fn gen_height(&mut self, max_height: usize) -> usize {
         let mut l = 0;
-        while self.rng.gen_range::<usize, usize, usize>(0, 2) > 0 && l < max_level {
+        while self.rng.gen_range::<usize, usize, usize>(0, 2) > 0 && l < max_height {
             l += 1;
         }
         l
@@ -103,20 +110,27 @@ impl LevelGenerator for GenLevel {
 
 pub struct SkipList<K, V> {
     head: *mut SkipListNode<K, V>,
-    max_level: usize,
-    level_generator: Box<dyn LevelGenerator>
+    length: usize,
+    height: usize,
+    max_height: usize,
+    height_generator: Box<dyn HeightGenerator + Send>
 }
 
+unsafe impl<K, V> Sync for SkipList<K, V> {}
+unsafe impl<K, V> Send for SkipList<K, V> {}
+
 impl<K: PartialOrd, V> SkipList<K, V> {
-    fn new(max_level: usize) -> Self {
-        Self::new_with_new_level(max_level, box GenLevel::new())
+    pub fn new(max_height: usize) -> Self {
+        Self::new_with_new_height(max_height, box GenHeight::new())
     }
 
-    fn new_with_new_level(max_level: usize, level_generator: Box<dyn LevelGenerator>) -> Self {
+    fn new_with_new_height(max_height: usize, height_generator: Box<dyn HeightGenerator + Send>) -> Self {
         SkipList{
-            head: SkipListNode::allocate_dummy(max_level),
-            max_level,
-            level_generator
+            head: SkipListNode::allocate_dummy(max_height),
+            length: 0,
+            height: 0,
+            max_height,
+            height_generator
         }
     }
 
@@ -127,7 +141,7 @@ impl<K: PartialOrd, V> SkipList<K, V> {
         }
     }
 
-    fn get<Q>(&self, key: &Q) -> Option<&V>
+    pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
     where K: Borrow<Q>,
           Q: PartialOrd {
         let updates = self.get_updates(key);
@@ -147,7 +161,27 @@ impl<K: PartialOrd, V> SkipList<K, V> {
         None
     }
 
-    fn insert(&mut self, key: K, value: V) -> Option<V> {
+    pub fn get_mut<Q: ?Sized>(&self, key: &Q) -> Option<&mut V>
+        where K: Borrow<Q>,
+              Q: PartialOrd {
+        let updates = self.get_updates(key);
+
+        for update_ptr in updates {
+            if let Some(update) = SkipListNode::from_raw(update_ptr) {
+                for next_ptr in &update.nexts {
+                    if let Some(next) = SkipListNode::from_raw_mut(*next_ptr) {
+                        if *next.key.borrow() == *key {
+                            return Some(&mut next.value);
+                        }
+                    }
+                }
+            }
+        }
+
+        None
+    }
+
+    pub fn insert(&mut self, key: K, value: V) -> Option<V> {
         let updates = self.get_updates(&key);
 
         for update_ptr in &updates {
@@ -163,30 +197,31 @@ impl<K: PartialOrd, V> SkipList<K, V> {
             }
         }
 
-        let level = self.level_generator.gen_level(self.max_level);
+        let height = self.height_generator.gen_height(self.max_height);
 
-        let node_ptr = SkipListNode::allocate(key, value, level);
+        let node_ptr = SkipListNode::allocate(key, value, height);
 
-        for i in 0..=level {
-            let update_ptr = updates[self.max_level - i];
+        for i in 0..=height {
+            let update_ptr = updates[self.max_height - i];
             if let Some(update) = SkipListNode::from_raw_mut(update_ptr) {
-                let next_ptr = update.nexts[update.level() - i];
+                let next_ptr = update.nexts[update.height() - i];
                 let node = SkipListNode::from_raw_mut(node_ptr).unwrap();
-                let i0 = update.level() - i;
+                let i0 = update.height() - i;
                 unsafe {
-                    *(node.nexts.get_unchecked_mut(level - i)) = next_ptr;
+                    *(node.nexts.get_unchecked_mut(height - i)) = next_ptr;
                     *(update.nexts.get_unchecked_mut(i0)) = node_ptr;
                 }
             }
         }
 
+        self.height += 1;
         None
     }
 
-    fn get_updates<Q>(&self, key: &Q) -> Vec<*mut SkipListNode<K, V>>
+    fn get_updates<Q: ?Sized>(&self, key: &Q) -> Vec<*mut SkipListNode<K, V>>
     where K: Borrow<Q>,
           Q: PartialOrd {
-        let mut updates = vec![self.head; self.max_level + 1];
+        let mut updates = vec![self.head; self.max_height + 1];
 
         let mut current_ptr = self.head;
 
@@ -196,8 +231,8 @@ impl<K: PartialOrd, V> SkipList<K, V> {
             for next_ptr in &current.nexts {
                 if let Some(next) = SkipListNode::from_raw(*next_ptr) {
                     if *next.key.borrow() < *key {
-                        for i in 0..=current.level() {
-                            updates[self.max_level - i] = current_ptr;
+                        for i in 0..=current.height() {
+                            updates[self.max_height - i] = current_ptr;
                         }
                         current_ptr = *next_ptr;
                         continue 'outer;
@@ -205,8 +240,8 @@ impl<K: PartialOrd, V> SkipList<K, V> {
                 }
             }
 
-            for i in 0..=current.level() {
-                updates[self.max_level - i] = current_ptr;
+            for i in 0..=current.height() {
+                updates[self.max_height - i] = current_ptr;
             }
 
             break;
@@ -215,7 +250,9 @@ impl<K: PartialOrd, V> SkipList<K, V> {
         updates
     }
 
-    fn remove(&mut self, key: &K) -> Option<V> {
+    pub fn remove<Q: ?Sized>(&mut self, key: &Q) -> Option<V>
+        where K: Borrow<Q>,
+              Q: PartialOrd {
 
         let updates = self.get_updates(key);
 
@@ -226,11 +263,12 @@ impl<K: PartialOrd, V> SkipList<K, V> {
             if let Some(update) = SkipListNode::from_raw_mut(update_ptr) {
                 for (i, next_ptr) in update.nexts.iter().enumerate() {
                     if let Some(next) = SkipListNode::from_raw_mut(*next_ptr) {
-                        if next.key == *key {
-                            let i0 = next.level() + i - update.level();
+                        let next_key = next.key.borrow();
+                        if *next_key == *key {
+                            let i0 = next.height() + i - update.height();
                             patch.push((i, i0, update_ptr, *next_ptr));
                             node_ptr = Some(*next_ptr);
-                        } else if next.key < *key {
+                        } else if *next_key < *key {
                             break
                         }
                     }
@@ -253,6 +291,7 @@ impl<K: PartialOrd, V> SkipList<K, V> {
             if let Some(node) = SkipListNode::from_raw_mut(node_ptr) {
                 let value = node.replace_value(unsafe { mem::uninitialized() });
                 SkipListNode::free(node_ptr);
+                self.height -= 1;
                 return Some(value);
             }
         }
@@ -267,7 +306,7 @@ impl<K, V: Display> Display for SkipList<K, V> {
         let mut flag = false;
         let mut current_ptr = self.head;
         while let Some(current) = SkipListNode::from_raw(current_ptr) {
-            current_ptr = current.nexts[current.level()];
+            current_ptr = current.nexts[current.height()];
             if let Some(current) = SkipListNode::from_raw(current_ptr) {
                 if flag {
                     write!(f, ", ").unwrap();
@@ -284,9 +323,9 @@ impl<K, V: Display> Display for SkipList<K, V> {
 impl<K, V> Drop for SkipList<K, V> {
     fn drop(&mut self) {
         let mut current_ptr = self.head;
-        while let Some(current) = SkipListNode::from_raw(current_ptr) {
-            current_ptr = current.nexts[current.level()];
-            if let Some(_current) = SkipListNode::from_raw(current_ptr) {
+        while let Some(current) = SkipListNode::from_raw_mut(current_ptr) {
+            current_ptr = current.nexts[current.height()];
+            if let Some(_current) = SkipListNode::from_raw_mut(current_ptr) {
                 SkipListNode::free(current_ptr);
             }
         }
@@ -298,6 +337,14 @@ mod test {
     use rand::prelude::*;
     use std::collections::HashSet;
     use super::*;
+
+    #[test]
+    fn test_drop() {
+        let mut map = SkipList::new(10);
+        map.insert(1, 2);
+        map.insert(1, 2);
+        drop(map);
+    }
 
     #[test]
     fn test_random() {
