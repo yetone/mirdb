@@ -1,7 +1,5 @@
-[package]
-name = "mirdb"
-version = "0.1.0"
-authors = ["yetone <yetoneful@gmail.com>"]
-edition = "2018"
-
-[dependencies]
+[workspace]
+members = [
+"mirdb-server",
+"skip-list",
+]
