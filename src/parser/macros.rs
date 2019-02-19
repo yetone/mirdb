@@ -27,7 +27,7 @@ pub enum CompareResult {
     Incomplete,
 }
 
-pub fn compare<'a, 'b>(i: &'a [u8], t: &'b [u8]) -> CompareResult {
+pub fn compare(i: &[u8], t: &[u8]) -> CompareResult {
     let pos = i.iter().zip(t.iter()).position(|(a, b)| a != b);
     match pos {
         Some(_) => CompareResult::Err,
@@ -41,7 +41,7 @@ pub fn compare<'a, 'b>(i: &'a [u8], t: &'b [u8]) -> CompareResult {
     }
 }
 
-pub fn take_split<'a>(i: &'a [u8], count: usize) -> (&'a [u8], &'a [u8]) {
+pub fn take_split(i: &[u8], count: usize) -> (&[u8], &[u8]) {
     let r = i.split_at(count);
     (r.1, r.0)
 }
@@ -342,7 +342,7 @@ pub fn alpha(i: &[u8]) -> IRResult<&[u8]> {
     }
 }
 
-pub fn digit<'a, T: FromStr>(i: &'a [u8]) -> IRResult<T> {
+pub fn digit<T: FromStr>(i: &[u8]) -> IRResult<T> {
     if i.len() == 0 {
         return IRResult::Err("");
     }

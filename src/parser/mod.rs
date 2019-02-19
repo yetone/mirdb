@@ -126,7 +126,7 @@ gen_parser!(_parse<CommandConf>, alt!(
     getter | setter | deleter
 ));
 
-pub fn parse<'a>(i: &'a [u8]) -> (&'a [u8], CommandConf<'a>) {
+pub fn parse(i: &[u8]) -> (&[u8], CommandConf) {
     match _parse(i) {
         IRResult::Ok(r) => r,
         IRResult::Incomplete(_) => (b"", cc!(Command::Incomplete)),
