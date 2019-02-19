@@ -6,6 +6,7 @@ use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::mem;
 use std::ptr;
 use std::ops::Drop;
+use std::borrow::Borrow;
 
 fn from_raw_mut<'a, T>(p: *mut T) -> Option<&'a mut T> {
     if p.is_null() {
@@ -126,14 +127,16 @@ impl<K: PartialOrd, V> SkipList<K, V> {
         }
     }
 
-    fn get(&self, key: &K) -> Option<&V> {
+    fn get<Q>(&self, key: &Q) -> Option<&V>
+    where K: Borrow<Q>,
+          Q: PartialOrd {
         let updates = self.get_updates(key);
 
         for update_ptr in updates {
             if let Some(update) = SkipListNode::from_raw(update_ptr) {
                 for next_ptr in &update.nexts {
                     if let Some(next) = SkipListNode::from_raw(*next_ptr) {
-                        if next.key == *key {
+                        if *next.key.borrow() == *key {
                             return Some(&next.value);
                         }
                     }
@@ -180,7 +183,9 @@ impl<K: PartialOrd, V> SkipList<K, V> {
         None
     }
 
-    fn get_updates(&self, key: &K) -> Vec<*mut SkipListNode<K, V>> {
+    fn get_updates<Q>(&self, key: &Q) -> Vec<*mut SkipListNode<K, V>>
+    where K: Borrow<Q>,
+          Q: PartialOrd {
         let mut updates = vec![self.head; self.max_level + 1];
 
         let mut current_ptr = self.head;
@@ -190,7 +195,7 @@ impl<K: PartialOrd, V> SkipList<K, V> {
 
             for next_ptr in &current.nexts {
                 if let Some(next) = SkipListNode::from_raw(*next_ptr) {
-                    if next.key < *key {
+                    if *next.key.borrow() < *key {
                         for i in 0..=current.level() {
                             updates[self.max_level - i] = current_ptr;
                         }
