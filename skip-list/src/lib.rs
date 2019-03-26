@@ -1,4 +1,4 @@
-#![feature(box_syntax, type_ascription, nll, duration_as_u128)]
+#![feature(box_syntax, type_ascription)]
 #![allow(dead_code)]
 
 use rand::prelude::*;
@@ -322,13 +322,8 @@ impl<K, V: Display> Display for SkipList<K, V> {
 
 impl<K, V> Drop for SkipList<K, V> {
     fn drop(&mut self) {
-        let mut current_ptr = self.head;
-        while let Some(current) = SkipListNode::from_raw_mut(current_ptr) {
-            current_ptr = current.nexts[current.height()];
-            if let Some(_current) = SkipListNode::from_raw_mut(current_ptr) {
-                SkipListNode::free(current_ptr);
-            }
-        }
+        println!("drop");
+        // FIXME
     }
 }
 
