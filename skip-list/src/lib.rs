@@ -78,6 +78,16 @@ impl<K, V> SkipListNode<K, V> {
     fn replace_value(&mut self, value: V) -> V {
         mem::replace(&mut self.value, value)
     }
+
+    pub fn next_mut(&mut self, height: usize) -> Option<&mut SkipListNode<K, V>> {
+        self.nexts.get(height).and_then(
+            |ptr| if ptr.is_null() {
+                None
+            } else {
+                Some(unsafe { &mut **ptr })
+            },
+        )
+    }
 }
 
 pub trait HeightGenerator {
@@ -119,7 +129,7 @@ pub struct SkipList<K, V> {
 unsafe impl<K, V> Sync for SkipList<K, V> {}
 unsafe impl<K, V> Send for SkipList<K, V> {}
 
-impl<K: PartialOrd, V> SkipList<K, V> {
+impl<K: Ord, V> SkipList<K, V> {
     pub fn new(max_height: usize) -> Self {
         Self::new_with_new_height(max_height, box GenHeight::new())
     }
@@ -143,7 +153,7 @@ impl<K: PartialOrd, V> SkipList<K, V> {
 
     pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
     where K: Borrow<Q>,
-          Q: PartialOrd {
+          Q: Ord {
         let updates = self.get_updates(key);
 
         for update_ptr in updates {
@@ -163,7 +173,7 @@ impl<K: PartialOrd, V> SkipList<K, V> {
 
     pub fn get_mut<Q: ?Sized>(&self, key: &Q) -> Option<&mut V>
         where K: Borrow<Q>,
-              Q: PartialOrd {
+              Q: Ord {
         let updates = self.get_updates(key);
 
         for update_ptr in updates {
@@ -220,7 +230,7 @@ impl<K: PartialOrd, V> SkipList<K, V> {
 
     fn get_updates<Q: ?Sized>(&self, key: &Q) -> Vec<*mut SkipListNode<K, V>>
     where K: Borrow<Q>,
-          Q: PartialOrd {
+          Q: Ord {
         let mut updates = vec![self.head; self.max_height + 1];
 
         let mut current_ptr = self.head;
@@ -252,7 +262,7 @@ impl<K: PartialOrd, V> SkipList<K, V> {
 
     pub fn remove<Q: ?Sized>(&mut self, key: &Q) -> Option<V>
         where K: Borrow<Q>,
-              Q: PartialOrd {
+              Q: Ord {
 
         let updates = self.get_updates(key);
 
@@ -322,8 +332,22 @@ impl<K, V: Display> Display for SkipList<K, V> {
 
 impl<K, V> Drop for SkipList<K, V> {
     fn drop(&mut self) {
-        println!("drop");
-        // FIXME
+        unsafe {
+            let mut current = self.head;
+            let mut is_head = true;
+
+            while let Some(next) = (*current).next_mut((*current).height()) {
+                if !is_head {
+                    SkipListNode::free(current);
+                }
+                current = next;
+                is_head = false;
+            }
+
+            if !is_head {
+                SkipListNode::free(current);
+            }
+        }
     }
 }
 
@@ -332,13 +356,46 @@ mod test {
     use rand::prelude::*;
     use std::collections::HashSet;
     use super::*;
+    use std::cmp::Ordering;
+    use std::fmt::Debug;
 
     #[test]
     fn test_drop() {
-        let mut map = SkipList::new(10);
-        map.insert(1, 2);
-        map.insert(1, 2);
-        drop(map);
+        struct A<T: Debug>(T);
+
+        impl<T: PartialOrd + Debug> PartialOrd for A<T> {
+            fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+                self.0.partial_cmp(&other.0)
+            }
+        }
+
+        impl<T: PartialEq + Debug> PartialEq for A<T> {
+            fn eq(&self, other: &Self) -> bool {
+                self.0.eq(&other.0)
+            }
+        }
+
+        impl<T: Ord + Debug> Eq for A<T> {}
+
+        impl<T: Ord + Debug> Ord for A<T> {
+            fn cmp(&self, other: &Self) -> Ordering {
+                self.0.cmp(&other.0)
+            }
+        }
+
+        impl<T: Debug> Drop for A<T> {
+            fn drop(&mut self) {
+                println!("drop {:?}", self.0);
+            }
+        }
+
+        type Key = A<Vec<u8>>;
+
+        let mut map: SkipList<Key, i32> = SkipList::new(10);
+        map.insert(A(vec![1]), 1);
+        map.insert(A(vec![2]), 2);
+        map.insert(A(vec![3]), 3);
+        map.insert(A(vec![4]), 4);
     }
 
     #[test]

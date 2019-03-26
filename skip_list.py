@@ -164,9 +164,13 @@ def test_random():
 
 
 if __name__ == '__main__':
-    import time
-    st = time.time()
-    print('running...')
-    test_random()
-    print('done!')
-    print('cost: %ss' % (time.time() - st))
+    # import time
+    # st = time.time()
+    # print('running...')
+    # test_random()
+    # print('done!')
+    # print('cost: %ss' % (time.time() - st))
+    l = List(10)
+    l.insert(1, 1)
+    l.insert(2, 2)
+    print(l.head.nexts[-1])
