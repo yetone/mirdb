@@ -129,7 +129,7 @@ pub struct SkipList<K, V> {
 unsafe impl<K, V> Sync for SkipList<K, V> {}
 unsafe impl<K, V> Send for SkipList<K, V> {}
 
-impl<K: Ord, V> SkipList<K, V> {
+impl<K, V> SkipList<K, V> {
     pub fn new(max_height: usize) -> Self {
         Self::new_with_new_height(max_height, box GenHeight::new())
     }
@@ -151,6 +151,34 @@ impl<K: Ord, V> SkipList<K, V> {
         }
     }
 
+    fn dispose(&mut self) {
+        unsafe {
+            let mut current = self.head;
+            let mut is_head = true;
+
+            while let Some(next) = (*current).next_mut((*current).height()) {
+                if !is_head {
+                    SkipListNode::free(current);
+                }
+                current = next;
+                is_head = false;
+            }
+
+            if !is_head {
+                SkipListNode::free(current);
+            }
+        }
+    }
+
+    fn clear(&mut self) {
+        self.dispose();
+        self.head = SkipListNode::allocate_dummy(self.max_height);
+        self.length = 0;
+        self.height = 0;
+    }
+}
+
+impl<K: Ord, V> SkipList<K, V> {
     pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
     where K: Borrow<Q>,
           Q: Ord {
@@ -332,22 +360,7 @@ impl<K, V: Display> Display for SkipList<K, V> {
 
 impl<K, V> Drop for SkipList<K, V> {
     fn drop(&mut self) {
-        unsafe {
-            let mut current = self.head;
-            let mut is_head = true;
-
-            while let Some(next) = (*current).next_mut((*current).height()) {
-                if !is_head {
-                    SkipListNode::free(current);
-                }
-                current = next;
-                is_head = false;
-            }
-
-            if !is_head {
-                SkipListNode::free(current);
-            }
-        }
+        self.dispose();
     }
 }
 
@@ -385,17 +398,18 @@ mod test {
 
         impl<T: Debug> Drop for A<T> {
             fn drop(&mut self) {
-                println!("drop {:?}", self.0);
+                println!("drop: {:?}", self.0);
             }
         }
 
         type Key = A<Vec<u8>>;
 
         let mut map: SkipList<Key, i32> = SkipList::new(10);
-        map.insert(A(vec![1]), 1);
-        map.insert(A(vec![2]), 2);
-        map.insert(A(vec![3]), 3);
-        map.insert(A(vec![4]), 4);
+
+        for i in 1..=4 {
+            println!("insert: {:?}", i);
+            map.insert(A(vec![i]), i as i32);
+        }
     }
 
     #[test]
