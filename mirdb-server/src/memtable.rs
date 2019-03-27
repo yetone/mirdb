@@ -48,5 +48,12 @@ mod test {
         let mut table = Memtable::new(3, 10);
         table.insert(1, 2);
         assert!(!table.is_full());
+        table.insert(1, 2);
+        table.insert(1, 2);
+        table.insert(1, 2);
+        assert!(!table.is_full());
+        table.insert(2, 2);
+        table.insert(3, 2);
+        assert!(table.is_full());
     }
 }
