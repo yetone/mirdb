@@ -119,10 +119,10 @@ impl HeightGenerator for GenHeight {
 }
 
 pub struct SkipList<K, V> {
-    head: *mut SkipListNode<K, V>,
-    length: usize,
-    height: usize,
-    max_height: usize,
+    head_: *mut SkipListNode<K, V>,
+    length_: usize,
+    height_: usize,
+    max_height_: usize,
     height_generator: Box<dyn HeightGenerator + Send>
 }
 
@@ -130,30 +130,42 @@ unsafe impl<K, V> Sync for SkipList<K, V> {}
 unsafe impl<K, V> Send for SkipList<K, V> {}
 
 impl<K, V> SkipList<K, V> {
-    pub fn new(max_height: usize) -> Self {
-        Self::new_with_new_height(max_height, box GenHeight::new())
+    pub fn length(&self) -> usize {
+        self.length_
     }
 
-    fn new_with_new_height(max_height: usize, height_generator: Box<dyn HeightGenerator + Send>) -> Self {
-        SkipList{
-            head: SkipListNode::allocate_dummy(max_height),
-            length: 0,
-            height: 0,
-            max_height,
-            height_generator
-        }
+    pub fn height(&self) -> usize {
+        self.height_
+    }
+
+    pub fn max_height(&self) -> usize {
+        self.max_height_
     }
 
     fn head(&self) -> Option<&mut SkipListNode<K, V>> {
-        match from_raw_mut(self.head) {
+        match from_raw_mut(self.head_) {
             None => None,
             Some(node) => Some(node)
         }
     }
 
+    pub fn new(max_height: usize) -> Self {
+        Self::new_with_height_generator(max_height, box GenHeight::new())
+    }
+
+    pub fn new_with_height_generator(max_height: usize, height_generator: Box<dyn HeightGenerator + Send>) -> Self {
+        SkipList{
+            head_: SkipListNode::allocate_dummy(max_height),
+            length_: 0,
+            height_: 0,
+            max_height_: max_height,
+            height_generator
+        }
+    }
+
     fn dispose(&mut self) {
         unsafe {
-            let mut current = self.head;
+            let mut current = self.head_;
             let mut is_head = true;
 
             while let Some(next) = (*current).next_mut((*current).height()) {
@@ -170,18 +182,18 @@ impl<K, V> SkipList<K, V> {
         }
     }
 
-    fn clear(&mut self) {
+    pub fn clear(&mut self) {
         self.dispose();
-        self.head = SkipListNode::allocate_dummy(self.max_height);
-        self.length = 0;
-        self.height = 0;
+        self.head_ = SkipListNode::allocate_dummy(self.max_height_);
+        self.length_ = 0;
+        self.height_ = 0;
     }
 }
 
 impl<K: Ord, V> SkipList<K, V> {
     pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
-    where K: Borrow<Q>,
-          Q: Ord {
+        where K: Borrow<Q>,
+              Q: Ord {
         let updates = self.get_updates(key);
 
         for update_ptr in updates {
@@ -235,12 +247,12 @@ impl<K: Ord, V> SkipList<K, V> {
             }
         }
 
-        let height = self.height_generator.gen_height(self.max_height);
+        let height = self.height_generator.gen_height(self.max_height_);
 
         let node_ptr = SkipListNode::allocate(key, value, height);
 
         for i in 0..=height {
-            let update_ptr = updates[self.max_height - i];
+            let update_ptr = updates[self.max_height_ - i];
             if let Some(update) = SkipListNode::from_raw_mut(update_ptr) {
                 let next_ptr = update.nexts[update.height() - i];
                 let node = SkipListNode::from_raw_mut(node_ptr).unwrap();
@@ -252,16 +264,17 @@ impl<K: Ord, V> SkipList<K, V> {
             }
         }
 
-        self.height += 1;
+        self.height_ = std::cmp::max(self.height_, height);
+        self.length_ += 1;
         None
     }
 
     fn get_updates<Q: ?Sized>(&self, key: &Q) -> Vec<*mut SkipListNode<K, V>>
-    where K: Borrow<Q>,
-          Q: Ord {
-        let mut updates = vec![self.head; self.max_height + 1];
+        where K: Borrow<Q>,
+              Q: Ord {
+        let mut updates = vec![self.head_; self.max_height_ + 1];
 
-        let mut current_ptr = self.head;
+        let mut current_ptr = self.head_;
 
         'outer: loop {
             let current = SkipListNode::from_raw(current_ptr).unwrap();
@@ -270,7 +283,7 @@ impl<K: Ord, V> SkipList<K, V> {
                 if let Some(next) = SkipListNode::from_raw(*next_ptr) {
                     if *next.key.borrow() < *key {
                         for i in 0..=current.height() {
-                            updates[self.max_height - i] = current_ptr;
+                            updates[self.max_height_ - i] = current_ptr;
                         }
                         current_ptr = *next_ptr;
                         continue 'outer;
@@ -279,7 +292,7 @@ impl<K: Ord, V> SkipList<K, V> {
             }
 
             for i in 0..=current.height() {
-                updates[self.max_height - i] = current_ptr;
+                updates[self.max_height_ - i] = current_ptr;
             }
 
             break;
@@ -329,7 +342,7 @@ impl<K: Ord, V> SkipList<K, V> {
             if let Some(node) = SkipListNode::from_raw_mut(node_ptr) {
                 let value = node.replace_value(unsafe { mem::uninitialized() });
                 SkipListNode::free(node_ptr);
-                self.height -= 1;
+                self.length_ -= 1;
                 return Some(value);
             }
         }
@@ -342,7 +355,7 @@ impl<K, V: Display> Display for SkipList<K, V> {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         write!(f, "[").unwrap();
         let mut flag = false;
-        let mut current_ptr = self.head;
+        let mut current_ptr = self.head_;
         while let Some(current) = SkipListNode::from_raw(current_ptr) {
             current_ptr = current.nexts[current.height()];
             if let Some(current) = SkipListNode::from_raw(current_ptr) {
@@ -355,6 +368,20 @@ impl<K, V: Display> Display for SkipList<K, V> {
             }
         }
         write!(f, "]")
+    }
+}
+
+impl<K: Ord + Clone, V: Clone> Clone for SkipList<K, V> {
+    fn clone(&self) -> Self {
+        let mut copied: SkipList<K, V> = SkipList::new(self.max_height_);
+        let mut current_ptr = self.head_;
+        while let Some(current) = SkipListNode::from_raw(current_ptr) {
+            current_ptr = current.nexts[current.height()];
+            if let Some(current) = SkipListNode::from_raw(current_ptr) {
+                copied.insert(current.key.clone(), current.value.clone());
+            }
+        }
+        copied
     }
 }
 
@@ -413,10 +440,58 @@ mod test {
     }
 
     #[test]
+    fn test_clear() {
+        let mut map: SkipList<i32, i32> = SkipList::new(10);
+        map.insert(1, 1);
+        map.insert(2, 2);
+        assert_eq!(Some(&1), map.get(&1));
+        assert_eq!(Some(&2), map.get(&2));
+        assert_eq!(2, map.length());
+        map.clear();
+        assert_eq!(None, map.get(&1));
+        assert_eq!(None, map.get(&2));
+        assert_eq!(0, map.length());
+        map.insert(1, 3);
+        map.insert(3, 4);
+        assert_eq!(Some(&3), map.get(&1));
+        assert_eq!(Some(&4), map.get(&3));
+        assert_eq!(2, map.length());
+    }
+
+    #[test]
+    fn test_clone() {
+        let n = 100;
+        let mut rng = rand::thread_rng();
+        let mut seen = HashSet::with_capacity(n);
+        let mut kvs = Vec::with_capacity(n);
+        for _ in 0..=n {
+            let k = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            if seen.contains(&k) {
+                continue;
+            }
+            let v = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            kvs.push((k, v));
+            seen.insert(k);
+        }
+        let mut l = SkipList::new(10);
+        for (k, v) in &kvs {
+            l.insert(*k, *v);
+        }
+
+        let c = l.clone();
+        assert_eq!(c.length(), l.length());
+
+        for (k, v) in &kvs {
+            assert_eq!(Some(v), l.get(k));
+            assert_eq!(Some(v), c.get(k));
+        }
+    }
+
+    #[test]
     fn test_random() {
         use std::time;
         let st = time::SystemTime::now();
-        let n = 100000;
+        let n = 10000;
         let mut rng = rand::thread_rng();
         let mut seen = HashSet::with_capacity(n);
         let mut kvs = Vec::with_capacity(n);

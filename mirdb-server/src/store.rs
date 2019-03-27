@@ -8,10 +8,11 @@ use skip_list::SkipList;
 
 use crate::parser::command::{SetterType, GetterType, Command};
 use crate::utils::to_str;
+use crate::data_manager::DataManager;
 
 pub type StoreKey = Vec<u8>;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct StorePayload {
     pub(crate) data: Vec<u8>,
     pub(crate) flags: u32,
@@ -29,7 +30,7 @@ pub struct GetRespItem<'a> {
 }
 
 pub struct Store {
-    data: SkipList<StoreKey, StorePayload>
+    data: DataManager<StoreKey, StorePayload>
 }
 
 #[derive(Debug, PartialEq)]
@@ -109,7 +110,7 @@ impl<'a> Response<'a> {
 impl Store {
     pub fn new() -> Self {
         Store {
-            data: SkipList::new(10)
+            data: DataManager::new(10, 3)
         }
     }
 
@@ -164,7 +165,7 @@ impl Store {
                     SetterType::Add => {
                         // Cannot use self.data.entry(key).or_insert(sp);
                         // because of the NOT_STORED response
-                        match self.data.get_mut(&key) {
+                        match self.data.get(&key) {
                             Some(_) => {
                                 return Some(Response::NotStored);
                             }
@@ -176,7 +177,7 @@ impl Store {
                     SetterType::Replace => {
                         // Cannot use self.data.entry(key).and_modify(|e| *e = sp);
                         // because of the NOT_STORED response
-                        match self.data.get_mut(&key) {
+                        match self.data.get(&key) {
                             Some(_) => {
                                 self.data.insert(key, sp);
                             }
@@ -186,13 +187,15 @@ impl Store {
                         }
                     }
                     SetterType::Append => {
-                        match self.data.get_mut(&key) {
+                        match self.data.get(&key) {
                             Some(v) => {
-                                v.data.extend(sp.data);
-                                v.ttl = sp.ttl;
-                                v.created_at = sp.created_at;
-                                v.bytes += sp.bytes;
-                                v.flags = sp.flags;
+                                let mut c = v.clone();
+                                c.data.extend(sp.data);
+                                c.ttl = sp.ttl;
+                                c.created_at = sp.created_at;
+                                c.bytes += sp.bytes;
+                                c.flags = sp.flags;
+                                self.data.insert(key, c);
                             }
                             None => {
                                 return Some(Response::NotStored);
@@ -200,15 +203,17 @@ impl Store {
                         }
                     }
                     SetterType::Prepend => {
-                        match self.data.get_mut(&key) {
+                        match self.data.get(&key) {
                             Some(v) => {
                                 let mut tmp: Vec<_> = sp.data.to_owned();
+                                let mut c = v.clone();
                                 tmp.extend(&v.data);
-                                v.data = tmp;
-                                v.ttl = sp.ttl;
-                                v.created_at = sp.created_at;
-                                v.bytes += sp.bytes;
-                                v.flags = sp.flags;
+                                c.data = tmp;
+                                c.ttl = sp.ttl;
+                                c.created_at = sp.created_at;
+                                c.bytes += sp.bytes;
+                                c.flags = sp.flags;
+                                self.data.insert(key, c);
                             }
                             None => {
                                 return Some(Response::NotStored);

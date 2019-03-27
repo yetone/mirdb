@@ -11,6 +11,8 @@ mod parser;
 mod store;
 mod utils;
 mod thread_pool;
+mod data_manager;
+mod memtable;
 
 use crate::parser::{parse, Command};
 use crate::store::Store;
