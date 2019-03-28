@@ -1,9 +1,12 @@
 [package]
-name = "mirdb-server"
+name = "sstable"
 version = "0.1.0"
 authors = ["yetone <yetoneful@gmail.com>"]
 edition = "2018"
 
+[lib]
+name = "sstable"
+
 [dependencies]
-skip-list = { path = "../skip-list" }
-sstable = { path = "../sstable" }
+crc = "1.2"
+integer-encoding = "1.0"

@@ -86,6 +86,9 @@ fn handle_connection(mut stream: TcpStream, store: Arc<RwLock<Store>>) -> Result
         };
 
         data = remain.to_vec();
+        if data.capacity() < buffer.len() {
+            data.reserve(buffer.len() - data.capacity());
+        }
     }
 
     Ok(())
