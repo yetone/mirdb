@@ -105,13 +105,15 @@ mod test {
     #[test]
     fn test_new() -> MyResult<()> {
         let path = Path::new("/tmp/test_table_reader");
-        let mut t = TableBuilder::new(path, Options::default())?;
+        let mut opt = Options::default();
+        opt.block_size = 20;
+        let mut t = TableBuilder::new(path, opt.clone())?;
         let data = get_data();
         for (k, v) in data {
             t.add(k, v)?;
         }
         t.flush()?;
-        let t = TableReader::new(path, Options::default())?;
+        let t = TableReader::new(path, opt.clone())?;
         for (k, _) in t.index_block.iter() {
             println!("index key: {}", to_str(&k));
         }
