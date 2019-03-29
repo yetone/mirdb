@@ -12,7 +12,6 @@ use crate::options::CompressType;
 use crate::options::Options;
 use crate::result::MyResult;
 use crate::util::mask_crc;
-use crate::writer;
 
 pub const BLOCK_CTYPE_LEN: usize = 1;
 pub const BLOCK_CKSUM_LEN: usize = 4;

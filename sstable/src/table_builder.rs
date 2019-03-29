@@ -1,21 +1,15 @@
 use std::fs::File;
 use std::fs::OpenOptions;
-use std::io::Read;
-use std::io::Seek;
-use std::io::SeekFrom;
 use std::io::Write;
 use std::path::Path;
 
 use crate::block_builder::BlockBuilder;
-use crate::block_handle::BlockHandle;
 use crate::footer::Footer;
 use crate::footer::FULL_FOOTER_LENGTH;
-use crate::options::CompressType;
 use crate::options::Options;
 use crate::result::MyResult;
 use crate::util::find_short_succ;
 use crate::util::find_shortest_sep;
-use crate::util::mask_crc;
 
 pub struct TableBuilder {
     file: File,

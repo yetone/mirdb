@@ -1,22 +1,22 @@
 use std::io::Read;
 use std::io::Seek;
 
+use crc::crc32;
+use crc::crc32::Hasher32;
 use integer_encoding::FixedInt;
+use snap::Decoder;
 
+use crate::block_builder::BLOCK_CKSUM_LEN;
+use crate::block_builder::BLOCK_CTYPE_LEN;
 use crate::block_handle::BlockHandle;
 use crate::block_iter::BlockIter;
+use crate::options::CompressType;
+use crate::options::int_to_compress_type;
 use crate::options::Options;
 use crate::reader;
 use crate::result::MyResult;
 use crate::result::StatusCode;
-use crate::block_builder::BLOCK_CKSUM_LEN;
-use crate::block_builder::BLOCK_CTYPE_LEN;
-use crc::crc32;
-use crc::crc32::Hasher32;
 use crate::util::unmask_crc;
-use crate::options::int_to_compress_type;
-use crate::options::CompressType;
-use snap::Decoder;
 
 #[derive(Clone)]
 pub struct Block {
@@ -50,9 +50,7 @@ impl Block {
                 CompressType::Snappy => {
                     let decoded = Decoder::new().decompress_vec(&buf)?;
                     Ok((Block::new_with_buffer(decoded, opt), offset))
-                },
-                _ => err!(StatusCode::CompressError, "compress type error")
-
+                }
             }
         } else {
             err!(StatusCode::InvalidData, "invalid data")

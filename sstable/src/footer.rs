@@ -1,17 +1,10 @@
-use std::fs::File;
-use std::fs::OpenOptions;
 use std::io::Read;
 use std::io::Seek;
-use std::io::Write;
-use std::path::Path;
-
-use crate::block_builder::BlockBuilder;
-use crate::block_handle::BlockHandle;
-use crate::options::Options;
-use crate::result::MyResult;
-use crate::util::find_short_succ;
-use crate::util::find_shortest_sep;
 use std::io::SeekFrom;
+use std::io::Write;
+
+use crate::block_handle::BlockHandle;
+use crate::result::MyResult;
 
 pub const FOOTER_LENGTH: usize = 40;
 pub const FULL_FOOTER_LENGTH: usize = FOOTER_LENGTH + 8;
@@ -74,6 +67,8 @@ impl Footer {
 #[cfg(test)]
 mod test {
     use super::*;
+    use std::path::Path;
+    use std::fs::File;
 
     #[test]
     fn test_footer() -> MyResult<()> {

@@ -1,7 +1,5 @@
 use std::cell::RefCell;
 use std::fs::File;
-use std::io::Seek;
-use std::io::SeekFrom;
 use std::ops::DerefMut;
 use std::path::Path;
 use std::rc::Rc;
