@@ -55,6 +55,7 @@ impl<'a> BlockIter<'a> {
         self.offset = off;
         self.current_entry_offset = off;
         self.current_restart_idx = idx;
+
         // advances self.offset to point to the next entry
         let (shared, non_shared, _, head_len) = self.parse_entry_and_advance();
 
@@ -116,11 +117,13 @@ impl<'a> BlockIter<'a> {
 
     pub fn seek(&mut self, to: &[u8]) {
         self.reset();
+
         let mut left = 0;
         let restart_count = self.restart_count();
         let mut right = if restart_count > 0 {restart_count - 1} else {0};
+
         while left < right {
-            let m = left + (right - left) / 2;
+            let m = (left + right + 1) / 2;
             self.seek_to_restart_point(m);
             if &self.key[..] < to {
                 left = m;
@@ -128,6 +131,7 @@ impl<'a> BlockIter<'a> {
                 right = m - 1;
             }
         }
+
         assert_eq!(left, right);
         self.current_restart_idx = left;
         self.offset = self.get_restart_point(left);

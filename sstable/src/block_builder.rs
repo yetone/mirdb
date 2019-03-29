@@ -31,13 +31,16 @@ impl BlockBuilder {
     }
 
     pub fn new_with_buffer<T: Into<Vec<u8>>>(buffer: T, opt: Options) -> Self {
+        let mut restarts = vec![0];
+        restarts.reserve(1023);
+
         BlockBuilder {
             opt,
             buffer: buffer.into(),
             count: 0,
             restart_count: 0,
             last_key: vec![],
-            restarts: vec![],
+            restarts,
         }
     }
 

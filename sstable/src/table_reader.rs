@@ -80,23 +80,34 @@ impl TableReader {
 
 #[cfg(test)]
 mod test {
+    use std::time;
+
     use crate::table_builder::TableBuilder;
     use crate::util::to_str;
 
     use super::*;
 
-    fn get_data() -> Vec<(&'static [u8], &'static [u8])> {
-        vec![
-            ("key1".as_bytes(), "value1".as_bytes()),
+    fn get_data() -> Vec<(String, String)> {
+        let mut data = vec![
+            ("key1".to_owned(), "value1".to_owned()),
             (
-                "loooooooooooooooooooooooooooooooooongerkey1".as_bytes(),
-                "shrtvl1".as_bytes(),
+                "loooooooooooooooooooooooooooooooooongerkey1".to_owned(),
+                "shrtvl1".to_owned(),
             ),
-            ("medium length key 1".as_bytes(), "some value 2".as_bytes()),
-            ("prefix_key1".as_bytes(), "value1".as_bytes()),
-            ("prefix_key2".as_bytes(), "value2".as_bytes()),
-            ("prefix_key3".as_bytes(), "value3".as_bytes()),
-        ]
+            ("medium length key 1".to_owned(), "some value 2".to_owned()),
+        ];
+        let mut key_prefix = "prefix_key".to_owned();
+        let value_prefix = "value";
+        let n = 1000;
+        for i in 1..=n {
+            if i % 10 == 0 {
+                key_prefix += "a";
+            }
+            let key = format!("{}{}", key_prefix, i);
+            let value = format!("{}{}", value_prefix, i);
+            data.push((key, value));
+        }
+        data
     }
 
     #[test]
@@ -106,22 +117,39 @@ mod test {
         opt.block_size = 20;
         let mut t = TableBuilder::new(path, opt.clone())?;
         let data = get_data();
+        println!("add: {}", data.len());
+        let st = time::SystemTime::now();
         for (k, v) in data {
-            t.add(k, v)?;
+            t.add(k.as_bytes(), v.as_bytes())?;
         }
         t.flush()?;
+        println!("add cost: {}ms", st.elapsed().unwrap().as_millis());
         let t = TableReader::new(path, opt.clone())?;
-        for (k, _) in t.index_block.iter() {
-            println!("index key: {}", to_str(&k));
+        let not_found_count = 1000;
+        let not_found_key_prefix = "yetone";
+        let mut not_found_keys = Vec::with_capacity(not_found_count);
+        for i in 0..not_found_count {
+            not_found_keys.push(format!("{}{}", not_found_key_prefix, i));
         }
-        let r = t.get("prefix_key0".as_bytes())?;
-        assert!(r.is_none());
+        println!("found not found: {}", not_found_keys.len());
+        let st = time::SystemTime::now();
+        for k in not_found_keys {
+            let r = t.get(k.as_bytes())?;
+            assert!(r.is_none());
+        }
+        println!("not found cost: {}ms", st.elapsed().unwrap().as_millis());
         let data = get_data();
+        println!("found: {}", data.len());
+        let st = time::SystemTime::now();
         for (k, v) in data {
-            let r = t.get(k)?;
+            let r = t.get(k.as_bytes())?;
+            if r.is_none() {
+                println!("error found: {}", to_str(k.as_bytes()));
+            }
             assert!(r.is_some());
-            assert_eq!(v, r.unwrap().as_slice());
+            assert_eq!(v.as_bytes(), r.unwrap().as_slice());
         }
+        println!("found cost: {}ms", st.elapsed().unwrap().as_millis());
         Ok(())
     }
 }

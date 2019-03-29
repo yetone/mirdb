@@ -51,7 +51,7 @@ impl BlockHandle {
 }
 
 macro_rules! bh {
-    ($offset:expr, $size:expr) => (BlockHandle::new($offset, $size));
+    ($offset:expr, $size:expr) => ($crate::block_handle::BlockHandle::new($offset, $size));
 }
 
 #[cfg(test)]
