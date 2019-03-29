@@ -51,9 +51,30 @@ pub fn find_short_succ(a: &[u8]) -> Vec<u8> {
     return result;
 }
 
+const MASK_DELTA: u32 = 0xa282ead8;
+
+pub fn mask_crc(c: u32) -> u32 {
+    (c.wrapping_shr(15) | c.wrapping_shl(17)).wrapping_add(MASK_DELTA)
+}
+
+pub fn unmask_crc(mc: u32) -> u32 {
+    let rot = mc.wrapping_sub(MASK_DELTA);
+    (rot.wrapping_shr(17) | rot.wrapping_shl(15))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::block_builder::BLOCK_CKSUM_LEN;
+
+    #[test]
+    fn test_crc() {
+        let c = ::std::u32::MAX;
+        let n = mask_crc(c);
+        assert_eq!(BLOCK_CKSUM_LEN, ::std::mem::size_of_val(&n));
+        assert_ne!(c, n);
+        assert_eq!(c, unmask_crc(n));
+    }
 
     #[test]
     fn test_find_shortest_sep() {

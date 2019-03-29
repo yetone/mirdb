@@ -1,12 +1,21 @@
 use std::io::Seek;
+use std::io::SeekFrom;
 use std::io::Write;
 
+use crc::crc32;
+use crc::crc32::Hasher32;
 use integer_encoding::{FixedIntWriter, VarIntWriter};
+use snap::Encoder;
 
 use crate::block_handle::BlockHandle;
+use crate::options::CompressType;
 use crate::options::Options;
 use crate::result::MyResult;
+use crate::util::mask_crc;
 use crate::writer;
+
+pub const BLOCK_CTYPE_LEN: usize = 1;
+pub const BLOCK_CKSUM_LEN: usize = 4;
 
 pub struct BlockBuilder {
     opt: Options,
@@ -31,6 +40,14 @@ impl BlockBuilder {
             last_key: vec![],
             restarts: vec![],
         }
+    }
+
+    fn reset(&mut self) {
+        self.buffer.clear();
+        self.count = 0;
+        self.restart_count = 0;
+        self.last_key.clear();
+        self.restarts.clear();
     }
 
     pub fn size_estimate(&self) -> usize {
@@ -74,11 +91,37 @@ impl BlockBuilder {
 
     pub fn flush<T: Seek + Write>(&mut self, w: &mut T, offset: usize) -> MyResult<BlockHandle> {
         self.buffer.reserve(self.restarts.len() * 4 + 4);
+
+        // write restart points
         for i in &self.restarts {
             self.buffer.write_fixedint(*i as u32).expect("write restart point error");
         }
+        // write restarts count
         self.buffer.write_fixedint(self.restarts.len() as u32).expect("write restarts count error");
-        let (_value_size, next_offset) = writer::write_bytes(w, offset, &self.buffer)?;
-        Ok(bh!(offset, next_offset - offset))
+
+        // compress buffer
+        if self.opt.compress_type == CompressType::Snappy {
+            let mut encoder = Encoder::new();
+            self.buffer = encoder.compress_vec(&self.buffer)?;
+        }
+
+        // write ctype
+        let ctype_buf = [self.opt.compress_type as u8; BLOCK_CTYPE_LEN];
+        self.buffer.write(&ctype_buf)?;
+
+        let mut digest = crc32::Digest::new(crc32::CASTAGNOLI);
+        digest.write(&self.buffer);
+
+        // write crc
+        self.buffer.write_fixedint(mask_crc(digest.sum32()))?;
+
+        w.seek(SeekFrom::Start(offset as u64))?;
+        w.write(&self.buffer)?;
+
+        let bh = bh!(offset, self.buffer.len());
+
+        self.reset();
+
+        Ok(bh)
     }
 }

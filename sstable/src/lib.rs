@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+#[macro_use]
 mod result;
 #[macro_use]
 mod block_handle;
@@ -13,3 +14,4 @@ mod block_builder;
 mod options;
 mod util;
 mod block_iter;
+mod footer;

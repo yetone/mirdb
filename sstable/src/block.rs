@@ -8,6 +8,15 @@ use crate::block_iter::BlockIter;
 use crate::options::Options;
 use crate::reader;
 use crate::result::MyResult;
+use crate::result::StatusCode;
+use crate::block_builder::BLOCK_CKSUM_LEN;
+use crate::block_builder::BLOCK_CTYPE_LEN;
+use crc::crc32;
+use crc::crc32::Hasher32;
+use crate::util::unmask_crc;
+use crate::options::int_to_compress_type;
+use crate::options::CompressType;
+use snap::Decoder;
 
 #[derive(Clone)]
 pub struct Block {
@@ -29,7 +38,31 @@ impl Block {
 
     pub fn new_from_location<T: Seek + Read>(r: &mut T, location: &BlockHandle, opt: Options) -> MyResult<(Block, usize)> {
         let (data, offset) = reader::read_bytes(r, location)?;
-        Ok((Block::new_with_buffer(data, opt), offset))
+        let cksum_buf = &data[data.len() - BLOCK_CKSUM_LEN..];
+        if !Block::verify_block(&data[..data.len() - BLOCK_CKSUM_LEN], unmask_crc(u32::decode_fixed(&cksum_buf))) {
+            return err!(StatusCode::ChecksumError, "checksum error");
+        }
+        let ctype_buf = &data[data.len() - BLOCK_CTYPE_LEN - BLOCK_CKSUM_LEN..data.len() - BLOCK_CKSUM_LEN];
+        let buf = &data[..data.len() - BLOCK_CKSUM_LEN - BLOCK_CTYPE_LEN];
+        if let Some(ctype) = int_to_compress_type(ctype_buf[0] as u32) {
+            match ctype {
+                CompressType::None => Ok((Block::new_with_buffer(buf, opt), offset)),
+                CompressType::Snappy => {
+                    let decoded = Decoder::new().decompress_vec(&buf)?;
+                    Ok((Block::new_with_buffer(decoded, opt), offset))
+                },
+                _ => err!(StatusCode::CompressError, "compress type error")
+
+            }
+        } else {
+            err!(StatusCode::InvalidData, "invalid data")
+        }
+    }
+
+    fn verify_block(data: &[u8], want: u32) -> bool {
+        let mut digest = crc32::Digest::new(crc32::CASTAGNOLI);
+        digest.write(data);
+        digest.sum32() == want
     }
 
     pub fn iter(&self) -> BlockIter {

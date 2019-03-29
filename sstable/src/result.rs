@@ -2,10 +2,16 @@ use std::io;
 use std::result;
 use std::error::Error;
 
+use snap::Error as SnapError;
+
 #[derive(Debug)]
 pub enum StatusCode {
     NotFound,
     IOError,
+    ChecksumError,
+    SnapError,
+    CompressError,
+    InvalidData,
 }
 
 #[derive(Debug)]
@@ -37,4 +43,18 @@ impl From<io::Error> for Status {
     }
 }
 
+impl From<SnapError> for Status {
+    fn from(e: SnapError) -> Self {
+        let code = match e {
+            SnapError::Checksum { .. } => StatusCode::ChecksumError,
+            _ => StatusCode::SnapError,
+        };
+        Status::new(code, e.description())
+    }
+}
+
 pub type MyResult<T> = result::Result<T, Status>;
+
+macro_rules! err {
+    ($code:expr, $msg:expr) => {Err($crate::result::Status { code: $code, msg: $msg.to_string() })};
+}

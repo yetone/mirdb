@@ -9,10 +9,10 @@ use std::rc::Rc;
 use crate::block::Block;
 use crate::block_handle::BlockHandle;
 use crate::cache;
+use crate::footer::Footer;
+use crate::footer::FULL_FOOTER_LENGTH;
 use crate::options::Options;
 use crate::result::MyResult;
-use crate::table_builder::Footer;
-use crate::table_builder::FULL_FOOTER_LENGTH;
 
 pub struct TableReader {
     file: Rc<RefCell<File>>,
@@ -28,8 +28,7 @@ impl TableReader {
     pub fn new(path: &Path, opt: Options) -> MyResult<TableReader> {
         let mut f = File::open(path)?;
         let size = f.metadata()?.len() as usize;
-        f.seek(SeekFrom::Start((size - FULL_FOOTER_LENGTH) as u64))?;
-        let footer = Footer::read(&mut f)?;
+        let footer = Footer::read(&mut f, size - FULL_FOOTER_LENGTH)?;
         let index_block = Block::new_from_location(&mut f, &footer.index, opt.clone())?.0;
         Ok(TableReader {
             file: Rc::new(RefCell::new(f)),
