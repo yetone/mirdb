@@ -10,7 +10,7 @@ use crate::cache;
 use crate::footer::Footer;
 use crate::footer::FULL_FOOTER_LENGTH;
 use crate::options::Options;
-use crate::result::MyResult;
+use crate::error::MyResult;
 
 pub struct TableReader {
     file: Rc<RefCell<File>>,

@@ -4,7 +4,7 @@ use std::io::SeekFrom;
 use std::io::Write;
 
 use crate::block_handle::BlockHandle;
-use crate::result::MyResult;
+use crate::error::MyResult;
 
 pub const FOOTER_LENGTH: usize = 40;
 pub const FULL_FOOTER_LENGTH: usize = FOOTER_LENGTH + 8;

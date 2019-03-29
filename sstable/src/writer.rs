@@ -4,7 +4,7 @@ use std::io::Write;
 
 use integer_encoding::FixedInt;
 
-use crate::result::MyResult;
+use crate::error::MyResult;
 
 pub fn write_usize<T: Seek + Write>(w: &mut T, offset: usize, content: usize) -> MyResult<(usize, usize)> {
     w.seek(SeekFrom::Start(offset as u64))?;

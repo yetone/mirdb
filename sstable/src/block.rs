@@ -14,8 +14,8 @@ use crate::options::CompressType;
 use crate::options::int_to_compress_type;
 use crate::options::Options;
 use crate::reader;
-use crate::result::MyResult;
-use crate::result::StatusCode;
+use crate::error::MyResult;
+use crate::error::StatusCode;
 use crate::util::unmask_crc;
 
 #[derive(Clone)]

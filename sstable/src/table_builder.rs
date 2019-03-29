@@ -7,7 +7,7 @@ use crate::block_builder::BlockBuilder;
 use crate::footer::Footer;
 use crate::footer::FULL_FOOTER_LENGTH;
 use crate::options::Options;
-use crate::result::MyResult;
+use crate::error::MyResult;
 use crate::util::find_short_succ;
 use crate::util::find_shortest_sep;
 

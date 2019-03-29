@@ -3,7 +3,7 @@ use std::io::Seek;
 use std::io::SeekFrom;
 use integer_encoding::FixedInt;
 
-use crate::result::MyResult;
+use crate::error::MyResult;
 use crate::block_handle::BlockHandle;
 
 pub fn read_usize<T: Seek + Read>(r: &mut T, offset: usize) -> MyResult<(usize, usize)> {

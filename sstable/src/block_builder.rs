@@ -10,7 +10,7 @@ use snap::Encoder;
 use crate::block_handle::BlockHandle;
 use crate::options::CompressType;
 use crate::options::Options;
-use crate::result::MyResult;
+use crate::error::MyResult;
 use crate::util::mask_crc;
 
 pub const BLOCK_CTYPE_LEN: usize = 1;

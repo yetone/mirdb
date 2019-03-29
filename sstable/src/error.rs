@@ -56,5 +56,5 @@ impl From<SnapError> for Status {
 pub type MyResult<T> = result::Result<T, Status>;
 
 macro_rules! err {
-    ($code:expr, $msg:expr) => {Err($crate::result::Status { code: $code, msg: $msg.to_string() })};
+    ($code:expr, $msg:expr) => {Err($crate::error::Status { code: $code, msg: $msg.to_string() })};
 }

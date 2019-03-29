@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 #[macro_use]
-mod result;
+mod error;
 #[macro_use]
 mod block_handle;
 mod writer;
