@@ -53,7 +53,7 @@ impl<'a> Response<'a> {
             Response::NotFound => {
                 writer.write(b"NOT_FOUND\r\n")?;
             }
-            Response::Get(v) => {
+            Response::Gets(v) | Response::Get(v) => {
                 for GetRespItem{ key, data, flags, bytes } in v {
                     writer.write(format!(
                         "VALUE {} {} {}\r\n",
