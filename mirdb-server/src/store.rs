@@ -11,6 +11,7 @@ use crate::utils::to_str;
 use crate::data_manager::DataManager;
 use crate::response::Response;
 use crate::response::GetRespItem;
+use crate::error::{MyResult, StatusCode};
 
 pub type StoreKey = Vec<u8>;
 
@@ -34,12 +35,12 @@ impl Store {
         }
     }
 
-    pub fn apply<'a>(&self, request: Request<'a>) -> Option<Response<'a>> {
+    pub fn apply(&self, request: Request) -> MyResult<Response> {
         match request {
             Request::Getter{ getter, keys } => {
                 let mut v = Vec::with_capacity(keys.len());
                 for key in keys {
-                    match self.data.get(key) {
+                    match self.data.get(&key) {
                         Some(p) => {
                             if p.created_at + p.ttl as u64 > SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() {
                                 v.push(GetRespItem {
@@ -53,23 +54,23 @@ impl Store {
                         _ => ()
                     }
                 }
-                Some(match getter {
+                Ok(match getter {
                     GetterType::Get => Response::Get(v),
                     GetterType::Gets => Response::Gets(v),
                 })
             }
             Request::Error(_) => {
-                Some(Response::Error)
+                Ok(Response::Error)
             }
-            _ => None
+            _ => err!(StatusCode::NotSupport, "not support")
         }
     }
 
-    pub fn apply_mut<'a>(&mut self, request: Request<'a>) -> Option<Response<'a>> {
+    pub fn apply_mut(&mut self, request: Request) -> MyResult<Response> {
         match request {
             Request::Setter{ setter, key, flags, ttl, bytes, payload } => {
                 if payload.len() > bytes {
-                    return Some(Response::ClientError("bad data chunk"));
+                    return Ok(Response::ClientError("bad data chunk".to_owned()));
                 }
                 let data = payload[..bytes as usize].to_vec();
                 let created_at = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
@@ -87,7 +88,7 @@ impl Store {
                         // because of the NOT_STORED response
                         match self.data.get(&key) {
                             Some(_) => {
-                                return Some(Response::NotStored);
+                                return Ok(Response::NotStored);
                             }
                             None => {
                                 self.data.insert(key, sp);
@@ -102,7 +103,7 @@ impl Store {
                                 self.data.insert(key, sp);
                             }
                             None => {
-                                return Some(Response::NotStored);
+                                return Ok(Response::NotStored);
                             }
                         }
                     }
@@ -118,7 +119,7 @@ impl Store {
                                 self.data.insert(key, c);
                             }
                             None => {
-                                return Some(Response::NotStored);
+                                return Ok(Response::NotStored);
                             }
                         }
                     }
@@ -136,23 +137,23 @@ impl Store {
                                 self.data.insert(key, c);
                             }
                             None => {
-                                return Some(Response::NotStored);
+                                return Ok(Response::NotStored);
                             }
                         }
                     }
                 }
-                Some(Response::Stored)
+                Ok(Response::Stored)
             }
             Request::Deleter{ key } => {
-                match self.data.remove(key) {
-                    Some(_) => Some(Response::Deleted),
-                    None => Some(Response::NotFound),
+                match self.data.remove(&key) {
+                    Some(_) => Ok(Response::Deleted),
+                    None => Ok(Response::NotFound),
                 }
             }
             Request::Error(_) => {
-                Some(Response::Error)
+                Ok(Response::Error)
             }
-            _ => None
+            _ => err!(StatusCode::NotSupport, "not support")
         }
     }
 }
@@ -164,38 +165,39 @@ mod test {
     #[test]
     fn test_get_none() {
         let store = Store::new();
-        let r = store.apply(Request::Getter{ getter: GetterType::Get, keys: vec!["a".as_bytes()] });
-        assert_eq!(Some(Response::Get(vec![])), r);
+        let r = store.apply(Request::Getter{ getter: GetterType::Get, keys: vec![b"a".to_vec()] });
+        assert_eq!(Ok(Response::Get(vec![])), r);
     }
 
     #[test]
     fn test_get_some() {
         let mut store = Store::new();
-        let key = "a".as_bytes();
-        let payload = "abc".as_bytes();
+        let key = b"a".to_vec();
+        let payload = b"abc".to_vec();
         let r = store.apply_mut(Request::Setter{
             setter: SetterType::Set,
-            key,
+            key: key.clone(),
             flags: 1,
             ttl: 10,
+            payload: payload.clone(),
             bytes: payload.len(),
-            payload
         });
-        assert!(r.is_some(), "stored");
-        let r = store.apply(Request::Getter{ getter: GetterType::Get, keys: vec![key] });
-        assert_eq!(Some(Response::Get(vec!(GetRespItem {
+        assert!(r.is_ok(), "stored");
+        let r = store.apply(Request::Getter{ getter: GetterType::Get, keys: vec![key.clone()] });
+        let bytes = payload.len();
+        assert_eq!(Ok(Response::Get(vec!(GetRespItem {
             key,
             data: payload.to_vec(),
             flags: 1,
-            bytes: payload.len(),
+            bytes,
         }))), r);
     }
 
     #[test]
     fn test_set() {
         let mut store = Store::new();
-        let key = b"a";
-        let payload = b"abc";
+        let key = b"a".to_vec();
+        let payload = b"abc".to_vec();
         let r = store.apply_mut(Request::Setter{
             setter: SetterType::Set,
             key,
@@ -204,14 +206,14 @@ mod test {
             bytes: payload.len(),
             payload
         });
-        assert_eq!(Some(Response::Stored), r);
+        assert_eq!(Ok(Response::Stored), r);
     }
 
     #[test]
     fn test_set_err() {
         let mut store = Store::new();
-        let key = b"a";
-        let payload = b"abc";
+        let key = b"a".to_vec();
+        let payload = b"abc".to_vec();
         let r = store.apply_mut(Request::Setter{
             setter: SetterType::Set,
             key,
@@ -220,6 +222,6 @@ mod test {
             bytes: payload.len() - 1,
             payload
         });
-        assert_eq!(Some(Response::ClientError("bad data chunk")), r);
+        assert_eq!(Ok(Response::ClientError("bad data chunk".to_owned())), r);
     }
 }

@@ -29,9 +29,9 @@ gen_parser!(getter<RequestConf>,
           keys: split!(space, key_parser) >>
           tag!(b"\r\n") >>
           (
-              cc!(Request::Getter{
+              cc!(Request::Getter {
                   getter: to_getter_type(getter),
-                  keys,
+                  keys: keys.iter().map(|x| x.to_vec()).collect(),
               })
           )
       )
@@ -88,11 +88,11 @@ gen_parser!(setter<RequestConf>,
               cc!(
                   Request::Setter {
                       setter: to_setter_type(setter),
-                      key,
+                      key: key.to_vec(),
                       flags,
                       ttl,
                       bytes,
-                      payload
+                      payload: payload.to_vec(),
                   },
                   unwrap_noreply(noreply)
               )
@@ -111,7 +111,7 @@ gen_parser!(deleter<RequestConf>,
                 (
                     cc!(
                         Request::Deleter {
-                            key
+                            key: key.to_vec(),
                         },
                         unwrap_noreply(noreply)
                     )
@@ -119,17 +119,9 @@ gen_parser!(deleter<RequestConf>,
             )
 );
 
-gen_parser!(_parse<RequestConf>, alt!(
+gen_parser!(parse<RequestConf>, alt!(
     getter | setter | deleter
 ));
-
-pub fn parse(i: &[u8]) -> (&[u8], RequestConf) {
-    match _parse(i) {
-        IRResult::Ok(r) => r,
-        IRResult::Incomplete(_) => (b"", cc!(Request::Incomplete)),
-        IRResult::Err(e) => (b"", cc!(Request::Error(if e != "" { e } else { "ERROR" })))
-    }
-}
 
 #[cfg(test)]
 mod test {
@@ -138,81 +130,82 @@ mod test {
 
     #[test]
     fn test() {
-        assert_eq!(parse(b"get abc\r\nget"), ("get".as_bytes(), cc!(Request::Getter {
+        assert_eq!(parse(b"get abc\r\nget"), IRResult::Ok(("get".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
-            keys: vec![b"abc"],
-        })));
-        assert_eq!(parse(b"get abc\r\n"), ("".as_bytes(), cc!(Request::Getter {
+            keys: vec![b"abc".to_vec()],
+        }))));
+        assert_eq!(parse(b"get abc\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
-            keys: vec![b"abc"],
-        })));
-        assert_eq!(parse(b"gets abc\r\n"), ("".as_bytes(), cc!(Request::Getter {
+            keys: vec![b"abc".to_vec()],
+        }))));
+        assert_eq!(parse(b"gets abc\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Gets,
-            keys: vec![b"abc"],
-        })));
-        assert_eq!(parse(b"get  abc\r\n"), ("".as_bytes(), cc!(Request::Getter {
+            keys: vec![b"abc".to_vec()],
+        }))));
+        assert_eq!(parse(b"get  abc\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
-            keys: vec![b"abc"],
-        })));
-        assert_eq!(parse(b"get abc def\r\n"), ("".as_bytes(), cc!(Request::Getter {
+            keys: vec![b"abc".to_vec()],
+        }))));
+        assert_eq!(parse(b"get abc def\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
-            keys: vec![b"abc", b"def"],
-        })));
-        assert_eq!(parse(b"get    abc  def   ghi\r\n"), ("".as_bytes(), cc!(Request::Getter {
+            keys: vec![b"abc".to_vec(), b"def".to_vec()],
+        }))));
+        assert_eq!(parse(b"get    abc  def   ghi\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
-            keys: vec![b"abc", b"def", b"ghi"],
-        })));
-        assert_eq!(parse(b"gets    abc  def   ghi\r\n"), ("".as_bytes(), cc!(Request::Getter {
+            keys: vec![b"abc".to_vec(), b"def".to_vec(), b"ghi".to_vec()],
+        }))));
+        assert_eq!(parse(b"gets    abc  def   ghi\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Gets,
-            keys: vec![b"abc", b"def", b"ghi"],
-        })));
-        assert_eq!(parse(b"set abc 1 0 7\r\n"), ("".as_bytes(), cc!(Request::Incomplete)));
-        assert_eq!(parse(b"set abc   1 0 7\r\n"), ("".as_bytes(), cc!(Request::Incomplete)));
-        assert_eq!(parse(b"set abc 1 0 7\r\n\"a b c\"\r\n"), ("".as_bytes(), cc!(Request::Setter {
+            keys: vec![b"abc".to_vec(), b"def".to_vec(), b"ghi".to_vec()],
+        }))));
+        assert_eq!(parse(b"set abc 1 0 7\r\n"), IRResult::Incomplete(7));
+        assert_eq!(parse(b"set abc   1 0 7\r\n"), IRResult::Incomplete(7));
+        assert_eq!(parse(b"set abc   1 0 7\r\na"), IRResult::Incomplete(6));
+        assert_eq!(parse(b"set abc 1 0 7\r\n\"a b c\"\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Set,
-            key: b"abc",
+            key: b"abc".to_vec(),
             flags: 1,
             ttl: 0,
             bytes: 7,
-            payload: b"\"a b c\"",
-        })));
-        assert_eq!(parse(b"set    abc    1 0 7\r\n\"a b c\"\r\n"), ("".as_bytes(), cc!(Request::Setter {
+            payload: b"\"a b c\"".to_vec(),
+        }))));
+        assert_eq!(parse(b"set    abc    1 0 7\r\n\"a b c\"\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Set,
-            key: b"abc",
+            key: b"abc".to_vec(),
             flags: 1,
             ttl: 0,
             bytes: 7,
-            payload: b"\"a b c\"",
-        })));
-        assert_eq!(parse(b"set abc 1 0 7 noreply\r\n\"a b c\"\r\n"), ("".as_bytes(), cc!(Request::Setter {
+            payload: b"\"a b c\"".to_vec(),
+        }))));
+        assert_eq!(parse(b"set abc 1 0 7 noreply\r\n\"a b c\"\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Set,
-            key: b"abc",
+            key: b"abc".to_vec(),
             flags: 1,
             ttl: 0,
             bytes: 7,
-            payload: b"\"a b c\"",
-        }, true)));
-        assert_eq!(parse(b"set abc 1 0 6\r\nabcd\r\n\r\n"), ("".as_bytes(), cc!(Request::Setter {
+            payload: b"\"a b c\"".to_vec(),
+        }, true))));
+        assert_eq!(parse(b"set abc 1 0 6\r\nabcd\r\n\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Set,
-            key: b"abc",
+            key: b"abc".to_vec(),
             flags: 1,
             ttl: 0,
             bytes: 6,
-            payload: b"abcd\r\n",
-        })));
-        assert_eq!(parse(b"add abc 1 0 6\r\nabcd\r\n\r\n"), ("".as_bytes(), cc!(Request::Setter {
+            payload: b"abcd\r\n".to_vec(),
+        }))));
+        assert_eq!(parse(b"add abc 1 0 6\r\nabcd\r\n\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Add,
-            key: b"abc",
+            key: b"abc".to_vec(),
             flags: 1,
             ttl: 0,
             bytes: 6,
-            payload: b"abcd\r\n",
-        })));
-        assert_eq!(parse(b"delete abc\r\n"), ("".as_bytes(), cc!(Request::Deleter {
-            key: b"abc"
-        })));
-        assert_eq!(parse(b"delete abc noreply\r\n"), ("".as_bytes(), cc!(Request::Deleter {
-            key: b"abc"
-        }, true)));
+            payload: b"abcd\r\n".to_vec(),
+        }))));
+        assert_eq!(parse(b"delete abc\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Deleter {
+            key: b"abc".to_vec()
+        }))));
+        assert_eq!(parse(b"delete abc noreply\r\n"), IRResult::Ok(("".as_bytes(), cc!(Request::Deleter {
+            key: b"abc".to_vec()
+        }, true))));
     }
 }

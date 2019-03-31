@@ -1,20 +1,22 @@
 use std::io::ErrorKind;
 use std::error::Error;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum StatusCode {
     IOError,
     NotFound,
+    NotSupport,
+    Other,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Status {
     pub code: StatusCode,
     pub msg: String,
 }
 
 impl Status {
-    fn new(code: StatusCode, msg: &str) -> Self {
+    pub fn new(code: StatusCode, msg: &str) -> Self {
         let msg = if msg.is_empty() {
             format!("{:?}", code)
         } else {
@@ -35,8 +37,17 @@ impl From<::std::io::Error> for Status {
     }
 }
 
+impl Into<::std::io::Error> for Status {
+    fn into(self) -> ::std::io::Error {
+        match self.code {
+            StatusCode::NotFound => ::std::io::ErrorKind::NotFound.into(),
+            _ => ::std::io::ErrorKind::Other.into(),
+        }
+    }
+}
+
 pub type MyResult<T> = ::std::result::Result<T, Status>;
 
 macro_rules! err {
-    ($code:expr, $msg:expr) => {$crate::error::Status::new($code, $msg)};
+    ($code:expr, $msg:expr) => {Err($crate::error::Status::new($code, $msg))};
 }

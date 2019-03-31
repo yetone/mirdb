@@ -7,3 +7,9 @@ edition = "2018"
 [dependencies]
 skip-list = { path = "../skip-list" }
 sstable = { path = "../sstable" }
+bytes = "0.4"
+futures = "0.1.18"
+tokio = "0.1.18"
+tokio-io = "0.1.12"
+tokio-proto = "0.1"
+tokio-service = "0.1"

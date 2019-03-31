@@ -1,5 +1,5 @@
-pub type Key<'a> = &'a [u8];
-pub type Payload<'a> = &'a [u8];
+pub type Key = Vec<u8>;
+pub type Payload = Vec<u8>;
 
 #[derive(Debug, PartialEq)]
 pub enum SetterType {
@@ -12,29 +12,28 @@ pub enum GetterType {
 }
 
 #[derive(Debug, PartialEq)]
-pub enum Request<'a> {
+pub enum Request {
     Getter {
         getter: GetterType,
-        keys: Vec<Key<'a>>,
+        keys: Vec<Key>,
     },
     Setter {
         setter: SetterType,
-        key: Key<'a>,
+        key: Key,
         flags: u32,
         ttl: u32,
         bytes: usize,
-        payload: Payload<'a>,
+        payload: Payload,
     },
     Deleter {
-        key: Key<'a>,
+        key: Key,
     },
-    Error(&'a str),
-    Incomplete,
+    Error(String),
 }
 
 #[derive(Debug, PartialEq)]
-pub struct RequestConf<'a> {
-    pub request: Request<'a>,
+pub struct RequestConf {
+    pub request: Request,
     pub noreply: bool,
 }
 

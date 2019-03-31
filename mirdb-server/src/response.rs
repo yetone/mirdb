@@ -1,45 +1,71 @@
-use std::io::Write;
+use bytes::{BufMut, BytesMut};
+
 use crate::error::MyResult;
 use crate::utils::to_str;
 
 #[derive(Debug, PartialEq)]
-pub struct GetRespItem<'a> {
-    pub(crate) key: &'a [u8],
+pub struct GetRespItem {
+    pub(crate) key: Vec<u8>,
     pub(crate) data: Vec<u8>,
     pub(crate) flags: u32,
     pub(crate) bytes: usize,
 }
 
-impl<'a> GetRespItem<'a> {
-    pub fn new(key: &'a [u8], data: Vec<u8>, flags: u32, bytes: usize) -> Self {
+impl GetRespItem {
+    pub fn new(key: Vec<u8>, data: Vec<u8>, flags: u32, bytes: usize) -> Self {
         GetRespItem { key, data, flags, bytes }
     }
 }
 
 #[derive(Debug, PartialEq)]
-pub enum Response<'a> {
+pub enum Response {
     Stored,
     NotStored,
     Exists,
     NotFound,
-    Get(Vec<GetRespItem<'a>>),
-    Gets(Vec<GetRespItem<'a>>),
+    Get(Vec<GetRespItem>),
+    Gets(Vec<GetRespItem>),
     Deleted,
     Touched,
     Ok,
-    Busy(&'a [u8]),
-    Badclass(&'a [u8]),
-    Nospare(&'a [u8]),
-    Notfull(&'a [u8]),
-    Unsafe(&'a [u8]),
-    Same(&'a [u8]),
+    Busy(Vec<u8>),
+    Badclass(Vec<u8>),
+    Nospare(Vec<u8>),
+    Notfull(Vec<u8>),
+    Unsafe(Vec<u8>),
+    Same(Vec<u8>),
     Error,
-    ClientError(&'a str),
-    ServerError(&'a str),
+    ClientError(String),
+    ServerError(String),
 }
 
-impl<'a> Response<'a> {
-    pub fn write(&self, writer: &mut Write) -> MyResult<()> {
+pub trait Writer {
+    fn write(&mut self, data: &[u8]) -> MyResult<()>;
+}
+
+pub struct BufferWriter<'a> {
+    buf: &'a mut BytesMut,
+}
+
+impl<'a> BufferWriter<'a> {
+    pub fn new(buf: &'a mut BytesMut) -> BufferWriter<'a> {
+        BufferWriter { buf }
+    }
+}
+
+impl<'a> Writer for BufferWriter<'a> {
+    fn write(&mut self, data: &[u8]) -> MyResult<()> {
+        self.buf.reserve(data.len());
+        unsafe {
+            self.buf.bytes_mut()[..data.len()].copy_from_slice(data);
+            self.buf.advance_mut(data.len());
+        }
+        Ok(())
+    }
+}
+
+impl Response {
+    pub fn write(&self, writer: &mut Writer) -> MyResult<()> {
         match self {
             Response::Stored => {
                 writer.write(b"STORED\r\n")?;
