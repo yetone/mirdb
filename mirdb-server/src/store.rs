@@ -6,9 +6,11 @@ use std::convert::From;
 
 use skip_list::SkipList;
 
-use crate::parser::command::{SetterType, GetterType, Command};
+use crate::request::{SetterType, GetterType, Request};
 use crate::utils::to_str;
 use crate::data_manager::DataManager;
+use crate::response::Response;
+use crate::response::GetRespItem;
 
 pub type StoreKey = Vec<u8>;
 
@@ -21,90 +23,8 @@ pub struct StorePayload {
     created_at: u64,
 }
 
-#[derive(Debug, PartialEq)]
-pub struct GetRespItem<'a> {
-    key: &'a [u8],
-    data: Vec<u8>,
-    flags: u32,
-    bytes: usize,
-}
-
 pub struct Store {
     data: DataManager<StoreKey, StorePayload>
-}
-
-#[derive(Debug, PartialEq)]
-pub enum Response<'a> {
-    Stored,
-    NotStored,
-    Exists,
-    NotFound,
-    Get(Vec<GetRespItem<'a>>),
-    Gets(Vec<GetRespItem<'a>>),
-    Deleted,
-    Touched,
-    Ok,
-    Busy(&'a [u8]),
-    Badclass(&'a [u8]),
-    Nospare(&'a [u8]),
-    Notfull(&'a [u8]),
-    Unsafe(&'a [u8]),
-    Same(&'a [u8]),
-    Error,
-    ClientError(&'a str),
-    ServerError(&'a str),
-}
-
-impl<'a> Response<'a> {
-    pub fn write(&self, writer: &mut Write) -> Result<()> {
-        match self {
-            Response::Stored => {
-                writer.write(b"STORED\r\n")?;
-            }
-            Response::NotStored => {
-                writer.write(b"NOT_STORED\r\n")?;
-            }
-            Response::Exists => {
-                writer.write(b"EXISTS\r\n")?;
-            }
-            Response::NotFound => {
-                writer.write(b"NOT_FOUND\r\n")?;
-            }
-            Response::Get(v) => {
-                for GetRespItem{ key, data, flags, bytes } in v {
-                    writer.write(format!(
-                        "VALUE {} {} {}\r\n",
-                        to_str(key), flags, bytes
-                    ).as_bytes())?;
-                    writer.write(&data[..])?;
-                    writer.write(b"\r\n")?;
-                }
-                writer.write(b"END\r\n")?;
-            }
-            Response::Deleted => {
-                writer.write(b"DELETED\r\n")?;
-            }
-            Response::Touched => {
-                writer.write(b"TOUCHED\r\n")?;
-            }
-            Response::Ok => {
-                writer.write(b"OK\r\n")?;
-            }
-            Response::Error => {
-                writer.write(b"ERROR\r\n")?;
-            }
-            Response::ClientError(e) => {
-                writer.write(format!("CLIENT_ERROR {}\r\n", e).as_bytes())?;
-            }
-            Response::ServerError(e) => {
-                writer.write(format!("SERVER_ERROR {}\r\n", e).as_bytes())?;
-            }
-            _ => {
-                unimplemented!();
-            }
-        }
-        Ok(())
-    }
 }
 
 impl Store {
@@ -114,9 +34,9 @@ impl Store {
         }
     }
 
-    pub fn apply<'a>(&self, command: Command<'a>) -> Option<Response<'a>> {
-        match command {
-            Command::Getter{ getter, keys } => {
+    pub fn apply<'a>(&self, request: Request<'a>) -> Option<Response<'a>> {
+        match request {
+            Request::Getter{ getter, keys } => {
                 let mut v = Vec::with_capacity(keys.len());
                 for key in keys {
                     match self.data.get(key) {
@@ -138,16 +58,16 @@ impl Store {
                     GetterType::Gets => Response::Gets(v),
                 })
             }
-            Command::Error(_) => {
+            Request::Error(_) => {
                 Some(Response::Error)
             }
             _ => None
         }
     }
 
-    pub fn apply_mut<'a>(&mut self, command: Command<'a>) -> Option<Response<'a>> {
-        match command {
-            Command::Setter{ setter, key, flags, ttl, bytes, payload } => {
+    pub fn apply_mut<'a>(&mut self, request: Request<'a>) -> Option<Response<'a>> {
+        match request {
+            Request::Setter{ setter, key, flags, ttl, bytes, payload } => {
                 if payload.len() > bytes {
                     return Some(Response::ClientError("bad data chunk"));
                 }
@@ -223,13 +143,13 @@ impl Store {
                 }
                 Some(Response::Stored)
             }
-            Command::Deleter{ key } => {
+            Request::Deleter{ key } => {
                 match self.data.remove(key) {
                     Some(_) => Some(Response::Deleted),
                     None => Some(Response::NotFound),
                 }
             }
-            Command::Error(_) => {
+            Request::Error(_) => {
                 Some(Response::Error)
             }
             _ => None
@@ -244,16 +164,16 @@ mod test {
     #[test]
     fn test_get_none() {
         let store = Store::new();
-        let r = store.apply(Command::Getter{ getter: GetterType::Get, keys: vec![b"a"] });
+        let r = store.apply(Request::Getter{ getter: GetterType::Get, keys: vec!["a".as_bytes()] });
         assert_eq!(Some(Response::Get(vec![])), r);
     }
 
     #[test]
     fn test_get_some() {
         let mut store = Store::new();
-        let key = b"a";
-        let payload = b"abc";
-        let r = store.apply_mut(Command::Setter{
+        let key = "a".as_bytes();
+        let payload = "abc".as_bytes();
+        let r = store.apply_mut(Request::Setter{
             setter: SetterType::Set,
             key,
             flags: 1,
@@ -262,7 +182,7 @@ mod test {
             payload
         });
         assert!(r.is_some(), "stored");
-        let r = store.apply(Command::Getter{ getter: GetterType::Get, keys: vec![key] });
+        let r = store.apply(Request::Getter{ getter: GetterType::Get, keys: vec![key] });
         assert_eq!(Some(Response::Get(vec!(GetRespItem {
             key,
             data: payload.to_vec(),
@@ -276,7 +196,7 @@ mod test {
         let mut store = Store::new();
         let key = b"a";
         let payload = b"abc";
-        let r = store.apply_mut(Command::Setter{
+        let r = store.apply_mut(Request::Setter{
             setter: SetterType::Set,
             key,
             flags: 1,
@@ -292,7 +212,7 @@ mod test {
         let mut store = Store::new();
         let key = b"a";
         let payload = b"abc";
-        let r = store.apply_mut(Command::Setter{
+        let r = store.apply_mut(Request::Setter{
             setter: SetterType::Set,
             key,
             flags: 1,

@@ -7,19 +7,27 @@ use std::net::{TcpListener, TcpStream};
 use std::sync::{Arc, RwLock};
 
 #[macro_use]
+mod request;
+mod response;
+#[macro_use]
+mod parser_util;
 mod parser;
 mod store;
 mod utils;
 mod thread_pool;
 mod data_manager;
 mod memtable;
+#[macro_use]
+mod error;
 
-use crate::parser::{parse, Command};
+use crate::parser::parse;
 use crate::store::Store;
 use crate::utils::to_str;
 use crate::thread_pool::ThreadPool;
+use crate::error::MyResult;
+use crate::request::Request;
 
-fn main() -> Result<()> {
+fn main() -> MyResult<()> {
     let listener = TcpListener::bind("127.0.0.1:12333").unwrap();
 
     let store = Arc::new(RwLock::new(Store::new()));
@@ -33,7 +41,7 @@ fn main() -> Result<()> {
 
         tp.execute(|| {
             match handle_connection(stream, store) {
-                Err(e) => println!("{}", e),
+                Err(e) => println!("{:?}", e),
                 _ => ()
             }
         });
@@ -42,7 +50,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn handle_connection(mut stream: TcpStream, store: Arc<RwLock<Store>>) -> Result<()> {
+fn handle_connection(mut stream: TcpStream, store: Arc<RwLock<Store>>) -> MyResult<()> {
     let mut buffer = [0; 512];
 
     let mut data: Vec<u8> = Vec::with_capacity(buffer.len());
@@ -59,15 +67,15 @@ fn handle_connection(mut stream: TcpStream, store: Arc<RwLock<Store>>) -> Result
 
         let (remain, cfg) = parse(&data);
 
-        match cfg.command {
-            Command::Incomplete => continue,
-            Command::Getter{ .. } => {
+        match cfg.request {
+            Request::Incomplete => continue,
+            Request::Getter{ .. } => {
                 let store = match store.read() {
                     Ok(guard) => guard,
                     Err(poisoned) => poisoned.into_inner()
                 };
 
-                match store.apply(cfg.command) {
+                match store.apply(cfg.request) {
                     Some(response) => response.write(&mut stream)?,
                     None => continue,
                 };
@@ -78,7 +86,7 @@ fn handle_connection(mut stream: TcpStream, store: Arc<RwLock<Store>>) -> Result
                     Err(poisoned) => poisoned.into_inner()
                 };
 
-                match store.apply_mut(cfg.command) {
+                match store.apply_mut(cfg.request) {
                     Some(response) => response.write(&mut stream)?,
                     None => continue,
                 };

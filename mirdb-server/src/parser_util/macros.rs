@@ -49,7 +49,7 @@ pub fn take_split(i: &[u8], count: usize) -> (&[u8], &[u8]) {
 #[macro_export]
 macro_rules! is_not {
     ($i:expr, $e:expr) => ({
-        use $crate::parser::macros::{compare, take_split, CompareResult, IRResult};
+        use $crate::parser_util::macros::{compare, take_split, CompareResult, IRResult};
         let pos = $i.iter().position(|x| $e.contains(x));
         match pos {
             None => IRResult::Ok(take_split($i, $i.len())),
@@ -63,7 +63,7 @@ macro_rules! is_not {
 macro_rules! tag {
     ($i:expr, $tag:expr) => ({
         use ::std::str::from_utf8;
-        use $crate::parser::macros::{compare, take_split, CompareResult, IRResult};
+        use $crate::parser_util::macros::{compare, take_split, CompareResult, IRResult};
 
         match compare($i, $tag) {
             CompareResult::Ok => {
@@ -85,7 +85,7 @@ macro_rules! tag {
 #[macro_export]
 macro_rules! take {
     ($i:expr, $size:expr) => ({
-        use $crate::parser::macros::{take_split, IRResult};
+        use $crate::parser_util::macros::{take_split, IRResult};
         let l = $i.len();
         if l >= $size {
             IRResult::Ok(take_split($i, $size))
@@ -98,7 +98,7 @@ macro_rules! take {
 #[macro_export]
 macro_rules! take_at_least {
     ($i:expr, $size:expr, $tag:expr) => ({
-        use $crate::parser::macros::{take_split, IRResult};
+        use $crate::parser_util::macros::{take_split, IRResult};
 
         (|| {
             let l = $i.len();
@@ -174,7 +174,7 @@ macro_rules! call (
 #[macro_export]
 macro_rules! chain {
     (@inner $i:expr, ($($rest:expr),*)) => ({
-        use $crate::parser::macros::IRResult;
+        use $crate::parser_util::macros::IRResult;
         IRResult::Ok(($i, ($($rest),*)))
     });
     (@inner $i:expr, $field:ident : $submac:ident!($($args:tt)*)) => (
@@ -184,7 +184,7 @@ macro_rules! chain {
         chain!(@inner $i, call!($e) >> $($rest)*);
     );
     (@inner $i:expr, $mac:ident!($($args:tt)*) >> $($rest:tt)*) => ({
-        use $crate::parser::macros::IRResult;
+        use $crate::parser_util::macros::IRResult;
         match $mac!($i, $($args)*) {
             IRResult::Err(e) => IRResult::Err(e),
             IRResult::Incomplete(n) => IRResult::Incomplete(n),
@@ -197,7 +197,7 @@ macro_rules! chain {
         chain!(@inner $i, $field: call!($e) >> $($rest)*);
     );
     (@inner $i:expr, $field:ident : $mac:ident!($($args:tt)*) >> $($rest:tt)*) => ({
-        use $crate::parser::macros::IRResult;
+        use $crate::parser_util::macros::IRResult;
         match $mac!($i, $($args)*) {
             IRResult::Err(e) => IRResult::Err(e),
             IRResult::Incomplete(n) => IRResult::Incomplete(n),
@@ -211,7 +211,7 @@ macro_rules! chain {
         chain!(@inner $i, call!($e) >> ($($rest)*));
     );
     (@inner $i:expr, $mac:ident!($($args:tt)*) >> ($($rest:tt)*)) => ({
-        use $crate::parser::macros::IRResult;
+        use $crate::parser_util::macros::IRResult;
 
         match $mac!($i, $($args)*) {
             IRResult::Err(e) => IRResult::Err(e),
@@ -225,7 +225,7 @@ macro_rules! chain {
         chain!(@inner $i, $field: call!($e) >> ( $($rest)* ) );
     );
     (@inner $i:expr, $field:ident : $mac:ident!( $($args:tt)* ) >> ( $($rest:tt)* )) => ({
-        use $crate::parser::macros::IRResult;
+        use $crate::parser_util::macros::IRResult;
 
         match $mac!($i, $($args)*) {
             IRResult::Err(e) => IRResult::Err(e),
@@ -237,11 +237,11 @@ macro_rules! chain {
         }
     });
     (@fin $i:expr, ($o:expr)) => ({
-        use $crate::parser::macros::IRResult;
+        use $crate::parser_util::macros::IRResult;
         IRResult::Ok(($i, $o))
     });
     (@fin $i:expr, ($($rest:tt)*)) => ({
-        use $crate::parser::macros::IRResult;
+        use $crate::parser_util::macros::IRResult;
         IRResult::Ok(($i, ($($rest)*)))
     });
     ($i:expr, $($rest:tt)*) => (
@@ -271,7 +271,7 @@ macro_rules! opt {
     };
     ($i:expr, $fn:ident($($args:tt)*)) => {
         {
-            use $crate::parser::macros::IRResult;
+            use $crate::parser_util::macros::IRResult;
             match call!($i, $fn, $($args)*) {
                 IRResult::Ok((i, o)) => IRResult::Ok((i, Some(o))),
                 IRResult::Err(_) => IRResult::Ok(($i, None)),
@@ -281,7 +281,7 @@ macro_rules! opt {
     };
     ($i:expr, $mac:ident!($($args:tt)*)) => {
         {
-            use $crate::parser::macros::IRResult;
+            use $crate::parser_util::macros::IRResult;
             match $mac!($i, $($args)*) {
                 IRResult::Ok((i, o)) => IRResult::Ok((i, Some(o))),
                 IRResult::Err(_) => IRResult::Ok(($i, None)),
@@ -298,7 +298,7 @@ macro_rules! alt {
     };
     (@inner $i:expr, $mac:ident!($($args:tt)*) | $($rest:tt)*) => {
         {
-            use $crate::parser::macros::IRResult;
+            use $crate::parser_util::macros::IRResult;
             match $mac!($i, $($args)*) {
                 IRResult::Ok((i, o)) => IRResult::Ok((i, o)),
                 IRResult::Incomplete(v) => IRResult::Incomplete(v),
@@ -307,7 +307,7 @@ macro_rules! alt {
         }
     };
     (@inner $i:expr, @fin) => {{
-        use $crate::parser::macros::IRResult;
+        use $crate::parser_util::macros::IRResult;
         IRResult::Err("")
     }};
     ($i:expr, $($rest:tt)*) => {

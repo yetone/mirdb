@@ -1,10 +1,7 @@
-#[macro_use]
-pub mod command;
-#[macro_use]
-pub mod macros;
-
-use self::macros::*;
-pub use self::command::{Command, CommandConf, SetterType, GetterType};
+use crate::request::GetterType;
+use crate::request::SetterType;
+use crate::request::{Request, RequestConf};
+use crate::parser_util::macros::{IRResult, space, digit};
 
 gen_parser!(key_parser<&[u8], &[u8]>, is_not!(b" \t\r\n\0"));
 
@@ -25,14 +22,14 @@ gen_parser!(setter_name_parser<&[u8]>,
             )
 );
 
-gen_parser!(getter<CommandConf>,
+gen_parser!(getter<RequestConf>,
       chain!(
           getter: getter_name_parser >>
           space >>
           keys: split!(space, key_parser) >>
           tag!(b"\r\n") >>
           (
-              cc!(Command::Getter{
+              cc!(Request::Getter{
                   getter: to_getter_type(getter),
                   keys,
               })
@@ -71,7 +68,7 @@ fn to_setter_type(x: &[u8]) -> SetterType {
     }
 }
 
-gen_parser!(setter<CommandConf>,
+gen_parser!(setter<RequestConf>,
       chain!(
           setter: setter_name_parser >>
           space >>
@@ -89,7 +86,7 @@ gen_parser!(setter<CommandConf>,
           tag!(b"\r\n") >>
           (
               cc!(
-                  Command::Setter {
+                  Request::Setter {
                       setter: to_setter_type(setter),
                       key,
                       flags,
@@ -103,7 +100,7 @@ gen_parser!(setter<CommandConf>,
       )
 );
 
-gen_parser!(deleter<CommandConf>,
+gen_parser!(deleter<RequestConf>,
             chain!(
                 tag!(b"delete") >>
                 space >>
@@ -113,7 +110,7 @@ gen_parser!(deleter<CommandConf>,
                 tag!(b"\r\n") >>
                 (
                     cc!(
-                        Command::Deleter {
+                        Request::Deleter {
                             key
                         },
                         unwrap_noreply(noreply)
@@ -122,55 +119,56 @@ gen_parser!(deleter<CommandConf>,
             )
 );
 
-gen_parser!(_parse<CommandConf>, alt!(
+gen_parser!(_parse<RequestConf>, alt!(
     getter | setter | deleter
 ));
 
-pub fn parse(i: &[u8]) -> (&[u8], CommandConf) {
+pub fn parse(i: &[u8]) -> (&[u8], RequestConf) {
     match _parse(i) {
         IRResult::Ok(r) => r,
-        IRResult::Incomplete(_) => (b"", cc!(Command::Incomplete)),
-        IRResult::Err(e) => (b"", cc!(Command::Error(if e != "" { e } else { "ERROR" })))
+        IRResult::Incomplete(_) => (b"", cc!(Request::Incomplete)),
+        IRResult::Err(e) => (b"", cc!(Request::Error(if e != "" { e } else { "ERROR" })))
     }
 }
 
 #[cfg(test)]
 mod test {
+    use super::*;
+    use crate::request::{Request, SetterType, GetterType};
+
     #[test]
     fn test() {
-        use super::parse;
-        use super::command::{Command, SetterType, GetterType};
-        assert_eq!(parse(b"get abc\r\nget"), ("get".as_bytes(), cc!(Command::Getter {
+        assert_eq!(parse(b"get abc\r\nget"), ("get".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
             keys: vec![b"abc"],
         })));
-        assert_eq!(parse(b"get abc\r\n"), ("".as_bytes(), cc!(Command::Getter {
+        assert_eq!(parse(b"get abc\r\n"), ("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
             keys: vec![b"abc"],
         })));
-        assert_eq!(parse(b"gets abc\r\n"), ("".as_bytes(), cc!(Command::Getter {
+        assert_eq!(parse(b"gets abc\r\n"), ("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Gets,
             keys: vec![b"abc"],
         })));
-        assert_eq!(parse(b"get  abc\r\n"), ("".as_bytes(), cc!(Command::Getter {
+        assert_eq!(parse(b"get  abc\r\n"), ("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
             keys: vec![b"abc"],
         })));
-        assert_eq!(parse(b"get abc def\r\n"), ("".as_bytes(), cc!(Command::Getter {
+        assert_eq!(parse(b"get abc def\r\n"), ("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
             keys: vec![b"abc", b"def"],
         })));
-        assert_eq!(parse(b"get    abc  def   ghi\r\n"), ("".as_bytes(), cc!(Command::Getter {
+        assert_eq!(parse(b"get    abc  def   ghi\r\n"), ("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Get,
             keys: vec![b"abc", b"def", b"ghi"],
         })));
-        assert_eq!(parse(b"gets    abc  def   ghi\r\n"), ("".as_bytes(), cc!(Command::Getter {
+        assert_eq!(parse(b"gets    abc  def   ghi\r\n"), ("".as_bytes(), cc!(Request::Getter {
             getter: GetterType::Gets,
             keys: vec![b"abc", b"def", b"ghi"],
         })));
-        assert_eq!(parse(b"set abc 1 0 7\r\n"), ("".as_bytes(), cc!(Command::Incomplete)));
-        assert_eq!(parse(b"set abc   1 0 7\r\n"), ("".as_bytes(), cc!(Command::Incomplete)));
-        assert_eq!(parse(b"set abc 1 0 7\r\n\"a b c\"\r\n"), ("".as_bytes(), cc!(Command::Setter {
+        assert_eq!(parse(b"set abc 1 0 7\r\n"), ("".as_bytes(), cc!(Request::Incomplete)));
+        assert_eq!(parse(b"set abc   1 0 7\r\n"), ("".as_bytes(), cc!(Request::Incomplete)));
+        assert_eq!(parse(b"set abc 1 0 7\r\n\"a b c\"\r\n"), ("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Set,
             key: b"abc",
             flags: 1,
@@ -178,7 +176,7 @@ mod test {
             bytes: 7,
             payload: b"\"a b c\"",
         })));
-        assert_eq!(parse(b"set    abc    1 0 7\r\n\"a b c\"\r\n"), ("".as_bytes(), cc!(Command::Setter {
+        assert_eq!(parse(b"set    abc    1 0 7\r\n\"a b c\"\r\n"), ("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Set,
             key: b"abc",
             flags: 1,
@@ -186,7 +184,7 @@ mod test {
             bytes: 7,
             payload: b"\"a b c\"",
         })));
-        assert_eq!(parse(b"set abc 1 0 7 noreply\r\n\"a b c\"\r\n"), ("".as_bytes(), cc!(Command::Setter {
+        assert_eq!(parse(b"set abc 1 0 7 noreply\r\n\"a b c\"\r\n"), ("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Set,
             key: b"abc",
             flags: 1,
@@ -194,7 +192,7 @@ mod test {
             bytes: 7,
             payload: b"\"a b c\"",
         }, true)));
-        assert_eq!(parse(b"set abc 1 0 6\r\nabcd\r\n\r\n"), ("".as_bytes(), cc!(Command::Setter {
+        assert_eq!(parse(b"set abc 1 0 6\r\nabcd\r\n\r\n"), ("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Set,
             key: b"abc",
             flags: 1,
@@ -202,7 +200,7 @@ mod test {
             bytes: 6,
             payload: b"abcd\r\n",
         })));
-        assert_eq!(parse(b"add abc 1 0 6\r\nabcd\r\n\r\n"), ("".as_bytes(), cc!(Command::Setter {
+        assert_eq!(parse(b"add abc 1 0 6\r\nabcd\r\n\r\n"), ("".as_bytes(), cc!(Request::Setter {
             setter: SetterType::Add,
             key: b"abc",
             flags: 1,
@@ -210,10 +208,10 @@ mod test {
             bytes: 6,
             payload: b"abcd\r\n",
         })));
-        assert_eq!(parse(b"delete abc\r\n"), ("".as_bytes(), cc!(Command::Deleter {
+        assert_eq!(parse(b"delete abc\r\n"), ("".as_bytes(), cc!(Request::Deleter {
             key: b"abc"
         })));
-        assert_eq!(parse(b"delete abc noreply\r\n"), ("".as_bytes(), cc!(Command::Deleter {
+        assert_eq!(parse(b"delete abc noreply\r\n"), ("".as_bytes(), cc!(Request::Deleter {
             key: b"abc"
         }, true)));
     }

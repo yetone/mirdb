@@ -12,7 +12,7 @@ pub enum GetterType {
 }
 
 #[derive(Debug, PartialEq)]
-pub enum Command<'a> {
+pub enum Request<'a> {
     Getter {
         getter: GetterType,
         keys: Vec<Key<'a>>,
@@ -33,17 +33,17 @@ pub enum Command<'a> {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct CommandConf<'a> {
-    pub command: Command<'a>,
+pub struct RequestConf<'a> {
+    pub request: Request<'a>,
     pub noreply: bool,
 }
 
 #[macro_export]
 macro_rules! cc {
-    ($c:expr, $n:expr) => {{
-        use $crate::parser::command::CommandConf;
-        CommandConf {
-            command: $c,
+    ($r:expr, $n:expr) => {{
+        use $crate::request::RequestConf;
+        RequestConf {
+            request: $r,
             noreply: $n,
         }
     }};
