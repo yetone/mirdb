@@ -2,9 +2,9 @@ use std::io;
 
 use bytes::buf::IntoBuf;
 use bytes::BytesMut;
+use tokio_io::{AsyncRead, AsyncWrite};
 #[allow(deprecated)]
 use tokio_io::codec::{Decoder, Encoder, Framed};
-use tokio_io::{AsyncRead, AsyncWrite};
 use tokio_proto::pipeline::ServerProto;
 
 use crate::error::{Status, StatusCode};
