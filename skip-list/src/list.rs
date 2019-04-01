@@ -63,6 +63,9 @@ impl<K, V> SkipList<K, V> {
             while let Some(next) = (*current).next_mut((*current).height()) {
                 if !is_head {
                     SkipListNode::free(current);
+                } else {
+                    let nexts_ptr = &mut (*current).nexts_ as *mut Vec<*mut SkipListNode<K, V>>;
+                    nexts_ptr.drop_in_place();
                 }
                 current = next;
                 is_head = false;
@@ -70,6 +73,9 @@ impl<K, V> SkipList<K, V> {
 
             if !is_head {
                 SkipListNode::free(current);
+            } else {
+                let nexts_ptr= &mut (*current).nexts_ as *mut Vec<*mut SkipListNode<K, V>>;
+                nexts_ptr.drop_in_place();
             }
         }
     }
@@ -297,6 +303,38 @@ mod test {
             list.insert(i, i + 1);
         }
         assert_eq!("[1, 2, 3]", list.to_string());
+    }
+
+    #[test]
+    fn test_insert() {
+        let mut list = SkipList::new(10);
+        list.insert(2, 4);
+        list.insert(0, 1);
+        list.insert(1, 3);
+        list.insert(0, 2);
+        assert_eq!(Some(&2), list.get(&0));
+        assert_eq!(Some(&3), list.get(&1));
+        assert_eq!(Some(&4), list.get(&2));
+        assert_eq!(None, list.get(&3));
+        assert_eq!(3, list.length());
+    }
+
+    #[test]
+    fn test_remove() {
+        let mut list = SkipList::new(10);
+        list.insert(2, 4);
+        list.insert(0, 2);
+        list.insert(1, 3);
+        assert_eq!(Some(&2), list.get(&0));
+        assert_eq!(Some(&3), list.get(&1));
+        assert_eq!(Some(&4), list.get(&2));
+        assert_eq!(None, list.get(&3));
+        assert_eq!(3, list.length());
+        list.remove(&1);
+        assert_eq!(None, list.get(&1));
+        assert_eq!(Some(&2), list.get(&0));
+        assert_eq!(Some(&4), list.get(&2));
+        assert_eq!(2, list.length());
     }
 
     #[test]
