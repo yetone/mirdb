@@ -2,12 +2,12 @@
 
 ### TODO
 
-[x] tokio with memcached protocol
+* [x] tokio with memcached protocol
 
-[x] memtable with skiplist
+* [x] memtable with skiplist
 
-[x] sstable
+* [x] sstable
 
-[ ] sstable compaction
+* [ ] sstable compaction
 
-[ ] raft
+* [ ] raft
