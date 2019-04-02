@@ -59,16 +59,13 @@ impl Store {
                     GetterType::Gets => Response::Gets(v),
                 })
             }
-            Request::Error(_) => {
-                Ok(Response::Error)
-            }
             _ => err!(StatusCode::NotSupport, "not support")
         }
     }
 
     pub fn apply_mut(&mut self, request: Request) -> MyResult<Response> {
         match request {
-            Request::Setter{ setter, key, flags, ttl, bytes, payload } => {
+            Request::Setter{ setter, key, flags, ttl, bytes, payload, .. } => {
                 if payload.len() > bytes {
                     return Ok(Response::ClientError("bad data chunk".to_owned()));
                 }
@@ -144,14 +141,11 @@ impl Store {
                 }
                 Ok(Response::Stored)
             }
-            Request::Deleter{ key } => {
+            Request::Deleter{ key, .. } => {
                 match self.data.remove(&key) {
                     Some(_) => Ok(Response::Deleted),
                     None => Ok(Response::NotFound),
                 }
-            }
-            Request::Error(_) => {
-                Ok(Response::Error)
             }
             _ => err!(StatusCode::NotSupport, "not support")
         }
@@ -165,7 +159,7 @@ mod test {
     #[test]
     fn test_get_none() {
         let store = Store::new();
-        let r = store.apply(Request::Getter{ getter: GetterType::Get, keys: vec![b"a".to_vec()] });
+        let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![b"a".to_vec()] });
         assert_eq!(Ok(Response::Get(vec![])), r);
     }
 
@@ -174,16 +168,17 @@ mod test {
         let mut store = Store::new();
         let key = b"a".to_vec();
         let payload = b"abc".to_vec();
-        let r = store.apply_mut(Request::Setter{
+        let r = store.apply_mut(Request::Setter {
             setter: SetterType::Set,
             key: key.clone(),
             flags: 1,
             ttl: 10,
             payload: payload.clone(),
             bytes: payload.len(),
+            no_reply: false,
         });
         assert!(r.is_ok(), "stored");
-        let r = store.apply(Request::Getter{ getter: GetterType::Get, keys: vec![key.clone()] });
+        let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![key.clone()] });
         let bytes = payload.len();
         assert_eq!(Ok(Response::Get(vec!(GetRespItem {
             key,
@@ -198,13 +193,14 @@ mod test {
         let mut store = Store::new();
         let key = b"a".to_vec();
         let payload = b"abc".to_vec();
-        let r = store.apply_mut(Request::Setter{
+        let r = store.apply_mut(Request::Setter {
             setter: SetterType::Set,
             key,
             flags: 1,
             ttl: 10,
             bytes: payload.len(),
-            payload
+            payload,
+            no_reply: false,
         });
         assert_eq!(Ok(Response::Stored), r);
     }
@@ -214,13 +210,14 @@ mod test {
         let mut store = Store::new();
         let key = b"a".to_vec();
         let payload = b"abc".to_vec();
-        let r = store.apply_mut(Request::Setter{
+        let r = store.apply_mut(Request::Setter {
             setter: SetterType::Set,
             key,
             flags: 1,
             ttl: 10,
             bytes: payload.len() - 1,
-            payload
+            payload,
+            no_reply: false,
         });
         assert_eq!(Ok(Response::ClientError("bad data chunk".to_owned())), r);
     }

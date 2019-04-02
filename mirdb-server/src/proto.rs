@@ -11,9 +11,9 @@ use crate::error::{Status, StatusCode};
 use crate::error::MyResult;
 use crate::parser::parse;
 use crate::parser_util::macros::IRResult;
-use crate::request::RequestConf;
 use crate::response::BufferWriter;
 use crate::response::Response;
+use crate::request::Request;
 
 pub struct ServerCodec;
 
@@ -31,10 +31,10 @@ impl Encoder for ServerCodec {
 }
 
 impl Decoder for ServerCodec {
-    type Item = RequestConf;
+    type Item = Request;
     type Error = io::Error;
 
-    fn decode(&mut self, src: &mut BytesMut) -> io::Result<Option<RequestConf>> {
+    fn decode(&mut self, src: &mut BytesMut) -> io::Result<Option<Request>> {
         let src_len = src.len();
         let (result, src_used) = match { parse(src) } {
             IRResult::Ok((remaining, req)) => {
@@ -59,7 +59,7 @@ pub struct Proto;
 
 #[allow(deprecated)]
 impl<T: AsyncWrite + AsyncRead + 'static> ServerProto<T> for Proto {
-    type Request = RequestConf;
+    type Request = Request;
     type Response = Response;
     type Transport = Framed<T, ServerCodec>;
     type BindTransport = io::Result<Framed<T, ServerCodec>>;

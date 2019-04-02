@@ -24,29 +24,10 @@ pub enum Request {
         ttl: u32,
         bytes: usize,
         payload: Payload,
+        no_reply: bool,
     },
     Deleter {
         key: Key,
+        no_reply: bool,
     },
-    Error(String),
-}
-
-#[derive(Debug, PartialEq)]
-pub struct RequestConf {
-    pub request: Request,
-    pub noreply: bool,
-}
-
-#[macro_export]
-macro_rules! cc {
-    ($r:expr, $n:expr) => {{
-        use $crate::request::RequestConf;
-        RequestConf {
-            request: $r,
-            noreply: $n,
-        }
-    }};
-    ($c:expr) => {{
-        cc!($c, false)
-    }}
 }

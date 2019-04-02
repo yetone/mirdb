@@ -19,7 +19,6 @@ pub use proto::Proto;
 
 use crate::parser::parse;
 use crate::request::Request;
-use crate::request::RequestConf;
 use crate::response::Response;
 use crate::store::Store;
 use crate::thread_pool::ThreadPool;
@@ -53,20 +52,20 @@ impl Server {
 }
 
 impl Service for Server {
-    type Request = RequestConf;
+    type Request = Request;
     type Response = Response;
     type Error = io::Error;
     type Future = Box<Future<Item = Response, Error = io::Error>>;
 
     fn call(&self, req: Self::Request) -> Self::Future {
-        match req.request {
+        match req {
             Request::Getter{ .. } => {
                 let store = match self.store.read() {
                     Ok(guard) => guard,
                     Err(poisoned) => poisoned.into_inner()
                 };
 
-                box future::done(match store.apply(req.request) {
+                box future::done(match store.apply(req) {
                     Ok(response) => Ok(response),
                     Err(e) => Ok(Response::ServerError(e.msg)),
                 })
@@ -77,7 +76,7 @@ impl Service for Server {
                     Err(poisoned) => poisoned.into_inner()
                 };
 
-                box future::done(match store.apply_mut(req.request) {
+                box future::done(match store.apply_mut(req) {
                     Ok(response) => Ok(response),
                     Err(e) => Ok(Response::ServerError(e.msg)),
                 })
@@ -87,7 +86,7 @@ impl Service for Server {
 }
 
 pub fn serve<T>(addr: SocketAddr, new_service: T)
-    where T: NewService<Request = RequestConf, Response = Response, Error = io::Error> + Send + Sync + 'static,
+    where T: NewService<Request = Request, Response = Response, Error = io::Error> + Send + Sync + 'static,
 {
     TcpServer::new(Proto, addr).serve(new_service);
 }
