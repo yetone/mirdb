@@ -1,6 +1,6 @@
 [workspace]
 members = [
-"mirdb-server",
+"tomatodb-server",
 "skip-list",
 "sstable",
 ]
