@@ -11,3 +11,6 @@ name = "sstable"
 crc = "1.2"
 integer-encoding = "1.0"
 snap = "0.2"
+cuckoofilter = "0.3.2"
+serde = { version = "1.0", features = ["derive"] }
+bincode = "1.1.2"

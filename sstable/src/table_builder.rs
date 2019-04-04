@@ -10,6 +10,7 @@ use crate::options::Options;
 use crate::error::MyResult;
 use crate::util::find_short_succ;
 use crate::util::find_shortest_sep;
+use crate::meta_block::MetaBlock;
 
 pub struct TableBuilder {
     file: File,
@@ -17,6 +18,8 @@ pub struct TableBuilder {
     offset: usize,
     data_block: BlockBuilder,
     index_block: BlockBuilder,
+    min_key: Option<Vec<u8>>,
+    max_key: Option<Vec<u8>>,
 }
 
 impl TableBuilder {
@@ -32,6 +35,8 @@ impl TableBuilder {
             offset: 0,
             data_block: BlockBuilder::new(opt.clone()),
             index_block: BlockBuilder::new(opt),
+            min_key: None,
+            max_key: None,
         })
     }
 
@@ -50,6 +55,10 @@ impl TableBuilder {
             self.write_data_block(k)?;
         }
         self.data_block.add(k, v);
+        if let None = &self.min_key {
+            self.min_key = Some(k.to_vec());
+        }
+        self.max_key = Some(k.to_vec());
         Ok(())
     }
 
@@ -71,9 +80,16 @@ impl TableBuilder {
 
     pub fn flush(mut self) -> MyResult<()> {
         self.write_data_block(&find_short_succ(&self.data_block.last_key))?;
-        let bh = self.index_block.flush(&mut self.file, self.offset)?;
-        let footer = Footer::new(bh.clone(), bh.clone());
-        footer.flush(&mut self.file, bh.offset + bh.size)?;
+        let mut meta_block = MetaBlock::new(
+            self.max_key.expect("max key"),
+            self.min_key.expect("min key")
+        );
+        let meta_bh = meta_block.flush(&mut self.file, self.offset)?;
+        self.offset = meta_bh.offset + meta_bh.size;
+        let index_bh = self.index_block.flush(&mut self.file, self.offset)?;
+        self.offset = index_bh.offset + index_bh.size;
+        let footer = Footer::new(meta_bh.clone(), index_bh.clone());
+        footer.flush(&mut self.file, self.offset)?;
         self.file.flush()?;
         Ok(())
     }

@@ -19,7 +19,7 @@ pub const BLOCK_CKSUM_LEN: usize = 4;
 pub struct BlockBuilder {
     opt: Options,
     pub buffer: Vec<u8>,
-    count: usize,
+    count_: usize,
     restart_count: usize,
     pub(crate) last_key: Vec<u8>,
     restarts: Vec<u32>,
@@ -37,16 +37,20 @@ impl BlockBuilder {
         BlockBuilder {
             opt,
             buffer: buffer.into(),
-            count: 0,
+            count_: 0,
             restart_count: 0,
             last_key: vec![],
             restarts,
         }
     }
 
+    fn count(&self) -> usize {
+        self.count_
+    }
+
     fn reset(&mut self) {
         self.buffer.clear();
-        self.count = 0;
+        self.count_ = 0;
         self.restart_count = 0;
         self.last_key.clear();
         self.restarts.clear();
@@ -88,7 +92,7 @@ impl BlockBuilder {
         self.last_key.extend_from_slice(&k[shared..]);
 
         self.restart_count += 1;
-        self.count += 1;
+        self.count_ += 1;
     }
 
     pub fn flush<T: Seek + Write>(&mut self, w: &mut T, offset: usize) -> MyResult<BlockHandle> {

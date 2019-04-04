@@ -11,16 +11,24 @@ pub const FULL_FOOTER_LENGTH: usize = FOOTER_LENGTH + 8;
 const MAGIC_FOOTER_ENCODED: [u8; 8] = [0x57, 0xfb, 0x80, 0x8b, 0x24, 0x75, 0x47, 0xdb];
 
 pub struct Footer {
-    pub meta_index: BlockHandle,
-    pub index: BlockHandle,
+    meta_index_: BlockHandle,
+    index_: BlockHandle,
 }
 
 impl Footer {
     pub fn new(meta_index: BlockHandle, index: BlockHandle) -> Footer {
         Footer {
-            meta_index,
-            index,
+            meta_index_: meta_index,
+            index_: index,
         }
+    }
+
+    pub fn meta_index(&self) -> &BlockHandle {
+        &self.meta_index_
+    }
+
+    pub fn index(&self) -> &BlockHandle {
+        &self.index_
     }
 
     pub fn read<T: Seek + Read>(r: &mut T, offset: usize) -> MyResult<Self> {
@@ -41,19 +49,19 @@ impl Footer {
         assert!(from.len() >= FULL_FOOTER_LENGTH);
         assert_eq!(&from[FOOTER_LENGTH..], &MAGIC_FOOTER_ENCODED);
         let (meta, metalen) = BlockHandle::decode(&from[0..]);
-        let (ix, _) = BlockHandle::decode(&from[metalen..]);
+        let (idx, _) = BlockHandle::decode(&from[metalen..]);
 
         Footer {
-            meta_index: meta,
-            index: ix,
+            meta_index_: meta,
+            index_: idx,
         }
     }
 
     pub fn encode(&self, to: &mut [u8]) {
         assert!(to.len() >= FULL_FOOTER_LENGTH);
 
-        let s1 = self.meta_index.encode_to(to);
-        let s2 = self.index.encode_to(&mut to[s1..]);
+        let s1 = self.meta_index_.encode_to(to);
+        let s2 = self.index_.encode_to(&mut to[s1..]);
 
         for i in s1 + s2..FOOTER_LENGTH {
             to[i] = 0;
@@ -81,10 +89,10 @@ mod test {
         f.flush()?;
         let mut f = File::open(path)?;
         let footer = Footer::read(&mut f, 0)?;
-        assert_eq!(0, footer.meta_index.offset);
-        assert_eq!(10, footer.meta_index.size);
-        assert_eq!(11, footer.index.offset);
-        assert_eq!(12, footer.index.size);
+        assert_eq!(0, footer.meta_index_.offset);
+        assert_eq!(10, footer.meta_index_.size);
+        assert_eq!(11, footer.index_.offset);
+        assert_eq!(12, footer.index_.size);
         Ok(())
     }
 }

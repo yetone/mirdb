@@ -7,6 +7,8 @@ pub enum StatusCode {
     NotFound,
     NotSupport,
     Other,
+    SstableError(sstable::StatusCode),
+    BincodeError,
 }
 
 #[derive(Debug, PartialEq)]
@@ -25,6 +27,18 @@ impl Status {
         Status {
             code, msg
         }
+    }
+}
+
+impl From<sstable::Status> for Status {
+    fn from(e: sstable::Status) -> Self {
+        Status::new(StatusCode::SstableError(e.code), &e.msg)
+    }
+}
+
+impl From<bincode::Error> for Status {
+    fn from(e: bincode::Error) -> Self {
+        Status::new(StatusCode::BincodeError, e.description())
     }
 }
 

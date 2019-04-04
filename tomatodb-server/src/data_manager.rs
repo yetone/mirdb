@@ -1,54 +1,101 @@
-use crate::memtable::Memtable;
 use std::borrow::Borrow;
+use std::fmt::Debug;
+use std::path::Path;
+
+use serde::de::DeserializeOwned;
+use serde::Deserialize;
+use serde::Serialize;
+
+use sstable::TableReader;
+
+use crate::error::MyResult;
+use crate::memtable::Memtable;
+use crate::memtable_list::MemtableList;
+use crate::options::Options;
+use crate::sstable_builder::build_sstable;
+use crate::sstable_reader::SstableReader;
+use crate::types::Table;
+use crate::utils::to_str;
 
 pub struct DataManager<K: Ord + Clone, V: Clone> {
-    mutable: Memtable<K, V>,
-    immutable: Option<Memtable<K, V>>,
+    mut_: Memtable<K, Option<V>>,
+    imm_: MemtableList<K, Option<V>>,
+    reader_: SstableReader,
+    opt_: Options,
 }
 
 unsafe impl<K: Ord + Clone, V: Clone> Sync for DataManager<K, V> {}
 unsafe impl<K: Ord + Clone, V: Clone> Send for DataManager<K, V> {}
 
-impl<K: Ord + Clone, V: Clone> DataManager<K, V> {
-    pub fn new(max_height: usize, memtable_size: usize) -> Self {
-        DataManager {
-            mutable: Memtable::new(memtable_size, max_height),
-            immutable: None,
-        }
+impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + Debug> DataManager<K, V> {
+    pub fn new(opt: Options) -> MyResult<Self> {
+        Ok(DataManager {
+            mut_: Memtable::new(opt.mem_table_max_size, opt.mem_table_max_height),
+            imm_: MemtableList::new(opt.clone(), opt.imm_mem_table_max_count, opt.imm_mem_table_max_size, opt.imm_mem_table_max_height),
+            reader_: SstableReader::new(opt.clone())?,
+            opt_: opt.clone(),
+        })
     }
 
-    pub fn insert(&mut self, k: K, v: V) -> Option<V> {
-        let r = self.mutable.insert(k, v);
-        if self.mutable.is_full() {
-            if let Some(_immutable) = &self.immutable {
-                // TODO:: to sstable
-            } else {
-                self.immutable = Some(self.mutable.clone());
+    pub fn insert(&mut self, k: K, v: V) -> MyResult<Option<V>> {
+        self.insert_(k, Some(v))
+    }
+
+    fn insert_(&mut self, k: K, v: Option<V>) -> MyResult<Option<V>> {
+        if self.mut_.is_full() {
+            if self.imm_.is_full() {
+                for memtable in self.imm_.iter() {
+                    let (_, reader) = build_sstable(self.opt_.clone(), 0, memtable)?;
+                    self.reader_.add(0, reader)?;
+                }
+                self.imm_.clear();
             }
-            self.mutable.clear();
+            self.imm_.push(self.mut_.clone());
+            self.mut_.clear();
         }
-        r
+        Ok(if let Some(v) = self.mut_.insert(k, v) {
+            v
+        } else { None })
     }
 
-    pub fn get<Q: ?Sized>(&self, k: &Q) -> Option<&V>
+    pub fn get<Q: ?Sized>(&self, k: &Q) -> MyResult<Option<V>>
         where K: Borrow<Q>,
-              Q: Ord {
-        let mut r = self.mutable.get(k);
+              Q: Ord + Borrow<[u8]> {
+        let mut r = self.mut_.get(k);
         if r.is_none()  {
-            if let Some(immutable) = &self.immutable {
-                r = immutable.get(k);
-            }
+            r = self.imm_.get(k);
         }
-        r
+        println!("get: {}", to_str(k.borrow()));
+        println!("r: {:?}", r);
+        // TODO: optimize this shit codes
+        // TODO: plz zero copy
+        Ok(
+            if let Some(r) = r {
+                if let Some(r) = r {
+                    Some(r.clone())
+                } else {
+                    None
+                }
+            } else {
+                let x: Option<Option<V>> = self.reader_.get(k.borrow())?;
+                println!("x: {:?}", x);
+                if let Some(x) = x {
+                    x.clone()
+                } else {
+                    None
+                }
+            }
+        )
     }
 
-    pub fn remove<Q: ?Sized>(&self, k: &Q) -> Option<&V>
-        where K: Borrow<Q>,
-              Q: Ord {
-        let r = self.get(k);
+    pub fn remove(&mut self, k: &K) -> MyResult<Option<V>>
+        where K: Borrow<[u8]> {
+        let r = self.get(k.borrow())?;
+        println!("remove: {}", to_str(k.borrow()));
         if !r.is_none() {
-            // TODO: dummy removed
+            println!("is not none");
+            self.insert_(k.clone(), None)?;
         }
-        r
+        Ok(r)
     }
 }

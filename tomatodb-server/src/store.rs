@@ -1,21 +1,23 @@
-use std::time::{SystemTime, UNIX_EPOCH};
-use std::io::{Write, Result};
 use std::collections::HashMap;
-use std::error::Error;
 use std::convert::From;
+use std::error::Error;
+use std::io::{Result, Write};
+use std::time::{SystemTime, UNIX_EPOCH};
+
+use serde::{Deserialize, Serialize};
 
 use skip_list::SkipList;
 
-use crate::request::{SetterType, GetterType, Request};
-use crate::utils::to_str;
 use crate::data_manager::DataManager;
-use crate::response::Response;
-use crate::response::GetRespItem;
 use crate::error::{MyResult, StatusCode};
+use crate::options::Options;
+use crate::request::{GetterType, Request, SetterType};
+use crate::response::GetRespItem;
+use crate::response::Response;
 
 pub type StoreKey = Vec<u8>;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct StorePayload {
     pub(crate) data: Vec<u8>,
     pub(crate) flags: u32,
@@ -25,14 +27,20 @@ pub struct StorePayload {
 }
 
 pub struct Store {
-    data: DataManager<StoreKey, StorePayload>
+    opt: Options,
+    data: DataManager<StoreKey, StorePayload>,
+}
+
+pub fn is_expire(p: &StorePayload) -> bool {
+    p.created_at + p.ttl as u64 <= SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
 }
 
 impl Store {
-    pub fn new() -> Self {
-        Store {
-            data: DataManager::new(10, 3)
-        }
+    pub fn new(opt: Options) -> MyResult<Self> {
+        Ok(Store {
+            data: DataManager::new(opt.clone())?,
+            opt,
+        })
     }
 
     pub fn apply(&self, request: Request) -> MyResult<Response> {
@@ -40,18 +48,15 @@ impl Store {
             Request::Getter{ getter, keys } => {
                 let mut v = Vec::with_capacity(keys.len());
                 for key in keys {
-                    match self.data.get(&key) {
-                        Some(p) => {
-                            if p.created_at + p.ttl as u64 > SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() {
-                                v.push(GetRespItem {
-                                    key,
-                                    data: p.data.clone(),
-                                    flags: p.flags,
-                                    bytes: p.bytes,
-                                });
-                            }
+                    if let Some(p) = self.data.get(&key)? {
+                        if !is_expire(&p) {
+                            v.push(GetRespItem {
+                                key,
+                                data: p.data,
+                                flags: p.flags,
+                                bytes: p.bytes,
+                            });
                         }
-                        _ => ()
                     }
                 }
                 Ok(match getter {
@@ -78,71 +83,60 @@ impl Store {
                 let key = key.to_vec();
                 match setter {
                     SetterType::Set => {
-                        self.data.insert(key, sp);
+                        self.data.insert(key, sp)?;
                     }
                     SetterType::Add => {
                         // Cannot use self.data.entry(key).or_insert(sp);
                         // because of the NOT_STORED response
-                        match self.data.get(&key) {
-                            Some(_) => {
-                                return Ok(Response::NotStored);
-                            }
-                            None => {
-                                self.data.insert(key, sp);
-                            }
+                        if let None = self.data.get(&key)? {
+                            self.data.insert(key, sp)?;
+                        } else {
+                            return Ok(Response::NotStored);
                         }
                     }
                     SetterType::Replace => {
                         // Cannot use self.data.entry(key).and_modify(|e| *e = sp);
                         // because of the NOT_STORED response
-                        match self.data.get(&key) {
-                            Some(_) => {
-                                self.data.insert(key, sp);
-                            }
-                            None => {
-                                return Ok(Response::NotStored);
-                            }
+                        if let None = self.data.get(&key)? {
+                            return Ok(Response::NotStored);
+                        } else {
+                            self.data.insert(key, sp)?;
                         }
                     }
                     SetterType::Append => {
-                        match self.data.get(&key) {
-                            Some(v) => {
-                                let mut c = v.clone();
-                                c.data.extend(sp.data);
-                                c.ttl = sp.ttl;
-                                c.created_at = sp.created_at;
-                                c.bytes += sp.bytes;
-                                c.flags = sp.flags;
-                                self.data.insert(key, c);
-                            }
-                            None => {
-                                return Ok(Response::NotStored);
-                            }
+                        if let Some(v) = self.data.get(&key)? {
+                            let mut c = v.clone();
+                            c.data.extend(sp.data);
+                            c.ttl = sp.ttl;
+                            c.created_at = sp.created_at;
+                            c.bytes += sp.bytes;
+                            c.flags = sp.flags;
+                            self.data.insert(key, c)?;
+                        } else {
+                            return Ok(Response::NotStored);
                         }
+
                     }
                     SetterType::Prepend => {
-                        match self.data.get(&key) {
-                            Some(v) => {
-                                let mut tmp: Vec<_> = sp.data.to_owned();
-                                let mut c = v.clone();
-                                tmp.extend(&v.data);
-                                c.data = tmp;
-                                c.ttl = sp.ttl;
-                                c.created_at = sp.created_at;
-                                c.bytes += sp.bytes;
-                                c.flags = sp.flags;
-                                self.data.insert(key, c);
-                            }
-                            None => {
-                                return Ok(Response::NotStored);
-                            }
+                        if let Some(v) = self.data.get(&key)? {
+                            let mut tmp: Vec<_> = sp.data.to_owned();
+                            let mut c = v.clone();
+                            tmp.extend(&v.data);
+                            c.data = tmp;
+                            c.ttl = sp.ttl;
+                            c.created_at = sp.created_at;
+                            c.bytes += sp.bytes;
+                            c.flags = sp.flags;
+                            self.data.insert(key, c)?;
+                        } else {
+                            return Ok(Response::NotStored);
                         }
                     }
                 }
                 Ok(Response::Stored)
             }
             Request::Deleter{ key, .. } => {
-                match self.data.remove(&key) {
+                match self.data.remove(&key)? {
                     Some(_) => Ok(Response::Deleted),
                     None => Ok(Response::NotFound),
                 }
@@ -154,18 +148,47 @@ impl Store {
 
 #[cfg(test)]
 mod test {
+    use std::collections::HashSet;
+    use std::fs::create_dir_all;
+    use std::fs::remove_dir_all;
+    use std::path::Path;
+
+    use rand::{Rng, thread_rng};
+    use rand::distributions::Alphanumeric;
+
+    use crate::utils::to_str;
+
     use super::*;
+
+    fn get_test_opt() -> Options {
+        let rand_string: String = thread_rng()
+            .sample_iter(&Alphanumeric)
+            .take(30)
+            .collect();
+        let mut opt = Options::default();
+        opt.work_dir = "/tmp/".to_owned() + &rand_string;
+        if Path::new(&opt.work_dir).exists() {
+            remove_dir_all(&opt.work_dir).expect("remove work dir error!");
+        }
+        create_dir_all(&opt.work_dir).expect("create work dir error!");
+        opt.mem_table_max_size = 1;
+        opt.imm_mem_table_max_size = 1;
+        opt.imm_mem_table_max_count = 1;
+        opt
+    }
 
     #[test]
     fn test_get_none() {
-        let store = Store::new();
+        let opt = get_test_opt();
+        let store = Store::new(opt).unwrap();
         let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![b"a".to_vec()] });
         assert_eq!(Ok(Response::Get(vec![])), r);
     }
 
     #[test]
     fn test_get_some() {
-        let mut store = Store::new();
+        let opt = get_test_opt();
+        let mut store = Store::new(opt).unwrap();
         let key = b"a".to_vec();
         let payload = b"abc".to_vec();
         let r = store.apply_mut(Request::Setter {
@@ -190,24 +213,65 @@ mod test {
 
     #[test]
     fn test_set() {
-        let mut store = Store::new();
-        let key = b"a".to_vec();
-        let payload = b"abc".to_vec();
-        let r = store.apply_mut(Request::Setter {
-            setter: SetterType::Set,
-            key,
-            flags: 1,
-            ttl: 10,
-            bytes: payload.len(),
-            payload,
-            no_reply: false,
-        });
-        assert_eq!(Ok(Response::Stored), r);
+        let opt = get_test_opt();
+        let mut store = Store::new(opt).unwrap();
+        let mut map = HashMap::new();
+        map.insert(b"a".to_vec(), b"abc".to_vec());
+        map.insert(b"b".to_vec(), b"bbc".to_vec());
+        map.insert(b"c".to_vec(), b"cbc".to_vec());
+        for (key, payload) in map.iter() {
+            let r = store.apply_mut(Request::Setter {
+                setter: SetterType::Set,
+                key: key.clone(),
+                flags: 1,
+                ttl: 100,
+                bytes: payload.len(),
+                payload: payload.clone(),
+                no_reply: false,
+            });
+            assert_eq!(Ok(Response::Stored), r);
+        }
+        for (key, payload) in map.iter() {
+            let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![key.clone()] });
+            let bytes = payload.len();
+            println!("get key: {}", to_str(key));
+            assert_eq!(Ok(Response::Get(vec!(GetRespItem {
+                key: key.clone(),
+                data: payload.to_vec(),
+                flags: 1,
+                bytes,
+            }))), r);
+        }
+        let mut deleted = HashSet::new();
+        for (key, _payload) in map.iter() {
+            let r = store.apply_mut(Request::Deleter { key: key.clone(), no_reply: false });
+            assert_eq!(Ok(Response::Deleted), r);
+            println!("delete key: {}", to_str(key));
+            deleted.insert(key.clone());
+            for (key, payload) in map.iter() {
+                let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![key.clone()] });
+                println!("get key: {}", to_str(key));
+                if deleted.contains(key) {
+                    println!("empty");
+                    assert_eq!(Ok(Response::Get(vec![])), r);
+                } else {
+                    println!("not empty");
+                    let bytes = payload.len();
+                    assert_eq!(Ok(Response::Get(vec!(GetRespItem {
+                        key: key.clone(),
+                        data: payload.to_vec(),
+                        flags: 1,
+                        bytes,
+                    }))), r);
+                }
+            }
+        }
     }
 
     #[test]
     fn test_set_err() {
-        let mut store = Store::new();
+        let opt = get_test_opt();
+        let mut store = Store::new(opt).unwrap();
         let key = b"a".to_vec();
         let payload = b"abc".to_vec();
         let r = store.apply_mut(Request::Setter {

@@ -1,5 +1,7 @@
 use skip_list::SkipList;
 use std::borrow::Borrow;
+use crate::types::Table;
+use skip_list::SkipListIter;
 
 #[derive(Clone)]
 pub struct Memtable<K: Ord + Clone, V: Clone> {
@@ -11,31 +13,38 @@ impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
     pub fn new(max_size: usize, max_height: usize) -> Self {
         let map = SkipList::new(max_height);
         Memtable {
-            max_size, map
+            max_size,
+            map
         }
     }
+    pub fn iter(&self) -> SkipListIter<K, V> {
+        self.map.iter()
+    }
+}
 
-    pub fn get<Q: ?Sized>(&self, k: &Q) -> Option<&V>
+impl<K: Ord + Clone, V: Clone> Table<K, V> for Memtable<K, V> {
+
+    fn get<Q: ?Sized>(&self, k: &Q) -> Option<&V>
         where K: Borrow<Q>,
               Q: Ord {
         self.map.get(k)
     }
 
-    pub fn get_mut<Q: ?Sized>(&self, k: &Q) -> Option<&mut V>
+    fn get_mut<Q: ?Sized>(&self, k: &Q) -> Option<&mut V>
         where K: Borrow<Q>,
               Q: Ord {
         self.map.get_mut(k)
     }
 
-    pub fn insert(&mut self, k: K, v: V) -> Option<V> {
+    fn insert(&mut self, k: K, v: V) -> Option<V> {
         self.map.insert(k, v)
     }
 
-    pub fn clear(&mut self) {
+    fn clear(&mut self) {
         self.map.clear()
     }
 
-    pub fn is_full(&self) -> bool {
+    fn is_full(&self) -> bool {
         self.max_size <= self.map.length()
     }
 }

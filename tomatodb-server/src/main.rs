@@ -38,6 +38,16 @@ mod thread_pool;
 mod data_manager;
 mod memtable;
 mod proto;
+mod memtable_list;
+mod types;
+mod options;
+mod sstable_builder;
+mod sstable_reader;
+mod manifest;
+mod wal;
+
+use crate::options::Options;
+use crate::error::MyResult;
 
 pub struct Server {
     store: Arc<RwLock<Store>>,
@@ -91,11 +101,15 @@ pub fn serve<T>(addr: SocketAddr, new_service: T)
     TcpServer::new(Proto, addr).serve(new_service);
 }
 
-fn main() {
+fn main() -> MyResult<()> {
     let addr = "127.0.0.1:12333".parse().unwrap();
-    let store = Arc::new(RwLock::new(Store::new()));
+
+    let store = Store::new(Options::default())?;
+    let store = Arc::new(RwLock::new(store));
 
     serve(addr, move || {
         Ok(Server::new(store.clone()))
     });
+
+    Ok(())
 }

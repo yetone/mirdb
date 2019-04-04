@@ -4,6 +4,8 @@
 mod error;
 #[macro_use]
 mod block_handle;
+#[macro_use]
+mod util;
 mod writer;
 mod reader;
 mod table_builder;
@@ -12,6 +14,11 @@ mod cache;
 mod block;
 mod block_builder;
 mod options;
-mod util;
 mod block_iter;
 mod footer;
+mod meta_block;
+
+pub use crate::table_reader::TableReader;
+pub use crate::table_builder::TableBuilder;
+pub use crate::options::Options;
+pub use crate::error::{MyResult, Status, StatusCode};

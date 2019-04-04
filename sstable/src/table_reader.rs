@@ -4,13 +4,16 @@ use std::ops::DerefMut;
 use std::path::Path;
 use std::rc::Rc;
 
+use integer_encoding::FixedIntWriter;
+
 use crate::block::Block;
 use crate::block_handle::BlockHandle;
 use crate::cache;
+use crate::error::MyResult;
 use crate::footer::Footer;
 use crate::footer::FULL_FOOTER_LENGTH;
 use crate::options::Options;
-use crate::error::MyResult;
+use crate::meta_block::MetaBlock;
 
 pub struct TableReader {
     file: Rc<RefCell<File>>,
@@ -20,6 +23,9 @@ pub struct TableReader {
     cache_id: cache::CacheID,
     footer: Footer,
     pub(crate) index_block: Block,
+    meta_block_: MetaBlock,
+    size_: usize,
+    file_name_: String,
 }
 
 impl TableReader {
@@ -27,7 +33,11 @@ impl TableReader {
         let mut f = File::open(path)?;
         let size = f.metadata()?.len() as usize;
         let footer = Footer::read(&mut f, size - FULL_FOOTER_LENGTH)?;
-        let index_block = Block::new_from_location(&mut f, &footer.index, opt.clone())?.0;
+        let meta_block = MetaBlock::new_from_location(&mut f, &footer.meta_index())?.0;
+        let index_block = Block::new_from_location(&mut f, &footer.index(), opt.clone())?.0;
+        let metadata = f.metadata()?;
+        let size_ = metadata.len() as usize;
+        let file_name_ = path.file_name().expect("get file name").to_str().expect("file name to str").to_owned();
         Ok(TableReader {
             file: Rc::new(RefCell::new(f)),
             file_size: size,
@@ -35,25 +45,57 @@ impl TableReader {
             footer,
             index_block,
             opt: opt.clone(),
+            meta_block_: meta_block,
+            size_,
+            file_name_,
         })
     }
 
+    pub fn min_key(&self) -> &Vec<u8> {
+        &self.meta_block_.min_key
+    }
+
+    pub fn max_key(&self) -> &Vec<u8> {
+        &self.meta_block_.max_key
+    }
+
+    pub fn size(&self) -> usize {
+        self.size_
+    }
+
+    pub fn file_name(&self) -> &String {
+        &self.file_name_
+    }
+
+    fn gen_cache_key(&self, bh: &BlockHandle) -> cache::CacheKey {
+        let mut dst = [0; 2 * 8];
+        (&mut dst[..8])
+            .write_fixedint(self.cache_id)
+            .expect("error writing to vec");
+        (&mut dst[8..])
+            .write_fixedint(bh.offset as u64)
+            .expect("error writing to vec");
+        dst
+    }
+
     fn read_block(&self, bh: &BlockHandle) -> MyResult<Option<Block>> {
-        let mut buf = [0; 16];
-        bh.encode_to(&mut buf);
+        let cache_key = self.gen_cache_key(bh);
         {
             let mut bc = self.opt.block_cache.borrow_mut();
-            let res = bc.get(&buf);
+            let res = bc.get(&cache_key);
             if let Some(block) = res {
                 return Ok(Some(block.clone()))
             }
         }
         let (block, _) = Block::new_from_location(self.file.borrow_mut().deref_mut(), bh, self.opt.clone())?;
-        self.opt.block_cache.borrow_mut().insert(&buf, block.clone());
+        self.opt.block_cache.borrow_mut().insert(&cache_key, block.clone());
         Ok(Some(block))
     }
 
     pub fn get(&self, k: &[u8]) -> MyResult<Option<Vec<u8>>> {
+        if k < self.min_key() || k > self.max_key() {
+            return Ok(None);
+        }
         let mut iter = self.index_block.iter();
         iter.seek(k);
         let kv = iter.current_kv();
@@ -124,9 +166,12 @@ mod test {
         }
         t.flush()?;
         println!("add cost: {}ms", st.elapsed().unwrap().as_millis());
+        println!("load");
+        let st = time::SystemTime::now();
         let t = TableReader::new(path, opt.clone())?;
+        println!("load cost: {}ms, size: {}, min_key: {}, max_key: {}", st.elapsed().unwrap().as_millis(), t.size(), to_str(t.min_key()), to_str(t.max_key()));
         let not_found_count = 1000;
-        let not_found_key_prefix = "yetone";
+        let not_found_key_prefix = "prefix_kex";
         let mut not_found_keys = Vec::with_capacity(not_found_count);
         for i in 0..not_found_count {
             not_found_keys.push(format!("{}{}", not_found_key_prefix, i));
@@ -139,7 +184,7 @@ mod test {
         }
         println!("not found cost: {}ms", st.elapsed().unwrap().as_millis());
         let data = get_data();
-        println!("found: {}", data.len());
+        println!("1st found: {}", data.len());
         let st = time::SystemTime::now();
         for (k, v) in data {
             let r = t.get(k.as_bytes())?;
@@ -149,7 +194,22 @@ mod test {
             assert!(r.is_some());
             assert_eq!(v.as_bytes(), r.unwrap().as_slice());
         }
-        println!("found cost: {}ms", st.elapsed().unwrap().as_millis());
+        let first_cost = st.elapsed().unwrap().as_millis();
+        println!("1st found cost: {}ms", first_cost);
+        let data = get_data();
+        println!("2nd found: {}", data.len());
+        let st = time::SystemTime::now();
+        for (k, v) in data {
+            let r = t.get(k.as_bytes())?;
+            if r.is_none() {
+                println!("error found: {}", to_str(k.as_bytes()));
+            }
+            assert!(r.is_some());
+            assert_eq!(v.as_bytes(), r.unwrap().as_slice());
+        }
+        let second_cost = st.elapsed().unwrap().as_millis();
+        println!("2nd found cost: {}ms", second_cost);
+        assert!(first_cost > second_cost);
         Ok(())
     }
 }

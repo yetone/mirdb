@@ -4,7 +4,7 @@ use std::error::Error;
 
 use snap::Error as SnapError;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum StatusCode {
     NotFound,
     IOError,
@@ -12,9 +12,11 @@ pub enum StatusCode {
     SnapError,
     CompressError,
     InvalidData,
+    BuildError,
+    BincodeError,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Status {
     pub code: StatusCode,
     pub msg: String,
@@ -50,6 +52,12 @@ impl From<SnapError> for Status {
             _ => StatusCode::SnapError,
         };
         Status::new(code, e.description())
+    }
+}
+
+impl From<bincode::Error> for Status {
+    fn from(e: bincode::Error) -> Self {
+        Status::new(StatusCode::BincodeError, e.description())
     }
 }
 
