@@ -76,7 +76,7 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
         })
     }
 
-    pub fn deleted(&self) -> bool {
+    pub fn is_deleted(&self) -> bool {
         self.deleted_
     }
 
@@ -226,7 +226,7 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
         let mut i = 0;
         while i < self.segs.len() {
             let seg = &self.segs[i];
-            if !seg.deleted() {
+            if !seg.is_deleted() {
                 break;
             }
             i += 1;
@@ -290,7 +290,7 @@ impl<'a, K: Serialize + DeserializeOwned, V: Serialize + DeserializeOwned> Itera
         }
         while self.index < self.wal.seg_count() {
             let seg = &self.wal.get_seg(self.index).expect("get seg");
-            if !seg.deleted() {
+            if !seg.is_deleted() {
                 break;
             }
             self.index += 1;

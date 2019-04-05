@@ -47,10 +47,11 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
     pub fn redo(&mut self) -> MyResult<()> {
         if self.wal_.seg_count() > 0 {
             let work_dir = Path::new(&self.opt_.work_dir);
-            for seg in &self.wal_.segs {
+            for seg in &mut self.wal_.segs {
                 let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
                 let (_, reader) = seg.build_sstable(self.opt_.clone(), &path)?;
                 self.reader_.add(0, reader)?;
+                seg.delete()?;
             }
             self.wal_ = WAL::new(self.opt_.clone())?;
             assert_eq!(0, self.wal_.seg_count());
