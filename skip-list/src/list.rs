@@ -63,9 +63,6 @@ impl<K, V> SkipList<K, V> {
             while let Some(next) = (*current).next_mut((*current).height()) {
                 if !is_head {
                     SkipListNode::free(current);
-                } else {
-                    let nexts_ptr = &mut (*current).nexts_ as *mut Vec<*mut SkipListNode<K, V>>;
-                    nexts_ptr.drop_in_place();
                 }
                 current = next;
                 is_head = false;
@@ -73,10 +70,11 @@ impl<K, V> SkipList<K, V> {
 
             if !is_head {
                 SkipListNode::free(current);
-            } else {
-                let nexts_ptr= &mut (*current).nexts_ as *mut Vec<*mut SkipListNode<K, V>>;
-                nexts_ptr.drop_in_place();
             }
+
+            // drop head nexts ptr
+            let nexts_ptr = &mut (*self.head_).nexts_ as *mut Vec<*mut SkipListNode<K, V>>;
+            nexts_ptr.drop_in_place();
         }
     }
 
