@@ -44,18 +44,23 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
     }
 
     pub fn redo(&mut self) -> MyResult<()> {
-        if self.wal_.seg_count() > 0 {
-            let work_dir = Path::new(&self.opt_.work_dir);
-            for seg in &mut self.wal_.segs {
-                let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
-                if let Some((_, reader)) = seg.build_sstable(self.opt_.clone(), &path)? {
-                    self.reader_.add(0, reader)?;
-                }
-                seg.delete()?;
-            }
-            self.wal_ = WAL::new(self.opt_.clone())?;
-            assert_eq!(0, self.wal_.seg_count());
+        if self.wal_.seg_count() <= 0 {
+            return Ok(());
         }
+
+        let work_dir = Path::new(&self.opt_.work_dir);
+        for seg in &mut self.wal_.segs {
+            let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
+            if let Some((_, reader)) = seg.build_sstable(self.opt_.clone(), &path)? {
+                self.reader_.add(0, reader)?;
+            }
+            seg.delete()?;
+        }
+
+        self.wal_ = WAL::new(self.opt_.clone())?;
+
+        assert_eq!(0, self.wal_.seg_count());
+
         Ok(())
     }
 
@@ -194,6 +199,16 @@ mod test {
             let r = dm.get(k)?;
             assert_eq!(Some(v.clone()), r);
         }
+
+        // load from wal
+        let dm: DataManager<Vec<u8>, Vec<u8>> = DataManager::new(opt.clone())?;
+
+        // can get data now!
+        for (k, v) in &data {
+            let r = dm.get(k)?;
+            assert_eq!(Some(v.clone()), r);
+        }
+        assert_eq!(Some(b"xixi".to_vec()), dm.get(b"d".to_vec().as_slice())?);
 
         Ok(())
     }

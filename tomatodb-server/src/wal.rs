@@ -91,7 +91,7 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
         let buf = serialize(entry)?;
         self.file.write_varint(buf.len())?;
         self.file.write(&buf)?;
-        self.file.sync_data()?;
+        self.file.flush()?;
         Ok(())
     }
 

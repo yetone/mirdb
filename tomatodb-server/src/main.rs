@@ -105,7 +105,9 @@ pub fn serve<T>(addr: SocketAddr, new_service: T)
 fn main() -> MyResult<()> {
     let addr = "127.0.0.1:12333".parse().unwrap();
 
-    let store = Store::new(Options::default())?;
+    let opt = Options::default();
+
+    let store = Store::new(opt.clone())?;
     let store = Arc::new(RwLock::new(store));
 
     serve(addr, move || {
