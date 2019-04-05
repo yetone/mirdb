@@ -28,13 +28,18 @@ pub struct StorePayload {
     created_at: u64,
 }
 
+impl StorePayload {
+    pub fn is_expired(&self) -> bool {
+        if self.ttl == 0 {
+            return false;
+        }
+        self.created_at + self.ttl as u64 <= SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
+    }
+}
+
 pub struct Store {
     opt: Options,
     data: DataManager<StoreKey, StorePayload>,
-}
-
-pub fn is_expire(p: &StorePayload) -> bool {
-    p.created_at + p.ttl as u64 <= SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
 }
 
 impl Store {
@@ -57,7 +62,7 @@ impl Store {
                 let mut v = Vec::with_capacity(keys.len());
                 for key in keys {
                     if let Some(p) = self.data.get(&key)? {
-                        if !is_expire(&p) {
+                        if !p.is_expired() {
                             v.push(GetRespItem {
                                 key,
                                 data: p.data,
