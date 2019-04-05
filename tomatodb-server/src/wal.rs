@@ -1,5 +1,7 @@
 use std::borrow::Borrow;
 use std::cmp::min;
+use std::collections::linked_list::Iter as LinkedListIter;
+use std::collections::LinkedList;
 use std::fmt::Debug;
 use std::fs::File;
 use std::fs::OpenOptions;
@@ -21,11 +23,14 @@ use integer_encoding::{VarIntReader, VarIntWriter};
 use serde::{Deserialize, Serialize};
 use serde::de::DeserializeOwned;
 
+use sstable::TableBuilder;
+use sstable::TableReader;
+
+use crate::error::err;
 use crate::error::MyResult;
+use crate::error::StatusCode;
 use crate::options::Options;
 use crate::utils::make_file_name;
-use sstable::TableReader;
-use sstable::TableBuilder;
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct LogEntry<K, V> {
@@ -54,7 +59,6 @@ impl<K, V> LogEntry<K, V> {
 pub struct WALSeg<K, V> {
     file: File,
     path: PathBuf,
-    deleted_: bool,
     k: PhantomData<K>,
     v: PhantomData<V>,
 }
@@ -70,14 +74,9 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
         Ok(WALSeg {
             file,
             path: path.as_ref().to_path_buf(),
-            deleted_: false,
             k: PhantomData,
             v: PhantomData,
         })
-    }
-
-    pub fn is_deleted(&self) -> bool {
-        self.deleted_
     }
 
     pub fn iter(&self) -> MyResult<WALSegIter<K, V>> {
@@ -96,9 +95,8 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
         Ok(())
     }
 
-    pub fn delete(&mut self) -> MyResult<()> {
+    pub fn delete(&self) -> MyResult<()> {
         remove_file(&self.path)?;
-        self.deleted_ = true;
         Ok(())
     }
 }
@@ -171,7 +169,7 @@ impl<K: DeserializeOwned, V: DeserializeOwned> Iterator for WALSegIter<K, V> {
 
 pub struct WAL<K, V> {
     opt: Options,
-    pub segs: Vec<WALSeg<K, V>>,
+    pub segs: LinkedList<WALSeg<K, V>>,
     current_file_num: usize,
 }
 
@@ -186,7 +184,7 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
             }
         }
         paths.sort();
-        let segs = paths.iter().map(|p| WALSeg::new(&p.as_path()).expect("new walseg")).collect();
+        let segs = paths.iter().map(|p| WALSeg::new(&p.as_path()).expect("new wal seg")).collect();
         Ok(WAL {
             opt,
             segs,
@@ -198,21 +196,14 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
         self.segs.len()
     }
 
-    pub fn get_seg(&self, i: usize) -> Option<&WALSeg<K, V>> {
-        self.segs.get(i)
-    }
-
-    pub fn get_seg_mut(&mut self, i: usize) -> Option<&mut WALSeg<K, V>> {
-        self.segs.get_mut(i)
-    }
-
     pub fn append(&mut self, entry: &LogEntry<K, V>) -> MyResult<()> {
-        let l = self.segs.len();
-        if l == 0 {
+        if self.seg_count() == 0 {
             self.new_seg()?;
         }
-        let l = self.segs.len();
-        self.segs[l - 1].append(entry)
+        if let Some(seg) = &mut self.segs.back_mut() {
+            return seg.append(entry);
+        }
+        err(StatusCode::WALError, "cannot get the tail wal seg")
     }
 
     pub fn truncate(&mut self, n: usize) -> MyResult<()> {
@@ -223,20 +214,10 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
     }
 
     pub fn consume_seg(&mut self) -> MyResult<()> {
-        let mut i = 0;
-        while i < self.segs.len() {
-            let seg = &self.segs[i];
-            if !seg.is_deleted() {
-                break;
-            }
-            i += 1;
+        if let Some(seg) = &mut self.segs.pop_front() {
+            seg.delete()?;
         }
-
-        if i >= self.segs.len() {
-            return Ok(());
-        }
-
-        self.segs[i].delete()
+        Ok(())
     }
 
     pub fn new_seg(&mut self) -> MyResult<()> {
@@ -245,7 +226,7 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
         let path = Path::new(&self.opt.work_dir);
         let path = path.join(file_name);
         let seg = WALSeg::new(path.as_path())?;
-        self.segs.push(seg);
+        self.segs.push_back(seg);
         Ok(())
     }
 
@@ -261,17 +242,15 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
 }
 
 pub struct WALIter<'a, K, V> {
-    wal: &'a WAL<K, V>,
-    index: usize,
-    seg_iter: Option<WALSegIter<K, V>>
+    segs_iter: LinkedListIter<'a, WALSeg<K, V>>,
+    seg_iter: Option<WALSegIter<K, V>>,
 }
 
 impl<'a, K, V> WALIter<'a, K, V> {
     pub fn new(wal: &'a WAL<K, V>) -> Self {
         WALIter {
-            wal,
-            index: 0,
-            seg_iter: None
+            segs_iter: wal.segs.iter(),
+            seg_iter: None,
         }
     }
 }
@@ -284,22 +263,13 @@ impl<'a, K: Serialize + DeserializeOwned, V: Serialize + DeserializeOwned> Itera
             let n = seg_iter.next();
             if n.is_some() {
                 return n;
-            } else {
-                self.index += 1;
             }
         }
-        while self.index < self.wal.seg_count() {
-            let seg = &self.wal.get_seg(self.index).expect("get seg");
-            if !seg.is_deleted() {
-                break;
-            }
-            self.index += 1;
+        if let Some(seg) = self.segs_iter.next() {
+            self.seg_iter = Some(seg.iter().expect("get wal seg iter"));
+            return self.next();
         }
-        if self.index >= self.wal.seg_count() {
-            return None;
-        }
-        self.seg_iter = Some(self.wal.segs[self.index].iter().expect("get walseg iter"));
-        self.next()
+        None
     }
 }
 

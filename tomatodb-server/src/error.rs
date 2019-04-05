@@ -10,6 +10,7 @@ pub enum StatusCode {
     SstableError(sstable::StatusCode),
     BincodeError,
     PatternError(usize),
+    WALError,
 }
 
 #[derive(Debug, PartialEq)]
@@ -71,4 +72,8 @@ pub type MyResult<T> = ::std::result::Result<T, Status>;
 
 macro_rules! err {
     ($code:expr, $msg:expr) => {Err($crate::error::Status::new($code, $msg))};
+}
+
+pub fn err<T>(code: StatusCode, msg: &str) -> MyResult<T> {
+    err!(code, msg)
 }

@@ -73,11 +73,13 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
                     let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
                     let (_, reader) = build_sstable(self.opt_.clone(), &path, memtable)?;
                     self.reader_.add(0, reader)?;
+                    self.wal_.consume_seg()?;
                 }
                 self.imm_.clear();
             }
             self.imm_.push(self.mut_.clone());
             self.mut_.clear();
+            self.wal_.new_seg()?;
         }
 
         Ok(if let Some(v) = self.mut_.insert(k, v) {
