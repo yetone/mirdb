@@ -102,14 +102,20 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
 }
 
 impl<V: Serialize + DeserializeOwned> WALSeg<Vec<u8>, V> {
-    pub fn build_sstable(&self, opt: Options, path: &Path) -> MyResult<(String, TableReader)> {
+    pub fn build_sstable(&self, opt: Options, path: &Path) -> MyResult<Option<(String, TableReader)>> {
         let table_opt = opt.to_table_opt();
         let mut tb = TableBuilder::new(&path, table_opt.clone())?;
+        let mut count = 0;
         for entry in self.iter()? {
             tb.add(&entry.k, &serialize(&entry.v)?)?;
+            count += 1;
         }
-        tb.flush()?;
-        Ok((path.to_str().unwrap().to_owned(), TableReader::new(path, table_opt.clone())?))
+        if count > 0 {
+            tb.flush()?;
+            Ok(Some((path.to_str().unwrap().to_owned(), TableReader::new(path, table_opt.clone())?)))
+        } else {
+            Ok(None)
+        }
     }
 }
 

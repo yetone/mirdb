@@ -12,7 +12,6 @@ use crate::error::MyResult;
 use crate::memtable::Memtable;
 use crate::memtable_list::MemtableList;
 use crate::options::Options;
-use crate::sstable_builder::build_sstable;
 use crate::sstable_reader::SstableReader;
 use crate::types::Table;
 use crate::utils::to_str;
@@ -49,8 +48,9 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
             let work_dir = Path::new(&self.opt_.work_dir);
             for seg in &mut self.wal_.segs {
                 let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
-                let (_, reader) = seg.build_sstable(self.opt_.clone(), &path)?;
-                self.reader_.add(0, reader)?;
+                if let Some((_, reader)) = seg.build_sstable(self.opt_.clone(), &path)? {
+                    self.reader_.add(0, reader)?;
+                }
                 seg.delete()?;
             }
             self.wal_ = WAL::new(self.opt_.clone())?;
@@ -71,8 +71,9 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
                 let work_dir = Path::new(&self.opt_.work_dir);
                 for memtable in self.imm_.iter() {
                     let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
-                    let (_, reader) = build_sstable(self.opt_.clone(), &path, memtable)?;
-                    self.reader_.add(0, reader)?;
+                    if let Some((_, reader)) = memtable.build_sstable(self.opt_.clone(), &path)? {
+                        self.reader_.add(0, reader)?;
+                    }
                     self.wal_.consume_seg()?;
                 }
                 self.imm_.clear();
@@ -128,5 +129,72 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
             self.insert_(k.clone(), None)?;
         }
         Ok(r)
+    }
+
+    #[cfg(test)]
+    fn clear_memtables(&mut self) {
+        self.mut_.clear();
+        self.imm_.clear();
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::test_utils::get_test_opt;
+
+    fn get_data() -> Vec<(Vec<u8>, Vec<u8>)> {
+        let mut kvs = Vec::with_capacity(3);
+        kvs.push((b"a".to_vec(), b"abcasldkfjaoiwejfawoejfoaisjdflaskdjfoias".to_vec()));
+        kvs.push((b"b".to_vec(), b"bbcasdlfjasldfj".to_vec()));
+        kvs.push((b"c".to_vec(), b"cbcasldfjowiejfoaisdjfalskdfj".to_vec()));
+        kvs
+    }
+
+    #[test]
+    fn test_fault_tolerance() -> MyResult<()> {
+        let mut opt = get_test_opt();
+        opt.imm_mem_table_max_count = 3;
+
+        let mut dm = DataManager::new(opt.clone())?;
+
+        let data = get_data();
+
+        for (k, v) in &data {
+            dm.insert(k.clone(), v.clone())?;
+        }
+
+        for (k, v) in &data {
+            let r = dm.get(k)?;
+            assert_eq!(Some(v.clone()), r);
+        }
+
+        // mock abnormal exit
+        dm.clear_memtables();
+
+        // cannot get data
+        for (k, _v) in &data {
+            let r = dm.get(k)?;
+            assert_eq!(None, r);
+        }
+
+        // load from wal
+        let mut dm = DataManager::new(opt.clone())?;
+
+        // can get data now!
+        for (k, v) in &data {
+            let r = dm.get(k)?;
+            assert_eq!(Some(v.clone()), r);
+        }
+
+        dm.insert(b"d".to_vec(), b"xixi".to_vec())?;
+        assert_eq!(Some(b"xixi".to_vec()), dm.get(b"d".to_vec().as_slice())?);
+
+        for (k, v) in &data {
+            let r = dm.get(k)?;
+            assert_eq!(Some(v.clone()), r);
+        }
+
+        Ok(())
     }
 }
