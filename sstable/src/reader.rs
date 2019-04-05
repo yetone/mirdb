@@ -1,10 +1,12 @@
+use std::cmp::min;
 use std::io::Read;
 use std::io::Seek;
 use std::io::SeekFrom;
+
 use integer_encoding::FixedInt;
 
-use crate::error::MyResult;
 use crate::block_handle::BlockHandle;
+use crate::error::MyResult;
 
 pub fn read_usize<T: Seek + Read>(r: &mut T, offset: usize) -> MyResult<(usize, usize)> {
     let mut buf = [0; 8];
@@ -24,11 +26,7 @@ pub fn read_bytes<T: Seek + Read>(r: &mut T, location: &BlockHandle) -> MyResult
         if size == 0 {
             break;
         }
-        if size > remain {
-            content.extend_from_slice(&buf[..remain]);
-        } else {
-            content.extend_from_slice(&buf[..size]);
-        }
+        content.extend_from_slice(&buf[..min(remain, size)]);
     }
     let len = content.len();
     Ok((content, location.offset + len))

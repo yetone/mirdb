@@ -22,13 +22,13 @@ pub struct FileMeta {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LevelMeta {
-    pub file_metas: Vec<FileMeta>
+    pub file_metas: Vec<FileMeta>,
 }
 
 impl LevelMeta {
     pub fn new() -> Self {
         LevelMeta {
-            file_metas: vec![]
+            file_metas: vec![],
         }
     }
 
@@ -84,7 +84,8 @@ impl LevelMeta {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Manifest {
-    pub level_metas: Vec<LevelMeta>
+    pub level_metas: Vec<LevelMeta>,
+    pub current_file_number: usize,
 }
 
 pub struct ManifestBuilder {
@@ -96,7 +97,14 @@ impl Manifest {
     fn new(opt: &Options) -> Self {
         Manifest {
             level_metas: Vec::with_capacity(opt.max_level),
+            current_file_number: 0,
         }
+    }
+
+    pub fn new_file_number(&mut self) -> usize {
+        let r = self.current_file_number;
+        self.current_file_number += 1;
+        r
     }
 
     pub fn gen_path(opt: &Options) -> PathBuf {
@@ -203,5 +211,9 @@ impl ManifestBuilder {
     pub fn flush(&self) -> MyResult<()> {
         let mut file_ = File::create(Manifest::gen_path(&self.opt))?;
         self.manifest_.flush(&mut file_)
+    }
+
+    pub fn new_file_number(&mut self) -> usize {
+        self.manifest_.new_file_number()
     }
 }

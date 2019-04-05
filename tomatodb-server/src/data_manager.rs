@@ -16,6 +16,7 @@ use crate::sstable_builder::build_sstable;
 use crate::sstable_reader::SstableReader;
 use crate::types::Table;
 use crate::utils::to_str;
+use crate::utils::make_file_name;
 
 pub struct DataManager<K: Ord + Clone, V: Clone> {
     mut_: Memtable<K, Option<V>>,
@@ -44,8 +45,10 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
     fn insert_(&mut self, k: K, v: Option<V>) -> MyResult<Option<V>> {
         if self.mut_.is_full() {
             if self.imm_.is_full() {
+                let work_dir = Path::new(&self.opt_.work_dir);
                 for memtable in self.imm_.iter() {
-                    let (_, reader) = build_sstable(self.opt_.clone(), 0, memtable)?;
+                    let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
+                    let (_, reader) = build_sstable(self.opt_.clone(), &path, memtable)?;
                     self.reader_.add(0, reader)?;
                 }
                 self.imm_.clear();
@@ -55,7 +58,9 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
         }
         Ok(if let Some(v) = self.mut_.insert(k, v) {
             v
-        } else { None })
+        } else {
+            None
+        })
     }
 
     pub fn get<Q: ?Sized>(&self, k: &Q) -> MyResult<Option<V>>

@@ -45,6 +45,7 @@ mod sstable_builder;
 mod sstable_reader;
 mod manifest;
 mod wal;
+mod test_utils;
 
 use crate::options::Options;
 use crate::error::MyResult;

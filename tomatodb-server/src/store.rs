@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 use std::convert::From;
 use std::error::Error;
+use std::fs::create_dir_all;
 use std::io::{Result, Write};
+use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
@@ -37,6 +39,12 @@ pub fn is_expire(p: &StorePayload) -> bool {
 
 impl Store {
     pub fn new(opt: Options) -> MyResult<Self> {
+        let path = Path::new(&opt.work_dir);
+        if !path.exists() {
+            create_dir_all(path)?;
+        } else if !path.is_dir() {
+            return err!(StatusCode::IOError, "work dir is not a dir");
+        }
         Ok(Store {
             data: DataManager::new(opt.clone())?,
             opt,
@@ -157,25 +165,9 @@ mod test {
     use rand::distributions::Alphanumeric;
 
     use crate::utils::to_str;
+    use crate::test_utils::get_test_opt;
 
     use super::*;
-
-    fn get_test_opt() -> Options {
-        let rand_string: String = thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(30)
-            .collect();
-        let mut opt = Options::default();
-        opt.work_dir = "/tmp/".to_owned() + &rand_string;
-        if Path::new(&opt.work_dir).exists() {
-            remove_dir_all(&opt.work_dir).expect("remove work dir error!");
-        }
-        create_dir_all(&opt.work_dir).expect("create work dir error!");
-        opt.mem_table_max_size = 1;
-        opt.imm_mem_table_max_size = 1;
-        opt.imm_mem_table_max_count = 1;
-        opt
-    }
 
     #[test]
     fn test_get_none() {

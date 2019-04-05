@@ -9,6 +9,7 @@ pub enum StatusCode {
     Other,
     SstableError(sstable::StatusCode),
     BincodeError,
+    PatternError(usize),
 }
 
 #[derive(Debug, PartialEq)]
@@ -48,6 +49,12 @@ impl From<::std::io::Error> for Status {
             ErrorKind::NotFound => Status::new(StatusCode::NotFound, e.description()),
             _ => Status::new(StatusCode::IOError, e.description()),
         }
+    }
+}
+
+impl From<glob::PatternError> for Status {
+    fn from(e: glob::PatternError) -> Self {
+        Status::new(StatusCode::PatternError(e.pos), e.msg)
     }
 }
 

@@ -1,17 +1,17 @@
 pub type Key = Vec<u8>;
 pub type Payload = Vec<u8>;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum SetterType {
     Set, Add, Replace, Append, Prepend
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum GetterType {
     Get, Gets
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Request {
     Getter {
         getter: GetterType,

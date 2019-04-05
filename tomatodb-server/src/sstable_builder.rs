@@ -16,15 +16,12 @@ use crate::options::Options;
 use crate::store::StoreKey;
 use crate::store::StorePayload;
 
-pub fn build_sstable<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize>(opt: Options, level: usize, table: &Memtable<K, Option<V>>) -> MyResult<(String, TableReader)> {
-    let work_dir = Path::new(&opt.work_dir);
-    let p = work_dir.join(format!("{}-{}.sst", level,
-                                  SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_millis()));
+pub fn build_sstable<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize>(opt: Options, path: &Path, table: &Memtable<K, Option<V>>) -> MyResult<(String, TableReader)> {
     let table_opt = opt.to_table_opt();
-    let mut tb = TableBuilder::new(&p, table_opt.clone())?;
+    let mut tb = TableBuilder::new(&path, table_opt.clone())?;
     for (k, v) in table.iter() {
         tb.add(k.borrow(), &serialize(v)?)?;
     }
     tb.flush()?;
-    Ok((p.to_str().unwrap().to_owned(), TableReader::new(p.as_path(), table_opt.clone())?))
+    Ok((path.to_str().unwrap().to_owned(), TableReader::new(path, table_opt.clone())?))
 }

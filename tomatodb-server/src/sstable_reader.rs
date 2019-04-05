@@ -1,18 +1,19 @@
-use crate::options::Options;
-use sstable::TableReader;
-use crate::error::MyResult;
 use std::borrow::Borrow;
-use crate::store::StorePayload;
-use crate::store::StoreKey;
-use bincode::deserialize;
-use serde::Deserialize;
+use std::collections::HashMap;
+use std::io::Cursor;
+use std::path::Path;
+
 use bincode::deserialize_from;
 use serde::de::DeserializeOwned;
-use std::io::Cursor;
-use crate::manifest::ManifestBuilder;
-use std::collections::HashMap;
+
+use sstable::TableReader;
+
+use crate::error::MyResult;
 use crate::manifest::FileMeta;
-use std::path::Path;
+use crate::manifest::ManifestBuilder;
+use crate::options::Options;
+use crate::store::StoreKey;
+use crate::store::StorePayload;
 
 pub struct SstableReader {
     opt_: Options,
@@ -63,6 +64,14 @@ impl SstableReader {
         self.readers_.insert(reader.file_name().to_owned(), reader);
         self.manifest_builder_.flush()?;
         Ok(())
+    }
+
+    pub fn manifest_builder(&self) -> &ManifestBuilder {
+        &self.manifest_builder_
+    }
+
+    pub fn manifest_builder_mut(&mut self) -> &mut ManifestBuilder {
+        &mut self.manifest_builder_
     }
 
     pub fn get<K: Borrow<[u8]>, V: DeserializeOwned>(&self, k: K) -> MyResult<Option<V>> {
