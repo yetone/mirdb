@@ -17,11 +17,14 @@ use crate::sstable_reader::SstableReader;
 use crate::types::Table;
 use crate::utils::to_str;
 use crate::utils::make_file_name;
+use crate::wal::WAL;
+use crate::wal::LogEntry;
 
 pub struct DataManager<K: Ord + Clone, V: Clone> {
     mut_: Memtable<K, Option<V>>,
     imm_: MemtableList<K, Option<V>>,
     reader_: SstableReader,
+    wal_: WAL<Vec<u8>, V>,
     opt_: Options,
 }
 
@@ -30,12 +33,29 @@ unsafe impl<K: Ord + Clone, V: Clone> Send for DataManager<K, V> {}
 
 impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + Debug> DataManager<K, V> {
     pub fn new(opt: Options) -> MyResult<Self> {
-        Ok(DataManager {
+        let mut dm = DataManager {
             mut_: Memtable::new(opt.mem_table_max_size, opt.mem_table_max_height),
             imm_: MemtableList::new(opt.clone(), opt.imm_mem_table_max_count, opt.imm_mem_table_max_size, opt.imm_mem_table_max_height),
             reader_: SstableReader::new(opt.clone())?,
+            wal_: WAL::new(opt.clone())?,
             opt_: opt.clone(),
-        })
+        };
+        dm.redo()?;
+        Ok(dm)
+    }
+
+    pub fn redo(&mut self) -> MyResult<()> {
+        if self.wal_.seg_count() > 0 {
+            let work_dir = Path::new(&self.opt_.work_dir);
+            for seg in &self.wal_.segs {
+                let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
+                let (_, reader) = seg.build_sstable(self.opt_.clone(), &path)?;
+                self.reader_.add(0, reader)?;
+            }
+            self.wal_ = WAL::new(self.opt_.clone())?;
+            assert_eq!(0, self.wal_.seg_count());
+        }
+        Ok(())
     }
 
     pub fn insert(&mut self, k: K, v: V) -> MyResult<Option<V>> {
@@ -43,6 +63,8 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
     }
 
     fn insert_(&mut self, k: K, v: Option<V>) -> MyResult<Option<V>> {
+        self.wal_.append(&LogEntry::new(k.borrow().to_vec(), v.clone()))?;
+
         if self.mut_.is_full() {
             if self.imm_.is_full() {
                 let work_dir = Path::new(&self.opt_.work_dir);
@@ -56,6 +78,7 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
             self.imm_.push(self.mut_.clone());
             self.mut_.clear();
         }
+
         Ok(if let Some(v) = self.mut_.insert(k, v) {
             v
         } else {

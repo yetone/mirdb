@@ -24,6 +24,8 @@ use serde::de::DeserializeOwned;
 use crate::error::MyResult;
 use crate::options::Options;
 use crate::utils::make_file_name;
+use sstable::TableReader;
+use sstable::TableBuilder;
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct LogEntry<K, V> {
@@ -34,6 +36,18 @@ pub struct LogEntry<K, V> {
 impl<K, V> LogEntry<K, V> {
     pub fn new(k: K, v: Option<V>) -> Self {
         LogEntry { k, v }
+    }
+
+    pub fn key(&self) -> &K {
+        &self.k
+    }
+
+    pub fn value(&self) -> &Option<V> {
+        &self.v
+    }
+
+    pub fn kv(self) -> (K, Option<V>) {
+        (self.k, self.v)
     }
 }
 
@@ -86,6 +100,18 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
         remove_file(&self.path)?;
         self.deleted_ = true;
         Ok(())
+    }
+}
+
+impl<V: Serialize + DeserializeOwned> WALSeg<Vec<u8>, V> {
+    pub fn build_sstable(&self, opt: Options, path: &Path) -> MyResult<(String, TableReader)> {
+        let table_opt = opt.to_table_opt();
+        let mut tb = TableBuilder::new(&path, table_opt.clone())?;
+        for entry in self.iter()? {
+            tb.add(&entry.k, &serialize(&entry.v)?)?;
+        }
+        tb.flush()?;
+        Ok((path.to_str().unwrap().to_owned(), TableReader::new(path, table_opt.clone())?))
     }
 }
 
@@ -168,11 +194,24 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
         })
     }
 
+    pub fn seg_count(&self) -> usize {
+        self.segs.len()
+    }
+
+    pub fn get_seg(&self, i: usize) -> Option<&WALSeg<K, V>> {
+        self.segs.get(i)
+    }
+
+    pub fn get_seg_mut(&mut self, i: usize) -> Option<&mut WALSeg<K, V>> {
+        self.segs.get_mut(i)
+    }
+
     pub fn append(&mut self, entry: &LogEntry<K, V>) -> MyResult<()> {
         let l = self.segs.len();
         if l == 0 {
             self.new_seg()?;
         }
+        let l = self.segs.len();
         self.segs[l - 1].append(entry)
     }
 
@@ -249,14 +288,14 @@ impl<'a, K: Serialize + DeserializeOwned, V: Serialize + DeserializeOwned> Itera
                 self.index += 1;
             }
         }
-        while self.index < self.wal.segs.len() {
-            let seg = &self.wal.segs[self.index];
+        while self.index < self.wal.seg_count() {
+            let seg = &self.wal.get_seg(self.index).expect("get seg");
             if !seg.deleted() {
                 break;
             }
             self.index += 1;
         }
-        if self.index >= self.wal.segs.len() {
+        if self.index >= self.wal.seg_count() {
             return None;
         }
         self.seg_iter = Some(self.wal.segs[self.index].iter().expect("get walseg iter"));
