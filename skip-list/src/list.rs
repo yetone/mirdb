@@ -61,7 +61,7 @@ impl<K, V> SkipList<K, V> {
             let mut current = self.head_;
             let mut is_head = true;
 
-            while let Some(next) = (*current).next_mut((*current).height()) {
+            while let Some(next) = (*current).next_mut(0) {
                 if !is_head {
                     SkipListNode::free(current);
                 }
@@ -91,17 +91,12 @@ impl<K: Ord, V> SkipList<K, V> {
     pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
         where K: Borrow<Q>,
               Q: Ord {
-        let updates = self.get_updates(key);
 
-        for update_ptr in updates {
-            if let Some(update) = SkipListNode::from_raw(update_ptr) {
-                for next_ptr in &update.nexts_ {
-                    if let Some(next) = SkipListNode::from_raw(*next_ptr) {
-                        if *next.key_.borrow() == *key {
-                            return Some(&next.value_);
-                        }
-                    }
-                }
+        let lower_bound = self.get_lower_bound(key);
+
+        if let Some(next) = lower_bound.next(0) {
+            if next.key().borrow() == key {
+                return Some(next.value());
             }
         }
 
@@ -111,17 +106,12 @@ impl<K: Ord, V> SkipList<K, V> {
     pub fn get_mut<Q: ?Sized>(&self, key: &Q) -> Option<&mut V>
         where K: Borrow<Q>,
               Q: Ord {
-        let updates = self.get_updates(key);
 
-        for update_ptr in updates {
-            if let Some(update) = SkipListNode::from_raw(update_ptr) {
-                for next_ptr in &update.nexts_ {
-                    if let Some(next) = SkipListNode::from_raw_mut(*next_ptr) {
-                        if *next.key_.borrow() == *key {
-                            return Some(&mut next.value_);
-                        }
-                    }
-                }
+        let lower_bound = self.get_lower_bound(key);
+
+        if let Some(next) = lower_bound.next_mut(0) {
+            if next.key().borrow() == key {
+                return Some(next.value_mut());
             }
         }
 
@@ -129,121 +119,115 @@ impl<K: Ord, V> SkipList<K, V> {
     }
 
     pub fn insert(&mut self, key: K, value: V) -> Option<V> {
-        let updates = self.get_updates(&key);
-
-        for update_ptr in &updates {
-            if let Some(update) = SkipListNode::from_raw(*update_ptr) {
-                for next_ptr in &update.nexts_ {
-                    if let Some(next) = SkipListNode::from_raw_mut(*next_ptr) {
-                        if next.key_ == key {
-                            let old_value = next.replace_value(value);
-                            return Some(old_value);
-                        }
-                    }
-                }
-            }
-        }
 
         let height = self.height_generator.gen_height(self.max_height_);
+
+        let (lower_bound, mut updates) = self.get_lower_bound_and_updates(&key);
+
+        if let Some(next) = lower_bound.next_mut(0) {
+            if next.key() == &key {
+                return Some(next.replace_value(value));
+            }
+        }
 
         let node_ptr = SkipListNode::allocate(key, value, height);
 
         for i in 0..=height {
-            let update_ptr = updates[self.max_height_ - i];
-            if let Some(update) = SkipListNode::from_raw_mut(update_ptr) {
-                let next_ptr = update.nexts_[update.height() - i];
-                let node = SkipListNode::from_raw_mut(node_ptr).unwrap();
-                let i0 = update.height() - i;
-                unsafe {
-                    *(node.nexts_.get_unchecked_mut(height - i)) = next_ptr;
-                    *(update.nexts_.get_unchecked_mut(i0)) = node_ptr;
-                }
+            let update = &mut updates[i];
+            unsafe {
+                *((*node_ptr).nexts_.get_unchecked_mut(i)) = *(update.nexts_.get_unchecked_mut(i));
+                *(update.nexts_.get_unchecked_mut(i)) = node_ptr;
             }
         }
 
-        self.height_ = std::cmp::max(self.height_, height);
+        self.height_ = ::std::cmp::max(self.height_, height);
         self.length_ += 1;
         None
     }
 
-    fn get_updates<Q: ?Sized>(&self, key: &Q) -> Vec<*mut SkipListNode<K, V>>
+    pub fn get_updates_for_bench<Q: ?Sized>(&self, key: &Q) -> (&mut SkipListNode<K, V>, Vec<&mut SkipListNode<K, V>>)
         where K: Borrow<Q>,
               Q: Ord {
-        let mut updates = vec![self.head_; self.max_height_ + 1];
+        self.get_lower_bound_and_updates(key)
+    }
 
-        let mut current_ptr = self.head_;
+    fn get_lower_bound_and_updates<Q: ?Sized>(&self, key: &Q) -> (&mut SkipListNode<K, V>, Vec<&mut SkipListNode<K, V>>)
+        where K: Borrow<Q>,
+              Q: Ord {
 
-        'outer: loop {
-            let current = SkipListNode::from_raw(current_ptr).unwrap();
+        let max_height = self.max_height_;
+        let mut updates= Vec::with_capacity(max_height + 1);
 
-            for next_ptr in &current.nexts_ {
-                if let Some(next) = SkipListNode::from_raw(*next_ptr) {
-                    if *next.key_.borrow() < *key {
-                        for i in 0..=current.height() {
-                            updates[self.max_height_ - i] = current_ptr;
-                        }
-                        current_ptr = *next_ptr;
-                        continue 'outer;
+        unsafe {
+            updates.set_len(max_height + 1);
+
+            for update in updates.iter_mut().take(max_height + 1).skip(self.height_ + 1) {
+                *update = &mut (*self.head_);
+            }
+
+            let mut current_ptr = self.head_;
+
+            for i in (0..=self.height_).rev() {
+                while let Some(next) = (*current_ptr).next_mut(i) {
+                    if next.key().borrow() < key {
+                        current_ptr = next;
+                    } else {
+                        break;
+                    }
+                }
+                updates[i] = &mut (*current_ptr);
+            }
+
+            (&mut (*current_ptr), updates)
+        }
+    }
+
+    fn get_lower_bound<Q: ?Sized>(&self, key: &Q) -> &mut SkipListNode<K, V>
+        where K: Borrow<Q>,
+              Q: Ord {
+
+        unsafe {
+            let mut current_ptr = self.head_;
+
+            for i in (0..=self.height_).rev() {
+                while let Some(next) = (*current_ptr).next_mut(i) {
+                    if next.key().borrow() < key {
+                        current_ptr = next;
+                    } else {
+                        break;
                     }
                 }
             }
 
-            for i in 0..=current.height() {
-                updates[self.max_height_ - i] = current_ptr;
-            }
-
-            break;
+            &mut (*current_ptr)
         }
-
-        updates
     }
 
     pub fn remove<Q: ?Sized>(&mut self, key: &Q) -> Option<V>
         where K: Borrow<Q>,
               Q: Ord {
 
-        let updates = self.get_updates(key);
+        let (lower_bound, mut updates) = self.get_lower_bound_and_updates(key);
 
-        let mut node_ptr = None;
-
-        let mut patch = vec![];
-        for update_ptr in updates {
-            if let Some(update) = SkipListNode::from_raw_mut(update_ptr) {
-                for (i, next_ptr) in update.nexts_.iter().enumerate() {
-                    if let Some(next) = SkipListNode::from_raw_mut(*next_ptr) {
-                        let next_key = next.key_.borrow();
-                        if *next_key == *key {
-                            let i0 = next.height() + i - update.height();
-                            patch.push((i, i0, update_ptr, *next_ptr));
-                            node_ptr = Some(*next_ptr);
-                        } else if *next_key < *key {
-                            break
-                        }
-                    }
-                }
-
+        if let Some(next) = lower_bound.next_mut(0) {
+            if next.key().borrow() != key {
+                return None;
             }
-        }
 
-        for (i, i0, update_ptr, next_ptr) in patch {
-            if let Some(update) = SkipListNode::from_raw_mut(update_ptr) {
-                if let Some(next) = SkipListNode::from_raw(next_ptr) {
-                    unsafe {
-                        *(update.nexts_.get_unchecked_mut(i)) = next.nexts_[i0];
-                    }
+            for i in 0..=next.height() {
+                let update = &mut updates[i];
+                unsafe {
+                    *(update.nexts_.get_unchecked_mut(i)) = *(next.nexts_.get_unchecked_mut(i));
                 }
             }
-        }
 
-        if let Some(node_ptr) = node_ptr {
-            if let Some(node) = SkipListNode::from_raw_mut(node_ptr) {
-                let value = node.replace_value(unsafe { mem::uninitialized() });
-                SkipListNode::free(node_ptr);
-                self.length_ -= 1;
-                return Some(value);
-            }
-        }
+            let old_value = next.replace_value(unsafe { mem::uninitialized() });
+            SkipListNode::free(next);
 
+            self.length_ -= 1;
+
+            return Some(old_value);
+        }
         None
     }
 }

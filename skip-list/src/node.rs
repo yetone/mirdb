@@ -24,6 +24,10 @@ impl<K, V> SkipListNode<K, V> {
         &self.value_
     }
 
+    pub fn value_mut(&mut self) -> &mut V {
+        &mut self.value_
+    }
+
     pub(crate) fn from_raw_mut<'a>(node_ptr: *mut SkipListNode<K, V>) -> Option<&'a mut SkipListNode<K, V>> {
         from_raw_mut(node_ptr)
     }

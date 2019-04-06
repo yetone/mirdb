@@ -14,7 +14,7 @@ impl<'a, K, V> Iterator for SkipListIter<'a, K, V> {
 
     fn next(&mut self) -> Option<Self::Item> {
         self.0.and_then(|node| {
-            self.0 = node.next(node.height());
+            self.0 = node.next(0);
             self.0
         }).map(|node| {
             (&node.key_, &node.value_)
@@ -36,7 +36,7 @@ impl<'a, K, V> Iterator for SkipListIterMut<'a, K, V> {
     fn next(&mut self) -> Option<Self::Item> {
         let current = ::std::mem::replace(&mut self.0, None);
         current.and_then(|node| {
-            match node.next_mut(node.height()) {
+            match node.next_mut(0) {
                 None => None,
                 Some(next) => {
                     let next: *mut SkipListNode<K, V> = next;
