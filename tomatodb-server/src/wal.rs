@@ -37,11 +37,11 @@ use crate::sstable_builder::skiplist_to_sstable;
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct LogEntry<K, V> {
     k: K,
-    v: Option<V>,
+    v: V,
 }
 
 impl<K, V> LogEntry<K, V> {
-    pub fn new(k: K, v: Option<V>) -> Self {
+    pub fn new(k: K, v: V) -> Self {
         LogEntry { k, v }
     }
 
@@ -49,11 +49,11 @@ impl<K, V> LogEntry<K, V> {
         &self.k
     }
 
-    pub fn value(&self) -> &Option<V> {
+    pub fn value(&self) -> &V {
         &self.v
     }
 
-    pub fn kv(self) -> (K, Option<V>) {
+    pub fn kv(self) -> (K, V) {
         (self.k, self.v)
     }
 }
@@ -104,7 +104,7 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
 }
 
 impl<V: Serialize + DeserializeOwned> WALSeg<Vec<u8>, V> {
-    fn to_skiplist(&self, opt: &Options) -> MyResult<SkipList<Vec<u8>, Option<V>>> {
+    fn to_skiplist(&self, opt: &Options) -> MyResult<SkipList<Vec<u8>, V>> {
         let mut map = SkipList::new(opt.mem_table_max_height);
         for entry in self.iter()? {
             map.insert(entry.k, entry.v);

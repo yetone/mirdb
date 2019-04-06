@@ -27,7 +27,7 @@ pub struct DataManager<K: Ord + Clone, V: Clone> {
     mut_: Arc<RwLock<Memtable<K, Option<V>>>>,
     imm_: Arc<RwLock<MemtableList<K, Option<V>>>>,
     readers_: Arc<RwLock<SstableReader>>,
-    wal_: Arc<RwLock<WAL<Vec<u8>, V>>>,
+    wal_: Arc<RwLock<WAL<Vec<u8>, Option<V>>>>,
     opt_: Options,
 }
 
