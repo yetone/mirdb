@@ -8,6 +8,7 @@ use crate::height_generator::HeightGenerator;
 use crate::height_generator::GenHeight;
 use crate::iter::SkipListIter;
 use crate::iter::SkipListIterMut;
+use std::fmt::Debug;
 
 pub struct SkipList<K, V> {
     head_: *mut SkipListNode<K, V>,
@@ -247,16 +248,22 @@ impl<K: Ord, V> SkipList<K, V> {
     }
 }
 
-impl<K, V: Display> Display for SkipList<K, V> {
+impl<K: Display, V: Display> Display for SkipList<K, V> {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         write!(f, "[")?;
-        for (i, (_, v)) in self.iter().enumerate() {
+        for (i, (k, v)) in self.iter().enumerate() {
             if i != 0 {
                 write!(f, ", ")?;
             }
-            write!(f, "{}", v)?;
+            write!(f, "({}, {})", k, v)?;
         }
         write!(f, "]")
+    }
+}
+
+impl<K, V> Debug for SkipList<K, V> {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        write!(f, "SkipList {{ len = {}, height = {} }}", self.length(), self.height())
     }
 }
 
@@ -300,7 +307,7 @@ mod test {
         for i in 0..3 {
             list.insert(i, i + 1);
         }
-        assert_eq!("[1, 2, 3]", list.to_string());
+        assert_eq!("[(0, 1), (1, 2), (2, 3)]", list.to_string());
     }
 
     #[test]
