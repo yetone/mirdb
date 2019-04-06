@@ -64,7 +64,7 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
 
             for seg in &mut wal.segs {
                 let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
-                if let Some((_, reader)) = seg.build_sstable(self.opt_.clone(), &path)? {
+                if let Some((_, reader)) = seg.build_sstable(&self.opt_, &path)? {
                     let mut readers = write_unlock(&self.readers_);
                     readers.add(0, reader)?;
                 }
@@ -95,7 +95,7 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
                 let work_dir = Path::new(&self.opt_.work_dir);
                 for memtable in immuttable.iter() {
                     let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
-                    if let Some((_, reader)) = memtable.build_sstable(self.opt_.clone(), &path)? {
+                    if let Some((_, reader)) = memtable.build_sstable(&self.opt_, &path)? {
                         let mut readers = write_unlock(&self.readers_);
                         readers.add(0, reader)?;
                     }

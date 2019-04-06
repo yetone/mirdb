@@ -31,6 +31,8 @@ use crate::error::MyResult;
 use crate::error::StatusCode;
 use crate::options::Options;
 use crate::utils::make_file_name;
+use skip_list::SkipList;
+use crate::sstable_builder::skiplist_to_sstable;
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct LogEntry<K, V> {
@@ -102,20 +104,17 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
 }
 
 impl<V: Serialize + DeserializeOwned> WALSeg<Vec<u8>, V> {
-    pub fn build_sstable(&self, opt: Options, path: &Path) -> MyResult<Option<(String, TableReader)>> {
-        let table_opt = opt.to_table_opt();
-        let mut tb = TableBuilder::new(&path, table_opt.clone())?;
-        let mut count = 0;
+    fn to_skiplist(&self, opt: &Options) -> MyResult<SkipList<Vec<u8>, Option<V>>> {
+        let mut map = SkipList::new(opt.mem_table_max_height);
         for entry in self.iter()? {
-            tb.add(&entry.k, &serialize(&entry.v)?)?;
-            count += 1;
+            map.insert(entry.k, entry.v);
         }
-        if count > 0 {
-            tb.flush()?;
-            Ok(Some((path.to_str().unwrap().to_owned(), TableReader::new(path, table_opt.clone())?)))
-        } else {
-            Ok(None)
-        }
+        Ok(map)
+    }
+
+    pub fn build_sstable(&self, opt: &Options, path: &Path) -> MyResult<Option<(String, TableReader)>> {
+        let map = self.to_skiplist(opt)?;
+        skiplist_to_sstable(&map, opt, path)
     }
 }
 

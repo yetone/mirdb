@@ -84,7 +84,7 @@ pub fn serve<T>(addr: SocketAddr, new_service: T)
 }
 
 fn main() -> MyResult<()> {
-    let addr = "127.0.0.1:12333".parse().unwrap();
+    let addr = "0.0.0.0:12333".parse().unwrap();
 
     let opt = Options::default();
 

@@ -12,6 +12,7 @@ use crate::options::CompressType;
 use crate::options::Options;
 use crate::error::MyResult;
 use crate::util::mask_crc;
+use crate::util::to_str;
 
 pub const BLOCK_CTYPE_LEN: usize = 1;
 pub const BLOCK_CKSUM_LEN: usize = 4;
@@ -62,9 +63,12 @@ impl BlockBuilder {
 
     pub fn add(&mut self, k: &[u8], v: &[u8]) {
         assert!(self.restart_count <= self.opt.block_restart_interval);
-        assert!(
-            self.buffer.is_empty() || self.last_key.as_slice() < k
-        );
+        if !self.buffer.is_empty() && self.last_key.as_slice() > k {
+            println!("last: {}, key: {}", to_str(self.last_key.as_slice()), to_str(k));
+            assert!(
+                self.buffer.is_empty() || self.last_key.as_slice() <= k
+            );
+        }
 
         let mut shared = 0;
 
