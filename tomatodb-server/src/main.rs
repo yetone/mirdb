@@ -25,6 +25,8 @@ use crate::thread_pool::ThreadPool;
 use crate::utils::to_str;
 
 #[macro_use]
+mod utils;
+#[macro_use]
 mod error;
 #[macro_use]
 mod request;
@@ -33,7 +35,6 @@ mod response;
 mod parser_util;
 mod parser;
 mod store;
-mod utils;
 mod thread_pool;
 mod data_manager;
 mod memtable;
@@ -51,11 +52,11 @@ use crate::options::Options;
 use crate::error::MyResult;
 
 pub struct Server {
-    store: Arc<RwLock<Store>>,
+    store: Arc<Store>,
 }
 
 impl Server {
-    fn new(store: Arc<RwLock<Store>>) -> Self {
+    fn new(store: Arc<Store>) -> Self {
         Server {
             store
         }
@@ -69,30 +70,10 @@ impl Service for Server {
     type Future = Box<Future<Item = Response, Error = io::Error>>;
 
     fn call(&self, req: Self::Request) -> Self::Future {
-        match req {
-            Request::Getter{ .. } => {
-                let store = match self.store.read() {
-                    Ok(guard) => guard,
-                    Err(poisoned) => poisoned.into_inner()
-                };
-
-                box future::done(match store.apply(req) {
-                    Ok(response) => Ok(response),
-                    Err(e) => Ok(Response::ServerError(e.msg)),
-                })
-            }
-            _ => {
-                let mut store = match self.store.write() {
-                    Ok(guard) => guard,
-                    Err(poisoned) => poisoned.into_inner()
-                };
-
-                box future::done(match store.apply_mut(req) {
-                    Ok(response) => Ok(response),
-                    Err(e) => Ok(Response::ServerError(e.msg)),
-                })
-            }
-        }
+        box future::done(match self.store.apply(req) {
+            Ok(response) => Ok(response),
+            Err(e) => Ok(Response::ServerError(e.msg)),
+        })
     }
 }
 
@@ -108,7 +89,7 @@ fn main() -> MyResult<()> {
     let opt = Options::default();
 
     let store = Store::new(opt.clone())?;
-    let store = Arc::new(RwLock::new(store));
+    let store = Arc::new(store);
 
     serve(addr, move || {
         Ok(Server::new(store.clone()))

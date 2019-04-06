@@ -1,6 +1,8 @@
 use std::borrow::Borrow;
 use std::fmt::Debug;
 use std::path::Path;
+use std::sync::Arc;
+use std::sync::RwLock;
 
 use serde::de::DeserializeOwned;
 use serde::Deserialize;
@@ -14,81 +16,99 @@ use crate::memtable_list::MemtableList;
 use crate::options::Options;
 use crate::sstable_reader::SstableReader;
 use crate::types::Table;
-use crate::utils::to_str;
 use crate::utils::make_file_name;
-use crate::wal::WAL;
+use crate::utils::read_unlock;
+use crate::utils::to_str;
+use crate::utils::write_unlock;
 use crate::wal::LogEntry;
+use crate::wal::WAL;
 
 pub struct DataManager<K: Ord + Clone, V: Clone> {
-    mut_: Memtable<K, Option<V>>,
-    imm_: MemtableList<K, Option<V>>,
-    reader_: SstableReader,
-    wal_: WAL<Vec<u8>, V>,
+    mut_: Arc<RwLock<Memtable<K, Option<V>>>>,
+    imm_: Arc<RwLock<MemtableList<K, Option<V>>>>,
+    readers_: Arc<RwLock<SstableReader>>,
+    wal_: Arc<RwLock<WAL<Vec<u8>, V>>>,
     opt_: Options,
 }
 
-unsafe impl<K: Ord + Clone, V: Clone> Sync for DataManager<K, V> {}
-unsafe impl<K: Ord + Clone, V: Clone> Send for DataManager<K, V> {}
+unsafe impl<K: Ord + Clone + Sync, V: Clone + Sync> Sync for DataManager<K, V> {}
+unsafe impl<K: Ord + Clone + Send, V: Clone + Send> Send for DataManager<K, V> {}
 
 impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + Debug> DataManager<K, V> {
     pub fn new(opt: Options) -> MyResult<Self> {
         let mut dm = DataManager {
-            mut_: Memtable::new(opt.mem_table_max_size, opt.mem_table_max_height),
-            imm_: MemtableList::new(opt.clone(), opt.imm_mem_table_max_count, opt.imm_mem_table_max_size, opt.imm_mem_table_max_height),
-            reader_: SstableReader::new(opt.clone())?,
-            wal_: WAL::new(opt.clone())?,
+            mut_: Arc::new(RwLock::new(Memtable::new(opt.mem_table_max_size, opt.mem_table_max_height))),
+            imm_: Arc::new(RwLock::new(MemtableList::new(opt.clone(), opt.imm_mem_table_max_count, opt.imm_mem_table_max_size, opt.imm_mem_table_max_height))),
+            readers_: Arc::new(RwLock::new(SstableReader::new(opt.clone())?)),
+            wal_: Arc::new(RwLock::new(WAL::new(opt.clone())?)),
             opt_: opt.clone(),
         };
         dm.redo()?;
         Ok(dm)
     }
 
+    fn new_file_number(&self) -> usize {
+        let mut readers = write_unlock(&self.readers_);
+        readers.manifest_builder_mut().new_file_number()
+    }
+
     pub fn redo(&mut self) -> MyResult<()> {
-        if self.wal_.seg_count() <= 0 {
-            return Ok(());
-        }
+        {
+            let mut wal = write_unlock(&self.wal_);
 
-        let work_dir = Path::new(&self.opt_.work_dir);
-        for seg in &mut self.wal_.segs {
-            let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
-            if let Some((_, reader)) = seg.build_sstable(self.opt_.clone(), &path)? {
-                self.reader_.add(0, reader)?;
+            if wal.seg_count() <= 0 {
+                return Ok(());
             }
-            seg.delete()?;
+
+            let work_dir = Path::new(&self.opt_.work_dir);
+
+            for seg in &mut wal.segs {
+                let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
+                if let Some((_, reader)) = seg.build_sstable(self.opt_.clone(), &path)? {
+                    let mut readers = write_unlock(&self.readers_);
+                    readers.add(0, reader)?;
+                }
+                seg.delete()?;
+            }
         }
 
-        self.wal_ = WAL::new(self.opt_.clone())?;
+        self.wal_ = Arc::new(RwLock::new(WAL::new(self.opt_.clone())?));
 
-        assert_eq!(0, self.wal_.seg_count());
+        assert_eq!(0, read_unlock(&self.wal_).seg_count());
 
         Ok(())
     }
 
-    pub fn insert(&mut self, k: K, v: V) -> MyResult<Option<V>> {
+    pub fn insert(&self, k: K, v: V) -> MyResult<Option<V>> {
         self.insert_(k, Some(v))
     }
 
-    fn insert_(&mut self, k: K, v: Option<V>) -> MyResult<Option<V>> {
-        self.wal_.append(&LogEntry::new(k.borrow().to_vec(), v.clone()))?;
+    fn insert_(&self, k: K, v: Option<V>) -> MyResult<Option<V>> {
+        let mut wal = write_unlock(&self.wal_);
+        wal.append(&LogEntry::new(k.borrow().to_vec(), v.clone()))?;
 
-        if self.mut_.is_full() {
-            if self.imm_.is_full() {
+        let mut muttable = write_unlock(&self.mut_);
+        let mut immuttable = write_unlock(&self.imm_);
+
+        if muttable.is_full() {
+            if immuttable.is_full() {
                 let work_dir = Path::new(&self.opt_.work_dir);
-                for memtable in self.imm_.iter() {
-                    let path = work_dir.join(make_file_name(self.reader_.manifest_builder_mut().new_file_number(), "sst"));
+                for memtable in immuttable.iter() {
+                    let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
                     if let Some((_, reader)) = memtable.build_sstable(self.opt_.clone(), &path)? {
-                        self.reader_.add(0, reader)?;
+                        let mut readers = write_unlock(&self.readers_);
+                        readers.add(0, reader)?;
                     }
-                    self.wal_.consume_seg()?;
+                    wal.consume_seg()?;
                 }
-                self.imm_.clear();
+                immuttable.clear();
             }
-            self.imm_.push(self.mut_.clone());
-            self.mut_.clear();
-            self.wal_.new_seg()?;
+            immuttable.push(muttable.clone());
+            muttable.clear();
+            wal.new_seg()?;
         }
 
-        Ok(if let Some(v) = self.mut_.insert(k, v) {
+        Ok(if let Some(v) = muttable.insert(k, v) {
             v
         } else {
             None
@@ -98,12 +118,15 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
     pub fn get<Q: ?Sized>(&self, k: &Q) -> MyResult<Option<V>>
         where K: Borrow<Q>,
               Q: Ord + Borrow<[u8]> {
-        let mut r = self.mut_.get(k);
+
+        let muttable = read_unlock(&self.mut_);
+        let immuttable = read_unlock(&self.imm_);
+
+        let mut r = muttable.get(k);
         if r.is_none()  {
-            r = self.imm_.get(k);
+            r = immuttable.get(k);
         }
-        println!("get: {}", to_str(k.borrow()));
-        println!("r: {:?}", r);
+
         // TODO: optimize this shit codes
         // TODO: plz zero copy
         Ok(
@@ -114,8 +137,8 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
                     None
                 }
             } else {
-                let x: Option<Option<V>> = self.reader_.get(k.borrow())?;
-                println!("x: {:?}", x);
+                let readers = read_unlock(&self.readers_);
+                let x: Option<Option<V>> = readers.get(k.borrow())?;
                 if let Some(x) = x {
                     x.clone()
                 } else {
@@ -125,28 +148,29 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
         )
     }
 
-    pub fn remove(&mut self, k: &K) -> MyResult<Option<V>>
+    pub fn remove(&self, k: &K) -> MyResult<Option<V>>
         where K: Borrow<[u8]> {
         let r = self.get(k.borrow())?;
-        println!("remove: {}", to_str(k.borrow()));
         if !r.is_none() {
-            println!("is not none");
             self.insert_(k.clone(), None)?;
         }
         Ok(r)
     }
 
     #[cfg(test)]
-    fn clear_memtables(&mut self) {
-        self.mut_.clear();
-        self.imm_.clear();
+    fn clear_memtables(&self) {
+        let mut muttable = write_unlock(&self.mut_);
+        let mut immuttable = write_unlock(&self.imm_);
+        muttable.clear();
+        immuttable.clear();
     }
 }
 
 #[cfg(test)]
 mod test {
-    use super::*;
     use crate::test_utils::get_test_opt;
+
+    use super::*;
 
     fn get_data() -> Vec<(Vec<u8>, Vec<u8>)> {
         let mut kvs = Vec::with_capacity(3);
@@ -161,7 +185,7 @@ mod test {
         let mut opt = get_test_opt();
         opt.imm_mem_table_max_count = 3;
 
-        let mut dm = DataManager::new(opt.clone())?;
+        let dm = DataManager::new(opt.clone())?;
 
         let data = get_data();
 
@@ -184,7 +208,7 @@ mod test {
         }
 
         // load from wal
-        let mut dm = DataManager::new(opt.clone())?;
+        let dm = DataManager::new(opt.clone())?;
 
         // can get data now!
         for (k, v) in &data {

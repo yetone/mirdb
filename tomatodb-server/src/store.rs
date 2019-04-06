@@ -77,12 +77,6 @@ impl Store {
                     GetterType::Gets => Response::Gets(v),
                 })
             }
-            _ => err!(StatusCode::NotSupport, "not support")
-        }
-    }
-
-    pub fn apply_mut(&mut self, request: Request) -> MyResult<Response> {
-        match request {
             Request::Setter{ setter, key, flags, ttl, bytes, payload, .. } => {
                 if payload.len() > bytes {
                     return Ok(Response::ClientError("bad data chunk".to_owned()));
@@ -154,7 +148,6 @@ impl Store {
                     None => Ok(Response::NotFound),
                 }
             }
-            _ => err!(StatusCode::NotSupport, "not support")
         }
     }
 }
@@ -185,10 +178,10 @@ mod test {
     #[test]
     fn test_get_some() {
         let opt = get_test_opt();
-        let mut store = Store::new(opt).unwrap();
+        let store = Store::new(opt).unwrap();
         let key = b"a".to_vec();
         let payload = b"abc".to_vec();
-        let r = store.apply_mut(Request::Setter {
+        let r = store.apply(Request::Setter {
             setter: SetterType::Set,
             key: key.clone(),
             flags: 1,
@@ -211,13 +204,13 @@ mod test {
     #[test]
     fn test_set() {
         let opt = get_test_opt();
-        let mut store = Store::new(opt).unwrap();
+        let store = Store::new(opt).unwrap();
         let mut map = HashMap::new();
         map.insert(b"a".to_vec(), b"abc".to_vec());
         map.insert(b"b".to_vec(), b"bbc".to_vec());
         map.insert(b"c".to_vec(), b"cbc".to_vec());
         for (key, payload) in map.iter() {
-            let r = store.apply_mut(Request::Setter {
+            let r = store.apply(Request::Setter {
                 setter: SetterType::Set,
                 key: key.clone(),
                 flags: 1,
@@ -241,7 +234,7 @@ mod test {
         }
         let mut deleted = HashSet::new();
         for (key, _payload) in map.iter() {
-            let r = store.apply_mut(Request::Deleter { key: key.clone(), no_reply: false });
+            let r = store.apply(Request::Deleter { key: key.clone(), no_reply: false });
             assert_eq!(Ok(Response::Deleted), r);
             println!("delete key: {}", to_str(key));
             deleted.insert(key.clone());
@@ -268,10 +261,10 @@ mod test {
     #[test]
     fn test_set_err() {
         let opt = get_test_opt();
-        let mut store = Store::new(opt).unwrap();
+        let store = Store::new(opt).unwrap();
         let key = b"a".to_vec();
         let payload = b"abc".to_vec();
-        let r = store.apply_mut(Request::Setter {
+        let r = store.apply(Request::Setter {
             setter: SetterType::Set,
             key,
             flags: 1,
