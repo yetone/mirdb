@@ -18,9 +18,6 @@ pub struct SkipList<K, V> {
     height_generator: Box<dyn HeightGenerator + Send>
 }
 
-unsafe impl<K, V> Sync for SkipList<K, V> {}
-unsafe impl<K, V> Send for SkipList<K, V> {}
-
 impl<K, V> SkipList<K, V> {
     pub fn length(&self) -> usize {
         self.length_

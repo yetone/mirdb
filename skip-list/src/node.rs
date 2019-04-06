@@ -1,5 +1,4 @@
 use std::mem;
-use std::ptr::NonNull;
 use std::ptr;
 use crate::util::from_raw_mut;
 use crate::util::from_raw;
@@ -10,10 +9,6 @@ pub struct SkipListNode<K, V> {
     pub(crate) key_: K,
     pub(crate) value_: V,
 }
-
-struct NodeWrapper<K, V>(NonNull<SkipListNode<K, V>>);
-
-unsafe impl<K, V> Send for NodeWrapper<K, V> {}
 
 impl<K, V> SkipListNode<K, V> {
     pub fn key(&self) -> &K {
