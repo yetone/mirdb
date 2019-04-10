@@ -10,12 +10,12 @@ use crate::block_builder::BLOCK_CKSUM_LEN;
 use crate::block_builder::BLOCK_CTYPE_LEN;
 use crate::block_handle::BlockHandle;
 use crate::block_iter::BlockIter;
+use crate::error::MyResult;
+use crate::error::StatusCode;
 use crate::options::CompressType;
 use crate::options::int_to_compress_type;
 use crate::options::Options;
 use crate::reader;
-use crate::error::MyResult;
-use crate::error::StatusCode;
 use crate::util::unmask_crc;
 
 #[derive(Clone)]
@@ -63,19 +63,14 @@ impl Block {
         digest.sum32() == want
     }
 
-    pub fn iter(&self) -> BlockIter {
+    pub fn restarts_offset(&self) -> usize {
         let restarts = u32::decode_fixed(&self.block[self.block.len() - 4..]);
         let restarts_offset = self.block.len() - 4 - 4 * restarts as usize;
+        restarts_offset
+    }
 
-        BlockIter {
-            block: &self.block,
-            key: vec![],
-            offset: 0,
-            current_entry_offset: 0,
-            val_offset: 0,
-            restarts_offset,
-            current_restart_idx: 0
-        }
+    pub fn iter(&self) -> BlockIter {
+        BlockIter::new(&self.block, self.restarts_offset())
     }
 }
 
@@ -86,9 +81,19 @@ mod test {
     use std::path::Path;
 
     use crate::block_builder::BlockBuilder;
+    use crate::types::SsIterator;
     use crate::util::to_str;
 
     use super::*;
+    use crate::types::SsIteratorIterWrap;
+
+    fn get_simple_data() -> Vec<(&'static [u8], &'static [u8])> {
+        vec![
+            ("prefix_key1".as_bytes(), "value1".as_bytes()),
+            ("prefix_key2".as_bytes(), "value2".as_bytes()),
+            ("prefix_key3".as_bytes(), "value3".as_bytes()),
+        ]
+    }
 
     fn get_data() -> Vec<(&'static [u8], &'static [u8])> {
         vec![
@@ -117,19 +122,59 @@ mod test {
         f.flush()?;
         let mut f = File::open(path)?;
         let (b1, _) = Block::new_from_location(&mut f, &bh, Options::default())?;
-        for (k, v) in b1.iter() {
+        for (k, v) in SsIteratorIterWrap::new(&mut b1.iter()) {
             println!("k: {}, v: {}", to_str(&k[..]), to_str(&v[..]));
         }
         assert_eq!(data.len(), b1.iter().count());
         let mut bi = b1.iter();
         bi.seek("prefix_key0".as_bytes());
-        assert_eq!("prefix_key1".as_bytes(), &bi.key[..]);
+        assert_eq!("prefix_key1".as_bytes(), &bi.state.key[..]);
         let data = get_data();
         for (k, v) in data {
             bi.seek(k);
-            assert_eq!(k, &bi.key[..]);
+            assert_eq!(k, &bi.state.key[..]);
             assert_eq!(v, &bi.current_kv().unwrap().1[..]);
         }
+        Ok(())
+    }
+
+    #[test]
+    fn test_iter() -> MyResult<()> {
+        let path = Path::new("/tmp/test_data_block_iter");
+        let mut f = File::create(path)?;
+        let mut b = BlockBuilder::new(Options::default());
+        let data = get_simple_data();
+        for (k, v) in &data {
+            b.add(*k, *v);
+        }
+        let bh = b.flush(&mut f, 0)?;
+        f.flush()?;
+
+        let mut f = File::open(path)?;
+        let (b1, _) = Block::new_from_location(&mut f, &bh, Options::default())?;
+
+        let mut iter = b1.iter();
+        assert_eq!(None, iter.current_kv());
+        iter.advance();
+        assert_eq!(b"prefix_key1".to_vec(), iter.current_kv().unwrap().0);
+        iter.advance();
+        assert_eq!(b"prefix_key2".to_vec(), iter.current_kv().unwrap().0);
+        iter.prev();
+        assert_eq!(b"prefix_key1".to_vec(), iter.current_kv().unwrap().0);
+
+        let mut iter = b1.iter();
+        iter.prev();
+        assert_eq!(None, iter.current_kv());
+
+        let mut iter = b1.iter();
+        iter.seek_to_last();
+        assert_eq!(b"prefix_key3".to_vec(), iter.current_kv().unwrap().0);
+        iter.prev();
+        assert_eq!(b"prefix_key2".to_vec(), iter.current_kv().unwrap().0);
+        iter.prev();
+        assert_eq!(b"prefix_key1".to_vec(), iter.current_kv().unwrap().0);
+        iter.prev();
+        assert_eq!(None, iter.current_kv());
         Ok(())
     }
 }

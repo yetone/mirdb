@@ -12,8 +12,10 @@ use crate::cache;
 use crate::error::MyResult;
 use crate::footer::Footer;
 use crate::footer::FULL_FOOTER_LENGTH;
-use crate::options::Options;
 use crate::meta_block::MetaBlock;
+use crate::options::Options;
+use crate::types::SsIterator;
+use crate::table_iter::TableIter;
 
 pub struct TableReader {
     file: Rc<RefCell<File>>,
@@ -78,7 +80,7 @@ impl TableReader {
         dst
     }
 
-    fn read_block(&self, bh: &BlockHandle) -> MyResult<Option<Block>> {
+    pub(crate) fn read_block(&self, bh: &BlockHandle) -> MyResult<Option<Block>> {
         let cache_key = self.gen_cache_key(bh);
         {
             let mut bc = self.opt.block_cache.borrow_mut();
@@ -92,7 +94,22 @@ impl TableReader {
         Ok(Some(block))
     }
 
+    fn iter(&self) -> TableIter {
+        TableIter::new(self)
+    }
+
     pub fn get(&self, k: &[u8]) -> MyResult<Option<Vec<u8>>> {
+        let mut iter = self.iter();
+        iter.seek(k);
+        if let Some((key, value)) = iter.current_kv() {
+            if &key[..] == k {
+                return Ok(Some(value));
+            }
+        }
+        Ok(None)
+    }
+
+    pub fn orig_get(&self, k: &[u8]) -> MyResult<Option<Vec<u8>>> {
         if k < self.min_key() || k > self.max_key() {
             return Ok(None);
         }
@@ -102,7 +119,7 @@ impl TableReader {
         if let None = kv {
             return Ok(None);
         }
-        let value = iter.current_kv().unwrap().1;
+        let value = kv.unwrap().1;
         let (bh, _) = BlockHandle::decode(&value);
         let block = self.read_block(&bh)?;
         if block.is_none() {

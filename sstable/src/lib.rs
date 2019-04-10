@@ -17,6 +17,8 @@ mod options;
 mod block_iter;
 mod footer;
 mod meta_block;
+mod table_iter;
+mod types;
 
 pub use crate::table_reader::TableReader;
 pub use crate::table_builder::TableBuilder;
