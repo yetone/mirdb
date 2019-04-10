@@ -3,13 +3,24 @@ pub trait SsIterator {
     fn advance(&mut self) -> bool;
     fn prev(&mut self) -> bool;
     fn current_k(&self) -> Option<Vec<u8>>;
-    fn current_kv(&self) -> Option<(Vec<u8>, Vec<u8>)>;
+    fn current_v(&self) -> Option<Vec<u8>>;
     fn reset(&mut self);
     fn seek(&mut self, key: &[u8]);
 
     fn seek_to_first(&mut self) {
         self.reset();
         self.advance();
+    }
+
+    fn current_kv(&self) -> Option<(Vec<u8>, Vec<u8>)> {
+        if self.valid() {
+            if let Some(k) = self.current_k() {
+                if let Some(v) = self.current_v() {
+                    return Some((k, v));
+                }
+            }
+        }
+        None
     }
 
     fn next(&mut self) -> Option<(Vec<u8>, Vec<u8>)> {

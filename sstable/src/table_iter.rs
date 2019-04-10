@@ -101,7 +101,7 @@ impl<'a> SsIterator for TableIter<'a> {
                         return false;
                     }
                     iter.seek_to_last();
-                    self.data_iter_state = iter.state.clone();
+                    self.data_iter_state = iter.state;
                     self.data_block = Some(block);
                     return true;
                 },
@@ -118,8 +118,8 @@ impl<'a> SsIterator for TableIter<'a> {
         self.data_iter().and_then(|x| x.current_k())
     }
 
-    fn current_kv(&self) -> Option<(Vec<u8>, Vec<u8>)> {
-        self.data_iter().and_then(|x| x.current_kv())
+    fn current_v(&self) -> Option<Vec<u8>> {
+        self.data_iter().and_then(|x| x.current_v())
     }
 
     fn reset(&mut self) {
@@ -137,7 +137,7 @@ impl<'a> SsIterator for TableIter<'a> {
                 Ok(Some(block)) => {
                     let mut iter = block.iter();
                     iter.seek(key);
-                    self.data_iter_state = iter.state.clone();
+                    self.data_iter_state = iter.state;
                     self.data_block = Some(block);
                 },
                 _ => ()
@@ -153,15 +153,17 @@ mod test {
     use crate::MyResult;
     use crate::Options;
     use crate::table_builder::TableBuilder;
+    use crate::util::to_str;
 
     use super::*;
+
+    static N: usize = 100;
 
     fn get_data() -> Vec<(String, String)> {
         let mut data = vec![];
         let mut key_prefix = "prefix_key".to_owned();
         let value_prefix = "value";
-        let n = 3;
-        for i in 1..=n {
+        for i in 1..=N {
             if i % 10 == 0 {
                 key_prefix += "a";
             }
@@ -176,19 +178,27 @@ mod test {
     fn test_seek() -> MyResult<()> {
         let path = Path::new("/tmp/test_table_iter");
         let mut opt = Options::default();
-        opt.block_size = 2;
+        opt.block_size = 1;
         let mut t = TableBuilder::new(path, opt.clone())?;
         let data = get_data();
-        for (k, v) in data {
+        for (k, v) in &data {
             t.add(k.as_bytes(), v.as_bytes())?;
         }
         t.flush()?;
+
         let t = TableReader::new(path, opt.clone())?;
 
         let mut iter = TableIter::new(&t);
         assert_eq!(None, iter.current_kv());
-        iter.seek("prefix_key2".as_bytes());
-        assert_eq!(b"prefix_key2".to_vec(), iter.current_kv().unwrap().0);
+        for i in 0..N {
+            let key = &data[i].0;
+            iter.seek(key.as_bytes());
+            if iter.current_k().unwrap() != key.as_bytes() {
+                println!("error seek i: {} k: {}", i, to_str(&iter.current_k().unwrap().to_vec()));
+                println!("v: {}", to_str(&iter.current_v().unwrap()));
+                assert!(false);
+            }
+        }
         Ok(())
     }
 
@@ -199,30 +209,36 @@ mod test {
         opt.block_size = 2;
         let mut t = TableBuilder::new(path, opt.clone())?;
         let data = get_data();
-        for (k, v) in data {
+        for (k, v) in &data {
             t.add(k.as_bytes(), v.as_bytes())?;
         }
         t.flush()?;
         let t = TableReader::new(path, opt.clone())?;
 
         let mut iter = TableIter::new(&t);
-        assert_eq!(None, iter.current_kv());
-        iter.advance();
-        assert_eq!(b"prefix_key1".to_vec(), iter.current_kv().unwrap().0);
-        iter.advance();
-        assert_eq!(b"prefix_key2".to_vec(), iter.current_kv().unwrap().0);
-        iter.advance();
-        assert_eq!(b"prefix_key3".to_vec(), iter.current_kv().unwrap().0);
+        assert_eq!(None, iter.current_k());
+        for i in 0..N {
+            iter.advance();
+            let key = &data[i].0;
+            if iter.current_k().unwrap() != key.as_bytes() {
+                println!("error advance i: {} k: {}", i, to_str(&iter.current_k().unwrap().to_vec()));
+                assert!(false);
+            }
+        }
         iter.advance();
         assert_eq!(None, iter.current_kv());
 
         let mut iter = TableIter::new(&t);
         iter.seek_to_last();
-        assert_eq!(b"prefix_key3".to_vec(), iter.current_kv().unwrap().0);
-        iter.prev();
-        assert_eq!(b"prefix_key2".to_vec(), iter.current_kv().unwrap().0);
-        iter.prev();
-        assert_eq!(b"prefix_key1".to_vec(), iter.current_kv().unwrap().0);
+        assert_eq!(iter.current_k().unwrap(), data[N - 1].0.as_bytes());
+        for i in (0..N - 1).into_iter().rev() {
+            iter.prev();
+            let key = &data[i].0;
+            if iter.current_k().unwrap() != key.as_bytes() {
+                println!("error prev i: {} k: {}", i, to_str(&iter.current_k().unwrap().to_vec()));
+                assert!(false);
+            }
+        }
         iter.prev();
         assert_eq!(None, iter.current_kv());
         Ok(())

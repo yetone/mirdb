@@ -33,22 +33,19 @@ impl BlockIterState {
 }
 
 pub struct BlockIter<'a> {
-    pub(crate) block: &'a Vec<u8>,
+    pub(crate) block: &'a [u8],
     pub(crate) state: BlockIterState,
 }
 
 impl<'a> BlockIter<'a> {
 
-    pub fn new(block: &'a Vec<u8>, restarts_offset: usize) -> Self {
+    pub fn new(block: &'a [u8], restarts_offset: usize) -> Self {
         let state = BlockIterState::new(restarts_offset);
 
-        Self {
-            block,
-            state,
-        }
+        Self::new_with_state(block, state)
     }
 
-    pub fn new_with_state(block: &'a Vec<u8>, state: BlockIterState) -> Self {
+    pub fn new_with_state(block: &'a [u8], state: BlockIterState) -> Self {
         Self {
             block,
             state,
@@ -105,18 +102,6 @@ impl<'a> BlockIter<'a> {
         self.state.key.extend_from_slice(&self.block[offset..offset + non_shared]);
     }
 
-    pub fn current(&self, key: &mut Vec<u8>, val: &mut Vec<u8>) -> bool {
-        if self.valid() {
-            key.clear();
-            val.clear();
-            key.extend_from_slice(&self.state.key);
-            val.extend_from_slice(&self.block[self.state.val_offset..self.state.next_offset]);
-            true
-        } else {
-            false
-        }
-    }
-
     pub fn seek_to_last(&mut self) {
         let restart_count = self.restart_count();
 
@@ -135,6 +120,10 @@ impl<'a> BlockIter<'a> {
         }
 
         assert!(self.valid());
+    }
+
+    pub fn key(&self) -> &[u8] {
+        &self.state.key[..]
     }
 }
 
@@ -201,11 +190,9 @@ impl<'a> SsIterator for BlockIter<'a> {
         }
     }
 
-    fn current_kv(&self) -> Option<(Vec<u8>, Vec<u8>)> {
-        let mut key = vec![];
-        let mut value = vec![];
-        if self.current(&mut key, &mut value) {
-            Some((key, value))
+    fn current_v(&self) -> Option<Vec<u8>> {
+        if self.valid() {
+            Some((&self.block[self.state.val_offset..self.state.next_offset]).to_vec())
         } else {
             None
         }
@@ -225,7 +212,7 @@ impl<'a> SsIterator for BlockIter<'a> {
         while left < right {
             let m = (left + right + 1) / 2;
             self.seek_to_restart_point(m);
-            if &self.state.key[..] < to {
+            if self.key() < to {
                 left = m;
             } else {
                 right = m - 1;
@@ -237,7 +224,7 @@ impl<'a> SsIterator for BlockIter<'a> {
         self.state.next_offset = self.get_restart_point_offset(left);
 
         while self.advance() {
-            if &self.state.key[..] >= to {
+            if self.key() >= to {
                 break;
             }
         }

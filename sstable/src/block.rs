@@ -82,10 +82,10 @@ mod test {
 
     use crate::block_builder::BlockBuilder;
     use crate::types::SsIterator;
+    use crate::types::SsIteratorIterWrap;
     use crate::util::to_str;
 
     use super::*;
-    use crate::types::SsIteratorIterWrap;
 
     fn get_simple_data() -> Vec<(&'static [u8], &'static [u8])> {
         vec![
@@ -127,12 +127,12 @@ mod test {
         }
         assert_eq!(data.len(), b1.iter().count());
         let mut bi = b1.iter();
-        bi.seek("prefix_key0".as_bytes());
-        assert_eq!("prefix_key1".as_bytes(), &bi.state.key[..]);
+        bi.seek("prefix_key2".as_bytes());
+        assert_eq!(bi.key(), "prefix_key2".as_bytes());
         let data = get_data();
         for (k, v) in data {
             bi.seek(k);
-            assert_eq!(k, &bi.state.key[..]);
+            assert_eq!(bi.key(), k);
             assert_eq!(v, &bi.current_kv().unwrap().1[..]);
         }
         Ok(())
@@ -142,7 +142,9 @@ mod test {
     fn test_iter() -> MyResult<()> {
         let path = Path::new("/tmp/test_data_block_iter");
         let mut f = File::create(path)?;
-        let mut b = BlockBuilder::new(Options::default());
+        let mut opt = Options::default();
+        opt.block_size = 20;
+        let mut b = BlockBuilder::new(opt);
         let data = get_simple_data();
         for (k, v) in &data {
             b.add(*k, *v);
@@ -154,27 +156,27 @@ mod test {
         let (b1, _) = Block::new_from_location(&mut f, &bh, Options::default())?;
 
         let mut iter = b1.iter();
-        assert_eq!(None, iter.current_kv());
+        assert_eq!(None, iter.current_k());
         iter.advance();
-        assert_eq!(b"prefix_key1".to_vec(), iter.current_kv().unwrap().0);
+        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
         iter.advance();
-        assert_eq!(b"prefix_key2".to_vec(), iter.current_kv().unwrap().0);
+        assert_eq!(iter.current_k().unwrap(), "prefix_key2".as_bytes());
         iter.prev();
-        assert_eq!(b"prefix_key1".to_vec(), iter.current_kv().unwrap().0);
+        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
 
         let mut iter = b1.iter();
         iter.prev();
-        assert_eq!(None, iter.current_kv());
+        assert_eq!(None, iter.current_k());
 
         let mut iter = b1.iter();
         iter.seek_to_last();
-        assert_eq!(b"prefix_key3".to_vec(), iter.current_kv().unwrap().0);
+        assert_eq!(iter.current_k().unwrap(), "prefix_key3".as_bytes());
         iter.prev();
-        assert_eq!(b"prefix_key2".to_vec(), iter.current_kv().unwrap().0);
+        assert_eq!(iter.current_k().unwrap(), "prefix_key2".as_bytes());
         iter.prev();
-        assert_eq!(b"prefix_key1".to_vec(), iter.current_kv().unwrap().0);
+        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
         iter.prev();
-        assert_eq!(None, iter.current_kv());
+        assert_eq!(None, iter.current_k());
         Ok(())
     }
 }

@@ -99,38 +99,14 @@ impl TableReader {
     }
 
     pub fn get(&self, k: &[u8]) -> MyResult<Option<Vec<u8>>> {
-        let mut iter = self.iter();
-        iter.seek(k);
-        if let Some((key, value)) = iter.current_kv() {
-            if &key[..] == k {
-                return Ok(Some(value));
-            }
-        }
-        Ok(None)
-    }
-
-    pub fn orig_get(&self, k: &[u8]) -> MyResult<Option<Vec<u8>>> {
         if k < self.min_key() || k > self.max_key() {
             return Ok(None);
         }
-        let mut iter = self.index_block.iter();
+        let mut iter = self.iter();
         iter.seek(k);
-        let kv = iter.current_kv();
-        if let None = kv {
-            return Ok(None);
-        }
-        let value = kv.unwrap().1;
-        let (bh, _) = BlockHandle::decode(&value);
-        let block = self.read_block(&bh)?;
-        if block.is_none() {
-            return Ok(None);
-        }
-        let block = block.unwrap();
-        let mut iter = block.iter();
-        iter.seek(k);
-        if let Some((key, value)) = iter.current_kv() {
+        if let Some(key) = iter.current_k() {
             if &key[..] == k {
-                return Ok(Some(value));
+                return Ok(iter.current_v());
             }
         }
         Ok(None)
