@@ -22,6 +22,7 @@ use crate::utils::to_str;
 use crate::utils::write_unlock;
 use crate::wal::LogEntry;
 use crate::wal::WAL;
+use std::sync::RwLockWriteGuard;
 
 pub struct DataManager<K: Ord + Clone, V: Clone> {
     mut_: Arc<RwLock<Memtable<K, Option<V>>>>,
@@ -38,7 +39,7 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
     pub fn new(opt: Options) -> MyResult<Self> {
         let mut dm = DataManager {
             mut_: Arc::new(RwLock::new(Memtable::new(opt.mem_table_max_size, opt.mem_table_max_height))),
-            imm_: Arc::new(RwLock::new(MemtableList::new(opt.clone(), opt.imm_mem_table_max_count, opt.imm_mem_table_max_size, opt.imm_mem_table_max_height))),
+            imm_: Arc::new(RwLock::new(MemtableList::new(opt.clone(), opt.imm_mem_table_max_count, opt.mem_table_max_size, opt.mem_table_max_height))),
             readers_: Arc::new(RwLock::new(SstableReader::new(opt.clone())?)),
             wal_: Arc::new(RwLock::new(WAL::new(opt.clone())?)),
             opt_: opt.clone(),
@@ -92,16 +93,7 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
 
         if muttable.is_full() {
             if immuttable.is_full() {
-                let work_dir = Path::new(&self.opt_.work_dir);
-                for memtable in immuttable.iter() {
-                    let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
-                    if let Some((_, reader)) = memtable.build_sstable(&self.opt_, &path)? {
-                        let mut readers = write_unlock(&self.readers_);
-                        readers.add(0, reader)?;
-                    }
-                    wal.consume_seg()?;
-                }
-                immuttable.clear();
+                self.minor_compaction(&mut wal, &mut immuttable)?;
             }
             immuttable.push(muttable.clone());
             muttable.clear();
@@ -155,6 +147,38 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
             self.insert_(k.clone(), None)?;
         }
         Ok(r)
+    }
+
+    fn minor_compaction(&self, wal: &mut RwLockWriteGuard<WAL<Vec<u8>, Option<V>>>, immuttable: &mut RwLockWriteGuard<MemtableList<K, Option<V>>>) -> MyResult<()> {
+        let work_dir = Path::new(&self.opt_.work_dir);
+        for memtable in immuttable.iter() {
+            let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
+            if let Some((_, reader)) = memtable.build_sstable(&self.opt_, &path)? {
+                let mut readers = write_unlock(&self.readers_);
+                readers.add(0, reader)?;
+            }
+            wal.consume_seg()?;
+        }
+        immuttable.clear();
+        Ok(())
+    }
+
+    fn major_compaction(&self) {
+        let levels = {
+            let readers = read_unlock(&self.readers_);
+            readers.compute_compaction_levels()
+        };
+        if levels.len() > 0 {
+            self.size_compaction(levels);
+        } else {
+            self.seek_compaction();
+        }
+    }
+
+    fn size_compaction(&self, _levels: Vec<usize>) {
+    }
+
+    fn seek_compaction(&self) {
     }
 
     #[cfg(test)]

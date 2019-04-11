@@ -16,10 +16,10 @@ pub struct Options {
     pub mem_table_max_size: usize,
     pub mem_table_max_height: usize,
     pub imm_mem_table_max_count: usize,
-    pub imm_mem_table_max_size: usize,
-    pub imm_mem_table_max_height: usize,
     pub block_size: usize,
     pub block_restart_interval: usize,
+
+    pub l0_compaction_trigger: usize,
 }
 
 impl Options {
@@ -34,16 +34,16 @@ impl Options {
 impl Default for Options {
     fn default() -> Self {
         let opt = Options {
-            max_level: 12,
+            max_level: 6,
             work_dir: "/tmp/tomatodb".into(),
-            sst_max_size: MB * 2,
-            mem_table_max_size: 1 << 10,
-            mem_table_max_height: 1 << 10,
+            sst_max_size: MB * 100,
+            mem_table_max_size: MB * 10,
+            mem_table_max_height: 1 << 5,
             imm_mem_table_max_count: 1 << 4,
-            imm_mem_table_max_size: 1 << 10,
-            imm_mem_table_max_height: 1 << 10,
             block_size: BLOCK_MAX_SIZE,
             block_restart_interval: 16,
+
+            l0_compaction_trigger: 4,
         };
         opt
     }

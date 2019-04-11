@@ -7,19 +7,19 @@ use crate::options::Options;
 #[derive(Clone)]
 pub struct MemtableList<K: Ord + Clone, V: Clone> {
     max_table_count_: usize,
-    table_max_size_: usize,
-    table_max_height_: usize,
+    per_table_max_size_: usize,
+    per_table_max_height_: usize,
     tables_: Vec<Memtable<K, V>>,
     opt_: Options,
 }
 
 impl<K: Ord + Clone, V: Clone> MemtableList<K, V> {
-    pub fn new(opt: Options, max_table_count: usize, table_max_size: usize, table_max_height: usize) -> Self {
-        let tables_ = Vec::with_capacity(table_max_size);
+    pub fn new(opt: Options, max_table_count: usize, per_table_max_size: usize, per_table_max_height: usize) -> Self {
+        let tables_ = Vec::with_capacity(max_table_count);
         MemtableList {
             max_table_count_: max_table_count,
-            table_max_size_: table_max_size,
-            table_max_height_: table_max_height,
+            per_table_max_size_: per_table_max_size,
+            per_table_max_height_: per_table_max_height,
             opt_: opt,
             tables_,
         }
@@ -63,7 +63,7 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {
         assert!(!self.is_full());
 
         if self.tables_.len() == 0 {
-            self.tables_.push(Memtable::new(self.table_max_size_, self.table_max_height_));
+            self.tables_.push(Memtable::new(self.per_table_max_size_, self.per_table_max_height_));
         }
 
         for table in &mut self.tables_ {
@@ -80,11 +80,15 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {
         for table in &mut self.tables_ {
             table.clear();
         }
-        self.tables_ = Vec::with_capacity(self.table_max_size_);
+        self.tables_ = Vec::with_capacity(self.max_table_count_);
     }
 
     fn is_full(&self) -> bool {
         self.tables_.len() == self.max_table_count_ && self.tables_.iter().all(|x| x.is_full())
+    }
+
+    fn size(&self) -> usize {
+        self.tables_.iter().map(|x| x.size()).sum()
     }
 }
 

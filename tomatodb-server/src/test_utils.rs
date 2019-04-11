@@ -22,7 +22,6 @@ pub fn get_test_opt() -> Options {
     }
     create_dir_all(&opt.work_dir).expect("create work dir error!");
     opt.mem_table_max_size = 1;
-    opt.imm_mem_table_max_size = 1;
     opt.imm_mem_table_max_count = 1;
     opt
 }

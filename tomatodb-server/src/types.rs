@@ -14,4 +14,6 @@ pub trait Table<K, V> {
     fn clear(&mut self);
 
     fn is_full(&self) -> bool;
+
+    fn size(&self) -> usize;
 }

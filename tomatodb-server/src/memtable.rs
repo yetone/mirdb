@@ -14,6 +14,7 @@ use crate::sstable_builder::skiplist_to_sstable;
 #[derive(Clone)]
 pub struct Memtable<K: Ord + Clone, V: Clone> {
     max_size: usize,
+    size_: usize,
     map: SkipList<K, V>,
 }
 
@@ -22,6 +23,7 @@ impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
         let map = SkipList::new(max_height);
         Memtable {
             max_size,
+            size_: 0,
             map
         }
     }
@@ -52,15 +54,28 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for Memtable<K, V> {
     }
 
     fn insert(&mut self, k: K, v: V) -> Option<V> {
-        self.map.insert(k, v)
+        let k_size = ::std::mem::size_of_val(&k);
+        self.size_ += ::std::mem::size_of_val(&v);
+        let r = self.map.insert(k, v);
+        if let Some(ref old_v) = r {
+            self.size_ -= ::std::mem::size_of_val(old_v);
+        } else {
+            self.size_ += k_size;
+        }
+        r
     }
 
     fn clear(&mut self) {
+        self.size_ = 0;
         self.map.clear()
     }
 
     fn is_full(&self) -> bool {
-        self.max_size <= self.map.length()
+        self.max_size <= self.size_
+    }
+
+    fn size(&self) -> usize {
+        self.size_
     }
 }
 
@@ -69,15 +84,17 @@ mod test {
     use super::*;
     #[test]
     fn test_get() {
-        let mut table = Memtable::new(3, 10);
+        let mut table = Memtable::new(::std::mem::size_of_val(&1) * 6, 10);
         table.insert(1, 2);
+        table.insert(1, 3);
+        table.insert(1, 4);
         assert!(!table.is_full());
-        table.insert(1, 2);
-        table.insert(1, 2);
-        table.insert(1, 2);
-        assert!(!table.is_full());
+        table.insert(1, 5);
+        table.insert(1, 6);
+        table.insert(1, 7);
         table.insert(2, 2);
-        table.insert(3, 2);
+        assert!(!table.is_full());
+        table.insert(3, 3);
         assert!(table.is_full());
     }
 }
