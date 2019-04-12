@@ -30,15 +30,6 @@ impl<'a> TableIter<'a> {
             _ => None
         }
     }
-
-    pub fn seek_to_last(&mut self) {
-        self.reset();
-        self.index_iter.seek_to_last();
-        self.index_iter.prev();
-        self.advance();
-
-        assert!(self.valid());
-    }
 }
 
 impl<'a> SsIterator for TableIter<'a> {
@@ -143,6 +134,15 @@ impl<'a> SsIterator for TableIter<'a> {
                 _ => ()
             }
         }
+    }
+
+    fn seek_to_last(&mut self) {
+        self.reset();
+        self.index_iter.seek_to_last();
+        self.index_iter.prev();
+        self.advance();
+
+        assert!(self.valid());
     }
 }
 

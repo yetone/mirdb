@@ -6,6 +6,7 @@ pub trait SsIterator {
     fn current_v(&self) -> Option<Vec<u8>>;
     fn reset(&mut self);
     fn seek(&mut self, key: &[u8]);
+    fn seek_to_last(&mut self);
 
     fn seek_to_first(&mut self) {
         self.reset();

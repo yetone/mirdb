@@ -102,26 +102,6 @@ impl<'a> BlockIter<'a> {
         self.state.key.extend_from_slice(&self.block[offset..offset + non_shared]);
     }
 
-    pub fn seek_to_last(&mut self) {
-        let restart_count = self.restart_count();
-
-        if restart_count > 0 {
-            self.seek_to_restart_point(restart_count - 1);
-        } else {
-            self.reset();
-        }
-
-        // Stop at last entry, before the iterator becomes invalid.
-        //
-        // We're checking the position before calling advance; if a restart point points to the
-        // last entry, calling advance() will directly reset the iterator.
-        while self.state.next_offset < self.state.restarts_offset {
-            self.advance();
-        }
-
-        assert!(self.valid());
-    }
-
     pub fn key(&self) -> &[u8] {
         &self.state.key[..]
     }
@@ -228,5 +208,25 @@ impl<'a> SsIterator for BlockIter<'a> {
                 break;
             }
         }
+    }
+
+    fn seek_to_last(&mut self) {
+        let restart_count = self.restart_count();
+
+        if restart_count > 0 {
+            self.seek_to_restart_point(restart_count - 1);
+        } else {
+            self.reset();
+        }
+
+        // Stop at last entry, before the iterator becomes invalid.
+        //
+        // We're checking the position before calling advance; if a restart point points to the
+        // last entry, calling advance() will directly reset the iterator.
+        while self.state.next_offset < self.state.restarts_offset {
+            self.advance();
+        }
+
+        assert!(self.valid());
     }
 }
