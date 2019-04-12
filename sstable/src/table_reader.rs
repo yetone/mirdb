@@ -3,6 +3,7 @@ use std::fs::File;
 use std::ops::DerefMut;
 use std::path::Path;
 use std::rc::Rc;
+use std::sync::atomic::AtomicUsize;
 
 use integer_encoding::FixedIntWriter;
 
@@ -16,6 +17,7 @@ use crate::meta_block::MetaBlock;
 use crate::options::Options;
 use crate::types::SsIterator;
 use crate::table_iter::TableIter;
+use std::sync::atomic::Ordering::Relaxed;
 
 pub struct TableReader {
     file: Rc<RefCell<File>>,
@@ -28,6 +30,8 @@ pub struct TableReader {
     meta_block_: MetaBlock,
     size_: usize,
     file_name_: String,
+
+    seek_miss_count_: AtomicUsize,
 }
 
 impl TableReader {
@@ -50,7 +54,20 @@ impl TableReader {
             meta_block_: meta_block,
             size_,
             file_name_,
+            seek_miss_count_: AtomicUsize::new(0),
         })
+    }
+
+    fn incr_seek_miss_count(&self) {
+        self.seek_miss_count_.fetch_add(1, Relaxed);
+    }
+
+    pub fn get_seek_miss_count(&self) -> usize {
+        self.seek_miss_count_.load(Relaxed)
+    }
+
+    pub fn reset_seek_miss_count(&self) -> usize {
+        self.seek_miss_count_.swap(0, Relaxed)
     }
 
     pub fn min_key(&self) -> &Vec<u8> {
@@ -109,6 +126,7 @@ impl TableReader {
                 return Ok(iter.current_v());
             }
         }
+        self.incr_seek_miss_count();
         Ok(None)
     }
 }
