@@ -31,4 +31,6 @@ pub enum Request {
         no_reply: bool,
     },
     Info,
+    Error,
+    MajorCompaction,
 }

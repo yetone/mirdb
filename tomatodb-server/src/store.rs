@@ -152,6 +152,13 @@ impl Store {
             Request::Info => {
                 Ok(Response::Info(self.data.info()))
             }
+            Request::Error => {
+                Ok(Response::Error)
+            }
+            Request::MajorCompaction => {
+                self.data.major_compaction()?;
+                Ok(Response::Ok)
+            }
         }
     }
 }

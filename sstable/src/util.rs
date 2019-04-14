@@ -1,4 +1,7 @@
 use std::str;
+use std::sync::RwLock;
+use std::sync::RwLockReadGuard;
+use std::sync::RwLockWriteGuard;
 
 pub fn to_str(cs: &[u8]) -> &str {
     str::from_utf8(&cs).expect("not a valid utf8")
@@ -60,6 +63,20 @@ pub fn mask_crc(c: u32) -> u32 {
 pub fn unmask_crc(mc: u32) -> u32 {
     let rot = mc.wrapping_sub(MASK_DELTA);
     (rot.wrapping_shr(17) | rot.wrapping_shl(15))
+}
+
+pub fn read_unlock<T>(l: &RwLock<T>) -> RwLockReadGuard<T> {
+    match l.read() {
+        Ok(v) => v,
+        Err(poised) => poised.into_inner(),
+    }
+}
+
+pub fn write_unlock<T>(l: &RwLock<T>) -> RwLockWriteGuard<T> {
+    match l.write() {
+        Ok(v) => v,
+        Err(poised) => poised.into_inner(),
+    }
 }
 
 #[cfg(test)]

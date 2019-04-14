@@ -125,8 +125,18 @@ gen_parser!(info<Request>,
             )
 );
 
+gen_parser!(major_compaction<Request>,
+            chain!(
+                tag!(b"major_compaction") >>
+                tag!(b"\r\n") >>
+                (
+                    Request::MajorCompaction
+                )
+            )
+);
+
 gen_parser!(parse<Request>, alt!(
-    getter | setter | deleter | info
+    getter | setter | deleter | info | major_compaction
 ));
 
 #[cfg(test)]

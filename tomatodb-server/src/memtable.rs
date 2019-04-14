@@ -31,6 +31,10 @@ impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
     pub fn iter(&self) -> SkipListIter<K, V> {
         self.map.iter()
     }
+
+    pub fn length(&self) -> usize {
+        self.map.length()
+    }
 }
 
 impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize> Memtable<K, Option<V>> {

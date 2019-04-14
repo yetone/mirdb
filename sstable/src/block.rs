@@ -1,6 +1,3 @@
-use std::io::Read;
-use std::io::Seek;
-
 use crc::crc32;
 use crc::crc32::Hasher32;
 use integer_encoding::FixedInt;
@@ -17,6 +14,7 @@ use crate::options::int_to_compress_type;
 use crate::options::Options;
 use crate::reader;
 use crate::util::unmask_crc;
+use crate::types::RandomAccess;
 
 #[derive(Clone)]
 pub struct Block {
@@ -36,7 +34,7 @@ impl Block {
         }
     }
 
-    pub fn new_from_location<T: Seek + Read>(r: &mut T, location: &BlockHandle, opt: Options) -> MyResult<(Block, usize)> {
+    pub fn new_from_location(r: &dyn RandomAccess, location: &BlockHandle, opt: Options) -> MyResult<(Block, usize)> {
         let (data, offset) = reader::read_bytes(r, location)?;
         let cksum_buf = &data[data.len() - BLOCK_CKSUM_LEN..];
         if !Block::verify_block(&data[..data.len() - BLOCK_CKSUM_LEN], unmask_crc(u32::decode_fixed(&cksum_buf))) {
@@ -112,8 +110,8 @@ mod test {
         }
         let bh = b.flush(&mut f, 0)?;
         f.flush()?;
-        let mut f = File::open(path)?;
-        let (b1, _) = Block::new_from_location(&mut f, &bh, Options::default())?;
+        let f = File::open(path)?;
+        let (b1, _) = Block::new_from_location(&f, &bh, Options::default())?;
         for (k, v) in SsIteratorIterWrap::new(&mut b1.iter()) {
             println!("k: {}, v: {}", to_str(&k[..]), to_str(&v[..]));
         }

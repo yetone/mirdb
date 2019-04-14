@@ -1,3 +1,38 @@
+use std::fs::File;
+use std::os::unix::fs::FileExt;
+
+use crate::MyResult;
+
+pub trait RandomAccess {
+    fn read_at(&self, offset: usize, dst: &mut [u8]) -> MyResult<usize>;
+}
+
+/// BufferBackedFile is a simple type implementing RandomAccess on a Vec<u8>. Used for some tests.
+#[allow(unused)]
+pub type BufferBackedFile = Vec<u8>;
+
+impl RandomAccess for BufferBackedFile {
+    fn read_at(&self, offset: usize, dst: &mut [u8]) -> MyResult<usize> {
+        if offset > self.len() {
+            return Ok(0);
+        }
+        let remaining = self.len() - offset;
+        let to_read = if dst.len() > remaining {
+            remaining
+        } else {
+            dst.len()
+        };
+        (&mut dst[0..to_read]).copy_from_slice(&self[offset..offset + to_read]);
+        Ok(to_read)
+    }
+}
+
+impl RandomAccess for File {
+    fn read_at(&self, offset: usize, dst: &mut [u8]) -> MyResult<usize> {
+        Ok((self as &FileExt).read_at(dst, offset as u64)?)
+    }
+}
+
 pub trait SsIterator {
     fn valid(&self) -> bool;
     fn advance(&mut self) -> bool;

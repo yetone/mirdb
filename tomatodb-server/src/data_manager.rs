@@ -9,7 +9,6 @@ use std::sync::RwLockWriteGuard;
 use std::thread;
 use std::time::Duration;
 
-use bincode::serialize;
 use serde::de::DeserializeOwned;
 use serde::Deserialize;
 use serde::Serialize;
@@ -67,7 +66,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
         let _ = thread::spawn(move || {
             let d = Duration::from_millis(dm.opt().thread_sleep_ms as u64);
             loop {
-//                dm.major_compaction().unwrap();
+                dm.major_compaction().unwrap();
                 thread::sleep(d);
             }
         });
@@ -75,7 +74,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
         let _ = thread::spawn(move || {
             let d = Duration::from_millis(dm.opt().thread_sleep_ms as u64);
             loop {
-//                dm.minor_compaction().unwrap();
+                dm.minor_compaction().unwrap();
                 thread::sleep(d);
             }
         });
@@ -83,9 +82,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
     }
 
     fn new_file_number(&self) -> usize {
-        let n = self.next_file_number_.load(Relaxed);
-        self.next_file_number_.fetch_add(1, Relaxed);
-        n
+        self.next_file_number_.fetch_add(1, Relaxed)
     }
 
     pub fn opt(&self) -> &Options {
@@ -133,21 +130,19 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
         wal.append(&LogEntry::new(k.borrow().to_vec(), v.clone()))?;
 
         let mut muttable = write_unlock(&self.mut_);
+        let r = muttable.insert(k, v);
 
         if muttable.is_full() {
+            let copied = muttable.clone();
             {
                 let mut immuttable = write_unlock(&self.imm_);
-                immuttable.add(muttable.clone());
+                immuttable.add(copied);
             }
             muttable.clear();
             wal.new_seg()?;
         }
 
-        Ok(if let Some(v) = muttable.insert(k, v) {
-            v
-        } else {
-            None
-        })
+        Ok(r.unwrap_or(None))
     }
 
     pub fn get<Q: ?Sized>(&self, k: &Q) -> MyResult<Option<V>>
@@ -193,13 +188,12 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
     }
 
     fn minor_compaction(&self) -> MyResult<()> {
-        println!("minor compaction");
-        let memtable = {
-            let mut imm = write_unlock(&self.imm_);
-            imm.consume()
-        };
-        if let Some(memtable) = memtable {
-            let work_dir = Path::new(&self.opt_.work_dir);
+        let imm = read_unlock(&self.imm_);
+        let c = imm.table_count();
+        let mut iter = imm.tables_iter().rev();
+        let work_dir = Path::new(&self.opt_.work_dir);
+        for _ in 0..c {
+            let memtable = iter.next().unwrap();
             let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
             if let Some((_, reader)) = memtable.build_sstable(&self.opt_, &path)? {
                 let mut readers = write_unlock(&self.readers_);
@@ -208,16 +202,21 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
             let mut wal = write_unlock(&self.wal_);
             wal.consume_seg()?;
         }
+        drop(imm);
+        let mut imm = write_unlock(&self.imm_);
+        for _ in 0..c {
+            imm.consume();
+        }
         Ok(())
     }
 
-    fn major_compaction(&self) -> MyResult<()> {
-        println!("major compaction");
+    pub fn major_compaction(&self) -> MyResult<()> {
         let levels = {
             let readers = read_unlock(&self.readers_);
             readers.compute_compaction_levels()
         };
         if levels.len() > 0 {
+            println!("size compaction: {:?}", levels);
             self.size_compaction(levels)?;
         } else {
             self.seek_compaction()?;
@@ -262,19 +261,15 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
 
         for i in &inputs0 {
             if let Some(min_) = min {
-                min = if min_ < i.min_key() {
-                    Some(min_)
-                } else {
-                    Some(i.min_key())
+                if min_ > i.min_key() {
+                    min = Some(i.min_key())
                 };
             } else {
                 min = Some(i.min_key());
             }
             if let Some(max_) = max {
-                max = if max_ > i.max_key() {
-                    Some(max_)
-                } else {
-                    Some(i.max_key())
+                if max_ < i.max_key() {
+                    max = Some(i.max_key())
                 };
             } else {
                 max = Some(i.max_key());
@@ -304,7 +299,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
         let mut table = None;
         let mut new_readers = vec![];
 
-        while let Some((k, v)) = &merger.next() {
+        while let Some((k, v)) = merger.next() {
             if table.is_none() {
                 let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
                 table = Some(TableBuilder::new(&path, table_opt.clone())?);
@@ -313,7 +308,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
             let is_full = {
                 let table_ = table.as_mut().unwrap();
 
-                table_.add(&k, &serialize(v)?)?;
+                table_.add(&k, &v)?;
 
                 table_.total_size_estimate() >= self.opt_.sst_max_size
             };
@@ -329,32 +324,31 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
         }
 
         if let Some(table_) = table {
-            let reader = TableReader::new(
-                &table_.path().clone(),
-                table_opt.clone())?;
-            new_readers.push(reader);
+            let path = &table_.path().clone();
             table_.flush()?;
+            let reader = TableReader::new(&path, table_opt.clone())?;
+            new_readers.push(reader);
         }
 
-        let mut file_names = vec![];
+        let mut file_names0 = vec![];
+        let mut file_names1 = vec![];
 
         for reader in inputs0 {
-            file_names.push(reader.file_name().clone());
+            file_names0.push(reader.file_name().clone());
         }
 
         for reader in inputs1 {
-            file_names.push(reader.file_name().clone());
+            file_names1.push(reader.file_name().clone());
         }
 
         drop(readers_group);
 
         let mut readers_group = write_unlock(&self.readers_);
 
-        readers_group.remove_by_file_names(level, &file_names)?;
+        readers_group.remove_by_file_names(level, &file_names0)?;
+        readers_group.remove_by_file_names(level + 1, &file_names1)?;
 
-        for reader in new_readers {
-            readers_group.add(level + 1, reader)?;
-        }
+        readers_group.add_readers(level + 1, new_readers)?;
 
         Ok(())
     }
@@ -373,8 +367,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
             if reader.min_key() <= max_key {
                 res.push(reader);
                 continue;
-            }
-            if reader.min_key() > max_key {
+            } else {
                 break;
             }
         }

@@ -265,8 +265,8 @@ mod test {
         let bh = b.flush(&mut f, 0)?;
         f.flush()?;
 
-        let mut f = File::open(path)?;
-        let (b1, _) = Block::new_from_location(&mut f, &bh, Options::default())?;
+        let f = File::open(path)?;
+        let (b1, _) = Block::new_from_location(&f, &bh, Options::default())?;
 
         let mut iter = b1.iter();
         assert_eq!(None, iter.current_k());

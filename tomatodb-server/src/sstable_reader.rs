@@ -14,6 +14,7 @@ use crate::manifest::ManifestBuilder;
 use crate::options::Options;
 use crate::store::StoreKey;
 use crate::store::StorePayload;
+use crate::utils::to_str;
 
 pub struct SstableReader {
     opt_: Options,
@@ -64,10 +65,7 @@ impl SstableReader {
         let readers = self.get_readers(level);
 
         if level == 0 {
-            let mut l = readers.len();
-            while l > 0 {
-                l -= 1;
-                let reader = &readers[l];
+            for reader in readers.iter().rev() {
                 if &(reader.min_key())[..] <= key && &(reader.max_key())[..] >= key {
                     res.push(reader);
                 }
@@ -87,7 +85,16 @@ impl SstableReader {
 
             assert_eq!(left, right);
 
-            res.push(&readers[left]);
+            for i in left..readers.len() {
+                let reader = &readers[i];
+                if &(reader.min_key())[..] <= key && &(reader.max_key())[..] >= key {
+                    res.push(reader);
+                    continue;
+                }
+                if &(reader.min_key())[..] > key  {
+                    break;
+                }
+            }
         }
 
         res
@@ -102,7 +109,6 @@ impl SstableReader {
                 }
                 for fm in fms {
                     let reader = self.load_reader(fm)?;
-                    println!("reader: {}", reader.file_name());
                     readers.push(reader);
                 }
                 if i != 0 {
@@ -115,14 +121,21 @@ impl SstableReader {
     }
 
     pub fn add(&mut self, level: usize, reader: TableReader) -> MyResult<()> {
+        self.add_readers(level, vec![reader])
+    }
+
+    pub fn add_readers(&mut self, level: usize, readers: Vec<TableReader>) -> MyResult<()> {
         assert!(level < self.opt_.max_level);
 
-        self.manifest_builder_.add_file_meta(level, table_reader_to_file_meta(&reader));
-        let readers = &mut self.readers_[level];
-        readers.push(reader);
-        if level != 0 {
-            sort_readers(readers);
+        for reader in readers {
+            self.manifest_builder_.add_file_meta(level, table_reader_to_file_meta(&reader));
+            let readers = &mut self.readers_[level];
+            readers.push(reader);
+            if level != 0 {
+                sort_readers(readers);
+            }
         }
+
         self.manifest_builder_.flush()?;
         Ok(())
     }

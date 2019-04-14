@@ -1,10 +1,9 @@
-use std::io::Read;
 use std::io::Seek;
-use std::io::SeekFrom;
 use std::io::Write;
 
 use crate::block_handle::BlockHandle;
 use crate::error::MyResult;
+use crate::types::RandomAccess;
 
 pub const FOOTER_LENGTH: usize = 40;
 pub const FULL_FOOTER_LENGTH: usize = FOOTER_LENGTH + 8;
@@ -31,10 +30,9 @@ impl Footer {
         &self.index_
     }
 
-    pub fn read<T: Seek + Read>(r: &mut T, offset: usize) -> MyResult<Self> {
-        r.seek(SeekFrom::Start(offset as u64))?;
+    pub fn read(r: &dyn RandomAccess, offset: usize) -> MyResult<Self> {
         let mut buf = [0; FULL_FOOTER_LENGTH];
-        r.read_exact(&mut buf)?;
+        r.read_at(offset, &mut buf)?;
         Ok(Footer::decode(&buf))
     }
 
@@ -74,9 +72,10 @@ impl Footer {
 
 #[cfg(test)]
 mod test {
-    use super::*;
-    use std::path::Path;
     use std::fs::File;
+    use std::path::Path;
+
+    use super::*;
 
     #[test]
     fn test_footer() -> MyResult<()> {

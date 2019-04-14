@@ -38,13 +38,13 @@ mod test {
         let (_, offset) = write_usize(&mut f, offset, 2)?;
         let (_, _offset) = write_usize(&mut f, offset, 3)?;
         f.flush()?;
-        let mut f = File::open(path)?;
+        let f = File::open(path)?;
         let offset = 0;
-        let (r, offset) = read_usize(&mut f, offset)?;
+        let (r, offset) = read_usize(&f, offset)?;
         assert_eq!(1, r);
-        let (r, offset) = read_usize(&mut f, offset)?;
+        let (r, offset) = read_usize(&f, offset)?;
         assert_eq!(2, r);
-        let (r, _offset) = read_usize(&mut f, offset)?;
+        let (r, _offset) = read_usize(&f, offset)?;
         assert_eq!(3, r);
         Ok(())
     }

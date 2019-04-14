@@ -40,8 +40,8 @@ impl Decoder for ServerCodec {
             IRResult::Ok((remaining, req)) => {
                 (Ok(Some(req)), src_len - remaining.len())
             },
-            IRResult::Err(err) => {
-                (err!(StatusCode::Other, err), 0)
+            IRResult::Err(_err) => {
+                (Ok(Some(Request::Error)), src_len)
             },
             IRResult::Incomplete(_) => {
                 (Ok(None), 0)
@@ -50,7 +50,7 @@ impl Decoder for ServerCodec {
         src.split_to(src_used);
         match result {
             Ok(x) => Ok(x),
-            Err(e) => Err(e.into()),
+            e @ Err(_) => e.into(),
         }
     }
 }

@@ -1,6 +1,4 @@
-use std::cell::RefCell;
 use std::fs::File;
-use std::ops::DerefMut;
 use std::path::Path;
 use std::rc::Rc;
 use std::sync::atomic::AtomicUsize;
@@ -17,10 +15,12 @@ use crate::footer::FULL_FOOTER_LENGTH;
 use crate::meta_block::MetaBlock;
 use crate::options::Options;
 use crate::table_iter::TableIter;
+use crate::types::RandomAccess;
 use crate::types::SsIterator;
+use crate::util::write_unlock;
 
 pub struct TableReader {
-    file: Rc<RefCell<File>>,
+    file: Rc<Box<dyn RandomAccess>>,
     file_size: usize,
     opt: Options,
 
@@ -44,15 +44,15 @@ impl TableReader {
             assert!(size > FULL_FOOTER_LENGTH);
         }
         let footer = Footer::read(&mut f, size - FULL_FOOTER_LENGTH)?;
-        let meta_block = MetaBlock::new_from_location(&mut f, &footer.meta_index())?.0;
-        let index_block = Block::new_from_location(&mut f, &footer.index(), opt.clone())?.0;
+        let meta_block = MetaBlock::new_from_location(&f, &footer.meta_index())?.0;
+        let index_block = Block::new_from_location(&f, &footer.index(), opt.clone())?.0;
         let metadata = f.metadata()?;
         let size_ = metadata.len() as usize;
         let file_name_ = path.file_name().expect("get file name").to_str().expect("file name to str").to_owned();
         Ok(TableReader {
-            file: Rc::new(RefCell::new(f)),
+            file: Rc::new(Box::new(f)),
             file_size: size,
-            cache_id: opt.block_cache.borrow_mut().new_cache_id(),
+            cache_id: write_unlock(&opt.block_cache).new_cache_id(),
             footer,
             index_block,
             opt: opt.clone(),
@@ -105,14 +105,14 @@ impl TableReader {
     pub(crate) fn read_block(&self, bh: &BlockHandle) -> MyResult<Option<Block>> {
         let cache_key = self.gen_cache_key(bh);
         {
-            let mut bc = self.opt.block_cache.borrow_mut();
+            let mut bc = write_unlock(&self.opt.block_cache);
             let res = bc.get(&cache_key);
             if let Some(block) = res {
                 return Ok(Some(block.clone()))
             }
         }
-        let (block, _) = Block::new_from_location(self.file.borrow_mut().deref_mut(), bh, self.opt.clone())?;
-        self.opt.block_cache.borrow_mut().insert(&cache_key, block.clone());
+        let (block, _) = Block::new_from_location(self.file.as_ref().as_ref(), bh, self.opt.clone())?;
+        write_unlock(&self.opt.block_cache).insert(&cache_key, block.clone());
         Ok(Some(block))
     }
 

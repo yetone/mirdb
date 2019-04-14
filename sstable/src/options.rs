@@ -1,7 +1,8 @@
-use crate::cache::Cache;
+use std::sync::Arc;
+use std::sync::RwLock;
+
 use crate::block::Block;
-use std::cell::RefCell;
-use std::rc::Rc;
+use crate::cache::Cache;
 
 const KB: usize = 1 << 10;
 const MB: usize = KB * KB;
@@ -28,7 +29,7 @@ pub fn int_to_compress_type(i: u32) -> Option<CompressType> {
 pub struct Options {
     pub block_size: usize,
     pub block_restart_interval: usize,
-    pub block_cache: Rc<RefCell<Cache<Block>>>,
+    pub block_cache: Arc<RwLock<Cache<Block>>>,
     pub compress_type: CompressType,
 }
 
@@ -37,7 +38,7 @@ impl Default for Options {
         Options {
             block_size: BLOCK_MAX_SIZE,
             block_restart_interval: 16,
-            block_cache: Rc::new(RefCell::new(Cache::new(BLOCK_CACHE_CAPACITY / BLOCK_MAX_SIZE))),
+            block_cache: Arc::new(RwLock::new(Cache::new(BLOCK_CACHE_CAPACITY / BLOCK_MAX_SIZE))),
             compress_type: CompressType::Snappy,
         }
     }

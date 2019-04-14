@@ -1,5 +1,6 @@
 use std::borrow::Borrow;
 use std::collections::LinkedList;
+use std::collections::linked_list;
 
 use crate::error::MyResult;
 use crate::memtable::Memtable;
@@ -33,6 +34,10 @@ impl<K: Ord + Clone, V: Clone> MemtableList<K, V> {
 
     pub fn consume(&mut self) -> Option<Memtable<K, V>> {
         self.tables_.pop_back()
+    }
+
+    pub fn tables_iter(&self) -> linked_list::Iter<Memtable<K, V>> {
+        self.tables_.iter()
     }
 
     pub fn table_count(&self) -> usize {

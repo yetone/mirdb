@@ -1,17 +1,17 @@
+use std::io::Cursor;
 use std::io::Seek;
+use std::io::SeekFrom;
 use std::io::Write;
 
+use bincode::{deserialize_from, serialize};
 use serde::{Deserialize, Serialize};
+use snap::Decoder;
+use snap::Encoder;
 
 use crate::block_handle::BlockHandle;
-use std::io::SeekFrom;
 use crate::MyResult;
-use bincode::{deserialize_from, serialize};
-use std::io::Cursor;
-use std::io::Read;
 use crate::reader;
-use snap::Encoder;
-use snap::Decoder;
+use crate::types::RandomAccess;
 
 #[derive(Serialize, Deserialize)]
 pub struct MetaBlock {
@@ -31,7 +31,7 @@ impl MetaBlock {
         Ok(deserialize_from(Cursor::new(buffer.into()))?)
     }
 
-    pub fn new_from_location<T: Seek + Read>(r: &mut T, location: &BlockHandle) -> MyResult<(MetaBlock, usize)> {
+    pub fn new_from_location(r: &dyn RandomAccess, location: &BlockHandle) -> MyResult<(MetaBlock, usize)> {
         let (data, offset) = reader::read_bytes(r, location)?;
         let data = Decoder::new().decompress_vec(&data)?;
         let size = data.len();

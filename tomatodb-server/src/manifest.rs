@@ -39,10 +39,10 @@ impl LevelMeta {
         let mut i = 0;
         while i < self.file_metas.len() {
             let file_meta = &self.file_metas[i];
-            i += 1;
             if &file_meta.file_name == file_name {
                 break
             }
+            i += 1;
         }
         if i < self.file_metas.len() {
             self.file_metas.remove(i);
@@ -174,10 +174,13 @@ impl fmt::Display for ManifestBuilder {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Next file number: {}\n\n", self.manifest_.next_file_number())?;
         for (i, lm) in self.manifest_.level_metas.iter().enumerate() {
-            write!(f, "Level{}:\n", i)?;
+            write!(f, "Level{} ({}):\n", i, lm.file_metas.len())?;
             for (i, fm) in lm.file_metas.iter().enumerate() {
                 if i == 0 {
                     write!(f, "\t")?;
+                } else if i > 10 {
+                    write!(f, "...")?;
+                    break;
                 } else {
                     write!(f, ", ")?;
                 }

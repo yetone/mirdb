@@ -45,7 +45,7 @@ impl Default for Options {
             block_size: BLOCK_MAX_SIZE,
             block_restart_interval: 16,
 
-            l0_compaction_trigger: 4,
+            l0_compaction_trigger: 1,
 
             thread_sleep_ms: 500,
         };
