@@ -23,6 +23,6 @@ mod types;
 pub use crate::table_iter::TableIter;
 pub use crate::table_reader::TableReader;
 pub use crate::table_builder::TableBuilder;
-pub use crate::types::SsIterator;
+pub use crate::types::{RandomAccess, SsIterator};
 pub use crate::options::Options;
 pub use crate::error::{MyResult, Status, StatusCode};

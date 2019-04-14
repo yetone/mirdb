@@ -23,6 +23,8 @@ use integer_encoding::{VarIntReader, VarIntWriter};
 use serde::{Deserialize, Serialize};
 use serde::de::DeserializeOwned;
 
+use skip_list::SkipList;
+use sstable::RandomAccess;
 use sstable::TableBuilder;
 use sstable::TableReader;
 
@@ -30,9 +32,11 @@ use crate::error::err;
 use crate::error::MyResult;
 use crate::error::StatusCode;
 use crate::options::Options;
-use crate::utils::make_file_name;
-use skip_list::SkipList;
 use crate::sstable_builder::skiplist_to_sstable;
+use crate::utils::make_file_name;
+
+//use snap::Decoder;
+//use snap::Encoder;
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct LogEntry<K, V> {
@@ -91,6 +95,7 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
 
     pub fn append(&mut self, entry: &LogEntry<K, V>) -> MyResult<()> {
         let buf = serialize(entry)?;
+//        let buf = Encoder::new().compress_vec(&buf)?;
         self.file.write_varint(buf.len())?;
         self.file.write(&buf)?;
         self.file.flush()?;
@@ -154,17 +159,10 @@ impl<K: DeserializeOwned, V: DeserializeOwned> Iterator for WALSegIter<K, V> {
         self.file.seek(SeekFrom::Start(self.offset as u64)).expect("seek wal file error");
         let size = self.file.read_varint().expect("read varint from wal file error");
         let offset = self.file.seek(SeekFrom::Current(0)).expect("seek wal file current offset error") as usize;
-        let mut data = Vec::with_capacity(size);
-        let mut buf = [0; 512];
-        while data.len() < size {
-            let remain = size - data.len();
-            let size = self.file.read(&mut buf).expect("read data from wal file error");
-            if size == 0 {
-                break;
-            }
-            data.extend_from_slice(&buf[..min(remain, size)]);
-        }
+        let mut data = vec![0; size];
+        self.file.read_at(offset, &mut data).expect("read at wal file error");
         let size = data.len();
+//        let data = Decoder::new().decompress_vec(&data).expect("snap decompress wal file error");
         let cursor = Cursor::new(data);
         let entry: LogEntry<K, V> = deserialize_from(cursor).expect("deserialize from wal file error");
         self.offset = offset + size;
