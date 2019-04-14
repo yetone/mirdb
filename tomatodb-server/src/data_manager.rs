@@ -98,9 +98,11 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
 
     pub fn redo(&mut self) -> MyResult<()> {
         {
+            println!("redoing...");
             let mut wal = write_unlock(&self.wal_);
 
             if wal.seg_count() <= 0 {
+                println!("redo done!");
                 return Ok(());
             }
 
@@ -120,6 +122,8 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
 
         assert_eq!(0, read_unlock(&self.wal_).seg_count());
 
+        println!("redo done!");
+
         Ok(())
     }
 
@@ -134,7 +138,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
         let mut muttable = write_unlock(&self.mut_);
         let r = muttable.insert(k, v);
 
-        if muttable.is_full() {
+        if wal.current_seg_size()? >= self.opt_.mem_table_max_size {
             let copied = muttable.clone();
             {
                 let mut immuttable = write_unlock(&self.imm_);

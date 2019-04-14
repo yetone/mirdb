@@ -800,6 +800,7 @@ dependencies = [
  "rand 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
  "skip-list 0.1.0",
+ "snap 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "sstable 0.1.0",
  "tokio 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio-io 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)",

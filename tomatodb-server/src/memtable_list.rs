@@ -95,10 +95,10 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {
     }
 
     fn is_full(&self) -> bool {
-        self.tables_.len() == self.max_table_count_ && self.tables_.iter().all(|x| x.is_full())
+        self.tables_.len() >= self.max_table_count_
     }
 
     fn size(&self) -> usize {
-        self.tables_.iter().map(|x| x.size()).sum()
+        unimplemented!()
     }
 }

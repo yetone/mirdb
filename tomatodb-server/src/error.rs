@@ -1,5 +1,7 @@
-use std::io::ErrorKind;
 use std::error::Error;
+use std::io::ErrorKind;
+
+use snap::Error as SnapError;
 
 #[derive(Debug, PartialEq)]
 pub enum StatusCode {
@@ -11,6 +13,8 @@ pub enum StatusCode {
     BincodeError,
     PatternError(usize),
     WALError,
+    ChecksumError,
+    SnapError,
 }
 
 #[derive(Debug, PartialEq)]
@@ -65,6 +69,16 @@ impl Into<::std::io::Error> for Status {
             StatusCode::NotFound => ::std::io::ErrorKind::NotFound.into(),
             _ => ::std::io::ErrorKind::Other.into(),
         }
+    }
+}
+
+impl From<SnapError> for Status {
+    fn from(e: SnapError) -> Self {
+        let code = match e {
+            SnapError::Checksum { .. } => StatusCode::ChecksumError,
+            _ => StatusCode::SnapError,
+        };
+        Status::new(code, e.description())
     }
 }
 

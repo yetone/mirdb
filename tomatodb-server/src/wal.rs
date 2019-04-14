@@ -235,6 +235,13 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
         Ok(())
     }
 
+    pub fn current_seg_size(&self) -> MyResult<usize> {
+        if let Some(seg) = self.segs.back() {
+            return Ok(seg.file.metadata()?.len() as usize);
+        }
+        Ok(0)
+    }
+
     fn new_file_num(&mut self) -> usize {
         let n = self.current_file_num;
         self.current_file_num += 1;
