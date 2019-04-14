@@ -1,5 +1,6 @@
 use std::borrow::Borrow;
 use std::collections::HashMap;
+use std::fs::remove_file;
 use std::io::Cursor;
 use std::path::Path;
 
@@ -159,6 +160,13 @@ impl SstableReader {
         }
 
         self.manifest_builder_.flush()?;
+
+        let work_dir = Path::new(&self.opt_.work_dir);
+        for file_name in file_names {
+            let path = work_dir.join(file_name);
+            remove_file(&path)?;
+        }
+
         Ok(())
     }
 

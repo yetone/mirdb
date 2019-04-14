@@ -178,11 +178,12 @@ impl fmt::Display for ManifestBuilder {
             for (i, fm) in lm.file_metas.iter().enumerate() {
                 if i == 0 {
                     write!(f, "\t")?;
-                } else if i > 10 {
-                    write!(f, "...")?;
-                    break;
                 } else {
                     write!(f, ", ")?;
+                }
+                if i > 10 {
+                    write!(f, "...")?;
+                    break;
                 }
                 write!(f, "{}", fm.file_name)?;
             }
