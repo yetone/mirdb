@@ -11,11 +11,14 @@ use crate::error::MyResult;
 use crate::util::find_short_succ;
 use crate::util::find_shortest_sep;
 use crate::meta_block::MetaBlock;
+use std::path::PathBuf;
 
 pub struct TableBuilder {
     file: File,
+    path_: PathBuf,
     opt: Options,
     offset: usize,
+    total_size_estimate_: usize,
     data_block: BlockBuilder,
     index_block: BlockBuilder,
     min_key: Option<Vec<u8>>,
@@ -31,8 +34,10 @@ impl TableBuilder {
             .open(path)?;
         Ok(TableBuilder {
             file,
+            path_: path.to_path_buf(),
             opt: opt.clone(),
             offset: 0,
+            total_size_estimate_: 0,
             data_block: BlockBuilder::new(opt.clone()),
             index_block: BlockBuilder::new(opt),
             min_key: None,
@@ -40,8 +45,12 @@ impl TableBuilder {
         })
     }
 
+    pub fn path(&self) -> &PathBuf {
+        &self.path_
+    }
+
     #[allow(unused)]
-    fn size_estimate(&self) -> usize {
+    fn current_size_estimate(&self) -> usize {
         let mut size = 0;
         size += self.data_block.size_estimate();
         size += self.index_block.size_estimate();
@@ -50,7 +59,12 @@ impl TableBuilder {
         size
     }
 
+    pub fn total_size_estimate(&self) -> usize {
+        self.total_size_estimate_
+    }
+
     pub fn add(&mut self, k: &[u8], v: &[u8]) -> MyResult<()> {
+        self.total_size_estimate_ += k.len() + v.len();
         if self.data_block.size_estimate() > self.opt.block_size {
             self.write_data_block(k)?;
         }

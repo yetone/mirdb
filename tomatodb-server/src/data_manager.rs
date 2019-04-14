@@ -10,6 +10,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use sstable::TableReader;
+use sstable::SsIterator;
 
 use crate::error::MyResult;
 use crate::memtable::Memtable;
@@ -23,6 +24,9 @@ use crate::utils::to_str;
 use crate::utils::write_unlock;
 use crate::wal::LogEntry;
 use crate::wal::WAL;
+use crate::merger::Merger;
+use sstable::TableBuilder;
+use bincode::serialize;
 
 pub struct DataManager<K: Ord + Clone, V: Clone> {
     mut_: Arc<RwLock<Memtable<K, Option<V>>>>,
@@ -192,7 +196,7 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
         let mut inputs0 = vec![];
 
         if level == 0 {
-            for reader in readers {
+            for reader in readers.iter().rev() {
                 inputs0.push(reader);
             }
         } else {
@@ -239,8 +243,56 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
         let readers = readers_group.get_readers(level + 1);
         let inputs1 = self.get_other_readers(&min_key, &max_key, readers);
 
+        let mut iters = vec![];
+
+        for reader in &inputs0 {
+            iters.push(reader.iter());
+        }
+
+        for reader in &inputs1 {
+            iters.push(reader.iter());
+        }
+
+        let mut merger = Merger::new(iters);
+
+        let work_dir = Path::new(&self.opt_.work_dir);
+
+        let table_opt = self.opt_.to_table_opt();
+        let mut table = None;
         let mut new_readers = vec![];
 
+        while let Some((k, v)) = &merger.next() {
+            if table.is_none() {
+                let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
+                table = Some(TableBuilder::new(&path, table_opt.clone())?);
+            }
+
+            let is_full = {
+                let table_ = table.as_mut().unwrap();
+
+                table_.add(&k, &serialize(v)?)?;
+
+                table_.total_size_estimate() >= self.opt_.sst_max_size
+            };
+
+            if is_full {
+                let table_ = table.unwrap();
+                let reader = TableReader::new(
+                    &table_.path().clone(),
+                    table_opt.clone())?;
+                new_readers.push(reader);
+                table_.flush()?;
+                table = None;
+            }
+        }
+
+        if let Some(table_) = table {
+            let reader = TableReader::new(
+                &table_.path().clone(),
+                table_opt.clone())?;
+            new_readers.push(reader);
+            table_.flush()?;
+        }
 
         let mut readers_group = write_unlock(&self.readers_);
 
