@@ -3,6 +3,7 @@ use std::result;
 use std::error::Error;
 
 use snap::Error as SnapError;
+use cuckoofilter::CuckooError;
 
 #[derive(Debug, PartialEq)]
 pub enum StatusCode {
@@ -14,6 +15,7 @@ pub enum StatusCode {
     InvalidData,
     BuildError,
     BincodeError,
+    CuckooError,
 }
 
 #[derive(Debug, PartialEq)]
@@ -58,6 +60,12 @@ impl From<SnapError> for Status {
 impl From<bincode::Error> for Status {
     fn from(e: bincode::Error) -> Self {
         Status::new(StatusCode::BincodeError, e.description())
+    }
+}
+
+impl From<CuckooError> for Status {
+    fn from(e: CuckooError) -> Self {
+        Status::new(StatusCode::CuckooError, e.description())
     }
 }
 

@@ -1,17 +1,20 @@
+use std::collections::hash_map::DefaultHasher;
 use std::fs::File;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::Path;
+use std::path::PathBuf;
+
+use cuckoofilter::{CuckooFilter, ExportedCuckooFilter};
 
 use crate::block_builder::BlockBuilder;
+use crate::error::MyResult;
 use crate::footer::Footer;
 use crate::footer::FULL_FOOTER_LENGTH;
+use crate::meta_block::MetaBlock;
 use crate::options::Options;
-use crate::error::MyResult;
 use crate::util::find_short_succ;
 use crate::util::find_shortest_sep;
-use crate::meta_block::MetaBlock;
-use std::path::PathBuf;
 
 pub struct TableBuilder {
     file: File,
@@ -23,6 +26,7 @@ pub struct TableBuilder {
     index_block: BlockBuilder,
     min_key: Option<Vec<u8>>,
     max_key: Option<Vec<u8>>,
+    filter: CuckooFilter<DefaultHasher>,
 }
 
 impl TableBuilder {
@@ -42,6 +46,7 @@ impl TableBuilder {
             index_block: BlockBuilder::new(opt),
             min_key: None,
             max_key: None,
+            filter: CuckooFilter::new(),
         })
     }
 
@@ -69,6 +74,7 @@ impl TableBuilder {
             self.write_data_block(k)?;
         }
         self.data_block.add(k, v);
+        self.filter.add(k)?;
         if let None = &self.min_key {
             self.min_key = Some(k.to_vec());
         }
@@ -96,7 +102,8 @@ impl TableBuilder {
         self.write_data_block(&find_short_succ(&self.data_block.last_key))?;
         let mut meta_block = MetaBlock::new(
             self.max_key.expect("max key"),
-            self.min_key.expect("min key")
+            self.min_key.expect("min key"),
+                ExportedCuckooFilter::from(&self.filter),
         );
         let meta_bh = meta_block.flush(&mut self.file, self.offset)?;
         self.offset = meta_bh.offset + meta_bh.size;

@@ -1,9 +1,11 @@
+use std::collections::hash_map::DefaultHasher;
 use std::fs::File;
 use std::path::Path;
 use std::rc::Rc;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering::Relaxed;
 
+use cuckoofilter::CuckooFilter;
 use integer_encoding::FixedIntWriter;
 
 use crate::block::Block;
@@ -27,11 +29,14 @@ pub struct TableReader {
     cache_id: cache::CacheID,
     footer: Footer,
     pub(crate) index_block: Block,
-    meta_block_: MetaBlock,
+    min_key_: Vec<u8>,
+    max_key_: Vec<u8>,
     size_: usize,
     file_name_: String,
 
     seek_miss_count_: AtomicUsize,
+
+    filter_: CuckooFilter<DefaultHasher>,
 }
 
 impl TableReader {
@@ -56,10 +61,12 @@ impl TableReader {
             footer,
             index_block,
             opt: opt.clone(),
-            meta_block_: meta_block,
+            min_key_: meta_block.min_key.clone(),
+            max_key_: meta_block.max_key.clone(),
             size_,
             file_name_,
             seek_miss_count_: AtomicUsize::new(0),
+            filter_: meta_block.filter.into(),
         })
     }
 
@@ -76,11 +83,11 @@ impl TableReader {
     }
 
     pub fn min_key(&self) -> &Vec<u8> {
-        &self.meta_block_.min_key
+        &self.min_key_
     }
 
     pub fn max_key(&self) -> &Vec<u8> {
-        &self.meta_block_.max_key
+        &self.max_key_
     }
 
     pub fn size(&self) -> usize {
@@ -122,6 +129,10 @@ impl TableReader {
 
     pub fn get(&self, k: &[u8]) -> MyResult<Option<Vec<u8>>> {
         if k < self.min_key() || k > self.max_key() {
+            return Ok(None);
+        }
+        if !self.filter_.contains(k) {
+            self.incr_seek_miss_count();
             return Ok(None);
         }
         let mut iter = self.iter();

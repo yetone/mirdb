@@ -61,7 +61,10 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
             last_compact_keys_: Vec::with_capacity(opt.max_level),
         };
         dm.redo()?;
-        let dma = Arc::new(dm);
+        Ok(Arc::new(dm))
+    }
+
+    pub fn background_thread(dma: Arc<Self>) {
         let dm = dma.clone();
         let _ = thread::spawn(move || {
             let d = Duration::from_millis(dm.opt().thread_sleep_ms as u64);
@@ -78,7 +81,6 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
                 thread::sleep(d);
             }
         });
-        Ok(dma.clone())
     }
 
     fn new_file_number(&self) -> usize {

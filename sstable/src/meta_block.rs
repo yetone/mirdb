@@ -7,6 +7,7 @@ use bincode::{deserialize_from, serialize};
 use serde::{Deserialize, Serialize};
 use snap::Decoder;
 use snap::Encoder;
+use cuckoofilter::ExportedCuckooFilter;
 
 use crate::block_handle::BlockHandle;
 use crate::MyResult;
@@ -17,13 +18,15 @@ use crate::types::RandomAccess;
 pub struct MetaBlock {
     pub max_key: Vec<u8>,
     pub min_key: Vec<u8>,
+    pub filter: ExportedCuckooFilter,
 }
 
 impl MetaBlock {
-    pub fn new(max_key: Vec<u8>, min_key: Vec<u8>) -> Self {
+    pub fn new(max_key: Vec<u8>, min_key: Vec<u8>, filter: ExportedCuckooFilter) -> Self {
         MetaBlock {
             max_key,
-            min_key
+            min_key,
+            filter,
         }
     }
 

@@ -51,8 +51,13 @@ impl Store {
         } else if !path.is_dir() {
             return err!(StatusCode::IOError, "work dir is not a dir");
         }
+        let dm = DataManager::new(opt.clone())?;
+        #[cfg(not(test))]
+        {
+            DataManager::background_thread(dm.clone());
+        }
         Ok(Store {
-            data: DataManager::new(opt.clone())?,
+            data: dm,
             opt,
         })
     }
