@@ -87,14 +87,6 @@ mod test {
 
     use super::*;
 
-    fn get_simple_data() -> Vec<(&'static [u8], &'static [u8])> {
-        vec![
-            ("prefix_key1".as_bytes(), "value1".as_bytes()),
-            ("prefix_key2".as_bytes(), "value2".as_bytes()),
-            ("prefix_key3".as_bytes(), "value3".as_bytes()),
-        ]
-    }
-
     fn get_data() -> Vec<(&'static [u8], &'static [u8])> {
         vec![
             ("key1".as_bytes(), "value1".as_bytes()),
@@ -135,48 +127,6 @@ mod test {
             assert_eq!(bi.key(), k);
             assert_eq!(v, &bi.current_kv().unwrap().1[..]);
         }
-        Ok(())
-    }
-
-    #[test]
-    fn test_iter() -> MyResult<()> {
-        let path = Path::new("/tmp/test_data_block_iter");
-        let mut f = File::create(path)?;
-        let mut opt = Options::default();
-        opt.block_size = 20;
-        let mut b = BlockBuilder::new(opt);
-        let data = get_simple_data();
-        for (k, v) in &data {
-            b.add(*k, *v);
-        }
-        let bh = b.flush(&mut f, 0)?;
-        f.flush()?;
-
-        let mut f = File::open(path)?;
-        let (b1, _) = Block::new_from_location(&mut f, &bh, Options::default())?;
-
-        let mut iter = b1.iter();
-        assert_eq!(None, iter.current_k());
-        iter.advance();
-        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
-        iter.advance();
-        assert_eq!(iter.current_k().unwrap(), "prefix_key2".as_bytes());
-        iter.prev();
-        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
-
-        let mut iter = b1.iter();
-        iter.prev();
-        assert_eq!(None, iter.current_k());
-
-        let mut iter = b1.iter();
-        iter.seek_to_last();
-        assert_eq!(iter.current_k().unwrap(), "prefix_key3".as_bytes());
-        iter.prev();
-        assert_eq!(iter.current_k().unwrap(), "prefix_key2".as_bytes());
-        iter.prev();
-        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
-        iter.prev();
-        assert_eq!(None, iter.current_k());
         Ok(())
     }
 }

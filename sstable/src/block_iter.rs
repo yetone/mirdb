@@ -114,7 +114,7 @@ impl<'a> SsIterator for BlockIter<'a> {
 
     fn advance(&mut self) -> bool {
         if self.state.next_offset >= self.state.restarts_offset {
-            self.reset();
+            self.state.key.clear();
             return false;
         } else {
             self.state.current_offset = self.state.next_offset;
@@ -228,5 +228,84 @@ impl<'a> SsIterator for BlockIter<'a> {
         }
 
         assert!(self.valid());
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use std::fs::File;
+    use std::io::Write;
+    use std::path::Path;
+
+    use crate::block::Block;
+    use crate::block_builder::BlockBuilder;
+    use crate::MyResult;
+    use crate::Options;
+    use crate::types::SsIterator;
+
+    fn get_simple_data() -> Vec<(&'static [u8], &'static [u8])> {
+        vec![
+            ("prefix_key1".as_bytes(), "value1".as_bytes()),
+            ("prefix_key2".as_bytes(), "value2".as_bytes()),
+            ("prefix_key3".as_bytes(), "value3".as_bytes()),
+        ]
+    }
+
+    #[test]
+    fn test_iter() -> MyResult<()> {
+        let path = Path::new("/tmp/test_data_block_iter");
+        let mut f = File::create(path)?;
+        let mut opt = Options::default();
+        opt.block_size = 20;
+        let mut b = BlockBuilder::new(opt);
+        let data = get_simple_data();
+        for (k, v) in &data {
+            b.add(*k, *v);
+        }
+        let bh = b.flush(&mut f, 0)?;
+        f.flush()?;
+
+        let mut f = File::open(path)?;
+        let (b1, _) = Block::new_from_location(&mut f, &bh, Options::default())?;
+
+        let mut iter = b1.iter();
+        assert_eq!(None, iter.current_k());
+        assert!(iter.advance());
+        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
+        assert!(!iter.prev());
+        assert_eq!(iter.current_k(), None);
+        assert!(iter.advance());
+        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
+        assert!(iter.advance());
+        assert_eq!(iter.current_k().unwrap(), "prefix_key2".as_bytes());
+        assert!(iter.advance());
+        assert_eq!(iter.current_k().unwrap(), "prefix_key3".as_bytes());
+        assert!(!iter.advance());
+        assert_eq!(iter.current_k(), None);
+        assert!(!iter.advance());
+        assert_eq!(iter.current_k(), None);
+        assert!(iter.prev());
+        assert_eq!(iter.current_k().unwrap(), "prefix_key2".as_bytes());
+        assert!(iter.prev());
+        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
+        assert!(!iter.prev());
+        assert_eq!(iter.current_k(), None);
+        assert!(!iter.prev());
+        assert_eq!(iter.current_k(), None);
+
+        let mut iter = b1.iter();
+        assert!(!iter.prev());
+        assert_eq!(None, iter.current_k());
+
+        let mut iter = b1.iter();
+        iter.seek_to_last();
+        assert_eq!(iter.current_k().unwrap(), "prefix_key3".as_bytes());
+        assert!(iter.prev());
+        assert_eq!(iter.current_k().unwrap(), "prefix_key2".as_bytes());
+        assert!(iter.prev());
+        assert_eq!(iter.current_k().unwrap(), "prefix_key1".as_bytes());
+        assert!(!iter.prev());
+        assert_eq!(None, iter.current_k());
+        Ok(())
     }
 }

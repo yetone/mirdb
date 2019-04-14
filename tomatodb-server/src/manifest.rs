@@ -132,12 +132,12 @@ impl ManifestBuilder {
     }
 
     pub fn add_file_meta(&mut self, level: usize, file_meta: FileMeta) {
-        assert!(level <= self.opt.max_level);
+        assert!(level < self.opt.max_level);
         self.manifest_.add_file_meta(level, file_meta)
     }
 
     pub fn remove_file_meta_by_file_name(&mut self, level: usize, file_name: &String) {
-        assert!(level <= self.opt.max_level);
+        assert!(level < self.opt.max_level);
         self.manifest_.remove_file_meta_by_file_name(level, file_name)
     }
 

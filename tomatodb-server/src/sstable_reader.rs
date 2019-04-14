@@ -33,7 +33,7 @@ fn sort_readers(readers: &mut Vec<TableReader>) {
 
 impl SstableReader {
     pub fn new(opt: Options) -> MyResult<Self> {
-        let readers_ = Vec::with_capacity(opt.max_level + 1);
+        let readers_ = Vec::with_capacity(opt.max_level);
         let mut r = SstableReader {
             opt_: opt.clone(),
             readers_,
@@ -50,7 +50,7 @@ impl SstableReader {
     }
 
     pub fn get_readers(&self, level: usize) -> &Vec<TableReader> {
-        assert!(level <= self.opt_.max_level);
+        assert!(level < self.opt_.max_level);
         &self.readers_[level]
     }
 
@@ -94,7 +94,7 @@ impl SstableReader {
     }
 
     pub fn load(&mut self) -> MyResult<()> {
-        for i in 0..=self.opt_.max_level {
+        for i in 0..self.opt_.max_level {
             let mut readers = vec![];
             if let Some(fms) = self.manifest_builder_.file_metas(i) {
                 if readers.len() < fms.len() {
@@ -115,7 +115,7 @@ impl SstableReader {
     }
 
     pub fn add(&mut self, level: usize, reader: TableReader) -> MyResult<()> {
-        assert!(level <= self.opt_.max_level);
+        assert!(level < self.opt_.max_level);
 
         self.manifest_builder_.add_file_meta(level, table_reader_to_file_meta(&reader));
         let readers = &mut self.readers_[level];
@@ -127,14 +127,14 @@ impl SstableReader {
         Ok(())
     }
 
-    pub fn remove(&mut self, level: usize, file_name: String) -> MyResult<()> {
-        assert!(level <= self.opt_.max_level);
+    pub fn remove(&mut self, level: usize, file_name: &String) -> MyResult<()> {
+        assert!(level < self.opt_.max_level);
 
         self.manifest_builder_.remove_file_meta_by_file_name(level, &file_name);
         let readers = &mut self.readers_[level];
         let mut i = 0;
         for reader in readers.iter() {
-            if reader.file_name() == &file_name {
+            if &reader.file_name() == &file_name {
                 break;
             }
             i += 1;
@@ -169,8 +169,8 @@ impl SstableReader {
     }
 
     pub fn compute_compaction_levels(&self) -> Vec<usize> {
-        let mut scores = Vec::with_capacity(self.opt_.max_level + 1);
-        for i in 0..=self.opt_.max_level {
+        let mut scores = Vec::with_capacity(self.opt_.max_level);
+        for i in 0..self.opt_.max_level {
             let readers = self.get_readers(i);
             let score = if i == 0 {
                 readers.len() as f64 / self.opt_.l0_compaction_trigger as f64

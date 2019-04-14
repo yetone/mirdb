@@ -111,7 +111,7 @@ impl TableReader {
         Ok(Some(block))
     }
 
-    fn iter(&self) -> TableIter {
+    pub fn iter(&self) -> TableIter {
         TableIter::new(self)
     }
 

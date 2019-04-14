@@ -47,6 +47,7 @@ mod sstable_reader;
 mod manifest;
 mod wal;
 mod test_utils;
+mod merger;
 
 use crate::options::Options;
 use crate::error::MyResult;

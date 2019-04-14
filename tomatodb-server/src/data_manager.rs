@@ -3,6 +3,7 @@ use std::fmt::Debug;
 use std::path::Path;
 use std::sync::Arc;
 use std::sync::RwLock;
+use std::sync::RwLockWriteGuard;
 
 use serde::de::DeserializeOwned;
 use serde::Deserialize;
@@ -22,7 +23,6 @@ use crate::utils::to_str;
 use crate::utils::write_unlock;
 use crate::wal::LogEntry;
 use crate::wal::WAL;
-use std::sync::RwLockWriteGuard;
 
 pub struct DataManager<K: Ord + Clone, V: Clone> {
     mut_: Arc<RwLock<Memtable<K, Option<V>>>>,
@@ -30,6 +30,7 @@ pub struct DataManager<K: Ord + Clone, V: Clone> {
     readers_: Arc<RwLock<SstableReader>>,
     wal_: Arc<RwLock<WAL<Vec<u8>, Option<V>>>>,
     opt_: Options,
+    last_compact_keys_: Vec<Vec<u8>>,
 }
 
 unsafe impl<K: Ord + Clone + Sync, V: Clone + Sync> Sync for DataManager<K, V> {}
@@ -43,6 +44,7 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
             readers_: Arc::new(RwLock::new(SstableReader::new(opt.clone())?)),
             wal_: Arc::new(RwLock::new(WAL::new(opt.clone())?)),
             opt_: opt.clone(),
+            last_compact_keys_: Vec::with_capacity(opt.max_level),
         };
         dm.redo()?;
         Ok(dm)
@@ -163,22 +165,117 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
         Ok(())
     }
 
-    fn major_compaction(&self) {
+    fn major_compaction(&self) -> MyResult<()> {
         let levels = {
             let readers = read_unlock(&self.readers_);
             readers.compute_compaction_levels()
         };
         if levels.len() > 0 {
-            self.size_compaction(levels);
+            self.size_compaction(levels)?;
         } else {
-            self.seek_compaction();
+            self.seek_compaction()?;
         }
+        Ok(())
     }
 
-    fn size_compaction(&self, _levels: Vec<usize>) {
+    fn size_compaction(&self, levels: Vec<usize>) -> MyResult<()> {
+        // TODO: process all levels
+        let level = levels[0];
+
+        if level == self.opt_.max_level - 1 {
+            return Ok(());
+        }
+
+        let readers_group = read_unlock(&self.readers_);
+        let readers = readers_group.get_readers(level);
+
+        let mut inputs0 = vec![];
+
+        if level == 0 {
+            for reader in readers {
+                inputs0.push(reader);
+            }
+        } else {
+            let last_compact_key = self.last_compact_keys_.get(level);
+
+            for reader in readers {
+                if last_compact_key.is_none() || reader.max_key() > last_compact_key.unwrap() {
+                    inputs0.push(reader);
+                    break;
+                }
+            }
+
+            if inputs0.is_empty() {
+                inputs0.push(&readers[0]);
+            }
+        }
+
+        let mut min = None;
+        let mut max = None;
+
+        for i in &inputs0 {
+            if let Some(min_) = min {
+                min = if min_ < i.min_key() {
+                    Some(min_)
+                } else {
+                    Some(i.min_key())
+                };
+            } else {
+                min = Some(i.min_key());
+            }
+            if let Some(max_) = max {
+                max = if max_ > i.max_key() {
+                    Some(max_)
+                } else {
+                    Some(i.max_key())
+                };
+            } else {
+                max = Some(i.max_key());
+            }
+        }
+
+        let min_key = min.unwrap();
+        let max_key = max.unwrap();
+        let readers = readers_group.get_readers(level + 1);
+        let inputs1 = self.get_other_readers(&min_key, &max_key, readers);
+
+        let mut new_readers = vec![];
+
+
+        let mut readers_group = write_unlock(&self.readers_);
+
+        for reader in inputs0 {
+            readers_group.remove(level, reader.file_name())?;
+        }
+        for reader in inputs1 {
+            readers_group.remove(level + 1, reader.file_name())?;
+        }
+        for reader in new_readers {
+            readers_group.add(level + 1, reader)?;
+        }
+        Ok(())
     }
 
-    fn seek_compaction(&self) {
+    fn seek_compaction(&self) -> MyResult<()> {
+        Ok(())
+    }
+
+    fn get_other_readers<'a>(&'a self, min_key: &Vec<u8>, max_key: &Vec<u8>, readers: &'a Vec<TableReader>) -> Vec<&'a TableReader> {
+        let mut res = vec![];
+        for reader in readers {
+            if reader.max_key() >= min_key {
+                res.push(reader);
+                continue;
+            }
+            if reader.min_key() <= max_key {
+                res.push(reader);
+                continue;
+            }
+            if reader.min_key() > max_key {
+                break;
+            }
+        }
+        res
     }
 
     #[cfg(test)]

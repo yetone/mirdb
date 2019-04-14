@@ -34,7 +34,7 @@ impl Options {
 impl Default for Options {
     fn default() -> Self {
         let opt = Options {
-            max_level: 6,
+            max_level: 7,
             work_dir: "/tmp/tomatodb".into(),
             sst_max_size: MB * 100,
             mem_table_max_size: MB * 10,

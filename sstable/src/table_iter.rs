@@ -30,6 +30,15 @@ impl<'a> TableIter<'a> {
             _ => None
         }
     }
+
+    #[cfg(test)]
+    fn print_info(&self) {
+        println!("------------------------------------");
+        println!("data_block: {}", self.data_block.is_some());
+        println!("index_iter: {:?}", self.index_iter.state);
+        println!("data_iter : {:?}", self.data_iter_state);
+        println!("------------------------------------");
+    }
 }
 
 impl<'a> SsIterator for TableIter<'a> {
@@ -59,12 +68,11 @@ impl<'a> SsIterator for TableIter<'a> {
                     self.data_block = Some(block);
                     return self.advance();
                 },
-                Ok(None) => return false,
+                Ok(None) => {println!("b");return false;},
                 Err(_) => return self.advance(),
             }
         }
 
-        self.reset();
         false
     }
 
@@ -79,6 +87,7 @@ impl<'a> SsIterator for TableIter<'a> {
         }
 
         if !self.index_iter.prev() {
+            self.reset();
             return false;
         }
 
@@ -87,17 +96,12 @@ impl<'a> SsIterator for TableIter<'a> {
             match self.table.read_block(&bh) {
                 Ok(Some(block)) => {
                     let mut iter = block.iter();
-                    iter.advance();
-                    if iter.state.key.is_empty() {
-                        return false;
-                    }
                     iter.seek_to_last();
                     self.data_iter_state = iter.state;
                     self.data_block = Some(block);
                     return true;
                 },
-                Ok(None) => return false,
-                Err(_) => return self.prev(),
+                _ => (),
             }
         }
 
@@ -206,7 +210,7 @@ mod test {
     fn test_advance_prev() -> MyResult<()> {
         let path = Path::new("/tmp/test_table_iter");
         let mut opt = Options::default();
-        opt.block_size = 2;
+        opt.block_size = 20;
         let mut t = TableBuilder::new(path, opt.clone())?;
         let data = get_data();
         for (k, v) in &data {
@@ -216,16 +220,76 @@ mod test {
         let t = TableReader::new(path, opt.clone())?;
 
         let mut iter = TableIter::new(&t);
+        println!("advance before");
+        iter.print_info();
+        assert!(iter.advance());
+        println!("advance after");
+        iter.print_info();
+        assert_eq!(Some(b"prefix_key1".to_vec()), iter.current_k());
+        assert!(iter.advance());
+        assert_eq!(Some(b"prefix_key2".to_vec()), iter.current_k());
+        assert!(iter.prev());
+        assert_eq!(Some(b"prefix_key1".to_vec()), iter.current_k());
+        assert!(iter.advance());
+        assert_eq!(Some(b"prefix_key2".to_vec()), iter.current_k());
+        assert!(iter.advance());
+        assert_eq!(Some(b"prefix_key3".to_vec()), iter.current_k());
+        assert!(iter.prev());
+        assert_eq!(Some(b"prefix_key2".to_vec()), iter.current_k());
+        assert!(iter.prev());
+        assert_eq!(Some(b"prefix_key1".to_vec()), iter.current_k());
+        println!("prev before");
+        iter.print_info();
+        assert!(!iter.prev());
+        println!("prev after");
+        iter.print_info();
         assert_eq!(None, iter.current_k());
+        println!("advance before");
+        iter.print_info();
+        assert!(iter.advance());
+        println!("advance after");
+        iter.print_info();
+        assert_eq!(Some(b"prefix_key1".to_vec()), iter.current_k());
+        println!("advance before");
+        iter.print_info();
+        assert!(iter.advance());
+        println!("advance after");
+        iter.print_info();
+        assert_eq!(Some(b"prefix_key2".to_vec()), iter.current_k());
+        assert!(iter.prev());
+        assert_eq!(Some(b"prefix_key1".to_vec()), iter.current_k());
+        assert!(!iter.prev());
+        assert_eq!(None, iter.current_k());
+
         for i in 0..N {
-            iter.advance();
+            assert!(iter.advance());
             let key = &data[i].0;
             if iter.current_k().unwrap() != key.as_bytes() {
-                println!("error advance i: {} k: {}", i, to_str(&iter.current_k().unwrap().to_vec()));
+                println!("error advance i: {} k: {} current_k: {}", i, to_str(key.as_bytes()), to_str(&iter.current_k().unwrap().to_vec()));
                 assert!(false);
             }
         }
-        iter.advance();
+        println!("advance before");
+        iter.print_info();
+        assert!(!iter.advance());
+        println!("advance after");
+        iter.print_info();
+        assert_eq!(None, iter.current_kv());
+        assert!(!iter.advance());
+        assert_eq!(None, iter.current_kv());
+
+        for i in (0..N - 1).into_iter().rev() {
+            iter.prev();
+            let key = &data[i].0;
+            if iter.current_k().unwrap() != key.as_bytes() {
+                println!("error prev i: {} k: {}", i, to_str(&iter.current_k().unwrap().to_vec()));
+                assert!(false);
+            }
+        }
+
+        assert!(!iter.prev());
+        assert_eq!(None, iter.current_kv());
+        assert!(!iter.prev());
         assert_eq!(None, iter.current_kv());
 
         let mut iter = TableIter::new(&t);
