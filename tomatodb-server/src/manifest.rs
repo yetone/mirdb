@@ -1,3 +1,4 @@
+use std::fmt;
 use std::fs::File;
 use std::io::Read;
 use std::io::Write;
@@ -52,21 +53,35 @@ impl LevelMeta {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Manifest {
     pub level_metas: Vec<LevelMeta>,
-    pub current_file_number: usize,
 }
 
 impl Manifest {
     fn new(opt: &Options) -> Self {
         Manifest {
             level_metas: Vec::with_capacity(opt.max_level),
-            current_file_number: 0,
         }
     }
 
-    pub fn new_file_number(&mut self) -> usize {
-        let r = self.current_file_number;
-        self.current_file_number += 1;
-        r
+    pub fn next_file_number(&self) -> usize {
+        let mut m = None;
+        for lm in &self.level_metas {
+            for fm in &lm.file_metas {
+                let pieces = fm.file_name.split('.').collect::<Vec<&str>>();
+                let n = pieces[0].parse::<usize>().unwrap();
+                if let Some(m_) = m {
+                    if n > m_ {
+                        m = Some(n);
+                    }
+                } else {
+                    m = Some(n);
+                }
+            }
+        }
+        if let Some(m_) = m {
+            m_ + 1
+        } else {
+            0
+        }
     }
 
     pub fn gen_path(opt: &Options) -> PathBuf {
@@ -150,7 +165,26 @@ impl ManifestBuilder {
         self.manifest_.flush(&mut file_)
     }
 
-    pub fn new_file_number(&mut self) -> usize {
-        self.manifest_.new_file_number()
+    pub fn next_file_number(&self) -> usize {
+        self.manifest_.next_file_number()
+    }
+}
+
+impl fmt::Display for ManifestBuilder {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Next file number: {}\n\n", self.manifest_.next_file_number())?;
+        for (i, lm) in self.manifest_.level_metas.iter().enumerate() {
+            write!(f, "Level{}:\n", i)?;
+            for (i, fm) in lm.file_metas.iter().enumerate() {
+                if i == 0 {
+                    write!(f, "\t")?;
+                } else {
+                    write!(f, ", ")?;
+                }
+                write!(f, "{}", fm.file_name)?;
+            }
+            write!(f, "\n")?;
+        }
+        Ok(())
     }
 }

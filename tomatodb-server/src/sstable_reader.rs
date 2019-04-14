@@ -74,7 +74,7 @@ impl SstableReader {
             }
         } else if readers.len() > 0 {
             let mut left = 0;
-            let mut right = readers.len();
+            let mut right = readers.len() - 1;
 
             while left < right {
                 let middle = (left + right + 1) / 2;
@@ -127,21 +127,24 @@ impl SstableReader {
         Ok(())
     }
 
-    pub fn remove(&mut self, level: usize, file_name: &String) -> MyResult<()> {
+    pub fn remove_by_file_names(&mut self, level: usize, file_names: &Vec<String>) -> MyResult<()> {
         assert!(level < self.opt_.max_level);
 
-        self.manifest_builder_.remove_file_meta_by_file_name(level, &file_name);
-        let readers = &mut self.readers_[level];
-        let mut i = 0;
-        for reader in readers.iter() {
-            if &reader.file_name() == &file_name {
-                break;
+        for file_name in file_names {
+            self.manifest_builder_.remove_file_meta_by_file_name(level, &file_name);
+            let readers = &mut self.readers_[level];
+            let mut i = 0;
+            for reader in readers.iter() {
+                if &reader.file_name() == &file_name {
+                    break;
+                }
+                i += 1;
             }
-            i += 1;
+            if i < readers.len() {
+                readers.remove(i);
+            }
         }
-        if i < readers.len() {
-            readers.remove(i);
-        }
+
         self.manifest_builder_.flush()?;
         Ok(())
     }

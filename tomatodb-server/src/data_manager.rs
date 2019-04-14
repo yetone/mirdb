@@ -2,19 +2,26 @@ use std::borrow::Borrow;
 use std::fmt::Debug;
 use std::path::Path;
 use std::sync::Arc;
+use std::sync::atomic::AtomicUsize;
+use std::sync::atomic::Ordering::Relaxed;
 use std::sync::RwLock;
 use std::sync::RwLockWriteGuard;
+use std::thread;
+use std::time::Duration;
 
+use bincode::serialize;
 use serde::de::DeserializeOwned;
 use serde::Deserialize;
 use serde::Serialize;
 
-use sstable::TableReader;
 use sstable::SsIterator;
+use sstable::TableBuilder;
+use sstable::TableReader;
 
 use crate::error::MyResult;
 use crate::memtable::Memtable;
 use crate::memtable_list::MemtableList;
+use crate::merger::Merger;
 use crate::options::Options;
 use crate::sstable_reader::SstableReader;
 use crate::types::Table;
@@ -24,9 +31,6 @@ use crate::utils::to_str;
 use crate::utils::write_unlock;
 use crate::wal::LogEntry;
 use crate::wal::WAL;
-use crate::merger::Merger;
-use sstable::TableBuilder;
-use bincode::serialize;
 
 pub struct DataManager<K: Ord + Clone, V: Clone> {
     mut_: Arc<RwLock<Memtable<K, Option<V>>>>,
@@ -34,29 +38,63 @@ pub struct DataManager<K: Ord + Clone, V: Clone> {
     readers_: Arc<RwLock<SstableReader>>,
     wal_: Arc<RwLock<WAL<Vec<u8>, Option<V>>>>,
     opt_: Options,
+    next_file_number_: AtomicUsize,
     last_compact_keys_: Vec<Vec<u8>>,
 }
 
-unsafe impl<K: Ord + Clone + Sync, V: Clone + Sync> Sync for DataManager<K, V> {}
-unsafe impl<K: Ord + Clone + Send, V: Clone + Send> Send for DataManager<K, V> {}
+unsafe impl<K: Ord + Clone, V: Clone> Sync for DataManager<K, V> {}
+unsafe impl<K: Ord + Clone, V: Clone> Send for DataManager<K, V> {}
 
-impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + Debug> DataManager<K, V> {
-    pub fn new(opt: Options) -> MyResult<Self> {
+impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + DeserializeOwned + Debug + 'static> DataManager<K, V> {
+    pub fn new(opt: Options) -> MyResult<Arc<Self>> {
+        let readers_ = Arc::new(RwLock::new(SstableReader::new(opt.clone())?));
+        let next_file_number = {
+            let readers = read_unlock(&readers_);
+            readers.manifest_builder().next_file_number()
+        };
         let mut dm = DataManager {
             mut_: Arc::new(RwLock::new(Memtable::new(opt.mem_table_max_size, opt.mem_table_max_height))),
             imm_: Arc::new(RwLock::new(MemtableList::new(opt.clone(), opt.imm_mem_table_max_count, opt.mem_table_max_size, opt.mem_table_max_height))),
-            readers_: Arc::new(RwLock::new(SstableReader::new(opt.clone())?)),
+            readers_,
+            next_file_number_: AtomicUsize::new(next_file_number),
             wal_: Arc::new(RwLock::new(WAL::new(opt.clone())?)),
             opt_: opt.clone(),
             last_compact_keys_: Vec::with_capacity(opt.max_level),
         };
         dm.redo()?;
-        Ok(dm)
+        let dma = Arc::new(dm);
+        let dm = dma.clone();
+        let _ = thread::spawn(move || {
+            let d = Duration::from_millis(dm.opt().thread_sleep_ms as u64);
+            loop {
+//                dm.major_compaction().unwrap();
+                thread::sleep(d);
+            }
+        });
+        let dm = dma.clone();
+        let _ = thread::spawn(move || {
+            let d = Duration::from_millis(dm.opt().thread_sleep_ms as u64);
+            loop {
+//                dm.minor_compaction().unwrap();
+                thread::sleep(d);
+            }
+        });
+        Ok(dma.clone())
     }
 
     fn new_file_number(&self) -> usize {
-        let mut readers = write_unlock(&self.readers_);
-        readers.manifest_builder_mut().new_file_number()
+        let n = self.next_file_number_.load(Relaxed);
+        self.next_file_number_.fetch_add(1, Relaxed);
+        n
+    }
+
+    pub fn opt(&self) -> &Options {
+        &self.opt_
+    }
+
+    pub fn info(&self) -> String {
+        let readers = read_unlock(&self.readers_);
+        readers.manifest_builder().to_string()
     }
 
     pub fn redo(&mut self) -> MyResult<()> {
@@ -95,13 +133,12 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
         wal.append(&LogEntry::new(k.borrow().to_vec(), v.clone()))?;
 
         let mut muttable = write_unlock(&self.mut_);
-        let mut immuttable = write_unlock(&self.imm_);
 
         if muttable.is_full() {
-            if immuttable.is_full() {
-                self.minor_compaction(&mut wal, &mut immuttable)?;
+            {
+                let mut immuttable = write_unlock(&self.imm_);
+                immuttable.add(muttable.clone());
             }
-            immuttable.push(muttable.clone());
             muttable.clear();
             wal.new_seg()?;
         }
@@ -155,21 +192,27 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
         Ok(r)
     }
 
-    fn minor_compaction(&self, wal: &mut RwLockWriteGuard<WAL<Vec<u8>, Option<V>>>, immuttable: &mut RwLockWriteGuard<MemtableList<K, Option<V>>>) -> MyResult<()> {
-        let work_dir = Path::new(&self.opt_.work_dir);
-        for memtable in immuttable.iter() {
+    fn minor_compaction(&self) -> MyResult<()> {
+        println!("minor compaction");
+        let memtable = {
+            let mut imm = write_unlock(&self.imm_);
+            imm.consume()
+        };
+        if let Some(memtable) = memtable {
+            let work_dir = Path::new(&self.opt_.work_dir);
             let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
             if let Some((_, reader)) = memtable.build_sstable(&self.opt_, &path)? {
                 let mut readers = write_unlock(&self.readers_);
                 readers.add(0, reader)?;
             }
+            let mut wal = write_unlock(&self.wal_);
             wal.consume_seg()?;
         }
-        immuttable.clear();
         Ok(())
     }
 
     fn major_compaction(&self) -> MyResult<()> {
+        println!("major compaction");
         let levels = {
             let readers = read_unlock(&self.readers_);
             readers.compute_compaction_levels()
@@ -277,11 +320,10 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
 
             if is_full {
                 let table_ = table.unwrap();
-                let reader = TableReader::new(
-                    &table_.path().clone(),
-                    table_opt.clone())?;
-                new_readers.push(reader);
+                let path = &table_.path().clone();
                 table_.flush()?;
+                let reader = TableReader::new(path, table_opt.clone())?;
+                new_readers.push(reader);
                 table = None;
             }
         }
@@ -294,17 +336,26 @@ impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize + DeserializeOwned + De
             table_.flush()?;
         }
 
-        let mut readers_group = write_unlock(&self.readers_);
+        let mut file_names = vec![];
 
         for reader in inputs0 {
-            readers_group.remove(level, reader.file_name())?;
+            file_names.push(reader.file_name().clone());
         }
+
         for reader in inputs1 {
-            readers_group.remove(level + 1, reader.file_name())?;
+            file_names.push(reader.file_name().clone());
         }
+
+        drop(readers_group);
+
+        let mut readers_group = write_unlock(&self.readers_);
+
+        readers_group.remove_by_file_names(level, &file_names)?;
+
         for reader in new_readers {
             readers_group.add(level + 1, reader)?;
         }
+
         Ok(())
     }
 
@@ -398,7 +449,7 @@ mod test {
         }
 
         // load from wal
-        let dm: DataManager<Vec<u8>, Vec<u8>> = DataManager::new(opt.clone())?;
+        let dm: Arc<DataManager<Vec<u8>, Vec<u8>>> = DataManager::new(opt.clone())?;
 
         // can get data now!
         for (k, v) in &data {

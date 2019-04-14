@@ -37,6 +37,7 @@ pub enum Response {
     Error,
     ClientError(String),
     ServerError(String),
+    Info(String),
 }
 
 pub trait Writer {
@@ -107,6 +108,9 @@ impl Response {
             }
             Response::ServerError(e) => {
                 writer.write(format!("SERVER_ERROR {}\r\n", e).as_bytes())?;
+            }
+            Response::Info(s) => {
+                writer.write(format!("INFO\r\n\r\n{}\r\n\r\nEND\r\n", s).as_bytes())?;
             }
             _ => {
                 unimplemented!();

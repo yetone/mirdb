@@ -20,6 +20,8 @@ pub struct Options {
     pub block_restart_interval: usize,
 
     pub l0_compaction_trigger: usize,
+
+    pub thread_sleep_ms: usize,
 }
 
 impl Options {
@@ -36,14 +38,16 @@ impl Default for Options {
         let opt = Options {
             max_level: 7,
             work_dir: "/tmp/tomatodb".into(),
-            sst_max_size: MB * 100,
-            mem_table_max_size: MB * 10,
+            sst_max_size: 100,
+            mem_table_max_size: 100,
             mem_table_max_height: 1 << 5,
             imm_mem_table_max_count: 1 << 4,
             block_size: BLOCK_MAX_SIZE,
             block_restart_interval: 16,
 
             l0_compaction_trigger: 4,
+
+            thread_sleep_ms: 500,
         };
         opt
     }

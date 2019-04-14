@@ -4,6 +4,7 @@ use std::error::Error;
 use std::fs::create_dir_all;
 use std::io::{Result, Write};
 use std::path::Path;
+use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
@@ -39,7 +40,7 @@ impl StorePayload {
 
 pub struct Store {
     opt: Options,
-    data: DataManager<StoreKey, StorePayload>,
+    data: Arc<DataManager<StoreKey, StorePayload>>,
 }
 
 impl Store {
@@ -148,6 +149,9 @@ impl Store {
                     None => Ok(Response::NotFound),
                 }
             }
+            Request::Info => {
+                Ok(Response::Info(self.data.info()))
+            }
         }
     }
 }
@@ -162,8 +166,8 @@ mod test {
     use rand::{Rng, thread_rng};
     use rand::distributions::Alphanumeric;
 
-    use crate::utils::to_str;
     use crate::test_utils::get_test_opt;
+    use crate::utils::to_str;
 
     use super::*;
 

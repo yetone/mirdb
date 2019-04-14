@@ -115,8 +115,18 @@ gen_parser!(deleter<Request>,
             )
 );
 
+gen_parser!(info<Request>,
+            chain!(
+                tag!(b"info") >>
+                tag!(b"\r\n") >>
+                (
+                    Request::Info
+                )
+            )
+);
+
 gen_parser!(parse<Request>, alt!(
-    getter | setter | deleter
+    getter | setter | deleter | info
 ));
 
 #[cfg(test)]

@@ -4,6 +4,7 @@ use std::ops::DerefMut;
 use std::path::Path;
 use std::rc::Rc;
 use std::sync::atomic::AtomicUsize;
+use std::sync::atomic::Ordering::Relaxed;
 
 use integer_encoding::FixedIntWriter;
 
@@ -15,9 +16,8 @@ use crate::footer::Footer;
 use crate::footer::FULL_FOOTER_LENGTH;
 use crate::meta_block::MetaBlock;
 use crate::options::Options;
-use crate::types::SsIterator;
 use crate::table_iter::TableIter;
-use std::sync::atomic::Ordering::Relaxed;
+use crate::types::SsIterator;
 
 pub struct TableReader {
     file: Rc<RefCell<File>>,
@@ -38,6 +38,11 @@ impl TableReader {
     pub fn new(path: &Path, opt: Options) -> MyResult<TableReader> {
         let mut f = File::open(path)?;
         let size = f.metadata()?.len() as usize;
+        if size <= FULL_FOOTER_LENGTH {
+            println!("path: {}", path.display());
+            println!("size: {}", size);
+            assert!(size > FULL_FOOTER_LENGTH);
+        }
         let footer = Footer::read(&mut f, size - FULL_FOOTER_LENGTH)?;
         let meta_block = MetaBlock::new_from_location(&mut f, &footer.meta_index())?.0;
         let index_block = Block::new_from_location(&mut f, &footer.index(), opt.clone())?.0;

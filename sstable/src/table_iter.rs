@@ -208,7 +208,7 @@ mod test {
 
     #[test]
     fn test_advance_prev() -> MyResult<()> {
-        let path = Path::new("/tmp/test_table_iter");
+        let path = Path::new("/tmp/test_table_advance_prev");
         let mut opt = Options::default();
         opt.block_size = 20;
         let mut t = TableBuilder::new(path, opt.clone())?;

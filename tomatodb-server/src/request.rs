@@ -30,4 +30,5 @@ pub enum Request {
         key: Key,
         no_reply: bool,
     },
+    Info,
 }
