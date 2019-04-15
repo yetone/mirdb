@@ -13,15 +13,20 @@ use std::io::SeekFrom;
 use std::io::Write;
 use std::marker::PhantomData;
 use std::num::Wrapping;
+use std::ops::DerefMut;
 use std::path::Path;
 use std::path::PathBuf;
+use std::ptr;
 
 use bincode::deserialize_from;
 use bincode::serialize;
 use glob::glob;
-use integer_encoding::{VarIntReader, VarIntWriter};
+use integer_encoding::FixedInt;
+use memmap::Mmap;
 use serde::{Deserialize, Serialize};
 use serde::de::DeserializeOwned;
+use snap::Decoder;
+use snap::Encoder;
 
 use skip_list::SkipList;
 use sstable::RandomAccess;
@@ -35,8 +40,22 @@ use crate::options::Options;
 use crate::sstable_builder::skiplist_to_sstable;
 use crate::utils::make_file_name;
 
-//use snap::Decoder;
-//use snap::Encoder;
+fn padding(len: usize) -> usize {
+    4usize.wrapping_sub(len) & 7
+}
+
+fn copy_memory(src: &[u8], dst: &mut [u8]) {
+    let len_src = src.len();
+    assert!(dst.len() >= len_src);
+
+    unsafe {
+        ptr::copy_nonoverlapping(
+            src.as_ptr(),
+            dst.as_mut_ptr(),
+            len_src
+        );
+    }
+}
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct LogEntry<K, V> {
@@ -64,13 +83,14 @@ impl<K, V> LogEntry<K, V> {
 
 pub struct WALSeg<K, V> {
     file: File,
+    size_: usize,
     path: PathBuf,
     k: PhantomData<K>,
     v: PhantomData<V>,
 }
 
 impl<K: Serialize, V: Serialize> WALSeg<K, V> {
-    pub fn new<T: AsRef<Path>>(path: T) -> MyResult<Self> {
+    pub fn new<T: AsRef<Path>>(path: T, _capacity: usize) -> MyResult<Self> {
         let file = OpenOptions::new()
             .read(true)
             .write(true)
@@ -79,6 +99,7 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
 
         Ok(WALSeg {
             file,
+            size_: 0,
             path: path.as_ref().to_path_buf(),
             k: PhantomData,
             v: PhantomData,
@@ -89,16 +110,39 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
         WALSegIter::new(&self.path)
     }
 
-    pub fn file_size(&self) -> MyResult<usize> {
-        Ok(self.file.metadata()?.len() as usize)
+    pub fn size(&self) -> usize {
+        self.size_
     }
 
     pub fn append(&mut self, entry: &LogEntry<K, V>) -> MyResult<()> {
-        let buf = serialize(entry)?;
-//        let buf = Encoder::new().compress_vec(&buf)?;
-        self.file.write_varint(buf.len())?;
+        let entry_buf = serialize(entry)?;
+        let entry_buf = Encoder::new().compress_vec(&entry_buf)?;
+
+        let entry_size = entry_buf.len();
+        let size_space = u32::required_space();
+
+        let padding = padding(entry_size);
+
+        let mut buf = vec![0; size_space + entry_size + padding];
+
+        // size
+        (entry_size as u32).encode_fixed(&mut buf[..size_space]);
+
+        // entry
+        copy_memory(&entry_buf, &mut buf[size_space..]);
+
+        // padding
+        if padding > 0 {
+            let zeros: [u8; 8] = [0; 8];
+            copy_memory(&zeros[..padding], &mut buf[size_space + entry_size..]);
+        }
+
         self.file.write(&buf)?;
+
         self.file.flush()?;
+
+        self.size_ += buf.len();
+
         Ok(())
     }
 
@@ -124,8 +168,9 @@ impl<V: Serialize + DeserializeOwned> WALSeg<Vec<u8>, V> {
 }
 
 pub struct WALSegIter<K, V> {
-    file: File,
     offset: usize,
+    mmap: Mmap,
+    file_size: usize,
     k: PhantomData<K>,
     v: PhantomData<V>,
 }
@@ -134,18 +179,19 @@ impl<K, V> WALSegIter<K, V> {
     pub fn new<T: AsRef<Path>>(path: T) -> MyResult<Self> {
         let file = OpenOptions::new()
             .read(true)
-            .open(path)?;
+            .open(&path)?;
+
+        let file_size = file.metadata()?.len() as usize;
+
+        let mmap = unsafe { Mmap::map(&file)? };
 
         Ok(WALSegIter {
-            file,
+            file_size,
+            mmap,
             offset: 0,
             k: PhantomData,
             v: PhantomData,
         })
-    }
-
-    pub fn file_size(&self) -> MyResult<usize> {
-        Ok(self.file.metadata()?.len() as usize)
     }
 }
 
@@ -153,19 +199,23 @@ impl<K: DeserializeOwned, V: DeserializeOwned> Iterator for WALSegIter<K, V> {
     type Item = LogEntry<K, V>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.offset >= self.file_size().expect("wal file size error") {
+        if self.offset >= self.file_size {
             return None;
         }
-        self.file.seek(SeekFrom::Start(self.offset as u64)).expect("seek wal file error");
-        let size = self.file.read_varint().expect("read varint from wal file error");
-        let offset = self.file.seek(SeekFrom::Current(0)).expect("seek wal file current offset error") as usize;
-        let mut data = vec![0; size];
-        self.file.read_at(offset, &mut data).expect("read at wal file error");
-        let size = data.len();
-//        let data = Decoder::new().decompress_vec(&data).expect("snap decompress wal file error");
+
+        let size = u32::decode_fixed(&self.mmap[self.offset..self.offset + u32::required_space()]) as usize;
+
+        if size == 0 {
+            return None
+        }
+
+        let offset = self.offset + u32::required_space();
+        let data = &self.mmap[offset..offset + size];
+        let data = Decoder::new().decompress_vec(&data).expect("snap decompress wal file error");
         let cursor = Cursor::new(data);
         let entry: LogEntry<K, V> = deserialize_from(cursor).expect("deserialize from wal file error");
-        self.offset = offset + size;
+        self.offset = offset + size + padding(size);
+
         Some(entry)
     }
 }
@@ -187,7 +237,17 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
             }
         }
         paths.sort();
-        let segs = paths.iter().map(|p| WALSeg::new(&p.as_path()).expect("new wal seg")).collect();
+        let segs = paths.iter().map(|p| {
+            let seg = WALSeg::new(&p.as_path(), opt.mem_table_max_size).expect("new wal seg");
+            if seg.file.metadata().unwrap().len() == 0 {
+                remove_file(&seg.path).unwrap();
+                None
+            } else {
+                Some(seg)
+            }
+        }).filter(|x| x.is_some())
+            .map(|x| x.unwrap())
+            .collect();
         Ok(WAL {
             opt,
             segs,
@@ -228,14 +288,14 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
         let file_name = make_file_name(file_num, "wal");
         let path = Path::new(&self.opt.work_dir);
         let path = path.join(file_name);
-        let seg = WALSeg::new(path.as_path())?;
+        let seg = WALSeg::new(path.as_path(), self.opt.mem_table_max_size)?;
         self.segs.push_back(seg);
         Ok(())
     }
 
     pub fn current_seg_size(&self) -> MyResult<usize> {
         if let Some(seg) = self.segs.back() {
-            return Ok(seg.file.metadata()?.len() as usize);
+            return Ok(seg.size());
         }
         Ok(0)
     }
@@ -291,21 +351,29 @@ mod test {
 
     #[test]
     fn test_wal_seg() -> MyResult<()> {
+        use std::time;
         let p = Path::new("/tmp/wal");
-        let mut seg = WALSeg::new(&p)?;
+        if p.exists() {
+            remove_file(p)?;
+        }
+        let mut seg = WALSeg::new(&p, 1024)?;
         let mut kvs = Vec::with_capacity(3);
         kvs.push((b"a".to_vec(), b"abcasldkfjaoiwejfawoejfoaisjdflaskdjfoias".to_vec()));
         kvs.push((b"b".to_vec(), b"bbcasdlfjasldfj".to_vec()));
         kvs.push((b"c".to_vec(), b"cbcasldfjowiejfoaisdjfalskdfj".to_vec()));
+        let st = time::SystemTime::now();
         for (k, v) in &kvs {
             let entry = LogEntry::new(k.clone(), Some(v.clone()));
             seg.append(&entry)?;
         }
+        println!("append cost: {}us", st.elapsed().unwrap().as_micros());
         let mut iter = seg.iter()?;
+        let st = time::SystemTime::now();
         for (k, v) in &kvs {
             let entry = LogEntry::new(k.clone(), Some(v.clone()));
             assert_eq!(Some(entry), iter.next());
         }
+        println!("iter cost: {}us", st.elapsed().unwrap().as_micros());
         assert_eq!(None, iter.next());
         Ok(())
     }

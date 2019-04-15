@@ -18,6 +18,8 @@ serde = { version = "1.0", features = ["derive"] }
 bincode = "1.1.2"
 integer-encoding = "1.0"
 snap = "0.2"
+crc = "1.2"
+memmap = "0.7.0"
 
 [dev-dependencies]
 rand = "0.6.1"
