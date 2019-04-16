@@ -7,6 +7,7 @@ use std::sync::atomic::Ordering::Relaxed;
 use std::sync::RwLock;
 use std::sync::RwLockWriteGuard;
 use std::thread;
+use std::time;
 use std::time::Duration;
 
 use serde::de::DeserializeOwned;
@@ -44,7 +45,7 @@ pub struct DataManager<K: Ord + Clone, V: Clone> {
 unsafe impl<K: Ord + Clone, V: Clone> Sync for DataManager<K, V> {}
 unsafe impl<K: Ord + Clone, V: Clone> Send for DataManager<K, V> {}
 
-impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + DeserializeOwned + Debug + 'static> DataManager<K, V> {
+impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + DeserializeOwned + Debug + 'static + Send> DataManager<K, V> {
     pub fn new(opt: Options) -> MyResult<Arc<Self>> {
         let readers_ = Arc::new(RwLock::new(SstableReader::new(opt.clone())?));
         let next_file_number = {
@@ -101,19 +102,44 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
             println!("redoing...");
             let mut wal = write_unlock(&self.wal_);
 
-            if wal.seg_count() <= 0 {
+            if wal.seg_count() == 0 {
                 println!("redo done!");
                 return Ok(());
             }
 
             let work_dir = Path::new(&self.opt_.work_dir);
 
-            for seg in &mut wal.segs {
+            let mut threads = Vec::with_capacity(wal.segs.len());
+
+            for seg in &wal.segs {
+                let opt = self.opt_.clone();
                 let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
-                if let Some((_, reader)) = seg.build_sstable(&self.opt_, &path)? {
-                    let mut readers = write_unlock(&self.readers_);
-                    readers.add(0, reader)?;
-                }
+                let seg = seg.clone()?;
+                threads.push(thread::spawn(move || {
+                    println!("building sstable {:?}...", path);
+                    let st = time::SystemTime::now();
+                    let t = seg.build_sstable(&opt, &path).unwrap();
+                    println!("build sstable {:?} cost: {}ms", path, st.elapsed().unwrap().as_millis());
+                    t.map(|_| path)
+                }));
+            }
+
+            let table_opt = self.opt_.to_table_opt();
+
+            let readers = threads.into_iter().map(|handle| {
+                handle.join().unwrap()
+            })
+                .filter(|x| x.is_some())
+                .map(|x| x.unwrap())
+                .map(|path| TableReader::new(&path, table_opt.clone()).unwrap())
+                .collect();
+
+            {
+                let mut readers_group = write_unlock(&self.readers_);
+                readers_group.add_readers(0, readers)?;
+            }
+
+            for seg in &mut wal.segs {
                 seg.delete()?;
             }
         }
@@ -234,53 +260,37 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
         // TODO: process all levels
         let level = levels[0];
 
-        if level == self.opt_.max_level - 1 {
+        if level >= self.opt_.max_level - 1 {
             return Ok(());
         }
 
         let readers_group = read_unlock(&self.readers_);
         let readers = readers_group.get_readers(level);
 
-        let mut inputs0 = vec![];
+        let mut inputs0: Vec<&TableReader>;
 
         if level == 0 {
-            for reader in readers.iter().rev() {
-                inputs0.push(reader);
-            }
+            inputs0 = readers.iter().rev().collect();
         } else {
             let last_compact_key = self.last_compact_keys_.get(level);
 
-            for reader in readers {
-                if last_compact_key.is_none() || reader.max_key() > last_compact_key.unwrap() {
-                    inputs0.push(reader);
-                    break;
-                }
-            }
+            inputs0 = readers.iter()
+                .filter(|reader| {
+                    last_compact_key.is_none() || reader.max_key() > last_compact_key.unwrap()
+                }).collect();
 
             if inputs0.is_empty() {
                 inputs0.push(&readers[0]);
             }
         }
 
-        let mut min = None;
-        let mut max = None;
-
-        for i in &inputs0 {
-            if let Some(min_) = min {
-                if min_ > i.min_key() {
-                    min = Some(i.min_key())
-                };
+        let (max, min) = inputs0.iter().fold((None, None), |a, b| {
+            if let (Some(max), Some(min)) = a {
+                (Some(::std::cmp::max(max, b.max_key())), Some(::std::cmp::min(min, b.min_key())))
             } else {
-                min = Some(i.min_key());
+                (Some(b.max_key()), Some(b.min_key()))
             }
-            if let Some(max_) = max {
-                if max_ < i.max_key() {
-                    max = Some(i.max_key())
-                };
-            } else {
-                max = Some(i.max_key());
-            }
-        }
+        });
 
         let min_key = min.unwrap();
         let max_key = max.unwrap();
@@ -319,14 +329,16 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
                 table_.total_size_estimate() >= self.opt_.sst_max_size
             };
 
-            if is_full {
-                let table_ = table.unwrap();
-                let path = &table_.path().clone();
-                table_.flush()?;
-                let reader = TableReader::new(path, table_opt.clone())?;
-                new_readers.push(reader);
-                table = None;
+            if !is_full {
+                continue;
             }
+
+            let table_ = table.unwrap();
+            let path = &table_.path().clone();
+            table_.flush()?;
+            let reader = TableReader::new(path, table_opt.clone())?;
+            new_readers.push(reader);
+            table = None;
         }
 
         if let Some(table_) = table {
@@ -364,20 +376,10 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
     }
 
     fn get_other_readers<'a>(&'a self, min_key: &Vec<u8>, max_key: &Vec<u8>, readers: &'a Vec<TableReader>) -> Vec<&'a TableReader> {
-        let mut res = vec![];
-        for reader in readers {
-            if reader.max_key() >= min_key {
-                res.push(reader);
-                continue;
-            }
-            if reader.min_key() <= max_key {
-                res.push(reader);
-                continue;
-            } else {
-                break;
-            }
-        }
-        res
+        readers.iter()
+            .take_while(|x| x.min_key() <= max_key)
+            .filter(|x| x.max_key() >= min_key)
+            .collect()
     }
 
     #[cfg(test)]
@@ -391,35 +393,58 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
 
 #[cfg(test)]
 mod test {
+    use std::collections::HashMap;
+    use std::time;
+
     use crate::test_utils::get_test_opt;
 
     use super::*;
 
-    fn get_data() -> Vec<(Vec<u8>, Vec<u8>)> {
-        let mut kvs = Vec::with_capacity(3);
-        kvs.push((b"a".to_vec(), b"abcasldkfjaoiwejfawoejfoaisjdflaskdjfoias".to_vec()));
-        kvs.push((b"b".to_vec(), b"bbcasdlfjasldfj".to_vec()));
-        kvs.push((b"c".to_vec(), b"cbcasldfjowiejfoaisdjfalskdfj".to_vec()));
-        kvs
+    fn get_data() -> HashMap<Vec<u8>, Vec<u8>> {
+        (b'a'..=b'f').into_iter()
+            .map(|x| (vec![x], vec![x; 20]))
+            .collect::<HashMap<_, _>>()
     }
 
     #[test]
     fn test_fault_tolerance() -> MyResult<()> {
         let mut opt = get_test_opt();
         opt.imm_mem_table_max_count = 3;
+        opt.mem_table_max_size = 20;
+        opt.sst_max_size = 60;
+        opt.l0_compaction_trigger = 1;
 
         let dm = DataManager::new(opt.clone())?;
 
-        let data = get_data();
+        let mut data = get_data();
 
+        let mut meet_b = false;
+        let mut updated_b = false;
+
+        let st = time::SystemTime::now();
         for (k, v) in &data {
+            println!("{}: {}", to_str(k), to_str(v));
             dm.insert(k.clone(), v.clone())?;
+            if meet_b {
+                dm.insert(b"b".to_vec(), b"none".to_vec())?;
+                updated_b = true;
+            }
+            if k == &b"b".to_vec() {
+                meet_b = true;
+            }
+        }
+        println!("insert cost: {}ms", st.elapsed().unwrap().as_millis());
+
+        if updated_b {
+            data.insert(b"b".to_vec(), b"none".to_vec());
         }
 
+        let st = time::SystemTime::now();
         for (k, v) in &data {
             let r = dm.get(k)?;
             assert_eq!(Some(v.clone()), r);
         }
+        println!("get cost: {}ms", st.elapsed().unwrap().as_millis());
 
         // mock abnormal exit
         dm.clear_memtables();
@@ -431,16 +456,25 @@ mod test {
         }
 
         // load from wal
+        println!("loading from wal");
+        let st = time::SystemTime::now();
         let dm = DataManager::new(opt.clone())?;
+        println!("load wal cost: {}ms", st.elapsed().unwrap().as_millis());
 
         // can get data now!
+        let st = time::SystemTime::now();
         for (k, v) in &data {
             let r = dm.get(k)?;
             assert_eq!(Some(v.clone()), r);
         }
+        println!("get cost: {}ms", st.elapsed().unwrap().as_millis());
 
-        dm.insert(b"d".to_vec(), b"xixi".to_vec())?;
-        assert_eq!(Some(b"xixi".to_vec()), dm.get(b"d".to_vec().as_slice())?);
+        data.insert(b"x".to_vec(), b"xxx".to_vec());
+        dm.insert(b"x".to_vec(), b"xxx".to_vec())?;
+        data.insert(b"y".to_vec(), b"yyy".to_vec());
+        dm.insert(b"y".to_vec(), b"yyy".to_vec())?;
+        data.insert(b"z".to_vec(), b"zzz".to_vec());
+        dm.insert(b"z".to_vec(), b"zzz".to_vec())?;
 
         for (k, v) in &data {
             let r = dm.get(k)?;
@@ -448,14 +482,36 @@ mod test {
         }
 
         // load from wal
+        println!("loading from wal");
+        let st = time::SystemTime::now();
         let dm: Arc<DataManager<Vec<u8>, Vec<u8>>> = DataManager::new(opt.clone())?;
+        println!("load wal cost: {}ms", st.elapsed().unwrap().as_millis());
 
         // can get data now!
         for (k, v) in &data {
             let r = dm.get(k)?;
             assert_eq!(Some(v.clone()), r);
         }
-        assert_eq!(Some(b"xixi".to_vec()), dm.get(b"d".to_vec().as_slice())?);
+
+        println!("loading from wal");
+        let st = time::SystemTime::now();
+        let dm: Arc<DataManager<Vec<u8>, Vec<u8>>> = DataManager::new(opt.clone())?;
+        println!("load wal cost: {}ms", st.elapsed().unwrap().as_millis());
+
+        // compaction
+        let st = time::SystemTime::now();
+        dm.minor_compaction()?;
+        println!("minor compaction cost: {}ms", st.elapsed().unwrap().as_millis());
+        let st = time::SystemTime::now();
+        dm.major_compaction()?;
+        println!("major compaction cost: {}ms", st.elapsed().unwrap().as_millis());
+        println!("info: {}", dm.info());
+
+        // can get data now!
+        for (k, v) in &data {
+            let r = dm.get(k)?;
+            assert_eq!(Some(v.clone()), r);
+        }
 
         Ok(())
     }

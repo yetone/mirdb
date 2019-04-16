@@ -146,6 +146,10 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
         Ok(())
     }
 
+    pub fn clone(&self) -> MyResult<Self> {
+        Self::new(&self.path, 0)
+    }
+
     pub fn delete(&self) -> MyResult<()> {
         remove_file(&self.path)?;
         Ok(())

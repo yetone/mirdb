@@ -17,6 +17,8 @@ use tokio_service::{NewService, Service};
 
 pub use proto::Proto;
 
+use crate::error::MyResult;
+use crate::options::Options;
 use crate::parser::parse;
 use crate::request::Request;
 use crate::response::Response;
@@ -48,9 +50,6 @@ mod manifest;
 mod wal;
 mod test_utils;
 mod merger;
-
-use crate::options::Options;
-use crate::error::MyResult;
 
 pub struct Server {
     store: Arc<Store>,
