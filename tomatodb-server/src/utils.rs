@@ -11,14 +11,14 @@ pub fn make_file_name(num: usize, ext: &str) -> String {
     format!("{:08}.{}", num, ext)
 }
 
-pub fn read_unlock<T>(l: &RwLock<T>) -> RwLockReadGuard<T> {
+pub fn read_lock<T>(l: &RwLock<T>) -> RwLockReadGuard<T> {
     match l.read() {
         Ok(v) => v,
         Err(poised) => poised.into_inner(),
     }
 }
 
-pub fn write_unlock<T>(l: &RwLock<T>) -> RwLockWriteGuard<T> {
+pub fn write_lock<T>(l: &RwLock<T>) -> RwLockWriteGuard<T> {
     match l.write() {
         Ok(v) => v,
         Err(poised) => poised.into_inner(),

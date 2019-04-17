@@ -26,9 +26,9 @@ use crate::options::Options;
 use crate::sstable_reader::SstableReader;
 use crate::types::Table;
 use crate::utils::make_file_name;
-use crate::utils::read_unlock;
+use crate::utils::read_lock;
 use crate::utils::to_str;
-use crate::utils::write_unlock;
+use crate::utils::write_lock;
 use crate::wal::LogEntry;
 use crate::wal::WAL;
 
@@ -49,7 +49,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
     pub fn new(opt: Options) -> MyResult<Arc<Self>> {
         let readers_ = Arc::new(RwLock::new(SstableReader::new(opt.clone())?));
         let next_file_number = {
-            let readers = read_unlock(&readers_);
+            let readers = read_lock(&readers_);
             readers.manifest_builder().next_file_number()
         };
         let mut dm = DataManager {
@@ -93,14 +93,14 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
     }
 
     pub fn info(&self) -> String {
-        let readers = read_unlock(&self.readers_);
+        let readers = read_lock(&self.readers_);
         readers.manifest_builder().to_string()
     }
 
     pub fn redo(&mut self) -> MyResult<()> {
         {
             println!("redoing...");
-            let mut wal = write_unlock(&self.wal_);
+            let mut wal = write_lock(&self.wal_);
 
             if wal.seg_count() == 0 {
                 println!("redo done!");
@@ -135,7 +135,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
                 .collect();
 
             {
-                let mut readers_group = write_unlock(&self.readers_);
+                let mut readers_group = write_lock(&self.readers_);
                 readers_group.add_readers(0, readers)?;
             }
 
@@ -146,7 +146,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
 
         self.wal_ = Arc::new(RwLock::new(WAL::new(self.opt_.clone())?));
 
-        assert_eq!(0, read_unlock(&self.wal_).seg_count());
+        assert_eq!(0, read_lock(&self.wal_).seg_count());
 
         println!("redo done!");
 
@@ -158,16 +158,16 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
     }
 
     fn insert_(&self, k: K, v: Option<V>) -> MyResult<Option<V>> {
-        let mut wal = write_unlock(&self.wal_);
+        let mut wal = write_lock(&self.wal_);
         wal.append(&LogEntry::new(k.borrow().to_vec(), v.clone()))?;
 
-        let mut muttable = write_unlock(&self.mut_);
+        let mut muttable = write_lock(&self.mut_);
         let r = muttable.insert(k, v);
 
         if wal.current_seg_size()? >= self.opt_.mem_table_max_size {
             let copied = muttable.clone();
             {
-                let mut immuttable = write_unlock(&self.imm_);
+                let mut immuttable = write_lock(&self.imm_);
                 immuttable.add(copied);
             }
             muttable.clear();
@@ -181,8 +181,8 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
         where K: Borrow<Q>,
               Q: Ord + Borrow<[u8]> {
 
-        let muttable = read_unlock(&self.mut_);
-        let immuttable = read_unlock(&self.imm_);
+        let muttable = read_lock(&self.mut_);
+        let immuttable = read_lock(&self.imm_);
 
         let mut r = muttable.get(k);
         if r.is_none()  {
@@ -199,7 +199,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
                     None
                 }
             } else {
-                let readers = read_unlock(&self.readers_);
+                let readers = read_lock(&self.readers_);
                 let x: Option<Option<V>> = readers.get(k.borrow())?;
                 if let Some(x) = x {
                     x.clone()
@@ -220,7 +220,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
     }
 
     fn minor_compaction(&self) -> MyResult<()> {
-        let imm = read_unlock(&self.imm_);
+        let imm = read_lock(&self.imm_);
         let c = imm.table_count();
         let mut iter = imm.tables_iter().rev();
         let work_dir = Path::new(&self.opt_.work_dir);
@@ -228,14 +228,14 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
             let memtable = iter.next().unwrap();
             let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
             if let Some((_, reader)) = memtable.build_sstable(&self.opt_, &path)? {
-                let mut readers = write_unlock(&self.readers_);
+                let mut readers = write_lock(&self.readers_);
                 readers.add(0, reader)?;
             }
-            let mut wal = write_unlock(&self.wal_);
+            let mut wal = write_lock(&self.wal_);
             wal.consume_seg()?;
         }
         drop(imm);
-        let mut imm = write_unlock(&self.imm_);
+        let mut imm = write_lock(&self.imm_);
         for _ in 0..c {
             imm.consume();
         }
@@ -244,7 +244,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
 
     pub fn major_compaction(&self) -> MyResult<()> {
         let levels = {
-            let readers = read_unlock(&self.readers_);
+            let readers = read_lock(&self.readers_);
             readers.compute_compaction_levels()
         };
         if levels.len() > 0 {
@@ -264,7 +264,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
             return Ok(());
         }
 
-        let readers_group = read_unlock(&self.readers_);
+        let readers_group = read_lock(&self.readers_);
         let readers = readers_group.get_readers(level);
 
         let mut inputs0: Vec<&TableReader>;
@@ -361,7 +361,7 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
 
         drop(readers_group);
 
-        let mut readers_group = write_unlock(&self.readers_);
+        let mut readers_group = write_lock(&self.readers_);
 
         readers_group.remove_by_file_names(level, &file_names0)?;
         readers_group.remove_by_file_names(level + 1, &file_names1)?;
@@ -384,8 +384,8 @@ impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + Deserialize
 
     #[cfg(test)]
     fn clear_memtables(&self) {
-        let mut muttable = write_unlock(&self.mut_);
-        let mut immuttable = write_unlock(&self.imm_);
+        let mut muttable = write_lock(&self.mut_);
+        let mut immuttable = write_lock(&self.imm_);
         muttable.clear();
         immuttable.clear();
     }
