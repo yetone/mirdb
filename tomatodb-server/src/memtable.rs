@@ -78,19 +78,20 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for Memtable<K, V> {
 #[cfg(test)]
 mod test {
     use super::*;
+
     #[test]
     fn test_get() {
-//        let mut table = Memtable::new(::std::mem::size_of_val(&1) * 6, 10);
-//        table.insert(1, 2);
-//        table.insert(1, 3);
-//        table.insert(1, 4);
-//        assert!(!table.is_full());
-//        table.insert(1, 5);
-//        table.insert(1, 6);
-//        table.insert(1, 7);
-//        table.insert(2, 2);
-//        assert!(!table.is_full());
-//        table.insert(3, 3);
-//        assert!(table.is_full());
+        let mut table = Memtable::new(::std::mem::size_of_val(&1) * 6, 10);
+        table.insert(1, 2);
+        table.insert(1, 3);
+        table.insert(1, 4);
+        table.insert(1, 5);
+        table.insert(1, 6);
+        table.insert(1, 7);
+        table.insert(2, 2);
+        table.insert(3, 3);
+        assert_eq!(Some(&7), table.get(&1));
+        assert_eq!(Some(&2), table.get(&2));
+        assert_eq!(Some(&3), table.get(&3));
     }
 }
