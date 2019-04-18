@@ -1,4 +1,4 @@
-#![feature(trace_macros, uniform_paths, box_syntax)]
+#![feature(trace_macros, box_syntax)]
 #![allow(unused_imports, unused_macros, dead_code)]
 
 use std::cell::RefCell;
