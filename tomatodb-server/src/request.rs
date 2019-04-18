@@ -1,5 +1,7 @@
-pub type Key = Vec<u8>;
-pub type Payload = Vec<u8>;
+use crate::slice::Slice;
+
+pub type Key = Slice;
+pub type Payload = Slice;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SetterType {

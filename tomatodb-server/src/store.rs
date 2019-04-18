@@ -17,12 +17,13 @@ use crate::options::Options;
 use crate::request::{GetterType, Request, SetterType};
 use crate::response::GetRespItem;
 use crate::response::Response;
+use crate::slice::Slice;
 
-pub type StoreKey = Vec<u8>;
+pub type StoreKey = Slice;
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct StorePayload {
-    pub(crate) data: Vec<u8>,
+    pub(crate) data: Slice,
     pub(crate) flags: u32,
     ttl: u32,
     pub(crate) bytes: usize,
@@ -87,13 +88,12 @@ impl Store {
                 if payload.len() > bytes {
                     return Ok(Response::ClientError("bad data chunk".to_owned()));
                 }
-                let data = payload[..bytes as usize].to_vec();
+                let data = Slice::from(&payload[..bytes as usize]);
                 let created_at = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
                 let sp = StorePayload {
                     flags, ttl, bytes,
                     data, created_at,
                 };
-                let key = key.to_vec();
                 match setter {
                     SetterType::Set => {
                         self.data.insert(key, sp)?;
@@ -132,7 +132,7 @@ impl Store {
                     }
                     SetterType::Prepend => {
                         if let Some(v) = self.data.get(&key)? {
-                            let mut tmp: Vec<_> = sp.data.to_owned();
+                            let mut tmp: Slice = sp.data.to_owned();
                             let mut c = v.clone();
                             tmp.extend(&v.data);
                             c.data = tmp;
@@ -187,7 +187,7 @@ mod test {
     fn test_get_none() {
         let opt = get_test_opt();
         let store = Store::new(opt).unwrap();
-        let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![b"a".to_vec()] });
+        let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![Slice::from("a")] });
         assert_eq!(Ok(Response::Get(vec![])), r);
     }
 
@@ -195,8 +195,8 @@ mod test {
     fn test_get_some() {
         let opt = get_test_opt();
         let store = Store::new(opt).unwrap();
-        let key = b"a".to_vec();
-        let payload = b"abc".to_vec();
+        let key = Slice::from("a");
+        let payload = Slice::from("abc");
         let r = store.apply(Request::Setter {
             setter: SetterType::Set,
             key: key.clone(),
@@ -211,7 +211,7 @@ mod test {
         let bytes = payload.len();
         assert_eq!(Ok(Response::Get(vec!(GetRespItem {
             key,
-            data: payload.to_vec(),
+            data: payload,
             flags: 1,
             bytes,
         }))), r);
@@ -226,46 +226,53 @@ mod test {
         map.insert(b"b".to_vec(), b"bbc".to_vec());
         map.insert(b"c".to_vec(), b"cbc".to_vec());
         for (key, payload) in map.iter() {
+            let key = Slice::from(key.clone());
+            let payload = Slice::from(payload.clone());
             let r = store.apply(Request::Setter {
                 setter: SetterType::Set,
-                key: key.clone(),
+                key,
                 flags: 1,
                 ttl: 100,
                 bytes: payload.len(),
-                payload: payload.clone(),
+                payload,
                 no_reply: false,
             });
             assert_eq!(Ok(Response::Stored), r);
         }
         for (key, payload) in map.iter() {
+            let key = Slice::from(key.clone());
+            let payload = Slice::from(payload.clone());
             let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![key.clone()] });
             let bytes = payload.len();
-            println!("get key: {}", to_str(key));
+            println!("get key: {}", to_str(&key));
             assert_eq!(Ok(Response::Get(vec!(GetRespItem {
-                key: key.clone(),
-                data: payload.to_vec(),
+                key,
+                data: payload,
                 flags: 1,
                 bytes,
             }))), r);
         }
         let mut deleted = HashSet::new();
         for (key, _payload) in map.iter() {
+            let key = Slice::from(key.clone());
             let r = store.apply(Request::Deleter { key: key.clone(), no_reply: false });
             assert_eq!(Ok(Response::Deleted), r);
-            println!("delete key: {}", to_str(key));
+            println!("delete key: {}", to_str(&key));
             deleted.insert(key.clone());
             for (key, payload) in map.iter() {
+                let key = Slice::from(key.clone());
+                let payload = Slice::from(payload.clone());
                 let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![key.clone()] });
-                println!("get key: {}", to_str(key));
-                if deleted.contains(key) {
+                println!("get key: {}", to_str(&key));
+                if deleted.contains(&key) {
                     println!("empty");
                     assert_eq!(Ok(Response::Get(vec![])), r);
                 } else {
                     println!("not empty");
                     let bytes = payload.len();
                     assert_eq!(Ok(Response::Get(vec!(GetRespItem {
-                        key: key.clone(),
-                        data: payload.to_vec(),
+                        key,
+                        data: payload,
                         flags: 1,
                         bytes,
                     }))), r);
@@ -278,8 +285,8 @@ mod test {
     fn test_set_err() {
         let opt = get_test_opt();
         let store = Store::new(opt).unwrap();
-        let key = b"a".to_vec();
-        let payload = b"abc".to_vec();
+        let key = Slice::from("a");
+        let payload = Slice::from("abc");
         let r = store.apply(Request::Setter {
             setter: SetterType::Set,
             key,

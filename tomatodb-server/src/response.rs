@@ -1,18 +1,19 @@
 use bytes::{BufMut, BytesMut};
 
 use crate::error::MyResult;
+use crate::slice::Slice;
 use crate::utils::to_str;
 
 #[derive(Debug, PartialEq)]
 pub struct GetRespItem {
-    pub(crate) key: Vec<u8>,
-    pub(crate) data: Vec<u8>,
+    pub(crate) key: Slice,
+    pub(crate) data: Slice,
     pub(crate) flags: u32,
     pub(crate) bytes: usize,
 }
 
 impl GetRespItem {
-    pub fn new(key: Vec<u8>, data: Vec<u8>, flags: u32, bytes: usize) -> Self {
+    pub fn new(key: Slice, data: Slice, flags: u32, bytes: usize) -> Self {
         GetRespItem { key, data, flags, bytes }
     }
 }

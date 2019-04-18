@@ -50,6 +50,7 @@ mod manifest;
 mod wal;
 mod test_utils;
 mod merger;
+mod slice;
 
 pub struct Server {
     store: Arc<Store>,
