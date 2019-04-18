@@ -18,13 +18,12 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::ptr;
 
-use bincode::deserialize_from;
+use bincode::deserialize;
 use bincode::serialize;
 use glob::glob;
 use integer_encoding::FixedInt;
 use memmap::Mmap;
 use serde::{Deserialize, Serialize};
-use serde::de::DeserializeOwned;
 use snap::Decoder;
 use snap::Encoder;
 
@@ -156,7 +155,9 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
     }
 }
 
-impl<V: Serialize + DeserializeOwned> WALSeg<Vec<u8>, V> {
+impl<V> WALSeg<Vec<u8>, V>
+    where for<'de> V: Serialize + Deserialize<'de> {
+
     fn to_skiplist(&self, opt: &Options) -> MyResult<SkipList<Vec<u8>, V>> {
         let mut map = SkipList::new(opt.mem_table_max_height);
         for entry in self.iter()? {
@@ -199,7 +200,11 @@ impl<K, V> WALSegIter<K, V> {
     }
 }
 
-impl<K: DeserializeOwned, V: DeserializeOwned> Iterator for WALSegIter<K, V> {
+impl<K, V> Iterator for WALSegIter<K, V>
+    where
+            for<'de> K: Deserialize<'de>,
+            for<'de> V: Deserialize<'de> {
+
     type Item = LogEntry<K, V>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -216,8 +221,7 @@ impl<K: DeserializeOwned, V: DeserializeOwned> Iterator for WALSegIter<K, V> {
         let offset = self.offset + u32::required_space();
         let data = &self.mmap[offset..offset + size];
         let data = Decoder::new().decompress_vec(&data).expect("snap decompress wal file error");
-        let cursor = Cursor::new(data);
-        let entry: LogEntry<K, V> = deserialize_from(cursor).expect("deserialize from wal file error");
+        let entry: LogEntry<K, V> = deserialize(&data).expect("deserialize from wal file error");
         self.offset = offset + size + padding(size);
 
         Some(entry)
@@ -329,7 +333,11 @@ impl<'a, K, V> WALIter<'a, K, V> {
     }
 }
 
-impl<'a, K: Serialize + DeserializeOwned, V: Serialize + DeserializeOwned> Iterator for WALIter<'a, K, V> {
+impl<'a, K, V> Iterator for WALIter<'a, K, V>
+    where
+            for<'de> K: Serialize + Deserialize<'de>,
+            for<'de> V: Serialize + Deserialize<'de> {
+
     type Item = LogEntry<K, V>;
 
     fn next(&mut self) -> Option<Self::Item> {

@@ -10,7 +10,6 @@ use std::thread;
 use std::time;
 use std::time::Duration;
 
-use serde::de::DeserializeOwned;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -45,7 +44,11 @@ pub struct DataManager<K: Ord + Clone, V: Clone> {
 unsafe impl<K: Ord + Clone, V: Clone> Sync for DataManager<K, V> {}
 unsafe impl<K: Ord + Clone, V: Clone> Send for DataManager<K, V> {}
 
-impl<K: Ord + Clone + Borrow<[u8]> + 'static, V: Clone + Serialize + DeserializeOwned + Debug + 'static + Send> DataManager<K, V> {
+impl<K, V> DataManager<K, V>
+    where
+        K: Ord + Clone + Borrow<[u8]> + 'static,
+        for<'de> V: Clone + Serialize + Deserialize<'de> + Debug + 'static + Send {
+
     pub fn new(opt: Options) -> MyResult<Arc<Self>> {
         let readers_ = Arc::new(RwLock::new(SstableReader::new(opt.clone())?));
         let next_file_number = {

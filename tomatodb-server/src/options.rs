@@ -39,7 +39,7 @@ impl Default for Options {
             max_level: 7,
             work_dir: "/tmp/tomatodb".into(),
             sst_max_size: MB * 100,
-            mem_table_max_size: MB * 100,
+            mem_table_max_size: MB * 4,
             mem_table_max_height: 1 << 5,
             imm_mem_table_max_count: 1 << 4,
             block_size: BLOCK_MAX_SIZE,

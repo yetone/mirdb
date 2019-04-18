@@ -1,9 +1,8 @@
-use std::io::Cursor;
 use std::io::Seek;
 use std::io::SeekFrom;
 use std::io::Write;
 
-use bincode::{deserialize_from, serialize};
+use bincode::{deserialize, serialize};
 use serde::{Deserialize, Serialize};
 use snap::Decoder;
 use snap::Encoder;
@@ -31,7 +30,7 @@ impl MetaBlock {
     }
 
     pub fn new_with_buffer<T: Into<Vec<u8>>>(buffer: T) -> MyResult<Self> {
-        Ok(deserialize_from(Cursor::new(buffer.into()))?)
+        Ok(deserialize(&buffer.into())?)
     }
 
     pub fn new_from_location(r: &dyn RandomAccess, location: &BlockHandle) -> MyResult<(MetaBlock, usize)> {

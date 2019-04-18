@@ -4,8 +4,8 @@ use std::fs::remove_file;
 use std::io::Cursor;
 use std::path::Path;
 
-use bincode::deserialize_from;
-use serde::de::DeserializeOwned;
+use bincode::deserialize;
+use serde::Deserialize;
 
 use sstable::TableReader;
 
@@ -178,13 +178,15 @@ impl SstableReader {
         &mut self.manifest_builder_
     }
 
-    pub fn get<K: Borrow<[u8]>, V: DeserializeOwned>(&self, k: K) -> MyResult<Option<V>> {
+    pub fn get<K, V>(&self, k: K) -> MyResult<Option<V>>
+        where
+            K: Borrow<[u8]>,
+            for<'de> V: Deserialize<'de> {
         for i in 0..self.opt_.max_level {
             let readers = self.search_readers(i, k.borrow());
             for reader in readers {
                 if let Some(encoded) = reader.get(k.borrow())? {
-                    let buff = Cursor::new(encoded);
-                    let decoded = deserialize_from(buff)?;
+                    let decoded = deserialize(&encoded)?;
                     return Ok(Some(decoded));
                 }
             }
