@@ -11,9 +11,9 @@ use crate::error::{Status, StatusCode};
 use crate::error::MyResult;
 use crate::parser::parse;
 use crate::parser_util::macros::IRResult;
+use crate::request::Request;
 use crate::response::BufferWriter;
 use crate::response::Response;
-use crate::request::Request;
 
 pub struct ServerCodec;
 

@@ -10,13 +10,14 @@ use std::ops::RangeTo;
 use std::slice::SliceIndex;
 
 use bytes::buf;
+use bytes::Bytes;
 use bytes::BytesMut;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::{self, Visitor};
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Slice {
-    inner: BytesMut,
+    inner: Bytes,
 }
 
 impl Slice {
@@ -28,7 +29,7 @@ impl Slice {
     #[inline]
     pub fn with_capacity(cap: usize) -> Self {
         Self {
-            inner: BytesMut::with_capacity(cap)
+            inner: Bytes::with_capacity(cap)
         }
     }
 
@@ -40,6 +41,24 @@ impl Slice {
     #[inline]
     pub fn is_empty(&self) -> bool {
         self.inner.is_empty()
+    }
+
+    pub fn slice(&self, begin: usize, end: usize) -> Self {
+        Self {
+            inner: self.inner.slice(begin, end)
+        }
+    }
+
+    pub fn slice_from(&self, begin: usize) -> Self {
+        Self {
+            inner: self.inner.slice_from(begin)
+        }
+    }
+
+    pub fn slice_to(&self, end: usize) -> Self {
+        Self {
+            inner: self.inner.slice_to(end)
+        }
     }
 }
 
@@ -113,7 +132,7 @@ impl Index<RangeTo<usize>> for Slice {
 
 impl IntoIterator for Slice {
     type Item = u8;
-    type IntoIter = buf::Iter<Cursor<BytesMut>>;
+    type IntoIter = buf::Iter<Cursor<Bytes>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
@@ -122,7 +141,7 @@ impl IntoIterator for Slice {
 
 impl<'a> IntoIterator for &'a Slice {
     type Item = u8;
-    type IntoIter = buf::Iter<Cursor<&'a BytesMut>>;
+    type IntoIter = buf::Iter<Cursor<&'a Bytes>>;
 
     fn into_iter(self) -> Self::IntoIter {
         (&self.inner).into_iter()
@@ -144,7 +163,7 @@ impl<'a> Extend<&'a u8> for Slice {
 impl From<BytesMut> for Slice {
     fn from(src: BytesMut) -> Self {
         Self {
-            inner: src
+            inner: src.freeze()
         }
     }
 }
