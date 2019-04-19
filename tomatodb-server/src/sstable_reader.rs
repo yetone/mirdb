@@ -13,10 +13,10 @@ use crate::error::MyResult;
 use crate::manifest::FileMeta;
 use crate::manifest::ManifestBuilder;
 use crate::options::Options;
+use crate::slice::Slice;
 use crate::store::StoreKey;
 use crate::store::StorePayload;
 use crate::utils::to_str;
-use crate::slice::Slice;
 
 pub struct SstableReader {
     opt_: Options,
@@ -67,7 +67,6 @@ impl SstableReader {
 
         let readers = self.get_readers(level);
         let key = key.borrow();
-        println!("search readers: {} {} {}", level, to_str(key), readers.len());
 
         if level == 0 {
             for reader in readers.iter().rev() {
@@ -186,7 +185,6 @@ impl SstableReader {
         where K: ?Sized + Borrow<Slice> {
         for i in 0..self.opt_.max_level {
             let readers = self.search_readers(i, k.borrow());
-            println!("{}: {}", i, readers.len());
             for reader in readers {
                 let r = reader.get(k.borrow())?;
                 if r.is_some() {

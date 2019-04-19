@@ -410,7 +410,7 @@ mod test {
     }
 
     fn get_data() -> HashMap<StoreKey, StorePayload> {
-        (b'a'..=b'l').into_iter()
+        (b'a'..=b'f').into_iter()
             .map(|x| (make_key(vec![x]), make_payload(vec![x; 20])))
             .collect::<HashMap<_, _>>()
     }
@@ -455,7 +455,7 @@ mod test {
         }
         println!("get cost: {}ms", st.elapsed().unwrap().as_millis());
 
-        let mut deleted = vec![make_key(b"e".to_vec())];
+        let deleted = vec![make_key(b"e".to_vec())];
         for k in &deleted {
             data.remove(k);
             dm.remove(k)?;
