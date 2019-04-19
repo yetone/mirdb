@@ -13,10 +13,11 @@ use sstable::TableReader;
 
 use crate::error::MyResult;
 use crate::options::Options;
+use crate::slice::Slice;
 use crate::store::StoreKey;
 use crate::store::StorePayload;
 
-pub fn skiplist_to_sstable<K: Borrow<[u8]>, V: Serialize>(map: &SkipList<K, V>, opt: &Options, path: &Path) -> MyResult<Option<(String, TableReader)>> {
+pub fn skiplist_to_sstable(map: &SkipList<Slice, Slice>, opt: &Options, path: &Path) -> MyResult<Option<(String, TableReader)>> {
 
     if map.length() == 0 {
         return Ok(None);
@@ -26,7 +27,7 @@ pub fn skiplist_to_sstable<K: Borrow<[u8]>, V: Serialize>(map: &SkipList<K, V>, 
     let mut tb = TableBuilder::new(&path, table_opt.clone())?;
 
     for (k, v) in map.iter() {
-        tb.add(k.borrow(), &serialize(v)?)?;
+        tb.add(k.borrow(), v.borrow())?;
     }
 
     tb.flush()?;

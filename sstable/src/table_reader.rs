@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use std::collections::hash_map::DefaultHasher;
 use std::fs::File;
 use std::path::Path;
@@ -127,7 +128,9 @@ impl TableReader {
         TableIter::new(self)
     }
 
-    pub fn get(&self, k: &[u8]) -> MyResult<Option<Vec<u8>>> {
+    pub fn get<K>(&self, k: &K) -> MyResult<Option<Vec<u8>>>
+        where K: ?Sized + Borrow<[u8]> {
+        let k = k.borrow();
         if k < self.min_key() || k > self.max_key() {
             return Ok(None);
         }

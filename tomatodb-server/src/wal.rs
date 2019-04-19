@@ -36,6 +36,7 @@ use crate::error::err;
 use crate::error::MyResult;
 use crate::error::StatusCode;
 use crate::options::Options;
+use crate::slice::Slice;
 use crate::sstable_builder::skiplist_to_sstable;
 use crate::utils::make_file_name;
 
@@ -58,8 +59,8 @@ fn copy_memory(src: &[u8], dst: &mut [u8]) {
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct LogEntry<K, V> {
-    k: K,
-    v: V,
+    pub(crate) k: K,
+    pub(crate) v: V,
 }
 
 impl<K, V> LogEntry<K, V> {
@@ -155,10 +156,9 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
     }
 }
 
-impl<V> WALSeg<Vec<u8>, V>
-    where for<'de> V: Serialize + Deserialize<'de> {
+impl WALSeg<Slice, Slice> {
 
-    fn to_skiplist(&self, opt: &Options) -> MyResult<SkipList<Vec<u8>, V>> {
+    fn to_skiplist(&self, opt: &Options) -> MyResult<SkipList<Slice, Slice>> {
         let mut map = SkipList::new(opt.mem_table_max_height);
         for entry in self.iter()? {
             map.insert(entry.k, entry.v);

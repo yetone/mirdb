@@ -10,6 +10,8 @@ use std::thread;
 use std::time;
 use std::time::Duration;
 
+use bincode::deserialize;
+use bincode::serialize;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -22,7 +24,10 @@ use crate::memtable::Memtable;
 use crate::memtable_list::MemtableList;
 use crate::merger::Merger;
 use crate::options::Options;
+use crate::slice::Slice;
 use crate::sstable_reader::SstableReader;
+use crate::store::StoreKey;
+use crate::store::StorePayload;
 use crate::types::Table;
 use crate::utils::make_file_name;
 use crate::utils::read_lock;
@@ -31,23 +36,20 @@ use crate::utils::write_lock;
 use crate::wal::LogEntry;
 use crate::wal::WAL;
 
-pub struct DataManager<K: Ord + Clone, V: Clone> {
-    mut_: Arc<RwLock<Memtable<K, Option<V>>>>,
-    imm_: Arc<RwLock<MemtableList<K, Option<V>>>>,
+pub struct DataManager {
+    mut_: Arc<RwLock<Memtable<Slice, Slice>>>,
+    imm_: Arc<RwLock<MemtableList<Slice, Slice>>>,
     readers_: Arc<RwLock<SstableReader>>,
-    wal_: Arc<RwLock<WAL<Vec<u8>, Option<V>>>>,
+    wal_: Arc<RwLock<WAL<Slice, Slice>>>,
     opt_: Options,
     next_file_number_: AtomicUsize,
     last_compact_keys_: Vec<Vec<u8>>,
 }
 
-unsafe impl<K: Ord + Clone, V: Clone> Sync for DataManager<K, V> {}
-unsafe impl<K: Ord + Clone, V: Clone> Send for DataManager<K, V> {}
+unsafe impl Sync for DataManager {}
+unsafe impl Send for DataManager {}
 
-impl<K, V> DataManager<K, V>
-    where
-        K: Ord + Clone + Borrow<[u8]> + 'static,
-        for<'de> V: Clone + Serialize + Deserialize<'de> + Debug + 'static + Send {
+impl DataManager {
 
     pub fn new(opt: Options) -> MyResult<Arc<Self>> {
         let readers_ = Arc::new(RwLock::new(SstableReader::new(opt.clone())?));
@@ -156,16 +158,23 @@ impl<K, V> DataManager<K, V>
         Ok(())
     }
 
-    pub fn insert(&self, k: K, v: V) -> MyResult<Option<V>> {
-        self.insert_(k, Some(v))
+    pub fn insert(&self, k: StoreKey, v: StorePayload) -> MyResult<Option<StorePayload>> {
+        self.insert_with_option(k, Some(v))
     }
 
-    fn insert_(&self, k: K, v: Option<V>) -> MyResult<Option<V>> {
+    fn insert_with_option(&self, k: StoreKey, v: Option<StorePayload>) -> MyResult<Option<StorePayload>> {
+        let encoded_v = serialize(&v)?;
+        let r = self.insert_(k, Slice::from(encoded_v))?;
+        Ok(r.and_then(|_| v))
+    }
+
+    fn insert_(&self, k: Slice, v: Slice) -> MyResult<Option<Slice>> {
         let mut wal = write_lock(&self.wal_);
-        wal.append(&LogEntry::new(k.borrow().to_vec(), v.clone()))?;
+        let entry = LogEntry::new(k, v);
+        wal.append(&entry)?;
 
         let mut muttable = write_lock(&self.mut_);
-        let r = muttable.insert(k, v);
+        let r = muttable.insert(entry.k, entry.v);
 
         if wal.current_seg_size()? >= self.opt_.mem_table_max_size {
             let copied = muttable.clone();
@@ -177,12 +186,13 @@ impl<K, V> DataManager<K, V>
             wal.new_seg()?;
         }
 
-        Ok(r.unwrap_or(None))
+        Ok(r)
     }
 
-    pub fn get<Q: ?Sized>(&self, k: &Q) -> MyResult<Option<V>>
-        where K: Borrow<Q>,
-              Q: Ord + Borrow<[u8]> {
+    pub fn get<K: ?Sized>(&self, k: &K) -> MyResult<Option<StorePayload>>
+        where K: Borrow<StoreKey> {
+
+        let k = k.borrow();
 
         let muttable = read_lock(&self.mut_);
         let immuttable = read_lock(&self.imm_);
@@ -192,32 +202,20 @@ impl<K, V> DataManager<K, V>
             r = immuttable.get(k);
         }
 
-        // TODO: optimize this shit codes
-        // TODO: plz zero copy
-        Ok(
-            if let Some(r) = r {
-                if let Some(r) = r {
-                    Some(r.clone())
-                } else {
-                    None
-                }
-            } else {
-                let readers = read_lock(&self.readers_);
-                let x: Option<Option<V>> = readers.get(k.borrow())?;
-                if let Some(x) = x {
-                    x.clone()
-                } else {
-                    None
-                }
-            }
-        )
+        if let Some(r) = r {
+            Ok(deserialize(r.borrow())?)
+        } else {
+            let readers = read_lock(&self.readers_);
+            let x: Option<Slice> = readers.get(k)?;
+            Ok(x.and_then(|x| deserialize(x.borrow()).unwrap()))
+        }
     }
 
-    pub fn remove(&self, k: &K) -> MyResult<Option<V>>
-        where K: Borrow<[u8]> {
+    pub fn remove<K>(&self, k: &K) -> MyResult<Option<StorePayload>>
+        where K: Borrow<StoreKey> {
         let r = self.get(k.borrow())?;
         if !r.is_none() {
-            self.insert_(k.clone(), None)?;
+            self.insert_with_option(k.borrow().clone(), None)?;
         }
         Ok(r)
     }
@@ -403,9 +401,17 @@ mod test {
 
     use super::*;
 
-    fn get_data() -> HashMap<Vec<u8>, Vec<u8>> {
+    fn make_key(k: Vec<u8>) -> StoreKey {
+        Slice::from(k)
+    }
+
+    fn make_payload(v: Vec<u8>) -> StorePayload {
+        StorePayload::new(Slice::from(v), 0, 0, 0, 0)
+    }
+
+    fn get_data() -> HashMap<StoreKey, StorePayload> {
         (b'a'..=b'f').into_iter()
-            .map(|x| (vec![x], vec![x; 20]))
+            .map(|x| (make_key(vec![x]), make_payload(vec![x; 20])))
             .collect::<HashMap<_, _>>()
     }
 
@@ -426,10 +432,10 @@ mod test {
 
         let st = time::SystemTime::now();
         for (k, v) in &data {
-            println!("{}: {}", to_str(k), to_str(v));
+            println!("{}: {}", to_str(k), to_str(&v.data));
             dm.insert(k.clone(), v.clone())?;
             if meet_b {
-                dm.insert(b"b".to_vec(), b"none".to_vec())?;
+                dm.insert(make_key(b"b".to_vec()), make_payload(b"none".to_vec()))?;
                 updated_b = true;
             }
             if k == &b"b".to_vec() {
@@ -439,7 +445,7 @@ mod test {
         println!("insert cost: {}ms", st.elapsed().unwrap().as_millis());
 
         if updated_b {
-            data.insert(b"b".to_vec(), b"none".to_vec());
+            data.insert(make_key(b"b".to_vec()), make_payload(b"none".to_vec()));
         }
 
         let st = time::SystemTime::now();
@@ -472,12 +478,12 @@ mod test {
         }
         println!("get cost: {}ms", st.elapsed().unwrap().as_millis());
 
-        data.insert(b"x".to_vec(), b"xxx".to_vec());
-        dm.insert(b"x".to_vec(), b"xxx".to_vec())?;
-        data.insert(b"y".to_vec(), b"yyy".to_vec());
-        dm.insert(b"y".to_vec(), b"yyy".to_vec())?;
-        data.insert(b"z".to_vec(), b"zzz".to_vec());
-        dm.insert(b"z".to_vec(), b"zzz".to_vec())?;
+        data.insert(make_key(b"x".to_vec()), make_payload(b"xxx".to_vec()));
+        data.insert(make_key(b"y".to_vec()), make_payload(b"yyy".to_vec()));
+        data.insert(make_key(b"z".to_vec()), make_payload(b"zzz".to_vec()));
+        dm.insert(make_key(b"x".to_vec()), make_payload(b"xxx".to_vec()))?;
+        dm.insert(make_key(b"y".to_vec()), make_payload(b"yyy".to_vec()))?;
+        dm.insert(make_key(b"z".to_vec()), make_payload(b"zzz".to_vec()))?;
 
         for (k, v) in &data {
             let r = dm.get(k)?;
@@ -487,7 +493,7 @@ mod test {
         // load from wal
         println!("loading from wal");
         let st = time::SystemTime::now();
-        let dm: Arc<DataManager<Vec<u8>, Vec<u8>>> = DataManager::new(opt.clone())?;
+        let dm: Arc<DataManager> = DataManager::new(opt.clone())?;
         println!("load wal cost: {}ms", st.elapsed().unwrap().as_millis());
 
         // can get data now!
@@ -498,7 +504,7 @@ mod test {
 
         println!("loading from wal");
         let st = time::SystemTime::now();
-        let dm: Arc<DataManager<Vec<u8>, Vec<u8>>> = DataManager::new(opt.clone())?;
+        let dm: Arc<DataManager> = DataManager::new(opt.clone())?;
         println!("load wal cost: {}ms", st.elapsed().unwrap().as_millis());
 
         // compaction

@@ -1,4 +1,5 @@
 use std::borrow::Borrow;
+use std::cmp::Ordering;
 use std::convert::From;
 use std::fmt;
 use std::hash;
@@ -62,6 +63,34 @@ impl Slice {
     }
 }
 
+impl<'a> PartialEq<&'a [u8]> for Slice {
+    fn eq(&self, other: &&[u8]) -> bool {
+        let s: &[u8] = self.as_ref();
+        (&s).eq(other)
+    }
+}
+
+impl<'a> PartialOrd<&'a [u8]> for Slice {
+    fn partial_cmp(&self, other: &&[u8]) -> Option<Ordering> {
+        let s: &[u8] = self.as_ref();
+        (&s).partial_cmp(other)
+    }
+}
+
+impl PartialEq<Vec<u8>> for Slice {
+    fn eq(&self, other: &Vec<u8>) -> bool {
+        let s: &[u8] = self.as_ref();
+        (&s).eq(&&other[..])
+    }
+}
+
+impl PartialOrd<Vec<u8>> for Slice {
+    fn partial_cmp(&self, other: &Vec<u8>) -> Option<Ordering> {
+        let s: &[u8] = self.as_ref();
+        (&s).partial_cmp(&&other[..])
+    }
+}
+
 impl hash::Hash for Slice {
     fn hash<H>(&self, state: &mut H) where H: hash::Hasher {
         self.inner.hash(state)
@@ -108,9 +137,24 @@ impl fmt::Debug for Slice {
     }
 }
 
-impl Borrow<[u8]> for Slice {
+impl<'a> Borrow<[u8]> for &'a Slice {
+    #[inline]
     fn borrow(&self) -> &[u8] {
         self.inner.borrow()
+    }
+}
+
+impl Borrow<[u8]> for Slice {
+    #[inline]
+    fn borrow(&self) -> &[u8] {
+        self.inner.borrow()
+    }
+}
+
+impl AsRef<[u8]> for Slice {
+    #[inline]
+    fn as_ref(&self) -> &[u8] {
+        self.inner.as_ref()
     }
 }
 
@@ -190,6 +234,8 @@ mod test {
     use bincode::deserialize;
     use bincode::serialize;
 
+    use crate::utils::to_str;
+
     use super::*;
 
     #[test]
@@ -202,7 +248,8 @@ mod test {
     fn test_serde() {
         let a = Slice::from("abc");
         let encoded = serialize(&a).unwrap();
-        let decoded = deserialize(&encoded).unwrap();
+        let decoded: Slice = deserialize(&encoded).unwrap();
         assert_eq!(Slice::from("abc"), decoded);
+        println!("a: {}", to_str(&a));
     }
 }

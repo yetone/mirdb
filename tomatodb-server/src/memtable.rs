@@ -1,15 +1,16 @@
-use skip_list::SkipList;
 use std::borrow::Borrow;
-use crate::types::Table;
-use skip_list::SkipListIter;
-use crate::options::Options;
-use serde::Serialize;
 use std::path::Path;
-use crate::error::MyResult;
-use sstable::TableReader;
+
+use skip_list::SkipList;
+use skip_list::SkipListIter;
 use sstable::TableBuilder;
-use bincode::serialize;
+use sstable::TableReader;
+
+use crate::error::MyResult;
+use crate::options::Options;
+use crate::slice::Slice;
 use crate::sstable_builder::skiplist_to_sstable;
+use crate::types::Table;
 
 #[derive(Clone)]
 pub struct Memtable<K: Ord + Clone, V: Clone> {
@@ -37,7 +38,7 @@ impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
     }
 }
 
-impl<K: Ord + Clone + Borrow<[u8]>, V: Clone + Serialize> Memtable<K, Option<V>> {
+impl Memtable<Slice, Slice> {
     pub fn build_sstable(&self, opt: &Options, path: &Path) -> MyResult<Option<(String, TableReader)>> {
         skiplist_to_sstable(&self.map_, opt, path)
     }
@@ -93,5 +94,13 @@ mod test {
         assert_eq!(Some(&7), table.get(&1));
         assert_eq!(Some(&2), table.get(&2));
         assert_eq!(Some(&3), table.get(&3));
+        let mut table = Memtable::new(::std::mem::size_of_val(&1) * 6, 10);
+        table.insert(Slice::from("b"), Slice::from("b"));
+        table.insert(Slice::from("a"), Slice::from("a"));
+        table.insert(Slice::from("c"), Slice::from("c"));
+        table.insert(Slice::from("a"), Slice::from("d"));
+        assert_eq!(Some(&Slice::from("d")), table.get(&Slice::from("a")));
+        assert_eq!(Some(&Slice::from("b")), table.get(&Slice::from("b")));
+        assert_eq!(Some(&Slice::from("c")), table.get(&Slice::from("c")));
     }
 }

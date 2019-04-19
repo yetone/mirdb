@@ -31,6 +31,12 @@ pub struct StorePayload {
 }
 
 impl StorePayload {
+    pub fn new(data: Slice, flags: u32, ttl: u32, bytes: usize, created_at: u64) -> Self {
+        Self {
+            data, flags, ttl, bytes, created_at
+        }
+    }
+
     pub fn is_expired(&self) -> bool {
         if self.ttl == 0 {
             return false;
@@ -41,7 +47,7 @@ impl StorePayload {
 
 pub struct Store {
     opt: Options,
-    data: Arc<DataManager<StoreKey, StorePayload>>,
+    data: Arc<DataManager>,
 }
 
 impl Store {

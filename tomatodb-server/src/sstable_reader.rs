@@ -16,6 +16,7 @@ use crate::options::Options;
 use crate::store::StoreKey;
 use crate::store::StorePayload;
 use crate::utils::to_str;
+use crate::slice::Slice;
 
 pub struct SstableReader {
     opt_: Options,
@@ -56,7 +57,8 @@ impl SstableReader {
         &self.readers_[level]
     }
 
-    pub fn search_readers(&self, level: usize, key: &[u8]) -> Vec<&TableReader> {
+    pub fn search_readers<K>(&self, level: usize, key: &K) -> Vec<&TableReader>
+        where K: ?Sized + Borrow<[u8]> {
         let mut res = vec![];
 
         if self.readers_.len() <= level {
@@ -64,6 +66,8 @@ impl SstableReader {
         }
 
         let readers = self.get_readers(level);
+        let key = key.borrow();
+        println!("search readers: {} {} {}", level, to_str(key), readers.len());
 
         if level == 0 {
             for reader in readers.iter().rev() {
@@ -178,16 +182,15 @@ impl SstableReader {
         &mut self.manifest_builder_
     }
 
-    pub fn get<K, V>(&self, k: K) -> MyResult<Option<V>>
-        where
-            K: Borrow<[u8]>,
-            for<'de> V: Deserialize<'de> {
+    pub fn get<K>(&self, k: &K) -> MyResult<Option<Slice>>
+        where K: ?Sized + Borrow<Slice> {
         for i in 0..self.opt_.max_level {
             let readers = self.search_readers(i, k.borrow());
+            println!("{}: {}", i, readers.len());
             for reader in readers {
-                if let Some(encoded) = reader.get(k.borrow())? {
-                    let decoded = deserialize(&encoded)?;
-                    return Ok(Some(decoded));
+                let r = reader.get(k.borrow())?;
+                if r.is_some() {
+                    return Ok(r.map(|x| Slice::from(x)));
                 }
             }
         }
