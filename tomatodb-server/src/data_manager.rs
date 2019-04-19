@@ -410,7 +410,7 @@ mod test {
     }
 
     fn get_data() -> HashMap<StoreKey, StorePayload> {
-        (b'a'..=b'f').into_iter()
+        (b'a'..=b'l').into_iter()
             .map(|x| (make_key(vec![x]), make_payload(vec![x; 20])))
             .collect::<HashMap<_, _>>()
     }
@@ -455,6 +455,17 @@ mod test {
         }
         println!("get cost: {}ms", st.elapsed().unwrap().as_millis());
 
+        let mut deleted = vec![make_key(b"e".to_vec())];
+        for k in &deleted {
+            data.remove(k);
+            dm.remove(k)?;
+        }
+
+        for k in &deleted {
+            let r = dm.get(k)?;
+            assert_eq!(None, r)
+        }
+
         // mock abnormal exit
         dm.clear_memtables();
 
@@ -488,6 +499,11 @@ mod test {
         for (k, v) in &data {
             let r = dm.get(k)?;
             assert_eq!(Some(v.clone()), r);
+        }
+
+        for k in &deleted {
+            let r = dm.get(k)?;
+            assert_eq!(None, r)
         }
 
         // load from wal
