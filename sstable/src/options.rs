@@ -38,7 +38,9 @@ impl Default for Options {
         Options {
             block_size: BLOCK_MAX_SIZE,
             block_restart_interval: 16,
-            block_cache: Arc::new(RwLock::new(Cache::new(BLOCK_CACHE_CAPACITY / BLOCK_MAX_SIZE))),
+            block_cache: Arc::new(RwLock::new(Cache::new(
+                BLOCK_CACHE_CAPACITY / BLOCK_MAX_SIZE,
+            ))),
             compress_type: CompressType::Snappy,
         }
     }

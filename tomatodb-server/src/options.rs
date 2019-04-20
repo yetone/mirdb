@@ -1,5 +1,5 @@
-use std::path::Path;
 use sstable::Options as TableOptions;
+use std::path::Path;
 
 const KB: usize = 1 << 10;
 const MB: usize = KB * KB;

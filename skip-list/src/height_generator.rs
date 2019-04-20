@@ -14,7 +14,7 @@ unsafe impl Send for GenHeight {}
 impl GenHeight {
     pub fn new() -> Self {
         GenHeight {
-            rng: rand::thread_rng()
+            rng: rand::thread_rng(),
         }
     }
 }
@@ -28,4 +28,3 @@ impl HeightGenerator for GenHeight {
         l
     }
 }
-

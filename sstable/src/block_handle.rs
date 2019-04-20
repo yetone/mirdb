@@ -27,10 +27,7 @@ impl BlockHandle {
     }
 
     pub fn new(offset: usize, size: usize) -> BlockHandle {
-        BlockHandle {
-            offset,
-            size,
-        }
+        BlockHandle { offset, size }
     }
 
     pub fn offset(&self) -> usize {
@@ -51,7 +48,9 @@ impl BlockHandle {
 }
 
 macro_rules! bh {
-    ($offset:expr, $size:expr) => ($crate::block_handle::BlockHandle::new($offset, $size));
+    ($offset:expr, $size:expr) => {
+        $crate::block_handle::BlockHandle::new($offset, $size)
+    };
 }
 
 #[cfg(test)]

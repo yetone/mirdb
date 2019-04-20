@@ -40,7 +40,7 @@ impl SstableReader {
         let mut r = SstableReader {
             opt_: opt.clone(),
             readers_,
-            manifest_builder_: ManifestBuilder::new(opt)?
+            manifest_builder_: ManifestBuilder::new(opt)?,
         };
         r.load()?;
         Ok(r)
@@ -58,7 +58,9 @@ impl SstableReader {
     }
 
     pub fn search_readers<K>(&self, level: usize, key: &K) -> Vec<&TableReader>
-        where K: ?Sized + Borrow<[u8]> {
+    where
+        K: ?Sized + Borrow<[u8]>,
+    {
         let mut res = vec![];
 
         if self.readers_.len() <= level {
@@ -95,7 +97,7 @@ impl SstableReader {
                     res.push(reader);
                     continue;
                 }
-                if &(reader.min_key())[..] > key  {
+                if &(reader.min_key())[..] > key {
                     break;
                 }
             }
@@ -132,7 +134,8 @@ impl SstableReader {
         assert!(level < self.opt_.max_level);
 
         for reader in readers {
-            self.manifest_builder_.add_file_meta(level, table_reader_to_file_meta(&reader));
+            self.manifest_builder_
+                .add_file_meta(level, table_reader_to_file_meta(&reader));
             let readers = &mut self.readers_[level];
             readers.push(reader);
             if level != 0 {
@@ -148,7 +151,8 @@ impl SstableReader {
         assert!(level < self.opt_.max_level);
 
         for file_name in file_names {
-            self.manifest_builder_.remove_file_meta_by_file_name(level, &file_name);
+            self.manifest_builder_
+                .remove_file_meta_by_file_name(level, &file_name);
             let readers = &mut self.readers_[level];
             let mut i = 0;
             for reader in readers.iter() {
@@ -182,7 +186,9 @@ impl SstableReader {
     }
 
     pub fn get<K>(&self, k: &K) -> MyResult<Option<Slice>>
-        where K: ?Sized + Borrow<Slice> {
+    where
+        K: ?Sized + Borrow<Slice>,
+    {
         for i in 0..self.opt_.max_level {
             let readers = self.search_readers(i, k.borrow());
             for reader in readers {

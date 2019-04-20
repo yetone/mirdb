@@ -1,6 +1,6 @@
+use crate::utils::to_str;
 use sstable::SsIterator;
 use sstable::TableIter;
-use crate::utils::to_str;
 
 pub struct Merger<'a> {
     iters: Vec<TableIter<'a>>,
@@ -9,10 +9,7 @@ pub struct Merger<'a> {
 
 impl<'a> Merger<'a> {
     pub fn new(iters: Vec<TableIter<'a>>) -> Self {
-        Self {
-            iters,
-            i: None,
-        }
+        Self { iters, i: None }
     }
 }
 
@@ -131,8 +128,8 @@ mod test {
     use crate::options::Options;
 
     use super::*;
-    use crate::utils::to_str;
     use crate::error::MyResult;
+    use crate::utils::to_str;
 
     #[test]
     fn test() -> MyResult<()> {

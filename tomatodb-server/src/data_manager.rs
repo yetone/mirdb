@@ -1,9 +1,9 @@
 use std::borrow::Borrow;
 use std::fmt::Debug;
 use std::path::Path;
-use std::sync::Arc;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering::Relaxed;
+use std::sync::Arc;
 use std::sync::RwLock;
 use std::sync::RwLockWriteGuard;
 use std::thread;
@@ -49,7 +49,6 @@ unsafe impl Sync for DataManager {}
 unsafe impl Send for DataManager {}
 
 impl DataManager {
-
     pub fn new(opt: Options) -> MyResult<Arc<Self>> {
         let readers_ = Arc::new(RwLock::new(SstableReader::new(opt.clone())?));
         let next_file_number = {
@@ -57,8 +56,16 @@ impl DataManager {
             readers.manifest_builder().next_file_number()
         };
         let mut dm = DataManager {
-            mut_: Arc::new(RwLock::new(Memtable::new(opt.mem_table_max_size, opt.mem_table_max_height))),
-            imm_: Arc::new(RwLock::new(MemtableList::new(opt.clone(), opt.imm_mem_table_max_count, opt.mem_table_max_size, opt.mem_table_max_height))),
+            mut_: Arc::new(RwLock::new(Memtable::new(
+                opt.mem_table_max_size,
+                opt.mem_table_max_height,
+            ))),
+            imm_: Arc::new(RwLock::new(MemtableList::new(
+                opt.clone(),
+                opt.imm_mem_table_max_count,
+                opt.mem_table_max_size,
+                opt.mem_table_max_height,
+            ))),
             readers_,
             next_file_number_: AtomicUsize::new(next_file_number),
             wal_: Arc::new(RwLock::new(WAL::new(opt.clone())?)),
@@ -123,16 +130,20 @@ impl DataManager {
                     println!("building sstable {:?}...", path);
                     let st = time::SystemTime::now();
                     let t = seg.build_sstable(&opt, &path).unwrap();
-                    println!("build sstable {:?} cost: {}ms", path, st.elapsed().unwrap().as_millis());
+                    println!(
+                        "build sstable {:?} cost: {}ms",
+                        path,
+                        st.elapsed().unwrap().as_millis()
+                    );
                     t.map(|_| path)
                 }));
             }
 
             let table_opt = self.opt_.to_table_opt();
 
-            let readers = threads.into_iter().map(|handle| {
-                handle.join().unwrap()
-            })
+            let readers = threads
+                .into_iter()
+                .map(|handle| handle.join().unwrap())
                 .filter(|x| x.is_some())
                 .map(|x| x.unwrap())
                 .map(|path| TableReader::new(&path, table_opt.clone()).unwrap())
@@ -161,7 +172,11 @@ impl DataManager {
         self.insert_with_option(k, Some(v))
     }
 
-    fn insert_with_option(&self, k: StoreKey, v: Option<StorePayload>) -> MyResult<Option<StorePayload>> {
+    fn insert_with_option(
+        &self,
+        k: StoreKey,
+        v: Option<StorePayload>,
+    ) -> MyResult<Option<StorePayload>> {
         let encoded_v = serialize(&v)?;
         let r = self.insert_(k, Slice::from(encoded_v))?;
         Ok(r.and_then(|_| v))
@@ -188,15 +203,16 @@ impl DataManager {
     }
 
     pub fn get<K: ?Sized>(&self, k: &K) -> MyResult<Option<StorePayload>>
-        where K: Borrow<StoreKey> {
-
+    where
+        K: Borrow<StoreKey>,
+    {
         let k = k.borrow();
 
         let muttable = read_lock(&self.mut_);
         let immuttable = read_lock(&self.imm_);
 
         let mut r = muttable.get(k);
-        if r.is_none()  {
+        if r.is_none() {
             r = immuttable.get(k);
         }
 
@@ -210,7 +226,9 @@ impl DataManager {
     }
 
     pub fn remove<K>(&self, k: &K) -> MyResult<Option<StorePayload>>
-        where K: Borrow<StoreKey> {
+    where
+        K: Borrow<StoreKey>,
+    {
         let r = self.get(k.borrow())?;
         if !r.is_none() {
             self.insert_with_option(k.borrow().clone(), None)?;
@@ -273,10 +291,12 @@ impl DataManager {
         } else {
             let last_compact_key = self.last_compact_keys_.get(level);
 
-            inputs0 = readers.iter()
+            inputs0 = readers
+                .iter()
                 .filter(|reader| {
                     last_compact_key.is_none() || reader.max_key() > last_compact_key.unwrap()
-                }).collect();
+                })
+                .collect();
 
             if inputs0.is_empty() {
                 inputs0.push(&readers[0]);
@@ -285,7 +305,10 @@ impl DataManager {
 
         let (max, min) = inputs0.iter().fold((None, None), |a, b| {
             if let (Some(max), Some(min)) = a {
-                (Some(::std::cmp::max(max, b.max_key())), Some(::std::cmp::min(min, b.min_key())))
+                (
+                    Some(::std::cmp::max(max, b.max_key())),
+                    Some(::std::cmp::min(min, b.min_key())),
+                )
             } else {
                 (Some(b.max_key()), Some(b.min_key()))
             }
@@ -374,8 +397,14 @@ impl DataManager {
         Ok(())
     }
 
-    fn get_other_readers<'a>(&'a self, min_key: &Vec<u8>, max_key: &Vec<u8>, readers: &'a Vec<TableReader>) -> Vec<&'a TableReader> {
-        readers.iter()
+    fn get_other_readers<'a>(
+        &'a self,
+        min_key: &Vec<u8>,
+        max_key: &Vec<u8>,
+        readers: &'a Vec<TableReader>,
+    ) -> Vec<&'a TableReader> {
+        readers
+            .iter()
             .take_while(|x| x.min_key() <= max_key)
             .filter(|x| x.max_key() >= min_key)
             .collect()
@@ -408,7 +437,8 @@ mod test {
     }
 
     fn get_data() -> HashMap<StoreKey, StorePayload> {
-        (b'a'..=b'f').into_iter()
+        (b'a'..=b'f')
+            .into_iter()
             .map(|x| (make_key(vec![x]), make_payload(vec![x; 20])))
             .collect::<HashMap<_, _>>()
     }
@@ -524,10 +554,16 @@ mod test {
         // compaction
         let st = time::SystemTime::now();
         dm.minor_compaction()?;
-        println!("minor compaction cost: {}ms", st.elapsed().unwrap().as_millis());
+        println!(
+            "minor compaction cost: {}ms",
+            st.elapsed().unwrap().as_millis()
+        );
         let st = time::SystemTime::now();
         dm.major_compaction()?;
-        println!("major compaction cost: {}ms", st.elapsed().unwrap().as_millis());
+        println!(
+            "major compaction cost: {}ms",
+            st.elapsed().unwrap().as_millis()
+        );
         println!("info: {}", dm.info());
 
         // can get data now!

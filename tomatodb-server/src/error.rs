@@ -30,9 +30,7 @@ impl Status {
         } else {
             format!("{:?}: {}", code, msg)
         };
-        Status {
-            code, msg
-        }
+        Status { code, msg }
     }
 }
 
@@ -85,7 +83,9 @@ impl From<SnapError> for Status {
 pub type MyResult<T> = ::std::result::Result<T, Status>;
 
 macro_rules! err {
-    ($code:expr, $msg:expr) => {Err($crate::error::Status::new($code, $msg))};
+    ($code:expr, $msg:expr) => {
+        Err($crate::error::Status::new($code, $msg))
+    };
 }
 
 pub fn err<T>(code: StatusCode, msg: &str) -> MyResult<T> {

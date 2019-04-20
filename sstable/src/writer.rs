@@ -6,7 +6,11 @@ use integer_encoding::FixedInt;
 
 use crate::error::MyResult;
 
-pub fn write_usize<T: Seek + Write>(w: &mut T, offset: usize, content: usize) -> MyResult<(usize, usize)> {
+pub fn write_usize<T: Seek + Write>(
+    w: &mut T,
+    offset: usize,
+    content: usize,
+) -> MyResult<(usize, usize)> {
     w.seek(SeekFrom::Start(offset as u64))?;
     let mut buf = [0; 8];
     content.encode_fixed(&mut buf);
@@ -14,7 +18,11 @@ pub fn write_usize<T: Seek + Write>(w: &mut T, offset: usize, content: usize) ->
     Ok((buf.len(), offset + buf.len()))
 }
 
-pub fn write_bytes<T: Write + Seek>(w: &mut T, offset: usize, content: &[u8]) -> MyResult<(usize, usize)> {
+pub fn write_bytes<T: Write + Seek>(
+    w: &mut T,
+    offset: usize,
+    content: &[u8],
+) -> MyResult<(usize, usize)> {
     w.seek(SeekFrom::Start(offset as u64))?;
     w.write(content)?;
     Ok((content.len(), offset + content.len()))

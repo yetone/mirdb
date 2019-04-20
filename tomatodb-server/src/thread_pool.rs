@@ -1,6 +1,6 @@
-use std::thread;
-use std::sync::{mpsc, Arc, Mutex};
 use std::ops::Drop;
+use std::sync::{mpsc, Arc, Mutex};
+use std::thread;
 
 struct Worker {
     id: usize,
@@ -31,18 +31,16 @@ pub type Job = Box<dyn FnBox + Send + 'static>;
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Self {
-        let thread = thread::spawn(move || {
-            loop {
-                let msg = receiver.lock().unwrap().recv().unwrap();
-                match msg {
-                    Message::NewJob(job) => {
-                        println!("Worker {} got a job; executing.", id);
-                        job.call_box();
-                    }
-                    Message::Terminate => {
-                        println!("Worker {} was told to terminate.", id);
-                        break;
-                    }
+        let thread = thread::spawn(move || loop {
+            let msg = receiver.lock().unwrap().recv().unwrap();
+            match msg {
+                Message::NewJob(job) => {
+                    println!("Worker {} got a job; executing.", id);
+                    job.call_box();
+                }
+                Message::Terminate => {
+                    println!("Worker {} was told to terminate.", id);
+                    break;
                 }
             }
         });
@@ -61,13 +59,13 @@ impl ThreadPool {
         for i in 0..size {
             workers.push(Worker::new(i, receiver.clone()));
         }
-        ThreadPool {
-            workers,
-            sender
-        }
+        ThreadPool { workers, sender }
     }
 
-    pub fn execute<F>(&self, job: F) where F: FnBox + Send + 'static {
+    pub fn execute<F>(&self, job: F)
+    where
+        F: FnBox + Send + 'static,
+    {
         self.sender.send(Message::NewJob(box job)).unwrap();
     }
 }

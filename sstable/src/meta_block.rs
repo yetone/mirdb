@@ -3,15 +3,15 @@ use std::io::SeekFrom;
 use std::io::Write;
 
 use bincode::{deserialize, serialize};
+use cuckoofilter::ExportedCuckooFilter;
 use serde::{Deserialize, Serialize};
 use snap::Decoder;
 use snap::Encoder;
-use cuckoofilter::ExportedCuckooFilter;
 
 use crate::block_handle::BlockHandle;
-use crate::MyResult;
 use crate::reader;
 use crate::types::RandomAccess;
+use crate::MyResult;
 
 #[derive(Serialize, Deserialize)]
 pub struct MetaBlock {
@@ -33,7 +33,10 @@ impl MetaBlock {
         Ok(deserialize(&buffer.into())?)
     }
 
-    pub fn new_from_location(r: &dyn RandomAccess, location: &BlockHandle) -> MyResult<(MetaBlock, usize)> {
+    pub fn new_from_location(
+        r: &dyn RandomAccess,
+        location: &BlockHandle,
+    ) -> MyResult<(MetaBlock, usize)> {
         let (data, offset) = reader::read_bytes(r, location)?;
         let data = Decoder::new().decompress_vec(&data)?;
         let size = data.len();

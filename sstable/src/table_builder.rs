@@ -103,7 +103,7 @@ impl TableBuilder {
         let mut meta_block = MetaBlock::new(
             self.max_key.expect("max key"),
             self.min_key.expect("min key"),
-                ExportedCuckooFilter::from(&self.filter),
+            ExportedCuckooFilter::from(&self.filter),
         );
         let meta_bh = meta_block.flush(&mut self.file, self.offset)?;
         self.offset = meta_bh.offset + meta_bh.size;

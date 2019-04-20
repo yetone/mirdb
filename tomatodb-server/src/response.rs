@@ -14,7 +14,12 @@ pub struct GetRespItem {
 
 impl GetRespItem {
     pub fn new(key: Slice, data: Slice, flags: u32, bytes: usize) -> Self {
-        GetRespItem { key, data, flags, bytes }
+        GetRespItem {
+            key,
+            data,
+            flags,
+            bytes,
+        }
     }
 }
 
@@ -82,11 +87,16 @@ impl Response {
                 writer.write(b"NOT_FOUND\r\n")?;
             }
             Response::Gets(v) | Response::Get(v) => {
-                for GetRespItem{ key, data, flags, bytes } in v {
-                    writer.write(format!(
-                        "VALUE {} {} {}\r\n",
-                        to_str(key), flags, bytes
-                    ).as_bytes())?;
+                for GetRespItem {
+                    key,
+                    data,
+                    flags,
+                    bytes,
+                } in v
+                {
+                    writer.write(
+                        format!("VALUE {} {} {}\r\n", to_str(key), flags, bytes).as_bytes(),
+                    )?;
                     writer.write(&data[..])?;
                     writer.write(b"\r\n")?;
                 }

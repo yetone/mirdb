@@ -3,8 +3,8 @@
 extern crate test;
 
 use skip_list::SkipList;
-use test::Bencher;
 use test::black_box;
+use test::Bencher;
 
 #[bench]
 fn insert(b: &mut Bencher) {

@@ -95,32 +95,48 @@ mod tests {
 
     #[test]
     fn test_find_shortest_sep() {
-        assert_eq!(find_shortest_sep("abcd".as_bytes(), "abcf".as_bytes()),
-                   "abce".as_bytes());
-        assert_eq!(find_shortest_sep("abc".as_bytes(), "acd".as_bytes()),
-                   "abc\0".as_bytes());
-        assert_eq!(find_shortest_sep("abcdefghi".as_bytes(), "abcffghi".as_bytes()),
-                   "abce".as_bytes());
-        assert_eq!(find_shortest_sep("a".as_bytes(), "a".as_bytes()),
-                   "a".as_bytes());
-        assert_eq!(find_shortest_sep("a".as_bytes(), "b".as_bytes()),
-                   "a\0".as_bytes());
-        assert_eq!(find_shortest_sep("abc".as_bytes(), "zzz".as_bytes()),
-                   "b".as_bytes());
-        assert_eq!(find_shortest_sep("yyy".as_bytes(), "z".as_bytes()),
-                   "yyy\0".as_bytes());
-        assert_eq!(find_shortest_sep("".as_bytes(), "".as_bytes()),
-                   "".as_bytes());
+        assert_eq!(
+            find_shortest_sep("abcd".as_bytes(), "abcf".as_bytes()),
+            "abce".as_bytes()
+        );
+        assert_eq!(
+            find_shortest_sep("abc".as_bytes(), "acd".as_bytes()),
+            "abc\0".as_bytes()
+        );
+        assert_eq!(
+            find_shortest_sep("abcdefghi".as_bytes(), "abcffghi".as_bytes()),
+            "abce".as_bytes()
+        );
+        assert_eq!(
+            find_shortest_sep("a".as_bytes(), "a".as_bytes()),
+            "a".as_bytes()
+        );
+        assert_eq!(
+            find_shortest_sep("a".as_bytes(), "b".as_bytes()),
+            "a\0".as_bytes()
+        );
+        assert_eq!(
+            find_shortest_sep("abc".as_bytes(), "zzz".as_bytes()),
+            "b".as_bytes()
+        );
+        assert_eq!(
+            find_shortest_sep("yyy".as_bytes(), "z".as_bytes()),
+            "yyy\0".as_bytes()
+        );
+        assert_eq!(
+            find_shortest_sep("".as_bytes(), "".as_bytes()),
+            "".as_bytes()
+        );
     }
 
     #[test]
     fn test_find_short_succ() {
-        assert_eq!(find_short_succ("abcd".as_bytes()),
-                   "b".as_bytes());
-        assert_eq!(find_short_succ("zzzz".as_bytes()),
-                   "{".as_bytes());
+        assert_eq!(find_short_succ("abcd".as_bytes()), "b".as_bytes());
+        assert_eq!(find_short_succ("zzzz".as_bytes()), "{".as_bytes());
         assert_eq!(find_short_succ(&[]), &[0xff]);
-        assert_eq!(find_short_succ(&[0xff, 0xff, 0xff]),
-                   &[0xff, 0xff, 0xff, 0xff]);
+        assert_eq!(
+            find_short_succ(&[0xff, 0xff, 0xff]),
+            &[0xff, 0xff, 0xff, 0xff]
+        );
     }
 }

@@ -2,13 +2,13 @@ use std::io;
 
 use bytes::buf::IntoBuf;
 use bytes::BytesMut;
-use tokio_io::{AsyncRead, AsyncWrite};
 #[allow(deprecated)]
 use tokio_io::codec::{Decoder, Encoder, Framed};
+use tokio_io::{AsyncRead, AsyncWrite};
 use tokio_proto::pipeline::ServerProto;
 
-use crate::error::{Status, StatusCode};
 use crate::error::MyResult;
+use crate::error::{Status, StatusCode};
 use crate::parser::parse;
 use crate::parser_util::macros::IRResult;
 use crate::request::Request;
@@ -25,7 +25,7 @@ impl Encoder for ServerCodec {
         let mut writer = BufferWriter::new(dst);
         match item.write(&mut writer) {
             Ok(_) => Ok(()),
-            Err(e) => Err(e.into())
+            Err(e) => Err(e.into()),
         }
     }
 }
@@ -37,15 +37,9 @@ impl Decoder for ServerCodec {
     fn decode(&mut self, src: &mut BytesMut) -> io::Result<Option<Request>> {
         let src_len = src.len();
         let (result, src_used) = match { parse(src) } {
-            IRResult::Ok((remaining, req)) => {
-                (Ok(Some(req)), src_len - remaining.len())
-            },
-            IRResult::Err(_err) => {
-                (Ok(Some(Request::Error)), src_len)
-            },
-            IRResult::Incomplete(_) => {
-                (Ok(None), 0)
-            }
+            IRResult::Ok((remaining, req)) => (Ok(Some(req)), src_len - remaining.len()),
+            IRResult::Err(_err) => (Ok(Some(Request::Error)), src_len),
+            IRResult::Incomplete(_) => (Ok(None), 0),
         };
         src.split_to(src_used);
         match result {

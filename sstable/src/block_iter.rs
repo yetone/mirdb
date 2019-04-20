@@ -20,7 +20,7 @@ impl BlockIterState {
             current_offset: 0,
             val_offset: 0,
             restarts_offset,
-            current_restart_idx: 0
+            current_restart_idx: 0,
         }
     }
 
@@ -38,7 +38,6 @@ pub struct BlockIter<'a> {
 }
 
 impl<'a> BlockIter<'a> {
-
     pub fn new(block: &'a [u8], restarts_offset: usize) -> Self {
         let state = BlockIterState::new(restarts_offset);
 
@@ -46,10 +45,7 @@ impl<'a> BlockIter<'a> {
     }
 
     pub fn new_with_state(block: &'a [u8], state: BlockIterState) -> Self {
-        Self {
-            block,
-            state,
-        }
+        Self { block, state }
     }
 
     pub fn restart_count(&self) -> usize {
@@ -85,7 +81,8 @@ impl<'a> BlockIter<'a> {
         let (shared, shared_len) = usize::decode_var(&self.block[self.state.next_offset..]);
         i += shared_len;
 
-        let (non_shared, non_shared_len) = usize::decode_var(&self.block[self.state.next_offset + i..]);
+        let (non_shared, non_shared_len) =
+            usize::decode_var(&self.block[self.state.next_offset + i..]);
         i += non_shared_len;
 
         let (val_size, val_size_len) = usize::decode_var(&self.block[self.state.next_offset + i..]);
@@ -99,7 +96,9 @@ impl<'a> BlockIter<'a> {
 
     fn assemble_key(&mut self, offset: usize, shared: usize, non_shared: usize) {
         self.state.key.truncate(shared);
-        self.state.key.extend_from_slice(&self.block[offset..offset + non_shared]);
+        self.state
+            .key
+            .extend_from_slice(&self.block[offset..offset + non_shared]);
     }
 
     pub fn key(&self) -> &[u8] {
@@ -109,7 +108,9 @@ impl<'a> BlockIter<'a> {
 
 impl<'a> SsIterator for BlockIter<'a> {
     fn valid(&self) -> bool {
-        !self.state.key.is_empty() && self.state.val_offset > 0 && self.state.val_offset <= self.state.restarts_offset
+        !self.state.key.is_empty()
+            && self.state.val_offset > 0
+            && self.state.val_offset <= self.state.restarts_offset
     }
 
     fn advance(&mut self) -> bool {
@@ -129,10 +130,11 @@ impl<'a> SsIterator for BlockIter<'a> {
         let restart_count = self.restart_count();
 
         while self.state.current_restart_idx + 1 < restart_count
-            && self.get_restart_point_offset(self.state.current_restart_idx + 1) < self.state.current_offset
-            {
-                self.state.current_restart_idx += 1;
-            }
+            && self.get_restart_point_offset(self.state.current_restart_idx + 1)
+                < self.state.current_offset
+        {
+            self.state.current_restart_idx += 1;
+        }
 
         true
     }
@@ -187,7 +189,11 @@ impl<'a> SsIterator for BlockIter<'a> {
 
         let mut left = 0;
         let restart_count = self.restart_count();
-        let mut right = if restart_count > 0 {restart_count - 1} else {0};
+        let mut right = if restart_count > 0 {
+            restart_count - 1
+        } else {
+            0
+        };
 
         while left < right {
             let m = (left + right + 1) / 2;
@@ -239,9 +245,9 @@ mod test {
 
     use crate::block::Block;
     use crate::block_builder::BlockBuilder;
+    use crate::types::SsIterator;
     use crate::MyResult;
     use crate::Options;
-    use crate::types::SsIterator;
 
     fn get_simple_data() -> Vec<(&'static [u8], &'static [u8])> {
         vec![

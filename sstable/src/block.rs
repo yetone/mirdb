@@ -9,12 +9,12 @@ use crate::block_handle::BlockHandle;
 use crate::block_iter::BlockIter;
 use crate::error::MyResult;
 use crate::error::StatusCode;
-use crate::options::CompressType;
 use crate::options::int_to_compress_type;
+use crate::options::CompressType;
 use crate::options::Options;
 use crate::reader;
-use crate::util::unmask_crc;
 use crate::types::RandomAccess;
+use crate::util::unmask_crc;
 
 #[derive(Clone)]
 pub struct Block {
@@ -34,13 +34,21 @@ impl Block {
         }
     }
 
-    pub fn new_from_location(r: &dyn RandomAccess, location: &BlockHandle, opt: Options) -> MyResult<(Block, usize)> {
+    pub fn new_from_location(
+        r: &dyn RandomAccess,
+        location: &BlockHandle,
+        opt: Options,
+    ) -> MyResult<(Block, usize)> {
         let (data, offset) = reader::read_bytes(r, location)?;
         let cksum_buf = &data[data.len() - BLOCK_CKSUM_LEN..];
-        if !Block::verify_block(&data[..data.len() - BLOCK_CKSUM_LEN], unmask_crc(u32::decode_fixed(&cksum_buf))) {
+        if !Block::verify_block(
+            &data[..data.len() - BLOCK_CKSUM_LEN],
+            unmask_crc(u32::decode_fixed(&cksum_buf)),
+        ) {
             return err!(StatusCode::ChecksumError, "checksum error");
         }
-        let ctype_buf = &data[data.len() - BLOCK_CTYPE_LEN - BLOCK_CKSUM_LEN..data.len() - BLOCK_CKSUM_LEN];
+        let ctype_buf =
+            &data[data.len() - BLOCK_CTYPE_LEN - BLOCK_CKSUM_LEN..data.len() - BLOCK_CKSUM_LEN];
         let buf = &data[..data.len() - BLOCK_CKSUM_LEN - BLOCK_CTYPE_LEN];
         if let Some(ctype) = int_to_compress_type(ctype_buf[0] as u32) {
             match ctype {

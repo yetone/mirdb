@@ -3,9 +3,9 @@ use std::cmp::min;
 use std::collections::linked_list::Iter as LinkedListIter;
 use std::collections::LinkedList;
 use std::fmt::Debug;
+use std::fs::remove_file;
 use std::fs::File;
 use std::fs::OpenOptions;
-use std::fs::remove_file;
 use std::io::Cursor;
 use std::io::Read;
 use std::io::Seek;
@@ -46,11 +46,7 @@ fn copy_memory(src: &[u8], dst: &mut [u8]) {
     assert!(dst.len() >= len_src);
 
     unsafe {
-        ptr::copy_nonoverlapping(
-            src.as_ptr(),
-            dst.as_mut_ptr(),
-            len_src
-        );
+        ptr::copy_nonoverlapping(src.as_ptr(), dst.as_mut_ptr(), len_src);
     }
 }
 
@@ -111,7 +107,10 @@ impl WALSeg {
         // padding
         if padding > 0 {
             let zeros: [u8; 8] = [0; 8];
-            copy_memory(&zeros[..padding], &mut buf[size_space * 2 + key_size + value_size..]);
+            copy_memory(
+                &zeros[..padding],
+                &mut buf[size_space * 2 + key_size + value_size..],
+            );
         }
 
         self.file.write(&buf)?;
@@ -140,7 +139,11 @@ impl WALSeg {
         Ok(map)
     }
 
-    pub fn build_sstable(&self, opt: &Options, path: &Path) -> MyResult<Option<(String, TableReader)>> {
+    pub fn build_sstable(
+        &self,
+        opt: &Options,
+        path: &Path,
+    ) -> MyResult<Option<(String, TableReader)>> {
         let map = self.to_skiplist(opt)?;
         skiplist_to_sstable(&map, opt, path)
     }
@@ -154,9 +157,7 @@ pub struct WALSegIter {
 
 impl WALSegIter {
     pub fn new<T: AsRef<Path>>(path: T) -> MyResult<Self> {
-        let file = OpenOptions::new()
-            .read(true)
-            .open(&path)?;
+        let file = OpenOptions::new().read(true).open(&path)?;
 
         let file_size = file.metadata()?.len() as usize;
 
@@ -171,7 +172,6 @@ impl WALSegIter {
 }
 
 impl Iterator for WALSegIter {
-
     type Item = (Slice, Slice);
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -179,7 +179,8 @@ impl Iterator for WALSegIter {
             return None;
         }
 
-        let size = u32::decode_fixed(&self.mmap[self.offset..self.offset + u32::required_space()]) as usize;
+        let size = u32::decode_fixed(&self.mmap[self.offset..self.offset + u32::required_space()])
+            as usize;
 
         if size == 0 {
             return None;
@@ -187,15 +188,20 @@ impl Iterator for WALSegIter {
 
         let offset = self.offset + u32::required_space();
 
-        let key_size = u32::decode_fixed(&self.mmap[offset..offset + u32::required_space()]) as usize;
+        let key_size =
+            u32::decode_fixed(&self.mmap[offset..offset + u32::required_space()]) as usize;
 
         let offset = offset + u32::required_space();
 
         let data = &self.mmap[offset..offset + size];
         let key_data = &data[..key_size];
         let value_data = &data[key_size..];
-        let key = Decoder::new().decompress_vec(&key_data).expect("snap decompress key in wal file error");
-        let value = Decoder::new().decompress_vec(&value_data).expect("snap decompress value in wal file error");
+        let key = Decoder::new()
+            .decompress_vec(&key_data)
+            .expect("snap decompress key in wal file error");
+        let value = Decoder::new()
+            .decompress_vec(&value_data)
+            .expect("snap decompress value in wal file error");
 
         self.offset = offset + size + padding(size);
 
@@ -220,15 +226,18 @@ impl WAL {
             }
         }
         paths.sort();
-        let segs = paths.iter().map(|p| {
-            let seg = WALSeg::new(&p.as_path(), opt.mem_table_max_size).expect("new wal seg");
-            if seg.file.metadata().unwrap().len() == 0 {
-                remove_file(&seg.path).unwrap();
-                None
-            } else {
-                Some(seg)
-            }
-        }).filter(|x| x.is_some())
+        let segs = paths
+            .iter()
+            .map(|p| {
+                let seg = WALSeg::new(&p.as_path(), opt.mem_table_max_size).expect("new wal seg");
+                if seg.file.metadata().unwrap().len() == 0 {
+                    remove_file(&seg.path).unwrap();
+                    None
+                } else {
+                    Some(seg)
+                }
+            })
+            .filter(|x| x.is_some())
             .map(|x| x.unwrap())
             .collect();
         Ok(WAL {
@@ -309,7 +318,6 @@ impl<'a> WALIter<'a> {
 }
 
 impl<'a> Iterator for WALIter<'a> {
-
     type Item = (Slice, Slice);
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -342,7 +350,10 @@ mod test {
         }
         let mut seg = WALSeg::new(&p, 1024)?;
         let mut kvs = Vec::with_capacity(3);
-        kvs.push((b"a".to_vec(), b"abcasldkfjaoiwejfawoejfoaisjdflaskdjfoias".to_vec()));
+        kvs.push((
+            b"a".to_vec(),
+            b"abcasldkfjaoiwejfawoejfoaisjdflaskdjfoias".to_vec(),
+        ));
         kvs.push((b"b".to_vec(), b"bbcasdlfjasldfj".to_vec()));
         kvs.push((b"c".to_vec(), b"cbcasldfjowiejfoaisdjfalskdfj".to_vec()));
         let st = time::SystemTime::now();
@@ -353,7 +364,10 @@ mod test {
         let mut iter = seg.iter()?;
         let st = time::SystemTime::now();
         for (k, v) in &kvs {
-            assert_eq!(Some((Slice::from(k.clone()), Slice::from(v.clone()))), iter.next());
+            assert_eq!(
+                Some((Slice::from(k.clone()), Slice::from(v.clone()))),
+                iter.next()
+            );
         }
         println!("iter cost: {}us", st.elapsed().unwrap().as_micros());
         assert_eq!(None, iter.next());
@@ -365,7 +379,10 @@ mod test {
         let opt = get_test_opt();
         let mut wal = WAL::new(opt.clone())?;
         let mut kvs = Vec::with_capacity(3);
-        kvs.push((b"a".to_vec(), b"abcasldkfjaoiwejfawoejfoaisjdflaskdjfoias".to_vec()));
+        kvs.push((
+            b"a".to_vec(),
+            b"abcasldkfjaoiwejfawoejfoaisjdflaskdjfoias".to_vec(),
+        ));
         kvs.push((b"b".to_vec(), b"bbcasdlfjasldfj".to_vec()));
         kvs.push((b"c".to_vec(), b"cbcasldfjowiejfoaisdjfalskdfj".to_vec()));
         for (k, v) in &kvs {
@@ -375,7 +392,10 @@ mod test {
         let mut wal = WAL::new(opt.clone())?;
         let mut iter = wal.iter()?;
         for (k, v) in &kvs {
-            assert_eq!(Some((Slice::from(k.clone()), Slice::from(v.clone()))), iter.next());
+            assert_eq!(
+                Some((Slice::from(k.clone()), Slice::from(v.clone()))),
+                iter.next()
+            );
         }
         assert_eq!(None, iter.next());
         wal.truncate(1)?;
@@ -384,7 +404,10 @@ mod test {
             if i == 0 {
                 continue;
             }
-            assert_eq!(Some((Slice::from(k.clone()), Slice::from(v.clone()))), iter.next());
+            assert_eq!(
+                Some((Slice::from(k.clone()), Slice::from(v.clone()))),
+                iter.next()
+            );
         }
         assert_eq!(None, iter.next());
         wal.truncate(1)?;
@@ -394,7 +417,10 @@ mod test {
             if i <= 1 {
                 continue;
             }
-            assert_eq!(Some((Slice::from(k.clone()), Slice::from(v.clone()))), iter.next());
+            assert_eq!(
+                Some((Slice::from(k.clone()), Slice::from(v.clone()))),
+                iter.next()
+            );
         }
         assert_eq!(None, iter.next());
         Ok(())

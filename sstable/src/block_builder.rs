@@ -8,9 +8,9 @@ use integer_encoding::{FixedIntWriter, VarIntWriter};
 use snap::Encoder;
 
 use crate::block_handle::BlockHandle;
+use crate::error::MyResult;
 use crate::options::CompressType;
 use crate::options::Options;
-use crate::error::MyResult;
 use crate::util::mask_crc;
 use crate::util::to_str;
 
@@ -64,10 +64,12 @@ impl BlockBuilder {
     pub fn add(&mut self, k: &[u8], v: &[u8]) {
         assert!(self.restart_count <= self.opt.block_restart_interval);
         if !self.buffer.is_empty() && self.last_key.as_slice() > k {
-            println!("last: {}, key: {}", to_str(self.last_key.as_slice()), to_str(k));
-            assert!(
-                self.buffer.is_empty() || self.last_key.as_slice() <= k
+            println!(
+                "last: {}, key: {}",
+                to_str(self.last_key.as_slice()),
+                to_str(k)
             );
+            assert!(self.buffer.is_empty() || self.last_key.as_slice() <= k);
         }
 
         let mut shared = 0;
@@ -86,9 +88,15 @@ impl BlockBuilder {
 
         let non_shared = k.len() - shared;
 
-        self.buffer.write_varint(shared).expect("write key shared size error");
-        self.buffer.write_varint(non_shared).expect("write key non-shared size error");
-        self.buffer.write_varint(v.len()).expect("write value size error");
+        self.buffer
+            .write_varint(shared)
+            .expect("write key shared size error");
+        self.buffer
+            .write_varint(non_shared)
+            .expect("write key non-shared size error");
+        self.buffer
+            .write_varint(v.len())
+            .expect("write value size error");
         self.buffer.extend_from_slice(&k[shared..]);
         self.buffer.extend_from_slice(v);
 
@@ -104,10 +112,14 @@ impl BlockBuilder {
 
         // write restart points
         for i in &self.restarts {
-            self.buffer.write_fixedint(*i as u32).expect("write restart point error");
+            self.buffer
+                .write_fixedint(*i as u32)
+                .expect("write restart point error");
         }
         // write restarts count
-        self.buffer.write_fixedint(self.restarts.len() as u32).expect("write restarts count error");
+        self.buffer
+            .write_fixedint(self.restarts.len() as u32)
+            .expect("write restarts count error");
 
         // compress buffer
         if self.opt.compress_type == CompressType::Snappy {

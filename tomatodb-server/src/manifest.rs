@@ -26,9 +26,7 @@ pub struct LevelMeta {
 
 impl LevelMeta {
     pub fn new() -> Self {
-        LevelMeta {
-            file_metas: vec![],
-        }
+        LevelMeta { file_metas: vec![] }
     }
 
     pub fn push_file_meta(&mut self, file_meta: FileMeta) {
@@ -40,7 +38,7 @@ impl LevelMeta {
         while i < self.file_metas.len() {
             let file_meta = &self.file_metas[i];
             if &file_meta.file_name == file_name {
-                break
+                break;
             }
             i += 1;
         }
@@ -117,7 +115,6 @@ impl Manifest {
     pub fn remove_file_meta_by_file_name(&mut self, level: usize, file_name: &String) {
         self.ensure_level(level);
         self.level_metas[level].remove_file_meta_by_file_name(file_name)
-
     }
 
     pub fn file_metas(&self, level: usize) -> Option<&Vec<FileMeta>> {
@@ -153,7 +150,8 @@ impl ManifestBuilder {
 
     pub fn remove_file_meta_by_file_name(&mut self, level: usize, file_name: &String) {
         assert!(level < self.opt.max_level);
-        self.manifest_.remove_file_meta_by_file_name(level, file_name)
+        self.manifest_
+            .remove_file_meta_by_file_name(level, file_name)
     }
 
     pub fn manifest(&self) -> &Manifest {
@@ -172,7 +170,11 @@ impl ManifestBuilder {
 
 impl fmt::Display for ManifestBuilder {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Next file number: {}\n\n", self.manifest_.next_file_number())?;
+        write!(
+            f,
+            "Next file number: {}\n\n",
+            self.manifest_.next_file_number()
+        )?;
         for (i, lm) in self.manifest_.level_metas.iter().enumerate() {
             write!(f, "Level{} ({}):\n", i, lm.file_metas.len())?;
             for (i, fm) in lm.file_metas.iter().enumerate() {

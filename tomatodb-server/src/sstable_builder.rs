@@ -17,8 +17,11 @@ use crate::slice::Slice;
 use crate::store::StoreKey;
 use crate::store::StorePayload;
 
-pub fn skiplist_to_sstable(map: &SkipList<Slice, Slice>, opt: &Options, path: &Path) -> MyResult<Option<(String, TableReader)>> {
-
+pub fn skiplist_to_sstable(
+    map: &SkipList<Slice, Slice>,
+    opt: &Options,
+    path: &Path,
+) -> MyResult<Option<(String, TableReader)>> {
     if map.length() == 0 {
         return Ok(None);
     }
@@ -32,6 +35,8 @@ pub fn skiplist_to_sstable(map: &SkipList<Slice, Slice>, opt: &Options, path: &P
 
     tb.flush()?;
 
-    Ok(Some((path.to_str().unwrap().to_owned(), TableReader::new(path, table_opt.clone())?)))
+    Ok(Some((
+        path.to_str().unwrap().to_owned(),
+        TableReader::new(path, table_opt.clone())?,
+    )))
 }
-

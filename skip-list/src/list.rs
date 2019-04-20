@@ -1,13 +1,13 @@
+use std::borrow::Borrow;
 use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::mem;
 use std::ops::Drop;
-use std::borrow::Borrow;
 
-use crate::node::SkipListNode;
-use crate::height_generator::HeightGenerator;
 use crate::height_generator::GenHeight;
+use crate::height_generator::HeightGenerator;
 use crate::iter::SkipListIter;
 use crate::iter::SkipListIterMut;
+use crate::node::SkipListNode;
 use std::fmt::Debug;
 
 pub struct SkipList<K, V> {
@@ -15,7 +15,7 @@ pub struct SkipList<K, V> {
     length_: usize,
     height_: usize,
     max_height_: usize,
-    height_generator: Box<dyn HeightGenerator + Send>
+    height_generator: Box<dyn HeightGenerator + Send>,
 }
 
 impl<K, V> SkipList<K, V> {
@@ -43,13 +43,16 @@ impl<K, V> SkipList<K, V> {
         Self::new_with_height_generator(max_height, box GenHeight::new())
     }
 
-    pub fn new_with_height_generator(max_height: usize, height_generator: Box<dyn HeightGenerator + Send>) -> Self {
-        SkipList{
+    pub fn new_with_height_generator(
+        max_height: usize,
+        height_generator: Box<dyn HeightGenerator + Send>,
+    ) -> Self {
+        SkipList {
             head_: SkipListNode::allocate_dummy(max_height),
             length_: 0,
             height_: 0,
             max_height_: max_height,
-            height_generator
+            height_generator,
         }
     }
 
@@ -86,9 +89,10 @@ impl<K, V> SkipList<K, V> {
 
 impl<K: Ord, V> SkipList<K, V> {
     pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
-        where K: Borrow<Q>,
-              Q: Ord {
-
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         let lower_bound = self.get_lower_bound(key);
 
         if let Some(next) = lower_bound.next(0) {
@@ -101,9 +105,10 @@ impl<K: Ord, V> SkipList<K, V> {
     }
 
     pub fn get_mut<Q: ?Sized>(&self, key: &Q) -> Option<&mut V>
-        where K: Borrow<Q>,
-              Q: Ord {
-
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         let lower_bound = self.get_lower_bound(key);
 
         if let Some(next) = lower_bound.next_mut(0) {
@@ -116,7 +121,6 @@ impl<K: Ord, V> SkipList<K, V> {
     }
 
     pub fn insert(&mut self, key: K, value: V) -> Option<V> {
-
         let height = self.height_generator.gen_height(self.max_height_);
 
         let (lower_bound, mut updates) = self.get_lower_bound_and_updates(&key);
@@ -142,23 +146,36 @@ impl<K: Ord, V> SkipList<K, V> {
         None
     }
 
-    pub fn get_updates_for_bench<Q: ?Sized>(&self, key: &Q) -> (&mut SkipListNode<K, V>, Vec<&mut SkipListNode<K, V>>)
-        where K: Borrow<Q>,
-              Q: Ord {
+    pub fn get_updates_for_bench<Q: ?Sized>(
+        &self,
+        key: &Q,
+    ) -> (&mut SkipListNode<K, V>, Vec<&mut SkipListNode<K, V>>)
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         self.get_lower_bound_and_updates(key)
     }
 
-    fn get_lower_bound_and_updates<Q: ?Sized>(&self, key: &Q) -> (&mut SkipListNode<K, V>, Vec<&mut SkipListNode<K, V>>)
-        where K: Borrow<Q>,
-              Q: Ord {
-
+    fn get_lower_bound_and_updates<Q: ?Sized>(
+        &self,
+        key: &Q,
+    ) -> (&mut SkipListNode<K, V>, Vec<&mut SkipListNode<K, V>>)
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         let max_height = self.max_height_;
-        let mut updates= Vec::with_capacity(max_height + 1);
+        let mut updates = Vec::with_capacity(max_height + 1);
 
         unsafe {
             updates.set_len(max_height + 1);
 
-            for update in updates.iter_mut().take(max_height + 1).skip(self.height_ + 1) {
+            for update in updates
+                .iter_mut()
+                .take(max_height + 1)
+                .skip(self.height_ + 1)
+            {
                 *update = &mut (*self.head_);
             }
 
@@ -180,9 +197,10 @@ impl<K: Ord, V> SkipList<K, V> {
     }
 
     fn get_lower_bound<Q: ?Sized>(&self, key: &Q) -> &mut SkipListNode<K, V>
-        where K: Borrow<Q>,
-              Q: Ord {
-
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         unsafe {
             let mut current_ptr = self.head_;
 
@@ -201,9 +219,10 @@ impl<K: Ord, V> SkipList<K, V> {
     }
 
     pub fn remove<Q: ?Sized>(&mut self, key: &Q) -> Option<V>
-        where K: Borrow<Q>,
-              Q: Ord {
-
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         let (lower_bound, mut updates) = self.get_lower_bound_and_updates(key);
 
         if let Some(next) = lower_bound.next_mut(0) {
@@ -244,7 +263,12 @@ impl<K: Display, V: Display> Display for SkipList<K, V> {
 
 impl<K, V> Debug for SkipList<K, V> {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        write!(f, "SkipList {{ len = {}, height = {} }}", self.length(), self.height())
+        write!(
+            f,
+            "SkipList {{ len = {}, height = {} }}",
+            self.length(),
+            self.height()
+        )
     }
 }
 
@@ -276,10 +300,10 @@ impl<K, V> SkipList<K, V> {
 
 #[cfg(test)]
 mod test {
-    use rand::prelude::*;
-    use std::collections::HashSet;
     use super::*;
+    use rand::prelude::*;
     use std::cmp::Ordering;
+    use std::collections::HashSet;
     use std::fmt::Debug;
 
     #[test]

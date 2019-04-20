@@ -25,7 +25,7 @@ impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
         Memtable {
             max_size_: max_size,
             size_: 0,
-            map_: map
+            map_: map,
         }
     }
 
@@ -39,22 +39,29 @@ impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
 }
 
 impl Memtable<Slice, Slice> {
-    pub fn build_sstable(&self, opt: &Options, path: &Path) -> MyResult<Option<(String, TableReader)>> {
+    pub fn build_sstable(
+        &self,
+        opt: &Options,
+        path: &Path,
+    ) -> MyResult<Option<(String, TableReader)>> {
         skiplist_to_sstable(&self.map_, opt, path)
     }
 }
 
 impl<K: Ord + Clone, V: Clone> Table<K, V> for Memtable<K, V> {
-
     fn get<Q: ?Sized>(&self, k: &Q) -> Option<&V>
-        where K: Borrow<Q>,
-              Q: Ord {
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         self.map_.get(k)
     }
 
     fn get_mut<Q: ?Sized>(&self, k: &Q) -> Option<&mut V>
-        where K: Borrow<Q>,
-              Q: Ord {
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         self.map_.get_mut(k)
     }
 

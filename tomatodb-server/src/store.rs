@@ -33,7 +33,11 @@ pub struct StorePayload {
 impl StorePayload {
     pub fn new(data: Slice, flags: u32, ttl: u32, bytes: usize, created_at: u64) -> Self {
         Self {
-            data, flags, ttl, bytes, created_at
+            data,
+            flags,
+            ttl,
+            bytes,
+            created_at,
         }
     }
 
@@ -41,7 +45,11 @@ impl StorePayload {
         if self.ttl == 0 {
             return false;
         }
-        self.created_at + self.ttl as u64 <= SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
+        self.created_at + self.ttl as u64
+            <= SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_secs()
     }
 }
 
@@ -63,15 +71,12 @@ impl Store {
         {
             DataManager::background_thread(dm.clone());
         }
-        Ok(Store {
-            data: dm,
-            opt,
-        })
+        Ok(Store { data: dm, opt })
     }
 
     pub fn apply(&self, request: Request) -> MyResult<Response> {
         match request {
-            Request::Getter{ getter, keys } => {
+            Request::Getter { getter, keys } => {
                 let mut v = Vec::with_capacity(keys.len());
                 for key in keys {
                     if let Some(p) = self.data.get(&key)? {
@@ -90,15 +95,29 @@ impl Store {
                     GetterType::Gets => Response::Gets(v),
                 })
             }
-            Request::Setter{ setter, key, flags, ttl, bytes, payload, .. } => {
+            Request::Setter {
+                setter,
+                key,
+                flags,
+                ttl,
+                bytes,
+                payload,
+                ..
+            } => {
                 if payload.len() > bytes {
                     return Ok(Response::ClientError("bad data chunk".to_owned()));
                 }
                 let data = Slice::from(&payload[..bytes as usize]);
-                let created_at = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+                let created_at = SystemTime::now()
+                    .duration_since(UNIX_EPOCH)
+                    .unwrap()
+                    .as_secs();
                 let sp = StorePayload {
-                    flags, ttl, bytes,
-                    data, created_at,
+                    flags,
+                    ttl,
+                    bytes,
+                    data,
+                    created_at,
                 };
                 match setter {
                     SetterType::Set => {
@@ -134,7 +153,6 @@ impl Store {
                         } else {
                             return Ok(Response::NotStored);
                         }
-
                     }
                     SetterType::Prepend => {
                         if let Some(v) = self.data.get(&key)? {
@@ -154,18 +172,12 @@ impl Store {
                 }
                 Ok(Response::Stored)
             }
-            Request::Deleter{ key, .. } => {
-                match self.data.remove(&key)? {
-                    Some(_) => Ok(Response::Deleted),
-                    None => Ok(Response::NotFound),
-                }
-            }
-            Request::Info => {
-                Ok(Response::Info(self.data.info()))
-            }
-            Request::Error => {
-                Ok(Response::Error)
-            }
+            Request::Deleter { key, .. } => match self.data.remove(&key)? {
+                Some(_) => Ok(Response::Deleted),
+                None => Ok(Response::NotFound),
+            },
+            Request::Info => Ok(Response::Info(self.data.info())),
+            Request::Error => Ok(Response::Error),
             Request::MajorCompaction => {
                 self.data.major_compaction()?;
                 Ok(Response::Ok)
@@ -181,8 +193,8 @@ mod test {
     use std::fs::remove_dir_all;
     use std::path::Path;
 
-    use rand::{Rng, thread_rng};
     use rand::distributions::Alphanumeric;
+    use rand::{thread_rng, Rng};
 
     use crate::test_utils::get_test_opt;
     use crate::utils::to_str;
@@ -193,7 +205,10 @@ mod test {
     fn test_get_none() {
         let opt = get_test_opt();
         let store = Store::new(opt).unwrap();
-        let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![Slice::from("a")] });
+        let r = store.apply(Request::Getter {
+            getter: GetterType::Get,
+            keys: vec![Slice::from("a")],
+        });
         assert_eq!(Ok(Response::Get(vec![])), r);
     }
 
@@ -213,14 +228,20 @@ mod test {
             no_reply: false,
         });
         assert!(r.is_ok(), "stored");
-        let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![key.clone()] });
+        let r = store.apply(Request::Getter {
+            getter: GetterType::Get,
+            keys: vec![key.clone()],
+        });
         let bytes = payload.len();
-        assert_eq!(Ok(Response::Get(vec!(GetRespItem {
-            key,
-            data: payload,
-            flags: 1,
-            bytes,
-        }))), r);
+        assert_eq!(
+            Ok(Response::Get(vec!(GetRespItem {
+                key,
+                data: payload,
+                flags: 1,
+                bytes,
+            }))),
+            r
+        );
     }
 
     #[test]
@@ -248,27 +269,39 @@ mod test {
         for (key, payload) in map.iter() {
             let key = Slice::from(key.clone());
             let payload = Slice::from(payload.clone());
-            let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![key.clone()] });
+            let r = store.apply(Request::Getter {
+                getter: GetterType::Get,
+                keys: vec![key.clone()],
+            });
             let bytes = payload.len();
             println!("get key: {}", to_str(&key));
-            assert_eq!(Ok(Response::Get(vec!(GetRespItem {
-                key,
-                data: payload,
-                flags: 1,
-                bytes,
-            }))), r);
+            assert_eq!(
+                Ok(Response::Get(vec!(GetRespItem {
+                    key,
+                    data: payload,
+                    flags: 1,
+                    bytes,
+                }))),
+                r
+            );
         }
         let mut deleted = HashSet::new();
         for (key, _payload) in map.iter() {
             let key = Slice::from(key.clone());
-            let r = store.apply(Request::Deleter { key: key.clone(), no_reply: false });
+            let r = store.apply(Request::Deleter {
+                key: key.clone(),
+                no_reply: false,
+            });
             assert_eq!(Ok(Response::Deleted), r);
             println!("delete key: {}", to_str(&key));
             deleted.insert(key.clone());
             for (key, payload) in map.iter() {
                 let key = Slice::from(key.clone());
                 let payload = Slice::from(payload.clone());
-                let r = store.apply(Request::Getter { getter: GetterType::Get, keys: vec![key.clone()] });
+                let r = store.apply(Request::Getter {
+                    getter: GetterType::Get,
+                    keys: vec![key.clone()],
+                });
                 println!("get key: {}", to_str(&key));
                 if deleted.contains(&key) {
                     println!("empty");
@@ -276,12 +309,15 @@ mod test {
                 } else {
                     println!("not empty");
                     let bytes = payload.len();
-                    assert_eq!(Ok(Response::Get(vec!(GetRespItem {
-                        key,
-                        data: payload,
-                        flags: 1,
-                        bytes,
-                    }))), r);
+                    assert_eq!(
+                        Ok(Response::Get(vec!(GetRespItem {
+                            key,
+                            data: payload,
+                            flags: 1,
+                            bytes,
+                        }))),
+                        r
+                    );
                 }
             }
         }

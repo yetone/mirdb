@@ -13,8 +13,8 @@ use std::slice::SliceIndex;
 use bytes::buf;
 use bytes::Bytes;
 use bytes::BytesMut;
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::{self, Visitor};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Slice {
@@ -30,7 +30,7 @@ impl Slice {
     #[inline]
     pub fn with_capacity(cap: usize) -> Self {
         Self {
-            inner: Bytes::with_capacity(cap)
+            inner: Bytes::with_capacity(cap),
         }
     }
 
@@ -46,19 +46,19 @@ impl Slice {
 
     pub fn slice(&self, begin: usize, end: usize) -> Self {
         Self {
-            inner: self.inner.slice(begin, end)
+            inner: self.inner.slice(begin, end),
         }
     }
 
     pub fn slice_from(&self, begin: usize) -> Self {
         Self {
-            inner: self.inner.slice_from(begin)
+            inner: self.inner.slice_from(begin),
         }
     }
 
     pub fn slice_to(&self, end: usize) -> Self {
         Self {
-            inner: self.inner.slice_to(end)
+            inner: self.inner.slice_to(end),
         }
     }
 }
@@ -92,15 +92,18 @@ impl PartialOrd<Vec<u8>> for Slice {
 }
 
 impl hash::Hash for Slice {
-    fn hash<H>(&self, state: &mut H) where H: hash::Hasher {
+    fn hash<H>(&self, state: &mut H)
+    where
+        H: hash::Hasher,
+    {
         self.inner.hash(state)
     }
 }
 
 impl Serialize for Slice {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: Serializer,
+    where
+        S: Serializer,
     {
         serializer.serialize_bytes(self.inner.as_ref())
     }
@@ -117,7 +120,7 @@ impl<'de> Visitor<'de> for SliceVisitor {
 
     fn visit_bytes<E>(self, value: &[u8]) -> Result<Self::Value, E>
     where
-        E: de::Error
+        E: de::Error,
     {
         Ok(Slice::from(value))
     }
@@ -125,8 +128,9 @@ impl<'de> Visitor<'de> for SliceVisitor {
 
 impl<'de> Deserialize<'de> for Slice {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: Deserializer<'de> {
+    where
+        D: Deserializer<'de>,
+    {
         deserializer.deserialize_bytes(SliceVisitor)
     }
 }
@@ -193,13 +197,19 @@ impl<'a> IntoIterator for &'a Slice {
 }
 
 impl Extend<u8> for Slice {
-    fn extend<T>(&mut self, iter: T) where T: IntoIterator<Item = u8> {
+    fn extend<T>(&mut self, iter: T)
+    where
+        T: IntoIterator<Item = u8>,
+    {
         self.inner.extend(iter)
     }
 }
 
 impl<'a> Extend<&'a u8> for Slice {
-    fn extend<T>(&mut self, iter: T) where T: IntoIterator<Item = &'a u8> {
+    fn extend<T>(&mut self, iter: T)
+    where
+        T: IntoIterator<Item = &'a u8>,
+    {
         self.inner.extend(iter)
     }
 }
@@ -207,7 +217,7 @@ impl<'a> Extend<&'a u8> for Slice {
 impl From<BytesMut> for Slice {
     fn from(src: BytesMut) -> Self {
         Self {
-            inner: src.freeze()
+            inner: src.freeze(),
         }
     }
 }
@@ -217,7 +227,7 @@ macro_rules! impl_from {
         impl From<$type> for Slice {
             fn from(src: $type) -> Self {
                 Self {
-                    inner: From::from(src)
+                    inner: From::from(src),
                 }
             }
         }

@@ -5,12 +5,17 @@ pub type Payload = Slice;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SetterType {
-    Set, Add, Replace, Append, Prepend
+    Set,
+    Add,
+    Replace,
+    Append,
+    Prepend,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum GetterType {
-    Get, Gets
+    Get,
+    Gets,
 }
 
 #[derive(Debug, Clone, PartialEq)]

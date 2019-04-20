@@ -1,6 +1,6 @@
 use std::borrow::Borrow;
-use std::collections::LinkedList;
 use std::collections::linked_list;
+use std::collections::LinkedList;
 
 use crate::error::MyResult;
 use crate::memtable::Memtable;
@@ -17,7 +17,12 @@ pub struct MemtableList<K: Ord + Clone, V: Clone> {
 }
 
 impl<K: Ord + Clone, V: Clone> MemtableList<K, V> {
-    pub fn new(opt: Options, max_table_count: usize, per_table_max_size: usize, per_table_max_height: usize) -> Self {
+    pub fn new(
+        opt: Options,
+        max_table_count: usize,
+        per_table_max_size: usize,
+        per_table_max_height: usize,
+    ) -> Self {
         let tables_ = LinkedList::new();
         MemtableList {
             max_table_count_: max_table_count,
@@ -47,8 +52,10 @@ impl<K: Ord + Clone, V: Clone> MemtableList<K, V> {
 
 impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {
     fn get<Q: ?Sized>(&self, k: &Q) -> Option<&V>
-        where K: Borrow<Q>,
-              Q: Ord {
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         for table in &self.tables_ {
             let r = table.get(k);
             if r.is_some() {
@@ -59,8 +66,10 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {
     }
 
     fn get_mut<Q: ?Sized>(&self, k: &Q) -> Option<&mut V>
-        where K: Borrow<Q>,
-              Q: Ord {
+    where
+        K: Borrow<Q>,
+        Q: Ord,
+    {
         for table in &self.tables_ {
             let r = table.get_mut(k);
             if r.is_some() {
@@ -74,12 +83,15 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {
         assert!(!self.is_full());
 
         if self.tables_.len() == 0 {
-            self.tables_.push_back(Memtable::new(self.per_table_max_size_, self.per_table_max_height_));
+            self.tables_.push_back(Memtable::new(
+                self.per_table_max_size_,
+                self.per_table_max_height_,
+            ));
         }
 
         for table in &mut self.tables_ {
             if !table.is_full() {
-                return table.insert(k, v)
+                return table.insert(k, v);
             }
         }
 

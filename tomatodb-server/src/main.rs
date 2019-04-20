@@ -3,14 +3,14 @@
 
 use std::cell::RefCell;
 use std::error::Error;
-use std::io::{Error as IOError, ErrorKind, Read, Result, Write};
 use std::io;
-use std::net::{TcpListener, TcpStream};
+use std::io::{Error as IOError, ErrorKind, Read, Result, Write};
 use std::net::SocketAddr;
+use std::net::{TcpListener, TcpStream};
 use std::rc::Rc;
 use std::sync::{Arc, RwLock};
 
-use futures::{Future, future};
+use futures::{future, Future};
 use tokio::prelude::*;
 use tokio_proto::TcpServer;
 use tokio_service::{NewService, Service};
@@ -35,22 +35,22 @@ mod request;
 mod response;
 #[macro_use]
 mod parser_util;
-mod parser;
-mod store;
-mod thread_pool;
 mod data_manager;
+mod manifest;
 mod memtable;
-mod proto;
 mod memtable_list;
-mod types;
+mod merger;
 mod options;
+mod parser;
+mod proto;
+mod slice;
 mod sstable_builder;
 mod sstable_reader;
-mod manifest;
-mod wal;
+mod store;
 mod test_utils;
-mod merger;
-mod slice;
+mod thread_pool;
+mod types;
+mod wal;
 
 pub struct Server {
     store: Arc<Store>,
@@ -58,9 +58,7 @@ pub struct Server {
 
 impl Server {
     fn new(store: Arc<Store>) -> Self {
-        Server {
-            store
-        }
+        Server { store }
     }
 }
 
@@ -79,7 +77,11 @@ impl Service for Server {
 }
 
 pub fn serve<T>(addr: SocketAddr, new_service: T)
-    where T: NewService<Request = Request, Response = Response, Error = io::Error> + Send + Sync + 'static,
+where
+    T: NewService<Request = Request, Response = Response, Error = io::Error>
+        + Send
+        + Sync
+        + 'static,
 {
     TcpServer::new(Proto, addr).serve(new_service);
 }
@@ -92,9 +94,7 @@ fn main() -> MyResult<()> {
     let store = Store::new(opt.clone())?;
     let store = Arc::new(store);
 
-    serve(addr, move || {
-        Ok(Server::new(store.clone()))
-    });
+    serve(addr, move || Ok(Server::new(store.clone())));
 
     Ok(())
 }

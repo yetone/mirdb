@@ -84,9 +84,7 @@ pub struct SsIteratorIterWrap<'a, T> {
 
 impl<'a, T: SsIterator> SsIteratorIterWrap<'a, T> {
     pub fn new(iter: &'a mut T) -> Self {
-        Self {
-            inner: iter
-        }
+        Self { inner: iter }
     }
 }
 

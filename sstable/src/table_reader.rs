@@ -54,7 +54,12 @@ impl TableReader {
         let index_block = Block::new_from_location(&f, &footer.index(), opt.clone())?.0;
         let metadata = f.metadata()?;
         let size_ = metadata.len() as usize;
-        let file_name_ = path.file_name().expect("get file name").to_str().expect("file name to str").to_owned();
+        let file_name_ = path
+            .file_name()
+            .expect("get file name")
+            .to_str()
+            .expect("file name to str")
+            .to_owned();
         Ok(TableReader {
             file: Rc::new(Box::new(f)),
             file_size: size,
@@ -116,10 +121,11 @@ impl TableReader {
             let mut bc = write_unlock(&self.opt.block_cache);
             let res = bc.get(&cache_key);
             if let Some(block) = res {
-                return Ok(Some(block.clone()))
+                return Ok(Some(block.clone()));
             }
         }
-        let (block, _) = Block::new_from_location(self.file.as_ref().as_ref(), bh, self.opt.clone())?;
+        let (block, _) =
+            Block::new_from_location(self.file.as_ref().as_ref(), bh, self.opt.clone())?;
         write_unlock(&self.opt.block_cache).insert(&cache_key, block.clone());
         Ok(Some(block))
     }
@@ -129,7 +135,9 @@ impl TableReader {
     }
 
     pub fn get<K>(&self, k: &K) -> MyResult<Option<Vec<u8>>>
-        where K: ?Sized + Borrow<[u8]> {
+    where
+        K: ?Sized + Borrow<[u8]>,
+    {
         let k = k.borrow();
         if k < self.min_key() || k > self.max_key() {
             return Ok(None);
@@ -199,7 +207,13 @@ mod test {
         println!("load");
         let st = time::SystemTime::now();
         let t = TableReader::new(path, opt.clone())?;
-        println!("load cost: {}ms, size: {}, min_key: {}, max_key: {}", st.elapsed().unwrap().as_millis(), t.size(), to_str(t.min_key()), to_str(t.max_key()));
+        println!(
+            "load cost: {}ms, size: {}, min_key: {}, max_key: {}",
+            st.elapsed().unwrap().as_millis(),
+            t.size(),
+            to_str(t.min_key()),
+            to_str(t.max_key())
+        );
         let not_found_count = 1000;
         let not_found_key_prefix = "prefix_kex";
         let mut not_found_keys = Vec::with_capacity(not_found_count);

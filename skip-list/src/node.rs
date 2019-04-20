@@ -1,7 +1,7 @@
+use crate::util::from_raw;
+use crate::util::from_raw_mut;
 use std::mem;
 use std::ptr;
-use crate::util::from_raw_mut;
-use crate::util::from_raw;
 
 #[derive(Debug)]
 pub struct SkipListNode<K, V> {
@@ -23,11 +23,15 @@ impl<K, V> SkipListNode<K, V> {
         &mut self.value_
     }
 
-    pub(crate) fn from_raw_mut<'a>(node_ptr: *mut SkipListNode<K, V>) -> Option<&'a mut SkipListNode<K, V>> {
+    pub(crate) fn from_raw_mut<'a>(
+        node_ptr: *mut SkipListNode<K, V>,
+    ) -> Option<&'a mut SkipListNode<K, V>> {
         from_raw_mut(node_ptr)
     }
 
-    pub(crate) fn from_raw<'a>(node_ptr: *mut SkipListNode<K, V>) -> Option<&'a SkipListNode<K, V>> {
+    pub(crate) fn from_raw<'a>(
+        node_ptr: *mut SkipListNode<K, V>,
+    ) -> Option<&'a SkipListNode<K, V>> {
         from_raw(node_ptr)
     }
 
@@ -35,7 +39,7 @@ impl<K, V> SkipListNode<K, V> {
         SkipListNode::allocate(
             unsafe { mem::uninitialized() },
             unsafe { mem::uninitialized() },
-            max_height
+            max_height,
         )
     }
 
@@ -62,23 +66,22 @@ impl<K, V> SkipListNode<K, V> {
     }
 
     pub fn next(&self, height: usize) -> Option<&SkipListNode<K, V>> {
-        self.nexts_.get(height).and_then(
-            |ptr| if ptr.is_null() {
+        self.nexts_.get(height).and_then(|ptr| {
+            if ptr.is_null() {
                 None
             } else {
-                Some(unsafe { & **ptr })
-            },
-        )
+                Some(unsafe { &**ptr })
+            }
+        })
     }
 
     pub fn next_mut(&mut self, height: usize) -> Option<&mut SkipListNode<K, V>> {
-        self.nexts_.get(height).and_then(
-            |ptr| if ptr.is_null() {
+        self.nexts_.get(height).and_then(|ptr| {
+            if ptr.is_null() {
                 None
             } else {
                 Some(unsafe { &mut **ptr })
-            },
-        )
+            }
+        })
     }
 }
-

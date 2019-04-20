@@ -1,9 +1,9 @@
+use std::error::Error;
 use std::io;
 use std::result;
-use std::error::Error;
 
-use snap::Error as SnapError;
 use cuckoofilter::CuckooError;
+use snap::Error as SnapError;
 
 #[derive(Debug, PartialEq)]
 pub enum StatusCode {
@@ -31,9 +31,7 @@ impl Status {
         } else {
             format!("{:?}: {}", code, msg)
         };
-        Status {
-            code, msg
-        }
+        Status { code, msg }
     }
 }
 
@@ -72,5 +70,10 @@ impl From<CuckooError> for Status {
 pub type MyResult<T> = result::Result<T, Status>;
 
 macro_rules! err {
-    ($code:expr, $msg:expr) => {Err($crate::error::Status { code: $code, msg: $msg.to_string() })};
+    ($code:expr, $msg:expr) => {
+        Err($crate::error::Status {
+            code: $code,
+            msg: $msg.to_string(),
+        })
+    };
 }

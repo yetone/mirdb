@@ -2,8 +2,8 @@ use crate::block::Block;
 use crate::block_handle::BlockHandle;
 use crate::block_iter::BlockIter;
 use crate::block_iter::BlockIterState;
-use crate::TableReader;
 use crate::types::SsIterator;
+use crate::TableReader;
 
 pub struct TableIter<'a> {
     table: &'a TableReader,
@@ -18,16 +18,17 @@ impl<'a> TableIter<'a> {
             table,
             index_iter: table.index_block.iter(),
             data_iter_state: BlockIterState::new(0),
-            data_block: None
+            data_block: None,
         }
     }
 
     fn data_iter(&self) -> Option<BlockIter> {
         match &self.data_block {
-            Some(ref v) => Some(
-                BlockIter::new_with_state(&v.block, self.data_iter_state.clone())
-            ),
-            _ => None
+            Some(ref v) => Some(BlockIter::new_with_state(
+                &v.block,
+                self.data_iter_state.clone(),
+            )),
+            _ => None,
         }
     }
 
@@ -67,8 +68,11 @@ impl<'a> SsIterator for TableIter<'a> {
                     self.data_iter_state = BlockIterState::new(block.restarts_offset());
                     self.data_block = Some(block);
                     return self.advance();
-                },
-                Ok(None) => {println!("b");return false;},
+                }
+                Ok(None) => {
+                    println!("b");
+                    return false;
+                }
                 Err(_) => return self.advance(),
             }
         }
@@ -100,7 +104,7 @@ impl<'a> SsIterator for TableIter<'a> {
                     self.data_iter_state = iter.state;
                     self.data_block = Some(block);
                     return true;
-                },
+                }
                 _ => (),
             }
         }
@@ -134,8 +138,8 @@ impl<'a> SsIterator for TableIter<'a> {
                     iter.seek(key);
                     self.data_iter_state = iter.state;
                     self.data_block = Some(block);
-                },
-                _ => ()
+                }
+                _ => (),
             }
         }
     }
@@ -154,10 +158,10 @@ impl<'a> SsIterator for TableIter<'a> {
 mod test {
     use std::path::Path;
 
-    use crate::MyResult;
-    use crate::Options;
     use crate::table_builder::TableBuilder;
     use crate::util::to_str;
+    use crate::MyResult;
+    use crate::Options;
 
     use super::*;
 
@@ -198,7 +202,11 @@ mod test {
             let key = &data[i].0;
             iter.seek(key.as_bytes());
             if iter.current_k().unwrap() != key.as_bytes() {
-                println!("error seek i: {} k: {}", i, to_str(&iter.current_k().unwrap().to_vec()));
+                println!(
+                    "error seek i: {} k: {}",
+                    i,
+                    to_str(&iter.current_k().unwrap().to_vec())
+                );
                 println!("v: {}", to_str(&iter.current_v().unwrap()));
                 assert!(false);
             }
@@ -265,7 +273,12 @@ mod test {
             assert!(iter.advance());
             let key = &data[i].0;
             if iter.current_k().unwrap() != key.as_bytes() {
-                println!("error advance i: {} k: {} current_k: {}", i, to_str(key.as_bytes()), to_str(&iter.current_k().unwrap().to_vec()));
+                println!(
+                    "error advance i: {} k: {} current_k: {}",
+                    i,
+                    to_str(key.as_bytes()),
+                    to_str(&iter.current_k().unwrap().to_vec())
+                );
                 assert!(false);
             }
         }
@@ -282,7 +295,11 @@ mod test {
             iter.prev();
             let key = &data[i].0;
             if iter.current_k().unwrap() != key.as_bytes() {
-                println!("error prev i: {} k: {}", i, to_str(&iter.current_k().unwrap().to_vec()));
+                println!(
+                    "error prev i: {} k: {}",
+                    i,
+                    to_str(&iter.current_k().unwrap().to_vec())
+                );
                 assert!(false);
             }
         }
@@ -299,7 +316,11 @@ mod test {
             iter.prev();
             let key = &data[i].0;
             if iter.current_k().unwrap() != key.as_bytes() {
-                println!("error prev i: {} k: {}", i, to_str(&iter.current_k().unwrap().to_vec()));
+                println!(
+                    "error prev i: {} k: {}",
+                    i,
+                    to_str(&iter.current_k().unwrap().to_vec())
+                );
                 assert!(false);
             }
         }
