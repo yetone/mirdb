@@ -33,14 +33,13 @@ use crate::utils::make_file_name;
 use crate::utils::read_lock;
 use crate::utils::to_str;
 use crate::utils::write_lock;
-use crate::wal::LogEntry;
 use crate::wal::WAL;
 
 pub struct DataManager {
     mut_: Arc<RwLock<Memtable<Slice, Slice>>>,
     imm_: Arc<RwLock<MemtableList<Slice, Slice>>>,
     readers_: Arc<RwLock<SstableReader>>,
-    wal_: Arc<RwLock<WAL<Slice, Slice>>>,
+    wal_: Arc<RwLock<WAL>>,
     opt_: Options,
     next_file_number_: AtomicUsize,
     last_compact_keys_: Vec<Vec<u8>>,
@@ -170,11 +169,10 @@ impl DataManager {
 
     fn insert_(&self, k: Slice, v: Slice) -> MyResult<Option<Slice>> {
         let mut wal = write_lock(&self.wal_);
-        let entry = LogEntry::new(k, v);
-        wal.append(&entry)?;
+        wal.append(&k, &v)?;
 
         let mut muttable = write_lock(&self.mut_);
-        let r = muttable.insert(entry.k, entry.v);
+        let r = muttable.insert(k, v);
 
         if wal.current_seg_size()? >= self.opt_.mem_table_max_size {
             let copied = muttable.clone();

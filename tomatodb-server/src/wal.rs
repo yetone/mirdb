@@ -18,12 +18,9 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::ptr;
 
-use bincode::deserialize;
-use bincode::serialize;
 use glob::glob;
 use integer_encoding::FixedInt;
 use memmap::Mmap;
-use serde::{Deserialize, Serialize};
 use snap::Decoder;
 use snap::Encoder;
 
@@ -57,39 +54,13 @@ fn copy_memory(src: &[u8], dst: &mut [u8]) {
     }
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
-pub struct LogEntry<K, V> {
-    pub(crate) k: K,
-    pub(crate) v: V,
-}
-
-impl<K, V> LogEntry<K, V> {
-    pub fn new(k: K, v: V) -> Self {
-        LogEntry { k, v }
-    }
-
-    pub fn key(&self) -> &K {
-        &self.k
-    }
-
-    pub fn value(&self) -> &V {
-        &self.v
-    }
-
-    pub fn kv(self) -> (K, V) {
-        (self.k, self.v)
-    }
-}
-
-pub struct WALSeg<K, V> {
+pub struct WALSeg {
     file: File,
     size_: usize,
     path: PathBuf,
-    k: PhantomData<K>,
-    v: PhantomData<V>,
 }
 
-impl<K: Serialize, V: Serialize> WALSeg<K, V> {
+impl WALSeg {
     pub fn new<T: AsRef<Path>>(path: T, _capacity: usize) -> MyResult<Self> {
         let file = OpenOptions::new()
             .read(true)
@@ -101,12 +72,10 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
             file,
             size_: 0,
             path: path.as_ref().to_path_buf(),
-            k: PhantomData,
-            v: PhantomData,
         })
     }
 
-    pub fn iter(&self) -> MyResult<WALSegIter<K, V>> {
+    pub fn iter(&self) -> MyResult<WALSegIter> {
         WALSegIter::new(&self.path)
     }
 
@@ -114,27 +83,35 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
         self.size_
     }
 
-    pub fn append(&mut self, entry: &LogEntry<K, V>) -> MyResult<()> {
-        let entry_buf = serialize(entry)?;
-        let entry_buf = Encoder::new().compress_vec(&entry_buf)?;
+    pub fn append(&mut self, key: &Slice, value: &Slice) -> MyResult<()> {
+        let mut encoder = Encoder::new();
+        let key_buf = encoder.compress_vec(key.as_ref())?;
+        let value_buf = encoder.compress_vec(value.as_ref())?;
 
-        let entry_size = entry_buf.len();
+        let key_size = key_buf.len();
+        let value_size = value_buf.len();
         let size_space = u32::required_space();
 
-        let padding = padding(entry_size);
+        let padding = padding(key_size + value_size);
 
-        let mut buf = vec![0; size_space + entry_size + padding];
+        let mut buf = vec![0; size_space * 2 + key_size + value_size + padding];
 
         // size
-        (entry_size as u32).encode_fixed(&mut buf[..size_space]);
+        ((key_size + value_size) as u32).encode_fixed(&mut buf[..size_space]);
 
-        // entry
-        copy_memory(&entry_buf, &mut buf[size_space..]);
+        // key size
+        (key_size as u32).encode_fixed(&mut buf[size_space..size_space * 2]);
+
+        // key
+        copy_memory(&key_buf, &mut buf[size_space * 2..]);
+
+        // value
+        copy_memory(&value_buf, &mut buf[size_space * 2 + key_size..]);
 
         // padding
         if padding > 0 {
             let zeros: [u8; 8] = [0; 8];
-            copy_memory(&zeros[..padding], &mut buf[size_space + entry_size..]);
+            copy_memory(&zeros[..padding], &mut buf[size_space * 2 + key_size + value_size..]);
         }
 
         self.file.write(&buf)?;
@@ -154,14 +131,11 @@ impl<K: Serialize, V: Serialize> WALSeg<K, V> {
         remove_file(&self.path)?;
         Ok(())
     }
-}
 
-impl WALSeg<Slice, Slice> {
-
-    fn to_skiplist(&self, opt: &Options) -> MyResult<SkipList<Slice, Slice>> {
+    pub fn to_skiplist(&self, opt: &Options) -> MyResult<SkipList<Slice, Slice>> {
         let mut map = SkipList::new(opt.mem_table_max_height);
-        for entry in self.iter()? {
-            map.insert(entry.k, entry.v);
+        for (k, v) in self.iter()? {
+            map.insert(k, v);
         }
         Ok(map)
     }
@@ -172,15 +146,13 @@ impl WALSeg<Slice, Slice> {
     }
 }
 
-pub struct WALSegIter<K, V> {
+pub struct WALSegIter {
     offset: usize,
     mmap: Mmap,
     file_size: usize,
-    k: PhantomData<K>,
-    v: PhantomData<V>,
 }
 
-impl<K, V> WALSegIter<K, V> {
+impl WALSegIter {
     pub fn new<T: AsRef<Path>>(path: T) -> MyResult<Self> {
         let file = OpenOptions::new()
             .read(true)
@@ -194,18 +166,13 @@ impl<K, V> WALSegIter<K, V> {
             file_size,
             mmap,
             offset: 0,
-            k: PhantomData,
-            v: PhantomData,
         })
     }
 }
 
-impl<K, V> Iterator for WALSegIter<K, V>
-    where
-            for<'de> K: Deserialize<'de>,
-            for<'de> V: Deserialize<'de> {
+impl Iterator for WALSegIter {
 
-    type Item = LogEntry<K, V>;
+    type Item = (Slice, Slice);
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.offset >= self.file_size {
@@ -215,26 +182,34 @@ impl<K, V> Iterator for WALSegIter<K, V>
         let size = u32::decode_fixed(&self.mmap[self.offset..self.offset + u32::required_space()]) as usize;
 
         if size == 0 {
-            return None
+            return None;
         }
 
         let offset = self.offset + u32::required_space();
+
+        let key_size = u32::decode_fixed(&self.mmap[offset..offset + u32::required_space()]) as usize;
+
+        let offset = offset + u32::required_space();
+
         let data = &self.mmap[offset..offset + size];
-        let data = Decoder::new().decompress_vec(&data).expect("snap decompress wal file error");
-        let entry: LogEntry<K, V> = deserialize(&data).expect("deserialize from wal file error");
+        let key_data = &data[..key_size];
+        let value_data = &data[key_size..];
+        let key = Decoder::new().decompress_vec(&key_data).expect("snap decompress key in wal file error");
+        let value = Decoder::new().decompress_vec(&value_data).expect("snap decompress value in wal file error");
+
         self.offset = offset + size + padding(size);
 
-        Some(entry)
+        Some((Slice::from(key), Slice::from(value)))
     }
 }
 
-pub struct WAL<K, V> {
+pub struct WAL {
     opt: Options,
-    pub segs: LinkedList<WALSeg<K, V>>,
+    pub segs: LinkedList<WALSeg>,
     current_file_num: usize,
 }
 
-impl<K: Serialize, V: Serialize> WAL<K, V> {
+impl WAL {
     pub fn new(opt: Options) -> MyResult<Self> {
         let path = Path::new(&opt.work_dir);
         let mut paths = vec![];
@@ -267,12 +242,12 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
         self.segs.len()
     }
 
-    pub fn append(&mut self, entry: &LogEntry<K, V>) -> MyResult<()> {
+    pub fn append(&mut self, key: &Slice, value: &Slice) -> MyResult<()> {
         if self.seg_count() == 0 {
             self.new_seg()?;
         }
         if let Some(seg) = &mut self.segs.back_mut() {
-            return seg.append(entry);
+            return seg.append(key, value);
         }
         err(StatusCode::WALError, "cannot get the tail wal seg")
     }
@@ -314,18 +289,18 @@ impl<K: Serialize, V: Serialize> WAL<K, V> {
         n
     }
 
-    pub fn iter(&self) -> MyResult<WALIter<K, V>> {
+    pub fn iter(&self) -> MyResult<WALIter> {
         Ok(WALIter::new(&self))
     }
 }
 
-pub struct WALIter<'a, K, V> {
-    segs_iter: LinkedListIter<'a, WALSeg<K, V>>,
-    seg_iter: Option<WALSegIter<K, V>>,
+pub struct WALIter<'a> {
+    segs_iter: LinkedListIter<'a, WALSeg>,
+    seg_iter: Option<WALSegIter>,
 }
 
-impl<'a, K, V> WALIter<'a, K, V> {
-    pub fn new(wal: &'a WAL<K, V>) -> Self {
+impl<'a> WALIter<'a> {
+    pub fn new(wal: &'a WAL) -> Self {
         WALIter {
             segs_iter: wal.segs.iter(),
             seg_iter: None,
@@ -333,12 +308,9 @@ impl<'a, K, V> WALIter<'a, K, V> {
     }
 }
 
-impl<'a, K, V> Iterator for WALIter<'a, K, V>
-    where
-            for<'de> K: Serialize + Deserialize<'de>,
-            for<'de> V: Serialize + Deserialize<'de> {
+impl<'a> Iterator for WALIter<'a> {
 
-    type Item = LogEntry<K, V>;
+    type Item = (Slice, Slice);
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(seg_iter) = &mut self.seg_iter {
@@ -375,15 +347,13 @@ mod test {
         kvs.push((b"c".to_vec(), b"cbcasldfjowiejfoaisdjfalskdfj".to_vec()));
         let st = time::SystemTime::now();
         for (k, v) in &kvs {
-            let entry = LogEntry::new(k.clone(), Some(v.clone()));
-            seg.append(&entry)?;
+            seg.append(&Slice::from(k.clone()), &Slice::from(v.clone()))?;
         }
         println!("append cost: {}us", st.elapsed().unwrap().as_micros());
         let mut iter = seg.iter()?;
         let st = time::SystemTime::now();
         for (k, v) in &kvs {
-            let entry = LogEntry::new(k.clone(), Some(v.clone()));
-            assert_eq!(Some(entry), iter.next());
+            assert_eq!(Some((Slice::from(k.clone()), Slice::from(v.clone()))), iter.next());
         }
         println!("iter cost: {}us", st.elapsed().unwrap().as_micros());
         assert_eq!(None, iter.next());
@@ -399,15 +369,13 @@ mod test {
         kvs.push((b"b".to_vec(), b"bbcasdlfjasldfj".to_vec()));
         kvs.push((b"c".to_vec(), b"cbcasldfjowiejfoaisdjfalskdfj".to_vec()));
         for (k, v) in &kvs {
-            let entry = LogEntry::new(k.clone(), Some(v.clone()));
             wal.new_seg()?;
-            wal.append(&entry)?;
+            wal.append(&Slice::from(k.clone()), &Slice::from(v.clone()))?;
         }
         let mut wal = WAL::new(opt.clone())?;
         let mut iter = wal.iter()?;
         for (k, v) in &kvs {
-            let entry = LogEntry::new(k.clone(), Some(v.clone()));
-            assert_eq!(Some(entry), iter.next());
+            assert_eq!(Some((Slice::from(k.clone()), Slice::from(v.clone()))), iter.next());
         }
         assert_eq!(None, iter.next());
         wal.truncate(1)?;
@@ -416,8 +384,7 @@ mod test {
             if i == 0 {
                 continue;
             }
-            let entry = LogEntry::new(k.clone(), Some(v.clone()));
-            assert_eq!(Some(entry), iter.next());
+            assert_eq!(Some((Slice::from(k.clone()), Slice::from(v.clone()))), iter.next());
         }
         assert_eq!(None, iter.next());
         wal.truncate(1)?;
@@ -427,8 +394,7 @@ mod test {
             if i <= 1 {
                 continue;
             }
-            let entry = LogEntry::new(k.clone(), Some(v.clone()));
-            assert_eq!(Some(entry), iter.next());
+            assert_eq!(Some((Slice::from(k.clone()), Slice::from(v.clone()))), iter.next());
         }
         assert_eq!(None, iter.next());
         Ok(())
