@@ -4,8 +4,8 @@ use std::sync::RwLock;
 use std::sync::RwLockReadGuard;
 use std::sync::RwLockWriteGuard;
 
-pub fn to_str<T: ?Sized + Borrow<[u8]>>(cs: &T) -> &str {
-    str::from_utf8(cs.borrow()).expect("not a valid utf8")
+pub fn to_str<T: ?Sized + AsRef<[u8]>>(cs: &T) -> &str {
+    str::from_utf8(cs.as_ref()).expect("not a valid utf8")
 }
 
 pub fn make_file_name(num: usize, ext: &str) -> String {
