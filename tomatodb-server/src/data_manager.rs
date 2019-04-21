@@ -370,16 +370,8 @@ impl DataManager {
             new_readers.push(reader);
         }
 
-        let mut file_names0 = vec![];
-        let mut file_names1 = vec![];
-
-        for reader in inputs0 {
-            file_names0.push(reader.file_name().clone());
-        }
-
-        for reader in inputs1 {
-            file_names1.push(reader.file_name().clone());
-        }
+        let file_names0 = inputs0.iter().map(|x| x.file_name().clone()).collect();
+        let file_names1 = inputs1.iter().map(|x| x.file_name().clone()).collect();
 
         drop(readers_group);
 

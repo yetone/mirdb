@@ -1,5 +1,6 @@
 use std::borrow::Borrow;
 use std::collections::HashMap;
+use std::collections::HashSet;
 use std::fs::remove_file;
 use std::io::Cursor;
 use std::path::Path;
@@ -147,24 +148,11 @@ impl SstableReader {
         Ok(())
     }
 
-    pub fn remove_by_file_names(&mut self, level: usize, file_names: &Vec<String>) -> MyResult<()> {
+    pub fn remove_by_file_names(&mut self, level: usize, file_names: &HashSet<String>) -> MyResult<()> {
         assert!(level < self.opt_.max_level);
 
-        for file_name in file_names {
-            self.manifest_builder_
-                .remove_file_meta_by_file_name(level, &file_name);
-            let readers = &mut self.readers_[level];
-            let mut i = 0;
-            for reader in readers.iter() {
-                if &reader.file_name() == &file_name {
-                    break;
-                }
-                i += 1;
-            }
-            if i < readers.len() {
-                readers.remove(i);
-            }
-        }
+        self.manifest_builder_.remove_file_meta_by_file_names(level, file_names);
+        self.readers_[level].drain_filter(|x| file_names.contains(x.file_name()));
 
         self.manifest_builder_.flush()?;
 

@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::fmt;
 use std::fs::File;
 use std::io::Read;
@@ -33,18 +34,14 @@ impl LevelMeta {
         self.file_metas.push(file_meta);
     }
 
-    pub fn remove_file_meta_by_file_name(&mut self, file_name: &String) {
-        let mut i = 0;
-        while i < self.file_metas.len() {
-            let file_meta = &self.file_metas[i];
-            if &file_meta.file_name == file_name {
-                break;
-            }
-            i += 1;
-        }
-        if i < self.file_metas.len() {
-            self.file_metas.remove(i);
-        }
+    pub fn remove_file_meta_by_file_name(&mut self, file_name: String) {
+        let mut set = HashSet::with_capacity(1);
+        set.insert(file_name);
+        self.remove_file_meta_by_file_names(&set);
+    }
+
+    pub fn remove_file_meta_by_file_names(&mut self, file_names: &HashSet<String>) {
+        self.file_metas.drain_filter(|x| file_names.contains(&x.file_name));
     }
 }
 
@@ -112,9 +109,14 @@ impl Manifest {
         self.level_metas[level].push_file_meta(file_meta);
     }
 
-    pub fn remove_file_meta_by_file_name(&mut self, level: usize, file_name: &String) {
+    pub fn remove_file_meta_by_file_name(&mut self, level: usize, file_name: String) {
         self.ensure_level(level);
         self.level_metas[level].remove_file_meta_by_file_name(file_name)
+    }
+
+    pub fn remove_file_meta_by_file_names(&mut self, level: usize, file_names: &HashSet<String>) {
+        self.ensure_level(level);
+        self.level_metas[level].remove_file_meta_by_file_names(file_names)
     }
 
     pub fn file_metas(&self, level: usize) -> Option<&Vec<FileMeta>> {
@@ -148,10 +150,16 @@ impl ManifestBuilder {
         self.manifest_.add_file_meta(level, file_meta)
     }
 
-    pub fn remove_file_meta_by_file_name(&mut self, level: usize, file_name: &String) {
+    pub fn remove_file_meta_by_file_name(&mut self, level: usize, file_name: String) {
         assert!(level < self.opt.max_level);
         self.manifest_
             .remove_file_meta_by_file_name(level, file_name)
+    }
+
+    pub fn remove_file_meta_by_file_names(&mut self, level: usize, file_names: &HashSet<String>) {
+        assert!(level < self.opt.max_level);
+        self.manifest_
+            .remove_file_meta_by_file_names(level, file_names)
     }
 
     pub fn manifest(&self) -> &Manifest {
