@@ -1,0 +1,17 @@
+addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/tomatodb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500

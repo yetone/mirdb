@@ -5,11 +5,13 @@ use std::cell::RefCell;
 use std::error::Error;
 use std::io;
 use std::io::{Error as IOError, ErrorKind, Read, Result, Write};
-use std::net::SocketAddr;
 use std::net::{TcpListener, TcpStream};
+use std::net::SocketAddr;
 use std::rc::Rc;
 use std::sync::{Arc, RwLock};
 
+use clap::App;
+use clap::Arg;
 use futures::{future, Future};
 use tokio::prelude::*;
 use tokio_proto::TcpServer;
@@ -51,6 +53,7 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+mod config;
 
 pub struct Server {
     store: Arc<Store>,
@@ -87,9 +90,23 @@ where
 }
 
 fn main() -> MyResult<()> {
-    let addr = "0.0.0.0:12333".parse().unwrap();
+    let matches = App::new("Tomato DB")
+        .version("0.0.1")
+        .author("yetone <yetoneful@gmail.com>")
+        .about("A KV DB")
+        .arg(Arg::with_name("config")
+            .short("c")
+            .long("config")
+            .value_name("FILE")
+            .help("Sets a custom config file")
+            .takes_value(true))
+        .get_matches();
 
-    let opt = Options::default();
+    let conf_path = matches.value_of("config").unwrap_or("default.conf");
+    let conf = config::from_path(conf_path)?;
+
+    let addr = conf.addr.parse().unwrap();
+    let opt = conf.to_options()?;
 
     let store = Store::new(opt.clone())?;
     let store = Arc::new(store);

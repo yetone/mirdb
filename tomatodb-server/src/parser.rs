@@ -1,4 +1,4 @@
-use crate::parser_util::macros::{digit, space, IRResult};
+use crate::parser_util::macros::{digit, space, u32_parser, usize_parser, IRResult};
 use crate::request::GetterType;
 use crate::request::Request;
 use crate::request::SetterType;
@@ -29,14 +29,6 @@ gen_parser!(
             })
     )
 );
-
-fn u32_parser(i: &[u8]) -> IRResult<u32> {
-    digit::<u32>(i)
-}
-
-fn usize_parser(i: &[u8]) -> IRResult<usize> {
-    digit::<usize>(i)
-}
 
 fn unwrap_no_reply(x: Option<&[u8]>) -> bool {
     if let Some(_) = x {

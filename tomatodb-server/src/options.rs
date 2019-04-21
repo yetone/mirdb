@@ -1,8 +1,10 @@
 use sstable::Options as TableOptions;
 use std::path::Path;
 
-const KB: usize = 1 << 10;
-const MB: usize = KB * KB;
+pub const KB: usize = 1 << 10;
+pub const MB: usize = KB * KB;
+pub const GB: usize = KB * MB;
+pub const TB: usize = KB * GB;
 
 const BLOCK_MAX_SIZE: usize = 4 * KB;
 const BLOCK_CACHE_CAPACITY: usize = 8 * MB;

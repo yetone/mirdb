@@ -15,6 +15,7 @@ pub enum StatusCode {
     WALError,
     ChecksumError,
     SnapError,
+    ConfigError,
 }
 
 #[derive(Debug, PartialEq)]
@@ -88,6 +89,6 @@ macro_rules! err {
     };
 }
 
-pub fn err<T>(code: StatusCode, msg: &str) -> MyResult<T> {
-    err!(code, msg)
+pub fn err<T: AsRef<str>, U>(code: StatusCode, msg: T) -> MyResult<U> {
+    err!(code, msg.as_ref())
 }

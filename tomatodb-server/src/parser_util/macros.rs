@@ -13,10 +13,11 @@ pub enum IRResult<'a, 'b, T> {
 
 impl<'a, 'b, T: Debug> IRResult<'a, 'b, T> {
     fn unwrap(self) -> (&'a [u8], T) {
-        if let IRResult::Ok(v) = self {
-            return v;
+        match self {
+            IRResult::Ok(v) => v,
+            IRResult::Err(e) => panic!(e.to_owned()),
+            IRResult::Incomplete(_) => panic!("incomplete!"),
         }
-        panic!("not ok");
     }
 }
 
@@ -352,6 +353,16 @@ pub fn digit<T: FromStr>(i: &[u8]) -> IRResult<T> {
         Ok(v) => IRResult::Ok((i, v)),
         Err(_e) => IRResult::Err(""),
     }
+}
+
+#[inline]
+pub fn u32_parser(i: &[u8]) -> IRResult<u32> {
+    digit::<u32>(i)
+}
+
+#[inline]
+pub fn usize_parser(i: &[u8]) -> IRResult<usize> {
+    digit::<usize>(i)
 }
 
 pub fn space(i: &[u8]) -> IRResult<&[u8]> {
