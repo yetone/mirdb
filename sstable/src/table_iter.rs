@@ -70,7 +70,6 @@ impl<'a> SsIterator for TableIter<'a> {
                     return self.advance();
                 }
                 Ok(None) => {
-                    println!("b");
                     return false;
                 }
                 Err(_) => return self.advance(),
