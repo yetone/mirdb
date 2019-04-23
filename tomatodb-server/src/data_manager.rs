@@ -239,6 +239,14 @@ impl DataManager {
     fn minor_compaction(&self) -> MyResult<()> {
         let imm = read_lock(&self.imm_);
         let c = imm.table_count();
+        if c == 0 {
+            return Ok(());
+        }
+        drop(imm);
+
+        let mut wal = write_lock(&self.wal_);
+        let imm = read_lock(&self.imm_);
+
         let mut iter = imm.tables_iter().rev();
         let work_dir = Path::new(&self.opt_.work_dir);
         for _ in 0..c {
@@ -248,10 +256,10 @@ impl DataManager {
                 let mut readers = write_lock(&self.readers_);
                 readers.add(0, reader)?;
             }
-            let mut wal = write_lock(&self.wal_);
             wal.consume_seg()?;
         }
         drop(imm);
+        drop(wal);
         let mut imm = write_lock(&self.imm_);
         for _ in 0..c {
             imm.consume();
