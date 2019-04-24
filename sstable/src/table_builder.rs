@@ -30,15 +30,15 @@ pub struct TableBuilder {
 }
 
 impl TableBuilder {
-    pub fn new(path: &Path, opt: Options) -> MyResult<TableBuilder> {
+    pub fn new<T: AsRef<Path>>(path: T, opt: Options) -> MyResult<TableBuilder> {
         let file = OpenOptions::new()
             .create(true)
             .truncate(true)
             .write(true)
-            .open(path)?;
+            .open(path.as_ref())?;
         Ok(TableBuilder {
             file,
-            path_: path.to_path_buf(),
+            path_: path.as_ref().to_path_buf(),
             opt: opt.clone(),
             offset: 0,
             total_size_estimate_: 0,
@@ -136,7 +136,7 @@ mod test {
 
     #[test]
     fn test_flush() -> MyResult<()> {
-        let mut t = TableBuilder::new("/tmp/x.data".as_ref(), Options::default())?;
+        let mut t = TableBuilder::new("/tmp/x.data", Options::default())?;
         let data = get_data();
         for (k, v) in data {
             t.add(k, v)?;

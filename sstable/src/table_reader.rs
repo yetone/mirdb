@@ -41,11 +41,11 @@ pub struct TableReader {
 }
 
 impl TableReader {
-    pub fn new(path: &Path, opt: Options) -> MyResult<TableReader> {
-        let mut f = File::open(path)?;
+    pub fn new<T: AsRef<Path>>(path: T, opt: Options) -> MyResult<TableReader> {
+        let mut f = File::open(path.as_ref())?;
         let size = f.metadata()?.len() as usize;
         if size <= FULL_FOOTER_LENGTH {
-            println!("path: {}", path.display());
+            println!("path: {}", path.as_ref().display());
             println!("size: {}", size);
             assert!(size > FULL_FOOTER_LENGTH);
         }
@@ -55,6 +55,7 @@ impl TableReader {
         let metadata = f.metadata()?;
         let size_ = metadata.len() as usize;
         let file_name_ = path
+            .as_ref()
             .file_name()
             .expect("get file name")
             .to_str()
