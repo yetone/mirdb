@@ -139,7 +139,7 @@ impl DataManager {
                 }));
             }
 
-            let table_opt = self.opt_.to_table_opt();
+            let table_opt = self.opt_.get_table_opt();
 
             let readers = threads
                 .into_iter()
@@ -341,7 +341,7 @@ impl DataManager {
 
         let work_dir = Path::new(&self.opt_.work_dir);
 
-        let table_opt = self.opt_.to_table_opt();
+        let table_opt = self.opt_.get_table_opt();
         let mut table = None;
         let mut new_readers = vec![];
 
@@ -363,15 +363,14 @@ impl DataManager {
                 continue;
             }
 
-            let table_ = table.unwrap();
+            let mut table_ = table.take().unwrap();
             let path = &table_.path().clone();
             table_.flush()?;
             let reader = TableReader::new(path, table_opt.clone())?;
             new_readers.push(reader);
-            table = None;
         }
 
-        if let Some(table_) = table {
+        if let Some(mut table_) = table.take() {
             let path = &table_.path().clone();
             table_.flush()?;
             let reader = TableReader::new(&path, table_opt.clone())?;

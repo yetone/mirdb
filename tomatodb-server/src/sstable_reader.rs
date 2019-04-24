@@ -50,7 +50,7 @@ impl SstableReader {
     fn load_reader(&self, file_meta: &FileMeta) -> MyResult<TableReader> {
         let path = Path::new(&self.opt_.work_dir);
         let path = path.join(&file_meta.file_name);
-        Ok(TableReader::new(&path, self.opt_.to_table_opt())?)
+        Ok(TableReader::new(&path, self.opt_.get_table_opt().clone())?)
     }
 
     pub fn get_readers(&self, level: usize) -> &Vec<TableReader> {

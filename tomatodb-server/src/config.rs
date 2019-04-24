@@ -38,8 +38,8 @@ impl Config {
         opt.mem_table_max_size = parse_size(self.mem_table_max_size.as_bytes())?;
         opt.mem_table_max_height = self.mem_table_max_height;
         opt.imm_mem_table_max_count = self.imm_mem_table_max_count;
-        opt.block_size = parse_size(self.block_size.as_bytes())?;
-        opt.block_restart_interval = self.block_restart_interval;
+        opt.table_opt.block_size = parse_size(self.block_size.as_bytes())?;
+        opt.table_opt.block_restart_interval = self.block_restart_interval;
         opt.l0_compaction_trigger = self.l0_compaction_trigger;
         opt.thread_sleep_ms = self.thread_sleep_ms;
         Ok(opt)
@@ -132,8 +132,8 @@ thread_sleep_ms = 500
         assert_eq!(4 * MB, opt.mem_table_max_size);
         assert_eq!(32, opt.mem_table_max_height);
         assert_eq!(16, opt.imm_mem_table_max_count);
-        assert_eq!(4 * KB, opt.block_size);
-        assert_eq!(16, opt.block_restart_interval);
+        assert_eq!(4 * KB, opt.table_opt.block_size);
+        assert_eq!(16, opt.table_opt.block_restart_interval);
         assert_eq!(4, opt.l0_compaction_trigger);
         assert_eq!(500, opt.thread_sleep_ms);
 

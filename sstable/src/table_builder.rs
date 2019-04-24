@@ -98,11 +98,11 @@ impl TableBuilder {
         Ok(())
     }
 
-    pub fn flush(mut self) -> MyResult<()> {
+    pub fn flush(&mut self) -> MyResult<()> {
         self.write_data_block(&find_short_succ(&self.data_block.last_key))?;
         let mut meta_block = MetaBlock::new(
-            self.max_key.expect("max key"),
-            self.min_key.expect("min key"),
+            self.max_key.clone().expect("max key"),
+            self.min_key.clone().expect("min key"),
             ExportedCuckooFilter::from(&self.filter),
         );
         let meta_bh = meta_block.flush(&mut self.file, self.offset)?;

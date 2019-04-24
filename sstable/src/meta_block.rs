@@ -29,6 +29,13 @@ impl MetaBlock {
         }
     }
 
+    pub fn reset(&mut self) {
+        self.max_key = vec![];
+        self.min_key = vec![];
+        self.filter.values = vec![];
+        self.filter.length = 0;
+    }
+
     pub fn new_with_buffer<T: Into<Vec<u8>>>(buffer: T) -> MyResult<Self> {
         Ok(deserialize(&buffer.into())?)
     }
@@ -49,6 +56,7 @@ impl MetaBlock {
         let buf = encoder.compress_vec(&buf)?;
         w.seek(SeekFrom::Start(offset as u64))?;
         let size = w.write(&buf)?;
+        self.reset();
         Ok(bh!(offset, size))
     }
 }

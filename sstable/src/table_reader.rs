@@ -127,7 +127,7 @@ impl TableReader {
         }
         let (block, _) =
             Block::new_from_location(self.file.as_ref().as_ref(), bh, self.opt.clone())?;
-        write_unlock(&self.opt.block_cache).insert(&cache_key, block.clone());
+        write_unlock(&self.opt.block_cache).insert(cache_key, block.clone());
         Ok(Some(block))
     }
 

@@ -18,39 +18,39 @@ pub struct Options {
     pub mem_table_max_size: usize,
     pub mem_table_max_height: usize,
     pub imm_mem_table_max_count: usize,
-    pub block_size: usize,
-    pub block_restart_interval: usize,
 
     pub l0_compaction_trigger: usize,
 
     pub thread_sleep_ms: usize,
+
+    pub table_opt: TableOptions,
 }
 
 impl Options {
-    pub fn to_table_opt(&self) -> TableOptions {
-        let mut table_opt = TableOptions::default();
-        table_opt.block_size = self.block_size;
-        table_opt.block_restart_interval = self.block_restart_interval;
-        table_opt
+    pub fn get_table_opt(&self) -> &TableOptions {
+        &self.table_opt
     }
 }
 
 impl Default for Options {
     fn default() -> Self {
-        let opt = Options {
+        let mut table_opt = TableOptions::default();
+        table_opt.block_size = BLOCK_MAX_SIZE;
+        table_opt.block_restart_interval = 16;
+
+        Options {
             max_level: 7,
             work_dir: "/tmp/tomatodb".into(),
             sst_max_size: MB * 100,
             mem_table_max_size: MB * 4,
             mem_table_max_height: 1 << 5,
             imm_mem_table_max_count: 1 << 4,
-            block_size: BLOCK_MAX_SIZE,
-            block_restart_interval: 16,
 
             l0_compaction_trigger: 4,
 
             thread_sleep_ms: 500,
-        };
-        opt
+
+            table_opt,
+        }
     }
 }

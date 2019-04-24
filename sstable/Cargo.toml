@@ -14,3 +14,4 @@ snap = "0.2"
 cuckoofilter = { git = "https://github.com/seiflotfy/rust-cuckoofilter", tag = "v0.4.0" }
 serde = { version = "1.0", features = ["derive"] }
 bincode = "1.1.2"
+lru = "0.1.15"

@@ -22,6 +22,9 @@ pub struct Block {
     pub block: Vec<u8>,
 }
 
+unsafe impl Send for Block {}
+unsafe impl Sync for Block {}
+
 impl Block {
     pub fn new(opt: Options) -> Self {
         Block::new_with_buffer(vec![], opt)

@@ -26,7 +26,7 @@ pub fn skiplist_to_sstable(
         return Ok(None);
     }
 
-    let table_opt = opt.to_table_opt();
+    let table_opt = opt.get_table_opt();
     let mut tb = TableBuilder::new(&path, table_opt.clone())?;
 
     for (k, v) in map.iter() {

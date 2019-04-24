@@ -134,8 +134,8 @@ mod test {
     #[test]
     fn test() -> MyResult<()> {
         let mut opt = Options::default();
-        opt.block_size = 20;
-        let opt = opt.to_table_opt();
+        opt.table_opt.block_size = 20;
+        let opt = opt.get_table_opt();
         let mut ts = vec![];
         let path = Path::new("/tmp/test_merger0");
         let mut t = TableBuilder::new(path, opt.clone())?;

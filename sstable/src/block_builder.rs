@@ -50,11 +50,11 @@ impl BlockBuilder {
     }
 
     fn reset(&mut self) {
-        self.buffer.clear();
+        self.buffer = vec![];
         self.count_ = 0;
         self.restart_count = 0;
-        self.last_key.clear();
-        self.restarts.clear();
+        self.last_key = vec![];
+        self.restarts = vec![];
     }
 
     pub fn size_estimate(&self) -> usize {
