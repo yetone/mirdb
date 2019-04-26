@@ -44,11 +44,11 @@ impl<K, V> SkipListNode<K, V> {
     }
 
     pub(crate) fn allocate(key: K, value: V, height: usize) -> *mut SkipListNode<K, V> {
-        Box::into_raw(box SkipListNode {
+        Box::into_raw(Box::new(SkipListNode {
             nexts_: vec![ptr::null_mut(); height + 1],
             key_: key,
             value_: value,
-        })
+        }))
     }
 
     pub(crate) fn height(&self) -> usize {

@@ -66,7 +66,7 @@ impl ThreadPool {
     where
         F: FnBox + Send + 'static,
     {
-        self.sender.send(Message::NewJob(box job)).unwrap();
+        self.sender.send(Message::NewJob(Box::new(job))).unwrap();
     }
 }
 

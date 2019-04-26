@@ -40,7 +40,7 @@ impl<K, V> SkipList<K, V> {
     }
 
     pub fn new(max_height: usize) -> Self {
-        Self::new_with_height_generator(max_height, box GenHeight::new())
+        Self::new_with_height_generator(max_height, Box::new(GenHeight::new()))
     }
 
     pub fn new_with_height_generator(

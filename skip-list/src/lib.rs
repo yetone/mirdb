@@ -1,4 +1,3 @@
-#![feature(box_syntax, type_ascription)]
 #![allow(dead_code)]
 
 mod height_generator;

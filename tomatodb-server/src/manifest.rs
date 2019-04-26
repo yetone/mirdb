@@ -41,7 +41,7 @@ impl LevelMeta {
     }
 
     pub fn remove_file_meta_by_file_names(&mut self, file_names: &HashSet<String>) {
-        self.file_metas.drain_filter(|x| file_names.contains(&x.file_name));
+        self.file_metas.retain(|x| !file_names.contains(&x.file_name));
     }
 }
 

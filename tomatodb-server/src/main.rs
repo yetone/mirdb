@@ -1,4 +1,3 @@
-#![feature(trace_macros, box_syntax, drain_filter)]
 #![allow(unused_imports, unused_macros, dead_code)]
 
 use std::cell::RefCell;
@@ -72,10 +71,10 @@ impl Service for Server {
     type Future = Box<Future<Item = Response, Error = io::Error>>;
 
     fn call(&self, req: Self::Request) -> Self::Future {
-        box future::done(match self.store.apply(req) {
+        Box::new(future::done(match self.store.apply(req) {
             Ok(response) => Ok(response),
             Err(e) => Ok(Response::ServerError(e.msg)),
-        })
+        }))
     }
 }
 
