@@ -110,6 +110,15 @@ fn main() -> MyResult<()> {
     let store = Store::new(opt.clone())?;
     let store = Arc::new(store);
 
+    println!("{}", r#"
+  __  __ _     ___  ___
+ |  \/  (_)_ _|   \| _ )
+ | |\/| | | '_| |) | _ \
+ |_|  |_|_|_| |___/|___/
+
+Welcome to MirDB!
+"#.trim_matches('\n'));
+
     serve(addr, move || Ok(Server::new(store.clone())));
 
     Ok(())

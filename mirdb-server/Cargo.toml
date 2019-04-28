@@ -1,5 +1,5 @@
 [package]
-name = "mirdb-server"
+name = "mirdb"
 version = "0.1.0"
 authors = ["yetone <yetoneful@gmail.com>"]
 edition = "2018"

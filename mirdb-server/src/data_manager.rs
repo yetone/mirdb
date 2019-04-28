@@ -110,13 +110,13 @@ impl DataManager {
 
     pub fn redo(&mut self) -> MyResult<()> {
         {
-            println!("redoing...");
             let mut wal = write_lock(&self.wal_);
 
             if wal.seg_count() == 0 {
-                println!("redo done!");
                 return Ok(());
             }
+
+            println!("redoing...");
 
             let work_dir = Path::new(&self.opt_.work_dir);
 
