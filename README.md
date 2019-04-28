@@ -1,4 +1,4 @@
-## [WIP] MirDB: A Persistent Key-Value Store for Flash and RAM Storage with Memcached protocol
+## [WIP] MirDB: A Persistent Key-Value Store with Memcached protocol
 
 ### TODO
 
@@ -6,8 +6,8 @@
 
 * [x] memtable with skiplist
 
-* [x] sstable
+* [x] minor compaction
 
-* [ ] sstable compaction
+* [x] major compaction
 
 * [ ] raft
