@@ -40,7 +40,7 @@ impl Default for Options {
 
         Options {
             max_level: 7,
-            work_dir: "/tmp/tomatodb".into(),
+            work_dir: "/tmp/mirdb".into(),
             sst_max_size: MB * 100,
             mem_table_max_size: MB * 4,
             mem_table_max_height: 1 << 5,

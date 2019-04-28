@@ -89,7 +89,7 @@ where
 }
 
 fn main() -> MyResult<()> {
-    let matches = App::new("Tomato DB")
+    let matches = App::new("MirDB")
         .version("0.0.1")
         .author("yetone <yetoneful@gmail.com>")
         .about("A KV DB")

@@ -107,7 +107,7 @@ mod test {
 addr = "0.0.0.0:12333"
 
 max_level = 7
-work_dir = "/tmp/tomatodbs"
+work_dir = "/tmp/mirdbs"
 
 sst_max_size = "100M"
 mem_table_max_size = "4M"
@@ -127,7 +127,7 @@ thread_sleep_ms = 500
         println!("{:#?}", config);
         let opt = config.to_options()?;
         assert_eq!(7, opt.max_level);
-        assert_eq!("/tmp/tomatodbs", opt.work_dir);
+        assert_eq!("/tmp/mirdbs", opt.work_dir);
         assert_eq!(100 * MB, opt.sst_max_size);
         assert_eq!(4 * MB, opt.mem_table_max_size);
         assert_eq!(32, opt.mem_table_max_height);

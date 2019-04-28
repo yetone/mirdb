@@ -1,4 +1,4 @@
-## [WIP] TomatoDB: A Persistent Key-Value Store for Flash and RAM Storage with Memcached protocol
+## [WIP] MirDB: A Persistent Key-Value Store for Flash and RAM Storage with Memcached protocol
 
 ### TODO
 

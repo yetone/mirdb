@@ -1,7 +1,7 @@
 addr = "0.0.0.0:12333"
 
 max_level = 7
-work_dir = "/tmp/tomatodb"
+work_dir = "/tmp/mirdb"
 
 sst_max_size = "100M"
 mem_table_max_size = "4M"
