@@ -2,6 +2,12 @@
 
 ![logo](https://github.com/yetone/mirdb/raw/master/assets/logo.gif)
 
+### USAGE
+
+It is painless as using memcached.
+
+![usage](https://github.com/yetone/mirdb/raw/master/assets/usage.gif)
+
 ### TODO
 
 * [x] tokio with memcached protocol
