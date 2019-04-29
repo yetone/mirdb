@@ -1,4 +1,4 @@
-## [WIP] MirDB: A Persistent Key-Value Store with Memcached protocol
+## MirDB: A Persistent Key-Value Store with Memcached protocol
 
 ![logo](https://github.com/yetone/mirdb/raw/master/assets/logo.gif)
 
