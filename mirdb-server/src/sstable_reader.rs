@@ -148,10 +148,15 @@ impl SstableReader {
         Ok(())
     }
 
-    pub fn remove_by_file_names(&mut self, level: usize, file_names: &HashSet<String>) -> MyResult<()> {
+    pub fn remove_by_file_names(
+        &mut self,
+        level: usize,
+        file_names: &HashSet<String>,
+    ) -> MyResult<()> {
         assert!(level < self.opt_.max_level);
 
-        self.manifest_builder_.remove_file_meta_by_file_names(level, file_names);
+        self.manifest_builder_
+            .remove_file_meta_by_file_names(level, file_names);
         self.readers_[level].retain(|x| !file_names.contains(x.file_name()));
 
         self.manifest_builder_.flush()?;

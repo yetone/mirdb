@@ -1,11 +1,12 @@
 #![allow(unused_imports, unused_macros, dead_code)]
 
+use env_logger;
 use std::cell::RefCell;
 use std::error::Error;
 use std::io;
 use std::io::{Error as IOError, ErrorKind, Read, Result, Write};
-use std::net::{TcpListener, TcpStream};
 use std::net::SocketAddr;
+use std::net::{TcpListener, TcpStream};
 use std::rc::Rc;
 use std::sync::{Arc, RwLock};
 
@@ -36,6 +37,7 @@ mod request;
 mod response;
 #[macro_use]
 mod parser_util;
+mod config;
 mod data_manager;
 mod manifest;
 mod memtable;
@@ -52,7 +54,6 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
-mod config;
 
 pub struct Server {
     store: Arc<Store>,
@@ -89,16 +90,20 @@ where
 }
 
 fn main() -> MyResult<()> {
+    env_logger::init();
+
     let matches = App::new("MirDB")
         .version("0.0.1")
         .author("yetone <yetoneful@gmail.com>")
         .about("A KV DB")
-        .arg(Arg::with_name("config")
-            .short("c")
-            .long("config")
-            .value_name("FILE")
-            .help("Sets a custom config file")
-            .takes_value(true))
+        .arg(
+            Arg::with_name("config")
+                .short("c")
+                .long("config")
+                .value_name("FILE")
+                .help("Sets a custom config file")
+                .takes_value(true),
+        )
         .get_matches();
 
     let conf_path = matches.value_of("config").unwrap_or("default.conf");
@@ -110,14 +115,18 @@ fn main() -> MyResult<()> {
     let store = Store::new(opt.clone())?;
     let store = Arc::new(store);
 
-    println!("{}", r#"
+    println!(
+        "{}",
+        r#"
   __  __ _     ___  ___
  |  \/  (_)_ _|   \| _ )
  | |\/| | | '_| |) | _ \
  |_|  |_|_|_| |___/|___/
 
 Welcome to MirDB!
-"#.trim_matches('\n'));
+"#
+        .trim_matches('\n')
+    );
 
     serve(addr, move || Ok(Server::new(store.clone())));
 

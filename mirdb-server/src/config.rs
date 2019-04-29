@@ -8,8 +8,8 @@ use toml;
 use crate::error::err;
 use crate::error::MyResult;
 use crate::error::StatusCode;
-use crate::options::{GB, KB, MB, Options, TB};
-use crate::parser_util::macros::{digit, IRResult, space, usize_parser};
+use crate::options::{Options, GB, KB, MB, TB};
+use crate::parser_util::macros::{digit, space, usize_parser, IRResult};
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -63,18 +63,14 @@ gen_parser!(
 
 gen_parser!(
     size_parser<usize>,
-    chain!(
-        size: usize_parser
-            >> unit: size_unit_parser
-            >> (to_size_unit(unit) * size)
-    )
+    chain!(size: usize_parser >> unit: size_unit_parser >> (to_size_unit(unit) * size))
 );
 
 fn parse_size(a: &[u8]) -> MyResult<usize> {
     match size_parser(a) {
         IRResult::Ok(v) => Ok(v.1),
         IRResult::Err(e) => err(StatusCode::ConfigError, e.to_owned()),
-        IRResult::Incomplete(_) => err(StatusCode::ConfigError, "incomplete!")
+        IRResult::Incomplete(_) => err(StatusCode::ConfigError, "incomplete!"),
     }
 }
 

@@ -1,3 +1,4 @@
+use log::info;
 use std::borrow::Borrow;
 use std::fmt::Debug;
 use std::path::Path;
@@ -116,7 +117,7 @@ impl DataManager {
                 return Ok(());
             }
 
-            println!("redoing...");
+            info!("redoing...");
 
             let work_dir = Path::new(&self.opt_.work_dir);
 
@@ -127,10 +128,10 @@ impl DataManager {
                 let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
                 let seg = seg.clone()?;
                 threads.push(thread::spawn(move || {
-                    println!("building sstable {:?}...", path);
+                    info!("building sstable {:?}...", path);
                     let st = time::SystemTime::now();
                     let t = seg.build_sstable(&opt, &path).unwrap();
-                    println!(
+                    info!(
                         "build sstable {:?} cost: {}ms",
                         path,
                         st.elapsed().unwrap().as_millis()
@@ -163,7 +164,7 @@ impl DataManager {
 
         assert_eq!(0, read_lock(&self.wal_).seg_count());
 
-        println!("redo done!");
+        info!("redo done!");
 
         Ok(())
     }
@@ -273,7 +274,7 @@ impl DataManager {
             readers.compute_compaction_levels()
         };
         if levels.len() > 0 {
-            println!("size compaction: {:?}", levels);
+            info!("size compaction: {:?}", levels);
             self.size_compaction(levels)?;
         } else {
             self.seek_compaction()?;
