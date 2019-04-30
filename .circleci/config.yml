@@ -19,6 +19,11 @@ jobs:
             rustfmt --version
             cargo fmt -- --check
       - run:
+          name: Lint
+          command: |
+            rustup component add clippy
+            cargo clippy --all-features
+      - run:
           name: Nightly Build
           command: |
             rustup run nightly rustc --version --verbose
@@ -35,7 +40,8 @@ jobs:
             rustup run stable cargo build --all-features
       - run:
           name: Test
-          command: rustup run stable cargo test --all-features
+          command: |
+            rustup run stable cargo test --all-features
       - save_cache:
           key: project-cache
           paths:
