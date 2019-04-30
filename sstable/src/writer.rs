@@ -14,7 +14,7 @@ pub fn write_usize<T: Seek + Write>(
     w.seek(SeekFrom::Start(offset as u64))?;
     let mut buf = [0; 8];
     content.encode_fixed(&mut buf);
-    w.write(&buf)?;
+    w.write_all(&buf)?;
     Ok((buf.len(), offset + buf.len()))
 }
 
@@ -24,7 +24,7 @@ pub fn write_bytes<T: Write + Seek>(
     content: &[u8],
 ) -> MyResult<(usize, usize)> {
     w.seek(SeekFrom::Start(offset as u64))?;
-    w.write(content)?;
+    w.write_all(content)?;
     Ok((content.len(), offset + content.len()))
 }
 

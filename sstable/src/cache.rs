@@ -19,15 +19,17 @@ impl<T> Cache<T> {
 
     pub fn new_cache_id(&mut self) -> CacheID {
         self.id += 1;
-        return self.id;
+        self.id
     }
 
+    #[inline]
     pub fn count(&self) -> usize {
-        return self.inner.len();
+        self.inner.len()
     }
 
+    #[inline]
     pub fn cap(&self) -> usize {
-        return self.inner.cap();
+        self.inner.cap()
     }
 
     pub fn insert(&mut self, key: CacheKey, elem: T) {

@@ -22,7 +22,7 @@ pub fn find_shortest_sep(a: &[u8], b: &[u8]) -> Vec<u8> {
     while diff_at < min {
         let diff = a[diff_at];
         if diff < 0xff && diff + 1 < b[diff_at] {
-            let mut sep = Vec::from(&a[0..diff_at + 1]);
+            let mut sep = Vec::from(&a[0..=diff_at]);
             sep[diff_at] += 1;
             return sep;
         }
@@ -37,7 +37,7 @@ pub fn find_shortest_sep(a: &[u8], b: &[u8]) -> Vec<u8> {
     sep.extend_from_slice(a);
     // Append a 0 byte; by making it longer than a, it will compare greater to it.
     sep.extend_from_slice(&[0]);
-    return sep;
+    sep
 }
 
 pub fn find_short_succ(a: &[u8]) -> Vec<u8> {
@@ -51,10 +51,10 @@ pub fn find_short_succ(a: &[u8]) -> Vec<u8> {
     }
     // Rare path
     result.push(255);
-    return result;
+    result
 }
 
-const MASK_DELTA: u32 = 0xa282ead8;
+const MASK_DELTA: u32 = 0xa282_ead8;
 
 pub fn mask_crc(c: u32) -> u32 {
     (c.wrapping_shr(15) | c.wrapping_shl(17)).wrapping_add(MASK_DELTA)

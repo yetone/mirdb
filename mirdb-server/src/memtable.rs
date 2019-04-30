@@ -74,8 +74,9 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for Memtable<K, V> {
         self.map_.clear()
     }
 
+    #[inline]
     fn is_full(&self) -> bool {
-        return false;
+        false
     }
 
     fn size(&self) -> usize {

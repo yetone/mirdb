@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use crate::error::MyResult;
 use crate::options::Options;
 
-const MANIFEST_FILENAME: &'static str = "MANIFEST";
+const MANIFEST_FILENAME: &str = "MANIFEST";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileMeta {
@@ -95,7 +95,7 @@ impl Manifest {
     }
 
     pub fn flush<T: Write>(&self, w: &mut T) -> MyResult<()> {
-        w.write(&serialize(self)?)?;
+        w.write_all(&serialize(self)?)?;
         Ok(())
     }
 
@@ -185,7 +185,7 @@ impl fmt::Display for ManifestBuilder {
             self.manifest_.next_file_number()
         )?;
         for (i, lm) in self.manifest_.level_metas.iter().enumerate() {
-            write!(f, "Level{} ({}):\n", i, lm.file_metas.len())?;
+            writeln!(f, "Level{} ({}):", i, lm.file_metas.len())?;
             for (i, fm) in lm.file_metas.iter().enumerate() {
                 if i == 0 {
                     write!(f, "\t")?;
@@ -198,7 +198,7 @@ impl fmt::Display for ManifestBuilder {
                 }
                 write!(f, "{}", fm.file_name)?;
             }
-            write!(f, "\n")?;
+            writeln!(f)?;
         }
         Ok(())
     }

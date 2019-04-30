@@ -39,7 +39,7 @@ impl Footer {
     pub fn flush<T: Seek + Write>(&self, w: &mut T, offset: usize) -> MyResult<BlockHandle> {
         let mut buf = [0; FULL_FOOTER_LENGTH];
         self.encode(&mut buf);
-        w.write(&mut buf)?;
+        w.write_all(&buf)?;
         Ok(bh!(offset, buf.len()))
     }
 
@@ -61,12 +61,13 @@ impl Footer {
         let s1 = self.meta_index_.encode_to(to);
         let s2 = self.index_.encode_to(&mut to[s1..]);
 
+        #[allow(clippy::needless_range_loop)]
         for i in s1 + s2..FOOTER_LENGTH {
             to[i] = 0;
         }
-        for i in FOOTER_LENGTH..FULL_FOOTER_LENGTH {
-            to[i] = MAGIC_FOOTER_ENCODED[i - FOOTER_LENGTH];
-        }
+
+        to[FOOTER_LENGTH..FULL_FOOTER_LENGTH]
+            .clone_from_slice(&MAGIC_FOOTER_ENCODED[0..(FULL_FOOTER_LENGTH - FOOTER_LENGTH)]);
     }
 }
 

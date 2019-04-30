@@ -15,9 +15,10 @@ impl<'a> Merger<'a> {
 
 impl<'a> SsIterator for Merger<'a> {
     fn valid(&self) -> bool {
-        self.iters.iter().any(|x| x.valid())
+        self.iters.iter().any(SsIterator::valid)
     }
 
+    #[allow(clippy::op_ref)]
     fn advance(&mut self) -> bool {
         let mut pk: Option<Vec<u8>> = None;
         let mut pi = None;
@@ -56,6 +57,7 @@ impl<'a> SsIterator for Merger<'a> {
         pk.is_some()
     }
 
+    #[allow(clippy::op_ref)]
     fn prev(&mut self) -> bool {
         let mut pk = None;
         let mut pi = None;

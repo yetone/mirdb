@@ -96,15 +96,12 @@ impl<'a> SsIterator for TableIter<'a> {
 
         if let Some((_k, v)) = self.index_iter.current_kv() {
             let (bh, _) = BlockHandle::decode(&v);
-            match self.table.read_block(&bh) {
-                Ok(Some(block)) => {
-                    let mut iter = block.iter();
-                    iter.seek_to_last();
-                    self.data_iter_state = iter.state;
-                    self.data_block = Some(block);
-                    return true;
-                }
-                _ => (),
+            if let Ok(Some(block)) = self.table.read_block(&bh) {
+                let mut iter = block.iter();
+                iter.seek_to_last();
+                self.data_iter_state = iter.state;
+                self.data_block = Some(block);
+                return true;
             }
         }
 
@@ -131,14 +128,11 @@ impl<'a> SsIterator for TableIter<'a> {
         self.index_iter.seek(key);
         if let Some((_k, v)) = self.index_iter.current_kv() {
             let (bh, _) = BlockHandle::decode(&v);
-            match self.table.read_block(&bh) {
-                Ok(Some(block)) => {
-                    let mut iter = block.iter();
-                    iter.seek(key);
-                    self.data_iter_state = iter.state;
-                    self.data_block = Some(block);
-                }
-                _ => (),
+            if let Ok(Some(block)) = self.table.read_block(&bh) {
+                let mut iter = block.iter();
+                iter.seek(key);
+                self.data_iter_state = iter.state;
+                self.data_block = Some(block);
             }
         }
     }

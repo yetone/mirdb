@@ -324,7 +324,7 @@ pub fn is_space(chr: u8) -> bool {
 }
 
 pub fn alpha(i: &[u8]) -> IRResult<&[u8]> {
-    if i.len() == 0 {
+    if i.is_empty() {
         return IRResult::Err("");
     }
     let position = i.iter().position(|x| !is_alphabetic(*x));
@@ -336,7 +336,7 @@ pub fn alpha(i: &[u8]) -> IRResult<&[u8]> {
 }
 
 pub fn digit<T: FromStr>(i: &[u8]) -> IRResult<T> {
-    if i.len() == 0 {
+    if i.is_empty() {
         return IRResult::Err("");
     }
     let position = i.iter().position(|x| !is_digit(*x));
@@ -366,7 +366,7 @@ pub fn usize_parser(i: &[u8]) -> IRResult<usize> {
 }
 
 pub fn space(i: &[u8]) -> IRResult<&[u8]> {
-    if i.len() == 0 {
+    if i.is_empty() {
         return IRResult::Err("");
     }
     let position = i.iter().position(|x| !is_space(*x));

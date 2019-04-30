@@ -145,8 +145,8 @@ impl DataManager {
             let readers = threads
                 .into_iter()
                 .map(|handle| handle.join().unwrap())
-                .filter(|x| x.is_some())
-                .map(|x| x.unwrap())
+                .filter(Option::is_some)
+                .map(Option::unwrap)
                 .map(|path| TableReader::new(&path, table_opt.clone()).unwrap())
                 .collect();
 
@@ -231,7 +231,7 @@ impl DataManager {
         K: Borrow<StoreKey>,
     {
         let r = self.get(k.borrow())?;
-        if !r.is_none() {
+        if r.is_some() {
             self.insert_with_option(k.borrow().clone(), None)?;
         }
         Ok(r)
@@ -273,7 +273,7 @@ impl DataManager {
             let readers = read_lock(&self.readers_);
             readers.compute_compaction_levels()
         };
-        if levels.len() > 0 {
+        if !levels.is_empty() {
             info!("size compaction: {:?}", levels);
             self.size_compaction(levels)?;
         } else {
@@ -399,14 +399,14 @@ impl DataManager {
 
     fn get_other_readers<'a>(
         &'a self,
-        min_key: &Vec<u8>,
-        max_key: &Vec<u8>,
-        readers: &'a Vec<TableReader>,
+        min_key: &[u8],
+        max_key: &[u8],
+        readers: &'a [TableReader],
     ) -> Vec<&'a TableReader> {
         readers
             .iter()
-            .take_while(|x| x.min_key() <= max_key)
-            .filter(|x| x.max_key() >= min_key)
+            .take_while(|x| x.min_key().as_slice() <= max_key)
+            .filter(|x| x.max_key().as_slice() >= min_key)
             .collect()
     }
 

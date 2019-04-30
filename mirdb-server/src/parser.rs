@@ -31,11 +31,7 @@ gen_parser!(
 );
 
 fn unwrap_no_reply(x: Option<&[u8]>) -> bool {
-    if let Some(_) = x {
-        true
-    } else {
-        false
-    }
+    x.is_some()
 }
 
 fn to_getter_type(x: &[u8]) -> GetterType {

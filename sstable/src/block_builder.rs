@@ -129,7 +129,7 @@ impl BlockBuilder {
 
         // write ctype
         let ctype_buf = [self.opt.compress_type as u8; BLOCK_CTYPE_LEN];
-        self.buffer.write(&ctype_buf)?;
+        self.buffer.write_all(&ctype_buf)?;
 
         let mut digest = crc32::Digest::new(crc32::CASTAGNOLI);
         digest.write(&self.buffer);
@@ -138,7 +138,7 @@ impl BlockBuilder {
         self.buffer.write_fixedint(mask_crc(digest.sum32()))?;
 
         w.seek(SeekFrom::Start(offset as u64))?;
-        w.write(&self.buffer)?;
+        w.write_all(&self.buffer)?;
 
         let bh = bh!(offset, self.buffer.len());
 

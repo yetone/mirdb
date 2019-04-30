@@ -82,7 +82,7 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {
     fn insert(&mut self, k: K, v: V) -> Option<V> {
         assert!(!self.is_full());
 
-        if self.tables_.len() == 0 {
+        if self.tables_.is_empty() {
             self.tables_.push_back(Memtable::new(
                 self.per_table_max_size_,
                 self.per_table_max_height_,
@@ -95,8 +95,7 @@ impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {
             }
         }
 
-        assert!(false, "not access here!");
-        None
+        unreachable!("can not access here!");
     }
 
     fn clear(&mut self) {

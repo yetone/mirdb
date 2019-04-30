@@ -44,7 +44,7 @@ impl Decoder for ServerCodec {
         src.split_to(src_used);
         match result {
             Ok(x) => Ok(x),
-            e @ Err(_) => e.into(),
+            e @ Err(_) => e,
         }
     }
 }

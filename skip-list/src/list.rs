@@ -133,6 +133,7 @@ impl<K: Ord, V> SkipList<K, V> {
 
         let node_ptr = SkipListNode::allocate(key, value, height);
 
+        #[allow(clippy::needless_range_loop)]
         for i in 0..=height {
             let update = &mut updates[i];
             unsafe {
@@ -196,6 +197,7 @@ impl<K: Ord, V> SkipList<K, V> {
         }
     }
 
+    #[allow(clippy::mut_from_ref)]
     fn get_lower_bound<Q: ?Sized>(&self, key: &Q) -> &mut SkipListNode<K, V>
     where
         K: Borrow<Q>,
@@ -230,6 +232,7 @@ impl<K: Ord, V> SkipList<K, V> {
                 return None;
             }
 
+            #[allow(clippy::needless_range_loop)]
             for i in 0..=next.height() {
                 let update = &mut updates[i];
                 unsafe {

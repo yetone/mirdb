@@ -21,10 +21,17 @@ pub struct Slice {
     inner: Bytes,
 }
 
+impl Default for Slice {
+    #[inline]
+    fn default() -> Self {
+        Self::with_capacity(0)
+    }
+}
+
 impl Slice {
     #[inline]
     pub fn new() -> Self {
-        Self::with_capacity(0)
+        Self::default()
     }
 
     #[inline]
@@ -91,6 +98,7 @@ impl PartialOrd<Vec<u8>> for Slice {
     }
 }
 
+#[allow(clippy::derive_hash_xor_eq)]
 impl hash::Hash for Slice {
     fn hash<H>(&self, state: &mut H)
     where

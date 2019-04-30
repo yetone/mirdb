@@ -53,7 +53,7 @@ impl Block {
         let ctype_buf =
             &data[data.len() - BLOCK_CTYPE_LEN - BLOCK_CKSUM_LEN..data.len() - BLOCK_CKSUM_LEN];
         let buf = &data[..data.len() - BLOCK_CKSUM_LEN - BLOCK_CTYPE_LEN];
-        if let Some(ctype) = int_to_compress_type(ctype_buf[0] as u32) {
+        if let Some(ctype) = int_to_compress_type(u32::from(ctype_buf[0])) {
             match ctype {
                 CompressType::None => Ok((Block::new_with_buffer(buf, opt), offset)),
                 CompressType::Snappy => {
@@ -74,8 +74,7 @@ impl Block {
 
     pub fn restarts_offset(&self) -> usize {
         let restarts = u32::decode_fixed(&self.block[self.block.len() - 4..]);
-        let restarts_offset = self.block.len() - 4 - 4 * restarts as usize;
-        restarts_offset
+        self.block.len() - 4 - 4 * restarts as usize
     }
 
     pub fn iter(&self) -> BlockIter {

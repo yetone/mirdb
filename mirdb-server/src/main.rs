@@ -17,11 +17,10 @@ use tokio::prelude::*;
 use tokio_proto::TcpServer;
 use tokio_service::{NewService, Service};
 
-use proto::Proto;
-
 use crate::error::MyResult;
 use crate::options::Options;
 use crate::parser::parse;
+use crate::proto::Proto;
 use crate::request::Request;
 use crate::response::Response;
 use crate::store::Store;

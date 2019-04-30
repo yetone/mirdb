@@ -42,14 +42,14 @@ pub struct TableReader {
 
 impl TableReader {
     pub fn new<T: AsRef<Path>>(path: T, opt: Options) -> MyResult<TableReader> {
-        let mut f = File::open(path.as_ref())?;
+        let f = File::open(path.as_ref())?;
         let size = f.metadata()?.len() as usize;
         if size <= FULL_FOOTER_LENGTH {
             println!("path: {}", path.as_ref().display());
             println!("size: {}", size);
             assert!(size > FULL_FOOTER_LENGTH);
         }
-        let footer = Footer::read(&mut f, size - FULL_FOOTER_LENGTH)?;
+        let footer = Footer::read(&f, size - FULL_FOOTER_LENGTH)?;
         let meta_block = MetaBlock::new_from_location(&f, &footer.meta_index())?.0;
         let index_block = Block::new_from_location(&f, &footer.index(), opt.clone())?.0;
         let metadata = f.metadata()?;

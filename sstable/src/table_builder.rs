@@ -75,7 +75,7 @@ impl TableBuilder {
         }
         self.data_block.add(k, v);
         self.filter.add(k)?;
-        if let None = &self.min_key {
+        if self.min_key.is_none() {
             self.min_key = Some(k.to_vec());
         }
         self.max_key = Some(k.to_vec());

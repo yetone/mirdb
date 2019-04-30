@@ -113,7 +113,7 @@ impl WALSeg {
             );
         }
 
-        self.file.write(&buf)?;
+        self.file.write_all(&buf)?;
 
         self.file.flush()?;
 
@@ -220,9 +220,8 @@ impl WAL {
         let path = Path::new(&opt.work_dir);
         let mut paths = vec![];
         for entry in glob(path.join("*.wal").to_str().expect("path to str"))? {
-            match entry {
-                Ok(path) => paths.push(path),
-                _ => (),
+            if let Ok(path) = entry {
+                paths.push(path);
             }
         }
         paths.sort();
@@ -237,8 +236,8 @@ impl WAL {
                     Some(seg)
                 }
             })
-            .filter(|x| x.is_some())
-            .map(|x| x.unwrap())
+            .filter(Option::is_some)
+            .map(Option::unwrap)
             .collect();
         Ok(WAL {
             opt,

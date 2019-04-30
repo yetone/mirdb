@@ -45,7 +45,7 @@ impl StorePayload {
         if self.ttl == 0 {
             return false;
         }
-        self.created_at + self.ttl as u64
+        self.created_at + u64::from(self.ttl)
             <= SystemTime::now()
                 .duration_since(UNIX_EPOCH)
                 .unwrap()
@@ -126,7 +126,7 @@ impl Store {
                     SetterType::Add => {
                         // Cannot use self.data.entry(key).or_insert(sp);
                         // because of the NOT_STORED response
-                        if let None = self.data.get(&key)? {
+                        if self.data.get(&key)?.is_none() {
                             self.data.insert(key, sp)?;
                         } else {
                             return Ok(Response::NotStored);
@@ -135,7 +135,7 @@ impl Store {
                     SetterType::Replace => {
                         // Cannot use self.data.entry(key).and_modify(|e| *e = sp);
                         // because of the NOT_STORED response
-                        if let None = self.data.get(&key)? {
+                        if self.data.get(&key)?.is_none() {
                             return Ok(Response::NotStored);
                         } else {
                             self.data.insert(key, sp)?;

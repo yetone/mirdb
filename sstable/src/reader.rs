@@ -7,7 +7,7 @@ use crate::types::RandomAccess;
 pub fn read_usize(r: &dyn RandomAccess, offset: usize) -> MyResult<(usize, usize)> {
     let mut buf = [0; 8];
     r.read_at(offset, &mut buf)?;
-    let decoded = usize::decode_fixed(&mut buf);
+    let decoded = usize::decode_fixed(&buf);
     Ok((decoded, offset + buf.len()))
 }
 

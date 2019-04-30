@@ -58,6 +58,7 @@ impl SstableReader {
         &self.readers_[level]
     }
 
+    #[allow(clippy::op_ref)]
     pub fn search_readers<K>(&self, level: usize, key: &K) -> Vec<&TableReader>
     where
         K: ?Sized + Borrow<[u8]>,
@@ -77,7 +78,7 @@ impl SstableReader {
                     res.push(reader);
                 }
             }
-        } else if readers.len() > 0 {
+        } else if !readers.is_empty() {
             let mut left = 0;
             let mut right = readers.len() - 1;
 
@@ -92,8 +93,7 @@ impl SstableReader {
 
             assert_eq!(left, right);
 
-            for i in left..readers.len() {
-                let reader = &readers[i];
+            for reader in readers.iter().skip(left) {
                 if &(reader.min_key())[..] <= key && &(reader.max_key())[..] >= key {
                     res.push(reader);
                     continue;
@@ -187,7 +187,7 @@ impl SstableReader {
             for reader in readers {
                 let r = reader.get(k.borrow())?;
                 if r.is_some() {
-                    return Ok(r.map(|x| Slice::from(x)));
+                    return Ok(r.map(Slice::from));
                 }
             }
         }
@@ -201,7 +201,8 @@ impl SstableReader {
             let score = if i == 0 {
                 readers.len() as f64 / self.opt_.l0_compaction_trigger as f64
             } else {
-                readers.iter().map(|x| x.size()).sum::<usize>() as f64 / self.max_bytes_for_level(i)
+                readers.iter().map(TableReader::size).sum::<usize>() as f64
+                    / self.max_bytes_for_level(i)
             };
             if score >= 1. {
                 scores.push((i, score))
@@ -213,7 +214,7 @@ impl SstableReader {
 
     fn max_bytes_for_level(&self, level: usize) -> f64 {
         let mut level = level;
-        let mut result = 10. * 1048576.;
+        let mut result = 10. * 1_048_576.;
         while level > 1 {
             result *= 10.;
             level -= 1;
