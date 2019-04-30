@@ -1,6 +1,5 @@
 #![allow(unused_imports, unused_macros, dead_code)]
 
-use env_logger;
 use std::cell::RefCell;
 use std::error::Error;
 use std::io;
@@ -12,12 +11,13 @@ use std::sync::{Arc, RwLock};
 
 use clap::App;
 use clap::Arg;
+use env_logger;
 use futures::{future, Future};
 use tokio::prelude::*;
 use tokio_proto::TcpServer;
 use tokio_service::{NewService, Service};
 
-pub use proto::Proto;
+use proto::Proto;
 
 use crate::error::MyResult;
 use crate::options::Options;
