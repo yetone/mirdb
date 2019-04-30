@@ -11,7 +11,7 @@
 
 ### USAGE
 
-It is painless as using memcached.
+It is painless as using [memcached](https://github.com/memcached/memcached/blob/master/doc/protocol.txt).
 
 ![usage](https://github.com/yetone/mirdb/raw/master/assets/usage.gif)
 
