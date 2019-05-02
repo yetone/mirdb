@@ -7,7 +7,7 @@
 [![CircleCI][cc-badge]][cc-url]
 
  [cc-url]: https://circleci.com/gh/yetone/mirdb
- [cc-badge]: https://atompunk.yetone.fun/github/yetone/mirdb?v=1
+ [cc-badge]: https://atompunk.yetone.fun/github/yetone/mirdb?v=2
 
 ### USAGE
 
