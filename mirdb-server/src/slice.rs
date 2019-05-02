@@ -224,9 +224,7 @@ impl<'a> Extend<&'a u8> for Slice {
 
 impl From<BytesMut> for Slice {
     fn from(src: BytesMut) -> Self {
-        Self {
-            inner: src.into(),
-        }
+        Self { inner: src.into() }
     }
 }
 
