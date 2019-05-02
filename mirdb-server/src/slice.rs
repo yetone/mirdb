@@ -152,14 +152,14 @@ impl fmt::Debug for Slice {
 impl<'a> Borrow<[u8]> for &'a Slice {
     #[inline]
     fn borrow(&self) -> &[u8] {
-        self.inner.borrow()
+        self.as_ref()
     }
 }
 
 impl Borrow<[u8]> for Slice {
     #[inline]
     fn borrow(&self) -> &[u8] {
-        self.inner.borrow()
+        self.as_ref()
     }
 }
 
@@ -225,7 +225,7 @@ impl<'a> Extend<&'a u8> for Slice {
 impl From<BytesMut> for Slice {
     fn from(src: BytesMut) -> Self {
         Self {
-            inner: src.freeze(),
+            inner: src.into(),
         }
     }
 }
