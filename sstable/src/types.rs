@@ -49,14 +49,14 @@ pub trait SsIterator {
     }
 
     fn current_kv(&self) -> Option<(Vec<u8>, Vec<u8>)> {
-        if self.valid() {
-            if let Some(k) = self.current_k() {
-                if let Some(v) = self.current_v() {
-                    return Some((k, v));
-                }
-            }
+        if !self.valid() {
+            return None
         }
-        None
+        self.current_k().and_then(|k| {
+            self.current_v().and_then(|v| {
+                Some((k, v))
+            })
+        })
     }
 
     fn next(&mut self) -> Option<(Vec<u8>, Vec<u8>)> {
