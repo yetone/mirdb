@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility Test Suite</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-pass {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .test-fail {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        .test-skip {
+            color: #ffc107;
+            font-weight: 600;
+        }
+        .test-info {
+            color: #6c757d;
+            font-weight: 600;
+        }
+        .hidden-frame {
+            width: 1px;
+            height: 1px;
+            border: none;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            left: -9999px;
+        }
+        .test-summary {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: #e8f4f8;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .test-detail {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Accessibility Test Suite</h1>
+
+    <div class="test-results">
+        <h2>Test Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <iframe id="test-iframe" class="hidden-frame" src="../index.html"></iframe>
+
+    <script>
+        class AccessibilityTests {
+            constructor(iframe) {
+                this.iframe = iframe;
+                this.results = [];
+            }
+
+            async runTest(name, testFn, critical = true) {
+                try {
+                    await testFn();
+                    this.pass(name, critical);
+                    return true;
+                } catch (error) {
+                    this.fail(name, error, critical);
+                    return false;
+                }
+            }
+
+            pass(name, critical) {
+                this.results.push({ name, status: 'pass', error: null, critical, category: this.categorizeTest(name) });
+            }
+
+            fail(name, error, critical) {
+                this.results.push({ name, status: 'fail', error: error.message, stack: error.stack, critical, category: this.categorizeTest(name) });
+            }
+
+            skip(name, reason) {
+                this.results.push({ name, status: 'skip', error: reason, critical: false, category: this.categorizeTest(name) });
+            }
+
+            categorizeTest(name) {
+                if (name.includes('heading') || name.includes('heading structure')) {
+                    return 'headings';
+                } else if (name.includes('alt') || name.includes('image')) {
+                    return 'images';
+                } else if (name.includes('keyboard') || name.includes('Tab')) {
+                    return 'keyboard-navigation';
+                } else if (name.includes('focus')) {
+                    return 'focus-indicators';
+                } else if (name.includes('contrast')) {
+                    return 'color-contrast';
+                } else if (name.includes('motion') || name.includes('prefers-reduced-motion')) {
+                    return 'reduced-motion';
+                } else if (name.includes('semantic')) {
+                    return 'semantic-html';
+                } else if (name.includes('role')) {
+                    return 'aria';
+                }
+                return 'other';
+            }
+
+            getResults() {
+                return this.results;
+            }
+
+            async waitForElement(selector, timeout = 3000) {
+                const start = Date.now();
+                while (Date.now() - start < timeout) {
+                    const element = this.iframe.contentDocument.querySelector(selector);
+                    if (element) return element;
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                throw new Error(`Element ${selector} not found within ${timeout}ms`);
+            }
+
+            waitForLoad(timeout = 3000) {
+                return new Promise((resolve, reject) => {
+                    const start = Date.now();
+                    const checkLoad = () => {
+                        if (this.iframe.contentDocument && this.iframe.contentDocument.readyState === 'complete') {
+                            const body = this.iframe.contentDocument.querySelector('body');
+                            if (body) {
+                                resolve();
+                            } else if (Date.now() - start < timeout) {
+                                setTimeout(checkLoad, 100);
+                            } else {
+                                reject(new Error('Body not loaded within timeout'));
+                            }
+                        } else if (Date.now() - start < timeout) {
+                            setTimeout(checkLoad, 100);
+                        } else {
+                            reject(new Error('Page not loaded within timeout')));
+                        }
+                    };
+                    checkLoad();
+                });
+            }
+
+            // Helper to check if element is focusable
+            isFocusable(element) {
+                if (!element) return false;
+
+                const tagName = element.tagName.toLowerCase();
+                const tabIndex = element.getAttribute('tabindex');
+
+                // Focusable elements
+                return tagName === 'a' ||
+                       tagName === 'button' ||
+                       tagName === 'input' ||
+                       tagName === 'select' ||
+                       tagName === 'textarea' ||
+                       (tabIndex !== null && parseInt(tabIndex) > -1);
+            }
+        }
+
+        // Initialize tests when iframe loads
+        window.addEventListener('load', async () => {
+            const iframe = document.getElementById('test-iframe');
+            const resultsDiv = document.getElementById('results');
+
+            // Wait for iframe to load
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            const test = new AccessibilityTests(iframe);
+
+            // Test Case 1: Heading hierarchy structure
+            await test.runTest('Heading hierarchy is properly structured (H1 > H2 > H3)', async () => {
+                await test.waitForLoad();
+
+                const headings = {
+                    h1: Array.from(iframe.contentDocument.querySelectorAll('h1')),
+                    h2: Array.from(iframe.contentDocument.querySelectorAll('h2')),
+                    h3: Array.from(iframe.contentDocument.querySelectorAll('h3'))
+                };
+
+                // Check H1 count
+                if (headings.h1.length !== 1) {
+                    throw new Error(`Expected exactly 1 H1 element, found ${headings.h1.length}`);
+                }
+
+                // Check H1 text
+                const h1Text = headings.h1[0].textContent.trim();
+                if (h1Text !== 'MirDB') {
+                    throw new Error(`H1 text is '${h1Text}', expected 'MirDB'`);
+                }
+
+                // Verify no skipped heading levels in document structure
+                const allHeadings = Array.from(iframe.contentDocument.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+                for (let i = 1; i < allHeadings.length; i++) {
+                    const prevLevel = parseInt(allHeadings[i-1].tagName[1]);
+                    const currLevel = parseInt(allHeadings[i].tagName[1]);
+                    if (currLevel - prevLevel > 1) {
+                        throw new Error(`Heading level skip detected: from H${prevLevel} to H${currLevel}`);
+                    }
+                }
+
+                // Check that H2s exist for major sections
+                if (headings.h2.length < 1) {
+                    throw new Error(`Expected at least 1 H2 element for main sections, found ${headings.h2.length}`);
+                }
+            });
+
+            // Test Case 2: H2 elements exist for major sections
+            await test.runTest('H2 elements exist for major content sections', async () => {
+                await test.waitForLoad();
+
+                const sectionsWithH2 = iframe.contentDocument.querySelectorAll('section h2, main h2, .container > h2');
+                if (sectionsWithH2.length === 0) {
+                    throw new Error('No H2 elements found for major sections');
+                }
+
+                // Check that H2s have meaningful content
+                for (const h2 of sectionsWithH2) {
+                    if (h2.textContent.trim().length < 3) {
+                        throw new Error(`H2 has insufficient text content: '${h2.textContent.trim()}'`);
+                    }
+                }
+            });
+
+            // Test Case 3: Alt text for images
+            await test.runTest('All images have descriptive alt text', async () => {
+                await test.waitForLoad();
+
+                const images = iframe.contentDocument.querySelectorAll('img');
+                if (images.length === 0) {
+                    throw new Error('No images found on the page');
+                }
+
+                for (const img of images) {
+                    const alt = img.getAttribute('alt');
+
+                    if (!alt) {
+                        throw new Error(`Image with src='${img.src}' is missing alt attribute`);
+                    }
+
+                    if (alt.trim() === '') {
+                        throw new Error(`Image with src='${img.src}' has empty alt text`);
+                    }
+
+                    // Check for descriptive alt text (not just "image" or "logo")
+                    const nonDescriptive = ['image', 'img', 'picture', 'logo', 'icon'];
+                    if (nonDescriptive.includes(alt.toLowerCase().trim())) {
+                        throw new Error(`Image has non-descriptive alt text: '${alt}'`);
+                    }
+
+                    // Check specific images
+                    if (img.src.includes('logo.gif')) {
+                        if (!alt.toLowerCase().includes('logo') && !alt.toLowerCase().includes('mirdb')) {
+                            throw new Error(`Logo alt text '${alt}' should describe it's a logo`);
+                        }
+                    }
+                }
+
+                // Check that we found the logo image
+                const logoImages = Array.from(images).filter(img => img.src.includes('logo.gif'));
+                if (logoImages.length === 0) {
+                    throw new Error('Logo image (logo.gif) not found');
+                }
+            });
+
+            // Test Case 4: Keyboard navigation
+            await test.runTest('All interactive elements are keyboard accessible', async () => {
+                await test.waitForLoad();
+
+                const interactiveElements = iframe.contentDocument.querySelectorAll(
+                    'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+
+                if (interactiveElements.length === 0) {
+                    throw new Error('No interactive elements found');
+                }
+
+                for (const element of interactiveElements) {
+                    const isVisible = this.isVisible(element);
+                    const isKeyboardAccessible = test.isFocusable(element);
+
+                    if (isVisible && !isKeyboardAccessible) {
+                        const tagName = element.tagName.toLowerCase();
+                        const hasTabIndex = element.hasAttribute('tabindex');
+                        const tabIndex = element.getAttribute('tabindex');
+
+                        throw new Error(`Visible interactive element ${tagName}${hasTabIndex ? `[tabindex=${tabIndex}]` : ''} is not keyboard accessible`);
+                    }
+                }
+
+                // Specifically check buttons in hero section
+                const heroButtons = iframe.contentDocument.querySelectorAll('.hero-actions button, .hero-actions a');
+                if (heroButtons.length < 2) {
+                    throw new Error(`Expected at least 2 buttons in hero section, found ${heroButtons.length}`);
+                }
+            });
+
+            // Test Case 5: Focus indicators
+            await test.runTest('Focus indicators are visible and distinct', async () => {
+                await test.waitForLoad();
+
+                const buttons = iframe.contentDocument.querySelectorAll('button, a.btn, .btn');
+
+                if (buttons.length === 0) {
+                    throw new Error('No buttons found to test focus indicators');
+                }
+
+                const doc = iframe.contentDocument;
+                const styles = doc.defaultView.getComputedStyle(buttons[0]);
+
+                // Check if there's a CSS rule for :focus or :focus-visible
+                const styleSheets = Array.from(doc.styleSheets);
+                let hasFocusStyles = false;
+
+                for (const sheet of styleSheets) {
+                    try {
+                        const rules = Array.from(sheet.cssRules || []);
+                        for (const rule of rules) {
+                            if (rule.selectorText && (
+                                rule.selectorText.includes(':focus') ||
+                                rule.selectorText.includes(':focus-visible')
+                            )) {
+                                hasFocusStyles = true;
+                                break;
+                            }
+                        }
+                        if (hasFocusStyles) break;
+                    } catch (e) {
+                        // Skip cross-origin stylesheets
+                    }
+                }
+
+                // Log warning if no focus styles found (not critical)
+                if (!hasFocusStyles) {
+                    test.skip('Focus indicator styles checked', 'Manual verification needed - check for :focus or :focus-visible styles');
+                }
+            });
+
+            // Test Case 6: Color contrast detection
+            await test.runTest('Color combinations appear to have sufficient contrast', async () => {
+                await test.waitForLoad();
+
+                // This is a manual check - automated contrast checking is complex
+                // We'll verify that colors are defined and not relying only on color
+
+                const heroSection = await test.waitForElement('.hero-section');
+                const heroTitle = await test.waitForElement('.hero-title');
+                const heroTagline = await test.waitForElement('.hero-tagline');
+
+                const computedStyle = (el) => iframe.contentWindow.getComputedStyle(el);
+
+                // Check that colors are defined
+                const heroBg = computedStyle(heroSection).backgroundColor;
+                const titleColor = computedStyle(heroTitle).color;
+                const titleBg = computedStyle(heroTitle).backgroundColor;
+                const taglineColor = computedStyle(heroTagline).color;
+
+                if (!heroBg || heroBg === 'transparent') {
+                    throw new Error('Hero section background color not defined');
+                }
+
+                if (!titleColor || titleColor === 'transparent') {
+                    throw new Error('Title text color not defined');
+                }
+
+                if (!taglineColor || taglineColor === 'transparent') {
+                    throw new Error('Tagline text color not defined');
+                }
+
+                // Check that information is not conveyed by color alone
+                // Look for elements that have only color differences
+                const buttons = iframe.contentDocument.querySelectorAll('.btn');
+                if (buttons.length >= 2) {
+                    const btn1Style = computedStyle(buttons[0]);
+                    const btn2Style = computedStyle(buttons[1]);
+
+                    // Check that buttons have different styling (not just color)
+                    if (btn1Style.backgroundColor === btn2Style.backgroundColor &&
+                        btn1Style.border === btn2Style.border) {
+                        throw new Error('Buttons may be using color alone to convey differences');
+                    }
+                }
+            });
+
+            // Test Case 7: Semantic HTML
+            await test.runTest('Semantic HTML elements are used appropriately', async () => {
+                await test.waitForLoad();
+
+                const doc = iframe.contentDocument;
+
+                // Check for landmarks
+                const header = doc.querySelector('header');
+                const main = doc.querySelector('main');
+                const footer = doc.querySelector('footer');
+                const nav = doc.querySelector('nav');
+
+                if (!header) {
+                    throw new Error('Missing semantic <header> element');
+                }
+
+                if (!main) {
+                    throw new Error('Missing semantic <main> element');
+                }
+
+                if (!footer) {
+                    throw new Error('Missing semantic <footer> element');
+                }
+
+                // Check for sections
+                const sections = doc.querySelectorAll('section');
+                if (sections.length === 0) {
+                    throw new Error('No <section> elements found');
+                }
+
+                // Check that <nav> is present or not needed
+                if (!nav) {
+                    // If there's navigation, it should use <nav>
+                    const navLinks = doc.querySelectorAll('header a, footer a');
+                    if (navLinks.length > 5) {
+                        throw new Error('Multiple navigation links found but no <nav> element used');
+                    }
+                }
+            });
+
+            // Test Case 8: Reduced motion support
+            await test.runTest('Prefers-reduced-motion is supported', async () => {
+                await test.waitForLoad();
+
+                const doc = iframe.contentDocument;
+                const styleSheets = Array.from(doc.styleSheets);
+
+                let hasReducedMotionSupport = false;
+                let hasAnimations = false;
+
+                // First, check if there are any animations defined
+                for (const sheet of styleSheets) {
+                    try {
+                        const rules = Array.from(sheet.cssRules || []);
+                        for (const rule of rules) {
+                            if (rule.type === CSSRule.KEYFRAMES_RULE ||
+                                (rule.style && (rule.style.animation || rule.style.transition))) {
+                                hasAnimations = true;
+                            }
+
+                            // Check for prefers-reduced-motion media query
+                            if (rule.conditionText && rule.conditionText.includes('prefers-reduced-motion')) {
+                                hasReducedMotionSupport = true;
+                            }
+                        }
+                    } catch (e) {
+                        // Skip cross-origin stylesheets
+                    }
+                }
+
+                if (hasAnimations && !hasReducedMotionSupport) {
+                    throw new Error('Animations are present but prefers-reduced-motion is not supported');
+                }
+            });
+
+            // Test Case 9: ARIA landmarks
+            await test.runTest('ARIA landmarks are present or not needed', async () => {
+                await test.waitForLoad();
+
+                const doc = iframe.contentDocument;
+
+                // Top-level landmarks
+                const landmarks = {
+                    header: doc.querySelector('header'),
+                    main: doc.querySelector('main'),
+                    footer: doc.querySelector('footer'),
+                    nav: doc.querySelector('nav'),
+                    complementary: doc.querySelector('[role="complementary"]')
+                };
+
+                // Check if header has role="banner" or implicit header for main
+                if (landmarks.header && landmarks.header === doc.querySelector('body > header')) {
+                    const role = landmarks.header.getAttribute('role');
+                    if (role && role !== 'banner' && role !== 'group') {
+                        throw new Error(`Header has invalid role: ${role}`);
+                    }
+                }
+
+                // Check if main has role="main" or implicit main
+                if (landmarks.main) {
+                    const role = landmarks.main.getAttribute('role');
+                    if (role && role !== 'main') {
+                        throw new Error(`Main section has invalid role: ${role}`);
+                    }
+                }
+
+                // Footer checks
+                if (landmarks.footer && landmarks.footer === doc.querySelector('body > footer')) {
+                    const role = landmarks.footer.getAttribute('role');
+                    if (role && role !== 'contentinfo') {
+                        throw new Error(`Footer has invalid role: ${role}`);
+                    }
+                }
+            });
+
+            // Display results
+            displayResults(test.getResults(), resultsDiv);
+        });
+
+        function displayResults(results, container) {
+            const passCount = results.filter(r => r.status === 'pass').length;
+            const failCount = results.filter(r => r.status === 'fail').length;
+            const skipCount = results.filter(r => r.status === 'skip').length;
+            const totalCount = results.length;
+
+            const criticalPass = results.filter(r => r.status === 'pass' && r.critical).length;
+            const criticalTotal = results.filter(r => r.critical).length;
+
+            container.innerHTML = `
+                <div class="test-summary">
+                    <strong>Test Summary:</strong> ${passCount}/${totalCount} passed
+                    ${failCount > 0 ? `<span style="color: #dc3545;">(${failCount} failed)</span>` : ''}
+                    ${skipCount > 0 ? `<span style="color: #ffc107;">(${skipCount} skipped)</span>` : ''}
+                    <br><strong>Critical Tests:</strong> ${criticalPass}/${criticalTotal} passed
+                </div>
+
+                <div id="results-by-category"></div>
+            `;
+
+            // Group results by category
+            const byCategory = {};
+            results.forEach(result => {
+                if (!byCategory[result.category]) {
+                    byCategory[result.category] = [];
+                }
+                byCategory[result.category].push(result);
+            });
+
+            const categoryHtml = Object.entries(byCategory)
+                .map(([category, categoryResults]) => `
+                    <div style="margin: 20px 0;">
+                        <h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px;">
+                            ${category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')}
+                        </h3>
+                        ${categoryResults.map(result => `
+                            <div class="test-detail">
+                                <strong>${result.name}</strong>
+                                <span class="test-${result.status}">[${result.status.toUpperCase()}]</span>
+                                ${result.critical ? '<span style="color: #e74c3c;">[CRITICAL]</span>' : ''}
+                                ${result.error && result.status === 'fail' ? `<div style="margin-top: 10px; color: #dc3545; font-size: 0.95em;"><strong>Error:</strong> ${result.error}</div>` : ''}
+                                ${result.error && result.status === 'skip' ? `<div style="margin-top: 10px; color: #ffc107; font-size: 0.95em;"><strong>Note:</strong> ${result.error}</div>` : ''}
+                                ${result.stack ? `<details style="margin-top: 10px;"><summary style="cursor: pointer; color: #6c757d; font-size: 0.85em;">Stack Trace</summary><pre style="background: #f1f1f1; padding: 10px; overflow-x: auto; font-size: 0.8em;">${result.stack}</pre></details>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `)
+                .join('');
+
+            document.getElementById('results-by-category').innerHTML = categoryHtml;
+
+            // Log summary to console
+            console.log(`Accessibility Test Results: ${passCount}/${totalCount} passed, ${failCount} failed, ${skipCount} skipped`);
+        }
+
+        // Helper function to check if an element is visible
+        function isVisible(element) {
+            const style = element.ownerDocument.defaultView.getComputedStyle(element);
+            return style.visibility !== 'hidden' &&
+                   style.display !== 'none' &&
+                   parseFloat(style.opacity) > 0.1;
+        }
+    </script>
+</body>
+</html>

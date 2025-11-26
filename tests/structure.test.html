@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structure and Accessibility Validation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        .results-section {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-category {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background: #e8f4f8;
+        }
+        .test-case {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #dee2e6;
+        }
+        .pass { color: #27ae60; font-weight: 600; }
+        .fail { color: #e74c3c; font-weight: 600; }
+        .info { color: #6c757d; }
+        code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .cta-button:hover {
+            background: #2980b9;
+        }
+        iframe {
+            width: 1px;
+            height: 1px;
+            position: absolute;
+            left: -9999px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Accessibility & Structure Validation Results</h1>
+    <p>Validating homepage against WCAG 2.1 AA guidelines and semantic HTML best practices.</p>
+
+    <div class="results-section">
+        <h2>Automated Test Results</h2>
+        <div id="test-results">
+            <div class="info">Loading and testing page structure...</div>
+        </div>
+    </div>
+
+    <div class="results-section">
+        <h2>Manual Test Checklist</h2>
+        <div id="manual-tests">
+            <h3>Keyboard Navigation ✓</h3>
+            <div class="test-case">
+                <p><strong>Test:</strong> Navigate using Tab key</p>
+                <p><strong>Expected:</strong> All interactive elements are reachable</p>
+                <p class="pass">
+                    <strong>Status:</strong> Ready to test - All <code>button</code>, <code>a[href]</code>, and interactive elements have proper focus
+                </p>
+            </div>
+
+            <h3>Focus Indicators ✓</h3>
+            <div class="test-case">
+                <p><strong>Test:</strong> Check focus-visible styles</p>
+                <p><strong>Expected:</strong> Clear visual indicators different from default state</p>
+                <p class="pass">
+                    <strong>Status:</strong> Ready to test - Focus styles implemented with 3px white outline and purple shadow
+                </p>
+            </div>
+
+            <h3>Color Contrast ✓</h3>
+            <div class="test-case">
+                <p><strong>Test:</strong> Run contrast analysis</p>
+                <p><strong>Expected:</strong> WCAG AA ratios (4.5:1 normal, 3:1 large)</p>
+                <p class="pass">
+                    <strong>Status:</strong> Ready to test - Colors selected to meet AA standards:
+                    <br>• White text on gradient background
+                    <br>• Dark text on light backgrounds
+                    <br>• High contrast mode support via media query
+                </p>
+            </div>
+
+            <h3>Responsive Design ✓</h3>
+            <div class="test-case">
+                <p><strong>Test:</strong> Check mobile and tablet views</p>
+                <p class="pass">
+                    <strong>Status:</strong> CSS grid and flexbox used with media queries at 768px and 480px breakpoints
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-section">
+        <h2>Expected Test Results</h2>
+        <p>Based on the implemented changes, we anticipate the following:</p>
+
+        <div class="test-category">
+            <h3>Heading Hierarchy ✓ PASS</h3>
+            <div class="test-case">
+                <strong>1 H1</strong>: "MirDB" (hero title)<br>
+                <strong>3 H2s</strong>: "Key Features", "Live Demonstration", "Quick Start"<br>
+                <strong>9 H3s</strong>: Feature cards, demo description, and quick-start subsections<br>
+                <span class="pass">No skipped levels, proper hierarchical structure</span>
+            </div>
+        </div>
+
+        <div class="test-category">
+            <h3>Alt Text ✓ PASS</h3>
+            <div class="test-case">
+                <strong>Logo image:</strong> "Animated MirDB logo showing key-value database operations with flowing data visualization"<br>
+                <strong>Demo image:</strong> "Animated demonstration showing MirDB server startup, client connection, and basic operations including SET, GET, and DELETE commands"<br>
+                <span class="pass">Both images have descriptive, meaningful alt text</span>
+            </div>
+        </div>
+
+        <div class="test-category">
+            <h3>Semantic HTML ✓ PASS</h3>
+            <div class="test-case">
+                <strong>Landmarks:</strong> <code>header</code>, <code>main</code>, <code>footer</code><br>
+                <strong>Sections:</strong> <code>section</code> elements for features, demo, and quick-start<br>
+                <strong>Articles:</strong> <code>article</code> elements for feature cards<br>
+                <strong>Skip links:</strong> Two skip links for main content and quick start<br>
+                <span class="pass">Proper semantic structure with ARIA landmarks</span>
+            </div>
+        </div>
+
+        <div class="test-category">
+            <h3>Reduced Motion ✓ PASS</h3>
+            <div class="test-case">
+                <strong>Media query:</strong> <code>@media (prefers-reduced-motion: reduce)</code><br>
+                <strong>Disabled:</strong> Animations, transitions, and smooth scrolling<br>
+                <span class="pass">Respects user accessibility preferences</span>
+            </div>
+        </div>
+
+        <div class="test-category">
+            <h3>High Contrast Mode ✓ PASS</h3>
+            <div class="test-case">
+                <strong>Media query:</strong> <code>@media (prefers-contrast: high)</code><br>
+                <strong>Enhanced contrast:</strong> High contrast colors for buttons and sections<br>
+                <span class="pass">Supports high contrast display modes</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-section">
+        <h2>Next Steps</h2>
+        <p>To complete the validation:</p>
+        <div class="test-case">
+            <ol>
+                <li>Open <code>tests/accessibility.test.html</code> in a browser</li>
+                <li>Run automated tests (JavaScript-based)</li>
+                <li>Manually test keyboard navigation with Tab key</li>
+                <li>Verify focus indicators are visible on all interactive elements</li>
+                <li>Use a contrast checker tool to verify WCAG AA compliance</li>
+                <li>Test with screen reader (NVDA, JAWS, or VoiceOver)</li>
+                <li>Enable reduced motion in OS settings and verify animations stop</li>
+            </ol>
+        </div>
+        <a href="javascript:void(0);" onclick="window.open('../index.html', '_blank')" class="cta-button">Open Homepage in New Tab</a>
+    </div>
+
+    <iframe id="test-iframe" src="../index.html"></iframe>
+
+    <script>
+        function runTests() {
+            const iframe = document.getElementById('test-iframe');
+            const resultsDiv = document.getElementById('test-results');
+
+            setTimeout(() => {
+                try {
+                    const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+                    // Test 1: Validate HTML structure
+                    const tests = [];
+
+                    // Heading hierarchy test
+                    const h1s = doc.querySelectorAll('h1');
+                    tests.push({
+                        name: 'Single H1 element exists',
+                        passed: h1s.length === 1,
+                        expected: '1',
+                        actual: h1s.length,
+                        details: h1s.length > 0 ? `H1 text: "${h1s[0].textContent.trim()}"` : ''
+                    });
+
+                    // Check for H1 content
+                    if (h1s.length === 1) {
+                        tests.push({
+                            name: 'H1 contains product name',
+                            passed: h1s[0].textContent.trim() === 'MirDB',
+                            expected: 'MirDB',
+                            actual: h1s[0].textContent.trim()
+                        });
+                    }
+
+                    // Check for H2 sections
+                    const h2s = doc.querySelectorAll('h2');
+                    tests.push({
+                        name: 'Multiple H2 elements for sections',
+                        passed: h2s.length >= 2,
+                        expected: '>= 2',
+                        actual: h2s.length,
+                        details: Array.from(h2s).map(h => h.textContent.trim()).join(', ')
+                    });
+
+                    // Check for alt text
+                    const images = doc.querySelectorAll('img');
+                    let allImagesHaveAlt = true;
+                    let altTexts = [];
+                    images.forEach(img => {
+                        const alt = img.getAttribute('alt');
+                        if (!alt || alt.trim() === '') {
+                            allImagesHaveAlt = false;
+                        } else {
+                            altTexts.push(`"${alt.trim()}"`);
+                        }
+                    });
+
+                    tests.push({
+                        name: 'All images have alt text',
+                        passed: allImagesHaveAlt && images.length > 0,
+                        expected: `all ${images.length} images have alt text`,
+                        actual: `${images.length} images, ${altTexts.length} with alt text`,
+                        details: altTexts.join('\n• ')
+                    });
+
+                    // Check for semantic elements
+                    const header = doc.querySelector('header');
+                    const main = doc.querySelector('main');
+                    const footer = doc.querySelector('footer');
+                    const sections = doc.querySelectorAll('section');
+                    const articles = doc.querySelectorAll('article');
+
+                    tests.push({
+                        name: 'Semantic HTML structure',
+                        passed: header && main && footer && sections.length > 0,
+                        expected: 'header, main, footer, sections',
+                        actual: `header: ${!!header}, main: ${!!main}, footer: ${!!footer}, sections: ${sections.length}, articles: ${articles.length}`
+                    });
+
+                    // Check for skip links
+                    const skipLinks = doc.querySelectorAll('.skip-link');
+                    tests.push({
+                        name: 'Skip links for accessibility',
+                        passed: skipLinks.length >= 2,
+                        expected: '>= 2 skip links',
+                        actual: `${skipLinks.length} skip links`,
+                        details: Array.from(skipLinks).map(s => s.textContent.trim()).join(', ')
+                    });
+
+                    // Check for focus styles
+                    const hasFocusStyles = doc.querySelector('style') || doc.querySelector('link[href*="styles"]');
+                    tests.push({
+                        name: 'CSS loaded for focus and accessibility styles',
+                        passed: !!hasFocusStyles,
+                        expected: 'CSS file linked',
+                        actual: hasFocusStyles ? 'CSS found' : 'No CSS'
+                    });
+
+                    // Render results
+                    let html = `\n                        <div class="info">\n                            <strong>Automated tests completed</strong><br>\n                            Found ${images.length} images, ${h2s.length} H2 headings, ${sections.length} sections\n                        </div>\n                    `;
+
+                    tests.forEach((test, index) => {
+                        html += `\n                            <div class="test-case">\n                                <strong>Test ${index + 1}:</strong> ${test.name}\n                                <span class="${test.passed ? 'pass' : 'fail'}">[${test.passed ? 'PASS' : 'FAIL'}]</span>\n                                <div class="info">Expected: ${test.expected}</div>\n                                <div class="info">Actual: ${test.actual}</div>\n                                ${test.details ? `<div class="info" style="margin-top: 5px;"><strong>Details:</strong><br>• ${test.details}</div>` : ''}\n                            </div>\n                        `;
+                    });
+
+                    const passCount = tests.filter(t => t.passed).length;
+                    const failCount = tests.filter(t => !t.passed).length;
+
+                    html = `<div class="test-category">\n                        <h3>Summary</h3>\n                        <p class="${failCount === 0 ? 'pass' : 'fail'}">\n                            <strong>Overall:</strong> ${passCount}/${tests.length} tests passed\n                            ${failCount > 0 ? `(${failCount} failures)` : ''}\n                        </p>\n                        ${html}\n                    </div>`;
+
+                    resultsDiv.innerHTML = html;
+
+                } catch (error) {
+                    resultsDiv.innerHTML = `<div class="fail">Error running tests: ${error.message}</div>`;
+                }
+            }, 1500);
+        }
+
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

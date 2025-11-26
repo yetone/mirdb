@@ -8,10 +8,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#quick-start" class="skip-link">Skip to quick start</a>
+
     <header class="hero-section" id="hero">
         <div class="hero-content">
             <div class="hero-logo">
-                <img src="assets/logo.gif" alt="MirDB animated logo showing database operations" class="logo-image">
+                <img src="assets/logo.gif" alt="Animated MirDB logo showing key-value database operations with flowing data visualization" class="logo-image">
             </div>
             <h1 class="hero-title">MirDB</h1>
             <p class="hero-tagline">Persistent Key-Value Store with Memcached Protocol Support</p>
@@ -26,7 +29,48 @@
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2>Key Features</h2>
+                <p>Discover what makes MirDB unique.</p>
+
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <h3>Memcached Protocol Compatible</h3>
+                        <p>Drop-in replacement for Memcached clients. Use your existing client libraries without any code changes.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <h3>Persistent Storage</h3>
+                        <p>Data survives server restarts via LSM Tree storage engine with Write-Ahead Logging for durability.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <h3>Built with Rust</h3>
+                        <p>High performance and memory safety guaranteed by Rust's ownership system and zero-cost abstractions.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <h3>High Performance</h3>
+                        <p>Skip-List memtable for fast in-memory operations and configurable compression for efficient storage.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="demo" class="demo-section">
+            <div class="container">
+                <h2>Live Demonstration</h2>
+                <p>See MirDB in action.</p>
+
+                <div class="demo-content">
+                    <img src="assets/usage.gif" alt="Animated demonstration showing MirDB server startup, client connection, and basic operations including SET, GET, and DELETE commands" class="demo-image">
+                    <p>This demonstration shows MirDB server starting up, accepting client connections, and performing basic SET, GET, and DELETE operations.</p>
+                </div>
+            </div>
+        </section>
+
         <section id="quick-start" class="quick-start-section">
             <div class="container">
                 <h2>Quick Start</h2>
