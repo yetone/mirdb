@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO and Meta Tags Test Suite</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        .test-results {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-pass {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .test-fail {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        .test-info {
+            color: #6c757d;
+            font-weight: 600;
+        }
+        .hidden-frame {
+            width: 1px;
+            height: 1px;
+            border: none;
+            position: absolute;
+            left: -9999px;
+        }
+        .test-category {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background: #e8f4f8;
+        }
+        .test-case {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #dee2e6;
+        }
+        .test-summary {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>SEO and Meta Tags Test Suite</h1>
+    <p>Validating homepage SEO optimization including meta tags, Open Graph, Twitter Cards, and semantic HTML.</p>
+
+    <div class="test-results">
+        <h2>Test Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <iframe id="test-iframe" class="hidden-frame" src="../index.html"></iframe>
+
+    <script>
+        class SEOTests {
+            constructor(iframe) {
+                this.iframe = iframe;
+                this.results = [];
+                this.seoData = {};
+            }
+
+            async runTest(name, testFn) {
+                try {
+                    await testFn();
+                    this.pass(name);
+                    return true;
+                } catch (error) {
+                    this.fail(name, error);
+                    return false;
+                }
+            }
+
+            pass(name) {
+                this.results.push({ name, status: 'pass', error: null, category: this.categorizeTest(name) });
+            }
+
+            fail(name, error) {
+                this.results.push({ name, status: 'fail', error: error.message, stack: error.stack, category: this.categorizeTest(name) });
+            }
+
+            categorizeTest(name) {
+                if (name.includes('title')) return 'title';
+                if (name.includes('meta description') || name.includes('description')) return 'meta-description';
+                if (name.includes('Open Graph') || name.includes('og:')) return 'open-graph';
+                if (name.includes('Twitter') || name.includes('twitter:')) return 'twitter-card';
+                if (name.includes('canonical')) return 'canonical-url';
+                if (name.includes('semantic') || name.includes('HTML')) return 'semantic-html';
+                if (name.includes('viewport')) return 'viewport';
+                return 'other';
+            }
+
+            getResults() {
+                return this.results;
+            }
+
+            getSEOData() {
+                return this.seoData;
+            }
+
+            async waitForLoad(timeout = 3000) {
+                return new Promise((resolve, reject) => {
+                    const start = Date.now();
+                    const checkLoad = () => {
+                        if (this.iframe.contentDocument && this.iframe.contentDocument.readyState === 'complete') {
+                            const head = this.iframe.contentDocument.querySelector('head');
+                            if (head) {
+                                resolve();
+                            } else if (Date.now() - start < timeout) {
+                                setTimeout(checkLoad, 100);
+                            } else {
+                                reject(new Error('Head element not loaded within timeout'));
+                            }
+                        } else if (Date.now() - start < timeout) {
+                            setTimeout(checkLoad, 100);
+                        } else {
+                            reject(new Error('Page not loaded within timeout'));
+                        }
+                    };
+                    checkLoad();
+                });
+            }
+
+            extractMetaTag(name, property = 'name') {
+                const meta = this.iframe.contentDocument.querySelector(`meta[${property}="${name}"]`);
+                return meta ? meta.getAttribute('content') : null;
+            }
+        }
+
+        // Initialize tests when iframe loads
+        window.addEventListener('load', async () => {
+            const iframe = document.getElementById('test-iframe');
+            const resultsDiv = document.getElementById('results');
+
+            // Wait for iframe to load
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            const test = new SEOTests(iframe);
+            const seoData = {};
+
+            // Test Case 1: Page title exists and is optimal
+            await test.runTest('Page title exists and contains MirDB', async () => {
+                await test.waitForLoad();
+
+                const title = iframe.contentDocument.title;
+                seoData.title = title;
+
+                if (!title || title.trim() === '') {
+                    throw new Error('Page title is missing or empty');
+                }
+
+                if (!title.includes('MirDB')) {
+                    throw new Error(`Title "${title}" does not include product name "MirDB"`);
+                }
+
+                if (title.length > 70) {
+                    throw new Error(`Title is ${title.length} characters (optimal: 50-60 characters)`);
+                }
+
+                if (title.length < 30) {
+                    throw new Error(`Title is ${title.length} characters (optimal: 30-70 characters)`);
+                }
+            });
+
+            // Test Case 2: Meta description exists and is optimal
+            await test.runTest('Meta description exists and is 150-160 characters', async () => {
+                await test.waitForLoad();
+
+                const metaDesc = test.extractMetaTag('description');
+                seoData.metaDescription = metaDesc;
+
+                if (!metaDesc) {
+                    throw new Error('Meta description tag is missing');
+                }
+
+                if (metaDesc.trim() === '') {
+                    throw new Error('Meta description is empty');
+                }
+
+                if (metaDesc.length < 120) {
+                    throw new Error(`Meta description is ${metaDesc.length} characters (minimum: 120 characters)`);
+                }
+
+                if (metaDesc.length > 160) {
+                    throw new Error(`Meta description is ${metaDesc.length} characters (maximum: 160 characters)`);
+                }
+
+                if (!metaDesc.includes('MirDB') && !metaDesc.includes('key-value')) {
+                    throw new Error('Meta description should mention MirDB or key-value functionality');
+                }
+            });
+
+            // Test Case 3: Open Graph title exists
+            await test.runTest('Open Graph og:title tag exists', async () => {
+                await test.waitForLoad();
+
+                const ogTitle = test.extractMetaTag('og:title', 'property');
+                seoData.ogTitle = ogTitle;
+
+                if (!ogTitle) {
+                    throw new Error('Open Graph og:title meta tag is missing');
+                }
+
+                if (ogTitle.trim() === '') {
+                    throw new Error('Open Graph og:title is empty');
+                }
+            });
+
+            // Test Case 4: Open Graph description exists
+            await test.runTest('Open Graph og:description tag exists', async () => {
+                await test.waitForLoad();
+
+                const ogDesc = test.extractMetaTag('og:description', 'property');
+                seoData.ogDescription = ogDesc;
+
+                if (!ogDesc) {
+                    throw new Error('Open Graph og:description meta tag is missing');
+                }
+
+                if (ogDesc.trim() === '') {
+                    throw new Error('Open Graph og:description is empty');
+                }
+            });
+
+            // Test Case 5: Open Graph type is 'website'
+            await test.runTest('Open Graph og:type is "website"', async () => {
+                await test.waitForLoad();
+
+                const ogType = test.extractMetaTag('og:type', 'property');
+                seoData.ogType = ogType;
+
+                if (!ogType) {
+                    throw new Error('Open Graph og:type meta tag is missing');
+                }
+
+                if (ogType !== 'website') {
+                    throw new Error(`Open Graph og:type is "${ogType}", expected "website"`);
+                }
+            });
+
+            // Test Case 6: Open Graph URL exists
+            await test.runTest('Open Graph og:url tag exists', async () => {
+                await test.waitForLoad();
+
+                const ogUrl = test.extractMetaTag('og:url', 'property');
+                seoData.ogUrl = ogUrl;
+
+                if (!ogUrl) {
+                    throw new Error('Open Graph og:url meta tag is missing');
+                }
+
+                if (ogUrl.trim() === '') {
+                    throw new Error('Open Graph og:url is empty');
+                }
+
+                if (!ogUrl.startsWith('http')) {
+                    throw new Error(`Open Graph og:url "${ogUrl}" should be an absolute URL starting with http/https`);
+                }
+            });
+
+            // Test Case 7: Open Graph image exists
+            await test.runTest('Open Graph og:image tag exists', async () => {
+                await test.waitForLoad();
+
+                const ogImage = test.extractMetaTag('og:image', 'property');
+                seoData.ogImage = ogImage;
+
+                if (!ogImage) {
+                    throw new Error('Open Graph og:image meta tag is missing');
+                }
+
+                if (ogImage.trim() === '') {
+                    throw new Error('Open Graph og:image is empty');
+                }
+
+                if (!ogImage.includes('logo.gif') && !ogImage.includes('usage.gif')) {
+                    throw new Error(`Open Graph og:image "${ogImage}" should reference logo.gif or usage.gif`);
+                }
+            });
+
+            // Test Case 8: Twitter Card tags exist (if Twitter optimization is desired)
+            await test.runTest('Twitter Card meta tags are present', async () => {
+                await test.waitForLoad();
+
+                const twitterCard = test.extractMetaTag('twitter:card');
+                const twitterTitle = test.extractMetaTag('twitter:title');
+                const twitterDesc = test.extractMetaTag('twitter:description');
+
+                seoData.twitterCard = twitterCard;
+                seoData.twitterTitle = twitterTitle;
+                seoData.twitterDescription = twitterDesc;
+
+                if (!twitterCard) {
+                    test.skip('Twitter Card tags checked', 'twitter:card tag is optional but recommended for Twitter optimization');
+                    return;
+                }
+
+                if (twitterCard !== 'summary' && twitterCard !== 'summary_large_image') {
+                    throw new Error(`twitter:card is "${twitterCard}", expected "summary" or "summary_large_image"`);
+                }
+
+                if (!twitterTitle) {
+                    throw new Error('twitter:title meta tag is missing');
+                }
+
+                if (!twitterDesc) {
+                    throw new Error('twitter:description meta tag is missing');
+                }
+            });
+
+            // Test Case 9: Canonical URL tag exists
+            await test.runTest('Canonical URL link tag exists and points to homepage', async () => {
+                await test.waitForLoad();
+
+                const canonicalLink = iframe.contentDocument.querySelector('link[rel="canonical"]');
+
+                if (!canonicalLink) {
+                    throw new Error('Canonical URL link tag is missing');
+                }
+
+                const canonicalHref = canonicalLink.getAttribute('href');
+                seoData.canonicalUrl = canonicalHref;
+
+                if (!canonicalHref || canonicalHref.trim() === '') {
+                    throw new Error('Canonical URL href attribute is empty');
+                }
+
+                if (!canonicalHref.startsWith('http')) {
+                    throw new Error(`Canonical URL "${canonicalHref}" should be an absolute URL starting with http/https`);
+                }
+            });
+
+            // Test Case 10: Viewport meta tag for mobile optimization
+            await test.runTest('Viewport meta tag exists for mobile optimization', async () => {
+                await test.waitForLoad();
+
+                const viewport = test.extractMetaTag('viewport');
+                seoData.viewport = viewport;
+
+                if (!viewport) {
+                    throw new Error('Viewport meta tag is missing');
+                }
+
+                if (!viewport.includes('width=device-width')) {
+                    throw new Error('Viewport meta tag should include "width=device-width"');
+                }
+
+                if (!viewport.includes('initial-scale=1.0')) {
+                    throw new Error('Viewport meta tag should include "initial-scale=1.0"');
+                }
+            });
+
+            // Test Case 11: Semantic HTML structure
+            await test.runTest('Semantic HTML5 elements are used appropriately', async () => {
+                await test.waitForLoad();
+
+                const doc = iframe.contentDocument;
+
+                const header = doc.querySelector('header');
+                const main = doc.querySelector('main');
+                const footer = doc.querySelector('footer');
+                const sections = doc.querySelectorAll('section');
+                const articles = doc.querySelectorAll('article');
+                const navs = doc.querySelectorAll('nav');
+
+                if (!header) {
+                    throw new Error('Semantic <header> element is missing');
+                }
+
+                if (!main) {
+                    throw new Error('Semantic <main> element is missing');
+                }
+
+                if (!footer) {
+                    throw new Error('Semantic <footer> element is missing');
+                }
+
+                if (sections.length === 0) {
+                    throw new Error('No semantic <section> elements found');
+                }
+
+                if (articles.length === 0) {
+                    throw new Error('No semantic <article> elements found');
+                }
+
+                seoData.semanticElements = {
+                    header: !!header,
+                    main: !!main,
+                    footer: !!footer,
+                    sections: sections.length,
+                    articles: articles.length,
+                    navs: navs.length
+                };
+            });
+
+            // Test Case 12: Language attribute
+            await test.runTest('HTML document has lang attribute', async () => {
+                await test.waitForLoad();
+
+                const htmlElement = iframe.contentDocument.documentElement;
+                const lang = htmlElement.getAttribute('lang');
+
+                if (!lang) {
+                    throw new Error('HTML document is missing lang attribute');
+                }
+
+                if (lang !== 'en') {
+                    throw new Error(`HTML lang attribute is "${lang}", expected "en"`);
+                }
+
+                seoData.language = lang;
+            });
+
+            // Test Case 13: Character encoding
+            await test.runTest('Character encoding is defined as UTF-8', async () => {
+                await test.waitForLoad();
+
+                const charsetMeta = test.extractMetaTag(null);
+                const charsetElement = iframe.contentDocument.querySelector('meta[charset]');
+
+                if (!charsetElement) {
+                    throw new Error('Character encoding meta tag is missing');
+                }
+
+                const charset = charsetElement.getAttribute('charset');
+                seoData.charset = charset;
+
+                if (charset.toLowerCase() !== 'utf-8') {
+                    throw new Error(`Character encoding is "${charset}", expected "UTF-8"`);
+                }
+            });
+
+            // Store SEO data for results display
+            test.seoData = seoData;
+
+            // Display results
+            displayResults(test.getResults(), seoData, resultsDiv);
+        });
+
+        function displayResults(results, seoData, container) {
+            const passCount = results.filter(r => r.status === 'pass').length;
+            const failCount = results.filter(r => r.status === 'fail').length;
+            const skipCount = results.filter(r => r.status === 'skip').length;
+            const totalCount = results.length;
+
+            const categories = {};
+            results.forEach(result => {
+                if (!categories[result.category]) {
+                    categories[result.category] = [];
+                }
+                categories[result.category].push(result);
+            });
+
+            let html = `
+                <div class="test-summary" style="background: ${failCount === 0 ? '#d4edda' : '#f8d7da'};">
+                    <strong>Test Summary:</strong> ${passCount}/${totalCount} passed
+                    ${failCount > 0 ? `<span class="test-fail">(${failCount} failed)</span>` : '<span class="test-pass">✓</span>'}
+                    ${skipCount > 0 ? `<span style="color: #ffc107;">(${skipCount} skipped)</span>` : ''}
+                </div>
+            `;
+
+            // Display SEO data summary
+            if (Object.keys(seoData).length > 0) {
+                html += `
+                    <div class="test-category">
+                        <h3>SEO Data Found</h3>
+                        <pre><code>${JSON.stringify(seoData, null, 2)}</code></pre>
+                    </div>
+                `;
+            }
+
+            // Group results by category
+            Object.entries(categories).forEach(([category, categoryResults]) => {
+                const categoryPass = categoryResults.filter(r => r.status === 'pass').length;
+                const categoryTotal = categoryResults.length;
+
+                html += `
+                    <div class="test-category">
+                        <h3>${category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')}</h3>
+                        <div style="margin-bottom: 15px; color: ${categoryPass === categoryTotal ? '#28a745' : '#dc3545'};">
+                            <strong>Category Results:</strong> ${categoryPass}/${categoryTotal} passed
+                        </div>
+                `;
+
+                categoryResults.forEach((result, index) => {
+                    html += `
+                        <div class="test-case">
+                            <strong>Test ${index + 1}:</strong> ${result.name}
+                            <span class="test-${result.status}">[${result.status.toUpperCase()}]</span>
+                            ${result.error ? `<div style="margin-top: 10px; color: #dc3545; font-size: 0.95em;"><strong>Error:</strong> ${result.error}</div>` : ''}
+                            ${result.stack ? `<details style="margin-top: 10px;"><summary style="cursor: pointer; color: #6c757d; font-size: 0.85em;">Stack Trace</summary><pre style="background: #f1f1f1; padding: 10px; overflow-x: auto; font-size: 0.8em;">${result.stack}</pre></details>` : ''}
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+
+            // Log summary to console
+            console.log(`SEO Test Results: ${passCount}/${totalCount} passed, ${failCount} failed, ${skipCount} skipped`);
+            console.log('SEO Data:', seoData);
+        }
+    </script>
+</body>
+</html>
