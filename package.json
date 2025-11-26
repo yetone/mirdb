@@ -6,9 +6,13 @@
     "test": "node tests/hero.test.js",
     "test:e2e": "node tests/e2e.test.js",
     "test:quickstart": "node tests/quickstart.test.js",
+    "test:performance": "node tests/performance.test.js",
+    "test:navigation": "node tests/navigation.test.js",
+    "test:static-perf": "node tests/static-performance.test.js",
     "serve": "python3 -m http.server 8000"
   },
   "devDependencies": {
-    "playwright": "^1.40.0"
+    "playwright": "^1.40.0",
+    "puppeteer": "^21.6.0"
   }
 }
