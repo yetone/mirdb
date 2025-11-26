@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Section Tests</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-pass { color: #28a745; }
+        .test-fail { color: #dc3545; }
+        .test-info { color: #6c757d; }
+        .hidden-frame {
+            width: 100%;
+            height: 500px;
+            border: none;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hero Section Test Suite</h1>
+
+    <div class="test-results">
+        <h2>Test Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <iframe id="test-iframe" class="hidden-frame" src="../index.html"></iframe>
+
+    <script>
+        class HeroSectionTest {
+            constructor(iframe) {
+                this.iframe = iframe;
+                this.results = [];
+            }
+
+            async runTest(name, testFn) {
+                try {
+                    await testFn();
+                    this.pass(name);
+                    return true;
+                } catch (error) {
+                    this.fail(name, error);
+                    return false;
+                }
+            }
+
+            pass(name) {
+                this.results.push({ name, status: 'pass', error: null });
+            }
+
+            fail(name, error) {
+                this.results.push({ name, status: 'fail', error: error.message, stack: error.stack });
+            }
+
+            getResults() {
+                return this.results;
+            }
+
+            // Test helper methods
+            async waitForElement(selector, timeout = 2000) {
+                const start = Date.now();
+                while (Date.now() - start < timeout) {
+                    const element = this.iframe.contentDocument.querySelector(selector);
+                    if (element) return element;
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                throw new Error(`Element ${selector} not found within ${timeout}ms`);
+            }
+
+            async waitForLoad(timeout = 2000) {
+                return new Promise((resolve, reject) => {
+                    const start = Date.now();
+                    const checkLoad = () => {
+                        if (this.iframe.contentDocument && this.iframe.contentDocument.readyState === 'complete') {
+                            const heroSection = this.iframe.contentDocument.querySelector('.hero-section');
+                            if (heroSection) {
+                                resolve();
+                            } else if (Date.now() - start < timeout) {
+                                setTimeout(checkLoad, 100);
+                            } else {
+                                reject(new Error('Hero section not loaded within timeout'));
+                            }
+                        } else if (Date.now() - start < timeout) {
+                            setTimeout(checkLoad, 100);
+                        } else {
+                            reject(new Error('Page not loaded within timeout'));
+                        }
+                    };
+                    checkLoad();
+                });
+            }
+        }
+
+        // Initialize tests when iframe loads
+        window.addEventListener('load', async () => {
+            const iframe = document.getElementById('test-iframe');
+            const resultsDiv = document.getElementById('results');
+
+            // Wait a bit for iframe to load
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const test = new HeroSectionTest(iframe);
+
+            // Test Case 1: Hero section loads within 2 seconds
+            await test.runTest('Hero section loads within 2 seconds', async () => {
+                const start = Date.now();
+                const heroSection = await test.waitForElement('.hero-section', 2000);
+                const loadTime = Date.now() - start;
+
+                if (loadTime > 2000) {
+                    throw new Error(`Hero section took ${loadTime}ms to load (expected <= 2000ms)`);
+                }
+            });
+
+            // Test Case 2: Product name 'MirDB' is displayed with h1 tag
+            await test.runTest('Product name MirDB is displayed with h1 tag', async () => {
+                await test.waitForLoad();
+
+                const heroTitle = await test.waitForElement('.hero-title');
+                if (!heroTitle) {
+                    throw new Error('Hero title element not found');
+                }
+
+                if (heroTitle.tagName !== 'H1') {
+                    throw new Error(`Title is not an H1 tag, found ${heroTitle.tagName}`);
+                }
+
+                if (heroTitle.textContent.trim() !== 'MirDB') {
+                    throw new Error(`Title text is '${heroTitle.textContent.trim()}', expected 'MirDB'`);
+                }
+            });
+
+            // Test Case 3: Tagline is clearly readable and present
+            await test.runTest('Tagline is present and correct', async () => {
+                await test.waitForLoad();
+
+                const tagline = await test.waitForElement('.hero-tagline');
+                if (!tagline) {
+                    throw new Error('Tagline element not found');
+                }
+
+                const expectedTagline = 'Persistent Key-Value Store with Memcached Protocol Support';
+                if (tagline.textContent.trim() !== expectedTagline) {
+                    throw new Error(`Tagline is '${tagline.textContent.trim()}', expected '${expectedTagline}'`);
+                }
+
+                // Check that tagline is visible
+                const style = iframe.contentWindow.getComputedStyle(tagline);
+                if (style.visibility === 'hidden' || style.display === 'none' || parseFloat(style.opacity) < 0.1) {
+                    throw new Error('Tagline is not visible');
+                }
+            });
+
+            // Test Case 4: Animated logo displays correctly with alt text
+            await test.runTest('Animated logo displays correctly with alt text', async () => {
+                await test.waitForLoad();
+
+                const logo = await test.waitForElement('.logo-image');
+                if (!logo) {
+                    throw new Error('Logo image not found');
+                }
+
+                if (logo.tagName !== 'IMG') {
+                    throw new Error(`Logo is not an IMG tag, found ${logo.tagName}`);
+                }
+
+                if (!logo.src.includes('logo.gif')) {
+                    throw new Error(`Logo src is '${logo.src}', expected to contain 'logo.gif'`);
+                }
+
+                const altText = logo.getAttribute('alt');
+                if (!altText || altText.trim() === '') {
+                    throw new Error('Logo missing alt text');
+                }
+
+                // Check image loaded successfully
+                if (!logo.complete) {
+                    throw new Error('Gif animation failed to load');
+                }
+
+                if (logo.naturalWidth === 0) {
+                    throw new Error('Gif animation failed to load (naturalWidth is 0)');
+                }
+            });
+
+            // Test Case 5: 'Get Started' button scrolls to quick-start section
+            await test.runTest("'Get Started' button scrolls to quick-start section", async () => {
+                await test.waitForLoad();
+
+                const button = await test.waitForElement('#get-started-btn');
+                const quickStartSection = await test.waitForElement('#quick-start');
+
+                if (!button) {
+                    throw new Error('Get Started button not found');
+                }
+
+                if (!button.textContent.includes('Get Started')) {
+                    throw new Error('Button does not contain correct text');
+                }
+
+                // Simulate click
+                button.click();
+
+                // Wait for smooth scroll
+                await new Promise(resolve => setTimeout(resolve, 600));
+
+                // Check we're at the quick-start section
+                const viewportCenter = iframe.contentWindow.scrollY + (iframe.contentWindow.innerHeight / 2);
+                const quickStartTop = quickStartSection.offsetTop;
+                const quickStartBottom = quickStartTop + quickStartSection.offsetHeight;
+
+                if (viewportCenter < quickStartTop || viewportCenter > quickStartBottom) {
+                    throw new Error('Page did not scroll to quick-start section');
+                }
+            });
+
+            // Test Case 6: 'View on GitHub' button opens correct URL in new tab
+            await test.runTest("'View on GitHub' button links to correct repository", async () => {
+                await test.waitForLoad();
+
+                const githubBtn = await test.waitForElement('#github-btn');
+                if (!githubBtn) {
+                    throw new Error('GitHub button not found');
+                }
+
+                const href = githubBtn.getAttribute('href');
+                const expected = 'https://github.com/yetone/mirdb';
+
+                if (href !== expected) {
+                    throw new Error(`GitHub link is '${href}', expected '${expected}'`);
+                }
+
+                const target = githubBtn.getAttribute('target');
+                if (target !== '_blank') {
+                    throw new Error(`GitHub link target is '${target}', expected '_blank'`);
+                }
+
+                const rel = githubBtn.getAttribute('rel');
+                if (!rel || !rel.includes('noopener') || !rel.includes('noreferrer')) {
+                    throw new Error(`GitHub link missing security attributes (rel=noopener noreferrer)`);
+                }
+            });
+
+            // Test Case 7: All elements are visible and properly styled
+            await test.runTest('All hero elements are visible and properly styled', async () => {
+                await test.waitForLoad();
+
+                const heroElements = [
+                    '.hero-title',
+                    '.hero-tagline',
+                    '.logo-image',
+                    '#get-started-btn',
+                    '#github-btn'
+                ];
+
+                for (const selector of heroElements) {
+                    const element = await test.waitForElement(selector);
+                    if (!element) {
+                        throw new Error(`Element ${selector} not found`);
+                    }
+
+                    const style = iframe.contentWindow.getComputedStyle(element);
+                    if (style.visibility === 'hidden' || style.display === 'none') {
+                        throw new Error(`Element ${selector} is not visible`);
+                    }
+                }
+            });
+
+            // Test Case 8: Responsive design elements are present
+            await test.runTest('Responsive design elements are present', async () => {
+                await test.waitForLoad();
+
+                const head = iframe.contentDocument.head;
+                const viewportMeta = head.querySelector('meta[name="viewport"]');
+
+                if (!viewportMeta) {
+                    throw new Error('Missing viewport meta tag for responsive design');
+                }
+
+                const cssLink = head.querySelector('link[href="styles.css"]');
+                if (!cssLink) {
+                    throw new Error('Missing CSS stylesheet link');
+                }
+            });
+
+            // Display results
+            displayResults(test.getResults(), resultsDiv);
+        });
+
+        function displayResults(results, container) {
+            const passCount = results.filter(r => r.status === 'pass').length;
+            const failCount = results.filter(r => r.status === 'fail').length;
+            const totalCount = results.length;
+
+            container.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <strong>Summary:</strong> ${passCount}/${totalCount} passed
+                    ${failCount > 0 ? `<span style="color: #dc3545;">(${failCount} failed)</span>` : ''}
+                </div>
+                ${results.map((result, index) => `
+                    <div style="margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 4px;">
+                        <strong>Test ${index + 1}:</strong> ${result.name}
+                        <span class="test-${result.status}">[${result.status.toUpperCase()}]</span>
+                        ${result.error ? `<div style="margin-top: 10px; color: #dc3545; font-size: 0.9em;"><strong>Error:</strong> ${result.error}</div>` : ''}
+                        ${result.stack ? `<details style="margin-top: 10px;"><summary style="cursor: pointer; color: #6c757d; font-size: 0.8em;">Stack Trace</summary><pre style="background: #f1f1f1; padding: 10px; overflow-x: auto; font-size: 0.8em;">${result.stack}</pre></details>` : ''}
+                    </div>
+                `).join('')}
+            `;
+
+            // Log summary to console
+            console.log(`Test Results: ${passCount}/${totalCount} passed`);
+        }
+    </script>
+</body>
+</html>
