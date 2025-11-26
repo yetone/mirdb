@@ -5,6 +5,7 @@
   "scripts": {
     "test": "node tests/hero.test.js",
     "test:e2e": "node tests/e2e.test.js",
+    "test:quickstart": "node tests/quickstart.test.js",
     "serve": "python3 -m http.server 8000"
   },
   "devDependencies": {

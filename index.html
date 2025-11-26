@@ -31,6 +31,61 @@
             <div class="container">
                 <h2>Quick Start</h2>
                 <p>Get started with MirDB in minutes.</p>
+
+                <div class="quick-start-subsection" id="installation">
+                    <h3>Installation</h3>
+                    <p>Install MirDB by cloning the repository and building with Cargo.</p>
+
+                    <pre><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+                </div>
+
+                <div class="quick-start-subsection" id="configuration">
+                    <h3>Configuration</h3>
+                    <p>Create a <code>mirdb.toml</code> configuration file with the following settings:</p>
+
+                    <pre><code>[server]
+address = "127.0.0.1:11211"
+work_dir = "./data"
+memtable_size = "64MB"
+sstable_max_size = "256MB"</code></pre>
+                </div>
+
+                <div class="quick-start-subsection" id="basic-usage">
+                    <h3>Basic Usage</h3>
+                    <p>Connect to MirDB using any memcache client:</p>
+
+                    <pre><code>import memcache
+
+# Connect to MirDB
+client = memcache.Client(['localhost:11211'])
+
+# Set a key-value pair
+client.set('key', 'value')
+
+# Get the value
+value = client.get('key')
+print(value)  # Output: value</code></pre>
+                </div>
+
+                <div class="quick-start-subsection" id="supported-operations">
+                    <h3>Supported Operations</h3>
+                    <p>MirDB supports the following Memcached commands:</p>
+
+                    <ul class="operations-list">
+                        <li><code>GET</code> - Retrieve the value for a given key</li>
+                        <li><code>GETS</code> - Retrieve the value with CAS token for a given key</li>
+                        <li><code>SET</code> - Store a key-value pair</li>
+                        <li><code>ADD</code> - Store a key-value pair only if the key doesn't exist</li>
+                        <li><code>REPLACE</code> - Replace an existing value for a given key</li>
+                        <li><code>APPEND</code> - Append data to an existing value</li>
+                        <li><code>PREPEND</code> - Prepend data to an existing value</li>
+                        <li><code>DELETE</code> - Delete a key-value pair</li>
+                        <li><code>INFO</code> - Get server information</li>
+                        <li><code>MajorCompaction</code> - Trigger a major compaction for SSTable optimization</li>
+                    </ul>
+                </div>
             </div>
         </section>
     </main>
