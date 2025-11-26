@@ -461,3 +461,144 @@ body {
     }
 }
 
+/* Architecture Section */
+.architecture-section {
+    padding: 5rem 0;
+    background: var(--white);
+}
+
+.architecture-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.architecture-section > .container > p {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #666;
+    margin-bottom: 3rem;
+}
+
+.architecture-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.architecture-diagram {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    overflow-x: auto;
+}
+
+.architecture-diagram svg {
+    width: 100%;
+    height: auto;
+    min-width: 600px;
+}
+
+.diagram-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    fill: var(--primary-color);
+}
+
+.diagram-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    fill: var(--text-color);
+}
+
+.diagram-description {
+    font-size: 0.8rem;
+    fill: #666;
+}
+
+.diagram-small-label {
+    font-size: 0.75rem;
+    fill: #ff6b6b;
+    font-weight: 500;
+}
+
+.architecture-explanation {
+    padding: 1rem;
+}
+
+.architecture-explanation h3 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.architecture-explanation h3:first-child {
+    margin-top: 0;
+}
+
+.architecture-explanation p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.architecture-steps,
+.architecture-benefits {
+    list-style: none;
+    padding-left: 0;
+}
+
+.architecture-steps li,
+.architecture-benefits li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+    color: #555;
+    line-height: 1.6;
+}
+
+.architecture-steps li:last-child,
+.architecture-benefits li:last-child {
+    border-bottom: none;
+}
+
+.architecture-steps strong,
+.architecture-benefits strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Responsive Architecture Section */
+@media (max-width: 968px) {
+    .architecture-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .architecture-diagram {
+        padding: 1rem;
+    }
+
+    .architecture-diagram svg {
+        min-width: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .architecture-section h2 {
+        font-size: 2rem;
+    }
+
+    .architecture-explanation h3 {
+        font-size: 1.3rem;
+    }
+
+    .architecture-diagram svg {
+        min-width: 400px;
+    }
+}
+

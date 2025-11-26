@@ -86,6 +86,102 @@
             </div>
         </section>
 
+        <section id="architecture" class="architecture-section">
+            <div class="container">
+                <h2>Architecture Overview</h2>
+                <p>Understanding MirDB's LSM Tree storage approach.</p>
+
+                <div class="architecture-content">
+                    <div class="architecture-diagram">
+                        <svg width="800" height="400" viewBox="0 0 800 400" aria-labelledby="architecture-title" role="img">
+                            <title id="architecture-title">MirDB Data Flow Architecture</title>
+                            <desc id="architecture-desc">A diagram showing data flow through write-ahead log, memtable, and SSTables</desc>
+
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#8a6bc9" />
+                                </marker>
+                            </defs>
+
+                            <!-- Write Path -->
+                            <text x="400" y="30" text-anchor="middle" class="diagram-title">Write Path Data Flow</text>
+
+                            <!-- Client -->
+                            <rect x="50" y="80" width="120" height="60" rx="5" fill="#f9f9fb" stroke="#5d4e75" stroke-width="2"/>
+                            <text x="110" y="105" text-anchor="middle" class="diagram-label">Memcached</text>
+                            <text x="110" y="125" text-anchor="middle" class="diagram-label">Client</text>
+
+                            <!-- Arrow -->
+                            <line x1="170" y1="110" x2="220" y2="110" stroke="#8a6bc9" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                            <!-- Write-Ahead Log -->
+                            <rect x="220" y="80" width="120" height="60" rx="5" fill="#f0f8ff" stroke="#5d4e75" stroke-width="2"/>
+                            <text x="280" y="105" text-anchor="middle" class="diagram-label">Write-Ahead</text>
+                            <text x="280" y="125" text-anchor="middle" class="diagram-label">Log (WAL)</text>
+
+                            <!-- Arrow -->
+                            <line x1="340" y1="110" x2="390" y2="110" stroke="#8a6bc9" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                            <!-- Memtable -->
+                            <rect x="390" y="80" width="120" height="60" rx="5" fill="#fff0f5" stroke="#5d4e75" stroke-width="2"/>
+                            <text x="450" y="105" text-anchor="middle" class="diagram-label">Skip-List</text>
+                            <text x="450" y="125" text-anchor="middle" class="diagram-label">Memtable</text>
+
+                            <!-- Arrow -->
+                            <line x1="510" y1="110" x2="560" y2="110" stroke="#8a6bc9" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                            <!-- SSTables -->
+                            <rect x="560" y="80" width="120" height="60" rx="5" fill="#f0fff0" stroke="#5d4e75" stroke-width="2"/>
+                            <text x="620" y="105" text-anchor="middle" class="diagram-label">Immutable</text>
+                            <text x="620" y="125" text-anchor="middle" class="diagram-label">SSTables</text>
+
+                            <!-- Compaction arrow -->
+                            <path d="M 620 180 Q 680 200 560 200" stroke="#ff6b6b" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+                            <text x="640" y="190" text-anchor="middle" class="diagram-small-label">Compaction</text>
+
+                            <!-- Explanation text -->
+                            <text x="110" y="180" text-anchor="middle" class="diagram-description">Client receives</text>
+                            <text x="110" y="195" text-anchor="middle" class="diagram-description">SET/GET commands</text>
+
+                            <text x="280" y="180" text-anchor="middle" class="diagram-description">Writes are logged</text>
+                            <text x="280" y="195" text-anchor="middle" class="diagram-description">for durability</text>
+
+                            <text x="450" y="180" text-anchor="middle" class="diagram-description">Active in-memory</text>
+                            <text x="450" y="195" text-anchor="middle" class="diagram-description">sorted table</text>
+
+                            <text x="620" y="180" text-anchor="middle" class="diagram-description">Immutable persisted</text>
+                            <text x="620" y="195" text-anchor="middle" class="diagram-description">SSTable files</text>
+                        </svg>
+                    </div>
+
+                    <div class="architecture-explanation">
+                        <h3>LSM Tree Approach</h3>
+                        <p>MirDB uses a Log-Structured Merge-tree (LSM Tree) architecture which provides excellent write performance by batching writes and periodically compacting data:</p>
+
+                        <ul class="architecture-steps">
+                            <li>
+                                <strong>Write-Ahead Log (WAL):</strong> All write operations are first logged to disk to ensure durability. This prevents data loss on system crashes.
+                            </li>
+                            <li>
+                                <strong>Memtable (Skip-List):</strong> Writes are buffered in an in-memory sorted data structure (skip-list) for fast writes and reads on recent data. GET requests first check the memtable.
+                            </li>
+                            <li>
+                                <strong>SSTables:</strong> When the memtable reaches its size limit, it's flushed to disk as an immutable Sorted String Table (SSTable). These files are periodically compacted to optimize storage and eliminate duplicates.
+                            </li>
+                        </ul>
+
+                        <h3>Benefits of LSM Trees</h3>
+                        <ul class="architecture-benefits">
+                            <li><strong>Write Efficiency:</strong> Sequential writes to log files avoid random disk I/O</li>
+                            <li><strong>Persistent Durability:</strong> Write-ahead logging ensures data survives crashes</li>
+                            <li><strong>Read Performance:</strong> Skip-list memtable provides O(log n) lookups</li>
+                            <li><strong>Space Efficiency:</strong> Compaction reduces storage requirements and eliminates tombstones</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="quick-start" class="quick-start-section">
             <div class="container">
                 <h2>Quick Start</h2>

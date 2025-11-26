@@ -12,7 +12,11 @@
     "serve": "python3 -m http.server 8000"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "playwright": "^1.40.0",
     "puppeteer": "^21.6.0"
+=======
+    "playwright": "^1.57.0"
+>>>>>>> 1fb275e (feat: add Architecture Overview section with LSM Tree visualization)
   }
 }
