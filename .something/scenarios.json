@@ -1,0 +1,339 @@
+{
+  "scenarios": [
+    {
+      "id": 1,
+      "uuid": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "title": "Hero Section Display",
+      "description": "Verify that the hero section displays correctly with all required elements",
+      "steps": [
+        "Load the homepage",
+        "Verify hero section is visible within 2 seconds",
+        "Check that product name 'MirDB' is displayed in an H1 tag",
+        "Verify tagline 'Persistent Key-Value Store with Memcached Protocol Support' is visible",
+        "Check that animated logo (logo.gif) is displayed with meaningful alt text",
+        "Verify 'Get Started' button is present and visible",
+        "Verify 'View on GitHub' button is present and visible"
+      ],
+      "expectedResult": "Hero section loads quickly with all elements properly displayed including logo, title, tagline, and both action buttons",
+      "priority": "high",
+      "category": "hero"
+    },
+    {
+      "id": 2,
+      "uuid": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+      "title": "Get Started Button Navigation",
+      "description": "Verify that the 'Get Started' button scrolls to the Quick Start section",
+      "steps": [
+        "Load the homepage",
+        "Click the 'Get Started' button in the hero section",
+        "Wait for scroll animation to complete",
+        "Verify the viewport has scrolled to the Quick Start section"
+      ],
+      "expectedResult": "Page smoothly scrolls to the Quick Start section when 'Get Started' button is clicked",
+      "priority": "high",
+      "category": "navigation"
+    },
+    {
+      "id": 3,
+      "uuid": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+      "title": "GitHub Button Link",
+      "description": "Verify that the GitHub button links correctly to the repository",
+      "steps": [
+        "Load the homepage",
+        "Locate the 'View on GitHub' button",
+        "Verify href attribute is 'https://github.com/yetone/mirdb'",
+        "Verify target attribute is '_blank' (opens in new tab)",
+        "Verify rel attribute contains 'noopener' and 'noreferrer' for security"
+      ],
+      "expectedResult": "GitHub button has correct URL, opens in new tab, and includes security attributes",
+      "priority": "high",
+      "category": "navigation"
+    },
+    {
+      "id": 4,
+      "uuid": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
+      "title": "Features Section Display",
+      "description": "Verify that the features section displays all key features",
+      "steps": [
+        "Load the homepage",
+        "Scroll to or locate the features section",
+        "Verify H2 heading 'Key Features' is present",
+        "Check for Memcached Protocol Compatible feature card",
+        "Check for Persistent Storage feature card",
+        "Check for Built with Rust feature card",
+        "Check for High Performance feature card"
+      ],
+      "expectedResult": "Features section displays with proper heading and all four feature cards visible",
+      "priority": "medium",
+      "category": "features"
+    },
+    {
+      "id": 5,
+      "uuid": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
+      "title": "Demo Section Display",
+      "description": "Verify that the demo section shows the usage demonstration",
+      "steps": [
+        "Load the homepage",
+        "Scroll to or locate the demo section",
+        "Verify H2 heading 'Live Demonstration' is present",
+        "Check that demo GIF (usage.gif) is displayed",
+        "Verify demo image has descriptive alt text"
+      ],
+      "expectedResult": "Demo section displays with heading and animated GIF demonstration with proper alt text",
+      "priority": "medium",
+      "category": "demo"
+    },
+    {
+      "id": 6,
+      "uuid": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c",
+      "title": "Architecture Section Display",
+      "description": "Verify that the architecture section explains the LSM Tree approach",
+      "steps": [
+        "Load the homepage",
+        "Scroll to or locate the architecture section",
+        "Verify H2 heading 'Architecture Overview' is present",
+        "Check that SVG diagram is displayed with proper accessibility attributes",
+        "Verify LSM Tree explanation is present",
+        "Check for WAL (Write-Ahead Log) explanation",
+        "Check for Memtable explanation",
+        "Check for SSTables explanation"
+      ],
+      "expectedResult": "Architecture section displays with diagram and comprehensive LSM Tree explanation including WAL, Memtable, and SSTables",
+      "priority": "medium",
+      "category": "architecture"
+    },
+    {
+      "id": 7,
+      "uuid": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d",
+      "title": "Quick Start Installation Instructions",
+      "description": "Verify that installation instructions are provided correctly",
+      "steps": [
+        "Load the homepage",
+        "Navigate to the Quick Start section",
+        "Locate the Installation subsection",
+        "Verify git clone command is present with correct repository URL",
+        "Verify cargo build command is present"
+      ],
+      "expectedResult": "Installation instructions include git clone and cargo build commands",
+      "priority": "high",
+      "category": "quickstart"
+    },
+    {
+      "id": 8,
+      "uuid": "b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e",
+      "title": "Quick Start Configuration Example",
+      "description": "Verify that configuration example is provided",
+      "steps": [
+        "Load the homepage",
+        "Navigate to the Quick Start section",
+        "Locate the Configuration subsection",
+        "Verify mirdb.toml configuration example is present",
+        "Check for server address configuration",
+        "Check for memtable_size configuration"
+      ],
+      "expectedResult": "Configuration subsection shows mirdb.toml example with server and storage settings",
+      "priority": "medium",
+      "category": "quickstart"
+    },
+    {
+      "id": 9,
+      "uuid": "c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f",
+      "title": "Quick Start Usage Example",
+      "description": "Verify that basic usage code example is provided",
+      "steps": [
+        "Load the homepage",
+        "Navigate to the Quick Start section",
+        "Locate the Basic Usage subsection",
+        "Verify Python memcache client example is present",
+        "Check for client.set() example",
+        "Check for client.get() example"
+      ],
+      "expectedResult": "Basic usage subsection shows Python code example with SET and GET operations",
+      "priority": "medium",
+      "category": "quickstart"
+    },
+    {
+      "id": 10,
+      "uuid": "d0e1f2a3-b4c5-4d6e-7f8a-9b0c1d2e3f4a",
+      "title": "Supported Operations List",
+      "description": "Verify that supported Memcached operations are listed",
+      "steps": [
+        "Load the homepage",
+        "Navigate to the Quick Start section",
+        "Locate the Supported Operations subsection",
+        "Verify GET operation is listed",
+        "Verify SET operation is listed",
+        "Verify DELETE operation is listed",
+        "Verify ADD operation is listed",
+        "Verify REPLACE operation is listed"
+      ],
+      "expectedResult": "Supported operations list includes GET, SET, DELETE, ADD, REPLACE and other Memcached commands",
+      "priority": "medium",
+      "category": "quickstart"
+    },
+    {
+      "id": 11,
+      "uuid": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
+      "title": "Heading Hierarchy Accessibility",
+      "description": "Verify proper heading hierarchy for accessibility",
+      "steps": [
+        "Load the homepage",
+        "Count H1 elements (should be exactly 1)",
+        "Verify H1 contains 'MirDB'",
+        "Check that H2 elements exist for main sections",
+        "Verify no heading levels are skipped (H1 -> H2 -> H3)"
+      ],
+      "expectedResult": "Page has exactly one H1, multiple H2s for sections, and no skipped heading levels",
+      "priority": "high",
+      "category": "accessibility"
+    },
+    {
+      "id": 12,
+      "uuid": "f2a3b4c5-d6e7-4f8a-9b0c-1d2e3f4a5b6c",
+      "title": "Image Alt Text Accessibility",
+      "description": "Verify all images have descriptive alt text",
+      "steps": [
+        "Load the homepage",
+        "Locate all img elements on the page",
+        "Verify each image has a non-empty alt attribute",
+        "Verify alt text is descriptive (not just 'image' or 'logo')",
+        "Check logo image has meaningful description",
+        "Check demo image has meaningful description"
+      ],
+      "expectedResult": "All images have descriptive alt text that conveys their purpose and content",
+      "priority": "high",
+      "category": "accessibility"
+    },
+    {
+      "id": 13,
+      "uuid": "a3b4c5d6-e7f8-4a9b-0c1d-2e3f4a5b6c7d",
+      "title": "Semantic HTML Structure",
+      "description": "Verify semantic HTML elements are used correctly",
+      "steps": [
+        "Load the homepage",
+        "Verify presence of header element",
+        "Verify presence of main element",
+        "Verify presence of footer element",
+        "Check for section elements with proper structure",
+        "Check for article elements for feature cards"
+      ],
+      "expectedResult": "Page uses proper semantic HTML with header, main, footer, sections, and articles",
+      "priority": "high",
+      "category": "accessibility"
+    },
+    {
+      "id": 14,
+      "uuid": "b4c5d6e7-f8a9-4b0c-1d2e-3f4a5b6c7d8e",
+      "title": "Keyboard Navigation",
+      "description": "Verify all interactive elements are keyboard accessible",
+      "steps": [
+        "Load the homepage",
+        "Press Tab key to navigate through interactive elements",
+        "Verify all buttons are reachable via keyboard",
+        "Verify all links are reachable via keyboard",
+        "Check that focus indicators are visible",
+        "Verify skip links are present for accessibility"
+      ],
+      "expectedResult": "All interactive elements can be reached and activated using keyboard only",
+      "priority": "high",
+      "category": "accessibility"
+    },
+    {
+      "id": 15,
+      "uuid": "c5d6e7f8-a9b0-4c1d-2e3f-4a5b6c7d8e9f",
+      "title": "Reduced Motion Support",
+      "description": "Verify prefers-reduced-motion media query is supported",
+      "steps": [
+        "Load the homepage",
+        "Check CSS for prefers-reduced-motion media query",
+        "Verify animations are disabled when reduced motion is preferred",
+        "Verify smooth scrolling respects reduced motion preference"
+      ],
+      "expectedResult": "Page respects user's reduced motion preference and disables animations accordingly",
+      "priority": "medium",
+      "category": "accessibility"
+    },
+    {
+      "id": 16,
+      "uuid": "d6e7f8a9-b0c1-4d2e-3f4a-5b6c7d8e9f0a",
+      "title": "Footer Display",
+      "description": "Verify footer contains required information",
+      "steps": [
+        "Load the homepage",
+        "Scroll to the footer section",
+        "Verify GitHub repository link is present",
+        "Verify license information (MIT) is displayed",
+        "Verify project status is shown"
+      ],
+      "expectedResult": "Footer displays GitHub link, MIT license, and project status",
+      "priority": "low",
+      "category": "footer"
+    },
+    {
+      "id": 17,
+      "uuid": "e7f8a9b0-c1d2-4e3f-4a5b-6c7d8e9f0a1b",
+      "title": "SEO Meta Tags",
+      "description": "Verify SEO-related meta tags are present",
+      "steps": [
+        "Load the homepage",
+        "Check for title tag with product name",
+        "Verify meta description tag is present",
+        "Check for Open Graph tags (og:title, og:description, og:type)",
+        "Check for Twitter Card tags",
+        "Verify canonical URL is set"
+      ],
+      "expectedResult": "Page includes proper meta tags for SEO and social sharing",
+      "priority": "medium",
+      "category": "seo"
+    },
+    {
+      "id": 18,
+      "uuid": "f8a9b0c1-d2e3-4f4a-5b6c-7d8e9f0a1b2c",
+      "title": "Responsive Design Mobile View",
+      "description": "Verify page displays correctly on mobile devices",
+      "steps": [
+        "Load the homepage on a mobile viewport (320px-480px width)",
+        "Verify hero section is readable without horizontal scrolling",
+        "Check that buttons are touch-friendly size",
+        "Verify feature cards stack vertically",
+        "Check that code blocks are scrollable if needed"
+      ],
+      "expectedResult": "Page is fully functional and readable on mobile devices with proper layout adjustments",
+      "priority": "medium",
+      "category": "responsive"
+    },
+    {
+      "id": 19,
+      "uuid": "a9b0c1d2-e3f4-4a5b-6c7d-8e9f0a1b2c3d",
+      "title": "Page Load Performance",
+      "description": "Verify page loads within acceptable time limits",
+      "steps": [
+        "Load the homepage",
+        "Measure time to First Contentful Paint",
+        "Verify hero section is interactive within 2 seconds",
+        "Check that all images load without significant delay",
+        "Verify no JavaScript errors in console"
+      ],
+      "expectedResult": "Page loads quickly with hero section interactive within 2 seconds",
+      "priority": "high",
+      "category": "performance"
+    },
+    {
+      "id": 20,
+      "uuid": "b0c1d2e3-f4a5-4b6c-7d8e-9f0a1b2c3d4e",
+      "title": "Architecture SVG Accessibility",
+      "description": "Verify the architecture SVG diagram is accessible",
+      "steps": [
+        "Load the homepage",
+        "Navigate to the architecture section",
+        "Verify SVG has role='img' attribute",
+        "Check for title element within SVG",
+        "Check for desc element within SVG",
+        "Verify aria-labelledby references the title"
+      ],
+      "expectedResult": "Architecture SVG diagram is accessible with proper ARIA attributes and descriptions",
+      "priority": "medium",
+      "category": "accessibility"
+    }
+  ]
+}
