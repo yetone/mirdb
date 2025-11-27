@@ -32,6 +32,51 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
+        .navigation-menu {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation-menu.sticky {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .nav-link:active {
+            transform: translateY(0);
+        }
+
         .hero {
             text-align: center;
             padding: 3rem 0;
@@ -199,6 +244,20 @@
                 grid-template-columns: 1fr;
             }
 
+            .navigation-menu {
+                margin-bottom: 1rem;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+
+            .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
             h1 {
                 font-size: 2rem;
             }
@@ -232,6 +291,13 @@
 <body>
     <header>
         <div class="container">
+            <nav data-testid="navigation-menu" class="navigation-menu sticky">
+                <ul class="nav-links">
+                    <li><a href="#features" class="nav-link smooth-scroll" data-scroll="smooth">Features</a></li>
+                    <li><a href="#usage" class="nav-link smooth-scroll" data-scroll="smooth">Usage</a></li>
+                    <li><a href="#getting-started" class="nav-link smooth-scroll" data-scroll="smooth">Getting Started</a></li>
+                </ul>
+            </nav>
             <div class="hero">
                 <img src="assets/logo.gif" alt="MirDB Logo" class="logo">
                 <h1>MirDB</h1>
@@ -274,7 +340,7 @@
         </div>
     </section>
 
-    <section class="section">
+    <section id="usage" class="section">
         <div class="container">
             <h2 class="section-title">Usage</h2>
             <div class="usage-section">
