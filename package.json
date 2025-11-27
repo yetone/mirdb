@@ -8,10 +8,19 @@
     "test:headed": "playwright test --headed"
   },
   "devDependencies": {
+    "@jest/globals": "^30.2.0",
     "@playwright/test": "^1.40.0",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "jsdom": "^27.2.0",
     "playwright": "^1.40.0"
   },
-  "keywords": ["mirdb", "tests", "e2e"],
+  "keywords": [
+    "mirdb",
+    "tests",
+    "e2e"
+  ],
   "author": "",
   "license": "MIT"
 }
