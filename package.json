@@ -1,24 +1,17 @@
 {
-  "name": "mirdb-homepage",
+  "name": "mirdb-website-tests",
   "version": "1.0.0",
-  "description": "MirDB homepage with hero section display and branding",
+  "description": "E2E tests for MirDB homepage",
+  "private": true,
   "scripts": {
-    "test": "jest --verbose",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
   },
   "devDependencies": {
-    "jest": "^29.0.0",
-    "jsdom": "^22.0.0"
+    "@playwright/test": "^1.40.0",
+    "playwright": "^1.40.0"
   },
-  "jest": {
-    "testEnvironment": "node",
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ],
-    "collectCoverageFrom": [
-      "!**/node_modules/**",
-      "!**/.git/**"
-    ]
-  }
+  "keywords": ["mirdb", "tests", "e2e"],
+  "author": "",
+  "license": "MIT"
 }

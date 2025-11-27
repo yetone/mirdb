@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
-    <meta name="description" content="MirDB is a persistent key-value store with Memcached protocol support. High-performance, reliable storage with familiar memcached interface.">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <meta name="description" content="MirDB is a persistent key-value store with Memcached protocol support">
     <style>
         * {
             margin: 0;
@@ -16,289 +16,347 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background-color: #f8f9fa;
         }
 
-        .hero-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            margin: 2rem auto;
+        .container {
             max-width: 1200px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .hero-logo {
-            width: 200px;
-            height: 200px;
-            margin-bottom: 2rem;
-            animation: fadeIn 1s ease-in;
-        }
-
-        .hero-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(102, 76, 162, 0.3);
-        }
-
-        .hero-title {
-            font-size: 4rem;
-            font-weight: 800;
-            color: #2c76bca;
-            margin-bottom: 1rem;
-            animation: slideUp 0.8s ease-out;
+        header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .hero-tagline {
-            font-size: 1.5rem;
-            color: #555;
-            max-width: 800px;
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .logo {
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
             margin-bottom: 2rem;
-            animation: slideUp 1s ease-out 0.2s both;
-            line-height: 1.8;
         }
 
-        .hero-cta {
+        .cta-buttons {
             display: flex;
             gap: 1rem;
-            animation: slideUp 1s ease-out 0.4s both;
-            flex-wrap: wrap;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .cta-button {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .cta-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .cta-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-        }
-
-        .cta-secondary {
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
             background: white;
             color: #667eea;
-            border: 2px solid #667eea;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: transform 0.2s;
         }
 
-        .cta-secondary:hover {
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .section {
+            padding: 3rem 0;
+        }
+
+        .section:nth-child(even) {
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .usage-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .usage-gif {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .code-example {
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .code-example pre {
+            margin: 0;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 14px;
+        }
+
+        .code-example code {
+            color: #333;
+        }
+
+        .getting-started {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .step-number {
             background: #667eea;
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .badges {
+            text-align: center;
+            margin-top: 2rem;
         }
 
         .status-badge {
-            margin-top: 2rem;
-            animation: fadeIn 1.5s ease-in;
+            display: inline-block;
+            margin: 0 0.5rem;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        footer a {
+            color: #667eea;
+            text-decoration: none;
         }
 
-        /* Tablet */
+        footer a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 3rem;
+            .usage-section {
+                grid-template-columns: 1fr;
             }
 
-            .hero-tagline {
-                font-size: 1.3rem;
+            h1 {
+                font-size: 2rem;
             }
 
-            .hero-logo {
-                width: 150px;
-                height: 150px;
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
             }
         }
 
-        /* Mobile */
         @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2.5rem;
+            .container {
+                padding: 0 15px;
             }
 
-            .hero-tagline {
-                font-size: 1.1rem;
-            }
-
-            .hero-logo {
-                width: 120px;
-                height: 120px;
-            }
-
-            .hero-cta {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .cta-button {
-                width: 100%;
-                justify-content: center;
+            .section {
+                padding: 2rem 0;
             }
         }
     </style>
 </head>
 <body>
-    <main>
-        <section class="hero-section" data-testid="hero-section">
-            <div class="hero-logo">
-                <img src="assets/logo.gif" alt="MirDB Logo" data-testid="hero-logo">
-            </div>
-
-            <h1 class="hero-title" data-testid="hero-title">MirDB</h1>
-
-            <p class="hero-tagline" data-testid="hero-tagline">
-                A persistent key-value store with Memcached protocol support
-            </p>
-
-            <div class="hero-cta">
-                <a href="#getting-started" class="cta-button cta-primary" data-testid="cta-get-started">
-                    Get Started
-                </a>
-                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="cta-button cta-secondary" data-testid="cta-github">
-                    View on GitHub
-                </a>
-            </div>
-
-            <div class="status-badge">
-                <img src="https://atompunk.yetone.fun/github/yetone/mirdb?v=2" alt="Build Status" data-testid="status-badge">
-            </div>
-        </section>
-    </main>
-
-    <footer class="page-footer" data-testid="page-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Project</h3>
-                <ul>
-                    <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="footer-github-link">GitHub Repository</a></li>
-                    <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a></li>
-                    <li><a href="https://github.com/yetone/mirdb/releases" target="_blank" rel="noopener noreferrer">Releases</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Community</h3>
-                <ul>
-                    <li><a href="https://github.com/yetone/mirdb/pulls" target="_blank" rel="noopener noreferrer">Contribute</a></li>
-                    <li><a href="https://github.com/yetone/mirdb/wiki" target="_blank" rel="noopener noreferrer">Documentation</a></li>
-                </ul>
+    <header>
+        <div class="container">
+            <div class="hero">
+                <img src="assets/logo.gif" alt="MirDB Logo" class="logo">
+                <h1>MirDB</h1>
+                <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+                <div class="badges">
+                    <a href="https://circleci.com/gh/yetone/mirdb">
+                        <img src="https://atompunk.yetone.fun/github/yetone/mirdb?v=2" alt="Build Status" class="status-badge">
+                    </a>
+                </div>
+                <div class="cta-buttons">
+                    <a href="https://github.com/yetone/mirdb" class="btn">View on GitHub</a>
+                    <a href="#getting-started" class="btn">Get Started</a>
+                    <a href="#features" class="btn">View Features</a>
+                </div>
             </div>
         </div>
-        <div class="footer-bottom">
+    </header>
+
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>Data persists to disk with LSM-tree architecture and SSTable format, ensuring durability and reliability.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Memcached Protocol</h3>
+                    <p>Fully compatible with the standard Memcached protocol, making integration seamless for existing applications.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Skiplist Memtable</h3>
+                    <p>High-performance memtable implementation using skiplist data structure for fast in-memory operations.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Compaction Support</h3>
+                    <p>Both minor and major compaction strategies to optimize storage and read performance over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Usage</h2>
+            <div class="usage-section">
+                <div class="usage-demo">
+                    <img id="usage-gif" src="assets/usage.gif" alt="MirDB Usage Demonstration" class="usage-gif">
+                </div>
+                <div>
+                    <p>MirDB works seamlessly with the standard memcached protocol:</p>
+                    <div class="code-example">
+                        <pre><code># Start MirDB server
+./mirdb-server
+
+# Connect using any memcached client
+# Set a key-value pair
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                    </div>
+                    <p style="margin-top: 1rem;">The GIF above demonstrates the interactive usage of MirDB with real commands.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="getting-started" class="section">
+        <div class="container">
+            <h2 class="section-title">Getting Started</h2>
+            <div class="getting-started">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Clone the Repository</h3>
+                        <div class="code-example">
+                            <pre><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Build the Project</h3>
+                        <div class="code-example">
+                            <pre><code>cargo build --release</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Run the Server</h3>
+                        <div class="code-example">
+                            <pre><code>./target/release/mirdb-server</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3>Start Using MirDB</h3>
+                        <p>Connect using any memcached-compatible client and start storing data!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MirDB. Open source project under MIT License.</p>
             <p>
-                &copy; 2024 MirDB Project. Licensed under the MIT License.
-                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">View source</a>
+                <a href="https://github.com/yetone/mirdb">GitHub</a> |
+                <a href="https://github.com/yetone/mirdb/issues">Issues</a> |
+                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE">License</a>
             </p>
         </div>
     </footer>
-
-    <style>
-        /* Footer Styles */
-        .page-footer {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 2rem 0;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-
-        .footer-section h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: #2c76bca;
-        }
-
-        .footer-section ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-section li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-section a {
-            color: #333;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: #667eea;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .footer-bottom a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .footer-bottom a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </body>
 </html>
