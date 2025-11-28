@@ -53,6 +53,9 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+#[cfg(test)]
+mod raft_log_tests;
+mod raft_log;
 
 pub struct Server {
     store: Arc<Store>,
