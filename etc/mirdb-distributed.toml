@@ -1,0 +1,35 @@
+# MirDB Distributed Configuration Template
+# This configuration enables Raft consensus for distributed operation
+
+[mirdb]
+path = "/tmp/mirdb-data"
+host = "127.0.0.1"
+port = 12333
+memtable_size = 4194304  # 4MB
+
+[raft]
+# Node ID must be unique across the cluster
+node_id = 1
+
+# List of all nodes in the cluster (node_id, host, port)
+# Format: "node_id=host:port"
+cluster_nodes = [
+    "1=127.0.0.1:12333",
+    "2=127.0.0.1:12334",
+    "3=127.0.0.1:12335"
+]
+
+# Raft timing parameters (in milliseconds)
+election_timeout_ms = 500
+heartbeat_interval_ms = 100
+
+# Log storage configuration
+log_dir = "/tmp/mirdb-data/raft-log"
+snapshot_threshold = 1000  # Create snapshot every 1000 entries
+
+# Network configuration
+rpc_timeout_ms = 500
+max_rpc_retries = 3
+
+[logging]
+level = "info"
