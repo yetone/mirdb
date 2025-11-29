@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <meta name="description" content="MirDB is a high-performance persistent key-value store with memcached protocol support, built with Rust and LSM tree architecture.">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <img src="../assets/logo.gif" alt="MirDB Logo" class="logo">
+                    <span class="brand-name">MirDB</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="#getting-started">Get Started</a></li>
+                    <li><a href="#commands">Commands</a></li>
+                    <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" class="github-link">GitHub</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Persistent Key-Value Store
+                        <span class="highlight">with Memcached Protocol</span>
+                    </h1>
+                    <p class="hero-description">
+                        High-performance key-value storage built with Rust, featuring LSM tree architecture,
+                        async I/O with Tokio, and full memcached protocol compatibility.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" class="btn btn-secondary">View on GitHub</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-card">
+                        <div class="terminal">
+                            <div class="terminal-header">
+                                <div class="terminal-dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="terminal-title">Terminal</span>
+                            </div>
+                            <div class="terminal-body">
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">mirdb-server</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">telnet localhost 12333</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">&gt;</span>
+                                    <span class="command">set mykey 0 0 5</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">&gt;</span>
+                                    <span class="command">hello</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="output">STORED</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">&gt;</span>
+                                    <span class="command">get mykey</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="output">VALUE mykey 0 5</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="output">hello</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="output">END</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="section">
+            <div class="container">
+                <h2 class="section-title">Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Memcached Compatible</h3>
+                        <p class="feature-description">
+                            Full support for memcached text protocol. Drop-in replacement for existing memcached applications.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💾</div>
+                        <h3 class="feature-title">Persistent Storage</h3>
+                        <p class="feature-description">
+                            SSTable-based persistence ensures data survives restarts. No more data loss on server reboot.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌳</div>
+                        <h3 class="feature-title">LSM Tree Architecture</h3>
+                        <p class="feature-description">
+                            Log-Structured Merge tree provides excellent write performance with efficient read operations.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚀</div>
+                        <h3 class="feature-title">Async Performance</h3>
+                        <p class="feature-description">
+                            Built with Tokio async runtime for high-performance I/O and concurrency.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <h3 class="feature-title">Automatic Compaction</h3>
+                        <p class="feature-description">
+                            Background minor and major compaction keeps storage optimized without manual intervention.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🦀</div>
+                        <h3 class="feature-title">Built with Rust</h3>
+                        <p class="feature-description">
+                            Memory-safe, fast, and reliable. Enjoy Rust's performance and safety guarantees.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Section -->
+        <section id="architecture" class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">Architecture</h2>
+                <div class="architecture-content">
+                    <div class="architecture-text">
+                        <h3>Write Path</h3>
+                        <ol class="architecture-list">
+                            <li>Writes are first appended to the <strong>Write-Ahead Log (WAL)</strong></li>
+                            <li>Data is then inserted into the in-memory <strong>Memtable</strong> (skip list)</li>
+                            <li>WAL ensures durability - data persists even after crashes</li>
+                        </ol>
+
+                        <h3>Read Path</h3>
+                        <ol class="architecture-list">
+                            <li>Lookups first check the <strong>Memtable</strong> (most recent data)</li>
+                            <li>If not found, search through <strong>SSTables</strong> from newest to oldest</li>
+                            <li>Bloom filters optimize reads by avoiding unnecessary disk I/O</li>
+                        </ol>
+
+                        <h3>Compaction</h3>
+                        <ol class="architecture-list">
+                            <li><strong>Minor compaction:</strong> Memtable flushed to new SSTable when full</li>
+                            <li><strong>Major compaction:</strong> Multiple SSTables merged to remove duplicates and deleted keys</li>
+                        </ol>
+                    </div>
+                    <div class="architecture-diagram">
+                        <div class="diagram-box">
+                            <div class="diagram-title">MirDB Architecture</div>
+                            <div class="component">
+                                <div class="component-name">Client</div>
+                            </div>
+                            <div class="arrow">↓ Memcached Protocol</div>
+                            <div class="component">
+                                <div class="component-name">MirDB Server</div>
+                            </div>
+                            <div class="arrow">↓ Write Path</div>
+                            <div class="component">
+                                <div class="component-name">WAL</div>
+                            </div>
+                            <div class="arrow">↓</div>
+                            <div class="component">
+                                <div class="component-name">Memtable</div>
+                            </div>
+                            <div class="arrow">↓ Minor Compaction</div>
+                            <div class="component">
+                                <div class="component-name">SSTables (Level 0-6)</div>
+                            </div>
+                            <div class="arrow">↓ Major Compaction</div>
+                            <div class="component">
+                                <div class="component-name">Optimized SSTables</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started Section -->
+        <section id="getting-started" class="section">
+            <div class="container">
+                <h2 class="section-title">Getting Started</h2>
+                <div class="getting-started-content">
+                    <div class="install-card">
+                        <h3>Installation</h3>
+                        <pre><code class="code-block"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run the server
+./target/release/mirdb-server</code></pre>
+                    </div>
+
+                    <div class="usage-card">
+                        <h3>Quick Example</h3>
+                        <pre><code class="code-block"># Connect using telnet or netcattelnet localhost 12333
+
+# Set a key-value pairset mykey 0 0 5hello
+
+# Get the valueget mykey
+
+# Expected response:VALUE mykey 0 5helloEND
+
+# Delete a keydelete mykey</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commands Section -->
+        <section id="commands" class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">Supported Commands</h2>
+                <div class="commands-grid">
+                    <div class="command-category">
+                        <h3>Memcached Protocol</h3>
+                        <ul class="command-list">
+                            <li><code>SET</code> - Store a value</li>
+                            <li><code>GET</code> - Retrieve a value</li>
+                            <li><code>DELETE</code> - Remove a key</li>
+                            <li><code>ADD</code> - Store only if key doesn't exist</li>
+                            <li><code>REPLACE</code> - Store only if key exists</li>
+                            <li><code>APPEND</code> - Append to existing value</li>
+                            <li><code>PREPEND</code> - Prepend to existing value</li>
+                        </ul>
+                    </div>
+                    <div class="command-category">
+                        <h3>MirDB Specific</h3>
+                        <ul class="command-list">
+                            <li><code>INFO</code> - Get server information</li>
+                            <li><code>MAJOR_COMPACTION</code> - Trigger major compaction</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="configuration-card">
+                    <h3>Default Configuration</h3>
+                    <table class="config-table">
+                        <tr>
+                            <th>Setting</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>listen_addr</code></td>
+                            <td><code>0.0.0.0:12333</code></td>
+                            <td>Server bind address</td>
+                        </tr>
+                        <tr>
+                            <td><code>max_lsm_levels</code></td>
+                            <td><code>7</code></td>
+                            <td>Maximum number of LSM levels</td>
+                        </tr>
+                        <tr>
+                            <td><code>sstable_max_size</code></td>
+                            <td><code>100MB</code></td>
+                            <td>Maximum size of SSTables before compaction</td>
+                        </tr>
+                        <tr>
+                            <td><code>memtable_max_size</code></td>
+                            <td><code>4MB</code></td>
+                            <td>Maximum size of memtable before flush</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="../assets/logo.gif" alt="MirDB Logo" class="footer-logo">
+                    <div class="footer-info">
+                        <h4>MirDB</h4>
+                        <p>Persistent Key-Value Store</p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#getting-started">Get Started</a></li>
+                        <li><a href="#commands">Commands</a></li>
+                    </ul>
+                </div>
+                <div class="footer-external">
+                    <ul>
+                        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Issues</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/blob/master/README.md" target="_blank" rel="noopener">Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MirDB Project. Open Source under appropriate license.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
