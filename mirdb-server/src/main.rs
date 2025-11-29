@@ -37,6 +37,7 @@ mod response;
 #[macro_use]
 mod parser_util;
 mod config;
+mod consensus;
 mod data_manager;
 mod manifest;
 mod memtable;
