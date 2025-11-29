@@ -1,0 +1,22 @@
+{
+  "name": "website",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.17",
+    "astro": "^5.16.3",
+    "tailwindcss": "^4.1.17"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "chrome-launcher": "^1.2.1",
+    "lighthouse": "^13.0.1",
+    "playwright": "^1.57.0"
+  }
+}

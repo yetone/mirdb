@@ -1,0 +1,310 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Lazy load below-the-fold images
+const LazyImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
+---
+
+<Layout title="MirDB - Persistent Key-Value Store with Memcached Protocol" description="MirDB is a high-performance persistent key-value store written in Rust, fully compatible with the Memcached protocol. Features LSM tree architecture, SSTable persistence, and async performance with Tokio.">
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center px-4 py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                MirDB
+            </h1>
+            <p class="text-xl md:text-2xl mb-4 text-slate-300">
+                Persistent Key-Value Store
+            </p>
+            <p class="text-lg mb-8 max-w-3xl mx-auto text-slate-400">
+                A high-performance key-value store written in Rust, featuring full Memcached protocol compatibility,
+                LSM tree architecture with SSTable persistence, and async performance powered by Tokio.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#getting-started" class="px-8 py-3 bg-teal-600 hover:bg-teal-700 rounded-lg font-semibold transition-colors">
+                    Get Started
+                </a>
+                <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer" class="px-8 py-3 border border-teal-600 hover:bg-teal-600 rounded-lg font-semibold transition-colors">
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-4 bg-slate-800">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                Key Features
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-6 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
+                    <div class="text-3xl mb-4">🚀</div>
+                    <h3 class="text-xl font-semibold mb-3 text-teal-400">Memcached Protocol</h3>
+                    <p class="text-slate-300">Full compatibility with the standard memcached text protocol. Drop-in replacement for existing memcached deployments.</p>
+                </div>
+                <div class="p-6 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
+                    <div class="text-3xl mb-4">💾</div>
+                    <h3 class="text-xl font-semibold mb-3 text-teal-400">Persistent Storage</h3>
+                    <p class="text-slate-300">Unlike memcached, MirDB persists data to disk using SSTables (Sorted String Tables) for durability.</p>
+                </div>
+                <div class="p-6 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
+                    <div class="text-3xl mb-4">🌳</div>
+                    <h3 class="text-xl font-semibold mb-3 text-teal-400">LSM Tree Architecture</h3>
+                    <p class="text-slate-300">Efficient Log-Structured Merge-tree approach with memtables, immutable memtables, and multi-level compaction.</p>
+                </div>
+                <div class="p-6 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
+                    <div class="text-3xl mb-4">⚡</div>
+                    <h3 class="text-xl font-semibold mb-3 text-teal-400">Async Performance</h3>
+                    <p class="text-slate-300">Built on Tokio async runtime for high-performance concurrent operations and efficient resource utilization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="py-20 px-4 bg-slate-900">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                Architecture Overview
+            </h2>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-teal-300">Write Path</h3>
+                    <ol class="space-y-3 text-slate-300">
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-7 h-7 bg-teal-600 rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">1</span>
+                            <span>Client sends SET/DELETE command via Memcached protocol</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-7 h-7 bg-teal-600 rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">2</span>
+                            <span>Write to Write-Ahead Log (WAL) for durability</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-7 h-7 bg-teal-600 rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">3</span>
+                            <span>Update active Memtable (in-memory skip list)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-7 h-7 bg-teal-600 rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">4</span>
+                            <span>Background compaction creates SSTables on disk</span>
+                        </li>
+                    </ol>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-teal-300">Read Path</h3>
+                    <ol class="space-y-3 text-slate-300">
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-7 h-7 bg-cyan-600 rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">1</span>
+                            <span>Client sends GET command via Memcached protocol</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-7 h-7 bg-cyan-600 rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">2</span>
+                            <span>Check active Memtable first (fastest)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-7 h-7 bg-cyan-600 rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">3</span>
+                            <span>Search immutable memtables (recent flushes)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-7 h-7 bg-cyan-600 rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">4</span>
+                            <span>Query SSTables in order (newest to oldest)</span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section id="getting-started" class="py-20 px-4 bg-slate-800">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                Getting Started
+            </h2>
+
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold mb-6 text-teal-300">Installation</h3>
+                <div class="bg-slate-900 rounded-lg p-6 overflow-x-auto">
+                    <pre class="text-slate-300 font-mono text-sm"><code class="language-bash"># Clone the repository
+git clone https://github.com/mirdb/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run the server
+./target/release/mirdb-server</code></pre>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold mb-6 text-teal-300">Quick Start</h3>
+                <p class="text-slate-300 mb-4">Connect using any memcached client or telnet:</p>
+                <div class="bg-slate-900 rounded-lg p-6 overflow-x-auto">
+                    <pre class="text-slate-300 font-mono text-sm"><code class="language-telnet">$ telnet localhost 12333
+Trying 127.0.0.1...
+Connected to localhost.
+
+# Set a key-value pair
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete a key
+delete mykey
+DELETED
+
+# Get server info
+info
+version:1.0.0
+uptime:1234
+entries:1000
+...</code></pre>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold mb-6 text-teal-300">Configuration</h3>
+                <p class="text-slate-300 mb-4">Default configuration in `etc/mirdb.toml`:</p>
+                <div class="bg-slate-900 rounded-lg p-6 overflow-x-auto">
+                    <pre class="text-slate-300 font-mono text-sm"><code class="language-toml">[server]
+listen = "0.0.0.0:12333"
+workers = 4
+
+[storage]
+work_dir = "/tmp/mirdb"
+max_lsm_level = 7
+sstable_max_size_mb = 100
+memtable_max_size_mb = 4
+block_size_kb = 4</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Reference Section -->
+    <section id="api" class="py-20 px-4 bg-slate-900">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                Supported Commands
+            </h2>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-slate-800 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-teal-300">Basic Commands</h3>
+                    <ul class="space-y-2 text-slate-300">
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">SET</code> - Store a key-value pair</li>
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">GET</code> - Retrieve a value by key</li>
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">DELETE</code> - Remove a key</li>
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">ADD</code> - Set only if key doesn't exist</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-teal-300">Advanced Commands</h3>
+                    <ul class="space-y-2 text-slate-300">
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">REPLACE</code> - Set only if key exists</li>
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">APPEND</code> - Append to existing value</li>
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">PREPEND</code> - Prepend to existing value</li>
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">FLUSH_ALL</code> - Clear all data</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-teal-300">MirDB-Specific</h3>
+                    <ul class="space-y-2 text-slate-300">
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">INFO</code> - Server statistics</li>
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">MAJOR_COMPACTION</code> - Trigger manual compaction</li>
+                        <li><code class="bg-slate-700 px-2 py-1 rounded">STATUS</code> - Detailed storage status</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status & Roadmap Section -->
+    <section id="roadmap" class="py-20 px-4 bg-slate-800">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                Project Status & Roadmap
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6 text-teal-300">✅ Implemented</h3>
+                    <ul class="space-y-3 text-slate-300">
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">✓</span>
+                            <span>Tokio-based async networking with memcached protocol</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">✓</span>
+                            <span>Memtable with skip list data structure</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">✓</span>
+                            <span>Minor compaction (memtable to SSTable)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">✓</span>
+                            <span>Major compaction (SSTable level compaction)</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6 text-teal-300">🚧 Planned</h3>
+                    <ul class="space-y-3 text-slate-300">
+                        <li class="flex items-start">
+                            <span class="text-orange-400 mr-2 mt-1">↻</span>
+                            <span>Raft consensus for distributed operation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-orange-400 mr-2 mt-1">↻</span>
+                            <span>Replication and high availability</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-orange-400 mr-2 mt-1">↻</span>
+                            <span>Advanced caching layer with LRU</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-orange-400 mr-2 mt-1">↻</span>
+                            <span>Metrics and monitoring integration</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer" class="px-8 py-3 bg-teal-600 hover:bg-teal-700 rounded-lg font-semibold transition-colors inline-block">
+                    Contribute on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 bg-slate-900 border-t border-slate-700">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-teal-400 transition-colors">
+                    GitHub
+                </a>
+                <a href="#features" class="text-slate-400 hover:text-teal-400 transition-colors">
+                    Features
+                </a>
+                <a href="#architecture" class="text-slate-400 hover:text-teal-400 transition-colors">
+                    Architecture
+                </a>
+                <a href="#getting-started" class="text-slate-400 hover:text-teal-400 transition-colors">
+                    Get Started
+                </a>
+            </div>
+            <p class="text-slate-500 text-sm">
+                © 2024 MirDB Project. Built with Rust and ❤️
+            </p>
+        </div>
+    </footer>
+</Layout>
