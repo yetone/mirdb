@@ -1,14 +1,14 @@
-The Keeper of Keys
+MirDB: The Keeper of Keys
 
 In depths of Rust, where memory holds fast,
-A keeper guards what time would have erased.
+MirDB guards what time would have erased.
 Each key and value, paired and bound to last,
 Through layered halls where data finds its place.
 
 First to the log, the witness writes in haste,
 A promise kept before the ink has dried.
 Then swift to mind, where skip lists interlaced
-Hold fleeting thoughts that soon will be compiled.
+Hold thoughts that persist, never cast aside.
 
 When memory fills, the cascade starts its course,
 From active pools to still, immutable streams.
@@ -20,7 +20,7 @@ That merges scattered pages into one.
 Distilling chaos into order planned,
 Until the deepest level's work is done.
 
-So rest your data here, in layers deep,
+So trust your data to MirDB's care,
 Where Rust-forged walls stand guard through endless night.
-A faithful store that never falls asleep,
+A persistent store beyond compare,
 Transforming fleeting bytes to lasting light.
