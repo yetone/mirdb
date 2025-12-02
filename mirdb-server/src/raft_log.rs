@@ -140,11 +140,12 @@ impl RaftLog {
                     .unwrap()
                     .as_secs();
 
+                let value_len = value.len();
                 let sp = StorePayload::new(
                     Slice::from(value),
                     flags,
                     ttl,
-                    value.len(),
+                    value_len,
                     created_at,
                 );
 

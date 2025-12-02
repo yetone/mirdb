@@ -108,7 +108,7 @@ mod tests {
         fn logs_match(&self, other: &MockRaftNode) -> bool {
             let my_logs = self.logs.lock().unwrap();
             let other_logs = other.logs.lock().unwrap();
-            my_logs == &*other_logs
+            *my_logs == *other_logs
         }
 
         // Simulate idempotent apply (applying same entry multiple times)
@@ -198,9 +198,16 @@ mod tests {
             let key_str = format!("{}", key_char);
             let key = Slice::from(key_str.as_bytes().to_vec());
 
-            // All nodes should see the same state
-            let value1 = store.get(&key).unwrap();
-            assert!(value1.is_some(), "Key {} should exist", key_char);
+            // All nodes should see the same state - use apply for getter
+            let result = store.apply(Request::Getter {
+                getter: crate::request::GetterType::Get,
+                keys: vec![key.clone()],
+            }).unwrap();
+            if let Response::Get(items) = result {
+                assert!(!items.is_empty(), "Key {} should exist", key_char);
+            } else {
+                panic!("Expected Get response for key {}", key_char);
+            }
         }
     }
 
@@ -266,8 +273,15 @@ mod tests {
 
         // Verify state is consistent and the operation is truly idempotent
         let key = Slice::from(b"test_key".to_vec());
-        let value = store.get(&key).unwrap();
-        assert!(value.is_some());
+        let result = store.apply(Request::Getter {
+            getter: crate::request::GetterType::Get,
+            keys: vec![key.clone()],
+        }).unwrap();
+        if let Response::Get(items) = result {
+            assert!(!items.is_empty(), "Key should exist after idempotent apply");
+        } else {
+            panic!("Expected Get response");
+        }
 
         // Check that applied index has not increased (already applied)
         assert_eq!(node1.applied_index.load(Ordering::SeqCst), 1);
