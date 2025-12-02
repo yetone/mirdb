@@ -22,6 +22,14 @@ from .memorability_assessor import (
     QuotabilityAnalysis
 )
 
+from .emotional_resonance_validator import (
+    EmotionalResonanceValidator,
+    EmotionalResponse,
+    ReviewerRating,
+    EmotionalResonanceReport,
+    validate_emotional_resonance
+)
+
 __all__ = [
     'OriginalityValidator',
     'validate_poem_originality',
@@ -34,5 +42,10 @@ __all__ = [
     'MemorabilityReport',
     'RhymeAnalysis',
     'RepetitionAnalysis',
-    'QuotabilityAnalysis'
+    'QuotabilityAnalysis',
+    'EmotionalResonanceValidator',
+    'EmotionalResponse',
+    'ReviewerRating',
+    'EmotionalResonanceReport',
+    'validate_emotional_resonance'
 ]
