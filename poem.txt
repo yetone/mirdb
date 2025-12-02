@@ -1,0 +1,27 @@
+MirDB: An Ode to Persistence
+
+In memory's fleeting embrace, data once did dwell,
+Lost to power's whim, a volatile spell.
+But MirDB rises, forged in Rust's might,
+A guardian of records through endless night.
+
+Not like memcached, whose treasures fade away,
+When servers sleep or circuits cease to play.
+Here data persists, etched deep in disk,
+No transient cache, no ephemeral risk.
+
+Through LSM trees, your bytes cascade down,
+From memtable heights to SSTable's crown.
+The Write-Ahead Log stands sentinel true,
+A promise keeper, durability's due.
+
+What memory forgets, the disk remembers still,
+Sorted strings preserved through crash and kill.
+Compaction weaves through layers deep,
+Eternal records that forever keep.
+
+So trust your keys to MirDB's care,
+Persistent storage beyond compare.
+Where others vanish in power's failing light,
+Your data endures, permanent and bright.
+
