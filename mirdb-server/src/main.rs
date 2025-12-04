@@ -56,6 +56,7 @@ mod wal;
 #[cfg(test)]
 mod raft_log_tests;
 mod raft_log;
+mod cluster;
 
 pub struct Server {
     store: Arc<Store>,
