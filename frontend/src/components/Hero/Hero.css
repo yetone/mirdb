@@ -33,7 +33,11 @@
 }
 
 .hero-cta {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   padding: 1rem 2.5rem;
   font-size: 1.125rem;
   font-weight: 600;
