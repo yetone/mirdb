@@ -8,29 +8,49 @@ import Hero from '../components/Hero.astro';
     <Hero />
 
     <!-- Getting Started Section (anchor target for CTA) -->
-    <section id="getting-started" class="bg-white py-16 sm:py-24">
+    <section id="getting-started" data-testid="getting-started-section" class="bg-white py-16 sm:py-24">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-3xl">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 data-testid="getting-started-heading" class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Getting Started
           </h2>
           <p class="mt-4 text-lg text-gray-600">
             Get up and running with MirDB in minutes. Start the server and connect with any memcached client.
           </p>
 
-          <div class="mt-8 rounded-lg bg-gray-900 p-6">
-            <pre class="overflow-x-auto text-sm text-gray-100"><code># Start MirDB
+          <!-- Startup Command -->
+          <h3 class="mt-10 text-xl font-semibold text-gray-900">1. Start the Server</h3>
+          <div data-testid="startup-code-block" class="mt-4 rounded-lg bg-gray-900 p-6">
+            <pre class="overflow-x-auto text-sm text-gray-100"><code class="language-bash"># Start MirDB with a configuration file
 mirdb -c config.toml
 
-# Connect with any memcached client
+# Or start with default settings
+mirdb</code></pre>
+          </div>
+
+          <!-- Usage Example with SET/GET -->
+          <h3 class="mt-10 text-xl font-semibold text-gray-900">2. Basic Operations</h3>
+          <p class="mt-2 text-gray-600">
+            Connect with any memcached client and start storing data:
+          </p>
+          <div data-testid="usage-code-block" class="mt-4 rounded-lg bg-gray-900 p-6">
+            <pre class="overflow-x-auto text-sm text-gray-100"><code class="language-bash"># Connect to MirDB
 telnet localhost 12333
+
+# SET a key-value pair
 set mykey 0 0 5
 hello
 STORED
+
+# GET the value back
 get mykey
 VALUE mykey 0 5
 hello
-END</code></pre>
+END
+
+# DELETE a key
+delete mykey
+DELETED</code></pre>
           </div>
         </div>
       </div>
