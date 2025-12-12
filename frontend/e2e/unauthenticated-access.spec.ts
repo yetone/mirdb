@@ -71,23 +71,28 @@ test.describe('Unauthenticated User Access - REQ-6', () => {
     // Clear all cookies and storage
     await context.clearCookies();
 
-    // Track all network requests to detect auth-related calls
+    // Track auth-related API calls (not source file requests)
     const authRequests: string[] = [];
 
     page.on('request', (request) => {
       const url = request.url().toLowerCase();
-      // Check for common auth-related endpoints
-      if (
-        url.includes('/auth') ||
-        url.includes('/login') ||
-        url.includes('/session') ||
-        url.includes('/token') ||
-        url.includes('/user') ||
-        url.includes('/me') ||
-        url.includes('/whoami') ||
-        url.includes('/verify')
-      ) {
-        authRequests.push(url);
+      // Only check for actual API calls, not source file requests
+      // Source files contain .ts, .tsx, .js, .css, .map extensions
+      const isSourceFile = /\.(tsx?|jsx?|css|map)($|\?)/.test(url);
+      if (!isSourceFile) {
+        // Check for common auth-related API endpoints
+        if (
+          url.includes('/api/auth') ||
+          url.includes('/api/login') ||
+          url.includes('/api/session') ||
+          url.includes('/api/token') ||
+          url.includes('/api/user') ||
+          url.includes('/api/me') ||
+          url.includes('/api/whoami') ||
+          url.includes('/api/verify')
+        ) {
+          authRequests.push(url);
+        }
       }
     });
 
