@@ -23,9 +23,9 @@ describe('Unauthenticated User Access - REQ-6', () => {
   it('TC3: Page renders without making authentication API calls', async () => {
     // Mock fetch to track any auth-related calls
     const fetchCalls: string[] = []
-    const originalFetch = global.fetch
+    const originalFetch = globalThis.fetch
 
-    global.fetch = vi.fn((url: RequestInfo | URL) => {
+    globalThis.fetch = vi.fn((url: RequestInfo | URL) => {
       const urlString = url.toString().toLowerCase()
       fetchCalls.push(urlString)
 
@@ -68,7 +68,7 @@ describe('Unauthenticated User Access - REQ-6', () => {
     )
     expect(authCalls).toHaveLength(0)
 
-    global.fetch = originalFetch
+    globalThis.fetch = originalFetch
   })
 
   it('Homepage renders all main sections without authentication', () => {
