@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import type { FeaturedCardProps, FeaturedItem } from '../../types/FeaturedContent.types'
+import type { FeaturedCardProps } from '../../types/FeaturedContent.types'
 
 /**
  * FeaturedCard component displays a single featured content item
