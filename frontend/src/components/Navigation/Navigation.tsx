@@ -62,7 +62,7 @@ export const Navigation: React.FC = () => {
               <Link
                 to={link.href}
                 className="navigation-link"
-                data-testid="nav-link"
+                data-testid={`navigation-link-${link.label.toLowerCase()}`}
                 onClick={closeMenu}
               >
                 {link.label}

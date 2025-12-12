@@ -41,7 +41,7 @@ export const Footer: React.FC = () => {
     <footer className="footer" data-testid="footer">
       <div className="footer-content" data-testid="footer-content">
         {/* Site Map Section */}
-        <div className="footer-section">
+        <div className="footer-section" data-testid="footer-section">
           <h3 className="footer-section-title">Site Map</h3>
           <nav aria-label="Footer navigation">
             <ul className="footer-links">
