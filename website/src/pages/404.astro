@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 - Page Not Found | MirDB" description="The page you're looking for doesn't exist. Return to MirDB homepage.">
+  <div data-testid="error-404-page" class="min-h-screen flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full text-center">
+      <!-- 404 Error Code -->
+      <p data-testid="error-404-code" class="text-9xl font-bold text-primary-600">404</p>
+
+      <!-- Error Title -->
+      <h1 data-testid="error-404-title" class="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+        Page Not Found
+      </h1>
+
+      <!-- Error Description -->
+      <p data-testid="error-404-description" class="mt-4 text-lg text-gray-600">
+        Sorry, we couldn't find the page you're looking for. The page may have been moved or doesn't exist.
+      </p>
+
+      <!-- Back to Home Link -->
+      <div class="mt-8">
+        <a
+          data-testid="error-404-home-link"
+          href="/"
+          class="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+        >
+          <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+          </svg>
+          Back to Home
+        </a>
+      </div>
+
+      <!-- Additional Help Text -->
+      <p class="mt-6 text-sm text-gray-500">
+        If you believe this is an error, please check the URL or visit our
+        <a href="/" class="text-primary-600 hover:text-primary-700 underline">homepage</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
