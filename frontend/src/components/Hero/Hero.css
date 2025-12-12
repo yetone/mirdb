@@ -59,6 +59,12 @@
   transform: translateY(0);
 }
 
+.hero-cta:focus {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(233, 69, 96, 0.4);
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .hero {

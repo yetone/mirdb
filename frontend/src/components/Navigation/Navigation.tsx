@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context'
 import './Navigation.css'
@@ -26,6 +26,7 @@ export interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ showAuthLinks = true }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const menuToggleRef = useRef<HTMLButtonElement>(null)
 
   // Try to use auth context, but handle case where it's not available
   let isAuthenticated = false
@@ -41,9 +42,29 @@ export const Navigation: React.FC<NavigationProps> = ({ showAuthLinks = true }) 
     setIsMenuOpen(!isMenuOpen)
   }
 
-  const closeMenu = () => {
+  const closeMenu = useCallback(() => {
     setIsMenuOpen(false)
-  }
+  }, [])
+
+  const closeMenuAndFocusToggle = useCallback(() => {
+    setIsMenuOpen(false)
+    // Return focus to the toggle button for accessibility
+    menuToggleRef.current?.focus()
+  }, [])
+
+  // Handle Escape key to close mobile menu
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isMenuOpen) {
+        closeMenuAndFocusToggle()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isMenuOpen, closeMenuAndFocusToggle])
 
   return (
     <header className="navigation-header" data-testid="main-navigation">
@@ -58,6 +79,7 @@ export const Navigation: React.FC<NavigationProps> = ({ showAuthLinks = true }) 
         </Link>
 
         <button
+          ref={menuToggleRef}
           className="mobile-menu-toggle"
           data-testid="mobile-menu-toggle"
           onClick={toggleMenu}
