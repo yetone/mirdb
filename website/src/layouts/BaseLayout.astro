@@ -2,9 +2,14 @@
 interface Props {
   title: string;
   description?: string;
+  ogType?: string;
 }
 
-const { title, description = 'MirDB - A persistent key-value store with Memcached protocol support' } = Astro.props;
+const {
+  title,
+  description = 'MirDB - A persistent key-value store with Memcached protocol support',
+  ogType = 'website'
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -13,6 +18,12 @@ const { title, description = 'MirDB - A persistent key-value store with Memcache
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
   </head>
