@@ -1,0 +1,122 @@
+---
+// ProjectStatus component for MirDB product showcase
+// Displays project status with implemented and planned features
+// REQ-9: Display project status including implemented and planned features
+
+interface StatusItem {
+  id: string;
+  title: string;
+  description: string;
+  status: 'implemented' | 'planned';
+}
+
+const statusItems: StatusItem[] = [
+  {
+    id: 'async-networking',
+    title: 'Async Networking',
+    description: 'Tokio-based async networking with memcached protocol support for high-performance concurrent connections.',
+    status: 'implemented'
+  },
+  {
+    id: 'memtable',
+    title: 'Memtable',
+    description: 'In-memory data structure using skip list for fast writes and efficient key-value storage.',
+    status: 'implemented'
+  },
+  {
+    id: 'minor-compaction',
+    title: 'Minor Compaction',
+    description: 'Automatic flushing of memtable data to SSTable files for persistent storage.',
+    status: 'implemented'
+  },
+  {
+    id: 'major-compaction',
+    title: 'Major Compaction',
+    description: 'SSTable level compaction for optimizing storage and maintaining read performance.',
+    status: 'implemented'
+  },
+  {
+    id: 'raft-consensus',
+    title: 'Raft Consensus',
+    description: 'Distributed consensus protocol for multi-node replication and high availability.',
+    status: 'planned'
+  }
+];
+
+const implementedFeatures = statusItems.filter(item => item.status === 'implemented');
+const plannedFeatures = statusItems.filter(item => item.status === 'planned');
+---
+
+<section data-testid="project-status-section" id="status" class="bg-gray-50 py-16 sm:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 data-testid="project-status-heading" class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        Project Status
+      </h2>
+      <p class="mt-4 text-lg text-gray-600">
+        Track the development progress of MirDB features and upcoming roadmap.
+      </p>
+    </div>
+
+    <div class="mt-16 grid gap-8 lg:grid-cols-2">
+      <!-- Implemented Features -->
+      <div data-testid="implemented-features" class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          </div>
+          <h3 data-testid="implemented-features-heading" class="text-xl font-semibold text-gray-900">
+            Implemented Features
+          </h3>
+        </div>
+        <ul data-testid="implemented-features-list" class="space-y-4">
+          {implementedFeatures.map((feature) => (
+            <li data-testid={`status-${feature.id}`} class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <span data-testid={`status-${feature.id}-title`} class="font-medium text-gray-900">{feature.title}</span>
+                <p data-testid={`status-${feature.id}-description`} class="text-sm text-gray-600 mt-1">{feature.description}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Planned Features -->
+      <div data-testid="planned-features" class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 data-testid="planned-features-heading" class="text-xl font-semibold text-gray-900">
+            Planned Features
+          </h3>
+        </div>
+        <ul data-testid="planned-features-list" class="space-y-4">
+          {plannedFeatures.map((feature) => (
+            <li data-testid={`status-${feature.id}`} class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <span data-testid={`status-${feature.id}-title`} class="font-medium text-gray-900">{feature.title}</span>
+                <p data-testid={`status-${feature.id}-description`} class="text-sm text-gray-600 mt-1">{feature.description}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-6 pt-6 border-t border-gray-100">
+          <p class="text-sm text-gray-500">
+            More features are being planned. Check the GitHub repository for the latest updates.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
