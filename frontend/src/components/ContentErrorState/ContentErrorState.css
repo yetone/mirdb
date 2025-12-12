@@ -1,0 +1,100 @@
+/**
+ * ContentErrorState component styles
+ * Graceful error display with retry functionality
+ */
+
+.content-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 24px auto;
+  max-width: 400px;
+}
+
+.error-icon {
+  color: #6c757d;
+  opacity: 0.7;
+}
+
+.error-message {
+  color: #495057;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 300px;
+}
+
+.retry-button {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.retry-button:hover {
+  background-color: #0056b3;
+}
+
+.retry-button:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.retry-button:active {
+  transform: scale(0.98);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .content-error-state {
+    background-color: #212529;
+  }
+
+  .error-icon {
+    color: #adb5bd;
+  }
+
+  .error-message {
+    color: #ced4da;
+  }
+
+  .retry-button {
+    background-color: #0d6efd;
+  }
+
+  .retry-button:hover {
+    background-color: #0a58ca;
+  }
+
+  .retry-button:focus {
+    outline-color: #0d6efd;
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+  .content-error-state {
+    padding: 32px 16px;
+    margin: 16px;
+  }
+
+  .error-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .error-message {
+    font-size: 14px;
+  }
+}
