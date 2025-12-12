@@ -264,5 +264,125 @@ major_compaction
         </div>
       </div>
     </section>
+
+    <!-- Configuration Section -->
+    <section id="configuration" data-testid="configuration-section" class="bg-white py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl">
+          <h2 data-testid="configuration-heading" class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Configuration
+          </h2>
+          <p class="mt-4 text-lg text-gray-600">
+            MirDB uses TOML configuration files to customize its behavior. Below are the key configuration options and their default values.
+          </p>
+
+          <!-- Example Configuration -->
+          <h3 class="mt-10 text-xl font-semibold text-gray-900">Example Configuration</h3>
+          <div data-testid="config-example-code-block" class="mt-4 rounded-lg bg-gray-900 p-6">
+            <pre class="overflow-x-auto text-sm text-gray-100"><code class="language-toml">addr = "0.0.0.0:12333"
+work_dir = "/tmp/mirdb"
+max_level = 7
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+block_size = "4K"</code></pre>
+          </div>
+
+          <!-- Configuration Parameters Table -->
+          <h3 class="mt-10 text-xl font-semibold text-gray-900">Configuration Parameters</h3>
+
+          <!-- Network Configuration -->
+          <div data-testid="config-network" class="mt-6">
+            <h4 class="text-lg font-medium text-gray-900">Network</h4>
+            <div class="mt-3 overflow-hidden rounded-lg border border-gray-200">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Parameter</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Description</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Default</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                  <tr data-testid="config-param-addr">
+                    <td class="px-4 py-3 text-sm font-mono text-gray-900">addr</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">Listen address and port</td>
+                    <td class="px-4 py-3 text-sm font-mono text-gray-600">0.0.0.0:12333</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Storage Configuration -->
+          <div data-testid="config-storage" class="mt-6">
+            <h4 class="text-lg font-medium text-gray-900">Storage</h4>
+            <div class="mt-3 overflow-hidden rounded-lg border border-gray-200">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Parameter</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Description</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Default</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                  <tr data-testid="config-param-work-dir">
+                    <td class="px-4 py-3 text-sm font-mono text-gray-900">work_dir</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">Data directory path</td>
+                    <td class="px-4 py-3 text-sm font-mono text-gray-600">/tmp/mirdb</td>
+                  </tr>
+                  <tr data-testid="config-param-max-level">
+                    <td class="px-4 py-3 text-sm font-mono text-gray-900">max_level</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">Maximum LSM tree levels</td>
+                    <td class="px-4 py-3 text-sm font-mono text-gray-600">7</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Size Limits Configuration -->
+          <div data-testid="config-size-limits" class="mt-6">
+            <h4 class="text-lg font-medium text-gray-900">Size Limits</h4>
+            <div class="mt-3 overflow-hidden rounded-lg border border-gray-200">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Parameter</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Description</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Default</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                  <tr data-testid="config-param-sst-max-size">
+                    <td class="px-4 py-3 text-sm font-mono text-gray-900">sst_max_size</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">Maximum SSTable file size</td>
+                    <td class="px-4 py-3 text-sm font-mono text-gray-600">100M</td>
+                  </tr>
+                  <tr data-testid="config-param-mem-table-max-size">
+                    <td class="px-4 py-3 text-sm font-mono text-gray-900">mem_table_max_size</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">Maximum memtable size before flush</td>
+                    <td class="px-4 py-3 text-sm font-mono text-gray-600">4M</td>
+                  </tr>
+                  <tr data-testid="config-param-block-size">
+                    <td class="px-4 py-3 text-sm font-mono text-gray-900">block_size</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">Data block size</td>
+                    <td class="px-4 py-3 text-sm font-mono text-gray-600">4K</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Size Units Note -->
+          <div class="mt-6 rounded-lg bg-blue-50 p-4">
+            <p class="text-sm text-blue-800">
+              <strong>Size Units:</strong> Configuration supports size suffixes: K (kilobytes), M (megabytes), G (gigabytes), T (terabytes).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </BaseLayout>
