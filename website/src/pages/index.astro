@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
 import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
 import Architecture from '../components/Architecture.astro';
 ---
 
 <BaseLayout title="MirDB - Persistent Key-Value Store with Memcached Protocol">
+  <Navigation />
   <main>
     <Hero />
     <Features />
