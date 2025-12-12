@@ -39,7 +39,7 @@ export const CONTACT_INFO = {
 export const Footer: React.FC = () => {
   return (
     <footer className="footer" data-testid="footer">
-      <div className="footer-content">
+      <div className="footer-content" data-testid="footer-content">
         {/* Site Map Section */}
         <div className="footer-section">
           <h3 className="footer-section-title">Site Map</h3>
