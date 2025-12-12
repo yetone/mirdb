@@ -59,5 +59,210 @@ DELETED</code></pre>
         </div>
       </div>
     </section>
+
+    <!-- Commands Reference Section -->
+    <section id="commands" data-testid="commands-section" class="bg-gray-50 py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-4xl">
+          <h2 data-testid="commands-heading" class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Supported Commands
+          </h2>
+          <p class="mt-4 text-lg text-gray-600">
+            MirDB implements the memcached text protocol. Here are all the commands you can use.
+          </p>
+
+          <!-- Storage Commands -->
+          <div class="mt-12">
+            <h3 data-testid="storage-commands-heading" class="text-2xl font-semibold text-gray-900">
+              Storage Commands
+            </h3>
+
+            <!-- SET Command -->
+            <div data-testid="command-set" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">SET</h4>
+              <p class="mt-2 text-gray-600">Store a key-value pair. Overwrites existing values.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+set mykey 0 0 5
+hello
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- ADD Command -->
+            <div data-testid="command-add" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">ADD</h4>
+              <p class="mt-2 text-gray-600">Store a key-value pair only if the key does not already exist.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>add &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+add newkey 0 0 5
+world
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- REPLACE Command -->
+            <div data-testid="command-replace" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">REPLACE</h4>
+              <p class="mt-2 text-gray-600">Store a key-value pair only if the key already exists.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>replace &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+replace mykey 0 0 7
+updated
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- APPEND Command -->
+            <div data-testid="command-append" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">APPEND</h4>
+              <p class="mt-2 text-gray-600">Append data to an existing key's value.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>append &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+append mykey 0 0 6
+_world
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- PREPEND Command -->
+            <div data-testid="command-prepend" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">PREPEND</h4>
+              <p class="mt-2 text-gray-600">Prepend data to an existing key's value.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>prepend &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+prepend mykey 0 0 6
+hello_
+STORED</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Retrieval Commands -->
+          <div class="mt-12">
+            <h3 data-testid="retrieval-commands-heading" class="text-2xl font-semibold text-gray-900">
+              Retrieval Commands
+            </h3>
+
+            <!-- GET Command -->
+            <div data-testid="command-get" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">GET</h4>
+              <p class="mt-2 text-gray-600">Retrieve the value for one or more keys.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>get &lt;key1&gt; [&lt;key2&gt; ...]\r\n
+
+# Example:
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+              </div>
+            </div>
+
+            <!-- GETS Command -->
+            <div data-testid="command-gets" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">GETS</h4>
+              <p class="mt-2 text-gray-600">Retrieve values with CAS (Check-And-Set) tokens. Same as GET in this implementation.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>gets &lt;key1&gt; [&lt;key2&gt; ...]\r\n
+
+# Example:
+gets mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deletion Commands -->
+          <div class="mt-12">
+            <h3 data-testid="deletion-commands-heading" class="text-2xl font-semibold text-gray-900">
+              Deletion Commands
+            </h3>
+
+            <!-- DELETE Command -->
+            <div data-testid="command-delete" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">DELETE</h4>
+              <p class="mt-2 text-gray-600">Remove a key from the database.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>delete &lt;key&gt; [noreply]\r\n
+
+# Example:
+delete mykey
+DELETED</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Commands -->
+          <div class="mt-12">
+            <h3 data-testid="admin-commands-heading" class="text-2xl font-semibold text-gray-900">
+              Admin Commands (MirDB-Specific)
+            </h3>
+
+            <!-- INFO Command -->
+            <div data-testid="command-info" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">INFO</h4>
+              <p class="mt-2 text-gray-600">Display database status and level information. This is a MirDB-specific command.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>info\r\n
+
+# Example:
+info
+# Returns database status and level information</code></pre>
+              </div>
+            </div>
+
+            <!-- MAJOR_COMPACTION Command -->
+            <div data-testid="command-major-compaction" class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <h4 class="text-lg font-semibold text-gray-900">MAJOR_COMPACTION</h4>
+              <p class="mt-2 text-gray-600">Trigger manual compaction of the database. This is a MirDB-specific command.</p>
+              <div class="mt-4 rounded-lg bg-gray-900 p-4">
+                <pre class="overflow-x-auto text-sm text-gray-100"><code>major_compaction\r\n
+
+# Example:
+major_compaction
+# Triggers database compaction</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Response Codes -->
+          <div class="mt-12">
+            <h3 data-testid="response-codes-heading" class="text-2xl font-semibold text-gray-900">
+              Response Codes
+            </h3>
+            <div class="mt-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+              <ul class="space-y-2 text-gray-600">
+                <li><code class="rounded bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900">STORED</code> - Data stored successfully</li>
+                <li><code class="rounded bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900">NOT_STORED</code> - Data not stored (condition not met for add/replace)</li>
+                <li><code class="rounded bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900">EXISTS</code> - CAS check failed</li>
+                <li><code class="rounded bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900">NOT_FOUND</code> - Key not found (for delete/replace)</li>
+                <li><code class="rounded bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900">DELETED</code> - Key deleted successfully</li>
+                <li><code class="rounded bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900">ERROR</code> - Unknown command</li>
+                <li><code class="rounded bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900">CLIENT_ERROR &lt;msg&gt;</code> - Client input error</li>
+                <li><code class="rounded bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900">SERVER_ERROR &lt;msg&gt;</code> - Server error</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </BaseLayout>
