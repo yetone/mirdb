@@ -25,6 +25,7 @@
     "tailwindcss": "^3.4.19"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.57.0",
     "lighthouse": "^13.0.1",
     "playwright-lighthouse": "^4.0.0"
