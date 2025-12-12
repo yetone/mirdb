@@ -1,0 +1,47 @@
+/**
+ * OptimizedImage component styles
+ * NFR-3: Page shall achieve Cumulative Layout Shift (CLS) under 0.1
+ */
+
+.optimized-image {
+  /* Ensure images fill their container while maintaining aspect ratio */
+  max-width: 100%;
+  height: auto;
+  /* Smooth loading transition */
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Container for maintaining aspect ratio and preventing CLS */
+.optimized-image-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #f0f0f0; /* Placeholder color while loading */
+}
+
+/* Ensure images within containers fill the space */
+.optimized-image-container .optimized-image,
+.optimized-image-container picture,
+.optimized-image-container picture img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Loading state placeholder */
+.optimized-image-container::before {
+  content: '';
+  display: block;
+  padding-bottom: var(--aspect-ratio-padding, 56.25%); /* Default 16:9 */
+}
+
+/* Respect reduced motion preferences for transitions */
+@media (prefers-reduced-motion: reduce) {
+  .optimized-image {
+    transition: none;
+  }
+}
