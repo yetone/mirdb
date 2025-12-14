@@ -2,8 +2,10 @@ use log::info;
 use std::borrow::Borrow;
 use std::fmt::Debug;
 use std::path::Path;
+use std::sync::atomic::AtomicBool;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering::Relaxed;
+use std::sync::atomic::Ordering::SeqCst;
 use std::sync::Arc;
 use std::sync::RwLock;
 use std::sync::RwLockWriteGuard;
@@ -47,6 +49,33 @@ pub struct StorageStats {
     pub immutable_memtable_count: usize,
 }
 
+/// Compaction status information for monitoring
+#[derive(Debug, Clone)]
+pub struct CompactionStatus {
+    /// Whether a minor compaction (memtable -> Level 0) is currently running
+    pub minor_running: bool,
+    /// Whether a major compaction (level N -> level N+1) is currently running
+    pub major_running: bool,
+    /// The current level being compacted during major compaction (if running)
+    pub major_current_level: Option<usize>,
+}
+
+impl CompactionStatus {
+    pub fn new() -> Self {
+        CompactionStatus {
+            minor_running: false,
+            major_running: false,
+            major_current_level: None,
+        }
+    }
+}
+
+impl Default for CompactionStatus {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 pub struct DataManager {
     mut_: Arc<RwLock<Memtable<Slice, Slice>>>,
     imm_: Arc<RwLock<MemtableList<Slice, Slice>>>,
@@ -55,6 +84,12 @@ pub struct DataManager {
     opt_: Options,
     next_file_number_: AtomicUsize,
     last_compact_keys_: Vec<Vec<u8>>,
+    /// Indicates if minor compaction is currently running
+    minor_compaction_running_: AtomicBool,
+    /// Indicates if major compaction is currently running
+    major_compaction_running_: AtomicBool,
+    /// The current level being compacted during major compaction
+    major_compaction_level_: AtomicUsize,
 }
 
 unsafe impl Sync for DataManager {}
@@ -83,6 +118,9 @@ impl DataManager {
             wal_: Arc::new(RwLock::new(WAL::new(opt.clone())?)),
             opt_: opt.clone(),
             last_compact_keys_: Vec::with_capacity(opt.max_level),
+            minor_compaction_running_: AtomicBool::new(false),
+            major_compaction_running_: AtomicBool::new(false),
+            major_compaction_level_: AtomicUsize::new(usize::MAX),
         };
         dm.redo()?;
         Ok(Arc::new(dm))
@@ -150,6 +188,23 @@ impl DataManager {
         let max_size = self.opt_.mem_table_max_size;
         let imm_count = immuttable.table_count();
         (current_size, max_size, imm_count)
+    }
+
+    /// Get the current compaction status for monitoring
+    pub fn compaction_status(&self) -> CompactionStatus {
+        let minor_running = self.minor_compaction_running_.load(SeqCst);
+        let major_running = self.major_compaction_running_.load(SeqCst);
+        let level = self.major_compaction_level_.load(SeqCst);
+
+        CompactionStatus {
+            minor_running,
+            major_running,
+            major_current_level: if major_running && level != usize::MAX {
+                Some(level)
+            } else {
+                None
+            },
+        }
     }
 
     pub fn redo(&mut self) -> MyResult<()> {
@@ -288,27 +343,37 @@ impl DataManager {
         }
         drop(imm);
 
-        let mut wal = write_lock(&self.wal_);
-        let imm = read_lock(&self.imm_);
+        // Set minor compaction status flag
+        self.minor_compaction_running_.store(true, SeqCst);
 
-        let mut iter = imm.tables_iter().rev();
-        let work_dir = Path::new(&self.opt_.work_dir);
-        for _ in 0..c {
-            let memtable = iter.next().unwrap();
-            let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
-            if let Some((_, reader)) = memtable.build_sstable(&self.opt_, &path)? {
-                let mut readers = write_lock(&self.readers_);
-                readers.add(0, reader)?;
+        let result = (|| -> MyResult<()> {
+            let mut wal = write_lock(&self.wal_);
+            let imm = read_lock(&self.imm_);
+
+            let mut iter = imm.tables_iter().rev();
+            let work_dir = Path::new(&self.opt_.work_dir);
+            for _ in 0..c {
+                let memtable = iter.next().unwrap();
+                let path = work_dir.join(make_file_name(self.new_file_number(), "sst"));
+                if let Some((_, reader)) = memtable.build_sstable(&self.opt_, &path)? {
+                    let mut readers = write_lock(&self.readers_);
+                    readers.add(0, reader)?;
+                }
+                wal.consume_seg()?;
             }
-            wal.consume_seg()?;
-        }
-        drop(imm);
-        drop(wal);
-        let mut imm = write_lock(&self.imm_);
-        for _ in 0..c {
-            imm.consume();
-        }
-        Ok(())
+            drop(imm);
+            drop(wal);
+            let mut imm = write_lock(&self.imm_);
+            for _ in 0..c {
+                imm.consume();
+            }
+            Ok(())
+        })();
+
+        // Clear minor compaction status flag
+        self.minor_compaction_running_.store(false, SeqCst);
+
+        result
     }
 
     pub fn major_compaction(&self) -> MyResult<()> {
@@ -318,7 +383,17 @@ impl DataManager {
         };
         if !levels.is_empty() {
             info!("size compaction: {:?}", levels);
-            self.size_compaction(levels)?;
+            // Set major compaction status flag with the first level being compacted
+            self.major_compaction_running_.store(true, SeqCst);
+            self.major_compaction_level_.store(levels[0], SeqCst);
+
+            let result = self.size_compaction(levels);
+
+            // Clear major compaction status flags
+            self.major_compaction_running_.store(false, SeqCst);
+            self.major_compaction_level_.store(usize::MAX, SeqCst);
+
+            result?;
         } else {
             self.seek_compaction()?;
         }

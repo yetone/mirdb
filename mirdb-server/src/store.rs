@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 
 use skip_list::SkipList;
 
-use crate::data_manager::{DataManager, StorageStats};
+use crate::data_manager::{CompactionStatus, DataManager, StorageStats};
 use crate::error::{MyResult, StatusCode};
 use crate::options::Options;
 use crate::request::{GetterType, Request, SetterType};
@@ -94,6 +94,11 @@ impl Store {
     /// Returns memtable statistics: (current_size_bytes, max_size_bytes, immutable_count)
     pub fn memtable_status(&self) -> (usize, usize, usize) {
         self.data.memtable_status()
+    }
+
+    /// Get current compaction status for monitoring
+    pub fn compaction_status(&self) -> CompactionStatus {
+        self.data.compaction_status()
     }
 
     pub fn apply(&self, request: Request) -> MyResult<Response> {

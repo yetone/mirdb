@@ -115,6 +115,7 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
     let uptime_seconds = get_uptime_seconds();
     let storage_info = store.info();
     let (_max_level, level_stats) = store.storage_status();
+    let compaction_status = store.compaction_status();
 
     // Build SSTable levels HTML
     let mut levels_html = String::new();
@@ -131,6 +132,20 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
             level, sstable_count, size_display
         ));
     }
+
+    // Determine compaction status text
+    let compaction_text = if compaction_status.minor_running && compaction_status.major_running {
+        "minor running, major running".to_string()
+    } else if compaction_status.minor_running {
+        "minor running".to_string()
+    } else if compaction_status.major_running {
+        match compaction_status.major_current_level {
+            Some(level) => format!("major running (level {})", level),
+            None => "major running".to_string(),
+        }
+    } else {
+        "idle".to_string()
+    };
 
     format!(
         r#"<!DOCTYPE html>
@@ -206,6 +221,8 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
             font-weight: 500;
             color: #4fc3f7;
         }}
+        .info-value.idle {{ color: #4caf50; }}
+        .info-value.running {{ color: #ff9800; animation: pulse 1s infinite; }}
         .section-title {{
             color: #4fc3f7;
             margin-bottom: 16px;
@@ -268,6 +285,24 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
         </div>
 
         <div class="status-card">
+            <h3 class="section-title">Compaction Status</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value {}" id="compactionStatus">{}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Minor Compaction</div>
+                    <div class="info-value" id="minorCompaction">{}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Major Compaction</div>
+                    <div class="info-value" id="majorCompaction">{}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-card">
             <h3 class="section-title">Storage Information</h3>
             <pre id="storageInfo">{}</pre>
         </div>
@@ -285,6 +320,21 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
             document.getElementById('uptime').textContent = uptimeSeconds + ' seconds';
         }}, 1000);
 
+        // Helper function to get compaction status text
+        function getCompactionStatusText(compaction) {{
+            if (compaction.minor_running && compaction.major_running) {{
+                return 'minor running, major running';
+            }} else if (compaction.minor_running) {{
+                return 'minor running';
+            }} else if (compaction.major_running) {{
+                if (compaction.major_current_level !== null) {{
+                    return 'major running (level ' + compaction.major_current_level + ')';
+                }}
+                return 'major running';
+            }}
+            return 'idle';
+        }}
+
         // Periodically check status
         setInterval(function() {{
             fetch('/api/status')
@@ -293,6 +343,17 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
                     document.getElementById('statusText').textContent = data.status;
                     document.getElementById('statusIndicator').className = 'status-indicator ' + data.status;
                     document.getElementById('statusText').className = 'status-text ' + data.status;
+
+                    // Update compaction status
+                    if (data.compaction) {{
+                        var statusText = getCompactionStatusText(data.compaction);
+                        var isRunning = data.compaction.minor_running || data.compaction.major_running;
+                        document.getElementById('compactionStatus').textContent = statusText;
+                        document.getElementById('compactionStatus').className = 'info-value ' + (isRunning ? 'running' : 'idle');
+                        document.getElementById('minorCompaction').textContent = data.compaction.minor_running ? 'running' : 'idle';
+                        document.getElementById('majorCompaction').textContent = data.compaction.major_running ?
+                            (data.compaction.major_current_level !== null ? 'running (level ' + data.compaction.major_current_level + ')' : 'running') : 'idle';
+                    }}
                 }})
                 .catch(() => {{
                     document.getElementById('statusText').textContent = 'offline';
@@ -307,6 +368,17 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
         uptime_seconds,
         VERSION,
         levels_html,
+        if compaction_status.minor_running || compaction_status.major_running { "running" } else { "idle" },
+        compaction_text,
+        if compaction_status.minor_running { "running" } else { "idle" },
+        if compaction_status.major_running {
+            match compaction_status.major_current_level {
+                Some(level) => format!("running (level {})", level),
+                None => "running".to_string(),
+            }
+        } else {
+            "idle".to_string()
+        },
         storage_info.replace('\n', "\n"),
         VERSION,
         uptime_seconds
@@ -359,6 +431,7 @@ fn handle_request(
             // Get storage status including SSTable levels
             let (_max_level, level_stats) = store.storage_status();
             let levels_json = build_levels_json(&level_stats);
+            let compaction_status = store.compaction_status();
 
             let status = serde_json::json!({
                 "status": "healthy",
@@ -373,6 +446,11 @@ fn handle_request(
                     "memtable_max_bytes": storage_stats.memtable_max_bytes,
                     "immutable_memtable_count": storage_stats.immutable_memtable_count,
                     "levels": levels_json
+                },
+                "compaction": {
+                    "minor_running": compaction_status.minor_running,
+                    "major_running": compaction_status.major_running,
+                    "major_current_level": compaction_status.major_current_level
                 }
             });
             Response::builder()
