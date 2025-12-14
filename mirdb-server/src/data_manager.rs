@@ -36,6 +36,17 @@ use crate::utils::to_str;
 use crate::utils::write_lock;
 use crate::wal::WAL;
 
+/// Statistics about the storage engine's memtable state
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StorageStats {
+    /// Current size of the active memtable in bytes
+    pub memtable_size_bytes: usize,
+    /// Maximum size of the memtable in bytes (configured limit)
+    pub memtable_max_bytes: usize,
+    /// Number of immutable memtables waiting to be flushed
+    pub immutable_memtable_count: usize,
+}
+
 pub struct DataManager {
     mut_: Arc<RwLock<Memtable<Slice, Slice>>>,
     imm_: Arc<RwLock<MemtableList<Slice, Slice>>>,
@@ -107,6 +118,18 @@ impl DataManager {
     pub fn info(&self) -> String {
         let readers = read_lock(&self.readers_);
         readers.manifest_builder().to_string()
+    }
+
+    /// Returns current storage statistics including memtable sizes
+    pub fn get_storage_stats(&self) -> StorageStats {
+        let muttable = read_lock(&self.mut_);
+        let immuttable = read_lock(&self.imm_);
+
+        StorageStats {
+            memtable_size_bytes: muttable.compute_size_bytes(),
+            memtable_max_bytes: self.opt_.mem_table_max_size,
+            immutable_memtable_count: immuttable.table_count(),
+        }
     }
 
     pub fn redo(&mut self) -> MyResult<()> {

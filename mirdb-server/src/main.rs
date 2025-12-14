@@ -59,6 +59,8 @@ mod types;
 mod wal;
 #[cfg(test)]
 mod http_server_tests;
+#[cfg(test)]
+mod memtable_status_tests;
 
 pub struct Server {
     store: Arc<Store>,

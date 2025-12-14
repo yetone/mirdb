@@ -5,6 +5,7 @@ use std::collections::LinkedList;
 use crate::error::MyResult;
 use crate::memtable::Memtable;
 use crate::options::Options;
+use crate::slice::Slice;
 use crate::types::Table;
 
 #[derive(Clone)]
@@ -47,6 +48,16 @@ impl<K: Ord + Clone, V: Clone> MemtableList<K, V> {
 
     pub fn table_count(&self) -> usize {
         self.tables_.len()
+    }
+}
+
+impl MemtableList<Slice, Slice> {
+    /// Computes the total byte size across all immutable memtables
+    pub fn compute_total_size_bytes(&self) -> usize {
+        self.tables_
+            .iter()
+            .map(|table| table.compute_size_bytes())
+            .sum()
     }
 }
 

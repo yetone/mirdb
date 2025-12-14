@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 
 use skip_list::SkipList;
 
-use crate::data_manager::DataManager;
+use crate::data_manager::{DataManager, StorageStats};
 use crate::error::{MyResult, StatusCode};
 use crate::options::Options;
 use crate::request::{GetterType, Request, SetterType};
@@ -77,6 +77,11 @@ impl Store {
     /// Get storage information for dashboard display
     pub fn info(&self) -> String {
         self.data.info()
+    }
+
+    /// Returns current storage statistics
+    pub fn get_storage_stats(&self) -> StorageStats {
+        self.data.get_storage_stats()
     }
 
     pub fn apply(&self, request: Request) -> MyResult<Response> {

@@ -308,13 +308,20 @@ fn handle_request(
         }
         (&Method::GET, "/api/status") => {
             let uptime_seconds = get_uptime_seconds();
+            let storage_stats = store.get_storage_stats();
             let status = serde_json::json!({
+                "status": "healthy",
                 "server": {
+                    "name": "MirDB",
                     "version": VERSION,
                     "uptime_seconds": uptime_seconds,
                     "memcached_addr": memcached_addr
                 },
-                "status": "healthy"
+                "storage": {
+                    "memtable_size_bytes": storage_stats.memtable_size_bytes,
+                    "memtable_max_bytes": storage_stats.memtable_max_bytes,
+                    "immutable_memtable_count": storage_stats.immutable_memtable_count
+                }
             });
             Response::builder()
                 .status(StatusCode::OK)

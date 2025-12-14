@@ -36,6 +36,16 @@ impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
     pub fn length(&self) -> usize {
         self.map_.length()
     }
+
+    /// Returns the current size of the memtable in bytes
+    pub fn size_bytes(&self) -> usize {
+        self.size_
+    }
+
+    /// Returns the maximum size of the memtable in bytes
+    pub fn max_size_bytes(&self) -> usize {
+        self.max_size_
+    }
 }
 
 impl Memtable<Slice, Slice> {
@@ -45,6 +55,14 @@ impl Memtable<Slice, Slice> {
         path: &Path,
     ) -> MyResult<Option<(String, TableReader)>> {
         skiplist_to_sstable(&self.map_, opt, path)
+    }
+
+    /// Computes the actual byte size of all key-value pairs in the memtable
+    pub fn compute_size_bytes(&self) -> usize {
+        self.map_
+            .iter()
+            .map(|(k, v)| k.len() + v.len())
+            .sum()
     }
 }
 
