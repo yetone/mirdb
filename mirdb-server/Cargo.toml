@@ -13,8 +13,10 @@ tokio = "0.1.18"
 tokio-io = "0.1.12"
 tokio-proto = "0.1"
 tokio-service = "0.1"
+hyper = "0.12"
 glob = "0.3.0"
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 bincode = "1.1.2"
 integer-encoding = "1.0"
 snap = "0.2"
@@ -27,3 +29,4 @@ env_logger = "0.6.1"
 
 [dev-dependencies]
 rand = "0.6.1"
+tempfile = "3.1"

@@ -1,4 +1,5 @@
 #![allow(unused_imports, unused_macros, dead_code)]
+#![allow(semicolon_in_expressions_from_macros)]
 
 use std::cell::RefCell;
 use std::error::Error;
@@ -8,11 +9,13 @@ use std::net::SocketAddr;
 use std::net::{TcpListener, TcpStream};
 use std::rc::Rc;
 use std::sync::{Arc, RwLock};
+use std::thread;
 
 use clap::App;
 use clap::Arg;
 use env_logger;
 use futures::{future, Future};
+use log::info;
 use tokio::prelude::*;
 use tokio_proto::TcpServer;
 use tokio_service::{NewService, Service};
@@ -38,6 +41,7 @@ mod response;
 mod parser_util;
 mod config;
 mod data_manager;
+mod http_server;
 mod manifest;
 mod memtable;
 mod memtable_list;
@@ -53,6 +57,8 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+#[cfg(test)]
+mod http_server_tests;
 
 pub struct Server {
     store: Arc<Store>,
@@ -108,7 +114,10 @@ fn main() -> MyResult<()> {
     let conf_path = matches.value_of("config").unwrap_or("default.conf");
     let conf = config::from_path(conf_path)?;
 
-    let addr = conf.addr.parse().unwrap();
+    // Validate configuration (includes port conflict detection)
+    conf.validate()?;
+
+    let addr: SocketAddr = conf.addr.parse().unwrap();
     let opt = conf.to_options()?;
 
     let store = Store::new(opt.clone())?;
@@ -127,6 +136,21 @@ Welcome to MirDB!
         .trim_matches('\n')
     );
 
+    // Start HTTP server if enabled
+    if conf.http_enabled() {
+        let http_addr: SocketAddr = conf.http_addr().unwrap().parse().unwrap();
+        let http_store = store.clone();
+
+        info!("Starting HTTP server on {}", http_addr);
+
+        // Spawn HTTP server in a separate thread with its own Tokio runtime
+        thread::spawn(move || {
+            let http_server = http_server::HttpServer::new(http_addr, http_store);
+            tokio::run(http_server.run());
+        });
+    }
+
+    info!("Starting Memcached TCP server on {}", addr);
     serve(addr, move || Ok(Server::new(store.clone())));
 
     Ok(())

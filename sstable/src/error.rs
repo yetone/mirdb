@@ -1,4 +1,3 @@
-use std::error::Error;
 use std::io;
 use std::result;
 
@@ -41,7 +40,7 @@ impl From<io::Error> for Status {
             io::ErrorKind::NotFound => StatusCode::NotFound,
             _ => StatusCode::IOError,
         };
-        Status::new(code, e.description())
+        Status::new(code, &e.to_string())
     }
 }
 
@@ -51,19 +50,19 @@ impl From<SnapError> for Status {
             SnapError::Checksum { .. } => StatusCode::ChecksumError,
             _ => StatusCode::SnapError,
         };
-        Status::new(code, e.description())
+        Status::new(code, &e.to_string())
     }
 }
 
 impl From<bincode::Error> for Status {
     fn from(e: bincode::Error) -> Self {
-        Status::new(StatusCode::BincodeError, e.description())
+        Status::new(StatusCode::BincodeError, &e.to_string())
     }
 }
 
 impl From<CuckooError> for Status {
     fn from(e: CuckooError) -> Self {
-        Status::new(StatusCode::CuckooError, e.description())
+        Status::new(StatusCode::CuckooError, &format!("{:?}", e))
     }
 }
 

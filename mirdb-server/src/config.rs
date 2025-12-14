@@ -11,6 +11,23 @@ use crate::error::StatusCode;
 use crate::options::{Options, GB, KB, MB, TB};
 use crate::parser_util::macros::{digit, space, usize_parser, IRResult};
 
+/// HTTP server configuration section
+#[derive(Debug, Deserialize, Clone, Default)]
+pub struct HttpConfig {
+    /// Whether HTTP server is enabled
+    #[serde(default)]
+    pub enabled: bool,
+    /// HTTP server address (e.g., "127.0.0.1:8080")
+    #[serde(default = "HttpConfig::default_addr")]
+    pub addr: String,
+}
+
+impl HttpConfig {
+    fn default_addr() -> String {
+        "127.0.0.1:8080".to_string()
+    }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct Config {
     pub addr: String,
@@ -27,6 +44,10 @@ pub struct Config {
     pub l0_compaction_trigger: usize,
 
     pub thread_sleep_ms: usize,
+
+    /// HTTP server configuration (optional)
+    #[serde(default)]
+    pub http: Option<HttpConfig>,
 }
 
 impl Config {
@@ -44,6 +65,52 @@ impl Config {
         opt.thread_sleep_ms = self.thread_sleep_ms;
         Ok(opt)
     }
+
+    /// Check if HTTP server is enabled
+    pub fn http_enabled(&self) -> bool {
+        self.http.as_ref().map(|h| h.enabled).unwrap_or(false)
+    }
+
+    /// Get HTTP server address if enabled
+    pub fn http_addr(&self) -> Option<&str> {
+        self.http.as_ref().filter(|h| h.enabled).map(|h| h.addr.as_str())
+    }
+
+    /// Validate configuration including port conflict detection
+    pub fn validate(&self) -> MyResult<()> {
+        if self.http_enabled() {
+            let http_addr = self.http.as_ref().unwrap().addr.as_str();
+
+            // Extract ports from addresses
+            let tcp_port = extract_port(&self.addr)?;
+            let http_port = extract_port(http_addr)?;
+
+            if tcp_port == http_port {
+                return err(
+                    StatusCode::ConfigError,
+                    format!(
+                        "Port conflict: HTTP server port ({}) conflicts with Memcached TCP server port ({}). \
+                         Please configure different ports for HTTP and Memcached servers.",
+                        http_port, tcp_port
+                    ),
+                );
+            }
+        }
+        Ok(())
+    }
+}
+
+/// Extract port number from address string (e.g., "127.0.0.1:8080" -> 8080)
+fn extract_port(addr: &str) -> MyResult<u16> {
+    addr.rsplit(':')
+        .next()
+        .and_then(|p| p.parse::<u16>().ok())
+        .ok_or_else(|| {
+            crate::error::Status::new(
+                StatusCode::ConfigError,
+                &format!("Invalid address format: {}", addr),
+            )
+        })
 }
 
 fn to_size_unit(x: &[u8]) -> usize {
