@@ -329,6 +329,41 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
             color: #4ecca3;
             word-break: break-all;
         }}
+        /* Tablet breakpoint */
+        @media (max-width: 768px) {{
+            body {{ padding: 16px; }}
+            h1 {{ font-size: 2em; }}
+            .status-card {{ padding: 16px; }}
+            .info-grid {{ gap: 12px; }}
+            .info-item {{ padding: 12px; }}
+            .config-grid {{ gap: 12px; }}
+            .config-item {{ padding: 12px; }}
+        }}
+        /* Mobile breakpoint (375px and below) */
+        @media (max-width: 480px) {{
+            body {{ padding: 12px; }}
+            h1 {{ font-size: 1.5em; margin-bottom: 20px; }}
+            .status-card {{ padding: 12px; margin-bottom: 16px; border-radius: 8px; }}
+            .status-header {{ margin-bottom: 16px; }}
+            .status-text {{ font-size: 1.2em; }}
+            .info-grid {{ grid-template-columns: 1fr; gap: 10px; }}
+            .info-item {{ padding: 12px; min-height: 44px; }}
+            .info-label {{ font-size: 0.8em; }}
+            .info-value {{ font-size: 1.1em; word-break: break-all; }}
+            .section-title {{ font-size: 1.1em; }}
+            pre {{ font-size: 0.75em; padding: 12px; }}
+            .level-row {{ padding: 10px 8px; flex-wrap: wrap; gap: 4px; }}
+            .level-label {{ min-width: 60px; font-size: 0.9em; }}
+            .level-count {{ font-size: 0.9em; }}
+            .level-size {{ min-width: auto; font-size: 0.85em; }}
+            .footer {{ margin-top: 24px; font-size: 0.8em; }}
+            .compaction-btn {{ padding: 10px 16px; font-size: 0.9em; min-height: 44px; }}
+            .compaction-section {{ gap: 10px; }}
+            .config-grid {{ grid-template-columns: 1fr; gap: 10px; }}
+            .config-item {{ padding: 12px; min-height: 44px; }}
+            .config-label {{ font-size: 0.8em; }}
+            .config-value {{ font-size: 1em; }}
+        }}
     </style>
 </head>
 <body>

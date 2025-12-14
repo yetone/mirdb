@@ -241,6 +241,7 @@
             font-size: 0.9rem;
         }
 
+        /* Tablet breakpoint */
         @media (max-width: 768px) {
             header .container {
                 flex-direction: column;
@@ -263,6 +264,115 @@
             footer .container {
                 flex-direction: column;
                 text-align: center;
+            }
+        }
+
+        /* Mobile breakpoint (375px and below) */
+        @media (max-width: 480px) {
+            header {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+
+            nav a {
+                padding: 0.5rem;
+                min-height: 44px;
+                min-width: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .hero .tagline {
+                font-size: 1rem;
+                padding: 0 0.5rem;
+            }
+
+            .hero .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 0.8rem 1.5rem;
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+            }
+
+            main {
+                padding: 2rem 1rem;
+            }
+
+            section h2 {
+                font-size: 1.5rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .feature-icon {
+                font-size: 2rem;
+            }
+
+            .architecture {
+                padding: 1rem;
+            }
+
+            .architecture pre {
+                font-size: 0.7rem;
+                padding: 1rem;
+            }
+
+            .stats {
+                gap: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            footer {
+                padding: 2rem 1rem;
+            }
+
+            footer .links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            footer .links a {
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
             }
         }
     </style>
