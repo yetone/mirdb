@@ -178,6 +178,29 @@ impl SstableReader {
         &mut self.manifest_builder_
     }
 
+    /// Returns statistics for each SSTable level
+    /// Returns a vector of tuples: (level, sstable_count, size_bytes)
+    pub fn level_stats(&self) -> Vec<(usize, usize, usize)> {
+        let mut stats = Vec::with_capacity(self.opt_.max_level);
+        for level in 0..self.opt_.max_level {
+            let (count, size) = if level < self.readers_.len() {
+                let readers = &self.readers_[level];
+                let count = readers.len();
+                let size: usize = readers.iter().map(|r| r.size()).sum();
+                (count, size)
+            } else {
+                (0, 0)
+            };
+            stats.push((level, count, size));
+        }
+        stats
+    }
+
+    /// Returns the maximum configured level
+    pub fn max_level(&self) -> usize {
+        self.opt_.max_level
+    }
+
     pub fn get<K>(&self, k: &K) -> MyResult<Option<Slice>>
     where
         K: ?Sized + Borrow<Slice>,

@@ -96,10 +96,41 @@ impl HttpServer {
     }
 }
 
+/// Build the levels array for the status API response
+pub fn build_levels_json(level_stats: &[(usize, usize, usize)]) -> Vec<serde_json::Value> {
+    level_stats
+        .iter()
+        .map(|(level, sstable_count, size_bytes)| {
+            serde_json::json!({
+                "level": level,
+                "sstable_count": sstable_count,
+                "size_bytes": size_bytes
+            })
+        })
+        .collect()
+}
+
 /// Generate the dashboard HTML page
 fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
     let uptime_seconds = get_uptime_seconds();
     let storage_info = store.info();
+    let (_max_level, level_stats) = store.storage_status();
+
+    // Build SSTable levels HTML
+    let mut levels_html = String::new();
+    for (level, sstable_count, size_bytes) in &level_stats {
+        let size_display = if *size_bytes >= 1024 * 1024 {
+            format!("{:.2} MB", *size_bytes as f64 / (1024.0 * 1024.0))
+        } else if *size_bytes >= 1024 {
+            format!("{:.2} KB", *size_bytes as f64 / 1024.0)
+        } else {
+            format!("{} B", size_bytes)
+        };
+        levels_html.push_str(&format!(
+            r#"<div class="level-row"><span class="level-label">Level {}</span><span class="level-count">{} SSTable(s)</span><span class="level-size">{}</span></div>"#,
+            level, sstable_count, size_display
+        ));
+    }
 
     format!(
         r#"<!DOCTYPE html>
@@ -194,6 +225,16 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
             color: #666;
             font-size: 0.9em;
         }}
+        .level-row {{
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-bottom: 1px solid #0f3460;
+        }}
+        .level-row:last-child {{ border-bottom: none; }}
+        .level-label {{ font-weight: bold; min-width: 80px; }}
+        .level-count {{ color: #4caf50; }}
+        .level-size {{ color: #888; min-width: 100px; text-align: right; }}
     </style>
 </head>
 <body>
@@ -219,6 +260,11 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
                     <div class="info-value" id="version">{}</div>
                 </div>
             </div>
+        </div>
+
+        <div class="status-card">
+            <h3 class="section-title">SSTable Levels (0-6)</h3>
+            {}
         </div>
 
         <div class="status-card">
@@ -260,6 +306,7 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
         memcached_addr,
         uptime_seconds,
         VERSION,
+        levels_html,
         storage_info.replace('\n', "\n"),
         VERSION,
         uptime_seconds
@@ -309,6 +356,10 @@ fn handle_request(
         (&Method::GET, "/api/status") => {
             let uptime_seconds = get_uptime_seconds();
             let storage_stats = store.get_storage_stats();
+            // Get storage status including SSTable levels
+            let (_max_level, level_stats) = store.storage_status();
+            let levels_json = build_levels_json(&level_stats);
+
             let status = serde_json::json!({
                 "status": "healthy",
                 "server": {
@@ -320,7 +371,8 @@ fn handle_request(
                 "storage": {
                     "memtable_size_bytes": storage_stats.memtable_size_bytes,
                     "memtable_max_bytes": storage_stats.memtable_max_bytes,
-                    "immutable_memtable_count": storage_stats.immutable_memtable_count
+                    "immutable_memtable_count": storage_stats.immutable_memtable_count,
+                    "levels": levels_json
                 }
             });
             Response::builder()

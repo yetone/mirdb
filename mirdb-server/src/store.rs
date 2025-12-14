@@ -84,6 +84,18 @@ impl Store {
         self.data.get_storage_stats()
     }
 
+    /// Returns storage status including SSTable level information
+    /// Returns a tuple: (max_level, level_stats)
+    /// where level_stats is Vec<(level, sstable_count, size_bytes)>
+    pub fn storage_status(&self) -> (usize, Vec<(usize, usize, usize)>) {
+        self.data.storage_status()
+    }
+
+    /// Returns memtable statistics: (current_size_bytes, max_size_bytes, immutable_count)
+    pub fn memtable_status(&self) -> (usize, usize, usize) {
+        self.data.memtable_status()
+    }
+
     pub fn apply(&self, request: Request) -> MyResult<Response> {
         match request {
             Request::Getter { getter, keys } => {

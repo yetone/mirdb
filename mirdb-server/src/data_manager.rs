@@ -126,10 +126,30 @@ impl DataManager {
         let immuttable = read_lock(&self.imm_);
 
         StorageStats {
-            memtable_size_bytes: muttable.compute_size_bytes(),
+            memtable_size_bytes: muttable.approx_memory_usage(),
             memtable_max_bytes: self.opt_.mem_table_max_size,
             immutable_memtable_count: immuttable.table_count(),
         }
+    }
+
+    /// Returns storage statistics including SSTable level information
+    /// Returns a tuple: (max_level, level_stats)
+    /// where level_stats is Vec<(level, sstable_count, size_bytes)>
+    pub fn storage_status(&self) -> (usize, Vec<(usize, usize, usize)>) {
+        let readers = read_lock(&self.readers_);
+        let max_level = readers.max_level();
+        let level_stats = readers.level_stats();
+        (max_level, level_stats)
+    }
+
+    /// Returns memtable statistics: (current_size_bytes, max_size_bytes, immutable_count)
+    pub fn memtable_status(&self) -> (usize, usize, usize) {
+        let muttable = read_lock(&self.mut_);
+        let immuttable = read_lock(&self.imm_);
+        let current_size = muttable.approx_memory_usage();
+        let max_size = self.opt_.mem_table_max_size;
+        let imm_count = immuttable.table_count();
+        (current_size, max_size, imm_count)
     }
 
     pub fn redo(&mut self) -> MyResult<()> {

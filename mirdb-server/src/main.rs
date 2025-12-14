@@ -61,6 +61,8 @@ mod wal;
 mod http_server_tests;
 #[cfg(test)]
 mod memtable_status_tests;
+#[cfg(test)]
+mod sstable_level_stats_tests;
 
 pub struct Server {
     store: Arc<Store>,

@@ -299,6 +299,16 @@ impl<K, V> SkipList<K, V> {
     pub fn iter_mut(&mut self) -> SkipListIterMut<K, V> {
         SkipListIterMut::new(self)
     }
+
+    /// Returns approximate memory usage in bytes
+    /// This is an estimate based on the number of elements and their expected sizes
+    pub fn approx_memory_usage(&self) -> usize {
+        // Base struct size
+        let base_size = mem::size_of::<Self>();
+        // Estimate per-node overhead (key, value, pointers)
+        let per_node_overhead = mem::size_of::<K>() + mem::size_of::<V>() + mem::size_of::<usize>() * (self.max_height_ + 1);
+        base_size + self.length_ * per_node_overhead
+    }
 }
 
 #[cfg(test)]

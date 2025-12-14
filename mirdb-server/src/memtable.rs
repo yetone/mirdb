@@ -46,6 +46,11 @@ impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
     pub fn max_size_bytes(&self) -> usize {
         self.max_size_
     }
+
+    /// Returns the approximate memory usage of the memtable in bytes
+    pub fn approx_memory_usage(&self) -> usize {
+        self.map_.approx_memory_usage()
+    }
 }
 
 impl Memtable<Slice, Slice> {
