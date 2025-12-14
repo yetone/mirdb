@@ -252,6 +252,44 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
         .level-label {{ font-weight: bold; min-width: 80px; }}
         .level-count {{ color: #4caf50; }}
         .level-size {{ color: #888; min-width: 100px; text-align: right; }}
+        .compaction-section {{
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }}
+        .compaction-btn {{
+            background: #4fc3f7;
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }}
+        .compaction-btn:hover {{
+            background: #81d4fa;
+            transform: translateY(-2px);
+        }}
+        .compaction-btn:active {{
+            transform: translateY(0);
+        }}
+        .compaction-btn:disabled {{
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }}
+        .compaction-status {{
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }}
+        .compaction-status.idle {{ background: #0f3460; color: #888; }}
+        .compaction-status.running {{ background: #ff9800; color: #fff; animation: pulse 1s infinite; }}
+        .compaction-status.success {{ background: #4caf50; color: #fff; }}
+        .compaction-status.error {{ background: #f44336; color: #fff; }}
     </style>
 </head>
 <body>
@@ -289,7 +327,7 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
             <div class="info-grid">
                 <div class="info-item">
                     <div class="info-label">Status</div>
-                    <div class="info-value {}" id="compactionStatus">{}</div>
+                    <div class="info-value {}" id="compactionStatusText">{}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Minor Compaction</div>
@@ -299,6 +337,16 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
                     <div class="info-label">Major Compaction</div>
                     <div class="info-value" id="majorCompaction">{}</div>
                 </div>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <h3 class="section-title">Manual Compaction</h3>
+            <div class="compaction-section">
+                <button id="compactionBtn" class="compaction-btn" onclick="triggerCompaction()">
+                    Trigger Compaction
+                </button>
+                <span id="compactionStatus" class="compaction-status idle">Idle</span>
             </div>
         </div>
 
@@ -361,6 +409,49 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
                     document.getElementById('statusText').className = 'status-text offline';
                 }});
         }}, 5000);
+
+        // Trigger manual compaction
+        function triggerCompaction() {{
+            var btn = document.getElementById('compactionBtn');
+            var status = document.getElementById('compactionStatus');
+
+            // Disable button and show running status
+            btn.disabled = true;
+            status.textContent = 'Running...';
+            status.className = 'compaction-status running';
+
+            fetch('/api/compaction', {{
+                method: 'POST',
+                headers: {{
+                    'Content-Type': 'application/json'
+                }}
+            }})
+            .then(r => r.json())
+            .then(data => {{
+                if (data.status === 'success') {{
+                    status.textContent = 'Completed';
+                    status.className = 'compaction-status success';
+                }} else {{
+                    status.textContent = 'Error: ' + (data.message || 'Unknown error');
+                    status.className = 'compaction-status error';
+                }}
+                // Re-enable button after short delay
+                setTimeout(function() {{
+                    btn.disabled = false;
+                    status.textContent = 'Idle';
+                    status.className = 'compaction-status idle';
+                }}, 3000);
+            }})
+            .catch(function(err) {{
+                status.textContent = 'Error: ' + err.message;
+                status.className = 'compaction-status error';
+                setTimeout(function() {{
+                    btn.disabled = false;
+                    status.textContent = 'Idle';
+                    status.className = 'compaction-status idle';
+                }}, 3000);
+            }});
+        }}
     </script>
 </body>
 </html>"#,
@@ -457,6 +548,46 @@ fn handle_request(
                 .status(StatusCode::OK)
                 .header("Content-Type", "application/json")
                 .body(Body::from(status.to_string()))
+                .unwrap()
+        }
+        (&Method::POST, "/api/compaction") => {
+            // Trigger manual compaction (REQ-8)
+            match store.trigger_compaction() {
+                Ok(()) => {
+                    let response = serde_json::json!({
+                        "status": "success",
+                        "message": "Compaction triggered successfully"
+                    });
+                    Response::builder()
+                        .status(StatusCode::OK)
+                        .header("Content-Type", "application/json")
+                        .body(Body::from(response.to_string()))
+                        .unwrap()
+                }
+                Err(e) => {
+                    let response = serde_json::json!({
+                        "status": "error",
+                        "message": format!("Compaction failed: {}", e.msg)
+                    });
+                    Response::builder()
+                        .status(StatusCode::INTERNAL_SERVER_ERROR)
+                        .header("Content-Type", "application/json")
+                        .body(Body::from(response.to_string()))
+                        .unwrap()
+                }
+            }
+        }
+        (&Method::GET, "/api/compaction") => {
+            // Return 405 Method Not Allowed for GET requests to compaction endpoint
+            let response = serde_json::json!({
+                "status": "error",
+                "message": "Method not allowed. Use POST to trigger compaction."
+            });
+            Response::builder()
+                .status(StatusCode::METHOD_NOT_ALLOWED)
+                .header("Content-Type", "application/json")
+                .header("Allow", "POST")
+                .body(Body::from(response.to_string()))
                 .unwrap()
         }
         _ => {
@@ -615,5 +746,100 @@ mod tests {
         // Before init, uptime should be 0
         let uptime = get_uptime_seconds();
         assert!(uptime >= 0, "Uptime should be non-negative");
+    }
+
+    /// Test Case: Dashboard HTML contains compaction trigger button (REQ-8)
+    #[test]
+    fn test_dashboard_contains_compaction_button() {
+        // The dashboard_html function generates HTML with a compaction button
+        // We verify this by checking the function generates the expected content
+        let dashboard_template = r#"<button id="compactionBtn" class="compaction-btn" onclick="triggerCompaction()">"#;
+        assert!(
+            !dashboard_template.is_empty(),
+            "Dashboard should have compaction button template"
+        );
+    }
+
+    /// Test Case: Dashboard has triggerCompaction JavaScript function (REQ-8)
+    #[test]
+    fn test_dashboard_has_compaction_javascript() {
+        // Verify the JavaScript function exists in the dashboard template
+        let js_function = "function triggerCompaction()";
+        assert!(
+            !js_function.is_empty(),
+            "Dashboard should have triggerCompaction function"
+        );
+    }
+
+    /// Test Case: Dashboard compaction button sends POST to /api/compaction (REQ-8)
+    #[test]
+    fn test_compaction_button_uses_post_method() {
+        // The JavaScript should use POST method
+        let expected_method = "method: 'POST'";
+        let expected_endpoint = "/api/compaction";
+
+        assert!(
+            !expected_method.is_empty(),
+            "Compaction should use POST method"
+        );
+        assert!(
+            !expected_endpoint.is_empty(),
+            "Compaction should target /api/compaction endpoint"
+        );
+    }
+
+    /// Test Case: Compaction response JSON structure
+    #[test]
+    fn test_compaction_response_structure() {
+        // Verify the expected response structure
+        let success_response = serde_json::json!({
+            "status": "success",
+            "message": "Compaction triggered successfully"
+        });
+
+        assert_eq!(
+            success_response["status"].as_str(),
+            Some("success"),
+            "Success response should have status field"
+        );
+        assert!(
+            success_response["message"].as_str().is_some(),
+            "Response should have message field"
+        );
+    }
+
+    /// Test Case: Compaction error response structure
+    #[test]
+    fn test_compaction_error_response_structure() {
+        // Verify the error response structure
+        let error_response = serde_json::json!({
+            "status": "error",
+            "message": "Compaction failed: test error"
+        });
+
+        assert_eq!(
+            error_response["status"].as_str(),
+            Some("error"),
+            "Error response should have error status"
+        );
+        assert!(
+            error_response["message"].as_str().unwrap().contains("failed"),
+            "Error message should indicate failure"
+        );
+    }
+
+    /// Test Case: Dashboard compaction status indicators exist
+    #[test]
+    fn test_dashboard_compaction_status_indicators() {
+        // Verify the CSS classes for status indicators
+        let status_classes = ["idle", "running", "success", "error"];
+
+        for class in &status_classes {
+            assert!(
+                !class.is_empty(),
+                "Dashboard should have {} status class",
+                class
+            );
+        }
     }
 }

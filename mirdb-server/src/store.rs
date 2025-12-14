@@ -101,6 +101,12 @@ impl Store {
         self.data.compaction_status()
     }
 
+    /// Trigger manual compaction (REQ-8)
+    /// This triggers a major compaction operation
+    pub fn trigger_compaction(&self) -> MyResult<()> {
+        self.data.major_compaction()
+    }
+
     pub fn apply(&self, request: Request) -> MyResult<Response> {
         match request {
             Request::Getter { getter, keys } => {
