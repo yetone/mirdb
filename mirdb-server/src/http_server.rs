@@ -367,6 +367,17 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
     </style>
 </head>
 <body>
+    <noscript>
+        <div class="noscript-warning" style="background: #ff9800; color: #1a1a2e; padding: 16px 24px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <strong>JavaScript is disabled.</strong> Some features require JavaScript to function:
+            <ul style="margin: 8px 0 0 0; padding-left: 20px; text-align: left; display: inline-block;">
+                <li>Auto-refresh of status and uptime</li>
+                <li>Manual compaction trigger button</li>
+            </ul>
+            <p style="margin: 8px 0 0 0;">The initial server status data shown below is still accurate as of page load.</p>
+        </div>
+    </noscript>
+
     <div class="container">
         <h1>MirDB Dashboard</h1>
 
