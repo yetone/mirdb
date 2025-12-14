@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ecca3;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #ddd;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #4ecca3;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #4ecca3;
+        }
+
+        .hero .tagline {
+            font-size: 1.4rem;
+            color: #ddd;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: #4ecca3;
+            color: #1a1a2e;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #4ecca3;
+            color: #4ecca3;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        section h2 {
+            font-size: 2rem;
+            color: #1a1a2e;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .feature-card h3 {
+            color: #4ecca3;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #666;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .architecture {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .architecture pre {
+            background: #1a1a2e;
+            color: #4ecca3;
+            padding: 1.5rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', monospace;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ecca3;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: #ddd;
+            padding: 3rem 2rem;
+        }
+
+        footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        footer .links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        footer a {
+            color: #4ecca3;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .version {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.1rem;
+            }
+
+            footer .container {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Mir<span>DB</span></a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>MirDB</h1>
+        <p class="tagline">A high-performance, persistent key-value store with Memcached protocol compatibility and LSM-tree architecture.</p>
+        <div class="cta-buttons">
+            <a href="/dashboard" class="btn btn-primary">View Dashboard</a>
+            <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank">Get Started</a>
+        </div>
+    </section>
+
+    <main>
+        <section id="features">
+            <h2>Key Features</h2>
+            <div class="features">
+                <article class="feature-card">
+                    <div class="feature-icon">&#128190;</div>
+                    <h3>Persistent Storage</h3>
+                    <p>Unlike in-memory caches, MirDB persists your data to disk using efficient SSTables (Sorted String Tables), ensuring data durability across restarts.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">&#128268;</div>
+                    <h3>Memcached Compatible</h3>
+                    <p>Drop-in replacement for Memcached with full protocol compatibility. Use your existing Memcached clients without any code changes.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">&#128202;</div>
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Built on a Log-Structured Merge-tree (LSM) design with write-ahead logging, memtables, and multi-level compaction for optimal write performance.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">&#9889;</div>
+                    <h3>High Performance</h3>
+                    <p>Asynchronous I/O powered by Tokio runtime, skip-list based memtables, and efficient block-based storage for blazing-fast operations.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">&#128295;</div>
+                    <h3>Configurable</h3>
+                    <p>Fine-tune memory limits, compaction triggers, block sizes, and more through a simple TOML configuration file.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">&#129494;</div>
+                    <h3>Written in Rust</h3>
+                    <p>Memory-safe, thread-safe, and blazingly fast. No garbage collection pauses, minimal runtime overhead.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2>Architecture Overview</h2>
+            <div class="architecture">
+                <pre>
+                    +-------------------------------------------------+
+                    |               Memcached Clients                 |
+                    +-----------------------+-------------------------+
+                                            |
+                    +-----------------------v-------------------------+
+                    |               TCP Server (Tokio)                |
+                    |            Memcached Protocol Parser            |
+                    +-----------------------+-------------------------+
+                                            |
+                    +-----------------------v-------------------------+
+                    |                    Store                        |
+                    |  +-------------------------------------------+  |
+                    |  |              Write-Ahead Log              |  |
+                    |  +-------------------------------------------+  |
+                    |  +-------------------------------------------+  |
+                    |  |     Active Memtable (Skip List)           |  |
+                    |  +-------------------------------------------+  |
+                    |  +-------------------------------------------+  |
+                    |  |        Immutable Memtables Queue          |  |
+                    |  +-------------------------------------------+  |
+                    |  +-------------------------------------------+  |
+                    |  |  Level 0  |  Level 1  |  ...  |  Level N  |  |
+                    |  |  SSTables |  SSTables |       |  SSTables |  |
+                    |  +-------------------------------------------+  |
+                    +-------------------------------------------------+
+                </pre>
+            </div>
+        </section>
+
+        <section id="stats">
+            <h2>Performance at a Glance</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">LSM Levels</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4MB</div>
+                    <div class="stat-label">Default Memtable Size</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100MB</div>
+                    <div class="stat-label">SSTable Max Size</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4KB</div>
+                    <div class="stat-label">Block Size</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="brand">
+                <span class="logo">Mir<span style="color:white">DB</span></span>
+                <p class="version">Version {{VERSION}}</p>
+            </div>
+            <div class="links">
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank">GitHub</a>
+            </div>
+            <p>&copy; 2024 MirDB. Open Source under MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>
