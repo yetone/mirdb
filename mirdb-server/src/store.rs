@@ -74,6 +74,11 @@ impl Store {
         Ok(Store { data: dm, opt })
     }
 
+    /// Get storage information for dashboard display
+    pub fn info(&self) -> String {
+        self.data.info()
+    }
+
     pub fn apply(&self, request: Request) -> MyResult<Response> {
         match request {
             Request::Getter { getter, keys } => {

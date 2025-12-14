@@ -136,12 +136,16 @@ Welcome to MirDB!
         .trim_matches('\n')
     );
 
+    // Initialize uptime tracking
+    http_server::init_start_time();
+
     // Start HTTP server if enabled
     if conf.http_enabled() {
         let http_addr: SocketAddr = conf.http_addr().unwrap().parse().unwrap();
         let http_store = store.clone();
 
         info!("Starting HTTP server on {}", http_addr);
+        info!("Dashboard available at http://{}/dashboard", http_addr);
 
         // Spawn HTTP server in a separate thread with its own Tokio runtime
         thread::spawn(move || {

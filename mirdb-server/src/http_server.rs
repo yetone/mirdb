@@ -1,5 +1,9 @@
+//! HTTP Server module for MirDB dashboard
+//! Provides a web-based interface for monitoring database status
+
 use std::net::SocketAddr;
 use std::sync::Arc;
+use std::time::Instant;
 
 use futures::future::{self, Future};
 use futures::Stream;
@@ -11,11 +15,33 @@ use tokio::net::TcpListener;
 
 use crate::store::Store;
 
-/// MirDB version string
+/// MirDB version string (alias for compatibility)
 pub const MIRDB_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+/// Version of MirDB from Cargo.toml
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Homepage HTML content embedded at compile time
 pub const HOMEPAGE_HTML: &str = include_str!("../assets/index.html");
+
+/// Global start time for uptime calculation
+static mut START_TIME: Option<Instant> = None;
+
+/// Initialize the start time (should be called once at server startup)
+pub fn init_start_time() {
+    unsafe {
+        START_TIME = Some(Instant::now());
+    }
+}
+
+/// Get the server uptime in seconds
+fn get_uptime_seconds() -> u64 {
+    unsafe {
+        START_TIME
+            .map(|start| start.elapsed().as_secs())
+            .unwrap_or(0)
+    }
+}
 
 /// HTTP server that runs alongside the TCP Memcached server
 pub struct HttpServer {
@@ -44,6 +70,7 @@ impl HttpServer {
         };
 
         info!("HTTP server listening on http://{}", addr);
+        info!("Dashboard available at http://{}/dashboard", addr);
 
         let http = Http::new();
 
@@ -69,11 +96,191 @@ impl HttpServer {
     }
 }
 
+/// Generate the dashboard HTML page
+fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
+    let uptime_seconds = get_uptime_seconds();
+    let storage_info = store.info();
+
+    format!(
+        r#"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB Dashboard</title>
+    <style>
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }}
+        .container {{ max-width: 1200px; margin: 0 auto; }}
+        h1 {{
+            color: #4fc3f7;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }}
+        .status-card {{
+            background: #16213e;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }}
+        .status-header {{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }}
+        .status-indicator {{
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #4caf50;
+            animation: pulse 2s infinite;
+        }}
+        .status-indicator.healthy {{ background: #4caf50; }}
+        .status-indicator.degraded {{ background: #ff9800; }}
+        .status-indicator.offline {{ background: #f44336; }}
+        @keyframes pulse {{
+            0%, 100% {{ opacity: 1; }}
+            50% {{ opacity: 0.6; }}
+        }}
+        .status-text {{
+            font-size: 1.4em;
+            font-weight: 600;
+        }}
+        .status-text.healthy {{ color: #4caf50; }}
+        .info-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }}
+        .info-item {{
+            background: #0f3460;
+            padding: 16px;
+            border-radius: 8px;
+        }}
+        .info-label {{
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+        }}
+        .info-value {{
+            font-size: 1.3em;
+            font-weight: 500;
+            color: #4fc3f7;
+        }}
+        .section-title {{
+            color: #4fc3f7;
+            margin-bottom: 16px;
+            font-size: 1.2em;
+        }}
+        pre {{
+            background: #0f3460;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }}
+        .footer {{
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MirDB Dashboard</h1>
+
+        <div class="status-card">
+            <div class="status-header">
+                <div class="status-indicator healthy" id="statusIndicator"></div>
+                <span class="status-text healthy" id="statusText">healthy</span>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Server Address</div>
+                    <div class="info-value" id="serverAddr">{}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Uptime</div>
+                    <div class="info-value" id="uptime">{} seconds</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Version</div>
+                    <div class="info-value" id="version">{}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <h3 class="section-title">Storage Information</h3>
+            <pre id="storageInfo">{}</pre>
+        </div>
+
+        <div class="footer">
+            MirDB v{} - A persistent key-value store with Memcached protocol support
+        </div>
+    </div>
+
+    <script>
+        // Auto-refresh uptime every second
+        let uptimeSeconds = {};
+        setInterval(function() {{
+            uptimeSeconds++;
+            document.getElementById('uptime').textContent = uptimeSeconds + ' seconds';
+        }}, 1000);
+
+        // Periodically check status
+        setInterval(function() {{
+            fetch('/api/status')
+                .then(r => r.json())
+                .then(data => {{
+                    document.getElementById('statusText').textContent = data.status;
+                    document.getElementById('statusIndicator').className = 'status-indicator ' + data.status;
+                    document.getElementById('statusText').className = 'status-text ' + data.status;
+                }})
+                .catch(() => {{
+                    document.getElementById('statusText').textContent = 'offline';
+                    document.getElementById('statusIndicator').className = 'status-indicator offline';
+                    document.getElementById('statusText').className = 'status-text offline';
+                }});
+        }}, 5000);
+    </script>
+</body>
+</html>"#,
+        memcached_addr,
+        uptime_seconds,
+        VERSION,
+        storage_info.replace('\n', "\n"),
+        VERSION,
+        uptime_seconds
+    )
+}
+
 /// Handle incoming HTTP requests
 fn handle_request(
     req: Request<Body>,
-    _store: Arc<Store>,
+    store: Arc<Store>,
 ) -> impl Future<Item = Response<Body>, Error = hyper::Error> {
+    // Extract the host header for determining memcached address
+    let host = req
+        .headers()
+        .get("host")
+        .and_then(|h| h.to_str().ok())
+        .unwrap_or("0.0.0.0:12333");
+
+    // For dashboard, use the configured memcached addr
+    let memcached_addr = host.replace(":8080", ":12333");
+
     let response = match (req.method(), req.uri().path()) {
         (&Method::GET, "/") | (&Method::GET, "/index.html") => {
             // Serve the homepage with MirDB branding
@@ -92,40 +299,7 @@ fn handle_request(
                 .unwrap()
         }
         (&Method::GET, "/dashboard") => {
-            // Dashboard placeholder page
-            let html = format!(r#"<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MirDB Dashboard</title>
-    <style>
-        body {{ font-family: sans-serif; background: #f5f5f5; margin: 0; }}
-        header {{ background: #1a1a2e; color: white; padding: 1rem; }}
-        nav {{ display: flex; gap: 2rem; max-width: 1200px; margin: 0 auto; }}
-        nav a {{ color: #4ecca3; text-decoration: none; }}
-        main {{ max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }}
-        footer {{ background: #1a1a2e; color: #888; padding: 2rem; text-align: center; }}
-    </style>
-</head>
-<body>
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/dashboard">Dashboard</a>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h1>MirDB Dashboard</h1>
-            <p>Dashboard functionality coming soon...</p>
-        </section>
-    </main>
-    <footer>
-        <p>MirDB v{}</p>
-    </footer>
-</body>
-</html>"#, MIRDB_VERSION);
+            let html = dashboard_html(&store, &memcached_addr);
             Response::builder()
                 .status(StatusCode::OK)
                 .header("Content-Type", "text/html; charset=utf-8")
@@ -133,10 +307,14 @@ fn handle_request(
                 .unwrap()
         }
         (&Method::GET, "/api/status") => {
+            let uptime_seconds = get_uptime_seconds();
             let status = serde_json::json!({
-                "status": "healthy",
-                "server": "MirDB",
-                "version": MIRDB_VERSION
+                "server": {
+                    "version": VERSION,
+                    "uptime_seconds": uptime_seconds,
+                    "memcached_addr": memcached_addr
+                },
+                "status": "healthy"
             });
             Response::builder()
                 .status(StatusCode::OK)
@@ -161,11 +339,23 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_version_is_set() {
+        assert_eq!(VERSION, "0.1.0");
+    }
+
+    #[test]
+    fn test_version_format() {
+        let parts: Vec<&str> = VERSION.split('.').collect();
+        assert_eq!(parts.len(), 3, "Version should be semantic versioning format");
+        for part in parts {
+            assert!(part.parse::<u32>().is_ok(), "Version part should be numeric");
+        }
+    }
+
+    #[test]
     fn test_http_server_creation() {
         // This test verifies that HttpServer can be created
-        // Actual integration tests will be in a separate module
         let addr: SocketAddr = "127.0.0.1:0".parse().unwrap();
-        // Note: We can't create a Store without options, so this is just a compile-time check
         assert_eq!(addr.port(), 0);
     }
 
@@ -281,5 +471,12 @@ mod tests {
             html.contains(MIRDB_VERSION),
             "Version should be injected into HTML"
         );
+    }
+
+    #[test]
+    fn test_uptime_starts_at_zero() {
+        // Before init, uptime should be 0
+        let uptime = get_uptime_seconds();
+        assert!(uptime >= 0, "Uptime should be non-negative");
     }
 }
