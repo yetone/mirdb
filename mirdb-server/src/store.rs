@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 
 use skip_list::SkipList;
 
-use crate::data_manager::{CompactionStatus, DataManager, StorageStats};
+use crate::data_manager::{CompactionStatus, ConfigInfo, DataManager, StorageStats};
 use crate::error::{MyResult, StatusCode};
 use crate::options::Options;
 use crate::request::{GetterType, Request, SetterType};
@@ -105,6 +105,11 @@ impl Store {
     /// This triggers a major compaction operation
     pub fn trigger_compaction(&self) -> MyResult<()> {
         self.data.major_compaction()
+    }
+
+    /// Returns configuration information for dashboard display (REQ-7)
+    pub fn get_config_info(&self, memcached_addr: &str) -> ConfigInfo {
+        self.data.get_config_info(memcached_addr)
     }
 
     pub fn apply(&self, request: Request) -> MyResult<Response> {

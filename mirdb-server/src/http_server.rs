@@ -43,6 +43,23 @@ fn get_uptime_seconds() -> u64 {
     }
 }
 
+/// Format bytes to human-readable size (e.g., 4194304 -> "4MB")
+fn format_bytes(bytes: usize) -> String {
+    const KB: usize = 1024;
+    const MB: usize = KB * 1024;
+    const GB: usize = MB * 1024;
+
+    if bytes >= GB {
+        format!("{}GB", bytes / GB)
+    } else if bytes >= MB {
+        format!("{}MB", bytes / MB)
+    } else if bytes >= KB {
+        format!("{}KB", bytes / KB)
+    } else {
+        format!("{}B", bytes)
+    }
+}
+
 /// HTTP server that runs alongside the TCP Memcached server
 pub struct HttpServer {
     addr: SocketAddr,
@@ -116,6 +133,7 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
     let storage_info = store.info();
     let (_max_level, level_stats) = store.storage_status();
     let compaction_status = store.compaction_status();
+    let config_info = store.get_config_info(memcached_addr);
 
     // Build SSTable levels HTML
     let mut levels_html = String::new();
@@ -290,6 +308,27 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
         .compaction-status.running {{ background: #ff9800; color: #fff; animation: pulse 1s infinite; }}
         .compaction-status.success {{ background: #4caf50; color: #fff; }}
         .compaction-status.error {{ background: #f44336; color: #fff; }}
+        .config-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }}
+        .config-item {{
+            background: #0f3460;
+            padding: 16px;
+            border-radius: 8px;
+        }}
+        .config-label {{
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+        }}
+        .config-value {{
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #4ecca3;
+            word-break: break-all;
+        }}
     </style>
 </head>
 <body>
@@ -313,6 +352,36 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
                 <div class="info-item">
                     <div class="info-label">Version</div>
                     <div class="info-value" id="version">{}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-card" id="configPanel">
+            <h3 class="section-title">Configuration Parameters</h3>
+            <div class="config-grid">
+                <div class="config-item">
+                    <div class="config-label">max_level</div>
+                    <div class="config-value" id="configMaxLevel">{}</div>
+                </div>
+                <div class="config-item">
+                    <div class="config-label">mem_table_max_size</div>
+                    <div class="config-value" id="configMemTableMaxSize">{}</div>
+                </div>
+                <div class="config-item">
+                    <div class="config-label">sst_max_size</div>
+                    <div class="config-value" id="configSstMaxSize">{}</div>
+                </div>
+                <div class="config-item">
+                    <div class="config-label">block_size</div>
+                    <div class="config-value" id="configBlockSize">{}</div>
+                </div>
+                <div class="config-item">
+                    <div class="config-label">work_dir</div>
+                    <div class="config-value" id="configWorkDir">{}</div>
+                </div>
+                <div class="config-item">
+                    <div class="config-label">memcached_addr</div>
+                    <div class="config-value" id="configMemcachedAddr">{}</div>
                 </div>
             </div>
         </div>
@@ -458,6 +527,12 @@ fn dashboard_html(store: &Store, memcached_addr: &str) -> String {
         memcached_addr,
         uptime_seconds,
         VERSION,
+        config_info.max_level,
+        format_bytes(config_info.mem_table_max_size),
+        format_bytes(config_info.sst_max_size),
+        format_bytes(config_info.block_size),
+        config_info.work_dir,
+        config_info.memcached_addr,
         levels_html,
         if compaction_status.minor_running || compaction_status.major_running { "running" } else { "idle" },
         compaction_text,
@@ -523,6 +598,8 @@ fn handle_request(
             let (_max_level, level_stats) = store.storage_status();
             let levels_json = build_levels_json(&level_stats);
             let compaction_status = store.compaction_status();
+            // Get configuration info for REQ-7
+            let config_info = store.get_config_info(&memcached_addr);
 
             let status = serde_json::json!({
                 "status": "healthy",
@@ -542,6 +619,17 @@ fn handle_request(
                     "minor_running": compaction_status.minor_running,
                     "major_running": compaction_status.major_running,
                     "major_current_level": compaction_status.major_current_level
+                },
+                "config": {
+                    "max_level": config_info.max_level,
+                    "mem_table_max_size": config_info.mem_table_max_size,
+                    "mem_table_max_size_formatted": format_bytes(config_info.mem_table_max_size),
+                    "sst_max_size": config_info.sst_max_size,
+                    "sst_max_size_formatted": format_bytes(config_info.sst_max_size),
+                    "block_size": config_info.block_size,
+                    "block_size_formatted": format_bytes(config_info.block_size),
+                    "work_dir": config_info.work_dir,
+                    "memcached_addr": config_info.memcached_addr
                 }
             });
             Response::builder()
@@ -841,5 +929,149 @@ mod tests {
                 class
             );
         }
+    }
+
+    /// Test format_bytes helper function
+    #[test]
+    fn test_format_bytes() {
+        // Test byte formatting
+        assert_eq!(format_bytes(512), "512B");
+        assert_eq!(format_bytes(1024), "1KB");
+        assert_eq!(format_bytes(4096), "4KB");
+        assert_eq!(format_bytes(1024 * 1024), "1MB");
+        assert_eq!(format_bytes(4 * 1024 * 1024), "4MB");
+        assert_eq!(format_bytes(8 * 1024 * 1024), "8MB");
+        assert_eq!(format_bytes(100 * 1024 * 1024), "100MB");
+        assert_eq!(format_bytes(1024 * 1024 * 1024), "1GB");
+    }
+
+    /// REQ-7 Test Case 1: Dashboard displays configuration parameters
+    /// Verifies: max_level, mem_table_max_size, sst_max_size, block_size
+    #[test]
+    fn test_dashboard_contains_config_panel() {
+        use crate::test_utils::get_test_opt;
+        use crate::store::Store;
+
+        let opt = get_test_opt();
+        let store = Store::new(opt).unwrap();
+        let memcached_addr = "127.0.0.1:12333";
+        let html = dashboard_html(&store, memcached_addr);
+
+        // Verify configuration panel exists
+        assert!(
+            html.contains("Configuration Parameters"),
+            "Dashboard should contain Configuration Parameters section"
+        );
+        assert!(
+            html.contains("configPanel"),
+            "Dashboard should contain config panel element"
+        );
+
+        // Verify key configuration parameters are displayed
+        assert!(
+            html.contains("max_level"),
+            "Dashboard should display max_level configuration"
+        );
+        assert!(
+            html.contains("mem_table_max_size"),
+            "Dashboard should display mem_table_max_size configuration"
+        );
+        assert!(
+            html.contains("sst_max_size"),
+            "Dashboard should display sst_max_size configuration"
+        );
+        assert!(
+            html.contains("block_size"),
+            "Dashboard should display block_size configuration"
+        );
+    }
+
+    /// REQ-7 Test Case 2: Dashboard shows custom mem_table_max_size
+    #[test]
+    fn test_dashboard_displays_custom_mem_table_max_size() {
+        use crate::test_utils::get_test_opt;
+        use crate::store::Store;
+        use crate::options::MB;
+
+        let mut opt = get_test_opt();
+        opt.mem_table_max_size = 8 * MB; // Set custom 8MB
+        let store = Store::new(opt).unwrap();
+        let memcached_addr = "127.0.0.1:12333";
+        let html = dashboard_html(&store, memcached_addr);
+
+        // Verify custom mem_table_max_size is displayed as 8MB
+        assert!(
+            html.contains("8MB"),
+            "Dashboard should show mem_table_max_size as 8MB"
+        );
+    }
+
+    /// REQ-7 Test Case 3: Dashboard shows work_dir configuration
+    #[test]
+    fn test_dashboard_displays_work_dir() {
+        use crate::test_utils::get_test_opt;
+        use crate::store::Store;
+
+        let opt = get_test_opt();
+        let work_dir = opt.work_dir.clone();
+        let store = Store::new(opt).unwrap();
+        let memcached_addr = "127.0.0.1:12333";
+        let html = dashboard_html(&store, memcached_addr);
+
+        // Verify work_dir is displayed
+        assert!(
+            html.contains("work_dir"),
+            "Dashboard should display work_dir configuration"
+        );
+        assert!(
+            html.contains(&work_dir),
+            "Dashboard should display the configured work directory path"
+        );
+    }
+
+    /// REQ-7 Test Case 4: Dashboard shows memcached listen address
+    #[test]
+    fn test_dashboard_displays_memcached_addr() {
+        use crate::test_utils::get_test_opt;
+        use crate::store::Store;
+
+        let opt = get_test_opt();
+        let store = Store::new(opt).unwrap();
+        let memcached_addr = "127.0.0.1:12333";
+        let html = dashboard_html(&store, memcached_addr);
+
+        // Verify memcached_addr is displayed
+        assert!(
+            html.contains("memcached_addr"),
+            "Dashboard should display memcached_addr configuration"
+        );
+        assert!(
+            html.contains(memcached_addr),
+            "Dashboard should display the configured Memcached listen address"
+        );
+    }
+
+    /// Test API status endpoint includes config section
+    #[test]
+    fn test_api_status_contains_config() {
+        use crate::data_manager::ConfigInfo;
+
+        // Test ConfigInfo serialization
+        let config = ConfigInfo {
+            max_level: 7,
+            work_dir: "/tmp/mirdb".to_string(),
+            mem_table_max_size: 4 * 1024 * 1024,
+            sst_max_size: 100 * 1024 * 1024,
+            block_size: 4 * 1024,
+            memcached_addr: "127.0.0.1:12333".to_string(),
+        };
+
+        let json = serde_json::to_string(&config).unwrap();
+        assert!(json.contains("max_level"));
+        assert!(json.contains("mem_table_max_size"));
+        assert!(json.contains("sst_max_size"));
+        assert!(json.contains("block_size"));
+        assert!(json.contains("work_dir"));
+        assert!(json.contains("memcached_addr"));
     }
 }

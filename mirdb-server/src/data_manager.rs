@@ -76,6 +76,23 @@ impl Default for CompactionStatus {
     }
 }
 
+/// Configuration information for dashboard display (REQ-7)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ConfigInfo {
+    /// Maximum number of LSM tree levels
+    pub max_level: usize,
+    /// Working directory for database files
+    pub work_dir: String,
+    /// Maximum size of memtable before flush
+    pub mem_table_max_size: usize,
+    /// Maximum size of SSTable files
+    pub sst_max_size: usize,
+    /// Block size for SSTable data blocks
+    pub block_size: usize,
+    /// Memcached TCP server listen address
+    pub memcached_addr: String,
+}
+
 pub struct DataManager {
     mut_: Arc<RwLock<Memtable<Slice, Slice>>>,
     imm_: Arc<RwLock<MemtableList<Slice, Slice>>>,
@@ -204,6 +221,18 @@ impl DataManager {
             } else {
                 None
             },
+        }
+    }
+
+    /// Returns configuration information for dashboard display (REQ-7)
+    pub fn get_config_info(&self, memcached_addr: &str) -> ConfigInfo {
+        ConfigInfo {
+            max_level: self.opt_.max_level,
+            work_dir: self.opt_.work_dir.clone(),
+            mem_table_max_size: self.opt_.mem_table_max_size,
+            sst_max_size: self.opt_.sst_max_size,
+            block_size: self.opt_.table_opt.block_size,
+            memcached_addr: memcached_addr.to_string(),
         }
     }
 
