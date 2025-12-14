@@ -713,6 +713,35 @@ fn handle_request(
                 .body(Body::from(response.to_string()))
                 .unwrap()
         }
+        // Handle POST to GET-only endpoints - return 405 Method Not Allowed
+        (&Method::POST, "/") | (&Method::POST, "/index.html") => {
+            Response::builder()
+                .status(StatusCode::METHOD_NOT_ALLOWED)
+                .header("Content-Type", "text/plain")
+                .header("Allow", "GET")
+                .body(Body::from("Method Not Allowed\n"))
+                .unwrap()
+        }
+        (&Method::POST, "/dashboard") => {
+            Response::builder()
+                .status(StatusCode::METHOD_NOT_ALLOWED)
+                .header("Content-Type", "text/plain")
+                .header("Allow", "GET")
+                .body(Body::from("Method Not Allowed\n"))
+                .unwrap()
+        }
+        (&Method::POST, "/api/status") => {
+            let response = serde_json::json!({
+                "status": "error",
+                "message": "Method not allowed. Use GET to retrieve status."
+            });
+            Response::builder()
+                .status(StatusCode::METHOD_NOT_ALLOWED)
+                .header("Content-Type", "application/json")
+                .header("Allow", "GET")
+                .body(Body::from(response.to_string()))
+                .unwrap()
+        }
         _ => {
             Response::builder()
                 .status(StatusCode::NOT_FOUND)
