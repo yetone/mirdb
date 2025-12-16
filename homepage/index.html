@@ -4,28 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility, written in Rust">
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+    <meta property="og:description" content="A high-performance persistent key-value store with Memcached protocol compatibility, written in Rust. Features LSM-tree architecture, write-ahead logging, and more.">
+    <meta property="og:type" content="website">
     <title>MirDB - Persistent Key-Value Store</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <!-- Hero Section -->
-    <section id="hero" class="hero" data-testid="hero-section">
-        <div class="hero-content">
-            <h1 class="product-name" data-testid="product-name">MirDB</h1>
-            <p class="tagline" data-testid="tagline">A persistent key-value store with Memcached protocol compatibility, written in Rust</p>
-            <div class="cta-buttons">
-                <a href="https://github.com/yetone/mirdb" class="btn btn-primary" data-testid="primary-cta" target="_blank" rel="noopener noreferrer">
-                    View on GitHub
-                </a>
-                <a href="#features" class="btn btn-secondary" data-testid="secondary-cta">
-                    Learn More
-                </a>
+    <!-- Header with Hero Section -->
+    <header>
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#architecture" class="nav-link">Architecture</a>
+            <a href="#commands" class="nav-link">Commands</a>
+            <a href="#getting-started" class="nav-link">Getting Started</a>
+        </nav>
+        <section id="hero" class="hero" data-testid="hero-section">
+            <div class="hero-content">
+                <h1 class="product-name" data-testid="product-name">MirDB</h1>
+                <p class="tagline" data-testid="tagline">A persistent key-value store with Memcached protocol compatibility, written in Rust</p>
+                <div class="cta-buttons">
+                    <a href="https://github.com/yetone/mirdb" class="btn btn-primary" data-testid="primary-cta" target="_blank" rel="noopener noreferrer">
+                        View on GitHub
+                    </a>
+                    <a href="#features" class="btn btn-secondary" data-testid="secondary-cta">
+                        Learn More
+                    </a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </header>
 
-    <!-- Features Section -->
+    <!-- Main Content -->
+    <main>
+        <!-- Features Section -->
     <section id="features" class="features" data-testid="features-section">
         <h2>Key Features</h2>
         <div class="features-grid">
@@ -231,6 +245,7 @@ client.delete('user:1')</code></pre>
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
