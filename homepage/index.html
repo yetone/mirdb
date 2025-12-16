@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility, written in Rust">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section id="hero" class="hero" data-testid="hero-section">
+        <div class="hero-content">
+            <h1 class="product-name" data-testid="product-name">MirDB</h1>
+            <p class="tagline" data-testid="tagline">A persistent key-value store with Memcached protocol compatibility, written in Rust</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/yetone/mirdb" class="btn btn-primary" data-testid="primary-cta" target="_blank" rel="noopener noreferrer">
+                    View on GitHub
+                </a>
+                <a href="#features" class="btn btn-secondary" data-testid="secondary-cta">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features" data-testid="features-section">
+        <h2>Key Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Memcached Compatible</h3>
+                <p>Drop-in replacement supporting the standard Memcached text protocol. Use your existing clients and tools.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Persistent Storage</h3>
+                <p>LSM-tree architecture with SSTable files ensures your data survives restarts.</p>
+            </div>
+            <div class="feature-card">
+                <h3>High Performance</h3>
+                <p>Skip list memtables, LRU block cache, and Cuckoo filters for blazing fast operations.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Durable</h3>
+                <p>Write-ahead logging guarantees crash recovery and data integrity.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Efficient</h3>
+                <p>Snappy compression and automatic compaction keep storage optimized.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Written in Rust</h3>
+                <p>Memory-safe, concurrent, and fast. Built with Tokio for async I/O.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commands Section -->
+    <section id="commands" class="commands">
+        <h2>Supported Commands</h2>
+        <div class="commands-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Commands</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Getter</td>
+                        <td><code>get</code>, <code>gets</code></td>
+                    </tr>
+                    <tr>
+                        <td>Setter</td>
+                        <td><code>set</code>, <code>add</code>, <code>replace</code>, <code>append</code>, <code>prepend</code></td>
+                    </tr>
+                    <tr>
+                        <td>Other</td>
+                        <td><code>delete</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section id="getting-started" class="getting-started">
+        <h2>Getting Started</h2>
+        <div class="code-example">
+            <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+
+# Build the server
+cd mirdb
+cargo build --release
+
+# Run MirDB
+./target/release/mirdb-server</code></pre>
+        </div>
+        <p>Connect using any Memcached client on the default port.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+            </div>
+            <div class="footer-tech">
+                <span class="badge">Rust</span>
+                <span class="badge">Tokio</span>
+                <span class="badge">LSM-tree</span>
+            </div>
+            <p class="footer-license">MIT License</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
