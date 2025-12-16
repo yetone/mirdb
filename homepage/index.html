@@ -39,6 +39,124 @@
                 </div>
             </div>
         </section>
+
+        <section class="features" id="features" data-testid="features-section">
+            <div class="features-container">
+                <h2 class="features-title" data-testid="features-heading">Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card" data-testid="feature-memcached">
+                        <div class="feature-icon" data-testid="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title" data-testid="feature-title">Memcached Protocol</h3>
+                        <p class="feature-description" data-testid="feature-description">
+                            Drop-in compatible with existing Memcached clients. Use your favorite language and library to connect.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-testid="feature-lsm-tree">
+                        <div class="feature-icon" data-testid="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title" data-testid="feature-title">LSM-Tree Storage</h3>
+                        <p class="feature-description" data-testid="feature-description">
+                            Efficient log-structured merge-tree engine for high-performance persistent storage with optimized write paths.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-testid="feature-wal">
+                        <div class="feature-icon" data-testid="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title" data-testid="feature-title">Write-Ahead Logging</h3>
+                        <p class="feature-description" data-testid="feature-description">
+                            Durable writes with crash recovery support. Your data is safe even during unexpected shutdowns.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-testid="feature-compaction">
+                        <div class="feature-icon" data-testid="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="17 1 21 5 17 9"></polyline>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                <polyline points="7 23 3 19 7 15"></polyline>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title" data-testid="feature-title">Auto Compaction</h3>
+                        <p class="feature-description" data-testid="feature-description">
+                            Background minor and major compaction keeps storage optimized without manual intervention.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-testid="feature-cache">
+                        <div class="feature-icon" data-testid="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                <polyline points="2 17 12 22 22 17"></polyline>
+                                <polyline points="2 12 12 17 22 12"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title" data-testid="feature-title">LRU Block Cache</h3>
+                        <p class="feature-description" data-testid="feature-description">
+                            In-memory caching for fast repeated reads with intelligent least-recently-used eviction.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-testid="feature-compression">
+                        <div class="feature-icon" data-testid="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title" data-testid="feature-title">Snappy Compression</h3>
+                        <p class="feature-description" data-testid="feature-description">
+                            Efficient data compression reduces storage footprint while maintaining fast read/write speeds.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-testid="feature-cuckoo">
+                        <div class="feature-icon" data-testid="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title" data-testid="feature-title">Cuckoo Filter</h3>
+                        <p class="feature-description" data-testid="feature-description">
+                            Fast probabilistic key existence checks to minimize unnecessary disk reads.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-testid="feature-rust">
+                        <div class="feature-icon" data-testid="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title" data-testid="feature-title">Rust Performance</h3>
+                        <p class="feature-description" data-testid="feature-description">
+                            Memory-safe systems programming with zero-cost abstractions for maximum performance and reliability.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
