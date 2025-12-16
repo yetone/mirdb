@@ -260,6 +260,95 @@ l0_compaction_trigger = 4</code></pre>
         </div>
       </div>
     </section>
+
+    <!-- Configuration Section -->
+    <section id="configuration" class="configuration" aria-labelledby="configuration-heading">
+      <div class="container">
+        <h2 id="configuration-heading">Configuration</h2>
+        <p class="section-description">MirDB uses TOML configuration files for easy setup. Specify the config file path with the <code>-c</code> flag when starting the server.</p>
+
+        <h3>Example Configuration</h3>
+        <pre><code class="language-toml">addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500</code></pre>
+
+        <h3>Configuration Parameters</h3>
+        <table class="config-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Description</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>addr</code></td>
+              <td>Listen address and port for the server</td>
+              <td><code>0.0.0.0:12333</code></td>
+            </tr>
+            <tr>
+              <td><code>work_dir</code></td>
+              <td>Data directory path for storing database files</td>
+              <td><code>/tmp/mirdb</code></td>
+            </tr>
+            <tr>
+              <td><code>max_level</code></td>
+              <td>Maximum LSM tree levels</td>
+              <td><code>7</code></td>
+            </tr>
+            <tr>
+              <td><code>sst_max_size</code></td>
+              <td>Maximum SSTable file size</td>
+              <td><code>100M</code></td>
+            </tr>
+            <tr>
+              <td><code>mem_table_max_size</code></td>
+              <td>Maximum memtable size before flush</td>
+              <td><code>4M</code></td>
+            </tr>
+            <tr>
+              <td><code>block_size</code></td>
+              <td>Data block size</td>
+              <td><code>4K</code></td>
+            </tr>
+            <tr>
+              <td><code>l0_compaction_trigger</code></td>
+              <td>Level 0 files count before triggering compaction</td>
+              <td><code>4</code></td>
+            </tr>
+            <tr>
+              <td><code>thread_sleep_ms</code></td>
+              <td>Background thread sleep interval in milliseconds</td>
+              <td><code>500</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Size Units</h3>
+        <p>Configuration supports the following size suffixes:</p>
+        <ul class="size-units-list">
+          <li><code>K</code> - Kilobytes (1024 bytes)</li>
+          <li><code>M</code> - Megabytes (1024 KB)</li>
+          <li><code>G</code> - Gigabytes (1024 MB)</li>
+          <li><code>T</code> - Terabytes (1024 GB)</li>
+        </ul>
+      </div>
+    </section>
   </main>
 
   <footer>
