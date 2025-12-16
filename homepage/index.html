@@ -112,9 +112,9 @@ flowchart TB
     </section>
 
     <!-- Commands Section -->
-    <section id="commands" class="commands">
+    <section id="commands" class="commands" data-testid="commands-section">
         <h2>Supported Commands</h2>
-        <div class="commands-table">
+        <div class="commands-table" data-testid="commands-table">
             <table>
                 <thead>
                     <tr>
@@ -123,15 +123,15 @@ flowchart TB
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr data-testid="getter-commands-row">
                         <td>Getter</td>
                         <td><code>get</code>, <code>gets</code></td>
                     </tr>
-                    <tr>
+                    <tr data-testid="setter-commands-row">
                         <td>Setter</td>
                         <td><code>set</code>, <code>add</code>, <code>replace</code>, <code>append</code>, <code>prepend</code></td>
                     </tr>
-                    <tr>
+                    <tr data-testid="other-commands-row">
                         <td>Other</td>
                         <td><code>delete</code></td>
                     </tr>
