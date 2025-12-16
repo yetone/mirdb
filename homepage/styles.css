@@ -399,8 +399,30 @@ body {
     font-size: 0.875rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+/* Tablet responsive adjustments (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .hero {
+        padding: 1.5rem;
+    }
+
+    .features,
+    .architecture,
+    .commands,
+    .getting-started {
+        padding: 4rem 1.5rem;
+    }
+
+    /* Touch-friendly footer links for tablet */
+    .footer-links a {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        min-height: 44px;
+        line-height: 1.5;
+    }
+}
+
+/* Mobile responsive adjustments (below 768px) */
+@media (max-width: 767px) {
     .hero {
         padding: 1rem;
     }
@@ -424,6 +446,14 @@ body {
 
     .features-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Touch-friendly footer links for mobile */
+    .footer-links a {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        min-height: 44px;
+        line-height: 1.5;
     }
 }
 
