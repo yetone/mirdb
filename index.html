@@ -39,6 +39,51 @@
         </div>
       </div>
     </section>
+
+    <!-- Core Features Section -->
+    <section id="features" class="features" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 id="features-heading">Key Features</h2>
+        <p class="section-description">MirDB brings together the best of both worlds: memcached's simple protocol and persistent storage for data durability.</p>
+
+        <div class="features-grid">
+          <!-- Memcached Compatibility Feature -->
+          <article class="feature-card" data-feature="memcached">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <h3>Memcached Compatible</h3>
+            <p>Full compatibility with the memcached text protocol. Use your existing memcached clients seamlessly - no code changes required. Supports SET, GET, DELETE, ADD, REPLACE, APPEND, PREPEND, and more.</p>
+          </article>
+
+          <!-- Persistent Storage Feature -->
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </div>
+            <h3>Persistent Storage</h3>
+            <p>Unlike memcached, your data survives restarts. MirDB uses SSTables (Sorted String Tables) to persist data to disk, ensuring data durability and crash recovery through Write-Ahead Logging (WAL).</p>
+          </article>
+
+          <!-- High Performance Feature -->
+          <article class="feature-card" data-feature="performance">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <h3>High Performance</h3>
+            <p>Built on an LSM tree (Log-Structured Merge-tree) architecture with async I/O powered by Tokio. Features efficient skip list memtables, multi-level compaction, and optimized read/write paths for maximum throughput.</p>
+          </article>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
