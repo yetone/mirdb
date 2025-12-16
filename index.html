@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A high-performance persistent key-value store with Memcached protocol compatibility, written in Rust">
+  <title>MirDB - High-Performance Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero" data-testid="hero-section">
+    <div class="hero-content">
+      <h1>MirDB</h1>
+      <p class="tagline">A High-Performance Persistent Key-Value Store</p>
+      <p class="value-proposition">
+        Memcached protocol compatible with LSM-tree architecture for durability.
+        Built in Rust for maximum performance and reliability.
+      </p>
+      <div class="cta-buttons">
+        <a href="https://github.com/yetone/mirdb" class="btn-primary" data-testid="primary-cta">
+          View on GitHub
+        </a>
+        <a href="#documentation" class="btn-secondary" data-testid="secondary-cta">
+          Read Documentation
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2>Key Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Memcached Protocol</h3>
+          <p>Drop-in compatibility with existing Memcached clients. Supports get, set, delete, and more.</p>
+        </div>
+        <div class="feature-card">
+          <h3>LSM-Tree Architecture</h3>
+          <p>Optimized for write-heavy workloads with efficient reads through level-based compaction.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Write-Ahead Logging</h3>
+          <p>Data durability with crash recovery. Never lose your data.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Skip List Memtable</h3>
+          <p>Fast in-memory operations with O(log n) complexity.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Snappy Compression</h3>
+          <p>Reduced storage footprint with fast compression and decompression.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Cuckoo Filter</h3>
+          <p>Fast key existence checks without disk reads.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start Section -->
+  <section class="quickstart" id="quickstart">
+    <div class="container">
+      <h2>Quick Start</h2>
+      <div class="code-block">
+        <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run the server
+./target/release/mirdb-server</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Documentation Section -->
+  <section class="documentation" id="documentation">
+    <div class="container">
+      <h2>Documentation</h2>
+      <p>Learn more about MirDB's architecture, configuration, and supported commands.</p>
+      <div class="doc-links">
+        <a href="https://github.com/yetone/mirdb#readme" class="doc-link">README</a>
+        <a href="https://github.com/yetone/mirdb/wiki" class="doc-link">Wiki</a>
+        <a href="https://github.com/yetone/mirdb/issues" class="doc-link">Issues</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 MirDB. Licensed under MIT/Apache-2.0.</p>
+      <div class="footer-links">
+        <a href="https://github.com/yetone/mirdb">GitHub</a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE">License</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
