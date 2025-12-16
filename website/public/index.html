@@ -20,5 +20,57 @@
       </div>
     </div>
   </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features-section">
+    <div class="features-container">
+      <h2 class="section-title">Key Features</h2>
+      <p class="section-subtitle">Built for performance, reliability, and developer experience</p>
+
+      <div class="features-grid">
+        <div class="feature-card" data-feature="memcached">
+          <div class="feature-icon">🔌</div>
+          <h3 class="feature-title">Memcached Protocol Compatibility</h3>
+          <p class="feature-description">Drop-in compatibility with existing Memcached clients. Use your favorite Memcached libraries and tools without any code changes.</p>
+        </div>
+
+        <div class="feature-card" data-feature="lsm-tree">
+          <div class="feature-icon">🌲</div>
+          <h3 class="feature-title">LSM-Tree Storage Architecture</h3>
+          <p class="feature-description">Efficient storage with optimized write and read paths. The LSM-tree architecture provides high write throughput while maintaining fast read performance.</p>
+        </div>
+
+        <div class="feature-card" data-feature="wal">
+          <div class="feature-icon">📝</div>
+          <h3 class="feature-title">Write-Ahead Logging (WAL)</h3>
+          <p class="feature-description">Data durability through crash-safe logging. Every write is persisted to the WAL before being acknowledged, ensuring no data loss.</p>
+        </div>
+
+        <div class="feature-card" data-feature="compaction">
+          <div class="feature-icon">🔄</div>
+          <h3 class="feature-title">Minor &amp; Major Compaction</h3>
+          <p class="feature-description">Automatic space reclamation and read optimization. Compaction merges and removes obsolete data, keeping storage efficient and queries fast.</p>
+        </div>
+
+        <div class="feature-card" data-feature="lru-cache">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">LRU Block Cache</h3>
+          <p class="feature-description">Fast reads through intelligent caching. Frequently accessed data blocks are kept in memory, dramatically reducing disk I/O for hot data.</p>
+        </div>
+
+        <div class="feature-card" data-feature="cuckoo-filter">
+          <div class="feature-icon">🔍</div>
+          <h3 class="feature-title">Cuckoo Filter</h3>
+          <p class="feature-description">Quick key existence checks without disk access. The Cuckoo filter efficiently determines if a key might exist, avoiding unnecessary disk lookups.</p>
+        </div>
+
+        <div class="feature-card" data-feature="snappy">
+          <div class="feature-icon">📦</div>
+          <h3 class="feature-title">Snappy Compression</h3>
+          <p class="feature-description">Reduced storage footprint with fast compression. Snappy provides excellent compression ratios with minimal CPU overhead.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>
