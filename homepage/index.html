@@ -11,11 +11,25 @@
     <header class="header">
         <nav class="nav">
             <a href="/" class="nav-logo" aria-label="MirDB Home">MirDB</a>
+            <button class="mobile-menu-toggle" data-testid="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-menu">
+                <span class="hamburger-icon">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </span>
+            </button>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">Documentation</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
             </ul>
+            <div class="mobile-nav-menu" id="mobile-nav-menu" data-testid="mobile-nav-menu" aria-hidden="true">
+                <ul class="mobile-nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+                    <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                </ul>
+            </div>
         </nav>
     </header>
 
@@ -162,5 +176,33 @@
     <footer class="footer">
         <p>&copy; 2025 MirDB. Licensed under MIT.</p>
     </footer>
+
+    <script>
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileNav = document.getElementById('mobile-nav-menu');
+
+            if (menuToggle && mobileNav) {
+                menuToggle.addEventListener('click', function() {
+                    const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                    menuToggle.setAttribute('aria-expanded', !isExpanded);
+                    mobileNav.setAttribute('aria-hidden', isExpanded);
+                    mobileNav.classList.toggle('is-open');
+                    menuToggle.classList.toggle('is-active');
+                });
+
+                // Close menu when clicking on a link
+                mobileNav.querySelectorAll('a').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        mobileNav.setAttribute('aria-hidden', 'true');
+                        mobileNav.classList.remove('is-open');
+                        menuToggle.classList.remove('is-active');
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
