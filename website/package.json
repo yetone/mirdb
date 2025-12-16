@@ -9,12 +9,20 @@
     "test:headed": "npx playwright test --headed",
     "test:report": "npx playwright show-report"
   },
-  "keywords": ["mirdb", "key-value-store", "memcached", "rust"],
+  "keywords": [
+    "mirdb",
+    "key-value-store",
+    "memcached",
+    "rust"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.57.0",
+    "get-port": "^7.1.0",
+    "lighthouse": "^13.0.1",
+    "playwright-lighthouse": "^4.0.0",
     "serve": "^14.2.5",
     "typescript": "^5.9.3"
   }
