@@ -13,6 +13,9 @@
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
+    <!-- Skip to main content link for keyboard navigation accessibility -->
+    <a href="#main-content" class="skip-link" data-testid="skip-to-main">Skip to main content</a>
+
     <!-- Header with Hero Section -->
     <header>
         <nav class="main-nav" aria-label="Main navigation">
@@ -38,7 +41,7 @@
     </header>
 
     <!-- Main Content -->
-    <main>
+    <main id="main-content" tabindex="-1">
         <!-- Features Section -->
     <section id="features" class="features" data-testid="features-section">
         <h2>Key Features</h2>

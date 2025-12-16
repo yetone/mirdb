@@ -538,6 +538,33 @@ body {
     }
 }
 
+/* Skip to main content link for keyboard accessibility */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e94560;
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: 1000;
+    transition: top 0.2s ease-in-out;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* Focus styles for main content when skip link is used */
+main:focus {
+    outline: none;
+}
+
 /* Focus styles for keyboard navigation */
 a:focus,
 button:focus {
