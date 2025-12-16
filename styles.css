@@ -23,6 +23,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 /* Skip Navigation Link - Accessibility */
@@ -78,6 +79,7 @@ body {
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--bg-color);
+    overflow-x: hidden;
 }
 
 .container {
@@ -231,7 +233,7 @@ header {
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
     gap: 2rem;
 }
 
@@ -500,7 +502,7 @@ footer {
 
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
     gap: 2rem;
     margin-bottom: 2rem;
 }
@@ -594,5 +596,45 @@ footer {
 
     section {
         padding: 3rem 0;
+    }
+}
+
+/* Minimum width support (320px per NFR-1) */
+@media (max-width: 320px) {
+    .hero {
+        padding: 3rem 0.75rem;
+    }
+
+    .hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .tagline {
+        font-size: 1rem;
+    }
+
+    .container {
+        padding: 0 0.75rem;
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+    }
+
+    .step {
+        padding: 1.5rem;
+    }
+
+    th, td {
+        padding: 0.75rem;
+    }
+
+    .arch-component {
+        min-width: auto;
+        padding: 1rem;
+    }
+
+    .status-item {
+        padding: 0.75rem;
     }
 }
