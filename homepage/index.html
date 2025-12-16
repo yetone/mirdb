@@ -59,6 +59,104 @@
         </div>
     </section>
 
+    <!-- Code Examples Section -->
+    <section class="code-examples" id="code-examples" data-testid="code-examples-section">
+        <div class="container">
+            <h2 class="section-title" data-testid="code-examples-title">Memcached Commands</h2>
+            <p class="section-description" data-testid="code-examples-description">
+                MirDB supports standard Memcached protocol commands. Here are the most commonly used operations:
+            </p>
+
+            <!-- Basic Commands -->
+            <div class="commands-grid" data-testid="commands-grid">
+                <!-- GET Command -->
+                <div class="command-card" data-testid="command-card-get">
+                    <h3 class="command-title" data-testid="command-title-get">get &lt;key&gt;</h3>
+                    <p class="command-description" data-testid="command-desc-get">Retrieve a value by its key. Returns the stored value or nothing if the key doesn't exist.</p>
+                    <div class="code-block" data-testid="code-block-get">
+                        <button class="copy-btn" data-testid="copy-btn-get" aria-label="Copy code">Copy</button>
+                        <pre><code class="language-memcached" data-testid="code-get">get mykey</code></pre>
+                    </div>
+                </div>
+
+                <!-- SET Command -->
+                <div class="command-card" data-testid="command-card-set">
+                    <h3 class="command-title" data-testid="command-title-set">set &lt;key&gt; &lt;value&gt;</h3>
+                    <p class="command-description" data-testid="command-desc-set">Store a value with the specified key. Overwrites any existing value.</p>
+                    <div class="code-block" data-testid="code-block-set">
+                        <button class="copy-btn" data-testid="copy-btn-set" aria-label="Copy code">Copy</button>
+                        <pre><code class="language-memcached" data-testid="code-set">set mykey 0 0 5
+hello</code></pre>
+                    </div>
+                </div>
+
+                <!-- DELETE Command -->
+                <div class="command-card" data-testid="command-card-delete">
+                    <h3 class="command-title" data-testid="command-title-delete">delete &lt;key&gt;</h3>
+                    <p class="command-description" data-testid="command-desc-delete">Remove a key and its associated value from the store.</p>
+                    <div class="code-block" data-testid="code-block-delete">
+                        <button class="copy-btn" data-testid="copy-btn-delete" aria-label="Copy code">Copy</button>
+                        <pre><code class="language-memcached" data-testid="code-delete">delete mykey</code></pre>
+                    </div>
+                </div>
+
+                <!-- GETS Command -->
+                <div class="command-card" data-testid="command-card-gets">
+                    <h3 class="command-title" data-testid="command-title-gets">gets &lt;key&gt;</h3>
+                    <p class="command-description" data-testid="command-desc-gets">Retrieve a value with its CAS (Check-And-Set) token for optimistic locking.</p>
+                    <div class="code-block" data-testid="code-block-gets">
+                        <button class="copy-btn" data-testid="copy-btn-gets" aria-label="Copy code">Copy</button>
+                        <pre><code class="language-memcached" data-testid="code-gets">gets mykey</code></pre>
+                    </div>
+                </div>
+
+                <!-- ADD Command -->
+                <div class="command-card" data-testid="command-card-add">
+                    <h3 class="command-title" data-testid="command-title-add">add &lt;key&gt; &lt;value&gt;</h3>
+                    <p class="command-description" data-testid="command-desc-add">Store a value only if the key doesn't already exist.</p>
+                    <div class="code-block" data-testid="code-block-add">
+                        <button class="copy-btn" data-testid="copy-btn-add" aria-label="Copy code">Copy</button>
+                        <pre><code class="language-memcached" data-testid="code-add">add newkey 0 0 5
+world</code></pre>
+                    </div>
+                </div>
+
+                <!-- REPLACE Command -->
+                <div class="command-card" data-testid="command-card-replace">
+                    <h3 class="command-title" data-testid="command-title-replace">replace &lt;key&gt; &lt;value&gt;</h3>
+                    <p class="command-description" data-testid="command-desc-replace">Update a value only if the key already exists.</p>
+                    <div class="code-block" data-testid="code-block-replace">
+                        <button class="copy-btn" data-testid="copy-btn-replace" aria-label="Copy code">Copy</button>
+                        <pre><code class="language-memcached" data-testid="code-replace">replace mykey 0 0 6
+world!</code></pre>
+                    </div>
+                </div>
+
+                <!-- APPEND Command -->
+                <div class="command-card" data-testid="command-card-append">
+                    <h3 class="command-title" data-testid="command-title-append">append &lt;key&gt; &lt;data&gt;</h3>
+                    <p class="command-description" data-testid="command-desc-append">Append data to an existing value.</p>
+                    <div class="code-block" data-testid="code-block-append">
+                        <button class="copy-btn" data-testid="copy-btn-append" aria-label="Copy code">Copy</button>
+                        <pre><code class="language-memcached" data-testid="code-append">append mykey 0 0 6
+_suffix</code></pre>
+                    </div>
+                </div>
+
+                <!-- PREPEND Command -->
+                <div class="command-card" data-testid="command-card-prepend">
+                    <h3 class="command-title" data-testid="command-title-prepend">prepend &lt;key&gt; &lt;data&gt;</h3>
+                    <p class="command-description" data-testid="command-desc-prepend">Prepend data to an existing value.</p>
+                    <div class="code-block" data-testid="code-block-prepend">
+                        <button class="copy-btn" data-testid="copy-btn-prepend" aria-label="Copy code">Copy</button>
+                        <pre><code class="language-memcached" data-testid="code-prepend">prepend mykey 0 0 7
+prefix_</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Getting Started Section -->
     <section class="getting-started" id="getting-started" data-testid="getting-started-section">
         <div class="container">

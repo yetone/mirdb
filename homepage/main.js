@@ -104,12 +104,130 @@
     }
 
     /**
+     * Initialize copy-to-clipboard functionality for code blocks
+     */
+    function initCopyButtons() {
+        const copyButtons = document.querySelectorAll('.copy-btn');
+
+        copyButtons.forEach(button => {
+            button.addEventListener('click', async function() {
+                const codeBlock = this.closest('.code-block');
+                const codeElement = codeBlock.querySelector('code');
+
+                if (!codeElement) {
+                    console.error('No code element found in code block');
+                    return;
+                }
+
+                const codeText = codeElement.textContent;
+
+                try {
+                    await navigator.clipboard.writeText(codeText);
+
+                    // Show success feedback
+                    const originalText = this.textContent;
+                    this.textContent = 'Copied!';
+                    this.classList.add('copied');
+
+                    // Reset button after 2 seconds
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    // Fallback for browsers that don't support clipboard API
+                    console.error('Failed to copy:', err);
+                    fallbackCopyToClipboard(codeText, this);
+                }
+            });
+        });
+    }
+
+    /**
+     * Fallback copy method for browsers without clipboard API
+     * @param {string} text - Text to copy
+     * @param {HTMLElement} button - The copy button element
+     */
+    function fallbackCopyToClipboard(text, button) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            document.execCommand('copy');
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 2000);
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+            button.textContent = 'Error';
+            setTimeout(() => {
+                button.textContent = 'Copy';
+            }, 2000);
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    /**
+     * Validate code examples section rendering
+     * @returns {boolean} - True if valid, false otherwise
+     */
+    function validateCodeExamplesSection() {
+        try {
+            const section = document.querySelector('[data-testid="code-examples-section"]');
+            const title = document.querySelector('[data-testid="code-examples-title"]');
+            const commandsGrid = document.querySelector('[data-testid="commands-grid"]');
+
+            // Check if section exists
+            if (!section || !title || !commandsGrid) {
+                return false;
+            }
+
+            // Check for required command cards
+            const requiredCommands = ['get', 'set', 'delete', 'gets', 'add', 'replace', 'append', 'prepend'];
+            for (const cmd of requiredCommands) {
+                const card = document.querySelector(`[data-testid="command-card-${cmd}"]`);
+                if (!card) {
+                    console.error(`Code examples section: Command card for '${cmd}' not found`);
+                    return false;
+                }
+            }
+
+            // Check that copy buttons exist
+            const copyButtons = section.querySelectorAll('.copy-btn');
+            if (copyButtons.length < requiredCommands.length) {
+                console.error('Code examples section: Not enough copy buttons found');
+                return false;
+            }
+
+            console.log('Code examples section rendered successfully');
+            return true;
+        } catch (error) {
+            console.error('Code examples section validation error:', error);
+            return false;
+        }
+    }
+
+    /**
      * Main initialization function
      */
     function init() {
         initSmoothScroll();
         initHeroSection();
         validateHeroRender();
+        initCopyButtons();
+        validateCodeExamplesSection();
     }
 
     // Initialize when DOM is ready
@@ -119,8 +237,9 @@
         init();
     }
 
-    // Expose validation function for testing
+    // Expose validation functions for testing
     window.MirDBHomepage = {
-        validateHeroRender: validateHeroRender
+        validateHeroRender: validateHeroRender,
+        validateCodeExamplesSection: validateCodeExamplesSection
     };
 })();
