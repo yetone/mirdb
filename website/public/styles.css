@@ -167,10 +167,122 @@ body {
   line-height: 1.6;
 }
 
+/* Architecture Overview Section */
+.architecture-section {
+  padding: 5rem 2rem;
+  background: #f8fafc;
+}
+
+.architecture-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.architecture-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.architecture-diagram {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.lsm-diagram {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+}
+
+.architecture-explanation {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.explanation-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.explanation-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  border-color: var(--primary-color);
+}
+
+.explanation-title {
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.explanation-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: step-counter;
+}
+
+.explanation-steps li {
+  position: relative;
+  padding: 0.75rem 0 0.75rem 2.5rem;
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.6;
+  border-bottom: 1px solid #f1f5f9;
+  counter-increment: step-counter;
+}
+
+.explanation-steps li:last-child {
+  border-bottom: none;
+}
+
+.explanation-steps li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.explanation-steps li strong {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.explanation-note {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  background: #fef9c3;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #854d0e;
+  line-height: 1.5;
+}
+
 /* Quick Start Section */
 .quick-start-section {
   padding: 5rem 2rem;
-  background: #f8fafc;
+  background: var(--background);
 }
 
 .quickstart-container {
@@ -375,5 +487,36 @@ body {
 
   .commands-grid {
     grid-template-columns: 1fr;
+  }
+
+  .architecture-section {
+    padding: 3rem 1.5rem;
+  }
+
+  .architecture-diagram {
+    padding: 0.75rem;
+  }
+
+  .lsm-diagram {
+    max-height: 350px;
+  }
+
+  .architecture-explanation {
+    grid-template-columns: 1fr;
+  }
+
+  .explanation-card {
+    padding: 1.5rem;
+  }
+
+  .explanation-steps li {
+    padding-left: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .explanation-steps li::before {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.75rem;
   }
 }

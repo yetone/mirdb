@@ -73,6 +73,163 @@
     </div>
   </section>
 
+  <!-- Architecture Overview Section -->
+  <section id="architecture" class="architecture-section">
+    <div class="architecture-container">
+      <h2 class="section-title">Architecture Overview</h2>
+      <p class="section-subtitle">Understanding MirDB's LSM-tree storage engine</p>
+
+      <div class="architecture-content">
+        <!-- LSM-tree Architecture Diagram -->
+        <div class="architecture-diagram" role="img" aria-label="LSM-tree architecture diagram showing write and read data paths through WAL, Memtable, Immutable Memtables, and SSTable levels">
+          <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" class="lsm-diagram" aria-describedby="diagram-description">
+            <title>MirDB LSM-Tree Architecture</title>
+            <desc id="diagram-description">A visual representation of the LSM-tree architecture showing the write path flowing from client through WAL and Memtable to SSTables, and the read path searching through all layers from Memtable to SSTable levels.</desc>
+
+            <!-- Background -->
+            <rect width="800" height="500" fill="#f8fafc"/>
+
+            <!-- Write Path Label -->
+            <text x="120" y="30" class="diagram-label" fill="#2563eb" font-weight="bold" font-size="16">Write Path</text>
+            <line x1="120" y1="35" x2="200" y2="35" stroke="#2563eb" stroke-width="2"/>
+
+            <!-- Read Path Label -->
+            <text x="600" y="30" class="diagram-label" fill="#16a34a" font-weight="bold" font-size="16">Read Path</text>
+            <line x1="600" y1="35" x2="680" y2="35" stroke="#16a34a" stroke-width="2"/>
+
+            <!-- Client -->
+            <rect x="350" y="50" width="100" height="40" rx="8" fill="#667eea" stroke="#5b21b6" stroke-width="2"/>
+            <text x="400" y="75" text-anchor="middle" fill="white" font-weight="600" font-size="14">Client</text>
+
+            <!-- Write Arrow from Client -->
+            <path d="M 370 90 L 370 130" stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrowBlue)"/>
+            <text x="340" y="115" fill="#2563eb" font-size="11">write</text>
+
+            <!-- Read Arrow from Client -->
+            <path d="M 430 90 L 430 130" stroke="#16a34a" stroke-width="3" fill="none" marker-end="url(#arrowGreen)"/>
+            <text x="445" y="115" fill="#16a34a" font-size="11">read</text>
+
+            <!-- WAL (Write-Ahead Log) -->
+            <rect x="150" y="140" width="140" height="50" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+            <text x="220" y="170" text-anchor="middle" fill="#92400e" font-weight="600" font-size="13">WAL</text>
+            <text x="220" y="182" text-anchor="middle" fill="#a16207" font-size="10">(Write-Ahead Log)</text>
+
+            <!-- Mutable Memtable -->
+            <rect x="330" y="140" width="140" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+            <text x="400" y="165" text-anchor="middle" fill="#1e40af" font-weight="600" font-size="13">Memtable</text>
+            <text x="400" y="180" text-anchor="middle" fill="#3b82f6" font-size="10">(Skip List - Mutable)</text>
+
+            <!-- Arrow from Client to WAL -->
+            <path d="M 370 130 L 290 140" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#arrowBlue)"/>
+
+            <!-- Arrow from WAL to Memtable -->
+            <path d="M 290 165 L 330 165" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#arrowBlue)"/>
+            <text x="305" y="158" fill="#2563eb" font-size="9">1</text>
+
+            <!-- Step indicators -->
+            <circle cx="180" cy="145" r="10" fill="#2563eb"/>
+            <text x="180" y="149" text-anchor="middle" fill="white" font-size="10" font-weight="bold">1</text>
+
+            <circle cx="360" cy="145" r="10" fill="#2563eb"/>
+            <text x="360" y="149" text-anchor="middle" fill="white" font-size="10" font-weight="bold">2</text>
+
+            <!-- Immutable Memtables -->
+            <rect x="330" y="220" width="140" height="50" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+            <text x="400" y="245" text-anchor="middle" fill="#4338ca" font-weight="600" font-size="13">Immutable Memtables</text>
+            <text x="400" y="260" text-anchor="middle" fill="#6366f1" font-size="10">(Queue for flush)</text>
+
+            <!-- Arrow from Memtable to Immutable -->
+            <path d="M 400 190 L 400 220" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#arrowBlue)"/>
+            <text x="410" y="208" fill="#2563eb" font-size="9">when full</text>
+
+            <circle cx="360" cy="225" r="10" fill="#2563eb"/>
+            <text x="360" y="229" text-anchor="middle" fill="white" font-size="10" font-weight="bold">3</text>
+
+            <!-- Minor Compaction Arrow -->
+            <path d="M 400 270 L 400 310" stroke="#f59e0b" stroke-width="2" fill="none" marker-end="url(#arrowOrange)" stroke-dasharray="5,3"/>
+            <text x="410" y="293" fill="#f59e0b" font-size="9" font-weight="500">Minor Compaction</text>
+
+            <!-- Level 0 SSTables -->
+            <rect x="280" y="320" width="240" height="45" rx="8" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+            <text x="400" y="342" text-anchor="middle" fill="#be185d" font-weight="600" font-size="13">Level 0 SSTables</text>
+            <text x="400" y="358" text-anchor="middle" fill="#ec4899" font-size="10">(May have overlapping keys)</text>
+
+            <circle cx="310" cy="325" r="10" fill="#2563eb"/>
+            <text x="310" y="329" text-anchor="middle" fill="white" font-size="10" font-weight="bold">4</text>
+
+            <!-- Major Compaction Arrow -->
+            <path d="M 400 365 L 400 400" stroke="#f59e0b" stroke-width="2" fill="none" marker-end="url(#arrowOrange)" stroke-dasharray="5,3"/>
+            <text x="410" y="385" fill="#f59e0b" font-size="9" font-weight="500">Major Compaction</text>
+
+            <!-- Level 1+ SSTables -->
+            <rect x="280" y="410" width="240" height="45" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+            <text x="400" y="432" text-anchor="middle" fill="#047857" font-weight="600" font-size="13">Level 1+ SSTables</text>
+            <text x="400" y="448" text-anchor="middle" fill="#10b981" font-size="10">(Sorted, non-overlapping)</text>
+
+            <circle cx="310" cy="415" r="10" fill="#2563eb"/>
+            <text x="310" y="419" text-anchor="middle" fill="white" font-size="10" font-weight="bold">5</text>
+
+            <!-- Read Path Arrows -->
+            <path d="M 470 165 L 550 165 L 550 432 L 520 432" stroke="#16a34a" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+            <path d="M 550 165 L 600 165" stroke="#16a34a" stroke-width="2" fill="none"/>
+            <text x="565" y="155" fill="#16a34a" font-size="9">1st</text>
+
+            <path d="M 550 245 L 600 245" stroke="#16a34a" stroke-width="2" fill="none"/>
+            <text x="565" y="235" fill="#16a34a" font-size="9">2nd</text>
+
+            <path d="M 550 342 L 600 342" stroke="#16a34a" stroke-width="2" fill="none"/>
+            <text x="565" y="332" fill="#16a34a" font-size="9">3rd</text>
+
+            <text x="565" y="422" fill="#16a34a" font-size="9">4th</text>
+
+            <!-- Cuckoo Filter box -->
+            <rect x="600" y="320" width="100" height="40" rx="6" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+            <text x="650" y="340" text-anchor="middle" fill="#854d0e" font-weight="500" font-size="11">Cuckoo Filter</text>
+            <text x="650" y="352" text-anchor="middle" fill="#a16207" font-size="9">(Skip lookup)</text>
+
+            <!-- Arrow markers definitions -->
+            <defs>
+              <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/>
+              </marker>
+              <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#16a34a"/>
+              </marker>
+              <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#f59e0b"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Architecture Explanation -->
+        <div class="architecture-explanation">
+          <div class="explanation-card">
+            <h3 class="explanation-title">Write Path</h3>
+            <ol class="explanation-steps">
+              <li><strong>WAL First:</strong> Every write is first persisted to the Write-Ahead Log for durability. This ensures data can be recovered after crashes.</li>
+              <li><strong>Memtable Insert:</strong> The key-value pair is inserted into the mutable memtable, which uses a skip list for O(log n) insertions.</li>
+              <li><strong>Become Immutable:</strong> When the memtable reaches its size limit, it becomes immutable and is added to a queue for flushing.</li>
+              <li><strong>Minor Compaction:</strong> Background threads flush immutable memtables to Level 0 SSTable files on disk.</li>
+              <li><strong>Major Compaction:</strong> SSTables are merged across levels to optimize read performance and reclaim space.</li>
+            </ol>
+          </div>
+
+          <div class="explanation-card">
+            <h3 class="explanation-title">Read Path</h3>
+            <ol class="explanation-steps">
+              <li><strong>Check Memtable:</strong> First, search the mutable memtable for the most recent value.</li>
+              <li><strong>Check Immutable Memtables:</strong> If not found, search the immutable memtable queue (newest to oldest).</li>
+              <li><strong>Search Level 0:</strong> Check Level 0 SSTables. Multiple files may contain the key due to overlapping ranges.</li>
+              <li><strong>Search Higher Levels:</strong> Continue through Level 1+ using binary search. Each level has sorted, non-overlapping files.</li>
+            </ol>
+            <p class="explanation-note">The Cuckoo filter quickly determines if a key might exist in an SSTable, avoiding unnecessary disk reads for non-existent keys.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Quick Start Section -->
   <section id="quickstart" class="quick-start-section">
     <div class="quickstart-container">
