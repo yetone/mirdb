@@ -32,13 +32,24 @@ describe('Navigation and Header', () => {
       expect(nav).not.toBeNull();
     });
 
-    it('header should be the first major element in body', () => {
+    it('header should be the first major element in body (after skip link)', () => {
       const body = document.body;
-      const firstChild = body.children[0];
+      // Find the first non-skip-link element
+      let firstMajorElement = null;
+      for (let i = 0; i < body.children.length; i++) {
+        const child = body.children[i];
+        // Skip links are accessibility features and should come before header
+        if (!child.classList.contains('skip-link') &&
+            !child.classList.contains('skip-to-content') &&
+            !child.getAttribute('href')?.includes('#main')) {
+          firstMajorElement = child;
+          break;
+        }
+      }
       expect(
-        firstChild.tagName.toLowerCase() === 'header' ||
-        firstChild.querySelector('header') !== null ||
-        firstChild.querySelector('nav') !== null
+        firstMajorElement.tagName.toLowerCase() === 'header' ||
+        firstMajorElement.querySelector('header') !== null ||
+        firstMajorElement.querySelector('nav') !== null
       ).toBe(true);
     });
 
