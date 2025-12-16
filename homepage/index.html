@@ -6,6 +6,7 @@
     <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility, written in Rust">
     <title>MirDB - Persistent Key-Value Store</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <!-- Hero Section -->
@@ -51,6 +52,61 @@
             <div class="feature-card">
                 <h3>Written in Rust</h3>
                 <p>Memory-safe, concurrent, and fast. Built with Tokio for async I/O.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="architecture" data-testid="architecture-section">
+        <h2>Architecture Overview</h2>
+        <p class="architecture-intro" data-testid="lsm-tree-explanation">
+            MirDB uses a Log-Structured Merge-tree (LSM-tree) architecture that provides excellent write performance
+            while maintaining efficient reads. LSM-trees optimize for write-heavy workloads by buffering writes in memory
+            and periodically flushing them to disk in sorted order, reducing random I/O and enabling efficient compaction.
+        </p>
+        <div class="architecture-diagram" data-testid="architecture-diagram">
+            <div class="diagram-container">
+                <pre class="mermaid" data-testid="mermaid-diagram">
+flowchart TB
+    subgraph WritePathSubgraph["Write Path"]
+        direction TB
+        WC[Client] --> WAL[WAL<br/>Write-Ahead Log]
+        WAL --> MT[Memtable<br/>Skip List]
+        MT --> SST[SSTable<br/>Files]
+    end
+
+    subgraph ReadPathSubgraph["Read Path"]
+        direction TB
+        RC[Client] --> RMT[Memtable]
+        RMT --> IMM[Immutable<br/>Memtable List]
+        IMM --> LEVELS[SSTable Levels<br/>L0 → L1 → L2...]
+    end
+
+    style WritePathSubgraph fill:#1a1a2e,stroke:#e94560,color:#fff
+    style ReadPathSubgraph fill:#16213e,stroke:#e94560,color:#fff
+    style WC fill:#e94560,stroke:#fff,color:#fff
+    style RC fill:#e94560,stroke:#fff,color:#fff
+    style WAL fill:#0f3460,stroke:#e94560,color:#fff
+    style MT fill:#0f3460,stroke:#e94560,color:#fff
+    style SST fill:#0f3460,stroke:#e94560,color:#fff
+    style RMT fill:#0f3460,stroke:#e94560,color:#fff
+    style IMM fill:#0f3460,stroke:#e94560,color:#fff
+    style LEVELS fill:#0f3460,stroke:#e94560,color:#fff
+                </pre>
+            </div>
+        </div>
+        <div class="architecture-paths">
+            <div class="path-description" data-testid="write-path-description">
+                <h3>Write Path</h3>
+                <p>Writes flow through: <strong>Client → WAL → Memtable → SSTable</strong>.
+                   Data is first logged to the Write-Ahead Log for durability, then inserted into the in-memory
+                   Memtable (skip list). When the Memtable reaches its size limit, it's flushed to disk as an SSTable file.</p>
+            </div>
+            <div class="path-description" data-testid="read-path-description">
+                <h3>Read Path</h3>
+                <p>Reads flow through: <strong>Client → Memtable → Immutable List → SSTable Levels</strong>.
+                   The most recent data is checked first in the active Memtable, then the immutable Memtable list,
+                   and finally the SSTable files organized in levels (L0 to max level).</p>
             </div>
         </div>
     </section>
