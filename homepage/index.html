@@ -26,34 +26,34 @@
         </div>
     </section>
 
-    <!-- Features Section (placeholder for future implementation) -->
-    <section class="features" id="features">
+    <!-- Features Section -->
+    <section class="features" id="features" data-testid="features-section">
         <div class="container">
-            <h2 class="section-title">Key Features</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Memcached Compatible</h3>
-                    <p>Drop-in replacement supporting get, set, delete, and more standard Memcached commands.</p>
+            <h2 class="section-title" data-testid="features-title">Key Features</h2>
+            <div class="feature-grid" data-testid="feature-grid">
+                <div class="feature-card" data-testid="feature-card-memcached">
+                    <h3 class="feature-card-title" data-testid="feature-title-memcached">Memcached Compatible</h3>
+                    <p class="feature-card-description" data-testid="feature-desc-memcached">Drop-in replacement supporting get, set, delete, and more standard Memcached commands.</p>
                 </div>
-                <div class="feature-card">
-                    <h3>Persistent Storage</h3>
-                    <p>LSM-tree architecture with SSTable files for durable data storage.</p>
+                <div class="feature-card" data-testid="feature-card-persistent">
+                    <h3 class="feature-card-title" data-testid="feature-title-persistent">Persistent Storage</h3>
+                    <p class="feature-card-description" data-testid="feature-desc-persistent">LSM-tree architecture with SSTable files for durable data storage.</p>
                 </div>
-                <div class="feature-card">
-                    <h3>Write-Ahead Logging</h3>
-                    <p>Never lose data with WAL-based crash recovery.</p>
+                <div class="feature-card" data-testid="feature-card-wal">
+                    <h3 class="feature-card-title" data-testid="feature-title-wal">Write-Ahead Logging</h3>
+                    <p class="feature-card-description" data-testid="feature-desc-wal">Never lose data with WAL-based crash recovery.</p>
                 </div>
-                <div class="feature-card">
-                    <h3>High Performance</h3>
-                    <p>Skip list memtables and LRU block cache for fast operations.</p>
+                <div class="feature-card" data-testid="feature-card-performance">
+                    <h3 class="feature-card-title" data-testid="feature-title-performance">High Performance</h3>
+                    <p class="feature-card-description" data-testid="feature-desc-performance">Skip list memtables and LRU block cache for fast operations.</p>
                 </div>
-                <div class="feature-card">
-                    <h3>Efficient Compression</h3>
-                    <p>Snappy compression reduces storage footprint.</p>
+                <div class="feature-card" data-testid="feature-card-compression">
+                    <h3 class="feature-card-title" data-testid="feature-title-compression">Efficient Compression</h3>
+                    <p class="feature-card-description" data-testid="feature-desc-compression">Snappy compression reduces storage footprint.</p>
                 </div>
-                <div class="feature-card">
-                    <h3>Smart Filtering</h3>
-                    <p>Cuckoo filters minimize unnecessary disk reads.</p>
+                <div class="feature-card" data-testid="feature-card-filtering">
+                    <h3 class="feature-card-title" data-testid="feature-title-filtering">Smart Filtering</h3>
+                    <p class="feature-card-description" data-testid="feature-desc-filtering">Cuckoo filters minimize unnecessary disk reads.</p>
                 </div>
             </div>
         </div>
