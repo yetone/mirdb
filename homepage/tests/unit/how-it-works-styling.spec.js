@@ -137,8 +137,8 @@ test.describe('How It Works Section Styling', () => {
       return window.getComputedStyle(el).color;
     });
 
-    // Primary color is #667eea (rgb(102, 126, 234))
-    expect(writeTitleColor).toBe('rgb(102, 126, 234)');
+    // Accessible primary color (WCAG AA: #4a5bb8 = rgb(74, 91, 184))
+    expect(writeTitleColor).toBe('rgb(74, 91, 184)');
   });
 
   /**
@@ -234,7 +234,7 @@ test.describe('How It Works Section Styling', () => {
       return window.getComputedStyle(el).color;
     });
 
-    // Primary color is #667eea (rgb(102, 126, 234))
-    expect(color).toBe('rgb(102, 126, 234)');
+    // Accessible dark primary color (WCAG AA: #2d3a7a = rgb(45, 58, 122))
+    expect(color).toBe('rgb(45, 58, 122)');
   });
 });

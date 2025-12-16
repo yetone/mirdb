@@ -200,8 +200,8 @@ test.describe('Getting Started Section Styling - Unit Tests', () => {
     // Should have padding for button appearance
     expect(buttonStyles.padding).not.toBe('0px');
 
-    // Should have primary color background (#667eea = rgb(102, 126, 234))
-    expect(buttonStyles.backgroundColor).toMatch(/rgb\(102,\s*126,\s*234\)/);
+    // Should have accessible primary color background (WCAG AA: #4a5bb8 = rgb(74, 91, 184))
+    expect(buttonStyles.backgroundColor).toMatch(/rgb\(74,\s*91,\s*184\)/);
 
     // Should have border radius
     expect(parseInt(buttonStyles.borderRadius)).toBeGreaterThan(0);

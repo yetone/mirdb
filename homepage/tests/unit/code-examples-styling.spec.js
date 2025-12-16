@@ -180,8 +180,8 @@ test.describe('Code Examples Section Styling - Unit Tests', () => {
     // Should use monospace font for command titles
     expect(styles.fontFamily.toLowerCase()).toMatch(/sfmono|consolas|liberation mono|menlo|monospace/);
 
-    // Should have primary color (purple-ish #667eea = rgb(102, 126, 234))
-    expect(styles.color).toMatch(/rgb\(102,\s*126,\s*234\)/);
+    // Should have accessible dark primary color (WCAG AA compliant #2d3a7a = rgb(45, 58, 122))
+    expect(styles.color).toMatch(/rgb\(45,\s*58,\s*122\)/);
   });
 
   /**

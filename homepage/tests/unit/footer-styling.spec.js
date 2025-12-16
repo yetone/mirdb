@@ -26,8 +26,8 @@ test.describe('Footer Styling Unit Tests (Scenario 7 - Test Case 5)', () => {
     const bgColor = await footer.evaluate((el) => {
       return window.getComputedStyle(el).backgroundColor;
     });
-    // Dark background color (#333 = rgb(51, 51, 51))
-    expect(bgColor).toMatch(/rgb\(51,\s*51,\s*51\)|#333/i);
+    // Dark background color (updated for WCAG AA: #1a1a1a = rgb(26, 26, 26))
+    expect(bgColor).toMatch(/rgb\(26,\s*26,\s*26\)|#1a1a1a/i);
 
     // Footer text should be white
     const textColor = await footer.evaluate((el) => {
