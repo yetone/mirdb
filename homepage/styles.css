@@ -512,8 +512,39 @@ body {
     text-align: center;
 }
 
+/* Footer Badges */
+.footer-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.badge-link {
+    display: inline-block;
+    transition: var(--transition);
+}
+
+.badge-link:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.badge-link:focus {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.status-badge,
+.license-badge {
+    height: 22px;
+    vertical-align: middle;
+}
+
 .footer-nav {
-    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .footer-nav a {
@@ -526,6 +557,34 @@ body {
 
 .footer-nav a:hover {
     opacity: 1;
+    text-decoration: underline;
+}
+
+.footer-nav a:focus {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.footer-copyright {
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.footer-copyright a {
+    color: var(--white);
+    text-decoration: underline;
+    transition: var(--transition);
+}
+
+.footer-copyright a:hover {
+    opacity: 0.8;
+}
+
+.footer-copyright a:focus {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 /* Responsive Design */

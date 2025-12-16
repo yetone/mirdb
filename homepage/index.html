@@ -291,13 +291,30 @@ l0_compaction_trigger = 4</code></pre>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" data-testid="footer-section">
         <div class="container">
-            <p>&copy; 2024 MirDB. Licensed under MIT.</p>
-            <nav class="footer-nav">
-                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href="#getting-started">Documentation</a>
+            <!-- Project Status Badge -->
+            <div class="footer-badges" data-testid="footer-badges">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="project-status-badge" class="badge-link">
+                    <img src="https://img.shields.io/badge/status-active-success.svg" alt="Project Status: Active" class="status-badge" data-testid="status-badge-img">
+                </a>
+                <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer" data-testid="license-badge-link" class="badge-link">
+                    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" class="license-badge" data-testid="license-badge-img">
+                </a>
+            </div>
+
+            <!-- Footer Navigation Links -->
+            <nav class="footer-nav" data-testid="footer-nav">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="footer-github-link">GitHub</a>
+                <a href="#getting-started" data-testid="footer-docs-internal-link">Documentation</a>
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer" data-testid="footer-docs-link">Full Docs</a>
+                <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer" data-testid="footer-license-link">License</a>
             </nav>
+
+            <!-- Copyright and License Info -->
+            <p class="footer-copyright" data-testid="footer-copyright">
+                &copy; 2024 MirDB. Licensed under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer" data-testid="footer-license-text-link">MIT License</a>.
+            </p>
         </div>
     </footer>
 
