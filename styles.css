@@ -338,3 +338,92 @@ button:focus {
 .skip-link:focus {
   top: 0;
 }
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Quick Start Section */
+.quick-start {
+  padding: 4rem 2rem;
+  background-color: var(--color-bg);
+}
+
+.quick-start h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.quick-start h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.quick-start h3:first-of-type {
+  margin-top: 0;
+}
+
+.quick-start p {
+  color: var(--color-text-light);
+  margin-bottom: 1rem;
+  font-size: 1.0625rem;
+}
+
+/* Code Blocks */
+pre {
+  background-color: #1e293b;
+  border-radius: 8px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1rem 0 1.5rem;
+}
+
+pre code {
+  color: #e2e8f0;
+  font-family: var(--font-family-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+code {
+  font-family: var(--font-family-mono);
+  font-size: 0.875em;
+}
+
+/* Inline code */
+p code {
+  background-color: var(--color-bg-alt);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+/* Responsive for Quick Start */
+@media (max-width: 768px) {
+  .quick-start {
+    padding: 3rem 1rem;
+  }
+
+  .quick-start h2 {
+    font-size: 2rem;
+  }
+
+  .quick-start h3 {
+    font-size: 1.25rem;
+  }
+
+  pre {
+    padding: 1rem;
+    font-size: 0.8125rem;
+  }
+}

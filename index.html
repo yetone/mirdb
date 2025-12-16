@@ -6,6 +6,7 @@
   <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility">
   <title>MirDB - Persistent Key-Value Store</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="prism.css">
 </head>
 <body>
   <header>
@@ -84,6 +85,60 @@
         </div>
       </div>
     </section>
+
+    <!-- Quick Start Section -->
+    <section id="quick-start" class="quick-start">
+      <div class="container">
+        <h2>Quick Start</h2>
+
+        <h3>Installation</h3>
+        <p>Clone and build MirDB using Cargo:</p>
+        <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run MirDB with configuration
+cargo run --release -- -c etc/mirdb.toml</code></pre>
+
+        <h3>Basic Usage</h3>
+        <p>Connect to MirDB using telnet or any memcached client:</p>
+        <pre><code class="language-bash"># Connect with telnet
+telnet localhost 12333
+
+# Store a value
+set mykey 0 0 5
+hello
+STORED
+
+# Retrieve the value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete the key
+delete mykey
+DELETED</code></pre>
+
+        <p>Or use netcat for quick testing:</p>
+        <pre><code class="language-bash"># Using nc (netcat)
+echo -e "set foo 0 0 3\r\nbar\r" | nc localhost 12333</code></pre>
+
+        <h3>Configuration</h3>
+        <p>Create a configuration file in TOML format:</p>
+        <pre><code class="language-toml"># etc/mirdb.toml
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdb"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+block_size = "4K"
+l0_compaction_trigger = 4</code></pre>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -94,5 +149,7 @@
       </p>
     </div>
   </footer>
+
+  <script src="prism.js"></script>
 </body>
 </html>
