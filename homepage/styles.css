@@ -103,6 +103,10 @@ body {
     color: var(--color-primary);
 }
 
+.nav-logo:active {
+    color: var(--color-primary-hover);
+}
+
 .nav-links {
     display: flex;
     list-style: none;
@@ -118,6 +122,10 @@ body {
 
 .nav-links a:hover {
     color: var(--color-text);
+}
+
+.nav-links a:active {
+    color: var(--color-primary);
 }
 
 /* Mobile Menu Toggle Button */
@@ -210,6 +218,10 @@ body {
     color: var(--color-primary);
 }
 
+.mobile-nav-links a:active {
+    color: var(--color-primary-hover);
+}
+
 /* Hero Section */
 .hero {
     min-height: 100vh;
@@ -281,6 +293,11 @@ body {
     opacity: 0.9;
 }
 
+.status-badge-link:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+}
+
 .status-badge-link:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 4px;
@@ -318,6 +335,12 @@ body {
     border-color: var(--color-primary-hover);
 }
 
+.btn-primary:active {
+    background-color: #b84530;
+    border-color: #b84530;
+    transform: scale(0.98);
+}
+
 .btn-secondary {
     background-color: transparent;
     color: var(--color-text);
@@ -327,6 +350,12 @@ body {
 .btn-secondary:hover {
     background-color: var(--color-surface);
     border-color: var(--color-text-muted);
+}
+
+.btn-secondary:active {
+    background-color: var(--color-background);
+    border-color: var(--color-text);
+    transform: scale(0.98);
 }
 
 /* Features Section */
@@ -365,6 +394,11 @@ body {
 .feature-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.feature-card:active {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .feature-icon {
@@ -641,6 +675,11 @@ body {
     border-color: var(--color-text-muted);
 }
 
+.copy-button:active {
+    background-color: var(--color-surface);
+    transform: scale(0.95);
+}
+
 .copy-button.copied {
     color: #4ade80;
     border-color: #4ade80;
@@ -739,6 +778,10 @@ body {
 
 .footer-links a:hover {
     color: var(--color-text);
+}
+
+.footer-links a:active {
+    color: var(--color-primary);
 }
 
 .footer-links svg {
