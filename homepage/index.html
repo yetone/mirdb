@@ -60,11 +60,15 @@
     </section>
 
     <!-- Getting Started Section -->
-    <section class="getting-started" id="getting-started">
+    <section class="getting-started" id="getting-started" data-testid="getting-started-section">
         <div class="container">
-            <h2 class="section-title">Getting Started</h2>
-            <div class="code-example">
-                <pre><code># Clone the repository
+            <h2 class="section-title" data-testid="getting-started-title">Getting Started</h2>
+
+            <!-- Installation Instructions -->
+            <div class="getting-started-subsection" data-testid="installation-section">
+                <h3 class="subsection-title" data-testid="installation-title">Installation</h3>
+                <div class="code-example" data-testid="installation-code">
+                    <pre><code class="language-bash"># Clone the repository
 git clone https://github.com/yetone/mirdb.git
 cd mirdb
 
@@ -73,6 +77,42 @@ cargo build --release
 
 # Run the server
 ./target/release/mirdb-server</code></pre>
+                </div>
+            </div>
+
+            <!-- Configuration Example -->
+            <div class="getting-started-subsection" data-testid="configuration-section">
+                <h3 class="subsection-title" data-testid="configuration-title">Quick Configuration</h3>
+                <p class="subsection-description" data-testid="configuration-description">
+                    Create a configuration file at <code>etc/mirdb.toml</code>:
+                </p>
+                <div class="code-example" data-testid="configuration-code">
+                    <pre><code class="language-toml"># MirDB Configuration
+addr = "0.0.0.0:12333"
+work_dir = "/var/lib/mirdb"
+
+# Memory settings
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+# Storage settings
+sst_max_size = "100M"
+block_size = "4K"
+
+# LSM-tree settings
+max_level = 7
+l0_compaction_trigger = 4</code></pre>
+                </div>
+            </div>
+
+            <!-- Documentation Link -->
+            <div class="getting-started-links" data-testid="documentation-links">
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer" class="btn btn-docs" data-testid="docs-link">
+                    View Full Documentation
+                </a>
+                <a href="https://github.com/yetone/mirdb/wiki" target="_blank" rel="noopener noreferrer" class="btn btn-docs-secondary" data-testid="wiki-link">
+                    Browse Wiki
+                </a>
             </div>
         </div>
     </section>

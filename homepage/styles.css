@@ -190,6 +190,32 @@ body {
     background: var(--bg-color);
 }
 
+.getting-started-subsection {
+    margin-bottom: 3rem;
+}
+
+.subsection-title {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.subsection-description {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.subsection-description code {
+    background: var(--white);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9rem;
+    color: var(--primary-color);
+}
+
 .code-example {
     background: #1e1e1e;
     border-radius: var(--border-radius);
@@ -197,6 +223,7 @@ body {
     overflow-x: auto;
     max-width: 800px;
     margin: 0 auto;
+    position: relative;
 }
 
 .code-example pre {
@@ -208,6 +235,78 @@ body {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-size: 0.95rem;
     line-height: 1.6;
+}
+
+/* Syntax Highlighting for bash */
+.code-example code.language-bash {
+    color: #98c379;
+}
+
+/* Syntax Highlighting for TOML */
+.code-example code.language-toml {
+    color: #e5c07b;
+}
+
+/* Syntax Highlighting indicator - shows the language */
+.code-example[data-testid="installation-code"]::before,
+.code-example[data-testid="configuration-code"]::before {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 0.75rem;
+    color: #666;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+.code-example[data-testid="installation-code"]::before {
+    content: 'bash';
+}
+
+.code-example[data-testid="configuration-code"]::before {
+    content: 'toml';
+}
+
+/* Documentation Links */
+.getting-started-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.btn-docs {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.btn-docs:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-docs-secondary {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 10px 26px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.btn-docs-secondary:hover {
+    background: var(--primary-color);
+    color: var(--white);
+    transform: translateY(-2px);
 }
 
 /* Footer */
