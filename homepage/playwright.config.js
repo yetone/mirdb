@@ -32,11 +32,27 @@ module.exports = defineConfig({
     screenshot: 'only-on-failure',
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for major browsers - Cross-browser compatibility per NFR-4
+   * Chrome: Desktop Chrome (Chromium engine)
+   * Firefox: Desktop Firefox (Gecko engine)
+   * Safari: Desktop Safari (WebKit engine)
+   * Edge: Microsoft Edge shares Chromium engine - tested via 'chromium' project
+   *
+   * Note: Edge uses the same Chromium engine as Chrome, so testing with chromium
+   * provides equivalent coverage. Full Edge testing requires Edge browser installed.
+   */
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
     },
   ],
 
