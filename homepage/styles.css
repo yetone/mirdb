@@ -267,6 +267,64 @@ body {
     margin-bottom: 3rem;
 }
 
+.getting-started-subsection {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+}
+
+.getting-started-subsection h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #e94560;
+    border-bottom: 2px solid #e94560;
+    padding-bottom: 0.5rem;
+}
+
+.getting-started-subsection p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+.getting-started-subsection p code {
+    background: rgba(233, 69, 96, 0.2);
+    color: #ff6b6b;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9rem;
+}
+
+.code-block {
+    background: #0d0d1a;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(233, 69, 96, 0.3);
+}
+
+.code-block pre {
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin: 0;
+}
+
+.code-block code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #7dd3fc;
+    display: block;
+}
+
+.code-block code.language-toml {
+    color: #a5d6ff;
+}
+
+.code-block code.language-python {
+    color: #90ee90;
+}
+
 .code-example {
     max-width: 700px;
     margin: 0 auto 2rem;
