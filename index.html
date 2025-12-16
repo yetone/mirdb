@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A High-Performance Persistent Key-Value Store with Memcached Protocol Compatibility">
+  <meta name="keywords" content="MirDB, key-value store, Memcached, Rust, LSM-tree, database">
+  <title>MirDB - High-Performance Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <a href="#" class="logo">MirDB</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="#commands">Commands</a></li>
+        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      </ul>
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>MirDB</h1>
+      <p class="tagline">A High-Performance Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+      <p class="subtitle">Built with Rust for speed, reliability, and Memcached drop-in compatibility</p>
+      <div class="cta-buttons">
+        <a href="#quick-start" class="btn btn-primary">Get Started</a>
+        <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <h2>Key Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Memcached Protocol</h3>
+          <p>Drop-in compatibility with existing Memcached clients. Use your favorite tools and libraries.</p>
+        </div>
+        <div class="feature-card">
+          <h3>LSM-Tree Architecture</h3>
+          <p>Optimized for write-heavy workloads with efficient reads using Log-Structured Merge-tree.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Write-Ahead Logging</h3>
+          <p>Data durability with crash recovery. Your data is safe even during unexpected shutdowns.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Skip List Memtable</h3>
+          <p>Fast in-memory operations with O(log n) complexity for inserts and lookups.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Snappy Compression</h3>
+          <p>Reduced storage footprint with fast Snappy compression for data blocks.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Cuckoo Filter</h3>
+          <p>Efficient key existence checks without disk reads for improved query performance.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quick-start" class="quick-start">
+      <h2>Quick Start</h2>
+      <p>Get MirDB up and running in minutes with these simple steps.</p>
+
+      <h3>Installation</h3>
+      <p>Clone the repository and build with Cargo:</p>
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard" data-copy>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+        <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build with Cargo
+cargo build --release</code></pre>
+      </div>
+
+      <h3>Configuration</h3>
+      <p>Create a configuration file at <code>etc/mirdb.toml</code>:</p>
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard" data-copy>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+        <pre><code class="language-toml"># etc/mirdb.toml
+addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500</code></pre>
+      </div>
+
+      <h3>Running the Server</h3>
+      <p>Start MirDB with your configuration:</p>
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard" data-copy>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+        <pre><code class="language-bash"># Run with configuration file
+cargo run --release -- -c etc/mirdb.toml</code></pre>
+      </div>
+
+      <h3>Basic Usage</h3>
+      <p>Connect using telnet or any Memcached client:</p>
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard" data-copy>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+        <pre><code class="language-bash"># Connect to MirDB
+telnet localhost 12333
+
+# Set a value (format: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;)
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+      </div>
+    </section>
+
+    <section id="commands" class="commands">
+      <h2>Supported Commands</h2>
+      <p>MirDB supports the following Memcached protocol commands:</p>
+
+      <h3>Getter Commands</h3>
+      <table class="command-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>get</code></td>
+            <td>Retrieve a value by key</td>
+          </tr>
+          <tr>
+            <td><code>gets</code></td>
+            <td>Retrieve a value with CAS token</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Setter Commands</h3>
+      <table class="command-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>set</code></td>
+            <td>Store a key-value pair</td>
+          </tr>
+          <tr>
+            <td><code>add</code></td>
+            <td>Store only if key doesn't exist</td>
+          </tr>
+          <tr>
+            <td><code>replace</code></td>
+            <td>Store only if key exists</td>
+          </tr>
+          <tr>
+            <td><code>append</code></td>
+            <td>Append data to existing value</td>
+          </tr>
+          <tr>
+            <td><code>prepend</code></td>
+            <td>Prepend data to existing value</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Other Commands</h3>
+      <table class="command-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>delete</code></td>
+            <td>Remove a key-value pair</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>MirDB</h4>
+        <p>A high-performance persistent key-value store built with Rust.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Links</h4>
+        <ul>
+          <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a></li>
+          <li><a href="https://github.com/yetone/mirdb/blob/master/README.md" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>License</h4>
+        <p>MIT / Apache 2.0</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MirDB. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Copy to clipboard functionality
+    function copyToClipboard(text, button) {
+      navigator.clipboard.writeText(text).then(function() {
+        const originalText = button.querySelector('.copy-text').textContent;
+        button.querySelector('.copy-text').textContent = 'Copied!';
+        button.classList.add('copied');
+        setTimeout(function() {
+          button.querySelector('.copy-text').textContent = originalText;
+          button.classList.remove('copied');
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Failed to copy: ', err);
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          button.querySelector('.copy-text').textContent = 'Copied!';
+          button.classList.add('copied');
+          setTimeout(function() {
+            button.querySelector('.copy-text').textContent = 'Copy';
+            button.classList.remove('copied');
+          }, 2000);
+        } catch (e) {
+          console.error('Fallback copy failed: ', e);
+        }
+        document.body.removeChild(textArea);
+      });
+    }
+
+    // Initialize copy buttons
+    document.querySelectorAll('.copy-btn').forEach(function(button) {
+      button.addEventListener('click', function() {
+        const codeBlock = this.closest('.code-block');
+        const code = codeBlock.querySelector('code').textContent;
+        copyToClipboard(code, this);
+      });
+    });
+
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.toggle('active');
+      this.classList.toggle('active');
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          // Close mobile menu if open
+          document.querySelector('.nav-links').classList.remove('active');
+          document.querySelector('.mobile-menu-toggle').classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

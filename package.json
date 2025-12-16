@@ -1,0 +1,14 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Product Homepage",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.0",
+    "jsdom": "^25.0.0",
+    "happy-dom": "^15.0.0"
+  }
+}
