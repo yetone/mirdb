@@ -1,10 +1,33 @@
 /**
  * MirDB Homepage - Main JavaScript
- * Handles smooth scrolling and any interactive elements
+ * Handles smooth scrolling, Mermaid diagrams, and any interactive elements
  */
 
 (function() {
     'use strict';
+
+    /**
+     * Initialize Mermaid.js for architecture diagrams
+     */
+    function initMermaid() {
+        if (typeof mermaid !== 'undefined') {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'default',
+                securityLevel: 'loose',
+                flowchart: {
+                    useMaxWidth: true,
+                    htmlLabels: true,
+                    curve: 'basis'
+                }
+            });
+            console.log('Mermaid.js initialized successfully');
+            return true;
+        } else {
+            console.warn('Mermaid.js not loaded');
+            return false;
+        }
+    }
 
     /**
      * Initialize smooth scrolling for anchor links
@@ -220,14 +243,76 @@
     }
 
     /**
+     * Validate How It Works / Architecture section rendering
+     * @returns {boolean} - True if valid, false otherwise
+     */
+    function validateHowItWorksSection() {
+        try {
+            const section = document.querySelector('[data-testid="how-it-works-section"]');
+            const title = document.querySelector('[data-testid="how-it-works-title"]');
+            const diagramContainer = document.querySelector('[data-testid="architecture-diagram-container"]');
+            const diagram = document.querySelector('[data-testid="architecture-diagram"]');
+            const diagramAlt = document.querySelector('[data-testid="architecture-diagram-alt"]');
+            const writePathCard = document.querySelector('[data-testid="write-path-card"]');
+            const readPathCard = document.querySelector('[data-testid="read-path-card"]');
+
+            // Check if section exists
+            if (!section || !title) {
+                console.error('How It Works section: Section or title not found');
+                return false;
+            }
+
+            // Check diagram elements
+            if (!diagramContainer || !diagram) {
+                console.error('How It Works section: Diagram container or diagram not found');
+                return false;
+            }
+
+            // Check for accessibility alt text
+            if (!diagramAlt) {
+                console.error('How It Works section: Diagram alt text not found');
+                return false;
+            }
+
+            // Check for write and read path explanations
+            if (!writePathCard || !readPathCard) {
+                console.error('How It Works section: Write or read path card not found');
+                return false;
+            }
+
+            // Check write path steps
+            const writeSteps = document.querySelector('[data-testid="write-path-steps"]');
+            if (!writeSteps || writeSteps.children.length < 4) {
+                console.error('How It Works section: Write path steps missing or incomplete');
+                return false;
+            }
+
+            // Check read path steps
+            const readSteps = document.querySelector('[data-testid="read-path-steps"]');
+            if (!readSteps || readSteps.children.length < 4) {
+                console.error('How It Works section: Read path steps missing or incomplete');
+                return false;
+            }
+
+            console.log('How It Works section rendered successfully');
+            return true;
+        } catch (error) {
+            console.error('How It Works section validation error:', error);
+            return false;
+        }
+    }
+
+    /**
      * Main initialization function
      */
     function init() {
+        initMermaid();
         initSmoothScroll();
         initHeroSection();
         validateHeroRender();
         initCopyButtons();
         validateCodeExamplesSection();
+        validateHowItWorksSection();
     }
 
     // Initialize when DOM is ready
@@ -240,6 +325,7 @@
     // Expose validation functions for testing
     window.MirDBHomepage = {
         validateHeroRender: validateHeroRender,
-        validateCodeExamplesSection: validateCodeExamplesSection
+        validateCodeExamplesSection: validateCodeExamplesSection,
+        validateHowItWorksSection: validateHowItWorksSection
     };
 })();

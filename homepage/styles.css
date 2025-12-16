@@ -309,6 +309,99 @@ body {
     transform: translateY(-2px);
 }
 
+/* How It Works / Architecture Section */
+.how-it-works {
+    padding: 5rem 0;
+    background: var(--bg-color);
+}
+
+.architecture-diagram-container {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.diagram-figure {
+    width: 100%;
+    max-width: 900px;
+    margin: 0;
+}
+
+.diagram-figure .mermaid {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.diagram-figure .mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Visually hidden but accessible to screen readers */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.data-paths-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.data-path-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.data-path-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.data-path-title {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.data-path-description {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.data-path-steps {
+    color: var(--text-color);
+    padding-left: 1.25rem;
+    line-height: 1.8;
+}
+
+.data-path-steps li {
+    margin-bottom: 0.75rem;
+}
+
+.data-path-steps li strong {
+    color: var(--primary-color);
+}
+
 /* Code Examples Section */
 .code-examples {
     padding: 5rem 0;
@@ -460,6 +553,25 @@ body {
 
     .feature-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* How It Works responsive */
+    .data-paths-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .diagram-figure .mermaid {
+        padding: 1rem;
+        min-height: 300px;
+        overflow-x: auto;
+    }
+
+    .data-path-card {
+        padding: 1.5rem;
+    }
+
+    .data-path-title {
+        font-size: 1.3rem;
     }
 }
 

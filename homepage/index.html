@@ -6,6 +6,8 @@
     <title>MirDB - High-Performance Persistent Key-Value Store</title>
     <meta name="description" content="MirDB is a high-performance, persistent key-value store with Memcached protocol compatibility, built in Rust with LSM-tree storage engine">
     <link rel="stylesheet" href="styles.css">
+    <!-- Mermaid.js for architecture diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <!-- Hero Section -->
@@ -54,6 +56,79 @@
                 <div class="feature-card" data-testid="feature-card-filtering">
                     <h3 class="feature-card-title" data-testid="feature-title-filtering">Smart Filtering</h3>
                     <p class="feature-card-description" data-testid="feature-desc-filtering">Cuckoo filters minimize unnecessary disk reads.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works / Architecture Section -->
+    <section class="how-it-works" id="how-it-works" data-testid="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title" data-testid="how-it-works-title">How It Works</h2>
+            <p class="section-description" data-testid="how-it-works-description">
+                MirDB uses a Log-Structured Merge-tree (LSM-tree) architecture for efficient storage and retrieval of key-value data.
+            </p>
+
+            <!-- Architecture Diagram -->
+            <div class="architecture-diagram-container" data-testid="architecture-diagram-container">
+                <figure class="diagram-figure" role="img" aria-label="LSM-tree architecture diagram showing the write and read paths through memtable, immutable memtable, and SSTable levels">
+                    <div class="mermaid" data-testid="architecture-diagram" aria-hidden="true">
+flowchart TB
+    subgraph WriteFlow["Write Path"]
+        W1[Client Write] --> W2[Write-Ahead Log]
+        W2 --> W3[Mutable Memtable]
+        W3 -->|"Size Threshold"| W4[Immutable Memtable]
+        W4 -->|"Background Flush"| W5[Level 0 SSTable]
+    end
+
+    subgraph Storage["Storage Levels"]
+        W5 --> L0[Level 0 SSTables]
+        L0 -->|"Compaction"| L1[Level 1 SSTables]
+        L1 -->|"Compaction"| L2[Level 2+ SSTables]
+    end
+
+    subgraph ReadFlow["Read Path"]
+        R1[Client Read] --> R2{Check Mutable Memtable}
+        R2 -->|"Not Found"| R3{Check Immutable Memtables}
+        R3 -->|"Not Found"| R4{Search SSTable Levels}
+        R4 --> R5[Cuckoo Filter Check]
+        R5 -->|"May Exist"| R6[Read from SSTable]
+    end
+                    </div>
+                    <figcaption class="diagram-caption visually-hidden" data-testid="architecture-diagram-alt">
+                        LSM-tree architecture diagram showing the write path from client through WAL to memtable and SSTables, and the read path searching through memtables and SSTables with Cuckoo filter optimization.
+                    </figcaption>
+                </figure>
+            </div>
+
+            <!-- Write and Read Path Explanations -->
+            <div class="data-paths-grid" data-testid="data-paths-grid">
+                <!-- Write Path Explanation -->
+                <div class="data-path-card" data-testid="write-path-card">
+                    <h3 class="data-path-title" data-testid="write-path-title">Write Path</h3>
+                    <p class="data-path-description" data-testid="write-path-description">
+                        When data is written to MirDB, it follows a carefully designed path for both durability and performance:
+                    </p>
+                    <ol class="data-path-steps" data-testid="write-path-steps">
+                        <li data-testid="write-step-1"><strong>Write-Ahead Log (WAL):</strong> Every write is first recorded in the WAL for crash recovery and durability.</li>
+                        <li data-testid="write-step-2"><strong>Mutable Memtable:</strong> The write is then inserted into an in-memory skip list structure for fast access.</li>
+                        <li data-testid="write-step-3"><strong>Immutable Memtable:</strong> When the memtable reaches its size threshold, it becomes immutable and is queued for flushing.</li>
+                        <li data-testid="write-step-4"><strong>SSTable Files:</strong> Background threads flush immutable memtables to sorted SSTable files on disk.</li>
+                    </ol>
+                </div>
+
+                <!-- Read Path Explanation -->
+                <div class="data-path-card" data-testid="read-path-card">
+                    <h3 class="data-path-title" data-testid="read-path-title">Read Path</h3>
+                    <p class="data-path-description" data-testid="read-path-description">
+                        Reading data from MirDB is optimized to find the most recent value as quickly as possible:
+                    </p>
+                    <ol class="data-path-steps" data-testid="read-path-steps">
+                        <li data-testid="read-step-1"><strong>Mutable Memtable:</strong> The current in-memory memtable is checked first for the fastest response.</li>
+                        <li data-testid="read-step-2"><strong>Immutable Memtables:</strong> If not found, immutable memtables are searched from newest to oldest.</li>
+                        <li data-testid="read-step-3"><strong>SSTable Levels:</strong> The search continues through SSTable files, level by level (L0 to L7).</li>
+                        <li data-testid="read-step-4"><strong>Cuckoo Filter:</strong> Each SSTable uses a Cuckoo filter to quickly skip files that don't contain the key.</li>
+                    </ol>
                 </div>
             </div>
         </div>
