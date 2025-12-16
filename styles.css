@@ -6,22 +6,71 @@
 }
 
 :root {
-    --primary-color: #e44d26;
+    --primary-color: #c73c1d;
     --secondary-color: #264de4;
     --accent-color: #f7df1e;
     --text-color: #333;
-    --text-light: #666;
+    --text-light: #595959;
     --bg-color: #fff;
     --bg-light: #f8f9fa;
     --bg-dark: #1a1a2e;
     --border-color: #e0e0e0;
     --success-color: #28a745;
+    --focus-color: #0066cc;
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', monospace;
 }
 
 html {
     scroll-behavior: smooth;
+}
+
+/* Skip Navigation Link - Accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--bg-dark);
+    color: #fff;
+    padding: 8px 16px;
+    z-index: 1000;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 0 0 4px 0;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--focus-color);
+    outline-offset: 2px;
+}
+
+/* Focus Indicators - Accessibility */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus {
+    outline: 3px solid var(--focus-color);
+    outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--focus-color);
+    outline-offset: 2px;
+}
+
+/* Remove outline for mouse users, keep for keyboard */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+    outline: none;
 }
 
 body {
@@ -456,7 +505,7 @@ footer {
     margin-bottom: 2rem;
 }
 
-.footer-section h4 {
+.footer-section h3 {
     margin-bottom: 1rem;
     color: var(--accent-color);
 }
