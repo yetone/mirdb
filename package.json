@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A persistent key-value store with Memcached protocol compatibility",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:python": "python3 -m unittest tests.test_homepage -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yetone/mirdb.git"
+  },
+  "keywords": ["mirdb", "memcached", "key-value", "rust"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "cheerio": "^1.1.2",
+    "jest": "^30.2.0"
+  }
+}
