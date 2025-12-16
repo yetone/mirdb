@@ -19,6 +19,7 @@
         <li><a href="#quick-start">Quick Start</a></li>
         <li><a href="#commands">Commands</a></li>
         <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#status">Status</a></li>
         <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
       </ul>
     </nav>
@@ -347,6 +348,63 @@ thread_sleep_ms = 500</code></pre>
           <li><code>G</code> - Gigabytes (1024 MB)</li>
           <li><code>T</code> - Terabytes (1024 GB)</li>
         </ul>
+      </div>
+    </section>
+
+    <!-- Project Status Section -->
+    <section id="status" class="project-status" aria-labelledby="status-heading">
+      <div class="container">
+        <h2 id="status-heading">Project Status</h2>
+        <p class="section-description">Track what's available now and what's coming next in MirDB.</p>
+
+        <div class="status-grid">
+          <div class="status-column">
+            <h3>Implemented</h3>
+            <ul class="status-list">
+              <li class="status-item implemented" data-status="implemented">
+                <span class="status-badge status-implemented">Implemented</span>
+                <span class="feature-name">Memcached Protocol</span>
+                <p class="feature-description">Full text protocol compatibility with memcached clients</p>
+              </li>
+              <li class="status-item implemented" data-status="implemented">
+                <span class="status-badge status-implemented">Implemented</span>
+                <span class="feature-name">Persistent Storage</span>
+                <p class="feature-description">Data survives restarts using SSTables</p>
+              </li>
+              <li class="status-item implemented" data-status="implemented">
+                <span class="status-badge status-implemented">Implemented</span>
+                <span class="feature-name">LSM Tree Engine</span>
+                <p class="feature-description">Log-Structured Merge-tree with skip list memtables</p>
+              </li>
+              <li class="status-item implemented" data-status="implemented">
+                <span class="status-badge status-implemented">Implemented</span>
+                <span class="feature-name">Minor Compaction</span>
+                <p class="feature-description">Memtable to SSTable flush</p>
+              </li>
+              <li class="status-item implemented" data-status="implemented">
+                <span class="status-badge status-implemented">Implemented</span>
+                <span class="feature-name">Major Compaction</span>
+                <p class="feature-description">Multi-level SSTable compaction</p>
+              </li>
+              <li class="status-item implemented" data-status="implemented">
+                <span class="status-badge status-implemented">Implemented</span>
+                <span class="feature-name">Write-Ahead Log (WAL)</span>
+                <p class="feature-description">Crash recovery and durability</p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="status-column">
+            <h3>Planned</h3>
+            <ul class="status-list">
+              <li class="status-item planned" data-status="planned">
+                <span class="status-badge status-planned">Planned</span>
+                <span class="feature-name">Raft Consensus</span>
+                <p class="feature-description">Distributed operation with Raft protocol for high availability</p>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   </main>

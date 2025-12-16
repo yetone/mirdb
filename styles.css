@@ -570,3 +570,105 @@ p code {
     font-size: 0.8125rem;
   }
 }
+
+/* Project Status Section */
+.project-status {
+  padding: 5rem 2rem;
+  background-color: var(--color-bg-alt);
+}
+
+.project-status h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.status-column h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.status-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.status-item {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.status-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin-bottom: 0.5rem;
+}
+
+.status-implemented {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-planned {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.feature-name {
+  display: block;
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.feature-description {
+  color: var(--color-text-light);
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsive for Project Status */
+@media (max-width: 768px) {
+  .project-status {
+    padding: 3rem 1rem;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .project-status h2 {
+    font-size: 2rem;
+  }
+}
