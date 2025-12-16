@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility, powered by Rust">
+    <meta name="keywords" content="MirDB, key-value store, Memcached, Rust, LSM-tree, database">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="/">MirDB</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <h1>MirDB</h1>
+                <p class="tagline">A persistent key-value store with Memcached protocol compatibility</p>
+                <p class="subtitle">Fast, durable, and powered by Rust</p>
+                <div class="cta-buttons">
+                    <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                    <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
+                </div>
+                <div class="badges">
+                    <span class="badge">Rust</span>
+                    <span class="badge">Memcached Protocol</span>
+                    <span class="badge">LSM-tree</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Memcached Protocol</h3>
+                        <p>Drop-in compatibility with existing Memcached clients using the standard text protocol. Supports get, gets, set, add, replace, append, prepend, and delete commands.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Skip List Memtable</h3>
+                        <p>High-performance in-memory operations using a custom skip list data structure for fast reads and writes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>LSM-tree Storage</h3>
+                        <p>Log-Structured Merge-tree architecture with SSTable files for efficient persistent storage and compaction.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Write-Ahead Logging</h3>
+                        <p>Durability guaranteed through write-ahead logging (WAL), ensuring data survives crashes and restarts.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Snappy Compression</h3>
+                        <p>Efficient storage with Snappy compression, reducing disk footprint without sacrificing performance.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Cuckoo Filter</h3>
+                        <p>Fast key existence checks using Cuckoo filters, minimizing unnecessary disk reads for non-existent keys.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="commands" class="commands">
+            <div class="container">
+                <h2>Supported Commands</h2>
+                <div class="commands-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>get</code></td>
+                                <td>Retrieve one or more values by key</td>
+                            </tr>
+                            <tr>
+                                <td><code>gets</code></td>
+                                <td>Retrieve values with CAS token</td>
+                            </tr>
+                            <tr>
+                                <td><code>set</code></td>
+                                <td>Store a key-value pair</td>
+                            </tr>
+                            <tr>
+                                <td><code>add</code></td>
+                                <td>Store only if key doesn't exist</td>
+                            </tr>
+                            <tr>
+                                <td><code>replace</code></td>
+                                <td>Store only if key exists</td>
+                            </tr>
+                            <tr>
+                                <td><code>append</code></td>
+                                <td>Append to existing value</td>
+                            </tr>
+                            <tr>
+                                <td><code>prepend</code></td>
+                                <td>Prepend to existing value</td>
+                            </tr>
+                            <tr>
+                                <td><code>delete</code></td>
+                                <td>Remove a key-value pair</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="getting-started" class="getting-started">
+            <div class="container">
+                <h2>Getting Started</h2>
+                <div class="steps">
+                    <div class="step">
+                        <h3>1. Install</h3>
+                        <pre><code>cargo install mirdb-server</code></pre>
+                    </div>
+                    <div class="step">
+                        <h3>2. Run</h3>
+                        <pre><code>mirdb-server --config etc/mirdb.toml</code></pre>
+                    </div>
+                    <div class="step">
+                        <h3>3. Connect</h3>
+                        <p>Use any Memcached client to connect:</p>
+                        <pre><code># Using telnet
+telnet localhost 11211
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="architecture">
+            <div class="container">
+                <h2>Architecture</h2>
+                <p class="arch-description">MirDB uses an LSM-tree (Log-Structured Merge-tree) architecture for efficient storage:</p>
+                <div class="arch-diagram">
+                    <div class="arch-flow">
+                        <div class="arch-component">
+                            <span class="component-name">Write Request</span>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="arch-component">
+                            <span class="component-name">WAL</span>
+                            <span class="component-desc">Write-Ahead Log</span>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="arch-component">
+                            <span class="component-name">Memtable</span>
+                            <span class="component-desc">Skip List</span>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="arch-component">
+                            <span class="component-name">SSTable</span>
+                            <span class="component-desc">Sorted String Table</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="arch-details">
+                    <p>1. All writes are first logged to the WAL for durability</p>
+                    <p>2. Data is then written to the in-memory Memtable (skip list)</p>
+                    <p>3. When the Memtable is full, it's flushed to disk as an SSTable</p>
+                    <p>4. Background compaction merges SSTables for read efficiency</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="status" class="status">
+            <div class="container">
+                <h2>Project Status</h2>
+                <div class="status-list">
+                    <div class="status-item completed">
+                        <span class="status-icon">&#10003;</span>
+                        <span>Tokio-based server with Memcached protocol</span>
+                    </div>
+                    <div class="status-item completed">
+                        <span class="status-icon">&#10003;</span>
+                        <span>Memtable with skip list</span>
+                    </div>
+                    <div class="status-item completed">
+                        <span class="status-icon">&#10003;</span>
+                        <span>Minor compaction</span>
+                    </div>
+                    <div class="status-item completed">
+                        <span class="status-icon">&#10003;</span>
+                        <span>Major compaction</span>
+                    </div>
+                    <div class="status-item planned">
+                        <span class="status-icon">&#9675;</span>
+                        <span>Raft consensus (planned)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>MirDB</h4>
+                    <p>A persistent key-value store with Memcached protocol compatibility</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Report Issues</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Technology</h4>
+                    <p>Built with Rust and Tokio</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>MIT License</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
