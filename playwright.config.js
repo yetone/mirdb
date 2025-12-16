@@ -19,10 +19,20 @@ module.exports = defineConfig({
   timeout: 60000,
   /* Shared settings for all the projects below */
   use: {
+    /* Base URL for tests - use local web server */
+    baseURL: 'http://localhost:3000',
     /* Collect trace when retrying the failed test */
     trace: 'on-first-retry',
     /* Headless mode */
     headless: true,
+  },
+
+  /* Run a local web server before starting the tests */
+  webServer: {
+    command: 'npx serve -l 3000 .',
+    port: 3000,
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
   },
 
   /* Configure projects for major browsers per NFR-6 */

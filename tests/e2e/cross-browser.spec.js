@@ -16,14 +16,12 @@
  */
 
 const { test, expect } = require('@playwright/test');
-const path = require('path');
 
-// Get the absolute path to the index.html file
-const indexPath = `file://${path.resolve(__dirname, '../../index.html')}`;
+// Use the baseURL from playwright.config.js which serves via local web server
 
 test.describe('Cross-Browser Compatibility - Page Load and Rendering', () => {
   test('page loads successfully with correct title', async ({ page, browserName }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Page should have correct title
     await expect(page).toHaveTitle(/MirDB/);
@@ -33,7 +31,7 @@ test.describe('Cross-Browser Compatibility - Page Load and Rendering', () => {
   });
 
   test('hero section renders correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Hero section should be visible
     const hero = page.locator('.hero');
@@ -57,7 +55,7 @@ test.describe('Cross-Browser Compatibility - Page Load and Rendering', () => {
   });
 
   test('navigation renders correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Navbar should be visible
     const navbar = page.locator('.navbar');
@@ -78,7 +76,7 @@ test.describe('Cross-Browser Compatibility - Page Load and Rendering', () => {
   });
 
   test('features section renders correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Features section should be visible
     const features = page.locator('#features');
@@ -99,7 +97,7 @@ test.describe('Cross-Browser Compatibility - Page Load and Rendering', () => {
   });
 
   test('commands table renders correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Commands section should be visible
     const commands = page.locator('#commands');
@@ -119,7 +117,7 @@ test.describe('Cross-Browser Compatibility - Page Load and Rendering', () => {
   });
 
   test('getting started section renders correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Getting started section should be visible
     const gettingStarted = page.locator('#getting-started');
@@ -135,7 +133,7 @@ test.describe('Cross-Browser Compatibility - Page Load and Rendering', () => {
   });
 
   test('architecture section renders correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Architecture section should be visible
     const architecture = page.locator('#architecture');
@@ -147,7 +145,7 @@ test.describe('Cross-Browser Compatibility - Page Load and Rendering', () => {
   });
 
   test('footer renders correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Footer should be visible
     const footer = page.locator('footer');
@@ -165,7 +163,7 @@ test.describe('Cross-Browser Compatibility - Page Load and Rendering', () => {
 
 test.describe('Cross-Browser Compatibility - CSS Features', () => {
   test('CSS variables are applied correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Check that CSS custom properties (variables) are working
     const primaryColor = await page.evaluate(() => {
@@ -175,7 +173,7 @@ test.describe('Cross-Browser Compatibility - CSS Features', () => {
   });
 
   test('flexbox layouts render correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Navbar uses flexbox
     const navbar = page.locator('.navbar');
@@ -194,7 +192,7 @@ test.describe('Cross-Browser Compatibility - CSS Features', () => {
   });
 
   test('grid layouts render correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Features grid uses CSS Grid
     const featuresGrid = page.locator('.features-grid');
@@ -208,7 +206,7 @@ test.describe('Cross-Browser Compatibility - CSS Features', () => {
   });
 
   test('gradient backgrounds render correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Hero should have gradient background
     const hero = page.locator('.hero');
@@ -217,7 +215,7 @@ test.describe('Cross-Browser Compatibility - CSS Features', () => {
   });
 
   test('background-clip text effect works for hero title', async ({ page, browserName }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Hero h1 uses background-clip: text
     const heroH1 = page.locator('.hero h1');
@@ -229,7 +227,7 @@ test.describe('Cross-Browser Compatibility - CSS Features', () => {
   });
 
   test('transitions are defined correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Buttons should have transitions
     const btn = page.locator('.btn').first();
@@ -239,7 +237,7 @@ test.describe('Cross-Browser Compatibility - CSS Features', () => {
   });
 
   test('box-shadow renders correctly on feature cards', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Feature cards should have box-shadow
     const featureCard = page.locator('.feature-card').first();
@@ -249,7 +247,7 @@ test.describe('Cross-Browser Compatibility - CSS Features', () => {
   });
 
   test('border-radius renders correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Buttons should have border-radius
     const btn = page.locator('.btn').first();
@@ -267,7 +265,7 @@ test.describe('Cross-Browser Compatibility - CSS Features', () => {
 
 test.describe('Cross-Browser Compatibility - Interactivity', () => {
   test('internal navigation links work correctly', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Click on Features link
     const featuresLink = page.locator('a[href="#features"]');
@@ -279,7 +277,7 @@ test.describe('Cross-Browser Compatibility - Interactivity', () => {
   });
 
   test('smooth scrolling works for anchor links', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Check that smooth scroll is enabled
     const scrollBehavior = await page.evaluate(() => {
@@ -289,7 +287,7 @@ test.describe('Cross-Browser Compatibility - Interactivity', () => {
   });
 
   test('hover effects work on buttons', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     const btn = page.locator('.btn-primary').first();
 
@@ -308,7 +306,7 @@ test.describe('Cross-Browser Compatibility - Interactivity', () => {
   });
 
   test('hover effects work on feature cards', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     const card = page.locator('.feature-card').first();
 
@@ -327,7 +325,7 @@ test.describe('Cross-Browser Compatibility - Interactivity', () => {
   });
 
   test('external links have correct attributes', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // GitHub links should open in new tab with security attributes
     const githubLink = page.locator('a[href="https://github.com/yetone/mirdb"]').first();
@@ -343,7 +341,7 @@ test.describe('Cross-Browser Compatibility - Interactivity', () => {
 
 test.describe('Cross-Browser Compatibility - Accessibility', () => {
   test('skip link is functional', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Skip link should exist
     const skipLink = page.locator('.skip-link');
@@ -355,7 +353,7 @@ test.describe('Cross-Browser Compatibility - Accessibility', () => {
   });
 
   test('focus indicators are visible', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Tab to first interactive element
     await page.keyboard.press('Tab');
@@ -372,7 +370,7 @@ test.describe('Cross-Browser Compatibility - Accessibility', () => {
   });
 
   test('images have alt attributes', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // All images should have alt attributes
     const images = page.locator('img');
@@ -385,7 +383,7 @@ test.describe('Cross-Browser Compatibility - Accessibility', () => {
   });
 
   test('semantic HTML structure is correct', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Should have main landmark
     const main = page.locator('main');
@@ -429,7 +427,7 @@ test.describe('Cross-Browser Compatibility - No JavaScript Errors', () => {
       }
     });
 
-    await page.goto(indexPath);
+    await page.goto('/');
 
     // Wait for page to fully load
     await page.waitForLoadState('domcontentloaded');
@@ -441,7 +439,7 @@ test.describe('Cross-Browser Compatibility - No JavaScript Errors', () => {
 
 test.describe('Cross-Browser Compatibility - No Horizontal Overflow', () => {
   test('no horizontal scrollbar appears', async ({ page }) => {
-    await page.goto(indexPath);
+    await page.goto('/');
 
     const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
     const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
