@@ -72,5 +72,109 @@
       </div>
     </div>
   </section>
+
+  <!-- Quick Start Section -->
+  <section id="quickstart" class="quick-start-section">
+    <div class="quickstart-container">
+      <h2 class="section-title">Quick Start</h2>
+      <p class="section-subtitle">Get up and running with MirDB in minutes</p>
+
+      <!-- Installation -->
+      <div class="quickstart-step">
+        <h3 class="step-title">1. Installation</h3>
+        <p class="step-description">Clone the repository and build MirDB using Cargo:</p>
+        <pre class="code-block"><code class="language-bash"><span class="comment"># Clone the repository</span>
+<span class="command">git</span> <span class="argument">clone</span> <span class="string">https://github.com/yetone/mirdb.git</span>
+<span class="command">cd</span> <span class="argument">mirdb</span>
+
+<span class="comment"># Build the project</span>
+<span class="command">cargo</span> <span class="argument">build</span> <span class="flag">--release</span></code></pre>
+      </div>
+
+      <!-- Running the Server -->
+      <div class="quickstart-step">
+        <h3 class="step-title">2. Start the Server</h3>
+        <p class="step-description">Run MirDB with default settings:</p>
+        <pre class="code-block"><code class="language-bash"><span class="comment"># Start MirDB server</span>
+<span class="command">cargo</span> <span class="argument">run</span> <span class="flag">--release</span>
+
+<span class="comment"># Or run the binary directly</span>
+<span class="command">./target/release/mirdb</span></code></pre>
+        <p class="step-note">By default, MirDB listens on port 11211 (standard Memcached port).</p>
+      </div>
+
+      <!-- Basic Usage -->
+      <div class="quickstart-step">
+        <h3 class="step-title">3. Basic Usage</h3>
+        <p class="step-description">Connect using any Memcached client or telnet. Here are common commands:</p>
+        <pre class="code-block"><code class="language-memcached"><span class="comment"># Connect to MirDB</span>
+<span class="command">telnet</span> <span class="argument">localhost</span> <span class="number">11211</span>
+
+<span class="comment"># Set a value</span>
+<span class="keyword">set</span> <span class="key">mykey</span> <span class="number">0</span> <span class="number">0</span> <span class="number">5</span>
+<span class="string">hello</span>
+<span class="response">STORED</span>
+
+<span class="comment"># Get the value</span>
+<span class="keyword">get</span> <span class="key">mykey</span>
+<span class="response">VALUE mykey 0 5</span>
+<span class="string">hello</span>
+<span class="response">END</span>
+
+<span class="comment"># Delete a key</span>
+<span class="keyword">delete</span> <span class="key">mykey</span>
+<span class="response">DELETED</span></code></pre>
+      </div>
+
+      <!-- Using with Clients -->
+      <div class="quickstart-step">
+        <h3 class="step-title">4. Using with Memcached Clients</h3>
+        <p class="step-description">MirDB is compatible with standard Memcached clients:</p>
+        <pre class="code-block"><code class="language-python"><span class="comment"># Python example with pymemcache</span>
+<span class="keyword">from</span> <span class="module">pymemcache.client</span> <span class="keyword">import</span> <span class="class">Client</span>
+
+<span class="variable">client</span> <span class="operator">=</span> <span class="class">Client</span>(<span class="string">'localhost:11211'</span>)
+
+<span class="comment"># Set a value</span>
+<span class="variable">client</span>.<span class="method">set</span>(<span class="string">'key'</span>, <span class="string">'value'</span>)
+
+<span class="comment"># Get the value</span>
+<span class="variable">result</span> <span class="operator">=</span> <span class="variable">client</span>.<span class="method">get</span>(<span class="string">'key'</span>)
+<span class="function">print</span>(<span class="variable">result</span>)  <span class="comment"># b'value'</span></code></pre>
+      </div>
+
+      <!-- Supported Commands Reference -->
+      <div class="quickstart-step">
+        <h3 class="step-title">Supported Commands</h3>
+        <div class="commands-grid">
+          <div class="command-category">
+            <h4>Getter Commands</h4>
+            <ul class="command-list">
+              <li><code>get &lt;key&gt; [&lt;key&gt; ...]</code> - Retrieve one or more values</li>
+              <li><code>gets &lt;key&gt; [&lt;key&gt; ...]</code> - Get with CAS token</li>
+            </ul>
+          </div>
+          <div class="command-category">
+            <h4>Setter Commands</h4>
+            <ul class="command-list">
+              <li><code>set</code> - Store a value</li>
+              <li><code>add</code> - Store only if key doesn't exist</li>
+              <li><code>replace</code> - Store only if key exists</li>
+              <li><code>append</code> - Append to existing value</li>
+              <li><code>prepend</code> - Prepend to existing value</li>
+            </ul>
+          </div>
+          <div class="command-category">
+            <h4>Other Commands</h4>
+            <ul class="command-list">
+              <li><code>delete</code> - Remove a key</li>
+              <li><code>info</code> - Server information</li>
+              <li><code>major_compaction</code> - Trigger manual compaction</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>

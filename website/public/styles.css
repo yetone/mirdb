@@ -167,6 +167,174 @@ body {
   line-height: 1.6;
 }
 
+/* Quick Start Section */
+.quick-start-section {
+  padding: 5rem 2rem;
+  background: #f8fafc;
+}
+
+.quickstart-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.quickstart-step {
+  margin-bottom: 3rem;
+}
+
+.step-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.step-description {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 1rem;
+}
+
+.step-note {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  font-style: italic;
+  margin-top: 0.75rem;
+}
+
+/* Code Blocks with Syntax Highlighting */
+.code-block {
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+.code-block code {
+  color: #e2e8f0;
+  background: transparent;
+  padding: 0;
+}
+
+/* Syntax Highlighting Colors */
+.code-block .comment {
+  color: #64748b;
+  font-style: italic;
+}
+
+.code-block .command {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.code-block .argument {
+  color: #e2e8f0;
+}
+
+.code-block .string {
+  color: #a3e635;
+}
+
+.code-block .flag {
+  color: #f472b6;
+}
+
+.code-block .keyword {
+  color: #c084fc;
+  font-weight: 600;
+}
+
+.code-block .key {
+  color: #fbbf24;
+}
+
+.code-block .number {
+  color: #fb923c;
+}
+
+.code-block .response {
+  color: #4ade80;
+  font-weight: 500;
+}
+
+.code-block .module {
+  color: #22d3ee;
+}
+
+.code-block .class {
+  color: #fbbf24;
+}
+
+.code-block .variable {
+  color: #e2e8f0;
+}
+
+.code-block .operator {
+  color: #f472b6;
+}
+
+.code-block .method {
+  color: #38bdf8;
+}
+
+.code-block .function {
+  color: #38bdf8;
+}
+
+/* Commands Grid */
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.command-category {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.command-category h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.command-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.command-list li {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.command-list li:last-child {
+  border-bottom: none;
+}
+
+.command-list code {
+  background: #f1f5f9;
+  color: var(--primary-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+  font-size: 0.85rem;
+}
+
 /* Responsive Design */
 @media (max-width: 640px) {
   .hero-section {
@@ -194,5 +362,18 @@ body {
 
   .feature-card {
     padding: 1.5rem;
+  }
+
+  .quick-start-section {
+    padding: 3rem 1.5rem;
+  }
+
+  .code-block {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+
+  .commands-grid {
+    grid-template-columns: 1fr;
   }
 }
