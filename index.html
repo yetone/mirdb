@@ -139,6 +139,127 @@ block_size = "4K"
 l0_compaction_trigger = 4</code></pre>
       </div>
     </section>
+
+    <section id="commands" class="commands">
+      <div class="section-content">
+        <h2>Commands Reference</h2>
+        <p class="section-description">MirDB implements the memcached text protocol, supporting the following commands:</p>
+
+        <div class="commands-grid">
+          <div class="command-card">
+            <h3>SET</h3>
+            <p class="command-description">Store a key-value pair</p>
+            <code class="command-syntax">set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code>
+            <div class="command-example">
+              <span class="example-label">Example:</span>
+              <pre>set mykey 0 3600 5\r\nhello\r\n</pre>
+            </div>
+          </div>
+
+          <div class="command-card">
+            <h3>GET</h3>
+            <p class="command-description">Retrieve one or more keys</p>
+            <code class="command-syntax">get &lt;key&gt; [&lt;key2&gt; ...]</code>
+            <div class="command-example">
+              <span class="example-label">Example:</span>
+              <pre>get mykey</pre>
+            </div>
+          </div>
+
+          <div class="command-card">
+            <h3>DELETE</h3>
+            <p class="command-description">Remove a key from the database</p>
+            <code class="command-syntax">delete &lt;key&gt; [noreply]</code>
+            <div class="command-example">
+              <span class="example-label">Example:</span>
+              <pre>delete mykey</pre>
+            </div>
+          </div>
+
+          <div class="command-card">
+            <h3>ADD</h3>
+            <p class="command-description">Store only if key doesn't exist</p>
+            <code class="command-syntax">add &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code>
+            <div class="command-example">
+              <span class="example-label">Example:</span>
+              <pre>add newkey 0 0 5\r\nvalue\r\n</pre>
+            </div>
+          </div>
+
+          <div class="command-card">
+            <h3>REPLACE</h3>
+            <p class="command-description">Store only if key exists</p>
+            <code class="command-syntax">replace &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code>
+            <div class="command-example">
+              <span class="example-label">Example:</span>
+              <pre>replace mykey 0 0 8\r\nnewvalue\r\n</pre>
+            </div>
+          </div>
+
+          <div class="command-card">
+            <h3>APPEND</h3>
+            <p class="command-description">Append data to existing value</p>
+            <code class="command-syntax">append &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code>
+            <div class="command-example">
+              <span class="example-label">Example:</span>
+              <pre>append mykey 0 0 6\r\n_world\r\n</pre>
+            </div>
+          </div>
+
+          <div class="command-card">
+            <h3>PREPEND</h3>
+            <p class="command-description">Prepend data to existing value</p>
+            <code class="command-syntax">prepend &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code>
+            <div class="command-example">
+              <span class="example-label">Example:</span>
+              <pre>prepend mykey 0 0 6\r\nhello_\r\n</pre>
+            </div>
+          </div>
+
+          <div class="command-card">
+            <h3>INFO</h3>
+            <p class="command-description">Display database status and level information</p>
+            <code class="command-syntax">info</code>
+            <div class="command-example">
+              <span class="example-label">Example:</span>
+              <pre>info</pre>
+            </div>
+          </div>
+
+          <div class="command-card">
+            <h3>MAJOR_COMPACTION</h3>
+            <p class="command-description">Trigger manual compaction of SSTables</p>
+            <code class="command-syntax">major_compaction</code>
+            <div class="command-example">
+              <span class="example-label">Example:</span>
+              <pre>major_compaction</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="response-codes">
+          <h3>Response Codes</h3>
+          <table class="response-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>STORED</code></td><td>Data stored successfully</td></tr>
+              <tr><td><code>NOT_STORED</code></td><td>Data not stored (condition not met for add/replace)</td></tr>
+              <tr><td><code>EXISTS</code></td><td>CAS check failed</td></tr>
+              <tr><td><code>NOT_FOUND</code></td><td>Key not found (for delete/replace)</td></tr>
+              <tr><td><code>DELETED</code></td><td>Key deleted successfully</td></tr>
+              <tr><td><code>ERROR</code></td><td>Unknown command</td></tr>
+              <tr><td><code>CLIENT_ERROR &lt;msg&gt;</code></td><td>Client input error</td></tr>
+              <tr><td><code>SERVER_ERROR &lt;msg&gt;</code></td><td>Server error</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
