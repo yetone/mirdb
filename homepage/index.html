@@ -171,6 +171,59 @@
                 </div>
             </div>
         </section>
+
+        <section class="code-example" id="code-example" data-testid="code-example-section">
+            <div class="code-example-container">
+                <h2 class="code-example-title" data-testid="code-example-heading">Quick Start</h2>
+                <p class="code-example-description">Get up and running with MirDB in minutes. Use standard Memcached commands to interact with your data.</p>
+
+                <div class="code-example-grid">
+                    <div class="code-block-wrapper">
+                        <div class="code-block-header">
+                            <span class="code-block-label">Installation</span>
+                            <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block syntax-highlight" data-testid="code-block"><code class="language-bash"><span class="token comment"># Install MirDB server</span>
+<span class="token function">cargo</span> install mirdb-server
+
+<span class="token comment"># Start the server</span>
+mirdb-server <span class="token parameter">--config</span> etc/mirdb.toml</code></pre>
+                    </div>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-block-header">
+                            <span class="code-block-label">Basic Usage</span>
+                            <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block syntax-highlight" data-testid="code-block"><code class="language-bash"><span class="token comment"># Connect to MirDB</span>
+<span class="token function">telnet</span> localhost <span class="token number">11211</span>
+
+<span class="token comment"># Store a value</span>
+<span class="token command">set</span> mykey <span class="token number">0</span> <span class="token number">0</span> <span class="token number">5</span>
+hello
+<span class="token response">STORED</span>
+
+<span class="token comment"># Retrieve the value</span>
+<span class="token command">get</span> mykey
+<span class="token response">VALUE mykey 0 5
+hello
+END</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
@@ -202,6 +255,33 @@
                     });
                 });
             }
+
+            // Copy to clipboard functionality
+            const copyButtons = document.querySelectorAll('.copy-button');
+            copyButtons.forEach(function(button) {
+                button.addEventListener('click', async function() {
+                    const codeBlock = this.closest('.code-block-wrapper').querySelector('code');
+                    const textToCopy = codeBlock.textContent;
+
+                    try {
+                        await navigator.clipboard.writeText(textToCopy);
+
+                        // Update button to show success
+                        const copyText = this.querySelector('.copy-text');
+                        const originalText = copyText.textContent;
+                        copyText.textContent = 'Copied!';
+                        this.classList.add('copied');
+
+                        // Reset after 2 seconds
+                        setTimeout(function() {
+                            copyText.textContent = originalText;
+                            button.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                });
+            });
         });
     </script>
 </body>
