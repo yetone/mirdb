@@ -390,6 +390,179 @@ body {
     line-height: 1.6;
 }
 
+/* Architecture Section */
+.architecture {
+    padding: var(--spacing-2xl) var(--spacing-md);
+    background-color: var(--color-background);
+}
+
+.architecture-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.architecture-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.architecture-description {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+}
+
+.architecture-content {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: start;
+}
+
+.architecture-diagram {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    overflow: hidden;
+}
+
+.lsm-tree-diagram {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+}
+
+/* SVG Diagram Styles */
+.diagram-box {
+    fill: var(--color-surface);
+    stroke: var(--color-border);
+    stroke-width: 2;
+}
+
+.wal-box {
+    fill: rgba(224, 93, 68, 0.15);
+    stroke: #e05d44;
+}
+
+.memtable-box {
+    fill: rgba(74, 222, 128, 0.15);
+    stroke: #4ade80;
+}
+
+.immutable-box {
+    fill: rgba(139, 148, 158, 0.15);
+    stroke: #8b949e;
+}
+
+.level-box {
+    fill: rgba(96, 165, 250, 0.1);
+    stroke: #60a5fa;
+}
+
+.level-0 {
+    fill: rgba(96, 165, 250, 0.2);
+}
+
+.level-1 {
+    fill: rgba(96, 165, 250, 0.15);
+}
+
+.level-2 {
+    fill: rgba(96, 165, 250, 0.1);
+}
+
+.diagram-text {
+    fill: var(--color-text);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-family);
+}
+
+.diagram-subtext {
+    fill: var(--color-text-muted);
+    font-size: 11px;
+    font-family: var(--font-family);
+}
+
+.diagram-label {
+    fill: var(--color-text);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font-family);
+}
+
+.diagram-note {
+    fill: var(--color-text-muted);
+    font-size: 11px;
+    font-family: var(--font-family);
+}
+
+.diagram-action {
+    fill: var(--color-text-muted);
+    font-size: 12px;
+    font-style: italic;
+    font-family: var(--font-family);
+}
+
+.compaction-label {
+    font-weight: 500;
+}
+
+.read-label {
+    fill: #a78bfa;
+}
+
+.read-note {
+    fill: #a78bfa;
+}
+
+/* Architecture Explanation */
+.architecture-explanation {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+}
+
+.explanation-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+}
+
+.explanation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.explanation-list li {
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-md);
+    border-left: 3px solid var(--color-primary);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}
+
+.explanation-list li:last-child {
+    margin-bottom: 0;
+}
+
+.explanation-list strong {
+    color: var(--color-text);
+    display: block;
+    margin-bottom: 4px;
+}
+
 /* Code Example Section */
 .code-example {
     padding: var(--spacing-2xl) var(--spacing-md);
@@ -651,6 +824,32 @@ body {
 
     .code-block-header {
         padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    /* Architecture section responsive */
+    .architecture-content {
+        grid-template-columns: 1fr;
+    }
+
+    .architecture-container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .architecture-diagram {
+        padding: var(--spacing-sm);
+        overflow-x: auto;
+    }
+
+    .lsm-tree-diagram {
+        min-width: 100%;
+    }
+
+    .architecture-explanation {
+        padding: var(--spacing-md);
+    }
+
+    .explanation-list li {
+        font-size: 0.9rem;
     }
 }
 

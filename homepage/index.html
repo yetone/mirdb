@@ -31,12 +31,14 @@
             </button>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">Documentation</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
             </ul>
             <div class="mobile-nav-menu" id="mobile-nav-menu" data-testid="mobile-nav-menu" aria-hidden="true">
                 <ul class="mobile-nav-links">
                     <li><a href="#features">Features</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
                     <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">Documentation</a></li>
                     <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
                 </ul>
@@ -191,6 +193,131 @@
                         <p class="feature-description" data-testid="feature-description">
                             Memory-safe systems programming with zero-cost abstractions for maximum performance and reliability.
                         </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="architecture" id="architecture" data-testid="architecture-section">
+            <div class="architecture-container">
+                <h2 class="architecture-title" data-testid="architecture-heading">Architecture</h2>
+                <p class="architecture-description" data-testid="architecture-description">
+                    MirDB uses a Log-Structured Merge-tree (LSM-tree) architecture for efficient persistent storage with optimized write performance and automatic background compaction.
+                </p>
+                <div class="architecture-content">
+                    <div class="architecture-diagram" data-testid="architecture-diagram" role="img" aria-label="LSM-tree architecture diagram showing data flow from writes through memtable to SSTable levels">
+                        <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" class="lsm-tree-diagram" data-testid="architecture-svg">
+                            <!-- Write Path -->
+                            <g class="write-path">
+                                <!-- Write Arrow -->
+                                <path d="M 50 80 L 130 80" stroke="#e05d44" stroke-width="3" fill="none" marker-end="url(#arrowhead)" data-testid="write-arrow"/>
+                                <text x="90" y="65" class="diagram-label" text-anchor="middle" data-testid="write-label">Write</text>
+
+                                <!-- WAL Box -->
+                                <rect x="140" y="50" width="120" height="60" rx="8" class="diagram-box wal-box" data-testid="wal-box"/>
+                                <text x="200" y="85" class="diagram-text" text-anchor="middle" data-testid="wal-text">WAL</text>
+                                <text x="200" y="100" class="diagram-subtext" text-anchor="middle">(Write-Ahead Log)</text>
+                            </g>
+
+                            <!-- Arrow from WAL to Memtable -->
+                            <path d="M 260 80 L 310 80" stroke="#e05d44" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                            <!-- Memtable Section -->
+                            <g class="memtable-section">
+                                <rect x="320" y="30" width="160" height="100" rx="8" class="diagram-box memtable-box" data-testid="memtable-box"/>
+                                <text x="400" y="60" class="diagram-text" text-anchor="middle" data-testid="memtable-text">Memtable</text>
+                                <text x="400" y="80" class="diagram-subtext" text-anchor="middle">(Skip List)</text>
+                                <text x="400" y="115" class="diagram-note" text-anchor="middle">In-Memory</text>
+                            </g>
+
+                            <!-- Arrow from Memtable to Immutable Memtable -->
+                            <path d="M 400 130 L 400 160" stroke="#8b949e" stroke-width="2" fill="none" marker-end="url(#arrowhead-gray)"/>
+                            <text x="450" y="150" class="diagram-action" text-anchor="start">When full</text>
+
+                            <!-- Immutable Memtable -->
+                            <g class="immutable-section">
+                                <rect x="320" y="170" width="160" height="70" rx="8" class="diagram-box immutable-box" data-testid="immutable-memtable-box"/>
+                                <text x="400" y="200" class="diagram-text" text-anchor="middle" data-testid="immutable-text">Immutable</text>
+                                <text x="400" y="220" class="diagram-text" text-anchor="middle">Memtable</text>
+                            </g>
+
+                            <!-- Minor Compaction Arrow -->
+                            <path d="M 400 240 L 400 280" stroke="#4ade80" stroke-width="2" fill="none" marker-end="url(#arrowhead-green)"/>
+                            <text x="480" y="265" class="diagram-action compaction-label" text-anchor="start" data-testid="minor-compaction-label">Minor Compaction</text>
+
+                            <!-- SSTable Levels -->
+                            <g class="sstable-section" data-testid="sstable-section">
+                                <!-- Level 0 -->
+                                <rect x="280" y="290" width="240" height="50" rx="6" class="diagram-box level-box level-0" data-testid="level-0-box"/>
+                                <text x="400" y="320" class="diagram-text" text-anchor="middle" data-testid="level-0-text">Level 0 (L0)</text>
+
+                                <!-- Major Compaction Arrow L0 to L1 -->
+                                <path d="M 400 340 L 400 360" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrowhead-blue)"/>
+
+                                <!-- Level 1 -->
+                                <rect x="250" y="370" width="300" height="50" rx="6" class="diagram-box level-box level-1" data-testid="level-1-box"/>
+                                <text x="400" y="400" class="diagram-text" text-anchor="middle" data-testid="level-1-text">Level 1 (L1)</text>
+
+                                <!-- Major Compaction Arrow L1 to L2 -->
+                                <path d="M 400 420 L 400 440" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrowhead-blue)"/>
+
+                                <!-- Level 2+ -->
+                                <rect x="220" y="450" width="360" height="50" rx="6" class="diagram-box level-box level-2" data-testid="level-2-box"/>
+                                <text x="400" y="480" class="diagram-text" text-anchor="middle" data-testid="level-2-text">Level 2+ (Larger levels)</text>
+
+                                <!-- Major Compaction Label -->
+                                <text x="530" y="395" class="diagram-action compaction-label" text-anchor="start" data-testid="major-compaction-label">Major Compaction</text>
+                            </g>
+
+                            <!-- Read Path -->
+                            <g class="read-path">
+                                <text x="650" y="60" class="diagram-label read-label" text-anchor="middle" data-testid="read-label">Read Path</text>
+                                <path d="M 650 75 L 650 120 L 480 120 L 480 80" stroke="#a78bfa" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead-purple)"/>
+                                <path d="M 650 120 L 650 200 L 480 200" stroke="#a78bfa" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead-purple)"/>
+                                <path d="M 650 200 L 650 315 L 520 315" stroke="#a78bfa" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead-purple)"/>
+                                <path d="M 650 315 L 650 395 L 550 395" stroke="#a78bfa" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead-purple)"/>
+                                <text x="680" y="150" class="diagram-note read-note" text-anchor="start">1. Memtable</text>
+                                <text x="680" y="210" class="diagram-note read-note" text-anchor="start">2. Immutable</text>
+                                <text x="680" y="320" class="diagram-note read-note" text-anchor="start">3. L0 SSTables</text>
+                                <text x="680" y="400" class="diagram-note read-note" text-anchor="start">4. L1+ SSTables</text>
+                            </g>
+
+                            <!-- Arrow Markers -->
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#e05d44"/>
+                                </marker>
+                                <marker id="arrowhead-gray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#8b949e"/>
+                                </marker>
+                                <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#4ade80"/>
+                                </marker>
+                                <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/>
+                                </marker>
+                                <marker id="arrowhead-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="architecture-explanation" data-testid="architecture-explanation">
+                        <h3 class="explanation-title">How It Works</h3>
+                        <ul class="explanation-list">
+                            <li data-testid="explanation-item-wal">
+                                <strong>Write-Ahead Log (WAL):</strong> All writes are first recorded to the WAL for durability, ensuring data safety even during crashes.
+                            </li>
+                            <li data-testid="explanation-item-memtable">
+                                <strong>Memtable:</strong> Writes are stored in an in-memory skip list for fast access. When the memtable reaches capacity, it becomes immutable.
+                            </li>
+                            <li data-testid="explanation-item-compaction">
+                                <strong>Compaction:</strong> Minor compaction flushes immutable memtables to Level 0 SSTables. Major compaction merges SSTables across levels, optimizing storage and read performance.
+                            </li>
+                            <li data-testid="explanation-item-sstable">
+                                <strong>SSTable Levels:</strong> Data is organized in levels, with each level holding more data. Cuckoo filters enable fast key lookups without reading disk.
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
