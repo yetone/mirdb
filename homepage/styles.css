@@ -350,6 +350,87 @@ body {
     opacity: 0.8;
 }
 
+/* Project Status Section */
+.project-status {
+    padding: 5rem 2rem;
+    background: #f8f9fa;
+}
+
+.project-status h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #1a1a2e;
+}
+
+.status-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.status-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.status-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: #1a1a2e;
+    border-bottom: 2px solid #e94560;
+    padding-bottom: 0.5rem;
+}
+
+.status-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.status-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-icon {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.status-item.completed .status-icon {
+    background: #10b981;
+    color: #fff;
+}
+
+.status-item.planned .status-icon {
+    background: #f59e0b;
+    color: #fff;
+}
+
+.status-item span:last-child {
+    color: #555;
+    line-height: 1.5;
+}
+
 /* Footer */
 .footer {
     padding: 3rem 2rem;

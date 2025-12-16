@@ -23,6 +23,7 @@
             <a href="#architecture" class="nav-link">Architecture</a>
             <a href="#commands" class="nav-link">Commands</a>
             <a href="#getting-started" class="nav-link">Getting Started</a>
+            <a href="#project-status" class="nav-link">Status</a>
         </nav>
         <section id="hero" class="hero" data-testid="hero-section">
             <div class="hero-content">
@@ -245,6 +246,43 @@ print(result)  # b'John Doe'
 
 # Delete the key
 client.delete('user:1')</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Status and Roadmap Section -->
+    <section id="project-status" class="project-status" data-testid="project-status-section">
+        <h2>Project Status & Roadmap</h2>
+        <div class="status-content">
+            <div class="status-card" data-testid="completed-features">
+                <h3>Completed Features</h3>
+                <ul class="status-list completed-list">
+                    <li class="status-item completed">
+                        <span class="status-icon">&#10003;</span>
+                        <span>Tokio-based server with Memcached protocol</span>
+                    </li>
+                    <li class="status-item completed">
+                        <span class="status-icon">&#10003;</span>
+                        <span>Memtable with skip list implementation</span>
+                    </li>
+                    <li class="status-item completed">
+                        <span class="status-icon">&#10003;</span>
+                        <span>Minor compaction</span>
+                    </li>
+                    <li class="status-item completed">
+                        <span class="status-icon">&#10003;</span>
+                        <span>Major compaction</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="status-card" data-testid="planned-features">
+                <h3>Planned Features</h3>
+                <ul class="status-list planned-list">
+                    <li class="status-item planned">
+                        <span class="status-icon">&#9675;</span>
+                        <span>Raft consensus for distributed deployment</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </section>

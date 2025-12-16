@@ -29,6 +29,7 @@ test.describe('Accessibility - Keyboard Navigation', () => {
       { selector: '.nav-link[href="#architecture"]', description: 'Architecture nav link' },
       { selector: '.nav-link[href="#commands"]', description: 'Commands nav link' },
       { selector: '.nav-link[href="#getting-started"]', description: 'Getting Started nav link' },
+      { selector: '.nav-link[href="#project-status"]', description: 'Status nav link' },
       { selector: '[data-testid="primary-cta"]', description: 'Primary CTA (View on GitHub)' },
       { selector: '[data-testid="secondary-cta"]', description: 'Secondary CTA (Learn More)' },
     ];
@@ -252,9 +253,9 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     // Press Shift+Tab to go backwards
     await page.keyboard.press('Shift+Tab');
 
-    // Should now be on the Getting Started nav link
-    const gettingStartedLink = page.locator('.nav-link[href="#getting-started"]');
-    const isFocused = await gettingStartedLink.evaluate((el) => el === document.activeElement);
+    // Should now be on the Status nav link (the last nav link before the CTA)
+    const statusLink = page.locator('.nav-link[href="#project-status"]');
+    const isFocused = await statusLink.evaluate((el) => el === document.activeElement);
     expect(isFocused, 'Shift+Tab should navigate to previous element').toBe(true);
   });
 });
