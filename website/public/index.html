@@ -26,23 +26,42 @@
 
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body id="top">
   <!-- Skip to main content link for accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation Header -->
+  <nav class="main-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="#top" class="nav-logo">MirDB</a>
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#quickstart" class="nav-link">Quick Start</a>
+        <a href="#project-status" class="nav-link">Status</a>
+        <a href="https://github.com/yetone/mirdb" class="nav-link nav-github" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+    </div>
+  </nav>
 
   <!-- Header with Hero Section -->
   <header role="banner">
     <!-- Hero Section -->
     <section class="hero-section" aria-labelledby="hero-title">
-    <div class="hero-content">
-      <h1 id="hero-title">MirDB</h1>
-      <p class="tagline">A persistent key-value store with Memcached protocol compatibility, written in Rust</p>
-      <div class="cta-buttons">
-        <a href="#quickstart" class="cta-button cta-primary">Get Started</a>
-        <a href="https://github.com/yetone/mirdb" class="cta-button cta-secondary">View on GitHub</a>
+      <div class="hero-content">
+        <h1 id="hero-title">MirDB</h1>
+        <p class="tagline">A persistent key-value store with Memcached protocol compatibility, written in Rust</p>
+        <div class="cta-buttons">
+          <a href="#quickstart" class="cta-button cta-primary">Get Started</a>
+          <a href="https://github.com/yetone/mirdb" class="cta-button cta-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
   </header>
 
   <!-- Main content area -->
@@ -431,9 +450,82 @@
   </section>
   </main>
 
-  <!-- Footer -->
-  <footer role="contentinfo">
-    <p class="footer-text">MirDB - Open Source Key-Value Store</p>
+  <!-- Footer Section -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <h3 class="footer-logo">MirDB</h3>
+          <p class="footer-tagline">A persistent key-value store with Memcached protocol compatibility, written in Rust</p>
+        </div>
+
+        <div class="footer-links">
+          <div class="footer-column">
+            <h4 class="footer-column-title">Navigation</h4>
+            <ul class="footer-nav-list">
+              <li><a href="#features" class="footer-link">Features</a></li>
+              <li><a href="#architecture" class="footer-link">Architecture</a></li>
+              <li><a href="#quickstart" class="footer-link">Quick Start</a></li>
+              <li><a href="#project-status" class="footer-link">Status</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h4 class="footer-column-title">Resources</h4>
+            <ul class="footer-nav-list">
+              <li><a href="https://github.com/yetone/mirdb" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+              <li><a href="https://github.com/yetone/mirdb/blob/master/README.md" class="footer-link" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+              <li><a href="https://github.com/yetone/mirdb/issues" class="footer-link" target="_blank" rel="noopener noreferrer">Report Issues</a></li>
+              <li><a href="https://github.com/yetone/mirdb/blob/master/LICENSE" class="footer-link" target="_blank" rel="noopener noreferrer">License</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h4 class="footer-column-title">Community</h4>
+            <ul class="footer-nav-list">
+              <li><a href="https://github.com/yetone/mirdb/graphs/contributors" class="footer-link" target="_blank" rel="noopener noreferrer">Contributors</a></li>
+              <li><a href="https://github.com/yetone/mirdb/pulls" class="footer-link" target="_blank" rel="noopener noreferrer">Pull Requests</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2024 MirDB. Open source under the MIT License.</p>
+        <a href="#top" class="back-to-top" aria-label="Back to top">
+          <span class="back-to-top-icon">&#8593;</span>
+          <span class="back-to-top-text">Back to Top</span>
+        </a>
+      </div>
+    </div>
   </footer>
+
+  <!-- Navigation Toggle Script -->
+  <script>
+    // Mobile navigation toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const navToggle = document.querySelector('.nav-toggle');
+      const navLinks = document.querySelector('.nav-links');
+
+      if (navToggle && navLinks) {
+        navToggle.addEventListener('click', function() {
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', !isExpanded);
+          navLinks.classList.toggle('nav-links-open');
+        });
+      }
+
+      // Close mobile nav when clicking a link
+      const navLinkItems = document.querySelectorAll('.nav-link');
+      navLinkItems.forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (navLinks.classList.contains('nav-links-open')) {
+            navLinks.classList.remove('nav-links-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
