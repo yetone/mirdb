@@ -1,0 +1,25 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "Homepage for MirDB - A high-performance, persistent key-value store",
+  "main": "main.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e/",
+    "test:unit": "playwright test tests/unit/",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "serve": "npx serve . -p 3000"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.2.0"
+  },
+  "keywords": [
+    "mirdb",
+    "key-value-store",
+    "homepage"
+  ],
+  "author": "",
+  "license": "MIT"
+}

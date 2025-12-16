@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - High-Performance Persistent Key-Value Store</title>
+    <meta name="description" content="MirDB is a high-performance, persistent key-value store with Memcached protocol compatibility, built in Rust with LSM-tree storage engine">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero" id="hero" data-testid="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title" data-testid="hero-title">MirDB</h1>
+                <p class="hero-tagline" data-testid="hero-tagline">A high-performance, persistent key-value store with Memcached protocol compatibility</p>
+                <p class="hero-description" data-testid="hero-description">
+                    Built in Rust with an LSM-tree storage engine for durability and speed.
+                    Drop-in replacement for Memcached with persistent storage capabilities.
+                </p>
+                <div class="hero-cta-buttons" data-testid="hero-cta-buttons">
+                    <a href="#getting-started" class="btn btn-primary" data-testid="get-started-btn">Get Started</a>
+                    <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" data-testid="github-btn">View on GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section (placeholder for future implementation) -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Memcached Compatible</h3>
+                    <p>Drop-in replacement supporting get, set, delete, and more standard Memcached commands.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>LSM-tree architecture with SSTable files for durable data storage.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Write-Ahead Logging</h3>
+                    <p>Never lose data with WAL-based crash recovery.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>High Performance</h3>
+                    <p>Skip list memtables and LRU block cache for fast operations.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Efficient Compression</h3>
+                    <p>Snappy compression reduces storage footprint.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Smart Filtering</h3>
+                    <p>Cuckoo filters minimize unnecessary disk reads.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section class="getting-started" id="getting-started">
+        <div class="container">
+            <h2 class="section-title">Getting Started</h2>
+            <div class="code-example">
+                <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build with Cargo
+cargo build --release
+
+# Run the server
+./target/release/mirdb-server</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 MirDB. Licensed under MIT.</p>
+            <nav class="footer-nav">
+                <a href="https://github.com/yetone/mirdb">GitHub</a>
+                <a href="#getting-started">Documentation</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
