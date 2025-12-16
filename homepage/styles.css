@@ -157,7 +157,7 @@ body {
 
 .feature-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
     gap: 2rem;
 }
 
@@ -221,13 +221,15 @@ body {
     border-radius: var(--border-radius);
     padding: 2rem;
     overflow-x: auto;
-    max-width: 800px;
+    max-width: min(100%, 800px);
     margin: 0 auto;
     position: relative;
 }
 
 .code-example pre {
     margin: 0;
+    overflow-x: visible;
+    white-space: pre;
 }
 
 .code-example code {
@@ -235,6 +237,7 @@ body {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-size: 0.95rem;
     line-height: 1.6;
+    display: block;
 }
 
 /* Syntax Highlighting for bash */
@@ -358,7 +361,7 @@ body {
 
 .data-paths-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
     gap: 2rem;
     margin-top: 3rem;
 }
@@ -418,7 +421,7 @@ body {
 
 .commands-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     gap: 1.5rem;
 }
 
@@ -480,7 +483,9 @@ body {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #a0a0a0;
-    padding: 4px 10px;
+    padding: 12px 14px;
+    min-width: 44px;
+    min-height: 44px;
     font-size: 0.75rem;
     border-radius: 4px;
     cursor: pointer;
@@ -522,7 +527,12 @@ body {
 }
 
 .badge-link {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
     transition: var(--transition);
 }
 
@@ -545,12 +555,20 @@ body {
 
 .footer-nav {
     margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .footer-nav a {
     color: var(--white);
     text-decoration: none;
-    margin: 0 1rem;
+    margin: 0 0.5rem;
+    padding: 12px 16px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
     opacity: 0.8;
     transition: var(--transition);
 }
@@ -575,6 +593,10 @@ body {
     color: var(--white);
     text-decoration: underline;
     transition: var(--transition);
+    padding: 12px 8px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
 }
 
 .footer-copyright a:hover {
