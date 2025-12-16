@@ -1,2 +1,4 @@
 /target
 **/*.rs.bk
+.something/
+homepage/node_modules/
