@@ -229,6 +229,89 @@ section > p {
   font-size: 0.95rem;
 }
 
+/* Architecture Section */
+.architecture {
+  max-width: 1200px;
+}
+
+.architecture h2 {
+  text-align: center;
+}
+
+.architecture > p {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.architecture-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.architecture-diagram {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.architecture-diagram svg {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.architecture-description {
+  background-color: var(--surface-color);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.architecture-description h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.architecture-description p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.architecture-description ul {
+  list-style: none;
+  padding: 0;
+}
+
+.architecture-description li {
+  padding: 1rem 0;
+  padding-left: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  position: relative;
+}
+
+.architecture-description li:last-child {
+  border-bottom: none;
+}
+
+.architecture-description li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1.35rem;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+}
+
+.architecture-description li strong {
+  color: var(--text-primary);
+}
+
 /* Quick Start Section */
 .quick-start {
   background-color: var(--surface-color);
@@ -549,6 +632,28 @@ p code {
   .footer-content {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  .architecture-diagram {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .architecture-diagram svg {
+    min-width: 600px;
+  }
+
+  .architecture-description {
+    padding: 1.5rem;
+  }
+
+  .architecture-description h3 {
+    font-size: 1.25rem;
+  }
+
+  .architecture-description li {
+    padding: 0.75rem 0;
+    padding-left: 1.25rem;
   }
 }
 

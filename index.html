@@ -14,6 +14,7 @@
       <a href="#" class="logo">MirDB</a>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
+        <li><a href="#architecture">Architecture</a></li>
         <li><a href="#quick-start">Quick Start</a></li>
         <li><a href="#commands">Commands</a></li>
         <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
@@ -63,6 +64,153 @@
         <div class="feature-card">
           <h3>Cuckoo Filter</h3>
           <p>Efficient key existence checks without disk reads for improved query performance.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture" class="architecture">
+      <h2>Architecture Overview</h2>
+      <p>MirDB uses a Log-Structured Merge-tree (LSM-tree) architecture optimized for write-heavy workloads with efficient reads.</p>
+
+      <div class="architecture-content">
+        <div class="architecture-diagram">
+          <svg role="img" aria-label="MirDB LSM-tree architecture diagram showing data flow from write operations through memtable, SSTable levels, and compaction process" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+            <title>MirDB LSM-tree Architecture Diagram</title>
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+              </marker>
+              <linearGradient id="memtableGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#16a34a;stop-opacity:1" />
+              </linearGradient>
+              <linearGradient id="walGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+              </linearGradient>
+              <linearGradient id="sstableGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+              </linearGradient>
+              <linearGradient id="compactionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+
+            <!-- Background -->
+            <rect x="0" y="0" width="800" height="500" fill="#1e293b" rx="8"/>
+
+            <!-- Write Path Label -->
+            <text x="80" y="35" fill="#94a3b8" font-size="14" font-weight="600">WRITE PATH</text>
+
+            <!-- Client Write -->
+            <rect x="40" y="60" width="120" height="50" rx="6" fill="#334155" stroke="#475569" stroke-width="2"/>
+            <text x="100" y="90" fill="#f8fafc" font-size="14" text-anchor="middle">Client Write</text>
+
+            <!-- Arrow to WAL -->
+            <line x1="160" y1="85" x2="200" y2="85" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- WAL (Write-Ahead Log) -->
+            <rect x="210" y="60" width="140" height="50" rx="6" fill="url(#walGradient)"/>
+            <text x="280" y="82" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Write-Ahead Log</text>
+            <text x="280" y="98" fill="#fef3c7" font-size="11" text-anchor="middle">(Durability)</text>
+
+            <!-- Arrow to Memtable -->
+            <line x1="350" y1="85" x2="390" y2="85" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- Mutable Memtable -->
+            <rect x="400" y="50" width="160" height="70" rx="6" fill="url(#memtableGradient)"/>
+            <text x="480" y="75" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Mutable Memtable</text>
+            <text x="480" y="92" fill="#dcfce7" font-size="11" text-anchor="middle">(Skip List)</text>
+            <text x="480" y="108" fill="#dcfce7" font-size="10" text-anchor="middle">In-Memory</text>
+
+            <!-- Arrow to Immutable -->
+            <line x1="480" y1="120" x2="480" y2="150" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="505" y="140" fill="#94a3b8" font-size="10">Full</text>
+
+            <!-- Immutable Memtables -->
+            <rect x="400" y="160" width="160" height="60" rx="6" fill="#15803d" stroke="#22c55e" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="480" y="185" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Immutable Memtables</text>
+            <text x="480" y="205" fill="#bbf7d0" font-size="10" text-anchor="middle">(Queue for Flush)</text>
+
+            <!-- Read Path Label -->
+            <text x="650" y="35" fill="#94a3b8" font-size="14" font-weight="600">READ PATH</text>
+
+            <!-- Client Read -->
+            <rect x="620" y="60" width="120" height="50" rx="6" fill="#334155" stroke="#475569" stroke-width="2"/>
+            <text x="680" y="90" fill="#f8fafc" font-size="14" text-anchor="middle">Client Read</text>
+
+            <!-- Read arrows -->
+            <line x1="620" y1="85" x2="570" y2="85" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <line x1="680" y1="110" x2="680" y2="280" stroke="#64748b" stroke-width="2" stroke-dasharray="4,4"/>
+            <line x1="680" y1="280" x2="380" y2="280" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- SSTable Levels Section -->
+            <text x="80" y="260" fill="#94a3b8" font-size="14" font-weight="600">SSTABLE LEVELS</text>
+
+            <!-- Minor Compaction Arrow -->
+            <line x1="400" y1="190" x2="330" y2="190" stroke="#64748b" stroke-width="2"/>
+            <line x1="330" y1="190" x2="330" y2="290" stroke="#64748b" stroke-width="2"/>
+            <line x1="330" y1="290" x2="85" y2="290" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="335" y="245" fill="#94a3b8" font-size="10" transform="rotate(-90, 335, 245)">Flush</text>
+
+            <!-- Level 0 -->
+            <rect x="40" y="280" width="280" height="55" rx="6" fill="url(#sstableGradient)"/>
+            <text x="180" y="302" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Level 0 (L0)</text>
+            <text x="180" y="320" fill="#bfdbfe" font-size="10" text-anchor="middle">Overlapping key ranges | Newest data</text>
+
+            <!-- Level 1 -->
+            <rect x="40" y="345" width="280" height="55" rx="6" fill="url(#sstableGradient)" opacity="0.85"/>
+            <text x="180" y="367" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Level 1 (L1)</text>
+            <text x="180" y="385" fill="#bfdbfe" font-size="10" text-anchor="middle">Sorted, non-overlapping | 10MB budget</text>
+
+            <!-- Level N -->
+            <rect x="40" y="410" width="280" height="55" rx="6" fill="url(#sstableGradient)" opacity="0.7"/>
+            <text x="180" y="432" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Level N (L2...L7)</text>
+            <text x="180" y="450" fill="#bfdbfe" font-size="10" text-anchor="middle">Budget doubles per level | Oldest data</text>
+
+            <!-- Major Compaction -->
+            <rect x="380" y="345" width="180" height="120" rx="6" fill="url(#compactionGradient)"/>
+            <text x="470" y="375" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Major Compaction</text>
+            <text x="470" y="395" fill="#e9d5ff" font-size="10" text-anchor="middle">(Background Process)</text>
+            <text x="470" y="420" fill="#e9d5ff" font-size="10" text-anchor="middle">Merges SSTable files</text>
+            <text x="470" y="438" fill="#e9d5ff" font-size="10" text-anchor="middle">across adjacent levels</text>
+            <text x="470" y="456" fill="#e9d5ff" font-size="10" text-anchor="middle">Removes duplicates</text>
+
+            <!-- Compaction arrows -->
+            <line x1="320" y1="372" x2="375" y2="372" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <line x1="320" y1="437" x2="375" y2="437" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <line x1="380" y1="405" x2="330" y2="405" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- Cuckoo Filter -->
+            <rect x="600" y="345" width="160" height="70" rx="6" fill="#334155" stroke="#475569" stroke-width="2"/>
+            <text x="680" y="372" fill="#f8fafc" font-size="11" font-weight="600" text-anchor="middle">Cuckoo Filter</text>
+            <text x="680" y="392" fill="#94a3b8" font-size="10" text-anchor="middle">Fast key existence</text>
+            <text x="680" y="408" fill="#94a3b8" font-size="10" text-anchor="middle">check (bloom filter)</text>
+
+            <!-- Filter arrow -->
+            <line x1="600" y1="380" x2="565" y2="380" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- Legend -->
+            <rect x="600" y="430" width="160" height="55" rx="4" fill="#0f172a" stroke="#334155"/>
+            <text x="680" y="450" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">Data Flow</text>
+            <line x1="620" y1="465" x2="660" y2="465" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="690" y="469" fill="#94a3b8" font-size="9">Write/Flush</text>
+            <line x1="620" y1="478" x2="660" y2="478" stroke="#64748b" stroke-width="2" stroke-dasharray="4,4"/>
+            <text x="690" y="482" fill="#94a3b8" font-size="9">Read</text>
+          </svg>
+        </div>
+
+        <div class="architecture-description">
+          <h3>How It Works</h3>
+          <p>The LSM-tree architecture provides excellent write performance by converting random writes into sequential I/O:</p>
+          <ul>
+            <li><strong>Write Path:</strong> Data is first written to the Write-Ahead Log (WAL) for durability, then inserted into the in-memory Memtable (implemented as a skip list for O(log n) operations).</li>
+            <li><strong>Memtable Flush:</strong> When the memtable reaches its size limit, it becomes immutable and is flushed to disk as a sorted SSTable file at Level 0.</li>
+            <li><strong>Compaction:</strong> Background compaction merges SSTables across levels, removing duplicates and maintaining sorted order for efficient reads.</li>
+            <li><strong>Read Path:</strong> Reads check the memtable first (newest data), then search through SSTable levels. Cuckoo filters enable fast key existence checks without disk reads.</li>
+          </ul>
         </div>
       </div>
     </section>
