@@ -1,7 +1,9 @@
 /* CSS Variables */
 :root {
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
+  --primary-color: #60a5fa;
+  --primary-hover: #3b82f6;
+  --primary-button-bg: #2563eb;
+  --primary-button-hover: #1d4ed8;
   --secondary-color: #64748b;
   --background-color: #0f172a;
   --surface-color: #1e293b;
@@ -10,7 +12,7 @@
   --text-secondary: #94a3b8;
   --border-color: #334155;
   --code-bg: #0d1117;
-  --success-color: #22c55e;
+  --success-color: #15803d;
   --font-mono: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
 }
 
@@ -156,12 +158,12 @@ main {
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
+  background-color: var(--primary-button-bg);
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-hover);
+  background-color: var(--primary-button-hover);
   color: white;
   transform: translateY(-2px);
 }
