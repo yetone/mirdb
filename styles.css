@@ -219,6 +219,16 @@ header {
     font-size: 0.875rem;
 }
 
+.badge-link {
+    display: inline-flex;
+    align-items: center;
+}
+
+.circleci-badge {
+    height: 20px;
+    width: auto;
+}
+
 /* Features Section */
 .features {
     padding: 5rem 0;
