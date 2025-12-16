@@ -259,6 +259,39 @@ body {
     flex-wrap: wrap;
 }
 
+/* Status Badge Section */
+.status-badge-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.status-badge-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+    border-radius: 4px;
+}
+
+.status-badge-link:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.status-badge-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+.status-badge-image {
+    height: 20px;
+    width: auto;
+    display: block;
+}
+
 /* Buttons */
 .btn {
     display: inline-flex;
