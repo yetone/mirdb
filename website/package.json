@@ -19,7 +19,9 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.57.0",
+    "axe-core": "^4.11.0",
     "get-port": "^7.1.0",
     "lighthouse": "^13.0.1",
     "playwright-lighthouse": "^4.0.0",
