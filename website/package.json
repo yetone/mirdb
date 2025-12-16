@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-website",
+  "version": "1.0.0",
+  "description": "MirDB Product Homepage",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx serve public -l 3000",
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:report": "npx playwright show-report"
+  },
+  "keywords": ["mirdb", "key-value-store", "memcached", "rust"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "serve": "^14.2.5",
+    "typescript": "^5.9.3"
+  }
+}

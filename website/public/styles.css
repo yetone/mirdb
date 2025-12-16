@@ -1,0 +1,121 @@
+/* CSS Reset and Base Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary-color: #1f2937;
+  --secondary-hover: #374151;
+  --text-color: #1f2937;
+  --text-light: #6b7280;
+  --background: #ffffff;
+  --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background: var(--background);
+}
+
+/* Hero Section */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-gradient);
+  padding: 2rem;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-section h1 {
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-size: clamp(1.125rem, 3vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2.5rem;
+  line-height: 1.5;
+}
+
+/* CTA Buttons */
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  min-width: 160px;
+}
+
+.cta-primary {
+  background-color: #ffffff;
+  color: var(--primary-color);
+}
+
+.cta-primary:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cta-secondary {
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+.cta-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .hero-section {
+    padding: 1.5rem;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-button {
+    width: 100%;
+    max-width: 280px;
+  }
+}
