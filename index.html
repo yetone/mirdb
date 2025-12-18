@@ -7,6 +7,8 @@
     <meta name="keywords" content="MirDB, key-value store, memcached, database, persistence, LSM tree, Rust">
     <title>MirDB - Persistent Key-Value Store with Memcached Compatibility</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -84,29 +86,134 @@
     </section>
 
     <!-- Quick Start Section -->
-    <section id="quickstart" class="quickstart" role="region" aria-labelledby="quickstart-heading">
+    <section id="quickstart" class="quickstart" role="region" aria-labelledby="quickstart-heading" data-testid="quickstart-section">
         <div class="container">
             <h2 id="quickstart-heading">Quick Start</h2>
+            <p class="quickstart-intro">Get up and running with MirDB in minutes</p>
+
             <div class="quickstart-content">
-                <div class="code-block">
-                    <div class="code-header">
-                        <span>Terminal</span>
+                <!-- Step 1: Start Server -->
+                <div class="quickstart-step">
+                    <h3>1. Start the Server</h3>
+                    <p>Start MirDB with a configuration file:</p>
+                    <div class="code-block" data-testid="code-block-server">
+                        <div class="code-header">
+                            <span>Terminal</span>
+                            <button class="copy-btn" data-copy-target="server-start-code" aria-label="Copy to clipboard" data-testid="copy-btn-server">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code class="language-bash" id="server-start-code"># Start MirDB server
+mirdb -c config.toml</code></pre>
                     </div>
-                    <pre><code># Start MirDB server
-mirdb -c config.toml
+                </div>
 
-# Connect with any memcached client
-telnet localhost 12333
+                <!-- Step 2: Connect -->
+                <div class="quickstart-step">
+                    <h3>2. Connect to MirDB</h3>
+                    <p>Connect using any memcached client or telnet on port <strong>12333</strong>:</p>
+                    <div class="code-block" data-testid="code-block-connect">
+                        <div class="code-header">
+                            <span>Terminal</span>
+                            <button class="copy-btn" data-copy-target="connect-code" aria-label="Copy to clipboard" data-testid="copy-btn-connect">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code class="language-bash" id="connect-code"># Connect with telnet
+telnet localhost 12333</code></pre>
+                    </div>
+                </div>
 
-# Store and retrieve data
+                <!-- Step 3: SET Command -->
+                <div class="quickstart-step">
+                    <h3>3. Store Data with SET</h3>
+                    <p>Use the SET command to store a key-value pair:</p>
+                    <div class="code-block" data-testid="code-block-set">
+                        <div class="code-header">
+                            <span>Memcached Protocol</span>
+                            <button class="copy-btn" data-copy-target="set-code" aria-label="Copy to clipboard" data-testid="copy-btn-set">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code class="language-bash" id="set-code"># SET command format: set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
 set mykey 0 0 5
 hello
-STORED
+STORED</code></pre>
+                    </div>
+                    <p class="code-note">The SET command stores "hello" (5 bytes) with key "mykey", flags=0, and ttl=0 (no expiration).</p>
+                </div>
 
+                <!-- Step 4: GET Command -->
+                <div class="quickstart-step">
+                    <h3>4. Retrieve Data with GET</h3>
+                    <p>Use the GET command to retrieve stored values:</p>
+                    <div class="code-block" data-testid="code-block-get">
+                        <div class="code-header">
+                            <span>Memcached Protocol</span>
+                            <button class="copy-btn" data-copy-target="get-code" aria-label="Copy to clipboard" data-testid="copy-btn-get">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code class="language-bash" id="get-code"># GET command: retrieve stored value
 get mykey
 VALUE mykey 0 5
 hello
 END</code></pre>
+                    </div>
+                    <p class="code-note">The response shows the key, flags, size, and the stored value "hello".</p>
+                </div>
+
+                <!-- Complete Example -->
+                <div class="quickstart-step">
+                    <h3>Complete Example Session</h3>
+                    <div class="code-block" data-testid="code-block-complete">
+                        <div class="code-header">
+                            <span>Full Session</span>
+                            <button class="copy-btn" data-copy-target="complete-code" aria-label="Copy to clipboard" data-testid="copy-btn-complete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code class="language-bash" id="complete-code"># Start MirDB server
+mirdb -c config.toml
+
+# In another terminal, connect via telnet
+telnet localhost 12333
+
+# Store a value
+set mykey 0 0 5
+hello
+STORED
+
+# Retrieve the value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete the key
+delete mykey
+DELETED</code></pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -242,5 +349,12 @@ END</code></pre>
             </div>
         </div>
     </footer>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+
+    <!-- Copy to clipboard functionality -->
+    <script src="script.js"></script>
 </body>
 </html>

@@ -241,8 +241,14 @@ body {
 .quickstart h2 {
     text-align: center;
     font-size: 2.5rem;
-    margin-bottom: var(--spacing-2xl);
+    margin-bottom: var(--spacing-md);
     color: var(--text-color);
+}
+
+.quickstart-intro {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-2xl);
 }
 
 .quickstart-content {
@@ -250,11 +256,31 @@ body {
     margin: 0 auto;
 }
 
+.quickstart-step {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.quickstart-step h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-color);
+}
+
+.quickstart-step > p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-md);
+}
+
+.quickstart-step strong {
+    color: var(--primary-color);
+}
+
 .code-block {
     background-color: var(--code-bg);
     border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: var(--shadow);
+    position: relative;
 }
 
 .code-header {
@@ -263,6 +289,43 @@ body {
     color: var(--text-light);
     font-size: 0.875rem;
     border-bottom: 1px solid #374151;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Copy Button */
+.copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: transparent;
+    color: var(--text-light);
+    border: 1px solid #374151;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-family);
+}
+
+.copy-btn:hover,
+.copy-btn:focus {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.copy-btn.copied {
+    background-color: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+
+.copy-btn svg {
+    width: 14px;
+    height: 14px;
 }
 
 .code-block pre {
@@ -276,6 +339,49 @@ body {
     font-size: 0.875rem;
     color: var(--code-text);
     line-height: 1.7;
+}
+
+/* Prism.js syntax highlighting overrides */
+.code-block pre[class*="language-"],
+.code-block code[class*="language-"] {
+    background: transparent;
+    color: var(--code-text);
+    text-shadow: none;
+}
+
+.code-block .token.comment {
+    color: #6a9955;
+}
+
+.code-block .token.keyword {
+    color: #569cd6;
+}
+
+.code-block .token.string {
+    color: #ce9178;
+}
+
+.code-block .token.function {
+    color: #dcdcaa;
+}
+
+.code-block .token.number {
+    color: #b5cea8;
+}
+
+.code-block .token.operator {
+    color: #d4d4d4;
+}
+
+.code-block .token.punctuation {
+    color: #808080;
+}
+
+.code-note {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    font-style: italic;
+    margin-top: var(--spacing-sm);
 }
 
 /* Commands Section */
