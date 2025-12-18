@@ -45,6 +45,7 @@
                 <li><a href="#quickstart" data-testid="nav-quickstart">Quick Start</a></li>
                 <li><a href="#commands" data-testid="nav-commands">Commands</a></li>
                 <li><a href="#configuration" data-testid="nav-configuration">Configuration</a></li>
+                <li><a href="#architecture" data-testid="nav-architecture">Architecture</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="nav-github" class="nav-external">GitHub</a></li>
             </ul>
         </div>
@@ -457,6 +458,101 @@ DELETED</code></pre>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Overview Section -->
+    <section id="architecture" class="architecture" role="region" aria-labelledby="architecture-heading" data-testid="architecture-section">
+        <div class="container">
+            <h2 id="architecture-heading">Architecture Overview</h2>
+            <p class="architecture-intro">MirDB uses a Log-Structured Merge-tree (LSM tree) architecture for efficient write operations and persistent storage.</p>
+
+            <!-- Data Flow Diagram -->
+            <div class="architecture-diagram-container">
+                <h3>Data Flow</h3>
+                <p class="diagram-description">The following diagram illustrates how data flows through MirDB's LSM tree architecture:</p>
+                <div class="architecture-diagram" data-testid="architecture-diagram">
+                    <pre class="diagram" aria-label="LSM tree data flow diagram">
+Write Request
+    │
+    ▼
+┌─────────┐
+│   WAL   │──── Write-Ahead Log for durability
+└────┬────┘
+     │
+     ▼
+┌──────────┐
+│ Memtable │──── Active in-memory skip list
+└────┬─────┘
+     │ (when full)
+     ▼
+┌────────────────┐
+│ Imm Memtables  │──── Immutable memtables queue
+└───────┬────────┘
+        │ (minor compaction)
+        ▼
+┌───────────────┐
+│ Level 0 SSTs  │──── Recently flushed, may overlap
+└───────┬───────┘
+        │ (major compaction)
+        ▼
+┌───────────────┐
+│ Level 1+ SSTs │──── Sorted, non-overlapping within level
+└───────────────┘</pre>
+                </div>
+            </div>
+
+            <!-- LSM Tree Components -->
+            <div class="architecture-components">
+                <h3>Key Components</h3>
+
+                <div class="component-grid">
+                    <div class="component-card">
+                        <h4>Memtable</h4>
+                        <p>The <strong>memtable</strong> is an in-memory write buffer implemented as a skip list data structure. All write operations first go to the memtable, providing fast write performance. When the memtable reaches its configured size limit (default 4MB), it becomes immutable and is queued for flushing to disk.</p>
+                    </div>
+
+                    <div class="component-card">
+                        <h4>SSTables (Sorted String Tables)</h4>
+                        <p><strong>SSTables</strong> are immutable on-disk files that store sorted key-value pairs. Each SSTable contains data blocks, an index block for efficient lookups, and a meta block with bloom filters. SSTables are organized into levels, with Level 0 containing recently flushed data and higher levels containing progressively older, compacted data.</p>
+                    </div>
+
+                    <div class="component-card">
+                        <h4>Write-Ahead Log (WAL)</h4>
+                        <p>The <strong>WAL</strong> ensures durability by writing all operations to disk before applying them to the memtable. In case of a crash, the WAL is replayed to recover any data that was in memory but not yet flushed to SSTables.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compaction -->
+            <div class="architecture-compaction">
+                <h3>Compaction Process</h3>
+                <p>MirDB uses a tiered compaction strategy to maintain read performance and reclaim space:</p>
+
+                <div class="compaction-types">
+                    <div class="compaction-card">
+                        <h4>Minor Compaction</h4>
+                        <p>Flushes immutable memtables to Level 0 SSTables. Triggered when the active memtable reaches its size limit. This process runs in a background thread to avoid blocking write operations.</p>
+                    </div>
+
+                    <div class="compaction-card">
+                        <h4>Major Compaction</h4>
+                        <p>Merges SSTables from Level N to Level N+1, removing deleted keys and duplicate entries. Triggered when a level exceeds its size threshold or when Level 0 has too many files (default: 4 files).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Read Path -->
+            <div class="architecture-read-path">
+                <h3>Read Path</h3>
+                <p>When reading a key, MirDB searches in the following order for optimal performance:</p>
+                <ol class="read-path-steps">
+                    <li><strong>Active Memtable</strong> - Check the current in-memory write buffer first</li>
+                    <li><strong>Immutable Memtables</strong> - Search through any memtables awaiting compaction (newest first)</li>
+                    <li><strong>Level 0 SSTables</strong> - Linear search through recently flushed files (may have overlapping key ranges)</li>
+                    <li><strong>Level 1+ SSTables</strong> - Binary search using index blocks (non-overlapping within each level)</li>
+                </ol>
             </div>
         </div>
     </section>

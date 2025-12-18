@@ -459,6 +459,156 @@ body {
     margin-bottom: var(--spacing-2xl);
 }
 
+/* Architecture Section */
+.architecture {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--background);
+}
+
+.architecture h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-color);
+}
+
+.architecture-intro {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-2xl);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.architecture h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-color);
+}
+
+/* Architecture Diagram */
+.architecture-diagram-container {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.diagram-description {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-lg);
+}
+
+.architecture-diagram {
+    background-color: var(--code-bg);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    overflow-x: auto;
+    box-shadow: var(--shadow);
+}
+
+.architecture-diagram pre.diagram {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--code-text);
+    line-height: 1.5;
+    margin: 0;
+    white-space: pre;
+}
+
+/* Architecture Components */
+.architecture-components {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-lg);
+}
+
+.component-card {
+    background-color: var(--background-alt);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+}
+
+.component-card h4 {
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-color);
+}
+
+.component-card p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.component-card strong {
+    color: var(--text-color);
+}
+
+/* Compaction Section */
+.architecture-compaction {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.architecture-compaction > p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-lg);
+}
+
+.compaction-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.compaction-card {
+    background-color: var(--background-alt);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+}
+
+.compaction-card h4 {
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-color);
+}
+
+.compaction-card p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Read Path */
+.architecture-read-path {
+    margin-bottom: var(--spacing-xl);
+}
+
+.architecture-read-path > p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-lg);
+}
+
+.read-path-steps {
+    list-style: decimal;
+    padding-left: var(--spacing-xl);
+    color: var(--text-light);
+}
+
+.read-path-steps li {
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-sm);
+}
+
+.read-path-steps strong {
+    color: var(--text-color);
+}
+
 /* Tables */
 .table-wrapper {
     overflow-x: auto;
@@ -639,8 +789,22 @@ tr:hover {
     .features h2,
     .quickstart h2,
     .commands h2,
-    .configuration h2 {
+    .configuration h2,
+    .architecture h2 {
         font-size: 2rem;
+    }
+
+    .architecture h3 {
+        font-size: 1.25rem;
+    }
+
+    .component-grid,
+    .compaction-types {
+        grid-template-columns: 1fr;
+    }
+
+    .architecture-diagram pre.diagram {
+        font-size: 0.75rem;
     }
 
     /* Feature cards single column */
