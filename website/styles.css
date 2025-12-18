@@ -246,6 +246,78 @@ a {
   white-space: pre;
 }
 
+/* Configuration Section */
+.configuration-section {
+  padding: 80px 24px;
+  background: var(--color-bg);
+}
+
+.config-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.config-example h3,
+.config-parameters h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--color-text);
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+
+.config-table th,
+.config-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.config-table th {
+  background: var(--color-bg-alt);
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.config-table td {
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.config-table td:first-child {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--color-primary);
+}
+
+.config-table td:last-child {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+}
+
+.config-table tr:last-child td {
+  border-bottom: none;
+}
+
+.config-table tr:hover td {
+  background: var(--color-bg-alt);
+}
+
 /* Footer */
 .footer {
   padding: 40px 24px;
@@ -298,5 +370,19 @@ a {
 
   .section-title {
     font-size: 2rem;
+  }
+
+  .config-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .config-table {
+    font-size: 0.875rem;
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: 8px 12px;
   }
 }
