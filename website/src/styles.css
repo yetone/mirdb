@@ -154,6 +154,73 @@ body {
     line-height: 1.7;
 }
 
+/* Supported Commands Section */
+.commands-section {
+    padding: 80px 20px;
+    background: #fff;
+}
+
+.commands-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #1a1a2e;
+}
+
+.commands-description {
+    text-align: center;
+    color: #4a5568;
+    margin-bottom: 3rem;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.command-item,
+.command-card {
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.command-item:hover,
+.command-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.command-item code.command,
+.command-card code.command {
+    display: inline-block;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #7c3aed;
+    background: #ede9fe;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+}
+
+.command-item p,
+.command-card p {
+    color: #4a5568;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
 /* Quick Start Section */
 .quickstart-section {
     padding: 80px 20px;
@@ -248,7 +315,12 @@ body {
     }
 
     .features-section h2,
-    .quickstart-section h2 {
+    .quickstart-section h2,
+    .commands-section h2 {
         font-size: 2rem;
+    }
+
+    .commands-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
