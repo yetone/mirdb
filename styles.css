@@ -524,6 +524,25 @@ tr:hover {
 }
 
 /* Responsive Design */
+
+/* Tablet landscape and small desktop (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--spacing-lg);
+    }
+
+    .footer-content {
+        grid-template-columns: 1.5fr 1fr 1fr;
+        gap: var(--spacing-xl);
+    }
+
+    .container {
+        padding: 0 var(--spacing-xl);
+    }
+}
+
+/* Tablet portrait and mobile (max-width: 768px) */
 @media (max-width: 768px) {
     .nav-links {
         display: none;
