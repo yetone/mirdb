@@ -18,6 +18,7 @@
             </button>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
                 <li><a href="#getting-started">Getting Started</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
             </ul>
@@ -73,6 +74,84 @@
                     <h3>LSM Tree Architecture</h3>
                     <p>Built on a Log-Structured Merge-tree for optimized write performance and efficient compaction.</p>
                 </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="architecture">
+            <h2>Architecture Overview</h2>
+            <p class="architecture-intro">MirDB uses a Log-Structured Merge-tree (LSM tree) architecture for optimized write performance and efficient data persistence.</p>
+            <div class="architecture-diagram-container">
+                <figure class="architecture-figure">
+                    <svg class="architecture-diagram" viewBox="0 0 600 500" role="img" aria-labelledby="architecture-diagram-title architecture-diagram-desc" xmlns="http://www.w3.org/2000/svg">
+                        <title id="architecture-diagram-title">MirDB LSM Tree Architecture Diagram</title>
+                        <desc id="architecture-diagram-desc">Visual representation of MirDB's LSM tree data flow: write requests go through Write-Ahead Log for durability, then to active Memtable in memory. When full, Memtable becomes immutable and undergoes minor compaction to Level 0 SSTables. Major compaction then merges SSTables from Level 0 to higher levels (Level 1 and above), creating sorted, non-overlapping files for efficient reads.</desc>
+
+                        <!-- Background -->
+                        <rect x="0" y="0" width="600" height="500" fill="var(--color-background-alt)" rx="8"/>
+
+                        <!-- Write Request Arrow -->
+                        <text x="300" y="30" text-anchor="middle" font-weight="bold" fill="var(--color-text)">Write Request</text>
+                        <line x1="300" y1="40" x2="300" y2="60" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                        <!-- Arrow marker definition -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-primary)"/>
+                            </marker>
+                        </defs>
+
+                        <!-- WAL Box -->
+                        <rect x="200" y="70" width="200" height="50" rx="6" fill="var(--color-card-bg)" stroke="var(--color-primary)" stroke-width="2"/>
+                        <text x="300" y="100" text-anchor="middle" font-weight="600" fill="var(--color-text)">Write-Ahead Log (WAL)</text>
+                        <text x="510" y="95" text-anchor="start" font-size="12" fill="var(--color-text-light)">Durability</text>
+
+                        <!-- Arrow WAL to Memtable -->
+                        <line x1="300" y1="120" x2="300" y2="145" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                        <!-- Memtable Box -->
+                        <rect x="200" y="155" width="200" height="50" rx="6" fill="var(--color-card-bg)" stroke="#22c55e" stroke-width="2"/>
+                        <text x="300" y="185" text-anchor="middle" font-weight="600" fill="var(--color-text)">Memtable (Skip List)</text>
+                        <text x="510" y="180" text-anchor="start" font-size="12" fill="var(--color-text-light)">In-memory</text>
+
+                        <!-- Arrow with label "when full" -->
+                        <line x1="300" y1="205" x2="300" y2="230" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="360" y="222" text-anchor="start" font-size="11" fill="var(--color-text-light)" font-style="italic">(when full)</text>
+
+                        <!-- Immutable Memtables Box -->
+                        <rect x="175" y="240" width="250" height="50" rx="6" fill="var(--color-card-bg)" stroke="#f59e0b" stroke-width="2"/>
+                        <text x="300" y="270" text-anchor="middle" font-weight="600" fill="var(--color-text)">Immutable Memtables Queue</text>
+                        <text x="510" y="265" text-anchor="start" font-size="12" fill="var(--color-text-light)">Awaiting flush</text>
+
+                        <!-- Arrow with label "minor compaction" -->
+                        <line x1="300" y1="290" x2="300" y2="315" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="360" y="307" text-anchor="start" font-size="11" fill="var(--color-text-light)" font-style="italic">(minor compaction)</text>
+
+                        <!-- Level 0 SSTables Box -->
+                        <rect x="175" y="325" width="250" height="50" rx="6" fill="var(--color-card-bg)" stroke="#ef4444" stroke-width="2"/>
+                        <text x="300" y="355" text-anchor="middle" font-weight="600" fill="var(--color-text)">Level 0 SSTables</text>
+                        <text x="510" y="350" text-anchor="start" font-size="12" fill="var(--color-text-light)">May overlap</text>
+
+                        <!-- Arrow with label "major compaction" -->
+                        <line x1="300" y1="375" x2="300" y2="400" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="360" y="392" text-anchor="start" font-size="11" fill="var(--color-text-light)" font-style="italic">(major compaction)</text>
+
+                        <!-- Level 1+ SSTables Box -->
+                        <rect x="150" y="410" width="300" height="50" rx="6" fill="var(--color-card-bg)" stroke="#8b5cf6" stroke-width="2"/>
+                        <text x="300" y="440" text-anchor="middle" font-weight="600" fill="var(--color-text)">Level 1+ SSTables</text>
+                        <text x="510" y="435" text-anchor="start" font-size="12" fill="var(--color-text-light)">Sorted, non-overlapping</text>
+
+                        <!-- Legend -->
+                        <rect x="20" y="470" width="12" height="12" fill="#22c55e"/>
+                        <text x="38" y="481" font-size="11" fill="var(--color-text-light)">Memory</text>
+                        <rect x="100" y="470" width="12" height="12" fill="#ef4444"/>
+                        <text x="118" y="481" font-size="11" fill="var(--color-text-light)">Disk (L0)</text>
+                        <rect x="180" y="470" width="12" height="12" fill="#8b5cf6"/>
+                        <text x="198" y="481" font-size="11" fill="var(--color-text-light)">Disk (L1+)</text>
+                    </svg>
+                    <figcaption class="architecture-caption">
+                        <strong>LSM Tree Data Flow:</strong> Write requests are first logged to the WAL for durability, then stored in the in-memory Memtable. When full, the Memtable becomes immutable and is flushed to Level 0 SSTables through minor compaction. Major compaction merges SSTables between levels for efficient storage and read performance.
+                    </figcaption>
+                </figure>
             </div>
         </section>
 

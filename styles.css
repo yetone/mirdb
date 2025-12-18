@@ -245,6 +245,68 @@ a:hover {
     line-height: 1.7;
 }
 
+/* Architecture Section */
+.architecture {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
+.architecture h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.architecture-intro {
+    text-align: center;
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+    max-width: 700px;
+    margin: 0 auto 2rem;
+}
+
+.architecture-diagram-container {
+    display: flex;
+    justify-content: center;
+}
+
+.architecture-figure {
+    max-width: 100%;
+}
+
+.architecture-diagram {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.architecture-caption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-top: 1.5rem;
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .architecture h2 {
+        font-size: 2rem;
+    }
+
+    .architecture-intro {
+        font-size: 1rem;
+    }
+
+    .architecture-diagram {
+        max-width: 100%;
+    }
+}
+
 /* Getting Started Section */
 .getting-started {
     max-width: var(--max-width);
