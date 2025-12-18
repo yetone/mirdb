@@ -329,7 +329,7 @@ body {
 .code-header {
     background-color: #111827;
     padding: var(--spacing-sm) var(--spacing-md);
-    color: var(--text-light);
+    color: #d1d5db;
     font-size: 0.875rem;
     border-bottom: 1px solid #374151;
     display: flex;
@@ -344,8 +344,8 @@ body {
     gap: var(--spacing-xs);
     padding: var(--spacing-xs) var(--spacing-sm);
     background-color: transparent;
-    color: var(--text-light);
-    border: 1px solid #374151;
+    color: #d1d5db;
+    border: 1px solid #4b5563;
     border-radius: 4px;
     font-size: 0.75rem;
     cursor: pointer;
@@ -393,7 +393,7 @@ body {
 }
 
 .code-block .token.comment {
-    color: #6a9955;
+    color: #87c987;
 }
 
 .code-block .token.keyword {
@@ -528,7 +528,7 @@ tr:hover {
     font-size: 0.95rem;
 }
 
-.footer-links h4 {
+.footer-links h3 {
     font-size: 1rem;
     margin-bottom: var(--spacing-md);
     color: white;
