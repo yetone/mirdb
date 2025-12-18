@@ -1,4 +1,5 @@
 import FeaturesSection from './components/FeaturesSection'
+import ComparisonSection from './components/ComparisonSection'
 import './App.css'
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
       </header>
 
       <FeaturesSection />
+
+      <ComparisonSection />
 
       <footer className="footer">
         <div className="footer-content">

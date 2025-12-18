@@ -1,0 +1,139 @@
+.comparison-section {
+  padding: 4rem 2rem;
+  background-color: #ffffff;
+}
+
+.comparison-heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.comparison-subtitle {
+  text-align: center;
+  font-size: 1.125rem;
+  color: #64748b;
+  margin-bottom: 2.5rem;
+}
+
+.comparison-table-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+}
+
+.comparison-table thead tr {
+  background-color: #1e293b;
+}
+
+.comparison-table th {
+  font-weight: 600;
+  color: white;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.feature-header {
+  width: 35%;
+}
+
+.mirdb-header {
+  width: 32.5%;
+  background-color: #3b82f6;
+}
+
+.memcached-header {
+  width: 32.5%;
+}
+
+.comparison-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 0.15s ease;
+}
+
+.comparison-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.comparison-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.feature-cell {
+  font-weight: 500;
+  color: #1e293b;
+  background-color: #f8fafc;
+}
+
+.mirdb-cell,
+.memcached-cell {
+  color: #475569;
+}
+
+.mirdb-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mirdb-cell.advantage {
+  color: #16a34a;
+  font-weight: 500;
+}
+
+.mirdb-cell.advantage .checkmark {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.advantage-indicator {
+  display: inline-flex;
+  align-items: center;
+}
+
+.cell-value {
+  display: inline;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 640px) {
+  .comparison-section {
+    padding: 3rem 1rem;
+  }
+
+  .comparison-heading {
+    font-size: 1.5rem;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .feature-header {
+    width: 40%;
+  }
+
+  .mirdb-header,
+  .memcached-header {
+    width: 30%;
+  }
+}
