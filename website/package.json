@@ -5,12 +5,22 @@
   "main": "src/index.html",
   "scripts": {
     "test": "jest",
+    "test:e2e": "npx playwright test",
+    "test:e2e:chromium": "npx playwright test --project=chromium",
+    "test:e2e:firefox": "npx playwright test --project=firefox",
+    "test:e2e:webkit": "npx playwright test --project=webkit",
+    "test:e2e:all-browsers": "npx playwright test --project=chromium --project=firefox --project=webkit",
     "serve": "npx http-server src -p 3000"
   },
-  "keywords": ["mirdb", "landing-page", "key-value-store"],
+  "keywords": [
+    "mirdb",
+    "landing-page",
+    "key-value-store"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"
   }
