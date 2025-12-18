@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store with Memcached Compatibility</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">MirDB</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero" role="banner">
+        <div class="hero-content">
+            <h1>MirDB</h1>
+            <p class="tagline">A persistent key-value store with memcached compatibility. Get the speed of in-memory caching with the durability of disk-based storage.</p>
+            <div class="hero-buttons">
+                <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="features" class="section features-section">
+            <div class="container">
+                <h2>Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">&#128268;</div>
+                        <h3>Memcached Protocol</h3>
+                        <p>Drop-in compatibility with existing memcached clients. Use your favorite client library without code changes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">&#128190;</div>
+                        <h3>Persistent Storage</h3>
+                        <p>Data survives restarts with SSTable-based durability. Never lose your cached data again.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">&#9889;</div>
+                        <h3>LSM Tree Architecture</h3>
+                        <p>Write-optimized design for high throughput. Efficient compaction keeps read performance fast.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">&#129528;</div>
+                        <h3>Built with Rust</h3>
+                        <p>Memory-safe, high-performance implementation using Tokio for async networking.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="getting-started" class="section getting-started-section" data-testid="getting-started-section">
+            <div class="container">
+                <h2>Getting Started</h2>
+
+                <div class="getting-started-content">
+                    <div class="getting-started-step" data-testid="installation-instructions">
+                        <h3>Installation & Running</h3>
+                        <p>Clone the repository and build with Cargo:</p>
+                        <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run MirDB server (default port: 12333)
+cargo run --release</code></pre>
+                        <p class="note">MirDB runs on the default port <strong data-testid="default-port">12333</strong>. You can configure this in the TOML configuration file.</p>
+                    </div>
+
+                    <div class="getting-started-step" data-testid="usage-example">
+                        <h3>Basic Usage</h3>
+                        <p>Connect to MirDB using any memcached-compatible client. Here's an example using Python:</p>
+                        <pre><code class="language-python"># Install pymemcache
+# pip install pymemcache
+
+from pymemcache.client import base
+
+# Connect to MirDB on default port 12333
+client = base.Client(('localhost', 12333))
+
+# Store a value
+client.set('mykey', 'Hello, MirDB!')
+
+# Retrieve the value
+result = client.get('mykey')
+print(result)  # b'Hello, MirDB!'
+
+# Delete the value
+client.delete('mykey')</code></pre>
+                    </div>
+
+                    <div class="getting-started-step" data-testid="configuration-example">
+                        <h3>Configuration</h3>
+                        <p>Configure MirDB using a TOML file. Here's an example configuration:</p>
+                        <pre><code class="language-toml"># mirdb.toml - MirDB Configuration
+
+# Network address and port
+addr = "0.0.0.0:12333"
+
+# LSM tree configuration
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+# Memory and storage limits
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+# Compaction settings
+imm_mem_table_max_count = 16
+l0_compaction_trigger = 4
+
+# Block settings
+block_size = "4K"
+block_restart_interval = 16</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="commands" class="section commands-section">
+            <div class="container">
+                <h2>Supported Commands</h2>
+                <div class="commands-grid">
+                    <div class="command-category">
+                        <h3>Storage Commands</h3>
+                        <ul class="command-list">
+                            <li><code>SET</code> - Store a value</li>
+                            <li><code>ADD</code> - Store if key doesn't exist</li>
+                            <li><code>REPLACE</code> - Store if key exists</li>
+                            <li><code>APPEND</code> - Append to existing value</li>
+                            <li><code>PREPEND</code> - Prepend to existing value</li>
+                        </ul>
+                    </div>
+                    <div class="command-category">
+                        <h3>Retrieval Commands</h3>
+                        <ul class="command-list">
+                            <li><code>GET</code> - Retrieve a value</li>
+                            <li><code>GETS</code> - Retrieve with CAS token</li>
+                        </ul>
+                    </div>
+                    <div class="command-category">
+                        <h3>Deletion Commands</h3>
+                        <ul class="command-list">
+                            <li><code>DELETE</code> - Remove a key-value pair</li>
+                        </ul>
+                    </div>
+                    <div class="command-category">
+                        <h3>Admin Commands</h3>
+                        <ul class="command-list">
+                            <li><code>INFO</code> - Get server information</li>
+                            <li><code>MAJOR_COMPACTION</code> - Trigger compaction</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="section architecture-section">
+            <div class="container">
+                <h2>Architecture</h2>
+                <div class="architecture-content">
+                    <div class="data-flow">
+                        <h3>Write Path</h3>
+                        <div class="flow-diagram">
+                            <span class="flow-step">Request</span>
+                            <span class="flow-arrow">&#8594;</span>
+                            <span class="flow-step">WAL</span>
+                            <span class="flow-arrow">&#8594;</span>
+                            <span class="flow-step">Memtable</span>
+                            <span class="flow-arrow">&#8594;</span>
+                            <span class="flow-step">Immutable Memtables</span>
+                            <span class="flow-arrow">&#8594;</span>
+                            <span class="flow-step">L0 SSTs</span>
+                            <span class="flow-arrow">&#8594;</span>
+                            <span class="flow-step">L1+ SSTs</span>
+                        </div>
+                    </div>
+                    <div class="data-flow">
+                        <h3>Read Path</h3>
+                        <div class="flow-diagram">
+                            <span class="flow-step">Request</span>
+                            <span class="flow-arrow">&#8594;</span>
+                            <span class="flow-step">Memtable</span>
+                            <span class="flow-arrow">&#8594;</span>
+                            <span class="flow-step">Immutable Memtables</span>
+                            <span class="flow-arrow">&#8594;</span>
+                            <span class="flow-step">L0 (linear)</span>
+                            <span class="flow-arrow">&#8594;</span>
+                            <span class="flow-step">L1+ (binary search)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>MirDB</h4>
+                    <p>A persistent key-value store with memcached compatibility.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="https://github.com/yetone/mirdb">GitHub Repository</a></li>
+                        <li><a href="#getting-started">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Status</h4>
+                    <p>Active Development</p>
+                    <p>License: MIT</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 MirDB. Built with Rust.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-toml.min.js"></script>
+</body>
+</html>
