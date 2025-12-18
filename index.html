@@ -46,6 +46,7 @@
                 <li><a href="#commands" data-testid="nav-commands">Commands</a></li>
                 <li><a href="#configuration" data-testid="nav-configuration">Configuration</a></li>
                 <li><a href="#architecture" data-testid="nav-architecture">Architecture</a></li>
+                <li><a href="#status" data-testid="nav-status">Status</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="nav-github" class="nav-external">GitHub</a></li>
             </ul>
         </div>
@@ -553,6 +554,70 @@ Write Request
                     <li><strong>Level 0 SSTables</strong> - Linear search through recently flushed files (may have overlapping key ranges)</li>
                     <li><strong>Level 1+ SSTables</strong> - Binary search using index blocks (non-overlapping within each level)</li>
                 </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Status Section -->
+    <section id="status" class="project-status" role="region" aria-labelledby="status-heading" data-testid="project-status-section">
+        <div class="container">
+            <h2 id="status-heading">Project Status</h2>
+            <p class="status-intro">Track what's been built and what's coming next</p>
+
+            <div class="status-grid">
+                <!-- Implemented Features -->
+                <div class="status-card implemented" data-testid="implemented-features">
+                    <h3 data-testid="implemented-features-heading">Implemented Features</h3>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-icon implemented-icon">&#10003;</span>
+                            <span class="feature-text">Tokio-based async networking with memcached protocol</span>
+                        </li>
+                        <li>
+                            <span class="feature-icon implemented-icon">&#10003;</span>
+                            <span class="feature-text">Memtable with skip list data structure</span>
+                        </li>
+                        <li>
+                            <span class="feature-icon implemented-icon">&#10003;</span>
+                            <span class="feature-text">Minor compaction (memtable to SSTable)</span>
+                        </li>
+                        <li>
+                            <span class="feature-icon implemented-icon">&#10003;</span>
+                            <span class="feature-text">Major compaction (SSTable level compaction)</span>
+                        </li>
+                        <li>
+                            <span class="feature-icon implemented-icon">&#10003;</span>
+                            <span class="feature-text">LSM tree architecture with write-ahead logging</span>
+                        </li>
+                        <li>
+                            <span class="feature-icon implemented-icon">&#10003;</span>
+                            <span class="feature-text">Full memcached text protocol support</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Planned Features -->
+                <div class="status-card planned" data-testid="planned-features">
+                    <h3 data-testid="planned-features-heading">Planned Features</h3>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-icon planned-icon">&#9675;</span>
+                            <span class="feature-text">Raft consensus for distributed operation</span>
+                        </li>
+                        <li>
+                            <span class="feature-icon planned-icon">&#9675;</span>
+                            <span class="feature-text">Cluster management and auto-sharding</span>
+                        </li>
+                        <li>
+                            <span class="feature-icon planned-icon">&#9675;</span>
+                            <span class="feature-text">Bloom filters for read optimization</span>
+                        </li>
+                        <li>
+                            <span class="feature-icon planned-icon">&#9675;</span>
+                            <span class="feature-text">Compression support for SSTables</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>

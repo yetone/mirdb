@@ -55,6 +55,16 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     const configLink = page.locator('[data-testid="nav-configuration"]');
     await expect(configLink).toBeFocused();
 
+    // Tab to Architecture link
+    await page.keyboard.press('Tab');
+    const architectureLink = page.locator('[data-testid="nav-architecture"]');
+    await expect(architectureLink).toBeFocused();
+
+    // Tab to Status link
+    await page.keyboard.press('Tab');
+    const statusLink = page.locator('[data-testid="nav-status"]');
+    await expect(statusLink).toBeFocused();
+
     // Tab to GitHub link in nav
     await page.keyboard.press('Tab');
     const githubNavLink = page.locator('[data-testid="nav-github"]');
@@ -160,6 +170,8 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     await page.keyboard.press('Tab'); // Quick Start
     await page.keyboard.press('Tab'); // Commands
     await page.keyboard.press('Tab'); // Configuration
+    await page.keyboard.press('Tab'); // Architecture
+    await page.keyboard.press('Tab'); // Status
     await page.keyboard.press('Tab'); // GitHub nav
     await page.keyboard.press('Tab'); // Get Started button
 

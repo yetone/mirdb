@@ -651,6 +651,94 @@ tr:hover {
     background-color: var(--background-alt);
 }
 
+/* Project Status Section */
+.project-status {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--background);
+}
+
+.project-status h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-color);
+}
+
+.status-intro {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.status-card {
+    background-color: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.status-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.status-card.implemented {
+    border-left: 4px solid var(--success);
+}
+
+.status-card.planned {
+    border-left: 4px solid var(--primary-color);
+}
+
+.status-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-color);
+}
+
+.status-card .feature-list {
+    list-style: none;
+}
+
+.status-card .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.status-card .feature-list li:last-child {
+    margin-bottom: 0;
+}
+
+.status-card .feature-icon {
+    flex-shrink: 0;
+    font-weight: bold;
+    width: 20px;
+    text-align: center;
+}
+
+.status-card .implemented-icon {
+    color: var(--success);
+}
+
+.status-card .planned-icon {
+    color: var(--primary-color);
+}
+
+.status-card .feature-text {
+    flex: 1;
+}
+
 /* Footer */
 .footer {
     background-color: var(--code-bg);
@@ -790,7 +878,8 @@ tr:hover {
     .quickstart h2,
     .commands h2,
     .configuration h2,
-    .architecture h2 {
+    .architecture h2,
+    .project-status h2 {
         font-size: 2rem;
     }
 
@@ -805,6 +894,11 @@ tr:hover {
 
     .architecture-diagram pre.diagram {
         font-size: 0.75rem;
+    }
+
+    /* Status cards single column on mobile */
+    .status-grid {
+        grid-template-columns: 1fr;
     }
 
     /* Feature cards single column */
