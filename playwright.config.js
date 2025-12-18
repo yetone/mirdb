@@ -20,6 +20,20 @@ module.exports = defineConfig({
         headless: true,
       },
     },
+    {
+      name: 'firefox',
+      use: {
+        browserName: 'firefox',
+        headless: true,
+      },
+    },
+    {
+      name: 'webkit',
+      use: {
+        browserName: 'webkit',
+        headless: true,
+      },
+    },
   ],
   webServer: undefined,
 });
