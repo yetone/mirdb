@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="#" class="logo">MirDB</a>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>MirDB</h1>
+            <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+            <p class="description">Drop-in replacement for memcached with durable storage. Built with Rust for reliability and performance.</p>
+            <div class="cta-buttons">
+                <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card" data-testid="feature-memcached">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 20V10"></path>
+                            <path d="M12 20V4"></path>
+                            <path d="M6 20v-6"></path>
+                        </svg>
+                    </div>
+                    <h3>Memcached Protocol Compatible</h3>
+                    <p>Use your existing memcached clients. MirDB speaks the same protocol, making migration seamless.</p>
+                </div>
+
+                <div class="feature-card" data-testid="feature-persistent">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                        </svg>
+                    </div>
+                    <h3>Persistent Storage</h3>
+                    <p>Unlike memcached, your data survives restarts. MirDB persists to disk using SSTables for durability.</p>
+                </div>
+
+                <div class="feature-card" data-testid="feature-lsm">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                    </div>
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Built on a Log-Structured Merge-tree for optimized write performance and efficient compaction.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="getting-started" class="getting-started">
+            <h2>Getting Started</h2>
+            <div class="code-section">
+                <h3>Installation</h3>
+                <pre><code class="language-bash">cargo install mirdb</code></pre>
+            </div>
+            <div class="code-section">
+                <h3>Basic Usage</h3>
+                <pre><code class="language-bash"># Start the server
+mirdb-server
+
+# Connect using any memcached client
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get a value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+            </div>
+        </section>
+
+        <section id="commands" class="commands">
+            <h2>Supported Commands</h2>
+            <div class="commands-grid">
+                <div class="command-category">
+                    <h3>Storage</h3>
+                    <ul>
+                        <li>SET</li>
+                        <li>ADD</li>
+                        <li>REPLACE</li>
+                        <li>APPEND</li>
+                        <li>PREPEND</li>
+                    </ul>
+                </div>
+                <div class="command-category">
+                    <h3>Retrieval</h3>
+                    <ul>
+                        <li>GET</li>
+                        <li>GETS</li>
+                    </ul>
+                </div>
+                <div class="command-category">
+                    <h3>Deletion</h3>
+                    <ul>
+                        <li>DELETE</li>
+                    </ul>
+                </div>
+                <div class="command-category">
+                    <h3>MirDB Specific</h3>
+                    <ul>
+                        <li>INFO</li>
+                        <li>MAJOR_COMPACTION</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+            <p>Licensed under MIT</p>
+            <p>&copy; 2024 MirDB</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
