@@ -702,12 +702,22 @@ tr:hover {
     background: var(--primary-color);
     color: white;
     padding: var(--spacing-sm) var(--spacing-md);
-    z-index: 100;
+    z-index: 9999;
     transition: top 0.2s ease;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 .skip-link:focus {
     top: 0;
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+/* Main content focus (for skip link target) */
+main:focus {
+    outline: none;
 }
 
 /* Reduced motion */

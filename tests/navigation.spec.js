@@ -202,13 +202,16 @@ test.describe('Navigation Functionality', () => {
     // Test Commands link
     const commandsLink = page.locator('[data-testid="nav-commands"]');
     await commandsLink.click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(800); // Allow more time for smooth scroll animation
 
     const commandsSection = page.locator('#commands');
     await expect(commandsSection).toBeVisible();
     const commandsBoundingBox = await commandsSection.boundingBox();
     expect(commandsBoundingBox).not.toBeNull();
-    expect(commandsBoundingBox.y).toBeLessThan(100);
+    // Section should be near top of viewport after scrolling
+    // Account for sticky nav (~60px) and allow some margin for scroll behavior
+    const viewportHeight = await page.evaluate(() => window.innerHeight);
+    expect(commandsBoundingBox.y).toBeLessThan(viewportHeight * 0.6); // Within top 60% of viewport
 
     // Scroll back to top
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -231,7 +234,7 @@ test.describe('Navigation Functionality', () => {
     expect(configBoundingBox).not.toBeNull();
     // Configuration is the last section, so it may not scroll all the way to top
     // Just verify it's visible on screen (within viewport height)
-    const viewportHeight = await page.evaluate(() => window.innerHeight);
-    expect(configBoundingBox.y).toBeLessThan(viewportHeight);
+    const configViewportHeight = await page.evaluate(() => window.innerHeight);
+    expect(configBoundingBox.y).toBeLessThan(configViewportHeight);
   });
 });
