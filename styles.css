@@ -318,6 +318,23 @@ pre code {
     margin: 0 auto;
 }
 
+/* Architecture Diagram */
+.architecture-diagram-wrapper {
+    margin-bottom: 3rem;
+    background-color: var(--bg-secondary);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    overflow: hidden;
+}
+
+.architecture-diagram {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    margin: 0 auto;
+    display: block;
+}
+
 .data-flow {
     margin-bottom: 2rem;
     background-color: var(--bg-secondary);
@@ -328,7 +345,31 @@ pre code {
 .data-flow h3 {
     font-size: 1.25rem;
     color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.path-description {
+    color: var(--text-light);
     margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.path-details {
+    margin-top: 1.5rem;
+    list-style: none;
+}
+
+.path-details li {
+    padding: 0.5rem 0;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    border-left: 3px solid var(--primary-color);
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.path-details li strong {
+    color: var(--secondary-color);
 }
 
 .flow-diagram {
@@ -345,6 +386,18 @@ pre code {
     border-radius: 0.5rem;
     font-size: 0.9rem;
     font-weight: 500;
+}
+
+.flow-step.wal {
+    background-color: #dc2626;
+}
+
+.flow-step.memtable {
+    background-color: #2563eb;
+}
+
+.flow-step.sst {
+    background-color: #059669;
 }
 
 .flow-arrow {
