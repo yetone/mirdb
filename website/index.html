@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - Persistent Key-Value Store with Memcached Compatibility</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">MirDB</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#getting-started">Getting Started</a></li>
+        <li><a href="#docs">Documentation</a></li>
+        <li><a href="https://github.com/mirdb/mirdb" class="nav-github">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>MirDB</h1>
+      <p class="tagline">A persistent key-value store with memcached compatibility. Get the speed of in-memory caching with the durability of disk-based storage.</p>
+      <div class="hero-cta">
+        <a href="#getting-started" class="btn btn-primary">Get Started</a>
+        <a href="https://github.com/mirdb/mirdb" class="btn btn-secondary">View on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Features Section -->
+  <section id="features" class="features-section">
+    <div class="container">
+      <h2 class="section-title">Key Features</h2>
+      <p class="section-subtitle">Built for performance, designed for simplicity</p>
+
+      <div class="features-grid">
+        <!-- Memcached Protocol Compatibility -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+              <path d="M2 17l10 5 10-5"></path>
+              <path d="M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Memcached Protocol Compatibility</h3>
+          <p class="feature-description">Drop-in replacement for memcached. Use your existing memcached clients without code changes. Full support for SET, GET, DELETE, and more commands.</p>
+        </div>
+
+        <!-- Persistent Storage -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Persistent Storage</h3>
+          <p class="feature-description">Data survives restarts with SSTable-based durable storage. Your data is safely persisted to disk while maintaining fast read and write performance.</p>
+        </div>
+
+        <!-- LSM Tree Architecture -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">LSM Tree Architecture</h3>
+          <p class="feature-description">Write-optimized design using Log-Structured Merge tree for high write throughput. Automatic compaction keeps read performance excellent.</p>
+        </div>
+
+        <!-- Async Networking -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Async Networking</h3>
+          <p class="feature-description">Built on Tokio for high-performance async I/O. Handle thousands of concurrent connections efficiently with minimal resource usage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Getting Started Section -->
+  <section id="getting-started" class="getting-started-section">
+    <div class="container">
+      <h2 class="section-title">Getting Started</h2>
+      <div class="code-example">
+        <pre><code># Clone the repository
+git clone https://github.com/mirdb/mirdb.git
+cd mirdb
+
+# Build and run
+cargo build --release
+./target/release/mirdb-server
+
+# Connect with any memcached client
+telnet localhost 12333</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 MirDB. MIT License.</p>
+      <div class="footer-links">
+        <a href="https://github.com/mirdb/mirdb">GitHub</a>
+        <a href="#docs">Documentation</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
