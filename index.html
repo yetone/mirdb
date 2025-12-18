@@ -624,31 +624,31 @@ Write Request
     </main>
 
     <!-- Footer -->
-    <footer class="footer" role="contentinfo">
+    <footer class="footer" role="contentinfo" data-testid="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
                     <span class="footer-logo">MirDB</span>
                     <p>A persistent key-value store with memcached compatibility</p>
                 </div>
-                <div class="footer-links">
+                <div class="footer-links" data-testid="footer-resources">
                     <h3>Resources</h3>
                     <ul>
-                        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-                        <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Report Issues</a></li>
-                        <li><a href="https://crates.io/crates/mirdb" target="_blank" rel="noopener noreferrer">Crates.io</a></li>
+                        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="footer-github-link">GitHub Repository</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer" data-testid="footer-issues-link">Report Issues</a></li>
+                        <li><a href="https://crates.io/crates/mirdb" target="_blank" rel="noopener noreferrer" data-testid="footer-crates-link">Crates.io</a></li>
                     </ul>
                 </div>
-                <div class="footer-links">
+                <div class="footer-links" data-testid="footer-community">
                     <h3>Community</h3>
                     <ul>
-                        <li><a href="https://github.com/yetone/mirdb/blob/master/README.md" target="_blank" rel="noopener noreferrer">Documentation</a></li>
-                        <li><a href="https://github.com/yetone/mirdb/graphs/contributors" target="_blank" rel="noopener noreferrer">Contributors</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/blob/master/README.md" target="_blank" rel="noopener noreferrer" data-testid="footer-docs-link">Documentation</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/graphs/contributors" target="_blank" rel="noopener noreferrer" data-testid="footer-contributors-link">Contributors</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>Built with Rust. MIT License.</p>
+            <div class="footer-bottom" data-testid="footer-bottom">
+                <p data-testid="footer-license">Built with Rust. <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer" data-testid="footer-license-link">MIT License</a>.</p>
             </div>
         </div>
     </footer>
