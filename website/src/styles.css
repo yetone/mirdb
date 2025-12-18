@@ -12,6 +12,55 @@ body {
     background-color: #fff;
 }
 
+/* Skip Link for Keyboard Navigation (WCAG 2.1 AA) */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #1a1a2e;
+    color: #fff;
+    padding: 8px 16px;
+    z-index: 1000;
+    text-decoration: none;
+    font-weight: 600;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid #00d4ff;
+    outline-offset: 2px;
+}
+
+/* Focus Indicators for Accessibility (WCAG 2.1 AA - 2.4.7 Focus Visible) */
+a:focus,
+button:focus,
+[tabindex]:focus {
+    outline: 3px solid #00d4ff;
+    outline-offset: 2px;
+}
+
+/* Enhanced focus for dark backgrounds */
+.hero-section a:focus,
+.quickstart-section a:focus,
+.footer a:focus {
+    outline-color: #00d4ff;
+    border-radius: 4px;
+}
+
+/* Focus styles for CTA buttons */
+.cta-primary:focus,
+.btn-primary:focus {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(0, 212, 255, 0.5);
+}
+
+.cta-secondary:focus {
+    outline: 3px solid #00d4ff;
+    outline-offset: 3px;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;

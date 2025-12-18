@@ -9,10 +9,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Skip to main content link for keyboard navigation -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header>
     <!-- Hero Section -->
-    <section class="hero-section">
+    <section class="hero-section" aria-labelledby="hero-title">
         <div class="hero-container">
-            <h1 class="product-name">MirDB</h1>
+            <h1 id="hero-title" class="product-name">MirDB</h1>
             <p class="tagline hero-tagline">Persistent Key-Value Store with Memcached Protocol Compatibility</p>
             <p class="value-proposition hero-description">
                 MirDB combines the simplicity of memcached with the durability of persistent storage.
@@ -25,7 +29,9 @@
             </div>
         </div>
     </section>
+    </header>
 
+    <main id="main-content">
     <!-- Features Section -->
     <section id="features" class="features-section">
         <div class="container">
@@ -86,11 +92,11 @@
     </section>
 
     <!-- Quick Start Section -->
-    <section id="documentation" class="quickstart-section">
+    <section id="documentation" class="quickstart-section" aria-labelledby="quickstart-heading">
         <div class="container">
-            <h2>Quick Start</h2>
-            <div class="code-block">
-                <pre><code># Start MirDB server
+            <h2 id="quickstart-heading">Quick Start</h2>
+            <div class="code-block" role="region" aria-label="Quick start code example">
+                <pre><code aria-label="MirDB server setup and usage example"># Start MirDB server
 mirdb -c config.toml
 
 # Connect with any memcached client
@@ -105,15 +111,16 @@ END</code></pre>
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-links">
+            <nav class="footer-links" aria-label="Footer navigation">
                 <a href="#documentation">Documentation</a>
                 <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
                 <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
-            </div>
+            </nav>
             <p class="copyright">&copy; 2024 MirDB. MIT License.</p>
         </div>
     </footer>
