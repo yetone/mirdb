@@ -198,8 +198,8 @@ test.describe('Tablet Responsive Design (768px viewport)', () => {
     }
 
     // Verify CTA buttons layout - they should be horizontally arranged on tablet
-    const primaryBtn = page.locator('.btn-primary');
-    const secondaryBtn = page.locator('.btn-secondary');
+    const primaryBtn = heroSection.locator('.cta-buttons .btn-primary');
+    const secondaryBtn = heroSection.locator('.cta-buttons .btn-secondary');
 
     const primaryBox = await primaryBtn.boundingBox();
     const secondaryBox = await secondaryBtn.boundingBox();
