@@ -131,11 +131,11 @@ block_restart_interval = 16</code></pre>
             </div>
         </section>
 
-        <section id="commands" class="section commands-section">
+        <section id="commands" class="section commands-section" data-testid="commands-section">
             <div class="container">
                 <h2>Supported Commands</h2>
                 <div class="commands-grid">
-                    <div class="command-category">
+                    <div class="command-category" data-testid="storage-commands">
                         <h3>Storage Commands</h3>
                         <ul class="command-list">
                             <li><code>SET</code> - Store a value</li>
@@ -145,20 +145,20 @@ block_restart_interval = 16</code></pre>
                             <li><code>PREPEND</code> - Prepend to existing value</li>
                         </ul>
                     </div>
-                    <div class="command-category">
+                    <div class="command-category" data-testid="retrieval-commands">
                         <h3>Retrieval Commands</h3>
                         <ul class="command-list">
                             <li><code>GET</code> - Retrieve a value</li>
                             <li><code>GETS</code> - Retrieve with CAS token</li>
                         </ul>
                     </div>
-                    <div class="command-category">
+                    <div class="command-category" data-testid="deletion-commands">
                         <h3>Deletion Commands</h3>
                         <ul class="command-list">
                             <li><code>DELETE</code> - Remove a key-value pair</li>
                         </ul>
                     </div>
-                    <div class="command-category">
+                    <div class="command-category" data-testid="admin-commands">
                         <h3>Admin Commands</h3>
                         <ul class="command-list">
                             <li><code>INFO</code> - Get server information</li>
