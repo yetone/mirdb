@@ -67,6 +67,12 @@ body {
     text-decoration: none;
 }
 
+.nav-logo:focus,
+.nav-logo:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
 .nav-links {
     display: flex;
     list-style: none;
@@ -82,6 +88,12 @@ body {
 
 .nav-links a:hover {
     color: var(--primary-color);
+}
+
+.nav-links a:focus,
+.nav-links a:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 /* Hero Section */
@@ -139,6 +151,12 @@ body {
     background-color: var(--primary-dark);
 }
 
+.btn-primary:focus,
+.btn-primary:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.5);
+    outline-offset: 2px;
+}
+
 .btn-secondary {
     background-color: transparent;
     color: white;
@@ -148,6 +166,12 @@ body {
 .btn-secondary:hover {
     border-color: #64748b;
     background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-secondary:focus,
+.btn-secondary:focus-visible {
+    outline: 3px solid rgba(100, 116, 139, 0.5);
+    outline-offset: 2px;
 }
 
 /* Sections */
@@ -441,6 +465,12 @@ pre code {
 
 .footer-section a:hover {
     color: white;
+}
+
+.footer-section a:focus,
+.footer-section a:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 .footer-bottom {
