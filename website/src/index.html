@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility. Fast, durable, and easy to use.">
+    <meta name="keywords" content="MirDB, key-value store, memcached, persistent, database, LSM tree, Rust">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <h1 class="product-name">MirDB</h1>
+            <p class="tagline hero-tagline">Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+            <p class="value-proposition hero-description">
+                MirDB combines the simplicity of memcached with the durability of persistent storage.
+                Built with Rust and powered by LSM tree architecture, it offers high-performance
+                data operations while ensuring your data survives restarts and crashes.
+            </p>
+            <div class="cta-buttons">
+                <a href="#documentation" class="cta-primary btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="cta-secondary">View on GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Memcached Compatible</h3>
+                    <p>Use existing memcached clients seamlessly. Drop-in replacement with full protocol support for GET, SET, DELETE, and more.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>Data survives restarts with SSTable storage. Write-ahead logging ensures durability even during unexpected crashes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>High Performance</h3>
+                    <p>LSM tree architecture with Tokio-based async I/O delivers exceptional throughput and low latency operations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="documentation" class="quickstart-section">
+        <div class="container">
+            <h2>Quick Start</h2>
+            <div class="code-block">
+                <pre><code># Start MirDB server
+mirdb -c config.toml
+
+# Connect with any memcached client
+telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#documentation">Documentation</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+            </div>
+            <p class="copyright">&copy; 2024 MirDB. MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>

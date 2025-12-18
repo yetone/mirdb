@@ -1,0 +1,17 @@
+{
+  "name": "mirdb-landing-page",
+  "version": "1.0.0",
+  "description": "MirDB Product Landing Page",
+  "main": "src/index.html",
+  "scripts": {
+    "test": "jest",
+    "serve": "npx http-server src -p 3000"
+  },
+  "keywords": ["mirdb", "landing-page", "key-value-store"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}
