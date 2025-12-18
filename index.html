@@ -78,28 +78,64 @@
 
         <section id="getting-started" class="getting-started">
             <h2>Getting Started</h2>
+
             <div class="code-section">
                 <h3>Installation</h3>
-                <pre><code class="language-bash">cargo install mirdb</code></pre>
+                <p>Install MirDB using Cargo, Rust's package manager:</p>
+                <pre><code class="language-bash">cargo install mirdb-server</code></pre>
+                <p>Or build from source:</p>
+                <pre><code class="language-bash">git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
             </div>
-            <div class="code-section">
-                <h3>Basic Usage</h3>
-                <pre><code class="language-bash"># Start the server
-mirdb-server
 
-# Connect using any memcached client
+            <div class="code-section">
+                <h3>Start the Server</h3>
+                <p>Run MirDB with default configuration:</p>
+                <pre><code class="language-bash">mirdb-server</code></pre>
+                <p>By default, MirDB listens on <code>0.0.0.0:12333</code>.</p>
+            </div>
+
+            <div class="code-section">
+                <h3>Basic Operations</h3>
+                <p>Connect using any memcached client or telnet. Here are the basic SET and GET operations:</p>
+
+                <h4>SET Operation</h4>
+                <p>Store a key-value pair:</p>
+                <pre><code class="language-bash"># Using telnet
 telnet localhost 12333
 
-# Set a value
+# SET command: SET &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
 set mykey 0 0 5
 hello
-STORED
+STORED</code></pre>
 
-# Get a value
+                <h4>GET Operation</h4>
+                <p>Retrieve a value by key:</p>
+                <pre><code class="language-bash"># GET command: GET &lt;key&gt;
 get mykey
 VALUE mykey 0 5
 hello
 END</code></pre>
+
+                <h4>Using Python Client</h4>
+                <pre><code class="language-python">import memcache
+
+# Connect to MirDB
+client = memcache.Client(['localhost:12333'])
+
+# SET operation
+client.set('user:1', 'John Doe')
+
+# GET operation
+value = client.get('user:1')
+print(value)  # Output: John Doe</code></pre>
+            </div>
+
+            <div class="code-section">
+                <h3>Learn More</h3>
+                <p>Ready to dive deeper? Check out the full documentation:</p>
+                <p><a href="https://github.com/yetone/mirdb#readme" class="btn btn-primary docs-link" id="docs-link">View Full Documentation</a></p>
             </div>
         </section>
 
@@ -150,6 +186,7 @@ END</code></pre>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script>
         // Mobile menu toggle
         document.querySelector('.mobile-menu-btn').addEventListener('click', function() {

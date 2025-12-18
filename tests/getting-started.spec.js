@@ -87,13 +87,13 @@ test.describe('Getting Started Section', () => {
     const preCount = await preWithLanguageClass.count();
     expect(preCount).toBeGreaterThan(0);
 
-    // Verify the CSS file is linked (checking for prism.css)
-    const prismCss = page.locator('link[href*="prism.css"]');
-    await expect(prismCss).toHaveAttribute('href', /prism\.css/);
+    // Verify the CSS file is linked (checking for prism CSS - either local or CDN)
+    const prismCss = page.locator('link[href*="prism"]');
+    await expect(prismCss.first()).toHaveAttribute('href', /prism/);
 
-    // Verify prism.js script is included
-    const prismJs = page.locator('script[src*="prism.js"]');
-    await expect(prismJs).toHaveAttribute('src', /prism\.js/);
+    // Verify prism.js script is included (either local or CDN)
+    const prismJs = page.locator('script[src*="prism"]');
+    await expect(prismJs.first()).toHaveAttribute('src', /prism/);
   });
 
   // Test Case 5: Check for link to full documentation
