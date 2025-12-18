@@ -15,7 +15,12 @@
     <nav class="navbar" role="navigation" aria-label="Main navigation" data-testid="navbar">
         <div class="nav-container">
             <a href="#" class="nav-brand" data-testid="nav-brand">MirDB</a>
-            <ul class="nav-links">
+            <button class="hamburger-menu" data-testid="hamburger-menu" aria-expanded="false" aria-label="Toggle navigation menu" aria-controls="nav-links">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            <ul class="nav-links" id="nav-links" data-testid="nav-links">
                 <li><a href="#features" data-testid="nav-features">Features</a></li>
                 <li><a href="#quickstart" data-testid="nav-quickstart">Quick Start</a></li>
                 <li><a href="#commands" data-testid="nav-commands">Commands</a></li>

@@ -102,6 +102,43 @@ body {
     gap: var(--spacing-xs);
 }
 
+/* Hamburger Menu (hidden on desktop) */
+.hamburger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    padding: var(--spacing-sm);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.hamburger-line {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background-color: var(--text-color);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Hamburger animation when open */
+.hamburger-menu[aria-expanded="true"] .hamburger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger-menu[aria-expanded="true"] .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu[aria-expanded="true"] .hamburger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
 /* Hero Section */
 .hero {
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
@@ -544,8 +581,40 @@ tr:hover {
 
 /* Tablet portrait and mobile (max-width: 768px) */
 @media (max-width: 768px) {
+    /* Navigation mobile styles */
+    .hamburger-menu {
+        display: flex;
+    }
+
+    .nav-container {
+        flex-wrap: wrap;
+    }
+
     .nav-links {
         display: none;
+        flex-direction: column;
+        width: 100%;
+        padding: var(--spacing-md) 0;
+        background-color: var(--background);
+        border-top: 1px solid var(--border-color);
+        margin-top: var(--spacing-md);
+        gap: 0;
+    }
+
+    .nav-links.nav-open {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: var(--spacing-md);
+        min-height: 44px;
+        display: flex;
+        align-items: center;
     }
 
     .hero-title {
@@ -564,6 +633,7 @@ tr:hover {
     .btn {
         width: 100%;
         max-width: 280px;
+        min-height: 44px;
     }
 
     .features h2,
@@ -573,6 +643,11 @@ tr:hover {
         font-size: 2rem;
     }
 
+    /* Feature cards single column */
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
     .footer-content {
         grid-template-columns: 1fr;
         text-align: center;
@@ -580,6 +655,13 @@ tr:hover {
 
     .footer-links ul {
         margin-bottom: var(--spacing-xl);
+    }
+
+    /* Copy button touch target */
+    .copy-btn {
+        min-height: 44px;
+        min-width: 44px;
+        padding: var(--spacing-sm) var(--spacing-md);
     }
 }
 

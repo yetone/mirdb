@@ -5,6 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     initCopyButtons();
+    initHamburgerMenu();
 });
 
 /**
@@ -117,4 +118,45 @@ function showCopyError(button) {
     setTimeout(function() {
         span.textContent = originalText;
     }, 2000);
+}
+
+/**
+ * Initialize hamburger menu for mobile navigation
+ */
+function initHamburgerMenu() {
+    var hamburgerButton = document.querySelector('[data-testid="hamburger-menu"]');
+    var navLinks = document.querySelector('[data-testid="nav-links"]');
+
+    if (!hamburgerButton || !navLinks) {
+        return;
+    }
+
+    hamburgerButton.addEventListener('click', function() {
+        var isExpanded = hamburgerButton.getAttribute('aria-expanded') === 'true';
+
+        // Toggle aria-expanded
+        hamburgerButton.setAttribute('aria-expanded', !isExpanded);
+
+        // Toggle nav-open class
+        navLinks.classList.toggle('nav-open');
+    });
+
+    // Close menu when clicking a navigation link
+    var navLinkElements = navLinks.querySelectorAll('a');
+    navLinkElements.forEach(function(link) {
+        link.addEventListener('click', function() {
+            hamburgerButton.setAttribute('aria-expanded', 'false');
+            navLinks.classList.remove('nav-open');
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        var isClickInsideNav = hamburgerButton.contains(event.target) || navLinks.contains(event.target);
+
+        if (!isClickInsideNav && navLinks.classList.contains('nav-open')) {
+            hamburgerButton.setAttribute('aria-expanded', 'false');
+            navLinks.classList.remove('nav-open');
+        }
+    });
 }
