@@ -223,50 +223,163 @@ DELETED</code></pre>
     <section id="commands" class="commands" role="region" aria-labelledby="commands-heading">
         <div class="container">
             <h2 id="commands-heading">Supported Commands</h2>
+
+            <!-- Storage Commands -->
+            <h3>Storage Commands</h3>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
                             <th>Command</th>
+                            <th>Format</th>
                             <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><code>SET</code></td>
+                            <td><code data-testid="set-format">set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code></td>
                             <td>Store a key-value pair</td>
                         </tr>
                         <tr>
-                            <td><code>GET</code></td>
-                            <td>Retrieve a value by key</td>
-                        </tr>
-                        <tr>
-                            <td><code>DELETE</code></td>
-                            <td>Remove a key-value pair</td>
-                        </tr>
-                        <tr>
                             <td><code>ADD</code></td>
+                            <td><code data-testid="add-format">add &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code></td>
                             <td>Store only if key doesn't exist</td>
                         </tr>
                         <tr>
                             <td><code>REPLACE</code></td>
+                            <td><code data-testid="replace-format">replace &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code></td>
                             <td>Store only if key exists</td>
                         </tr>
                         <tr>
                             <td><code>APPEND</code></td>
+                            <td><code data-testid="append-format">append &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code></td>
                             <td>Append data to existing value</td>
                         </tr>
                         <tr>
                             <td><code>PREPEND</code></td>
+                            <td><code data-testid="prepend-format">prepend &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code></td>
                             <td>Prepend data to existing value</td>
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Retrieval Commands -->
+            <h3>Retrieval Commands</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Format</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>GET</code></td>
+                            <td><code data-testid="get-format">get &lt;key1&gt; [&lt;key2&gt; ...]</code></td>
+                            <td>Retrieve one or more values by key</td>
+                        </tr>
+                        <tr>
+                            <td><code>GETS</code></td>
+                            <td><code data-testid="gets-format">gets &lt;key1&gt; [&lt;key2&gt; ...]</code></td>
+                            <td>Retrieve with CAS token</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Deletion Commands -->
+            <h3>Deletion Commands</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Format</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>DELETE</code></td>
+                            <td><code data-testid="delete-format">delete &lt;key&gt; [noreply]</code></td>
+                            <td>Remove a key-value pair</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- MirDB-Specific Commands -->
+            <h3>MirDB-Specific Commands</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Format</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         <tr>
                             <td><code>INFO</code></td>
-                            <td>Get server information (MirDB specific)</td>
+                            <td><code data-testid="info-format">info</code></td>
+                            <td>Display database status and server information</td>
                         </tr>
                         <tr>
                             <td><code>MAJOR_COMPACTION</code></td>
-                            <td>Trigger major compaction (MirDB specific)</td>
+                            <td><code data-testid="major-compaction-format">major_compaction</code></td>
+                            <td>Trigger manual compaction of the LSM tree</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Response Codes -->
+            <h3>Response Codes</h3>
+            <div class="table-wrapper" data-testid="response-codes">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Response</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>STORED</code></td>
+                            <td>Data stored successfully</td>
+                        </tr>
+                        <tr>
+                            <td><code>NOT_STORED</code></td>
+                            <td>Data not stored (condition not met for add/replace)</td>
+                        </tr>
+                        <tr>
+                            <td><code>EXISTS</code></td>
+                            <td>CAS check failed (item has been modified)</td>
+                        </tr>
+                        <tr>
+                            <td><code>NOT_FOUND</code></td>
+                            <td>Key not found (for delete/replace operations)</td>
+                        </tr>
+                        <tr>
+                            <td><code>DELETED</code></td>
+                            <td>Key deleted successfully</td>
+                        </tr>
+                        <tr>
+                            <td><code>ERROR</code></td>
+                            <td>Unknown command or server error</td>
+                        </tr>
+                        <tr>
+                            <td><code>CLIENT_ERROR &lt;msg&gt;</code></td>
+                            <td>Client input error with message</td>
+                        </tr>
+                        <tr>
+                            <td><code>SERVER_ERROR &lt;msg&gt;</code></td>
+                            <td>Server error with message</td>
                         </tr>
                     </tbody>
                 </table>
