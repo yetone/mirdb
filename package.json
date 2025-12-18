@@ -3,12 +3,19 @@
   "version": "1.0.0",
   "description": "MirDB Product Homepage",
   "scripts": {
-    "serve": "npx serve -p 3000",
-    "test": "npx playwright test",
+    "serve": "npx serve ./website -l 3000",
+    "test": "npx vitest run",
+    "test:unit": "npx vitest run",
+    "test:e2e": "npx playwright test",
     "test:ui": "npx playwright test --ui",
     "test:headed": "npx playwright test --headed"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^22.0.0",
+    "jsdom": "^25.0.0",
+    "serve": "^14.2.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
   }
 }
