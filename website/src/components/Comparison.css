@@ -1,0 +1,118 @@
+.comparison {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #f8fafc;
+}
+
+.comparison-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.comparison-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.comparison-subtitle {
+  font-size: 1.125rem;
+  color: #94a3b8;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.comparison-highlight {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.highlight-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.highlight-card.persistence {
+  border-left: 4px solid #22c55e;
+}
+
+.highlight-card.compatibility {
+  border-left: 4px solid #3b82f6;
+}
+
+.highlight-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.highlight-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.comparison-table th {
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.comparison-table tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table tr.advantage {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.mirdb-cell {
+  color: #22c55e;
+  font-weight: 500;
+}
+
+.memcached-cell {
+  color: #94a3b8;
+}
+
+@media (max-width: 640px) {
+  .comparison {
+    padding: 3rem 1rem;
+  }
+
+  .comparison-title {
+    font-size: 1.5rem;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .highlight-card {
+    padding: 1rem;
+  }
+}
