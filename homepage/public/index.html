@@ -36,22 +36,22 @@
       </div>
     </section>
 
-    <section class="features-section" id="features">
+    <section class="features-section" id="features" data-testid="features-section">
       <h2>Key Features</h2>
-      <div class="features-grid">
-        <div class="feature-card">
+      <div class="features-grid" data-testid="features-grid">
+        <div class="feature-card" data-testid="feature-memcached">
           <h3>Memcached Protocol</h3>
           <p>Compatible with standard Memcached text protocol. Use your existing clients without any code changes.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-testid="feature-persistence">
           <h3>Persistent Storage</h3>
           <p>Unlike in-memory Memcached, MirDB persists data to disk using SSTables. Your data survives restarts.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-testid="feature-lsm">
           <h3>LSM Tree Architecture</h3>
           <p>Production-grade storage engine with memtables, WAL, and multi-level SSTable compaction.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-testid="feature-async">
           <h3>Async Performance</h3>
           <p>Built on Tokio for high-concurrency workloads with non-blocking I/O.</p>
         </div>
