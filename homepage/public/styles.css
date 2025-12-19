@@ -473,8 +473,8 @@ footer {
   color: var(--primary-color);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Responsive Design - Mobile (under 768px) */
+@media (max-width: 767px) {
   .navbar {
     flex-direction: column;
     gap: 1rem;
@@ -579,6 +579,49 @@ footer {
   .footer-content {
     flex-direction: column;
     text-align: center;
+  }
+}
+
+/* Responsive Design - Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+  }
+
+  .nav-links {
+    gap: 1.5rem;
+  }
+
+  .hero-section {
+    padding: 2rem;
+  }
+
+  .hero-cta-group {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .features-section,
+  .architecture-section,
+  .quickstart-section,
+  .configuration-section {
+    padding: 4rem 2rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .architecture-explanations {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
   }
 }
 
