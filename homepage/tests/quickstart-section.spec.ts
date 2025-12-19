@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Quick Start Code Examples (REQ-3, US-3)', () => {
+test.describe('Quick Start Time to First Use (Scenario 16)', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the homepage
     await page.goto('file://' + process.cwd() + '/public/index.html');
@@ -23,25 +23,66 @@ test.describe('Quick Start Code Examples (REQ-3, US-3)', () => {
     await expect(codeBlocks.first()).toBeVisible();
   });
 
-  test('TC2: Server start command example shows ./mirdb -c mirdb.toml', async ({ page }) => {
+  test('Scenario TC2: Verify installation instructions are present', async ({ page }) => {
     // Navigate to the quick-start section
     const quickstartSection = page.locator('[data-testid="quickstart-section"], .quickstart-section, #quickstart');
     await quickstartSection.scrollIntoViewIfNeeded();
 
-    // Find code blocks containing server start command
-    const codeContent = await quickstartSection.locator('code').textContent();
+    // Find the installation step
+    const installStep = quickstartSection.locator('[data-testid="quickstart-install"]');
+    await expect(installStep).toBeVisible();
+
+    // Verify the install step has a heading
+    const installHeading = installStep.locator('h3');
+    await expect(installHeading).toContainText('Install');
+
+    // Get all code content from the install section
+    const codeContent = await installStep.locator('code').textContent();
+
+    // Verify installation instructions include cargo install or git clone
+    const hasInstallInstructions =
+      codeContent?.includes('cargo install mirdb') ||
+      codeContent?.includes('git clone') ||
+      codeContent?.includes('cargo build');
+
+    expect(hasInstallInstructions).toBeTruthy();
+  });
+
+  test('Scenario TC3: Verify server start instructions are present', async ({ page }) => {
+    // Navigate to the quick-start section
+    const quickstartSection = page.locator('[data-testid="quickstart-section"], .quickstart-section, #quickstart');
+    await quickstartSection.scrollIntoViewIfNeeded();
+
+    // Find the server start step
+    const startStep = quickstartSection.locator('[data-testid="quickstart-start"]');
+    await expect(startStep).toBeVisible();
+
+    // Verify the start step has a heading
+    const startHeading = startStep.locator('h3');
+    await expect(startHeading).toContainText('Start');
+
+    // Get code content from the start section
+    const codeContent = await startStep.locator('code').textContent();
 
     // Verify the server start command is present
     expect(codeContent).toContain('./mirdb -c mirdb.toml');
   });
 
-  test('TC3: Connection example shows telnet localhost 12333 or client library', async ({ page }) => {
+  test('Scenario TC4: Verify connection instructions are present', async ({ page }) => {
     // Navigate to the quick-start section
     const quickstartSection = page.locator('[data-testid="quickstart-section"], .quickstart-section, #quickstart');
     await quickstartSection.scrollIntoViewIfNeeded();
 
-    // Find code blocks containing connection example
-    const codeContent = await quickstartSection.locator('code').textContent();
+    // Find the connect step
+    const connectStep = quickstartSection.locator('[data-testid="quickstart-connect"]');
+    await expect(connectStep).toBeVisible();
+
+    // Verify the connect step has a heading
+    const connectHeading = connectStep.locator('h3');
+    await expect(connectHeading).toContainText('Connect');
+
+    // Get code content from the connect section
+    const codeContent = await connectStep.locator('code').textContent();
 
     // Verify connection command is present (telnet or client library)
     const hasConnectionExample =
@@ -52,33 +93,28 @@ test.describe('Quick Start Code Examples (REQ-3, US-3)', () => {
     expect(hasConnectionExample).toBeTruthy();
   });
 
-  test('TC4: SET operation example shows SET command with STORED response', async ({ page }) => {
+  test('Scenario TC5: Verify basic operations are demonstrated (SET and GET)', async ({ page }) => {
     // Navigate to the quick-start section
     const quickstartSection = page.locator('[data-testid="quickstart-section"], .quickstart-section, #quickstart');
     await quickstartSection.scrollIntoViewIfNeeded();
 
-    // Find code blocks containing SET operation
-    const codeContent = await quickstartSection.locator('code').textContent();
+    // Find the connect step which contains SET/GET operations
+    const connectStep = quickstartSection.locator('[data-testid="quickstart-connect"]');
+    await expect(connectStep).toBeVisible();
+
+    // Get code content from the connect section
+    const codeContent = await connectStep.locator('code').textContent();
 
     // Verify SET command is present
     expect(codeContent?.toLowerCase()).toContain('set');
 
-    // Verify STORED response is shown
+    // Verify STORED response is shown for SET operation
     expect(codeContent).toContain('STORED');
-  });
-
-  test('TC5: GET operation example shows GET command with VALUE response', async ({ page }) => {
-    // Navigate to the quick-start section
-    const quickstartSection = page.locator('[data-testid="quickstart-section"], .quickstart-section, #quickstart');
-    await quickstartSection.scrollIntoViewIfNeeded();
-
-    // Find code blocks containing GET operation
-    const codeContent = await quickstartSection.locator('code').textContent();
 
     // Verify GET command is present
     expect(codeContent?.toLowerCase()).toContain('get');
 
-    // Verify VALUE response is shown
+    // Verify VALUE response is shown for GET operation
     expect(codeContent).toContain('VALUE');
   });
 

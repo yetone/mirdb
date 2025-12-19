@@ -174,21 +174,63 @@
 
     <section class="quickstart-section" id="quickstart" data-testid="quickstart-section">
       <h2>Quick Start</h2>
-      <div class="code-block">
-        <div class="code-block-header">
-          <span class="code-language">bash</span>
-          <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">
-            <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span class="copy-text">Copy</span>
-          </button>
-        </div>
-        <pre><code class="language-bash"><span class="token comment"># Start MirDB server</span>
-<span class="token command">./mirdb -c mirdb.toml</span>
+      <p class="quickstart-intro">Get up and running with MirDB in under 5 minutes.</p>
 
-<span class="token comment"># Connect with any memcached client</span>
+      <div class="quickstart-step" data-testid="quickstart-install">
+        <h3>1. Install MirDB</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">bash</span>
+            <button class="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+          <pre><code class="language-bash"><span class="token comment"># Install from crates.io</span>
+<span class="token command">cargo install mirdb</span>
+
+<span class="token comment"># Or clone and build from source</span>
+<span class="token command">git clone https://github.com/mirdb/mirdb.git</span>
+<span class="token command">cd mirdb</span>
+<span class="token command">cargo build --release</span></code></pre>
+        </div>
+      </div>
+
+      <div class="quickstart-step" data-testid="quickstart-start">
+        <h3>2. Start the Server</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">bash</span>
+            <button class="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+          <pre><code class="language-bash"><span class="token comment"># Start MirDB server</span>
+<span class="token command">./mirdb -c mirdb.toml</span></code></pre>
+        </div>
+      </div>
+
+      <div class="quickstart-step" data-testid="quickstart-connect">
+        <h3>3. Connect and Use</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">bash</span>
+            <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+          <pre><code class="language-bash"><span class="token comment"># Connect with any memcached client</span>
 <span class="token command">telnet localhost 12333</span>
 
 <span class="token comment"># Set a value</span>
@@ -201,6 +243,7 @@
 <span class="token comment"># Response: VALUE mykey 0 5</span>
 <span class="token comment"># hello</span>
 <span class="token comment"># END</span></code></pre>
+        </div>
       </div>
     </section>
 
