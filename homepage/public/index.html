@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent Memcached-compatible key-value store built with Rust and LSM tree architecture">
+  <title>MirDB - Persistent Memcached-Compatible Key-Value Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="/" class="logo">MirDB</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero-section" id="hero" data-testid="hero-section">
+      <div class="hero-content">
+        <h1>MirDB</h1>
+        <h2 class="tagline" data-testid="tagline">A Persistent Memcached-Compatible Key-Value Store</h2>
+        <p class="hero-description">
+          Drop-in replacement for Memcached with data persistence.
+          Built with Rust and powered by LSM tree architecture for
+          high-performance storage that survives restarts.
+        </p>
+        <div class="hero-cta-group">
+          <a href="#quickstart" class="btn-primary cta-button" data-testid="cta-button">Get Started</a>
+          <a href="https://github.com/mirdb/mirdb" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section" id="features">
+      <h2>Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Memcached Protocol</h3>
+          <p>Compatible with standard Memcached text protocol. Use your existing clients without any code changes.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Persistent Storage</h3>
+          <p>Unlike in-memory Memcached, MirDB persists data to disk using SSTables. Your data survives restarts.</p>
+        </div>
+        <div class="feature-card">
+          <h3>LSM Tree Architecture</h3>
+          <p>Production-grade storage engine with memtables, WAL, and multi-level SSTable compaction.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Async Performance</h3>
+          <p>Built on Tokio for high-concurrency workloads with non-blocking I/O.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quickstart-section" id="quickstart">
+      <h2>Quick Start</h2>
+      <div class="code-block">
+        <pre><code># Start MirDB server
+./mirdb -c mirdb.toml
+
+# Connect with any memcached client
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+# Response: STORED
+
+# Get the value
+get mykey
+# Response: VALUE mykey 0 5
+# hello
+# END</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2024 MirDB Project. Licensed under MIT.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://github.com/mirdb/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a></li>
+      </ul>
+    </div>
+  </footer>
+</body>
+</html>
