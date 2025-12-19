@@ -220,6 +220,219 @@ body {
   word-break: break-word;
 }
 
+/* Quick Start Section */
+.quick-start-section {
+  padding: 80px 0;
+  background-color: #f8f9fa;
+}
+
+.section-description {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 600px;
+  margin: -30px auto 50px;
+}
+
+.quick-start-steps {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.quick-start-step {
+  margin-bottom: 40px;
+}
+
+.step-title {
+  font-size: 1.5rem;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #64ffda;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.step-description {
+  color: #666;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.step-description code {
+  background-color: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #e83e8c;
+}
+
+.usage-notes {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  border-left: 4px solid #64ffda;
+}
+
+.usage-notes p {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.usage-notes p:last-child {
+  margin-bottom: 0;
+}
+
+.usage-notes code {
+  background-color: #f1f3f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.85em;
+  color: #16213e;
+}
+
+/* Code Block Component */
+.code-block {
+  position: relative;
+  margin: 16px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #1a1a2e;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: #16213e;
+  border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+}
+
+.code-block-title {
+  font-size: 0.85rem;
+  color: #64ffda;
+  font-weight: 500;
+}
+
+.code-block-language {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.code-block-content {
+  position: relative;
+}
+
+.code-pre {
+  margin: 0;
+  padding: 20px;
+  overflow-x: auto;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #e1e1e1;
+  background-color: transparent;
+  tab-size: 2;
+}
+
+.code-pre code {
+  font-family: inherit;
+  background: none;
+  padding: 0;
+}
+
+/* Syntax highlighting */
+.code-pre.language-bash,
+.code-pre.language-shell {
+  color: #e1e1e1;
+}
+
+.code-pre.language-toml {
+  color: #e1e1e1;
+}
+
+.code-line {
+  display: block;
+}
+
+.line-number {
+  display: inline-block;
+  width: 2em;
+  margin-right: 1em;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: right;
+  user-select: none;
+}
+
+.line-content {
+  display: inline;
+}
+
+/* Copy Button */
+.copy-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.copy-button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(100, 255, 218, 0.5);
+  color: #64ffda;
+}
+
+.copy-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.3);
+}
+
+.copy-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-icon.copied {
+  color: #64ffda;
+  font-weight: bold;
+}
+
+.copy-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero h1 {
@@ -243,5 +456,38 @@ body {
   .command-syntax code,
   .command-response code {
     font-size: 0.75rem;
+  }
+
+  .quick-start-section {
+    padding: 60px 0;
+  }
+
+  .section-description {
+    margin: -20px auto 40px;
+    font-size: 1rem;
+  }
+
+  .step-title {
+    font-size: 1.25rem;
+  }
+
+  .code-pre {
+    padding: 16px;
+    font-size: 0.8rem;
+  }
+
+  .copy-button {
+    width: 32px;
+    height: 32px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .usage-notes {
+    padding: 12px;
+  }
+
+  .usage-notes p {
+    font-size: 0.85rem;
   }
 }

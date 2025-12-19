@@ -1,5 +1,6 @@
 import React from 'react';
 import { Features } from './components/Features';
+import { QuickStart } from './components/QuickStart';
 import { Commands } from './components/Commands';
 import { Configuration } from './components/Configuration';
 import { GitHubLink } from './components/GitHubLink';
@@ -24,6 +25,7 @@ const App: React.FC = () => {
 
       <main>
         <Features />
+        <QuickStart />
         <Commands />
         <Configuration />
       </main>
