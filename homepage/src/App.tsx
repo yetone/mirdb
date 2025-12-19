@@ -1,6 +1,7 @@
 import React from 'react';
 import { Features } from './components/Features';
 import { Commands } from './components/Commands';
+import { Configuration } from './components/Configuration';
 import './App.css';
 
 const App: React.FC = () => {
@@ -20,6 +21,7 @@ const App: React.FC = () => {
       <main>
         <Features />
         <Commands />
+        <Configuration />
       </main>
 
       <footer className="footer">
