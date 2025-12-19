@@ -187,6 +187,71 @@ body {
   font-size: 0.95rem;
 }
 
+/* Architecture Section */
+.architecture-section {
+  padding: 4rem 2rem;
+  background-color: var(--background-color);
+}
+
+.architecture-section h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.architecture-intro {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+.architecture-diagram-container {
+  max-width: 850px;
+  margin: 0 auto 3rem;
+  background-color: var(--surface-color);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.architecture-diagram {
+  width: 100%;
+  height: auto;
+  min-width: 600px;
+  display: block;
+}
+
+.architecture-explanations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.explanation-card {
+  padding: 1.5rem;
+  background-color: var(--surface-color);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+
+.explanation-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+}
+
+.explanation-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
 /* Quick Start Section */
 .quickstart-section {
   padding: 4rem 2rem;
@@ -357,8 +422,31 @@ footer {
   }
 
   .features-section,
+  .architecture-section,
   .quickstart-section {
     padding: 3rem 1rem;
+  }
+
+  .architecture-intro {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .architecture-diagram-container {
+    padding: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .architecture-diagram {
+    min-width: 500px;
+  }
+
+  .architecture-explanations {
+    gap: 1rem;
+  }
+
+  .explanation-card {
+    padding: 1.25rem;
   }
 
   .footer-content {

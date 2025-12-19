@@ -13,6 +13,7 @@
       <a href="/" class="logo">MirDB</a>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
+        <li><a href="#architecture">Architecture</a></li>
         <li><a href="#quickstart">Quick Start</a></li>
         <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
       </ul>
@@ -54,6 +55,110 @@
         <div class="feature-card" data-testid="feature-async">
           <h3>Async Performance</h3>
           <p>Built on Tokio for high-concurrency workloads with non-blocking I/O.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="architecture-section" id="architecture" data-testid="architecture-section">
+      <h2>How It Works</h2>
+      <p class="architecture-intro">MirDB uses an LSM (Log-Structured Merge) tree architecture for high-performance, durable storage.</p>
+
+      <div class="architecture-diagram-container">
+        <svg class="architecture-diagram" data-testid="architecture-diagram" role="img" aria-label="LSM tree architecture diagram showing write data flow: Write operations go to WAL (Write-Ahead Log) for durability, then to Memtable (in-memory), then through compaction to SSTable levels on disk" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+          <title>LSM Tree Data Flow Diagram</title>
+          <desc>Architecture diagram showing how data flows through MirDB: Write requests are first logged to the Write-Ahead Log (WAL) for durability, then stored in the in-memory Memtable. When the Memtable fills up, it is flushed to disk as Level 0 SSTables, which are then compacted into higher levels (Level 1, Level 2, etc.) for efficient storage.</desc>
+
+          <!-- Background -->
+          <rect width="800" height="400" fill="#f8fafc"/>
+
+          <!-- Write Operation -->
+          <g class="diagram-node" data-component="write">
+            <rect x="30" y="160" width="100" height="80" rx="8" fill="#2563eb" stroke="#1d4ed8" stroke-width="2"/>
+            <text x="80" y="195" text-anchor="middle" fill="white" font-weight="600" font-size="14">Write</text>
+            <text x="80" y="215" text-anchor="middle" fill="white" font-size="12">Request</text>
+          </g>
+
+          <!-- Arrow from Write to WAL -->
+          <g class="diagram-arrow">
+            <line x1="130" y1="200" x2="175" y2="200" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+          </g>
+
+          <!-- WAL (Write-Ahead Log) -->
+          <g class="diagram-node" data-component="wal" data-testid="diagram-wal">
+            <rect x="180" y="140" width="120" height="120" rx="8" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+            <text x="240" y="185" text-anchor="middle" fill="white" font-weight="600" font-size="14">WAL</text>
+            <text x="240" y="205" text-anchor="middle" fill="white" font-size="11">Write-Ahead</text>
+            <text x="240" y="220" text-anchor="middle" fill="white" font-size="11">Log</text>
+            <text x="240" y="250" text-anchor="middle" fill="#fef3c7" font-size="10">(Durability)</text>
+          </g>
+
+          <!-- Arrow from WAL to Memtable -->
+          <g class="diagram-arrow">
+            <line x1="300" y1="200" x2="345" y2="200" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+          </g>
+
+          <!-- Memtable -->
+          <g class="diagram-node" data-component="memtable" data-testid="diagram-memtable">
+            <rect x="350" y="140" width="120" height="120" rx="8" fill="#10b981" stroke="#059669" stroke-width="2"/>
+            <text x="410" y="185" text-anchor="middle" fill="white" font-weight="600" font-size="14">Memtable</text>
+            <text x="410" y="205" text-anchor="middle" fill="white" font-size="11">In-Memory</text>
+            <text x="410" y="220" text-anchor="middle" fill="white" font-size="11">Skip List</text>
+            <text x="410" y="250" text-anchor="middle" fill="#d1fae5" font-size="10">(Fast Writes)</text>
+          </g>
+
+          <!-- Arrow from Memtable to SSTable -->
+          <g class="diagram-arrow">
+            <line x1="470" y1="200" x2="515" y2="200" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="492" y="185" text-anchor="middle" fill="#64748b" font-size="9">Flush</text>
+          </g>
+
+          <!-- SSTable Levels Container -->
+          <g class="diagram-node" data-component="sstable" data-testid="diagram-sstable">
+            <rect x="520" y="60" width="250" height="280" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2"/>
+            <text x="645" y="85" text-anchor="middle" fill="#475569" font-weight="600" font-size="14">SSTable Levels (Disk)</text>
+
+            <!-- Level 0 -->
+            <rect x="540" y="100" width="210" height="50" rx="6" fill="#8b5cf6" stroke="#7c3aed" stroke-width="2"/>
+            <text x="645" y="130" text-anchor="middle" fill="white" font-weight="500" font-size="12">Level 0 (Recently Flushed)</text>
+
+            <!-- Arrow between levels -->
+            <line x1="645" y1="150" x2="645" y2="170" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="680" y="165" text-anchor="start" fill="#64748b" font-size="9">Compact</text>
+
+            <!-- Level 1 -->
+            <rect x="540" y="175" width="210" height="50" rx="6" fill="#6366f1" stroke="#4f46e5" stroke-width="2"/>
+            <text x="645" y="205" text-anchor="middle" fill="white" font-weight="500" font-size="12">Level 1 (Sorted)</text>
+
+            <!-- Arrow between levels -->
+            <line x1="645" y1="225" x2="645" y2="245" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="680" y="240" text-anchor="start" fill="#64748b" font-size="9">Compact</text>
+
+            <!-- Level 2+ -->
+            <rect x="540" y="250" width="210" height="50" rx="6" fill="#4f46e5" stroke="#4338ca" stroke-width="2"/>
+            <text x="645" y="280" text-anchor="middle" fill="white" font-weight="500" font-size="12">Level 2+ (Larger Files)</text>
+          </g>
+
+          <!-- Arrow Marker Definition -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="architecture-explanations" data-testid="architecture-explanations">
+        <div class="explanation-card">
+          <h3>1. Write-Ahead Log (WAL)</h3>
+          <p>Every write is first recorded in the WAL for durability. If the server crashes, data can be recovered from the log.</p>
+        </div>
+        <div class="explanation-card">
+          <h3>2. Memtable</h3>
+          <p>Data is stored in a fast, in-memory skip list. This enables quick writes and reads for recent data.</p>
+        </div>
+        <div class="explanation-card">
+          <h3>3. SSTable Levels</h3>
+          <p>When the Memtable fills up, it's flushed to disk as sorted string tables. Background compaction merges and organizes data across levels for efficient storage and retrieval.</p>
         </div>
       </div>
     </section>
