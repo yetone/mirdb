@@ -1,13 +1,15 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { StickyNav } from './components/StickyNav';
 import { Features } from './components/Features';
 import { QuickStart } from './components/QuickStart';
 import { Commands } from './components/Commands';
 import { Configuration } from './components/Configuration';
 import { GitHubLink } from './components/GitHubLink';
+import { NotFound } from './components/NotFound';
 import './App.css';
 
-const App: React.FC = () => {
+const HomePage: React.FC = () => {
   return (
     <div className="app">
       <StickyNav />
@@ -56,6 +58,17 @@ const App: React.FC = () => {
         </div>
       </footer>
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
