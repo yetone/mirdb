@@ -132,43 +132,54 @@ test.describe('Responsive Design - Mobile', () => {
       await expect(navbar).toBeVisible();
     });
 
-    test('navigation links wrap appropriately on mobile', async ({ page }) => {
+    test('mobile menu toggle is visible on mobile', async ({ page }) => {
+      const menuToggle = page.locator('[data-testid="mobile-menu-toggle"]');
+      await expect(menuToggle).toBeVisible();
+
+      // Menu toggle should have proper ARIA attributes
+      const ariaExpanded = await menuToggle.getAttribute('aria-expanded');
+      expect(ariaExpanded).toBe('false');
+    });
+
+    test('navigation links are hidden until menu is opened', async ({ page }) => {
       const navLinks = page.locator('.nav-links');
+
+      // Nav links should be hidden initially
+      await expect(navLinks).not.toBeVisible();
+
+      // Click menu toggle to open
+      const menuToggle = page.locator('[data-testid="mobile-menu-toggle"]');
+      await menuToggle.click();
+
+      // Nav links should now be visible
       await expect(navLinks).toBeVisible();
-
-      // Check that navigation has flex-wrap enabled
-      const flexWrap = await navLinks.evaluate((el) => {
-        return window.getComputedStyle(el).flexWrap;
-      });
-      expect(flexWrap).toBe('wrap');
     });
 
-    test('navigation links are centered on mobile', async ({ page }) => {
-      const navLinks = page.locator('.nav-links');
-
-      const justifyContent = await navLinks.evaluate((el) => {
-        return window.getComputedStyle(el).justifyContent;
-      });
-      expect(justifyContent).toBe('center');
-    });
-
-    test('navbar uses column layout on mobile', async ({ page }) => {
+    test('navbar uses row layout with flex-wrap on mobile', async ({ page }) => {
       const navbar = page.locator('.navbar');
 
       const flexDirection = await navbar.evaluate((el) => {
         return window.getComputedStyle(el).flexDirection;
       });
-      expect(flexDirection).toBe('column');
+      const flexWrap = await navbar.evaluate((el) => {
+        return window.getComputedStyle(el).flexWrap;
+      });
+      expect(flexDirection).toBe('row');
+      expect(flexWrap).toBe('wrap');
     });
 
-    test('all navigation links are accessible', async ({ page }) => {
+    test('all navigation links are accessible when menu is open', async ({ page }) => {
+      // Open the mobile menu first
+      const menuToggle = page.locator('[data-testid="mobile-menu-toggle"]');
+      await menuToggle.click();
+
       const navLinkElements = page.locator('.nav-links a');
       const count = await navLinkElements.count();
 
-      // Should have all navigation links visible
+      // Should have all navigation links
       expect(count).toBeGreaterThanOrEqual(4);
 
-      // All links should be visible and clickable
+      // All links should be visible when menu is open
       for (let i = 0; i < count; i++) {
         await expect(navLinkElements.nth(i)).toBeVisible();
       }
@@ -199,16 +210,19 @@ test.describe('Responsive Design - Mobile', () => {
       expect(boundingBox!.width).toBeGreaterThanOrEqual(44);
     });
 
-    test('navigation links have adequate touch target size', async ({ page }) => {
+    test('navigation links have adequate touch target size when menu is open', async ({ page }) => {
+      // Open the mobile menu first
+      const menuToggle = page.locator('[data-testid="mobile-menu-toggle"]');
+      await menuToggle.click();
+
       const navLinks = page.locator('.nav-links a');
       const count = await navLinks.count();
 
       for (let i = 0; i < count; i++) {
         const boundingBox = await navLinks.nth(i).boundingBox();
         expect(boundingBox).not.toBeNull();
-        // Links should have at least 44px height (including line-height and padding)
-        // Width can be smaller for text links but should still be reasonable
-        expect(boundingBox!.height).toBeGreaterThanOrEqual(20); // Text links have inherent height from font
+        // Links should have at least 44px height for touch-friendly targets
+        expect(boundingBox!.height).toBeGreaterThanOrEqual(44);
       }
     });
 

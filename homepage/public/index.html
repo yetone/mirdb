@@ -8,10 +8,18 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Skip to main content link for keyboard users -->
+  <a href="#main-content" class="skip-link" data-testid="skip-link">Skip to main content</a>
+
   <header>
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
       <a href="/" class="logo">MirDB</a>
-      <ul class="nav-links">
+      <button class="mobile-menu-toggle" data-testid="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      <ul class="nav-links" id="nav-links" data-testid="nav-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#quickstart">Quick Start</a></li>
@@ -21,7 +29,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="hero-section" id="hero" data-testid="hero-section">
       <div class="hero-content">
         <h1>MirDB</h1>
@@ -259,6 +267,40 @@
         }
       });
     });
+
+    // Mobile menu toggle functionality
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenuToggle && navLinks) {
+      mobileMenuToggle.addEventListener('click', function() {
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', !isExpanded);
+        navLinks.classList.toggle('nav-open');
+        this.classList.toggle('menu-open');
+      });
+
+      // Close menu when pressing Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navLinks.classList.contains('nav-open')) {
+          mobileMenuToggle.setAttribute('aria-expanded', 'false');
+          navLinks.classList.remove('nav-open');
+          mobileMenuToggle.classList.remove('menu-open');
+          mobileMenuToggle.focus();
+        }
+      });
+
+      // Close menu when clicking a link
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth < 768) {
+            mobileMenuToggle.setAttribute('aria-expanded', 'false');
+            navLinks.classList.remove('nav-open');
+            mobileMenuToggle.classList.remove('menu-open');
+          }
+        });
+      });
+    }
   </script>
   </main>
 
