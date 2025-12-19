@@ -335,7 +335,7 @@ body {
 
 /* Syntax Highlighting */
 .token.comment {
-  color: #6b7280;
+  color: #9ca3af;
   font-style: italic;
 }
 
@@ -447,13 +447,13 @@ footer {
 }
 
 .footer-info a {
-  color: var(--primary-color);
-  text-decoration: none;
+  color: #60a5fa;
+  text-decoration: underline;
   transition: color 0.2s;
 }
 
 .footer-info a:hover {
-  color: #60a5fa;
+  color: #93c5fd;
   text-decoration: underline;
 }
 
