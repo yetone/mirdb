@@ -2,6 +2,7 @@ import React from 'react';
 import { Features } from './components/Features';
 import { Commands } from './components/Commands';
 import { Configuration } from './components/Configuration';
+import { GitHubLink } from './components/GitHubLink';
 import './App.css';
 
 const App: React.FC = () => {
@@ -9,6 +10,9 @@ const App: React.FC = () => {
     <div className="app">
       <header className="hero">
         <div className="container">
+          <div className="header-nav">
+            <GitHubLink />
+          </div>
           <h1>MirDB</h1>
           <p className="tagline">Memcached, but persistent.</p>
           <p className="description">
@@ -27,6 +31,7 @@ const App: React.FC = () => {
       <footer className="footer">
         <div className="container">
           <p>&copy; 2024 MirDB. Built with Rust.</p>
+          <GitHubLink />
         </div>
       </footer>
     </div>
