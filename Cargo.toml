@@ -3,4 +3,5 @@ members = [
 "mirdb-server",
 "skip-list",
 "sstable",
+"tests",
 ]

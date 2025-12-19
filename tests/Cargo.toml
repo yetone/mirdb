@@ -1,0 +1,14 @@
+[package]
+name = "content_accuracy_tests"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[[test]]
+name = "content_accuracy"
+path = "content_accuracy_tests.rs"
+
+[[test]]
+name = "memcached_integration"
+path = "memcached_integration_tests.rs"
