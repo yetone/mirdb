@@ -116,6 +116,83 @@ END</code></pre>
     </div>
   </section>
 
+  <!-- Supported Commands Section -->
+  <section id="commands" aria-label="Supported Commands">
+    <div class="container">
+      <h2>Supported Commands</h2>
+      <p class="section-intro">MirDB implements the memcached text protocol, enabling compatibility with existing memcached clients.</p>
+
+      <div class="commands-grid">
+        <!-- Storage Commands -->
+        <div class="command-category">
+          <h3>Storage Commands</h3>
+          <div class="command-item">
+            <h4>SET</h4>
+            <p>Store a key-value pair</p>
+            <pre><code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n</code></pre>
+          </div>
+          <div class="command-item">
+            <h4>ADD</h4>
+            <p>Store only if key doesn't exist</p>
+          </div>
+          <div class="command-item">
+            <h4>REPLACE</h4>
+            <p>Store only if key exists</p>
+          </div>
+          <div class="command-item">
+            <h4>APPEND</h4>
+            <p>Append data to existing value</p>
+          </div>
+          <div class="command-item">
+            <h4>PREPEND</h4>
+            <p>Prepend data to existing value</p>
+          </div>
+        </div>
+
+        <!-- Retrieval Commands -->
+        <div class="command-category">
+          <h3>Retrieval Commands</h3>
+          <div class="command-item">
+            <h4>GET</h4>
+            <p>Retrieve one or more keys</p>
+            <pre><code>get &lt;key1&gt; [&lt;key2&gt; ...]\r\n</code></pre>
+          </div>
+          <div class="command-item">
+            <h4>GETS</h4>
+            <p>Retrieve with CAS token</p>
+          </div>
+        </div>
+
+        <!-- Deletion Commands -->
+        <div class="command-category">
+          <h3>Deletion Commands</h3>
+          <div class="command-item">
+            <h4>DELETE</h4>
+            <p>Remove a key</p>
+            <pre><code>delete &lt;key&gt; [noreply]\r\n</code></pre>
+          </div>
+        </div>
+
+        <!-- MirDB-Specific Commands -->
+        <div class="command-category mirdb-specific">
+          <h3>MirDB-Specific Commands</h3>
+          <p class="category-note">These are MirDB extension commands not found in standard memcached.</p>
+          <div class="command-item">
+            <h4>INFO</h4>
+            <p>Display database status and level information</p>
+            <pre><code>info\r\n</code></pre>
+          </div>
+          <div class="command-item">
+            <h4>MAJOR_COMPACTION</h4>
+            <p>Trigger manual compaction of storage levels</p>
+            <pre><code>major_compaction\r\n</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer>
     <div class="container">
