@@ -112,8 +112,8 @@ test.describe('Responsive Design - Tablet View', () => {
     const stickyNav = page.locator('.sticky-nav, [data-testid="sticky-nav"]');
     await expect(stickyNav).toBeVisible();
 
-    // Check footer navigation is also accessible
-    const footerGitHubLink = page.locator('footer a[href*="github.com"]');
+    // Check footer navigation is also accessible (use .first() since there are multiple footer links)
+    const footerGitHubLink = page.locator('footer a[href*="github.com"]').first();
     await expect(footerGitHubLink).toBeVisible();
   });
 

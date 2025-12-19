@@ -15,8 +15,8 @@ test.describe('GitHub Repository Links', () => {
   });
 
   test('footer contains link to GitHub repository', async ({ page }) => {
-    // Test Case 2: Check footer for GitHub repository link
-    const footerGitHubLink = page.locator('footer a[href*="github.com"]');
+    // Test Case 2: Check footer for GitHub repository link (use .github-link class for the main repo link)
+    const footerGitHubLink = page.locator('footer a.github-link[href*="github.com"]');
     await expect(footerGitHubLink).toBeVisible();
     await expect(footerGitHubLink).toHaveAttribute('href', GITHUB_REPO_URL);
   });
@@ -26,7 +26,8 @@ test.describe('GitHub Repository Links', () => {
     const navGitHubLink = page.locator('.sticky-nav a[href*="github.com"], nav a[href*="github.com"]');
     await expect(navGitHubLink).toHaveAttribute('target', '_blank');
 
-    const footerGitHubLink = page.locator('footer a[href*="github.com"]');
+    // Use .github-link class for the main repo link
+    const footerGitHubLink = page.locator('footer a.github-link[href*="github.com"]');
     await expect(footerGitHubLink).toHaveAttribute('target', '_blank');
   });
 });

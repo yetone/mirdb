@@ -31,8 +31,28 @@ const App: React.FC = () => {
 
       <footer className="footer">
         <div className="container">
-          <p>&copy; 2024 MirDB. Built with Rust.</p>
-          <GitHubLink />
+          <div className="footer-content">
+            <p>&copy; 2024 MirDB. Built with Rust.</p>
+            <div className="footer-links">
+              <GitHubLink />
+              <a
+                href="https://github.com/mirdb/mirdb/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-link"
+              >
+                Contribute
+              </a>
+              <a
+                href="https://github.com/mirdb/mirdb/blob/main/LICENSE"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-link"
+              >
+                MIT License
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
