@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth scrolling for anchor navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @layer components {
   .btn-primary {
     @apply inline-flex items-center px-6 py-3 text-base font-semibold text-white bg-mirdb-primary rounded-lg hover:bg-mirdb-secondary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mirdb-primary focus:ring-offset-2;
