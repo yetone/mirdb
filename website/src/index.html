@@ -560,6 +560,173 @@ DELETED</code></pre>
         </div>
     </section>
 
+    <!-- Configuration Reference Section -->
+    <section id="configuration" class="py-20 bg-mirdb-light" data-testid="configuration-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-mirdb-dark text-center mb-12">Configuration Reference</h2>
+            <p class="text-gray-600 text-center max-w-2xl mx-auto mb-12">
+                MirDB uses TOML configuration files with sensible defaults. Customize these parameters
+                to optimize performance for your specific workload.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Network & Storage Configuration -->
+                <div class="space-y-8">
+                    <!-- Network Configuration -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-6">Network Configuration</h3>
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg" data-testid="config-table-network">
+                            <table class="w-full">
+                                <thead class="bg-mirdb-dark text-white">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Parameter</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Default</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-addr">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">addr</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">0.0.0.0:12333</td>
+                                        <td class="px-6 py-4 text-gray-600">Listen address and port</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Storage Configuration -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-6">Storage Configuration</h3>
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg" data-testid="config-table-storage">
+                            <table class="w-full">
+                                <thead class="bg-mirdb-dark text-white">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Parameter</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Default</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-work-dir">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">work_dir</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">/tmp/mirdb</td>
+                                        <td class="px-6 py-4 text-gray-600">Data directory path</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-max-level">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">max_level</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">7</td>
+                                        <td class="px-6 py-4 text-gray-600">Maximum LSM tree levels</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-sst-max-size">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">sst_max_size</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">100M</td>
+                                        <td class="px-6 py-4 text-gray-600">Max SSTable file size</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memory & Compaction Configuration -->
+                <div class="space-y-8">
+                    <!-- Memory Tables Configuration -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-6">Memory Tables</h3>
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg" data-testid="config-table-memory">
+                            <table class="w-full">
+                                <thead class="bg-mirdb-dark text-white">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Parameter</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Default</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-mem-table-max-size">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">mem_table_max_size</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">4M</td>
+                                        <td class="px-6 py-4 text-gray-600">Max memtable size before flush</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-mem-table-max-height">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">mem_table_max_height</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">32</td>
+                                        <td class="px-6 py-4 text-gray-600">Skip list max height</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-imm-mem-table-max-count">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">imm_mem_table_max_count</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">16</td>
+                                        <td class="px-6 py-4 text-gray-600">Max queued immutable memtables</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Compaction & Block Configuration -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-6">Compaction & Blocks</h3>
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg" data-testid="config-table-compaction">
+                            <table class="w-full">
+                                <thead class="bg-mirdb-dark text-white">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Parameter</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Default</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-block-size">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">block_size</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">4K</td>
+                                        <td class="px-6 py-4 text-gray-600">Data block size</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-l0-compaction-trigger">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">l0_compaction_trigger</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">4</td>
+                                        <td class="px-6 py-4 text-gray-600">Level 0 files before compaction</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="config-param-thread-sleep-ms">
+                                        <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">thread_sleep_ms</td>
+                                        <td class="px-6 py-4 font-mono text-gray-700">500</td>
+                                        <td class="px-6 py-4 text-gray-600">Background thread sleep interval (ms)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Full Documentation Link -->
+                    <div class="bg-gradient-to-br from-mirdb-primary to-mirdb-secondary rounded-xl p-6 text-white" data-testid="config-docs-link-container">
+                        <div class="flex items-start">
+                            <svg class="w-6 h-6 text-white mt-1 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                            <div>
+                                <h4 class="text-lg font-semibold mb-2">Full Configuration Documentation</h4>
+                                <p class="text-blue-100 text-sm mb-4">
+                                    For advanced configuration options, size unit formats (K, M, G, T), and production deployment guidelines,
+                                    see the complete configuration documentation.
+                                </p>
+                                <a href="https://github.com/pjzhong/mirdb#configuration"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="inline-flex items-center bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors"
+                                   data-testid="config-docs-link">
+                                    <span>View Full Documentation</span>
+                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Copy to Clipboard Script -->
     <script>
         function copyToClipboard(button, codeId) {
