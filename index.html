@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol support. Drop-in replacement with LSM tree architecture for durability.">
+    <meta name="keywords" content="MirDB, key-value store, memcached, persistent storage, LSM tree, Rust">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="container">
+            <a href="#" class="logo">
+                <span class="logo-text">MirDB</span>
+            </a>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a href="#features" role="menuitem">Features</a></li>
+                <li role="none"><a href="#getting-started" role="menuitem">Getting Started</a></li>
+                <li role="none"><a href="#commands" role="menuitem">Commands</a></li>
+                <li role="none"><a href="#architecture" role="menuitem">Architecture</a></li>
+                <li role="none"><a href="https://github.com/yetone/mirdb" role="menuitem" target="_blank" rel="noopener noreferrer" class="github-link">GitHub</a></li>
+            </ul>
+            <button class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero" role="banner">
+        <div class="container">
+            <h1 class="hero-title">MirDB</h1>
+            <p class="hero-tagline">Persistent Key-Value Store with Memcached Protocol</p>
+            <ul class="hero-features">
+                <li>Drop-in replacement for memcached with data persistence</li>
+                <li>LSM tree architecture for efficient writes and durability</li>
+                <li>Written in Rust for safety and high performance</li>
+            </ul>
+            <div class="hero-cta">
+                <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="features" aria-labelledby="features-heading">
+        <div class="container">
+            <h2 id="features-heading" class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3>Memcached Compatible</h3>
+                    <p>Use your existing memcached clients without modification. MirDB implements the standard memcached text protocol.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                            <polyline points="17,21 17,13 7,13 7,21"/>
+                            <polyline points="7,3 7,8 15,8"/>
+                        </svg>
+                    </div>
+                    <h3>Persistent Storage</h3>
+                    <p>Unlike memcached, your data survives restarts. MirDB uses SSTables to persist data safely to disk.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                        </svg>
+                    </div>
+                    <h3>LSM Architecture</h3>
+                    <p>Log-Structured Merge-tree provides excellent write performance with background compaction for optimized storage.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <h3>Async Performance</h3>
+                    <p>Built on Tokio for high-throughput async I/O operations, handling thousands of concurrent connections efficiently.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section id="getting-started" class="getting-started" aria-labelledby="getting-started-heading">
+        <div class="container">
+            <h2 id="getting-started-heading" class="section-title">Getting Started</h2>
+            <p class="section-description">Get MirDB running in under 5 minutes with these simple steps.</p>
+
+            <div class="steps">
+                <!-- Step 1: Installation -->
+                <div class="step">
+                    <div class="step-number" aria-hidden="true">1</div>
+                    <div class="step-content">
+                        <h3>Install MirDB</h3>
+                        <p>Clone the repository and build with Cargo:</p>
+                        <div class="code-block-wrapper">
+                            <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build with Cargo
+cargo build --release</code></pre>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="install">
+                                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                </svg>
+                                <svg class="check-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Start the Server -->
+                <div class="step">
+                    <div class="step-number" aria-hidden="true">2</div>
+                    <div class="step-content">
+                        <h3>Start the Server</h3>
+                        <p>Run MirDB with the default configuration:</p>
+                        <div class="code-block-wrapper">
+                            <pre><code class="language-bash"># Start MirDB server
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="start">
+                                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                </svg>
+                                <svg class="check-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <p class="note">MirDB listens on <code>0.0.0.0:12333</code> by default.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Connect to MirDB -->
+                <div class="step">
+                    <div class="step-number" aria-hidden="true">3</div>
+                    <div class="step-content">
+                        <h3>Connect to MirDB</h3>
+                        <p>Connect using telnet or any memcached client:</p>
+                        <div class="code-block-wrapper">
+                            <pre><code class="language-bash"># Connect using telnet
+telnet localhost 12333</code></pre>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="connect">
+                                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                </svg>
+                                <svg class="check-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Basic Operations -->
+                <div class="step">
+                    <div class="step-number" aria-hidden="true">4</div>
+                    <div class="step-content">
+                        <h3>Basic Operations</h3>
+                        <p>Try these basic SET and GET commands:</p>
+                        <div class="code-block-wrapper">
+                            <pre><code class="language-bash"># SET a key-value pair
+# Format: set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+set mykey 0 0 5
+hello
+STORED
+
+# GET the value back
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# DELETE the key
+delete mykey
+DELETED</code></pre>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="operations">
+                                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                </svg>
+                                <svg class="check-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commands Section -->
+    <section id="commands" class="commands" aria-labelledby="commands-heading">
+        <div class="container">
+            <h2 id="commands-heading" class="section-title">Supported Commands</h2>
+            <p class="section-description">MirDB supports standard memcached commands plus additional MirDB-specific commands.</p>
+
+            <div class="commands-grid">
+                <div class="command-category">
+                    <h3>Storage Commands</h3>
+                    <ul class="command-list">
+                        <li><code>SET</code> - Store a key-value pair</li>
+                        <li><code>ADD</code> - Store only if key doesn't exist</li>
+                        <li><code>REPLACE</code> - Store only if key exists</li>
+                        <li><code>APPEND</code> - Append data to existing value</li>
+                        <li><code>PREPEND</code> - Prepend data to existing value</li>
+                    </ul>
+                </div>
+                <div class="command-category">
+                    <h3>Retrieval Commands</h3>
+                    <ul class="command-list">
+                        <li><code>GET</code> - Retrieve one or more keys</li>
+                        <li><code>GETS</code> - Retrieve with CAS token</li>
+                    </ul>
+                </div>
+                <div class="command-category">
+                    <h3>Deletion Commands</h3>
+                    <ul class="command-list">
+                        <li><code>DELETE</code> - Remove a key</li>
+                    </ul>
+                </div>
+                <div class="command-category">
+                    <h3>MirDB-Specific</h3>
+                    <ul class="command-list">
+                        <li><code>INFO</code> - Display database status</li>
+                        <li><code>MAJOR_COMPACTION</code> - Trigger manual compaction</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="architecture" aria-labelledby="architecture-heading">
+        <div class="container">
+            <h2 id="architecture-heading" class="section-title">Architecture</h2>
+            <p class="section-description">MirDB uses a Log-Structured Merge-tree (LSM) architecture for efficient writes and persistent storage.</p>
+
+            <div class="architecture-diagram" role="img" aria-label="MirDB LSM Tree Architecture Diagram">
+                <div class="arch-row">
+                    <div class="arch-component client">
+                        <span class="arch-label">Client</span>
+                        <span class="arch-desc">Memcached Protocol</span>
+                    </div>
+                </div>
+                <div class="arch-arrow" aria-hidden="true">&#8595;</div>
+                <div class="arch-row">
+                    <div class="arch-component wal">
+                        <span class="arch-label">WAL</span>
+                        <span class="arch-desc">Write-Ahead Log</span>
+                    </div>
+                    <div class="arch-component memtable">
+                        <span class="arch-label">Memtable</span>
+                        <span class="arch-desc">Skip List (In-Memory)</span>
+                    </div>
+                </div>
+                <div class="arch-arrow" aria-hidden="true">&#8595; Minor Compaction</div>
+                <div class="arch-row">
+                    <div class="arch-component sstable">
+                        <span class="arch-label">SSTable L0</span>
+                        <span class="arch-desc">Sorted String Tables</span>
+                    </div>
+                </div>
+                <div class="arch-arrow" aria-hidden="true">&#8595; Major Compaction</div>
+                <div class="arch-row levels">
+                    <div class="arch-component sstable">
+                        <span class="arch-label">SSTable L1-L7</span>
+                        <span class="arch-desc">Compacted Levels</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arch-explanation">
+                <h3>How It Works</h3>
+                <ol>
+                    <li><strong>Write Path:</strong> Writes go to the WAL for durability, then to the in-memory Memtable (skip list)</li>
+                    <li><strong>Minor Compaction:</strong> When Memtable is full, it's flushed to disk as an immutable SSTable</li>
+                    <li><strong>Major Compaction:</strong> SSTables are periodically merged across levels for optimized reads</li>
+                    <li><strong>Read Path:</strong> Reads check Memtable first, then search through SSTable levels</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section id="configuration" class="configuration" aria-labelledby="configuration-heading">
+        <div class="container">
+            <h2 id="configuration-heading" class="section-title">Configuration</h2>
+            <p class="section-description">MirDB can be configured via a TOML file. Here are the default settings:</p>
+
+            <div class="config-table-wrapper">
+                <table class="config-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Default Value</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>addr</code></td>
+                            <td><code>0.0.0.0:12333</code></td>
+                            <td>Listen address and port</td>
+                        </tr>
+                        <tr>
+                            <td><code>work_dir</code></td>
+                            <td><code>/tmp/mirdb</code></td>
+                            <td>Data storage directory</td>
+                        </tr>
+                        <tr>
+                            <td><code>mem_table_max_size</code></td>
+                            <td><code>4M</code></td>
+                            <td>Maximum memtable size before flush</td>
+                        </tr>
+                        <tr>
+                            <td><code>sst_max_size</code></td>
+                            <td><code>100M</code></td>
+                            <td>Maximum SSTable file size</td>
+                        </tr>
+                        <tr>
+                            <td><code>max_level</code></td>
+                            <td><code>7</code></td>
+                            <td>Maximum LSM tree levels</td>
+                        </tr>
+                        <tr>
+                            <td><code>block_size</code></td>
+                            <td><code>4K</code></td>
+                            <td>Data block size</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-text">MirDB</span>
+                    <p>Persistent Key-Value Store with Memcached Protocol</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Report Issues</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#getting-started">Getting Started</a></li>
+                        <li><a href="#commands">Commands Reference</a></li>
+                        <li><a href="#configuration">Configuration</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Built with Rust. Open Source.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+    <script src="js/main.js" defer></script>
+</body>
+</html>
