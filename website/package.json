@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
     "build": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify && cp ./src/index.html ./dist/index.html",
-    "test": "node tests/hero-section.test.js && node tests/key-features.test.js",
+    "test": "node tests/hero-section.test.js && node tests/key-features.test.js && node tests/seo-optimization.test.js",
+    "test:seo": "node tests/seo-optimization.test.js",
     "test:e2e": "npx playwright test",
     "test:ui": "npx playwright test --ui"
   },
