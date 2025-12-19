@@ -1,5 +1,6 @@
 import React from 'react';
 import { Features } from './components/Features';
+import { Commands } from './components/Commands';
 import './App.css';
 
 const App: React.FC = () => {
@@ -18,6 +19,7 @@ const App: React.FC = () => {
 
       <main>
         <Features />
+        <Commands />
       </main>
 
       <footer className="footer">
