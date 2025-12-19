@@ -32,12 +32,19 @@ body {
 
 /* Navigation */
 .navbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
   justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   padding: 1rem 2rem;
   background-color: var(--background-color);
   border-bottom: 1px solid var(--border-color);
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -51,6 +58,8 @@ body {
 }
 
 .nav-links {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 2rem;
   list-style: none;
@@ -71,10 +80,17 @@ body {
 .hero-section {
   min-height: calc(100vh - 80px);
   max-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   padding: 2rem;
+  background: -webkit-linear-gradient(315deg, var(--surface-color) 0%, var(--background-color) 100%);
   background: linear-gradient(135deg, var(--surface-color) 0%, var(--background-color) 100%);
 }
 
@@ -108,9 +124,14 @@ body {
 }
 
 .hero-cta-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 1rem;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 
@@ -123,6 +144,7 @@ body {
   font-weight: 600;
   text-decoration: none;
   border-radius: 0.5rem;
+  -webkit-transition: all 0.2s;
   transition: all 0.2s;
   cursor: pointer;
 }
@@ -134,6 +156,7 @@ body {
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
+  -webkit-transform: translateY(-1px);
   transform: translateY(-1px);
 }
 
@@ -291,7 +314,11 @@ body {
 }
 
 .copy-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   gap: 0.5rem;
   padding: 0.375rem 0.75rem;
@@ -302,6 +329,7 @@ body {
   font-size: 0.75rem;
   font-weight: 500;
   cursor: pointer;
+  -webkit-transition: all 0.2s;
   transition: all 0.2s;
 }
 
@@ -428,15 +456,27 @@ footer {
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
   justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
 .footer-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
   gap: 0.25rem;
 }
@@ -458,6 +498,8 @@ footer {
 }
 
 .footer-links {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 1.5rem;
   list-style: none;
@@ -612,6 +654,7 @@ footer {
 
   .btn-primary:hover,
   .btn-secondary:hover {
+    -webkit-transform: none;
     transform: none;
   }
 }
@@ -635,6 +678,7 @@ button:focus-visible {
   text-decoration: none;
   font-weight: 600;
   border-radius: 0.375rem;
+  -webkit-transition: top 0.2s;
   transition: top 0.2s;
 }
 
@@ -647,7 +691,12 @@ button:focus-visible {
 /* Mobile menu toggle button */
 .mobile-menu-toggle {
   display: none;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: space-evenly;
+  -ms-flex-pack: space-evenly;
   justify-content: space-around;
   width: 44px;
   height: 44px;
@@ -663,10 +712,12 @@ button:focus-visible {
   height: 3px;
   background-color: var(--text-color);
   border-radius: 2px;
+  -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 
 .mobile-menu-toggle.menu-open .hamburger-line:nth-child(1) {
+  -webkit-transform: rotate(45deg) translate(6px, 6px);
   transform: rotate(45deg) translate(6px, 6px);
 }
 
@@ -675,6 +726,7 @@ button:focus-visible {
 }
 
 .mobile-menu-toggle.menu-open .hamburger-line:nth-child(3) {
+  -webkit-transform: rotate(-45deg) translate(6px, -6px);
   transform: rotate(-45deg) translate(6px, -6px);
 }
 
