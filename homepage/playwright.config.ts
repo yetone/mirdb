@@ -16,6 +16,22 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'edge',
+      use: {
+        ...devices['Desktop Edge'],
+        // Use Chromium engine to emulate Edge behavior
+        // Edge and Chrome share the same Blink rendering engine
+      },
+    },
   ],
   webServer: {
     command: 'npm run preview',
