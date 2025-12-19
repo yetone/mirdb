@@ -7,6 +7,7 @@
   <meta name="keywords" content="mirdb, key-value store, memcached, persistent storage, rust, lsm tree">
   <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
   <link rel="stylesheet" href="styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
 </head>
 <body>
   <section id="hero" class="hero" data-testid="hero">
@@ -52,26 +53,110 @@
   </section>
 
   <section id="getting-started" class="getting-started">
-    <h2>Getting Started</h2>
+    <h2 id="getting-started-heading">Getting Started</h2>
+    <p class="section-description">Get MirDB running in under 5 minutes with these simple steps.</p>
     <div class="steps">
       <div class="step">
-        <h3>1. Clone the Repository</h3>
-        <pre><code>git clone https://github.com/yetone/mirdb.git
-cd mirdb</code></pre>
-      </div>
-      <div class="step">
-        <h3>2. Build and Run</h3>
-        <pre><code>cargo build --release
-./target/release/mirdb-server</code></pre>
-      </div>
-      <div class="step">
-        <h3>3. Connect</h3>
-        <pre><code># Using telnet
-telnet localhost 12333
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Clone and Build</h3>
+          <p>Clone the repository and build with Cargo:</p>
+          <div class="code-block-wrapper">
+            <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
 
-# Or use any memcached client
-SET mykey 0 0 5
-hello</code></pre>
+# Build with Cargo
+cargo build --release</code></pre>
+            <button class="copy-btn" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              <svg class="check-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Start the Server</h3>
+          <p>Run MirDB with the default configuration:</p>
+          <div class="code-block-wrapper">
+            <pre><code class="language-bash"># Start MirDB server
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+            <button class="copy-btn" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              <svg class="check-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+          <p class="note">MirDB listens on <code>0.0.0.0:12333</code> by default.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Connect to MirDB</h3>
+          <p>Connect using telnet or any memcached client:</p>
+          <div class="code-block-wrapper">
+            <pre><code class="language-bash"># Connect using telnet
+telnet localhost 12333</code></pre>
+            <button class="copy-btn" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              <svg class="check-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Basic Operations</h3>
+          <p>Try these basic SET and GET commands:</p>
+          <div class="code-block-wrapper">
+            <pre><code class="language-bash"># SET a key-value pair
+# Format: set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+set mykey 0 0 5
+hello
+STORED
+
+# GET the value back
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# DELETE the key
+delete mykey
+DELETED</code></pre>
+            <button class="copy-btn" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              <svg class="check-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -135,5 +220,9 @@ hello</code></pre>
       </nav>
     </div>
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+  <script src="main.js" defer></script>
 </body>
 </html>

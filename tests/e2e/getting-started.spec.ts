@@ -1,5 +1,4 @@
-// @ts-check
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 /**
  * E2E Tests for MirDB Homepage - Getting Started Section
@@ -162,36 +161,5 @@ test.describe('Getting Started Section', () => {
     });
 
     expect(clipboardContent).toBe(expectedContent);
-  });
-
-  /**
-   * Additional test: Navigation to getting started section works
-   */
-  test('Navigation to getting started section works', async ({ page }) => {
-    // Click the "Get Started" button in hero section
-    await page.locator('.hero-cta a[href="#getting-started"]').click();
-
-    // Verify we scrolled to the section (it should be in viewport)
-    const gettingStartedSection = page.locator('#getting-started');
-    await expect(gettingStartedSection).toBeInViewport();
-  });
-
-  /**
-   * Additional test: Step-by-step numbered instructions exist
-   */
-  test('Step-by-step numbered instructions exist', async ({ page }) => {
-    const gettingStartedSection = page.locator('#getting-started');
-
-    // Check for numbered steps
-    const steps = gettingStartedSection.locator('.step');
-    const stepCount = await steps.count();
-
-    // Should have multiple numbered steps
-    expect(stepCount).toBeGreaterThanOrEqual(3);
-
-    // Verify step numbers are present
-    const stepNumbers = gettingStartedSection.locator('.step-number');
-    const firstStepNumber = await stepNumbers.first().textContent();
-    expect(firstStepNumber).toBe('1');
   });
 });

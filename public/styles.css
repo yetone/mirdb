@@ -371,6 +371,99 @@ footer a:hover {
   h2 { font-size: 1.5rem; }
 }
 
+/* Getting Started - Enhanced styling */
+.getting-started .section-description {
+  text-align: center;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-lg);
+}
+
+.getting-started .step {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.getting-started .step-number {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 700;
+  border-radius: 50%;
+}
+
+.getting-started .step-content {
+  flex: 1;
+}
+
+.getting-started .step-content h3 {
+  margin-bottom: var(--spacing-xs);
+}
+
+.getting-started .step-content p {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-sm);
+}
+
+.getting-started .step-content .note {
+  font-size: 0.875rem;
+  margin-top: var(--spacing-xs);
+}
+
+/* Code block wrapper with copy button */
+.code-block-wrapper {
+  position: relative;
+  margin: var(--spacing-sm) 0;
+}
+
+.code-block-wrapper pre {
+  margin: 0;
+  padding-right: 80px; /* Space for copy button */
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #9ca3af;
+  font-size: 0.75rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #e5e7eb;
+}
+
+.copy-btn.copied {
+  color: #22c55e;
+  border-color: #22c55e;
+}
+
+.copy-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.copy-btn .hidden {
+  display: none;
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -387,4 +480,12 @@ a:focus,
 button:focus {
   outline: 3px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+/* Responsive - Enhanced */
+@media (max-width: 768px) {
+  .getting-started .step {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
 }
