@@ -6,6 +6,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     initCopyButtons();
     initMobileMenu();
+    initSmoothScroll();
 });
 
 /**
@@ -98,4 +99,29 @@ function fallbackCopy(text, button) {
     }
 
     document.body.removeChild(textArea);
+}
+
+/**
+ * Initialize smooth scroll for anchor links
+ */
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                e.preventDefault();
+                const navbar = document.querySelector('.navbar, .site-header');
+                const navbarHeight = navbar ? navbar.offsetHeight : 0;
+                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
 }
