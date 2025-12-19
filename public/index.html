@@ -197,6 +197,55 @@ DELETED</code></pre>
     </div>
   </section>
 
+  <section id="architecture" class="architecture" data-testid="architecture" aria-labelledby="architecture-heading">
+    <h2 id="architecture-heading">Architecture</h2>
+    <p class="section-description">MirDB uses a Log-Structured Merge-tree (LSM) architecture for efficient writes and persistent storage.</p>
+
+    <div class="architecture-diagram" role="img" aria-label="MirDB LSM Tree Architecture Diagram showing data flow from Client through WAL and Memtable to SSTables with minor and major compaction processes">
+      <div class="arch-row">
+        <div class="arch-component client">
+          <span class="arch-label">Client</span>
+          <span class="arch-desc">Memcached Protocol</span>
+        </div>
+      </div>
+      <div class="arch-arrow" aria-hidden="true">&#8595;</div>
+      <div class="arch-row">
+        <div class="arch-component wal">
+          <span class="arch-label">WAL</span>
+          <span class="arch-desc">Write-Ahead Log</span>
+        </div>
+        <div class="arch-component memtable">
+          <span class="arch-label">Memtable</span>
+          <span class="arch-desc">Skip List (In-Memory)</span>
+        </div>
+      </div>
+      <div class="arch-arrow" aria-hidden="true">&#8595; Minor Compaction</div>
+      <div class="arch-row">
+        <div class="arch-component sstable">
+          <span class="arch-label">SSTable L0</span>
+          <span class="arch-desc">Sorted String Tables</span>
+        </div>
+      </div>
+      <div class="arch-arrow" aria-hidden="true">&#8595; Major Compaction</div>
+      <div class="arch-row levels">
+        <div class="arch-component sstable">
+          <span class="arch-label">SSTable L1-L7</span>
+          <span class="arch-desc">Compacted Levels</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-explanation">
+      <h3>How It Works</h3>
+      <ol>
+        <li><strong>Write Path:</strong> Writes go to the WAL (Write-Ahead Log) for durability, then to the in-memory Memtable (skip list)</li>
+        <li><strong>Minor Compaction:</strong> When Memtable is full, it's flushed to disk as an immutable SSTable</li>
+        <li><strong>Major Compaction:</strong> SSTables are periodically merged across levels for optimized reads</li>
+        <li><strong>Read Path:</strong> Reads check Memtable first, then search through SSTable levels</li>
+      </ol>
+    </div>
+  </section>
+
   <section id="configuration" class="configuration">
     <h2>Default Configuration</h2>
     <table>
