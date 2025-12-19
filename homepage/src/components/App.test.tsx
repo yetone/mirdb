@@ -5,17 +5,17 @@ import App from '../App';
 describe('GitHub Repository Links - Integration Tests', () => {
   const githubUrl = 'https://github.com/mirdb/mirdb';
 
-  describe('Test Case 1: Header contains link to GitHub repository', () => {
-    it('header contains link to GitHub repository', () => {
+  describe('Test Case 1: Navigation contains link to GitHub repository', () => {
+    it('navigation contains link to GitHub repository', () => {
       render(<App />);
 
-      // Get header element
-      const header = screen.getByRole('banner');
+      // Get sticky navigation element
+      const nav = screen.getByTestId('sticky-nav');
 
-      // Find GitHub link within the header
-      const headerGitHubLink = header.querySelector('a[href*="github.com"]');
-      expect(headerGitHubLink).toBeInTheDocument();
-      expect(headerGitHubLink).toHaveAttribute('href', githubUrl);
+      // Find GitHub link within the navigation
+      const navGitHubLink = nav.querySelector('a[href*="github.com"]');
+      expect(navGitHubLink).toBeInTheDocument();
+      expect(navGitHubLink).toHaveAttribute('href', githubUrl);
     });
   });
 
@@ -34,12 +34,12 @@ describe('GitHub Repository Links - Integration Tests', () => {
   });
 
   describe('Test Case 3: GitHub link opens in new tab (target="_blank")', () => {
-    it('header GitHub link has target="_blank"', () => {
+    it('navigation GitHub link has target="_blank"', () => {
       render(<App />);
 
-      const header = screen.getByRole('banner');
-      const headerGitHubLink = header.querySelector('a[href*="github.com"]');
-      expect(headerGitHubLink).toHaveAttribute('target', '_blank');
+      const nav = screen.getByTestId('sticky-nav');
+      const navGitHubLink = nav.querySelector('a[href*="github.com"]');
+      expect(navGitHubLink).toHaveAttribute('target', '_blank');
     });
 
     it('footer GitHub link has target="_blank"', () => {

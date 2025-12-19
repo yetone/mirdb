@@ -7,11 +7,11 @@ test.describe('GitHub Repository Links', () => {
     await page.goto('/');
   });
 
-  test('header contains link to GitHub repository', async ({ page }) => {
-    // Test Case 1: Check header for GitHub repository link
-    const headerGitHubLink = page.locator('header a[href*="github.com"]');
-    await expect(headerGitHubLink).toBeVisible();
-    await expect(headerGitHubLink).toHaveAttribute('href', GITHUB_REPO_URL);
+  test('navigation contains link to GitHub repository', async ({ page }) => {
+    // Test Case 1: Check sticky navigation for GitHub repository link
+    const navGitHubLink = page.locator('.sticky-nav a[href*="github.com"], nav a[href*="github.com"]');
+    await expect(navGitHubLink).toBeVisible();
+    await expect(navGitHubLink).toHaveAttribute('href', GITHUB_REPO_URL);
   });
 
   test('footer contains link to GitHub repository', async ({ page }) => {
@@ -23,8 +23,8 @@ test.describe('GitHub Repository Links', () => {
 
   test('GitHub link opens in new tab (target="_blank")', async ({ page }) => {
     // Test Case 3: Verify GitHub link has target='_blank'
-    const headerGitHubLink = page.locator('header a[href*="github.com"]');
-    await expect(headerGitHubLink).toHaveAttribute('target', '_blank');
+    const navGitHubLink = page.locator('.sticky-nav a[href*="github.com"], nav a[href*="github.com"]');
+    await expect(navGitHubLink).toHaveAttribute('target', '_blank');
 
     const footerGitHubLink = page.locator('footer a[href*="github.com"]');
     await expect(footerGitHubLink).toHaveAttribute('target', '_blank');

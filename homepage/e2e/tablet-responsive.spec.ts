@@ -92,14 +92,14 @@ test.describe('Responsive Design - Tablet View', () => {
   test('TC3: navigation is accessible on tablet', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
 
-    // Check for GitHub link in header (primary navigation on this page)
-    const headerGitHubLink = page.locator('header a[href*="github.com"], .header-nav a');
+    // Check for GitHub link in sticky navigation (primary navigation on this page)
+    const navGitHubLink = page.locator('.sticky-nav a[href*="github.com"], nav a[href*="github.com"]');
 
     // At tablet size, navigation should be visible
-    await expect(headerGitHubLink.first()).toBeVisible();
+    await expect(navGitHubLink.first()).toBeVisible();
 
     // Verify the GitHub link is clickable and properly sized
-    const linkBox = await headerGitHubLink.first().boundingBox();
+    const linkBox = await navGitHubLink.first().boundingBox();
     expect(linkBox).not.toBeNull();
 
     if (linkBox) {
@@ -108,9 +108,9 @@ test.describe('Responsive Design - Tablet View', () => {
       expect(linkBox.width).toBeGreaterThanOrEqual(44);
     }
 
-    // Verify navigation container is properly laid out
-    const headerNav = page.locator('.header-nav');
-    await expect(headerNav).toBeVisible();
+    // Verify sticky navigation container is properly laid out
+    const stickyNav = page.locator('.sticky-nav, [data-testid="sticky-nav"]');
+    await expect(stickyNav).toBeVisible();
 
     // Check footer navigation is also accessible
     const footerGitHubLink = page.locator('footer a[href*="github.com"]');

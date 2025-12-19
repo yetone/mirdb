@@ -1,4 +1,5 @@
 import React from 'react';
+import { StickyNav } from './components/StickyNav';
 import { Features } from './components/Features';
 import { QuickStart } from './components/QuickStart';
 import { Commands } from './components/Commands';
@@ -9,11 +10,9 @@ import './App.css';
 const App: React.FC = () => {
   return (
     <div className="app">
+      <StickyNav />
       <header className="hero">
         <div className="container">
-          <div className="header-nav">
-            <GitHubLink />
-          </div>
           <h1>MirDB</h1>
           <p className="tagline">Memcached, but persistent.</p>
           <p className="description">

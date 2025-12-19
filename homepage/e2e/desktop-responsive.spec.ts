@@ -36,13 +36,13 @@ test.describe('Responsive Design - Desktop View', () => {
   test('TC2: full navigation links visible without hamburger menu on desktop', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
 
-    // Check that header navigation is visible
-    const headerNav = page.locator('.header-nav')
-    await expect(headerNav).toBeVisible()
+    // Check that sticky navigation is visible
+    const stickyNav = page.locator('.sticky-nav, [data-testid="sticky-nav"]')
+    await expect(stickyNav).toBeVisible()
 
-    // Check for GitHub link in header (primary navigation element)
-    const headerGitHubLink = page.locator('header a[href*="github.com"], .header-nav a[href*="github.com"]')
-    await expect(headerGitHubLink).toBeVisible()
+    // Check for GitHub link in navigation (primary navigation element)
+    const navGitHubLink = page.locator('.sticky-nav a[href*="github.com"], nav a[href*="github.com"]')
+    await expect(navGitHubLink).toBeVisible()
 
     // Verify there is no hamburger menu visible on desktop
     const hamburgerButton = page.locator('[data-testid="mobile-menu-toggle"], .hamburger-menu, .mobile-nav-toggle, button[aria-label*="menu" i]')

@@ -4,11 +4,73 @@
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.6;
   color: #333;
   background-color: #fff;
+}
+
+/* Sticky Navigation */
+.sticky-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sticky-nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-logo:hover {
+  color: #64ffda;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #64ffda;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sticky-nav .github-link {
+  margin-left: 8px;
 }
 
 .container {
@@ -22,6 +84,7 @@ body {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: #fff;
   padding: 80px 0;
+  padding-top: 140px; /* Account for sticky nav height (60px) + original padding */
   text-align: center;
 }
 
@@ -42,6 +105,11 @@ body {
   max-width: 600px;
   margin: 0 auto;
   opacity: 0.9;
+}
+
+/* Section scroll offset for sticky nav */
+section[id] {
+  scroll-margin-top: 80px;
 }
 
 /* Features Section */
@@ -435,6 +503,11 @@ body {
 
 /* Responsive - Tablet (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
+  .nav-link {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
   .hero h1 {
     font-size: 3rem;
   }
@@ -469,6 +542,33 @@ body {
 
 /* Responsive - Mobile (below 768px) */
 @media (max-width: 767px) {
+  .sticky-nav-container {
+    padding: 0 15px;
+  }
+
+  .nav-logo {
+    font-size: 1.25rem;
+  }
+
+  .nav-links {
+    gap: 4px;
+  }
+
+  .nav-link {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+
+  .sticky-nav .github-link {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    margin-left: 4px;
+  }
+
+  .hero {
+    padding-top: 120px;
+  }
+
   .hero h1 {
     font-size: 2.5rem;
   }
