@@ -347,6 +347,77 @@ body {
   color: #34d399;
 }
 
+/* Configuration Section */
+.configuration-section {
+  padding: 4rem 2rem;
+  background-color: var(--background-color);
+}
+
+.configuration-section h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.configuration-intro {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.config-table-container {
+  max-width: 700px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--surface-color);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.config-table th,
+.config-table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+}
+
+.config-table th {
+  background-color: var(--text-color);
+  color: var(--code-text);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.config-table td {
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.config-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.config-table tbody tr:hover {
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+.config-table code {
+  background-color: var(--code-background);
+  color: var(--code-text);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+
 /* Footer */
 footer {
   padding: 2rem;
@@ -390,6 +461,8 @@ footer {
 
   .nav-links {
     gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .hero-section {
@@ -423,8 +496,24 @@ footer {
 
   .features-section,
   .architecture-section,
-  .quickstart-section {
+  .quickstart-section,
+  .configuration-section {
     padding: 3rem 1rem;
+  }
+
+  .configuration-intro {
+    font-size: 1rem;
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .config-table code {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
   }
 
   .architecture-intro {

@@ -15,6 +15,7 @@
         <li><a href="#features">Features</a></li>
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#configuration">Configuration</a></li>
         <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
       </ul>
     </nav>
@@ -192,6 +193,47 @@
 <span class="token comment"># Response: VALUE mykey 0 5</span>
 <span class="token comment"># hello</span>
 <span class="token comment"># END</span></code></pre>
+      </div>
+    </section>
+
+    <section class="configuration-section" id="configuration" data-testid="configuration-section">
+      <h2>Configuration</h2>
+      <p class="configuration-intro">Configure MirDB using a TOML configuration file. Below are the key settings and their default values.</p>
+      <div class="config-table-container">
+        <table class="config-table" data-testid="config-table">
+          <thead>
+            <tr>
+              <th>Setting</th>
+              <th>Default Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-testid="config-listen-address">
+              <td>Listen Address</td>
+              <td><code>0.0.0.0:12333</code></td>
+            </tr>
+            <tr data-testid="config-work-directory">
+              <td>Work Directory</td>
+              <td><code>/tmp/mirdb</code></td>
+            </tr>
+            <tr data-testid="config-max-lsm-levels">
+              <td>Max LSM Levels</td>
+              <td><code>7</code></td>
+            </tr>
+            <tr data-testid="config-memtable-size">
+              <td>Memtable Size</td>
+              <td><code>4MB</code></td>
+            </tr>
+            <tr data-testid="config-sstable-size">
+              <td>SSTable Size</td>
+              <td><code>100MB</code></td>
+            </tr>
+            <tr data-testid="config-block-size">
+              <td>Block Size</td>
+              <td><code>4KB</code></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
