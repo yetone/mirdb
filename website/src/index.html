@@ -810,6 +810,159 @@ print(client.get('user:1001'))  # Output: John Doe</code></pre>
         </div>
     </section>
 
+    <!-- Memcached vs MirDB Comparison Section -->
+    <section id="comparison" class="py-20 bg-white" data-testid="comparison-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-mirdb-dark text-center mb-4">MirDB vs Standard Memcached</h2>
+            <p class="text-gray-600 text-center max-w-2xl mx-auto mb-12">
+                See how MirDB compares to standard memcached and why it might be the right choice for your application.
+            </p>
+
+            <!-- Comparison Table -->
+            <div class="overflow-x-auto" data-testid="comparison-table">
+                <table class="w-full bg-mirdb-light rounded-xl overflow-hidden shadow-lg">
+                    <thead class="bg-mirdb-dark text-white">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold">Feature</th>
+                            <th class="px-6 py-4 text-center text-sm font-semibold">Standard Memcached</th>
+                            <th class="px-6 py-4 text-center text-sm font-semibold">MirDB</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <!-- Data Persistence Row -->
+                        <tr class="hover:bg-gray-50" data-testid="comparison-item-persistence">
+                            <td class="px-6 py-4 font-medium text-mirdb-dark">Data Persistence</td>
+                            <td class="px-6 py-4 text-center" data-testid="memcached-volatility">
+                                <div class="flex flex-col items-center">
+                                    <svg aria-hidden="true" class="w-6 h-6 text-red-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    <span class="text-gray-600 text-sm">Volatile - Data stored in RAM only, lost on restart</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center" data-testid="mirdb-persistence">
+                                <div class="flex flex-col items-center">
+                                    <svg aria-hidden="true" class="w-6 h-6 text-green-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="text-gray-600 text-sm">Persistent - Data survives restarts using SSTable disk storage</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Data Durability Row -->
+                        <tr class="hover:bg-gray-50" data-testid="comparison-item-durability">
+                            <td class="px-6 py-4 font-medium text-mirdb-dark">Crash Recovery</td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <svg aria-hidden="true" class="w-6 h-6 text-red-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    <span class="text-gray-600 text-sm">No recovery - All data lost after crash</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <svg aria-hidden="true" class="w-6 h-6 text-green-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="text-gray-600 text-sm">Durable - WAL ensures no committed writes are lost</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Protocol Compatibility Row -->
+                        <tr class="hover:bg-gray-50" data-testid="comparison-item-protocol">
+                            <td class="px-6 py-4 font-medium text-mirdb-dark">Protocol</td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <svg aria-hidden="true" class="w-6 h-6 text-green-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="text-gray-600 text-sm">Memcached text protocol</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center" data-testid="protocol-compatibility">
+                                <div class="flex flex-col items-center">
+                                    <svg aria-hidden="true" class="w-6 h-6 text-green-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="text-gray-600 text-sm">Fully compatible with memcached protocol - use existing clients</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Storage Architecture Row -->
+                        <tr class="hover:bg-gray-50" data-testid="comparison-item-architecture">
+                            <td class="px-6 py-4 font-medium text-mirdb-dark">Storage Architecture</td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <span class="text-gray-600 text-sm">Simple hash table in memory</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <span class="text-gray-600 text-sm">LSM tree with memtable, WAL, and SSTable levels</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Write Performance Row -->
+                        <tr class="hover:bg-gray-50" data-testid="comparison-item-write">
+                            <td class="px-6 py-4 font-medium text-mirdb-dark">Write Performance</td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <svg aria-hidden="true" class="w-6 h-6 text-green-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="text-gray-600 text-sm">Very fast (memory only)</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <svg aria-hidden="true" class="w-6 h-6 text-green-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="text-gray-600 text-sm">Fast - optimized for write-heavy workloads</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Implementation Language Row -->
+                        <tr class="hover:bg-gray-50" data-testid="comparison-item-language">
+                            <td class="px-6 py-4 font-medium text-mirdb-dark">Implementation</td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <span class="text-gray-600 text-sm">C</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <span class="text-gray-600 text-sm">Rust - memory safe with high performance</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Summary Box -->
+            <div class="mt-12 bg-gradient-to-br from-mirdb-primary to-mirdb-secondary rounded-xl p-8 text-white">
+                <div class="max-w-3xl mx-auto text-center">
+                    <h3 class="text-2xl font-semibold mb-4">Why Choose MirDB?</h3>
+                    <p class="text-blue-100 text-lg leading-relaxed mb-6">
+                        MirDB gives you the best of both worlds: the simplicity and speed of memcached's protocol
+                        with the reliability of persistent storage. Your existing memcached clients work out of the box,
+                        but your data survives restarts and crashes.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#quickstart" class="inline-flex items-center justify-center bg-white text-mirdb-primary px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                            <svg aria-hidden="true" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Get Started Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer Section -->
     <footer id="footer" class="bg-mirdb-dark text-white py-12" data-testid="footer-section">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
