@@ -16,6 +16,326 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <style>
+        .noscript-content {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+        .noscript-hero {
+          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+          color: #fff;
+          padding: 40px 20px;
+          text-align: center;
+          margin: -20px -20px 30px -20px;
+        }
+        .noscript-hero h1 {
+          font-size: 2.5rem;
+          margin: 0 0 0.5rem 0;
+        }
+        .noscript-tagline {
+          font-size: 1.25rem;
+          color: #64ffda;
+          margin: 0 0 1rem 0;
+        }
+        .noscript-description {
+          opacity: 0.9;
+          margin: 0;
+        }
+        .noscript-nav {
+          background: #f8f9fa;
+          padding: 15px 20px;
+          margin: 0 -20px 30px -20px;
+          border-bottom: 1px solid #e9ecef;
+        }
+        .noscript-nav a {
+          color: #1a1a2e;
+          text-decoration: none;
+          margin-right: 20px;
+          font-weight: 500;
+        }
+        .noscript-nav a:hover {
+          text-decoration: underline;
+        }
+        .noscript-section {
+          margin-bottom: 40px;
+        }
+        .noscript-section h2 {
+          color: #1a1a2e;
+          border-bottom: 2px solid #64ffda;
+          padding-bottom: 10px;
+          margin-bottom: 20px;
+        }
+        .noscript-section h3 {
+          color: #16213e;
+          margin: 20px 0 10px 0;
+        }
+        .noscript-feature {
+          background: #f8f9fa;
+          padding: 20px;
+          margin-bottom: 15px;
+          border-radius: 8px;
+          border-left: 4px solid #64ffda;
+        }
+        .noscript-feature h3 {
+          margin-top: 0;
+          color: #1a1a2e;
+        }
+        .noscript-code-block {
+          background: #1a1a2e;
+          color: #e1e1e1;
+          padding: 15px;
+          border-radius: 6px;
+          overflow-x: auto;
+          margin: 15px 0;
+          font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+          font-size: 0.9rem;
+        }
+        .noscript-code-block pre {
+          margin: 0;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        }
+        .noscript-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 15px 0;
+        }
+        .noscript-table th, .noscript-table td {
+          border: 1px solid #e9ecef;
+          padding: 12px;
+          text-align: left;
+        }
+        .noscript-table th {
+          background: #1a1a2e;
+          color: #fff;
+        }
+        .noscript-table code {
+          background: #f1f3f5;
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+          font-size: 0.85em;
+        }
+        .noscript-footer {
+          background: #1a1a2e;
+          color: #fff;
+          padding: 20px;
+          text-align: center;
+          margin: 40px -20px -20px -20px;
+        }
+        .noscript-footer a {
+          color: #64ffda;
+        }
+      </style>
+      <div class="noscript-content">
+        <header class="noscript-hero">
+          <h1>MirDB</h1>
+          <p class="noscript-tagline">Memcached, but persistent.</p>
+          <p class="noscript-description">A high-performance persistent key-value store with memcached protocol compatibility. Built with Rust for safety and performance.</p>
+        </header>
+
+        <nav class="noscript-nav">
+          <a href="#features">Features</a>
+          <a href="#quick-start">Quick Start</a>
+          <a href="#commands">Commands</a>
+          <a href="#configuration">Configuration</a>
+          <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </nav>
+
+        <main>
+          <section id="features" class="noscript-section">
+            <h2>Key Features</h2>
+
+            <div class="noscript-feature">
+              <h3>Memcached Protocol Compatible</h3>
+              <p>Drop-in replacement for memcached clients. Use your existing memcached client libraries without any code changes. Full support for GET, SET, DELETE, and other standard commands.</p>
+            </div>
+
+            <div class="noscript-feature">
+              <h3>Durable Persistence</h3>
+              <p>Unlike memcached, your data survives restarts. MirDB persists all data to disk using SSTables, ensuring your cached data is never lost due to process restarts or system reboots.</p>
+            </div>
+
+            <div class="noscript-feature">
+              <h3>LSM-Tree Architecture</h3>
+              <p>Built on a Log-Structured Merge-tree (LSM-tree) storage engine with SSTable compaction. Optimized for write-heavy workloads with efficient background compaction across multiple levels.</p>
+            </div>
+          </section>
+
+          <section id="quick-start" class="noscript-section">
+            <h2>Quick Start</h2>
+            <p>Get MirDB running in under 5 minutes with these simple steps.</p>
+
+            <h3>1. Install MirDB</h3>
+            <p>Install MirDB using Cargo, the Rust package manager:</p>
+            <div class="noscript-code-block">
+              <pre>cargo install mirdb</pre>
+            </div>
+
+            <h3>2. Configure (Optional)</h3>
+            <p>Create a configuration file mirdb.toml:</p>
+            <div class="noscript-code-block">
+              <pre>addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdb"
+sst_max_size = "100M"
+mem_table_max_size = "4M"</pre>
+            </div>
+
+            <h3>3. Run MirDB</h3>
+            <p>Start the MirDB server with your configuration:</p>
+            <div class="noscript-code-block">
+              <pre>mirdb -c mirdb.toml</pre>
+            </div>
+
+            <h3>4. Basic Usage</h3>
+            <p>Connect using any memcached client or telnet:</p>
+            <div class="noscript-code-block">
+              <pre>$ telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</pre>
+            </div>
+          </section>
+
+          <section id="commands" class="noscript-section">
+            <h2>Supported Commands</h2>
+            <table class="noscript-table">
+              <thead>
+                <tr>
+                  <th>Command</th>
+                  <th>Syntax</th>
+                  <th>Description</th>
+                  <th>Response</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>get</strong></td>
+                  <td><code>get &lt;key&gt;</code></td>
+                  <td>Retrieve the value associated with the specified key</td>
+                  <td><code>VALUE &lt;key&gt; &lt;flags&gt; &lt;bytes&gt;\r\n&lt;data&gt;\r\nEND</code></td>
+                </tr>
+                <tr>
+                  <td><strong>set</strong></td>
+                  <td><code>set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                  <td>Store a key-value pair with optional expiration time</td>
+                  <td><code>STORED</code></td>
+                </tr>
+                <tr>
+                  <td><strong>delete</strong></td>
+                  <td><code>delete &lt;key&gt;</code></td>
+                  <td>Remove the specified key from the store</td>
+                  <td><code>DELETED</code></td>
+                </tr>
+                <tr>
+                  <td><strong>add</strong></td>
+                  <td><code>add &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                  <td>Store a key-value pair only if the key does not already exist</td>
+                  <td><code>STORED or NOT_STORED</code></td>
+                </tr>
+                <tr>
+                  <td><strong>replace</strong></td>
+                  <td><code>replace &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                  <td>Store a key-value pair only if the key already exists</td>
+                  <td><code>STORED or NOT_STORED</code></td>
+                </tr>
+                <tr>
+                  <td><strong>append</strong></td>
+                  <td><code>append &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                  <td>Append data to an existing key value</td>
+                  <td><code>STORED or NOT_STORED</code></td>
+                </tr>
+                <tr>
+                  <td><strong>prepend</strong></td>
+                  <td><code>prepend &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                  <td>Prepend data to an existing key value</td>
+                  <td><code>STORED or NOT_STORED</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section id="configuration" class="noscript-section">
+            <h2>Configuration</h2>
+            <p>MirDB uses TOML configuration files. Specify your config file using the -c flag.</p>
+
+            <h3>Example Configuration</h3>
+            <div class="noscript-code-block">
+              <pre>addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"</pre>
+            </div>
+
+            <h3>Configuration Parameters</h3>
+            <table class="noscript-table">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>addr</code></td>
+                  <td>Listen address and port for the server</td>
+                  <td><code>0.0.0.0:12333</code></td>
+                </tr>
+                <tr>
+                  <td><code>work_dir</code></td>
+                  <td>Data directory path for storing database files</td>
+                  <td><code>/tmp/mirdb</code></td>
+                </tr>
+                <tr>
+                  <td><code>max_level</code></td>
+                  <td>Maximum LSM tree levels</td>
+                  <td><code>7</code></td>
+                </tr>
+                <tr>
+                  <td><code>mem_table_max_size</code></td>
+                  <td>Maximum memtable size before flush</td>
+                  <td><code>4M</code></td>
+                </tr>
+                <tr>
+                  <td><code>sst_max_size</code></td>
+                  <td>Maximum SSTable file size</td>
+                  <td><code>100M</code></td>
+                </tr>
+                <tr>
+                  <td><code>block_size</code></td>
+                  <td>Data block size within SSTables</td>
+                  <td><code>4K</code></td>
+                </tr>
+                <tr>
+                  <td><code>l0_compaction_trigger</code></td>
+                  <td>Number of Level 0 files before triggering compaction</td>
+                  <td><code>4</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </main>
+
+        <footer class="noscript-footer">
+          <p>&copy; 2024 MirDB. Built with Rust.</p>
+          <p><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
+        </footer>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
