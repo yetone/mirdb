@@ -13,6 +13,7 @@
     "url": "git+https://github.com/yetone/mirdb.git"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.57.0",
     "serve": "^14.2.5"
   },
