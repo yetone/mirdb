@@ -262,12 +262,16 @@
   </script>
   </main>
 
-  <footer>
+  <footer data-testid="footer">
     <div class="footer-content">
-      <p>&copy; 2024 MirDB Project. Licensed under MIT.</p>
+      <div class="footer-info">
+        <p data-testid="footer-copyright">&copy; 2024 MirDB Project. All rights reserved.</p>
+        <p data-testid="footer-license">Licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
+      </div>
       <ul class="footer-links">
-        <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-        <li><a href="https://github.com/mirdb/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a></li>
+        <li><a href="https://github.com/mirdb/mirdb" data-testid="footer-github-link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://github.com/mirdb/mirdb#readme" data-testid="footer-docs-link" target="_blank" rel="noopener noreferrer">Docs</a></li>
+        <li><a href="https://crates.io/crates/mirdb" data-testid="footer-crates-link" target="_blank" rel="noopener noreferrer">Crates.io</a></li>
       </ul>
     </div>
   </footer>

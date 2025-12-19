@@ -435,6 +435,28 @@ footer {
   gap: 1rem;
 }
 
+.footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.footer-info p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.footer-info a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-info a:hover {
+  color: #60a5fa;
+  text-decoration: underline;
+}
+
 .footer-links {
   display: flex;
   gap: 1.5rem;
