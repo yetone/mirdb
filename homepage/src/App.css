@@ -433,8 +433,42 @@ body {
   height: 16px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive - Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  .tagline {
+    font-size: 1.3rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .commands-table th,
+  .commands-table td {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+  }
+
+  .quick-start-section {
+    padding: 70px 0;
+  }
+
+  .code-pre {
+    padding: 18px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive - Mobile (below 768px) */
+@media (max-width: 767px) {
   .hero h1 {
     font-size: 2.5rem;
   }
