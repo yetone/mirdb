@@ -16,6 +16,20 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    // Note: Edge uses Chromium engine, so chromium tests effectively cover Edge compatibility
+    // Uncomment below to test on actual Edge browser when available
+    // {
+    //   name: 'edge',
+    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    // },
   ],
   webServer: {
     command: 'npx serve -l 3000 ./public',
