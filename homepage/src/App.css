@@ -459,13 +459,63 @@ section[id] {
   padding: 0;
 }
 
-/* Syntax highlighting */
+/* Syntax highlighting token colors - Dark theme */
+.syntax-keyword {
+  color: #c792ea; /* Purple for keywords */
+}
+
+.syntax-string {
+  color: #c3e88d; /* Green for strings */
+}
+
+.syntax-comment {
+  color: #676e95; /* Gray for comments */
+  font-style: italic;
+}
+
+.syntax-number {
+  color: #f78c6c; /* Orange for numbers */
+}
+
+.syntax-operator {
+  color: #89ddff; /* Cyan for operators */
+}
+
+.syntax-function {
+  color: #82aaff; /* Blue for functions/macros */
+}
+
+.syntax-variable {
+  color: #f07178; /* Red/coral for variables */
+}
+
+.syntax-property {
+  color: #ffcb6b; /* Yellow for properties/keys */
+}
+
+.syntax-punctuation {
+  color: #89ddff; /* Cyan for punctuation */
+}
+
+.syntax-builtin {
+  color: #82aaff; /* Blue for built-in functions/types */
+}
+
+.syntax-plain {
+  color: #e1e1e1; /* Default text color */
+}
+
+/* Language-specific base colors (fallback) */
 .code-pre.language-bash,
 .code-pre.language-shell {
   color: #e1e1e1;
 }
 
 .code-pre.language-toml {
+  color: #e1e1e1;
+}
+
+.code-pre.language-rust {
   color: #e1e1e1;
 }
 

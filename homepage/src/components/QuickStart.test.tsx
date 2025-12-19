@@ -32,8 +32,11 @@ describe('QuickStart Section - E2E Tests', () => {
       const quickStartSection = screen.getByTestId('quick-start-section');
       expect(quickStartSection).toBeInTheDocument();
 
-      // Check for the installation command
-      expect(screen.getByText('cargo install mirdb')).toBeInTheDocument();
+      // Check for the installation command (text split across syntax highlighting spans)
+      const installStep = screen.getByTestId('install-step');
+      const codeBlock = within(installStep).getByTestId('code-block');
+      const codeElement = codeBlock.querySelector('code');
+      expect(codeElement?.textContent).toContain('cargo install mirdb');
     });
 
     it('has installation step with proper title', () => {
@@ -57,8 +60,11 @@ describe('QuickStart Section - E2E Tests', () => {
     it('displays command showing how to start MirDB with config file', () => {
       render(<QuickStart />);
 
-      // Check for the run command
-      expect(screen.getByText('mirdb -c mirdb.toml')).toBeInTheDocument();
+      // Check for the run command (text split across syntax highlighting spans)
+      const runStep = screen.getByTestId('run-step');
+      const codeBlock = within(runStep).getByTestId('code-block');
+      const codeElement = codeBlock.querySelector('code');
+      expect(codeElement?.textContent).toContain('mirdb -c mirdb.toml');
     });
 
     it('has run step with proper title', () => {
@@ -82,10 +88,11 @@ describe('QuickStart Section - E2E Tests', () => {
     it('displays SET command example with STORED response', () => {
       render(<QuickStart />);
 
-      // Check for SET command elements in the usage step code block
+      // Check for SET command elements in the usage step code block (text split across spans)
       const usageStep = screen.getByTestId('usage-step');
       const codeBlock = within(usageStep).getByTestId('code-block');
-      expect(within(codeBlock).getByText(/set mykey 0 0 5/)).toBeInTheDocument();
+      const codeElement = codeBlock.querySelector('code');
+      expect(codeElement?.textContent).toContain('set mykey 0 0 5');
       // STORED appears in code block
       expect(usageExample).toContain('STORED');
     });
@@ -93,11 +100,12 @@ describe('QuickStart Section - E2E Tests', () => {
     it('displays GET command example with VALUE response', () => {
       render(<QuickStart />);
 
-      // Check for GET command elements
+      // Check for GET command elements (text split across syntax highlighting spans)
       const usageStep = screen.getByTestId('usage-step');
       const codeBlock = within(usageStep).getByTestId('code-block');
-      expect(within(codeBlock).getByText(/get mykey/)).toBeInTheDocument();
-      expect(within(codeBlock).getByText(/VALUE mykey 0 5/)).toBeInTheDocument();
+      const codeElement = codeBlock.querySelector('code');
+      expect(codeElement?.textContent).toContain('get mykey');
+      expect(codeElement?.textContent).toContain('VALUE mykey 0 5');
     });
 
     it('displays END response for GET command', () => {
@@ -114,7 +122,11 @@ describe('QuickStart Section - E2E Tests', () => {
     it('shows complete usage example with telnet', () => {
       render(<QuickStart />);
 
-      expect(screen.getByText(/telnet localhost 12333/)).toBeInTheDocument();
+      // Text split across syntax highlighting spans
+      const usageStep = screen.getByTestId('usage-step');
+      const codeBlock = within(usageStep).getByTestId('code-block');
+      const codeElement = codeBlock.querySelector('code');
+      expect(codeElement?.textContent).toContain('telnet localhost 12333');
     });
 
     it('has usage step with proper title', () => {

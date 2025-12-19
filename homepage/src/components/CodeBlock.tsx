@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
+import { tokenize, getTokenClassName, isSupportedLanguage } from './syntaxHighlighter';
 
 export interface CodeBlockProps {
   code: string;
@@ -41,13 +42,71 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
     }
   }, [code]);
 
+  // Memoize tokenized code for performance
+  const highlightedTokens = useMemo(() => {
+    if (isSupportedLanguage(language)) {
+      return tokenize(code, language);
+    }
+    return null;
+  }, [code, language]);
+
+  const renderHighlightedCode = () => {
+    if (!highlightedTokens) {
+      return code;
+    }
+    return highlightedTokens.map((token, index) => (
+      <span key={index} className={getTokenClassName(token.type)} data-testid={`token-${token.type}`}>
+        {token.value}
+      </span>
+    ));
+  };
+
   const renderCodeLines = () => {
     const lines = code.split('\n');
     if (!showLineNumbers) {
-      return <code className={`language-${language}`}>{code}</code>;
+      return (
+        <code className={`language-${language}`} data-highlighted={highlightedTokens ? 'true' : 'false'}>
+          {renderHighlightedCode()}
+        </code>
+      );
     }
+
+    // For line numbers, we need to split tokens by newlines
+    if (highlightedTokens) {
+      const lineTokens: Array<Array<{ type: string; value: string }>> = [[]];
+      highlightedTokens.forEach((token) => {
+        const parts = token.value.split('\n');
+        parts.forEach((part, idx) => {
+          if (idx > 0) {
+            lineTokens.push([]);
+          }
+          if (part) {
+            lineTokens[lineTokens.length - 1].push({ type: token.type, value: part });
+          }
+        });
+      });
+
+      return (
+        <code className={`language-${language}`} data-highlighted="true">
+          {lineTokens.map((tokens, lineIndex) => (
+            <span key={lineIndex} className="code-line">
+              <span className="line-number">{lineIndex + 1}</span>
+              <span className="line-content">
+                {tokens.map((token, tokenIndex) => (
+                  <span key={tokenIndex} className={getTokenClassName(token.type)}>
+                    {token.value}
+                  </span>
+                ))}
+              </span>
+              {lineIndex < lineTokens.length - 1 && '\n'}
+            </span>
+          ))}
+        </code>
+      );
+    }
+
     return (
-      <code className={`language-${language}`}>
+      <code className={`language-${language}`} data-highlighted="false">
         {lines.map((line, index) => (
           <span key={index} className="code-line">
             <span className="line-number">{index + 1}</span>

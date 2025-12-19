@@ -38,7 +38,9 @@ describe('CodeBlock Component - Unit Tests', () => {
 
     it('renders code content correctly', () => {
       render(<CodeBlock {...defaultProps} />);
-      expect(screen.getByText('cargo install mirdb')).toBeInTheDocument();
+      // Text is split across syntax highlighting spans, so check textContent
+      const codeElement = screen.getByTestId('code-pre').querySelector('code');
+      expect(codeElement?.textContent).toContain('cargo install mirdb');
     });
 
     it('renders copy button', () => {
@@ -182,8 +184,10 @@ lineC`;
       const multilineCode = `cargo install mirdb
 mirdb -c mirdb.toml`;
       render(<CodeBlock code={multilineCode} language="bash" />);
-      expect(screen.getByText(/cargo install mirdb/)).toBeInTheDocument();
-      expect(screen.getByText(/mirdb -c mirdb.toml/)).toBeInTheDocument();
+      // Text is split across syntax highlighting spans, so check textContent
+      const codeElement = screen.getByTestId('code-pre').querySelector('code');
+      expect(codeElement?.textContent).toContain('cargo install mirdb');
+      expect(codeElement?.textContent).toContain('mirdb -c mirdb.toml');
     });
 
     it('copies multiline code correctly', async () => {
@@ -263,5 +267,176 @@ describe('CodeBlock Component - Edge Cases', () => {
 
     // Fallback should be attempted
     expect(execCommandMock).toHaveBeenCalledWith('copy');
+  });
+});
+
+describe('CodeBlock Component - Syntax Highlighting (Test Case 4)', () => {
+  beforeEach(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {
+        writeText: vi.fn().mockResolvedValue(undefined),
+      },
+      writable: true,
+      configurable: true,
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  describe('Bash/Shell syntax highlighting', () => {
+    it('applies syntax highlighting to bash code', () => {
+      render(<CodeBlock code="cargo install mirdb" language="bash" />);
+      const codeElement = screen.getByTestId('code-pre').querySelector('code');
+      expect(codeElement).toHaveAttribute('data-highlighted', 'true');
+    });
+
+    it('highlights bash builtin commands', () => {
+      render(<CodeBlock code="cargo install mirdb" language="bash" />);
+      const builtinTokens = screen.getAllByTestId('token-builtin');
+      expect(builtinTokens.length).toBeGreaterThan(0);
+      expect(builtinTokens[0]).toHaveClass('syntax-builtin');
+    });
+
+    it('highlights bash comments', () => {
+      render(<CodeBlock code="# This is a comment" language="bash" />);
+      const commentToken = screen.getByTestId('token-comment');
+      expect(commentToken).toHaveClass('syntax-comment');
+      expect(commentToken.textContent).toBe('# This is a comment');
+    });
+
+    it('highlights bash strings', () => {
+      render(<CodeBlock code='echo "hello world"' language="bash" />);
+      const stringToken = screen.getByTestId('token-string');
+      expect(stringToken).toHaveClass('syntax-string');
+    });
+
+    it('highlights bash variables', () => {
+      render(<CodeBlock code="echo $HOME" language="bash" />);
+      const varToken = screen.getByTestId('token-variable');
+      expect(varToken).toHaveClass('syntax-variable');
+    });
+
+    it('highlights shell language the same as bash', () => {
+      render(<CodeBlock code="cargo install mirdb" language="shell" />);
+      const codeElement = screen.getByTestId('code-pre').querySelector('code');
+      expect(codeElement).toHaveAttribute('data-highlighted', 'true');
+    });
+  });
+
+  describe('TOML syntax highlighting', () => {
+    it('applies syntax highlighting to TOML code', () => {
+      render(<CodeBlock code='addr = "0.0.0.0:12333"' language="toml" />);
+      const codeElement = screen.getByTestId('code-pre').querySelector('code');
+      expect(codeElement).toHaveAttribute('data-highlighted', 'true');
+    });
+
+    it('highlights TOML property keys', () => {
+      render(<CodeBlock code='addr = "0.0.0.0:12333"' language="toml" />);
+      const propToken = screen.getByTestId('token-property');
+      expect(propToken).toHaveClass('syntax-property');
+      expect(propToken.textContent).toBe('addr');
+    });
+
+    it('highlights TOML strings', () => {
+      render(<CodeBlock code='addr = "0.0.0.0:12333"' language="toml" />);
+      const stringToken = screen.getByTestId('token-string');
+      expect(stringToken).toHaveClass('syntax-string');
+    });
+
+    it('highlights TOML numbers', () => {
+      render(<CodeBlock code="max_level = 7" language="toml" />);
+      const numToken = screen.getByTestId('token-number');
+      expect(numToken).toHaveClass('syntax-number');
+      expect(numToken.textContent).toBe('7');
+    });
+
+    it('highlights TOML section headers', () => {
+      render(<CodeBlock code="[server]" language="toml" />);
+      const keywordToken = screen.getByTestId('token-keyword');
+      expect(keywordToken).toHaveClass('syntax-keyword');
+    });
+
+    it('highlights complete TOML config', () => {
+      const config = `addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdb"`;
+      render(<CodeBlock code={config} language="toml" />);
+
+      // Should have property tokens
+      const propTokens = screen.getAllByTestId('token-property');
+      expect(propTokens.length).toBe(3);
+
+      // Should have string tokens
+      const stringTokens = screen.getAllByTestId('token-string');
+      expect(stringTokens.length).toBe(2);
+
+      // Should have number token
+      const numToken = screen.getByTestId('token-number');
+      expect(numToken).toBeInTheDocument();
+    });
+  });
+
+  describe('Rust syntax highlighting', () => {
+    it('applies syntax highlighting to Rust code', () => {
+      render(<CodeBlock code="fn main() {}" language="rust" />);
+      const codeElement = screen.getByTestId('code-pre').querySelector('code');
+      expect(codeElement).toHaveAttribute('data-highlighted', 'true');
+    });
+
+    it('highlights Rust keywords', () => {
+      render(<CodeBlock code="let mut x = 5;" language="rust" />);
+      const keywordTokens = screen.getAllByTestId('token-keyword');
+      expect(keywordTokens.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('highlights Rust macros', () => {
+      render(<CodeBlock code='println!("Hello")' language="rust" />);
+      const funcToken = screen.getByTestId('token-function');
+      expect(funcToken).toHaveClass('syntax-function');
+      expect(funcToken.textContent).toBe('println!');
+    });
+
+    it('highlights Rust strings', () => {
+      render(<CodeBlock code='"hello world"' language="rust" />);
+      const stringToken = screen.getByTestId('token-string');
+      expect(stringToken).toHaveClass('syntax-string');
+    });
+
+    it('highlights Rust comments', () => {
+      render(<CodeBlock code="// This is a comment" language="rust" />);
+      const commentToken = screen.getByTestId('token-comment');
+      expect(commentToken).toHaveClass('syntax-comment');
+    });
+
+    it('highlights Rust builtin types', () => {
+      render(<CodeBlock code="let s: String" language="rust" />);
+      const builtinToken = screen.getByTestId('token-builtin');
+      expect(builtinToken).toHaveClass('syntax-builtin');
+    });
+  });
+
+  describe('Unsupported languages', () => {
+    it('does not apply syntax highlighting for unsupported languages', () => {
+      render(<CodeBlock code="some code" language="python" />);
+      const codeElement = screen.getByTestId('code-pre').querySelector('code');
+      expect(codeElement).toHaveAttribute('data-highlighted', 'false');
+    });
+  });
+
+  describe('Syntax highlighting with line numbers', () => {
+    it('applies syntax highlighting with line numbers enabled', () => {
+      const code = `cargo install mirdb
+mirdb -c mirdb.toml`;
+      render(<CodeBlock code={code} language="bash" showLineNumbers />);
+
+      const codeElement = screen.getByTestId('code-pre').querySelector('code');
+      expect(codeElement).toHaveAttribute('data-highlighted', 'true');
+
+      // Verify line numbers are present
+      const lineNumbers = screen.getByTestId('code-block').querySelectorAll('.line-number');
+      expect(lineNumbers.length).toBe(2);
+    });
   });
 });
