@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
     "build": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify && cp ./src/index.html ./dist/index.html",
-    "test": "node tests/hero-section.test.js && node tests/key-features.test.js && node tests/seo-optimization.test.js",
+    "test": "node tests/hero-section.test.js && node tests/key-features.test.js && node tests/seo-optimization.test.js && node tests/github-pages-deployment.test.js",
+    "test:deployment": "node tests/github-pages-deployment.test.js",
     "test:seo": "node tests/seo-optimization.test.js",
     "test:e2e": "npx playwright test",
     "test:ui": "npx playwright test --ui"
@@ -16,7 +17,8 @@
     "jsdom": "^27.3.0",
     "lighthouse": "^13.0.1",
     "playwright-lighthouse": "^4.0.0",
-    "tailwindcss": "^3.4.0"
+    "tailwindcss": "^3.4.0",
+    "yaml": "^2.8.2"
   },
   "keywords": [],
   "author": "",
