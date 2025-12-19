@@ -1,4 +1,4 @@
-/* CSS Variables */
+/* CSS Variables - Light Theme (default) */
 :root {
   --primary-color: #2563eb;
   --primary-hover: #1d4ed8;
@@ -10,6 +10,39 @@
   --border-color: #e2e8f0;
   --code-background: #1e293b;
   --code-text: #e2e8f0;
+  --diagram-bg: #f8fafc;
+}
+
+/* Dark Theme */
+html[data-theme="dark"] {
+  --primary-color: #60a5fa;
+  --primary-hover: #93c5fd;
+  --secondary-color: #94a3b8;
+  --text-color: #f1f5f9;
+  --text-muted: #94a3b8;
+  --background-color: #0f172a;
+  --surface-color: #1e293b;
+  --border-color: #334155;
+  --code-background: #0f172a;
+  --code-text: #e2e8f0;
+  --diagram-bg: #1e293b;
+}
+
+/* System preference detection - respects prefers-color-scheme on first visit */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    --primary-color: #60a5fa;
+    --primary-hover: #93c5fd;
+    --secondary-color: #94a3b8;
+    --text-color: #f1f5f9;
+    --text-muted: #94a3b8;
+    --background-color: #0f172a;
+    --surface-color: #1e293b;
+    --border-color: #334155;
+    --code-background: #0f172a;
+    --code-text: #e2e8f0;
+    --diagram-bg: #1e293b;
+  }
 }
 
 /* Reset and Base Styles */
@@ -766,6 +799,10 @@ button:focus-visible {
     padding: 1rem;
   }
 
+  .navbar-controls {
+    order: 1;
+  }
+
   .nav-links {
     display: none;
     flex-basis: 100%;
@@ -774,6 +811,7 @@ button:focus-visible {
     padding: 1rem 0;
     margin-top: 1rem;
     border-top: 1px solid var(--border-color);
+    order: 2;
   }
 
   .nav-links.nav-open {
@@ -794,5 +832,106 @@ button:focus-visible {
 
   .nav-links li:last-child a {
     border-bottom: none;
+  }
+
+  /* Theme toggle visible on mobile */
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Hide mobile menu toggle on larger screens */
+@media (min-width: 768px) {
+  .mobile-menu-toggle {
+    display: none;
+  }
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--surface-color);
+  border-color: var(--primary-color);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* Sun icon shown in dark mode */
+.theme-toggle .sun-icon {
+  display: none;
+}
+
+/* Moon icon shown in light mode */
+.theme-toggle .moon-icon {
+  display: block;
+}
+
+html[data-theme="dark"] .theme-toggle .sun-icon {
+  display: block;
+}
+
+html[data-theme="dark"] .theme-toggle .moon-icon {
+  display: none;
+}
+
+/* Also handle system preference dark mode */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .theme-toggle .sun-icon,
+  html:not([data-theme="light"]) .theme-toggle .sun-icon {
+    display: block;
+  }
+  html:not([data-theme]) .theme-toggle .moon-icon,
+  html:not([data-theme="light"]) .theme-toggle .moon-icon {
+    display: none;
+  }
+}
+
+html[data-theme="light"] .theme-toggle .sun-icon {
+  display: none;
+}
+
+html[data-theme="light"] .theme-toggle .moon-icon {
+  display: block;
+}
+
+/* Navbar controls container */
+.navbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Dark mode adjustments for SVG diagram */
+html[data-theme="dark"] .architecture-diagram rect[fill="#f8fafc"] {
+  fill: var(--diagram-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .architecture-diagram rect[fill="#f8fafc"] {
+    fill: var(--diagram-bg);
   }
 }

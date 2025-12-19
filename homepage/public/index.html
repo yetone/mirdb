@@ -14,11 +14,29 @@
   <header>
     <nav class="navbar" role="navigation" aria-label="Main navigation">
       <a href="/" class="logo">MirDB</a>
-      <button class="mobile-menu-toggle" data-testid="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-      </button>
+      <div class="navbar-controls">
+        <button class="theme-toggle" data-testid="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button class="mobile-menu-toggle" data-testid="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
       <ul class="nav-links" id="nav-links" data-testid="nav-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#architecture">Architecture</a></li>
@@ -289,6 +307,68 @@
     </section>
 
   <script>
+    // Theme toggle functionality
+    (function() {
+      const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
+      const html = document.documentElement;
+
+      // Initialize theme from localStorage or system preference
+      function initializeTheme() {
+        const savedTheme = localStorage.getItem('theme');
+
+        if (savedTheme) {
+          // User has a saved preference
+          html.setAttribute('data-theme', savedTheme);
+        } else {
+          // Check system preference
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        }
+      }
+
+      // Get current theme
+      function getCurrentTheme() {
+        return html.getAttribute('data-theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      }
+
+      // Toggle theme
+      function toggleTheme() {
+        const currentTheme = getCurrentTheme();
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+
+        // Update aria-label for accessibility
+        themeToggle.setAttribute('aria-label',
+          newTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+        );
+      }
+
+      // Initialize theme on page load
+      initializeTheme();
+
+      // Add click handler for theme toggle
+      if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Update initial aria-label
+        const currentTheme = getCurrentTheme();
+        themeToggle.setAttribute('aria-label',
+          currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+        );
+      }
+
+      // Listen for system preference changes
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        // Only update if user hasn't set a preference
+        if (!localStorage.getItem('theme')) {
+          html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+      });
+    })();
+
     // Copy to clipboard functionality
     document.querySelectorAll('.copy-button').forEach(button => {
       button.addEventListener('click', async function() {
