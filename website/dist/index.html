@@ -430,6 +430,136 @@ DELETED</code></pre>
         </div>
     </section>
 
+    <!-- Protocol Reference Section -->
+    <section id="protocol" class="py-20 bg-white" data-testid="protocol-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-mirdb-dark text-center mb-12">Protocol Reference</h2>
+            <p class="text-gray-600 text-center max-w-2xl mx-auto mb-12">
+                MirDB implements the memcached text protocol, enabling compatibility with existing memcached clients.
+                Below is a reference of all supported commands and response codes.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Supported Commands Table -->
+                <div>
+                    <h3 class="text-xl font-semibold text-mirdb-dark mb-6">Supported Commands</h3>
+                    <div class="bg-mirdb-light rounded-xl overflow-hidden shadow-lg" data-testid="commands-table">
+                        <table class="w-full">
+                            <thead class="bg-mirdb-dark text-white">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-sm font-semibold">Command</th>
+                                    <th class="px-6 py-3 text-left text-sm font-semibold">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50" data-testid="command-set">
+                                    <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">SET</td>
+                                    <td class="px-6 py-4 text-gray-600">Store a key-value pair</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50" data-testid="command-get">
+                                    <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">GET</td>
+                                    <td class="px-6 py-4 text-gray-600">Retrieve one or more keys</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50" data-testid="command-add">
+                                    <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">ADD</td>
+                                    <td class="px-6 py-4 text-gray-600">Store only if key doesn't exist</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50" data-testid="command-replace">
+                                    <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">REPLACE</td>
+                                    <td class="px-6 py-4 text-gray-600">Store only if key exists</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50" data-testid="command-delete">
+                                    <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">DELETE</td>
+                                    <td class="px-6 py-4 text-gray-600">Remove a key</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50" data-testid="command-append">
+                                    <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">APPEND</td>
+                                    <td class="px-6 py-4 text-gray-600">Append data to existing value</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50" data-testid="command-prepend">
+                                    <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">PREPEND</td>
+                                    <td class="px-6 py-4 text-gray-600">Prepend data to existing value</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50" data-testid="command-gets">
+                                    <td class="px-6 py-4 font-mono text-mirdb-primary font-medium">GETS</td>
+                                    <td class="px-6 py-4 text-gray-600">Retrieve with CAS token</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- MirDB-Specific Commands and Response Codes -->
+                <div class="space-y-8">
+                    <!-- MirDB-Specific Commands -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-6">MirDB-Specific Commands</h3>
+                        <div class="bg-gradient-to-br from-mirdb-primary to-mirdb-secondary rounded-xl p-6 text-white" data-testid="mirdb-commands">
+                            <p class="text-blue-100 mb-4">These commands are unique to MirDB and provide additional database management capabilities.</p>
+                            <div class="space-y-4">
+                                <div class="bg-white/10 rounded-lg p-4" data-testid="command-info">
+                                    <div class="flex items-center mb-2">
+                                        <span class="font-mono font-bold text-lg">INFO</span>
+                                        <span class="ml-3 text-xs bg-white/20 px-2 py-1 rounded">MirDB Extension</span>
+                                    </div>
+                                    <p class="text-blue-100 text-sm">Display database status and level information. Returns details about memtable size, SSTable levels, and compaction status.</p>
+                                </div>
+                                <div class="bg-white/10 rounded-lg p-4" data-testid="command-major-compaction">
+                                    <div class="flex items-center mb-2">
+                                        <span class="font-mono font-bold text-lg">MAJOR_COMPACTION</span>
+                                        <span class="ml-3 text-xs bg-white/20 px-2 py-1 rounded">MirDB Extension</span>
+                                    </div>
+                                    <p class="text-blue-100 text-sm">Trigger manual compaction of SSTable levels. Use this to reclaim disk space and optimize read performance.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Response Codes -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-6">Response Codes</h3>
+                        <div class="bg-mirdb-light rounded-xl overflow-hidden shadow-lg" data-testid="response-codes">
+                            <table class="w-full">
+                                <thead class="bg-mirdb-dark text-white">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Code</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold">Meaning</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50" data-testid="response-stored">
+                                        <td class="px-6 py-4 font-mono text-green-600 font-medium">STORED</td>
+                                        <td class="px-6 py-4 text-gray-600">Data stored successfully</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="response-not-stored">
+                                        <td class="px-6 py-4 font-mono text-yellow-600 font-medium">NOT_STORED</td>
+                                        <td class="px-6 py-4 text-gray-600">Data not stored (condition not met)</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="response-exists">
+                                        <td class="px-6 py-4 font-mono text-yellow-600 font-medium">EXISTS</td>
+                                        <td class="px-6 py-4 text-gray-600">CAS check failed</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="response-not-found">
+                                        <td class="px-6 py-4 font-mono text-gray-500 font-medium">NOT_FOUND</td>
+                                        <td class="px-6 py-4 text-gray-600">Key not found</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="response-deleted">
+                                        <td class="px-6 py-4 font-mono text-blue-600 font-medium">DELETED</td>
+                                        <td class="px-6 py-4 text-gray-600">Key deleted successfully</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" data-testid="response-error">
+                                        <td class="px-6 py-4 font-mono text-red-600 font-medium">ERROR</td>
+                                        <td class="px-6 py-4 text-gray-600">Unknown command or server error</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Copy to Clipboard Script -->
     <script>
         function copyToClipboard(button, codeId) {
