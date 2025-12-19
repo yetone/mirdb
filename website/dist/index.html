@@ -242,12 +242,213 @@
         </div>
     </section>
 
-    <!-- Quick Start Section Placeholder -->
-    <section id="quickstart" class="py-20 bg-mirdb-light">
+    <!-- Quick Start Section -->
+    <section id="quickstart" class="py-20 bg-mirdb-light" data-testid="quickstart-section">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-mirdb-dark text-center mb-12">Quick Start</h2>
-            <!-- Quick start content will be added in future scenarios -->
+            <p class="text-gray-600 text-center max-w-2xl mx-auto mb-12">
+                Get MirDB up and running in minutes. Follow these simple steps to start using
+                a persistent key-value store with your existing memcached clients.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Installation & Configuration Column -->
+                <div class="space-y-8">
+                    <!-- Installation -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-mirdb-primary text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
+                            Build from Source
+                        </h3>
+                        <div class="code-block bg-mirdb-dark rounded-lg overflow-hidden" data-testid="installation-code">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+                                <span class="text-gray-400 text-sm">Terminal</span>
+                                <button class="copy-button text-gray-400 hover:text-white transition-colors flex items-center text-sm" data-testid="copy-button-install" onclick="copyToClipboard(this, 'install-code')">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+                            <pre class="p-4 text-gray-300 overflow-x-auto"><code id="install-code"># Clone the repository
+git clone https://github.com/pjzhong/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run MirDB
+./target/release/mirdb -c etc/mirdb.toml</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Configuration -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-mirdb-primary text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
+                            Configure (Optional)
+                        </h3>
+                        <div class="code-block bg-mirdb-dark rounded-lg overflow-hidden" data-testid="config-example">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+                                <span class="text-gray-400 text-sm">mirdb.toml</span>
+                                <button class="copy-button text-gray-400 hover:text-white transition-colors flex items-center text-sm" data-testid="copy-button-config" onclick="copyToClipboard(this, 'config-code')">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+                            <pre class="p-4 text-gray-300 overflow-x-auto"><code id="config-code"># Network configuration
+addr = "0.0.0.0:12333"
+
+# Storage settings
+work_dir = "/var/lib/mirdb"
+max_level = 7
+
+# Memory limits
+mem_table_max_size = "4M"
+sst_max_size = "100M"</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Client Connection -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-mirdb-primary text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
+                            Connect with Memcached Client
+                        </h3>
+                        <div class="code-block bg-mirdb-dark rounded-lg overflow-hidden" data-testid="client-connection-example">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+                                <span class="text-gray-400 text-sm">Python Example</span>
+                                <button class="copy-button text-gray-400 hover:text-white transition-colors flex items-center text-sm" data-testid="copy-button-client" onclick="copyToClipboard(this, 'client-code')">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+                            <pre class="p-4 text-gray-300 overflow-x-auto"><code id="client-code">import memcache
+
+# Connect to MirDB using standard memcached client
+client = memcache.Client(['localhost:12333'])
+
+# Now use it just like memcached!
+client.set('user:1001', 'John Doe')
+print(client.get('user:1001'))  # Output: John Doe</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Usage Examples Column -->
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-mirdb-dark mb-4">Basic Commands</h3>
+                        <p class="text-gray-600 mb-6">
+                            MirDB supports the standard memcached text protocol. Use telnet or any
+                            memcached client to interact with the database.
+                        </p>
+                    </div>
+
+                    <!-- SET Command -->
+                    <div>
+                        <h4 class="text-lg font-medium text-mirdb-dark mb-3">SET - Store a Value</h4>
+                        <div class="code-block bg-mirdb-dark rounded-lg overflow-hidden" data-testid="example-set">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+                                <span class="text-gray-400 text-sm">Memcached Protocol</span>
+                                <button class="copy-button text-gray-400 hover:text-white transition-colors flex items-center text-sm" data-testid="copy-button-set" onclick="copyToClipboard(this, 'set-code')">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+                            <pre class="p-4 text-gray-300 overflow-x-auto"><code id="set-code"># set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+set session:abc123 0 3600 15
+{"user_id":1001}
+STORED</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- GET Command -->
+                    <div>
+                        <h4 class="text-lg font-medium text-mirdb-dark mb-3">GET - Retrieve a Value</h4>
+                        <div class="code-block bg-mirdb-dark rounded-lg overflow-hidden" data-testid="example-get">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+                                <span class="text-gray-400 text-sm">Memcached Protocol</span>
+                                <button class="copy-button text-gray-400 hover:text-white transition-colors flex items-center text-sm" data-testid="copy-button-get" onclick="copyToClipboard(this, 'get-code')">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+                            <pre class="p-4 text-gray-300 overflow-x-auto"><code id="get-code"># get &lt;key&gt;
+get session:abc123
+VALUE session:abc123 0 15
+{"user_id":1001}
+END</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE Command -->
+                    <div>
+                        <h4 class="text-lg font-medium text-mirdb-dark mb-3">DELETE - Remove a Value</h4>
+                        <div class="code-block bg-mirdb-dark rounded-lg overflow-hidden" data-testid="example-delete">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+                                <span class="text-gray-400 text-sm">Memcached Protocol</span>
+                                <button class="copy-button text-gray-400 hover:text-white transition-colors flex items-center text-sm" data-testid="copy-button-delete" onclick="copyToClipboard(this, 'delete-code')">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+                            <pre class="p-4 text-gray-300 overflow-x-auto"><code id="delete-code"># delete &lt;key&gt;
+delete session:abc123
+DELETED</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Quick Tip -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex">
+                            <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div>
+                                <h4 class="text-blue-800 font-medium">Pro Tip</h4>
+                                <p class="text-blue-700 text-sm mt-1">
+                                    Use the <code class="bg-blue-100 px-1 rounded">info</code> command to view database status
+                                    and <code class="bg-blue-100 px-1 rounded">major_compaction</code> to manually trigger
+                                    SSTable compaction when needed.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+
+    <!-- Copy to Clipboard Script -->
+    <script>
+        function copyToClipboard(button, codeId) {
+            const codeElement = document.getElementById(codeId);
+            const text = codeElement.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Copied!';
+                button.classList.add('text-green-400');
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('text-green-400');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+    </script>
 </body>
 </html>
