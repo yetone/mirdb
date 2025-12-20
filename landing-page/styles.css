@@ -325,6 +325,153 @@ body {
   line-height: 1.4;
 }
 
+/* Comparison Section */
+.comparison {
+  padding: 5rem 2rem;
+  background: #f8f9fa;
+}
+
+.comparison-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.comparison .section-title {
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+}
+
+.comparison .section-description {
+  color: #666;
+  margin-bottom: 3rem;
+}
+
+.comparison-table {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.comparison-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.comparison-feature {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.comparison-feature-title {
+  font-size: 1.1rem;
+  color: #1a1a2e;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.comparison-feature-desc {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.comparison-memcached,
+.comparison-mirdb {
+  padding: 1rem;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.comparison-memcached {
+  border-left: 3px solid #8b949e;
+}
+
+.comparison-mirdb {
+  border-left: 3px solid #00d9ff;
+}
+
+.comparison-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.comparison-value {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.comparison-advantage {
+  color: #1a1a2e;
+  font-weight: 500;
+}
+
+.comparison-disadvantage {
+  color: #666;
+}
+
+.comparison-summary {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-top: 2rem;
+}
+
+.comparison-summary p {
+  color: #c9d1d9;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0;
+  text-align: center;
+}
+
+.comparison-summary strong {
+  color: #00d9ff;
+}
+
+@media (max-width: 768px) {
+  .comparison-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .comparison-feature {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .comparison {
+    padding: 3rem 1rem;
+  }
+
+  .comparison-row {
+    padding: 1rem;
+  }
+
+  .comparison-memcached,
+  .comparison-mirdb {
+    padding: 0.75rem;
+  }
+
+  .comparison-summary {
+    padding: 1rem 1.5rem;
+  }
+}
+
 /* Getting Started Section */
 .getting-started {
   padding: 5rem 2rem;

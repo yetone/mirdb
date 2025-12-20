@@ -170,6 +170,84 @@
     </div>
   </section>
 
+  <section data-testid="comparison-section" class="comparison">
+    <div class="comparison-container">
+      <h2 class="section-title">MirDB vs Memcached</h2>
+      <p class="section-description">
+        See how MirDB compares to standard Memcached. Get the familiar protocol you know with the durability you need.
+      </p>
+
+      <div class="comparison-table">
+        <div class="comparison-row" data-testid="comparison-item-persistence">
+          <div class="comparison-feature">
+            <h3 class="comparison-feature-title">Data Persistence</h3>
+            <p class="comparison-feature-desc">How data is stored and retained</p>
+          </div>
+          <div class="comparison-memcached">
+            <span class="comparison-label">Memcached</span>
+            <p class="comparison-value comparison-disadvantage">Memory-only storage. All data is lost on restart or failure.</p>
+          </div>
+          <div class="comparison-mirdb">
+            <span class="comparison-label">MirDB</span>
+            <p class="comparison-value comparison-advantage">Persistent disk storage via SSTables. Data survives restarts and system failures.</p>
+          </div>
+        </div>
+
+        <div class="comparison-row" data-testid="comparison-item-compatibility">
+          <div class="comparison-feature">
+            <h3 class="comparison-feature-title">Client Compatibility</h3>
+            <p class="comparison-feature-desc">Using existing tools and libraries</p>
+          </div>
+          <div class="comparison-memcached">
+            <span class="comparison-label">Memcached</span>
+            <p class="comparison-value">Standard Memcached text protocol</p>
+          </div>
+          <div class="comparison-mirdb">
+            <span class="comparison-label">MirDB</span>
+            <p class="comparison-value comparison-advantage">Full protocol compatibility. Existing Memcached clients work without any code changes.</p>
+          </div>
+        </div>
+
+        <div class="comparison-row" data-testid="comparison-item-architecture">
+          <div class="comparison-feature">
+            <h3 class="comparison-feature-title">Storage Architecture</h3>
+            <p class="comparison-feature-desc">Underlying storage engine design</p>
+          </div>
+          <div class="comparison-memcached">
+            <span class="comparison-label">Memcached</span>
+            <p class="comparison-value">Slab allocator for in-memory caching</p>
+          </div>
+          <div class="comparison-mirdb">
+            <span class="comparison-label">MirDB</span>
+            <p class="comparison-value comparison-advantage">LSM tree architecture with memtables and SSTables for optimized writes and durable storage.</p>
+          </div>
+        </div>
+
+        <div class="comparison-row" data-testid="comparison-item-use-case">
+          <div class="comparison-feature">
+            <h3 class="comparison-feature-title">Best Use Case</h3>
+            <p class="comparison-feature-desc">When to choose each solution</p>
+          </div>
+          <div class="comparison-memcached">
+            <span class="comparison-label">Memcached</span>
+            <p class="comparison-value">Pure caching where data loss is acceptable</p>
+          </div>
+          <div class="comparison-mirdb">
+            <span class="comparison-label">MirDB</span>
+            <p class="comparison-value comparison-advantage">When you need Memcached simplicity with data durability guarantees.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="comparison-summary">
+        <p>
+          <strong>Drop-in replacement:</strong> Switch from Memcached to MirDB without changing your application code.
+          Your existing Memcached clients and libraries work seamlessly with MirDB's protocol-compatible implementation.
+        </p>
+      </div>
+    </div>
+  </section>
+
   <section data-testid="getting-started-section" id="getting-started" class="getting-started">
     <div class="getting-started-container">
       <h2 class="section-title">Getting Started</h2>
