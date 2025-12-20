@@ -8,6 +8,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.6;
   color: #333;
+  overflow-x: hidden;
 }
 
 .hero {
@@ -24,6 +25,7 @@ body {
 .hero-content {
   text-align: center;
   max-width: 800px;
+  width: 100%;
 }
 
 .hero h1 {
@@ -591,5 +593,161 @@ body {
   .footer-links {
     flex-direction: column;
     gap: 2rem;
+  }
+
+  /* Touch-friendly footer links for mobile */
+  .footer-nav a {
+    display: inline-block;
+    padding: 0.5rem 0;
+    min-height: 44px;
+    line-height: 1.5;
+  }
+
+  .footer-nav li {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Extra small devices (320px and below) */
+@media (max-width: 480px) {
+  .hero {
+    padding: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .tagline {
+    font-size: 1rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .features {
+    padding: 3rem 1rem;
+  }
+
+  .features-title {
+    font-size: 1.5rem;
+  }
+
+  .feature-card {
+    padding: 1.5rem;
+  }
+
+  .feature-title {
+    font-size: 1.1rem;
+  }
+
+  .code-examples {
+    padding: 3rem 1rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .section-description {
+    font-size: 0.95rem;
+  }
+
+  .code-example {
+    padding: 1rem;
+  }
+
+  .code-block {
+    padding: 0.75rem;
+  }
+
+  .code-block code {
+    font-size: 0.75rem;
+  }
+
+  .supported-commands {
+    padding: 1.5rem 1rem;
+  }
+
+  .commands-title {
+    font-size: 1.25rem;
+  }
+
+  .commands-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .command-item {
+    padding: 0.75rem;
+    min-height: 44px;
+  }
+
+  .getting-started {
+    padding: 3rem 1rem;
+  }
+
+  .step {
+    padding: 1rem;
+    padding-left: 3rem;
+  }
+
+  .step::before {
+    left: 0.75rem;
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+
+  .reference-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .reference-item {
+    padding: 0.75rem;
+    min-height: 44px;
+  }
+
+  .quick-reference {
+    padding: 1.5rem 1rem;
+  }
+
+  .footer {
+    padding: 2rem 1rem 1.5rem;
+  }
+
+  .footer-brand {
+    text-align: center;
+  }
+
+  .footer-section {
+    min-width: auto;
+  }
+
+  .footer-section-title {
+    font-size: 0.9rem;
+  }
+
+  .footer-nav a {
+    display: inline-block;
+    padding: 0.5rem 0;
+    min-height: 44px;
+    line-height: 1.5;
   }
 }
