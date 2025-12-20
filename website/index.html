@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol Compatibility. Drop-in replacement for memcached with data persistence.">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">MirDB</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#commands">Commands</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero" id="hero">
+    <div class="hero-container">
+      <h1 class="hero-title">MirDB</h1>
+      <p class="hero-tagline">Persistent Key-Value Store with Memcached Compatibility</p>
+      <p class="hero-description">
+        A drop-in replacement for memcached that persists your data to disk.
+        Built with Rust for performance and reliability, using an LSM-tree architecture
+        for efficient writes and reads.
+      </p>
+      <div class="hero-cta">
+        <a href="#quickstart" class="btn btn-primary">Get Started</a>
+        <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section class="features" id="features" aria-labelledby="features-heading">
+    <div class="features-container">
+      <h2 id="features-heading" class="section-title">Key Features</h2>
+      <p class="section-subtitle">Everything you need for a reliable, persistent key-value store</p>
+
+      <div class="features-grid">
+        <!-- Feature 1: Memcached Protocol Compatibility -->
+        <article class="feature-card" data-feature="memcached-protocol">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+              <path d="M2 17l10 5 10-5"></path>
+              <path d="M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Memcached Protocol Compatibility</h3>
+          <p class="feature-description">
+            Use your existing memcached clients without any code changes. MirDB implements the standard memcached text protocol, making it a true drop-in replacement for your caching layer.
+          </p>
+        </article>
+
+        <!-- Feature 2: Persistent Storage -->
+        <article class="feature-card" data-feature="persistent-storage">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Persistent Storage</h3>
+          <p class="feature-description">
+            Unlike memcached, your data survives restarts. MirDB stores data in SSTables (Sorted String Tables) on disk, ensuring durability without sacrificing the speed you expect.
+          </p>
+        </article>
+
+        <!-- Feature 3: LSM-Tree Architecture -->
+        <article class="feature-card" data-feature="lsm-tree">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">LSM-Tree Architecture</h3>
+          <p class="feature-description">
+            Built on a Log-Structured Merge-tree design for write-optimized performance. Data flows through memtables to sorted SSTables across multiple levels, balancing write speed with read efficiency.
+          </p>
+        </article>
+
+        <!-- Feature 4: Async Networking (Tokio) -->
+        <article class="feature-card" data-feature="async-networking">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Async Networking (Tokio)</h3>
+          <p class="feature-description">
+            Powered by Tokio, Rust's leading async runtime. Handle thousands of concurrent connections efficiently with non-blocking I/O and minimal resource consumption.
+          </p>
+        </article>
+
+        <!-- Feature 5: Background Compaction -->
+        <article class="feature-card" data-feature="background-compaction">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Background Compaction</h3>
+          <p class="feature-description">
+            Automatic background threads handle both minor and major compaction. Your data stays organized and queries remain fast without any manual intervention or downtime.
+          </p>
+        </article>
+
+        <!-- Feature 6: Write-Ahead Logging -->
+        <article class="feature-card" data-feature="write-ahead-logging">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Write-Ahead Logging</h3>
+          <p class="feature-description">
+            Every write is logged before being applied, ensuring crash recovery and data integrity. Even in unexpected shutdowns, your data remains safe and recoverable.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start Section -->
+  <section class="quickstart" id="quickstart" aria-labelledby="quickstart-heading">
+    <div class="quickstart-container">
+      <h2 id="quickstart-heading" class="section-title">Quick Start</h2>
+      <p class="section-subtitle">Get MirDB running in minutes</p>
+
+      <div class="quickstart-steps">
+        <div class="step">
+          <h3 class="step-title">1. Install</h3>
+          <pre class="code-block"><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+        </div>
+
+        <div class="step">
+          <h3 class="step-title">2. Run</h3>
+          <pre class="code-block"><code>./target/release/mirdb-server</code></pre>
+        </div>
+
+        <div class="step">
+          <h3 class="step-title">3. Connect</h3>
+          <pre class="code-block"><code># Using telnet or any memcached client
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+
+# Get it back
+get mykey</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Section -->
+  <section class="architecture" id="architecture" aria-labelledby="architecture-heading">
+    <div class="architecture-container">
+      <h2 id="architecture-heading" class="section-title">How It Works</h2>
+      <p class="section-subtitle">LSM-Tree data flow from write to disk</p>
+
+      <div class="architecture-diagram">
+        <pre class="diagram-text">
+Write Request
+    │
+    ▼
+┌─────────┐
+│   WAL   │──── Write-Ahead Log for durability
+└────┬────┘
+     │
+     ▼
+┌──────────┐
+│ Memtable │──── Active in-memory skip list
+└────┬─────┘
+     │ (when full)
+     ▼
+┌────────────────┐
+│ Imm Memtables  │──── Immutable memtables queue
+└───────┬────────┘
+        │ (minor compaction)
+        ▼
+┌───────────────┐
+│ Level 0 SSTs  │──── Recently flushed, may overlap
+└───────┬───────┘
+        │ (major compaction)
+        ▼
+┌───────────────┐
+│ Level 1+ SSTs │──── Sorted, non-overlapping
+└───────────────┘
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Commands Section -->
+  <section class="commands" id="commands" aria-labelledby="commands-heading">
+    <div class="commands-container">
+      <h2 id="commands-heading" class="section-title">Supported Commands</h2>
+      <p class="section-subtitle">Standard memcached commands plus MirDB extras</p>
+
+      <div class="commands-table-wrapper">
+        <table class="commands-table">
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>SET</code></td>
+              <td>Store a key-value pair</td>
+            </tr>
+            <tr>
+              <td><code>GET</code></td>
+              <td>Retrieve value by key</td>
+            </tr>
+            <tr>
+              <td><code>GETS</code></td>
+              <td>Retrieve value with CAS token</td>
+            </tr>
+            <tr>
+              <td><code>ADD</code></td>
+              <td>Store only if key doesn't exist</td>
+            </tr>
+            <tr>
+              <td><code>REPLACE</code></td>
+              <td>Store only if key exists</td>
+            </tr>
+            <tr>
+              <td><code>APPEND</code></td>
+              <td>Append data to existing value</td>
+            </tr>
+            <tr>
+              <td><code>PREPEND</code></td>
+              <td>Prepend data to existing value</td>
+            </tr>
+            <tr>
+              <td><code>DELETE</code></td>
+              <td>Remove a key-value pair</td>
+            </tr>
+            <tr>
+              <td><code>INFO</code></td>
+              <td>Get server statistics (MirDB)</td>
+            </tr>
+            <tr>
+              <td><code>MAJOR_COMPACTION</code></td>
+              <td>Trigger manual compaction (MirDB)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">MirDB</span>
+          <p class="footer-description">Persistent Key-Value Store with Memcached Compatibility</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://github.com/yetone/mirdb/blob/master/README.md" target="_blank" rel="noopener noreferrer">Documentation</a>
+          <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Built with Rust. Licensed under MIT.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
