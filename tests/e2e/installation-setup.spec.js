@@ -108,7 +108,7 @@ test.describe('Installation and Setup Instructions', () => {
 
   test.describe('Quick Start Section Accessibility', () => {
     test('should be accessible via Get Started button', async ({ page }) => {
-      const getStartedBtn = page.locator('a[href="#quick-start"]');
+      const getStartedBtn = page.locator('.hero-cta a[href="#quick-start"]');
       await expect(getStartedBtn).toBeVisible();
 
       await getStartedBtn.click();

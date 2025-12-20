@@ -627,6 +627,177 @@
             }
         }
 
+        /* Project Status Section */
+        .project-status {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-white) 100%);
+        }
+
+        .project-status .container {
+            max-width: 1000px;
+        }
+
+        .project-status h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .status-intro {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.125rem;
+            margin-bottom: 48px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .status-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .status-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            background: #1d4ed8;
+            color: #ffffff;
+        }
+
+        .status-badge.planned {
+            background: #92400e;
+            color: #ffffff;
+        }
+
+        .status-card p {
+            color: var(--text-light);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            color: var(--text-light);
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .roadmap .feature-list li::before {
+            content: '→';
+            color: var(--primary-color);
+        }
+
+        .feature-list li strong {
+            color: var(--text-dark);
+        }
+
+        .contribute-section {
+            text-align: center;
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .contribute-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .contribute-section p {
+            color: var(--text-light);
+            margin-bottom: 24px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contribute-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .project-status {
+                padding: 60px 20px;
+            }
+
+            .project-status h2 {
+                font-size: 2rem;
+            }
+
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-card {
+                padding: 24px;
+            }
+
+            .contribute-section {
+                padding: 24px;
+            }
+
+            .contribute-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .contribute-links .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+        }
+
         /* Header and Navigation */
         header {
             position: fixed;
@@ -789,6 +960,7 @@
                     <li><a href="#features">Features</a></li>
                     <li><a href="#quick-start">Quick Start</a></li>
                     <li><a href="#configuration">Configuration</a></li>
+                    <li><a href="#project-status">Status</a></li>
                     <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
                 </ul>
             </nav>
@@ -1103,6 +1275,61 @@ END</code></pre>
                     <div class="config-usage">
                         <p>Run MirDB with your custom configuration:</p>
                         <code>mirdb -c /path/to/mirdb.toml</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="project-status" class="project-status" aria-labelledby="project-status-title">
+            <div class="container">
+                <h2 id="project-status-title">Project Status & Roadmap</h2>
+                <p class="status-intro">
+                    MirDB is actively developed and maintained. Here's what we've built and what's coming next.
+                </p>
+
+                <div class="status-grid">
+                    <div class="status-card current-status">
+                        <h3>Current Status</h3>
+                        <span class="status-badge">Alpha</span>
+                        <p>MirDB is currently in active development. Core features are implemented and working:</p>
+                        <ul class="feature-list">
+                            <li>Memcached protocol compatibility (SET, GET, DELETE, etc.)</li>
+                            <li>Persistent storage with LSM-tree architecture</li>
+                            <li>Write-ahead logging for durability</li>
+                            <li>Background compaction</li>
+                            <li>Async networking with Tokio</li>
+                        </ul>
+                    </div>
+
+                    <div class="status-card roadmap">
+                        <h3>Roadmap</h3>
+                        <span class="status-badge planned">Planned Features</span>
+                        <p>We're working on exciting features to make MirDB even more powerful:</p>
+                        <ul class="feature-list">
+                            <li><strong>Raft Consensus:</strong> Distributed replication for high availability</li>
+                            <li><strong>Clustering:</strong> Horizontal scaling across multiple nodes</li>
+                            <li><strong>Binary Protocol:</strong> Enhanced performance with binary memcached protocol</li>
+                            <li><strong>TTL Support:</strong> Automatic key expiration</li>
+                            <li><strong>Metrics & Monitoring:</strong> Built-in observability</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="contribute-section">
+                    <h3>Want to Contribute?</h3>
+                    <p>MirDB is open source and we welcome contributions! Whether you're interested in implementing new features, fixing bugs, or improving documentation, there's a place for you.</p>
+                    <div class="contribute-links">
+                        <a href="https://github.com/yetone/mirdb/blob/main/CONTRIBUTING.md" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Contributing Guidelines
+                        </a>
+                        <a href="https://github.com/yetone/mirdb/issues" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            View Open Issues
+                        </a>
                     </div>
                 </div>
             </div>

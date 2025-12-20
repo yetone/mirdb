@@ -104,8 +104,8 @@ test.describe('Configuration Options Display', () => {
 
     test('should display all key defaults in configuration section', async ({ page }) => {
       // Verify the configuration section contains all required defaults
-      const configSection = page.locator('#configuration, section:has-text("Configuration")');
-      const configText = await configSection.first().textContent();
+      const configSection = page.locator('#configuration');
+      const configText = await configSection.textContent();
 
       // Check for all key configuration values
       expect(configText).toContain('12333'); // Port

@@ -321,7 +321,8 @@ describe('Accessibility Compliance', () => {
       const logo = document.querySelector('.hero-logo');
 
       if (logo) {
-        const alt = logo.getAttribute('alt');
+        // Check for alt attribute (img elements) or aria-label (SVG elements)
+        const alt = logo.getAttribute('alt') || logo.getAttribute('aria-label');
         expect(alt).toBeTruthy();
         // Logo alt should mention product name or be "logo"
         expect(alt.toLowerCase()).toMatch(/(mirdb|logo)/i);

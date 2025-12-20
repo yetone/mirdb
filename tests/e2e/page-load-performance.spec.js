@@ -72,7 +72,7 @@ test.describe('Page Load Performance', () => {
       await expect(page.locator('h1')).toBeVisible({ timeout: 3000 });
       await expect(page.locator('.hero-tagline')).toBeVisible({ timeout: 3000 });
       await expect(page.locator('.hero-description')).toBeVisible({ timeout: 3000 });
-      await expect(page.locator('.btn-primary')).toBeVisible({ timeout: 3000 });
+      await expect(page.locator('.btn-primary').first()).toBeVisible({ timeout: 3000 });
 
       const loadTime = Date.now() - startTime;
       console.log(`Time to all critical elements: ${loadTime}ms`);

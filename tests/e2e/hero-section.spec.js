@@ -42,8 +42,8 @@ test.describe('Hero Section Value Proposition Display', () => {
     });
 
     test('should have CTA buttons for documentation and GitHub', async ({ page }) => {
-      const getStartedBtn = page.locator('.btn-primary');
-      const githubBtn = page.locator('.btn-secondary');
+      const getStartedBtn = page.locator('.hero-cta .btn-primary');
+      const githubBtn = page.locator('.hero-cta .btn-secondary');
 
       await expect(getStartedBtn).toBeVisible();
       await expect(githubBtn).toBeVisible();

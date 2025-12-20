@@ -53,13 +53,13 @@ test.describe('No JavaScript Core Content Dependency (NFR-5)', () => {
     test('should display CTA buttons without JavaScript', async ({ page }) => {
       await page.goto(indexPath);
 
-      // Primary CTA - Get Started
-      const primaryCta = page.locator('.btn-primary');
+      // Primary CTA - Get Started (in hero section)
+      const primaryCta = page.locator('.hero-cta .btn-primary');
       await expect(primaryCta).toBeVisible();
       await expect(primaryCta).toContainText('Get Started');
 
-      // Secondary CTA - GitHub
-      const secondaryCta = page.locator('.btn-secondary');
+      // Secondary CTA - GitHub (in hero section)
+      const secondaryCta = page.locator('.hero-cta .btn-secondary');
       await expect(secondaryCta).toBeVisible();
       await expect(secondaryCta).toContainText('GitHub');
     });
@@ -309,7 +309,7 @@ test.describe('No JavaScript Core Content Dependency (NFR-5)', () => {
     test('CTA Get Started button should navigate without JavaScript', async ({ page }) => {
       await page.goto(indexPath);
 
-      const getStartedBtn = page.locator('.btn-primary');
+      const getStartedBtn = page.locator('.hero-cta .btn-primary');
       await expect(getStartedBtn).toBeVisible();
 
       // Get href and verify it's an anchor link
@@ -382,8 +382,8 @@ test.describe('No JavaScript Core Content Dependency (NFR-5)', () => {
       const display = await hero.evaluate((el) => window.getComputedStyle(el).display);
       expect(display).toBe('flex');
 
-      // Check primary button has background color
-      const btn = page.locator('.btn-primary');
+      // Check primary button has background color (hero CTA button)
+      const btn = page.locator('.hero-cta .btn-primary');
       const backgroundColor = await btn.evaluate((el) =>
         window.getComputedStyle(el).backgroundColor
       );

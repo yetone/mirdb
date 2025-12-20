@@ -41,15 +41,16 @@ describe('Static Hosting Compatibility', () => {
 
     test('should not have any server-side file extensions referenced', () => {
       // Check that no PHP, JSP, ASP, or other server-side file extensions are referenced
+      // Use word boundary or end-of-string patterns to avoid false positives like "display" matching .pl
       const serverSidePatterns = [
-        /\.php/i,
-        /\.jsp/i,
-        /\.asp/i,
-        /\.aspx/i,
-        /\.cfm/i,
-        /\.cgi/i,
-        /\.pl/i,
-        /\.rb/i,
+        /\.php(\?|#|"|'|\s|$)/i,
+        /\.jsp(\?|#|"|'|\s|$)/i,
+        /\.asp(\?|#|"|'|\s|$)/i,
+        /\.aspx(\?|#|"|'|\s|$)/i,
+        /\.cfm(\?|#|"|'|\s|$)/i,
+        /\.cgi(\?|#|"|'|\s|$)/i,
+        /\.pl(\?|#|"|'|\s|$)/i,
+        /\.rb(\?|#|"|'|\s|$)/i,
       ];
 
       serverSidePatterns.forEach((pattern) => {

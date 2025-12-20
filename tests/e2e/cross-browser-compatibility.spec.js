@@ -325,12 +325,12 @@ test.describe('Cross-Browser Compatibility', () => {
     test('links are navigable', async ({ page, browserName }) => {
       await page.goto(indexPath);
 
-      // Check Get Started link points to quick-start section
-      const getStartedBtn = page.locator('a.btn-primary[href="#quick-start"]');
+      // Check Get Started link points to quick-start section (in hero section)
+      const getStartedBtn = page.locator('.hero-cta a.btn-primary[href="#quick-start"]');
       await expect(getStartedBtn).toBeVisible();
 
-      // Check GitHub link exists
-      const githubBtn = page.locator('a.btn-secondary[href*="github.com"]');
+      // Check GitHub link exists (in hero section)
+      const githubBtn = page.locator('.hero-cta a.btn-secondary[href*="github.com"]');
       await expect(githubBtn).toBeVisible();
 
       console.log(`Links are navigable on ${browserName}`);
