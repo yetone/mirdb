@@ -16,6 +16,20 @@ module.exports = defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    // Edge uses Chromium engine and requires msedge channel to be installed
+    // For CI/CD environments without Edge, we test Chrome which shares the same Blink engine
+    // {
+    //   name: 'edge',
+    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    // },
   ],
   webServer: undefined, // We're testing static files, no server needed
 });
