@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol Compatibility">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f8f9fa;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .hero .tagline {
+      font-size: 1.4rem;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary {
+      background: #3498db;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    /* Features Section */
+    #features {
+      padding: 80px 20px;
+      background: white;
+    }
+
+    #features h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 50px;
+      color: #2c3e50;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 30px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+
+    .feature-card p {
+      color: #666;
+      line-height: 1.7;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    /* Quick Start Section */
+    .quick-start {
+      padding: 80px 20px;
+      background: #2c3e50;
+      color: white;
+    }
+
+    .quick-start h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 40px;
+    }
+
+    .code-block {
+      background: #1a252f;
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+
+    .code-block code {
+      color: #e0e0e0;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.9rem;
+    }
+
+    .code-block .comment {
+      color: #7f8c8d;
+    }
+
+    /* Footer */
+    footer {
+      background: #1a252f;
+      color: #bdc3c7;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    footer a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero .tagline {
+        font-size: 1.1rem;
+      }
+
+      #features h2,
+      .quick-start h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>MirDB</h1>
+      <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+      <div class="cta-buttons">
+        <a href="https://github.com/yetone/mirdb" class="btn btn-primary">View on GitHub</a>
+        <a href="#quick-start" class="btn btn-secondary">Get Started</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" data-section="features">
+    <div class="container">
+      <h2>Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔌</div>
+          <h3>Memcached Protocol Compatible</h3>
+          <p>Full compatibility with the standard Memcached text protocol. Connect using existing Memcached clients seamlessly. Supports SET, GET, DELETE, ADD, REPLACE, and more commands.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💾</div>
+          <h3>Persistent Storage with SSTables</h3>
+          <p>Unlike traditional Memcached, MirDB persists your data to disk using SSTables (Sorted String Tables). Your data survives restarts and crashes with full durability.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌲</div>
+          <h3>LSM Tree Architecture</h3>
+          <p>Built on a Log-Structured Merge Tree (LSM) architecture for efficient write operations. Features multi-level compaction with configurable thresholds for optimal performance.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Async Networking with Tokio</h3>
+          <p>High-performance asynchronous networking powered by Tokio. Handle thousands of concurrent connections efficiently with Rust's async runtime.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Skip List Memtable</h3>
+          <p>In-memory data stored in a skip list data structure for fast O(log n) insertions and lookups. Efficient memory usage with lock-free concurrent access.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Automatic Compaction</h3>
+          <p>Background minor and major compaction processes keep your data organized. Level-based compaction reduces read amplification while maintaining write performance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start Section -->
+  <section id="quick-start" class="quick-start">
+    <div class="container">
+      <h2>Quick Start</h2>
+      <div class="code-block">
+        <code>
+<span class="comment"># Clone the repository</span>
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+<span class="comment"># Build the project</span>
+cargo build --release
+
+<span class="comment"># Run MirDB server</span>
+./target/release/mirdb-server
+        </code>
+      </div>
+      <div class="code-block">
+        <code>
+<span class="comment"># Connect using telnet or any Memcached client</span>
+telnet localhost 12333
+
+<span class="comment"># Set a value</span>
+set mykey 0 0 5
+hello
+
+<span class="comment"># Get the value</span>
+get mykey
+        </code>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>MirDB is open source software licensed under the MIT License.</p>
+      <p>
+        <a href="https://github.com/yetone/mirdb">GitHub</a> |
+        <a href="https://github.com/yetone/mirdb/issues">Issues</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

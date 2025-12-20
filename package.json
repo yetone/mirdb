@@ -1,0 +1,12 @@
+{
+  "name": "mirdb-landing-page",
+  "version": "1.0.0",
+  "description": "Landing page for MirDB - A Persistent Key-Value Store",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}
