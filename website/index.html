@@ -209,27 +209,40 @@
       <div class="quickstart-steps">
         <div class="step">
           <h3 class="step-title">1. Install</h3>
-          <pre class="code-block"><code>git clone https://github.com/yetone/mirdb.git
+          <div class="code-block">
+            <button class="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">Copy</button>
+            <pre><code class="language-bash">git clone https://github.com/yetone/mirdb.git
 cd mirdb
 cargo build --release</code></pre>
+          </div>
         </div>
 
         <div class="step">
           <h3 class="step-title">2. Run</h3>
-          <pre class="code-block"><code>./target/release/mirdb-server</code></pre>
+          <div class="code-block">
+            <button class="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">Copy</button>
+            <pre><code class="language-bash">./target/release/mirdb-server</code></pre>
+          </div>
         </div>
 
         <div class="step">
           <h3 class="step-title">3. Connect</h3>
-          <pre class="code-block"><code># Using telnet or any memcached client
+          <div class="code-block">
+            <button class="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">Copy</button>
+            <pre><code class="language-bash"># Using telnet or any memcached client
 telnet localhost 12333
 
 # Set a value
 set mykey 0 0 5
 hello
+STORED
 
 # Get it back
-get mykey</code></pre>
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
         </div>
       </div>
     </div>
@@ -354,5 +367,31 @@ Write Request
       </div>
     </div>
   </footer>
+
+  <script>
+    // Copy button functionality
+    document.querySelectorAll('.copy-button').forEach(button => {
+      button.addEventListener('click', async () => {
+        const codeBlock = button.parentElement;
+        const code = codeBlock.querySelector('code');
+        const text = code.textContent;
+
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = 'Copied!';
+          button.classList.add('copied');
+          setTimeout(() => {
+            button.textContent = 'Copy';
+            button.classList.remove('copied');
+          }, 2000);
+        } catch (err) {
+          button.textContent = 'Failed';
+          setTimeout(() => {
+            button.textContent = 'Copy';
+          }, 2000);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
