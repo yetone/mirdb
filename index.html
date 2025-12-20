@@ -132,6 +132,106 @@
       margin-bottom: 15px;
     }
 
+    /* Comparison Section */
+    #comparison {
+      padding: 80px 20px;
+      background: #e8f4f8;
+    }
+
+    #comparison h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 50px;
+      color: #2c3e50;
+    }
+
+    .comparison-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .comparison-intro {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 40px;
+      line-height: 1.8;
+    }
+
+    .comparison-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .comparison-column {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .comparison-column.mirdb {
+      border-top: 4px solid #3498db;
+    }
+
+    .comparison-column.memcached {
+      border-top: 4px solid #95a5a6;
+    }
+
+    .comparison-column h3 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .comparison-column ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .comparison-column li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .comparison-column li:last-child {
+      border-bottom: none;
+    }
+
+    .comparison-column li::before {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .comparison-column.mirdb li::before {
+      content: "✓";
+      color: #27ae60;
+    }
+
+    .comparison-column.memcached li::before {
+      content: "×";
+      color: #e74c3c;
+    }
+
+    .comparison-highlight {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      padding: 25px 30px;
+      border-radius: 10px;
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .comparison-highlight p {
+      font-size: 1.1rem;
+      margin: 0;
+      line-height: 1.7;
+    }
+
     /* Commands Section */
     #commands {
       padding: 80px 20px;
@@ -312,6 +412,10 @@
       .feature-card {
         padding: 25px;
       }
+
+      .comparison-table {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* Mobile-specific styles for 375px viewport */
@@ -425,6 +529,45 @@
           <h3>Automatic Compaction</h3>
           <p>Background minor and major compaction processes keep your data organized. Level-based compaction reduces read amplification while maintaining write performance.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Memcached Comparison Section -->
+  <section id="comparison" data-section="comparison">
+    <div class="container">
+      <h2>MirDB vs Memcached</h2>
+      <p class="comparison-intro">
+        Standard Memcached is a powerful in-memory caching solution, but it's volatile—your data is lost when the server restarts.
+        MirDB provides a drop-in replacement that adds persistence while maintaining full protocol compatibility.
+      </p>
+      <div class="comparison-table">
+        <div class="comparison-column mirdb">
+          <h3>MirDB</h3>
+          <ul>
+            <li>Persistent storage to disk via SSTables</li>
+            <li>Data survives restarts and crashes</li>
+            <li>Full durability with Write-Ahead Log</li>
+            <li>LSM tree architecture for efficient writes</li>
+            <li>Compatible with existing Memcached clients</li>
+          </ul>
+        </div>
+        <div class="comparison-column memcached">
+          <h3>Standard Memcached</h3>
+          <ul>
+            <li>Volatile in-memory storage only</li>
+            <li>Data lost on restart or failure</li>
+            <li>No durability guarantees</li>
+            <li>Simple hash table storage</li>
+            <li>Requires separate persistence layer</li>
+          </ul>
+        </div>
+      </div>
+      <div class="comparison-highlight">
+        <p>
+          <strong>Switch seamlessly:</strong> MirDB uses the same Memcached protocol, so your existing code and clients work without changes.
+          Get the benefits of persistence with zero migration effort.
+        </p>
       </div>
     </div>
   </section>
