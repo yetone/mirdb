@@ -4,6 +4,27 @@
   box-sizing: border-box;
 }
 
+/* Skip Link - Visually hidden until focused for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #00d9ff;
+  color: #1a1a2e;
+  padding: 8px 16px;
+  z-index: 100;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 0;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #00ff88;
+  outline-offset: 2px;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.6;
@@ -576,7 +597,7 @@ body {
 }
 
 .footer-copyright {
-  color: #6e7681;
+  color: #8b949e;
   font-size: 0.85rem;
 }
 
