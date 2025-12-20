@@ -255,34 +255,102 @@ END</code></pre>
       <p class="section-subtitle">LSM-Tree data flow from write to disk</p>
 
       <div class="architecture-diagram">
-        <pre class="diagram-text">
-Write Request
-    │
-    ▼
-┌─────────┐
-│   WAL   │──── Write-Ahead Log for durability
-└────┬────┘
-     │
-     ▼
-┌──────────┐
-│ Memtable │──── Active in-memory skip list
-└────┬─────┘
-     │ (when full)
-     ▼
-┌────────────────┐
-│ Imm Memtables  │──── Immutable memtables queue
-└───────┬────────┘
-        │ (minor compaction)
-        ▼
-┌───────────────┐
-│ Level 0 SSTs  │──── Recently flushed, may overlap
-└───────┬───────┘
-        │ (major compaction)
-        ▼
-┌───────────────┐
-│ Level 1+ SSTs │──── Sorted, non-overlapping
-└───────────────┘
-        </pre>
+        <svg
+          class="lsm-tree-diagram"
+          viewBox="0 0 600 520"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-labelledby="diagram-title diagram-desc"
+        >
+          <title id="diagram-title">MirDB LSM-Tree Architecture Diagram</title>
+          <desc id="diagram-desc">Data flow diagram showing how writes flow through the LSM-tree: Write Request goes to WAL (Write-Ahead Log) for durability, then to Memtable (in-memory skip list), when full it moves to Immutable Memtables queue, minor compaction flushes to Level 0 SSTables (may overlap), and major compaction merges into Level 1+ SSTables (sorted, non-overlapping).</desc>
+
+          <!-- Background -->
+          <rect width="600" height="520" fill="#1e293b" rx="8"/>
+
+          <!-- Write Request -->
+          <text x="300" y="35" fill="#e2e8f0" font-family="monospace" font-size="14" text-anchor="middle" font-weight="bold">Write Request</text>
+
+          <!-- Arrow from Write to WAL -->
+          <line x1="300" y1="45" x2="300" y2="65" stroke="#64748b" stroke-width="2"/>
+          <polygon points="300,72 295,65 305,65" fill="#64748b"/>
+
+          <!-- WAL Box -->
+          <rect x="200" y="80" width="200" height="45" fill="#334155" stroke="#2563eb" stroke-width="2" rx="4"/>
+          <text x="300" y="107" fill="#e2e8f0" font-family="monospace" font-size="13" text-anchor="middle" font-weight="bold">WAL</text>
+          <text x="420" y="107" fill="#94a3b8" font-family="sans-serif" font-size="11" text-anchor="start">Write-Ahead Log for durability</text>
+
+          <!-- Arrow from WAL to Memtable -->
+          <line x1="300" y1="125" x2="300" y2="145" stroke="#64748b" stroke-width="2"/>
+          <polygon points="300,152 295,145 305,145" fill="#64748b"/>
+
+          <!-- Memtable Box -->
+          <rect x="200" y="160" width="200" height="45" fill="#334155" stroke="#22c55e" stroke-width="2" rx="4"/>
+          <text x="300" y="187" fill="#e2e8f0" font-family="monospace" font-size="13" text-anchor="middle" font-weight="bold">Memtable</text>
+          <text x="420" y="187" fill="#94a3b8" font-family="sans-serif" font-size="11" text-anchor="start">Active in-memory skip list</text>
+
+          <!-- Arrow with (when full) label -->
+          <line x1="300" y1="205" x2="300" y2="230" stroke="#64748b" stroke-width="2"/>
+          <text x="360" y="222" fill="#94a3b8" font-family="sans-serif" font-size="10" font-style="italic">(when full)</text>
+          <polygon points="300,237 295,230 305,230" fill="#64748b"/>
+
+          <!-- Immutable Memtables Box -->
+          <rect x="175" y="245" width="250" height="45" fill="#334155" stroke="#eab308" stroke-width="2" rx="4"/>
+          <text x="300" y="272" fill="#e2e8f0" font-family="monospace" font-size="13" text-anchor="middle" font-weight="bold">Imm Memtables</text>
+          <text x="440" y="272" fill="#94a3b8" font-family="sans-serif" font-size="11" text-anchor="start">Immutable queue</text>
+
+          <!-- Arrow with (minor compaction) label -->
+          <line x1="300" y1="290" x2="300" y2="315" stroke="#64748b" stroke-width="2"/>
+          <text x="375" y="307" fill="#94a3b8" font-family="sans-serif" font-size="10" font-style="italic">(minor compaction)</text>
+          <polygon points="300,322 295,315 305,315" fill="#64748b"/>
+
+          <!-- Level 0 SSTs Box -->
+          <rect x="175" y="330" width="250" height="45" fill="#334155" stroke="#f97316" stroke-width="2" rx="4"/>
+          <text x="300" y="357" fill="#e2e8f0" font-family="monospace" font-size="13" text-anchor="middle" font-weight="bold">Level 0 SSTs</text>
+          <text x="440" y="357" fill="#94a3b8" font-family="sans-serif" font-size="11" text-anchor="start">May overlap</text>
+
+          <!-- Arrow with (major compaction) label -->
+          <line x1="300" y1="375" x2="300" y2="400" stroke="#64748b" stroke-width="2"/>
+          <text x="375" y="392" fill="#94a3b8" font-family="sans-serif" font-size="10" font-style="italic">(major compaction)</text>
+          <polygon points="300,407 295,400 305,400" fill="#64748b"/>
+
+          <!-- Level 1+ SSTs Box -->
+          <rect x="175" y="415" width="250" height="45" fill="#334155" stroke="#8b5cf6" stroke-width="2" rx="4"/>
+          <text x="300" y="442" fill="#e2e8f0" font-family="monospace" font-size="13" text-anchor="middle" font-weight="bold">Level 1+ SSTs</text>
+          <text x="440" y="442" fill="#94a3b8" font-family="sans-serif" font-size="11" text-anchor="start">Sorted, non-overlapping</text>
+
+          <!-- Persistent Storage indicator -->
+          <rect x="150" y="475" width="300" height="30" fill="transparent" stroke="#64748b" stroke-width="1" stroke-dasharray="5,3" rx="4"/>
+          <text x="300" y="495" fill="#64748b" font-family="sans-serif" font-size="11" text-anchor="middle">Persistent Storage (SSTables on disk)</text>
+        </svg>
+      </div>
+
+      <div class="architecture-explanation">
+        <h3 class="architecture-explanation-title">Understanding LSM-Tree Architecture</h3>
+        <p class="architecture-explanation-text">
+          MirDB uses a <strong>Log-Structured Merge-tree (LSM-tree)</strong> architecture, which is optimized for
+          write-heavy workloads. This design provides several key benefits:
+        </p>
+        <ul class="architecture-benefits">
+          <li>
+            <strong>Efficient Write Performance:</strong> All writes go sequentially to the WAL and memtable,
+            avoiding random disk I/O. This makes writes extremely fast compared to traditional B-tree databases.
+          </li>
+          <li>
+            <strong>Durability via WAL:</strong> The Write-Ahead Log ensures that every write is persisted before
+            acknowledgment, providing crash recovery and data safety.
+          </li>
+          <li>
+            <strong>Background Compaction:</strong> Data is organized through compaction processes that run in the
+            background. Minor compaction flushes memtables to Level 0 SSTables, while major compaction merges
+            SSTables across levels to maintain read performance and reclaim space.
+          </li>
+          <li>
+            <strong>Tiered Storage Levels:</strong> SSTables are organized into levels (0 through 7 by default).
+            Lower levels may have overlapping key ranges, while higher levels are fully sorted and non-overlapping,
+            enabling efficient binary search during reads.
+          </li>
+        </ul>
       </div>
     </div>
   </section>

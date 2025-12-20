@@ -370,6 +370,65 @@ a:hover {
   white-space: pre;
 }
 
+/* LSM-Tree SVG Diagram */
+.lsm-tree-diagram {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Architecture Explanation */
+.architecture-explanation {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: var(--color-background-alt);
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--color-primary);
+}
+
+.architecture-explanation-title {
+  font-size: 1.25rem;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.architecture-explanation-text {
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.7;
+}
+
+.architecture-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.architecture-benefits li {
+  padding: var(--spacing-sm) 0;
+  padding-left: var(--spacing-md);
+  color: var(--color-text);
+  line-height: 1.6;
+  position: relative;
+}
+
+.architecture-benefits li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(var(--spacing-sm) + 0.5em);
+  width: 6px;
+  height: 6px;
+  background: var(--color-primary);
+  border-radius: 50%;
+}
+
+.architecture-benefits li strong {
+  color: var(--color-text);
+}
+
 /* Commands Section */
 .commands {
   padding: var(--spacing-xxl) var(--spacing-md);
