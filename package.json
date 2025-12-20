@@ -8,7 +8,9 @@
     "test:all": "npm run test && npm run test:e2e"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.40.0",
+    "axe-core": "^4.11.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jsdom": "^23.0.0"
