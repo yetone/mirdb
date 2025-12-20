@@ -134,6 +134,102 @@
             flex-wrap: wrap;
         }
 
+        /* Quick Start Section */
+        .quick-start {
+            padding: 80px 20px;
+            background: var(--bg-white);
+        }
+
+        .quick-start .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quick-start h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .quick-start-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 48px;
+        }
+
+        .installation-steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .installation-steps li {
+            counter-increment: step-counter;
+            margin-bottom: 32px;
+            padding-left: 60px;
+            position: relative;
+        }
+
+        .installation-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            color: var(--text-light);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .step-description a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .step-description a:hover {
+            text-decoration: underline;
+        }
+
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .code-block code {
+            color: #e5e7eb;
+        }
+
+        .code-comment {
+            color: #6b7280;
+        }
+
         .differentiator {
             display: flex;
             align-items: center;
@@ -178,6 +274,29 @@
                 max-width: 280px;
                 justify-content: center;
             }
+
+            .quick-start {
+                padding: 60px 20px;
+            }
+
+            .quick-start h2 {
+                font-size: 2rem;
+            }
+
+            .installation-steps li {
+                padding-left: 50px;
+            }
+
+            .installation-steps li::before {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 12px 16px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -191,6 +310,14 @@
 
             .hero {
                 padding: 20px 16px;
+            }
+
+            .quick-start h2 {
+                font-size: 1.75rem;
+            }
+
+            .step-title {
+                font-size: 1.1rem;
             }
         }
 
@@ -452,6 +579,71 @@
                         <span>Built with Rust</span>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="quick-start" class="quick-start" aria-labelledby="quick-start-title">
+            <div class="container">
+                <h2 id="quick-start-title">Quick Start</h2>
+                <p class="quick-start-subtitle">Get MirDB running in minutes with these simple steps.</p>
+
+                <ol class="installation-steps">
+                    <li>
+                        <h3 class="step-title">Prerequisites</h3>
+                        <p class="step-description">
+                            MirDB is built with Rust. Make sure you have Rust and Cargo installed.
+                            If you don't have Rust installed, get it from
+                            <a href="https://rustup.rs/" target="_blank" rel="noopener noreferrer">rustup.rs</a>
+                            or run the following command:
+                        </p>
+                        <pre class="code-block"><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</code></pre>
+                    </li>
+
+                    <li>
+                        <h3 class="step-title">Clone and Build</h3>
+                        <p class="step-description">
+                            Clone the MirDB repository and build the project:
+                        </p>
+                        <pre class="code-block"><code><span class="code-comment"># Clone the repository</span>
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+<span class="code-comment"># Build the project</span>
+cargo build --release</code></pre>
+                    </li>
+
+                    <li>
+                        <h3 class="step-title">Start the Server</h3>
+                        <p class="step-description">
+                            Run MirDB with the default configuration. The server will listen on port 12333:
+                        </p>
+                        <pre class="code-block"><code><span class="code-comment"># Start MirDB server</span>
+cargo run --release
+
+<span class="code-comment"># Or run with a custom config file</span>
+cargo run --release -- -c /path/to/config.toml</code></pre>
+                    </li>
+
+                    <li>
+                        <h3 class="step-title">Connect and Test</h3>
+                        <p class="step-description">
+                            Use any memcached client to connect. Here's a quick test using telnet:
+                        </p>
+                        <pre class="code-block"><code><span class="code-comment"># Connect to MirDB</span>
+telnet localhost 12333
+
+<span class="code-comment"># Set a value</span>
+set mykey 0 0 5
+hello
+STORED
+
+<span class="code-comment"># Get the value</span>
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                    </li>
+                </ol>
             </div>
         </section>
 
