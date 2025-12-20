@@ -145,6 +145,66 @@
       color: #2c3e50;
     }
 
+    /* Configuration Section */
+    #configuration {
+      padding: 80px 20px;
+      background: white;
+    }
+
+    #configuration h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 50px;
+      color: #2c3e50;
+    }
+
+    .config-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .config-intro {
+      text-align: center;
+      color: #666;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    .config-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #f8f9fa;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .config-table th,
+    .config-table td {
+      padding: 15px 20px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .config-table th {
+      background: #2c3e50;
+      color: white;
+      font-weight: 600;
+    }
+
+    .config-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .config-table tr:hover td {
+      background: #f0f0f0;
+    }
+
+    .config-value {
+      font-family: 'Monaco', 'Menlo', monospace;
+      color: #3498db;
+      font-weight: 600;
+    }
+
     .commands-container {
       max-width: 900px;
       margin: 0 auto;
@@ -404,6 +464,57 @@
             <span class="command-item">MAJOR_COMPACTION</span>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Configuration Section -->
+  <section id="configuration" data-section="configuration">
+    <div class="container">
+      <h2>Default Configuration</h2>
+      <p class="config-intro">MirDB comes with sensible defaults that work for most use cases. Configuration is managed via TOML files.</p>
+      <div class="config-container">
+        <table class="config-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Description</th>
+              <th>Default Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Port</td>
+              <td>Server listen port</td>
+              <td class="config-value">12333</td>
+            </tr>
+            <tr>
+              <td>Max LSM Levels</td>
+              <td>Maximum number of LSM tree levels</td>
+              <td class="config-value">7</td>
+            </tr>
+            <tr>
+              <td>Memtable Size</td>
+              <td>Maximum size before memtable flush</td>
+              <td class="config-value">4MB</td>
+            </tr>
+            <tr>
+              <td>SSTable Max Size</td>
+              <td>Maximum SSTable file size</td>
+              <td class="config-value">100MB</td>
+            </tr>
+            <tr>
+              <td>Block Size</td>
+              <td>Data block size for SSTables</td>
+              <td class="config-value">4KB</td>
+            </tr>
+            <tr>
+              <td>L0 Compaction Trigger</td>
+              <td>Level 0 files before compaction</td>
+              <td class="config-value">4</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
