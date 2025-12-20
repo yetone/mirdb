@@ -78,5 +78,84 @@
       </div>
     </div>
   </section>
+
+  <section data-testid="code-examples-section" class="code-examples">
+    <div class="code-examples-container">
+      <h2 class="section-title">Quick Start</h2>
+      <p class="section-description">
+        MirDB uses the standard Memcached text protocol. Connect with any Memcached client or use telnet to get started.
+      </p>
+
+      <div class="code-examples-grid">
+        <div class="code-example">
+          <h3 class="code-example-title">Store Data with SET</h3>
+          <pre class="code-block"><code><span class="command">SET</span> <span class="key">mykey</span> <span class="param">0</span> <span class="param">0</span> <span class="param">11</span>
+<span class="value">Hello World</span>
+<span class="response">STORED</span></code></pre>
+          <p class="code-description">
+            Store a key-value pair. Parameters: key, flags, TTL (0=no expiration), byte count.
+          </p>
+        </div>
+
+        <div class="code-example">
+          <h3 class="code-example-title">Retrieve Data with GET</h3>
+          <pre class="code-block"><code><span class="command">GET</span> <span class="key">mykey</span>
+<span class="response">VALUE mykey 0 11</span>
+<span class="value">Hello World</span>
+<span class="response">END</span></code></pre>
+          <p class="code-description">
+            Retrieve one or more keys. Returns the value along with metadata.
+          </p>
+        </div>
+
+        <div class="code-example">
+          <h3 class="code-example-title">Remove Data with DELETE</h3>
+          <pre class="code-block"><code><span class="command">DELETE</span> <span class="key">mykey</span>
+<span class="response">DELETED</span></code></pre>
+          <p class="code-description">
+            Remove a key from the store. Returns DELETED on success, NOT_FOUND if key doesn't exist.
+          </p>
+        </div>
+      </div>
+
+      <div data-testid="supported-commands" class="supported-commands">
+        <h3 class="commands-title">Supported Commands</h3>
+        <div class="commands-grid">
+          <div class="command-item">
+            <span class="command-name">SET</span>
+            <span class="command-desc">Store a key-value pair</span>
+          </div>
+          <div class="command-item">
+            <span class="command-name">GET</span>
+            <span class="command-desc">Retrieve value by key</span>
+          </div>
+          <div class="command-item">
+            <span class="command-name">DELETE</span>
+            <span class="command-desc">Remove a key</span>
+          </div>
+          <div class="command-item">
+            <span class="command-name">ADD</span>
+            <span class="command-desc">Store only if key doesn't exist</span>
+          </div>
+          <div class="command-item">
+            <span class="command-name">REPLACE</span>
+            <span class="command-desc">Store only if key exists</span>
+          </div>
+          <div class="command-item">
+            <span class="command-name">APPEND</span>
+            <span class="command-desc">Append data to existing value</span>
+          </div>
+          <div class="command-item">
+            <span class="command-name">PREPEND</span>
+            <span class="command-desc">Prepend data to existing value</span>
+          </div>
+          <div class="command-item">
+            <span class="command-name">GETS</span>
+            <span class="command-desc">Retrieve with CAS token</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>

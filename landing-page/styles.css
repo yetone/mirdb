@@ -158,6 +158,150 @@ body {
   font-size: 0.95rem;
 }
 
+/* Code Examples Section */
+.code-examples {
+  padding: 5rem 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.code-examples-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  text-align: center;
+  color: #a0a0a0;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.code-examples-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.code-example {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-example-title {
+  color: #00d9ff;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.code-block {
+  background: #0d1117;
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-block code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #c9d1d9;
+  white-space: pre;
+}
+
+/* Syntax Highlighting */
+.code-block .command {
+  color: #ff7b72;
+  font-weight: 600;
+}
+
+.code-block .key {
+  color: #79c0ff;
+}
+
+.code-block .param {
+  color: #a5d6ff;
+}
+
+.code-block .value {
+  color: #7ee787;
+}
+
+.code-block .response {
+  color: #8b949e;
+  font-style: italic;
+}
+
+.code-description {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Supported Commands Section */
+.supported-commands {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.commands-title {
+  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.command-item {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.command-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.command-name {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, monospace;
+  color: #ff7b72;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.command-desc {
+  color: #8b949e;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 2.5rem;
@@ -181,6 +325,18 @@ body {
   }
 
   .features-title {
+    font-size: 2rem;
+  }
+
+  .code-examples-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commands-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section-title {
     font-size: 2rem;
   }
 }
