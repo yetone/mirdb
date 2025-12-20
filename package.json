@@ -1,7 +1,7 @@
 {
   "name": "mirdb-landing-page",
   "version": "1.0.0",
-  "description": "Landing page for MirDB - A Persistent Key-Value Store",
+  "description": "Landing page for MirDB - A Persistent Key-Value Store with Memcached Protocol",
   "scripts": {
     "test": "jest"
   },
