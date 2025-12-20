@@ -193,6 +193,212 @@
                 padding: 20px 16px;
             }
         }
+
+        /* Configuration Section */
+        .configuration {
+            padding: 80px 20px;
+            background-color: var(--bg-white);
+        }
+
+        .configuration .container {
+            max-width: 900px;
+        }
+
+        .configuration h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .configuration-intro {
+            font-size: 1.125rem;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .config-defaults {
+            background-color: var(--bg-light);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .config-defaults h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .config-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .config-table th,
+        .config-table td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .config-table th {
+            font-weight: 600;
+            color: var(--text-dark);
+            background-color: var(--bg-white);
+        }
+
+        .config-table td {
+            color: var(--text-light);
+        }
+
+        .config-table code {
+            background-color: var(--bg-white);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .config-example {
+            margin-top: 32px;
+        }
+
+        .config-example h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .config-example p {
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .config-code {
+            background-color: #1f2937;
+            border-radius: 8px;
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        .config-code pre {
+            margin: 0;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #e5e7eb;
+        }
+
+        .config-code .comment {
+            color: #6b7280;
+        }
+
+        .config-code .key {
+            color: #93c5fd;
+        }
+
+        .config-code .value {
+            color: #86efac;
+        }
+
+        .config-usage {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .config-usage p {
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .config-usage code {
+            background-color: var(--bg-white);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .configuration {
+                padding: 60px 16px;
+            }
+
+            .configuration h2 {
+                font-size: 2rem;
+            }
+
+            .config-defaults {
+                padding: 20px;
+                overflow-x: auto;
+            }
+
+            .config-table th,
+            .config-table td {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+
+            .config-code {
+                padding: 16px;
+            }
+
+            .config-code pre {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .config-defaults {
+                padding: 12px;
+                overflow-x: auto;
+            }
+
+            .config-table {
+                min-width: 100%;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .config-table th,
+            .config-table td {
+                padding: 8px 6px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+
+            .config-table code {
+                font-size: 0.75rem;
+                padding: 1px 4px;
+            }
+
+            .config-code {
+                padding: 12px;
+            }
+
+            .config-code pre {
+                font-size: 0.7rem;
+            }
+
+            .config-usage code {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+                word-break: break-all;
+            }
+        }
     </style>
 </head>
 <body>
@@ -244,6 +450,95 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                         <span>Built with Rust</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="configuration" class="configuration">
+            <div class="container">
+                <h2>Configuration</h2>
+                <p class="configuration-intro">
+                    MirDB uses TOML configuration files for easy customization. Configure network settings, storage parameters, and performance tuning options.
+                </p>
+
+                <div class="config-defaults">
+                    <h3>Default Configuration Values</h3>
+                    <table class="config-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Default Value</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>addr</code></td>
+                                <td><code>0.0.0.0:12333</code></td>
+                                <td>Listen address and port</td>
+                            </tr>
+                            <tr>
+                                <td><code>work_dir</code></td>
+                                <td><code>/tmp/mirdb</code></td>
+                                <td>Data directory path</td>
+                            </tr>
+                            <tr>
+                                <td><code>max_level</code></td>
+                                <td><code>7</code></td>
+                                <td>Maximum LSM tree levels</td>
+                            </tr>
+                            <tr>
+                                <td><code>mem_table_max_size</code></td>
+                                <td><code>4MB</code></td>
+                                <td>Max memtable size before flush</td>
+                            </tr>
+                            <tr>
+                                <td><code>sst_max_size</code></td>
+                                <td><code>100MB</code></td>
+                                <td>Max SSTable file size</td>
+                            </tr>
+                            <tr>
+                                <td><code>block_size</code></td>
+                                <td><code>4KB</code></td>
+                                <td>Data block size</td>
+                            </tr>
+                            <tr>
+                                <td><code>l0_compaction_trigger</code></td>
+                                <td><code>4</code></td>
+                                <td>Level 0 files before compaction</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="config-example">
+                    <h3>Configuration Example</h3>
+                    <p>Create a custom configuration file (e.g., <code>mirdb.toml</code>) to customize MirDB settings:</p>
+                    <div class="config-code">
+                        <pre><span class="comment"># Network settings</span>
+<span class="key">addr</span> = <span class="value">"0.0.0.0:12333"</span>
+
+<span class="comment"># Storage settings</span>
+<span class="key">max_level</span> = <span class="value">7</span>
+<span class="key">work_dir</span> = <span class="value">"/var/lib/mirdb"</span>
+
+<span class="comment"># Memory and SSTable settings</span>
+<span class="key">sst_max_size</span> = <span class="value">"100M"</span>
+<span class="key">mem_table_max_size</span> = <span class="value">"4M"</span>
+<span class="key">mem_table_max_height</span> = <span class="value">32</span>
+
+<span class="comment"># Block settings</span>
+<span class="key">block_size</span> = <span class="value">"4K"</span>
+<span class="key">block_restart_interval</span> = <span class="value">16</span>
+
+<span class="comment"># Compaction settings</span>
+<span class="key">l0_compaction_trigger</span> = <span class="value">4</span></pre>
+                    </div>
+
+                    <div class="config-usage">
+                        <p>Run MirDB with your custom configuration:</p>
+                        <code>mirdb -c /path/to/mirdb.toml</code>
                     </div>
                 </div>
             </div>
