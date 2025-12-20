@@ -693,6 +693,28 @@ a:hover {
   margin: 0;
 }
 
+/* Global responsive rules */
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Touch-friendly button sizing */
+.btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero-title {
@@ -729,6 +751,71 @@ a:hover {
   }
 
   .advantage-text {
+    font-size: 1rem;
+  }
+
+  /* Ensure sections don't overflow on mobile */
+  .hero-container,
+  .features-container,
+  .quickstart-container,
+  .architecture-container,
+  .commands-container,
+  .why-mirdb-container,
+  .footer-container {
+    max-width: 100%;
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+  }
+
+  /* Mobile hero section */
+  .hero {
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  /* Mobile code blocks */
+  .code-block {
+    max-width: 100%;
+    padding: var(--spacing-sm);
+    font-size: 0.8125rem;
+  }
+
+  /* Mobile feature cards */
+  .feature-card {
+    padding: var(--spacing-md);
+  }
+
+  /* Mobile step cards */
+  .step {
+    padding: var(--spacing-md);
+  }
+
+  /* Architecture section mobile */
+  .architecture-diagram {
+    padding: var(--spacing-sm);
+  }
+
+  .lsm-tree-diagram {
+    max-width: 100%;
+  }
+
+  /* Commands section mobile */
+  .commands-table th,
+  .commands-table td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.875rem;
+  }
+
+  /* Section titles mobile */
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .section-subtitle {
     font-size: 1rem;
   }
 }
