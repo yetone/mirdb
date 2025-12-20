@@ -479,6 +479,74 @@ a:hover {
   border-bottom: none;
 }
 
+/* Commands Examples */
+.commands-examples {
+  margin-top: var(--spacing-xl);
+}
+
+.commands-examples-title {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.command-example {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--box-shadow);
+}
+
+.command-example:last-child {
+  margin-bottom: 0;
+}
+
+.command-example-name {
+  font-size: 1.125rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.command-example-description {
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.command-syntax {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.syntax-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.syntax-label {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 0.875rem;
+}
+
+.command-syntax .code-block {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .commands-examples-title {
+    font-size: 1.25rem;
+  }
+
+  .command-example {
+    padding: var(--spacing-md);
+  }
+}
+
 /* Footer */
 .footer {
   background: var(--color-code-bg);

@@ -362,7 +362,7 @@ END</code></pre>
       <p class="section-subtitle">Standard memcached commands plus MirDB extras</p>
 
       <div class="commands-table-wrapper">
-        <table class="commands-table">
+        <table class="commands-table" data-testid="commands-table">
           <thead>
             <tr>
               <th>Command</th>
@@ -370,48 +370,109 @@ END</code></pre>
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr data-command="SET">
               <td><code>SET</code></td>
               <td>Store a key-value pair</td>
             </tr>
-            <tr>
+            <tr data-command="GET">
               <td><code>GET</code></td>
               <td>Retrieve value by key</td>
             </tr>
-            <tr>
+            <tr data-command="GETS">
               <td><code>GETS</code></td>
               <td>Retrieve value with CAS token</td>
             </tr>
-            <tr>
+            <tr data-command="ADD">
               <td><code>ADD</code></td>
               <td>Store only if key doesn't exist</td>
             </tr>
-            <tr>
+            <tr data-command="REPLACE">
               <td><code>REPLACE</code></td>
               <td>Store only if key exists</td>
             </tr>
-            <tr>
+            <tr data-command="APPEND">
               <td><code>APPEND</code></td>
               <td>Append data to existing value</td>
             </tr>
-            <tr>
+            <tr data-command="PREPEND">
               <td><code>PREPEND</code></td>
               <td>Prepend data to existing value</td>
             </tr>
-            <tr>
+            <tr data-command="DELETE">
               <td><code>DELETE</code></td>
               <td>Remove a key-value pair</td>
             </tr>
-            <tr>
+            <tr data-command="INFO">
               <td><code>INFO</code></td>
               <td>Get server statistics (MirDB)</td>
             </tr>
-            <tr>
+            <tr data-command="MAJOR_COMPACTION">
               <td><code>MAJOR_COMPACTION</code></td>
               <td>Trigger manual compaction (MirDB)</td>
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Command Examples Section -->
+      <div class="commands-examples" data-testid="commands-examples">
+        <h3 class="commands-examples-title">Command Examples</h3>
+
+        <!-- SET Command Example -->
+        <div class="command-example" data-command-example="SET">
+          <h4 class="command-example-name">SET Command</h4>
+          <p class="command-example-description">Store a key-value pair with optional flags and TTL.</p>
+          <div class="command-syntax">
+            <div class="syntax-block">
+              <span class="syntax-label">Request:</span>
+              <div class="code-block">
+                <pre><code class="language-bash">set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n</code></pre>
+              </div>
+            </div>
+            <div class="syntax-block">
+              <span class="syntax-label">Example:</span>
+              <div class="code-block">
+                <pre><code class="language-bash">set mykey 0 0 5
+hello</code></pre>
+              </div>
+            </div>
+            <div class="syntax-block">
+              <span class="syntax-label">Response:</span>
+              <div class="code-block">
+                <pre><code class="language-bash">STORED</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GET Command Example -->
+        <div class="command-example" data-command-example="GET">
+          <h4 class="command-example-name">GET Command</h4>
+          <p class="command-example-description">Retrieve one or more values by key.</p>
+          <div class="command-syntax">
+            <div class="syntax-block">
+              <span class="syntax-label">Request:</span>
+              <div class="code-block">
+                <pre><code class="language-bash">get &lt;key1&gt; [&lt;key2&gt; ...]\r\n</code></pre>
+              </div>
+            </div>
+            <div class="syntax-block">
+              <span class="syntax-label">Example:</span>
+              <div class="code-block">
+                <pre><code class="language-bash">get mykey</code></pre>
+              </div>
+            </div>
+            <div class="syntax-block">
+              <span class="syntax-label">Response:</span>
+              <div class="code-block">
+                <pre><code class="language-bash">VALUE mykey 0 5
+hello
+END</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
