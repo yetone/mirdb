@@ -402,6 +402,99 @@ a:hover {
   font-size: 0.875rem;
 }
 
+/* Why MirDB / Comparison Section */
+.why-mirdb {
+  padding: var(--spacing-xxl) var(--spacing-md);
+  background-color: var(--color-background-alt);
+}
+
+.why-mirdb-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.comparison-card {
+  background: var(--color-background);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  transition: box-shadow 0.2s ease;
+}
+
+.comparison-card:hover {
+  box-shadow: var(--box-shadow);
+}
+
+.comparison-memcached {
+  border-color: var(--color-border);
+}
+
+.comparison-mirdb {
+  border-color: var(--color-primary);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, var(--color-background) 100%);
+}
+
+.comparison-title {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+  text-align: center;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.comparison-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comparison-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.comparison-icon {
+  flex-shrink: 0;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.comparison-pro .comparison-icon {
+  color: #22c55e;
+}
+
+.comparison-con .comparison-icon {
+  color: #ef4444;
+}
+
+.advantage-summary {
+  background: var(--color-background);
+  border-left: 4px solid var(--color-primary);
+  padding: var(--spacing-lg);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.advantage-text {
+  color: var(--color-text);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero-title {
@@ -427,5 +520,17 @@ a:hover {
 
   .footer-links {
     justify-content: center;
+  }
+
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .advantage-summary {
+    padding: var(--spacing-md);
+  }
+
+  .advantage-text {
+    font-size: 1rem;
   }
 }

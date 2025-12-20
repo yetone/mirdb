@@ -13,6 +13,7 @@
     <div class="nav-container">
       <a href="#" class="nav-logo">MirDB</a>
       <ul class="nav-links">
+        <li><a href="#why-mirdb">Why MirDB?</a></li>
         <li><a href="#features">Features</a></li>
         <li><a href="#quickstart">Quick Start</a></li>
         <li><a href="#architecture">Architecture</a></li>
@@ -37,6 +38,68 @@
       </div>
     </div>
   </header>
+
+  <!-- Why MirDB Section -->
+  <section class="why-mirdb" id="why-mirdb" aria-labelledby="why-mirdb-heading" data-section="why-mirdb">
+    <div class="why-mirdb-container">
+      <h2 id="why-mirdb-heading" class="section-title">Why MirDB?</h2>
+      <p class="section-subtitle">The best of memcached with the reliability of persistent storage</p>
+
+      <div class="comparison-grid">
+        <div class="comparison-card comparison-memcached">
+          <h3 class="comparison-title">Standard Memcached</h3>
+          <ul class="comparison-list">
+            <li class="comparison-item comparison-con">
+              <span class="comparison-icon" aria-hidden="true">&#10007;</span>
+              Data lost on restart or crash
+            </li>
+            <li class="comparison-item comparison-con">
+              <span class="comparison-icon" aria-hidden="true">&#10007;</span>
+              In-memory only storage
+            </li>
+            <li class="comparison-item comparison-pro">
+              <span class="comparison-icon" aria-hidden="true">&#10003;</span>
+              Fast read/write operations
+            </li>
+            <li class="comparison-item comparison-pro">
+              <span class="comparison-icon" aria-hidden="true">&#10003;</span>
+              Simple key-value interface
+            </li>
+          </ul>
+        </div>
+
+        <div class="comparison-card comparison-mirdb">
+          <h3 class="comparison-title">MirDB</h3>
+          <ul class="comparison-list">
+            <li class="comparison-item comparison-pro">
+              <span class="comparison-icon" aria-hidden="true">&#10003;</span>
+              Data survives restarts and crashes
+            </li>
+            <li class="comparison-item comparison-pro">
+              <span class="comparison-icon" aria-hidden="true">&#10003;</span>
+              Durable disk-based storage with SSTables
+            </li>
+            <li class="comparison-item comparison-pro">
+              <span class="comparison-icon" aria-hidden="true">&#10003;</span>
+              Fast read/write via LSM-tree architecture
+            </li>
+            <li class="comparison-item comparison-pro">
+              <span class="comparison-icon" aria-hidden="true">&#10003;</span>
+              Same memcached protocol - drop-in replacement
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="advantage-summary">
+        <p class="advantage-text">
+          Unlike memcached, MirDB persists your data to disk. Use your existing memcached clients
+          without any code changes while gaining the reliability of durable storage. Your data
+          survives restarts, crashes, and power failures.
+        </p>
+      </div>
+    </div>
+  </section>
 
   <!-- Features Section -->
   <section class="features" id="features" aria-labelledby="features-heading">
