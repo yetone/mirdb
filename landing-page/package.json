@@ -1,0 +1,17 @@
+{
+  "name": "landing-page",
+  "version": "1.0.0",
+  "description": "MirDB Product Landing Page",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed"
+  },
+  "keywords": ["mirdb", "landing-page"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0"
+  }
+}
