@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol Compatibility">
+  <meta name="keywords" content="mirdb, key-value store, memcached, persistent storage, LSM-tree, Rust">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <style>
+    /* CSS Variables for consistent theming */
+    :root {
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --secondary-color: #374151;
+      --secondary-hover: #1f2937;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --background: #ffffff;
+      --background-alt: #f9fafb;
+      --border-color: #e5e7eb;
+      --focus-ring: #93c5fd;
+      --white: #ffffff;
+    }
+
+    /* Reset and Base Styles */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--background);
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Focus styles for accessibility */
+    a:focus,
+    button:focus {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+      padding: 4rem 0 6rem;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      color: var(--text-color);
+      margin-bottom: 1rem;
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .hero-description {
+      font-size: 1.125rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    /* CTA Buttons Container */
+    .cta-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Base CTA Button Styles */
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.875rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+      min-width: 160px;
+    }
+
+    /* Primary CTA - Get Started */
+    .cta-primary {
+      background-color: var(--primary-color);
+      color: var(--white);
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+    }
+
+    .cta-primary:hover {
+      background-color: var(--primary-hover);
+      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 10px -1px rgba(37, 99, 235, 0.4);
+    }
+
+    .cta-primary:focus,
+    .cta-primary:focus-visible {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    /* Secondary CTA - View on GitHub */
+    .cta-secondary {
+      background-color: var(--white);
+      color: var(--secondary-color);
+      border: 2px solid var(--border-color);
+    }
+
+    .cta-secondary:hover {
+      background-color: var(--background-alt);
+      border-color: var(--secondary-color);
+      text-decoration: none;
+    }
+
+    .cta-secondary:focus,
+    .cta-secondary:focus-visible {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    /* CTA Icons */
+    .cta-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-right: 0.5rem;
+    }
+
+    /* GitHub Icon SVG */
+    .github-icon {
+      fill: currentColor;
+    }
+
+    /* Quick Start Section */
+    #quick-start {
+      padding: 4rem 0;
+      background-color: var(--background);
+    }
+
+    #quick-start h2 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .code-block {
+      background-color: #1f2937;
+      color: #e5e7eb;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 4rem 0;
+      background-color: var(--background-alt);
+    }
+
+    .features h2 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background-color: var(--background);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .feature-card h3 {
+      font-size: 1.125rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    .feature-card p {
+      color: var(--text-light);
+      font-size: 0.9375rem;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--secondary-color);
+      color: var(--white);
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .footer a {
+      color: var(--white);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-copyright {
+      color: #9ca3af;
+      font-size: 0.875rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 3rem 0 4rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero-tagline {
+        font-size: 1.25rem;
+      }
+
+      .hero-description {
+        font-size: 1rem;
+      }
+
+      .cta-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .cta {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+
+    /* Reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero" id="hero" data-section="hero">
+    <div class="container hero-content">
+      <img
+        src="https://github.com/yetone/mirdb/raw/master/assets/logo.gif"
+        alt="MirDB Logo"
+        class="hero-logo"
+      />
+      <h1>MirDB</h1>
+      <p class="hero-tagline">Persistent Key-Value Store with Memcached Compatibility</p>
+      <p class="hero-description">
+        A high-performance, persistent key-value store built in Rust. Get the familiarity
+        of memcached with the reliability of persistent storage powered by LSM-tree architecture.
+      </p>
+      <div class="cta-container">
+        <a
+          href="#quick-start"
+          class="cta cta-primary"
+          data-cta="primary"
+        >
+          Get Started
+        </a>
+        <a
+          href="https://github.com/yetone/mirdb"
+          class="cta cta-secondary"
+          data-cta="secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="cta-icon github-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start Section -->
+  <section id="quick-start">
+    <div class="container">
+      <h2>Quick Start</h2>
+      <div class="code-block">
+        <pre><code># Clone and build MirDB
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release
+
+# Run the server
+./target/release/mirdb-server
+
+# Connect using any memcached client
+telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2>Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Memcached Protocol</h3>
+          <p>Full compatibility with memcached text protocol. Use existing clients and tools without modification.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Persistent Storage</h3>
+          <p>Unlike memcached, your data survives restarts. LSM-tree architecture ensures durability and efficient writes.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Write-Ahead Logging</h3>
+          <p>Every write is logged before acknowledgment, ensuring no data loss even during unexpected shutdowns.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Async I/O with Tokio</h3>
+          <p>Built on Rust's Tokio runtime for high-performance, non-blocking network I/O.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Background Compaction</h3>
+          <p>Automatic background compaction keeps storage efficient without impacting query performance.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Built in Rust</h3>
+          <p>Memory safety and performance without compromise. Zero-cost abstractions and fearless concurrency.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="#quick-start">Documentation</a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+      </div>
+      <p class="footer-copyright">&copy; 2024 MirDB. Built with Rust.</p>
+    </div>
+  </footer>
+</body>
+</html>
