@@ -125,6 +125,59 @@
       margin-bottom: 15px;
     }
 
+    /* Commands Section */
+    #commands {
+      padding: 80px 20px;
+      background: #f8f9fa;
+    }
+
+    #commands h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 50px;
+      color: #2c3e50;
+    }
+
+    .commands-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .command-category {
+      margin-bottom: 30px;
+    }
+
+    .command-category h3 {
+      color: #2c3e50;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #3498db;
+    }
+
+    .command-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .command-item {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.95rem;
+      color: #2c3e50;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .command-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-color: #3498db;
+    }
+
     /* Quick Start Section */
     .quick-start {
       padding: 80px 20px;
@@ -243,6 +296,45 @@
           <div class="feature-icon">🔄</div>
           <h3>Automatic Compaction</h3>
           <p>Background minor and major compaction processes keep your data organized. Level-based compaction reduces read amplification while maintaining write performance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported Commands Section -->
+  <section id="commands" data-section="commands">
+    <div class="container">
+      <h2>Supported Commands</h2>
+      <div class="commands-container">
+        <div class="command-category">
+          <h3>Storage Commands</h3>
+          <div class="command-list">
+            <span class="command-item">SET</span>
+            <span class="command-item">ADD</span>
+            <span class="command-item">REPLACE</span>
+            <span class="command-item">APPEND</span>
+            <span class="command-item">PREPEND</span>
+          </div>
+        </div>
+        <div class="command-category">
+          <h3>Retrieval Commands</h3>
+          <div class="command-list">
+            <span class="command-item">GET</span>
+            <span class="command-item">GETS</span>
+          </div>
+        </div>
+        <div class="command-category">
+          <h3>Deletion Commands</h3>
+          <div class="command-list">
+            <span class="command-item">DELETE</span>
+          </div>
+        </div>
+        <div class="command-category">
+          <h3>Admin Commands</h3>
+          <div class="command-list">
+            <span class="command-item">INFO</span>
+            <span class="command-item">MAJOR_COMPACTION</span>
+          </div>
         </div>
       </div>
     </div>
