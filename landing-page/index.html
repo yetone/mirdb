@@ -157,5 +157,83 @@
       </div>
     </div>
   </section>
+
+  <section data-testid="getting-started-section" id="getting-started" class="getting-started">
+    <div class="getting-started-container">
+      <h2 class="section-title">Getting Started</h2>
+      <p class="section-description">
+        Get MirDB up and running in minutes. Follow these simple steps to start using your persistent key-value store.
+      </p>
+
+      <div class="installation-steps">
+        <h3 class="steps-title">Installation</h3>
+        <ol class="steps-list">
+          <li class="step" data-testid="step-1">
+            <span class="step-title">Install via Cargo</span>
+            <p class="step-description">If you have Rust installed, you can build MirDB from source:</p>
+            <pre class="code-block"><code>git clone https://github.com/mirdb/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+          </li>
+          <li class="step" data-testid="step-2">
+            <span class="step-title">Create Configuration File</span>
+            <p class="step-description">Create a TOML configuration file (e.g., <code>mirdb.toml</code>):</p>
+            <pre class="code-block"><code># MirDB Configuration
+addr = "0.0.0.0:12333"
+work_dir = "/tmp/mirdb"
+max_level = 7
+
+# Memory settings
+mem_table_max_size = "4M"
+sst_max_size = "100M"
+block_size = "4K"</code></pre>
+          </li>
+          <li class="step" data-testid="step-3">
+            <span class="step-title">Start the Server</span>
+            <p class="step-description">Run MirDB with your configuration:</p>
+            <pre class="code-block"><code>./target/release/mirdb -c mirdb.toml</code></pre>
+          </li>
+          <li class="step" data-testid="step-4">
+            <span class="step-title">Verify Installation</span>
+            <p class="step-description">Test your setup by connecting with telnet or any Memcached client:</p>
+            <pre class="code-block"><code># Connect to MirDB on default port 12333
+telnet localhost 12333
+
+# Test with a simple SET/GET
+SET testkey 0 0 5
+hello
+STORED
+
+GET testkey
+VALUE testkey 0 5
+hello
+END</code></pre>
+          </li>
+        </ol>
+      </div>
+
+      <div class="quick-reference">
+        <h3 class="reference-title">Quick Reference</h3>
+        <div class="reference-grid">
+          <div class="reference-item">
+            <span class="reference-label">Default Port</span>
+            <code class="reference-value">12333</code>
+          </div>
+          <div class="reference-item">
+            <span class="reference-label">Config Format</span>
+            <code class="reference-value">TOML</code>
+          </div>
+          <div class="reference-item">
+            <span class="reference-label">Protocol</span>
+            <code class="reference-value">Memcached Text</code>
+          </div>
+          <div class="reference-item">
+            <span class="reference-label">Data Directory</span>
+            <code class="reference-value">/tmp/mirdb</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>

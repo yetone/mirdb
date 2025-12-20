@@ -302,6 +302,139 @@ body {
   line-height: 1.4;
 }
 
+/* Getting Started Section */
+.getting-started {
+  padding: 5rem 2rem;
+  background: #f8f9fa;
+}
+
+.getting-started-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.getting-started .section-title {
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+}
+
+.getting-started .section-description {
+  color: #666;
+  margin-bottom: 3rem;
+}
+
+.installation-steps {
+  margin-bottom: 3rem;
+}
+
+.steps-title {
+  font-size: 1.5rem;
+  color: #1a1a2e;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.steps-list {
+  counter-reset: step-counter;
+  list-style: none;
+  padding-left: 0;
+}
+
+.step {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  padding-left: 4rem;
+}
+
+.step::before {
+  counter-increment: step-counter;
+  content: counter(step-counter);
+  position: absolute;
+  left: 1.5rem;
+  top: 1.5rem;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #00d9ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.step-title {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 0.5rem;
+}
+
+.step-description {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.step .code-block {
+  background: #1a1a2e;
+  margin-bottom: 0;
+}
+
+.step .code-block code {
+  color: #c9d1d9;
+}
+
+.quick-reference {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.reference-title {
+  font-size: 1.25rem;
+  color: #1a1a2e;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.reference-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.reference-item {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.reference-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.reference-value {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, monospace;
+  color: #1a1a2e;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: none;
+  padding: 0;
+}
+
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 2.5rem;
@@ -338,5 +471,20 @@ body {
 
   .section-title {
     font-size: 2rem;
+  }
+
+  .reference-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .step {
+    padding-left: 3.5rem;
+  }
+
+  .step::before {
+    left: 1rem;
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
   }
 }
