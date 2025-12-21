@@ -322,6 +322,28 @@ code {
     outline-offset: 2px;
 }
 
+/* Skip Link - Hidden until focused for keyboard accessibility */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-primary);
+    color: #ffffff;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 1000;
+    transition: top var(--transition);
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid white;
+    outline-offset: 2px;
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {

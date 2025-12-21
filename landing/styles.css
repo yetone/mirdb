@@ -19,6 +19,28 @@ body {
   background-color: #f8f9fa;
 }
 
+/* Skip Link - Hidden until focused for keyboard accessibility */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e94560;
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0 0 8px 8px;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 1000;
+  transition: top 0.2s ease-in-out;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #a8d8ea;
+  outline-offset: 2px;
+}
+
 /* Hero Section */
 .hero {
   min-height: 100vh;

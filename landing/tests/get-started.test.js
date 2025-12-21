@@ -18,7 +18,8 @@ describe('Get Started Section and CTA', () => {
   // Test Case 1: Get Started CTA Navigation
   describe('Test Case 1: Get Started CTA Navigation', () => {
     it('should have Get Started button that links to the get-started section', () => {
-      const getStartedBtn = document.querySelector('a[href="#get-started"]');
+      // Find the CTA button in the hero section (not the skip link)
+      const getStartedBtn = document.querySelector('.cta-buttons a[href="#get-started"]');
       expect(getStartedBtn).not.toBeNull();
       expect(getStartedBtn.textContent).toBe('Get Started');
     });
