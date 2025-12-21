@@ -135,9 +135,121 @@ main {
   color: #1a1a2e;
 }
 
-.get-started-section p {
+.get-started-section > p,
+.get-started-section .section-intro {
   font-size: 1.125rem;
   color: #4a5568;
+  margin-bottom: 3rem;
+}
+
+/* Installation section */
+.installation,
+.usage-examples,
+.documentation-links {
+  text-align: left;
+  margin-bottom: 3rem;
+}
+
+.installation h3,
+.usage-examples h3,
+.documentation-links h3 {
+  font-size: 1.75rem;
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #e94560;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.installation p,
+.usage-examples p,
+.documentation-links p {
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+}
+
+.install-option,
+.example {
+  margin-bottom: 2rem;
+}
+
+.install-option h4,
+.example h4 {
+  font-size: 1.25rem;
+  color: #16213e;
+  margin-bottom: 0.75rem;
+}
+
+/* Code blocks */
+.code-block {
+  background: #1a1a2e;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 1.25rem;
+  overflow-x: auto;
+}
+
+.code-block code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  color: #a8d8ea;
+  line-height: 1.6;
+  display: block;
+  white-space: pre;
+}
+
+/* Documentation links */
+.link-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-doc {
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-doc:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(233, 69, 96, 0.4);
+}
+
+.btn-doc:focus {
+  outline: 3px solid #e94560;
+  outline-offset: 2px;
+}
+
+.btn-doc-secondary {
+  background: transparent;
+  color: #1a1a2e;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #1a1a2e;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-doc-secondary:hover {
+  background: #1a1a2e;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-doc-secondary:focus {
+  outline: 3px solid #1a1a2e;
+  outline-offset: 2px;
 }
 
 /* Footer */

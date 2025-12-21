@@ -26,7 +26,70 @@
   <main>
     <section id="get-started" class="get-started-section">
       <h2>Quick Start</h2>
-      <p>Get up and running with MirDB in minutes.</p>
+      <p class="section-intro">Get up and running with MirDB in minutes.</p>
+
+      <div class="installation">
+        <h3>Installation</h3>
+        <p>Install MirDB using Cargo or build from source:</p>
+
+        <div class="install-option">
+          <h4>Using Cargo</h4>
+          <div class="code-block">
+            <pre><code>cargo install mirdb</code></pre>
+          </div>
+        </div>
+
+        <div class="install-option">
+          <h4>Build from Source</h4>
+          <div class="code-block">
+            <pre><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="usage-examples">
+        <h3>Usage Examples</h3>
+        <p>MirDB uses the memcached protocol. Connect using any memcached client or telnet:</p>
+
+        <div class="example">
+          <h4>Start the Server</h4>
+          <div class="code-block">
+            <pre><code>mirdb --listen 127.0.0.1:12333</code></pre>
+          </div>
+        </div>
+
+        <div class="example">
+          <h4>Store Data with SET</h4>
+          <p>Store a value with an expiration time (0 = no expiration):</p>
+          <div class="code-block">
+            <pre><code>SET mykey 0 0 5
+hello
+STORED</code></pre>
+          </div>
+        </div>
+
+        <div class="example">
+          <h4>Retrieve Data with GET</h4>
+          <p>Retrieve a previously stored value:</p>
+          <div class="code-block">
+            <pre><code>GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="documentation-links">
+        <h3>Learn More</h3>
+        <p>Explore the full documentation and source code:</p>
+        <div class="link-buttons">
+          <a href="https://github.com/yetone/mirdb#readme" class="btn btn-doc" target="_blank" rel="noopener noreferrer">View Documentation</a>
+          <a href="https://github.com/yetone/mirdb" class="btn btn-doc-secondary" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        </div>
+      </div>
     </section>
   </main>
 
