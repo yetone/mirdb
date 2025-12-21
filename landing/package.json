@@ -6,17 +6,23 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
-    "vitest": "^1.0.0",
+    "@playwright/test": "^1.57.0",
+    "@testing-library/dom": "^9.0.0",
     "jsdom": "^23.0.0",
-    "@testing-library/dom": "^9.0.0"
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0"
   },
-  "keywords": ["mirdb", "landing-page"],
+  "keywords": [
+    "mirdb",
+    "landing-page"
+  ],
   "author": "",
   "license": "MIT"
 }
