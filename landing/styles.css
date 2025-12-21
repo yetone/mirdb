@@ -356,3 +356,80 @@ footer a:focus {
   outline: 3px solid #a8d8ea;
   outline-offset: 2px;
 }
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+
+  /* Main content section */
+  main {
+    background-color: #121212;
+  }
+
+  .get-started-section h2 {
+    color: #f0f0f0;
+  }
+
+  .get-started-section > p,
+  .get-started-section .section-intro {
+    color: #b0b0b0;
+  }
+
+  /* Installation and usage sections */
+  .installation h3,
+  .usage-examples h3,
+  .documentation-links h3 {
+    color: #f0f0f0;
+    border-bottom-color: #e94560;
+  }
+
+  .installation p,
+  .usage-examples p,
+  .documentation-links p {
+    color: #b0b0b0;
+  }
+
+  .install-option h4,
+  .example h4 {
+    color: #d0d0d0;
+  }
+
+  /* Code blocks - already dark, ensure they work well */
+  .code-block {
+    background: #1e1e1e;
+    border: 1px solid #333;
+  }
+
+  .code-block code {
+    color: #a8d8ea;
+  }
+
+  /* Secondary button for dark mode */
+  .btn-doc-secondary {
+    color: #f0f0f0;
+    border-color: #f0f0f0;
+  }
+
+  .btn-doc-secondary:hover {
+    background: #f0f0f0;
+    color: #121212;
+  }
+
+  .btn-doc-secondary:focus {
+    outline-color: #a8d8ea;
+  }
+
+  /* Footer adjustments for dark mode */
+  footer {
+    background: #0a0a0a;
+    border-top: 1px solid #333;
+  }
+
+  /* Skip link in dark mode */
+  .skip-link:focus {
+    outline-color: #e94560;
+  }
+}
