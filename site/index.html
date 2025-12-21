@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - Persistent Key-Value Storage with Memcached Compatibility. Drop-in replacement for memcached with durable SSTables storage.">
+    <title>MirDB - Persistent Key-Value Storage with Memcached Compatibility</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header id="hero" class="hero">
+        <div class="container">
+            <h1>MirDB</h1>
+            <p class="tagline">Persistent Key-Value Storage with Memcached Compatibility</p>
+            <p class="description">A high-performance key-value store that combines the simplicity of memcached with the durability of persistent storage. Your data survives restarts.</p>
+            <div class="cta-buttons">
+                <a href="#get-started" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/example/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="features" data-section="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <!-- Feature 1: Memcached Protocol Compatible -->
+                <article class="feature-card" data-feature="memcached" data-testid="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Memcached Protocol Compatible</h3>
+                    <p>Drop-in replacement for existing memcached clients. Full text protocol support allows seamless migration without code changes.</p>
+                </article>
+
+                <!-- Feature 2: Persistent Storage -->
+                <article class="feature-card" data-feature="persistent" data-testid="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                        </svg>
+                    </div>
+                    <h3>Persistent Storage</h3>
+                    <p>Data survives restarts using SSTables (Sorted String Tables). Unlike memcached, your cached data is durable and persisted to disk.</p>
+                </article>
+
+                <!-- Feature 3: High Performance -->
+                <article class="feature-card" data-feature="performance" data-testid="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <h3>High Performance</h3>
+                    <p>Built on LSM-tree architecture with Tokio async I/O for maximum throughput. Efficient write-optimized storage with fast reads.</p>
+                </article>
+
+                <!-- Feature 4: Configurable -->
+                <article class="feature-card" data-feature="configurable" data-testid="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </div>
+                    <h3>Configurable</h3>
+                    <p>Extensive configuration options for tuning performance. Customize memtable size, SSTable limits, block size, and compaction settings.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Started Section -->
+    <section id="get-started" class="get-started">
+        <div class="container">
+            <h2>Get Started</h2>
+            <div class="installation">
+                <h3>Installation</h3>
+                <pre><code>cargo install mirdb</code></pre>
+                <p>Or build from source:</p>
+                <pre><code>git clone https://github.com/example/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+            </div>
+            <div class="usage">
+                <h3>Quick Start</h3>
+                <pre><code># Start the server
+./mirdb-server
+
+# Connect with any memcached client
+echo "set mykey 0 0 5\r\nhello\r\n" | nc localhost 12333
+echo "get mykey\r\n" | nc localhost 12333</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 MirDB. Released under the MIT License.</p>
+            <nav>
+                <a href="https://github.com/example/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://github.com/example/mirdb/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contribute</a>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>

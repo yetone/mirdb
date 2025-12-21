@@ -1,0 +1,14 @@
+{
+  "name": "mirdb-landing-page",
+  "version": "1.0.0",
+  "description": "Landing page for MirDB - Persistent Key-Value Storage with Memcached Compatibility",
+  "scripts": {
+    "serve": "npx serve . -l 3000",
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.2.0"
+  }
+}
