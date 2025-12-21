@@ -23,6 +23,11 @@
       box-sizing: border-box;
     }
 
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
       line-height: 1.6;
@@ -286,6 +291,56 @@
 
       .config-table {
         font-size: 0.85rem;
+      }
+
+      .architecture-diagram {
+        font-size: 0.6rem;
+        padding: 12px;
+      }
+
+      .footer-links a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 8px 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .hero {
+        padding: 60px 0;
+      }
+
+      .features,
+      .technical-highlights,
+      .get-started {
+        padding: 60px 0;
+      }
+
+      .tech-card {
+        padding: 20px;
+      }
+
+      .architecture-diagram {
+        font-size: 0.55rem;
+        padding: 10px;
+        max-width: 100%;
+        overflow-x: auto;
+      }
+
+      .config-table th,
+      .config-table td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+      }
+
+      .code-block {
+        padding: 16px;
+        font-size: 0.8rem;
       }
     }
   </style>
