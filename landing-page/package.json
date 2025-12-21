@@ -1,0 +1,19 @@
+{
+  "name": "landing-page",
+  "version": "1.0.0",
+  "description": "MirDB Product Landing Page",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx http-server -c-1 -p 5173 .",
+    "test": "playwright test --project=chromium"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "http-server": "^14.1.1",
+    "playwright": "^1.57.0"
+  }
+}

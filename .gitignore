@@ -2,3 +2,4 @@
 **/*.rs.bk
 .something/
 landing/node_modules/
+landing-page/node_modules/
