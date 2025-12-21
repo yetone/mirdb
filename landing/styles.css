@@ -260,6 +260,39 @@ footer {
   padding: 2rem;
 }
 
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.footer-content .copyright {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+footer a {
+  color: #e94560;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+footer a:hover {
+  color: #ff6b6b;
+  text-decoration: underline;
+}
+
+footer a:focus {
+  outline: 2px solid #a8d8ea;
+  outline-offset: 2px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .product-name {
