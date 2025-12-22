@@ -10,6 +10,7 @@ module.exports = defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    colorScheme: 'dark', // Force dark mode for consistent testing
   },
   projects: [
     {
