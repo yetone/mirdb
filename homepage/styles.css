@@ -65,10 +65,21 @@ body {
 }
 
 .nav-brand a {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--color-text);
   text-decoration: none;
+}
+
+.nav-brand .logo-image {
+  flex-shrink: 0;
+}
+
+.nav-brand .logo-text {
+  white-space: nowrap;
 }
 
 .nav-links {

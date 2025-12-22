@@ -10,12 +10,24 @@
 <body>
   <header class="header">
     <nav class="nav">
-      <div class="nav-brand">
-        <a href="/">MirDB</a>
+      <div class="nav-brand" data-testid="logo">
+        <a href="/">
+          <svg class="logo-image" data-testid="logo-image" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="32" height="32" rx="6" fill="url(#logo-gradient)"/>
+            <path d="M8 10h16v2H8v-2zm0 5h16v2H8v-2zm0 5h12v2H8v-2z" fill="white"/>
+            <defs>
+              <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#3b82f6"/>
+                <stop offset="1" stop-color="#22d3ee"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="logo-text">MirDB</span>
+        </a>
       </div>
       <div class="nav-links">
-        <a href="#features">Features</a>
         <a href="#quickstart">Quick Start</a>
+        <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a>
         <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </nav>
