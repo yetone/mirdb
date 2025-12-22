@@ -97,20 +97,85 @@
       </div>
     </section>
 
-    <section id="quickstart" class="quickstart-section">
+    <section id="quickstart" class="quickstart-section" data-testid="quickstart-section">
       <div class="container">
         <h2 class="section-title">Quick Start</h2>
-        <div class="code-block">
-          <pre><code># Clone and build
-git clone https://github.com/yetone/mirdb.git
-cd mirdb
-cargo build --release
 
-# Run the server
+        <div class="code-block" data-testid="code-block">
+          <div class="code-header">
+            <span class="code-title">Installation</span>
+            <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+          <pre><code class="language-bash"><span class="token comment"># Clone and build MirDB</span>
+<span class="token function">git</span> clone https://github.com/yetone/mirdb.git
+<span class="token builtin">cd</span> mirdb
+<span class="token function">cargo</span> build <span class="token flag">--release</span>
+
+<span class="token comment"># Run the server</span>
 ./target/release/mirdb-server
 
-# Connect with any Memcached client
-# Default address: 0.0.0.0:12333</code></pre>
+<span class="token comment"># Connect with any Memcached client</span>
+<span class="token comment"># Default address: 0.0.0.0:12333</span></code></pre>
+        </div>
+
+        <div class="code-block" data-testid="code-block-client">
+          <div class="code-header">
+            <span class="code-title">Connect with Memcached Client (Python)</span>
+            <button class="copy-button" data-testid="copy-button-client" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+          <pre><code class="language-python"><span class="token keyword">from</span> pymemcache.client <span class="token keyword">import</span> base
+
+<span class="token comment"># Connect to MirDB using standard Memcached client</span>
+client <span class="token operator">=</span> base.Client<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span> <span class="token number">12333</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Set a value</span>
+client.set<span class="token punctuation">(</span><span class="token string">'key'</span><span class="token punctuation">,</span> <span class="token string">'value'</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Get the value</span>
+result <span class="token operator">=</span> client.get<span class="token punctuation">(</span><span class="token string">'key'</span><span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span>  <span class="token comment"># b'value'</span></code></pre>
+        </div>
+
+        <div class="config-section" data-testid="config-section">
+          <h3 class="config-title">Default Configuration</h3>
+          <div class="config-grid">
+            <div class="config-item">
+              <span class="config-key">Listen Address</span>
+              <span class="config-value">0.0.0.0:12333</span>
+            </div>
+            <div class="config-item">
+              <span class="config-key">Work Directory</span>
+              <span class="config-value">/tmp/mirdb</span>
+            </div>
+            <div class="config-item">
+              <span class="config-key">Memtable Size</span>
+              <span class="config-value">4MB</span>
+            </div>
+            <div class="config-item">
+              <span class="config-key">SSTable Size</span>
+              <span class="config-value">100MB</span>
+            </div>
+            <div class="config-item">
+              <span class="config-key">Block Size</span>
+              <span class="config-value">4KB</span>
+            </div>
+            <div class="config-item">
+              <span class="config-key">Max LSM Levels</span>
+              <span class="config-value">7</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -125,5 +190,34 @@ cargo build --release
       </div>
     </div>
   </footer>
+
+  <script>
+    // Copy to clipboard functionality
+    document.querySelectorAll('.copy-button').forEach(button => {
+      button.addEventListener('click', async function() {
+        const codeBlock = this.closest('.code-block');
+        const code = codeBlock.querySelector('code');
+        const textToCopy = code.textContent;
+
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+
+          // Visual feedback
+          this.classList.add('copied');
+          const copyText = this.querySelector('.copy-text');
+          const originalText = copyText.textContent;
+          copyText.textContent = 'Copied!';
+
+          // Reset after 2 seconds
+          setTimeout(() => {
+            this.classList.remove('copied');
+            copyText.textContent = originalText;
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy:', err);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
