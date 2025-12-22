@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol support. Built with Rust for high performance.">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <div class="nav-brand">
+        <a href="/">MirDB</a>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>MirDB</h1>
+        <p class="hero-tagline">Persistent Key-Value Store with Memcached Protocol</p>
+        <p class="hero-description">A high-performance, persistent database that speaks Memcached. Built with Rust for reliability and speed.</p>
+        <div class="hero-buttons">
+          <a href="#quickstart" class="btn btn-primary">Get Started</a>
+          <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features-section" data-testid="features-section">
+      <div class="container">
+        <h2 class="section-title">Key Features</h2>
+        <div class="features-grid" data-testid="features-grid">
+          <div class="feature-card" data-testid="feature-card">
+            <div class="feature-icon" data-testid="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Connect using any standard Memcached client. Zero migration effort for existing applications. Full protocol compatibility means you can switch without changing your code.</p>
+          </div>
+
+          <div class="feature-card" data-testid="feature-card">
+            <div class="feature-icon" data-testid="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </div>
+            <h3 class="feature-title">Persistent Storage</h3>
+            <p class="feature-description">Data survives restarts. SSTables provide durable, efficient disk storage. Never lose your cached data again with automatic persistence to disk.</p>
+          </div>
+
+          <div class="feature-card" data-testid="feature-card">
+            <div class="feature-icon" data-testid="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </div>
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">Optimized for write-heavy workloads with intelligent compaction strategies. The Log-Structured Merge-Tree design ensures consistent high performance at scale.</p>
+          </div>
+
+          <div class="feature-card" data-testid="feature-card">
+            <div class="feature-icon" data-testid="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <h3 class="feature-title">Rust Performance</h3>
+            <p class="feature-description">Built with Tokio for async I/O. Safe, fast, and resource-efficient. Leverages Rust's memory safety guarantees without sacrificing speed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quickstart" class="quickstart-section">
+      <div class="container">
+        <h2 class="section-title">Quick Start</h2>
+        <div class="code-block">
+          <pre><code># Clone and build
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release
+
+# Run the server
+./target/release/mirdb-server
+
+# Connect with any Memcached client
+# Default address: 0.0.0.0:12333</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>MirDB is open source software licensed under the MIT License.</p>
+      <div class="footer-links">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
