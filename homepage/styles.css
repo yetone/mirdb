@@ -37,6 +37,7 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .container {
@@ -494,6 +495,7 @@ body {
   border-radius: var(--border-radius);
   overflow: hidden;
   margin-bottom: var(--spacing-lg);
+  max-width: 100%;
 }
 
 .code-header {
@@ -550,6 +552,7 @@ body {
   margin: 0;
   padding: var(--spacing-md);
   overflow-x: auto;
+  max-width: 100%;
 }
 
 .code-block code {
@@ -557,6 +560,9 @@ body {
   font-size: 0.875rem;
   color: var(--color-text);
   line-height: 1.7;
+  display: block;
+  white-space: pre;
+  word-wrap: normal;
 }
 
 /* Syntax Highlighting - Prism-like token colors */
