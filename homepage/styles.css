@@ -235,6 +235,91 @@ body {
   line-height: 1.7;
 }
 
+/* Project Status Section */
+.status-section {
+  padding: var(--spacing-xl) 0;
+  background-color: var(--color-surface);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.status-implemented,
+.status-planned {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+}
+
+.status-subtitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.status-icon {
+  flex-shrink: 0;
+}
+
+.status-implemented .status-icon,
+.status-implemented .status-indicator svg {
+  color: #22c55e;
+}
+
+.status-planned .status-icon,
+.status-planned .status-indicator svg {
+  color: var(--color-accent);
+}
+
+.status-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.status-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.status-indicator {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.status-footer {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.status-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.status-footer a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
 /* Quick Start Section */
 .quickstart-section {
   padding: var(--spacing-xl) 0;

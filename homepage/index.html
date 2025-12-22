@@ -97,6 +97,82 @@
       </div>
     </section>
 
+    <section id="status" class="status-section" data-testid="status-section">
+      <div class="container">
+        <h2 class="section-title">Project Status</h2>
+        <div class="status-grid">
+          <div class="status-implemented" data-testid="implemented-features">
+            <h3 class="status-subtitle">
+              <svg class="status-icon check-icon" data-testid="status-indicator" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              Implemented
+            </h3>
+            <ul class="status-list">
+              <li class="status-item">
+                <span class="status-indicator" data-testid="status-indicator">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                Tokio-based async networking with Memcached protocol
+              </li>
+              <li class="status-item">
+                <span class="status-indicator" data-testid="status-indicator">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                Memtable with skip list data structure
+              </li>
+              <li class="status-item">
+                <span class="status-indicator" data-testid="status-indicator">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                Minor compaction (memtable to SSTable)
+              </li>
+              <li class="status-item">
+                <span class="status-indicator" data-testid="status-indicator">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                Major compaction (SSTable level compaction)
+              </li>
+            </ul>
+          </div>
+          <div class="status-planned" data-testid="planned-features">
+            <h3 class="status-subtitle">
+              <svg class="status-icon planned-icon" data-testid="status-indicator" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              Planned
+            </h3>
+            <ul class="status-list">
+              <li class="status-item">
+                <span class="status-indicator" data-testid="status-indicator">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                </span>
+                Raft consensus for distributed operation
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p class="status-footer">
+          For a detailed roadmap and progress updates, visit our
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub repository</a>.
+        </p>
+      </div>
+    </section>
+
     <section id="quickstart" class="quickstart-section" data-testid="quickstart-section">
       <div class="container">
         <h2 class="section-title">Quick Start</h2>
