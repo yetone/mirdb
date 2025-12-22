@@ -235,6 +235,169 @@ body {
   line-height: 1.7;
 }
 
+/* Architecture Section */
+.architecture-section {
+  padding: var(--spacing-xl) 0;
+  background-color: var(--color-background);
+}
+
+.architecture-intro {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.architecture-diagram {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.diagram-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.diagram-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.diagram-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  min-width: 200px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.diagram-node:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.diagram-node .node-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-xs);
+}
+
+.diagram-node .node-label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.diagram-node .node-description {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: var(--spacing-xs);
+}
+
+/* Node Type Styles */
+.diagram-node.entry-point .node-icon {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.diagram-node.wal-node .node-icon {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.diagram-node.memtable-node .node-icon {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: white;
+}
+
+.diagram-node.imm-memtable-node .node-icon {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: white;
+}
+
+.diagram-node.sstable-node .node-icon {
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: white;
+}
+
+.diagram-node.sstable-node.level-n .node-icon {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* Diagram Sections */
+.diagram-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--border-radius);
+  margin: var(--spacing-xs) 0;
+}
+
+.diagram-section .section-label {
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  background-color: var(--color-background);
+  padding: 0 var(--spacing-xs);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.memory-section {
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.disk-section {
+  border-color: rgba(236, 72, 153, 0.4);
+}
+
+/* Diagram Arrows */
+.diagram-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--color-text-muted);
+  padding: var(--spacing-xs) 0;
+}
+
+.diagram-arrow.with-label {
+  gap: var(--spacing-xs);
+}
+
+.diagram-arrow .arrow-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.diagram-arrow .compaction-label {
+  font-weight: 600;
+  color: var(--color-accent);
+  background-color: rgba(34, 211, 238, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
 /* Project Status Section */
 .status-section {
   padding: var(--spacing-xl) 0;
