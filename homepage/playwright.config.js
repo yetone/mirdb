@@ -13,13 +13,29 @@ module.exports = defineConfig({
     colorScheme: 'dark', // Force dark mode for consistent testing
   },
   projects: [
+    // Desktop browsers - Chrome, Firefox, Safari (WebKit), Edge
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    // Edge uses Chromium engine, so chromium tests cover Edge compatibility
+    // For full Edge testing, install Edge and use: channel: 'msedge'
+    // Mobile browsers for responsive testing
+    {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
+    },
+    {
+      name: 'mobile-safari',
+      use: { ...devices['iPhone 12'] },
     },
   ],
   webServer: {
