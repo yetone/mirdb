@@ -37,6 +37,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -45,6 +46,7 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Header and Navigation */
@@ -99,6 +101,11 @@ body {
   padding: 0.5rem;
   border-radius: var(--radius);
   transition: background-color 0.2s;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-toggle:hover {
@@ -728,5 +735,77 @@ code {
   .nav-links {
     flex-wrap: wrap;
     justify-content: center;
+  }
+}
+
+/* Very small mobile screens (320px and below) */
+@media (max-width: 360px) {
+  .nav {
+    padding: 0.75rem 1rem;
+  }
+
+  .nav-links {
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .hero {
+    padding: 6rem 1rem 3rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 12vw, 3rem);
+  }
+
+  .hero-tagline {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    min-width: 140px;
+  }
+
+  .features {
+    padding: 3rem 1rem;
+  }
+
+  .features h2,
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .feature-card {
+    padding: 1.5rem;
+  }
+
+  .getting-started {
+    padding: 3rem 1rem;
+  }
+
+  .project-status {
+    padding: 3rem 1rem;
+  }
+
+  .code-examples {
+    padding: 3rem 1rem;
+  }
+
+  .code-block,
+  pre {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+
+  .footer {
+    padding: 1.5rem 1rem;
+  }
+
+  .footer-links {
+    gap: 1rem;
   }
 }
