@@ -62,32 +62,69 @@
     </section>
 
     <section id="getting-started" class="getting-started">
-      <h2>Getting Started</h2>
+      <h2 class="section-title">Getting Started</h2>
+
       <div class="code-section">
         <h3>Installation</h3>
-        <pre><code class="language-bash"># Clone and build from source
+
+        <h4>Option 1: Install via Cargo</h4>
+        <div class="code-block" data-testid="cargo-install">
+          <pre><code class="language-bash">cargo install mirdb</code></pre>
+        </div>
+
+        <h4>Option 2: Build from Source</h4>
+        <div class="code-block" data-testid="build-from-source">
+          <pre><code class="language-bash"># Clone the repository
 git clone https://github.com/yetone/mirdb.git
 cd mirdb
+
+# Build the project
 cargo build --release</code></pre>
+        </div>
       </div>
+
       <div class="code-section">
-        <h3>Basic Usage</h3>
-        <pre><code class="language-bash"># Start the server
+        <h3>Starting the Server</h3>
+        <div class="code-block" data-testid="server-startup">
+          <pre><code class="language-bash"># Run with default configuration
 ./target/release/mirdb-server
 
-# Connect using telnet or any Memcached client
+# Or run with custom config file
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+        </div>
+        <p class="server-note">The server will start listening on <code>0.0.0.0:12333</code> by default.</p>
+      </div>
+
+      <div class="code-section">
+        <h3>Basic Usage</h3>
+        <p>Connect using any Memcached client or telnet:</p>
+        <div class="code-block">
+          <pre><code class="language-bash"># Connect via telnet
 telnet localhost 12333
 
-# Set a value
+# SET a value
 set mykey 0 0 5
 hello
 STORED
 
-# Get the value
+# GET the value
 get mykey
 VALUE mykey 0 5
 hello
-END</code></pre>
+END
+
+# DELETE the value
+delete mykey
+DELETED</code></pre>
+        </div>
+      </div>
+
+      <div class="code-section">
+        <h3>Learn More</h3>
+        <p>
+          For detailed documentation, API reference, and advanced configuration options, visit our
+          <a href="https://github.com/yetone/mirdb#readme" class="doc-link" data-testid="documentation-link">full documentation</a>.
+        </p>
       </div>
     </section>
   </main>

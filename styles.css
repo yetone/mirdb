@@ -255,6 +255,50 @@ body {
   color: var(--color-text);
 }
 
+.code-section h4 {
+  font-size: 1rem;
+  margin: 1.5rem 0 0.75rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.code-section p {
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+.code-block {
+  margin: 1rem 0;
+}
+
+.server-note {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.server-note code {
+  background-color: var(--color-bg-secondary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.doc-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.doc-link:hover {
+  text-decoration: underline;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: var(--color-text);
+}
+
 pre {
   background-color: var(--color-code-bg);
   color: var(--color-code-text);
