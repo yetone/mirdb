@@ -1,4 +1,5 @@
 /* CSS Custom Properties for theming */
+/* Fallback values for browsers that don't support CSS custom properties */
 :root {
   --color-bg: #ffffff;
   --color-bg-secondary: #f8f9fa;
@@ -64,7 +65,10 @@ html {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #ffffff;
   background-color: var(--color-bg);
+  color: #1a1a2e;
   color: var(--color-text);
   line-height: 1.6;
   min-height: 100vh;
@@ -77,12 +81,17 @@ body {
   top: 0;
   left: 0;
   right: 0;
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #ffffff;
   background-color: var(--color-bg);
+  border-bottom: 1px solid #e5e7eb;
   border-bottom: 1px solid var(--color-border);
   z-index: 100;
 }
 
 .nav {
+  /* Fallback for browsers without CSS custom properties support */
+  max-width: 1200px;
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 1rem 1.5rem;
@@ -94,6 +103,8 @@ body {
 .logo {
   font-size: 1.5rem;
   font-weight: 700;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #3b82f6;
   color: var(--color-primary);
   text-decoration: none;
 }
@@ -105,6 +116,8 @@ body {
 }
 
 .nav-links a {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   text-decoration: none;
   font-weight: 500;
@@ -112,6 +125,8 @@ body {
 }
 
 .nav-links a:hover {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #3b82f6;
   color: var(--color-primary);
 }
 
@@ -121,6 +136,8 @@ body {
   cursor: pointer;
   font-size: 1.25rem;
   padding: 0.5rem;
+  /* Fallback for browsers without CSS custom properties support */
+  border-radius: 8px;
   border-radius: var(--radius);
   transition: background-color 0.2s;
   min-width: 44px;
@@ -131,6 +148,8 @@ body {
 }
 
 .theme-toggle:hover {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
 }
 
@@ -141,10 +160,14 @@ body {
   align-items: center;
   justify-content: center;
   padding: 6rem 1.5rem 4rem;
+  /* Fallback for browsers without CSS custom properties support */
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-secondary) 100%);
 }
 
 .hero-content {
+  /* Fallback for browsers without CSS custom properties support */
+  max-width: 1200px;
   max-width: var(--max-width);
   text-align: center;
 }
@@ -152,6 +175,8 @@ body {
 .hero-title {
   font-size: clamp(3rem, 8vw, 5rem);
   font-weight: 800;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #3b82f6;
   color: var(--color-primary);
   margin-bottom: 1rem;
   letter-spacing: -0.02em;
@@ -159,6 +184,8 @@ body {
 
 .hero-tagline {
   font-size: clamp(1.25rem, 3vw, 1.75rem);
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
   margin-bottom: 1.5rem;
   font-weight: 600;
@@ -166,6 +193,8 @@ body {
 
 .hero-description {
   font-size: 1.125rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   max-width: 600px;
   margin: 0 auto 2rem;
@@ -185,6 +214,8 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0.875rem 2rem;
+  /* Fallback for browsers without CSS custom properties support */
+  border-radius: 8px;
   border-radius: var(--radius);
   font-size: 1rem;
   font-weight: 600;
@@ -194,6 +225,8 @@ body {
 }
 
 .btn-primary {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #3b82f6;
   background-color: var(--color-primary);
   color: #ffffff;
 }
@@ -204,19 +237,28 @@ body {
 }
 
 .btn-primary:hover {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #2563eb;
   background-color: var(--color-primary-dark);
   transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   box-shadow: var(--shadow);
 }
 
 .btn-secondary {
   background-color: transparent;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
+  border: 2px solid #e5e7eb;
   border: 2px solid var(--color-border);
 }
 
 .btn-secondary:hover {
+  /* Fallback for browsers without CSS custom properties support */
+  border-color: #3b82f6;
   border-color: var(--color-primary);
+  color: #3b82f6;
   color: var(--color-primary);
   transform: translateY(-2px);
 }
@@ -224,6 +266,8 @@ body {
 /* Features Section */
 .features {
   padding: 5rem 1.5rem;
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
 }
 
@@ -231,10 +275,14 @@ body {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 3rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
 }
 
 .feature-grid {
+  /* Fallback for browsers without CSS custom properties support */
+  max-width: 1200px;
   max-width: var(--max-width);
   margin: 0 auto;
   display: grid;
@@ -243,9 +291,13 @@ body {
 }
 
 .feature-card {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #ffffff;
   background-color: var(--color-bg);
   padding: 2rem;
+  border-radius: 8px;
   border-radius: var(--radius);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   box-shadow: var(--shadow);
   transition: transform 0.2s;
 }
@@ -257,10 +309,14 @@ body {
 .feature-card h3 {
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #3b82f6;
   color: var(--color-primary);
 }
 
 .feature-card p {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   font-size: 1rem;
 }
@@ -268,6 +324,8 @@ body {
 /* Getting Started Section */
 .getting-started {
   padding: 5rem 1.5rem;
+  /* Fallback for browsers without CSS custom properties support */
+  max-width: 1200px;
   max-width: var(--max-width);
   margin: 0 auto;
 }
@@ -276,6 +334,8 @@ body {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 3rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
 }
 
@@ -286,17 +346,23 @@ body {
 .code-section h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
 }
 
 .code-section h4 {
   font-size: 1rem;
   margin: 1.5rem 0 0.75rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .code-section p {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   margin-bottom: 1rem;
 }
@@ -311,12 +377,16 @@ body {
 }
 
 .server-note code {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
 }
 
 .doc-link {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #3b82f6;
   color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
@@ -330,6 +400,8 @@ body {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 3rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
 }
 
@@ -340,9 +412,13 @@ body {
 }
 
 pre {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #1e1e1e;
   background-color: var(--color-code-bg);
+  color: #d4d4d4;
   color: var(--color-code-text);
   padding: 1.5rem;
+  border-radius: 8px;
   border-radius: var(--radius);
   overflow-x: auto;
   font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
@@ -359,7 +435,9 @@ code {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
+  /* Fallback for browsers without CSS custom properties support */
   background-color: #4b5563;
+  background-color: var(--color-secondary);
   color: #ffffff;
   border: none;
   border-radius: 4px;
@@ -377,10 +455,14 @@ code {
 }
 
 .copy-button:hover {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #3b82f6;
   background-color: var(--color-primary);
 }
 
 .copy-button:focus {
+  /* Fallback for browsers without CSS custom properties support */
+  outline: 2px solid #3b82f6;
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
@@ -393,7 +475,10 @@ code {
 /* Project Status Section */
 .project-status {
   padding: 5rem 1.5rem;
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
+  max-width: 1200px;
   max-width: var(--max-width);
   margin: 0 auto;
 }
@@ -402,6 +487,8 @@ code {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
 }
 
@@ -413,9 +500,13 @@ code {
 }
 
 .status-card {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #ffffff;
   background-color: var(--color-bg);
+  border-radius: 8px;
   border-radius: var(--radius);
   padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   box-shadow: var(--shadow);
 }
 
@@ -463,6 +554,8 @@ code {
   padding: 0.5rem 0;
   padding-left: 1.5rem;
   position: relative;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   font-size: 0.95rem;
 }
@@ -481,14 +574,20 @@ code {
 }
 
 .commands-section {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #ffffff;
   background-color: var(--color-bg);
+  border-radius: 8px;
   border-radius: var(--radius);
   padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   box-shadow: var(--shadow);
 }
 
 .commands-section h3 {
   font-size: 1.5rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
   margin-bottom: 0.5rem;
   text-align: center;
@@ -496,6 +595,8 @@ code {
 
 .commands-description {
   text-align: center;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   margin-bottom: 2rem;
 }
@@ -508,15 +609,21 @@ code {
 
 .command-group {
   padding: 1rem;
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
+  border-radius: 8px;
   border-radius: var(--radius);
 }
 
 .command-group h4 {
   font-size: 1rem;
+  /* Fallback for browsers without CSS custom properties support */
   color: #1e40af;
+  color: var(--color-primary);
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -531,13 +638,18 @@ code {
 
 .command-list li {
   padding: 0.4rem 0;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   font-size: 0.9rem;
 }
 
 .command-list code {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #1e1e1e;
   background-color: var(--color-code-bg);
   color: #60a5fa;
+  color: var(--color-primary);
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
   font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
@@ -548,6 +660,8 @@ code {
 /* Code Examples Section */
 .code-examples {
   padding: 5rem 1.5rem;
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #ffffff;
   background-color: var(--color-bg);
 }
 
@@ -555,11 +669,15 @@ code {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
 }
 
 .section-description {
   text-align: center;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   max-width: 600px;
   margin: 0 auto 3rem;
@@ -567,6 +685,8 @@ code {
 }
 
 .code-examples-grid {
+  /* Fallback for browsers without CSS custom properties support */
+  max-width: 1200px;
   max-width: var(--max-width);
   margin: 0 auto;
   display: grid;
@@ -575,19 +695,27 @@ code {
 }
 
 .code-example-card {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
+  border-radius: 8px;
   border-radius: var(--radius);
   padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   box-shadow: var(--shadow);
 }
 
 .code-example-card h3 {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #3b82f6;
   color: var(--color-primary);
 }
 
 .code-description {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   font-size: 0.95rem;
   margin-bottom: 1rem;
@@ -595,9 +723,13 @@ code {
 
 /* Syntax Highlighting */
 .code-block {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #1e1e1e;
   background-color: var(--color-code-bg);
+  color: #d4d4d4;
   color: var(--color-code-text);
   padding: 1rem;
+  border-radius: 8px;
   border-radius: var(--radius);
   overflow-x: auto;
   font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
@@ -661,6 +793,8 @@ code {
 /* Configuration Section */
 .configuration {
   padding: 5rem 1.5rem;
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
 }
 
@@ -668,11 +802,15 @@ code {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
 }
 
 .configuration .section-description {
   text-align: center;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   max-width: 600px;
   margin: 0 auto 3rem;
@@ -680,6 +818,8 @@ code {
 }
 
 .config-content {
+  /* Fallback for browsers without CSS custom properties support */
+  max-width: 1200px;
   max-width: var(--max-width);
   margin: 0 auto;
   display: grid;
@@ -691,13 +831,19 @@ code {
 .config-params h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
+  /* Fallback for browsers without CSS custom properties support */
+  color: #1a1a2e;
   color: var(--color-text);
 }
 
 .config-example pre {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #1e1e1e;
   background-color: var(--color-code-bg);
+  color: #d4d4d4;
   color: var(--color-code-text);
   padding: 1.5rem;
+  border-radius: 8px;
   border-radius: var(--radius);
   overflow-x: auto;
   font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
@@ -708,9 +854,13 @@ code {
 .params-table {
   width: 100%;
   border-collapse: collapse;
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #ffffff;
   background-color: var(--color-bg);
+  border-radius: 8px;
   border-radius: var(--radius);
   overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   box-shadow: var(--shadow);
 }
 
@@ -718,24 +868,34 @@ code {
 .params-table td {
   padding: 0.875rem 1rem;
   text-align: left;
+  /* Fallback for browsers without CSS custom properties support */
+  border-bottom: 1px solid #e5e7eb;
   border-bottom: 1px solid var(--color-border);
 }
 
 .params-table th {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
   font-weight: 600;
+  color: #1a1a2e;
   color: var(--color-text);
 }
 
 .params-table td {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
 }
 
 .params-table td code {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-size: 0.875rem;
+  color: #3b82f6;
   color: var(--color-primary);
 }
 
@@ -744,17 +904,24 @@ code {
 }
 
 .params-table tbody tr:hover {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
 }
 
 .config-more {
+  /* Fallback for browsers without CSS custom properties support */
+  max-width: 1200px;
   max-width: var(--max-width);
   margin: 2rem auto 0;
   text-align: center;
+  color: #4a4a68;
   color: var(--color-text-secondary);
 }
 
 .config-more a {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #3b82f6;
   color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
@@ -952,12 +1119,17 @@ code {
 
 /* Footer */
 .footer {
+  /* Fallback for browsers without CSS custom properties support */
+  background-color: #f8f9fa;
   background-color: var(--color-bg-secondary);
+  border-top: 1px solid #e5e7eb;
   border-top: 1px solid var(--color-border);
   padding: 2rem 1.5rem;
 }
 
 .footer-content {
+  /* Fallback for browsers without CSS custom properties support */
+  max-width: 1200px;
   max-width: var(--max-width);
   margin: 0 auto;
   display: flex;
@@ -968,6 +1140,8 @@ code {
 }
 
 .footer-content p {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   font-size: 0.9rem;
 }
@@ -978,6 +1152,8 @@ code {
 }
 
 .footer-links a {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #4a4a68;
   color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
@@ -985,6 +1161,8 @@ code {
 }
 
 .footer-links a:hover {
+  /* Fallback for browsers without CSS custom properties support */
+  color: #3b82f6;
   color: var(--color-primary);
 }
 
