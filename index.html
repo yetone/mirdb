@@ -68,29 +68,32 @@
         <h3>Installation</h3>
 
         <h4>Option 1: Install via Cargo</h4>
-        <div class="code-block" data-testid="cargo-install">
+        <div class="code-block-wrapper" data-testid="cargo-install">
           <pre><code class="language-bash">cargo install mirdb</code></pre>
+          <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">Copy</button>
         </div>
 
         <h4>Option 2: Build from Source</h4>
-        <div class="code-block" data-testid="build-from-source">
+        <div class="code-block-wrapper" data-testid="build-from-source">
           <pre><code class="language-bash"># Clone the repository
 git clone https://github.com/yetone/mirdb.git
 cd mirdb
 
 # Build the project
 cargo build --release</code></pre>
+          <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">Copy</button>
         </div>
       </div>
 
       <div class="code-section">
         <h3>Starting the Server</h3>
-        <div class="code-block" data-testid="server-startup">
+        <div class="code-block-wrapper" data-testid="server-startup">
           <pre><code class="language-bash"># Run with default configuration
 ./target/release/mirdb-server
 
 # Or run with custom config file
 ./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+          <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">Copy</button>
         </div>
         <p class="server-note">The server will start listening on <code>0.0.0.0:12333</code> by default.</p>
       </div>
@@ -181,35 +184,44 @@ cargo build --release</code></pre>
         <div class="code-example-card" data-testid="set-example">
           <h3>SET Operation</h3>
           <p class="code-description">Store a key-value pair in the database.</p>
-          <pre class="code-block with-line-numbers" data-testid="set-code-block"><code class="language-bash" data-language="bash"><span class="line-number">1</span><span class="line-content"><span class="token comment"># SET command syntax</span></span>
+          <div class="code-block-wrapper">
+            <pre class="code-block with-line-numbers" data-testid="set-code-block"><code class="language-bash" data-language="bash"><span class="line-number">1</span><span class="line-content"><span class="token comment"># SET command syntax</span></span>
 <span class="line-number">2</span><span class="line-content"><span class="token comment"># set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;</span></span>
 <span class="line-number">3</span><span class="line-content"><span class="token comment"># &lt;data&gt;</span></span>
 <span class="line-number">4</span><span class="line-content"></span>
 <span class="line-number">5</span><span class="line-content"><span class="token keyword">set</span> mykey <span class="token number">0</span> <span class="token number">0</span> <span class="token number">5</span></span>
 <span class="line-number">6</span><span class="line-content">hello</span>
 <span class="line-number">7</span><span class="line-content"><span class="token response">STORED</span></span></code></pre>
+            <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">Copy</button>
+          </div>
         </div>
 
         <div class="code-example-card" data-testid="get-example">
           <h3>GET Operation</h3>
           <p class="code-description">Retrieve a value by its key.</p>
-          <pre class="code-block with-line-numbers" data-testid="get-code-block"><code class="language-bash" data-language="bash"><span class="line-number">1</span><span class="line-content"><span class="token comment"># GET command syntax</span></span>
+          <div class="code-block-wrapper">
+            <pre class="code-block with-line-numbers" data-testid="get-code-block"><code class="language-bash" data-language="bash"><span class="line-number">1</span><span class="line-content"><span class="token comment"># GET command syntax</span></span>
 <span class="line-number">2</span><span class="line-content"><span class="token comment"># get &lt;key1&gt; [&lt;key2&gt; ...]</span></span>
 <span class="line-number">3</span><span class="line-content"></span>
 <span class="line-number">4</span><span class="line-content"><span class="token keyword">get</span> mykey</span>
 <span class="line-number">5</span><span class="line-content"><span class="token response">VALUE mykey 0 5</span></span>
 <span class="line-number">6</span><span class="line-content">hello</span>
 <span class="line-number">7</span><span class="line-content"><span class="token response">END</span></span></code></pre>
+            <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">Copy</button>
+          </div>
         </div>
 
         <div class="code-example-card" data-testid="delete-example">
           <h3>DELETE Operation</h3>
           <p class="code-description">Remove a key from the database.</p>
-          <pre class="code-block with-line-numbers" data-testid="delete-code-block"><code class="language-bash" data-language="bash"><span class="line-number">1</span><span class="line-content"><span class="token comment"># DELETE command syntax</span></span>
+          <div class="code-block-wrapper">
+            <pre class="code-block with-line-numbers" data-testid="delete-code-block"><code class="language-bash" data-language="bash"><span class="line-number">1</span><span class="line-content"><span class="token comment"># DELETE command syntax</span></span>
 <span class="line-number">2</span><span class="line-content"><span class="token comment"># delete &lt;key&gt; [noreply]</span></span>
 <span class="line-number">3</span><span class="line-content"></span>
 <span class="line-number">4</span><span class="line-content"><span class="token keyword">delete</span> mykey</span>
 <span class="line-number">5</span><span class="line-content"><span class="token response">DELETED</span></span></code></pre>
+            <button class="copy-button" data-testid="copy-button" aria-label="Copy code to clipboard" title="Copy to clipboard">Copy</button>
+          </div>
         </div>
       </div>
     </section>

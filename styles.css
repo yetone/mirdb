@@ -299,6 +299,12 @@ body {
   color: var(--color-text);
 }
 
+/* Code block wrapper for copy button positioning */
+.code-block-wrapper {
+  position: relative;
+  margin: 1rem 0;
+}
+
 pre {
   background-color: var(--color-code-bg);
   color: var(--color-code-text);
@@ -312,6 +318,39 @@ pre {
 
 code {
   font-family: inherit;
+}
+
+/* Copy button styles */
+.copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: var(--color-secondary);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+  opacity: 0.8;
+  z-index: 10;
+}
+
+.copy-button:hover {
+  background-color: var(--color-primary);
+  opacity: 1;
+}
+
+.copy-button:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.copy-button.copied {
+  background-color: #10b981;
+  opacity: 1;
 }
 
 /* Project Status Section */
