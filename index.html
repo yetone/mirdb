@@ -104,6 +104,75 @@ cargo build --release</code></pre>
       </div>
     </section>
 
+    <section id="project-status" class="project-status" data-testid="project-status-section">
+      <h2>Project Status</h2>
+      <p class="section-description">MirDB is actively developed. Here's the current feature availability:</p>
+
+      <div class="status-grid">
+        <div class="status-card" data-testid="implemented-features">
+          <h3 class="status-title implemented">Implemented Features</h3>
+          <ul class="status-list" data-testid="implemented-features-list">
+            <li>Tokio-based async networking with memcached protocol</li>
+            <li>Memtable with skip list data structure</li>
+            <li>Minor compaction (memtable to SSTable)</li>
+            <li>Major compaction (SSTable level compaction)</li>
+            <li>Persistent storage with SSTables</li>
+            <li>LSM tree architecture with multi-level compaction</li>
+          </ul>
+        </div>
+
+        <div class="status-card" data-testid="planned-features">
+          <h3 class="status-title planned">Planned Features</h3>
+          <ul class="status-list" data-testid="planned-features-list">
+            <li>Raft consensus for distributed operation</li>
+            <li>Cluster mode support</li>
+            <li>Binary protocol support</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="commands-section" data-testid="supported-commands-section">
+        <h3>Supported Memcached Commands</h3>
+        <p class="commands-description">MirDB implements the memcached text protocol with the following commands:</p>
+
+        <div class="commands-grid">
+          <div class="command-group" data-testid="storage-commands">
+            <h4>Storage Commands</h4>
+            <ul class="command-list" data-testid="storage-commands-list">
+              <li><code>SET</code> - Store a key-value pair</li>
+              <li><code>ADD</code> - Store only if key doesn't exist</li>
+              <li><code>REPLACE</code> - Store only if key exists</li>
+              <li><code>APPEND</code> - Append data to existing value</li>
+              <li><code>PREPEND</code> - Prepend data to existing value</li>
+            </ul>
+          </div>
+
+          <div class="command-group" data-testid="retrieval-commands">
+            <h4>Retrieval Commands</h4>
+            <ul class="command-list" data-testid="retrieval-commands-list">
+              <li><code>GET</code> - Retrieve one or more keys</li>
+              <li><code>GETS</code> - Retrieve with CAS token</li>
+            </ul>
+          </div>
+
+          <div class="command-group" data-testid="deletion-commands">
+            <h4>Deletion Commands</h4>
+            <ul class="command-list" data-testid="deletion-commands-list">
+              <li><code>DELETE</code> - Remove a key from the database</li>
+            </ul>
+          </div>
+
+          <div class="command-group" data-testid="mirdb-commands">
+            <h4>MirDB-Specific Commands</h4>
+            <ul class="command-list" data-testid="mirdb-commands-list">
+              <li><code>INFO</code> - Display database status and level information</li>
+              <li><code>MAJOR_COMPACTION</code> - Trigger manual compaction</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="code-examples" class="code-examples" data-testid="code-examples-section">
       <h2>Code Examples</h2>
       <p class="section-description">MirDB supports standard Memcached operations. Here are examples of the most common commands:</p>

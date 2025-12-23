@@ -314,6 +314,139 @@ code {
   font-family: inherit;
 }
 
+/* Project Status Section */
+.project-status {
+  padding: 5rem 1.5rem;
+  background-color: var(--color-bg-secondary);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.project-status h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.status-card {
+  background-color: var(--color-bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.status-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid;
+}
+
+.status-title.implemented {
+  color: #10b981;
+  border-color: #10b981;
+}
+
+.status-title.planned {
+  color: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.status-list {
+  list-style: none;
+  padding: 0;
+}
+
+.status-list li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.status-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-weight: bold;
+}
+
+.status-card[data-testid="planned-features"] .status-list li::before {
+  content: "○";
+  color: #f59e0b;
+}
+
+.commands-section {
+  background-color: var(--color-bg);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.commands-section h3 {
+  font-size: 1.5rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.commands-description {
+  text-align: center;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+}
+
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.command-group {
+  padding: 1rem;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius);
+}
+
+.command-group h4 {
+  font-size: 1rem;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.command-list {
+  list-style: none;
+  padding: 0;
+}
+
+.command-list li {
+  padding: 0.4rem 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.command-list code {
+  background-color: var(--color-code-bg);
+  color: var(--color-primary);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 /* Code Examples Section */
 .code-examples {
   padding: 5rem 1.5rem;
