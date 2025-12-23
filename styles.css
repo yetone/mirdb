@@ -314,6 +314,119 @@ code {
   font-family: inherit;
 }
 
+/* Code Examples Section */
+.code-examples {
+  padding: 5rem 1.5rem;
+  background-color: var(--color-bg);
+}
+
+.code-examples h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.section-description {
+  text-align: center;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  font-size: 1.125rem;
+}
+
+.code-examples-grid {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.code-example-card {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.code-example-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-primary);
+}
+
+.code-description {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+/* Syntax Highlighting */
+.code-block {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.code-block code {
+  display: block;
+}
+
+/* Line Numbers */
+.with-line-numbers code {
+  display: block;
+}
+
+.line-number {
+  display: inline-block;
+  width: 2em;
+  text-align: right;
+  padding-right: 1em;
+  margin-right: 0.5em;
+  color: #6b7280;
+  user-select: none;
+  border-right: 1px solid #374151;
+}
+
+.line-content {
+  display: inline;
+}
+
+/* Syntax Highlighting Tokens */
+.token.comment {
+  color: #6a9955;
+  font-style: italic;
+}
+
+.token.keyword {
+  color: #569cd6;
+  font-weight: bold;
+}
+
+.token.number {
+  color: #b5cea8;
+}
+
+.token.string {
+  color: #ce9178;
+}
+
+.token.response {
+  color: #4ec9b0;
+  font-weight: bold;
+}
+
+.token.command {
+  color: #dcdcaa;
+}
+
 /* Footer */
 .footer {
   background-color: var(--color-bg-secondary);

@@ -96,35 +96,52 @@ cargo build --release</code></pre>
       </div>
 
       <div class="code-section">
-        <h3>Basic Usage</h3>
-        <p>Connect using any Memcached client or telnet:</p>
-        <div class="code-block">
-          <pre><code class="language-bash"># Connect via telnet
-telnet localhost 12333
-
-# SET a value
-set mykey 0 0 5
-hello
-STORED
-
-# GET the value
-get mykey
-VALUE mykey 0 5
-hello
-END
-
-# DELETE the value
-delete mykey
-DELETED</code></pre>
-        </div>
-      </div>
-
-      <div class="code-section">
         <h3>Learn More</h3>
         <p>
           For detailed documentation, API reference, and advanced configuration options, visit our
           <a href="https://github.com/yetone/mirdb#readme" class="doc-link" data-testid="documentation-link">full documentation</a>.
         </p>
+      </div>
+    </section>
+
+    <section id="code-examples" class="code-examples" data-testid="code-examples-section">
+      <h2>Code Examples</h2>
+      <p class="section-description">MirDB supports standard Memcached operations. Here are examples of the most common commands:</p>
+
+      <div class="code-examples-grid">
+        <div class="code-example-card" data-testid="set-example">
+          <h3>SET Operation</h3>
+          <p class="code-description">Store a key-value pair in the database.</p>
+          <pre class="code-block with-line-numbers" data-testid="set-code-block"><code class="language-bash" data-language="bash"><span class="line-number">1</span><span class="line-content"><span class="token comment"># SET command syntax</span></span>
+<span class="line-number">2</span><span class="line-content"><span class="token comment"># set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;</span></span>
+<span class="line-number">3</span><span class="line-content"><span class="token comment"># &lt;data&gt;</span></span>
+<span class="line-number">4</span><span class="line-content"></span>
+<span class="line-number">5</span><span class="line-content"><span class="token keyword">set</span> mykey <span class="token number">0</span> <span class="token number">0</span> <span class="token number">5</span></span>
+<span class="line-number">6</span><span class="line-content">hello</span>
+<span class="line-number">7</span><span class="line-content"><span class="token response">STORED</span></span></code></pre>
+        </div>
+
+        <div class="code-example-card" data-testid="get-example">
+          <h3>GET Operation</h3>
+          <p class="code-description">Retrieve a value by its key.</p>
+          <pre class="code-block with-line-numbers" data-testid="get-code-block"><code class="language-bash" data-language="bash"><span class="line-number">1</span><span class="line-content"><span class="token comment"># GET command syntax</span></span>
+<span class="line-number">2</span><span class="line-content"><span class="token comment"># get &lt;key1&gt; [&lt;key2&gt; ...]</span></span>
+<span class="line-number">3</span><span class="line-content"></span>
+<span class="line-number">4</span><span class="line-content"><span class="token keyword">get</span> mykey</span>
+<span class="line-number">5</span><span class="line-content"><span class="token response">VALUE mykey 0 5</span></span>
+<span class="line-number">6</span><span class="line-content">hello</span>
+<span class="line-number">7</span><span class="line-content"><span class="token response">END</span></span></code></pre>
+        </div>
+
+        <div class="code-example-card" data-testid="delete-example">
+          <h3>DELETE Operation</h3>
+          <p class="code-description">Remove a key from the database.</p>
+          <pre class="code-block with-line-numbers" data-testid="delete-code-block"><code class="language-bash" data-language="bash"><span class="line-number">1</span><span class="line-content"><span class="token comment"># DELETE command syntax</span></span>
+<span class="line-number">2</span><span class="line-content"><span class="token comment"># delete &lt;key&gt; [noreply]</span></span>
+<span class="line-number">3</span><span class="line-content"></span>
+<span class="line-number">4</span><span class="line-content"><span class="token keyword">delete</span> mykey</span>
+<span class="line-number">5</span><span class="line-content"><span class="token response">DELETED</span></span></code></pre>
+        </div>
       </div>
     </section>
   </main>
