@@ -611,6 +611,112 @@ code {
   color: #dcdcaa;
 }
 
+/* Configuration Section */
+.configuration {
+  padding: 5rem 1.5rem;
+  background-color: var(--color-bg-secondary);
+}
+
+.configuration h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.configuration .section-description {
+  text-align: center;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  font-size: 1.125rem;
+}
+
+.config-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.config-example h3,
+.config-params h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.config-example pre {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.params-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.params-table th,
+.params-table td {
+  padding: 0.875rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.params-table th {
+  background-color: var(--color-bg-secondary);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.params-table td {
+  color: var(--color-text-secondary);
+}
+
+.params-table td code {
+  background-color: var(--color-bg-secondary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: var(--color-primary);
+}
+
+.params-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.params-table tbody tr:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.config-more {
+  max-width: var(--max-width);
+  margin: 2rem auto 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.config-more a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.config-more a:hover {
+  text-decoration: underline;
+}
+
 /* Footer */
 .footer {
   background-color: var(--color-bg-secondary);
@@ -712,6 +818,10 @@ code {
   .btn {
     width: 100%;
     max-width: 280px;
+  }
+
+  .config-content {
+    grid-template-columns: 1fr;
   }
 
   .footer-content {
