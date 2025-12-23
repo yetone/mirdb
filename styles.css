@@ -4,8 +4,8 @@
   --color-bg-secondary: #f8f9fa;
   --color-text: #1a1a2e;
   --color-text-secondary: #4a4a68;
-  --color-primary: #3b82f6;
-  --color-primary-dark: #2563eb;
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
   --color-secondary: #6b7280;
   --color-border: #e5e7eb;
   --color-code-bg: #1e1e1e;
@@ -19,11 +19,33 @@
   --color-bg: #0f0f23;
   --color-bg-secondary: #1a1a2e;
   --color-text: #ffffff;
-  --color-text-secondary: #a0a0b8;
-  --color-primary: #60a5fa;
-  --color-primary-dark: #3b82f6;
+  --color-text-secondary: #b8b8d0;
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
   --color-secondary: #9ca3af;
   --color-border: #2d2d44;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 1000;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 1rem;
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
 }
 
 /* Reset and base styles */
@@ -173,6 +195,11 @@ body {
 
 .btn-primary {
   background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-primary {
+  background-color: #1d4ed8;
   color: #ffffff;
 }
 
@@ -332,7 +359,7 @@ code {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  background-color: var(--color-secondary);
+  background-color: #4b5563;
   color: #ffffff;
   border: none;
   border-radius: 4px;
@@ -341,7 +368,6 @@ code {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s, opacity 0.2s;
-  opacity: 0.8;
   z-index: 10;
   min-width: 44px;
   min-height: 44px;
@@ -352,7 +378,6 @@ code {
 
 .copy-button:hover {
   background-color: var(--color-primary);
-  opacity: 1;
 }
 
 .copy-button:focus {
@@ -402,13 +427,31 @@ code {
 }
 
 .status-title.implemented {
-  color: #10b981;
-  border-color: #10b981;
+  color: #047857;
+  border-color: #047857;
 }
 
 .status-title.planned {
-  color: #f59e0b;
-  border-color: #f59e0b;
+  color: #b45309;
+  border-color: #b45309;
+}
+
+[data-theme="dark"] .status-title.implemented {
+  color: #34d399;
+  border-color: #34d399;
+}
+
+[data-theme="dark"] .status-title.planned {
+  color: #fbbf24;
+  border-color: #fbbf24;
+}
+
+[data-theme="dark"] .status-list li::before {
+  color: #34d399;
+}
+
+[data-theme="dark"] .status-card[data-testid="planned-features"] .status-list li::before {
+  color: #fbbf24;
 }
 
 .status-list {
@@ -428,13 +471,13 @@ code {
   content: "✓";
   position: absolute;
   left: 0;
-  color: #10b981;
+  color: #047857;
   font-weight: bold;
 }
 
 .status-card[data-testid="planned-features"] .status-list li::before {
   content: "○";
-  color: #f59e0b;
+  color: #b45309;
 }
 
 .commands-section {
@@ -471,10 +514,14 @@ code {
 
 .command-group h4 {
   font-size: 1rem;
-  color: var(--color-primary);
+  color: #1e40af;
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .command-group h4 {
+  color: var(--color-primary);
 }
 
 .command-list {
@@ -490,7 +537,7 @@ code {
 
 .command-list code {
   background-color: var(--color-code-bg);
-  color: var(--color-primary);
+  color: #60a5fa;
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
   font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;

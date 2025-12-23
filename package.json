@@ -8,6 +8,7 @@
     "serve": "npx serve . -p 3000"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.40.0",
     "chrome-launcher": "^1.2.1",
     "lighthouse": "^13.0.1",
