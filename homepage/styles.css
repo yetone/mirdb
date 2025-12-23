@@ -269,6 +269,75 @@ a:hover {
     line-height: 1.6;
 }
 
+/* Community Section */
+.community {
+    padding: 5rem 1.5rem;
+    background: var(--color-surface);
+}
+
+.community-intro {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    color: var(--color-text-secondary);
+    font-size: 1.125rem;
+}
+
+.community-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.community-card {
+    background: var(--color-background);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.community-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.community-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.community-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.community-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+}
+
+.community-description {
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}
+
+.community-card .btn {
+    display: inline-block;
+}
+
 /* Footer */
 .footer {
     background: var(--color-surface);

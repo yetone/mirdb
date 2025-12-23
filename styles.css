@@ -1117,6 +1117,83 @@ code {
   color: var(--color-text);
 }
 
+/* Community Section */
+.community {
+  padding: 5rem 1.5rem;
+  background-color: var(--color-bg-secondary);
+}
+
+.community .section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.community-intro {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  color: var(--color-text-secondary);
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.community-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.community-card {
+  background-color: var(--color-bg);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.community-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.community-icon {
+  width: 64px;
+  height: 64px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.community-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.community-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+}
+
+.community-description {
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+.community-card .btn {
+  display: inline-block;
+}
+
 /* Footer */
 .footer {
   /* Fallback for browsers without CSS custom properties support */
