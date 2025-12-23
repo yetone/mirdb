@@ -9,6 +9,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
+    "chrome-launcher": "^1.2.1",
+    "lighthouse": "^13.0.1",
     "serve": "^14.2.0"
   }
 }
