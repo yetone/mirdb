@@ -764,6 +764,192 @@ code {
   text-decoration: underline;
 }
 
+/* Architecture Section */
+.architecture {
+  padding: 5rem 1.5rem;
+  background-color: var(--color-bg);
+}
+
+.architecture h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.architecture .section-description {
+  text-align: center;
+  color: var(--color-text-secondary);
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  font-size: 1.125rem;
+}
+
+.architecture-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.architecture-diagram {
+  margin: 0 0 3rem 0;
+  padding: 0;
+}
+
+.lsm-diagram {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.diagram-label {
+  font-size: 16px;
+  font-weight: 700;
+  fill: var(--color-primary);
+}
+
+.diagram-text {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--color-text);
+}
+
+.diagram-subtext {
+  font-size: 10px;
+  fill: var(--color-text-secondary);
+}
+
+.diagram-note {
+  font-size: 10px;
+  font-style: italic;
+}
+
+.diagram-box {
+  stroke-width: 2;
+}
+
+.client-box {
+  fill: var(--color-bg);
+  stroke: var(--color-primary);
+}
+
+.wal-box {
+  fill: #fef3c7;
+  stroke: #f59e0b;
+}
+
+[data-theme="dark"] .wal-box {
+  fill: #451a03;
+  stroke: #f59e0b;
+}
+
+.memtable-box {
+  fill: #dcfce7;
+  stroke: #22c55e;
+}
+
+[data-theme="dark"] .memtable-box {
+  fill: #052e16;
+  stroke: #22c55e;
+}
+
+.imm-box {
+  fill: #e0e7ff;
+  stroke: #6366f1;
+}
+
+[data-theme="dark"] .imm-box {
+  fill: #1e1b4b;
+  stroke: #818cf8;
+}
+
+.level0-box {
+  fill: #fce7f3;
+  stroke: #ec4899;
+}
+
+[data-theme="dark"] .level0-box {
+  fill: #500724;
+  stroke: #ec4899;
+}
+
+.level1-box {
+  fill: #dbeafe;
+  stroke: #3b82f6;
+}
+
+[data-theme="dark"] .level1-box {
+  fill: #172554;
+  stroke: #3b82f6;
+}
+
+.diagram-arrow {
+  fill: none;
+  stroke: var(--color-text-secondary);
+  stroke-width: 2;
+}
+
+.diagram-arrow.read-return {
+  stroke: var(--color-primary);
+  stroke-dasharray: 4,2;
+}
+
+.diagram-caption {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.architecture-explanation {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.path-explanation {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.path-explanation h3 {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.path-explanation p {
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.path-explanation ol {
+  padding-left: 1.5rem;
+  color: var(--color-text-secondary);
+}
+
+.path-explanation li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.path-explanation strong {
+  color: var(--color-text);
+}
+
 /* Footer */
 .footer {
   background-color: var(--color-bg-secondary);
@@ -890,6 +1076,22 @@ code {
 
   .commands-grid {
     grid-template-columns: 1fr;
+  }
+
+  .architecture-explanation {
+    grid-template-columns: 1fr;
+  }
+
+  .lsm-diagram {
+    max-width: 100%;
+  }
+
+  .architecture {
+    padding: 3rem 1rem;
+  }
+
+  .architecture h2 {
+    font-size: 1.75rem;
   }
 }
 

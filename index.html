@@ -20,6 +20,7 @@
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#getting-started">Getting Started</a></li>
+        <li><a href="#architecture">Architecture</a></li>
         <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">Documentation</a></li>
         <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
       </ul>
@@ -310,6 +311,159 @@ thread_sleep_ms = 500</code></pre>
           For more advanced configuration options and detailed documentation, see the
           <a href="https://github.com/yetone/mirdb#configuration" data-testid="config-docs-link" target="_blank" rel="noopener">configuration documentation</a>.
         </p>
+      </div>
+    </section>
+
+    <section id="architecture" class="architecture" data-testid="architecture-section">
+      <h2>Architecture Overview</h2>
+      <p class="section-description">MirDB uses an LSM (Log-Structured Merge) tree architecture for efficient write-heavy workloads with persistent storage.</p>
+
+      <div class="architecture-content">
+        <figure class="architecture-diagram" data-testid="lsm-tree-diagram">
+          <svg viewBox="0 0 800 520" role="img" aria-labelledby="diagram-title diagram-desc" class="lsm-diagram">
+            <title id="diagram-title">LSM Tree Data Flow Diagram</title>
+            <desc id="diagram-desc">A visual diagram showing how data flows through MirDB's LSM tree architecture, including the write path from client through WAL and memtables to SSTables, and the read path that searches from memtables through disk levels.</desc>
+
+            <!-- Background -->
+            <rect x="0" y="0" width="800" height="520" fill="var(--color-bg-secondary)" rx="8"/>
+
+            <!-- Write Path Label -->
+            <text x="200" y="30" class="diagram-label" text-anchor="middle" fill="var(--color-primary)">Write Path</text>
+
+            <!-- Read Path Label -->
+            <text x="600" y="30" class="diagram-label" text-anchor="middle" fill="var(--color-primary)">Read Path</text>
+
+            <!-- Client Write -->
+            <rect x="120" y="50" width="160" height="40" rx="6" class="diagram-box client-box"/>
+            <text x="200" y="75" class="diagram-text" text-anchor="middle">Client Write</text>
+
+            <!-- Arrow down to WAL -->
+            <path d="M200 90 L200 120" class="diagram-arrow" marker-end="url(#arrowhead)"/>
+
+            <!-- WAL -->
+            <rect x="120" y="120" width="160" height="40" rx="6" class="diagram-box wal-box"/>
+            <text x="200" y="145" class="diagram-text" text-anchor="middle">WAL (Write-Ahead Log)</text>
+
+            <!-- Arrow down to Memtable -->
+            <path d="M200 160 L200 190" class="diagram-arrow" marker-end="url(#arrowhead)"/>
+
+            <!-- Memtable -->
+            <rect x="120" y="190" width="160" height="40" rx="6" class="diagram-box memtable-box"/>
+            <text x="200" y="215" class="diagram-text" text-anchor="middle">Memtable (Skip List)</text>
+
+            <!-- Arrow down to Immutable Memtables -->
+            <path d="M200 230 L200 260" class="diagram-arrow" marker-end="url(#arrowhead)"/>
+            <text x="280" y="250" class="diagram-note" fill="var(--color-text-secondary)">when full</text>
+
+            <!-- Immutable Memtables -->
+            <rect x="120" y="260" width="160" height="40" rx="6" class="diagram-box imm-box"/>
+            <text x="200" y="285" class="diagram-text" text-anchor="middle">Immutable Memtables</text>
+
+            <!-- Arrow down to Level 0 -->
+            <path d="M200 300 L200 340" class="diagram-arrow" marker-end="url(#arrowhead)"/>
+            <text x="280" y="325" class="diagram-note" fill="var(--color-text-secondary)">minor compaction</text>
+
+            <!-- Level 0 SSTs -->
+            <rect x="80" y="340" width="240" height="45" rx="6" class="diagram-box level0-box"/>
+            <text x="200" y="360" class="diagram-text" text-anchor="middle">Level 0 SSTables</text>
+            <text x="200" y="376" class="diagram-subtext" text-anchor="middle">(may overlap)</text>
+
+            <!-- Arrow down to Level 1+ -->
+            <path d="M200 385 L200 420" class="diagram-arrow" marker-end="url(#arrowhead)"/>
+            <text x="280" y="408" class="diagram-note" fill="var(--color-text-secondary)">major compaction</text>
+
+            <!-- Level 1+ SSTs -->
+            <rect x="40" y="420" width="320" height="45" rx="6" class="diagram-box level1-box"/>
+            <text x="200" y="440" class="diagram-text" text-anchor="middle">Level 1+ SSTables</text>
+            <text x="200" y="456" class="diagram-subtext" text-anchor="middle">(sorted, non-overlapping)</text>
+
+            <!-- Client Read -->
+            <rect x="520" y="50" width="160" height="40" rx="6" class="diagram-box client-box"/>
+            <text x="600" y="75" class="diagram-text" text-anchor="middle">Client Read</text>
+
+            <!-- Read path arrows and search order -->
+            <path d="M600 90 L600 190" class="diagram-arrow" marker-end="url(#arrowhead)"/>
+
+            <!-- Search Memtable -->
+            <rect x="520" y="190" width="160" height="40" rx="6" class="diagram-box memtable-box"/>
+            <text x="600" y="215" class="diagram-text" text-anchor="middle">1. Check Memtable</text>
+
+            <!-- Arrow to Imm -->
+            <path d="M600 230 L600 260" class="diagram-arrow" marker-end="url(#arrowhead)"/>
+            <text x="698" y="250" class="diagram-note" fill="var(--color-text-secondary)">miss?</text>
+
+            <!-- Search Immutable -->
+            <rect x="520" y="260" width="160" height="40" rx="6" class="diagram-box imm-box"/>
+            <text x="600" y="285" class="diagram-text" text-anchor="middle">2. Check Imm Tables</text>
+
+            <!-- Arrow to Level 0 -->
+            <path d="M600 300 L600 340" class="diagram-arrow" marker-end="url(#arrowhead)"/>
+            <text x="698" y="325" class="diagram-note" fill="var(--color-text-secondary)">miss?</text>
+
+            <!-- Search Level 0 -->
+            <rect x="480" y="340" width="240" height="45" rx="6" class="diagram-box level0-box"/>
+            <text x="600" y="360" class="diagram-text" text-anchor="middle">3. Search Level 0</text>
+            <text x="600" y="376" class="diagram-subtext" text-anchor="middle">(linear search)</text>
+
+            <!-- Arrow to Level 1+ -->
+            <path d="M600 385 L600 420" class="diagram-arrow" marker-end="url(#arrowhead)"/>
+            <text x="698" y="408" class="diagram-note" fill="var(--color-text-secondary)">miss?</text>
+
+            <!-- Search Level 1+ -->
+            <rect x="440" y="420" width="320" height="45" rx="6" class="diagram-box level1-box"/>
+            <text x="600" y="440" class="diagram-text" text-anchor="middle">4. Search Level 1+</text>
+            <text x="600" y="456" class="diagram-subtext" text-anchor="middle">(binary search)</text>
+
+            <!-- Return Result Arrow -->
+            <path d="M600 465 L600 490 L740 490 L740 100 L680 100" class="diagram-arrow read-return" marker-end="url(#arrowhead-return)"/>
+            <text x="750" y="300" class="diagram-note" fill="var(--color-primary)" transform="rotate(90, 750, 300)">return value</text>
+
+            <!-- Arrow markers -->
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-text-secondary)"/>
+              </marker>
+              <marker id="arrowhead-return" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-primary)"/>
+              </marker>
+            </defs>
+
+            <!-- Disk boundary line -->
+            <line x1="20" y1="330" x2="780" y2="330" stroke="var(--color-border)" stroke-width="2" stroke-dasharray="8,4"/>
+            <text x="30" y="495" class="diagram-note" fill="var(--color-text-secondary)">Disk (Persistent)</text>
+            <text x="30" y="320" class="diagram-note" fill="var(--color-text-secondary)">Memory</text>
+          </svg>
+          <figcaption class="diagram-caption" data-testid="diagram-caption">
+            LSM Tree architecture showing how data flows from client writes through the memory hierarchy to persistent disk storage,
+            and how reads traverse from fastest (memory) to slowest (disk) layers.
+          </figcaption>
+        </figure>
+
+        <div class="architecture-explanation" data-testid="architecture-explanation">
+          <div class="path-explanation" data-testid="write-path-explanation">
+            <h3>Write Path</h3>
+            <p>When data is written to MirDB, it follows a carefully designed path to ensure both performance and durability:</p>
+            <ol>
+              <li><strong>WAL (Write-Ahead Log)</strong>: Every write is first recorded in the WAL for crash recovery</li>
+              <li><strong>Memtable</strong>: Data is then inserted into the active memtable, an in-memory skip list for fast writes</li>
+              <li><strong>Immutable Memtables</strong>: When the memtable reaches capacity (default 4MB), it becomes immutable and queues for flushing</li>
+              <li><strong>Level 0 SSTables</strong>: Minor compaction flushes immutable memtables to disk as sorted string tables</li>
+              <li><strong>Level 1+ SSTables</strong>: Major compaction merges and sorts data across levels for efficient storage</li>
+            </ol>
+          </div>
+
+          <div class="path-explanation" data-testid="read-path-explanation">
+            <h3>Read Path</h3>
+            <p>Reads are optimized by searching from the fastest (most recent) to slowest data sources:</p>
+            <ol>
+              <li><strong>Active Memtable</strong>: First, check the in-memory memtable for the most recent writes</li>
+              <li><strong>Immutable Memtables</strong>: Then search queued immutable memtables (newest first)</li>
+              <li><strong>Level 0 SSTables</strong>: Search disk files that may have overlapping key ranges (linear scan)</li>
+              <li><strong>Level 1+ SSTables</strong>: Binary search through sorted, non-overlapping files at each level</li>
+            </ol>
+            <p>This layered approach ensures recent data is found quickly while maintaining efficient disk utilization.</p>
+          </div>
+        </div>
       </div>
     </section>
   </main>
