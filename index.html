@@ -138,6 +138,7 @@
       padding: 5rem 2rem;
       max-width: 1200px;
       margin: 0 auto;
+      overflow-x: hidden;
     }
 
     section h2 {
@@ -162,7 +163,7 @@
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
       gap: 2rem;
     }
 
@@ -190,6 +191,7 @@
     .quick-start-content {
       display: grid;
       gap: 2rem;
+      max-width: 100%;
     }
 
     .quick-start-step {
@@ -197,6 +199,8 @@
       border: 1px solid var(--border-color);
       border-radius: 0.5rem;
       padding: 2rem;
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     .quick-start-step h3 {
@@ -248,7 +252,7 @@
 
     .commands-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
       gap: 2rem;
     }
 
@@ -342,12 +346,13 @@
       nav {
         flex-direction: column;
         gap: 1rem;
+        padding: 1rem;
       }
 
       .nav-links {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 1rem;
+        gap: 0.75rem;
       }
 
       #hero h1 {
@@ -368,6 +373,114 @@
 
       section h2 {
         font-size: 2rem;
+      }
+
+      .config-table {
+        display: block;
+        overflow-x: auto;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+
+    /* Extra small devices (320px) */
+    @media (max-width: 375px) {
+      html, body {
+        overflow-x: hidden;
+      }
+
+      nav {
+        padding: 0.75rem;
+      }
+
+      .nav-brand {
+        font-size: 1.25rem;
+      }
+
+      .nav-links {
+        gap: 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      #hero {
+        padding: 5rem 1rem 3rem;
+      }
+
+      #hero h1 {
+        font-size: 2rem;
+      }
+
+      #hero .tagline {
+        font-size: 1rem;
+      }
+
+      #hero .description {
+        font-size: 0.875rem;
+      }
+
+      .btn {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+      }
+
+      section {
+        padding: 2rem 0.75rem;
+      }
+
+      section h2 {
+        font-size: 1.5rem;
+      }
+
+      .section-description {
+        font-size: 0.875rem;
+      }
+
+      .feature-card {
+        padding: 1.25rem;
+      }
+
+      .feature-card h3 {
+        font-size: 1rem;
+      }
+
+      .feature-card p {
+        font-size: 0.875rem;
+      }
+
+      .quick-start-step {
+        padding: 1.25rem;
+      }
+
+      pre {
+        padding: 0.75rem;
+        font-size: 0.75rem;
+      }
+
+      pre code {
+        font-size: 0.75rem;
+      }
+
+      .command-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+
+      .config-table th,
+      .config-table td {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+      }
+
+      footer {
+        padding: 2rem 0.75rem;
+      }
+
+      footer p {
+        font-size: 0.875rem;
       }
     }
   </style>
@@ -590,7 +703,7 @@ get mykey
     <p class="license-info">Released under the MIT License</p>
     <ul class="footer-links">
       <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="footer-github-link">GitHub Repository</a></li>
-      <li><a href="https://github.com/yetone/mirdb/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" data-testid="footer-license-link">License</a></li>
+      <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer" data-testid="footer-issues-link">Report Issues</a></li>
       <li><a href="https://github.com/yetone/mirdb#contributing" target="_blank" rel="noopener noreferrer" data-testid="footer-contributing-link">Contributing</a></li>
     </ul>
   </footer>
