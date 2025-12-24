@@ -6,16 +6,20 @@
 }
 
 :root {
-  --primary-color: #3b82f6;
+  --primary-color: #2563eb;
   --primary-dark: #1d4ed8;
   --secondary-color: #64748b;
   --text-color: #1e293b;
-  --text-light: #64748b;
+  --text-light: #475569;
   --bg-color: #ffffff;
   --bg-secondary: #f8fafc;
   --border-color: #e2e8f0;
   --code-bg: #1e293b;
   --code-text: #e2e8f0;
+  /* Accessible colors for dark backgrounds (WCAG AA 4.5:1 minimum) */
+  --nav-link-color: #cbd5e1;
+  --footer-text-color: #cbd5e1;
+  --footer-note-color: #94a3b8;
 }
 
 body {
@@ -41,7 +45,7 @@ body {
 }
 
 .header-nav a {
-  color: #94a3b8;
+  color: var(--nav-link-color);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
@@ -78,7 +82,7 @@ body {
 
 .tagline {
   font-size: 1.5rem;
-  color: #94a3b8;
+  color: var(--nav-link-color);
   margin-bottom: 32px;
 }
 
@@ -388,7 +392,7 @@ body {
 }
 
 .footer-links a {
-  color: #94a3b8;
+  color: var(--footer-text-color);
   text-decoration: none;
   transition: color 0.2s ease;
   min-height: 44px;
@@ -402,12 +406,12 @@ body {
 }
 
 .footer-note {
-  color: #64748b;
+  color: var(--footer-note-color);
   margin-bottom: 16px;
 }
 
 .copyright {
-  color: #475569;
+  color: var(--footer-text-color);
   font-size: 0.875rem;
 }
 
