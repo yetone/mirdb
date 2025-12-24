@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol Compatibility">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero" id="hero">
+        <div class="container">
+            <h1>MirDB</h1>
+            <p class="tagline">A Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+            <p class="subtitle">Drop-in replacement for memcached with data persistence using LSM tree architecture</p>
+            <div class="cta-buttons">
+                <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#configuration">Configuration</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Memcached Protocol</h3>
+                    <p>Full compatibility with the memcached text protocol. Works with existing memcached clients - supports SET, GET, DELETE, ADD, REPLACE, APPEND, and PREPEND commands.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>Unlike standard memcached, MirDB persists data to disk using SSTables. Your data survives restarts with Write-Ahead Log (WAL) for durability.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Built on a Log-Structured Merge-tree architecture with skip list memtables, background compaction, and multi-level storage optimization.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Async I/O with Tokio</h3>
+                    <p>High-performance async networking powered by Tokio runtime. Efficient block caching with LRU and Snappy compression.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture" id="architecture">
+        <div class="container">
+            <h2>Architecture Overview</h2>
+            <div class="architecture-diagram">
+                <div class="diagram-flow">
+                    <div class="diagram-step">
+                        <div class="step-box">Write Request</div>
+                        <span class="arrow">&#8595;</span>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="step-box">WAL (Write-Ahead Log)</div>
+                        <span class="arrow">&#8595;</span>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="step-box">Memtable (Skip List)</div>
+                        <span class="arrow">&#8595;</span>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="step-box">Immutable Memtable</div>
+                        <span class="arrow">&#8595;</span>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="step-box">SSTable Level 0</div>
+                        <span class="arrow">&#8595;</span>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="step-box">SSTable Levels 1-7</div>
+                    </div>
+                </div>
+            </div>
+            <div class="architecture-description">
+                <p><strong>Write Path:</strong> Data is first written to the WAL for durability, then inserted into the in-memory Memtable (implemented as a skip list). When the Memtable reaches its size limit, it becomes immutable and is flushed to disk as an SSTable.</p>
+                <p><strong>Compaction:</strong> Background compaction merges SSTables across levels to optimize read performance and reclaim space. Minor compaction flushes memtables to Level 0, while major compaction merges SSTables across levels.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section class="getting-started" id="getting-started">
+        <div class="container">
+            <h2>Getting Started</h2>
+
+            <div class="getting-started-step">
+                <h3>Installation</h3>
+                <p>Clone the repository and build MirDB using Cargo:</p>
+                <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# The binary will be available at target/release/mirdb</code></pre>
+            </div>
+
+            <div class="getting-started-step">
+                <h3>Running MirDB</h3>
+                <p>Start the server with the default configuration or specify a custom config file:</p>
+                <pre><code class="language-bash"># Run with default configuration
+cargo run -p mirdb
+
+# Run with custom configuration
+cargo run -p mirdb -- -c /path/to/config.toml
+
+# Or use the built binary
+./target/release/mirdb -c etc/mirdb.toml</code></pre>
+            </div>
+
+            <div class="getting-started-step">
+                <h3>Connecting to MirDB</h3>
+                <p>MirDB listens on <strong>0.0.0.0:12333</strong> by default. Connect using any memcached client or telnet:</p>
+                <pre><code class="language-bash"># Connect with telnet
+telnet localhost 12333
+
+# Or use any memcached client library</code></pre>
+            </div>
+
+            <div class="getting-started-step">
+                <h3>Basic Commands</h3>
+                <p>MirDB supports standard memcached commands:</p>
+                <pre><code class="language-bash"># Set a value (key, flags, exptime, bytes)
+set mykey 0 0 5
+hello
+# Response: STORED
+
+# Get a value
+get mykey
+# Response: VALUE mykey 0 5
+#           hello
+#           END
+
+# Delete a value
+delete mykey
+# Response: DELETED
+
+# Other supported commands: ADD, REPLACE, APPEND, PREPEND</code></pre>
+            </div>
+
+            <div class="getting-started-step">
+                <h3>Configuration</h3>
+                <p>MirDB uses TOML configuration files. Here's an example configuration:</p>
+                <pre><code class="language-toml"># etc/mirdb.toml
+addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section class="configuration" id="configuration">
+        <div class="container">
+            <h2>Configuration Reference</h2>
+            <table class="config-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Description</th>
+                        <th>Default</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>addr</code></td>
+                        <td>Listen address and port</td>
+                        <td><code>0.0.0.0:12333</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>work_dir</code></td>
+                        <td>Data directory path</td>
+                        <td><code>/tmp/mirdb</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>max_level</code></td>
+                        <td>Maximum LSM tree levels</td>
+                        <td><code>7</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>mem_table_max_size</code></td>
+                        <td>Max memtable size before flush</td>
+                        <td><code>4M</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>sst_max_size</code></td>
+                        <td>Max SSTable file size</td>
+                        <td><code>100M</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>block_size</code></td>
+                        <td>Data block size</td>
+                        <td><code>4K</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>l0_compaction_trigger</code></td>
+                        <td>Level 0 files before compaction</td>
+                        <td><code>4</code></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="note">Size values support suffixes: K (KB), M (MB), G (GB), T (TB)</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>MirDB</h4>
+                    <p>A persistent key-value store with memcached compatibility.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub Repository</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Report Issues</a></li>
+                        <li><a href="#getting-started">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Project Status</h4>
+                    <p>Raft consensus support coming soon!</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Open source project. See repository for license details.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
