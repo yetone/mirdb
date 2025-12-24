@@ -544,27 +544,27 @@
     <h2>Key Features</h2>
     <p class="section-description">Built with modern Rust for safety and performance</p>
     <div class="features-grid">
-      <div class="feature-card">
+      <div class="feature-card" data-testid="feature-memcached-protocol">
         <h3>Memcached Protocol</h3>
         <p>Full compatibility with the memcached text protocol. Use your existing memcached clients without any code changes.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" data-testid="feature-persistent-storage">
         <h3>Persistent Storage</h3>
         <p>Unlike memcached, MirDB persists data to disk using SSTables. Your data survives restarts.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" data-testid="feature-lsm-tree">
         <h3>LSM Tree Architecture</h3>
-        <p>Log-Structured Merge-tree design with memtables, immutable memtables, and multi-level SSTable compaction.</p>
+        <p>Log-Structured Merge-tree design with memtables, immutable memtables, and multi-level SSTable compaction for optimal performance.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" data-testid="feature-async-networking">
         <h3>Async Networking</h3>
         <p>Built on Tokio for high-performance asynchronous I/O and efficient connection handling.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" data-testid="feature-wal">
         <h3>Write-Ahead Logging</h3>
         <p>Durability guaranteed with WAL. Data is safe even in case of unexpected shutdowns.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" data-testid="feature-compaction">
         <h3>Configurable Compaction</h3>
         <p>Fine-tune compaction strategies to optimize for your workload with configurable triggers and levels.</p>
       </div>
