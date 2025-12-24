@@ -438,6 +438,13 @@ body {
     padding: 2px 6px;
   }
 
+  /* Make config table scrollable on mobile */
+  .config-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   /* Mobile touch target improvements */
   .footer-links {
     flex-direction: column;
