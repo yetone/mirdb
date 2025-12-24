@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Hero Section -->
+  <header class="hero" id="hero">
+    <div class="hero-content">
+      <h1>MirDB</h1>
+      <p class="tagline">Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+      <div class="cta-buttons">
+        <a href="#getting-started" class="btn btn-primary">Get Started</a>
+        <a href="https://github.com/mirdb/mirdb" class="btn btn-secondary">View on GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2>Key Features</h2>
+      <div class="features-grid">
+        <!-- Feature 1: Memcached Protocol Compatibility -->
+        <div class="feature-item" data-feature="memcached-protocol">
+          <div class="feature-icon">🔌</div>
+          <h3>Memcached Protocol Compatible</h3>
+          <p>Works seamlessly with existing memcached clients. Supports standard commands like SET, GET, DELETE, ADD, REPLACE, APPEND, and PREPEND with familiar response codes.</p>
+        </div>
+
+        <!-- Feature 2: Persistent Storage -->
+        <div class="feature-item" data-feature="persistence">
+          <div class="feature-icon">💾</div>
+          <h3>Persistent Storage</h3>
+          <p>Unlike standard memcached, MirDB persists data to disk using SSTables (Sorted String Tables). Your data survives restarts with Write-Ahead Log (WAL) for durability.</p>
+        </div>
+
+        <!-- Feature 3: LSM Tree Architecture -->
+        <div class="feature-item" data-feature="lsm-tree">
+          <div class="feature-icon">🌳</div>
+          <h3>LSM Tree Architecture</h3>
+          <p>Built on a Log-Structured Merge-tree design with memtables, immutable memtables, and multi-level SSTable compaction for optimal write performance and storage efficiency.</p>
+        </div>
+
+        <!-- Feature 4: Async I/O with Tokio -->
+        <div class="feature-item" data-feature="async-io">
+          <div class="feature-icon">⚡</div>
+          <h3>Async I/O with Tokio</h3>
+          <p>High-performance async networking powered by Tokio. Non-blocking I/O operations ensure excellent throughput and low latency for concurrent connections.</p>
+        </div>
+
+        <!-- Feature 5: Configurable Parameters -->
+        <div class="feature-item" data-feature="configurable">
+          <div class="feature-icon">⚙️</div>
+          <h3>Highly Configurable</h3>
+          <p>Fine-tune performance with TOML-based configuration. Adjust memtable size, SSTable size, compaction triggers, and more to match your workload.</p>
+        </div>
+
+        <!-- Feature 6: Block Caching -->
+        <div class="feature-item" data-feature="caching">
+          <div class="feature-icon">🚀</div>
+          <h3>Block Caching & Compression</h3>
+          <p>LRU block cache for frequently accessed data and Snappy compression for efficient storage utilization without sacrificing read performance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Section -->
+  <section class="architecture" id="architecture">
+    <div class="container">
+      <h2>Architecture Overview</h2>
+      <div class="architecture-diagram">
+        <pre class="diagram">
+Write Request
+    │
+    ▼
+┌─────────┐
+│   WAL   │──── (Write-Ahead Log for durability)
+└────┬────┘
+     │
+     ▼
+┌──────────┐
+│ Memtable │──── (Active in-memory skip list)
+└────┬─────┘
+     │ (when full)
+     ▼
+┌────────────────┐
+│ Imm Memtables  │──── (Immutable memtables queue)
+└───────┬────────┘
+        │ (minor compaction)
+        ▼
+┌───────────────┐
+│ Level 0 SSTs  │──── (Recently flushed, may overlap)
+└───────┬───────┘
+        │ (major compaction)
+        ▼
+┌───────────────┐
+│ Level 1+ SSTs │──── (Sorted, non-overlapping within level)
+└───────────────┘
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Getting Started Section -->
+  <section class="getting-started" id="getting-started">
+    <div class="container">
+      <h2>Getting Started</h2>
+      <div class="getting-started-content">
+        <h3>Installation</h3>
+        <pre class="code-block"><code>cargo build --release</code></pre>
+
+        <h3>Configuration</h3>
+        <p>Create a configuration file (config.toml):</p>
+        <pre class="code-block"><code>addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdb"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+block_size = "4K"
+l0_compaction_trigger = 4</code></pre>
+
+        <h3>Usage Example</h3>
+        <p>Connect with any memcached client:</p>
+        <pre class="code-block"><code># Connect using telnet
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+# Response: STORED
+
+# Get a value
+get mykey
+# Response: VALUE mykey 0 5
+#           hello
+#           END
+
+# Delete a value
+delete mykey
+# Response: DELETED</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="#features">Features</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#getting-started">Getting Started</a>
+          <a href="https://github.com/mirdb/mirdb">GitHub</a>
+        </div>
+        <p class="footer-note">MirDB is open source software. Raft consensus for distributed operation coming soon.</p>
+        <p class="copyright">&copy; 2024 MirDB Project</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

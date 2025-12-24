@@ -1,0 +1,289 @@
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --secondary-color: #64748b;
+  --text-color: #1e293b;
+  --text-light: #64748b;
+  --bg-color: #ffffff;
+  --bg-secondary: #f8fafc;
+  --border-color: #e2e8f0;
+  --code-bg: #1e293b;
+  --code-text: #e2e8f0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.tagline {
+  font-size: 1.5rem;
+  color: #94a3b8;
+  margin-bottom: 32px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: white;
+  border: 2px solid #475569;
+}
+
+.btn-secondary:hover {
+  border-color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Features Section */
+.features {
+  padding: 80px 20px;
+  background-color: var(--bg-secondary);
+}
+
+.features h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 48px;
+  color: var(--text-color);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.feature-item {
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.feature-item h3 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  color: var(--text-color);
+}
+
+.feature-item p {
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+/* Architecture Section */
+.architecture {
+  padding: 80px 20px;
+}
+
+.architecture h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 48px;
+}
+
+.architecture-diagram {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.diagram {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 32px;
+  border-radius: 12px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  white-space: pre;
+  line-height: 1.4;
+}
+
+/* Getting Started Section */
+.getting-started {
+  padding: 80px 20px;
+  background-color: var(--bg-secondary);
+}
+
+.getting-started h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 48px;
+}
+
+.getting-started-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.getting-started h3 {
+  font-size: 1.5rem;
+  margin: 32px 0 16px;
+  color: var(--text-color);
+}
+
+.getting-started h3:first-child {
+  margin-top: 0;
+}
+
+.getting-started p {
+  color: var(--text-light);
+  margin-bottom: 12px;
+}
+
+.code-block {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 20px 24px;
+  border-radius: 8px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+.code-block code {
+  white-space: pre;
+}
+
+/* Footer */
+.footer {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.footer-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+.footer-note {
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.copyright {
+  color: #475569;
+  font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .tagline {
+    font-size: 1.125rem;
+  }
+
+  .features h2,
+  .architecture h2,
+  .getting-started h2 {
+    font-size: 2rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-item {
+    padding: 24px;
+  }
+
+  .diagram {
+    font-size: 0.75rem;
+    padding: 16px;
+  }
+
+  .code-block {
+    padding: 16px;
+    font-size: 0.8rem;
+  }
+}
