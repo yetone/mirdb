@@ -223,6 +223,61 @@ delete mykey
     </div>
   </section>
 
+  <!-- Configuration Section -->
+  <section class="configuration" id="configuration">
+    <div class="container">
+      <h2>Configuration Reference</h2>
+      <p>MirDB uses TOML configuration files for flexible customization. Below are the key configuration parameters and their default values.</p>
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>addr</code></td>
+            <td>Listen address and port for incoming connections</td>
+            <td><code>0.0.0.0:12333</code></td>
+          </tr>
+          <tr>
+            <td><code>work_dir</code></td>
+            <td>Data directory path for storing SSTables and WAL</td>
+            <td><code>/tmp/mirdb</code></td>
+          </tr>
+          <tr>
+            <td><code>max_level</code></td>
+            <td>Maximum number of LSM tree levels</td>
+            <td><code>7</code></td>
+          </tr>
+          <tr>
+            <td><code>mem_table_max_size</code></td>
+            <td>Maximum memtable size before flush to disk</td>
+            <td><code>4M</code></td>
+          </tr>
+          <tr>
+            <td><code>sst_max_size</code></td>
+            <td>Maximum SSTable file size</td>
+            <td><code>100M</code></td>
+          </tr>
+          <tr>
+            <td><code>block_size</code></td>
+            <td>Data block size within SSTables</td>
+            <td><code>4K</code></td>
+          </tr>
+          <tr>
+            <td><code>l0_compaction_trigger</code></td>
+            <td>Number of Level 0 files that trigger compaction</td>
+            <td><code>4</code></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="config-note">Size values support suffixes: K (KB), M (MB), G (GB), T (TB). For full configuration documentation, see the <a href="https://github.com/mirdb/mirdb#configuration" class="doc-link">GitHub repository</a>.</p>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
@@ -230,7 +285,8 @@ delete mykey
         <div class="footer-links">
           <a href="#features">Features</a>
           <a href="#architecture">Architecture</a>
-          <a href="#getting-started">Documentation</a>
+          <a href="#getting-started">Getting Started</a>
+          <a href="#configuration">Configuration</a>
           <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener">GitHub</a>
         </div>
         <p class="footer-note">MirDB is open source software. Raft consensus for distributed operation coming soon.</p>
