@@ -192,27 +192,27 @@ END</code></pre>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>listen_address</td>
+                        <td>addr</td>
                         <td>0.0.0.0:12333</td>
                         <td>Server listen address and port</td>
                     </tr>
                     <tr>
-                        <td>work_directory</td>
+                        <td>work_dir</td>
                         <td>/tmp/mirdb</td>
                         <td>Directory for data storage</td>
                     </tr>
                     <tr>
-                        <td>max_lsm_levels</td>
+                        <td>max_level</td>
                         <td>7</td>
                         <td>Maximum LSM tree levels</td>
                     </tr>
                     <tr>
-                        <td>memtable_max_size</td>
+                        <td>mem_table_max_size</td>
                         <td>4MB</td>
                         <td>Maximum memtable size before flush</td>
                     </tr>
                     <tr>
-                        <td>sstable_max_size</td>
+                        <td>sst_max_size</td>
                         <td>100MB</td>
                         <td>Maximum SSTable file size</td>
                     </tr>
@@ -223,6 +223,23 @@ END</code></pre>
                     </tr>
                 </tbody>
             </table>
+
+            <h3>Configuration File Example</h3>
+            <pre><code class="language-toml"># mirdb.toml - Example configuration file
+addr = "0.0.0.0:12333"
+work_dir = "/tmp/mirdb"
+
+max_level = 7
+mem_table_max_size = "4M"
+sst_max_size = "100M"
+block_size = "4K"
+
+# Optional advanced settings
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500</code></pre>
         </div>
     </section>
 
