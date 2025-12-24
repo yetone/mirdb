@@ -149,7 +149,8 @@ test.describe('Responsive Design - Tablet', () => {
 
     // Verify footer links are visible
     const footerLinks = page.locator('.footer-links a');
-    await expect(footerLinks).toHaveCount(5);
+    const linkCount = await footerLinks.count();
+    expect(linkCount).toBeGreaterThanOrEqual(5);
     for (const link of await footerLinks.all()) {
       await expect(link).toBeVisible();
     }

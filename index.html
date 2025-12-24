@@ -295,17 +295,19 @@ delete mykey
   </main>
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer" data-testid="footer">
     <div class="container">
       <div class="footer-content">
-        <div class="footer-links">
+        <div class="footer-links" data-testid="footer-links">
           <a href="#features">Features</a>
           <a href="#architecture">Architecture</a>
           <a href="#getting-started">Getting Started</a>
           <a href="#configuration">Configuration</a>
-          <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/mirdb/mirdb#documentation" target="_blank" rel="noopener" data-testid="footer-docs-link">Documentation</a>
+          <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener" data-testid="footer-github-link">GitHub</a>
+          <a href="https://github.com/mirdb/mirdb/blob/main/LICENSE" target="_blank" rel="noopener" data-testid="footer-license-link">MIT License</a>
         </div>
-        <p class="footer-note">MirDB is open source software. Raft consensus for distributed operation coming soon.</p>
+        <p class="footer-note" data-testid="footer-roadmap">MirDB is open source software. Raft consensus for distributed operation coming soon.</p>
         <p class="copyright">&copy; 2024 MirDB Project</p>
       </div>
     </div>
