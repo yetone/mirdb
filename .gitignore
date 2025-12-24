@@ -7,3 +7,6 @@ test-results/
 landing-page/node_modules/
 landing-page/test-results/
 landing-page/playwright-report/
+website/node_modules/
+website/test-results/
+website/playwright-report/

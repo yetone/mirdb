@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-landing-page",
+  "version": "1.0.0",
+  "description": "MirDB Product Landing Page",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "serve": "npx http-server . -p 3000 -c-1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "keywords": [
+    "mirdb",
+    "landing-page",
+    "key-value-store",
+    "memcached"
+  ],
+  "license": "MIT"
+}
