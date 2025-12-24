@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg-dark: #0f172a;
+      --bg-darker: #020617;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --border-color: #334155;
+      --code-bg: #1e293b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--bg-darker);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    /* Hero Section */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+    }
+
+    #hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    #hero .tagline {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    #hero .description {
+      max-width: 600px;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--code-bg);
+    }
+
+    /* Section Styles */
+    section {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    section .section-description {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Features Section */
+    #features {
+      background-color: var(--bg-darker);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 2rem;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+    }
+
+    /* Quick Start Section */
+    #quick-start {
+      background-color: var(--bg-dark);
+    }
+
+    .quick-start-content {
+      display: grid;
+      gap: 2rem;
+    }
+
+    .quick-start-step {
+      background-color: var(--bg-darker);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 2rem;
+    }
+
+    .quick-start-step h3 {
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .step-number {
+      background-color: var(--primary-color);
+      color: white;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: bold;
+    }
+
+    .quick-start-step p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    /* Code Blocks */
+    pre {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    pre code {
+      font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    /* Commands Section */
+    #commands {
+      background-color: var(--bg-darker);
+    }
+
+    .commands-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .command-group h3 {
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+
+    .command-list {
+      list-style: none;
+    }
+
+    .command-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .command-list code {
+      background-color: var(--code-bg);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-family: monospace;
+    }
+
+    /* Configuration Section */
+    #configuration {
+      background-color: var(--bg-dark);
+    }
+
+    .config-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+
+    .config-table th,
+    .config-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .config-table th {
+      background-color: var(--bg-darker);
+      color: var(--text-primary);
+    }
+
+    .config-table td {
+      color: var(--text-secondary);
+    }
+
+    .config-table code {
+      background-color: var(--code-bg);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--bg-darker);
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    footer p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    footer .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    footer .footer-links a:hover {
+      color: var(--text-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      #hero h1 {
+        font-size: 2.5rem;
+      }
+
+      #hero .tagline {
+        font-size: 1.25rem;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      section {
+        padding: 3rem 1rem;
+      }
+
+      section h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <a href="#" class="nav-brand">MirDB</a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#quick-start">Quick Start</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#configuration">Configuration</a></li>
+      <li><a href="https://github.com/yetone/mirdb" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <h1>MirDB</h1>
+    <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+    <p class="description">
+      A high-performance, persistent key-value store written in Rust that speaks the Memcached protocol.
+      Drop-in replacement for memcached with the added benefit of data persistence using LSM tree architecture.
+    </p>
+    <div class="cta-buttons">
+      <a href="#quick-start" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/yetone/mirdb" target="_blank" class="btn btn-secondary">View on GitHub</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features">
+    <h2>Key Features</h2>
+    <p class="section-description">Built with modern Rust for safety and performance</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>Memcached Protocol</h3>
+        <p>Full compatibility with the memcached text protocol. Use your existing memcached clients without any code changes.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Persistent Storage</h3>
+        <p>Unlike memcached, MirDB persists data to disk using SSTables. Your data survives restarts.</p>
+      </div>
+      <div class="feature-card">
+        <h3>LSM Tree Architecture</h3>
+        <p>Log-Structured Merge-tree design with memtables, immutable memtables, and multi-level SSTable compaction.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Async Networking</h3>
+        <p>Built on Tokio for high-performance asynchronous I/O and efficient connection handling.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Write-Ahead Logging</h3>
+        <p>Durability guaranteed with WAL. Data is safe even in case of unexpected shutdowns.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Configurable Compaction</h3>
+        <p>Fine-tune compaction strategies to optimize for your workload with configurable triggers and levels.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start Section -->
+  <section id="quick-start">
+    <h2>Quick Start</h2>
+    <p class="section-description">Get MirDB running in minutes</p>
+    <div class="quick-start-content">
+      <div class="quick-start-step">
+        <h3><span class="step-number">1</span> Installation</h3>
+        <p>Install MirDB using Cargo or download a pre-built binary:</p>
+        <pre><code class="language-bash"># Install from source using Cargo
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release
+
+# The binary will be available at ./target/release/mirdb</code></pre>
+      </div>
+
+      <div class="quick-start-step">
+        <h3><span class="step-number">2</span> Configuration</h3>
+        <p>Create a configuration file in TOML format:</p>
+        <pre><code class="language-toml"># mirdb.toml - Basic configuration
+addr = "0.0.0.0:12333"
+work_dir = "/tmp/mirdb"
+
+max_level = 7
+mem_table_max_size = "4M"
+sst_max_size = "100M"
+block_size = "4K"
+
+l0_compaction_trigger = 4</code></pre>
+      </div>
+
+      <div class="quick-start-step">
+        <h3><span class="step-number">3</span> Start the Server</h3>
+        <p>Run MirDB with your configuration file:</p>
+        <pre><code class="language-bash"># Start MirDB server with custom config
+./target/release/mirdb -c mirdb.toml
+
+# Or use the default configuration
+./target/release/mirdb</code></pre>
+      </div>
+
+      <div class="quick-start-step">
+        <h3><span class="step-number">4</span> Connect a Client</h3>
+        <p>Connect using any memcached-compatible client or simple telnet:</p>
+        <pre><code class="language-bash"># Connect using telnet
+telnet localhost 12333
+
+# Or use netcat
+nc localhost 12333
+
+# Try some commands:
+set mykey 0 0 5
+hello
+# Response: STORED
+
+get mykey
+# Response: VALUE mykey 0 5
+#           hello
+#           END</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Commands Section -->
+  <section id="commands">
+    <h2>Supported Commands</h2>
+    <p class="section-description">Full memcached protocol compatibility plus MirDB-specific commands</p>
+    <div class="commands-grid">
+      <div class="command-group">
+        <h3>Storage Commands</h3>
+        <ul class="command-list">
+          <li><code>SET</code> <span>Store a key-value pair</span></li>
+          <li><code>ADD</code> <span>Store only if key doesn't exist</span></li>
+          <li><code>REPLACE</code> <span>Store only if key exists</span></li>
+          <li><code>APPEND</code> <span>Append data to existing value</span></li>
+          <li><code>PREPEND</code> <span>Prepend data to existing value</span></li>
+        </ul>
+      </div>
+      <div class="command-group">
+        <h3>Retrieval Commands</h3>
+        <ul class="command-list">
+          <li><code>GET</code> <span>Retrieve one or more keys</span></li>
+          <li><code>GETS</code> <span>Retrieve with CAS token</span></li>
+        </ul>
+      </div>
+      <div class="command-group">
+        <h3>Deletion Commands</h3>
+        <ul class="command-list">
+          <li><code>DELETE</code> <span>Remove a key</span></li>
+        </ul>
+      </div>
+      <div class="command-group">
+        <h3>MirDB-Specific</h3>
+        <ul class="command-list">
+          <li><code>INFO</code> <span>Display database status</span></li>
+          <li><code>MAJOR_COMPACTION</code> <span>Trigger manual compaction</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Configuration Section -->
+  <section id="configuration">
+    <h2>Configuration Options</h2>
+    <p class="section-description">Tune MirDB for your specific workload</p>
+    <table class="config-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>addr</code></td>
+          <td>Listen address and port</td>
+          <td><code>0.0.0.0:12333</code></td>
+        </tr>
+        <tr>
+          <td><code>work_dir</code></td>
+          <td>Data directory path</td>
+          <td><code>/tmp/mirdb</code></td>
+        </tr>
+        <tr>
+          <td><code>max_level</code></td>
+          <td>Maximum LSM tree levels</td>
+          <td><code>7</code></td>
+        </tr>
+        <tr>
+          <td><code>mem_table_max_size</code></td>
+          <td>Max memtable size before flush</td>
+          <td><code>4M</code></td>
+        </tr>
+        <tr>
+          <td><code>sst_max_size</code></td>
+          <td>Max SSTable file size</td>
+          <td><code>100M</code></td>
+        </tr>
+        <tr>
+          <td><code>block_size</code></td>
+          <td>Data block size</td>
+          <td><code>4K</code></td>
+        </tr>
+        <tr>
+          <td><code>l0_compaction_trigger</code></td>
+          <td>Level 0 files before compaction</td>
+          <td><code>4</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>MirDB - A persistent key-value store written in Rust</p>
+    <ul class="footer-links">
+      <li><a href="https://github.com/yetone/mirdb" target="_blank">GitHub Repository</a></li>
+      <li><a href="https://github.com/yetone/mirdb/issues" target="_blank">Report Issues</a></li>
+      <li><a href="https://github.com/yetone/mirdb#contributing" target="_blank">Contributing</a></li>
+    </ul>
+  </footer>
+
+  <!-- Syntax Highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/toml.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</body>
+</html>
