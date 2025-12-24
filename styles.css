@@ -366,6 +366,10 @@ body {
   color: #94a3b8;
   text-decoration: none;
   transition: color 0.2s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
 }
 
 .footer-links a:hover {
@@ -432,5 +436,18 @@ body {
   .config-table code {
     font-size: 0.8rem;
     padding: 2px 6px;
+  }
+
+  /* Mobile touch target improvements */
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-links a {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
   }
 }
