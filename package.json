@@ -8,11 +8,16 @@
     "test:headed": "npx playwright test --headed",
     "serve": "npx serve -p 3000"
   },
-  "keywords": ["mirdb", "key-value-store", "memcached"],
+  "keywords": [
+    "mirdb",
+    "key-value-store",
+    "memcached"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.57.0",
     "playwright": "^1.57.0",
     "serve": "^14.2.0"

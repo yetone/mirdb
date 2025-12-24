@@ -8,12 +8,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
   <style>
     :root {
-      --primary-color: #2563eb;
-      --primary-dark: #1d4ed8;
+      --primary-color: #60a5fa;
+      --primary-dark: #2563eb;
       --bg-dark: #0f172a;
       --bg-darker: #020617;
       --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
+      --text-secondary: #cbd5e1;
       --border-color: #334155;
       --code-bg: #1e293b;
     }
@@ -116,12 +116,12 @@
     }
 
     .btn-primary {
-      background-color: var(--primary-color);
+      background-color: var(--primary-dark);
       color: white;
     }
 
     .btn-primary:hover {
-      background-color: var(--primary-dark);
+      background-color: #1d4ed8;
     }
 
     .btn-secondary {
@@ -245,6 +245,11 @@
       line-height: 1.5;
     }
 
+    /* Override highlight.js comment color for better contrast */
+    pre code .hljs-comment {
+      color: #a1b5c9;
+    }
+
     /* Commands Section */
     #commands {
       background-color: var(--bg-darker);
@@ -339,6 +344,24 @@
 
     footer .footer-links a:hover {
       color: var(--text-primary);
+    }
+
+    /* Focus styles for accessibility */
+    a:focus,
+    button:focus,
+    input:focus,
+    select:focus,
+    textarea:focus,
+    [tabindex]:focus {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    .btn:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
     }
 
     /* Responsive */
