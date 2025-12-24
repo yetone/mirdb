@@ -20,6 +20,52 @@
   --nav-link-color: #cbd5e1;
   --footer-text-color: #cbd5e1;
   --footer-note-color: #94a3b8;
+  --focus-color: #2563eb;
+  --focus-outline-width: 3px;
+  --focus-outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Keyboard Navigation & Focus Styles (WCAG 2.1 AA Compliance - NFR-3)
+   ========================================================================== */
+
+/* Global focus styles for all interactive elements */
+:focus {
+  outline: var(--focus-outline-width) solid var(--focus-color);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Use :focus-visible for modern browsers to only show focus on keyboard navigation */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: var(--focus-outline-width) solid var(--focus-color);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Skip link for keyboard navigation - hidden until focused */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 0 0 8px 8px;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 1000;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 0;
+  outline: var(--focus-outline-width) solid #ffffff;
+  outline-offset: var(--focus-outline-offset);
 }
 
 body {
@@ -58,6 +104,13 @@ body {
 
 .header-nav a:hover {
   color: white;
+}
+
+.header-nav a:focus,
+.header-nav a:focus-visible {
+  color: white;
+  outline-color: #ffffff;
+  border-radius: 4px;
 }
 
 /* Hero Section */
@@ -112,6 +165,13 @@ body {
   background-color: var(--primary-dark);
 }
 
+.btn-primary:focus,
+.btn-primary:focus-visible {
+  background-color: var(--primary-dark);
+  outline-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5);
+}
+
 .btn-secondary {
   background-color: transparent;
   color: white;
@@ -121,6 +181,14 @@ body {
 .btn-secondary:hover {
   border-color: white;
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:focus,
+.btn-secondary:focus-visible {
+  border-color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  outline-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
 }
 
 /* Features Section */
@@ -375,6 +443,15 @@ body {
   text-decoration: underline;
 }
 
+.config-note a:focus,
+.config-note a:focus-visible,
+.doc-link:focus,
+.doc-link:focus-visible {
+  outline-color: var(--focus-color);
+  border-radius: 2px;
+  text-decoration: underline;
+}
+
 /* Footer */
 .footer {
   background: var(--code-bg);
@@ -403,6 +480,13 @@ body {
 
 .footer-links a:hover {
   color: white;
+}
+
+.footer-links a:focus,
+.footer-links a:focus-visible {
+  color: white;
+  outline-color: var(--focus-color);
+  border-radius: 4px;
 }
 
 .footer-note {
