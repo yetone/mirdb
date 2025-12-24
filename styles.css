@@ -31,11 +31,36 @@ body {
   padding: 0 20px;
 }
 
+/* Header Navigation */
+.header-nav {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.header-nav a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.header-nav a:hover {
+  color: white;
+}
+
 /* Hero Section */
 .hero {
   background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
   color: white;
-  padding: 80px 20px;
+  padding: 40px 20px 80px;
   text-align: center;
 }
 
@@ -388,6 +413,15 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .header-nav {
+    gap: 8px;
+  }
+
+  .header-nav a {
+    font-size: 0.875rem;
+    padding: 8px 10px;
+  }
+
   .hero h1 {
     font-size: 2.5rem;
   }

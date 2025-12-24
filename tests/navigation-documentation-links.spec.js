@@ -51,23 +51,32 @@ test.describe('Navigation and Documentation Links', () => {
    */
   test('TC2: should have GitHub repository link using HTTPS', async ({ page }) => {
     // Step 3: Locate GitHub repository link - should be prominently displayed
+    // Filter for links that go directly to the repo (not documentation hash)
     const githubLinks = page.locator('a[href*="github"]');
 
     // Verify at least one GitHub link exists
     const githubLinkCount = await githubLinks.count();
     expect(githubLinkCount).toBeGreaterThanOrEqual(1);
 
-    // Step 4: Verify GitHub link functionality - should use HTTPS and point to correct repo
-    const firstGithubLink = githubLinks.first();
-    await expect(firstGithubLink).toBeVisible();
+    // Step 4: Find a link that references GitHub in its text
+    // (not documentation links that happen to point to github)
+    let foundGithubLink = false;
+    for (let i = 0; i < githubLinkCount; i++) {
+      const link = githubLinks.nth(i);
+      const linkText = await link.textContent();
 
-    // Verify it uses HTTPS
-    const href = await firstGithubLink.getAttribute('href');
-    expect(href).toMatch(/^https:\/\/github\.com\//);
+      if (linkText && linkText.toLowerCase().match(/github|view on github|source code|repository/i)) {
+        await expect(link).toBeVisible();
 
-    // Verify link text references GitHub
-    const linkText = await firstGithubLink.textContent();
-    expect(linkText.toLowerCase()).toMatch(/github|view on github|source code|repository/i);
+        // Verify it uses HTTPS
+        const href = await link.getAttribute('href');
+        expect(href).toMatch(/^https:\/\/github\.com\//);
+        foundGithubLink = true;
+        break;
+      }
+    }
+
+    expect(foundGithubLink, 'Should have at least one link with GitHub text').toBe(true);
   });
 
   /**
@@ -165,11 +174,16 @@ test.describe('Navigation and Documentation Links', () => {
     const hero = page.locator('header.hero, #hero');
     await expect(hero).toBeVisible();
 
-    // Check hero contains GitHub link
-    const heroGithubLink = hero.locator('a[href*="github"]');
-    await expect(heroGithubLink).toBeVisible();
+    // Check hero contains GitHub link (may have multiple GitHub links)
+    const heroGithubLinks = hero.locator('a[href*="github"]');
+    const count = await heroGithubLinks.count();
+    expect(count).toBeGreaterThanOrEqual(1);
 
-    const href = await heroGithubLink.getAttribute('href');
+    // Verify at least one GitHub link is visible
+    const firstGithubLink = heroGithubLinks.first();
+    await expect(firstGithubLink).toBeVisible();
+
+    const href = await firstGithubLink.getAttribute('href');
     expect(href).toMatch(/^https:\/\/github\.com\//);
   });
 
