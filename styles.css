@@ -150,12 +150,30 @@ body {
 .architecture h2 {
   text-align: center;
   font-size: 2.5rem;
-  margin-bottom: 48px;
+  margin-bottom: 24px;
+}
+
+.architecture-intro {
+  text-align: center;
+  color: var(--text-light);
+  max-width: 700px;
+  margin: 0 auto 40px;
+  font-size: 1.1rem;
 }
 
 .architecture-diagram {
+  max-width: 650px;
+  margin: 0 auto 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.lsm-tree-diagram {
+  width: 100%;
   max-width: 600px;
-  margin: 0 auto;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .diagram {
@@ -168,6 +186,36 @@ body {
   overflow-x: auto;
   white-space: pre;
   line-height: 1.4;
+}
+
+.architecture-description {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.arch-detail {
+  background: var(--bg-secondary);
+  padding: 24px;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.arch-detail h3 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: var(--text-color);
+}
+
+.arch-detail p {
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.arch-detail strong {
+  color: var(--text-color);
 }
 
 /* Getting Started Section */

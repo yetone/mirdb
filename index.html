@@ -73,35 +73,111 @@
   <section class="architecture" id="architecture">
     <div class="container">
       <h2>Architecture Overview</h2>
-      <div class="architecture-diagram">
-        <pre class="diagram">
-Write Request
-    │
-    ▼
-┌─────────┐
-│   WAL   │──── (Write-Ahead Log for durability)
-└────┬────┘
-     │
-     ▼
-┌──────────┐
-│ Memtable │──── (Active in-memory skip list)
-└────┬─────┘
-     │ (when full)
-     ▼
-┌────────────────┐
-│ Imm Memtables  │──── (Immutable memtables queue)
-└───────┬────────┘
-        │ (minor compaction)
-        ▼
-┌───────────────┐
-│ Level 0 SSTs  │──── (Recently flushed, may overlap)
-└───────┬───────┘
-        │ (major compaction)
-        ▼
-┌───────────────┐
-│ Level 1+ SSTs │──── (Sorted, non-overlapping within level)
-└───────────────┘
-        </pre>
+      <p class="architecture-intro">MirDB uses a Log-Structured Merge-tree (LSM tree) architecture for optimal write performance and storage efficiency.</p>
+      <div class="architecture-diagram" data-testid="architecture-diagram">
+        <!-- SVG Architecture Diagram showing LSM Tree data flow -->
+        <svg
+          class="lsm-tree-diagram"
+          viewBox="0 0 600 700"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-labelledby="architecture-diagram-title architecture-diagram-desc"
+          data-testid="architecture-svg"
+        >
+          <title id="architecture-diagram-title">MirDB LSM Tree Architecture Diagram</title>
+          <desc id="architecture-diagram-desc">Data flow diagram showing how data moves through the MirDB storage engine: from Write Request through WAL (Write-Ahead Log) for durability, then to Memtable (active in-memory skip list), to Immutable Memtables queue, through minor compaction to Level 0 SSTables, and finally through major compaction to Level 1+ SSTables.</desc>
+
+          <!-- Background -->
+          <rect width="600" height="700" fill="#1a1a2e" rx="8"/>
+
+          <!-- Write Request Box -->
+          <g class="diagram-node" data-component="write-request">
+            <rect x="200" y="20" width="200" height="50" rx="6" fill="#4a90a4" stroke="#6bb3c9" stroke-width="2"/>
+            <text x="300" y="52" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="16" font-weight="bold">Write Request</text>
+          </g>
+
+          <!-- Arrow 1 -->
+          <path d="M300 70 L300 100" stroke="#6bb3c9" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+          <!-- WAL Box -->
+          <g class="diagram-node" data-component="wal">
+            <rect x="150" y="110" width="300" height="60" rx="6" fill="#2d5a4a" stroke="#4a9a7a" stroke-width="2"/>
+            <text x="300" y="137" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="16" font-weight="bold">WAL</text>
+            <text x="300" y="158" text-anchor="middle" fill="#a0d0c0" font-family="sans-serif" font-size="12">Write-Ahead Log for durability</text>
+          </g>
+
+          <!-- Arrow 2 -->
+          <path d="M300 170 L300 200" stroke="#6bb3c9" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+          <!-- Memtable Box -->
+          <g class="diagram-node" data-component="memtable">
+            <rect x="150" y="210" width="300" height="60" rx="6" fill="#5a3d6a" stroke="#8a5d9a" stroke-width="2"/>
+            <text x="300" y="237" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="16" font-weight="bold">Memtable</text>
+            <text x="300" y="258" text-anchor="middle" fill="#c0a0d0" font-family="sans-serif" font-size="12">Active in-memory skip list</text>
+          </g>
+
+          <!-- Arrow 3 with label -->
+          <path d="M300 270 L300 310" stroke="#6bb3c9" stroke-width="3" marker-end="url(#arrowhead)"/>
+          <text x="370" y="295" fill="#888" font-family="sans-serif" font-size="11" font-style="italic">(when full)</text>
+
+          <!-- Immutable Memtables Box -->
+          <g class="diagram-node" data-component="imm-memtable">
+            <rect x="150" y="320" width="300" height="60" rx="6" fill="#5a4d3a" stroke="#9a7d5a" stroke-width="2"/>
+            <text x="300" y="347" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="16" font-weight="bold">Imm Memtables</text>
+            <text x="300" y="368" text-anchor="middle" fill="#d0c0a0" font-family="sans-serif" font-size="12">Immutable memtables queue</text>
+          </g>
+
+          <!-- Arrow 4 with label (minor compaction) -->
+          <path d="M300 380 L300 420" stroke="#ffa500" stroke-width="3" marker-end="url(#arrowhead-orange)"/>
+          <text x="400" y="405" fill="#ffa500" font-family="sans-serif" font-size="11" font-weight="bold">(minor compaction)</text>
+
+          <!-- Level 0 SSTs Box -->
+          <g class="diagram-node" data-component="level0-sst">
+            <rect x="150" y="430" width="300" height="60" rx="6" fill="#3d4a5a" stroke="#5d7a9a" stroke-width="2"/>
+            <text x="300" y="457" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="16" font-weight="bold">Level 0 SSTs</text>
+            <text x="300" y="478" text-anchor="middle" fill="#a0c0e0" font-family="sans-serif" font-size="12">Recently flushed, may overlap</text>
+          </g>
+
+          <!-- Arrow 5 with label (major compaction) -->
+          <path d="M300 490 L300 530" stroke="#ff6b6b" stroke-width="3" marker-end="url(#arrowhead-red)"/>
+          <text x="400" y="515" fill="#ff6b6b" font-family="sans-serif" font-size="11" font-weight="bold">(major compaction)</text>
+
+          <!-- Level 1+ SSTs Box -->
+          <g class="diagram-node" data-component="sstable">
+            <rect x="150" y="540" width="300" height="60" rx="6" fill="#2a3a4a" stroke="#4a6a8a" stroke-width="2"/>
+            <text x="300" y="567" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="16" font-weight="bold">Level 1+ SSTs</text>
+            <text x="300" y="588" text-anchor="middle" fill="#90b0d0" font-family="sans-serif" font-size="12">Sorted, non-overlapping within level</text>
+          </g>
+
+          <!-- Storage icon/indicator -->
+          <g class="diagram-node" data-component="storage">
+            <rect x="200" y="620" width="200" height="40" rx="4" fill="#1a2a3a" stroke="#3a5a7a" stroke-width="1" stroke-dasharray="4"/>
+            <text x="300" y="645" text-anchor="middle" fill="#7090b0" font-family="sans-serif" font-size="12">Persistent Disk Storage</text>
+          </g>
+
+          <!-- Arrow definitions -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#6bb3c9"/>
+            </marker>
+            <marker id="arrowhead-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#ffa500"/>
+            </marker>
+            <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#ff6b6b"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+      <div class="architecture-description">
+        <div class="arch-detail">
+          <h3>Write Path</h3>
+          <p>Data is first written to the <strong>WAL</strong> (Write-Ahead Log) for durability, then inserted into the in-memory <strong>Memtable</strong> (implemented as a skip list). When the Memtable reaches its size limit, it becomes immutable and is queued for flushing.</p>
+        </div>
+        <div class="arch-detail">
+          <h3>Compaction</h3>
+          <p>Background <strong>minor compaction</strong> flushes immutable memtables to Level 0 <strong>SSTables</strong>. <strong>Major compaction</strong> merges SSTables across levels to optimize read performance and reclaim space, maintaining sorted, non-overlapping files at each level.</p>
+        </div>
       </div>
     </div>
   </section>
