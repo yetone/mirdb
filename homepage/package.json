@@ -1,0 +1,19 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB product homepage - persistent key-value store with memcached compatibility",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "serve": "npx http-server -p 3000 -c-1"
+  },
+  "keywords": ["mirdb", "homepage", "memcached", "key-value-store"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "http-server": "^14.1.1"
+  }
+}
