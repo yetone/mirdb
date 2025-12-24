@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility. Drop-in replacement for memcached with disk persistence.">
+    <meta name="keywords" content="MirDB, key-value store, memcached, persistent storage, database, Rust">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" aria-label="MirDB Home">
+                <span class="logo-text">MirDB</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#quickstart">Quick Start</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="#configuration">Configuration</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="nav-github">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section" aria-labelledby="hero-title">
+        <div class="hero-container">
+            <h1 id="hero-title" class="hero-product-name">MirDB</h1>
+            <p class="hero-tagline">Persistent Key-Value Store with Memcached Protocol</p>
+            <p class="hero-value-proposition">
+                A drop-in replacement for memcached that persists your data to disk.
+                Built with Rust for memory safety and performance, MirDB combines the simplicity
+                of the memcached protocol with the reliability of persistent storage using LSM tree architecture.
+            </p>
+            <div class="hero-cta-container">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-primary" data-testid="primary-cta">
+                    Get Started
+                </a>
+                <a href="#features" class="btn btn-secondary" data-testid="secondary-cta">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section" aria-labelledby="features-title">
+        <div class="section-container">
+            <h2 id="features-title" class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Memcached Protocol Compatibility</h3>
+                    <p>Compatible with the standard memcached text protocol. Your existing memcached clients work out of the box.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>Unlike memcached, MirDB persists data to disk using SSTables (Sorted String Tables) for durability.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Uses a Log-Structured Merge-tree approach with memtables and multi-level SSTable compaction.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Async Networking (Tokio)</h3>
+                    <p>Built on Tokio for high-performance asynchronous I/O and networking.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Write-Ahead Logging</h3>
+                    <p>WAL ensures data durability even in case of unexpected shutdowns.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Configurable Compaction</h3>
+                    <p>Both minor and major compaction strategies to optimize storage and performance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quickstart" class="quickstart-section" aria-labelledby="quickstart-title">
+        <div class="section-container">
+            <h2 id="quickstart-title" class="section-title">Quick Start</h2>
+
+            <h3>Installation</h3>
+            <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build with Cargo
+cargo build --release</code></pre>
+
+            <h3>Configuration (config.toml)</h3>
+            <pre><code class="language-toml">[server]
+listen_address = "0.0.0.0:12333"
+work_directory = "/tmp/mirdb"
+
+[storage]
+max_lsm_levels = 7
+memtable_max_size = 4194304  # 4MB
+sstable_max_size = 104857600 # 100MB
+block_size = 4096            # 4KB</code></pre>
+
+            <h3>Running the Server</h3>
+            <pre><code class="language-bash"># Start MirDB server
+./target/release/mirdb-server</code></pre>
+
+            <h3>Connecting with a Client</h3>
+            <pre><code class="language-bash"># Connect using telnet or any memcached client
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+        </div>
+    </section>
+
+    <!-- Commands Section -->
+    <section id="commands" class="commands-section" aria-labelledby="commands-title">
+        <div class="section-container">
+            <h2 id="commands-title" class="section-title">Supported Commands</h2>
+
+            <h3>Storage Commands</h3>
+            <table class="commands-table">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>SET</td><td>Store a key-value pair</td></tr>
+                    <tr><td>ADD</td><td>Store only if key doesn't exist</td></tr>
+                    <tr><td>REPLACE</td><td>Store only if key exists</td></tr>
+                    <tr><td>APPEND</td><td>Append data to existing value</td></tr>
+                    <tr><td>PREPEND</td><td>Prepend data to existing value</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Retrieval Commands</h3>
+            <table class="commands-table">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>GET</td><td>Retrieve value for one or more keys</td></tr>
+                    <tr><td>GETS</td><td>Retrieve value with CAS token</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Other Commands</h3>
+            <table class="commands-table">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>DELETE</td><td>Remove a key</td></tr>
+                    <tr><td>INFO</td><td>Get server information (MirDB-specific)</td></tr>
+                    <tr><td>MAJOR_COMPACTION</td><td>Trigger major compaction (MirDB-specific)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section id="configuration" class="configuration-section" aria-labelledby="configuration-title">
+        <div class="section-container">
+            <h2 id="configuration-title" class="section-title">Configuration</h2>
+
+            <table class="config-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Default Value</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>listen_address</td>
+                        <td>0.0.0.0:12333</td>
+                        <td>Server listen address and port</td>
+                    </tr>
+                    <tr>
+                        <td>work_directory</td>
+                        <td>/tmp/mirdb</td>
+                        <td>Directory for data storage</td>
+                    </tr>
+                    <tr>
+                        <td>max_lsm_levels</td>
+                        <td>7</td>
+                        <td>Maximum LSM tree levels</td>
+                    </tr>
+                    <tr>
+                        <td>memtable_max_size</td>
+                        <td>4MB</td>
+                        <td>Maximum memtable size before flush</td>
+                    </tr>
+                    <tr>
+                        <td>sstable_max_size</td>
+                        <td>100MB</td>
+                        <td>Maximum SSTable file size</td>
+                    </tr>
+                    <tr>
+                        <td>block_size</td>
+                        <td>4KB</td>
+                        <td>Block size for SSTable storage</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+                <a href="https://github.com/yetone/mirdb/blob/master/README.md" target="_blank" rel="noopener noreferrer">Documentation</a>
+                <a href="https://github.com/yetone/mirdb/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing</a>
+            </div>
+            <p class="footer-copyright">MirDB - A Persistent Key-Value Store with Memcached Protocol</p>
+        </div>
+    </footer>
+</body>
+</html>

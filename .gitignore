@@ -4,3 +4,6 @@
 node_modules/
 playwright-report/
 test-results/
+landing-page/node_modules/
+landing-page/test-results/
+landing-page/playwright-report/

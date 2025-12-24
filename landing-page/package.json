@@ -1,0 +1,22 @@
+{
+  "name": "mirdb-landing-page",
+  "version": "1.0.0",
+  "description": "Landing page for MirDB - Persistent Key-Value Store with Memcached Protocol",
+  "main": "index.html",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "serve": "npx http-server . -p 3000"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "keywords": [
+    "mirdb",
+    "landing-page",
+    "memcached",
+    "key-value-store"
+  ],
+  "author": "",
+  "license": "MIT"
+}
