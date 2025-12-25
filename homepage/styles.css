@@ -470,6 +470,36 @@ code {
 
 .status-card li {
     margin-bottom: 0.5rem;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.checkmark {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.planned-indicator {
+    color: #e65100;
+    font-weight: bold;
+}
+
+.contribute-section {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.contribute-section a {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.contribute-section a:hover {
+    text-decoration: underline;
 }
 
 /* Footer */

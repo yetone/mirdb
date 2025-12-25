@@ -210,26 +210,29 @@ DELETED</code></pre>
         </div>
     </section>
 
-    <section id="status" class="status">
+    <section id="status" class="status" data-testid="status-section">
         <div class="container">
             <h2>Project Status</h2>
             <div class="status-grid">
-                <div class="status-card implemented">
-                    <h3>Implemented</h3>
-                    <ul>
-                        <li>Tokio-based async networking</li>
-                        <li>Memcached protocol support</li>
-                        <li>Skip list memtable</li>
-                        <li>Minor compaction</li>
-                        <li>Major compaction</li>
+                <div class="status-card implemented" data-testid="implemented-features">
+                    <h3>✓ Implemented</h3>
+                    <ul data-testid="implemented-list">
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Tokio-based async networking</li>
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Memcached protocol support</li>
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Skip list memtable</li>
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Minor compaction</li>
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Major compaction</li>
                     </ul>
                 </div>
-                <div class="status-card planned">
-                    <h3>Planned</h3>
-                    <ul>
-                        <li>Raft consensus for distributed operation</li>
+                <div class="status-card planned" data-testid="planned-features">
+                    <h3>◯ Planned</h3>
+                    <ul data-testid="planned-list">
+                        <li><span class="planned-indicator" aria-label="planned">◯</span> Raft consensus for distributed operation</li>
                     </ul>
                 </div>
+            </div>
+            <div class="contribute-section" data-testid="contribute-section">
+                <p>Want to contribute? Check out our <a href="https://github.com/yetone/mirdb/blob/main/CONTRIBUTING.md" data-testid="contributing-link" target="_blank" rel="noopener noreferrer">contribution guidelines</a> to get started.</p>
             </div>
         </div>
     </section>
