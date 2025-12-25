@@ -295,10 +295,92 @@ body {
     font-size: 0.95rem;
 }
 
+/* Configuration Section */
+.configuration {
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--color-background);
+}
+
+.configuration h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+}
+
+.configuration-intro {
+    text-align: center;
+    color: var(--color-text-light);
+    max-width: 700px;
+    margin: 0 auto var(--spacing-xl) auto;
+}
+
+.configuration-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.config-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.config-table thead {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.config-table th,
+.config-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.config-table th {
+    font-weight: 600;
+}
+
+.config-table tbody tr:hover {
+    background-color: var(--color-background);
+}
+
+.config-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.config-table code {
+    font-family: var(--font-mono);
+    background-color: rgba(37, 99, 235, 0.1);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.config-note {
+    margin-top: var(--spacing-lg);
+    text-align: center;
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+}
+
+.config-note code {
+    font-family: var(--font-mono);
+    background-color: var(--color-surface);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+}
+
 /* Quick Start Section */
 .quick-start {
     padding: var(--spacing-xl) var(--spacing-lg);
-    background-color: var(--color-background);
+    background-color: var(--color-surface);
 }
 
 .quick-start h2 {
@@ -445,6 +527,17 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .configuration-content {
+        max-width: 100%;
+        padding: 0 var(--spacing-md);
+    }
+
+    .config-table th,
+    .config-table td {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
     .quick-start-content {
         max-width: 700px;
     }
@@ -480,6 +573,8 @@ body {
 
     .nav-links {
         gap: var(--spacing-md);
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .footer-content {
@@ -502,6 +597,20 @@ body {
 
     .architecture-diagram svg {
         min-width: 600px;
+    }
+
+    .configuration-content {
+        overflow-x: auto;
+    }
+
+    .config-table {
+        min-width: 500px;
+    }
+
+    .config-table th,
+    .config-table td {
+        padding: var(--spacing-sm);
+        font-size: 0.85rem;
     }
 }
 

@@ -31,6 +31,7 @@
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
                 <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#configuration">Configuration</a></li>
                 <li><a href="#quick-start">Quick Start</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
             </ul>
@@ -181,6 +182,55 @@
                         <p>Persistent, sorted key-value files on disk organized in levels. Level 0 may have overlapping keys, while higher levels are sorted and non-overlapping. Major compaction merges and sorts data between levels.</p>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="configuration" class="configuration" aria-labelledby="configuration-title">
+            <h2 id="configuration-title">Default Configuration</h2>
+            <p class="configuration-intro">MirDB uses sensible defaults that work for most use cases. Here are the default configuration parameters for reference:</p>
+            <div class="configuration-content" data-testid="configuration-section">
+                <table class="config-table" data-testid="config-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Parameter</th>
+                            <th scope="col">Default Value</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-testid="config-addr">
+                            <td><code>addr</code></td>
+                            <td><code data-testid="config-addr-value">0.0.0.0:12333</code></td>
+                            <td>Server listen address and port</td>
+                        </tr>
+                        <tr data-testid="config-max-level">
+                            <td><code>max_level</code></td>
+                            <td><code data-testid="config-max-level-value">7</code></td>
+                            <td>Maximum LSM tree levels</td>
+                        </tr>
+                        <tr data-testid="config-work-dir">
+                            <td><code>work_dir</code></td>
+                            <td><code data-testid="config-work-dir-value">/tmp/mirdb</code></td>
+                            <td>Data directory path</td>
+                        </tr>
+                        <tr data-testid="config-sst-max-size">
+                            <td><code>sst_max_size</code></td>
+                            <td><code data-testid="config-sst-max-size-value">100M</code></td>
+                            <td>Maximum SSTable file size</td>
+                        </tr>
+                        <tr data-testid="config-mem-table-max-size">
+                            <td><code>mem_table_max_size</code></td>
+                            <td><code data-testid="config-mem-table-max-size-value">4M</code></td>
+                            <td>Maximum memtable size before flush</td>
+                        </tr>
+                        <tr data-testid="config-block-size">
+                            <td><code>block_size</code></td>
+                            <td><code data-testid="config-block-size-value">4K</code></td>
+                            <td>Data block size</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="config-note">To customize these values, create a TOML configuration file and pass it with <code>--config</code> flag.</p>
             </div>
         </section>
 
