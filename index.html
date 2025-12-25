@@ -6,6 +6,7 @@
     <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. Fast, reliable, and compatible with existing Memcached clients.">
     <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
     <header class="header">
@@ -89,27 +90,86 @@
         <section id="quick-start" class="quick-start" aria-labelledby="quickstart-title">
             <h2 id="quickstart-title">Quick Start</h2>
             <div class="quick-start-content">
-                <div class="step">
-                    <h3>1. Clone and Build</h3>
-                    <pre><code>git clone https://github.com/yetone/mirdb.git
+                <div class="step" data-testid="installation-step">
+                    <h3>1. Installation</h3>
+                    <p class="step-description">Clone the repository and build from source:</p>
+                    <pre data-testid="installation-code"><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
 cd mirdb
-cargo build --release</code></pre>
+
+# Build with Cargo
+cargo build --release
+
+# Run the server
+./target/release/mirdb-server</code></pre>
                 </div>
-                <div class="step">
-                    <h3>2. Run the Server</h3>
-                    <pre><code>./target/release/mirdb-server</code></pre>
+
+                <div class="step" data-testid="configuration-step">
+                    <h3>2. Configuration</h3>
+                    <p class="step-description">Create a configuration file (optional - defaults are sensible):</p>
+                    <pre data-testid="configuration-code"><code class="language-toml"># Server address
+addr = "0.0.0.0:12333"
+
+# LSM tree configuration
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+# Storage sizes
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+block_size = "4K"</code></pre>
+                    <p class="step-description">Start the server with a custom configuration:</p>
+                    <pre><code class="language-bash">./target/release/mirdb-server --config mirdb.toml</code></pre>
                 </div>
-                <div class="step">
-                    <h3>3. Connect with Any Memcached Client</h3>
-                    <pre><code># Using telnet
+
+                <div class="step" data-testid="usage-step">
+                    <h3>3. Usage</h3>
+                    <p class="step-description">Connect using any Memcached client. Here's an example using Python:</p>
+                    <pre data-testid="usage-code"><code class="language-python">from pymemcache.client import base
+
+# Connect to MirDB
+client = base.Client(('localhost', 12333))
+
+# Store a value
+client.set('mykey', 'Hello, MirDB!')
+
+# Retrieve the value
+result = client.get('mykey')
+print(result)  # Output: b'Hello, MirDB!'
+
+# Delete the key
+client.delete('mykey')</code></pre>
+                    <p class="step-description">Or use telnet for quick testing:</p>
+                    <pre data-testid="telnet-usage-code"><code class="language-bash"># Connect via telnet
 telnet localhost 12333
 
-# Set a value
-set mykey 0 0 5
+# Set a value (format: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;)
+set greeting 0 0 5
 hello
+STORED
 
 # Get the value
-get mykey</code></pre>
+get greeting
+VALUE greeting 0 5
+hello
+END</code></pre>
+                </div>
+
+                <div class="step" data-testid="commands-step">
+                    <h3>4. Supported Commands</h3>
+                    <p class="step-description">MirDB supports the following Memcached commands:</p>
+                    <pre data-testid="commands-code"><code class="language-rust">// Storage Commands
+SET, ADD, REPLACE, APPEND, PREPEND
+
+// Retrieval Commands
+GET, GETS
+
+// Deletion Commands
+DELETE
+
+// MirDB-Specific Commands
+INFO           // Get server information
+MAJOR_COMPACTION  // Trigger manual compaction</code></pre>
                 </div>
             </div>
         </section>
@@ -125,5 +185,12 @@ get mykey</code></pre>
             </nav>
         </div>
     </footer>
+
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-toml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js"></script>
 </body>
 </html>

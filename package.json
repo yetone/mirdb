@@ -1,25 +1,27 @@
 {
-  "name": "workspace",
+  "name": "mirdb-homepage",
   "version": "1.0.0",
-  "description": "![logo](https://github.com/yetone/mirdb/raw/master/assets/logo.gif)",
+  "description": "MirDB Product Homepage",
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "test:headed": "playwright test --headed"
+    "test:headed": "playwright test --headed",
+    "serve": "serve -l 8080 ."
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yetone/mirdb.git"
   },
-  "keywords": [],
+  "keywords": ["mirdb", "memcached", "key-value-store", "rust"],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/yetone/mirdb/issues"
   },
   "homepage": "https://github.com/yetone/mirdb#readme",
   "devDependencies": {
-    "@playwright/test": "^1.57.0"
+    "@playwright/test": "^1.57.0",
+    "serve": "^14.2.0"
   }
 }

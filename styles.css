@@ -271,6 +271,11 @@ body {
     line-height: 1.7;
 }
 
+.step-description {
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-sm);
+}
+
 /* Footer */
 .footer {
     padding: var(--spacing-lg);
