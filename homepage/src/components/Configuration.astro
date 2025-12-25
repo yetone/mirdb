@@ -1,0 +1,91 @@
+---
+const configParams = [
+  { name: 'addr', default: '0.0.0.0:12333', description: 'Server listen address and port' },
+  { name: 'work_dir', default: '/tmp/mirdb', description: 'Data storage directory path' },
+  { name: 'max_level', default: '7', description: 'Maximum LSM tree levels' },
+  { name: 'mem_table_max_size', default: '4M', description: 'Maximum memtable size before flush' },
+  { name: 'mem_table_max_height', default: '32', description: 'Skip list maximum height' },
+  { name: 'imm_mem_table_max_count', default: '16', description: 'Maximum queued immutable memtables' },
+  { name: 'sst_max_size', default: '100M', description: 'Maximum SSTable file size' },
+  { name: 'block_size', default: '4K', description: 'Data block size' },
+  { name: 'block_restart_interval', default: '16', description: 'Key prefix restart interval' },
+  { name: 'l0_compaction_trigger', default: '4', description: 'Level 0 files before compaction starts' },
+  { name: 'thread_sleep_ms', default: '500', description: 'Background thread sleep interval in milliseconds' },
+];
+
+const tomlExample = `addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500`;
+---
+
+<section id="configuration" class="py-20 px-4 bg-slate-800">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-white">
+      Configuration
+    </h2>
+
+    <p class="text-slate-300 text-center mb-8 max-w-2xl mx-auto">
+      MirDB uses TOML configuration files. Specify the config file path using the <code class="bg-slate-700 px-2 py-1 rounded">-c</code> flag.
+    </p>
+
+    <div class="mb-12">
+      <h3 class="text-xl font-semibold mb-4 text-white">Example Configuration</h3>
+      <pre data-testid="toml-example" class="bg-slate-900 p-4 rounded-lg overflow-x-auto text-sm text-slate-300"><code>{tomlExample}</code></pre>
+    </div>
+
+    <div class="mb-12">
+      <h3 class="text-xl font-semibold mb-4 text-white">Configuration Parameters</h3>
+      <div class="overflow-x-auto">
+        <table data-testid="config-table" class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-700">
+              <th class="py-3 px-4 text-slate-200 font-semibold">Parameter</th>
+              <th class="py-3 px-4 text-slate-200 font-semibold">Default</th>
+              <th class="py-3 px-4 text-slate-200 font-semibold">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {configParams.map((param) => (
+              <tr class="border-b border-slate-700 hover:bg-slate-700/50">
+                <td class="py-3 px-4">
+                  <code class="bg-slate-900 px-2 py-1 rounded text-orange-400">{param.name}</code>
+                </td>
+                <td class="py-3 px-4">
+                  <code class="bg-slate-900 px-2 py-1 rounded text-slate-300">{param.default}</code>
+                </td>
+                <td class="py-3 px-4 text-slate-300">{param.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold mb-4 text-white">Size Units</h3>
+      <div data-testid="size-units-guide" class="bg-slate-900 p-6 rounded-lg">
+        <p class="text-slate-300 mb-4">Configuration values support the following size unit suffixes:</p>
+        <ul class="space-y-2 text-slate-300">
+          <li><code class="bg-slate-800 px-2 py-1 rounded text-orange-400">K</code> - Kilobytes (1024 bytes)</li>
+          <li><code class="bg-slate-800 px-2 py-1 rounded text-orange-400">M</code> - Megabytes (1024 KB)</li>
+          <li><code class="bg-slate-800 px-2 py-1 rounded text-orange-400">G</code> - Gigabytes (1024 MB)</li>
+          <li><code class="bg-slate-800 px-2 py-1 rounded text-orange-400">T</code> - Terabytes (1024 GB)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

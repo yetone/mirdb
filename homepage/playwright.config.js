@@ -1,6 +1,6 @@
-const { defineConfig, devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
 
-module.exports = defineConfig({
+export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -8,7 +8,7 @@ module.exports = defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:4321',
     trace: 'on-first-retry',
   },
   projects: [
@@ -18,8 +18,8 @@ module.exports = defineConfig({
     },
   ],
   webServer: {
-    command: 'npx http-server . -p 3000 -c-1',
-    url: 'http://localhost:3000',
+    command: 'npm run dev',
+    url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
