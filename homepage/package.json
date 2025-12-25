@@ -26,6 +26,8 @@
     "@playwright/test": "^1.57.0",
     "http-server": "^14.1.1",
     "jsdom": "^27.3.0",
-    "playwright": "^1.57.0"
+    "lighthouse": "^13.0.1",
+    "playwright": "^1.57.0",
+    "playwright-lighthouse": "^4.0.0"
   }
 }

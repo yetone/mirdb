@@ -15,6 +15,13 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: /page-load-performance\.spec\.ts/,
+    },
+    {
+      name: 'performance',
+      testMatch: /page-load-performance\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+      fullyParallel: false,
     },
     {
       name: 'firefox',

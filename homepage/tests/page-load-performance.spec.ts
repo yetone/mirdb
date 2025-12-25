@@ -1,329 +1,172 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
+import { playAudit } from 'playwright-lighthouse';
 
 /**
  * Page Load Performance Tests
  *
- * This test suite validates that the MirDB homepage meets performance requirements
- * as specified in NFR-1 (page load under 3 seconds) and success criteria
- * (Lighthouse performance score above 90).
- *
- * Test cases:
- * TC1: Page load time within 3 seconds
- * TC2: Lighthouse performance score >= 90
- * TC3: First Contentful Paint (FCP) within 1.5 seconds
- * TC4: Largest Contentful Paint (LCP) within 2.5 seconds
- * TC5: Cumulative Layout Shift (CLS) below 0.1
+ * These tests verify that the MirDB homepage meets performance requirements:
+ * - NFR-1: Page must load within 3 seconds on standard connections
+ * - Lighthouse performance score should be above 90
+ * - Core Web Vitals thresholds for FCP, LCP, and CLS
  */
 
-test.describe('Page Load Performance', () => {
-  test.describe.configure({ timeout: 60000 });
+// Lighthouse tests require a specific port for remote debugging
+const LIGHTHOUSE_PORT = 9222;
 
-  test('TC1: page becomes interactive within 3 seconds', async ({ page }) => {
-    // Start timing before navigation
+// Performance thresholds based on PRD requirements
+const PERFORMANCE_THRESHOLDS = {
+  performance: 90,         // Lighthouse performance score >= 90
+  accessibility: 80,       // Accessibility baseline
+  'best-practices': 80,    // Best practices baseline
+  seo: 80,                 // SEO baseline
+};
+
+test.describe('Page Load Performance', () => {
+
+  test('TC1: Page becomes interactive within 3 seconds on standard connection', async ({ page }) => {
+    // Measure page load time
     const startTime = Date.now();
 
-    // Navigate to homepage and wait for DOM content loaded
-    await page.goto('/');
+    // Navigate to homepage
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    // Wait for the page to be interactive (DOM content loaded)
-    await page.waitForLoadState('domcontentloaded');
-
-    // Measure time to DOM content loaded
-    const domContentLoadedTime = Date.now() - startTime;
-
-    // Wait for full load
-    await page.waitForLoadState('load');
+    // Wait for the page to become interactive (hero section visible)
+    await page.locator('[data-testid="hero-section"]').waitFor({ state: 'visible' });
 
     const loadTime = Date.now() - startTime;
 
-    // Log the timing for debugging
-    console.log(`DOM Content Loaded: ${domContentLoadedTime}ms`);
-    console.log(`Full Load: ${loadTime}ms`);
+    // Verify page loads within 3 seconds (3000ms) per NFR-1
+    expect(loadTime).toBeLessThan(3000);
 
-    // Also check navigation timing API for more accurate measurements
-    const navigationTiming = await page.evaluate(() => {
-      const timing = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      return {
-        domContentLoadedEventEnd: timing.domContentLoadedEventEnd,
-        loadEventEnd: timing.loadEventEnd,
-        domInteractive: timing.domInteractive,
-        responseStart: timing.responseStart,
-        fetchStart: timing.fetchStart
-      };
-    });
-
-    // Calculate time to interactive (from navigation start)
-    const timeToInteractive = navigationTiming.domInteractive;
-    console.log(`Navigation API - Time to Interactive: ${timeToInteractive}ms`);
-    console.log(`Navigation API - DOM Content Loaded: ${navigationTiming.domContentLoadedEventEnd}ms`);
-
-    // Assert page becomes interactive within 3 seconds (3000ms)
-    // Using domInteractive as the measure of when page is interactive
-    expect(timeToInteractive).toBeLessThan(3000);
-
-    // Verify the page actually rendered content
-    const heroSection = page.locator('[data-testid="hero-section"]');
-    await expect(heroSection).toBeVisible();
+    console.log(`Page load time: ${loadTime}ms`);
   });
 
-  test('TC2: performance score is 90 or above (simulated via metrics)', async ({ page }) => {
-    // Since running Lighthouse programmatically requires additional setup,
-    // we'll measure key performance metrics that contribute to Lighthouse score
-    // and validate they meet the thresholds that would result in a 90+ score
-
-    await page.goto('/');
-    await page.waitForLoadState('load');
-
-    // Get performance metrics
-    const metrics = await page.evaluate(() => {
-      const paintEntries = performance.getEntriesByType('paint');
-      const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-
-      const fcp = paintEntries.find(entry => entry.name === 'first-contentful-paint');
-
-      return {
-        fcp: fcp ? fcp.startTime : null,
-        ttfb: navigationEntry.responseStart - navigationEntry.fetchStart,
-        domContentLoaded: navigationEntry.domContentLoadedEventEnd,
-        loadEventEnd: navigationEntry.loadEventEnd,
-        domInteractive: navigationEntry.domInteractive
-      };
+  test('TC2: Lighthouse performance score is 90 or above', async () => {
+    // Launch browser with remote debugging for Lighthouse
+    const browser = await chromium.launch({
+      args: [`--remote-debugging-port=${LIGHTHOUSE_PORT}`],
     });
 
-    console.log('Performance Metrics:', JSON.stringify(metrics, null, 2));
+    const page = await browser.newPage();
+    await page.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
 
-    // For a Lighthouse score of 90+, these metrics should be in good ranges:
-    // - FCP should be under 1.8s for a "Good" score
-    // - TTFB should be under 800ms
-    // - DOM Interactive should be under 3s
-
-    // Assert FCP is good (under 1800ms)
-    if (metrics.fcp !== null) {
-      expect(metrics.fcp).toBeLessThan(1800);
-    }
-
-    // Assert TTFB is good (under 800ms)
-    expect(metrics.ttfb).toBeLessThan(800);
-
-    // Assert DOM Interactive is good (under 3000ms)
-    expect(metrics.domInteractive).toBeLessThan(3000);
-
-    // Assert overall page load is under 5 seconds
-    expect(metrics.loadEventEnd).toBeLessThan(5000);
-
-    // Verify static site has minimal JavaScript by checking document readiness
-    const pageContent = await page.content();
-    // A well-optimized static site should have limited script tags
-    const scriptMatches = pageContent.match(/<script/g) || [];
-    console.log(`Script tags found: ${scriptMatches.length}`);
-
-    // For a static site, we expect minimal scripts (0-3 is typical)
-    expect(scriptMatches.length).toBeLessThanOrEqual(5);
-  });
-
-  test('TC3: First Contentful Paint occurs within 1.5 seconds', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('load');
-
-    // Get FCP using Performance API
-    const fcp = await page.evaluate(() => {
-      return new Promise<number>((resolve) => {
-        // Check if FCP is already available in the buffer
-        const paintEntries = performance.getEntriesByType('paint');
-        const fcpEntry = paintEntries.find(entry => entry.name === 'first-contentful-paint');
-
-        if (fcpEntry) {
-          resolve(fcpEntry.startTime);
-          return;
-        }
-
-        // If not, observe for it
-        new PerformanceObserver((entryList) => {
-          const entries = entryList.getEntries();
-          const fcpEntry = entries.find(entry => entry.name === 'first-contentful-paint');
-          if (fcpEntry) {
-            resolve(fcpEntry.startTime);
-          }
-        }).observe({ type: 'paint', buffered: true });
-
-        // Timeout after 5 seconds
-        setTimeout(() => resolve(-1), 5000);
-      });
+    // Run Lighthouse audit with performance thresholds
+    const result = await playAudit({
+      page,
+      port: LIGHTHOUSE_PORT,
+      thresholds: PERFORMANCE_THRESHOLDS,
+      reports: {
+        formats: { json: false, html: false, csv: false },
+      },
     });
 
-    console.log(`First Contentful Paint (FCP): ${fcp}ms`);
+    // Extract performance score from the audit
+    const performanceScore = result.lhr.categories.performance.score * 100;
 
-    // FCP should occur within 1.5 seconds (1500ms)
-    expect(fcp).toBeGreaterThan(0);
-    expect(fcp).toBeLessThan(1500);
+    console.log(`Lighthouse Performance Score: ${performanceScore}`);
+
+    // Assert performance score meets threshold
+    expect(performanceScore).toBeGreaterThanOrEqual(90);
+
+    await browser.close();
   });
 
-  test('TC4: Largest Contentful Paint occurs within 2.5 seconds', async ({ page }) => {
-    // Set up LCP observer BEFORE navigation to capture all entries
-    await page.addInitScript(() => {
-      (window as any).__lcpValue = -1;
-      const observer = new PerformanceObserver((entryList) => {
-        const entries = entryList.getEntries();
-        const lastEntry = entries[entries.length - 1];
-        if (lastEntry) {
-          (window as any).__lcpValue = lastEntry.startTime;
-        }
-      });
-      observer.observe({ type: 'largest-contentful-paint', buffered: true });
+  test('TC3: First Contentful Paint (FCP) occurs within 1.5 seconds', async () => {
+    // Launch browser with remote debugging for Lighthouse
+    const browser = await chromium.launch({
+      args: [`--remote-debugging-port=${LIGHTHOUSE_PORT}`],
     });
 
-    await page.goto('/');
-    await page.waitForLoadState('load');
+    const page = await browser.newPage();
+    await page.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
 
-    // Trigger an interaction to finalize LCP measurement
-    await page.mouse.click(10, 10);
-
-    // Wait for LCP to be captured
-    await page.waitForTimeout(1000);
-
-    // Get LCP value from the window object
-    const lcp = await page.evaluate(() => (window as any).__lcpValue);
-
-    console.log(`Largest Contentful Paint (LCP): ${lcp}ms`);
-
-    // In headless CI environments, LCP might not always be reported
-    // Fall back to checking that the largest visible content loaded quickly
-    if (lcp === -1) {
-      // Alternative check: measure time to largest visible element
-      const navigationTiming = await page.evaluate(() => {
-        const timing = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-        return timing.loadEventEnd;
-      });
-      console.log(`Fallback: Load Event End: ${navigationTiming}ms`);
-      // Full page load should be under 2.5 seconds
-      expect(navigationTiming).toBeLessThan(2500);
-    } else {
-      // LCP should occur within 2.5 seconds (2500ms)
-      expect(lcp).toBeGreaterThan(0);
-      expect(lcp).toBeLessThan(2500);
-    }
-
-    // Verify the hero section (typically the LCP element) is visible
-    const heroSection = page.locator('[data-testid="hero-section"]');
-    await expect(heroSection).toBeVisible();
-  });
-
-  test('TC5: Cumulative Layout Shift is below 0.1', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('load');
-
-    // Wait for any animations or layout shifts to complete
-    await page.waitForTimeout(1000);
-
-    // Scroll the page to trigger any lazy loading or layout shifts
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(500);
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(500);
-
-    // Get CLS using PerformanceObserver
-    const cls = await page.evaluate(() => {
-      return new Promise<number>((resolve) => {
-        let cumulativeLayoutShift = 0;
-
-        new PerformanceObserver((entryList) => {
-          const entries = entryList.getEntries();
-
-          entries.forEach((entry: any) => {
-            // Only count shifts without recent input
-            if (!entry.hadRecentInput) {
-              cumulativeLayoutShift += entry.value;
-            }
-          });
-
-          resolve(cumulativeLayoutShift);
-        }).observe({
-          type: 'layout-shift',
-          buffered: true
-        });
-
-        // Timeout after 2 seconds with current value
-        setTimeout(() => resolve(cumulativeLayoutShift), 2000);
-      });
+    // Run Lighthouse audit
+    const result = await playAudit({
+      page,
+      port: LIGHTHOUSE_PORT,
+      thresholds: {
+        performance: 50, // Lower threshold since we're checking specific metrics
+      },
+      reports: {
+        formats: { json: false, html: false, csv: false },
+      },
     });
 
-    console.log(`Cumulative Layout Shift (CLS): ${cls}`);
+    // Extract FCP metric from audit results
+    const fcpAudit = result.lhr.audits['first-contentful-paint'];
+    const fcpMs = fcpAudit.numericValue;
 
-    // CLS should be below 0.1 for a "Good" score
-    expect(cls).toBeLessThan(0.1);
+    console.log(`First Contentful Paint: ${fcpMs}ms`);
+
+    // FCP should be within 1.5 seconds (1500ms)
+    expect(fcpMs).toBeLessThan(1500);
+
+    await browser.close();
   });
 
-  test('assets are optimized for performance', async ({ page }) => {
-    // Navigate and capture network requests
-    const requests: { url: string; size: number; type: string }[] = [];
-
-    page.on('response', async (response) => {
-      const headers = response.headers();
-      const contentLength = headers['content-length'];
-      const contentType = headers['content-type'] || '';
-
-      if (contentLength) {
-        requests.push({
-          url: response.url(),
-          size: parseInt(contentLength, 10),
-          type: contentType
-        });
-      }
+  test('TC4: Largest Contentful Paint (LCP) occurs within 2.5 seconds', async () => {
+    // Launch browser with remote debugging for Lighthouse
+    const browser = await chromium.launch({
+      args: [`--remote-debugging-port=${LIGHTHOUSE_PORT}`],
     });
 
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    const page = await browser.newPage();
+    await page.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
 
-    // Calculate total page size
-    const totalSize = requests.reduce((sum, req) => sum + req.size, 0);
-    console.log(`Total page size: ${(totalSize / 1024).toFixed(2)} KB`);
-    console.log(`Number of requests: ${requests.length}`);
+    // Run Lighthouse audit
+    const result = await playAudit({
+      page,
+      port: LIGHTHOUSE_PORT,
+      thresholds: {
+        performance: 50, // Lower threshold since we're checking specific metrics
+      },
+      reports: {
+        formats: { json: false, html: false, csv: false },
+      },
+    });
 
-    // Log large resources
-    const largeResources = requests.filter(r => r.size > 100 * 1024);
-    if (largeResources.length > 0) {
-      console.log('Large resources (>100KB):');
-      largeResources.forEach(r => console.log(`  ${r.url}: ${(r.size / 1024).toFixed(2)} KB`));
-    }
+    // Extract LCP metric from audit results
+    const lcpAudit = result.lhr.audits['largest-contentful-paint'];
+    const lcpMs = lcpAudit.numericValue;
 
-    // For a well-optimized static site:
-    // - Total page size should be under 1MB for initial load
-    // - Number of requests should be reasonable (under 30)
-    expect(totalSize).toBeLessThan(1024 * 1024); // 1MB
-    expect(requests.length).toBeLessThan(30);
+    console.log(`Largest Contentful Paint: ${lcpMs}ms`);
 
-    // Verify no large unoptimized images
-    const largeImages = requests.filter(r =>
-      r.type.includes('image') && r.size > 200 * 1024
-    );
-    expect(largeImages.length).toBe(0);
+    // LCP should be within 2.5 seconds (2500ms)
+    expect(lcpMs).toBeLessThan(2500);
+
+    await browser.close();
   });
 
-  test('page renders essential content quickly', async ({ page }) => {
-    await page.goto('/');
+  test('TC5: Cumulative Layout Shift (CLS) score is below 0.1', async () => {
+    // Launch browser with remote debugging for Lighthouse
+    const browser = await chromium.launch({
+      args: [`--remote-debugging-port=${LIGHTHOUSE_PORT}`],
+    });
 
-    // Measure time to first meaningful content
-    const startTime = Date.now();
+    const page = await browser.newPage();
+    await page.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
 
-    // Wait for hero section to be visible
-    await page.waitForSelector('[data-testid="hero-section"]', { state: 'visible' });
-    const heroTime = Date.now() - startTime;
+    // Run Lighthouse audit
+    const result = await playAudit({
+      page,
+      port: LIGHTHOUSE_PORT,
+      thresholds: {
+        performance: 50, // Lower threshold since we're checking specific metrics
+      },
+      reports: {
+        formats: { json: false, html: false, csv: false },
+      },
+    });
 
-    // Wait for navigation to be visible
-    await page.waitForSelector('.navbar', { state: 'visible' });
-    const navTime = Date.now() - startTime;
+    // Extract CLS metric from audit results
+    const clsAudit = result.lhr.audits['cumulative-layout-shift'];
+    const clsScore = clsAudit.numericValue;
 
-    // Wait for main heading
-    await page.waitForSelector('[data-testid="product-name"]', { state: 'visible' });
-    const headingTime = Date.now() - startTime;
+    console.log(`Cumulative Layout Shift: ${clsScore}`);
 
-    console.log(`Time to hero section: ${heroTime}ms`);
-    console.log(`Time to navigation: ${navTime}ms`);
-    console.log(`Time to main heading: ${headingTime}ms`);
+    // CLS should be below 0.1 for good user experience
+    expect(clsScore).toBeLessThan(0.1);
 
-    // All essential content should render within 2 seconds
-    expect(heroTime).toBeLessThan(2000);
-    expect(navTime).toBeLessThan(2000);
-    expect(headingTime).toBeLessThan(2000);
+    await browser.close();
   });
 });
