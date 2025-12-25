@@ -166,6 +166,7 @@ body {
 .btn-secondary:hover,
 .btn-secondary:focus {
     background-color: var(--color-border);
+    box-shadow: 0 0 0 2px var(--color-primary);
 }
 
 /* Features Section */
