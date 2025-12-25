@@ -30,8 +30,8 @@
                 <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
                 <p class="description">A high-performance, persistent key-value store written in Rust. Drop-in replacement for Memcached with durable storage powered by LSM tree architecture.</p>
                 <div class="cta-buttons">
-                    <a href="#quick-start" class="btn btn-primary">Get Started</a>
-                    <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                    <a href="#quick-start" class="btn btn-primary" data-testid="primary-cta">Get Started</a>
+                    <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" data-testid="secondary-cta" target="_blank" rel="noopener noreferrer">View on GitHub</a>
                 </div>
             </div>
         </section>
@@ -175,13 +175,19 @@ MAJOR_COMPACTION  // Trigger manual compaction</code></pre>
         </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" data-testid="footer">
         <div class="footer-content">
-            <p>MirDB is open source software licensed under MIT.</p>
-            <nav class="footer-nav">
-                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a>
-                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+            <div class="footer-info">
+                <p>MirDB is open source software licensed under MIT.</p>
+                <div class="footer-status" data-testid="project-status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text">Active Development</span>
+                </div>
+            </div>
+            <nav class="footer-nav" data-testid="footer-links">
+                <a href="https://github.com/yetone/mirdb" data-testid="footer-github-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://github.com/yetone/mirdb#readme" data-testid="footer-docs-link" target="_blank" rel="noopener noreferrer">Documentation</a>
+                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" data-testid="footer-license-link" target="_blank" rel="noopener noreferrer">License</a>
             </nav>
         </div>
     </footer>
