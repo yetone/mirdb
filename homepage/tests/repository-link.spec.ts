@@ -74,11 +74,11 @@ test.describe('Repository Link Accessibility', () => {
 
   test('TC4: Repository link is present in the footer', async ({ page }) => {
     // Check for repository link in footer
-    const footer = page.locator('[data-testid="footer-section"]');
+    const footer = page.locator('[data-testid="footer"]');
     await expect(footer).toBeVisible();
 
     // Find the GitHub link in footer
-    const footerGithubLink = page.locator('[data-testid="footer-github-link"]');
+    const footerGithubLink = page.locator('[data-testid="footer-repo-link"]');
     await expect(footerGithubLink).toBeVisible();
 
     // Verify link text

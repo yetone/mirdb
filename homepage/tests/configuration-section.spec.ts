@@ -113,8 +113,8 @@ test.describe('Configuration Reference Section', () => {
   });
 
   test('Configuration section is accessible via navigation', async ({ page }) => {
-    // Check that navigation link to configuration exists
-    const navLink = page.locator('nav a[href="#configuration"]');
+    // Check that navigation link to configuration exists (use desktop nav which is visible by default on larger viewports)
+    const navLink = page.locator('.nav-links a[href="#configuration"]');
     await expect(navLink).toBeVisible();
 
     // Click navigation link

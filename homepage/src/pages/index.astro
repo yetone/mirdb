@@ -14,11 +14,44 @@ import ProjectStatus from '../components/ProjectStatus.astro';
     <nav class="navbar fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800">
       <div class="nav-container max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         <a href="#" class="nav-brand text-xl font-bold text-white">MirDB</a>
-        <div class="nav-links flex gap-6">
+
+        <!-- Desktop Navigation -->
+        <div class="nav-links hidden md:flex gap-6">
           <a href="#features" class="nav-link text-slate-300 hover:text-white transition-colors">Features</a>
           <a href="#getting-started" class="nav-link text-slate-300 hover:text-white transition-colors">Getting Started</a>
           <a href="#configuration" class="nav-link text-slate-300 hover:text-white transition-colors">Configuration</a>
           <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="nav-github-link" class="text-slate-300 hover:text-white transition-colors">GitHub</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button
+          id="mobile-menu-btn"
+          data-testid="mobile-menu-btn"
+          class="md:hidden text-slate-300 hover:text-white p-2"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <svg class="hamburger-icon w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <svg class="close-icon hidden w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-menu"
+        data-testid="mobile-menu"
+        class="mobile-menu hidden md:hidden bg-slate-900/95 backdrop-blur border-b border-slate-800"
+      >
+        <div class="px-4 py-4 space-y-3">
+          <a href="#features" class="mobile-nav-link block text-slate-300 hover:text-white transition-colors py-2">Features</a>
+          <a href="#getting-started" class="mobile-nav-link block text-slate-300 hover:text-white transition-colors py-2">Getting Started</a>
+          <a href="#configuration" class="mobile-nav-link block text-slate-300 hover:text-white transition-colors py-2">Configuration</a>
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="mobile-nav-link block text-slate-300 hover:text-white transition-colors py-2">GitHub</a>
         </div>
       </div>
     </nav>
@@ -124,6 +157,52 @@ import ProjectStatus from '../components/ProjectStatus.astro';
 </style>
 
 <script>
+  // Mobile menu functionality
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const hamburgerIcon = mobileMenuBtn?.querySelector('.hamburger-icon');
+  const closeIcon = mobileMenuBtn?.querySelector('.close-icon');
+
+  function toggleMobileMenu() {
+    const isOpen = mobileMenu?.classList.contains('hidden') === false;
+
+    if (isOpen) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  }
+
+  function openMobileMenu() {
+    mobileMenu?.classList.remove('hidden');
+    hamburgerIcon?.classList.add('hidden');
+    closeIcon?.classList.remove('hidden');
+    mobileMenuBtn?.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeMobileMenu() {
+    mobileMenu?.classList.add('hidden');
+    hamburgerIcon?.classList.remove('hidden');
+    closeIcon?.classList.add('hidden');
+    mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+  }
+
+  mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+
+  // Close mobile menu when clicking a link
+  document.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', closeMobileMenu);
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const navbar = document.querySelector('.navbar');
+    if (navbar && !navbar.contains(target) && mobileMenu && !mobileMenu.classList.contains('hidden')) {
+      closeMobileMenu();
+    }
+  });
+
   // Smooth scroll for navigation links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
