@@ -1,0 +1,70 @@
+---
+// Project Status and Roadmap Component
+---
+
+<section id="status" class="py-16 px-4 bg-slate-800" data-testid="status-section">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-12 text-white">Project Status</h2>
+
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <!-- Implemented Features -->
+      <div class="bg-emerald-900/30 border border-emerald-700 rounded-lg p-6" data-testid="implemented-features">
+        <h3 class="text-xl font-semibold mb-4 text-emerald-400 flex items-center gap-2">
+          <span class="text-emerald-500">&#10003;</span> Implemented
+        </h3>
+        <ul class="space-y-3" data-testid="implemented-list">
+          <li class="flex items-center gap-3 text-slate-300">
+            <span class="checkmark text-emerald-500 font-bold" aria-label="implemented">&#10003;</span>
+            <span>Tokio-based async networking</span>
+          </li>
+          <li class="flex items-center gap-3 text-slate-300">
+            <span class="checkmark text-emerald-500 font-bold" aria-label="implemented">&#10003;</span>
+            <span>Memcached protocol support</span>
+          </li>
+          <li class="flex items-center gap-3 text-slate-300">
+            <span class="checkmark text-emerald-500 font-bold" aria-label="implemented">&#10003;</span>
+            <span>Skip list memtable</span>
+          </li>
+          <li class="flex items-center gap-3 text-slate-300">
+            <span class="checkmark text-emerald-500 font-bold" aria-label="implemented">&#10003;</span>
+            <span>Minor compaction</span>
+          </li>
+          <li class="flex items-center gap-3 text-slate-300">
+            <span class="checkmark text-emerald-500 font-bold" aria-label="implemented">&#10003;</span>
+            <span>Major compaction</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Planned Features -->
+      <div class="bg-orange-900/30 border border-orange-700 rounded-lg p-6" data-testid="planned-features">
+        <h3 class="text-xl font-semibold mb-4 text-orange-400 flex items-center gap-2">
+          <span class="text-orange-500">&#9675;</span> Planned
+        </h3>
+        <ul class="space-y-3" data-testid="planned-list">
+          <li class="flex items-center gap-3 text-slate-300">
+            <span class="planned-indicator text-orange-500 font-bold" aria-label="planned">&#9675;</span>
+            <span>Raft consensus for distributed operation</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Contribution Section -->
+    <div class="mt-12 text-center" data-testid="contribute-section">
+      <p class="text-slate-400">
+        Want to contribute? Check out our
+        <a
+          href="https://github.com/yetone/mirdb/blob/main/CONTRIBUTING.md"
+          data-testid="contributing-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-orange-500 hover:text-orange-400 font-semibold"
+        >
+          contribution guidelines
+        </a>
+        to get started.
+      </p>
+    </div>
+  </div>
+</section>

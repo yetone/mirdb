@@ -15,7 +15,7 @@
                 <li><a href="#features">Features</a></li>
                 <li><a href="#getting-started">Getting Started</a></li>
                 <li><a href="#configuration">Configuration</a></li>
-                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="nav-github-link">GitHub</a></li>
             </ul>
         </div>
     </nav>
@@ -54,6 +54,78 @@
                 <div class="feature-card">
                     <h3>Built with Rust</h3>
                     <p>Memory-safe implementation with high performance and reliability.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="architecture">
+        <div class="container">
+            <h2>How MirDB Works</h2>
+            <div class="architecture-content">
+                <div data-testid="architecture-diagram" role="img" aria-label="MirDB LSM tree architecture diagram showing data flow from write requests through WAL, Memtable, and SSTable levels">
+                    <div class="diagram-container">
+                        <div class="diagram-row">
+                            <div class="diagram-box write-box">
+                                <span class="box-label">Write Request</span>
+                            </div>
+                            <div class="diagram-arrow">&#8595;</div>
+                        </div>
+                        <div class="diagram-row">
+                            <div class="diagram-box wal-box">
+                                <span class="box-label">WAL</span>
+                                <span class="box-desc">Write-Ahead Log</span>
+                            </div>
+                            <div class="diagram-arrow">&#8595;</div>
+                        </div>
+                        <div class="diagram-row">
+                            <div class="diagram-box memtable-box">
+                                <span class="box-label">Memtable</span>
+                                <span class="box-desc">In-memory Skip List</span>
+                            </div>
+                            <div class="diagram-arrow">&#8595;</div>
+                            <span class="arrow-label">when full</span>
+                        </div>
+                        <div class="diagram-row">
+                            <div class="diagram-box immutable-box">
+                                <span class="box-label">Immutable Memtables</span>
+                                <span class="box-desc">Queue awaiting flush</span>
+                            </div>
+                            <div class="diagram-arrow">&#8595;</div>
+                            <span class="arrow-label">minor compaction</span>
+                        </div>
+                        <div class="diagram-row">
+                            <div class="diagram-box sstable-box level0">
+                                <span class="box-label">Level 0 SSTables</span>
+                                <span class="box-desc">Recently flushed, may overlap</span>
+                            </div>
+                            <div class="diagram-arrow">&#8595;</div>
+                            <span class="arrow-label">major compaction</span>
+                        </div>
+                        <div class="diagram-row">
+                            <div class="diagram-box sstable-box level1">
+                                <span class="box-label">Level 1+ SSTables</span>
+                                <span class="box-desc">Sorted, non-overlapping</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-testid="lsm-explanation" class="lsm-explanation">
+                    <h3>Log-Structured Merge Tree</h3>
+                    <p>
+                        MirDB uses an LSM (Log-Structured Merge) tree architecture, which is optimized for
+                        write-heavy workloads. All writes first go to the Write-Ahead Log (WAL) for durability,
+                        then to an in-memory Memtable for fast access.
+                    </p>
+                    <p>
+                        When the Memtable fills up, it becomes immutable and is flushed to disk as an SSTable
+                        (Sorted String Table). Background compaction processes merge and sort these SSTables
+                        across levels, maintaining read performance while optimizing storage efficiency.
+                    </p>
+                    <p>
+                        This design provides excellent write performance, crash recovery through WAL, and
+                        efficient reads through bloom filters and block indexes in each SSTable.
+                    </p>
                 </div>
             </div>
         </div>
@@ -138,34 +210,37 @@ DELETED</code></pre>
         </div>
     </section>
 
-    <section id="status" class="status">
+    <section id="status" class="status" data-testid="status-section">
         <div class="container">
             <h2>Project Status</h2>
             <div class="status-grid">
-                <div class="status-card implemented">
-                    <h3>Implemented</h3>
-                    <ul>
-                        <li>Tokio-based async networking</li>
-                        <li>Memcached protocol support</li>
-                        <li>Skip list memtable</li>
-                        <li>Minor compaction</li>
-                        <li>Major compaction</li>
+                <div class="status-card implemented" data-testid="implemented-features">
+                    <h3>✓ Implemented</h3>
+                    <ul data-testid="implemented-list">
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Tokio-based async networking</li>
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Memcached protocol support</li>
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Skip list memtable</li>
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Minor compaction</li>
+                        <li><span class="checkmark" aria-label="implemented">✓</span> Major compaction</li>
                     </ul>
                 </div>
-                <div class="status-card planned">
-                    <h3>Planned</h3>
-                    <ul>
-                        <li>Raft consensus for distributed operation</li>
+                <div class="status-card planned" data-testid="planned-features">
+                    <h3>◯ Planned</h3>
+                    <ul data-testid="planned-list">
+                        <li><span class="planned-indicator" aria-label="planned">◯</span> Raft consensus for distributed operation</li>
                     </ul>
                 </div>
+            </div>
+            <div class="contribute-section" data-testid="contribute-section">
+                <p>Want to contribute? Check out our <a href="https://github.com/yetone/mirdb/blob/main/CONTRIBUTING.md" data-testid="contributing-link" target="_blank" rel="noopener noreferrer">contribution guidelines</a> to get started.</p>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
+    <footer class="footer" data-testid="footer-section">
         <div class="container">
             <p>&copy; 2024 MirDB. Open source under MIT License.</p>
-            <p><a href="https://github.com/yetone/mirdb">View on GitHub</a></p>
+            <p><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" data-testid="footer-github-link">View on GitHub</a></p>
         </div>
     </footer>
 </body>
