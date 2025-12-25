@@ -3,239 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MirDB - A persistent key-value store written in Rust that implements the Memcached protocol. Get persistence without changing your memcached client.">
-    <meta name="keywords" content="MirDB, key-value store, memcached, Rust, persistent storage, LSM tree, SSTable">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. Fast, reliable, and compatible with existing Memcached clients.">
     <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --text-color: #333;
-            --light-bg: #f8f9fa;
-            --white: #ffffff;
-            --border-radius: 8px;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, #1a252f 100%);
-            color: var(--white);
-            padding: 80px 20px;
-            min-height: 70vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            text-align: center;
-        }
-
-        .hero-logo {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -2px;
-            background: linear-gradient(90deg, #3498db, #9b59b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-tagline {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 300;
-        }
-
-        .hero-description {
-            font-size: 1.1rem;
-            margin-bottom: 2.5rem;
-            color: rgba(255, 255, 255, 0.75);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 14px 28px;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-            color: var(--white);
-        }
-
-        .btn-primary:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--white);
-            transform: translateY(-2px);
-        }
-
-        /* Icon styling */
-        .btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .hero {
-                padding: 60px 20px;
-                min-height: 60vh;
-            }
-
-            .hero-logo {
-                font-size: 2.5rem;
-            }
-
-            .hero-tagline {
-                font-size: 1.2rem;
-            }
-
-            .hero-description {
-                font-size: 1rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 280px;
-                justify-content: center;
-            }
-        }
-
-        /* Features Section Placeholder */
-        .features {
-            padding: 80px 20px;
-            background: var(--light-bg);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 3rem;
-            color: var(--secondary-color);
-        }
-
-        /* Quick Start Section */
-        #quick-start {
-            padding: 80px 20px;
-            background: var(--white);
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--secondary-color);
-            color: rgba(255, 255, 255, 0.7);
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Hero Section -->
-    <section class="hero" data-testid="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-logo" data-testid="product-name">MirDB</h1>
-            <p class="hero-tagline" data-testid="hero-tagline">Persistent Key-Value Store with Memcached Protocol</p>
-            <p class="hero-description" data-testid="hero-description">
-                A high-performance, persistent key-value store written in Rust.
-                Drop-in replacement for memcached with data durability powered by LSM tree architecture.
-            </p>
-            <div class="cta-buttons">
-                <a href="https://github.com/yetone/mirdb" class="btn btn-primary" data-testid="primary-cta" target="_blank" rel="noopener noreferrer">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                    View on GitHub
-                </a>
-                <a href="https://github.com/yetone/mirdb#readme" class="btn btn-secondary" data-testid="secondary-cta" target="_blank" rel="noopener noreferrer">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
-                    </svg>
-                    Documentation
-                </a>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <img src="assets/logo.gif" alt="MirDB Logo" width="40" height="40">
+                <span>MirDB</span>
             </div>
-        </div>
-    </section>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <!-- Features Section (Placeholder for future implementation) -->
-    <section class="features" id="features">
-        <h2 class="section-title">Key Features</h2>
-        <!-- Feature cards will be added in future scenarios -->
-    </section>
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-content">
+                <h1 id="hero-title">MirDB</h1>
+                <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+                <p class="description">A high-performance, persistent key-value store written in Rust. Drop-in replacement for Memcached with durable storage powered by LSM tree architecture.</p>
+                <div class="cta-buttons">
+                    <a href="#quick-start" class="btn btn-primary">Get Started</a>
+                    <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                </div>
+            </div>
+        </section>
 
-    <!-- Quick Start Section (Placeholder for future implementation) -->
-    <section id="quick-start">
-        <h2 class="section-title">Quick Start</h2>
-        <!-- Quick start content will be added in future scenarios -->
-    </section>
+        <section id="features" class="features" aria-labelledby="features-title">
+            <h2 id="features-title">Key Features</h2>
+            <div class="features-grid" data-testid="features-grid">
+                <article class="feature-card" data-testid="feature-card-memcached">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h3>Memcached Protocol Compatibility</h3>
+                    <p>Full compatibility with the Memcached text protocol. Use your existing Memcached clients without any code changes. Supports GET, SET, ADD, REPLACE, DELETE, and more.</p>
+                </article>
 
-    <!-- Footer -->
+                <article class="feature-card" data-testid="feature-card-persistence">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                        </svg>
+                    </div>
+                    <h3>Persistent Storage with SSTables</h3>
+                    <p>Unlike in-memory caches, MirDB persists your data to disk using SSTables (Sorted String Tables). Your data survives restarts and system failures with Write-Ahead Logging (WAL).</p>
+                </article>
+
+                <article class="feature-card" data-testid="feature-card-lsm">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </div>
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Built on Log-Structured Merge-tree (LSM) architecture for optimal write performance. Data flows from WAL to Memtable to immutable SSTables with automatic minor and major compaction.</p>
+                </article>
+
+                <article class="feature-card" data-testid="feature-card-async">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <h3>Async Networking with Tokio</h3>
+                    <p>High-performance asynchronous networking powered by Tokio runtime. Handle thousands of concurrent connections efficiently with Rust's zero-cost abstractions and memory safety.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="quick-start" class="quick-start" aria-labelledby="quickstart-title">
+            <h2 id="quickstart-title">Quick Start</h2>
+            <div class="quick-start-content">
+                <div class="step">
+                    <h3>1. Clone and Build</h3>
+                    <pre><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+                </div>
+                <div class="step">
+                    <h3>2. Run the Server</h3>
+                    <pre><code>./target/release/mirdb-server</code></pre>
+                </div>
+                <div class="step">
+                    <h3>3. Connect with Any Memcached Client</h3>
+                    <pre><code># Using telnet
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+
+# Get the value
+get mykey</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <footer class="footer">
-        <p>&copy; 2024 MirDB. Licensed under MIT. <a href="https://github.com/yetone/mirdb">GitHub</a></p>
+        <div class="footer-content">
+            <p>MirDB is open source software licensed under MIT.</p>
+            <nav class="footer-nav">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+            </nav>
+        </div>
     </footer>
 </body>
 </html>
