@@ -1,2 +1,6 @@
 /target
 **/*.rs.bk
+node_modules/
+homepage/node_modules/
+homepage/test-results/
+homepage/playwright-report/

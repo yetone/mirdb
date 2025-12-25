@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility, powered by Rust">
+    <title>MirDB - Persistent Memcached, Powered by Rust</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">MirDB</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#configuration">Configuration</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero" data-testid="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title" data-testid="product-name">MirDB</h1>
+            <p class="hero-tagline" data-testid="tagline">Persistent memcached, powered by Rust</p>
+            <p class="hero-description">
+                A high-performance key-value store that combines the simplicity of the memcached protocol
+                with durable storage using LSM tree architecture.
+            </p>
+            <div class="hero-ctas">
+                <a href="#getting-started" class="btn btn-primary" data-testid="get-started-btn">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" data-testid="github-link" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Memcached Protocol</h3>
+                    <p>Drop-in replacement for memcached. Works with existing clients and tooling.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>Data persists to disk using SSTables. Survives restarts and crashes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Write-optimized storage with efficient compaction for consistent performance.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Built with Rust</h3>
+                    <p>Memory-safe implementation with high performance and reliability.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="getting-started" class="getting-started" data-testid="getting-started-section">
+        <div class="container">
+            <h2>Getting Started</h2>
+            <div class="instructions">
+                <h3>Installation</h3>
+                <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run MirDB server
+./target/release/mirdb-server</code></pre>
+
+                <h3>Basic Usage</h3>
+                <pre><code># Connect using telnet or any memcached client
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get a value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete a value
+delete mykey
+DELETED</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="configuration" class="configuration">
+        <div class="container">
+            <h2>Configuration</h2>
+            <table class="config-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>listen_addr</code></td>
+                        <td><code>0.0.0.0:12333</code></td>
+                        <td>Server listen address</td>
+                    </tr>
+                    <tr>
+                        <td><code>max_levels</code></td>
+                        <td><code>7</code></td>
+                        <td>Maximum LSM tree levels</td>
+                    </tr>
+                    <tr>
+                        <td><code>work_dir</code></td>
+                        <td><code>/tmp/mirdb</code></td>
+                        <td>Data storage directory</td>
+                    </tr>
+                    <tr>
+                        <td><code>sstable_max_size</code></td>
+                        <td><code>100M</code></td>
+                        <td>Maximum SSTable file size</td>
+                    </tr>
+                    <tr>
+                        <td><code>memtable_max_size</code></td>
+                        <td><code>4M</code></td>
+                        <td>Maximum memtable size before flush</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="status" class="status">
+        <div class="container">
+            <h2>Project Status</h2>
+            <div class="status-grid">
+                <div class="status-card implemented">
+                    <h3>Implemented</h3>
+                    <ul>
+                        <li>Tokio-based async networking</li>
+                        <li>Memcached protocol support</li>
+                        <li>Skip list memtable</li>
+                        <li>Minor compaction</li>
+                        <li>Major compaction</li>
+                    </ul>
+                </div>
+                <div class="status-card planned">
+                    <h3>Planned</h3>
+                    <ul>
+                        <li>Raft consensus for distributed operation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 MirDB. Open source under MIT License.</p>
+            <p><a href="https://github.com/yetone/mirdb">View on GitHub</a></p>
+        </div>
+    </footer>
+</body>
+</html>
