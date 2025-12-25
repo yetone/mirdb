@@ -12,7 +12,12 @@
     "type": "git",
     "url": "git+https://github.com/yetone/mirdb.git"
   },
-  "keywords": ["mirdb", "memcached", "key-value-store", "rust"],
+  "keywords": [
+    "mirdb",
+    "memcached",
+    "key-value-store",
+    "rust"
+  ],
   "author": "",
   "license": "MIT",
   "type": "commonjs",
@@ -21,6 +26,7 @@
   },
   "homepage": "https://github.com/yetone/mirdb#readme",
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.57.0",
     "serve": "^14.2.0"
   }
