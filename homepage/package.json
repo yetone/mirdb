@@ -11,7 +11,10 @@
     "test:playwright": "playwright test",
     "test:headed": "playwright test --headed"
   },
-  "keywords": ["mirdb", "homepage"],
+  "keywords": [
+    "mirdb",
+    "homepage"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -21,6 +24,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
+    "http-server": "^14.1.1",
     "jsdom": "^27.3.0",
     "playwright": "^1.57.0"
   }
