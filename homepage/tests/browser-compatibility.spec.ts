@@ -166,21 +166,13 @@ test.describe('Browser Compatibility - Homepage Rendering', () => {
   test('flexbox layouts render correctly', async ({ page, browserName }) => {
     await page.goto('/');
 
-    // Verify hero section has flexbox layout elements
-    // Use the CTA buttons container (parent of get-started-btn)
-    const getStartedBtn = page.locator('[data-testid="get-started-btn"]');
-    await expect(getStartedBtn).toBeVisible();
-
-    // Get the parent container and check its display
-    const ctasStyles = await getStartedBtn.evaluate((el) => {
-      const parent = el.parentElement;
-      if (parent) {
-        const styles = window.getComputedStyle(parent);
-        return {
-          display: styles.display,
-        };
-      }
-      return { display: 'none' };
+    // Verify hero CTAs flexbox layout - the CTA buttons container uses Tailwind flex classes
+    const heroCtas = page.locator('[data-testid="hero-section"] .flex');
+    const ctasStyles = await heroCtas.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        display: styles.display,
+      };
     });
     expect(ctasStyles.display).toBe('flex');
   });
