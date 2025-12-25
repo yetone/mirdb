@@ -1,0 +1,98 @@
+---
+// Getting Started Component for MirDB Homepage
+// Provides installation instructions, configuration examples, and usage guide
+---
+
+<section id="getting-started" class="py-16 px-4 bg-slate-900">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold text-white mb-8 text-center">Getting Started</h2>
+
+    <!-- Installation -->
+    <div class="mb-10">
+      <h3 class="text-xl font-semibold text-orange-500 mb-4">1. Installation</h3>
+      <p class="text-slate-300 mb-4">Clone the repository and build MirDB using Cargo:</p>
+      <pre class="bg-slate-800 rounded-lg p-4 overflow-x-auto"><code class="text-slate-300 installation"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run MirDB server with config
+cargo run --release -- -c etc/mirdb.toml</code></pre>
+    </div>
+
+    <!-- Configuration -->
+    <div class="mb-10">
+      <h3 class="text-xl font-semibold text-orange-500 mb-4">2. Configuration</h3>
+      <p class="text-slate-300 mb-4">Create a configuration file in TOML format:</p>
+      <pre class="bg-slate-800 rounded-lg p-4 overflow-x-auto"><code class="text-slate-300 config toml"># etc/mirdb.toml
+addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+thread_sleep_ms = 500</code></pre>
+    </div>
+
+    <!-- Connecting -->
+    <div class="mb-10">
+      <h3 class="text-xl font-semibold text-orange-500 mb-4">3. Connecting with a Memcached Client</h3>
+      <p class="text-slate-300 mb-4">MirDB is compatible with any memcached client. Connect using telnet, netcat, or any memcached library:</p>
+      <pre class="bg-slate-800 rounded-lg p-4 overflow-x-auto"><code class="text-slate-300"># Connect using telnet
+telnet localhost 12333
+
+# Or using netcat (nc)
+nc localhost 12333</code></pre>
+    </div>
+
+    <!-- Basic Operations -->
+    <div class="mb-10">
+      <h3 class="text-xl font-semibold text-orange-500 mb-4">4. Basic Operations</h3>
+      <p class="text-slate-300 mb-4">Once connected, use SET, GET, and DELETE commands:</p>
+      <pre class="bg-slate-800 rounded-lg p-4 overflow-x-auto"><code class="text-slate-300"># Set a value (key: mykey, flags: 0, ttl: 0, bytes: 5)
+set mykey 0 0 5
+hello
+STORED
+
+# Get a value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete a value
+delete mykey
+DELETED</code></pre>
+    </div>
+
+    <!-- Client Library Example -->
+    <div>
+      <h3 class="text-xl font-semibold text-orange-500 mb-4">5. Using a Client Library</h3>
+      <p class="text-slate-300 mb-4">You can use any memcached client library. Here's an example using Python:</p>
+      <pre class="bg-slate-800 rounded-lg p-4 overflow-x-auto"><code class="text-slate-300">import memcache
+
+# Connect to MirDB
+client = memcache.Client(['127.0.0.1:12333'])
+
+# Set a value
+client.set('mykey', 'hello')
+
+# Get the value
+value = client.get('mykey')
+print(value)  # Output: hello
+
+# Delete the key
+client.delete('mykey')</code></pre>
+    </div>
+  </div>
+</section>
