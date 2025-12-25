@@ -9,20 +9,20 @@ import Configuration from '../components/Configuration.astro';
 <Layout title="MirDB - Persistent Key-Value Store with Memcached Protocol">
   <main>
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800">
-      <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <a href="#" class="text-xl font-bold text-white">MirDB</a>
-        <div class="flex gap-6">
-          <a href="#features" class="text-slate-300 hover:text-white transition-colors">Features</a>
-          <a href="#getting-started" class="text-slate-300 hover:text-white transition-colors">Getting Started</a>
-          <a href="#configuration" class="text-slate-300 hover:text-white transition-colors">Configuration</a>
+    <nav class="navbar fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800">
+      <div class="nav-container max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="#" class="nav-brand text-xl font-bold text-white">MirDB</a>
+        <div class="nav-links flex gap-6">
+          <a href="#features" class="nav-link text-slate-300 hover:text-white transition-colors">Features</a>
+          <a href="#getting-started" class="nav-link text-slate-300 hover:text-white transition-colors">Getting Started</a>
+          <a href="#configuration" class="nav-link text-slate-300 hover:text-white transition-colors">Configuration</a>
           <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="text-slate-300 hover:text-white transition-colors">GitHub</a>
         </div>
       </div>
     </nav>
 
     <!-- Hero Section -->
-    <section data-testid="hero-section" class="pt-32 pb-20 px-4 text-center bg-gradient-to-b from-slate-800 to-slate-900">
+    <section id="hero" data-testid="hero-section" class="pt-32 pb-20 px-4 text-center bg-gradient-to-b from-slate-800 to-slate-900">
       <div class="max-w-4xl mx-auto">
         <h1 data-testid="product-name" class="text-4xl md:text-6xl font-bold mb-6 text-white">
           MirDB
@@ -85,3 +85,77 @@ import Configuration from '../components/Configuration.astro';
     </footer>
   </main>
 </Layout>
+
+<style>
+  /* Smooth scrolling behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Active nav link styling */
+  .nav-link.active {
+    color: #f97316; /* orange-500 */
+    font-weight: 600;
+  }
+</style>
+
+<script>
+  // Smooth scroll for navigation links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      if (href && href !== '#') {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth'
+          });
+          // Update URL hash
+          history.pushState(null, '', href);
+        }
+      } else if (href === '#') {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+        history.pushState(null, '', window.location.pathname);
+      }
+    });
+  });
+
+  // Intersection Observer for active nav link highlighting
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '-20% 0px -60% 0px',
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+
+        // Remove active class from all nav links
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+        });
+
+        // Add active class to the corresponding nav link
+        const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+        }
+      }
+    });
+  }, observerOptions);
+
+  // Observe all sections
+  sections.forEach(section => {
+    observer.observe(section);
+  });
+</script>
