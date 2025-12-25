@@ -38,14 +38,14 @@
     </header>
 
     <main id="main-content" tabindex="-1">
-        <section class="hero" aria-labelledby="hero-title">
+        <section class="hero" aria-labelledby="hero-title" data-testid="hero-section">
             <div class="hero-content">
-                <h1 id="hero-title">MirDB</h1>
-                <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
-                <p class="description">A high-performance, persistent key-value store written in Rust. Drop-in replacement for Memcached with durable storage powered by LSM tree architecture.</p>
+                <h1 id="hero-title" class="hero-logo" data-testid="product-name">MirDB</h1>
+                <p class="tagline" data-testid="hero-tagline">Persistent Key-Value Store with Memcached Protocol</p>
+                <p class="description" data-testid="hero-description">A high-performance, persistent key-value store written in Rust. Drop-in replacement for Memcached with durable storage powered by LSM tree architecture.</p>
                 <div class="cta-buttons">
-                    <a href="#quick-start" class="btn btn-primary" data-testid="primary-cta">Get Started</a>
-                    <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" data-testid="secondary-cta" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                    <a href="https://github.com/yetone/mirdb" class="btn btn-primary" data-testid="primary-cta" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                    <a href="https://github.com/yetone/mirdb#readme" class="btn btn-secondary" data-testid="secondary-cta" target="_blank" rel="noopener noreferrer">Documentation</a>
                 </div>
             </div>
         </section>

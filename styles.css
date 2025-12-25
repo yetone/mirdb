@@ -106,7 +106,8 @@ body {
     margin: 0 auto;
 }
 
-.hero h1 {
+.hero h1,
+.hero h1.hero-logo {
     font-size: 3.5rem;
     font-weight: 800;
     color: var(--color-text);
