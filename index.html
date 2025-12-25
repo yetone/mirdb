@@ -110,21 +110,21 @@
                         <title>MirDB LSM Tree Architecture - Data flow from WAL through Memtable to SSTables</title>
 
                         <!-- Background -->
-                        <rect width="800" height="400" fill="#f8fafc"/>
+                        <rect class="diagram-bg" width="800" height="400"/>
 
                         <!-- WAL Box -->
                         <rect x="50" y="150" width="120" height="80" rx="8" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
                         <text x="110" y="195" text-anchor="middle" fill="white" font-weight="600" font-size="16">WAL</text>
 
                         <!-- Arrow from WAL to Memtable -->
-                        <path d="M 170 190 L 210 190" stroke="#64748b" stroke-width="3" marker-end="url(#arrowhead)"/>
+                        <path class="diagram-arrow" d="M 170 190 L 210 190" stroke-width="3" marker-end="url(#arrowhead)"/>
 
                         <!-- Memtable Box -->
                         <rect x="220" y="150" width="120" height="80" rx="8" fill="#22c55e" stroke="#16a34a" stroke-width="2"/>
                         <text x="280" y="195" text-anchor="middle" fill="white" font-weight="600" font-size="16">Memtable</text>
 
                         <!-- Arrow from Memtable to Immutable -->
-                        <path d="M 340 190 L 380 190" stroke="#64748b" stroke-width="3" marker-end="url(#arrowhead)"/>
+                        <path class="diagram-arrow" d="M 340 190 L 380 190" stroke-width="3" marker-end="url(#arrowhead)"/>
 
                         <!-- Immutable Memtables Box -->
                         <rect x="390" y="130" width="140" height="120" rx="8" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
@@ -133,7 +133,7 @@
                         <text x="460" y="225" text-anchor="middle" fill="white" font-size="12">(Queue)</text>
 
                         <!-- Arrow from Immutable to SSTables -->
-                        <path d="M 530 190 L 570 190" stroke="#64748b" stroke-width="3" marker-end="url(#arrowhead)"/>
+                        <path class="diagram-arrow" d="M 530 190 L 570 190" stroke-width="3" marker-end="url(#arrowhead)"/>
 
                         <!-- SSTables Box -->
                         <rect x="580" y="100" width="160" height="180" rx="8" fill="#8b5cf6" stroke="#7c3aed" stroke-width="2"/>
@@ -146,18 +146,18 @@
                         <!-- Arrow marker definition -->
                         <defs>
                             <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                                <polygon class="diagram-arrowhead" points="0 0, 10 3.5, 0 7"/>
                             </marker>
                         </defs>
 
                         <!-- Flow labels -->
-                        <text x="190" y="175" text-anchor="middle" fill="#64748b" font-size="10">→</text>
-                        <text x="360" y="175" text-anchor="middle" fill="#64748b" font-size="10">→</text>
-                        <text x="550" y="175" text-anchor="middle" fill="#64748b" font-size="10">→</text>
+                        <text class="diagram-label" x="190" y="175" text-anchor="middle" font-size="10">→</text>
+                        <text class="diagram-label" x="360" y="175" text-anchor="middle" font-size="10">→</text>
+                        <text class="diagram-label" x="550" y="175" text-anchor="middle" font-size="10">→</text>
 
                         <!-- Write label at top -->
-                        <text x="110" y="130" text-anchor="middle" fill="#1e293b" font-size="14" font-weight="500">Write Request</text>
-                        <path d="M 110 135 L 110 145" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text class="diagram-text" x="110" y="130" text-anchor="middle" font-size="14" font-weight="500">Write Request</text>
+                        <path class="diagram-arrow" d="M 110 135 L 110 145" stroke-width="2" marker-end="url(#arrowhead)"/>
                     </svg>
                 </div>
 
