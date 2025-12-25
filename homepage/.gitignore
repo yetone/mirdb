@@ -1,0 +1,6 @@
+node_modules/
+.astro/
+.vite/
+dist/
+playwright-report/
+test-results/

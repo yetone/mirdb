@@ -2,13 +2,24 @@
   "name": "mirdb-homepage",
   "version": "1.0.0",
   "description": "MirDB Product Homepage",
+  "type": "module",
   "scripts": {
-    "start": "npx http-server . -p 3000 -c-1",
-    "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
+  },
+  "keywords": ["mirdb", "homepage"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^5.16.6",
+    "tailwindcss": "^3.4.19"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
-    "http-server": "^14.1.1"
+    "@playwright/test": "^1.57.0",
+    "playwright": "^1.57.0"
   }
 }

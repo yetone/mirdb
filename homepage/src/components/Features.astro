@@ -1,0 +1,48 @@
+---
+import FeatureCard from './FeatureCard.astro';
+
+const features = [
+  {
+    id: 'memcached',
+    icon: 'memcached' as const,
+    title: 'Memcached Protocol Compatibility',
+    description: 'Works seamlessly with existing memcached clients. Drop-in replacement for your current memcached setup with no client code changes required.',
+  },
+  {
+    id: 'persistence',
+    icon: 'persistence' as const,
+    title: 'Durable Persistence',
+    description: 'Your data is safely persisted to disk using SSTable storage. Survive restarts and crashes with durability guarantees that in-memory solutions cannot provide.',
+  },
+  {
+    id: 'lsm',
+    icon: 'lsm' as const,
+    title: 'LSM Tree Architecture',
+    description: 'Powered by a Log-Structured Merge-tree design. Optimized write performance through memtable buffering and background compaction processes.',
+  },
+  {
+    id: 'rust',
+    icon: 'rust' as const,
+    title: 'Rust Performance',
+    description: 'Built with Rust for blazing-fast speed and memory safety. Zero-cost abstractions and fearless concurrency deliver reliable performance at scale.',
+  },
+];
+---
+
+<section id="features" class="py-20 px-4 bg-slate-900">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-white">
+      Key Features
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {features.map((feature) => (
+        <FeatureCard
+          id={feature.id}
+          icon={feature.icon}
+          title={feature.title}
+          description={feature.description}
+        />
+      ))}
+    </div>
+  </div>
+</section>
