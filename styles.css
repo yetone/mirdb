@@ -426,6 +426,27 @@ body {
     margin-bottom: var(--spacing-sm);
 }
 
+/* Usage Demo */
+.usage-demo {
+    margin: var(--spacing-md) 0 var(--spacing-lg) 0;
+    text-align: center;
+}
+
+.usage-demo img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+}
+
+.usage-demo figcaption {
+    margin-top: var(--spacing-sm);
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
 /* Footer */
 .footer {
     padding: var(--spacing-lg);
