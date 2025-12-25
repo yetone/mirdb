@@ -329,6 +329,19 @@ MAJOR_COMPACTION  // Trigger manual compaction</code></pre>
                 <div class="footer-status" data-testid="project-status">
                     <span class="status-indicator"></span>
                     <span class="status-text">Active Development</span>
+                    <span class="status-divider">|</span>
+                    <span class="status-label" data-testid="project-status-label">Alpha</span>
+                    <span class="status-divider">|</span>
+                    <span data-testid="version-info"><span data-testid="version-number">v0.1.0</span></span>
+                </div>
+                <div class="implemented-features-footer" data-testid="implemented-features">
+                    <h4>Implemented Features</h4>
+                    <ul data-testid="implemented-features-list">
+                        <li>Tokio-based async networking with memcached protocol</li>
+                        <li>Memtable with skip list data structure</li>
+                        <li>Minor compaction (memtable to SSTable)</li>
+                        <li>Major compaction (SSTable level compaction)</li>
+                    </ul>
                 </div>
             </div>
             <nav class="footer-nav" data-testid="footer-links">
