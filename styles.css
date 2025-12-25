@@ -228,10 +228,76 @@ body {
     line-height: 1.7;
 }
 
+/* Architecture Section */
+.architecture {
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--color-surface);
+}
+
+.architecture h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-xl);
+    color: var(--color-text);
+}
+
+.architecture-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.architecture-diagram {
+    margin-bottom: var(--spacing-xl);
+    background-color: var(--color-background);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+}
+
+.architecture-diagram svg {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+}
+
+.architecture-explanations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.component-explanation {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    transition: all 0.2s ease;
+}
+
+.component-explanation:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.component-explanation h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.component-explanation p {
+    color: var(--color-text-light);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
 /* Quick Start Section */
 .quick-start {
     padding: var(--spacing-xl) var(--spacing-lg);
-    background-color: var(--color-surface);
+    background-color: var(--color-background);
 }
 
 .quick-start h2 {
@@ -374,6 +440,10 @@ body {
         padding: var(--spacing-md);
     }
 
+    .architecture-explanations {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .quick-start-content {
         max-width: 700px;
     }
@@ -418,6 +488,19 @@ body {
 
     .features-grid {
         grid-template-columns: 1fr;
+    }
+
+    .architecture-explanations {
+        grid-template-columns: 1fr;
+    }
+
+    .architecture-diagram {
+        padding: var(--spacing-md);
+        overflow-x: auto;
+    }
+
+    .architecture-diagram svg {
+        min-width: 600px;
     }
 }
 
