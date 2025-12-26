@@ -312,6 +312,94 @@ body {
   border-radius: 4px;
 }
 
+/* Technical Specifications Section */
+.technical-specs {
+  padding: var(--spacing-xxl) 0;
+  background-color: var(--color-bg-alt);
+}
+
+.technical-specs h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.specs-card {
+  background-color: var(--color-bg);
+  padding: var(--spacing-lg);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.specs-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary);
+}
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.specs-table th,
+.specs-table td {
+  padding: var(--spacing-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.specs-table th {
+  font-weight: 600;
+  color: var(--color-text);
+  background-color: var(--color-bg-alt);
+}
+
+.specs-table td {
+  color: var(--color-text-light);
+}
+
+.specs-table code {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  background-color: var(--color-code-bg);
+  color: var(--color-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.requirements-list {
+  list-style: none;
+}
+
+.requirements-list li {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.requirements-list li:last-child {
+  border-bottom: none;
+}
+
+.requirements-list strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.requirements-list span {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
+
 /* Footer */
 .footer {
   background-color: var(--color-code-bg);

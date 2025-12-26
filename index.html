@@ -18,6 +18,7 @@
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="#technical-specs">Tech Specs</a></li>
         <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Documentation</a></li>
         <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
       </ul>
@@ -174,6 +175,83 @@ block_size = "4KB"</code></pre>
             <ul>
               <li><code>INFO</code> - Database status</li>
               <li><code>MAJOR_COMPACTION</code> - Trigger compaction</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="technical-specs" class="technical-specs">
+      <div class="container">
+        <h2>Technical Specifications</h2>
+        <p class="section-description">Configuration defaults and system requirements for running MirDB.</p>
+
+        <div class="specs-grid">
+          <div class="specs-card">
+            <h3>Configuration Defaults</h3>
+            <table class="specs-table">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Default Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Listen Address</td>
+                  <td><code>0.0.0.0:12333</code></td>
+                </tr>
+                <tr>
+                  <td>Work Directory</td>
+                  <td><code>/tmp/mirdb</code></td>
+                </tr>
+                <tr>
+                  <td>Max LSM Levels</td>
+                  <td><code>7</code></td>
+                </tr>
+                <tr>
+                  <td>SSTable Max Size</td>
+                  <td><code>100MB</code></td>
+                </tr>
+                <tr>
+                  <td>Memtable Max Size</td>
+                  <td><code>4MB</code></td>
+                </tr>
+                <tr>
+                  <td>Block Size</td>
+                  <td><code>4KB</code></td>
+                </tr>
+                <tr>
+                  <td>L0 Compaction Trigger</td>
+                  <td><code>4 files</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="specs-card">
+            <h3>System Requirements</h3>
+            <ul class="requirements-list">
+              <li>
+                <strong>Rust</strong>
+                <span>Rust 2018 edition or later with Cargo build system</span>
+              </li>
+              <li>
+                <strong>Tokio Runtime</strong>
+                <span>Async runtime for non-blocking I/O operations</span>
+              </li>
+              <li>
+                <strong>Operating System</strong>
+                <span>Linux, macOS, or Windows with POSIX-compatible filesystem</span>
+              </li>
+              <li>
+                <strong>Memory</strong>
+                <span>Minimum 512MB RAM (recommended 2GB+ for production)</span>
+              </li>
+              <li>
+                <strong>Disk Space</strong>
+                <span>Depends on data volume; SSTable storage uses ~2x data size during compaction</span>
+              </li>
             </ul>
           </div>
         </div>
