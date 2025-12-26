@@ -10,10 +10,11 @@
   <link rel="stylesheet" href="css/prism.css">
 </head>
 <body>
-  <header class="header">
-    <nav class="nav">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="header" role="banner">
+    <nav class="nav" role="navigation" aria-label="Main navigation">
       <div class="nav-brand">
-        <a href="#" class="logo nav-logo">MirDB</a>
+        <a href="#" class="logo nav-logo" aria-label="MirDB Home">MirDB</a>
       </div>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
@@ -26,7 +27,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content" role="main">
     <section class="hero">
       <div class="container">
         <h1>MirDB</h1>
@@ -221,7 +222,7 @@ block_size = "4KB"</code></pre>
         <h2>Supported Commands</h2>
         <div class="command-grid">
           <div class="command-card">
-            <h4>Storage</h4>
+            <h3>Storage</h3>
             <ul>
               <li><code>SET</code> - Store a key-value pair</li>
               <li><code>ADD</code> - Store only if key doesn't exist</li>
@@ -231,20 +232,20 @@ block_size = "4KB"</code></pre>
             </ul>
           </div>
           <div class="command-card">
-            <h4>Retrieval</h4>
+            <h3>Retrieval</h3>
             <ul>
               <li><code>GET</code> - Retrieve one or more keys</li>
               <li><code>GETS</code> - Retrieve with CAS token</li>
             </ul>
           </div>
           <div class="command-card">
-            <h4>Deletion</h4>
+            <h3>Deletion</h3>
             <ul>
               <li><code>DELETE</code> - Remove a key</li>
             </ul>
           </div>
           <div class="command-card">
-            <h4>Administration</h4>
+            <h3>Administration</h3>
             <ul>
               <li><code>INFO</code> - Database status</li>
               <li><code>MAJOR_COMPACTION</code> - Trigger compaction</li>
@@ -332,15 +333,15 @@ block_size = "4KB"</code></pre>
     </section>
   </main>
 
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer-content">
         <div class="footer-brand">
-          <h3>MirDB</h3>
+          <h2 class="footer-title">MirDB</h2>
           <p>A persistent key-value store with memcached protocol.</p>
         </div>
         <div class="footer-links">
-          <h4>Resources</h4>
+          <h3>Resources</h3>
           <ul>
             <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
             <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Documentation</a></li>
@@ -348,7 +349,7 @@ block_size = "4KB"</code></pre>
           </ul>
         </div>
         <div class="footer-status">
-          <h4>Project Status</h4>
+          <h3>Project Status</h3>
           <ul>
             <li>Memcached Protocol</li>
             <li>Skip List Memtable</li>

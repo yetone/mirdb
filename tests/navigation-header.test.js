@@ -24,10 +24,14 @@ describe('Navigation and Header', () => {
             expect(nav).not.toBeNull();
         });
 
-        test('header should be at the top of the page (first child of body or early in DOM)', () => {
+        test('header should be at the top of the page (first or second child of body for skip link)', () => {
             const body = document.body;
             const firstElement = body.children[0];
-            expect(firstElement.tagName.toLowerCase()).toBe('header');
+            const secondElement = body.children[1];
+            // Header should be either first (no skip link) or second (with skip link)
+            const headerIsFirst = firstElement.tagName.toLowerCase() === 'header';
+            const headerIsSecond = secondElement && secondElement.tagName.toLowerCase() === 'header';
+            expect(headerIsFirst || headerIsSecond).toBe(true);
         });
 
         test('navigation should contain links', () => {

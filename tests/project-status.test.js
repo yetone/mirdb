@@ -17,7 +17,7 @@ describe('Project Status Display', () => {
 
         test('Project Status heading should exist', () => {
             const footer = document.querySelector('footer');
-            const statusHeading = footer.querySelector('.footer-status h4');
+            const statusHeading = footer.querySelector('.footer-status h3, .footer-status h4');
             expect(statusHeading).not.toBeNull();
             expect(statusHeading.textContent.toLowerCase()).toContain('project status');
         });

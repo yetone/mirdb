@@ -9,6 +9,48 @@
   padding: 0;
 }
 
+/* Skip Link - Accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 8px 16px;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 0;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 2px;
+}
+
+/* Focus Styles - Accessibility */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 :root {
   --color-primary: #3b82f6;
   --color-primary-dark: #2563eb;
@@ -386,6 +428,7 @@ body {
   border: 1px solid var(--color-border);
 }
 
+.command-card h3,
 .command-card h4 {
   font-size: 1.125rem;
   margin-bottom: var(--spacing-sm);
@@ -512,8 +555,14 @@ body {
   margin-bottom: var(--spacing-xl);
 }
 
+.footer-brand h2.footer-title,
 .footer-brand h3 {
   font-size: 1.5rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer h3 {
+  font-size: 1rem;
   margin-bottom: var(--spacing-sm);
 }
 
