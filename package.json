@@ -1,0 +1,12 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB product homepage",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jsdom": "^24.0.0"
+  }
+}

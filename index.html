@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility. Fast, durable, and easy to use.">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="nav-logo">MirDB</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <h1>MirDB</h1>
+                <p class="tagline">A persistent key-value store with memcached protocol compatibility</p>
+                <p class="value-proposition">
+                    Drop-in replacement for memcached with data persistence. Built with Rust for speed and reliability,
+                    using LSM tree architecture for efficient storage.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#quick-start" class="btn btn-primary">Get Started</a>
+                    <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Memcached Compatible</h3>
+                    <p>Works with existing memcached clients. Supports SET, GET, DELETE, ADD, REPLACE, APPEND, and PREPEND commands.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Data Persistence</h3>
+                    <p>Unlike traditional memcached, your data survives restarts. SSTables and Write-Ahead Log ensure durability.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Efficient write performance with background compaction. Multi-level storage optimization for fast reads.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Built with Rust</h3>
+                    <p>Tokio-based async networking for high performance. Memory safety guarantees without garbage collection.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="quick-start" class="quick-start">
+            <h2>Quick Start</h2>
+            <div class="code-example">
+                <h3>Installation</h3>
+                <pre><code class="language-bash">cargo install mirdb-server
+
+# Run the server
+mirdb-server --config /path/to/config.toml</code></pre>
+            </div>
+            <div class="code-example">
+                <h3>Usage</h3>
+                <pre><code class="language-python"># Connect with any memcached client
+import memcache
+client = memcache.Client(['localhost:12333'])
+
+# Store data
+client.set('key', 'value')
+
+# Retrieve data
+value = client.get('key')</code></pre>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>MirDB is open source software licensed under MIT.</p>
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Issues</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
