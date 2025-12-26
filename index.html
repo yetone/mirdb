@@ -17,6 +17,7 @@
       </div>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
+        <li><a href="#comparison">Comparison</a></li>
         <li><a href="#quick-start">Quick Start</a></li>
         <li><a href="#technical-specs">Tech Specs</a></li>
         <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Documentation</a></li>
@@ -60,6 +61,78 @@
             <h3>Built with Rust</h3>
             <p>Tokio-based async networking with memory safety guarantees and high performance.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="comparison" class="comparison" data-section="comparison">
+      <div class="container">
+        <h2>MirDB vs Standard Memcached</h2>
+        <p class="section-description">Understanding the key differences and advantages of MirDB over traditional memcached.</p>
+
+        <div class="comparison-grid">
+          <div class="comparison-card advantage">
+            <h3>Data Persistence</h3>
+            <p><strong>Unlike standard memcached</strong>, which is a purely in-memory cache that loses all data on restart, MirDB persists your data to disk using SSTables. Your data survives server restarts and system failures.</p>
+            <ul>
+              <li>Data is preserved through restarts</li>
+              <li>LSM tree architecture ensures durability</li>
+              <li>Write-ahead logging for crash recovery</li>
+            </ul>
+          </div>
+          <div class="comparison-card">
+            <h3>Protocol Compatibility</h3>
+            <p>MirDB implements the standard memcached text protocol, allowing you to use your existing memcached clients without modification. All common memcached commands are supported.</p>
+            <ul>
+              <li>Drop-in replacement for memcached</li>
+              <li>Works with any memcached client library</li>
+              <li>Same familiar SET, GET, DELETE commands</li>
+            </ul>
+          </div>
+          <div class="comparison-card">
+            <h3>Storage Architecture</h3>
+            <p>While memcached relies solely on volatile memory, MirDB uses an LSM tree (Log-Structured Merge-tree) architecture with SSTables for efficient disk storage and compaction.</p>
+            <ul>
+              <li>Efficient write performance</li>
+              <li>Automatic background compaction</li>
+              <li>Multi-level storage optimization</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="comparison-table-container">
+          <h3>Feature Comparison</h3>
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Standard Memcached</th>
+                <th>MirDB</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Data Persistence</td>
+                <td class="negative">No - data lost on restart</td>
+                <td class="positive">Yes - data survives restarts</td>
+              </tr>
+              <tr>
+                <td>Storage</td>
+                <td>In-memory only (volatile)</td>
+                <td>Disk + memory (SSTable/LSM)</td>
+              </tr>
+              <tr>
+                <td>Protocol</td>
+                <td>Memcached text protocol</td>
+                <td>Memcached text protocol</td>
+              </tr>
+              <tr>
+                <td>Crash Recovery</td>
+                <td class="negative">No recovery possible</td>
+                <td class="positive">Write-ahead log recovery</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
