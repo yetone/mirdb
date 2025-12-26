@@ -1,94 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility. Fast, durable, and easy to use.">
-    <title>MirDB - Persistent Key-Value Store</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility. Fast, reliable, and built with Rust.">
+  <meta name="keywords" content="MirDB, key-value store, memcached, Rust, LSM tree, persistence, database">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/prism.css">
 </head>
 <body>
-    <header class="header">
-        <nav class="nav">
-            <a href="/" class="nav-logo">MirDB</a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#quick-start">Quick Start</a></li>
-                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header class="header">
+    <nav class="nav">
+      <div class="nav-brand">
+        <a href="#" class="logo">MirDB</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Documentation</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <main>
-        <section id="hero" class="hero">
-            <div class="hero-content">
-                <h1>MirDB</h1>
-                <p class="tagline">A persistent key-value store with memcached protocol compatibility</p>
-                <p class="value-proposition">
-                    Drop-in replacement for memcached with data persistence. Built with Rust for speed and reliability,
-                    using LSM tree architecture for efficient storage.
-                </p>
-                <div class="cta-buttons">
-                    <a href="#quick-start" class="btn btn-primary">Get Started</a>
-                    <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
-                </div>
-            </div>
-        </section>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>MirDB</h1>
+        <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+        <p class="description">
+          Fast, reliable, and built with Rust. MirDB combines the simplicity of memcached with the durability of persistent storage using LSM tree architecture.
+        </p>
+        <div class="cta-buttons">
+          <a href="#quick-start" class="btn btn-primary">Get Started</a>
+          <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+        </div>
+      </div>
+    </section>
 
-        <section id="features" class="features">
-            <h2>Key Features</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Memcached Compatible</h3>
-                    <p>Works with existing memcached clients. Supports SET, GET, DELETE, ADD, REPLACE, APPEND, and PREPEND commands.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Data Persistence</h3>
-                    <p>Unlike traditional memcached, your data survives restarts. SSTables and Write-Ahead Log ensure durability.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>LSM Tree Architecture</h3>
-                    <p>Efficient write performance with background compaction. Multi-level storage optimization for fast reads.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Built with Rust</h3>
-                    <p>Tokio-based async networking for high performance. Memory safety guarantees without garbage collection.</p>
-                </div>
-            </div>
-        </section>
+    <section id="features" class="features">
+      <div class="container">
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>Memcached Protocol</h3>
+            <p>Compatible with the standard memcached text protocol. Use existing memcached clients without modification.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Data Persistence</h3>
+            <p>Unlike memcached, MirDB persists data to disk using SSTables, surviving restarts and failures.</p>
+          </div>
+          <div class="feature-card">
+            <h3>LSM Tree Architecture</h3>
+            <p>Efficient write performance with background compaction and multi-level storage optimization.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Built with Rust</h3>
+            <p>Tokio-based async networking with memory safety guarantees and high performance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <section id="quick-start" class="quick-start">
-            <h2>Quick Start</h2>
-            <div class="code-example">
-                <h3>Installation</h3>
-                <pre><code class="language-bash">cargo install mirdb-server
+    <section id="quick-start" class="quick-start" data-section="quick-start">
+      <div class="container">
+        <h2>Quick Start</h2>
+        <p class="section-description">Get up and running with MirDB in minutes.</p>
 
-# Run the server
-mirdb-server --config /path/to/config.toml</code></pre>
-            </div>
-            <div class="code-example">
-                <h3>Usage</h3>
-                <pre><code class="language-python"># Connect with any memcached client
-import memcache
+        <div class="quick-start-content">
+          <div class="step">
+            <h3>1. Installation</h3>
+            <p>Clone the repository and build with Cargo:</p>
+            <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build and run with Cargo
+cargo run --release</code></pre>
+          </div>
+
+          <div class="step">
+            <h3>2. Connect with Any Memcached Client</h3>
+            <p>MirDB works with any memcached-compatible client. Here's an example using Python:</p>
+            <pre><code class="language-python">import memcache
+
+# Connect to MirDB (default port: 12333)
 client = memcache.Client(['localhost:12333'])
 
-# Store data
-client.set('key', 'value')
+# Store data with SET
+client.set('user:1', 'John Doe')
+client.set('counter', '42')
 
-# Retrieve data
-value = client.get('key')</code></pre>
-            </div>
-        </section>
-    </main>
+# Retrieve data with GET
+name = client.get('user:1')
+print(f"User: {name}")  # Output: User: John Doe
 
-    <footer class="footer">
-        <div class="footer-content">
-            <p>MirDB is open source software licensed under MIT.</p>
-            <div class="footer-links">
-                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Issues</a>
-            </div>
+count = client.get('counter')
+print(f"Counter: {count}")  # Output: Counter: 42
+
+# Delete data
+client.delete('counter')</code></pre>
+          </div>
+
+          <div class="step">
+            <h3>3. Using the Raw Protocol</h3>
+            <p>You can also connect directly using telnet or netcat:</p>
+            <pre><code class="language-bash"># Connect to MirDB
+telnet localhost 12333
+
+# SET a key-value pair
+set mykey 0 0 5
+hello
+STORED
+
+# GET the value back
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+
+          <div class="step">
+            <h3>4. Configuration</h3>
+            <p>Default configuration values:</p>
+            <pre><code class="language-toml"># MirDB default configuration
+listen_address = "0.0.0.0:12333"
+work_directory = "/tmp/mirdb"
+max_lsm_levels = 7
+sstable_max_size = "100MB"
+memtable_max_size = "4MB"
+block_size = "4KB"</code></pre>
+          </div>
         </div>
-    </footer>
+
+        <div class="quick-start-footer">
+          <p>Ready to dive deeper?</p>
+          <a href="https://github.com/yetone/mirdb#readme" class="btn btn-primary" target="_blank" rel="noopener">Read Full Documentation</a>
+          <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View Source on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="commands" class="commands">
+      <div class="container">
+        <h2>Supported Commands</h2>
+        <div class="command-grid">
+          <div class="command-card">
+            <h4>Storage</h4>
+            <ul>
+              <li><code>SET</code> - Store a key-value pair</li>
+              <li><code>ADD</code> - Store only if key doesn't exist</li>
+              <li><code>REPLACE</code> - Store only if key exists</li>
+              <li><code>APPEND</code> - Append to existing value</li>
+              <li><code>PREPEND</code> - Prepend to existing value</li>
+            </ul>
+          </div>
+          <div class="command-card">
+            <h4>Retrieval</h4>
+            <ul>
+              <li><code>GET</code> - Retrieve one or more keys</li>
+              <li><code>GETS</code> - Retrieve with CAS token</li>
+            </ul>
+          </div>
+          <div class="command-card">
+            <h4>Deletion</h4>
+            <ul>
+              <li><code>DELETE</code> - Remove a key</li>
+            </ul>
+          </div>
+          <div class="command-card">
+            <h4>Administration</h4>
+            <ul>
+              <li><code>INFO</code> - Database status</li>
+              <li><code>MAJOR_COMPACTION</code> - Trigger compaction</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h3>MirDB</h3>
+          <p>A persistent key-value store with memcached protocol.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Documentation</a></li>
+            <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-status">
+          <h4>Project Status</h4>
+          <ul>
+            <li>Memcached Protocol</li>
+            <li>Skip List Memtable</li>
+            <li>Minor Compaction</li>
+            <li>Major Compaction</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Licensed under ISC</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/prism.js"></script>
 </body>
 </html>
