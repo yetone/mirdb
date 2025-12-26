@@ -76,8 +76,9 @@ describe('Page Performance', () => {
       const externalLinks = htmlContent.match(/https?:\/\/(?!github\.com)[^"'\s]+/gi) || [];
 
       // Filter out GitHub links which are expected
+      // Also filter out canonical URL (mirdb.io) which is required for SEO
       const nonGitHubExternals = externalLinks.filter(link =>
-        !link.includes('github.com') && !link.includes('github.io')
+        !link.includes('github.com') && !link.includes('github.io') && !link.includes('mirdb.io')
       );
 
       // Should have minimal or no external dependencies for fast load
