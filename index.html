@@ -23,6 +23,21 @@
     <link rel="canonical" href="https://github.com/yetone/mirdb">
 
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Progressive Enhancement: Ensure navigation works without JavaScript -->
+    <noscript>
+        <style>
+            /* On mobile, show navigation when JavaScript is disabled */
+            @media (max-width: 768px) {
+                .nav-links {
+                    display: flex !important;
+                }
+                .mobile-menu-toggle {
+                    display: none !important;
+                }
+            }
+        </style>
+    </noscript>
 </head>
 <body>
     <a href="#main" class="skip-link">Skip to main content</a>
