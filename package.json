@@ -1,0 +1,28 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "![logo](https://github.com/yetone/mirdb/raw/master/assets/logo.gif)",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "serve": "npx serve -l 3000 ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yetone/mirdb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yetone/mirdb/issues"
+  },
+  "homepage": "https://github.com/yetone/mirdb#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "playwright": "^1.57.0",
+    "serve": "^14.2.5"
+  }
+}
