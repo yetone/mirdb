@@ -158,36 +158,174 @@ END</code></pre>
 
         <section id="commands" class="commands-section">
             <h2>Supported Commands</h2>
-            <div class="commands-grid">
-                <div class="command-category">
-                    <h3>Storage</h3>
-                    <ul>
-                        <li><code>SET</code></li>
-                        <li><code>ADD</code></li>
-                        <li><code>REPLACE</code></li>
-                        <li><code>APPEND</code></li>
-                        <li><code>PREPEND</code></li>
-                    </ul>
+
+            <!-- Storage Commands -->
+            <div class="command-category-section" data-testid="commands-storage">
+                <h3 class="category-title">Storage Commands</h3>
+
+                <div class="command-item" data-testid="command-set">
+                    <h4 class="command-name">SET</h4>
+                    <p class="command-description">Store a key-value pair. Overwrites existing value if key exists.</p>
+                    <div class="command-example">
+                        <pre><code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+set mykey 0 3600 5
+hello
+STORED</code></pre>
+                    </div>
                 </div>
-                <div class="command-category">
-                    <h3>Retrieval</h3>
-                    <ul>
-                        <li><code>GET</code></li>
-                        <li><code>GETS</code></li>
-                    </ul>
+
+                <div class="command-item" data-testid="command-add">
+                    <h4 class="command-name">ADD</h4>
+                    <p class="command-description">Store a key-value pair only if the key does not already exist.</p>
+                    <div class="command-example">
+                        <pre><code>add &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+add newkey 0 0 5
+world
+STORED</code></pre>
+                    </div>
                 </div>
-                <div class="command-category">
-                    <h3>Deletion</h3>
-                    <ul>
-                        <li><code>DELETE</code></li>
-                    </ul>
+
+                <div class="command-item" data-testid="command-replace">
+                    <h4 class="command-name">REPLACE</h4>
+                    <p class="command-description">Store a key-value pair only if the key already exists.</p>
+                    <div class="command-example">
+                        <pre><code>replace &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+replace mykey 0 0 6
+world!
+STORED</code></pre>
+                    </div>
                 </div>
-                <div class="command-category">
-                    <h3>MirDB-Specific</h3>
-                    <ul>
-                        <li><code>INFO</code></li>
-                        <li><code>MAJOR_COMPACTION</code></li>
-                    </ul>
+
+                <div class="command-item" data-testid="command-append">
+                    <h4 class="command-name">APPEND</h4>
+                    <p class="command-description">Append data to an existing key's value.</p>
+                    <div class="command-example">
+                        <pre><code>append &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+append mykey 0 0 6
+_extra
+STORED</code></pre>
+                    </div>
+                </div>
+
+                <div class="command-item" data-testid="command-prepend">
+                    <h4 class="command-name">PREPEND</h4>
+                    <p class="command-description">Prepend data to an existing key's value.</p>
+                    <div class="command-example">
+                        <pre><code>prepend &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n
+
+# Example:
+prepend mykey 0 0 7
+prefix_
+STORED</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Retrieval Commands -->
+            <div class="command-category-section" data-testid="commands-retrieval">
+                <h3 class="category-title">Retrieval Commands</h3>
+
+                <div class="command-item" data-testid="command-get">
+                    <h4 class="command-name">GET</h4>
+                    <p class="command-description">Retrieve the value for one or more keys.</p>
+                    <div class="command-example">
+                        <pre><code>get &lt;key1&gt; [&lt;key2&gt; ...]\r\n
+
+# Example:
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Multiple keys:
+get key1 key2 key3
+VALUE key1 0 5
+value1
+VALUE key2 0 5
+value2
+END</code></pre>
+                    </div>
+                </div>
+
+                <div class="command-item" data-testid="command-gets">
+                    <h4 class="command-name">GETS</h4>
+                    <p class="command-description">Retrieve value with CAS (Check-And-Set) token for optimistic locking.</p>
+                    <div class="command-example">
+                        <pre><code>gets &lt;key1&gt; [&lt;key2&gt; ...]\r\n
+
+# Example:
+gets mykey
+VALUE mykey 0 5 12345
+hello
+END</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deletion Commands -->
+            <div class="command-category-section" data-testid="commands-deletion">
+                <h3 class="category-title">Deletion Commands</h3>
+
+                <div class="command-item" data-testid="command-delete">
+                    <h4 class="command-name">DELETE</h4>
+                    <p class="command-description">Remove a key from the database.</p>
+                    <div class="command-example">
+                        <pre><code>delete &lt;key&gt; [noreply]\r\n
+
+# Example:
+delete mykey
+DELETED
+
+# Key not found:
+delete nonexistent
+NOT_FOUND</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MirDB-Specific Commands -->
+            <div class="command-category-section" data-testid="commands-mirdb">
+                <h3 class="category-title">MirDB-Specific Commands</h3>
+
+                <div class="command-item" data-testid="command-info">
+                    <h4 class="command-name">INFO</h4>
+                    <p class="command-description">Display database status and LSM tree level information.</p>
+                    <div class="command-example">
+                        <pre><code>info\r\n
+
+# Example:
+info
+MirDB Status:
+  Memtable entries: 1234
+  SSTable levels: 7
+  Total keys: 50000
+END</code></pre>
+                    </div>
+                </div>
+
+                <div class="command-item" data-testid="command-major_compaction">
+                    <h4 class="command-name">MAJOR_COMPACTION</h4>
+                    <p class="command-description">Trigger a manual major compaction to merge SSTables and reclaim space.</p>
+                    <div class="command-example">
+                        <pre><code>major_compaction\r\n
+
+# Example:
+major_compaction
+OK</code></pre>
+                    </div>
                 </div>
             </div>
         </section>
