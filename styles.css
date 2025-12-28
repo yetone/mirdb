@@ -267,12 +267,53 @@ section h2 {
     background-color: var(--color-bg-alt);
 }
 
+.quick-start-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quick-start-step {
+    margin-bottom: var(--spacing-xl);
+}
+
+.quick-start-step:last-child {
+    margin-bottom: 0;
+}
+
+.quick-start-step h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.quick-start-step p {
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
+    font-size: 0.95rem;
+}
+
 .code-block {
     max-width: 800px;
     margin: 0 auto;
     background-color: var(--color-code-bg);
     border-radius: var(--border-radius);
     overflow: hidden;
+    position: relative;
+}
+
+.code-block[data-language]::before {
+    content: attr(data-language);
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-md);
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
 }
 
 .code-block pre {
@@ -285,6 +326,11 @@ section h2 {
     font-size: 0.875rem;
     color: var(--color-code-text);
     line-height: 1.7;
+}
+
+/* Syntax highlighting for bash/shell */
+.code-block code.language-bash {
+    color: var(--color-code-text);
 }
 
 /* Commands Section */

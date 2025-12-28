@@ -100,24 +100,59 @@
 
         <section id="quick-start" class="quick-start-section">
             <h2>Quick Start</h2>
-            <div class="code-block">
-                <pre><code># Clone and build from source
+            <div class="quick-start-content">
+                <div class="quick-start-step" id="install-section">
+                    <h3>Installation</h3>
+                    <p>Install MirDB using Cargo (Rust's package manager):</p>
+                    <div class="code-block" data-language="bash">
+                        <pre><code class="language-bash" id="install-command"># Install from crates.io (recommended)
+cargo install mirdb</code></pre>
+                    </div>
+                </div>
+
+                <div class="quick-start-step" id="build-from-source-section">
+                    <h3>Or Build from Source</h3>
+                    <div class="code-block" data-language="bash">
+                        <pre><code class="language-bash" id="build-commands"># Clone and build from source
 git clone https://github.com/yetone/mirdb
 cd mirdb
-cargo build --release
+cargo build --release</code></pre>
+                    </div>
+                </div>
 
-# Run MirDB server
-./target/release/mirdb
+                <div class="quick-start-step" id="run-section">
+                    <h3>Run MirDB</h3>
+                    <div class="code-block" data-language="bash">
+                        <pre><code class="language-bash" id="run-command"># Run MirDB server
+./target/release/mirdb</code></pre>
+                    </div>
+                </div>
 
-# Connect with any memcached client
-telnet localhost 12333
+                <div class="quick-start-step" id="connect-section">
+                    <h3>Connect and Test</h3>
+                    <p>Connect with any memcached-compatible client:</p>
+                    <div class="code-block" data-language="bash">
+                        <pre><code class="language-bash" id="connect-example"># Connect with telnet
+telnet localhost 12333</code></pre>
+                    </div>
+                </div>
+
+                <div class="quick-start-step" id="usage-section">
+                    <h3>Basic Usage</h3>
+                    <p>Try SET and GET commands:</p>
+                    <div class="code-block" data-language="bash">
+                        <pre><code class="language-bash" id="usage-example"># Set a key-value pair
 set hello 0 0 5
 world
 STORED
+
+# Get the value back
 get hello
 VALUE hello 0 5
 world
 END</code></pre>
+                    </div>
+                </div>
             </div>
         </section>
 
