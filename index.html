@@ -79,22 +79,22 @@
         <section id="features" class="features-section">
             <h2>Key Features</h2>
             <div class="features-grid">
-                <div class="feature-card">
-                    <h3>Persistent Storage</h3>
-                    <p>Unlike memcached, MirDB persists data to disk using SSTables, ensuring your data survives restarts.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Memcached Compatible</h3>
-                    <p>Drop-in replacement using standard memcached text protocol. Your existing clients work out of the box.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Written in Rust</h3>
-                    <p>Memory safety, high performance, and modern async I/O with Tokio runtime.</p>
-                </div>
-                <div class="feature-card">
+                <article class="feature-card" data-feature="lsm-tree">
                     <h3>LSM Tree Architecture</h3>
-                    <p>Log-Structured Merge-tree with configurable levels, automatic compaction, and write-ahead logging.</p>
-                </div>
+                    <p>MirDB uses a Log-Structured Merge-tree approach with memtables, immutable memtables, and multi-level SSTable compaction for efficient write performance and reliable storage.</p>
+                </article>
+                <article class="feature-card" data-feature="async-io">
+                    <h3>Async I/O with Tokio</h3>
+                    <p>Built on Tokio for high-performance asynchronous networking. Handle thousands of concurrent connections efficiently with Rust's async/await runtime.</p>
+                </article>
+                <article class="feature-card" data-feature="configurable">
+                    <h3>Configurable Parameters</h3>
+                    <p>Fine-tune MirDB for your workload with TOML configuration. Adjust memtable size, SSTable limits, compaction triggers, and more to optimize performance.</p>
+                </article>
+                <article class="feature-card" data-feature="compaction">
+                    <h3>Background Compaction</h3>
+                    <p>Automatic background compaction keeps your data organized. Minor compaction flushes memtables to disk, while major compaction merges SSTables across levels.</p>
+                </article>
             </div>
         </section>
 
