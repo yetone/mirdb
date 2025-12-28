@@ -332,8 +332,48 @@ OK</code></pre>
 
         <section id="configuration" class="config-section">
             <h2>Configuration</h2>
-            <div class="code-block">
-                <pre><code># Default configuration (TOML format)
+            <p class="config-intro">MirDB uses TOML configuration files. Configure MirDB by creating a configuration file and passing it via the <code>-c</code> flag:</p>
+            <div class="code-block" data-language="bash">
+                <pre><code class="language-bash">mirdb -c /path/to/config.toml</code></pre>
+            </div>
+
+            <h3>Configuration Parameters</h3>
+            <div class="config-params-table">
+                <div class="config-param-row" data-param="addr">
+                    <span class="param-name"><code>addr</code></span>
+                    <span class="param-description">Listen address and port for the server</span>
+                    <span class="param-default"><code>0.0.0.0:12333</code></span>
+                </div>
+                <div class="config-param-row" data-param="max_level">
+                    <span class="param-name"><code>max_level</code></span>
+                    <span class="param-description">Maximum number of LSM tree levels</span>
+                    <span class="param-default"><code>7</code></span>
+                </div>
+                <div class="config-param-row" data-param="work_dir">
+                    <span class="param-name"><code>work_dir</code></span>
+                    <span class="param-description">Data directory path for storing SSTable files</span>
+                    <span class="param-default"><code>/tmp/mirdb</code></span>
+                </div>
+                <div class="config-param-row" data-param="sst_max_size">
+                    <span class="param-name"><code>sst_max_size</code></span>
+                    <span class="param-description">Maximum SSTable file size before splitting</span>
+                    <span class="param-default"><code>100M</code></span>
+                </div>
+                <div class="config-param-row" data-param="mem_table_max_size">
+                    <span class="param-name"><code>mem_table_max_size</code></span>
+                    <span class="param-description">Maximum memtable size before flush to disk</span>
+                    <span class="param-default"><code>4M</code></span>
+                </div>
+                <div class="config-param-row" data-param="block_size">
+                    <span class="param-name"><code>block_size</code></span>
+                    <span class="param-description">Data block size within SSTable files</span>
+                    <span class="param-default"><code>4K</code></span>
+                </div>
+            </div>
+
+            <h3>Example Configuration</h3>
+            <div class="code-block" data-language="toml">
+                <pre><code class="language-toml"># MirDB Configuration (TOML format)
 addr = "0.0.0.0:12333"
 max_level = 7
 work_dir = "/tmp/mirdb"
