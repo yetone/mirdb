@@ -22,6 +22,23 @@
     --border-radius: 8px;
 }
 
+/* Dark mode support - uses system preference */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-primary: #3b82f6;
+        --color-primary-dark: #2563eb;
+        --color-secondary: #94a3b8;
+        --color-text: #f1f5f9;
+        --color-text-light: #cbd5e1;
+        --color-bg: #0f172a;
+        --color-bg-alt: #1e293b;
+        --color-border: #334155;
+        --color-code-bg: #0d1117;
+        --color-code-text: #e6edf3;
+        --color-footer-text: #94a3b8;
+    }
+}
+
 /* Reset */
 *, *::before, *::after {
     box-sizing: border-box;
