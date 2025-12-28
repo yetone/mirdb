@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="#main" class="skip-link">Skip to main content</a>
     <header>
         <nav class="nav-container">
             <a href="#" class="logo-link">
@@ -43,7 +44,7 @@
         </nav>
     </header>
 
-    <main>
+    <main id="main">
         <section id="hero" class="hero-section">
             <div class="hero-content">
                 <img src="assets/logo.gif" alt="MirDB Logo - Persistent Key-Value Store" class="hero-logo" id="hero-logo">
@@ -59,6 +60,7 @@
 
         <!-- Value Propositions Section -->
         <section id="value-propositions" class="value-propositions-section" data-testid="value-propositions-section">
+            <h2 class="visually-hidden">Why MirDB</h2>
             <div class="value-props-grid" data-testid="value-props-grid">
                 <!-- Persistent Storage -->
                 <div class="value-prop-card" data-testid="value-prop-persistent-storage">

@@ -4,12 +4,13 @@
     --color-primary-dark: #1d4ed8;
     --color-secondary: #64748b;
     --color-text: #1e293b;
-    --color-text-light: #64748b;
+    --color-text-light: #536379;
     --color-bg: #ffffff;
     --color-bg-alt: #f8fafc;
     --color-border: #e2e8f0;
     --color-code-bg: #1e293b;
     --color-code-text: #e2e8f0;
+    --color-footer-text: #a1b5cc;
     --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
     --max-width: 1200px;
@@ -39,6 +40,40 @@ body {
     line-height: 1.6;
     color: var(--color-text);
     background-color: var(--color-bg);
+}
+
+/* Skip Link for Accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--color-primary);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 200;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 0 0 var(--border-radius) 0;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 2px solid var(--color-primary-dark);
+    outline-offset: 2px;
+}
+
+/* Visually Hidden (for screen readers only) */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* Header */
@@ -524,7 +559,7 @@ footer {
 
 .footer-section p {
     font-size: 0.875rem;
-    color: var(--color-text-light);
+    color: var(--color-footer-text);
 }
 
 .footer-section ul {
@@ -536,7 +571,7 @@ footer {
 }
 
 .footer-section a {
-    color: var(--color-text-light);
+    color: var(--color-footer-text);
     text-decoration: none;
     font-size: 0.875rem;
     transition: color 0.2s ease;
@@ -554,7 +589,7 @@ footer {
 
 .footer-bottom p {
     font-size: 0.875rem;
-    color: var(--color-text-light);
+    color: var(--color-footer-text);
 }
 
 /* Mobile Menu Toggle (Hamburger) */
