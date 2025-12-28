@@ -181,6 +181,47 @@ section {
     padding: var(--spacing-xl) var(--spacing-lg);
 }
 
+/* Value Propositions Section */
+.value-propositions-section {
+    background-color: var(--color-bg);
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.value-props-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.value-prop-card {
+    text-align: center;
+    padding: var(--spacing-lg);
+}
+
+.value-prop-icon {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.value-prop-icon svg {
+    width: 48px;
+    height: 48px;
+}
+
+.value-prop-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.value-prop-description {
+    color: var(--color-text-light);
+    line-height: 1.7;
+}
+
 section h2 {
     font-size: 2rem;
     font-weight: 700;
@@ -377,5 +418,10 @@ footer {
     .btn {
         width: 100%;
         max-width: 300px;
+    }
+
+    .value-props-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
     }
 }

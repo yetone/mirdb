@@ -35,6 +35,47 @@
             </div>
         </section>
 
+        <!-- Value Propositions Section -->
+        <section id="value-propositions" class="value-propositions-section" data-testid="value-propositions-section">
+            <div class="value-props-grid" data-testid="value-props-grid">
+                <!-- Persistent Storage -->
+                <div class="value-prop-card" data-testid="value-prop-persistent-storage">
+                    <div class="value-prop-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h3 class="value-prop-title" data-testid="value-prop-persistent-storage-title">Persistent Storage</h3>
+                    <p class="value-prop-description" data-testid="value-prop-persistent-storage-description">Unlike memcached, MirDB persists your data to disk using LSM tree architecture with SSTables. Your data survives restarts and crashes.</p>
+                </div>
+
+                <!-- Memcached Compatible -->
+                <div class="value-prop-card" data-testid="value-prop-memcached-compatible">
+                    <div class="value-prop-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="value-prop-title" data-testid="value-prop-memcached-compatible-title">Memcached Compatible</h3>
+                    <p class="value-prop-description" data-testid="value-prop-memcached-compatible-description">Drop-in replacement using the standard memcached text protocol. Your existing memcached clients connect seamlessly without any code changes.</p>
+                </div>
+
+                <!-- Written in Rust -->
+                <div class="value-prop-card" data-testid="value-prop-rust">
+                    <div class="value-prop-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <h3 class="value-prop-title" data-testid="value-prop-rust-title">Written in Rust</h3>
+                    <p class="value-prop-description" data-testid="value-prop-rust-description">Built with Rust for memory safety, performance, and reliability. Async I/O powered by Tokio for handling thousands of concurrent connections.</p>
+                </div>
+            </div>
+        </section>
+
         <section id="features" class="features-section">
             <h2>Key Features</h2>
             <div class="features-grid">
