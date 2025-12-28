@@ -24,6 +24,10 @@ module.exports = defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    {
+      name: 'edge',
+      use: { ...devices['Desktop Edge'] },
+    },
   ],
   webServer: {
     command: 'npx serve -l 3000 .',
