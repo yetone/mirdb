@@ -471,6 +471,103 @@ a:hover {
     color: var(--text-color);
 }
 
+/* Project Status Section */
+.project-status {
+    padding: 5rem 0;
+    background: var(--background);
+}
+
+.project-status h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.project-status .section-description {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+    color: var(--text-light);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.status-card {
+    background: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: var(--card-shadow);
+}
+
+.status-card.implemented {
+    border-left: 4px solid #22c55e;
+}
+
+.status-card.planned {
+    border-left: 4px solid #f59e0b;
+}
+
+.status-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.status-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.status-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.status-item.done .status-icon {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.status-item.future .status-icon {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.status-text {
+    color: var(--text-light);
+    line-height: 1.5;
+}
+
 /* Footer */
 .footer {
     background: var(--text-color);
@@ -532,7 +629,8 @@ a:hover {
     .features h2,
     .code-example h2,
     .getting-started h2,
-    .architecture h2 {
+    .architecture h2,
+    .project-status h2 {
         font-size: 2.25rem;
     }
 
@@ -589,7 +687,8 @@ a:hover {
 
     .features h2,
     .code-example h2,
-    .getting-started h2 {
+    .getting-started h2,
+    .project-status h2 {
         font-size: 2rem;
     }
 
@@ -598,6 +697,10 @@ a:hover {
     }
 
     .getting-started-content {
+        grid-template-columns: 1fr;
+    }
+
+    .status-grid {
         grid-template-columns: 1fr;
     }
 
