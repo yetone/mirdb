@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. High-performance LSM tree architecture written in Rust.">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="hero">
+        <nav class="nav">
+            <div class="nav-brand">
+                <img src="../assets/logo.gif" alt="MirDB Logo" class="logo">
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#quickstart">Quick Start</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <h1 class="product-name">MirDB</h1>
+            <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+            <p class="description">
+                A high-performance key-value database built with Rust, featuring LSM tree architecture
+                and full Memcached protocol compatibility. Your data persists across restarts.
+            </p>
+            <div class="cta-buttons">
+                <a href="#quickstart" class="btn btn-primary cta">Get Started</a>
+                <a href="https://github.com/yetone/mirdb#readme" class="btn btn-secondary cta" target="_blank" rel="noopener">View Documentation</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="features" class="features">
+            <h2>Key Features</h2>
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <h3>Memcached Compatible</h3>
+                    <p>Use existing Memcached clients and tools. Full support for SET, GET, DELETE, ADD, REPLACE, APPEND, and PREPEND commands.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>Unlike Memcached, MirDB persists your data to disk using SSTables. Your data survives server restarts.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>High Performance</h3>
+                    <p>LSM tree architecture with skip list memtables, Write-Ahead Log (WAL) for durability, and efficient compaction.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="quickstart" class="quickstart">
+            <h2>Quick Start</h2>
+            <div class="quickstart-content">
+                <div class="step">
+                    <h3>1. Build from Source</h3>
+                    <pre><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+                </div>
+                <div class="step">
+                    <h3>2. Run MirDB</h3>
+                    <pre><code>./target/release/mirdb-server</code></pre>
+                    <p>Default port: <code>12333</code></p>
+                </div>
+                <div class="step">
+                    <h3>3. Connect with Telnet</h3>
+                    <pre><code>telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>MirDB is open source software licensed under MIT.</p>
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Documentation</a>
+                <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Issues</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
