@@ -391,6 +391,12 @@ h1, h2, h3 {
     max-width: 100%;
 }
 
+/* Ensure scrollable regions are keyboard accessible via tabindex="0" in HTML */
+.config-table-group:focus {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+}
+
 .config-table-group h3 {
     font-size: 1rem;
     color: var(--color-text-muted);
