@@ -220,6 +220,102 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Getting Started Section */
+        .getting-started {
+            padding: 5rem 2rem;
+            background-color: var(--bg-light);
+        }
+
+        .getting-started-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .getting-started h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .getting-started-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.125rem;
+            margin-bottom: 3rem;
+        }
+
+        .getting-started-step {
+            margin-bottom: 2rem;
+        }
+
+        .getting-started-step h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .getting-started pre {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Consolas', 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+
+        .getting-started pre code {
+            font-family: inherit;
+            color: inherit;
+        }
+
+        .getting-started .comment {
+            color: #9ca3af;
+        }
+
+        .getting-started .command {
+            color: #60a5fa;
+        }
+
+        .getting-started .output {
+            color: #34d399;
+        }
+
+        @media (max-width: 768px) {
+            .getting-started {
+                padding: 3rem 1.5rem;
+            }
+
+            .getting-started h2 {
+                font-size: 2rem;
+            }
+
+            .getting-started pre {
+                padding: 1rem;
+                font-size: 0.75rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -279,6 +375,36 @@
                     <h3>Rust Performance</h3>
                     <p>Written in Rust with async networking via Tokio. Memory-safe, fast, and efficient—deploy a single binary with confidence.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="getting-started" id="getting-started" data-testid="getting-started-section">
+        <div class="getting-started-container">
+            <h2>Getting Started</h2>
+            <p class="getting-started-subtitle">Get MirDB up and running in minutes</p>
+
+            <div class="getting-started-step">
+                <h3><span class="step-number">1</span> Start the MirDB Server</h3>
+                <pre><code><span class="comment"># Start MirDB server with your configuration file</span>
+<span class="command">mirdb -c /path/to/config.toml</span></code></pre>
+            </div>
+
+            <div class="getting-started-step">
+                <h3><span class="step-number">2</span> Connect with Any Memcached Client</h3>
+                <pre><code><span class="comment"># Connect using telnet or any memcached client</span>
+<span class="command">telnet localhost 12333</span>
+
+<span class="comment"># Store a value</span>
+<span class="command">set mykey 0 0 5</span>
+hello
+<span class="output">STORED</span>
+
+<span class="comment"># Retrieve the value</span>
+<span class="command">get mykey</span>
+<span class="output">VALUE mykey 0 5
+hello
+END</span></code></pre>
             </div>
         </div>
     </section>
