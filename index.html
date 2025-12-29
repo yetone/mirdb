@@ -316,6 +316,119 @@
                 font-size: 0.75rem;
             }
         }
+
+        /* Configuration Section */
+        .configuration {
+            padding: 5rem 2rem;
+            background-color: var(--white);
+        }
+
+        .configuration-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .configuration h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .configuration-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.125rem;
+            margin-bottom: 3rem;
+        }
+
+        .configuration pre {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Consolas', 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+
+        .configuration pre code {
+            font-family: inherit;
+            color: inherit;
+        }
+
+        .configuration .config-key {
+            color: #60a5fa;
+        }
+
+        .configuration .config-value {
+            color: #34d399;
+        }
+
+        .configuration .config-comment {
+            color: #9ca3af;
+        }
+
+        .configuration-description {
+            margin-top: 2rem;
+        }
+
+        .config-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .config-table th,
+        .config-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .config-table th {
+            background-color: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .config-table td {
+            color: var(--text-light);
+        }
+
+        .config-table code {
+            background-color: var(--bg-light);
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'SF Mono', 'Consolas', 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .configuration {
+                padding: 3rem 1.5rem;
+            }
+
+            .configuration h2 {
+                font-size: 2rem;
+            }
+
+            .configuration pre {
+                padding: 1rem;
+                font-size: 0.75rem;
+            }
+
+            .config-table {
+                font-size: 0.875rem;
+            }
+
+            .config-table th,
+            .config-table td {
+                padding: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -409,6 +522,69 @@ END</span>
 <span class="comment"># Delete a key</span>
 <span class="command">delete mykey</span>
 <span class="output">DELETED</span></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="configuration" id="configuration" data-testid="configuration-section">
+        <div class="configuration-container">
+            <h2>Configuration</h2>
+            <p class="configuration-subtitle">Customize MirDB with a simple TOML configuration file</p>
+
+            <pre data-testid="config-toml"><code><span class="config-comment"># Example mirdb.toml configuration</span>
+
+<span class="config-key">addr</span> = <span class="config-value">"0.0.0.0:12333"</span>
+
+<span class="config-key">max_level</span> = <span class="config-value">7</span>
+<span class="config-key">work_dir</span> = <span class="config-value">"/tmp/mirdb"</span>
+
+<span class="config-key">sst_max_size</span> = <span class="config-value">"100M"</span>
+<span class="config-key">mem_table_max_size</span> = <span class="config-value">"4M"</span>
+
+<span class="config-key">block_size</span> = <span class="config-value">"4K"</span></code></pre>
+
+            <div class="configuration-description">
+                <table class="config-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                            <th>Default</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>addr</code></td>
+                            <td>Listen address and port</td>
+                            <td><code>0.0.0.0:12333</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>max_level</code></td>
+                            <td>Maximum LSM tree levels</td>
+                            <td><code>7</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>work_dir</code></td>
+                            <td>Data directory path</td>
+                            <td><code>/tmp/mirdb</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>sst_max_size</code></td>
+                            <td>Maximum SSTable file size</td>
+                            <td><code>100M</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>mem_table_max_size</code></td>
+                            <td>Maximum memtable size before flush</td>
+                            <td><code>4M</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>block_size</code></td>
+                            <td>Data block size</td>
+                            <td><code>4K</code></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
