@@ -274,6 +274,28 @@ body {
     gap: 1rem;
 }
 
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer-left .license-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-left .license-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.footer-left .version {
+    color: #808080;
+    font-size: 0.875rem;
+}
+
 .footer-links {
     display: flex;
     gap: 2rem;
