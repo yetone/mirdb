@@ -166,10 +166,49 @@ body {
     line-height: 1.7;
 }
 
+/* Commands Section */
+.commands {
+    padding: 80px 20px;
+    background-color: var(--bg-color);
+}
+
+.commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.command-card {
+    background-color: var(--bg-light);
+    padding: 25px 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+    transition: var(--transition);
+}
+
+.command-card:hover {
+    transform: translateX(5px);
+    box-shadow: var(--card-shadow);
+}
+
+.command-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.command-description {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
 /* Getting Started Section */
 .getting-started {
     padding: 80px 20px;
-    background-color: var(--bg-color);
+    background-color: var(--bg-light);
 }
 
 .steps {
