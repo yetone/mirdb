@@ -8,6 +8,7 @@
     "serve": "npx serve homepage -l 3000"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.2.5"
   }
 }
