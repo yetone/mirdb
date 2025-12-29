@@ -62,33 +62,133 @@
         </div>
     </section>
 
-    <!-- Getting Started Section -->
-    <section class="getting-started" id="getting-started">
+    <!-- Getting Started / Quick Start Section -->
+    <section class="getting-started" id="getting-started" data-testid="quick-start-section">
         <div class="container">
-            <h2 class="section-title">Getting Started</h2>
+            <h2 class="section-title">Quick Start</h2>
             <div class="steps">
+                <!-- Step 1: Installation -->
                 <div class="step">
                     <h3>1. Install MirDB</h3>
-                    <pre><code>cargo install mirdb-server</code></pre>
+                    <p class="step-description">Install MirDB using Cargo, the Rust package manager:</p>
+                    <div class="code-block" data-testid="installation-code-block">
+                        <div class="code-block-header">
+                            <span class="code-block-title">Terminal</span>
+                            <button class="copy-btn" data-copy="cargo install mirdb-server" aria-label="Copy installation command">Copy</button>
+                        </div>
+                        <pre><code>cargo install mirdb-server</code></pre>
+                    </div>
                 </div>
+
+                <!-- Step 2: Configuration -->
                 <div class="step">
-                    <h3>2. Start the Server</h3>
-                    <pre><code>mirdb-server</code></pre>
+                    <h3>2. Configure MirDB</h3>
+                    <p class="step-description">Create a configuration file to customize MirDB settings:</p>
+                    <div class="code-block" data-testid="configuration-code-block">
+                        <div class="code-block-header">
+                            <span class="code-block-title">mirdb.toml</span>
+                            <button class="copy-btn" data-copy='addr = "0.0.0.0:12333"
+work_dir = "/var/lib/mirdb"
+max_level = 7
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+block_size = "4K"' aria-label="Copy configuration">Copy</button>
+                        </div>
+                        <pre><code><span class="code-comment"># Network settings</span>
+addr = <span class="code-string">"0.0.0.0:12333"</span>
+
+<span class="code-comment"># Storage settings</span>
+work_dir = <span class="code-string">"/var/lib/mirdb"</span>
+max_level = <span class="code-number">7</span>
+
+<span class="code-comment"># SSTable configuration</span>
+sst_max_size = <span class="code-string">"100M"</span>
+mem_table_max_size = <span class="code-string">"4M"</span>
+block_size = <span class="code-string">"4K"</span></code></pre>
+                    </div>
                 </div>
+
+                <!-- Step 3: Start Server -->
                 <div class="step">
-                    <h3>3. Connect with Memcached Client</h3>
-                    <pre><code>telnet localhost 12333
+                    <h3>3. Start the Server</h3>
+                    <p class="step-description">Run MirDB with your configuration file:</p>
+                    <div class="code-block" data-testid="start-server-code-block">
+                        <div class="code-block-header">
+                            <span class="code-block-title">Terminal</span>
+                            <button class="copy-btn" data-copy="mirdb-server -c mirdb.toml" aria-label="Copy start command">Copy</button>
+                        </div>
+                        <pre><code>mirdb-server -c mirdb.toml</code></pre>
+                    </div>
+                </div>
+
+                <!-- Step 4: Usage -->
+                <div class="step">
+                    <h3>4. Connect and Use</h3>
+                    <p class="step-description">Connect using telnet or any Memcached client to interact with MirDB:</p>
+                    <div class="code-block" data-testid="usage-code-block">
+                        <div class="code-block-header">
+                            <span class="code-block-title">Terminal</span>
+                            <button class="copy-btn" data-copy='telnet localhost 12333
 set mykey 0 0 5
 hello
 STORED
 get mykey
 VALUE mykey 0 5
 hello
-END</code></pre>
+END' aria-label="Copy usage example">Copy</button>
+                        </div>
+                        <pre><code><span class="code-comment"># Connect using telnet</span>
+telnet localhost 12333
+
+<span class="code-comment"># Store a value</span>
+set mykey 0 0 5
+hello
+<span class="code-response">STORED</span>
+
+<span class="code-comment"># Retrieve the value</span>
+get mykey
+<span class="code-response">VALUE</span> mykey 0 5
+hello
+<span class="code-response">END</span></code></pre>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <script>
+        // Copy button functionality
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', async () => {
+                const textToCopy = button.dataset.copy;
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    button.textContent = 'Copied!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    // Fallback for older browsers
+                    const textarea = document.createElement('textarea');
+                    textarea.value = textToCopy;
+                    textarea.style.position = 'fixed';
+                    textarea.style.opacity = '0';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    button.textContent = 'Copied!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                        button.classList.remove('copied');
+                    }, 2000);
+                }
+            });
+        });
+    </script>
 
     <!-- Footer -->
     <footer class="footer">

@@ -183,15 +183,67 @@ body {
 
 .step h3 {
     font-size: 1.3rem;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: var(--text-color);
+}
+
+.step-description {
+    color: var(--text-light);
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+/* Code Block Styles */
+.code-block {
+    position: relative;
+    background-color: var(--bg-dark);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #2d2d4a;
+}
+
+.code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    background-color: #2d2d4a;
+    border-bottom: 1px solid #3d3d5c;
+}
+
+.code-block-title {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.copy-btn {
+    background: transparent;
+    border: 1px solid var(--text-light);
+    color: var(--text-light);
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: var(--transition);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.copy-btn:hover {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+.copy-btn.copied {
+    border-color: #4caf50;
+    color: #4caf50;
 }
 
 .step pre {
     background-color: var(--bg-dark);
     color: #e0e0e0;
     padding: 20px;
-    border-radius: 8px;
+    margin: 0;
     overflow-x: auto;
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.9rem;
@@ -200,6 +252,24 @@ body {
 
 .step code {
     font-family: inherit;
+}
+
+/* Code syntax highlighting */
+.code-comment {
+    color: #6a9955;
+}
+
+.code-string {
+    color: #ce9178;
+}
+
+.code-number {
+    color: #b5cea8;
+}
+
+.code-response {
+    color: #4fc3f7;
+    font-weight: 600;
 }
 
 /* Footer */
