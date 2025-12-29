@@ -440,6 +440,12 @@ a:hover {
     text-decoration: none;
 }
 
+.footer-status {
+    color: #22c55e;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero {
