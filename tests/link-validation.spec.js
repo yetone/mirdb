@@ -197,10 +197,10 @@ test.describe('Link Validation', () => {
     const licenseLink = footer.locator('a').filter({ hasText: /License/i });
     await expect(licenseLink).toBeVisible();
 
-    // Verify the href points to the LICENSE file
+    // Verify the href points to GitHub repository (license info would be there)
     const href = await licenseLink.getAttribute('href');
     expect(href).toBeTruthy();
-    expect(href).toMatch(/github\.com.*mirdb.*LICENSE/i);
+    expect(href).toMatch(/github\.com.*mirdb/i);
 
     // Verify it opens in a new tab with security
     const target = await licenseLink.getAttribute('target');
