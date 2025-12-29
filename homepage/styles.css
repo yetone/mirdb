@@ -212,6 +212,71 @@ a:hover {
     line-height: 1.6;
 }
 
+/* Code Examples Section */
+.code-examples {
+    padding: 5rem 0;
+    background: var(--background-alt);
+}
+
+.code-examples h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.code-examples .section-description {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: var(--text-light);
+    font-size: 1.1rem;
+}
+
+.code-block {
+    margin-bottom: 2rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.code-block h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.code-block pre {
+    background: var(--code-bg);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    overflow-x: auto;
+}
+
+.code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--code-text);
+    line-height: 1.6;
+}
+
+/* Commands List */
+.commands-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.command {
+    background: var(--code-bg);
+    color: #22c55e;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
 /* Getting Started Section */
 .getting-started {
     padding: 5rem 0;
