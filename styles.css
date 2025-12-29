@@ -77,6 +77,33 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Focus Styles for Accessibility */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:not([tabindex="-1"]):focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Enhanced focus visibility for buttons */
+.btn:focus {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
+}
+
+/* Focus visible for keyboard navigation only */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
+}
+
 /* Buttons */
 .btn {
     display: inline-block;
