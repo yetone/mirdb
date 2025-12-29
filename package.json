@@ -8,6 +8,7 @@
     "serve": "npx serve ."
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.40.0",
+    "sharp": "^0.34.5"
   }
 }

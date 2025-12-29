@@ -11,7 +11,10 @@
     <!-- Hero Section -->
     <header class="hero" id="hero">
         <div class="container">
-            <img src="assets/logo.gif" alt="MirDB Logo" class="logo">
+            <picture>
+                <source srcset="assets/logo.webp" type="image/webp">
+                <img src="assets/logo.png" alt="MirDB Logo" class="logo" width="500" height="180">
+            </picture>
             <h1>MirDB</h1>
             <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
             <p class="description">A high-performance, persistent key-value store that speaks the Memcached protocol. Built with Rust for safety and speed.</p>
