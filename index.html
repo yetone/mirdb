@@ -292,6 +292,154 @@ cargo build --release
         </div>
     </section>
 
+    <!-- Configuration Section -->
+    <section class="configuration" id="configuration" data-testid="configuration-section">
+        <div class="container">
+            <h2 class="section-title">Configuration</h2>
+            <p class="section-description">MirDB uses TOML configuration files. Customize memory tables, block sizes, and compaction triggers to optimize for your workload.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-title">Example Configuration (etc/mirdb.toml)</span>
+                    <button class="copy-btn" data-clipboard-target="#code-config" aria-label="Copy code to clipboard">
+                        <span class="copy-icon">&#x1F4CB;</span>
+                        <span class="copy-text">Copy</span>
+                    </button>
+                </div>
+                <pre class="language-toml"><code id="code-config" class="language-toml">addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500</code></pre>
+            </div>
+
+            <!-- Configuration Parameters Table -->
+            <div class="config-tables">
+                <div class="config-table-group">
+                    <h3>Network</h3>
+                    <table class="config-table" data-testid="config-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Description</th>
+                                <th>Default</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>addr</code></td>
+                                <td>Listen address and port</td>
+                                <td><code>0.0.0.0:12333</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="config-table-group">
+                    <h3>Memory Tables</h3>
+                    <table class="config-table" data-testid="config-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Description</th>
+                                <th>Default</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>mem_table_max_size</code></td>
+                                <td>Max memtable size before flush</td>
+                                <td><code>4M</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>mem_table_max_height</code></td>
+                                <td>Skip list max height</td>
+                                <td><code>32</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>imm_mem_table_max_count</code></td>
+                                <td>Max queued immutable memtables</td>
+                                <td><code>16</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="config-table-group">
+                    <h3>SSTables &amp; Blocks</h3>
+                    <table class="config-table" data-testid="config-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Description</th>
+                                <th>Default</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>sst_max_size</code></td>
+                                <td>Max SSTable file size</td>
+                                <td><code>100M</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>block_size</code></td>
+                                <td>Data block size</td>
+                                <td><code>4K</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>block_restart_interval</code></td>
+                                <td>Key prefix restart interval</td>
+                                <td><code>16</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="config-table-group">
+                    <h3>Compaction</h3>
+                    <table class="config-table" data-testid="config-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Description</th>
+                                <th>Default</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>l0_compaction_trigger</code></td>
+                                <td>Level 0 files before compaction</td>
+                                <td><code>4</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>max_level</code></td>
+                                <td>Maximum LSM tree levels</td>
+                                <td><code>7</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>thread_sleep_ms</code></td>
+                                <td>Background thread sleep interval</td>
+                                <td><code>500</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Supported Commands Section -->
     <section class="commands" id="commands">
         <div class="container">
@@ -344,6 +492,7 @@ cargo build --release
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-toml.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
