@@ -15,6 +15,10 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         :root {
             --primary-color: #2563eb;
             --primary-dark: #1d4ed8;
@@ -1283,6 +1287,66 @@ END</span>
                         document.body.removeChild(textArea);
                     }
                 });
+            });
+
+            // Smooth scroll navigation with URL hash update
+            // Handle navigation link clicks
+            const navLinks = document.querySelectorAll('.nav-link, a[href^="#"]');
+
+            navLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+
+                    // Only handle internal hash links
+                    if (href && href.startsWith('#')) {
+                        const targetId = href.substring(1);
+                        const targetElement = document.getElementById(targetId);
+
+                        if (targetElement) {
+                            e.preventDefault();
+
+                            // Scroll to target with smooth behavior
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+
+                            // Update URL hash without jumping
+                            history.pushState(null, null, href);
+                        }
+                    }
+                });
+            });
+
+            // Handle initial page load with hash in URL
+            if (window.location.hash) {
+                const targetId = window.location.hash.substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    // Small delay to ensure page is fully loaded
+                    setTimeout(function() {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 100);
+                }
+            }
+
+            // Handle browser back/forward navigation
+            window.addEventListener('popstate', function() {
+                if (window.location.hash) {
+                    const targetId = window.location.hash.substring(1);
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
             });
         });
     </script>
