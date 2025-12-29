@@ -129,6 +129,97 @@
                 flex-direction: column;
             }
         }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            background-color: var(--white);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .features-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.125rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--bg-light);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background-color: var(--primary-color);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--white);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .features {
+                padding: 3rem 1.5rem;
+            }
+
+            .features h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -143,6 +234,51 @@
             <div class="cta-buttons">
                 <a href="#getting-started" class="btn btn-primary" data-testid="hero-cta-primary">Get Started</a>
                 <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" data-testid="hero-cta-github" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features" data-testid="features-section">
+        <div class="features-container">
+            <h2>Key Features</h2>
+            <p class="features-subtitle">Everything you need for high-performance, persistent key-value storage</p>
+            <div class="features-grid" data-testid="features-grid">
+                <div class="feature-card" data-testid="feature-memcached">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3>Memcached Protocol Compatible</h3>
+                    <p>Drop-in replacement for Memcached. Use your existing clients and tools—MirDB speaks the standard Memcached text protocol, supporting SET, GET, DELETE, and more.</p>
+                </div>
+                <div class="feature-card" data-testid="feature-persistence">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                        </svg>
+                    </div>
+                    <h3>Persistent Storage</h3>
+                    <p>Unlike standard Memcached, your data survives restarts. MirDB persists data to disk using SSTable storage, ensuring durability without sacrificing performance.</p>
+                </div>
+                <div class="feature-card" data-testid="feature-lsm">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Built on a 7-level Log-Structured Merge-tree architecture optimized for write-heavy workloads. Automatic compaction keeps performance consistent over time.</p>
+                </div>
+                <div class="feature-card" data-testid="feature-rust">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3>Rust Performance</h3>
+                    <p>Written in Rust with async networking via Tokio. Memory-safe, fast, and efficient—deploy a single binary with confidence.</p>
+                </div>
             </div>
         </div>
     </section>
