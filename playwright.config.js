@@ -9,8 +9,9 @@ module.exports = defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'file://' + __dirname + '/index.html',
+    baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',
+    headless: true,
   },
   projects: [
     {

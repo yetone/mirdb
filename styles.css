@@ -143,19 +143,33 @@ h1, h2, h3 {
     border-radius: 0.75rem;
     padding: 2rem;
     text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
 }
 
 .feature-icon {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+    color: var(--color-primary);
 }
 
-.feature-card h3 {
+.feature-icon svg {
+    width: 48px;
+    height: 48px;
+}
+
+.feature-card h3,
+.feature-title {
     font-size: 1.25rem;
     margin-bottom: 0.75rem;
 }
 
-.feature-card p {
+.feature-card p,
+.feature-description {
     color: var(--color-text-muted);
 }
 
@@ -318,6 +332,10 @@ h1, h2, h3 {
     .getting-started,
     .commands {
         padding: 3rem 0;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
     }
 }
 
