@@ -1,6 +1,12 @@
 // @ts-check
-const { defineConfig } = require('@playwright/test');
+const { defineConfig, devices } = require('@playwright/test');
 
+/**
+ * Cross-browser testing configuration
+ *
+ * Supports: Chrome (via Chromium), Firefox, Safari (via WebKit), Edge (via Chromium)
+ * Note: Edge uses Chromium engine, so 'chromium' project covers both Chrome and Edge
+ */
 module.exports = defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -17,7 +23,28 @@ module.exports = defineConfig({
     {
       name: 'chromium',
       use: {
-        browserName: 'chromium',
+        ...devices['Desktop Chrome'],
+        headless: true,
+      },
+    },
+    {
+      name: 'firefox',
+      use: {
+        ...devices['Desktop Firefox'],
+        headless: true,
+      },
+    },
+    {
+      name: 'webkit',
+      use: {
+        ...devices['Desktop Safari'],
+        headless: true,
+      },
+    },
+    {
+      name: 'edge',
+      use: {
+        ...devices['Desktop Edge'],
         headless: true,
       },
     },
