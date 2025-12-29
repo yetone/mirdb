@@ -256,6 +256,85 @@ a:hover {
     color: var(--code-text);
 }
 
+/* Defaults Table Styles */
+.defaults-section {
+    margin-top: 3rem;
+}
+
+.defaults-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.defaults-table {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background: var(--background);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+.defaults-table thead {
+    background: var(--code-bg);
+    color: var(--code-text);
+}
+
+.defaults-table th,
+.defaults-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+}
+
+.defaults-table th {
+    font-weight: 600;
+}
+
+.defaults-table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.defaults-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.defaults-table tbody tr:hover {
+    background: var(--background-alt);
+}
+
+.defaults-table code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    background: var(--background-alt);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    color: var(--primary-color);
+}
+
+/* Documentation Link Section */
+.docs-link-section {
+    margin-top: 2.5rem;
+    text-align: center;
+}
+
+.docs-link-section p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+}
+
+.docs-link {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.docs-link:hover {
+    text-decoration: underline;
+}
+
 /* Architecture Section */
 .architecture {
     padding: 5rem 0;

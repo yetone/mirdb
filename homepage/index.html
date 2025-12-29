@@ -105,25 +105,66 @@ END</code></pre>
         <div class="container">
             <h2>Getting Started</h2>
             <div class="getting-started-content">
-                <div class="step">
+                <div class="step" data-step="install">
                     <h3>1. Install</h3>
-                    <pre><code>cargo install mirdb</code></pre>
+                    <pre><code class="language-bash">cargo install mirdb</code></pre>
                 </div>
-                <div class="step">
+                <div class="step" data-step="configure">
                     <h3>2. Configure</h3>
-                    <pre><code class="language-toml">[server]
-listen_addr = "0.0.0.0:12333"
-
-[storage]
+                    <pre><code class="language-toml"># config.toml
+addr = "0.0.0.0:12333"
 work_dir = "/var/lib/mirdb"
-max_lsm_levels = 7
-sstable_max_size = 104857600
-memtable_max_size = 4194304</code></pre>
+max_level = 7
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+block_size = "4K"</code></pre>
                 </div>
-                <div class="step">
+                <div class="step" data-step="run">
                     <h3>3. Run</h3>
-                    <pre><code>mirdb -c config.toml</code></pre>
+                    <pre><code class="language-bash">mirdb -c config.toml</code></pre>
                 </div>
+            </div>
+
+            <div class="defaults-section">
+                <h3>Default Configuration Values</h3>
+                <table class="defaults-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Listen Address</td>
+                            <td><code>0.0.0.0:12333</code></td>
+                        </tr>
+                        <tr>
+                            <td>Max LSM Levels</td>
+                            <td><code>7</code></td>
+                        </tr>
+                        <tr>
+                            <td>Work Directory</td>
+                            <td><code>/tmp/mirdb</code></td>
+                        </tr>
+                        <tr>
+                            <td>SSTable Max Size</td>
+                            <td><code>100MB</code></td>
+                        </tr>
+                        <tr>
+                            <td>Memtable Max Size</td>
+                            <td><code>4MB</code></td>
+                        </tr>
+                        <tr>
+                            <td>Block Size</td>
+                            <td><code>4KB</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="docs-link-section">
+                <p>For more detailed configuration options and usage guides, see the <a href="https://github.com/yetone/mirdb#readme" class="docs-link" target="_blank" rel="noopener noreferrer">full documentation</a>.</p>
             </div>
         </div>
     </section>
