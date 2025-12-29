@@ -446,8 +446,66 @@ a:hover {
     margin-top: 0.25rem;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Responsive Design - Tablet (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .hero {
+        padding: 5rem 0;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+    }
+
+    .hero .tagline {
+        font-size: 1.35rem;
+    }
+
+    .hero .description {
+        font-size: 1.05rem;
+    }
+
+    .features h2,
+    .code-example h2,
+    .getting-started h2,
+    .architecture h2 {
+        font-size: 2.25rem;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+    }
+
+    .getting-started-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .getting-started-content .step:last-child {
+        grid-column: span 2;
+        max-width: 50%;
+        margin: 0 auto;
+    }
+
+    .defaults-table {
+        max-width: 100%;
+    }
+
+    .architecture-diagram {
+        padding: 1.5rem;
+    }
+
+    .arch-svg {
+        max-width: 100%;
+    }
+}
+
+/* Responsive Design - Mobile (up to 767px) */
+@media (max-width: 767px) {
     .hero {
         padding: 4rem 0;
     }
