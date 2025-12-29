@@ -1,11 +1,11 @@
 {
   "name": "mirdb-homepage",
   "version": "1.0.0",
-  "description": "MirDB Homepage",
+  "description": "MirDB Homepage with E2E tests",
   "scripts": {
     "test": "playwright test",
-    "test:headed": "playwright test --headed",
-    "serve": "npx serve ."
+    "test:ui": "playwright test --ui",
+    "serve": "npx serve homepage -l 3000"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0"
