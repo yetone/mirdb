@@ -1,0 +1,12 @@
+{
+  "name": "mirdb-homepage-tests",
+  "version": "1.0.0",
+  "description": "Tests for MirDB homepage",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:unit": "node --test tests/unit/*.test.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}

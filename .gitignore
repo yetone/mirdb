@@ -2,4 +2,8 @@
 **/*.rs.bk
 .something/
 node_modules/
+tests/node_modules/
+package-lock.json
+tests/package-lock.json
+tests/test-results/
 test-results/

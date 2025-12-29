@@ -3,26 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol support, written in Rust">
     <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <meta name="description" content="MirDB is a persistent key-value store written in Rust that implements the Memcached protocol with LSM tree architecture.">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>MirDB</h1>
-            <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
-            <p class="value-proposition">
+    <header class="hero">
+        <div class="container">
+            <h1 class="hero-title">MirDB</h1>
+            <p class="hero-tagline">Persistent Key-Value Store with Memcached Protocol</p>
+            <p class="hero-description">
                 MirDB is a persistent key-value store written in Rust that implements the Memcached protocol.
                 Unlike traditional memcached, MirDB persists your data to disk using an LSM tree architecture,
                 giving you the familiar memcached interface with the durability you need.
             </p>
-            <div class="cta-buttons">
-                <a href="#getting-started" class="btn-primary cta-primary">Get Started</a>
-                <a href="https://github.com/yetone/mirdb" class="btn-secondary cta-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            <div class="hero-cta">
+                <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Memcached Compatible</h3>
+                    <p>Drop-in replacement using the standard memcached protocol. Connect using any standard memcached client.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3>Persistent Storage</h3>
+                    <p>Data survives restarts with SSTable-based storage. Your data is safely persisted to disk.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>High Performance</h3>
+                    <p>LSM tree architecture with async I/O built on Tokio for high-performance networking.</p>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- Code Examples Section -->
+    <section class="code-examples" id="code-examples">
+        <div class="container">
+            <h2 class="section-title">Code Examples</h2>
+            <p class="section-description">Get started with MirDB using any standard memcached client. Here's how easy it is:</p>
+
+            <!-- Connection Example -->
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-title">Connect to MirDB</span>
+                    <button class="copy-btn" data-clipboard-target="#code-connect" aria-label="Copy code to clipboard">
+                        <span class="copy-icon">📋</span>
+                        <span class="copy-text">Copy</span>
+                    </button>
+                </div>
+                <pre class="language-python"><code id="code-connect" class="language-python">import memcache
+
+# Connect to MirDB server
+mc = memcache.Client(['127.0.0.1:12333'])</code></pre>
+            </div>
+
+            <!-- SET Operation Example -->
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-title">Store Data with SET</span>
+                    <button class="copy-btn" data-clipboard-target="#code-set" aria-label="Copy code to clipboard">
+                        <span class="copy-icon">📋</span>
+                        <span class="copy-text">Copy</span>
+                    </button>
+                </div>
+                <pre class="language-python"><code id="code-set" class="language-python"># Store a value
+mc.set('user:1', 'John Doe')
+
+# Store with expiration (60 seconds)
+mc.set('session:abc123', 'user_data', time=60)</code></pre>
+            </div>
+
+            <!-- GET Operation Example -->
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-title">Retrieve Data with GET</span>
+                    <button class="copy-btn" data-clipboard-target="#code-get" aria-label="Copy code to clipboard">
+                        <span class="copy-icon">📋</span>
+                        <span class="copy-text">Copy</span>
+                    </button>
+                </div>
+                <pre class="language-python"><code id="code-get" class="language-python"># Retrieve a value
+user = mc.get('user:1')
+print(user)  # Output: John Doe
+
+# Delete a value
+mc.delete('user:1')</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section class="getting-started" id="getting-started">
+        <div class="container">
+            <h2 class="section-title">Getting Started</h2>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-title">Installation</span>
+                    <button class="copy-btn" data-clipboard-target="#code-install" aria-label="Copy code to clipboard">
+                        <span class="copy-icon">📋</span>
+                        <span class="copy-text">Copy</span>
+                    </button>
+                </div>
+                <pre class="language-bash"><code id="code-install" class="language-bash"># Clone and build from source
+git clone https://github.com/yetone/mirdb
+cd mirdb
+cargo build --release
+
+# Run with configuration
+./target/release/mirdb -c etc/mirdb.toml</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Commands Section -->
+    <section class="commands" id="commands">
+        <div class="container">
+            <h2 class="section-title">Supported Commands</h2>
+            <div class="commands-grid">
+                <div class="command-group">
+                    <h3>Storage</h3>
+                    <ul>
+                        <li><code>SET</code></li>
+                        <li><code>ADD</code></li>
+                        <li><code>REPLACE</code></li>
+                        <li><code>APPEND</code></li>
+                        <li><code>PREPEND</code></li>
+                    </ul>
+                </div>
+                <div class="command-group">
+                    <h3>Retrieval</h3>
+                    <ul>
+                        <li><code>GET</code></li>
+                        <li><code>GETS</code></li>
+                    </ul>
+                </div>
+                <div class="command-group">
+                    <h3>Deletion</h3>
+                    <ul>
+                        <li><code>DELETE</code></li>
+                    </ul>
+                </div>
+                <div class="command-group">
+                    <h3>Admin</h3>
+                    <ul>
+                        <li><code>INFO</code></li>
+                        <li><code>MAJOR_COMPACTION</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a> |
+                Built with Rust
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
