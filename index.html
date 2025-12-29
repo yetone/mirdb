@@ -375,10 +375,16 @@
             margin-top: 2rem;
         }
 
+        .config-table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .config-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 1rem;
+            min-width: 300px;
         }
 
         .config-table th,
@@ -824,6 +830,7 @@ END</span>
 <span class="config-key">block_size</span> = <span class="config-value">"4K"</span></code></pre>
 
             <div class="configuration-description">
+                <div class="config-table-wrapper">
                 <table class="config-table">
                     <thead>
                         <tr>
@@ -865,6 +872,7 @@ END</span>
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </section>
