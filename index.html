@@ -560,6 +560,96 @@
             }
         }
 
+        /* Architecture Section */
+        .architecture {
+            padding: 5rem 2rem;
+            background-color: var(--white);
+        }
+
+        .architecture-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .architecture h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .architecture-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.125rem;
+            margin-bottom: 3rem;
+        }
+
+        .architecture-diagram {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .architecture-diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .architecture-description {
+            margin-top: 2rem;
+        }
+
+        .architecture-description h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .architecture-description ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .architecture-description li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            color: var(--text-light);
+        }
+
+        .architecture-description li:last-child {
+            border-bottom: none;
+        }
+
+        .architecture-description strong {
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 768px) {
+            .architecture {
+                padding: 3rem 1.5rem;
+            }
+
+            .architecture h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Visually hidden class for accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
         /* Footer Section */
         .footer {
             background-color: #1f2937;
@@ -861,6 +951,76 @@ END</span>
                         <span class="command-tag">INFO</span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="architecture" id="architecture" data-testid="architecture-section">
+        <div class="architecture-container">
+            <h2>Architecture</h2>
+            <p class="architecture-subtitle">LSM Tree data flow for write-optimized persistence</p>
+
+            <figure class="architecture-diagram" data-testid="architecture-diagram">
+                <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="architecture-diagram-title architecture-diagram-desc">
+                    <title id="architecture-diagram-title">MirDB LSM Tree Architecture Diagram</title>
+                    <desc id="architecture-diagram-desc">Data flow diagram showing write path: WAL (Write-Ahead Log) for durability, then Memtable for in-memory storage, and finally SSTable for persistent disk storage. This LSM tree architecture provides write-optimized performance with data durability.</desc>
+
+                    <!-- Background -->
+                    <rect width="600" height="400" fill="#f9fafb"/>
+
+                    <!-- Write Request -->
+                    <rect x="225" y="20" width="150" height="40" rx="8" fill="#2563eb"/>
+                    <text x="300" y="45" text-anchor="middle" fill="white" font-weight="600" font-size="14">Write Request</text>
+
+                    <!-- Arrow from Write Request to WAL -->
+                    <path d="M300 60 L300 90" stroke="#6b7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                    <!-- WAL Box -->
+                    <rect x="175" y="100" width="250" height="60" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" data-component="wal"/>
+                    <text x="300" y="125" text-anchor="middle" fill="#92400e" font-weight="700" font-size="16">WAL</text>
+                    <text x="300" y="145" text-anchor="middle" fill="#92400e" font-size="12">Write-Ahead Log (Durability)</text>
+
+                    <!-- Arrow from WAL to Memtable -->
+                    <path d="M300 160 L300 190" stroke="#6b7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                    <!-- Memtable Box -->
+                    <rect x="175" y="200" width="250" height="60" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2" data-component="memtable"/>
+                    <text x="300" y="225" text-anchor="middle" fill="#1e40af" font-weight="700" font-size="16">Memtable</text>
+                    <text x="300" y="245" text-anchor="middle" fill="#1e40af" font-size="12">In-Memory Skip List</text>
+
+                    <!-- Arrow from Memtable to SSTable -->
+                    <path d="M300 260 L300 290" stroke="#6b7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <text x="310" y="280" fill="#6b7280" font-size="11">flush when full</text>
+
+                    <!-- SSTable Box -->
+                    <rect x="175" y="300" width="250" height="60" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2" data-component="sstable"/>
+                    <text x="300" y="325" text-anchor="middle" fill="#065f46" font-weight="700" font-size="16">SSTable</text>
+                    <text x="300" y="345" text-anchor="middle" fill="#065f46" font-size="12">Sorted String Tables (Disk)</text>
+
+                    <!-- Arrow marker definition -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+                        </marker>
+                    </defs>
+
+                    <!-- Level indicators on the right -->
+                    <text x="450" y="130" fill="#6b7280" font-size="11">Step 1: Log write</text>
+                    <text x="450" y="230" fill="#6b7280" font-size="11">Step 2: Buffer in memory</text>
+                    <text x="450" y="330" fill="#6b7280" font-size="11">Step 3: Persist to disk</text>
+                </svg>
+                <figcaption class="visually-hidden">
+                    Architecture diagram showing the MirDB LSM tree data flow: Write requests first go to WAL (Write-Ahead Log) for durability, then to the Memtable (in-memory skip list), and finally are flushed to SSTables (Sorted String Tables) on disk.
+                </figcaption>
+            </figure>
+
+            <div class="architecture-description">
+                <h3>How Data Flows Through MirDB</h3>
+                <ul>
+                    <li><strong>WAL (Write-Ahead Log):</strong> Every write is first logged for crash recovery and durability</li>
+                    <li><strong>Memtable:</strong> Data is buffered in an in-memory skip list for fast writes (default 4MB)</li>
+                    <li><strong>SSTable:</strong> When the memtable is full, data is flushed to sorted, immutable files on disk</li>
+                </ul>
             </div>
         </div>
     </section>
