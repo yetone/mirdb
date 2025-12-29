@@ -15,6 +15,7 @@
             </div>
             <div class="nav-links">
                 <a href="#features">Features</a>
+                <a href="#architecture">Architecture</a>
                 <a href="#quickstart">Quick Start</a>
                 <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
             </div>
@@ -77,6 +78,51 @@ get mykey
 VALUE mykey 0 5
 hello
 END</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="architecture">
+            <h2>Architecture Overview</h2>
+            <p class="architecture-intro">MirDB uses an LSM (Log-Structured Merge) tree architecture for efficient writes and reliable data persistence.</p>
+
+            <div class="architecture-content">
+                <div class="data-flow" role="img" aria-label="MirDB data flow diagram showing Write Request flowing to WAL for durability, then to Memtable in memory, and finally to SSTable on disk">
+                    <pre>
+Write Request
+      │
+      ▼
+┌─────────────┐
+│     WAL     │ ◄─── Write-Ahead Log (durability)
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│  Memtable   │ ◄─── In-memory skip list (fast writes)
+└──────┬──────┘
+       │ (when full)
+       ▼
+┌─────────────┐
+│   SSTable   │ ◄─── Sorted String Table (persistent storage)
+└─────────────┘
+                    </pre>
+                </div>
+
+                <div class="component-explanations">
+                    <div class="component-card">
+                        <h3>Write-Ahead Log (WAL)</h3>
+                        <p>The WAL provides <strong>durability</strong> by persisting every write operation to disk before acknowledging it. In case of a crash, MirDB can recover data by replaying the WAL, ensuring no committed data is lost.</p>
+                    </div>
+
+                    <div class="component-card">
+                        <h3>Memtable</h3>
+                        <p>An <strong>in-memory</strong> data structure (skip list) that stores recent writes for fast access. When the Memtable reaches its size threshold (default 4MB), it becomes immutable and is flushed to disk as an SSTable.</p>
+                    </div>
+
+                    <div class="component-card">
+                        <h3>SSTable</h3>
+                        <p>Sorted String Tables are immutable files stored <strong>on disk</strong> containing sorted key-value pairs. SSTables use block compression, cuckoo filters for fast lookups, and are organized into levels for efficient compaction.</p>
+                    </div>
                 </div>
             </div>
         </section>

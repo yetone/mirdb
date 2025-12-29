@@ -257,6 +257,90 @@ body {
     font-size: 0.9rem;
 }
 
+/* Architecture Section */
+.architecture {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.architecture h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.architecture-intro {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 1.125rem;
+    margin-bottom: 3rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.architecture-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+}
+
+.data-flow {
+    background: var(--bg-dark);
+    border-radius: 12px;
+    padding: 2rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.data-flow pre {
+    color: #e0e0e0;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+    white-space: pre;
+}
+
+.component-explanations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+
+.component-card {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.component-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.component-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+}
+
+.component-card p {
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+.component-card strong {
+    color: var(--text-color);
+}
+
 /* Footer */
 .footer {
     background: var(--bg-dark);
