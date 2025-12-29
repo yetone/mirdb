@@ -249,6 +249,22 @@ h1, h2, h3 {
     padding: 5rem 0;
 }
 
+.getting-started .docs-link {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--color-text-muted);
+}
+
+.getting-started .docs-link a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.getting-started .docs-link a:hover {
+    text-decoration: underline;
+}
+
 /* Commands Section */
 .commands {
     padding: 5rem 0;
