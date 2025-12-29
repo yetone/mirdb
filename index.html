@@ -766,6 +766,91 @@
                 gap: 1rem;
             }
         }
+
+        /* Code Block Container */
+        .code-block-container {
+            position: relative;
+        }
+
+        .code-block-container pre {
+            margin: 0;
+        }
+
+        /* Copy Button Styles */
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            color: #9ca3af;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .copy-btn:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        .copy-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .copy-btn .copy-icon {
+            display: block;
+        }
+
+        .copy-btn .check-icon {
+            display: none;
+        }
+
+        .copy-btn.copied {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #10b981;
+        }
+
+        .copy-btn.copied .copy-icon {
+            display: none;
+        }
+
+        .copy-btn.copied .check-icon {
+            display: block;
+        }
+
+        /* Copy Feedback Tooltip */
+        .copy-feedback {
+            position: absolute;
+            top: 0.75rem;
+            right: 3.5rem;
+            background-color: #10b981;
+            color: white;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+
+        .copy-feedback.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -847,13 +932,25 @@
 
             <div class="getting-started-step">
                 <h3><span class="step-number">1</span> Start the MirDB Server</h3>
-                <pre><code><span class="comment"># Start MirDB server with your configuration file</span>
+                <div class="code-block-container" data-testid="code-block-1">
+                    <pre><code><span class="comment"># Start MirDB server with your configuration file</span>
 <span class="command">mirdb -c /path/to/config.toml</span></code></pre>
+                    <button class="copy-btn" data-testid="copy-btn-1" aria-label="Copy code to clipboard" type="button">
+                        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </button>
+                    <span class="copy-feedback" data-testid="copy-feedback-1">Copied!</span>
+                </div>
             </div>
 
             <div class="getting-started-step">
                 <h3><span class="step-number">2</span> Connect with Any Memcached Client</h3>
-                <pre><code><span class="comment"># Connect using telnet or any memcached client</span>
+                <div class="code-block-container" data-testid="code-block-2">
+                    <pre><code><span class="comment"># Connect using telnet or any memcached client</span>
 <span class="command">telnet localhost 12333</span>
 
 <span class="comment"># Store a value</span>
@@ -870,6 +967,16 @@ END</span>
 <span class="comment"># Delete a key</span>
 <span class="command">delete mykey</span>
 <span class="output">DELETED</span></code></pre>
+                    <button class="copy-btn" data-testid="copy-btn-2" aria-label="Copy code to clipboard" type="button">
+                        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </button>
+                    <span class="copy-feedback" data-testid="copy-feedback-2">Copied!</span>
+                </div>
             </div>
         </div>
     </section>
@@ -879,7 +986,8 @@ END</span>
             <h2>Configuration</h2>
             <p class="configuration-subtitle">Customize MirDB with a simple TOML configuration file</p>
 
-            <pre data-testid="config-toml"><code><span class="config-comment"># Example mirdb.toml configuration</span>
+            <div class="code-block-container" data-testid="code-block-config">
+                <pre data-testid="config-toml"><code><span class="config-comment"># Example mirdb.toml configuration</span>
 
 <span class="config-key">addr</span> = <span class="config-value">"0.0.0.0:12333"</span>
 
@@ -890,6 +998,16 @@ END</span>
 <span class="config-key">mem_table_max_size</span> = <span class="config-value">"4M"</span>
 
 <span class="config-key">block_size</span> = <span class="config-value">"4K"</span></code></pre>
+                <button class="copy-btn" data-testid="copy-btn-config" aria-label="Copy code to clipboard" type="button">
+                    <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </button>
+                <span class="copy-feedback" data-testid="copy-feedback-config">Copied!</span>
+            </div>
 
             <div class="configuration-description">
                 <div class="config-table-wrapper">
@@ -1111,5 +1229,62 @@ END</span>
             </p>
         </div>
     </footer>
+
+    <script>
+        // Copy to clipboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyButtons = document.querySelectorAll('.copy-btn');
+
+            copyButtons.forEach(function(button) {
+                button.addEventListener('click', async function() {
+                    const container = button.closest('.code-block-container');
+                    const codeElement = container.querySelector('pre code');
+                    const feedbackElement = container.querySelector('.copy-feedback');
+
+                    // Get the raw text content (without HTML formatting)
+                    const textToCopy = codeElement.textContent;
+
+                    try {
+                        await navigator.clipboard.writeText(textToCopy);
+
+                        // Add copied class to button for visual feedback
+                        button.classList.add('copied');
+
+                        // Show the feedback tooltip
+                        feedbackElement.classList.add('visible');
+
+                        // Reset after 2 seconds
+                        setTimeout(function() {
+                            button.classList.remove('copied');
+                            feedbackElement.classList.remove('visible');
+                        }, 2000);
+                    } catch (err) {
+                        // Fallback for older browsers
+                        const textArea = document.createElement('textarea');
+                        textArea.value = textToCopy;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-9999px';
+                        document.body.appendChild(textArea);
+                        textArea.select();
+
+                        try {
+                            document.execCommand('copy');
+                            button.classList.add('copied');
+                            feedbackElement.classList.add('visible');
+
+                            setTimeout(function() {
+                                button.classList.remove('copied');
+                                feedbackElement.classList.remove('visible');
+                            }, 2000);
+                        } catch (e) {
+                            console.error('Copy failed:', e);
+                        }
+
+                        document.body.removeChild(textArea);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
