@@ -1,0 +1,433 @@
+/* CSS Custom Properties */
+:root {
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --color-secondary: #64748b;
+    --color-background: #0f172a;
+    --color-surface: #1e293b;
+    --color-surface-light: #334155;
+    --color-text: #f8fafc;
+    --color-text-muted: #94a3b8;
+    --color-accent: #22c55e;
+    --font-mono: 'Fira Code', 'Consolas', 'Monaco', monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    --max-width: 1200px;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 6rem;
+}
+
+/* Reset and Base Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+/* Container */
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-md);
+}
+
+h3 {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+}
+
+p {
+    margin-bottom: var(--spacing-sm);
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn:hover {
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-surface-light);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-surface-light);
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+    background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-background) 100%);
+}
+
+.hero .logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: var(--spacing-md);
+}
+
+.hero h1 {
+    font-size: 4rem;
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero .tagline {
+    font-size: 1.5rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.hero .description {
+    max-width: 600px;
+    margin: 0 auto var(--spacing-md);
+    color: var(--color-text-muted);
+}
+
+.cta-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Features Section */
+.features {
+    padding: var(--spacing-xl) 0;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.feature-card {
+    background-color: var(--color-surface);
+    padding: var(--spacing-md);
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-surface-light);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.feature-card h3 {
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+}
+
+.feature-card p {
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+}
+
+/* Code Examples Section */
+.code-examples {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--color-surface);
+}
+
+.section-description {
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin-bottom: var(--spacing-lg);
+}
+
+.code-block {
+    margin-bottom: var(--spacing-md);
+}
+
+.code-block h3 {
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+.code-block pre {
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.code-block pre code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Commands List */
+.commands-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+}
+
+.command {
+    background-color: var(--color-background);
+    color: var(--color-accent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+}
+
+/* Architecture Section */
+.architecture {
+    padding: var(--spacing-xl) 0;
+}
+
+.architecture-diagram {
+    background-color: var(--color-surface);
+    padding: var(--spacing-md);
+    border-radius: 0.75rem;
+    margin-top: var(--spacing-md);
+}
+
+.arch-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.arch-step {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.arch-label {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+.arch-arrow {
+    color: var(--color-text-muted);
+    font-size: 1.5rem;
+}
+
+/* Getting Started Section */
+.getting-started {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--color-surface);
+}
+
+.defaults-table {
+    margin-top: var(--spacing-md);
+}
+
+.defaults-table h3 {
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-background);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+thead {
+    background-color: var(--color-surface-light);
+}
+
+th, td {
+    padding: var(--spacing-sm);
+    text-align: left;
+    border-bottom: 1px solid var(--color-surface-light);
+}
+
+th {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+td {
+    color: var(--color-text-muted);
+}
+
+td code {
+    font-family: var(--font-mono);
+    background-color: var(--color-surface);
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    color: var(--color-accent);
+}
+
+/* Footer */
+.footer {
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid var(--color-surface-light);
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer-links a {
+    color: var(--color-text-muted);
+}
+
+.footer-links a:hover {
+    color: var(--color-text);
+}
+
+.footer-text {
+    color: var(--color-secondary);
+    font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    :root {
+        --spacing-xl: 4rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero .tagline {
+        font-size: 1.25rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .arch-flow {
+        flex-direction: column;
+    }
+
+    .arch-arrow {
+        transform: rotate(90deg);
+    }
+
+    .code-block pre {
+        font-size: 0.8rem;
+    }
+
+    table {
+        font-size: 0.875rem;
+    }
+
+    th, td {
+        padding: var(--spacing-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero .logo {
+        max-width: 150px;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 250px;
+        text-align: center;
+    }
+}
+
+/* Prism.js Override for better readability */
+pre[class*="language-"] {
+    margin: 0;
+    padding: var(--spacing-md);
+    background-color: var(--color-background) !important;
+}
+
+code[class*="language-"] {
+    font-family: var(--font-mono);
+}
