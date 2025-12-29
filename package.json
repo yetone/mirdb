@@ -8,8 +8,14 @@
     "serve": "npx serve ."
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.40.0"
   },
-  "keywords": ["mirdb", "memcached", "key-value-store", "landing-page"],
+  "keywords": [
+    "mirdb",
+    "memcached",
+    "key-value-store",
+    "landing-page"
+  ],
   "license": "MIT"
 }
