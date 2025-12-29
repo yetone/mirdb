@@ -454,6 +454,96 @@ h1, h2, h3 {
     }
 }
 
+/* Project Status Section */
+.project-status {
+    padding: 5rem 0;
+    background-color: var(--color-bg);
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.status-category {
+    background-color: var(--color-bg-light);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.status-category h3 {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-list {
+    list-style: none;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    border-radius: 9999px;
+    white-space: nowrap;
+    min-width: 5.5rem;
+}
+
+.status-implemented {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.status-planned {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.status-feature {
+    color: var(--color-text);
+    font-size: 0.9375rem;
+}
+
+@media (max-width: 768px) {
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .status-badge {
+        min-width: 5rem;
+        font-size: 0.625rem;
+    }
+
+    .status-feature {
+        font-size: 0.875rem;
+    }
+}
+
 /* Prism.js Override */
 pre[class*="language-"] {
     background: var(--color-bg) !important;
