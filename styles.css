@@ -104,6 +104,11 @@ body {
     color: var(--primary-color);
 }
 
+.nav-link:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
 .github-link {
     display: flex;
     align-items: center;
@@ -173,6 +178,40 @@ body {
 .btn-secondary:hover {
     border-color: var(--primary-color);
     color: var(--primary-color);
+}
+
+/* Focus styles for accessibility */
+.btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.btn-primary:focus {
+    outline-color: white;
+    box-shadow: 0 0 0 4px var(--primary-color);
+}
+
+/* General focus styles for all interactive elements */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Logo link focus */
+.logo-link:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Footer link focus */
+.footer-nav a:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
 }
 
 /* Section styles */
