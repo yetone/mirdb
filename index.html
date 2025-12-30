@@ -121,6 +121,118 @@
         </div>
     </section>
 
+    <!-- Architecture Section -->
+    <section id="architecture" class="architecture">
+        <div class="container">
+            <h2 class="section-title">Architecture Overview</h2>
+            <p class="section-description">
+                MirDB uses a Log-Structured Merge-tree (LSM tree) architecture optimized for write-heavy workloads.
+                Data flows through multiple stages to ensure both high performance and durability.
+            </p>
+
+            <div class="architecture-content">
+                <div class="architecture-diagram">
+                    <svg viewBox="0 0 800 400" class="architecture-diagram" xmlns="http://www.w3.org/2000/svg" aria-label="LSM Tree Data Flow Diagram">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#38bdf8"/>
+                            </marker>
+                            <linearGradient id="walGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#fb923c;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="memtableGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#4ade80;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="sstableGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Write Request -->
+                        <rect x="20" y="160" width="100" height="60" rx="8" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+                        <text x="70" y="195" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="600">Write</text>
+
+                        <!-- Arrow to WAL -->
+                        <line x1="120" y1="190" x2="170" y2="190" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                        <!-- WAL (Write-Ahead Log) -->
+                        <rect x="180" y="140" width="140" height="100" rx="8" fill="url(#walGradient)" stroke="#f97316" stroke-width="2"/>
+                        <text x="250" y="180" text-anchor="middle" fill="#1e293b" font-size="14" font-weight="700">WAL</text>
+                        <text x="250" y="200" text-anchor="middle" fill="#1e293b" font-size="11">(Write-Ahead Log)</text>
+                        <text x="250" y="225" text-anchor="middle" fill="#1e293b" font-size="10">Durability First</text>
+
+                        <!-- Arrow to Memtable -->
+                        <line x1="320" y1="190" x2="370" y2="190" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                        <!-- Memtable -->
+                        <rect x="380" y="140" width="140" height="100" rx="8" fill="url(#memtableGradient)" stroke="#22c55e" stroke-width="2"/>
+                        <text x="450" y="180" text-anchor="middle" fill="#1e293b" font-size="14" font-weight="700">Memtable</text>
+                        <text x="450" y="200" text-anchor="middle" fill="#1e293b" font-size="11">(In-Memory)</text>
+                        <text x="450" y="225" text-anchor="middle" fill="#1e293b" font-size="10">Skip List Structure</text>
+
+                        <!-- Arrow to SSTable -->
+                        <line x1="520" y1="190" x2="570" y2="190" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                        <!-- SSTable -->
+                        <rect x="580" y="120" width="180" height="140" rx="8" fill="url(#sstableGradient)" stroke="#3b82f6" stroke-width="2"/>
+                        <text x="670" y="160" text-anchor="middle" fill="white" font-size="14" font-weight="700">SSTable</text>
+                        <text x="670" y="180" text-anchor="middle" fill="white" font-size="11">(Sorted String Table)</text>
+                        <text x="670" y="205" text-anchor="middle" fill="white" font-size="10">Immutable Disk Files</text>
+                        <text x="670" y="225" text-anchor="middle" fill="white" font-size="10">Multi-Level Storage</text>
+                        <text x="670" y="245" text-anchor="middle" fill="white" font-size="10">Compaction Strategy</text>
+
+                        <!-- Flush Label -->
+                        <text x="545" y="170" text-anchor="middle" fill="#94a3b8" font-size="10">Flush</text>
+
+                        <!-- Compaction Arrow -->
+                        <path d="M 670 270 Q 670 320 670 340" stroke="#38bdf8" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+                        <text x="670" y="360" text-anchor="middle" fill="#94a3b8" font-size="10">Compaction</text>
+
+                        <!-- Read Path -->
+                        <rect x="20" y="300" width="100" height="60" rx="8" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+                        <text x="70" y="335" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="600">Read</text>
+
+                        <!-- Read arrows -->
+                        <line x1="120" y1="330" x2="380" y2="250" stroke="#a78bfa" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+                        <line x1="120" y1="330" x2="580" y2="270" stroke="#a78bfa" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+
+                        <!-- Legend -->
+                        <rect x="20" y="30" width="150" height="80" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+                        <text x="30" y="50" fill="#f1f5f9" font-size="11" font-weight="600">Data Flow:</text>
+                        <line x1="30" y1="65" x2="60" y2="65" stroke="#38bdf8" stroke-width="2"/>
+                        <text x="70" y="69" fill="#94a3b8" font-size="10">Write Path</text>
+                        <line x1="30" y1="85" x2="60" y2="85" stroke="#a78bfa" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="70" y="89" fill="#94a3b8" font-size="10">Read Path</text>
+                        <line x1="30" y1="100" x2="60" y2="100" stroke="#38bdf8" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="70" y="104" fill="#94a3b8" font-size="10">Background</text>
+                    </svg>
+                </div>
+
+                <div class="architecture-explanation">
+                    <h3>Write Path</h3>
+                    <ol class="data-flow-list">
+                        <li>
+                            <strong>WAL (Write-Ahead Log)</strong>: All writes are first recorded to the Write-Ahead Log for durability.
+                            This ensures data can be recovered even after a crash.
+                        </li>
+                        <li>
+                            <strong>Memtable</strong>: Data is then written to an in-memory structure (skip list) for fast access.
+                            The Memtable provides O(log n) read and write operations.
+                        </li>
+                        <li>
+                            <strong>SSTable (Sorted String Table)</strong>: When the Memtable reaches capacity (default 4MB),
+                            it's flushed to disk as an immutable SSTable file. SSTables are organized in multiple levels
+                            with background compaction to optimize read performance.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Commands Section -->
     <section id="commands" class="commands">
         <div class="container">

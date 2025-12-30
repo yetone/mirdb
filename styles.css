@@ -263,9 +263,62 @@ h1, h2, h3 {
     color: #fbbf24;
 }
 
+/* Architecture Section */
+.architecture {
+    padding: var(--spacing-2xl) 0;
+}
+
+.architecture-content {
+    display: grid;
+    gap: var(--spacing-xl);
+}
+
+.architecture-diagram {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    overflow: hidden;
+}
+
+.architecture-diagram svg {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+}
+
+.architecture-explanation {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+}
+
+.architecture-explanation h3 {
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-md);
+    font-size: 1.25rem;
+}
+
+.data-flow-list {
+    list-style: decimal;
+    margin-left: var(--spacing-md);
+}
+
+.data-flow-list li {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-muted);
+    line-height: 1.7;
+}
+
+.data-flow-list li strong {
+    color: var(--color-text);
+}
+
 /* Commands Section */
 .commands {
     padding: var(--spacing-2xl) 0;
+    background-color: var(--color-surface);
 }
 
 .commands-intro {
@@ -284,7 +337,7 @@ h1, h2, h3 {
 }
 
 .command-category {
-    background-color: var(--color-surface);
+    background-color: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
@@ -315,7 +368,7 @@ h1, h2, h3 {
     font-family: var(--font-mono);
     font-weight: 600;
     color: var(--color-text);
-    background-color: var(--color-background);
+    background-color: var(--color-surface);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     font-size: 0.875rem;
