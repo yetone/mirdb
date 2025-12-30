@@ -501,8 +501,77 @@
             color: #4ec9b0;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
+        /* Responsive - Tablet */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .hero-headline {
+                font-size: 2rem;
+            }
+
+            .hero-subheadline {
+                font-size: 1.1rem;
+            }
+
+            .hero-logo {
+                max-width: 250px;
+            }
+
+            .value-prop-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
+
+            .value-prop-column {
+                padding: 1.5rem;
+            }
+
+            .value-prop-column h3 {
+                font-size: 1.1rem;
+            }
+
+            .value-prop-column p {
+                font-size: 0.9rem;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .commands-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quickstart-content {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+
+            /* Ensure touch-friendly targets - minimum 44px */
+            .btn {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 0.875rem 1.5rem;
+            }
+
+            nav a {
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem;
+            }
+
+            .footer-links a {
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem;
+            }
+
+            nav ul {
+                gap: 1.5rem;
+            }
+        }
+
+        /* Responsive - Mobile */
+        @media (max-width: 767px) {
             html, body {
                 overflow-x: hidden;
             }
