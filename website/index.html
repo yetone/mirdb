@@ -127,28 +127,28 @@ END</code></pre>
       </div>
     </section>
 
-    <section class="status" id="status">
+    <section class="status" id="status" data-testid="status-section">
       <h2>Project Status</h2>
-      <div class="status-grid">
-        <div class="status-item completed">
-          <span class="status-icon">✓</span>
-          <span>Async Networking</span>
+      <div class="status-grid" data-testid="status-grid">
+        <div class="status-item completed" data-testid="status-item-async-networking" data-status="implemented">
+          <span class="status-icon" data-testid="status-icon">✓</span>
+          <span data-testid="status-label">Async Networking</span>
         </div>
-        <div class="status-item completed">
-          <span class="status-icon">✓</span>
-          <span>Memtable (Skip List)</span>
+        <div class="status-item completed" data-testid="status-item-memtable" data-status="implemented">
+          <span class="status-icon" data-testid="status-icon">✓</span>
+          <span data-testid="status-label">Memtable (Skip List)</span>
         </div>
-        <div class="status-item completed">
-          <span class="status-icon">✓</span>
-          <span>Minor Compaction</span>
+        <div class="status-item completed" data-testid="status-item-minor-compaction" data-status="implemented">
+          <span class="status-icon" data-testid="status-icon">✓</span>
+          <span data-testid="status-label">Minor Compaction</span>
         </div>
-        <div class="status-item completed">
-          <span class="status-icon">✓</span>
-          <span>Major Compaction</span>
+        <div class="status-item completed" data-testid="status-item-major-compaction" data-status="implemented">
+          <span class="status-icon" data-testid="status-icon">✓</span>
+          <span data-testid="status-label">Major Compaction</span>
         </div>
-        <div class="status-item planned">
-          <span class="status-icon">○</span>
-          <span>Raft Consensus</span>
+        <div class="status-item planned" data-testid="status-item-raft-consensus" data-status="planned">
+          <span class="status-icon" data-testid="status-icon">○</span>
+          <span data-testid="status-label">Raft Consensus</span>
         </div>
       </div>
     </section>
