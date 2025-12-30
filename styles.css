@@ -261,6 +261,156 @@ code.language-toml {
   opacity: 1;
 }
 
+/* Feature Comparison Section */
+.feature-comparison {
+  background-color: #f8f9fa;
+}
+
+.section-description {
+  text-align: center;
+  color: #4a4a4a;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.comparison-table-wrapper {
+  overflow-x: auto;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.comparison-table thead {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+
+.comparison-table th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.comparison-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.comparison-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.feature-name {
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.mirdb-feature {
+  color: #4a4a4a;
+}
+
+.memcached-feature {
+  color: #4a4a4a;
+}
+
+.feature-yes {
+  display: inline-block;
+  background-color: #10b981;
+  color: #ffffff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.feature-no {
+  display: inline-block;
+  background-color: #ef4444;
+  color: #ffffff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.feature-na {
+  display: inline-block;
+  background-color: #9ca3af;
+  color: #ffffff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Supported Commands Section */
+.commands-section {
+  background-color: #ffffff;
+}
+
+.commands-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .commands-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .commands-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.command-group {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+.command-group h3 {
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.command-list {
+  list-style: none;
+}
+
+.command-list li {
+  margin-bottom: 0.5rem;
+  color: #4a4a4a;
+  font-size: 0.9rem;
+}
+
+.command-list code {
+  background-color: #1a1a2e;
+  color: #e2e8f0;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.mirdb-specific {
+  border: 2px solid #0f4c75;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .hero h1 {
@@ -273,6 +423,15 @@ code.language-toml {
 
   .section-title {
     font-size: 1.5rem;
+  }
+
+  .comparison-table {
+    font-size: 0.875rem;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.75rem 1rem;
   }
 }
 

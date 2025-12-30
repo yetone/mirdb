@@ -97,6 +97,58 @@
     </div>
   </section>
 
+  <!-- Feature Comparison Section -->
+  <section id="feature-comparison" class="feature-comparison" data-section="feature-comparison">
+    <div class="container">
+      <h2 class="section-title">MirDB vs Standard Memcached</h2>
+      <p class="section-description">See how MirDB compares to standard memcached and what makes it different.</p>
+
+      <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>MirDB</th>
+              <th>Standard Memcached</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="comparison-row" data-feature="persistence">
+              <td class="feature-name">Data Persistence</td>
+              <td class="mirdb-feature"><span class="feature-yes">Yes</span> - Data survives restarts with SSTable storage</td>
+              <td class="memcached-feature"><span class="feature-no">No</span> - In-memory only, data lost on restart</td>
+            </tr>
+            <tr class="comparison-row" data-feature="protocol">
+              <td class="feature-name">Protocol Compatibility</td>
+              <td class="mirdb-feature"><span class="feature-yes">Yes</span> - Fully compatible with memcached protocol</td>
+              <td class="memcached-feature"><span class="feature-yes">Yes</span> - Native protocol</td>
+            </tr>
+            <tr class="comparison-row" data-feature="clients">
+              <td class="feature-name">Client Compatibility</td>
+              <td class="mirdb-feature"><span class="feature-yes">Yes</span> - Use existing memcached clients, drop-in replacement</td>
+              <td class="memcached-feature"><span class="feature-yes">Yes</span> - Native support</td>
+            </tr>
+            <tr class="comparison-row" data-feature="storage">
+              <td class="feature-name">Storage Engine</td>
+              <td class="mirdb-feature">LSM Tree with SSTables</td>
+              <td class="memcached-feature">Hash table (memory only)</td>
+            </tr>
+            <tr class="comparison-row" data-feature="durability">
+              <td class="feature-name">Write Durability</td>
+              <td class="mirdb-feature"><span class="feature-yes">Yes</span> - Write-ahead logging</td>
+              <td class="memcached-feature"><span class="feature-no">No</span> - No durability guarantees</td>
+            </tr>
+            <tr class="comparison-row" data-feature="compaction">
+              <td class="feature-name">Background Compaction</td>
+              <td class="mirdb-feature"><span class="feature-yes">Yes</span> - Automatic multi-level compaction</td>
+              <td class="memcached-feature"><span class="feature-na">N/A</span> - Not applicable</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <!-- Getting Started Section -->
   <section id="getting-started" class="getting-started">
     <div class="container">
