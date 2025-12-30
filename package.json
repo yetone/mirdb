@@ -22,6 +22,7 @@
   "homepage": "https://github.com/yetone/mirdb#readme",
   "devDependencies": {
     "@playwright/test": "^1.57.0",
+    "html-validate": "^10.5.0",
     "lighthouse": "^13.0.1",
     "playwright": "^1.57.0",
     "playwright-lighthouse": "^4.0.0",
