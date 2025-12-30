@@ -710,9 +710,72 @@
         .footer-links a:hover {
             color: var(--primary-color);
         }
+
+        /* Accessibility - Focus Styles */
+        a:focus,
+        button:focus,
+        .btn:focus {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        .btn:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Enhanced focus for navigation links */
+        nav a:focus,
+        nav a:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Focus styles for buttons */
+        .btn:focus,
+        .btn:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+            box-shadow: 0 0 0 4px rgba(45, 90, 163, 0.3);
+        }
+
+        /* Focus styles for footer links */
+        .footer-links a:focus,
+        .footer-links a:focus-visible,
+        .footer-info a:focus,
+        .footer-info a:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Skip to content link for keyboard navigation */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            z-index: 1000;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 0 0 4px 0;
+            transition: top 0.2s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+            outline: 3px solid var(--primary-hover);
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
         <div class="container">
             <a href="/" class="logo-text">MirDB</a>
@@ -726,6 +789,7 @@
         </div>
     </header>
 
+    <main id="main-content">
     <section class="hero">
         <div class="container">
             <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo" loading="lazy" width="500" height="180">
@@ -915,6 +979,7 @@ END</span>
             </div>
         </div>
     </section>
+    </main>
 
     <footer>
         <div class="container">
