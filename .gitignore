@@ -2,3 +2,4 @@
 **/*.rs.bk
 .something/
 node_modules/
+test-results/

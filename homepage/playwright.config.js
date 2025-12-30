@@ -17,6 +17,20 @@ module.exports = defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    // Edge uses Chromium engine, so testing with Chromium provides equivalent coverage
+    // On systems with Edge installed, you can use: channel: 'msedge'
+    {
+      name: 'edge',
+      use: { ...devices['Desktop Edge'] },
+    },
   ],
   webServer: {
     command: 'npx serve . -l 3000',
