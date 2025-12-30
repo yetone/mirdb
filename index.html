@@ -296,6 +296,35 @@
             color: #f472b6;
         }
 
+        .code-command {
+            color: #60a5fa;
+        }
+
+        .code-flag {
+            color: #fbbf24;
+        }
+
+        .code-number {
+            color: #c084fc;
+        }
+
+        .code-response {
+            color: #34d399;
+        }
+
+        .code-prompt {
+            color: #94a3b8;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+        }
+
+        .code-block code {
+            display: block;
+        }
+
         /* Configuration */
         .config-table {
             width: 100%;
@@ -762,43 +791,43 @@
     </section>
 
     <!-- Quick Start Section -->
-    <section id="quickstart">
+    <section id="quickstart" data-testid="quick-start-section">
         <div class="container">
             <h2 class="section-title">Quick Start</h2>
             <p class="section-subtitle">Get MirDB running in minutes with these simple steps.</p>
 
             <h3 style="margin-bottom: 1rem;">Installation</h3>
-            <div class="code-block">
-                <code><span class="code-comment"># Clone the repository</span>
-git clone https://github.com/yetone/mirdb.git
-cd mirdb
+            <div class="code-block" data-testid="installation-code-block" data-language="bash">
+                <pre><code><span class="code-comment"># Clone the repository</span>
+<span class="code-command">git clone</span> https://github.com/yetone/mirdb.git
+<span class="code-command">cd</span> mirdb
 
 <span class="code-comment"># Build the project</span>
-cargo build --release
+<span class="code-command">cargo build</span> <span class="code-flag">--release</span>
 
 <span class="code-comment"># Run with default configuration</span>
-./target/release/mirdb-server -c etc/mirdb.toml</code>
+./target/release/mirdb-server <span class="code-flag">-c</span> etc/mirdb.toml</code></pre>
             </div>
 
-            <h3 style="margin: 2rem 0 1rem;">Usage Example</h3>
-            <div class="code-block">
-                <code><span class="code-comment"># Connect to MirDB</span>
-$ telnet localhost 12333
+            <h3 style="margin: 2rem 0 1rem;">Protocol Example (Telnet)</h3>
+            <div class="code-block" data-testid="telnet-protocol-code-block" data-language="memcached-protocol">
+                <pre><code><span class="code-comment"># Connect to MirDB</span>
+<span class="code-prompt">$</span> <span class="code-command">telnet</span> localhost <span class="code-number">12333</span>
 
 <span class="code-comment"># Store a value</span>
-set mykey 0 0 5
+<span class="code-keyword">set</span> mykey <span class="code-number">0</span> <span class="code-number">0</span> <span class="code-number">5</span>
 hello
-<span class="code-string">STORED</span>
+<span class="code-response">STORED</span>
 
 <span class="code-comment"># Retrieve the value</span>
-get mykey
-<span class="code-string">VALUE mykey 0 5
+<span class="code-keyword">get</span> mykey
+<span class="code-response">VALUE mykey 0 5
 hello
 END</span>
 
 <span class="code-comment"># Delete the value</span>
-delete mykey
-<span class="code-string">DELETED</span></code>
+<span class="code-keyword">delete</span> mykey
+<span class="code-response">DELETED</span></code></pre>
             </div>
         </div>
     </section>
