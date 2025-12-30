@@ -388,6 +388,11 @@
             color: #dc2626;
         }
 
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         /* Footer */
         footer {
             background-color: var(--code-bg);
@@ -877,11 +882,12 @@ END</span>
     </section>
 
     <!-- Comparison Section -->
-    <section id="comparison">
+    <section id="comparison" data-testid="comparison-section">
         <div class="container">
             <h2 class="section-title">How MirDB Compares</h2>
             <p class="section-subtitle">See how MirDB stacks up against other popular key-value stores.</p>
-            <table class="comparison-table">
+            <div class="table-responsive">
+            <table class="comparison-table" data-testid="comparison-table">
                 <thead>
                     <tr>
                         <th>Feature</th>
@@ -923,6 +929,7 @@ END</span>
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </section>
 
