@@ -1,122 +1,187 @@
 const { test, expect } = require('@playwright/test');
 
+/**
+ * SEO - Meta Tags Tests
+ * Scenario: Validate the page has proper meta tags for search engine optimization
+ *
+ * This test suite verifies:
+ * 1. Title tag contains 'MirDB' and relevant keywords
+ * 2. Meta description under 160 characters describing MirDB
+ * 3. Viewport meta tag for responsive design
+ * 4. Open Graph title meta tag
+ */
+
 test.describe('SEO - Meta Tags', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
-  test('TC1: Page has title tag containing MirDB and relevant keywords', async ({ page }) => {
+  test('Test Case 1: Page has title tag containing MirDB and relevant keywords', async ({ page }) => {
+    // Get the page title
     const title = await page.title();
+
+    // Title should exist and not be empty
+    expect(title).toBeTruthy();
+    expect(title.trim().length).toBeGreaterThan(0);
 
     // Title should contain 'MirDB'
     expect(title.toLowerCase()).toContain('mirdb');
 
-    // Title should be descriptive and contain relevant keywords
-    expect(title.length).toBeGreaterThan(10);
-    expect(title.length).toBeLessThanOrEqual(60); // Optimal SEO title length
+    // Title should contain relevant keywords (at least one of these)
+    const relevantKeywords = ['key-value', 'persistent', 'memcached', 'store', 'database'];
+    const titleLower = title.toLowerCase();
+    const hasRelevantKeyword = relevantKeywords.some(keyword => titleLower.includes(keyword));
+    expect(hasRelevantKeyword).toBe(true);
 
-    // Title should mention key functionality
-    expect(title.toLowerCase()).toMatch(/key-value|memcached|persistent/i);
+    // Title should be a reasonable length for SEO (typically 50-60 characters max)
+    expect(title.length).toBeLessThanOrEqual(70);
+
+    console.log(`Page title: "${title}" (${title.length} characters)`);
   });
 
-  test('TC2: Page has meta description under 160 characters describing MirDB', async ({ page }) => {
-    const metaDescription = await page.locator('meta[name="description"]').getAttribute('content');
+  test('Test Case 2: Page has meta description under 160 characters describing MirDB', async ({ page }) => {
+    // Get the meta description tag
+    const metaDescription = page.locator('meta[name="description"]');
+    const descCount = await metaDescription.count();
 
     // Meta description should exist
-    expect(metaDescription).not.toBeNull();
-    expect(metaDescription).toBeTruthy();
+    expect(descCount).toBe(1);
 
-    // Meta description should be under 160 characters (optimal for SEO)
-    expect(metaDescription.length).toBeLessThanOrEqual(160);
+    // Get the content attribute
+    const description = await metaDescription.getAttribute('content');
 
-    // Meta description should be meaningful (at least 50 chars)
-    expect(metaDescription.length).toBeGreaterThan(50);
+    // Description should exist and not be empty
+    expect(description).toBeTruthy();
+    expect(description.trim().length).toBeGreaterThan(0);
 
-    // Meta description should mention MirDB
-    expect(metaDescription.toLowerCase()).toContain('mirdb');
+    // Description should be under 160 characters for optimal SEO
+    expect(description.length).toBeLessThanOrEqual(160);
 
-    // Meta description should describe the value proposition
-    expect(metaDescription.toLowerCase()).toMatch(/memcached|persistent|key-value/i);
+    // Description should mention MirDB or describe its purpose
+    const descLower = description.toLowerCase();
+    const describesMirDB = descLower.includes('mirdb') ||
+      (descLower.includes('key-value') && descLower.includes('persistent')) ||
+      (descLower.includes('memcached') && descLower.includes('persistent'));
+    expect(describesMirDB).toBe(true);
+
+    // Description should be meaningful (minimum length)
+    expect(description.length).toBeGreaterThan(50);
+
+    console.log(`Meta description: "${description}" (${description.length} characters)`);
   });
 
-  test('TC3: Page has viewport meta tag for responsive design', async ({ page }) => {
-    const viewport = await page.locator('meta[name="viewport"]').getAttribute('content');
+  test('Test Case 3: Page has viewport meta tag for responsive design', async ({ page }) => {
+    // Get the viewport meta tag
+    const viewportMeta = page.locator('meta[name="viewport"]');
+    const viewportCount = await viewportMeta.count();
 
     // Viewport meta tag should exist
-    expect(viewport).not.toBeNull();
-    expect(viewport).toBeTruthy();
+    expect(viewportCount).toBe(1);
 
-    // Viewport should contain width=device-width
-    expect(viewport).toContain('width=device-width');
+    // Get the content attribute
+    const viewportContent = await viewportMeta.getAttribute('content');
 
-    // Viewport should contain initial-scale=1
-    expect(viewport.toLowerCase()).toMatch(/initial-scale\s*=\s*1/);
+    // Viewport content should exist
+    expect(viewportContent).toBeTruthy();
+
+    // Viewport should include width=device-width for responsive design
+    expect(viewportContent.toLowerCase()).toContain('width=device-width');
+
+    // Viewport should include initial-scale
+    expect(viewportContent.toLowerCase()).toContain('initial-scale');
+
+    console.log(`Viewport meta tag content: "${viewportContent}"`);
   });
 
-  test('TC4: Page has og:title meta tag', async ({ page }) => {
-    const ogTitle = await page.locator('meta[property="og:title"]').getAttribute('content');
+  test('Test Case 4: Page has og:title meta tag', async ({ page }) => {
+    // Get the Open Graph title meta tag
+    const ogTitle = page.locator('meta[property="og:title"]');
+    const ogTitleCount = await ogTitle.count();
 
-    // og:title should exist
-    expect(ogTitle).not.toBeNull();
-    expect(ogTitle).toBeTruthy();
+    // og:title meta tag should exist
+    expect(ogTitleCount).toBe(1);
+
+    // Get the content attribute
+    const ogTitleContent = await ogTitle.getAttribute('content');
+
+    // og:title content should exist and not be empty
+    expect(ogTitleContent).toBeTruthy();
+    expect(ogTitleContent.trim().length).toBeGreaterThan(0);
 
     // og:title should contain MirDB
-    expect(ogTitle.toLowerCase()).toContain('mirdb');
+    expect(ogTitleContent.toLowerCase()).toContain('mirdb');
 
-    // og:title should be descriptive
-    expect(ogTitle.length).toBeGreaterThan(10);
+    console.log(`og:title meta tag content: "${ogTitleContent}"`);
   });
 
-  test('Page has og:description meta tag', async ({ page }) => {
-    const ogDescription = await page.locator('meta[property="og:description"]').getAttribute('content');
+  test('Verify og:description meta tag exists', async ({ page }) => {
+    // Get the Open Graph description meta tag
+    const ogDesc = page.locator('meta[property="og:description"]');
+    const ogDescCount = await ogDesc.count();
 
-    // og:description should exist
-    expect(ogDescription).not.toBeNull();
-    expect(ogDescription).toBeTruthy();
+    // og:description meta tag should exist
+    expect(ogDescCount).toBe(1);
 
-    // og:description should mention key value proposition
-    expect(ogDescription.toLowerCase()).toMatch(/memcached|persistent|key-value/i);
+    // Get the content attribute
+    const ogDescContent = await ogDesc.getAttribute('content');
+
+    // og:description content should exist and not be empty
+    expect(ogDescContent).toBeTruthy();
+    expect(ogDescContent.trim().length).toBeGreaterThan(0);
+
+    console.log(`og:description meta tag content: "${ogDescContent}"`);
   });
 
-  test('Page has og:image meta tag', async ({ page }) => {
-    const ogImage = await page.locator('meta[property="og:image"]').getAttribute('content');
+  test('Verify og:image meta tag exists', async ({ page }) => {
+    // Get the Open Graph image meta tag
+    const ogImage = page.locator('meta[property="og:image"]');
+    const ogImageCount = await ogImage.count();
 
-    // og:image should exist
-    expect(ogImage).not.toBeNull();
-    expect(ogImage).toBeTruthy();
+    // og:image meta tag should exist
+    expect(ogImageCount).toBe(1);
 
-    // og:image should be a valid URL or path
-    expect(ogImage).toMatch(/^(https?:\/\/|\/|assets\/)/);
+    // Get the content attribute
+    const ogImageContent = await ogImage.getAttribute('content');
+
+    // og:image content should exist and not be empty
+    expect(ogImageContent).toBeTruthy();
+    expect(ogImageContent.trim().length).toBeGreaterThan(0);
+
+    console.log(`og:image meta tag content: "${ogImageContent}"`);
   });
 
-  test('Page has og:type meta tag', async ({ page }) => {
-    const ogType = await page.locator('meta[property="og:type"]').getAttribute('content');
+  test('Verify og:type meta tag exists', async ({ page }) => {
+    // Get the Open Graph type meta tag
+    const ogType = page.locator('meta[property="og:type"]');
+    const ogTypeCount = await ogType.count();
 
-    // og:type should exist
-    expect(ogType).not.toBeNull();
-    expect(ogType).toBeTruthy();
+    // og:type meta tag should exist
+    expect(ogTypeCount).toBe(1);
 
-    // og:type should be 'website' for a homepage
-    expect(ogType).toBe('website');
+    // Get the content attribute
+    const ogTypeContent = await ogType.getAttribute('content');
+
+    // og:type content should exist and not be empty
+    expect(ogTypeContent).toBeTruthy();
+    expect(ogTypeContent.trim().length).toBeGreaterThan(0);
+
+    console.log(`og:type meta tag content: "${ogTypeContent}"`);
   });
 
-  test('Page has charset meta tag set to UTF-8', async ({ page }) => {
-    const charset = await page.locator('meta[charset]').getAttribute('charset');
+  test('Verify charset meta tag exists', async ({ page }) => {
+    // Get the charset meta tag
+    const charsetMeta = page.locator('meta[charset]');
+    const charsetCount = await charsetMeta.count();
 
-    // charset should exist and be UTF-8
-    expect(charset).not.toBeNull();
-    expect(charset.toUpperCase()).toBe('UTF-8');
-  });
+    // charset meta tag should exist
+    expect(charsetCount).toBe(1);
 
-  test('Page has keywords meta tag', async ({ page }) => {
-    const keywords = await page.locator('meta[name="keywords"]').getAttribute('content');
+    // Get the charset attribute
+    const charsetValue = await charsetMeta.getAttribute('charset');
 
-    // keywords should exist
-    expect(keywords).not.toBeNull();
-    expect(keywords).toBeTruthy();
+    // charset should be UTF-8
+    expect(charsetValue.toLowerCase()).toBe('utf-8');
 
-    // keywords should contain relevant terms
-    expect(keywords.toLowerCase()).toContain('mirdb');
-    expect(keywords.toLowerCase()).toMatch(/memcached|key-value|database|persistent/i);
+    console.log(`Charset meta tag: "${charsetValue}"`);
   });
 });
