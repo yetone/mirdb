@@ -168,38 +168,99 @@ h1, h2, h3 {
 }
 
 /* Quick Start Section */
-.quickstart {
+.quick-start {
     padding: var(--spacing-2xl) 0;
     background-color: var(--color-surface);
 }
 
+.section-description {
+    text-align: center;
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 auto var(--spacing-lg);
+}
+
+.code-block-wrapper {
+    margin-bottom: var(--spacing-lg);
+}
+
+.code-block-wrapper h3 {
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Code Block with Syntax Highlighting */
 .code-block {
     background-color: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
-    overflow: hidden;
-}
-
-.code-header {
-    background-color: var(--color-border);
-    padding: var(--spacing-xs) var(--spacing-sm);
-}
-
-.code-lang {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    text-transform: uppercase;
-}
-
-.code-block pre {
     padding: var(--spacing-md);
     overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    margin: 0;
 }
 
 .code-block code {
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
+    font-family: inherit;
+    background: none;
+    padding: 0;
     color: var(--color-text);
+}
+
+/* Syntax Highlighting Classes */
+.code-comment {
+    color: #6b7280;
+    font-style: italic;
+}
+
+.code-command {
+    color: #22d3ee;
+    font-weight: 600;
+}
+
+.code-flag {
+    color: #a78bfa;
+}
+
+.code-path {
+    color: #fbbf24;
+}
+
+.code-prompt {
+    color: #10b981;
+    user-select: none;
+}
+
+.code-keyword {
+    color: #f472b6;
+    font-weight: 600;
+}
+
+.code-key {
+    color: #60a5fa;
+}
+
+.code-number {
+    color: #fb923c;
+}
+
+.code-string {
+    color: #4ade80;
+}
+
+.code-response {
+    color: #34d399;
+    font-weight: 600;
+}
+
+.code-operator {
+    color: #f472b6;
+}
+
+.code-arg {
+    color: #fbbf24;
 }
 
 /* Footer */

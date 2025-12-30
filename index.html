@@ -78,25 +78,45 @@
     </section>
 
     <!-- Quick Start Section -->
-    <section id="quickstart" class="quickstart">
+    <section id="quick-start" class="quick-start">
         <div class="container">
             <h2 class="section-title">Quick Start</h2>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">bash</span>
-                </div>
-                <pre><code># Start MirDB server
-mirdb -c /path/to/config.toml
+            <p class="section-description">Get up and running with MirDB in minutes. Start the server and begin storing data using familiar memcached commands.</p>
 
-# Connect with any memcached client
-$ telnet localhost 12333
-&gt; set mykey 0 0 5
-&gt; hello
-STORED
-&gt; get mykey
-VALUE mykey 0 5
-hello
-END</code></pre>
+            <!-- Server Startup -->
+            <div class="code-block-wrapper">
+                <h3>Start the Server</h3>
+                <pre class="code-block"><code class="language-bash"><span class="code-comment"># Start MirDB server with configuration file</span>
+<span class="code-command">mirdb</span> <span class="code-flag">-c</span> <span class="code-path">/path/to/config.toml</span></code></pre>
+            </div>
+
+            <!-- Usage Examples -->
+            <div class="code-block-wrapper">
+                <h3>Basic Usage</h3>
+                <pre class="code-block"><code class="language-bash"><span class="code-comment"># Connect with any memcached client</span>
+<span class="code-prompt">$</span> <span class="code-command">telnet</span> <span class="code-arg">localhost</span> <span class="code-number">12333</span>
+
+<span class="code-comment"># SET operation - store a value</span>
+<span class="code-prompt">&gt;</span> <span class="code-keyword">set</span> <span class="code-key">mykey</span> <span class="code-number">0 0 5</span>
+<span class="code-prompt">&gt;</span> <span class="code-string">hello</span>
+<span class="code-response">STORED</span>
+
+<span class="code-comment"># GET operation - retrieve a value</span>
+<span class="code-prompt">&gt;</span> <span class="code-keyword">get</span> <span class="code-key">mykey</span>
+<span class="code-response">VALUE</span> <span class="code-key">mykey</span> <span class="code-number">0 5</span>
+<span class="code-string">hello</span>
+<span class="code-response">END</span></code></pre>
+            </div>
+
+            <!-- Configuration Example -->
+            <div class="code-block-wrapper">
+                <h3>Configuration</h3>
+                <pre class="code-block"><code class="language-toml"><span class="code-comment"># config.toml</span>
+<span class="code-key">addr</span> <span class="code-operator">=</span> <span class="code-string">"0.0.0.0:12333"</span>
+<span class="code-key">max_level</span> <span class="code-operator">=</span> <span class="code-number">7</span>
+<span class="code-key">work_dir</span> <span class="code-operator">=</span> <span class="code-string">"/var/lib/mirdb"</span>
+<span class="code-key">mem_table_max_size</span> <span class="code-operator">=</span> <span class="code-string">"4M"</span>
+<span class="code-key">sst_max_size</span> <span class="code-operator">=</span> <span class="code-string">"100M"</span></code></pre>
             </div>
         </div>
     </section>
