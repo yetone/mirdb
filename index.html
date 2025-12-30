@@ -480,6 +480,63 @@
             .demo-header h2 {
                 font-size: 1.5rem;
             }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-light);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-top: 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-info {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .footer-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
         }
     </style>
 </head>
@@ -641,5 +698,21 @@ END</span>
             </div>
         </div>
     </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>MirDB - A persistent key-value store with Memcached protocol compatibility</p>
+                    <p>Licensed under the <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener">MIT License</a></p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Issues</a>
+                    <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener">License</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
