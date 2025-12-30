@@ -569,6 +569,15 @@ section h2 {
   color: var(--color-text-muted);
 }
 
+.footer-version {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  padding: 0.25rem 0.75rem;
+  background-color: var(--color-background);
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
 .footer-links {
   display: flex;
   gap: 1.5rem;
