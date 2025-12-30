@@ -322,7 +322,7 @@ body {
   max-width: 800px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
 }
 
@@ -331,24 +331,25 @@ body {
   flex-direction: column;
   gap: 0.5rem;
   background: var(--surface);
-  padding: 1.5rem;
-  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.5rem;
   border: 1px solid var(--border);
 }
 
 .config-label {
-  font-weight: 600;
-  color: var(--text-color);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  color: var(--text-light);
+  font-weight: 500;
 }
 
 .config-value {
   font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--primary-color);
   background: var(--background);
   padding: 0.5rem 0.75rem;
-  border-radius: 0.375rem;
-  font-size: 0.95rem;
+  border-radius: 0.25rem;
   border: 1px solid var(--border);
 }
 
@@ -576,11 +577,6 @@ body {
 
   .config-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .config-item {
-    padding: 1rem;
   }
 
   .features-grid {

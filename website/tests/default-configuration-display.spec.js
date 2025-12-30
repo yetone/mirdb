@@ -7,62 +7,58 @@ test.describe('Default Configuration Display', () => {
   });
 
   test('TC1: Default listen address shows 0.0.0.0:12333', async ({ page }) => {
-    // Locate configuration section
-    const configSection = page.locator('section#configuration, [data-testid="configuration-section"], .configuration');
-    await configSection.scrollIntoViewIfNeeded();
+    // Navigate to Configuration section
+    const configSection = page.locator('#configuration, [data-testid="configuration-section"]');
     await expect(configSection).toBeVisible();
 
-    // Check for listen address value
-    const listenAddressItem = configSection.locator('[data-testid="config-listen-address"], .config-item:has-text("Listen Address")');
+    // Find the listen address configuration item
+    const listenAddressItem = page.locator('[data-testid="config-listen-address"]');
     await expect(listenAddressItem).toBeVisible();
 
-    // Verify the default value is displayed
-    const configText = await listenAddressItem.textContent();
-    expect(configText).toContain('0.0.0.0:12333');
+    // Verify the value shows '0.0.0.0:12333'
+    const listenAddressValue = page.locator('[data-testid="config-value-listen-address"]');
+    await expect(listenAddressValue).toHaveText('0.0.0.0:12333');
   });
 
   test('TC2: Default memtable max size shows 4MB', async ({ page }) => {
-    // Locate configuration section
-    const configSection = page.locator('section#configuration, [data-testid="configuration-section"], .configuration');
-    await configSection.scrollIntoViewIfNeeded();
+    // Navigate to Configuration section
+    const configSection = page.locator('#configuration, [data-testid="configuration-section"]');
     await expect(configSection).toBeVisible();
 
-    // Check for memtable size value
-    const memtableItem = configSection.locator('[data-testid="config-memtable-size"], .config-item:has-text("Memtable")');
-    await expect(memtableItem).toBeVisible();
+    // Find the memtable size configuration item
+    const memtableSizeItem = page.locator('[data-testid="config-memtable-size"]');
+    await expect(memtableSizeItem).toBeVisible();
 
-    // Verify the default value is displayed
-    const configText = await memtableItem.textContent();
-    expect(configText).toContain('4MB');
+    // Verify the value shows '4MB'
+    const memtableSizeValue = page.locator('[data-testid="config-value-memtable-size"]');
+    await expect(memtableSizeValue).toHaveText('4MB');
   });
 
   test('TC3: Default SSTable max size shows 100MB', async ({ page }) => {
-    // Locate configuration section
-    const configSection = page.locator('section#configuration, [data-testid="configuration-section"], .configuration');
-    await configSection.scrollIntoViewIfNeeded();
+    // Navigate to Configuration section
+    const configSection = page.locator('#configuration, [data-testid="configuration-section"]');
     await expect(configSection).toBeVisible();
 
-    // Check for SSTable size value
-    const sstableItem = configSection.locator('[data-testid="config-sstable-size"], .config-item:has-text("SSTable")');
-    await expect(sstableItem).toBeVisible();
+    // Find the SSTable size configuration item
+    const sstableSizeItem = page.locator('[data-testid="config-sstable-size"]');
+    await expect(sstableSizeItem).toBeVisible();
 
-    // Verify the default value is displayed
-    const configText = await sstableItem.textContent();
-    expect(configText).toContain('100MB');
+    // Verify the value shows '100MB'
+    const sstableSizeValue = page.locator('[data-testid="config-value-sstable-size"]');
+    await expect(sstableSizeValue).toHaveText('100MB');
   });
 
   test('TC4: Default work directory shows /tmp/mirdb', async ({ page }) => {
-    // Locate configuration section
-    const configSection = page.locator('section#configuration, [data-testid="configuration-section"], .configuration');
-    await configSection.scrollIntoViewIfNeeded();
+    // Navigate to Configuration section
+    const configSection = page.locator('#configuration, [data-testid="configuration-section"]');
     await expect(configSection).toBeVisible();
 
-    // Check for work directory value
-    const workDirItem = configSection.locator('[data-testid="config-work-directory"], .config-item:has-text("Work Directory")');
+    // Find the work directory configuration item
+    const workDirItem = page.locator('[data-testid="config-work-directory"]');
     await expect(workDirItem).toBeVisible();
 
-    // Verify the default value is displayed
-    const configText = await workDirItem.textContent();
-    expect(configText).toContain('/tmp/mirdb');
+    // Verify the value shows '/tmp/mirdb'
+    const workDirValue = page.locator('[data-testid="config-value-work-directory"]');
+    await expect(workDirValue).toHaveText('/tmp/mirdb');
   });
 });
