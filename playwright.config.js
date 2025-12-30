@@ -20,6 +20,10 @@ module.exports = defineConfig({
       name: 'firefox',
       use: { browserName: 'firefox' },
     },
+    {
+      name: 'webkit',
+      use: { browserName: 'webkit' },
+    },
   ],
   webServer: {
     command: 'npx serve . -l 3000',
