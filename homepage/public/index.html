@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility. Built in Rust for performance and reliability.">
+  <meta name="keywords" content="MirDB, key-value store, memcached, persistent storage, Rust, LSM tree, database">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <img src="logo.gif" alt="MirDB Logo" class="nav-logo-img">
+        <span class="nav-logo-text">MirDB</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" data-testid="hero-section" role="banner">
+    <div class="hero-container">
+      <div class="hero-content">
+        <!-- Logo -->
+        <img
+          src="logo.gif"
+          alt="MirDB Logo - ASCII art style database logo"
+          class="hero-logo"
+          data-testid="hero-logo"
+        >
+
+        <!-- Product Name -->
+        <h1 class="hero-title" data-testid="hero-product-name">MirDB</h1>
+
+        <!-- Tagline -->
+        <p class="hero-tagline" data-testid="hero-tagline">
+          Persistent Key-Value Store with Memcached Protocol
+        </p>
+
+        <!-- Subtitle with key features -->
+        <p class="hero-subtitle">
+          A high-performance, durable storage solution built in Rust with LSM-tree architecture
+        </p>
+
+        <!-- Call-to-Action Buttons -->
+        <div class="hero-cta">
+          <a
+            href="#quick-start"
+            class="btn btn-primary"
+            data-testid="cta-get-started"
+          >
+            Get Started
+          </a>
+          <a
+            href="https://github.com/yetone/mirdb"
+            class="btn btn-secondary"
+            data-testid="cta-github"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg class="github-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section (placeholder for structure) -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2>Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Memcached Protocol</h3>
+          <p>Drop-in replacement with full memcached text protocol support. Use existing clients without modification.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Persistent Storage</h3>
+          <p>Data survives restarts with SSTable persistence and Write-Ahead Log for durability.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Built in Rust</h3>
+          <p>Memory-safe, high-performance implementation with async I/O powered by Tokio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start Section -->
+  <section id="quick-start" class="quick-start">
+    <div class="container">
+      <h2>Quick Start</h2>
+      <div class="code-block">
+        <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run with default configuration
+./target/release/mirdb -c etc/mirdb.toml</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 MirDB. Licensed under MIT.</p>
+      <nav class="footer-links">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
