@@ -32,6 +32,7 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Hero Section */
@@ -450,6 +451,11 @@ section h2 {
   color: var(--color-text-muted);
   text-decoration: none;
   transition: color 0.2s;
+  /* Ensure minimum touch target size (44x44px) for mobile accessibility */
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem;
 }
 
 .footer-links a:hover {
@@ -483,6 +489,60 @@ section h2 {
 
   .footer-links {
     justify-content: center;
+  }
+}
+
+/* Small mobile responsive adjustments (320px+) */
+@media (max-width: 480px) {
+  .hero {
+    padding: 2rem 1rem;
+  }
+
+  section {
+    padding: 2rem 1rem;
+  }
+
+  /* Feature grid: single column on small mobile */
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Status grid: single column on small mobile */
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Command list: single column on small mobile */
+  .command-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Ensure code blocks scroll horizontally without page overflow */
+  .code-block {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .code-block pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Config list: stack on mobile */
+  .config-list li {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  /* Footer adjustments */
+  .footer {
+    padding: 1.5rem 1rem;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
   }
 }
 
