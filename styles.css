@@ -491,3 +491,61 @@ code.language-toml {
   border-radius: 0.25rem;
   font-weight: 600;
 }
+
+/* Client Connection Examples Section */
+.client-connection {
+  background-color: #ffffff;
+}
+
+.client-examples-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .client-examples-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .client-examples-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.client-example {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.client-example h3 {
+  font-size: 1.25rem;
+  color: #0f4c75;
+  margin-bottom: 0.5rem;
+}
+
+.example-description {
+  color: #4a4a4a;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Syntax Highlighting Classes */
+.language-python,
+.language-javascript,
+.language-ruby,
+.language-bash,
+.language-toml {
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+}
+
+pre.language-python code,
+pre.language-javascript code,
+pre.language-ruby code,
+pre.language-bash code {
+  color: #e0e0e0;
+}

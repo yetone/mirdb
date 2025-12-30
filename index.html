@@ -231,6 +231,81 @@ DELETED</code></pre>
     </div>
   </section>
 
+  <!-- Client Connection Examples Section -->
+  <section id="client-connection" class="client-connection" data-section="client-connection">
+    <div class="container">
+      <h2 class="section-title">Client Connection Examples</h2>
+      <p class="section-description">Connect to MirDB using any memcached-compatible client. Here are examples in popular languages.</p>
+
+      <div class="client-examples-grid">
+        <!-- Python Example -->
+        <div class="client-example" data-language="python">
+          <h3>Python</h3>
+          <p class="example-description">Using pymemcache library:</p>
+          <pre class="language-python"><code class="language-python">from pymemcache.client import Client
+
+# Connect to MirDB
+client = Client(('localhost', 12333))
+
+# Store a value
+client.set('user:1', 'John Doe')
+
+# Retrieve the value
+result = client.get('user:1')
+print(result)  # b'John Doe'
+
+# Delete a key
+client.delete('user:1')</code></pre>
+        </div>
+
+        <!-- Node.js Example -->
+        <div class="client-example" data-language="nodejs">
+          <h3>Node.js</h3>
+          <p class="example-description">Using memcached library:</p>
+          <pre class="language-javascript"><code class="language-javascript">const Memcached = require('memcached');
+
+// Connect to MirDB
+const client = new Memcached('localhost:12333');
+
+// Store a value
+client.set('session:abc', 'user_data', 3600, (err) => {
+  if (err) console.error(err);
+});
+
+// Retrieve the value
+client.get('session:abc', (err, data) => {
+  console.log(data);  // 'user_data'
+});
+
+// Delete a key
+client.del('session:abc', (err) => {
+  if (err) console.error(err);
+});</code></pre>
+        </div>
+
+        <!-- Ruby Example -->
+        <div class="client-example" data-language="ruby">
+          <h3>Ruby</h3>
+          <p class="example-description">Using dalli gem:</p>
+          <pre class="language-ruby"><code class="language-ruby">require 'dalli'
+
+# Connect to MirDB
+client = Dalli::Client.new('localhost:12333')
+
+# Store a value
+client.set('cache:key', 'cached_value')
+
+# Retrieve the value
+result = client.get('cache:key')
+puts result  # 'cached_value'
+
+# Delete a key
+client.delete('cache:key')</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
