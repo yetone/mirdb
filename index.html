@@ -117,10 +117,10 @@ cargo build --release
 ./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
         </div>
 
-        <div class="step">
+        <div class="step" data-section="configuration">
           <h3 class="step-title"><span class="step-number">2</span> Configuration</h3>
           <p class="step-description">MirDB uses TOML configuration files. Here's an example configuration (<code class="inline-code">etc/mirdb.toml</code>):</p>
-          <pre><code>addr = "0.0.0.0:12333"
+          <pre class="language-toml"><code class="language-toml">addr = "0.0.0.0:12333"
 
 max_level = 7
 work_dir = "/tmp/mirdb"

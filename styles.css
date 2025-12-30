@@ -191,6 +191,7 @@ section {
   margin-bottom: 1rem;
 }
 
+/* Code block styling with syntax highlighting */
 pre {
   background-color: #1a1a2e;
   color: #e2e8f0;
@@ -203,6 +204,19 @@ pre {
 code {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
   font-size: 0.875rem;
+}
+
+pre code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+/* TOML syntax highlighting */
+pre.language-toml,
+code.language-toml {
+  color: #e0e0e0;
 }
 
 .inline-code {
@@ -260,4 +274,61 @@ code {
   .section-title {
     font-size: 1.5rem;
   }
+}
+
+/* Supported Commands Section */
+.commands-section {
+  background-color: #f8f9fa;
+}
+
+.section-description {
+  text-align: center;
+  color: #4a4a4a;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.command-group {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.command-group h3 {
+  font-size: 1.1rem;
+  color: #0f4c75;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.command-group.mirdb-specific {
+  background-color: #f0f7ff;
+  border: 1px solid #0f4c75;
+}
+
+.command-list {
+  list-style: none;
+  padding: 0;
+}
+
+.command-list li {
+  padding: 0.5rem 0;
+  color: #4a4a4a;
+  font-size: 0.95rem;
+}
+
+.command-list code {
+  background-color: #e2e8f0;
+  color: #1a1a2e;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
 }
