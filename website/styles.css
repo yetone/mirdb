@@ -118,7 +118,7 @@ body {
   font-weight: 600;
   text-decoration: none;
   border-radius: 0.5rem;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
   cursor: pointer;
   border: none;
 }
@@ -612,9 +612,26 @@ body {
 
 /* Focus states for accessibility */
 a:focus,
-button:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
+button:focus,
+.btn:focus {
+  outline: 2px solid var(--primary-color) !important;
+  outline-offset: 2px !important;
+}
+
+/* Ensure focus is visible on primary buttons (contrast with blue background) */
+a.btn.btn-primary:focus,
+button.btn.btn-primary:focus,
+.btn.btn-primary:focus {
+  outline: 2px solid var(--secondary-color) !important;
+  outline-offset: 2px !important;
+}
+
+/* Ensure focus is visible on secondary buttons (contrast with dark background) */
+a.btn.btn-secondary:focus,
+button.btn.btn-secondary:focus,
+.btn.btn-secondary:focus {
+  outline: 2px solid white !important;
+  outline-offset: 2px !important;
 }
 
 /* Skip to main content link for accessibility */
