@@ -13,7 +13,10 @@
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="#" class="nav-logo">
-        <img src="logo-static.gif" alt="MirDB Logo" class="nav-logo-img">
+        <picture>
+          <source type="image/webp" srcset="logo-100w.webp 100w, logo-200w.webp 200w" sizes="40px">
+          <img src="logo-100w.png" alt="MirDB Logo" class="nav-logo-img" width="40" height="14">
+        </picture>
         <span class="nav-logo-text">MirDB</span>
       </a>
       <ul class="nav-links">
@@ -28,15 +31,25 @@
   <section class="hero" data-testid="hero-section" role="banner">
     <div class="hero-container">
       <div class="hero-content">
-        <!-- Logo -->
-        <img
-          src="logo-static.gif"
-          data-src="logo.gif"
-          alt="MirDB Logo - ASCII art style database logo"
-          class="hero-logo"
-          data-testid="hero-logo"
-          loading="eager"
-        >
+        <!-- Logo with responsive images and WebP support -->
+        <picture class="hero-logo-picture" data-testid="hero-logo">
+          <source
+            type="image/webp"
+            srcset="logo-200w.webp 200w, logo-300w.webp 300w, logo-500w.webp 500w"
+            sizes="(max-width: 600px) 200px, (max-width: 900px) 300px, 500px"
+          >
+          <img
+            src="logo-static.gif"
+            data-src="logo.gif"
+            alt="MirDB Logo - ASCII art style database logo"
+            class="hero-logo"
+            width="500"
+            height="180"
+            loading="eager"
+            srcset="logo-200w.png 200w, logo-300w.png 300w, logo-500w.png 500w"
+            sizes="(max-width: 600px) 200px, (max-width: 900px) 300px, 500px"
+          >
+        </picture>
 
         <!-- Product Name -->
         <h1 class="hero-title" data-testid="hero-product-name">MirDB</h1>
