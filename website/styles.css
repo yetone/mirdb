@@ -6,16 +6,16 @@
 }
 
 :root {
-  --primary-color: #3b82f6;
-  --primary-hover: #2563eb;
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
   --secondary-color: #1e293b;
   --secondary-hover: #334155;
   --text-color: #1e293b;
-  --text-light: #64748b;
+  --text-light: #475569;
   --background: #ffffff;
   --surface: #f8fafc;
   --border: #e2e8f0;
-  --success: #22c55e;
+  --success: #15803d;
   --code-bg: #1e293b;
   --code-text: #e2e8f0;
 }
@@ -336,7 +336,7 @@ body {
 }
 
 .license {
-  color: var(--text-light);
+  color: #94a3b8;
   font-size: 0.875rem;
 }
 
