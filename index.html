@@ -121,6 +121,57 @@
         </div>
     </section>
 
+    <!-- Commands Section -->
+    <section id="commands" class="commands">
+        <div class="container">
+            <h2 class="section-title">Supported Commands</h2>
+            <p class="commands-intro">MirDB implements the memcached text protocol. Here are the supported commands:</p>
+            <div class="commands-grid">
+                <div class="command-category">
+                    <h3 class="category-title">Storage Commands</h3>
+                    <div class="command-item">
+                        <span class="command-name">SET</span>
+                        <span class="command-desc">Store a key-value pair</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">ADD</span>
+                        <span class="command-desc">Store only if key doesn't exist</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">REPLACE</span>
+                        <span class="command-desc">Store only if key exists</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">APPEND</span>
+                        <span class="command-desc">Append data to existing value</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">PREPEND</span>
+                        <span class="command-desc">Prepend data to existing value</span>
+                    </div>
+                </div>
+                <div class="command-category">
+                    <h3 class="category-title">Retrieval Commands</h3>
+                    <div class="command-item">
+                        <span class="command-name">GET</span>
+                        <span class="command-desc">Retrieve one or more keys</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">GETS</span>
+                        <span class="command-desc">Retrieve with CAS token</span>
+                    </div>
+                </div>
+                <div class="command-category">
+                    <h3 class="category-title">Deletion Commands</h3>
+                    <div class="command-item">
+                        <span class="command-name">DELETE</span>
+                        <span class="command-desc">Remove a key from the store</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
