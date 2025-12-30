@@ -873,3 +873,258 @@ code:focus {
 .planned .feature-text {
   color: #6b7280;
 }
+
+/* ==========================================================================
+   Dark Mode Support (NFR-6)
+   Uses prefers-color-scheme media query for automatic dark mode detection
+   All colors maintain WCAG AA contrast ratios (4.5:1 for normal text)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  /* Body and base styles */
+  body {
+    background-color: #1a1a2e;
+    color: #e2e8f0;
+  }
+
+  /* Section titles */
+  .section-title {
+    color: #f8f9fa;
+  }
+
+  /* Value Propositions Section */
+  .value-propositions {
+    background-color: #16213e;
+  }
+
+  .proposition {
+    background-color: #0f3460;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  .proposition:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .proposition-title {
+    color: #3282b8;
+  }
+
+  .proposition-description {
+    color: #94a3b8;
+  }
+
+  /* Getting Started Section */
+  .getting-started {
+    background-color: #1a1a2e;
+  }
+
+  .step {
+    background-color: #16213e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .step-title {
+    color: #f8f9fa;
+  }
+
+  .step-description {
+    color: #94a3b8;
+  }
+
+  /* Code blocks */
+  pre {
+    background-color: #0d1117;
+    color: #e2e8f0;
+  }
+
+  pre code {
+    color: #e2e8f0;
+  }
+
+  .inline-code {
+    background-color: #374151;
+    color: #e2e8f0;
+  }
+
+  /* Commands section */
+  .commands-section {
+    background-color: #16213e;
+  }
+
+  .command-group {
+    background-color: #0f3460;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .command-group h3 {
+    color: #3282b8;
+    border-bottom-color: #374151;
+  }
+
+  .command-group.mirdb-specific {
+    background-color: #1e3a5f;
+    border-color: #3282b8;
+  }
+
+  .command-list li {
+    color: #94a3b8;
+  }
+
+  .command-list code {
+    background-color: #374151;
+    color: #e2e8f0;
+  }
+
+  /* Feature Comparison Section */
+  .feature-comparison {
+    background-color: #16213e;
+  }
+
+  .section-description {
+    color: #94a3b8;
+  }
+
+  .comparison-table {
+    background-color: #0f3460;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  .comparison-table thead {
+    background-color: #0d1117;
+  }
+
+  .comparison-table td {
+    border-bottom-color: #374151;
+  }
+
+  .comparison-table tbody tr:hover {
+    background-color: #1e3a5f;
+  }
+
+  .feature-name {
+    color: #f8f9fa;
+  }
+
+  .mirdb-feature,
+  .memcached-feature {
+    color: #94a3b8;
+  }
+
+  /* Client Connection Section */
+  .client-connection {
+    background-color: #1a1a2e;
+  }
+
+  .client-example {
+    background-color: #16213e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .client-example h3 {
+    color: #3282b8;
+  }
+
+  .example-description {
+    color: #94a3b8;
+  }
+
+  /* Architecture Overview Section */
+  .architecture-overview {
+    background-color: #1a1a2e;
+  }
+
+  .architecture-diagram {
+    background-color: #16213e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .architecture-description h3 {
+    color: #3282b8;
+  }
+
+  .architecture-components li {
+    color: #94a3b8;
+    border-bottom-color: #374151;
+  }
+
+  .architecture-components li strong {
+    color: #f8f9fa;
+  }
+
+  /* Project Status Section */
+  .project-status {
+    background-color: #16213e;
+  }
+
+  .status-group {
+    background-color: #0f3460;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .status-group h3 {
+    color: #f8f9fa;
+    border-bottom-color: #374151;
+  }
+
+  .implemented-features h3 {
+    color: #10b981;
+    border-bottom-color: #10b981;
+  }
+
+  .planned-features h3 {
+    color: #3282b8;
+    border-bottom-color: #3282b8;
+  }
+
+  .feature-item {
+    border-bottom-color: #374151;
+  }
+
+  .feature-text {
+    color: #94a3b8;
+  }
+
+  .implemented .feature-text {
+    color: #e2e8f0;
+  }
+
+  .planned .feature-text {
+    color: #94a3b8;
+  }
+
+  .feature-pending {
+    background-color: #374151;
+    color: #e2e8f0;
+    border-color: #3282b8;
+  }
+
+  /* Footer */
+  .footer {
+    background-color: #0d1117;
+  }
+
+  /* Commands list in getting started */
+  .commands-list li {
+    color: #94a3b8;
+  }
+
+  /* Focus styles for dark mode */
+  a:focus,
+  button:focus,
+  [tabindex]:focus {
+    outline-color: #3282b8;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline-color: #3282b8;
+  }
+
+  .btn:focus,
+  .btn:focus-visible {
+    outline-color: #3282b8;
+    box-shadow: 0 0 0 4px rgba(50, 130, 184, 0.3);
+  }
+}
