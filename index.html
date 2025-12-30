@@ -49,6 +49,54 @@
     </div>
   </section>
 
+  <!-- Supported Commands Section -->
+  <section id="commands" class="commands-section" data-section="commands">
+    <div class="container">
+      <h2 class="section-title">Supported Commands</h2>
+      <p class="section-description">MirDB implements the memcached text protocol with additional administrative commands.</p>
+
+      <div class="commands-grid">
+        <!-- Storage Commands -->
+        <div class="command-group" data-command-type="storage">
+          <h3>Storage Commands</h3>
+          <ul class="command-list">
+            <li><code>SET</code> - Store a key-value pair</li>
+            <li><code>ADD</code> - Store only if key doesn't exist</li>
+            <li><code>REPLACE</code> - Store only if key exists</li>
+            <li><code>APPEND</code> - Append data to existing value</li>
+            <li><code>PREPEND</code> - Prepend data to existing value</li>
+          </ul>
+        </div>
+
+        <!-- Retrieval Commands -->
+        <div class="command-group" data-command-type="retrieval">
+          <h3>Retrieval Commands</h3>
+          <ul class="command-list">
+            <li><code>GET</code> - Retrieve one or more keys</li>
+            <li><code>GETS</code> - Retrieve with CAS token</li>
+          </ul>
+        </div>
+
+        <!-- Deletion Commands -->
+        <div class="command-group" data-command-type="deletion">
+          <h3>Deletion Commands</h3>
+          <ul class="command-list">
+            <li><code>DELETE</code> - Remove a key</li>
+          </ul>
+        </div>
+
+        <!-- MirDB-Specific Commands -->
+        <div class="command-group mirdb-specific" data-command-type="mirdb-specific">
+          <h3>MirDB-Specific Commands</h3>
+          <ul class="command-list">
+            <li><code>INFO</code> - Display database status and level information</li>
+            <li><code>MAJOR_COMPACTION</code> - Trigger manual compaction</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Getting Started Section -->
   <section id="getting-started" class="getting-started">
     <div class="container">
