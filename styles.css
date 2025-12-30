@@ -1,14 +1,19 @@
 /* MirDB Homepage Styles */
+/* Cross-Browser Compatibility: Tested on Chrome, Firefox, Safari, Edge */
 
 /* Reset and base styles */
 *, *::before, *::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 html {
+  /* Smooth scroll with fallback for older browsers */
   scroll-behavior: smooth;
+  -webkit-scroll-behavior: smooth;
 }
 
 body {
@@ -33,6 +38,11 @@ h1, h2, h3 {
 
 /* Hero Section */
 .hero {
+  /* Cross-browser gradient support */
+  background: #1a1a2e; /* Fallback for older browsers */
+  background: -webkit-linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: -moz-linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: -o-linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: #ffffff;
   padding: 4rem 0;
@@ -51,9 +61,20 @@ h1, h2, h3 {
 }
 
 .hero-actions {
+  /* Cross-browser flexbox support */
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 1rem;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 
@@ -64,10 +85,18 @@ h1, h2, h3 {
   border-radius: 0.5rem;
   text-decoration: none;
   font-weight: 600;
+  /* Cross-browser transition and transform support */
+  -webkit-transition: -webkit-transform 0.2s, box-shadow 0.2s;
+  -moz-transition: -moz-transform 0.2s, box-shadow 0.2s;
+  -o-transition: -o-transform 0.2s, box-shadow 0.2s;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .btn:hover {
+  -webkit-transform: translateY(-2px);
+  -moz-transform: translateY(-2px);
+  -ms-transform: translateY(-2px);
+  -o-transform: translateY(-2px);
   transform: translateY(-2px);
 }
 
@@ -108,7 +137,18 @@ section {
 }
 
 .propositions-grid {
+  /* Cross-browser flexbox support */
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -moz-box-orient: vertical;
+  -moz-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
   gap: 2rem;
 }
@@ -126,12 +166,24 @@ section {
   background-color: #ffffff;
   padding: 2rem;
   border-radius: 0.75rem;
+  -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  /* Cross-browser transition and transform support */
+  -webkit-transition: -webkit-transform 0.2s, box-shadow 0.2s;
+  -moz-transition: -moz-transform 0.2s, box-shadow 0.2s;
+  -o-transition: -o-transform 0.2s, box-shadow 0.2s;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .proposition:hover {
+  -webkit-transform: translateY(-4px);
+  -moz-transform: translateY(-4px);
+  -ms-transform: translateY(-4px);
+  -o-transform: translateY(-4px);
   transform: translateY(-4px);
+  -webkit-box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -152,7 +204,18 @@ section {
 }
 
 .getting-started-content {
+  /* Cross-browser flexbox support */
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -moz-box-orient: vertical;
+  -moz-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
   gap: 2rem;
 }
@@ -165,7 +228,16 @@ section {
 }
 
 .step-title {
+  /* Cross-browser flexbox support */
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   gap: 0.75rem;
   font-size: 1.25rem;
@@ -174,8 +246,21 @@ section {
 }
 
 .step-number {
+  /* Cross-browser flexbox support */
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   width: 2rem;
   height: 2rem;
