@@ -151,6 +151,79 @@ section {
   background-color: #ffffff;
 }
 
+.getting-started-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.step {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.step-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background-color: #0f4c75;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.step-description {
+  color: #4a4a4a;
+  margin-bottom: 1rem;
+}
+
+pre {
+  background-color: #1a1a2e;
+  color: #e2e8f0;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+  font-size: 0.875rem;
+}
+
+.inline-code {
+  background-color: #e2e8f0;
+  color: #1a1a2e;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.commands-list {
+  list-style: none;
+  margin-top: 1rem;
+  padding-left: 0;
+}
+
+.commands-list li {
+  margin-bottom: 0.75rem;
+  color: #4a4a4a;
+}
+
 /* Footer */
 .footer {
   background-color: #1a1a2e;

@@ -101,7 +101,81 @@
   <section id="getting-started" class="getting-started">
     <div class="container">
       <h2 class="section-title">Getting Started</h2>
-      <p>Quick start instructions will be added here.</p>
+      <div class="getting-started-content">
+
+        <div class="step">
+          <h3 class="step-title"><span class="step-number">1</span> Installation</h3>
+          <p class="step-description">Clone the repository and build MirDB using Cargo:</p>
+          <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run MirDB with the default configuration
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+        </div>
+
+        <div class="step">
+          <h3 class="step-title"><span class="step-number">2</span> Configuration</h3>
+          <p class="step-description">MirDB uses TOML configuration files. Here's an example configuration (<code class="inline-code">etc/mirdb.toml</code>):</p>
+          <pre><code>addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500</code></pre>
+        </div>
+
+        <div class="step">
+          <h3 class="step-title"><span class="step-number">3</span> Basic Usage</h3>
+          <p class="step-description">Connect using any memcached client or tools like <code class="inline-code">telnet</code> or <code class="inline-code">nc</code>:</p>
+          <pre><code># Connect to MirDB
+telnet localhost 12333
+
+# Or using netcat
+nc localhost 12333
+
+# Store a value
+set mykey 0 0 5
+hello
+STORED
+
+# Retrieve the value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete a key
+delete mykey
+DELETED</code></pre>
+        </div>
+
+        <div class="step">
+          <h3 class="step-title"><span class="step-number">4</span> Supported Commands</h3>
+          <p class="step-description">MirDB supports the following memcached commands:</p>
+          <ul class="commands-list">
+            <li><strong>Storage:</strong> <code class="inline-code">SET</code>, <code class="inline-code">ADD</code>, <code class="inline-code">REPLACE</code>, <code class="inline-code">APPEND</code>, <code class="inline-code">PREPEND</code></li>
+            <li><strong>Retrieval:</strong> <code class="inline-code">GET</code>, <code class="inline-code">GETS</code></li>
+            <li><strong>Deletion:</strong> <code class="inline-code">DELETE</code></li>
+            <li><strong>MirDB-specific:</strong> <code class="inline-code">INFO</code>, <code class="inline-code">MAJOR_COMPACTION</code></li>
+          </ul>
+        </div>
+
+      </div>
     </div>
   </section>
 
