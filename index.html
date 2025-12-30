@@ -293,6 +293,94 @@
             display: none;
         }
 
+        /* Quick Start Section */
+        .quickstart {
+            padding: 4rem 0;
+            background: var(--bg-color);
+        }
+
+        .quickstart-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .quickstart-header h2 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .quickstart-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .quickstart-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .quickstart-step {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .quickstart-step h3 {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quickstart-step h3 .step-number {
+            background: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block code {
+            color: #d4d4d4;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .code-block .command {
+            color: #569cd6;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .response {
+            color: #4ec9b0;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             header .container {
@@ -331,6 +419,14 @@
             }
 
             .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quickstart-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .quickstart-content {
                 grid-template-columns: 1fr;
             }
         }
@@ -425,6 +521,54 @@
                     <span class="icon" aria-hidden="true">🗳️</span>
                     <h3>Raft Consensus</h3>
                     <p>Planned support for distributed consensus using the Raft protocol, enabling high availability and fault tolerance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="quickstart" class="quickstart">
+        <div class="container">
+            <div class="quickstart-header">
+                <h2>Quick Start</h2>
+                <p>Get up and running with MirDB in minutes</p>
+            </div>
+            <div class="quickstart-content">
+                <div class="quickstart-step">
+                    <h3><span class="step-number">1</span> Clone and Build</h3>
+                    <pre class="code-block"><code><span class="comment"># Clone the repository</span>
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+<span class="comment"># Build the project</span>
+cargo build --release</code></pre>
+                </div>
+                <div class="quickstart-step">
+                    <h3><span class="step-number">2</span> Start the Server</h3>
+                    <pre class="code-block"><code><span class="comment"># Run MirDB server</span>
+./target/release/mirdb-server
+
+<span class="comment"># Or with custom config</span>
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+                </div>
+                <div class="quickstart-step">
+                    <h3><span class="step-number">3</span> Connect and Use</h3>
+                    <pre class="code-block"><code><span class="comment"># Connect using any memcached client</span>
+telnet localhost 12333
+
+<span class="comment"># SET a value</span>
+<span class="command">set </span>mykey 0 0 5
+hello
+<span class="response">STORED</span>
+
+<span class="comment"># GET the value</span>
+<span class="command">get </span>mykey
+<span class="response">VALUE mykey 0 5
+hello
+END</span>
+
+<span class="comment"># DELETE the key</span>
+<span class="command">delete </span>mykey
+<span class="response">DELETED</span></code></pre>
                 </div>
             </div>
         </div>
