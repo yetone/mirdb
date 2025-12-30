@@ -213,6 +213,86 @@
             line-height: 1.6;
         }
 
+        /* Features Section */
+        .features {
+            padding: 4rem 0;
+            background: var(--bg-light);
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .features-header h2 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .features-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .feature-card.planned {
+            border: 2px dashed var(--primary-color);
+            background: linear-gradient(135deg, var(--bg-color) 0%, #f0f4ff 100%);
+        }
+
+        .feature-card.planned .planned-badge {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .feature-card:not(.planned) .planned-badge {
+            display: none;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             header .container {
@@ -244,6 +324,14 @@
 
             .value-prop-header h2 {
                 font-size: 1.5rem;
+            }
+
+            .features-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -300,6 +388,43 @@
                     <span class="icon" aria-hidden="true">🌲</span>
                     <h3>LSM Tree Architecture</h3>
                     <p>Built on efficient Log-Structured Merge Tree architecture for optimal storage and retrieval performance with excellent write throughput.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="features-header">
+                <h2>Features</h2>
+                <p>Powerful capabilities for reliable data storage</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card feature-item">
+                    <span class="icon" aria-hidden="true">⚡</span>
+                    <h3>Async Networking with Tokio</h3>
+                    <p>Built on Tokio for high-performance asynchronous networking, enabling efficient handling of concurrent connections.</p>
+                </div>
+                <div class="feature-card feature-item">
+                    <span class="icon" aria-hidden="true">📝</span>
+                    <h3>Memtable with Skip List</h3>
+                    <p>In-memory data structure using skip list for fast writes and efficient range queries before data is flushed to disk.</p>
+                </div>
+                <div class="feature-card feature-item">
+                    <span class="icon" aria-hidden="true">🔄</span>
+                    <h3>Minor Compaction</h3>
+                    <p>Automatically merges smaller SSTables to optimize read performance and reduce storage fragmentation.</p>
+                </div>
+                <div class="feature-card feature-item">
+                    <span class="icon" aria-hidden="true">📦</span>
+                    <h3>Major Compaction</h3>
+                    <p>Full-scale compaction process that reorganizes all data levels for optimal storage efficiency and query performance.</p>
+                </div>
+                <div class="feature-card feature-item planned">
+                    <span class="planned-badge">Upcoming</span>
+                    <span class="icon" aria-hidden="true">🗳️</span>
+                    <h3>Raft Consensus</h3>
+                    <p>Planned support for distributed consensus using the Raft protocol, enabling high availability and fault tolerance.</p>
                 </div>
             </div>
         </div>
