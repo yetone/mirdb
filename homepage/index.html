@@ -80,6 +80,63 @@ END</code></pre>
         <li><strong>LSM Levels:</strong> 7 levels</li>
       </ul>
     </section>
+
+    <section id="project-status" class="project-status" data-testid="project-status">
+      <h2>Project Status</h2>
+      <div class="status-grid">
+        <div class="status-column">
+          <h3 class="status-header implemented-header" data-testid="implemented-header">
+            <span class="status-icon implemented-icon">✓</span>
+            Implemented Features
+          </h3>
+          <ul class="status-list implemented-list" data-testid="implemented-features">
+            <li class="status-item implemented" data-testid="feature-implemented">
+              <span class="status-badge implemented-badge">Implemented</span>
+              Tokio-based async networking with memcached protocol
+            </li>
+            <li class="status-item implemented" data-testid="feature-implemented">
+              <span class="status-badge implemented-badge">Implemented</span>
+              Memtable with skip list data structure
+            </li>
+            <li class="status-item implemented" data-testid="feature-implemented">
+              <span class="status-badge implemented-badge">Implemented</span>
+              Minor compaction (memtable to SSTable)
+            </li>
+            <li class="status-item implemented" data-testid="feature-implemented">
+              <span class="status-badge implemented-badge">Implemented</span>
+              Major compaction (SSTable level compaction)
+            </li>
+          </ul>
+          <div class="supported-commands" data-testid="supported-commands">
+            <h4>Supported Commands</h4>
+            <ul class="command-list">
+              <li class="command-item" data-testid="command-set"><code>SET</code> - Store a key-value pair</li>
+              <li class="command-item" data-testid="command-get"><code>GET</code> - Retrieve a value by key</li>
+              <li class="command-item" data-testid="command-gets"><code>GETS</code> - Retrieve multiple values</li>
+              <li class="command-item" data-testid="command-delete"><code>DELETE</code> - Remove a key-value pair</li>
+              <li class="command-item" data-testid="command-add"><code>ADD</code> - Add a new key-value pair</li>
+              <li class="command-item" data-testid="command-replace"><code>REPLACE</code> - Replace an existing value</li>
+              <li class="command-item" data-testid="command-append"><code>APPEND</code> - Append to existing value</li>
+              <li class="command-item" data-testid="command-prepend"><code>PREPEND</code> - Prepend to existing value</li>
+              <li class="command-item" data-testid="command-info"><code>INFO</code> - Get server information</li>
+              <li class="command-item" data-testid="command-major-compaction"><code>MAJOR_COMPACTION</code> - Trigger compaction</li>
+            </ul>
+          </div>
+        </div>
+        <div class="status-column">
+          <h3 class="status-header planned-header" data-testid="planned-header">
+            <span class="status-icon planned-icon">◯</span>
+            Planned Features
+          </h3>
+          <ul class="status-list planned-list" data-testid="planned-features">
+            <li class="status-item planned" data-testid="feature-planned">
+              <span class="status-badge planned-badge">Planned</span>
+              Raft consensus for distributed operation
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
