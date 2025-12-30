@@ -404,6 +404,28 @@
             color: var(--text-light);
         }
 
+        /* Architecture Section */
+        .architecture-diagram {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .architecture-diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .architecture-description {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -417,6 +439,10 @@
             .commands-grid {
                 grid-template-columns: 1fr;
             }
+
+            .architecture-diagram svg {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -427,6 +453,7 @@
             <a href="#" class="nav-logo">MirDB</a>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
                 <li><a href="#commands">Commands</a></li>
                 <li><a href="#quickstart">Quick Start</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank">GitHub</a></li>
@@ -518,6 +545,141 @@
                     <h3>Configurable</h3>
                     <p>Tune memtable size, SSTable parameters, and compaction behavior to match your workload.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Overview Section -->
+    <section id="architecture" data-testid="architecture-section">
+        <div class="container">
+            <h2 class="section-title">Architecture Overview</h2>
+            <p class="section-subtitle architecture-description">MirDB uses a Log-Structured Merge (LSM) tree architecture for efficient writes and persistent storage. Data flows from the Write-Ahead Log through the memtable to SSTable levels via compaction.</p>
+
+            <div class="architecture-diagram diagram-container">
+                <svg
+                    data-testid="lsm-tree-diagram"
+                    viewBox="0 0 800 500"
+                    width="800"
+                    height="500"
+                    role="img"
+                    aria-label="LSM Tree Architecture Diagram showing data flow from write requests through WAL, memtable, immutable memtable, and SSTable levels"
+                    tabindex="0"
+                >
+                    <title>LSM Tree Architecture: Data flows from write requests through WAL (Write-Ahead Log) for durability, then to the active memtable, immutable memtables queue, and finally to SSTable levels via compaction</title>
+
+                    <!-- Background -->
+                    <rect width="800" height="500" fill="#f8fafc"/>
+
+                    <!-- Write Request Arrow -->
+                    <g data-component="write-request">
+                        <text x="100" y="45" font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">Write Request</text>
+                        <path d="M 100 55 L 100 85" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    </g>
+
+                    <!-- Arrow marker definition -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+                        </marker>
+                        <marker id="arrowhead-gray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+                        </marker>
+                    </defs>
+
+                    <!-- WAL (Write-Ahead Log) -->
+                    <g data-component="wal">
+                        <rect x="30" y="90" width="140" height="60" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                        <text x="100" y="120" font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#92400e" text-anchor="middle">WAL</text>
+                        <text x="100" y="138" font-family="Arial, sans-serif" font-size="10" fill="#92400e" text-anchor="middle">(Write-Ahead Log)</text>
+                    </g>
+
+                    <!-- Arrow from WAL to Memtable -->
+                    <path d="M 100 155 L 100 185" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                    <!-- Memtable -->
+                    <g data-component="memtable">
+                        <rect x="30" y="190" width="140" height="60" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                        <text x="100" y="220" font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#1e40af" text-anchor="middle">Memtable</text>
+                        <text x="100" y="238" font-family="Arial, sans-serif" font-size="10" fill="#1e40af" text-anchor="middle">(Active Skip List)</text>
+                    </g>
+
+                    <!-- Arrow from Memtable to Immutable Memtables -->
+                    <path d="M 100 255 L 100 285" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <text x="130" y="275" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">(when full)</text>
+
+                    <!-- Immutable Memtables -->
+                    <g data-component="immutable-memtable">
+                        <rect x="30" y="290" width="140" height="60" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+                        <text x="100" y="318" font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#4338ca" text-anchor="middle">Imm Memtables</text>
+                        <text x="100" y="336" font-family="Arial, sans-serif" font-size="10" fill="#4338ca" text-anchor="middle">(Immutable Queue)</text>
+                    </g>
+
+                    <!-- Arrow from Immutable to Level 0 (Minor Compaction) -->
+                    <path d="M 170 320 L 230 320" stroke="#6b7280" stroke-width="2" fill="none" marker-end="url(#arrowhead-gray)" stroke-dasharray="5,3"/>
+                    <text x="200" y="310" font-family="Arial, sans-serif" font-size="9" fill="#6b7280" text-anchor="middle">minor</text>
+                    <text x="200" y="335" font-family="Arial, sans-serif" font-size="9" fill="#6b7280" text-anchor="middle">compaction</text>
+
+                    <!-- SSTable Section -->
+                    <g data-component="sstable">
+                        <!-- Level 0 SSTables -->
+                        <g data-component="level-0">
+                            <rect x="240" y="90" width="520" height="80" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3"/>
+                            <text x="260" y="115" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#991b1b">Level 0 SSTables</text>
+                            <text x="260" y="130" font-family="Arial, sans-serif" font-size="9" fill="#991b1b">(May overlap, recently flushed)</text>
+                            <!-- Individual SST files -->
+                            <rect x="260" y="140" width="80" height="20" rx="4" fill="#fee2e2" stroke="#fca5a5"/>
+                            <text x="300" y="155" font-family="Arial, sans-serif" font-size="10" fill="#991b1b" text-anchor="middle">SST</text>
+                            <rect x="350" y="140" width="80" height="20" rx="4" fill="#fee2e2" stroke="#fca5a5"/>
+                            <text x="390" y="155" font-family="Arial, sans-serif" font-size="10" fill="#991b1b" text-anchor="middle">SST</text>
+                            <rect x="440" y="140" width="80" height="20" rx="4" fill="#fee2e2" stroke="#fca5a5"/>
+                            <text x="480" y="155" font-family="Arial, sans-serif" font-size="10" fill="#991b1b" text-anchor="middle">SST</text>
+                        </g>
+
+                        <!-- Arrow from Level 0 to Level 1 (Major Compaction) -->
+                        <path d="M 500 175 L 500 205" stroke="#6b7280" stroke-width="2" fill="none" marker-end="url(#arrowhead-gray)" stroke-dasharray="5,3"/>
+                        <text x="545" y="195" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">major compaction</text>
+
+                        <!-- Level 1 SSTables -->
+                        <g data-component="level-1">
+                            <rect x="240" y="210" width="520" height="70" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+                            <text x="260" y="235" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#166534">Level 1 SSTables</text>
+                            <text x="260" y="250" font-family="Arial, sans-serif" font-size="9" fill="#166534">(Sorted, non-overlapping)</text>
+                            <!-- Individual SST files -->
+                            <rect x="260" y="260" width="100" height="15" rx="3" fill="#dcfce7" stroke="#86efac"/>
+                            <rect x="370" y="260" width="100" height="15" rx="3" fill="#dcfce7" stroke="#86efac"/>
+                            <rect x="480" y="260" width="100" height="15" rx="3" fill="#dcfce7" stroke="#86efac"/>
+                            <rect x="590" y="260" width="100" height="15" rx="3" fill="#dcfce7" stroke="#86efac"/>
+                        </g>
+
+                        <!-- Arrow from Level 1 to Level 2+ -->
+                        <path d="M 500 285 L 500 315" stroke="#6b7280" stroke-width="2" fill="none" marker-end="url(#arrowhead-gray)" stroke-dasharray="5,3"/>
+
+                        <!-- Level 2+ SSTables -->
+                        <g data-component="level-n">
+                            <rect x="240" y="320" width="520" height="70" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+                            <text x="260" y="345" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#1e40af">Level 2+ SSTables</text>
+                            <text x="260" y="360" font-family="Arial, sans-serif" font-size="9" fill="#1e40af">(Larger files, sorted by key range)</text>
+                            <!-- Individual SST files -->
+                            <rect x="260" y="370" width="150" height="15" rx="3" fill="#dbeafe" stroke="#93c5fd"/>
+                            <rect x="420" y="370" width="150" height="15" rx="3" fill="#dbeafe" stroke="#93c5fd"/>
+                            <rect x="580" y="370" width="150" height="15" rx="3" fill="#dbeafe" stroke="#93c5fd"/>
+                        </g>
+                    </g>
+
+                    <!-- Read Path Annotation -->
+                    <g data-component="read-path">
+                        <text x="680" y="430" font-family="Arial, sans-serif" font-size="11" fill="#6b7280" text-anchor="end">Read Path: Memtable → Imm → L0 → L1 → ...</text>
+                    </g>
+
+                    <!-- Legend -->
+                    <g transform="translate(30, 420)">
+                        <text x="0" y="0" font-family="Arial, sans-serif" font-size="11" font-weight="600" fill="#374151">Legend:</text>
+                        <line x1="0" y1="15" x2="30" y2="15" stroke="#2563eb" stroke-width="2"/>
+                        <text x="40" y="20" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Write Flow</text>
+                        <line x1="120" y1="15" x2="150" y2="15" stroke="#6b7280" stroke-width="2" stroke-dasharray="5,3"/>
+                        <text x="160" y="20" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Compaction</text>
+                    </g>
+                </svg>
             </div>
         </div>
     </section>
