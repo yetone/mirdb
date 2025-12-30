@@ -4,6 +4,7 @@
   "description": "Homepage for MirDB - A Persistent Key-Value Store with Memcached Protocol",
   "private": true,
   "scripts": {
+    "build": "node build.js",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "serve": "npx serve ."

@@ -1,0 +1,215 @@
+{
+  "site": {
+    "title": "MirDB - Persistent Key-Value Store with Memcached Protocol",
+    "description": "MirDB - A Persistent Key-Value Store with Memcached Protocol. Get the simplicity of memcached with the durability of disk-backed storage.",
+    "ogImage": "https://raw.githubusercontent.com/yetone/mirdb/master/assets/mirdb-og-image.png",
+    "copyright": "2024 MirDB Project"
+  },
+  "hero": {
+    "title": "MirDB",
+    "tagline": "Persistent Key-Value Store with Memcached Protocol",
+    "description": "Get the simplicity of memcached with the durability of disk-backed storage. MirDB persists your data using an efficient LSM tree architecture while maintaining full compatibility with the memcached protocol.",
+    "primaryCta": {
+      "text": "Get Started",
+      "href": "#quick-start"
+    },
+    "secondaryCta": {
+      "text": "View on GitHub",
+      "href": "https://github.com/yetone/mirdb"
+    }
+  },
+  "features": [
+    {
+      "title": "Memcached Protocol",
+      "description": "Drop-in compatibility with standard memcached text protocol. Use your existing clients seamlessly."
+    },
+    {
+      "title": "Data Persistence",
+      "description": "Unlike memcached, MirDB persists data to disk. No more cold cache problems after restarts."
+    },
+    {
+      "title": "LSM Tree Architecture",
+      "description": "Efficient storage engine optimized for write-heavy workloads with multi-level compaction."
+    },
+    {
+      "title": "Rust Performance",
+      "description": "Written in Rust for memory safety and high performance without garbage collection pauses."
+    }
+  ],
+  "comparison": {
+    "intro": "MirDB gives you the familiar memcached API with the durability you need for production workloads.",
+    "rows": [
+      {
+        "feature": "Data Persistence",
+        "mirdb": {
+          "supported": true,
+          "description": "Persists data to disk using SSTables"
+        },
+        "memcached": {
+          "supported": false,
+          "description": "In-memory only, data lost on restart"
+        }
+      },
+      {
+        "feature": "Cold Cache Problem",
+        "mirdb": {
+          "supported": true,
+          "description": "No cold cache - data survives restarts and is immediately available"
+        },
+        "memcached": {
+          "supported": false,
+          "description": "Cold cache on every restart, requires cache warming"
+        }
+      },
+      {
+        "feature": "Memcached Protocol",
+        "mirdb": {
+          "supported": true,
+          "description": "Full compatibility with existing clients"
+        },
+        "memcached": {
+          "supported": true,
+          "description": "Native protocol support"
+        }
+      },
+      {
+        "feature": "Storage Engine",
+        "mirdb": {
+          "supported": null,
+          "description": "LSM Tree with compaction, optimized for writes"
+        },
+        "memcached": {
+          "supported": null,
+          "description": "Slab allocator, optimized for memory efficiency"
+        }
+      },
+      {
+        "feature": "Crash Recovery",
+        "mirdb": {
+          "supported": true,
+          "description": "WAL ensures durability, automatic recovery"
+        },
+        "memcached": {
+          "supported": false,
+          "description": "No recovery, cache must be rebuilt"
+        }
+      }
+    ]
+  },
+  "quickStart": {
+    "code": "# Clone and build\ngit clone https://github.com/yetone/mirdb.git\ncd mirdb\ncargo build --release\n\n# Run the server\n./target/release/mirdb-server\n\n# Connect with any memcached client\ntelnet localhost 12333\nset mykey 0 0 5\nhello\nSTORED\nget mykey\nVALUE mykey 0 5\nhello\nEND"
+  },
+  "architecture": {
+    "intro": "MirDB uses an LSM (Log-Structured Merge) tree architecture, optimized for write-heavy workloads with efficient compaction.",
+    "diagramAlt": "LSM Tree Architecture Diagram showing data flow from Write Request through WAL, Memtable, and SSTable levels",
+    "concepts": [
+      {
+        "term": "WAL (Write-Ahead Log)",
+        "description": "Ensures durability by logging writes before they're applied. Enables crash recovery."
+      },
+      {
+        "term": "Memtable",
+        "description": "Fast in-memory write buffer using a skip list data structure. Writes go here first after WAL."
+      },
+      {
+        "term": "SSTable (Sorted String Table)",
+        "description": "Immutable on-disk files containing sorted key-value pairs. Organized in levels for efficient reads."
+      },
+      {
+        "term": "Compaction",
+        "description": "Background process that merges SSTables to reclaim space and maintain read performance."
+      }
+    ]
+  },
+  "configuration": [
+    {
+      "name": "Port",
+      "value": "12333"
+    },
+    {
+      "name": "Storage",
+      "value": "/tmp/mirdb"
+    },
+    {
+      "name": "Memtable Size",
+      "value": "4MB before flush"
+    },
+    {
+      "name": "SSTable Size",
+      "value": "Up to 100MB per file"
+    },
+    {
+      "name": "LSM Levels",
+      "value": "7 levels"
+    }
+  ],
+  "projectStatus": {
+    "implemented": [
+      "Tokio-based async networking with memcached protocol",
+      "Memtable with skip list data structure",
+      "Minor compaction (memtable to SSTable)",
+      "Major compaction (SSTable level compaction)"
+    ],
+    "planned": [
+      "Raft consensus for distributed operation"
+    ],
+    "commands": [
+      {
+        "name": "SET",
+        "description": "Store a key-value pair"
+      },
+      {
+        "name": "GET",
+        "description": "Retrieve a value by key"
+      },
+      {
+        "name": "GETS",
+        "description": "Retrieve multiple values"
+      },
+      {
+        "name": "DELETE",
+        "description": "Remove a key-value pair"
+      },
+      {
+        "name": "ADD",
+        "description": "Add a new key-value pair"
+      },
+      {
+        "name": "REPLACE",
+        "description": "Replace an existing value"
+      },
+      {
+        "name": "APPEND",
+        "description": "Append to existing value"
+      },
+      {
+        "name": "PREPEND",
+        "description": "Prepend to existing value"
+      },
+      {
+        "name": "INFO",
+        "description": "Get server information"
+      },
+      {
+        "name": "MAJOR_COMPACTION",
+        "description": "Trigger compaction"
+      }
+    ]
+  },
+  "footer": {
+    "links": [
+      {
+        "text": "GitHub",
+        "href": "https://github.com/yetone/mirdb"
+      },
+      {
+        "text": "Documentation",
+        "href": "https://github.com/yetone/mirdb#readme"
+      },
+      {
+        "text": "License",
+        "href": "https://github.com/yetone/mirdb"
+      }
+    ]
+  }
+}
