@@ -293,6 +293,79 @@
             display: none;
         }
 
+        /* Commands Section */
+        .commands {
+            padding: 4rem 0;
+            background: var(--bg-color);
+        }
+
+        .commands-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .commands-header h2 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .commands-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .command-category {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .command-category h3 {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .command-category .category-description {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .command-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .command-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .command-list li:last-child {
+            border-bottom: none;
+        }
+
+        .command-list code {
+            background: var(--bg-color);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
         /* Demo Section */
         .demo {
             padding: 4rem 0;
@@ -469,6 +542,14 @@
                 grid-template-columns: 1fr;
             }
 
+            .commands-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .commands-grid {
+                grid-template-columns: 1fr;
+            }
+
             .quickstart-header h2 {
                 font-size: 1.5rem;
             }
@@ -629,6 +710,51 @@
                     <span class="icon" aria-hidden="true">🗳️</span>
                     <h3>Raft Consensus</h3>
                     <p>Planned support for distributed consensus using the Raft protocol, enabling high availability and fault tolerance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="commands" class="commands">
+        <div class="container">
+            <div class="commands-header">
+                <h2>Supported Commands</h2>
+                <p>MirDB implements the memcached text protocol with additional MirDB-specific commands</p>
+            </div>
+            <div class="commands-grid">
+                <div class="command-category command-category-storage">
+                    <h3>Storage Commands</h3>
+                    <p class="category-description">Commands for writing and modifying data</p>
+                    <ul class="command-list">
+                        <li><code>SET</code> - Store a key-value pair</li>
+                        <li><code>ADD</code> - Store only if key doesn't exist</li>
+                        <li><code>REPLACE</code> - Store only if key exists</li>
+                        <li><code>APPEND</code> - Append data to existing value</li>
+                        <li><code>PREPEND</code> - Prepend data to existing value</li>
+                    </ul>
+                </div>
+                <div class="command-category command-category-retrieval">
+                    <h3>Retrieval Commands</h3>
+                    <p class="category-description">Commands for reading data</p>
+                    <ul class="command-list">
+                        <li><code>GET</code> - Retrieve one or more keys</li>
+                        <li><code>GETS</code> - Retrieve with CAS token</li>
+                    </ul>
+                </div>
+                <div class="command-category command-category-deletion">
+                    <h3>Deletion Commands</h3>
+                    <p class="category-description">Commands for removing data</p>
+                    <ul class="command-list">
+                        <li><code>DELETE</code> - Remove a key from the store</li>
+                    </ul>
+                </div>
+                <div class="command-category command-category-mirdb">
+                    <h3>MirDB-Specific Commands</h3>
+                    <p class="category-description">Custom commands unique to MirDB</p>
+                    <ul class="command-list">
+                        <li><code>INFO</code> - Display database status and level information</li>
+                        <li><code>MAJOR_COMPACTION</code> - Trigger manual compaction</li>
+                    </ul>
                 </div>
             </div>
         </div>
