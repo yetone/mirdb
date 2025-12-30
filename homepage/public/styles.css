@@ -90,6 +90,8 @@ body {
   color: var(--color-text);
   font-weight: 700;
   font-size: 1.25rem;
+  min-height: 44px;
+  padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 .nav-logo-img {
