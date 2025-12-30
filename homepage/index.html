@@ -70,6 +70,102 @@ END</code></pre>
       </div>
     </section>
 
+    <section id="architecture" class="architecture" data-testid="architecture">
+      <h2>How It Works</h2>
+      <p class="architecture-intro">MirDB uses an LSM (Log-Structured Merge) tree architecture, optimized for write-heavy workloads with efficient compaction.</p>
+      <div class="architecture-diagram-container">
+        <svg
+          class="architecture-diagram"
+          data-testid="architecture-diagram"
+          role="img"
+          aria-label="LSM Tree Architecture Diagram showing data flow from Write Request through WAL, Memtable, and SSTable levels"
+          viewBox="0 0 600 450"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Background -->
+          <rect width="600" height="450" fill="#1a1a2e"/>
+
+          <!-- Title -->
+          <text x="300" y="30" text-anchor="middle" fill="#e0e0e0" font-size="16" font-weight="bold">LSM Tree Data Flow</text>
+
+          <!-- Write Request -->
+          <rect x="240" y="50" width="120" height="35" rx="5" fill="#4a90d9" stroke="#6ba3e0" stroke-width="2"/>
+          <text x="300" y="72" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">Write Request</text>
+
+          <!-- Arrow to WAL -->
+          <line x1="300" y1="85" x2="300" y2="105" stroke="#6ba3e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+          <!-- WAL Box -->
+          <rect x="215" y="110" width="170" height="45" rx="5" fill="#2d5a3d" stroke="#4a8c5e" stroke-width="2"/>
+          <text x="300" y="128" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">WAL</text>
+          <text x="300" y="145" text-anchor="middle" fill="#b0d4b8" font-size="10">(Write-Ahead Log)</text>
+
+          <!-- Arrow to Memtable -->
+          <line x1="300" y1="155" x2="300" y2="175" stroke="#6ba3e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+          <!-- Memtable Box -->
+          <rect x="215" y="180" width="170" height="45" rx="5" fill="#5a3d6b" stroke="#8a5e9c" stroke-width="2"/>
+          <text x="300" y="198" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">Memtable</text>
+          <text x="300" y="215" text-anchor="middle" fill="#d4b0e8" font-size="10">(In-memory Skip List)</text>
+
+          <!-- Arrow to Immutable Memtables with label -->
+          <line x1="300" y1="225" x2="300" y2="245" stroke="#6ba3e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text x="355" y="238" fill="#888" font-size="9" font-style="italic">when full</text>
+
+          <!-- Immutable Memtables Box -->
+          <rect x="190" y="250" width="220" height="40" rx="5" fill="#4a4a6a" stroke="#7070a0" stroke-width="2"/>
+          <text x="300" y="275" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">Immutable Memtables</text>
+
+          <!-- Arrow to Level 0 with label -->
+          <line x1="300" y1="290" x2="300" y2="310" stroke="#6ba3e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text x="380" y="303" fill="#888" font-size="9" font-style="italic">minor compaction</text>
+
+          <!-- Level 0 SSTables -->
+          <rect x="140" y="315" width="320" height="40" rx="5" fill="#6b4a3d" stroke="#9c6b5e" stroke-width="2"/>
+          <text x="300" y="332" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">Level 0 SSTables</text>
+          <text x="300" y="347" text-anchor="middle" fill="#e8c4b0" font-size="9">(May overlap, recently flushed)</text>
+
+          <!-- Arrow to Level 1+ with label -->
+          <line x1="300" y1="355" x2="300" y2="375" stroke="#6ba3e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text x="380" y="368" fill="#888" font-size="9" font-style="italic">major compaction</text>
+
+          <!-- Level 1+ SSTables -->
+          <rect x="100" y="380" width="400" height="45" rx="5" fill="#3d5a6b" stroke="#5e8a9c" stroke-width="2"/>
+          <text x="300" y="400" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">Level 1+ SSTables</text>
+          <text x="300" y="417" text-anchor="middle" fill="#b0d4e8" font-size="9">(Sorted, non-overlapping within level)</text>
+
+          <!-- Arrowhead marker definition -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#6ba3e0"/>
+            </marker>
+          </defs>
+
+          <!-- Legend -->
+          <rect x="20" y="110" width="12" height="12" fill="#2d5a3d" stroke="#4a8c5e"/>
+          <text x="38" y="120" fill="#888" font-size="10">Durability</text>
+
+          <rect x="20" y="130" width="12" height="12" fill="#5a3d6b" stroke="#8a5e9c"/>
+          <text x="38" y="140" fill="#888" font-size="10">Memory</text>
+
+          <rect x="20" y="150" width="12" height="12" fill="#6b4a3d" stroke="#9c6b5e"/>
+          <text x="38" y="160" fill="#888" font-size="10">Disk (L0)</text>
+
+          <rect x="20" y="170" width="12" height="12" fill="#3d5a6b" stroke="#5e8a9c"/>
+          <text x="38" y="180" fill="#888" font-size="10">Disk (L1+)</text>
+        </svg>
+      </div>
+      <div class="architecture-description">
+        <h3>Key Concepts</h3>
+        <ul class="architecture-concepts">
+          <li><strong>WAL (Write-Ahead Log):</strong> Ensures durability by logging writes before they're applied. Enables crash recovery.</li>
+          <li><strong>Memtable:</strong> Fast in-memory write buffer using a skip list data structure. Writes go here first after WAL.</li>
+          <li><strong>SSTable (Sorted String Table):</strong> Immutable on-disk files containing sorted key-value pairs. Organized in levels for efficient reads.</li>
+          <li><strong>Compaction:</strong> Background process that merges SSTables to reclaim space and maintain read performance.</li>
+        </ul>
+      </div>
+    </section>
+
     <section id="config" class="configuration">
       <h2>Default Configuration</h2>
       <ul class="config-list">
