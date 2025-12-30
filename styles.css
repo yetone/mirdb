@@ -549,3 +549,68 @@ pre.language-ruby code,
 pre.language-bash code {
   color: #e0e0e0;
 }
+
+/* Keyboard Navigation - Focus Styles (NFR-3 Accessibility) */
+/* Base focus styles for all interactive elements */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus {
+  outline: 3px solid #0f4c75;
+  outline-offset: 2px;
+}
+
+/* Focus-visible for better UX (keyboard only, not mouse) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #0f4c75;
+  outline-offset: 2px;
+}
+
+/* Hide focus ring on mouse click but show for keyboard */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Button focus styles */
+.btn:focus,
+.btn:focus-visible {
+  outline: 3px solid #0f4c75;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(15, 76, 117, 0.3);
+}
+
+/* Primary button focus - ensure visibility on dark backgrounds */
+.btn-primary:focus,
+.btn-primary:focus-visible {
+  outline-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+/* Secondary button focus - white outline on dark hero */
+.btn-secondary:focus,
+.btn-secondary:focus-visible {
+  outline-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+/* Footer link focus styles */
+.footer-links a:focus,
+.footer-links a:focus-visible {
+  outline-color: #ffffff;
+  outline-offset: 4px;
+}
+
+/* Code block links/interactive elements */
+pre:focus,
+code:focus {
+  outline: 2px solid #3282b8;
+  outline-offset: 2px;
+}
