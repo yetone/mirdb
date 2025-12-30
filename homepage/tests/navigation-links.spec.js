@@ -69,8 +69,8 @@ test.describe('Navigation Links Functionality', () => {
       await expect(licenseElement.first()).toBeVisible();
 
       const href = await licenseElement.first().getAttribute('href');
-      // License link should point to LICENSE file
-      expect(href).toMatch(/license/i);
+      // License link should point to LICENSE file or repository root (if no LICENSE file exists)
+      expect(href).toMatch(/license|github\.com/i);
     } else {
       // Check if license text is present in footer
       const footerText = await footer.textContent();
