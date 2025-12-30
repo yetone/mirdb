@@ -289,6 +289,133 @@ section h2 {
   }
 }
 
+/* Comparison Section */
+.comparison {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: var(--color-surface);
+}
+
+.comparison-intro {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+.comparison-table {
+  background-color: var(--color-background);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.comparison-row {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1.5fr;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.comparison-row:last-child {
+  border-bottom: none;
+}
+
+.comparison-header {
+  background-color: var(--color-surface);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.comparison-header .comparison-mirdb {
+  color: var(--color-accent);
+}
+
+.comparison-header .comparison-memcached {
+  color: var(--color-text-muted);
+}
+
+.comparison-feature {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.feature-row .comparison-feature {
+  display: flex;
+  align-items: center;
+}
+
+.comparison-mirdb,
+.comparison-memcached {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.comparison-yes {
+  color: #22c55e;
+}
+
+.comparison-no {
+  color: #ef4444;
+}
+
+.comparison-neutral {
+  color: var(--color-text-muted);
+}
+
+.check-icon {
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.cross-icon {
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: #ef4444;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .comparison-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .comparison-header {
+    display: none;
+  }
+
+  .feature-row .comparison-feature {
+    font-size: 1.1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .comparison-mirdb,
+  .comparison-memcached {
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .comparison-mirdb::before {
+    content: "MirDB: ";
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  .comparison-memcached::before {
+    content: "Memcached: ";
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+}
+
 /* Project Status Section */
 .project-status {
   max-width: 1200px;

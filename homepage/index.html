@@ -51,6 +51,71 @@
       </div>
     </section>
 
+    <section id="comparison" class="comparison" data-testid="comparison">
+      <h2>MirDB vs Standard Memcached</h2>
+      <p class="comparison-intro">MirDB gives you the familiar memcached API with the durability you need for production workloads.</p>
+      <div class="comparison-table">
+        <div class="comparison-row comparison-header">
+          <div class="comparison-feature">Feature</div>
+          <div class="comparison-mirdb">MirDB</div>
+          <div class="comparison-memcached">Memcached</div>
+        </div>
+        <div class="comparison-row feature-row" data-testid="comparison-persistence">
+          <div class="comparison-feature">Data Persistence</div>
+          <div class="comparison-mirdb comparison-yes">
+            <span class="check-icon">&#10003;</span>
+            Persists data to disk using SSTables
+          </div>
+          <div class="comparison-memcached comparison-no">
+            <span class="cross-icon">&#10007;</span>
+            In-memory only, data lost on restart
+          </div>
+        </div>
+        <div class="comparison-row feature-row" data-testid="comparison-cold-cache">
+          <div class="comparison-feature">Cold Cache Problem</div>
+          <div class="comparison-mirdb comparison-yes">
+            <span class="check-icon">&#10003;</span>
+            No cold cache - data survives restarts and is immediately available
+          </div>
+          <div class="comparison-memcached comparison-no">
+            <span class="cross-icon">&#10007;</span>
+            Cold cache on every restart, requires cache warming
+          </div>
+        </div>
+        <div class="comparison-row feature-row">
+          <div class="comparison-feature">Memcached Protocol</div>
+          <div class="comparison-mirdb comparison-yes">
+            <span class="check-icon">&#10003;</span>
+            Full compatibility with existing clients
+          </div>
+          <div class="comparison-memcached comparison-yes">
+            <span class="check-icon">&#10003;</span>
+            Native protocol support
+          </div>
+        </div>
+        <div class="comparison-row feature-row">
+          <div class="comparison-feature">Storage Engine</div>
+          <div class="comparison-mirdb comparison-neutral">
+            LSM Tree with compaction, optimized for writes
+          </div>
+          <div class="comparison-memcached comparison-neutral">
+            Slab allocator, optimized for memory efficiency
+          </div>
+        </div>
+        <div class="comparison-row feature-row">
+          <div class="comparison-feature">Crash Recovery</div>
+          <div class="comparison-mirdb comparison-yes">
+            <span class="check-icon">&#10003;</span>
+            WAL ensures durability, automatic recovery
+          </div>
+          <div class="comparison-memcached comparison-no">
+            <span class="cross-icon">&#10007;</span>
+            No recovery, cache must be rebuilt
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="quick-start" class="quick-start">
       <h2>Quick Start</h2>
       <div class="code-block">
