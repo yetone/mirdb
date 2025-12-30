@@ -13,7 +13,7 @@
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="#" class="nav-logo">
-        <img src="logo.gif" alt="MirDB Logo" class="nav-logo-img">
+        <img src="logo-static.gif" alt="MirDB Logo" class="nav-logo-img">
         <span class="nav-logo-text">MirDB</span>
       </a>
       <ul class="nav-links">
@@ -30,10 +30,12 @@
       <div class="hero-content">
         <!-- Logo -->
         <img
-          src="logo.gif"
+          src="logo-static.gif"
+          data-src="logo.gif"
           alt="MirDB Logo - ASCII art style database logo"
           class="hero-logo"
           data-testid="hero-logo"
+          loading="eager"
         >
 
         <!-- Product Name -->
@@ -124,5 +126,18 @@ cargo build --release
       </nav>
     </div>
   </footer>
+  <!-- Progressive enhancement: Load animated logo after page load -->
+  <script defer>
+    window.addEventListener('load', function() {
+      var heroLogo = document.querySelector('.hero-logo[data-src]');
+      if (heroLogo && heroLogo.dataset.src) {
+        var animatedLogo = new Image();
+        animatedLogo.onload = function() {
+          heroLogo.src = heroLogo.dataset.src;
+        };
+        animatedLogo.src = heroLogo.dataset.src;
+      }
+    });
+  </script>
 </body>
 </html>
