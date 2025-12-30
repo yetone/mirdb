@@ -699,3 +699,107 @@ code:focus {
   outline: 2px solid #3282b8;
   outline-offset: 2px;
 }
+
+/* Project Status Section */
+.project-status {
+  background-color: #f8f9fa;
+}
+
+.status-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.status-group {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.status-group h3 {
+  font-size: 1.25rem;
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-icon {
+  font-size: 1rem;
+}
+
+.implemented-features h3 {
+  color: #047857;
+  border-bottom-color: #047857;
+}
+
+.planned-features h3 {
+  color: #0f4c75;
+  border-bottom-color: #0f4c75;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+}
+
+.feature-check,
+.feature-pending {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.feature-check {
+  background-color: #047857;
+  color: #ffffff;
+}
+
+.feature-pending {
+  background-color: #e2e8f0;
+  color: #4a4a4a;
+  border: 2px solid #0f4c75;
+}
+
+.feature-text {
+  color: #4a4a4a;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.implemented .feature-text {
+  color: #1a1a2e;
+}
+
+.planned .feature-text {
+  color: #6b7280;
+}
