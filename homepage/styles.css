@@ -377,8 +377,8 @@ section h2 {
 }
 
 .implemented-badge {
-  background-color: rgba(34, 197, 94, 0.2);
-  color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #2dd66c;
 }
 
 .planned-badge {
