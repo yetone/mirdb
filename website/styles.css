@@ -340,8 +340,68 @@ body {
   font-size: 0.875rem;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Responsive Design - Tablet Viewport (768px-1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .navbar {
+    padding: 1rem 1.5rem;
+  }
+
+  .nav-links {
+    gap: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .hero {
+    padding: 5rem 2rem;
+    min-height: 50vh;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  .tagline {
+    font-size: 1.25rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .commands-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .code-block {
+    max-width: 100%;
+  }
+
+  .code-block pre {
+    padding: 1.5rem;
+  }
+
+  .code-block code {
+    font-size: 0.85rem;
+  }
+
+  .features,
+  .commands,
+  .quick-start,
+  .status {
+    padding: 4rem 1.5rem;
+  }
+
+  .features h2,
+  .commands h2,
+  .quick-start h2,
+  .status h2 {
+    font-size: 2.25rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* Responsive Design - Small Screens */
+@media (max-width: 767px) {
   .navbar {
     padding: 1rem;
   }
