@@ -32,26 +32,31 @@
       </div>
     </section>
 
-    <section class="features" id="features">
+    <section class="features" id="features" data-testid="features-section">
       <h2>Key Features</h2>
       <div class="features-grid">
-        <div class="feature-card">
+        <div class="feature-card" data-testid="feature-card">
+          <span class="feature-icon" aria-hidden="true">🔌</span>
           <h3>Memcached Protocol</h3>
           <p>Drop-in compatibility with existing memcached clients</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-testid="feature-card">
+          <span class="feature-icon" aria-hidden="true">💾</span>
           <h3>Persistent Storage</h3>
           <p>Data survives restarts via SSTable file format</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-testid="feature-card">
+          <span class="feature-icon" aria-hidden="true">🌳</span>
           <h3>LSM Tree Engine</h3>
           <p>High-performance writes with background compaction</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-testid="feature-card">
+          <span class="feature-icon" aria-hidden="true">⚡</span>
           <h3>Async I/O</h3>
           <p>Built on Tokio for efficient concurrent connections</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-testid="feature-card">
+          <span class="feature-icon" aria-hidden="true">⚙️</span>
           <h3>Configurable</h3>
           <p>TOML-based configuration for tuning performance</p>
         </div>
