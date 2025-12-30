@@ -153,6 +153,66 @@
             height: 20px;
         }
 
+        /* Value Proposition Section */
+        .value-prop {
+            padding: 4rem 0;
+            background: var(--bg-color);
+        }
+
+        .value-prop-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .value-prop-header h2 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .value-prop-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .value-prop-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .value-prop-column {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .value-prop-column:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .value-prop-column .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .value-prop-column h3 {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .value-prop-column p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             header .container {
@@ -176,6 +236,14 @@
 
             .hero-logo {
                 max-width: 200px;
+            }
+
+            .value-prop-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .value-prop-header h2 {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -207,6 +275,32 @@
                 <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener">
                     <img src="https://atompunk.yetone.fun/github/yetone/mirdb?v=2" alt="CircleCI Status">
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="value-proposition" class="value-prop">
+        <div class="container">
+            <div class="value-prop-header">
+                <h2>Why Choose MirDB?</h2>
+                <p>Three key benefits that set MirDB apart</p>
+            </div>
+            <div class="value-prop-grid">
+                <div class="value-prop-column">
+                    <span class="icon" aria-hidden="true">🔌</span>
+                    <h3>Memcached Protocol Support</h3>
+                    <p>Drop-in replacement for memcached with full protocol compatibility. Use your existing memcached clients and code with zero modifications required.</p>
+                </div>
+                <div class="value-prop-column">
+                    <span class="icon" aria-hidden="true">💾</span>
+                    <h3>Persistence</h3>
+                    <p>Your data survives restarts with built-in durability. Unlike traditional memcached, MirDB ensures your cached data is never lost unexpectedly.</p>
+                </div>
+                <div class="value-prop-column">
+                    <span class="icon" aria-hidden="true">🌲</span>
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Built on efficient Log-Structured Merge Tree architecture for optimal storage and retrieval performance with excellent write throughput.</p>
+                </div>
             </div>
         </div>
     </section>
