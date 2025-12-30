@@ -1,0 +1,14 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Product Homepage",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "serve": "npx serve ."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.2.1"
+  }
+}
