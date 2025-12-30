@@ -11,7 +11,12 @@
   <header class="navbar">
     <nav>
       <a href="/" class="logo">MirDB</a>
-      <ul class="nav-links">
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" data-testid="hamburger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links" data-testid="nav-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#commands">Commands</a></li>
         <li><a href="#quick-start">Quick Start</a></li>
@@ -163,5 +168,37 @@ END</code></pre>
       <p class="license" data-testid="license-info">Licensed under MIT/Apache-2.0</p>
     </div>
   </footer>
+
+  <script>
+    // Mobile menu toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.querySelector('.mobile-menu-toggle');
+      const navLinks = document.querySelector('.nav-links');
+
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', function() {
+          const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+          menuToggle.setAttribute('aria-expanded', !isExpanded);
+          navLinks.classList.toggle('open');
+        });
+
+        // Close menu when clicking on a nav link
+        navLinks.querySelectorAll('a').forEach(function(link) {
+          link.addEventListener('click', function() {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            navLinks.classList.remove('open');
+          });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+          if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            navLinks.classList.remove('open');
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
