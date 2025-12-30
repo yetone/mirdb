@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="container">
+      <h1>MirDB</h1>
+      <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+      <div class="hero-actions">
+        <a href="#getting-started" class="btn btn-primary">Get Started</a>
+        <a href="https://github.com/mirdb/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Value Propositions Section -->
+  <section id="value-propositions" class="value-propositions" data-section="value-propositions">
+    <div class="container">
+      <h2 class="section-title">Why MirDB?</h2>
+      <div class="propositions-grid">
+        <article class="proposition" data-proposition="memcached-compatibility">
+          <h3 class="proposition-title" data-title>Drop-in Memcached Compatibility</h3>
+          <p class="proposition-description" data-description>
+            Use your existing memcached clients without any code changes. MirDB implements the standard memcached text protocol, making migration seamless and effortless.
+          </p>
+        </article>
+
+        <article class="proposition" data-proposition="persistence">
+          <h3 class="proposition-title" data-title>Built-in Persistence</h3>
+          <p class="proposition-description" data-description>
+            Unlike standard memcached, your data survives restarts. MirDB persists data to disk using SSTable-based storage with write-ahead logging for durability.
+          </p>
+        </article>
+
+        <article class="proposition" data-proposition="lsm-tree">
+          <h3 class="proposition-title" data-title>LSM Tree Architecture</h3>
+          <p class="proposition-description" data-description>
+            Optimized for write-heavy workloads with a Log-Structured Merge-tree architecture. Automatic compaction keeps your storage efficient and queries fast.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Getting Started Section -->
+  <section id="getting-started" class="getting-started">
+    <div class="container">
+      <h2 class="section-title">Getting Started</h2>
+      <p>Quick start instructions will be added here.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 MirDB. Licensed under MIT.</p>
+      <nav class="footer-links">
+        <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener">GitHub</a>
+        <a href="#documentation">Documentation</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
