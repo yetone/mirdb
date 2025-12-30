@@ -7,13 +7,13 @@ const { defineConfig, devices } = require('@playwright/test');
  */
 module.exports = defineConfig({
   testDir: './tests',
-  fullyParallel: true,
+  fullyParallel: false, // Lighthouse tests need sequential execution
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1, // Single worker for Lighthouse compatibility
   reporter: 'html',
   use: {
-    baseURL: 'file://' + __dirname + '/public/index.html',
+    baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
   },
   projects: [
@@ -22,6 +22,10 @@ module.exports = defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
+        // Enable remote debugging for Lighthouse
+        launchOptions: {
+          args: ['--remote-debugging-port=9222'],
+        },
       },
     },
   ],

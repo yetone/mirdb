@@ -156,9 +156,9 @@ describe('Footer Section - REQ-10', () => {
       const footer = document.querySelector('footer');
       const footerSections = footer.querySelectorAll('.footer-section');
 
-      // Find the Resources section
+      // Find the Resources section (h3 for proper heading hierarchy per WCAG)
       const resourcesSection = Array.from(footerSections).find(
-        section => section.querySelector('h4')?.textContent.toLowerCase().includes('resources')
+        section => section.querySelector('h3')?.textContent.toLowerCase().includes('resources')
       );
 
       expect(resourcesSection).toBeTruthy();
@@ -236,10 +236,11 @@ describe('Footer Section - REQ-10', () => {
   describe('Footer Community and Social Links', () => {
     test('footer should have community section', () => {
       const footer = document.querySelector('footer');
-      const footerSections = footer.querySelectorAll('.footer-section h4');
+      // Use h3 for proper heading hierarchy per WCAG accessibility requirements
+      const footerSections = footer.querySelectorAll('.footer-section h3');
 
       const communitySection = Array.from(footerSections).find(
-        h4 => h4.textContent.toLowerCase().includes('community')
+        h3 => h3.textContent.toLowerCase().includes('community')
       );
 
       expect(communitySection).toBeTruthy();
@@ -284,7 +285,8 @@ describe('Footer Section - REQ-10', () => {
 
     test('footer sections should have headings', () => {
       const footer = document.querySelector('footer');
-      const headings = footer.querySelectorAll('h4');
+      // Use h3 for proper heading hierarchy per WCAG accessibility requirements
+      const headings = footer.querySelectorAll('h3');
 
       expect(headings.length).toBeGreaterThanOrEqual(2);
     });
