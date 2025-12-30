@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="lsm-title lsm-desc">
+  <title id="lsm-title">LSM Tree Architecture Diagram</title>
+  <desc id="lsm-desc">Data flow diagram showing how MirDB's LSM tree storage engine processes writes from Write-Ahead Log through Memtable to SSTable levels with compaction</desc>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8f9fa"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700" fill="#1a1a2e">LSM Tree Data Flow</text>
+
+  <!-- Write Request Arrow -->
+  <g id="write-request">
+    <text x="400" y="70" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#0f4c75">Write Request</text>
+    <path d="M400 80 L400 105" stroke="#0f4c75" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  </g>
+
+  <!-- WAL Box -->
+  <g id="wal-component">
+    <rect x="300" y="110" width="200" height="50" rx="8" fill="#0f4c75" stroke="#16213e" stroke-width="2"/>
+    <text x="400" y="140" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#ffffff">WAL (Write-Ahead Log)</text>
+    <text x="530" y="140" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4a4a4a">Durability</text>
+  </g>
+
+  <!-- Arrow from WAL to Memtable -->
+  <path d="M400 160 L400 185" stroke="#0f4c75" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Memtable Box -->
+  <g id="memtable-component">
+    <rect x="300" y="190" width="200" height="50" rx="8" fill="#047857" stroke="#065f46" stroke-width="2"/>
+    <text x="400" y="220" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#ffffff">Memtable (Skip List)</text>
+    <text x="530" y="220" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4a4a4a">Active in-memory</text>
+  </g>
+
+  <!-- Arrow from Memtable to Imm Memtables -->
+  <path d="M400 240 L400 265" stroke="#0f4c75" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="470" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#4a4a4a" font-style="italic">when full</text>
+
+  <!-- Immutable Memtables Box -->
+  <g id="imm-memtables-component">
+    <rect x="280" y="270" width="240" height="50" rx="8" fill="#3282b8" stroke="#16213e" stroke-width="2"/>
+    <text x="400" y="300" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#ffffff">Immutable Memtables</text>
+    <text x="550" y="300" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4a4a4a">Queue</text>
+  </g>
+
+  <!-- Arrow from Imm Memtables to Level 0 -->
+  <path d="M400 320 L400 355" stroke="#0f4c75" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="470" y="343" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#b91c1c" font-weight="600">minor compaction</text>
+
+  <!-- Level 0 SSTables Box -->
+  <g id="level0-component">
+    <rect x="270" y="360" width="260" height="50" rx="8" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+    <text x="400" y="390" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#1a1a2e">Level 0 SSTables</text>
+    <text x="560" y="390" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4a4a4a">May overlap</text>
+  </g>
+
+  <!-- Arrow from Level 0 to Level 1+ -->
+  <path d="M400 410 L400 445" stroke="#0f4c75" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="470" y="433" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#b91c1c" font-weight="600">major compaction</text>
+
+  <!-- Level 1+ SSTables Box -->
+  <g id="level1plus-component">
+    <rect x="250" y="450" width="300" height="50" rx="8" fill="#1a1a2e" stroke="#16213e" stroke-width="2"/>
+    <text x="400" y="480" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#ffffff">Level 1+ SSTables</text>
+    <text x="580" y="480" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4a4a4a">Sorted, non-overlapping</text>
+  </g>
+
+  <!-- Read Path Indicator -->
+  <g id="read-path">
+    <text x="100" y="140" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#0f4c75">Read Path</text>
+    <text x="100" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4a4a4a">1. Memtable</text>
+    <text x="100" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4a4a4a">2. Imm Memtables</text>
+    <text x="100" y="190" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4a4a4a">3. Level 0 (linear)</text>
+    <text x="100" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4a4a4a">4. Level 1+ (binary)</text>
+
+    <!-- Read path arrows -->
+    <path d="M180 250 C 230 250, 230 215, 290 215" stroke="#047857" stroke-width="1.5" stroke-dasharray="4,2" fill="none" marker-end="url(#arrowhead-green)"/>
+  </g>
+
+  <!-- Legend -->
+  <g id="legend" transform="translate(550, 520)">
+    <text x="0" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" fill="#1a1a2e">Legend</text>
+    <rect x="0" y="10" width="12" height="12" fill="#0f4c75"/>
+    <text x="20" y="20" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#4a4a4a">Durability Layer</text>
+    <rect x="0" y="28" width="12" height="12" fill="#047857"/>
+    <text x="20" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#4a4a4a">In-Memory</text>
+    <rect x="0" y="46" width="12" height="12" fill="#fbbf24"/>
+    <text x="20" y="56" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#4a4a4a">Disk Storage</text>
+  </g>
+
+  <!-- Arrow marker definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0f4c75"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#047857"/>
+    </marker>
+  </defs>
+</svg>

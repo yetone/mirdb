@@ -635,6 +635,76 @@ pre.language-bash code {
   color: #e0e0e0;
 }
 
+/* Architecture Overview Section */
+.architecture-overview {
+  background-color: #ffffff;
+}
+
+.architecture-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .architecture-content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .architecture-diagram {
+    flex: 2;
+  }
+
+  .architecture-description {
+    flex: 1;
+  }
+}
+
+.architecture-diagram {
+  background-color: #f8f9fa;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.architecture-diagram svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.architecture-description h3 {
+  font-size: 1.125rem;
+  color: #0f4c75;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.architecture-description h3:first-child {
+  margin-top: 0;
+}
+
+.architecture-components {
+  list-style: none;
+  padding: 0;
+}
+
+.architecture-components li {
+  padding: 0.75rem 0;
+  color: #4a4a4a;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.architecture-components li:last-child {
+  border-bottom: none;
+}
+
+.architecture-components li strong {
+  color: #1a1a2e;
+}
+
 /* Keyboard Navigation - Focus Styles (NFR-3 Accessibility) */
 /* Base focus styles for all interactive elements */
 a:focus,
