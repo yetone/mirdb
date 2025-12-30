@@ -129,10 +129,14 @@ test.describe('Responsive Design - Mobile', () => {
     const featuresSection = page.locator('#features');
     await expect(featuresSection).toBeInViewport();
 
+    // Verify How It Works link is visible
+    const howItWorksLink = page.locator('.nav-link', { hasText: 'How It Works' });
+    await expect(howItWorksLink).toBeVisible();
+
     // Verify each link is within viewport width
     const navLinks = page.locator('.nav-link');
     const linkCount = await navLinks.count();
-    expect(linkCount).toBe(4);
+    expect(linkCount).toBe(5);
 
     for (let i = 0; i < linkCount; i++) {
       const link = navLinks.nth(i);

@@ -75,9 +75,14 @@ test.describe('Header and Navigation Display', () => {
     await expect(githubLink).toBeVisible();
     await expect(githubLink).toHaveAttribute('href', 'https://github.com/yetone/mirdb');
 
-    // Verify navigation list contains exactly 4 items
+    // Verify How It Works link is present
+    const howItWorksLink = page.locator('.nav-link', { hasText: 'How It Works' });
+    await expect(howItWorksLink).toBeVisible();
+    await expect(howItWorksLink).toHaveAttribute('href', '#how-it-works');
+
+    // Verify navigation list contains exactly 5 items (Features, How It Works, Getting Started, Documentation, GitHub)
     const navItems = page.locator('.nav-list li');
-    await expect(navItems).toHaveCount(4);
+    await expect(navItems).toHaveCount(5);
   });
 
   /**

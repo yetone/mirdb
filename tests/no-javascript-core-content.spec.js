@@ -217,11 +217,12 @@ test.describe('No JavaScript Core Content', () => {
     // Verify all navigation links are visible
     const navLinks = page.locator('.nav-list .nav-link');
     const linkCount = await navLinks.count();
-    expect(linkCount).toBe(4); // Features, Getting Started, Documentation, GitHub
+    expect(linkCount).toBe(5); // Features, How It Works, Getting Started, Documentation, GitHub
 
     // Verify each nav link is visible and has valid href
     const expectedLinks = [
       { text: 'Features', href: '#features' },
+      { text: 'How It Works', href: '#how-it-works' },
       { text: 'Getting Started', href: '#getting-started' },
       { text: 'Documentation', href: '#documentation' },
       { text: 'GitHub', hrefContains: 'github.com' }

@@ -98,10 +98,14 @@ test.describe('Responsive Design - Desktop', () => {
       await expect(hamburgerMenu.first()).not.toBeVisible();
     }
 
+    // Verify How It Works link is visible
+    const howItWorksLink = page.locator('.nav-link', { hasText: 'How It Works' });
+    await expect(howItWorksLink).toBeVisible();
+
     // Verify navigation links are horizontally aligned (inline layout)
     const navItems = page.locator('.nav-list li');
     const itemCount = await navItems.count();
-    expect(itemCount).toBe(4);
+    expect(itemCount).toBe(5);
 
     // Check that nav items are displayed horizontally
     const firstItemBox = await navItems.first().boundingBox();

@@ -97,10 +97,14 @@ test.describe('Responsive Design - Tablet', () => {
     const githubLink = page.locator('.nav-link', { hasText: 'GitHub' });
     await expect(githubLink).toBeVisible();
 
+    // Verify How It Works link is visible
+    const howItWorksLink = page.locator('.nav-link', { hasText: 'How It Works' });
+    await expect(howItWorksLink).toBeVisible();
+
     // Verify navigation links are clickable
     const navLinks = page.locator('.nav-link');
     const linkCount = await navLinks.count();
-    expect(linkCount).toBe(4);
+    expect(linkCount).toBe(5);
 
     // Verify each link is within the viewport
     for (let i = 0; i < linkCount; i++) {

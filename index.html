@@ -26,6 +26,7 @@
             <nav class="main-nav" role="navigation" aria-label="Main navigation">
                 <ul class="nav-list">
                     <li><a href="#features" class="nav-link">Features</a></li>
+                    <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
                     <li><a href="#getting-started" class="nav-link">Getting Started</a></li>
                     <li><a href="#documentation" class="nav-link">Documentation</a></li>
                     <li><a href="https://github.com/yetone/mirdb" class="nav-link github-link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
@@ -69,6 +70,58 @@
                     <div class="feature-card">
                         <h3>Configurable Storage</h3>
                         <p>Fine-tune memtable sizes, SSTable limits, and compaction parameters to match your use case.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="how-it-works-section">
+            <div class="section-container">
+                <h2>How It Works</h2>
+                <p class="section-intro">MirDB uses a Log-Structured Merge-tree (LSM tree) architecture to provide durable, high-performance key-value storage. Here's how your data flows through the system:</p>
+                <div class="architecture-diagram" role="img" aria-label="MirDB architecture diagram showing data flow from client request through WAL, Memtable, and SSTables">
+                    <div class="data-flow">
+                        <div class="flow-step">
+                            <div class="flow-icon" aria-hidden="true">📝</div>
+                            <h3>1. Write Request</h3>
+                            <p>Client sends SET/ADD/REPLACE command via Memcached protocol</p>
+                        </div>
+                        <div class="flow-arrow" aria-hidden="true">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon" aria-hidden="true">📋</div>
+                            <h3>2. Write-Ahead Log</h3>
+                            <p>Data is first written to WAL for crash recovery and durability</p>
+                        </div>
+                        <div class="flow-arrow" aria-hidden="true">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon" aria-hidden="true">🧠</div>
+                            <h3>3. Memtable</h3>
+                            <p>In-memory skip list provides fast reads and writes</p>
+                        </div>
+                        <div class="flow-arrow" aria-hidden="true">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon" aria-hidden="true">💾</div>
+                            <h3>4. SSTables</h3>
+                            <p>When memtable is full, data is flushed to sorted disk files</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="architecture-details">
+                    <div class="detail-card">
+                        <h3>LSM Tree Benefits</h3>
+                        <ul>
+                            <li>Optimized for write-heavy workloads</li>
+                            <li>Sequential disk writes for high throughput</li>
+                            <li>Background compaction keeps read performance optimal</li>
+                        </ul>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Data Integrity</h3>
+                        <ul>
+                            <li>Write-Ahead Logging ensures no data loss on crash</li>
+                            <li>Immutable SSTables prevent data corruption</li>
+                            <li>Multi-level compaction maintains data consistency</li>
+                        </ul>
                     </div>
                 </div>
             </div>

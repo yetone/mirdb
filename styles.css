@@ -271,6 +271,112 @@ section h2 {
     color: var(--text-muted);
 }
 
+/* How It Works section */
+.how-it-works-section {
+    padding: 5rem 0;
+    background-color: var(--bg-secondary);
+}
+
+.section-intro {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    font-size: 1.125rem;
+    color: var(--text-muted);
+}
+
+.architecture-diagram {
+    margin-bottom: 3rem;
+}
+
+.data-flow {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.flow-step {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    width: 200px;
+    min-height: 180px;
+}
+
+.flow-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.flow-step h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.flow-step p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.flow-arrow {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    padding-top: 3rem;
+}
+
+.architecture-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.detail-card {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.detail-card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.detail-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.detail-card li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+}
+
+.detail-card li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
 /* Getting started */
 .getting-started-content {
     max-width: 800px;
@@ -407,5 +513,26 @@ code {
     .footer-container {
         flex-direction: column;
         text-align: center;
+    }
+
+    /* How It Works responsive */
+    .data-flow {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .flow-step {
+        width: 100%;
+        max-width: 300px;
+        min-height: auto;
+    }
+
+    .flow-arrow {
+        transform: rotate(90deg);
+        padding: 0.5rem 0;
+    }
+
+    .architecture-details {
+        grid-template-columns: 1fr;
     }
 }
