@@ -63,40 +63,44 @@
       </div>
     </section>
 
-    <section class="commands" id="commands">
+    <section class="commands" id="commands" data-testid="commands-section">
       <h2>Supported Commands</h2>
       <div class="commands-grid">
-        <div class="command-item">
+        <div class="command-item" data-testid="command-SET">
           <code>SET</code>
           <span>Store a key-value pair</span>
         </div>
-        <div class="command-item">
+        <div class="command-item" data-testid="command-GET">
           <code>GET</code>
           <span>Retrieve value(s) by key</span>
         </div>
-        <div class="command-item">
+        <div class="command-item" data-testid="command-DELETE">
           <code>DELETE</code>
           <span>Remove a key</span>
         </div>
-        <div class="command-item">
+        <div class="command-item" data-testid="command-ADD">
           <code>ADD</code>
           <span>Store only if key doesn't exist</span>
         </div>
-        <div class="command-item">
+        <div class="command-item" data-testid="command-REPLACE">
           <code>REPLACE</code>
           <span>Store only if key exists</span>
         </div>
-        <div class="command-item">
+        <div class="command-item" data-testid="command-APPEND">
           <code>APPEND</code>
           <span>Append to existing value</span>
         </div>
-        <div class="command-item">
+        <div class="command-item" data-testid="command-PREPEND">
           <code>PREPEND</code>
           <span>Prepend to existing value</span>
         </div>
-        <div class="command-item">
+        <div class="command-item" data-testid="command-INFO">
           <code>INFO</code>
           <span>Display database status</span>
+        </div>
+        <div class="command-item" data-testid="command-MAJOR_COMPACTION">
+          <code>MAJOR_COMPACTION</code>
+          <span>Trigger manual compaction</span>
         </div>
       </div>
     </section>
