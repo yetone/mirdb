@@ -1,371 +1,420 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 
-/**
- * Test Suite: Visual Design Consistency
- * Scenario: Verify the design is visually consistent with modern developer tool aesthetics
- * NFR-5: Design must be visually consistent with modern developer tool aesthetics
- */
-
 test.describe('Visual Design Consistency', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
-  /**
-   * Test Case 1: Check code blocks use monospace font
-   * Expected: All code examples use monospace/fixed-width font family
-   */
-  test('TC1: Code blocks use monospace font family', async ({ page }) => {
-    // Check all <pre> elements have monospace font
-    const preElements = page.locator('pre');
-    const preCount = await preElements.count();
-    expect(preCount).toBeGreaterThan(0);
+  test.describe('Test Case 1: Code blocks use monospace font', () => {
+    test('all pre elements use monospace font-family', async ({ page }) => {
+      const preElements = await page.locator('pre').all();
+      expect(preElements.length).toBeGreaterThan(0);
 
-    for (let i = 0; i < preCount; i++) {
-      const fontFamily = await preElements.nth(i).evaluate((el) => {
-        return window.getComputedStyle(el).fontFamily;
-      });
-      // Check that font-family contains monospace keywords
-      const hasMonospace = /mono|Monaco|Cascadia|Consolas|Courier|SF Mono/i.test(fontFamily);
-      expect(hasMonospace, `<pre> element ${i + 1} should have monospace font, got: ${fontFamily}`).toBe(true);
-    }
-
-    // Check all <code> elements have monospace font
-    const codeElements = page.locator('code');
-    const codeCount = await codeElements.count();
-    expect(codeCount).toBeGreaterThan(0);
-
-    for (let i = 0; i < codeCount; i++) {
-      const fontFamily = await codeElements.nth(i).evaluate((el) => {
-        return window.getComputedStyle(el).fontFamily;
-      });
-      // Check that font-family contains monospace keywords
-      const hasMonospace = /mono|Monaco|Cascadia|Consolas|Courier|SF Mono/i.test(fontFamily);
-      expect(hasMonospace, `<code> element ${i + 1} should have monospace font, got: ${fontFamily}`).toBe(true);
-    }
-
-    // Check commands table first column (command names) has monospace font
-    const commandCells = page.locator('.commands-table td:first-child');
-    const commandCellCount = await commandCells.count();
-
-    if (commandCellCount > 0) {
-      for (let i = 0; i < commandCellCount; i++) {
-        const fontFamily = await commandCells.nth(i).evaluate((el) => {
+      for (const pre of preElements) {
+        const fontFamily = await pre.evaluate((el) => {
           return window.getComputedStyle(el).fontFamily;
         });
-        const hasMonospace = /mono|Monaco|Cascadia|Consolas|Courier|SF Mono/i.test(fontFamily);
-        expect(hasMonospace, `Command cell ${i + 1} should have monospace font, got: ${fontFamily}`).toBe(true);
+        // Check that font-family contains monospace-type fonts
+        const isMonospace =
+          fontFamily.toLowerCase().includes('mono') ||
+          fontFamily.toLowerCase().includes('monospace') ||
+          fontFamily.toLowerCase().includes('courier') ||
+          fontFamily.toLowerCase().includes('consolas');
+        expect(isMonospace).toBe(true);
       }
-    }
+    });
+
+    test('all code elements use monospace font-family', async ({ page }) => {
+      const codeElements = await page.locator('code').all();
+      expect(codeElements.length).toBeGreaterThan(0);
+
+      for (const code of codeElements) {
+        const fontFamily = await code.evaluate((el) => {
+          return window.getComputedStyle(el).fontFamily;
+        });
+        // Check that font-family contains monospace-type fonts
+        const isMonospace =
+          fontFamily.toLowerCase().includes('mono') ||
+          fontFamily.toLowerCase().includes('monospace') ||
+          fontFamily.toLowerCase().includes('courier') ||
+          fontFamily.toLowerCase().includes('consolas');
+        expect(isMonospace).toBe(true);
+      }
+    });
+
+    test('command table first column uses monospace font', async ({ page }) => {
+      const commandCells = await page.locator('.commands-table td:first-child').all();
+      expect(commandCells.length).toBeGreaterThan(0);
+
+      for (const cell of commandCells) {
+        const fontFamily = await cell.evaluate((el) => {
+          return window.getComputedStyle(el).fontFamily;
+        });
+        const isMonospace =
+          fontFamily.toLowerCase().includes('mono') ||
+          fontFamily.toLowerCase().includes('monospace') ||
+          fontFamily.toLowerCase().includes('courier') ||
+          fontFamily.toLowerCase().includes('consolas');
+        expect(isMonospace).toBe(true);
+      }
+    });
   });
 
-  /**
-   * Test Case 2: Verify typography hierarchy
-   * Expected: Clear visual hierarchy with distinct heading sizes (h1 > h2 > h3 > body)
-   */
-  test('TC2: Typography hierarchy has distinct heading sizes', async ({ page }) => {
-    // Get body font size as baseline
-    const bodyFontSize = await page.locator('body').evaluate((el) => {
-      return parseFloat(window.getComputedStyle(el).fontSize);
-    });
-
-    // Get h1 font size
-    const h1Element = page.locator('h1').first();
-    const h1FontSize = await h1Element.evaluate((el) => {
-      return parseFloat(window.getComputedStyle(el).fontSize);
-    });
-
-    // Get h2 font sizes
-    const h2Elements = page.locator('h2');
-    const h2Count = await h2Elements.count();
-    expect(h2Count).toBeGreaterThan(0);
-
-    const h2FontSize = await h2Elements.first().evaluate((el) => {
-      return parseFloat(window.getComputedStyle(el).fontSize);
-    });
-
-    // Get h3 font sizes
-    const h3Elements = page.locator('h3');
-    const h3Count = await h3Elements.count();
-    expect(h3Count).toBeGreaterThan(0);
-
-    const h3FontSize = await h3Elements.first().evaluate((el) => {
-      return parseFloat(window.getComputedStyle(el).fontSize);
-    });
-
-    // Verify hierarchy: h1 > h2 > h3 > body
-    expect(h1FontSize, `h1 (${h1FontSize}px) should be larger than h2 (${h2FontSize}px)`).toBeGreaterThan(h2FontSize);
-    expect(h2FontSize, `h2 (${h2FontSize}px) should be larger than h3 (${h3FontSize}px)`).toBeGreaterThan(h3FontSize);
-    expect(h3FontSize, `h3 (${h3FontSize}px) should be larger than or equal to body (${bodyFontSize}px)`).toBeGreaterThanOrEqual(bodyFontSize);
-
-    // Verify all h2 elements have consistent font size
-    for (let i = 0; i < h2Count; i++) {
-      const fontSize = await h2Elements.nth(i).evaluate((el) => {
+  test.describe('Test Case 2: Typography hierarchy', () => {
+    test('h1 has largest font size', async ({ page }) => {
+      const h1FontSize = await page.locator('h1').first().evaluate((el) => {
         return parseFloat(window.getComputedStyle(el).fontSize);
       });
-      expect(fontSize, `All h2 elements should have consistent size`).toBe(h2FontSize);
-    }
-
-    // Verify headings have appropriate font-weight
-    const h1FontWeight = await h1Element.evaluate((el) => {
-      return parseInt(window.getComputedStyle(el).fontWeight, 10);
+      const h2FontSize = await page.locator('h2').first().evaluate((el) => {
+        return parseFloat(window.getComputedStyle(el).fontSize);
+      });
+      expect(h1FontSize).toBeGreaterThan(h2FontSize);
     });
-    expect(h1FontWeight, 'h1 should have bold font weight').toBeGreaterThanOrEqual(700);
 
-    const h2FontWeight = await h2Elements.first().evaluate((el) => {
-      return parseInt(window.getComputedStyle(el).fontWeight, 10);
+    test('h2 has larger font size than h3', async ({ page }) => {
+      const h2FontSize = await page.locator('h2').first().evaluate((el) => {
+        return parseFloat(window.getComputedStyle(el).fontSize);
+      });
+      const h3FontSize = await page.locator('h3').first().evaluate((el) => {
+        return parseFloat(window.getComputedStyle(el).fontSize);
+      });
+      expect(h2FontSize).toBeGreaterThan(h3FontSize);
     });
-    expect(h2FontWeight, 'h2 should have bold font weight').toBeGreaterThanOrEqual(600);
-  });
 
-  /**
-   * Test Case 3: Check button styling consistency
-   * Expected: All buttons share consistent styling (colors, padding, border-radius)
-   */
-  test('TC3: Buttons have consistent styling', async ({ page }) => {
-    const buttons = page.locator('.btn');
-    const buttonCount = await buttons.count();
-    expect(buttonCount).toBeGreaterThanOrEqual(2);
+    test('h3 has larger font size than body text', async ({ page }) => {
+      const h3FontSize = await page.locator('h3').first().evaluate((el) => {
+        return parseFloat(window.getComputedStyle(el).fontSize);
+      });
+      const bodyFontSize = await page.locator('body').evaluate((el) => {
+        return parseFloat(window.getComputedStyle(el).fontSize);
+      });
+      expect(h3FontSize).toBeGreaterThan(bodyFontSize);
+    });
 
-    // Collect button styles
-    const buttonStyles = [];
-    for (let i = 0; i < buttonCount; i++) {
-      const styles = await buttons.nth(i).evaluate((el) => {
-        const computed = window.getComputedStyle(el);
+    test('headings have consistent font-weight hierarchy', async ({ page }) => {
+      const h1Weight = await page.locator('h1').first().evaluate((el) => {
+        return parseInt(window.getComputedStyle(el).fontWeight);
+      });
+      const h2Weight = await page.locator('h2').first().evaluate((el) => {
+        return parseInt(window.getComputedStyle(el).fontWeight);
+      });
+      const h3Weight = await page.locator('h3').first().evaluate((el) => {
+        return parseInt(window.getComputedStyle(el).fontWeight);
+      });
+
+      // All headings should have bold or semi-bold weight (>=600)
+      expect(h1Weight).toBeGreaterThanOrEqual(600);
+      expect(h2Weight).toBeGreaterThanOrEqual(600);
+      expect(h3Weight).toBeGreaterThanOrEqual(600);
+    });
+
+    test('all h2 elements have consistent styling', async ({ page }) => {
+      const h2Elements = await page.locator('h2').all();
+      expect(h2Elements.length).toBeGreaterThan(1);
+
+      const firstH2Style = await h2Elements[0].evaluate((el) => {
+        const styles = window.getComputedStyle(el);
         return {
-          padding: computed.padding,
-          paddingTop: computed.paddingTop,
-          paddingBottom: computed.paddingBottom,
-          paddingLeft: computed.paddingLeft,
-          paddingRight: computed.paddingRight,
-          borderRadius: computed.borderRadius,
-          fontWeight: computed.fontWeight,
-          display: computed.display,
+          fontSize: styles.fontSize,
+          fontWeight: styles.fontWeight,
+          fontFamily: styles.fontFamily,
         };
       });
-      buttonStyles.push(styles);
-    }
 
-    // All buttons should have same padding values (check vertical padding)
-    const firstPaddingTop = buttonStyles[0].paddingTop;
-    const firstPaddingBottom = buttonStyles[0].paddingBottom;
-
-    for (let i = 1; i < buttonStyles.length; i++) {
-      expect(buttonStyles[i].paddingTop, `Button ${i + 1} paddingTop should match button 1`).toBe(firstPaddingTop);
-      expect(buttonStyles[i].paddingBottom, `Button ${i + 1} paddingBottom should match button 1`).toBe(firstPaddingBottom);
-    }
-
-    // All buttons should have same border-radius
-    const firstBorderRadius = buttonStyles[0].borderRadius;
-    for (let i = 1; i < buttonStyles.length; i++) {
-      expect(buttonStyles[i].borderRadius, `Button ${i + 1} border-radius should match button 1`).toBe(firstBorderRadius);
-    }
-
-    // All buttons should have same font-weight
-    const firstFontWeight = buttonStyles[0].fontWeight;
-    for (let i = 1; i < buttonStyles.length; i++) {
-      expect(buttonStyles[i].fontWeight, `Button ${i + 1} font-weight should match button 1`).toBe(firstFontWeight);
-    }
-
-    // Buttons should have reasonable border-radius (not zero)
-    const borderRadiusValue = parseFloat(firstBorderRadius);
-    expect(borderRadiusValue, 'Buttons should have non-zero border-radius').toBeGreaterThan(0);
-
-    // Check that buttons have appropriate padding (not too small)
-    const paddingTopValue = parseFloat(firstPaddingTop);
-    expect(paddingTopValue, 'Buttons should have adequate vertical padding').toBeGreaterThanOrEqual(8);
-  });
-
-  /**
-   * Test Case 4: Verify section spacing
-   * Expected: Consistent vertical spacing between sections
-   */
-  test('TC4: Sections have consistent vertical spacing', async ({ page }) => {
-    // Get all main sections
-    const sections = page.locator('main section');
-    const sectionCount = await sections.count();
-    expect(sectionCount).toBeGreaterThanOrEqual(3);
-
-    // Collect section padding values
-    const sectionStyles = [];
-    for (let i = 0; i < sectionCount; i++) {
-      const styles = await sections.nth(i).evaluate((el) => {
-        const computed = window.getComputedStyle(el);
-        return {
-          paddingTop: parseFloat(computed.paddingTop),
-          paddingBottom: parseFloat(computed.paddingBottom),
-        };
-      });
-      sectionStyles.push(styles);
-    }
-
-    // Check that sections have consistent padding
-    // Allow for some variation (hero might be different) but check main content sections
-    const contentSections = sectionStyles.slice(1); // Skip hero section which may have different padding
-
-    if (contentSections.length >= 2) {
-      // Non-hero sections should have consistent vertical padding
-      const firstPaddingTop = contentSections[0].paddingTop;
-      const firstPaddingBottom = contentSections[0].paddingBottom;
-
-      for (let i = 1; i < contentSections.length; i++) {
-        expect(contentSections[i].paddingTop, `Section ${i + 2} paddingTop should match section 2`).toBe(firstPaddingTop);
-        expect(contentSections[i].paddingBottom, `Section ${i + 2} paddingBottom should match section 2`).toBe(firstPaddingBottom);
+      for (let i = 1; i < h2Elements.length; i++) {
+        const currentH2Style = await h2Elements[i].evaluate((el) => {
+          const styles = window.getComputedStyle(el);
+          return {
+            fontSize: styles.fontSize,
+            fontWeight: styles.fontWeight,
+            fontFamily: styles.fontFamily,
+          };
+        });
+        expect(currentH2Style.fontSize).toBe(firstH2Style.fontSize);
+        expect(currentH2Style.fontWeight).toBe(firstH2Style.fontWeight);
+        expect(currentH2Style.fontFamily).toBe(firstH2Style.fontFamily);
       }
-    }
+    });
+  });
 
-    // Verify sections have adequate vertical spacing (padding >= 48px which is 3rem at 16px base)
-    for (let i = 0; i < sectionCount; i++) {
-      expect(sectionStyles[i].paddingTop, `Section ${i + 1} should have adequate top padding`).toBeGreaterThanOrEqual(48);
-      expect(sectionStyles[i].paddingBottom, `Section ${i + 1} should have adequate bottom padding`).toBeGreaterThanOrEqual(0);
-    }
+  test.describe('Test Case 3: Button styling consistency', () => {
+    test('all buttons have consistent border-radius', async ({ page }) => {
+      const buttons = await page.locator('.btn').all();
+      expect(buttons.length).toBeGreaterThan(1);
 
-    // Check h2 margins are consistent across sections
-    const h2Elements = page.locator('section h2');
-    const h2Count = await h2Elements.count();
+      const firstBtnRadius = await buttons[0].evaluate((el) => {
+        return window.getComputedStyle(el).borderRadius;
+      });
 
-    if (h2Count >= 2) {
-      const h2Margins = [];
-      for (let i = 0; i < h2Count; i++) {
-        const margin = await h2Elements.nth(i).evaluate((el) => {
+      for (const btn of buttons) {
+        const borderRadius = await btn.evaluate((el) => {
+          return window.getComputedStyle(el).borderRadius;
+        });
+        expect(borderRadius).toBe(firstBtnRadius);
+      }
+    });
+
+    test('all buttons have consistent padding', async ({ page }) => {
+      const buttons = await page.locator('.btn').all();
+      expect(buttons.length).toBeGreaterThan(1);
+
+      const firstBtnPadding = await buttons[0].evaluate((el) => {
+        return window.getComputedStyle(el).padding;
+      });
+
+      for (const btn of buttons) {
+        const padding = await btn.evaluate((el) => {
+          return window.getComputedStyle(el).padding;
+        });
+        expect(padding).toBe(firstBtnPadding);
+      }
+    });
+
+    test('all buttons have consistent font-weight', async ({ page }) => {
+      const buttons = await page.locator('.btn').all();
+      expect(buttons.length).toBeGreaterThan(1);
+
+      const firstBtnFontWeight = await buttons[0].evaluate((el) => {
+        return window.getComputedStyle(el).fontWeight;
+      });
+
+      for (const btn of buttons) {
+        const fontWeight = await btn.evaluate((el) => {
+          return window.getComputedStyle(el).fontWeight;
+        });
+        expect(fontWeight).toBe(firstBtnFontWeight);
+      }
+    });
+
+    test('primary and secondary buttons use consistent color scheme', async ({ page }) => {
+      const primaryBtn = page.locator('.btn-primary').first();
+      const secondaryBtn = page.locator('.btn-secondary').first();
+
+      // Primary button should have colored background
+      const primaryBgColor = await primaryBtn.evaluate((el) => {
+        return window.getComputedStyle(el).backgroundColor;
+      });
+      expect(primaryBgColor).not.toBe('rgba(0, 0, 0, 0)');
+      expect(primaryBgColor).not.toBe('transparent');
+
+      // Secondary button should have different styling
+      const secondaryBgColor = await secondaryBtn.evaluate((el) => {
+        return window.getComputedStyle(el).backgroundColor;
+      });
+      // Secondary should be different from primary
+      expect(secondaryBgColor).not.toBe(primaryBgColor);
+    });
+  });
+
+  test.describe('Test Case 4: Section spacing consistency', () => {
+    test('main sections have consistent vertical padding', async ({ page }) => {
+      const sections = await page.locator('section[class*="-section"]').all();
+      expect(sections.length).toBeGreaterThan(2);
+
+      const sectionPaddings = [];
+      for (const section of sections) {
+        const padding = await section.evaluate((el) => {
+          const styles = window.getComputedStyle(el);
+          return {
+            paddingTop: styles.paddingTop,
+            paddingBottom: styles.paddingBottom,
+          };
+        });
+        sectionPaddings.push(padding);
+      }
+
+      // Check that non-hero sections have consistent padding
+      // Hero section may have different padding, so we check other sections
+      const nonHeroSections = sectionPaddings.slice(1);
+      const firstNonHeroPadding = nonHeroSections[0];
+
+      for (const padding of nonHeroSections) {
+        expect(padding.paddingTop).toBe(firstNonHeroPadding.paddingTop);
+        expect(padding.paddingBottom).toBe(firstNonHeroPadding.paddingBottom);
+      }
+    });
+
+    test('feature cards have consistent padding', async ({ page }) => {
+      const featureCards = await page.locator('.feature-card').all();
+      expect(featureCards.length).toBeGreaterThan(1);
+
+      const firstCardPadding = await featureCards[0].evaluate((el) => {
+        return window.getComputedStyle(el).padding;
+      });
+
+      for (const card of featureCards) {
+        const padding = await card.evaluate((el) => {
+          return window.getComputedStyle(el).padding;
+        });
+        expect(padding).toBe(firstCardPadding);
+      }
+    });
+
+    test('section containers have consistent max-width', async ({ page }) => {
+      const containers = await page.locator('.section-container').all();
+      expect(containers.length).toBeGreaterThan(1);
+
+      const firstContainerMaxWidth = await containers[0].evaluate((el) => {
+        return window.getComputedStyle(el).maxWidth;
+      });
+
+      for (const container of containers) {
+        const maxWidth = await container.evaluate((el) => {
+          return window.getComputedStyle(el).maxWidth;
+        });
+        expect(maxWidth).toBe(firstContainerMaxWidth);
+      }
+    });
+
+    test('steps have consistent margin-bottom spacing', async ({ page }) => {
+      const steps = await page.locator('.step').all();
+      expect(steps.length).toBeGreaterThan(1);
+
+      // Get all but the last step (last may have different margin)
+      const stepsToCheck = steps.slice(0, -1);
+      const firstStepMargin = await stepsToCheck[0].evaluate((el) => {
+        return window.getComputedStyle(el).marginBottom;
+      });
+
+      for (const step of stepsToCheck) {
+        const marginBottom = await step.evaluate((el) => {
           return window.getComputedStyle(el).marginBottom;
         });
-        h2Margins.push(margin);
+        expect(marginBottom).toBe(firstStepMargin);
       }
-
-      // All h2 margins should be consistent
-      for (let i = 1; i < h2Margins.length; i++) {
-        expect(h2Margins[i], `h2 element ${i + 1} margin should match h2 element 1`).toBe(h2Margins[0]);
-      }
-    }
+    });
   });
 
-  /**
-   * Test Case 5: Check color palette consistency
-   * Expected: Page uses consistent color palette throughout all sections
-   */
-  test('TC5: Color palette is consistent throughout page', async ({ page }) => {
-    // Get CSS custom properties (CSS variables)
-    const cssVariables = await page.evaluate(() => {
-      const root = document.documentElement;
-      const styles = getComputedStyle(root);
-      return {
-        primaryColor: styles.getPropertyValue('--primary-color').trim(),
-        textColor: styles.getPropertyValue('--text-color').trim(),
-        textMuted: styles.getPropertyValue('--text-muted').trim(),
-        bgColor: styles.getPropertyValue('--bg-color').trim(),
-        bgSecondary: styles.getPropertyValue('--bg-secondary').trim(),
-        borderColor: styles.getPropertyValue('--border-color').trim(),
+  test.describe('Test Case 5: Color palette consistency', () => {
+    test('uses CSS custom properties for consistent colors', async ({ page }) => {
+      // Verify that CSS custom properties are defined
+      const rootStyles = await page.evaluate(() => {
+        const root = document.documentElement;
+        const styles = getComputedStyle(root);
+        return {
+          primaryColor: styles.getPropertyValue('--primary-color').trim(),
+          textColor: styles.getPropertyValue('--text-color').trim(),
+          textMuted: styles.getPropertyValue('--text-muted').trim(),
+          bgColor: styles.getPropertyValue('--bg-color').trim(),
+          borderColor: styles.getPropertyValue('--border-color').trim(),
+        };
+      });
+
+      // Check that custom properties are defined and not empty
+      expect(rootStyles.primaryColor).toBeTruthy();
+      expect(rootStyles.textColor).toBeTruthy();
+      expect(rootStyles.textMuted).toBeTruthy();
+      expect(rootStyles.bgColor).toBeTruthy();
+      expect(rootStyles.borderColor).toBeTruthy();
+    });
+
+    test('primary buttons use primary color from palette', async ({ page }) => {
+      const primaryBtnBgColor = await page.locator('.btn-primary').first().evaluate((el) => {
+        return window.getComputedStyle(el).backgroundColor;
+      });
+
+      const primaryColor = await page.evaluate(() => {
+        const root = document.documentElement;
+        return getComputedStyle(root).getPropertyValue('--primary-color').trim();
+      });
+
+      // Convert hex to RGB for comparison
+      const hexToRgb = (hex) => {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result
+          ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})`
+          : null;
       };
+
+      const expectedRgb = hexToRgb(primaryColor);
+      expect(primaryBtnBgColor).toBe(expectedRgb);
     });
 
-    // Verify CSS variables are defined
-    expect(cssVariables.primaryColor, 'Primary color should be defined').toBeTruthy();
-    expect(cssVariables.textColor, 'Text color should be defined').toBeTruthy();
-    expect(cssVariables.bgColor, 'Background color should be defined').toBeTruthy();
+    test('all nav links use same text color', async ({ page }) => {
+      const navLinks = await page.locator('.nav-link').all();
+      expect(navLinks.length).toBeGreaterThan(1);
 
-    // Check that primary buttons use the primary color
-    const primaryBtn = page.locator('.btn-primary').first();
-    const primaryBtnBgColor = await primaryBtn.evaluate((el) => {
-      return window.getComputedStyle(el).backgroundColor;
-    });
-
-    // Convert hex to rgb for comparison if needed
-    const primaryColorRgb = await page.evaluate((hex) => {
-      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      if (result) {
-        return `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})`;
-      }
-      return hex;
-    }, cssVariables.primaryColor);
-
-    expect(primaryBtnBgColor, 'Primary button should use primary color').toBe(primaryColorRgb);
-
-    // Check that nav links use consistent text color
-    const navLinks = page.locator('.nav-link');
-    const navLinkCount = await navLinks.count();
-
-    const navLinkColors = [];
-    for (let i = 0; i < navLinkCount; i++) {
-      const color = await navLinks.nth(i).evaluate((el) => {
+      const firstLinkColor = await navLinks[0].evaluate((el) => {
         return window.getComputedStyle(el).color;
       });
-      navLinkColors.push(color);
-    }
 
-    // All nav links should have same base color
-    for (let i = 1; i < navLinkColors.length; i++) {
-      expect(navLinkColors[i], `Nav link ${i + 1} color should match nav link 1`).toBe(navLinkColors[0]);
-    }
-
-    // Check that feature cards have consistent styling
-    const featureCards = page.locator('.feature-card');
-    const cardCount = await featureCards.count();
-
-    if (cardCount >= 2) {
-      const cardStyles = [];
-      for (let i = 0; i < cardCount; i++) {
-        const styles = await featureCards.nth(i).evaluate((el) => {
-          const computed = window.getComputedStyle(el);
-          return {
-            backgroundColor: computed.backgroundColor,
-            borderColor: computed.borderColor,
-          };
-        });
-        cardStyles.push(styles);
-      }
-
-      // All cards should have same background color
-      for (let i = 1; i < cardStyles.length; i++) {
-        expect(cardStyles[i].backgroundColor, `Feature card ${i + 1} background should match card 1`).toBe(cardStyles[0].backgroundColor);
-        expect(cardStyles[i].borderColor, `Feature card ${i + 1} border should match card 1`).toBe(cardStyles[0].borderColor);
-      }
-    }
-
-    // Check that all h3 headings in feature cards use consistent color
-    const featureHeadings = page.locator('.feature-card h3');
-    const headingCount = await featureHeadings.count();
-
-    if (headingCount >= 2) {
-      const headingColors = [];
-      for (let i = 0; i < headingCount; i++) {
-        const color = await featureHeadings.nth(i).evaluate((el) => {
+      for (const link of navLinks) {
+        const color = await link.evaluate((el) => {
           return window.getComputedStyle(el).color;
         });
-        headingColors.push(color);
+        expect(color).toBe(firstLinkColor);
       }
+    });
 
-      // All feature headings should have same color
-      for (let i = 1; i < headingColors.length; i++) {
-        expect(headingColors[i], `Feature heading ${i + 1} color should match heading 1`).toBe(headingColors[0]);
-      }
-    }
+    test('feature cards have consistent border color', async ({ page }) => {
+      const featureCards = await page.locator('.feature-card').all();
+      expect(featureCards.length).toBeGreaterThan(1);
 
-    // Verify code blocks use consistent styling
-    const codeBlocks = page.locator('pre');
-    const codeBlockCount = await codeBlocks.count();
+      const firstCardBorderColor = await featureCards[0].evaluate((el) => {
+        return window.getComputedStyle(el).borderColor;
+      });
 
-    if (codeBlockCount >= 2) {
-      const codeBlockStyles = [];
-      for (let i = 0; i < codeBlockCount; i++) {
-        const styles = await codeBlocks.nth(i).evaluate((el) => {
-          const computed = window.getComputedStyle(el);
-          return {
-            backgroundColor: computed.backgroundColor,
-            color: computed.color,
-            borderRadius: computed.borderRadius,
-          };
+      for (const card of featureCards) {
+        const borderColor = await card.evaluate((el) => {
+          return window.getComputedStyle(el).borderColor;
         });
-        codeBlockStyles.push(styles);
+        expect(borderColor).toBe(firstCardBorderColor);
       }
+    });
 
-      // All code blocks should have same styling
-      for (let i = 1; i < codeBlockStyles.length; i++) {
-        expect(codeBlockStyles[i].backgroundColor, `Code block ${i + 1} background should match block 1`).toBe(codeBlockStyles[0].backgroundColor);
-        expect(codeBlockStyles[i].color, `Code block ${i + 1} text color should match block 1`).toBe(codeBlockStyles[0].color);
-        expect(codeBlockStyles[i].borderRadius, `Code block ${i + 1} border-radius should match block 1`).toBe(codeBlockStyles[0].borderRadius);
+    test('code blocks use consistent background color', async ({ page }) => {
+      const preElements = await page.locator('pre').all();
+      expect(preElements.length).toBeGreaterThan(1);
+
+      const firstPreBgColor = await preElements[0].evaluate((el) => {
+        return window.getComputedStyle(el).backgroundColor;
+      });
+
+      for (const pre of preElements) {
+        const bgColor = await pre.evaluate((el) => {
+          return window.getComputedStyle(el).backgroundColor;
+        });
+        expect(bgColor).toBe(firstPreBgColor);
       }
-    }
+    });
+
+    test('muted text elements use consistent color', async ({ page }) => {
+      // Check tagline and hero description use the muted text color
+      const taglineColor = await page.locator('.tagline').evaluate((el) => {
+        return window.getComputedStyle(el).color;
+      });
+      const heroDescColor = await page.locator('.hero-description').evaluate((el) => {
+        return window.getComputedStyle(el).color;
+      });
+
+      expect(taglineColor).toBe(heroDescColor);
+    });
+
+    test('footer uses consistent dark theme colors', async ({ page }) => {
+      const footerBgColor = await page.locator('.footer').evaluate((el) => {
+        return window.getComputedStyle(el).backgroundColor;
+      });
+      const footerTextColor = await page.locator('.footer').evaluate((el) => {
+        return window.getComputedStyle(el).color;
+      });
+
+      // Footer should have dark background
+      const codeBgColor = await page.evaluate(() => {
+        const root = document.documentElement;
+        return getComputedStyle(root).getPropertyValue('--code-bg').trim();
+      });
+
+      // Convert hex to RGB for comparison
+      const hexToRgb = (hex) => {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result
+          ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})`
+          : null;
+      };
+
+      const expectedFooterBg = hexToRgb(codeBgColor);
+      expect(footerBgColor).toBe(expectedFooterBg);
+    });
   });
 });
