@@ -293,10 +293,57 @@
             display: none;
         }
 
+        /* Demo Section */
+        .demo {
+            padding: 4rem 0;
+            background: var(--bg-color);
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .demo-header h2 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .demo-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .demo-figure {
+            margin: 0;
+        }
+
+        .demo-gif {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
+        }
+
+        .demo-caption {
+            margin-top: 1.5rem;
+            color: var(--text-light);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
         /* Quick Start Section */
         .quickstart {
             padding: 4rem 0;
-            background: var(--bg-color);
+            background: var(--bg-light);
         }
 
         .quickstart-header {
@@ -429,6 +476,10 @@
             .quickstart-content {
                 grid-template-columns: 1fr;
             }
+
+            .demo-header h2 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -522,6 +573,23 @@
                     <h3>Raft Consensus</h3>
                     <p>Planned support for distributed consensus using the Raft protocol, enabling high availability and fault tolerance.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="demo">
+        <div class="container">
+            <div class="demo-header">
+                <h2>See MirDB in Action</h2>
+                <p>Watch how easy it is to use MirDB with memcached commands</p>
+            </div>
+            <div class="demo-content">
+                <figure class="demo-figure">
+                    <img src="assets/usage.gif" alt="MirDB usage demonstration showing memcached commands in action" class="demo-gif" loading="lazy">
+                    <figcaption class="demo-caption">
+                        This demonstration shows MirDB handling standard memcached commands including SET, GET, and DELETE operations. Notice how data persists across server restarts, unlike traditional memcached.
+                    </figcaption>
+                </figure>
             </div>
         </div>
     </section>
