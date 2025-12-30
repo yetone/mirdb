@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. Get the simplicity of memcached with the durability of disk-backed storage.">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero" data-testid="hero">
+    <div class="hero-content">
+      <h1>MirDB</h1>
+      <p class="tagline" data-testid="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+      <p class="hero-description">
+        Get the simplicity of memcached with the durability of disk-backed storage.
+        MirDB persists your data using an efficient LSM tree architecture while
+        maintaining full compatibility with the memcached protocol.
+      </p>
+      <div class="hero-ctas">
+        <a href="#quick-start" class="btn btn-primary">Get Started</a>
+        <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="features" class="features">
+      <h2>Key Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Memcached Protocol</h3>
+          <p>Drop-in compatibility with standard memcached text protocol. Use your existing clients seamlessly.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Data Persistence</h3>
+          <p>Unlike memcached, MirDB persists data to disk. No more cold cache problems after restarts.</p>
+        </div>
+        <div class="feature-card">
+          <h3>LSM Tree Architecture</h3>
+          <p>Efficient storage engine optimized for write-heavy workloads with multi-level compaction.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Rust Performance</h3>
+          <p>Written in Rust for memory safety and high performance without garbage collection pauses.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quick-start" class="quick-start">
+      <h2>Quick Start</h2>
+      <div class="code-block">
+        <pre><code># Clone and build
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release
+
+# Run the server
+./target/release/mirdb-server
+
+# Connect with any memcached client
+telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+      </div>
+    </section>
+
+    <section id="config" class="configuration">
+      <h2>Default Configuration</h2>
+      <ul class="config-list">
+        <li><strong>Port:</strong> 12333</li>
+        <li><strong>Storage:</strong> /tmp/mirdb</li>
+        <li><strong>Memtable Size:</strong> 4MB before flush</li>
+        <li><strong>SSTable Size:</strong> Up to 100MB per file</li>
+        <li><strong>LSM Levels:</strong> 7 levels</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2024 MirDB Project</p>
+      <nav class="footer-links">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

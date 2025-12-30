@@ -1,0 +1,15 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "Homepage for MirDB - A Persistent Key-Value Store with Memcached Protocol",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "serve": "npx serve ."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.2.0"
+  }
+}
