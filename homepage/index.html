@@ -56,6 +56,89 @@
     </div>
   </section>
 
+  <!-- Architecture Overview Section -->
+  <section id="architecture" class="architecture" data-testid="architecture-section">
+    <h2>Architecture Overview</h2>
+    <p class="architecture-intro">
+      MirDB uses a <strong>Log-Structured Merge-tree (LSM tree)</strong> architecture optimized for write-heavy workloads.
+      LSM trees provide high write throughput by buffering writes in memory before flushing to disk in sorted batches.
+    </p>
+    <div class="architecture-content">
+      <div class="diagram-container" data-testid="architecture-diagram">
+        <svg viewBox="0 0 600 480" class="lsm-diagram" role="img" aria-label="LSM Tree Data Flow Diagram showing Write-Ahead Log, Memtable, Immutable Memtables, and SSTable levels">
+          <!-- Title -->
+          <text x="300" y="30" text-anchor="middle" class="diagram-title">LSM Tree Data Flow</text>
+
+          <!-- Write Request Arrow -->
+          <text x="300" y="60" text-anchor="middle" class="diagram-label">Write Request</text>
+          <line x1="300" y1="68" x2="300" y2="85" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+          <!-- WAL Box -->
+          <rect x="200" y="90" width="200" height="50" rx="8" class="diagram-box wal-box"/>
+          <text x="300" y="120" text-anchor="middle" class="diagram-box-text">WAL</text>
+          <text x="300" y="135" text-anchor="middle" class="diagram-subtext">(Write-Ahead Log)</text>
+
+          <!-- Arrow WAL to Memtable -->
+          <line x1="300" y1="140" x2="300" y2="160" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+          <!-- Memtable Box -->
+          <rect x="200" y="165" width="200" height="50" rx="8" class="diagram-box memtable-box"/>
+          <text x="300" y="195" text-anchor="middle" class="diagram-box-text">Memtable</text>
+          <text x="300" y="210" text-anchor="middle" class="diagram-subtext">(Active in-memory skip list)</text>
+
+          <!-- Arrow Memtable to Imm -->
+          <line x1="300" y1="215" x2="300" y2="235" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text x="360" y="230" class="diagram-note">when full</text>
+
+          <!-- Immutable Memtables Box -->
+          <rect x="175" y="240" width="250" height="50" rx="8" class="diagram-box imm-box"/>
+          <text x="300" y="270" text-anchor="middle" class="diagram-box-text">Immutable Memtables</text>
+          <text x="300" y="285" text-anchor="middle" class="diagram-subtext">(Queue awaiting compaction)</text>
+
+          <!-- Arrow Imm to Level 0 -->
+          <line x1="300" y1="290" x2="300" y2="310" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text x="380" y="305" class="diagram-note">minor compaction</text>
+
+          <!-- Level 0 SSTables -->
+          <rect x="150" y="315" width="300" height="50" rx="8" class="diagram-box level0-box"/>
+          <text x="300" y="345" text-anchor="middle" class="diagram-box-text">Level 0 SSTables</text>
+          <text x="300" y="360" text-anchor="middle" class="diagram-subtext">(Recently flushed, may overlap)</text>
+
+          <!-- Arrow Level 0 to Level 1+ -->
+          <line x1="300" y1="365" x2="300" y2="385" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text x="380" y="380" class="diagram-note">major compaction</text>
+
+          <!-- Level 1+ SSTables -->
+          <rect x="125" y="390" width="350" height="50" rx="8" class="diagram-box level1-box"/>
+          <text x="300" y="420" text-anchor="middle" class="diagram-box-text">Level 1+ SSTables</text>
+          <text x="300" y="435" text-anchor="middle" class="diagram-subtext">(Sorted, non-overlapping per level)</text>
+
+          <!-- Arrowhead marker definition -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#667eea"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+      <div class="architecture-explanation" data-testid="architecture-explanation">
+        <h3>How It Works</h3>
+        <ul>
+          <li><strong>Write-Ahead Log (WAL):</strong> All writes are first recorded in the WAL for durability and crash recovery.</li>
+          <li><strong>Memtable:</strong> Writes are buffered in an in-memory skip list for fast access.</li>
+          <li><strong>Immutable Memtables:</strong> When the memtable is full, it becomes immutable and queues for compaction.</li>
+          <li><strong>SSTable Levels:</strong> Data is organized into sorted string tables across multiple levels, with compaction merging data from lower to higher levels.</li>
+        </ul>
+        <h3>Benefits of LSM Trees</h3>
+        <ul>
+          <li><strong>High Write Throughput:</strong> Sequential writes to disk are much faster than random writes.</li>
+          <li><strong>Space Efficiency:</strong> Compaction removes duplicate keys and deleted entries.</li>
+          <li><strong>Predictable Performance:</strong> Background compaction keeps read latency stable.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- Quick Start Section -->
   <section id="quick-start" class="quick-start">
     <h2>Quick Start</h2>

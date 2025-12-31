@@ -156,6 +156,162 @@ h1 {
   font-size: 0.95rem;
 }
 
+/* Architecture Section */
+.architecture {
+  padding: 5rem 2rem;
+  background-color: #ffffff;
+}
+
+.architecture h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #1a1a2e;
+}
+
+.architecture-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem auto;
+  font-size: 1.1rem;
+  color: #444;
+  line-height: 1.7;
+}
+
+.architecture-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.diagram-container {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.lsm-diagram {
+  width: 100%;
+  height: auto;
+  max-width: 500px;
+  margin: 0 auto;
+  display: block;
+}
+
+.diagram-title {
+  font-size: 18px;
+  font-weight: 600;
+  fill: #1a1a2e;
+}
+
+.diagram-label {
+  font-size: 14px;
+  fill: #444;
+}
+
+.diagram-box {
+  fill: #ffffff;
+  stroke: #667eea;
+  stroke-width: 2;
+}
+
+.diagram-box.wal-box {
+  fill: #e8f4fd;
+}
+
+.diagram-box.memtable-box {
+  fill: #e8fdf4;
+}
+
+.diagram-box.imm-box {
+  fill: #fdf4e8;
+}
+
+.diagram-box.level0-box {
+  fill: #f4e8fd;
+}
+
+.diagram-box.level1-box {
+  fill: #fde8f4;
+}
+
+.diagram-box-text {
+  font-size: 16px;
+  font-weight: 600;
+  fill: #1a1a2e;
+}
+
+.diagram-subtext {
+  font-size: 11px;
+  fill: #666;
+}
+
+.diagram-note {
+  font-size: 10px;
+  fill: #888;
+  font-style: italic;
+}
+
+.architecture-explanation {
+  padding: 1rem 0;
+}
+
+.architecture-explanation h3 {
+  font-size: 1.3rem;
+  color: #667eea;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.architecture-explanation h3:first-child {
+  margin-top: 0;
+}
+
+.architecture-explanation ul {
+  list-style: none;
+  padding: 0;
+}
+
+.architecture-explanation li {
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: #444;
+  line-height: 1.6;
+  border-bottom: 1px solid #eee;
+}
+
+.architecture-explanation li:last-child {
+  border-bottom: none;
+}
+
+.architecture-explanation li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.architecture-explanation strong {
+  color: #1a1a2e;
+}
+
+/* Responsive Architecture Section */
+@media (max-width: 900px) {
+  .architecture-content {
+    grid-template-columns: 1fr;
+  }
+
+  .diagram-container {
+    order: -1;
+  }
+}
+
 /* Quick Start Section */
 .quick-start {
   padding: 5rem 2rem;
