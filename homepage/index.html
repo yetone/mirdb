@@ -6,30 +6,39 @@
   <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol support. LSM tree architecture, disk persistence, and async networking.">
   <meta name="keywords" content="MirDB, key-value store, memcached, persistent storage, LSM tree, Rust database">
   <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="canonical" href="https://mirdb.io/">
+  <!-- Open Graph meta tags for social sharing -->
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
+  <meta property="og:description" content="MirDB is a persistent key-value store with Memcached protocol support. Features LSM tree architecture, disk persistence, and async networking built with Rust.">
+  <meta property="og:image" content="https://mirdb.io/assets/og-image.png">
+  <meta property="og:url" content="https://mirdb.io/">
+  <meta property="og:type" content="website">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <!-- Skip Navigation Link for Accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar" data-testid="navbar" aria-label="Main navigation">
-    <div class="nav-container">
-      <a href="#" class="nav-logo">MirDB</a>
-      <ul class="nav-links" data-testid="nav-links">
-        <li><a href="#features">Features</a></li>
-        <li><a href="#quick-start">Quick Start</a></li>
-        <li><a href="#architecture">Architecture</a></li>
-        <li><a href="#configuration">Configuration</a></li>
-        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-      </ul>
-    </div>
-  </nav>
+  <!-- Header with Navigation Bar -->
+  <header>
+    <nav class="navbar" data-testid="navbar" aria-label="Main navigation">
+      <div class="nav-container">
+        <a href="#" class="nav-logo">MirDB</a>
+        <ul class="nav-links" data-testid="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#quick-start">Quick Start</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+          <li><a href="#configuration">Configuration</a></li>
+          <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
 
   <!-- Main Content -->
   <main id="main-content">
-  <!-- Hero Section -->
-  <section data-testid="hero-section" class="hero">
+    <!-- Hero Section -->
+    <section data-testid="hero-section" class="hero">
     <div class="hero-content">
       <div class="logo-container">
         <img src="../assets/logo.gif" alt="MirDB Logo" class="logo">
@@ -331,7 +340,6 @@ get mykey</code></pre>
       </div>
     </div>
   </section>
-
   </main>
 
   <!-- Footer -->
