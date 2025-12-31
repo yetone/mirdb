@@ -9,8 +9,11 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Skip Navigation Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <!-- Navigation Bar -->
-  <nav class="navbar" data-testid="navbar">
+  <nav class="navbar" data-testid="navbar" aria-label="Main navigation">
     <div class="nav-container">
       <a href="#" class="nav-logo">MirDB</a>
       <ul class="nav-links" data-testid="nav-links">
@@ -23,6 +26,8 @@
     </div>
   </nav>
 
+  <!-- Main Content -->
+  <main id="main-content">
   <!-- Hero Section -->
   <section data-testid="hero-section" class="hero">
     <div class="hero-content">
@@ -326,6 +331,8 @@ get mykey</code></pre>
       </div>
     </div>
   </section>
+
+  </main>
 
   <!-- Footer -->
   <footer class="footer" data-testid="footer-section">
