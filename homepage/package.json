@@ -4,12 +4,16 @@
   "description": "MirDB Product Homepage",
   "scripts": {
     "dev": "npx serve . -p 3000",
+    "build": "node scripts/build.js",
+    "serve:build": "npx serve dist -p 3001",
     "test": "npx playwright test",
-    "test:ui": "npx playwright test --ui"
+    "test:ui": "npx playwright test --ui",
+    "test:build": "npx playwright test --config=playwright.build.config.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.40.0",
+    "html-validate": "^8.18.0",
     "serve": "^14.2.0"
   }
 }
