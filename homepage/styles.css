@@ -924,3 +924,347 @@ h1 {
     font-size: 1rem;
   }
 }
+
+/* Theme Toggle Button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid #444;
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: #444;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.theme-toggle:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Show sun icon in dark mode, moon icon in light mode */
+.theme-toggle .sun-icon {
+  display: none;
+}
+
+.theme-toggle .moon-icon {
+  display: block;
+}
+
+html.dark .theme-toggle .sun-icon {
+  display: block;
+}
+
+html.dark .theme-toggle .moon-icon {
+  display: none;
+}
+
+/* Dark Mode Styles */
+html.dark body {
+  background-color: #0d0d15;
+  color: #e0e0e0;
+}
+
+html.dark .navbar {
+  background: rgba(13, 13, 21, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+html.dark .nav-logo {
+  color: #e0e0e0;
+}
+
+html.dark .nav-logo:hover {
+  color: #667eea;
+}
+
+html.dark .nav-links a {
+  color: #aaa;
+}
+
+html.dark .nav-links a:hover {
+  color: #667eea;
+}
+
+html.dark .theme-toggle {
+  border-color: #666;
+  color: #e0e0e0;
+}
+
+html.dark .theme-toggle:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+/* Hero Section - Keep gradient but adjust text */
+html.dark .hero {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+}
+
+/* Features Section */
+html.dark .features {
+  background-color: #1a1a2e;
+}
+
+html.dark .features h2 {
+  color: #e0e0e0;
+}
+
+html.dark .feature-card {
+  background: #2d2d44;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .feature-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .feature-card h3 {
+  color: #8b9cf4;
+}
+
+html.dark .feature-card p {
+  color: #b0b0b0;
+}
+
+/* Supported Commands Section */
+html.dark .supported-commands {
+  background-color: #0d0d15;
+}
+
+html.dark .supported-commands h2 {
+  color: #e0e0e0;
+}
+
+html.dark .commands-intro {
+  color: #b0b0b0;
+}
+
+html.dark .commands-category {
+  background: #1a1a2e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .commands-category h3 {
+  color: #8b9cf4;
+  border-bottom-color: #3d3d5c;
+}
+
+html.dark .command-list li {
+  border-bottom-color: #3d3d5c;
+  color: #e0e0e0;
+}
+
+html.dark .command-list span {
+  color: #b0b0b0;
+}
+
+/* Architecture Section */
+html.dark .architecture {
+  background-color: #1a1a2e;
+}
+
+html.dark .architecture h2 {
+  color: #e0e0e0;
+}
+
+html.dark .architecture-intro {
+  color: #b0b0b0;
+}
+
+html.dark .diagram-container {
+  background: #2d2d44;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .diagram-title {
+  fill: #e0e0e0;
+}
+
+html.dark .diagram-label {
+  fill: #b0b0b0;
+}
+
+html.dark .diagram-box {
+  fill: #2d2d44;
+  stroke: #8b9cf4;
+}
+
+html.dark .diagram-box.wal-box {
+  fill: #1a2e4a;
+}
+
+html.dark .diagram-box.memtable-box {
+  fill: #1a4a2e;
+}
+
+html.dark .diagram-box.imm-box {
+  fill: #4a3d1a;
+}
+
+html.dark .diagram-box.level0-box {
+  fill: #3d1a4a;
+}
+
+html.dark .diagram-box.level1-box {
+  fill: #4a1a3d;
+}
+
+html.dark .diagram-box-text {
+  fill: #e0e0e0;
+}
+
+html.dark .diagram-subtext {
+  fill: #999;
+}
+
+html.dark .diagram-note {
+  fill: #888;
+}
+
+html.dark .architecture-explanation h3 {
+  color: #8b9cf4;
+}
+
+html.dark .architecture-explanation li {
+  color: #b0b0b0;
+  border-bottom-color: #3d3d5c;
+}
+
+html.dark .architecture-explanation li::before {
+  color: #8b9cf4;
+}
+
+html.dark .architecture-explanation strong {
+  color: #e0e0e0;
+}
+
+/* Quick Start Section - Already dark, keep similar */
+html.dark .quick-start {
+  background-color: #0a0a12;
+}
+
+html.dark .code-block {
+  background: #1a1a2e;
+}
+
+html.dark .code-block code {
+  color: #e0e0e0;
+}
+
+/* Configuration Section */
+html.dark .configuration {
+  background-color: #1a1a2e;
+}
+
+html.dark .configuration h2 {
+  color: #e0e0e0;
+}
+
+html.dark .config-intro {
+  color: #b0b0b0;
+}
+
+html.dark .config-table {
+  background: #2d2d44;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .config-table thead {
+  background: linear-gradient(135deg, #4a5568 0%, #3d4a5c 100%);
+}
+
+html.dark .config-table td {
+  border-bottom-color: #3d3d5c;
+  color: #e0e0e0;
+}
+
+html.dark .config-table tbody tr:hover {
+  background-color: #3d3d5c;
+}
+
+html.dark .config-table code {
+  background-color: #1a1a2e;
+  color: #8b9cf4;
+}
+
+html.dark .config-link a {
+  color: #8b9cf4;
+}
+
+html.dark .config-link a:hover {
+  color: #b0b0f4;
+}
+
+/* Project Status Section */
+html.dark .project-status {
+  background-color: #0d0d15;
+}
+
+html.dark .project-status h2 {
+  color: #e0e0e0;
+}
+
+html.dark .status-column {
+  background: #1a1a2e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .status-heading {
+  border-bottom-color: #3d3d5c;
+}
+
+html.dark .status-heading.implemented-heading {
+  color: #4ade80;
+}
+
+html.dark .status-heading.roadmap-heading {
+  color: #8b9cf4;
+}
+
+html.dark .status-item {
+  border-bottom-color: #3d3d5c;
+  color: #e0e0e0;
+}
+
+html.dark .status-item.implemented .check-icon {
+  color: #4ade80;
+}
+
+html.dark .status-item.planned .planned-icon {
+  color: #8b9cf4;
+}
+
+/* Footer - Already dark */
+html.dark .footer {
+  background-color: #050508;
+}
+
+html.dark .footer-links a {
+  color: #888;
+}
+
+html.dark .footer-links a:hover {
+  color: #e0e0e0;
+}
+
+/* Skip Link */
+html.dark .skip-link {
+  background: #2d2d44;
+}
+
+html.dark .skip-link:focus {
+  outline-color: #8b9cf4;
+}
+
+/* 404 Page */
+html.dark .not-found-section {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+}
