@@ -176,6 +176,63 @@ h1 {
   border-radius: 12px;
   padding: 1.5rem;
   overflow-x: auto;
+  position: relative;
+}
+
+/* Copy Button Styles */
+.copy-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.copy-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.copy-button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.copy-button .copy-icon {
+  display: block;
+}
+
+.copy-button .check-icon {
+  display: none;
+}
+
+.copy-button.copied {
+  background: rgba(74, 222, 128, 0.2);
+  border-color: rgba(74, 222, 128, 0.4);
+  color: #4ade80;
+}
+
+.copy-button.copied .copy-icon {
+  display: none;
+}
+
+.copy-button.copied .check-icon {
+  display: block;
+}
+
+.copy-text {
+  font-weight: 500;
 }
 
 .code-block pre {
