@@ -254,6 +254,65 @@ get mykey</code></pre>
     </p>
   </section>
 
+  <!-- Project Status Section -->
+  <section id="project-status" class="project-status" data-testid="project-status-section">
+    <h2>Project Status</h2>
+    <div class="status-content">
+      <div class="status-column">
+        <h3 class="status-heading implemented-heading" data-testid="implemented-heading">
+          <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Implemented Features
+        </h3>
+        <ul class="status-list implemented-list" data-testid="implemented-features-list">
+          <li class="status-item implemented" data-testid="feature-async-networking">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Tokio-based async networking</span>
+          </li>
+          <li class="status-item implemented" data-testid="feature-memtable">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Memtable with skip list</span>
+          </li>
+          <li class="status-item implemented" data-testid="feature-minor-compaction">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Minor compaction</span>
+          </li>
+          <li class="status-item implemented" data-testid="feature-major-compaction">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Major compaction</span>
+          </li>
+        </ul>
+      </div>
+      <div class="status-column">
+        <h3 class="status-heading roadmap-heading" data-testid="roadmap-heading">
+          <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Roadmap
+        </h3>
+        <ul class="status-list roadmap-list" data-testid="roadmap-features-list">
+          <li class="status-item planned" data-testid="feature-raft-consensus">
+            <svg class="planned-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+            <span>Raft consensus</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
