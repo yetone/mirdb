@@ -402,6 +402,97 @@ h1 {
   color: #e0e0e0;
 }
 
+/* Configuration Section */
+.configuration {
+  padding: 5rem 2rem;
+  background-color: #f8f9fa;
+}
+
+.configuration h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #1a1a2e;
+}
+
+.config-intro {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.config-table-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.config-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.config-table th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.config-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.config-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.config-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.config-table code {
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', monospace;
+  background-color: #f0f0f5;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #667eea;
+}
+
+.config-link {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.config-link a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.config-link a:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
 /* Footer */
 .footer {
   background-color: #0d0d15;

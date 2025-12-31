@@ -202,6 +202,58 @@ get mykey</code></pre>
     });
   </script>
 
+  <!-- Configuration Section -->
+  <section id="configuration" class="configuration">
+    <h2>Configuration</h2>
+    <p class="config-intro">MirDB offers various configuration options to tune performance for your specific use case.</p>
+    <div class="config-table-wrapper">
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Default Value</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Listen Address</td>
+            <td><code>0.0.0.0:12333</code></td>
+            <td>Network address and port for the server to listen on</td>
+          </tr>
+          <tr>
+            <td>Max LSM Levels</td>
+            <td><code>7</code></td>
+            <td>Maximum number of levels in the LSM tree structure</td>
+          </tr>
+          <tr>
+            <td>Work Directory</td>
+            <td><code>/tmp/mirdb</code></td>
+            <td>Directory path for storing data files and SSTables</td>
+          </tr>
+          <tr>
+            <td>SSTable Max Size</td>
+            <td><code>100MB</code></td>
+            <td>Maximum size of individual SSTable files</td>
+          </tr>
+          <tr>
+            <td>Memtable Max Size</td>
+            <td><code>4MB</code></td>
+            <td>Maximum size of the in-memory table before flushing to disk</td>
+          </tr>
+          <tr>
+            <td>Block Size</td>
+            <td><code>4KB</code></td>
+            <td>Size of data blocks within SSTable files</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="config-link">
+      <a href="https://github.com/yetone/mirdb#configuration" target="_blank" rel="noopener noreferrer">View full configuration documentation →</a>
+    </p>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
