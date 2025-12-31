@@ -26,6 +26,7 @@
         <a href="#" class="nav-logo">MirDB</a>
         <ul class="nav-links" data-testid="nav-links">
           <li><a href="#features">Features</a></li>
+          <li><a href="#supported-commands">Commands</a></li>
           <li><a href="#quick-start">Quick Start</a></li>
           <li><a href="#architecture">Architecture</a></li>
           <li><a href="#configuration">Configuration</a></li>
@@ -80,6 +81,60 @@
       <div class="feature-card">
         <h3>Configurable Parameters</h3>
         <p>Fine-tune performance with configurable parameters including memtable size, block size, compaction levels, and more.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported Commands Section -->
+  <section id="supported-commands" class="supported-commands" data-testid="supported-commands-section">
+    <h2>Supported Commands</h2>
+    <p class="commands-intro">
+      MirDB implements the <strong>memcached text protocol</strong>, enabling compatibility with existing memcached clients.
+    </p>
+    <div class="commands-grid">
+      <div class="commands-category" data-testid="storage-commands">
+        <h3>
+          <svg class="command-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          Storage Commands
+        </h3>
+        <ul class="command-list">
+          <li><code>SET</code> <span>Store a key-value pair</span></li>
+          <li><code>ADD</code> <span>Store only if key doesn't exist</span></li>
+          <li><code>REPLACE</code> <span>Store only if key exists</span></li>
+          <li><code>APPEND</code> <span>Append data to existing value</span></li>
+          <li><code>PREPEND</code> <span>Prepend data to existing value</span></li>
+        </ul>
+      </div>
+      <div class="commands-category" data-testid="retrieval-commands">
+        <h3>
+          <svg class="command-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          Retrieval Commands
+        </h3>
+        <ul class="command-list">
+          <li><code>GET</code> <span>Retrieve one or more keys</span></li>
+          <li><code>GETS</code> <span>Retrieve with CAS token</span></li>
+        </ul>
+      </div>
+      <div class="commands-category" data-testid="management-commands">
+        <h3>
+          <svg class="command-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          Management Commands
+        </h3>
+        <ul class="command-list">
+          <li><code>DELETE</code> <span>Remove a key</span></li>
+          <li><code>INFO</code> <span>Display database status and level information</span></li>
+          <li><code>MAJOR_COMPACTION</code> <span>Trigger manual compaction</span></li>
+        </ul>
       </div>
     </div>
   </section>
