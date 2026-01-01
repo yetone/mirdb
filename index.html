@@ -257,13 +257,14 @@
     </style>
 </head>
 <body>
-    <nav>
+    <nav data-testid="navigation-header">
         <div class="nav-container">
-            <a href="#" class="nav-logo">MirDB</a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#quickstart">Quick Start</a></li>
-                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+            <a href="#" class="nav-logo" data-testid="nav-logo">MirDB</a>
+            <ul class="nav-links" data-testid="nav-links">
+                <li><a href="#features" data-testid="nav-link-features">Features</a></li>
+                <li><a href="#quickstart" data-testid="nav-link-quickstart">Quick Start</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" data-testid="nav-link-github">GitHub</a></li>
+                <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener" data-testid="nav-link-docs">Docs</a></li>
             </ul>
         </div>
     </nav>
