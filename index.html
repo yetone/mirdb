@@ -183,9 +183,77 @@
             line-height: 1.7;
         }
 
+        /* Commands Section */
+        #commands {
+            padding: 5rem 2rem;
+        }
+
+        .commands-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .command-card {
+            background: var(--white);
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .command-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .command-name {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .command-description {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .commands-footer {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .docs-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 0.5rem;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .docs-link:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
         /* Quick Start Section */
         #quickstart {
             padding: 5rem 2rem;
+            background: var(--bg-light);
         }
 
         .quickstart-container {
@@ -262,6 +330,7 @@
             <a href="#" class="nav-logo" data-testid="nav-logo">MirDB</a>
             <ul class="nav-links" data-testid="nav-links">
                 <li><a href="#features" data-testid="nav-link-features">Features</a></li>
+                <li><a href="#commands" data-testid="nav-link-commands">Commands</a></li>
                 <li><a href="#quickstart" data-testid="nav-link-quickstart">Quick Start</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" data-testid="nav-link-github">GitHub</a></li>
                 <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener" data-testid="nav-link-docs">Docs</a></li>
@@ -300,6 +369,56 @@
                 <h3>High Performance</h3>
                 <p>Built on LSM tree architecture for exceptional write throughput. Features efficient compaction strategies, configurable memory and disk parameters, and optimized data structures for blazing fast operations.</p>
             </article>
+        </div>
+    </section>
+
+    <section id="commands">
+        <div class="commands-container">
+            <h2 class="section-title">Supported Commands</h2>
+            <p class="section-subtitle">MirDB implements the memcached text protocol with support for all essential commands</p>
+
+            <div class="commands-grid" data-testid="commands-grid">
+                <article class="command-card" data-testid="command-set">
+                    <div class="command-name">SET</div>
+                    <p class="command-description">Store a key-value pair in the database. Overwrites existing values if the key already exists.</p>
+                </article>
+
+                <article class="command-card" data-testid="command-get">
+                    <div class="command-name">GET</div>
+                    <p class="command-description">Retrieve the value associated with one or more keys from the database.</p>
+                </article>
+
+                <article class="command-card" data-testid="command-add">
+                    <div class="command-name">ADD</div>
+                    <p class="command-description">Store a key-value pair only if the key does not already exist in the database.</p>
+                </article>
+
+                <article class="command-card" data-testid="command-replace">
+                    <div class="command-name">REPLACE</div>
+                    <p class="command-description">Update an existing key-value pair. Fails if the key does not exist.</p>
+                </article>
+
+                <article class="command-card" data-testid="command-append">
+                    <div class="command-name">APPEND</div>
+                    <p class="command-description">Append data to the end of an existing value without modifying its flags or expiration time.</p>
+                </article>
+
+                <article class="command-card" data-testid="command-prepend">
+                    <div class="command-name">PREPEND</div>
+                    <p class="command-description">Prepend data to the beginning of an existing value without modifying its flags or expiration time.</p>
+                </article>
+
+                <article class="command-card" data-testid="command-delete">
+                    <div class="command-name">DELETE</div>
+                    <p class="command-description">Remove a key and its associated value from the database permanently.</p>
+                </article>
+            </div>
+
+            <div class="commands-footer">
+                <a href="https://github.com/memcached/memcached/blob/master/doc/protocol.txt" class="docs-link" data-testid="commands-docs-link" target="_blank" rel="noopener">
+                    View Full Memcached Protocol Documentation
+                </a>
+            </div>
         </div>
     </section>
 
