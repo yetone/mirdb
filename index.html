@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol Compatibility">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. Features data persistence, LSM tree architecture, and memcached compatibility.">
     <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mirdb.io/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mirdb.io/">
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
+    <meta property="og:description" content="MirDB is a persistent key-value store with memcached protocol compatibility. Features data persistence via Write-Ahead Log, LSM tree architecture for high write throughput, and SSTable-based storage.">
+    <meta property="og:image" content="https://mirdb.io/assets/og-image.png">
+    <meta property="og:site_name" content="MirDB">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://mirdb.io/">
+    <meta name="twitter:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
+    <meta name="twitter:description" content="MirDB is a persistent key-value store with memcached protocol compatibility. Features data persistence via Write-Ahead Log, LSM tree architecture for high write throughput, and SSTable-based storage.">
+    <meta name="twitter:image" content="https://mirdb.io/assets/og-image.png">
+
+    <!-- Additional SEO meta tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="MirDB, key-value store, memcached, persistent cache, LSM tree, database, storage engine">
     <style>
         * {
             margin: 0;
@@ -738,15 +760,16 @@
         <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Docs</a>
     </div>
 
-    <section class="hero">
+    <header class="hero" data-testid="hero-header">
         <h1>MirDB</h1>
         <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
         <div class="hero-buttons">
             <a href="#quickstart" class="btn btn-primary">Get Started</a>
             <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
         </div>
-    </section>
+    </header>
 
+    <main data-testid="main-content">
     <section id="features">
         <h2 class="section-title">Why MirDB?</h2>
         <p class="section-subtitle">Three key differentiators that make MirDB the right choice for your data storage needs</p>
@@ -1033,6 +1056,7 @@ l0_compaction_trigger = 4</code>
             </div>
         </div>
     </section>
+    </main>
 
     <footer data-testid="footer">
         <p data-testid="footer-description">MirDB - Open Source Persistent Key-Value Store</p>
