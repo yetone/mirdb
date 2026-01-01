@@ -205,6 +205,116 @@
             line-height: 1.7;
         }
 
+        /* Comparison Section */
+        #comparison {
+            padding: 5rem 2rem;
+        }
+
+        .comparison-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+
+        .comparison-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .comparison-table th {
+            padding: 1.25rem 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--white);
+            font-size: 1.1rem;
+        }
+
+        .comparison-table th:first-child {
+            text-align: left;
+            padding-left: 2rem;
+        }
+
+        .comparison-table td {
+            padding: 1rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-color);
+            padding-left: 2rem;
+        }
+
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .comparison-yes {
+            color: #16a34a;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .comparison-no {
+            color: #dc2626;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .comparison-note {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.875rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            .comparison-table th:first-child,
+            .comparison-table td:first-child {
+                padding-left: 1rem;
+            }
+
+            .comparison-table th {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .comparison-table {
+                font-size: 0.875rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .comparison-yes,
+            .comparison-no {
+                font-size: 1.1rem;
+            }
+        }
+
         /* Commands Section */
         #commands {
             padding: 5rem 2rem;
@@ -627,6 +737,7 @@
             }
 
             #features,
+            #comparison,
             #commands,
             #architecture,
             #quickstart,
@@ -736,6 +847,7 @@
             <a href="#" class="nav-logo" data-testid="nav-logo">MirDB</a>
             <ul class="nav-links" data-testid="nav-links">
                 <li><a href="#features" data-testid="nav-link-features">Features</a></li>
+                <li><a href="#comparison" data-testid="nav-link-comparison">Comparison</a></li>
                 <li><a href="#architecture" data-testid="nav-link-architecture">Architecture</a></li>
                 <li><a href="#commands" data-testid="nav-link-commands">Commands</a></li>
                 <li><a href="#quickstart" data-testid="nav-link-quickstart">Quick Start</a></li>
@@ -752,6 +864,7 @@
     </nav>
     <div class="mobile-menu" data-testid="mobile-menu" role="navigation" aria-label="Mobile navigation">
         <a href="#features">Features</a>
+        <a href="#comparison">Comparison</a>
         <a href="#architecture">Architecture</a>
         <a href="#commands">Commands</a>
         <a href="#quickstart">Quick Start</a>
@@ -792,6 +905,57 @@
                 <h3>High Performance</h3>
                 <p>Built on LSM tree architecture for exceptional write throughput. Features efficient compaction strategies, configurable memory and disk parameters, and optimized data structures for blazing fast operations.</p>
             </article>
+        </div>
+    </section>
+
+    <section id="comparison" data-testid="comparison-section">
+        <div class="comparison-container">
+            <h2 class="section-title">MirDB vs Memcached Comparison</h2>
+            <p class="section-subtitle">See how MirDB enhances the memcached experience with persistence and durability</p>
+
+            <table class="comparison-table" data-testid="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th data-testid="comparison-header-mirdb">MirDB</th>
+                        <th data-testid="comparison-header-memcached">Memcached</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-testid="comparison-row-persistence">
+                        <td>Data Persistence</td>
+                        <td data-testid="mirdb-persistence" data-value="yes"><span class="comparison-yes" aria-label="Yes">&#10003;</span></td>
+                        <td data-testid="memcached-persistence" data-value="no"><span class="comparison-no" aria-label="No">&#10007;</span></td>
+                    </tr>
+                    <tr data-testid="comparison-row-protocol">
+                        <td>Memcached Protocol</td>
+                        <td data-testid="mirdb-protocol" data-value="yes"><span class="comparison-yes" aria-label="Yes">&#10003;</span></td>
+                        <td data-testid="memcached-protocol" data-value="yes"><span class="comparison-yes" aria-label="Yes (Native)">&#10003;</span></td>
+                    </tr>
+                    <tr data-testid="comparison-row-wal">
+                        <td>Write-Ahead Log</td>
+                        <td data-testid="mirdb-wal" data-value="yes"><span class="comparison-yes" aria-label="Yes">&#10003;</span></td>
+                        <td data-testid="memcached-wal" data-value="no"><span class="comparison-no" aria-label="No">&#10007;</span></td>
+                    </tr>
+                    <tr data-testid="comparison-row-crash-recovery">
+                        <td>Crash Recovery</td>
+                        <td data-testid="mirdb-crash-recovery" data-value="yes"><span class="comparison-yes" aria-label="Yes">&#10003;</span></td>
+                        <td data-testid="memcached-crash-recovery" data-value="no"><span class="comparison-no" aria-label="No">&#10007;</span></td>
+                    </tr>
+                    <tr data-testid="comparison-row-in-memory">
+                        <td>In-Memory Performance</td>
+                        <td data-testid="mirdb-in-memory" data-value="yes"><span class="comparison-yes" aria-label="Yes">&#10003;</span></td>
+                        <td data-testid="memcached-in-memory" data-value="yes"><span class="comparison-yes" aria-label="Yes">&#10003;</span></td>
+                    </tr>
+                    <tr data-testid="comparison-row-existing-clients">
+                        <td>Use Existing Clients</td>
+                        <td data-testid="mirdb-existing-clients" data-value="yes"><span class="comparison-yes" aria-label="Yes">&#10003;</span></td>
+                        <td data-testid="memcached-existing-clients" data-value="yes"><span class="comparison-yes" aria-label="Yes">&#10003;</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="comparison-note">MirDB offers all the benefits of memcached with added persistence — your data survives restarts.</p>
         </div>
     </section>
 
