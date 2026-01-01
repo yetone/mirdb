@@ -423,6 +423,77 @@
             font-size: 0.8rem;
         }
 
+        /* Mobile Menu Toggle Button */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            min-width: 44px;
+            min-height: 44px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background-color: var(--text-color);
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            padding: 1rem 0;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            min-height: 44px;
+            line-height: 44px;
+            padding-top: 0;
+            padding-bottom: 0;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .mobile-menu a:hover,
+        .mobile-menu a:focus {
+            background: var(--bg-light);
+            color: var(--primary-color);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -437,8 +508,144 @@
                 display: none;
             }
 
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
             .section-title {
                 font-size: 1.75rem;
+            }
+
+            nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-logo {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
+
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #features,
+            #commands,
+            #architecture,
+            #quickstart,
+            #configuration {
+                padding: 3rem 1rem;
+            }
+
+            .section-subtitle {
+                font-size: 1rem;
+                padding: 0 0.5rem;
+            }
+
+            .features-grid,
+            .commands-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card,
+            .command-card {
+                padding: 1.5rem;
+            }
+
+            .architecture-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .architecture-diagram {
+                padding: 1rem;
+            }
+
+            .quickstart-container {
+                padding: 0;
+            }
+
+            .code-block {
+                padding: 1rem;
+                margin: 0.75rem 0;
+                max-width: 100%;
+                overflow-x: auto;
+            }
+
+            .code-block code {
+                font-size: 0.8rem;
+                white-space: pre;
+            }
+
+            .config-param {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .config-param > code {
+                min-width: auto;
+            }
+
+            footer {
+                padding: 2rem 1rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .footer-links a {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .docs-link {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Extra small screens (320px) */
+        @media (max-width: 375px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .hero .tagline {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .feature-card h3,
+            .architecture-explanation h3 {
+                font-size: 1.1rem;
+            }
+
+            .command-name {
+                font-size: 1rem;
             }
         }
     </style>
@@ -456,8 +663,22 @@
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" data-testid="nav-link-github">GitHub</a></li>
                 <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener" data-testid="nav-link-docs">Docs</a></li>
             </ul>
+            <button class="mobile-menu-toggle" data-testid="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
+    <div class="mobile-menu" data-testid="mobile-menu" role="navigation" aria-label="Mobile navigation">
+        <a href="#features">Features</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#commands">Commands</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="#configuration">Configuration</a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Docs</a>
+    </div>
 
     <section class="hero">
         <h1>MirDB</h1>
@@ -731,5 +952,36 @@ l0_compaction_trigger = 4</code>
             <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener" data-testid="footer-license-link">License</a>
         </div>
     </footer>
+
+    <script>
+        // Mobile menu toggle functionality
+        const mobileMenuToggle = document.querySelector('[data-testid="mobile-menu-toggle"]');
+        const mobileMenu = document.querySelector('[data-testid="mobile-menu"]');
+
+        mobileMenuToggle.addEventListener('click', function() {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', !isExpanded);
+            this.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                mobileMenuToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!mobileMenu.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                mobileMenuToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
