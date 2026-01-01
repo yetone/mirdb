@@ -22,7 +22,7 @@ test.describe('Footer Section', () => {
     const licenseLink = page.locator('[data-testid="footer-license-link"]');
     await expect(licenseLink).toBeVisible();
     await expect(licenseLink).toHaveText('License');
-    await expect(licenseLink).toHaveAttribute('href', 'https://github.com/yetone/mirdb/blob/master/LICENSE');
+    await expect(licenseLink).toHaveAttribute('href', 'https://github.com/yetone/mirdb#license');
     await expect(licenseLink).toHaveAttribute('target', '_blank');
     await expect(licenseLink).toHaveAttribute('rel', 'noopener');
   });
@@ -40,7 +40,7 @@ test.describe('Footer Section', () => {
     const contributingLink = page.locator('[data-testid="footer-contributing-link"]');
     await expect(contributingLink).toBeVisible();
     await expect(contributingLink).toHaveText('Contributing');
-    await expect(contributingLink).toHaveAttribute('href', 'https://github.com/yetone/mirdb/blob/master/CONTRIBUTING.md');
+    await expect(contributingLink).toHaveAttribute('href', 'https://github.com/yetone/mirdb#contributing');
     await expect(contributingLink).toHaveAttribute('target', '_blank');
     await expect(contributingLink).toHaveAttribute('rel', 'noopener');
   });
