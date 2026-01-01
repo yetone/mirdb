@@ -304,6 +304,51 @@
             flex-wrap: wrap;
         }
 
+        /* Configuration Section */
+        #configuration {
+            padding: 5rem 2rem;
+            background: var(--bg-light);
+        }
+
+        .config-params {
+            margin-top: 1.5rem;
+        }
+
+        .config-param {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .config-param:last-child {
+            border-bottom: none;
+        }
+
+        .config-param > code {
+            background: #e5e7eb;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            min-width: 180px;
+        }
+
+        .config-param span {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .config-param span code {
+            background: #e5e7eb;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.8rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -332,6 +377,7 @@
                 <li><a href="#features" data-testid="nav-link-features">Features</a></li>
                 <li><a href="#commands" data-testid="nav-link-commands">Commands</a></li>
                 <li><a href="#quickstart" data-testid="nav-link-quickstart">Quick Start</a></li>
+                <li><a href="#configuration" data-testid="nav-link-configuration">Configuration</a></li>
                 <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" data-testid="nav-link-github">GitHub</a></li>
                 <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener" data-testid="nav-link-docs">Docs</a></li>
             </ul>
@@ -457,6 +503,57 @@ END
 <span class="code-comment"># Delete a value</span>
 delete mykey
 DELETED</code>
+            </div>
+        </div>
+    </section>
+
+    <section id="configuration">
+        <div class="quickstart-container">
+            <h2 class="section-title">Configuration</h2>
+            <p class="section-subtitle">Customize MirDB for your workload with TOML configuration</p>
+
+            <h3>Default Configuration</h3>
+            <div class="code-block" data-testid="config-toml-block">
+                <code><span class="code-comment"># Network settings</span>
+addr = "0.0.0.0:12333"
+
+<span class="code-comment"># Storage settings</span>
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+<span class="code-comment"># SSTable settings</span>
+sst_max_size = "100M"
+block_size = "4K"
+
+<span class="code-comment"># Memory table settings</span>
+mem_table_max_size = "4M"
+
+<span class="code-comment"># Compaction settings</span>
+l0_compaction_trigger = 4</code>
+            </div>
+
+            <h3>Configuration Parameters</h3>
+            <div class="config-params">
+                <div class="config-param">
+                    <code>addr</code>
+                    <span>Listen address and port (default: <code>0.0.0.0:12333</code>)</span>
+                </div>
+                <div class="config-param">
+                    <code>work_dir</code>
+                    <span>Data directory path (default: <code>/tmp/mirdb</code>)</span>
+                </div>
+                <div class="config-param">
+                    <code>mem_table_max_size</code>
+                    <span>Maximum memtable size before flush (default: <code>4M</code>)</span>
+                </div>
+                <div class="config-param">
+                    <code>sst_max_size</code>
+                    <span>Maximum SSTable file size (default: <code>100M</code>)</span>
+                </div>
+                <div class="config-param">
+                    <code>l0_compaction_trigger</code>
+                    <span>Level 0 files before compaction triggers (default: <code>4</code>)</span>
+                </div>
             </div>
         </div>
     </section>
