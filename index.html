@@ -59,7 +59,17 @@
             <h2>Quick Start</h2>
             <div class="quickstart-content">
                 <div class="quickstart-step">
-                    <h3>1. Configuration</h3>
+                    <h3>1. Installation</h3>
+                    <pre><code># Install from source using Cargo
+cargo install mirdb-server
+
+# Or clone and build manually
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+                </div>
+                <div class="quickstart-step">
+                    <h3>2. Configuration</h3>
                     <pre><code># mirdb.toml
 addr = "0.0.0.0:12333"
 work_dir = "/var/lib/mirdb"
@@ -67,7 +77,7 @@ mem_table_max_size = "4M"
 sst_max_size = "100M"</code></pre>
                 </div>
                 <div class="quickstart-step">
-                    <h3>2. Connect & Use</h3>
+                    <h3>3. Connect & Use</h3>
                     <pre><code># Connect with any memcached client
 telnet localhost 12333
 
