@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility. Built with Rust for performance and safety.">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero" id="hero">
+        <nav class="nav">
+            <div class="nav-brand">MirDB</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#quickstart">Quick Start</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+            </div>
+        </nav>
+        <div class="hero-content">
+            <h1>MirDB</h1>
+            <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+            <p class="value-prop">MirDB brings persistence to memcached. Get the familiar protocol you know with the durability your data deserves.</p>
+            <div class="hero-buttons">
+                <a href="#quickstart" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card" data-feature="memcached">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Memcached Compatible</h3>
+                    <p>Use your existing clients and tooling. MirDB implements the standard memcached text protocol, allowing seamless integration with any memcached client library.</p>
+                </div>
+                <div class="feature-card" data-feature="persistent">
+                    <div class="feature-icon">💾</div>
+                    <h3>Persistent Storage</h3>
+                    <p>Your data survives restarts. Unlike traditional memcached, MirDB persists data to disk using SSTable storage, ensuring durability without sacrificing performance.</p>
+                </div>
+                <div class="feature-card" data-feature="performance">
+                    <div class="feature-icon">⚡</div>
+                    <h3>High Performance</h3>
+                    <p>Built on LSM tree architecture with efficient compaction. Async networking via Tokio and skip list-based memtables deliver the speed you need.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section class="quickstart" id="quickstart">
+        <div class="container">
+            <h2>Quick Start</h2>
+            <div class="quickstart-content">
+                <div class="quickstart-step">
+                    <h3>1. Configuration</h3>
+                    <pre><code># mirdb.toml
+addr = "0.0.0.0:12333"
+work_dir = "/var/lib/mirdb"
+mem_table_max_size = "4M"
+sst_max_size = "100M"</code></pre>
+                </div>
+                <div class="quickstart-step">
+                    <h3>2. Connect & Use</h3>
+                    <pre><code># Connect with any memcached client
+telnet localhost 12333
+
+# Store a value
+set mykey 0 0 5
+hello
+STORED
+
+# Retrieve a value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="brand-name">MirDB</span>
+                    <span class="status-badge">Active Development</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener">License</a>
+                </div>
+            </div>
+            <p class="copyright">Built with Rust for performance and safety.</p>
+        </div>
+    </footer>
+</body>
+</html>
