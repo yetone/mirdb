@@ -14,6 +14,7 @@
             <div class="nav-brand">MirDB</div>
             <div class="nav-links">
                 <a href="#features">Features</a>
+                <a href="#commands">Commands</a>
                 <a href="#quickstart">Quick Start</a>
                 <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
             </div>
@@ -48,6 +49,46 @@
                     <div class="feature-icon">⚡</div>
                     <h3>High Performance</h3>
                     <p>Built on LSM tree architecture with efficient compaction. Async networking via Tokio and skip list-based memtables deliver the speed you need.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commands Section -->
+    <section class="commands" id="commands">
+        <div class="container">
+            <h2>Supported Commands</h2>
+            <p class="commands-intro">MirDB implements the memcached text protocol, enabling compatibility with existing memcached clients.</p>
+            <div class="commands-grid">
+                <div class="command-category" data-category="storage">
+                    <h3>Storage Commands</h3>
+                    <ul class="command-list">
+                        <li><code>SET</code> - Store a key-value pair</li>
+                        <li><code>ADD</code> - Store only if key doesn't exist</li>
+                        <li><code>REPLACE</code> - Store only if key exists</li>
+                        <li><code>APPEND</code> - Append data to existing value</li>
+                        <li><code>PREPEND</code> - Prepend data to existing value</li>
+                    </ul>
+                </div>
+                <div class="command-category" data-category="retrieval">
+                    <h3>Retrieval Commands</h3>
+                    <ul class="command-list">
+                        <li><code>GET</code> - Retrieve one or more keys</li>
+                        <li><code>GETS</code> - Retrieve with CAS token</li>
+                    </ul>
+                </div>
+                <div class="command-category" data-category="deletion">
+                    <h3>Deletion Commands</h3>
+                    <ul class="command-list">
+                        <li><code>DELETE</code> - Remove a key</li>
+                    </ul>
+                </div>
+                <div class="command-category" data-category="mirdb-extensions">
+                    <h3>MirDB Extensions</h3>
+                    <ul class="command-list">
+                        <li><code>INFO</code> - Display database status and level information</li>
+                        <li><code>MAJOR_COMPACTION</code> - Trigger manual compaction</li>
+                    </ul>
                 </div>
             </div>
         </div>

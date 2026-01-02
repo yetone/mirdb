@@ -202,6 +202,72 @@ body {
     line-height: 1.7;
 }
 
+/* Commands Section */
+.commands {
+    padding: 100px 24px;
+    background-color: var(--background);
+}
+
+.commands h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.commands-intro {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 60px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.commands-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    max-width: var(--container-width);
+    margin: 0 auto;
+}
+
+.command-category {
+    background-color: var(--surface);
+    padding: 32px;
+    border-radius: 12px;
+    border: 1px solid var(--surface-light);
+}
+
+.command-category h3 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: var(--accent);
+}
+
+.command-list {
+    list-style: none;
+}
+
+.command-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--surface-light);
+    color: var(--text-secondary);
+}
+
+.command-list li:last-child {
+    border-bottom: none;
+}
+
+.command-list code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background-color: var(--background);
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: var(--accent);
+    font-weight: 600;
+}
+
 /* Quick Start Section */
 .quickstart {
     padding: 100px 24px;
@@ -312,6 +378,10 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .commands-grid {
+        grid-template-columns: 1fr;
+    }
+
     .quickstart-content {
         grid-template-columns: 1fr;
     }
@@ -343,6 +413,7 @@ body {
     }
 
     .features h2,
+    .commands h2,
     .quickstart h2 {
         font-size: 2rem;
     }
