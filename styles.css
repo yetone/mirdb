@@ -330,6 +330,169 @@ body {
     line-height: 1.6;
 }
 
+/* Configuration Section */
+.configuration {
+    padding: 100px 24px;
+    background-color: var(--surface);
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.configuration h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.config-intro {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 60px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.config-intro code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background-color: var(--background);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+}
+
+.config-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    max-width: var(--container-width);
+    margin: 0 auto 40px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.config-example,
+.config-options {
+    background-color: var(--background);
+    padding: 32px;
+    border-radius: 12px;
+    border: 1px solid var(--surface-light);
+    overflow: hidden;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.config-example h3,
+.config-options h3 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: var(--accent);
+}
+
+.config-example pre {
+    background-color: var(--surface);
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.config-example code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.option-list {
+    margin: 0;
+}
+
+.option-list dt {
+    margin-top: 16px;
+}
+
+.option-list dt:first-child {
+    margin-top: 0;
+}
+
+.option-list dt code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background-color: var(--surface);
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.option-list dd {
+    margin-left: 0;
+    margin-top: 8px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.option-list dd code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background-color: var(--surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 0.9em;
+}
+
+.config-guidance {
+    background-color: var(--background);
+    padding: 32px;
+    border-radius: 12px;
+    border: 1px solid var(--surface-light);
+    max-width: var(--container-width);
+    margin: 0 auto;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.config-guidance h3 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: var(--accent);
+}
+
+.config-guidance ul {
+    list-style: none;
+    padding: 0;
+}
+
+.config-guidance li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--surface-light);
+    color: var(--text-secondary);
+    padding-left: 24px;
+    position: relative;
+}
+
+.config-guidance li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+}
+
+.config-guidance li:last-child {
+    border-bottom: none;
+}
+
+.config-guidance code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background-color: var(--surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+    font-size: 0.9em;
+}
+
 /* Footer */
 .footer {
     padding: 60px 24px 40px;
@@ -399,6 +562,10 @@ body {
     .quickstart-content {
         grid-template-columns: 1fr;
     }
+
+    .config-content {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {
@@ -432,8 +599,20 @@ body {
 
     .features h2,
     .commands h2,
-    .quickstart h2 {
+    .quickstart h2,
+    .configuration h2 {
         font-size: 2rem;
+    }
+
+    .config-example,
+    .config-options,
+    .config-guidance {
+        padding: 20px;
+    }
+
+    .config-example pre {
+        padding: 12px;
+        font-size: 0.8rem;
     }
 
     .footer-content {

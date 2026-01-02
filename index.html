@@ -59,6 +59,7 @@
                 <a href="#features">Features</a>
                 <a href="#commands">Commands</a>
                 <a href="#quickstart">Quick Start</a>
+                <a href="#configuration">Configuration</a>
                 <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Docs</a>
                 <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
             </div>
@@ -179,6 +180,46 @@ VALUE mykey 0 5
 hello
 END</code></pre>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section class="configuration" id="configuration">
+        <div class="container">
+            <h2>Configuration</h2>
+            <p class="config-intro">MirDB uses TOML configuration files for customization. Create a configuration file and pass it using the <code>-c</code> flag, or modify the defaults to suit your deployment needs.</p>
+            <div class="config-content">
+                <div class="config-example">
+                    <h3>Default Configuration</h3>
+                    <pre><code># mirdb.toml - Default configuration options
+addr = "0.0.0.0:12333"
+work_dir = "/var/lib/mirdb"
+mem_table_max_size = "4M"
+sst_max_size = "100M"</code></pre>
+                </div>
+                <div class="config-options">
+                    <h3>Configuration Options</h3>
+                    <dl class="option-list">
+                        <dt><code>addr</code></dt>
+                        <dd>Listen address and port. Default: <code>0.0.0.0:12333</code></dd>
+                        <dt><code>work_dir</code></dt>
+                        <dd>Data directory path for storing SSTable files and WAL. Example: <code>/var/lib/mirdb</code></dd>
+                        <dt><code>mem_table_max_size</code></dt>
+                        <dd>Maximum memtable size before flushing to disk. Default: <code>4M</code> (4 megabytes)</dd>
+                        <dt><code>sst_max_size</code></dt>
+                        <dd>Maximum SSTable file size. Default: <code>100M</code> (100 megabytes)</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="config-guidance">
+                <h3>Customization Tips</h3>
+                <ul>
+                    <li>Increase <code>mem_table_max_size</code> for write-heavy workloads to reduce flush frequency</li>
+                    <li>Set <code>work_dir</code> to a path on fast storage (SSD) for optimal performance</li>
+                    <li>Use size suffixes: <code>K</code> (kilobytes), <code>M</code> (megabytes), <code>G</code> (gigabytes)</li>
+                    <li>Run with: <code>mirdb -c /path/to/mirdb.toml</code></li>
+                </ul>
             </div>
         </div>
     </section>
