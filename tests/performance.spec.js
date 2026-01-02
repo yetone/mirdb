@@ -120,12 +120,13 @@ test.describe('Page Performance', () => {
     expect(parseInt(heroH1Styles.fontWeight)).toBeGreaterThanOrEqual(700);
 
     // Verify there are no inline scripts that could block rendering
+    // Note: JSON-LD scripts (type="application/ld+json") are excluded as they are not render-blocking
     const inlineScripts = await page.evaluate(() => {
-      const scripts = document.querySelectorAll('script:not([src])');
+      const scripts = document.querySelectorAll('script:not([src]):not([type="application/ld+json"])');
       return scripts.length;
     });
 
-    // No inline scripts in the page (clean HTML)
+    // No render-blocking inline scripts in the page (JSON-LD structured data is allowed)
     expect(inlineScripts).toBe(0);
 
     // Check for any external scripts that could be render-blocking
