@@ -114,6 +114,76 @@ body {
     margin-bottom: 1rem;
 }
 
+/* Architecture Section */
+.architecture-section {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f8fafc;
+}
+
+.architecture-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.architecture-intro {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    color: var(--text-light);
+    font-size: 1.125rem;
+    line-height: 1.7;
+}
+
+.architecture-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.diagram-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.architecture-diagram {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.architecture-explanation {
+    padding: 1.5rem;
+}
+
+.architecture-explanation h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.data-flow-steps {
+    list-style: decimal;
+    padding-left: 1.5rem;
+}
+
+.data-flow-steps li {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+}
+
+.data-flow-steps li strong {
+    color: var(--primary-color);
+}
+
 /* Footer */
 footer {
     padding: 2rem;
@@ -149,5 +219,27 @@ footer {
     .cta-secondary {
         width: 100%;
         max-width: 280px;
+    }
+
+    /* Architecture responsive */
+    .architecture-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .architecture-section {
+        padding: 3rem 1.5rem;
+    }
+
+    .architecture-section h2 {
+        font-size: 1.75rem;
+    }
+
+    .architecture-intro {
+        font-size: 1rem;
+    }
+
+    .architecture-explanation h3 {
+        font-size: 1.25rem;
     }
 }
