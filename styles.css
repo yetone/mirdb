@@ -542,3 +542,115 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* Print Styles */
+@media print {
+    /* Reset backgrounds and colors for readability */
+    *, *::before, *::after {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+    }
+
+    /* Hide non-essential interactive elements */
+    .cta-buttons {
+        display: none !important;
+    }
+
+    .btn {
+        display: none !important;
+    }
+
+    /* Hide footer navigation links (keep copyright) */
+    .footer-links {
+        display: none !important;
+    }
+
+    /* Hide syntax highlighting external scripts indicator */
+    .docs-links {
+        display: none !important;
+    }
+
+    /* Ensure headings are readable */
+    h1, h2, h3, h4, h5, h6 {
+        color: #000 !important;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        -webkit-text-fill-color: #000 !important;
+    }
+
+    /* Ensure hero section is readable */
+    .hero h1 {
+        background: none !important;
+        -webkit-background-clip: unset !important;
+        background-clip: unset !important;
+        -webkit-text-fill-color: #000 !important;
+    }
+
+    /* Make code blocks print-friendly */
+    .code-block {
+        border: 1px solid #333 !important;
+        padding: 10pt !important;
+        page-break-inside: avoid;
+    }
+
+    .code-block code,
+    .code-block pre {
+        color: #000 !important;
+        font-size: 10pt;
+    }
+
+    /* Feature cards - remove hover effects, add borders */
+    .feature-card {
+        border: 1px solid #333 !important;
+        page-break-inside: avoid;
+    }
+
+    /* Tables - ensure borders are visible */
+    .config-table,
+    .config-table th,
+    .config-table td {
+        border: 1px solid #333 !important;
+    }
+
+    /* Roadmap items - ensure readability */
+    .roadmap-item {
+        border-bottom: 1px solid #ccc !important;
+    }
+
+    /* Show URLs after links for reference */
+    a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        color: #333 !important;
+        word-break: break-all;
+    }
+
+    /* Don't show URL for anchor links */
+    a[href^="#"]::after {
+        content: "";
+    }
+
+    /* Page break controls */
+    section {
+        page-break-before: auto;
+        page-break-inside: avoid;
+    }
+
+    /* Prevent orphans and widows */
+    p {
+        orphans: 3;
+        widows: 3;
+    }
+
+    /* Ensure proper margins for printing */
+    @page {
+        margin: 2cm;
+    }
+}
