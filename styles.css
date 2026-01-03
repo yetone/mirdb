@@ -28,6 +28,21 @@
     padding: 0;
 }
 
+/* Focus styles for keyboard accessibility */
+:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
 html {
     scroll-behavior: smooth;
 }
