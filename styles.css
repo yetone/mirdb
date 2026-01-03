@@ -1,7 +1,8 @@
 /* CSS Variables for theming */
 :root {
-    --color-primary: #3b82f6;
-    --color-primary-dark: #2563eb;
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --color-primary-text: #60a5fa;
     --color-secondary: #64748b;
     --color-background: #0f172a;
     --color-surface: #1e293b;
@@ -199,7 +200,7 @@ body {
 
 .quick-start-step h3 {
     font-size: 1.5rem;
-    color: var(--color-primary);
+    color: var(--color-primary-text);
     margin-bottom: var(--spacing-sm);
 }
 
@@ -272,7 +273,7 @@ body {
 .command-category h3 {
     font-size: 1.125rem;
     margin-bottom: var(--spacing-sm);
-    color: var(--color-primary);
+    color: var(--color-primary-text);
 }
 
 .commands-list {
@@ -338,7 +339,7 @@ body {
 }
 
 .coming-soon-heading {
-    color: var(--color-primary);
+    color: var(--color-primary-text);
 }
 
 .roadmap-list {
@@ -429,7 +430,7 @@ body {
 
 .config-table td:last-child {
     font-family: var(--font-mono);
-    color: var(--color-primary);
+    color: var(--color-primary-text);
 }
 
 /* Footer */
