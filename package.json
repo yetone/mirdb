@@ -1,0 +1,17 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "Homepage for MirDB - A persistent key-value store with memcached protocol support",
+  "scripts": {
+    "test": "jest",
+    "test:e2e": "playwright test",
+    "test:unit": "jest tests/unit",
+    "serve": "npx serve -p 8080"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^23.0.0"
+  }
+}
