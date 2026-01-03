@@ -238,6 +238,64 @@ body {
     border-radius: var(--border-radius);
 }
 
+/* Commands Section */
+.commands-section {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--color-surface);
+}
+
+.commands-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.commands-section .section-intro {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-lg);
+}
+
+.commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.command-category {
+    background-color: var(--color-background);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+}
+
+.command-category h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+}
+
+.commands-list {
+    margin: 0;
+}
+
+.commands-list dt {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-top: var(--spacing-sm);
+}
+
+.commands-list dt:first-child {
+    margin-top: 0;
+}
+
+.commands-list dd {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-left: 0;
+}
+
 /* Config Section */
 .config {
     padding: var(--spacing-xl) 0;
@@ -316,6 +374,7 @@ body {
 
     .features h2,
     .quickstart h2,
+    .commands-section h2,
     .config h2 {
         font-size: 2rem;
     }

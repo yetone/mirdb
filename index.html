@@ -116,6 +116,46 @@ END</code></pre>
             </div>
         </section>
 
+        <section id="commands" class="commands-section" aria-labelledby="commands-heading">
+            <div class="container">
+                <h2 id="commands-heading">Supported Commands</h2>
+                <p class="section-intro">MirDB implements the memcached text protocol, supporting these commands:</p>
+                <div class="commands-grid">
+                    <div class="command-category">
+                        <h3>Storage Commands</h3>
+                        <dl class="commands-list">
+                            <dt>SET</dt>
+                            <dd>Store a key-value pair in the database</dd>
+                            <dt>ADD</dt>
+                            <dd>Store data only if the key doesn't already exist</dd>
+                            <dt>REPLACE</dt>
+                            <dd>Store data only if the key already exists</dd>
+                            <dt>APPEND</dt>
+                            <dd>Append data to an existing value</dd>
+                            <dt>PREPEND</dt>
+                            <dd>Prepend data to an existing value</dd>
+                        </dl>
+                    </div>
+                    <div class="command-category">
+                        <h3>Retrieval Commands</h3>
+                        <dl class="commands-list">
+                            <dt>GET</dt>
+                            <dd>Retrieve one or more keys from the database</dd>
+                            <dt>GETS</dt>
+                            <dd>Retrieve keys with CAS token support</dd>
+                        </dl>
+                    </div>
+                    <div class="command-category">
+                        <h3>Deletion Commands</h3>
+                        <dl class="commands-list">
+                            <dt>DELETE</dt>
+                            <dd>Remove a key from the database</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="config" class="config">
             <div class="container">
                 <h2>Default Configuration</h2>
