@@ -6,6 +6,7 @@
     <meta name="description" content="MirDB - A persistent key-value store with memcached protocol support. Written in Rust for memory-safe, high-performance data storage.">
     <title>MirDB - Persistent Key-Value Store</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <header class="hero">
@@ -52,27 +53,65 @@
             </div>
         </section>
 
-        <section id="quickstart" class="quickstart">
+        <section id="quickstart" class="quickstart" aria-labelledby="quickstart-heading">
             <div class="container">
-                <h2>Quick Start</h2>
-                <div class="code-block">
-                    <pre><code># Clone and build MirDB
+                <h2 id="quickstart-heading">Quick Start</h2>
+
+                <div class="quick-start-step">
+                    <h3>1. Installation</h3>
+                    <p>Clone and build MirDB from source:</p>
+                    <div class="code-block">
+                        <pre><code class="language-bash"># Clone the repository
 git clone https://github.com/yetone/mirdb.git
 cd mirdb
+
+# Build with Cargo
 cargo build --release
 
 # Run the server
-./target/release/mirdb-server
+./target/release/mirdb-server</code></pre>
+                    </div>
+                </div>
 
-# Connect with any memcached client
-telnet localhost 12333
-set mykey 0 0 5
+                <div class="quick-start-step">
+                    <h3>2. Connect to MirDB</h3>
+                    <p>Connect using any memcached client or telnet. Default port is 12333.</p>
+                    <div class="code-block">
+                        <pre><code class="language-bash"># Connect to MirDB
+telnet localhost 12333</code></pre>
+                    </div>
+                </div>
+
+                <div class="quick-start-step">
+                    <h3>3. Store Data (SET)</h3>
+                    <p>Use the SET command to store key-value pairs:</p>
+                    <div class="code-block">
+                        <pre><code class="language-bash"># SET command syntax: SET &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+SET mykey 0 0 5
 hello
-STORED
-get mykey
+STORED</code></pre>
+                    </div>
+                </div>
+
+                <div class="quick-start-step">
+                    <h3>4. Retrieve Data (GET)</h3>
+                    <p>Use the GET command to retrieve stored values:</p>
+                    <div class="code-block">
+                        <pre><code class="language-bash"># GET command syntax: GET &lt;key&gt;
+GET mykey
 VALUE mykey 0 5
 hello
 END</code></pre>
+                    </div>
+                </div>
+
+                <div class="quick-start-step">
+                    <h3>5. Learn More</h3>
+                    <p>For detailed documentation and advanced usage:</p>
+                    <div class="docs-links">
+                        <a href="https://github.com/yetone/mirdb#readme" class="docs-link" id="docs-link" target="_blank" rel="noopener">View Full Documentation</a>
+                        <a href="https://github.com/memcached/memcached/blob/master/doc/protocol.txt" class="docs-link" target="_blank" rel="noopener">Memcached Protocol Reference</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -128,5 +167,9 @@ END</code></pre>
             </nav>
         </div>
     </footer>
+
+    <!-- Prism.js for Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </body>
 </html>

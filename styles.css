@@ -189,6 +189,55 @@ body {
     line-height: 1.8;
 }
 
+/* Quick Start Steps */
+.quick-start-step {
+    margin-bottom: var(--spacing-lg);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quick-start-step h3 {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.quick-start-step p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Documentation Links */
+.docs-links {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.docs-link {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.docs-link:hover {
+    background-color: var(--color-primary-dark);
+    color: var(--color-text);
+}
+
+/* Prism.js code block integration */
+.code-block pre[class*="language-"] {
+    margin: 0;
+    border-radius: var(--border-radius);
+}
+
 /* Config Section */
 .config {
     padding: var(--spacing-xl) 0;
