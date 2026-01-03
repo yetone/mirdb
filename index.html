@@ -156,6 +156,83 @@ END</code></pre>
             </div>
         </section>
 
+        <section id="roadmap" class="roadmap" aria-labelledby="roadmap-heading">
+            <div class="container">
+                <h2 id="roadmap-heading">Project Status & Roadmap</h2>
+                <p class="section-intro">See what's already implemented and what's coming next.</p>
+
+                <div class="roadmap-grid">
+                    <div class="roadmap-column">
+                        <h3 class="implemented-heading">Implemented Features</h3>
+                        <ul class="roadmap-list implemented-list">
+                            <li class="roadmap-item implemented">
+                                <span class="status-icon" aria-hidden="true">✓</span>
+                                <div class="item-content">
+                                    <strong>Memcached Protocol Support</strong>
+                                    <p>Full text protocol compatibility with GET, SET, DELETE, ADD, REPLACE, APPEND, PREPEND commands</p>
+                                </div>
+                            </li>
+                            <li class="roadmap-item implemented">
+                                <span class="status-icon" aria-hidden="true">✓</span>
+                                <div class="item-content">
+                                    <strong>Persistent Storage</strong>
+                                    <p>Data persisted to disk using SSTables with write-ahead logging for durability</p>
+                                </div>
+                            </li>
+                            <li class="roadmap-item implemented">
+                                <span class="status-icon" aria-hidden="true">✓</span>
+                                <div class="item-content">
+                                    <strong>Background Compaction</strong>
+                                    <p>Automatic LSM tree compaction across 7 levels for efficient storage management</p>
+                                </div>
+                            </li>
+                            <li class="roadmap-item implemented">
+                                <span class="status-icon" aria-hidden="true">✓</span>
+                                <div class="item-content">
+                                    <strong>Snappy Compression</strong>
+                                    <p>Data blocks compressed using Snappy for reduced storage footprint</p>
+                                </div>
+                            </li>
+                            <li class="roadmap-item implemented">
+                                <span class="status-icon" aria-hidden="true">✓</span>
+                                <div class="item-content">
+                                    <strong>CRC32 Checksums</strong>
+                                    <p>Data integrity verification with CRC32 checksums on all blocks</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="roadmap-column">
+                        <h3 class="coming-soon-heading">Coming Soon</h3>
+                        <ul class="roadmap-list coming-soon-list">
+                            <li class="roadmap-item planned">
+                                <span class="status-icon" aria-hidden="true">◯</span>
+                                <div class="item-content">
+                                    <strong>Raft Consensus</strong>
+                                    <p>Distributed consensus protocol for high availability and fault tolerance across multiple nodes</p>
+                                </div>
+                            </li>
+                            <li class="roadmap-item planned">
+                                <span class="status-icon" aria-hidden="true">◯</span>
+                                <div class="item-content">
+                                    <strong>Cluster Mode</strong>
+                                    <p>Multi-node deployment with automatic data sharding and replication</p>
+                                </div>
+                            </li>
+                            <li class="roadmap-item planned">
+                                <span class="status-icon" aria-hidden="true">◯</span>
+                                <div class="item-content">
+                                    <strong>Binary Protocol</strong>
+                                    <p>Memcached binary protocol support for improved performance</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="config" class="config">
             <div class="container">
                 <h2>Default Configuration</h2>

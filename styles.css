@@ -296,6 +296,104 @@ body {
     margin-left: 0;
 }
 
+/* Roadmap Section */
+.roadmap {
+    padding: var(--spacing-xl) 0;
+}
+
+.roadmap h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.roadmap .section-intro {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-lg);
+}
+
+.roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.roadmap-column {
+    background-color: var(--color-surface);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+}
+
+.roadmap-column h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.implemented-heading {
+    color: #22c55e;
+}
+
+.coming-soon-heading {
+    color: var(--color-primary);
+}
+
+.roadmap-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.roadmap-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.roadmap-item:last-child {
+    border-bottom: none;
+}
+
+.roadmap-item .status-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+.roadmap-item.implemented .status-icon {
+    color: #22c55e;
+}
+
+.roadmap-item.planned .status-icon {
+    color: var(--color-text-muted);
+}
+
+.roadmap-item .item-content {
+    flex: 1;
+}
+
+.roadmap-item .item-content strong {
+    display: block;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+}
+
+.roadmap-item .item-content p {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
 /* Config Section */
 .config {
     padding: var(--spacing-xl) 0;
@@ -375,11 +473,16 @@ body {
     .features h2,
     .quickstart h2,
     .commands-section h2,
+    .roadmap h2,
     .config h2 {
         font-size: 2rem;
     }
 
     .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .roadmap-grid {
         grid-template-columns: 1fr;
     }
 }
