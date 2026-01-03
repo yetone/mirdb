@@ -502,4 +502,27 @@ body {
         max-width: 250px;
         text-align: center;
     }
+
+    /* Mobile touch target requirements (WCAG 2.5.5 - minimum 44px) */
+    .footer-links {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .footer-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .docs-link {
+        min-height: 44px;
+    }
+
+    /* Ensure commands grid stacks properly on small screens */
+    .commands-grid {
+        grid-template-columns: 1fr;
+    }
 }
