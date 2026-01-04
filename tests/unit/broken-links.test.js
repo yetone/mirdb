@@ -1,10 +1,10 @@
 /**
- * Unit tests for verifying no broken links exist on the page
+ * Unit test for verifying no broken links exist on the page
  * Scenario: Error Handling - Broken Links
  *
  * Test Cases:
- * 1. No empty href attributes
- * 2. Internal anchor links (#section) point to existing elements
+ * 1. Scan all href attributes - No empty href attributes
+ * 2. Check internal anchor links - Internal anchor links (#section) point to existing elements
  */
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
@@ -33,17 +33,14 @@ function runTests() {
   const dom = new JSDOM(html);
   const document = dom.window.document;
 
-  /**
-   * Test 1: No empty href attributes
-   * Scans all anchor tags to ensure no href is empty or just whitespace
-   */
-  function testNoEmptyHrefAttributes() {
+  // Test 1: No empty href attributes
+  function testNoEmptyHref() {
     const allLinks = document.querySelectorAll('a[href]');
     let emptyHrefLinks = [];
 
     allLinks.forEach(link => {
       const href = link.getAttribute('href');
-      // Check for empty, whitespace-only, or just "#" href
+      // Check for empty, whitespace-only, or just "#" href values
       if (!href || href.trim() === '' || href === '#') {
         emptyHrefLinks.push({
           text: link.textContent?.trim() || '[no text]',
@@ -52,50 +49,47 @@ function runTests() {
       }
     });
 
-    if (emptyHrefLinks.length === 0) {
-      console.log(`✓ No empty href attributes found (checked ${allLinks.length} links)`);
+    if (emptyHrefLinks.length === 0 && allLinks.length > 0) {
+      console.log(`✓ All ${allLinks.length} links have valid non-empty href attributes`);
       passed++;
       results.push({ test: 'no_empty_href', status: 'pass' });
-    } else {
-      console.log(`✗ Found ${emptyHrefLinks.length} links with empty href:`);
-      emptyHrefLinks.forEach(link => {
-        console.log(`  - "${link.text}" has href="${link.href}"`);
-      });
+    } else if (allLinks.length === 0) {
+      console.log('✗ No links found on the page');
       failed++;
-      results.push({
-        test: 'no_empty_href',
-        status: 'fail',
-        error: `Found ${emptyHrefLinks.length} empty href attributes`
-      });
+      results.push({ test: 'no_empty_href', status: 'fail', error: 'No links found on the page' });
+    } else {
+      const errorDetails = emptyHrefLinks.map(l => `"${l.text}" (href="${l.href}")`).join(', ');
+      console.log(`✗ Found ${emptyHrefLinks.length} links with empty href: ${errorDetails}`);
+      failed++;
+      results.push({ test: 'no_empty_href', status: 'fail', error: `Empty href links: ${errorDetails}` });
     }
   }
 
-  /**
-   * Test 2: Internal anchor links point to existing elements
-   * Ensures all #section links have corresponding id elements
-   */
-  function testInternalAnchorLinksExist() {
-    const internalLinks = document.querySelectorAll('a[href^="#"]');
-    let brokenAnchors = [];
-    let validAnchors = 0;
+  // Test 2: Internal anchor links point to existing elements
+  function testInternalAnchorLinks() {
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    let brokenAnchorLinks = [];
+    let validAnchorLinks = [];
 
-    internalLinks.forEach(link => {
+    anchorLinks.forEach(link => {
       const href = link.getAttribute('href');
-      // Skip if just "#"
-      if (href === '#') {
-        return;
-      }
+      // Skip lone "#" as it's checked in test 1
+      if (href === '#') return;
 
-      // Extract the id from the href (remove the #)
+      // Extract the ID from the href (remove the #)
       const targetId = href.substring(1);
 
-      // Check if element with this id exists
+      // Check if an element with that ID exists
       const targetElement = document.getElementById(targetId);
 
-      if (targetElement) {
-        validAnchors++;
+      if (!targetElement) {
+        brokenAnchorLinks.push({
+          text: link.textContent?.trim() || '[no text]',
+          href: href,
+          targetId: targetId
+        });
       } else {
-        brokenAnchors.push({
+        validAnchorLinks.push({
           text: link.textContent?.trim() || '[no text]',
           href: href,
           targetId: targetId
@@ -103,66 +97,76 @@ function runTests() {
       }
     });
 
-    if (brokenAnchors.length === 0 && validAnchors > 0) {
-      console.log(`✓ All ${validAnchors} internal anchor links point to existing elements`);
+    // Include only meaningful anchor links (not lone "#")
+    const meaningfulAnchorLinks = Array.from(anchorLinks).filter(l => l.getAttribute('href') !== '#');
+
+    if (brokenAnchorLinks.length === 0 && meaningfulAnchorLinks.length > 0) {
+      console.log(`✓ All ${validAnchorLinks.length} internal anchor links point to existing elements`);
       passed++;
-      results.push({ test: 'internal_anchors_valid', status: 'pass' });
-    } else if (validAnchors === 0 && brokenAnchors.length === 0) {
-      console.log('✓ No internal anchor links found (nothing to validate)');
+      results.push({ test: 'internal_anchor_links', status: 'pass' });
+    } else if (meaningfulAnchorLinks.length === 0) {
+      console.log('⚠ No internal anchor links found (skipping test)');
+      // Not failing here since the page might not have internal anchors
       passed++;
-      results.push({ test: 'internal_anchors_valid', status: 'pass' });
+      results.push({ test: 'internal_anchor_links', status: 'pass', note: 'No internal anchor links found' });
     } else {
-      console.log(`✗ Found ${brokenAnchors.length} broken internal anchor links:`);
-      brokenAnchors.forEach(anchor => {
-        console.log(`  - "${anchor.text}" links to #${anchor.targetId} (element not found)`);
-      });
+      const errorDetails = brokenAnchorLinks.map(l => `"${l.text}" (href="${l.href}" -> #${l.targetId})`).join(', ');
+      console.log(`✗ Found ${brokenAnchorLinks.length} broken anchor links: ${errorDetails}`);
       failed++;
-      results.push({
-        test: 'internal_anchors_valid',
-        status: 'fail',
-        error: `Found ${brokenAnchors.length} broken anchor links: ${brokenAnchors.map(a => a.href).join(', ')}`
-      });
+      results.push({ test: 'internal_anchor_links', status: 'fail', error: `Broken anchor links: ${errorDetails}` });
     }
   }
 
-  /**
-   * Test 3: All links have href attribute (not missing)
-   * Ensures anchor tags have the href attribute defined
-   */
-  function testAllLinksHaveHref() {
-    const allAnchors = document.querySelectorAll('a');
-    let missingHref = [];
+  // Test 3: Verify all anchor link targets have proper IDs
+  function testAnchorTargetsAccessible() {
+    // Find all elements that are targets of internal links
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    const targetIds = new Set();
 
-    allAnchors.forEach(anchor => {
-      if (!anchor.hasAttribute('href')) {
-        missingHref.push({
-          text: anchor.textContent?.trim() || '[no text]'
-        });
+    anchorLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && href !== '#') {
+        targetIds.add(href.substring(1));
       }
     });
 
-    if (missingHref.length === 0) {
-      console.log(`✓ All ${allAnchors.length} anchor tags have href attribute`);
+    let accessibleTargets = [];
+    let inaccessibleTargets = [];
+
+    targetIds.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        // Check if element is visible (not hidden or display:none in inline style)
+        const style = element.getAttribute('style') || '';
+        const isHidden = style.includes('display: none') || style.includes('visibility: hidden');
+
+        if (isHidden) {
+          inaccessibleTargets.push(id);
+        } else {
+          accessibleTargets.push(id);
+        }
+      }
+    });
+
+    if (inaccessibleTargets.length === 0 && targetIds.size > 0) {
+      console.log(`✓ All ${accessibleTargets.length} anchor target elements are accessible`);
       passed++;
-      results.push({ test: 'all_links_have_href', status: 'pass' });
+      results.push({ test: 'anchor_targets_accessible', status: 'pass' });
+    } else if (targetIds.size === 0) {
+      console.log('⚠ No anchor targets to validate (skipping test)');
+      passed++;
+      results.push({ test: 'anchor_targets_accessible', status: 'pass', note: 'No anchor targets found' });
     } else {
-      console.log(`✗ Found ${missingHref.length} anchor tags without href:`);
-      missingHref.forEach(link => {
-        console.log(`  - "${link.text}"`);
-      });
+      console.log(`✗ Found ${inaccessibleTargets.length} inaccessible anchor targets: ${inaccessibleTargets.join(', ')}`);
       failed++;
-      results.push({
-        test: 'all_links_have_href',
-        status: 'fail',
-        error: `Found ${missingHref.length} anchors without href attribute`
-      });
+      results.push({ test: 'anchor_targets_accessible', status: 'fail', error: `Inaccessible targets: ${inaccessibleTargets.join(', ')}` });
     }
   }
 
   // Run all tests
-  testNoEmptyHrefAttributes();
-  testInternalAnchorLinksExist();
-  testAllLinksHaveHref();
+  testNoEmptyHref();
+  testInternalAnchorLinks();
+  testAnchorTargetsAccessible();
 
   // Summary
   console.log(`\n${'='.repeat(50)}`);
