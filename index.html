@@ -108,15 +108,14 @@ hello
 END</code></pre>
         </div>
       </div>
-
-      <div class="config-info">
+      <div class="config-info" data-testid="default-config">
         <h3>Default Configuration</h3>
         <ul>
-          <li><strong>Listen address:</strong> 0.0.0.0:12333</li>
-          <li><strong>Max LSM levels:</strong> 7</li>
-          <li><strong>Work directory:</strong> /tmp/mirdb</li>
-          <li><strong>SSTable max size:</strong> 100MB</li>
-          <li><strong>Memtable max size:</strong> 4MB</li>
+          <li data-config="listen-address"><strong>Listen address:</strong> 0.0.0.0:12333</li>
+          <li data-config="lsm-levels"><strong>Max LSM levels:</strong> 7</li>
+          <li data-config="work-directory"><strong>Work directory:</strong> /tmp/mirdb</li>
+          <li data-config="sstable-size"><strong>SSTable max size:</strong> 100MB</li>
+          <li data-config="memtable-size"><strong>Memtable max size:</strong> 4MB</li>
         </ul>
       </div>
     </section>
