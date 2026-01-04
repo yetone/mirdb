@@ -1,225 +1,452 @@
-// @ts-check
-const fs = require('fs');
-const path = require('path');
-const { test, expect } = require('@playwright/test');
-
 /**
- * Test Suite: CSS Validation
+ * CSS Validation Tests
  *
- * Verifies that CSS is valid and follows best practices
- * Tests W3C CSS validation and vendor prefix presence
+ * Test Case 1: W3C CSS validation - verifies CSS has no validation errors
+ * Test Case 2: Browser prefix checking - ensures vendor prefixes are included
  */
 
-const cssFilePath = path.join(__dirname, '..', '..', 'styles.css');
-const cssContent = fs.readFileSync(cssFilePath, 'utf-8');
+const fs = require('fs');
+const path = require('path');
+const { validate } = require('csstree-validator');
 
-test.describe('CSS Validation', () => {
-  /**
-   * Test Case 1: Run W3C CSS validation
-   * Input: Run W3C CSS validation
-   * Expected: No CSS validation errors
-   */
-  test('should have valid CSS with no W3C validation errors', () => {
-    // Parse CSS for common validation errors
+const cssPath = path.join(__dirname, '../../styles.css');
 
-    // 1. Check for unclosed braces
+function runTests() {
+  console.log('Running CSS Validation Tests...\n');
+
+  let passed = 0;
+  let failed = 0;
+  const results = [];
+
+  // Read the CSS file
+  let cssContent;
+  try {
+    cssContent = fs.readFileSync(cssPath, 'utf-8');
+  } catch (error) {
+    console.error('Failed to read styles.css:', error.message);
+    process.exit(1);
+  }
+
+  // =========================================================================
+  // TEST CASE 1: W3C CSS Validation
+  // =========================================================================
+
+  // Test 1.1: CSS file should have no syntax errors
+  function testCssSyntaxErrors() {
+    const result = validate(cssContent);
+
+    // Filter out warnings about vendor prefixes (these are intentional)
+    const errors = result.filter(issue => {
+      const msg = issue.message || '';
+      // Skip vendor prefix warnings (these are intentional for cross-browser support)
+      if (msg.includes('-webkit-')) return false;
+      if (msg.includes('-moz-')) return false;
+      if (msg.includes('-ms-')) return false;
+      if (msg.includes('-o-')) return false;
+      return true;
+    });
+
+    if (errors.length === 0) {
+      console.log('✓ CSS has no syntax errors');
+      passed++;
+      results.push({ test: 'CSS syntax validation', status: 'pass' });
+    } else {
+      const errorMessages = errors.map(e =>
+        `Line ${e.line}:${e.column} - ${e.message}`
+      ).join('\n  ');
+      console.log(`✗ CSS validation errors found:\n  ${errorMessages}`);
+      failed++;
+      results.push({
+        test: 'CSS syntax validation',
+        status: 'fail',
+        error: errorMessages
+      });
+    }
+  }
+
+  // Test 1.2: CSS file should exist and be readable
+  function testCssFileExists() {
+    if (fs.existsSync(cssPath) && cssContent.length > 0) {
+      console.log('✓ CSS file exists and is readable');
+      passed++;
+      results.push({ test: 'CSS file exists', status: 'pass' });
+    } else {
+      console.log('✗ CSS file does not exist or is empty');
+      failed++;
+      results.push({
+        test: 'CSS file exists',
+        status: 'fail',
+        error: 'CSS file not found or empty'
+      });
+    }
+  }
+
+  // Test 1.3: CSS should have valid structure with proper selectors
+  function testValidSelectors() {
+    const selectorPatterns = [
+      { pattern: /\*[,\s]/, name: 'Universal selector (*)' },
+      { pattern: /body\s*{/, name: 'Element selector (body)' },
+      { pattern: /\.[\w-]+\s*{/, name: 'Class selectors' },
+      { pattern: /:root\s*{/, name: ':root pseudo selector' },
+      { pattern: /@media\s*\(/, name: 'Media queries' }
+    ];
+
+    const missing = selectorPatterns.filter(s => !s.pattern.test(cssContent));
+
+    if (missing.length === 0) {
+      console.log('✓ CSS has valid selectors structure');
+      passed++;
+      results.push({ test: 'Valid CSS selectors', status: 'pass' });
+    } else {
+      const missingNames = missing.map(m => m.name).join(', ');
+      console.log(`✗ Missing CSS selectors: ${missingNames}`);
+      failed++;
+      results.push({
+        test: 'Valid CSS selectors',
+        status: 'fail',
+        error: `Missing selectors: ${missingNames}`
+      });
+    }
+  }
+
+  // Test 1.4: CSS should have properly closed blocks
+  function testBalancedBraces() {
     const openBraces = (cssContent.match(/{/g) || []).length;
     const closeBraces = (cssContent.match(/}/g) || []).length;
-    expect(openBraces).toBe(closeBraces);
 
-    // 2. Check for missing semicolons in property declarations
-    // Match property: value patterns and ensure they end with semicolon (or are last before })
-    const propertyValuePattern = /[a-z-]+\s*:\s*[^;{}]+(?=[;}])/gi;
-    const matches = cssContent.match(propertyValuePattern) || [];
-    // Each match should be followed by ; or }
-    for (const match of matches) {
-      // This is a simplified check - the pattern itself ensures valid termination
-      expect(match.trim().length).toBeGreaterThan(0);
+    if (openBraces === closeBraces) {
+      console.log(`✓ CSS has balanced braces (${openBraces} opening, ${closeBraces} closing)`);
+      passed++;
+      results.push({ test: 'Balanced CSS braces', status: 'pass' });
+    } else {
+      console.log(`✗ CSS has unbalanced braces: ${openBraces} opening vs ${closeBraces} closing`);
+      failed++;
+      results.push({
+        test: 'Balanced CSS braces',
+        status: 'fail',
+        error: `Unbalanced braces: ${openBraces} opening vs ${closeBraces} closing`
+      });
+    }
+  }
+
+  // Test 1.5: CSS should have valid property-value pairs
+  function testValidProperties() {
+    const propertyPatterns = [
+      { pattern: /box-sizing\s*:\s*border-box/, name: 'box-sizing' },
+      { pattern: /margin\s*:\s*0/, name: 'margin' },
+      { pattern: /display\s*:\s*(flex|grid|block|inline-block)/, name: 'display' },
+      { pattern: /color\s*:\s*(var\(|#)/, name: 'color' },
+      { pattern: /background-color\s*:/, name: 'background-color' },
+      { pattern: /font-family\s*:/, name: 'font-family' },
+      { pattern: /font-size\s*:/, name: 'font-size' }
+    ];
+
+    const missing = propertyPatterns.filter(p => !p.pattern.test(cssContent));
+
+    if (missing.length === 0) {
+      console.log('✓ CSS has valid property-value pairs');
+      passed++;
+      results.push({ test: 'Valid CSS properties', status: 'pass' });
+    } else {
+      const missingNames = missing.map(m => m.name).join(', ');
+      console.log(`✗ Missing CSS properties: ${missingNames}`);
+      failed++;
+      results.push({
+        test: 'Valid CSS properties',
+        status: 'fail',
+        error: `Missing properties: ${missingNames}`
+      });
+    }
+  }
+
+  // Test 1.6: CSS custom properties should be properly defined
+  function testCssVariables() {
+    const hasVariables = /--[\w-]+\s*:\s*[^;]+;/.test(cssContent);
+    const rootMatch = cssContent.match(/:root\s*{([^}]+)}/);
+
+    const expectedVars = ['--primary-color', '--text-color', '--bg-color'];
+    const missingVars = [];
+
+    if (rootMatch) {
+      expectedVars.forEach(varName => {
+        if (!rootMatch[1].includes(varName)) {
+          missingVars.push(varName);
+        }
+      });
     }
 
-    // 3. Check for valid CSS selectors (no empty selectors)
-    const emptySelectors = cssContent.match(/{\s*}/g);
-    expect(emptySelectors).toBeNull();
-
-    // 4. Check for valid color values
-    const hexColors = cssContent.match(/#[0-9a-fA-F]+/g) || [];
-    for (const color of hexColors) {
-      // Valid hex colors are 3, 4, 6, or 8 characters (including #)
-      const hexPart = color.slice(1);
-      expect([3, 4, 6, 8]).toContain(hexPart.length);
-      expect(hexPart).toMatch(/^[0-9a-fA-F]+$/);
+    if (hasVariables && rootMatch && missingVars.length === 0) {
+      console.log('✓ CSS custom properties (variables) are properly defined');
+      passed++;
+      results.push({ test: 'CSS custom properties', status: 'pass' });
+    } else {
+      const error = missingVars.length > 0
+        ? `Missing variables: ${missingVars.join(', ')}`
+        : 'CSS variables not properly defined';
+      console.log(`✗ ${error}`);
+      failed++;
+      results.push({
+        test: 'CSS custom properties',
+        status: 'fail',
+        error: error
+      });
     }
+  }
 
-    // 5. Check for valid unit values (common units)
-    const unitPattern = /:\s*[\d.]+([a-z%]+)/gi;
-    const unitMatches = [...cssContent.matchAll(unitPattern)];
-    const validUnits = ['px', 'em', 'rem', '%', 'vh', 'vw', 'vmin', 'vmax', 's', 'ms', 'deg', 'fr', 'ch'];
-    for (const match of unitMatches) {
-      const unit = match[1].toLowerCase();
-      expect(validUnits).toContain(unit);
+  // =========================================================================
+  // TEST CASE 2: Browser Vendor Prefixes
+  // =========================================================================
+
+  // Test 2.1: Should include -webkit- prefix for flexbox properties
+  function testWebkitFlexbox() {
+    const flexboxPrefixes = [
+      { pattern: /-webkit-flex/, name: '-webkit-flex' },
+      { pattern: /-webkit-justify-content/, name: '-webkit-justify-content' },
+      { pattern: /-webkit-align-items/, name: '-webkit-align-items' }
+    ];
+
+    const missing = flexboxPrefixes.filter(p => !p.pattern.test(cssContent));
+
+    if (missing.length === 0) {
+      console.log('✓ Includes -webkit- prefix for flexbox properties');
+      passed++;
+      results.push({ test: 'Webkit flexbox prefixes', status: 'pass' });
+    } else {
+      const missingNames = missing.map(m => m.name).join(', ');
+      console.log(`✗ Missing webkit flexbox prefixes: ${missingNames}`);
+      failed++;
+      results.push({
+        test: 'Webkit flexbox prefixes',
+        status: 'fail',
+        error: `Missing: ${missingNames}`
+      });
     }
+  }
 
-    // 6. Check for valid CSS custom properties (variables)
-    const customProperties = cssContent.match(/--[a-zA-Z-]+/g) || [];
-    for (const prop of customProperties) {
-      // Custom properties should have valid names
-      expect(prop).toMatch(/^--[a-zA-Z][a-zA-Z0-9-]*$/);
+  // Test 2.2: Should include -webkit- prefix for sticky positioning
+  function testWebkitSticky() {
+    const hasWebkitSticky = /position\s*:\s*-webkit-sticky/.test(cssContent);
+    const hasSticky = /position\s*:\s*sticky/.test(cssContent);
+
+    if (hasWebkitSticky && hasSticky) {
+      console.log('✓ Includes -webkit- prefix for sticky positioning');
+      passed++;
+      results.push({ test: 'Webkit sticky prefix', status: 'pass' });
+    } else {
+      const missing = [];
+      if (!hasWebkitSticky) missing.push('-webkit-sticky');
+      if (!hasSticky) missing.push('sticky');
+      console.log(`✗ Missing sticky positioning: ${missing.join(', ')}`);
+      failed++;
+      results.push({
+        test: 'Webkit sticky prefix',
+        status: 'fail',
+        error: `Missing: ${missing.join(', ')}`
+      });
     }
+  }
 
-    // 7. Check for valid var() function usage
-    const varUsages = cssContent.match(/var\([^)]+\)/g) || [];
-    for (const varUsage of varUsages) {
-      // Should reference a custom property
-      expect(varUsage).toMatch(/var\(\s*--[a-zA-Z][a-zA-Z0-9-]*\s*\)/);
+  // Test 2.3: Should include -webkit- prefix for scroll-behavior
+  function testWebkitScrollBehavior() {
+    const hasWebkitScroll = /-webkit-scroll-behavior\s*:\s*smooth/.test(cssContent);
+    const hasScroll = /scroll-behavior\s*:\s*smooth/.test(cssContent);
+
+    if (hasWebkitScroll && hasScroll) {
+      console.log('✓ Includes -webkit- prefix for scroll-behavior');
+      passed++;
+      results.push({ test: 'Webkit scroll-behavior prefix', status: 'pass' });
+    } else {
+      const missing = [];
+      if (!hasWebkitScroll) missing.push('-webkit-scroll-behavior');
+      if (!hasScroll) missing.push('scroll-behavior');
+      console.log(`✗ Missing scroll-behavior: ${missing.join(', ')}`);
+      failed++;
+      results.push({
+        test: 'Webkit scroll-behavior prefix',
+        status: 'fail',
+        error: `Missing: ${missing.join(', ')}`
+      });
     }
+  }
 
-    // 8. Check for valid CSS functions
-    const functionPattern = /\b(rgb|rgba|hsl|hsla|linear-gradient|radial-gradient|calc|clamp|min|max|repeat|minmax|auto-fit|url)\s*\(/gi;
-    const functionMatches = cssContent.match(functionPattern) || [];
-    // All function usages should be from known CSS functions
-    expect(functionMatches.length).toBeGreaterThan(0);
+  // Test 2.4: Should include -webkit- prefix for linear-gradient
+  function testWebkitGradient() {
+    const hasWebkitGradient = /-webkit-linear-gradient/.test(cssContent);
+    const hasGradient = /linear-gradient/.test(cssContent);
 
-    // 9. Check for duplicate property declarations in same block
-    // This is a basic check for obvious duplicates
-    const blocks = cssContent.split('}');
-    for (const block of blocks) {
-      if (!block.includes('{')) continue;
-      const blockContent = block.split('{')[1];
-      if (!blockContent) continue;
-
-      // Extract property names (excluding vendor-prefixed as duplicates are intentional)
-      const nonPrefixedProps = [...blockContent.matchAll(/\n\s*([a-z][a-z-]*)(?=\s*:)/gi)]
-        .map(m => m[1])
-        .filter(p => !p.startsWith('-webkit') && !p.startsWith('-moz') && !p.startsWith('-ms') && !p.startsWith('-o'));
-
-      // Check for unintentional duplicates (same property appears twice)
-      const uniqueProps = [...new Set(nonPrefixedProps)];
-      // Allow some duplicates as they may be intentional for fallbacks
-      expect(nonPrefixedProps.length - uniqueProps.length).toBeLessThanOrEqual(nonPrefixedProps.length / 2);
+    if (hasWebkitGradient && hasGradient) {
+      console.log('✓ Includes -webkit- prefix for linear-gradient');
+      passed++;
+      results.push({ test: 'Webkit gradient prefix', status: 'pass' });
+    } else {
+      const missing = [];
+      if (!hasWebkitGradient) missing.push('-webkit-linear-gradient');
+      if (!hasGradient) missing.push('linear-gradient');
+      console.log(`✗ Missing gradient: ${missing.join(', ')}`);
+      failed++;
+      results.push({
+        test: 'Webkit gradient prefix',
+        status: 'fail',
+        error: `Missing: ${missing.join(', ')}`
+      });
     }
+  }
 
-    // 10. Check that media queries have valid syntax
-    const mediaQueries = cssContent.match(/@media[^{]+/g) || [];
-    for (const mq of mediaQueries) {
-      // Should contain valid media features
-      expect(mq).toMatch(/@media\s*\([^)]+\)/);
+  // Test 2.5: Should include vendor prefixes for flex-direction
+  function testFlexDirection() {
+    const hasWebkitFlexDir = /-webkit-flex-direction/.test(cssContent);
+    const hasFlexDir = /flex-direction/.test(cssContent);
+
+    if (hasWebkitFlexDir && hasFlexDir) {
+      console.log('✓ Includes vendor prefixes for flex-direction');
+      passed++;
+      results.push({ test: 'Flex-direction prefixes', status: 'pass' });
+    } else {
+      const missing = [];
+      if (!hasWebkitFlexDir) missing.push('-webkit-flex-direction');
+      if (!hasFlexDir) missing.push('flex-direction');
+      console.log(`✗ Missing flex-direction: ${missing.join(', ')}`);
+      failed++;
+      results.push({
+        test: 'Flex-direction prefixes',
+        status: 'fail',
+        error: `Missing: ${missing.join(', ')}`
+      });
     }
+  }
 
-    // 11. Verify :root contains CSS custom properties
-    const rootBlock = cssContent.match(/:root\s*{[^}]+}/);
-    expect(rootBlock).not.toBeNull();
-    expect(rootBlock[0]).toContain('--');
+  // Test 2.6: Should include vendor prefixes for flex-wrap
+  function testFlexWrap() {
+    const hasWebkitFlexWrap = /-webkit-flex-wrap/.test(cssContent);
+    const hasFlexWrap = /flex-wrap/.test(cssContent);
 
-    // 12. Check for valid pseudo-classes and pseudo-elements
-    const pseudoPattern = /::?(before|after|hover|focus|active|visited|first-child|last-child|nth-child|not|root|focus-within|focus-visible)\b/gi;
-    const pseudoMatches = cssContent.match(pseudoPattern) || [];
-    expect(pseudoMatches.length).toBeGreaterThan(0);
-  });
-
-  /**
-   * Test Case 2: Check for browser prefixes
-   * Input: Check for browser prefixes
-   * Expected: Necessary vendor prefixes are included for cross-browser support
-   */
-  test('should have necessary vendor prefixes for cross-browser support', () => {
-    // 1. Check for -webkit- prefixes (Safari, older Chrome)
-    const webkitPrefixes = cssContent.match(/-webkit-[a-z-]+/g) || [];
-    expect(webkitPrefixes.length).toBeGreaterThan(0);
-
-    // 2. Verify flexbox has webkit prefixes
-    // Standard display: flex should have -webkit-flex fallback
-    const hasFlexbox = cssContent.includes('display: flex') || cssContent.includes('display:flex');
-    const hasWebkitFlex = cssContent.includes('-webkit-flex');
-    if (hasFlexbox) {
-      expect(hasWebkitFlex).toBe(true);
+    if (hasWebkitFlexWrap && hasFlexWrap) {
+      console.log('✓ Includes vendor prefixes for flex-wrap');
+      passed++;
+      results.push({ test: 'Flex-wrap prefixes', status: 'pass' });
+    } else {
+      const missing = [];
+      if (!hasWebkitFlexWrap) missing.push('-webkit-flex-wrap');
+      if (!hasFlexWrap) missing.push('flex-wrap');
+      console.log(`✗ Missing flex-wrap: ${missing.join(', ')}`);
+      failed++;
+      results.push({
+        test: 'Flex-wrap prefixes',
+        status: 'fail',
+        error: `Missing: ${missing.join(', ')}`
+      });
     }
+  }
 
-    // 3. Verify flex-direction has webkit prefix if used
-    const hasFlexDirection = cssContent.includes('flex-direction');
-    const hasWebkitFlexDirection = cssContent.includes('-webkit-flex-direction');
-    if (hasFlexDirection) {
-      expect(hasWebkitFlexDirection).toBe(true);
+  // Test 2.7: Standard property should follow vendor-prefixed version
+  function testPrefixOrder() {
+    // Check that display: flex follows display: -webkit-flex
+    const displayFlexPattern = /display\s*:\s*-webkit-flex[\s\S]*?display\s*:\s*flex/;
+    const hasCorrectOrder = displayFlexPattern.test(cssContent);
+
+    if (hasCorrectOrder) {
+      console.log('✓ Standard properties follow vendor-prefixed versions');
+      passed++;
+      results.push({ test: 'Prefix order', status: 'pass' });
+    } else {
+      console.log('✗ Standard property should follow vendor-prefixed version');
+      failed++;
+      results.push({
+        test: 'Prefix order',
+        status: 'fail',
+        error: 'display: flex should follow display: -webkit-flex'
+      });
     }
+  }
 
-    // 4. Verify justify-content has webkit prefix
-    const hasJustifyContent = cssContent.includes('justify-content');
-    const hasWebkitJustifyContent = cssContent.includes('-webkit-justify-content');
-    if (hasJustifyContent) {
-      expect(hasWebkitJustifyContent).toBe(true);
+  // Test 2.8: Comprehensive cross-browser flexbox support
+  function testCrossBrowserFlexbox() {
+    const requiredPrefixes = [
+      'display: -webkit-flex',
+      'display: flex',
+      '-webkit-justify-content:',
+      'justify-content:',
+      '-webkit-align-items:',
+      'align-items:'
+    ];
+
+    const missing = requiredPrefixes.filter(p => !cssContent.includes(p));
+
+    if (missing.length === 0) {
+      console.log('✓ Cross-browser flexbox layout is fully supported');
+      passed++;
+      results.push({ test: 'Cross-browser flexbox', status: 'pass' });
+    } else {
+      console.log(`✗ Missing cross-browser flexbox support: ${missing.join(', ')}`);
+      failed++;
+      results.push({
+        test: 'Cross-browser flexbox',
+        status: 'fail',
+        error: `Missing: ${missing.join(', ')}`
+      });
     }
+  }
 
-    // 5. Verify align-items has webkit prefix
-    const hasAlignItems = cssContent.includes('align-items');
-    const hasWebkitAlignItems = cssContent.includes('-webkit-align-items');
-    if (hasAlignItems) {
-      expect(hasWebkitAlignItems).toBe(true);
-    }
+  // Test 2.9: Vendor prefixes in responsive media queries
+  function testMediaQueryPrefixes() {
+    const mediaQueryContent = cssContent.match(/@media[^{]+{[\s\S]*?}\s*}/g);
 
-    // 6. Verify flex-wrap has webkit prefix if used
-    const hasFlexWrap = cssContent.includes('flex-wrap');
-    const hasWebkitFlexWrap = cssContent.includes('-webkit-flex-wrap');
-    if (hasFlexWrap) {
-      expect(hasWebkitFlexWrap).toBe(true);
-    }
+    if (mediaQueryContent) {
+      const mediaQueryCSS = mediaQueryContent.join('');
+      const hasWebkitInMedia = /-webkit-flex/.test(mediaQueryCSS);
 
-    // 7. Verify scroll-behavior has webkit prefix
-    const hasScrollBehavior = cssContent.includes('scroll-behavior');
-    const hasWebkitScrollBehavior = cssContent.includes('-webkit-scroll-behavior');
-    if (hasScrollBehavior) {
-      expect(hasWebkitScrollBehavior).toBe(true);
-    }
-
-    // 8. Verify linear-gradient has webkit prefix
-    const hasLinearGradient = cssContent.includes('linear-gradient');
-    const hasWebkitLinearGradient = cssContent.includes('-webkit-linear-gradient');
-    if (hasLinearGradient) {
-      expect(hasWebkitLinearGradient).toBe(true);
-    }
-
-    // 9. Verify sticky positioning has webkit prefix
-    const hasStickyPosition = cssContent.includes('position: sticky') || cssContent.includes('position:sticky');
-    const hasWebkitSticky = cssContent.includes('position: -webkit-sticky') || cssContent.includes('position:-webkit-sticky');
-    if (hasStickyPosition) {
-      expect(hasWebkitSticky).toBe(true);
-    }
-
-    // 10. Check that prefixed properties appear BEFORE standard properties (fallback pattern)
-    // This ensures older browsers get the prefixed version first
-    const flexBlocks = cssContent.split(/display:\s*flex/);
-    if (flexBlocks.length > 1) {
-      // Check that -webkit-flex appears before flex in blocks that use flexbox
-      for (let i = 0; i < flexBlocks.length - 1; i++) {
-        const block = flexBlocks[i];
-        // The block before "display: flex" should contain "display: -webkit-flex"
-        expect(block).toContain('-webkit-flex');
+      if (hasWebkitInMedia) {
+        console.log('✓ Vendor prefixes are included in media queries');
+        passed++;
+        results.push({ test: 'Media query prefixes', status: 'pass' });
+      } else {
+        console.log('✗ Media queries should include vendor prefixes');
+        failed++;
+        results.push({
+          test: 'Media query prefixes',
+          status: 'fail',
+          error: 'Missing -webkit- prefixes in media queries'
+        });
       }
+    } else {
+      console.log('✗ No media queries found');
+      failed++;
+      results.push({
+        test: 'Media query prefixes',
+        status: 'fail',
+        error: 'No media queries found in CSS'
+      });
     }
+  }
 
-    // 11. Verify no orphaned prefixes (prefixes without standard property)
-    // Count occurrences of -webkit-flex vs flex
-    const webkitFlexCount = (cssContent.match(/display:\s*-webkit-flex/g) || []).length;
-    const standardFlexCount = (cssContent.match(/display:\s*flex/g) || []).length;
-    // Should have equal or more standard properties than prefixed (some may be fallbacks only)
-    expect(standardFlexCount).toBeGreaterThanOrEqual(webkitFlexCount);
+  // Run all tests
+  console.log('=== Test Case 1: W3C CSS Validation ===\n');
+  testCssFileExists();
+  testCssSyntaxErrors();
+  testValidSelectors();
+  testBalancedBraces();
+  testValidProperties();
+  testCssVariables();
 
-    // 12. Verify critical cross-browser properties are prefixed
-    // For this landing page, the critical properties are:
-    // - Flexbox (display, justify-content, align-items, flex-wrap)
-    // - Position sticky
-    // - Scroll behavior
-    // - Linear gradients
+  console.log('\n=== Test Case 2: Browser Vendor Prefixes ===\n');
+  testWebkitFlexbox();
+  testWebkitSticky();
+  testWebkitScrollBehavior();
+  testWebkitGradient();
+  testFlexDirection();
+  testFlexWrap();
+  testPrefixOrder();
+  testCrossBrowserFlexbox();
+  testMediaQueryPrefixes();
 
-    // Count of critical prefixed properties
-    const criticalPrefixedCount = [
-      cssContent.includes('-webkit-flex'),
-      cssContent.includes('-webkit-justify-content'),
-      cssContent.includes('-webkit-align-items'),
-      cssContent.includes('-webkit-sticky'),
-      cssContent.includes('-webkit-linear-gradient'),
-      cssContent.includes('-webkit-scroll-behavior'),
-    ].filter(Boolean).length;
+  // Summary
+  console.log(`\n${'='.repeat(50)}`);
+  console.log(`Tests: ${passed} passed, ${failed} failed`);
+  console.log(`${'='.repeat(50)}\n`);
 
-    // Should have at least 4 critical prefixed properties for good cross-browser support
-    expect(criticalPrefixedCount).toBeGreaterThanOrEqual(4);
-  });
-});
+  if (failed > 0) {
+    process.exit(1);
+  }
+}
+
+runTests();
