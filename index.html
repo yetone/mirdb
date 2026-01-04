@@ -61,20 +61,54 @@
 
     <section id="getting-started" class="getting-started">
       <h2>Getting Started</h2>
-      <div class="code-example">
-        <pre><code># Start MirDB server
+
+      <div class="step-card">
+        <h3>1. Installation</h3>
+        <p class="step-description">Clone the repository and build MirDB using Cargo:</p>
+        <div class="code-example">
+          <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build with Cargo
+cargo build --release
+
+# The binary will be at target/release/mirdb</code></pre>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <h3>2. Start the Server</h3>
+        <p class="step-description">Run MirDB with a configuration file:</p>
+        <div class="code-example">
+          <pre><code># Start MirDB server with config
 mirdb -c /path/to/config.toml
 
-# Connect with any memcached client
+# Or use the default configuration
+./target/release/mirdb</code></pre>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <h3>3. Connect and Use</h3>
+        <p class="step-description">Connect with any memcached client. Here's an example using telnet:</p>
+        <div class="code-example">
+          <pre><code># Connect to MirDB
 telnet localhost 12333
+
+# Store a value
 set mykey 0 0 5
 hello
 STORED
+
+# Retrieve the value
 get mykey
 VALUE mykey 0 5
 hello
 END</code></pre>
+        </div>
       </div>
+
       <div class="config-info">
         <h3>Default Configuration</h3>
         <ul>
