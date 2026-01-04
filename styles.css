@@ -51,8 +51,8 @@ main:focus {
   --bg-color: #ffffff;
   --bg-light: #f3f4f6;
   --border-color: #e5e7eb;
-  --code-bg: #1f2937;
-  --code-text: #f9fafb;
+  --code-bg: #1e293b;
+  --code-text: #e2e8f0;
 }
 
 html {
