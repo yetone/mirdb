@@ -5,6 +5,43 @@
   padding: 0;
 }
 
+/* Skip Link for Keyboard Navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 0.5rem 0;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--primary-dark);
+  outline-offset: 2px;
+}
+
+/* Global Focus Styles for Keyboard Accessibility */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus:not([tabindex="-1"]) {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Main content focus style when targeted via skip link */
+main:focus {
+  outline: none;
+}
+
 :root {
   --primary-color: #2563eb;
   --primary-dark: #1d4ed8;
