@@ -1,14 +1,28 @@
 {
-  "name": "mirdb-landing-page",
+  "name": "workspace",
   "version": "1.0.0",
-  "description": "Landing page for MirDB - A Persistent Key-Value Store",
+  "description": "![logo](https://github.com/yetone/mirdb/raw/master/assets/logo.gif)",
+  "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "test:unit": "node tests/unit/semantic-html.test.js",
-    "serve": "npx serve . -p 3000"
+    "serve": "serve . -l 3000"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yetone/mirdb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yetone/mirdb/issues"
+  },
+  "homepage": "https://github.com/yetone/mirdb#readme",
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
-    "jsdom": "^23.0.0"
+    "@playwright/test": "^1.57.0",
+    "jsdom": "^27.4.0",
+    "playwright": "^1.57.0",
+    "serve": "^14.2.5"
   }
 }
