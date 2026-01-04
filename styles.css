@@ -354,6 +354,75 @@ body {
   border-radius: 0.25rem;
 }
 
+/* Project Status Section */
+.project-status {
+  padding: 5rem 2rem;
+  background-color: var(--bg-light);
+}
+
+.project-status h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: var(--text-color);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.status-card {
+  background-color: var(--bg-color);
+  padding: 2rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+
+.status-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.status-card ul {
+  list-style: none;
+}
+
+.status-card li {
+  padding: 0.5rem 0;
+  color: var(--text-light);
+  border-bottom: 1px solid var(--border-color);
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.status-card li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.implemented-features li::before {
+  background-color: #22c55e;
+}
+
+.planned-features li::before {
+  background-color: #f59e0b;
+}
+
+.status-card li:last-child {
+  border-bottom: none;
+}
+
 /* Footer */
 footer {
   padding: 2rem;
