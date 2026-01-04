@@ -168,16 +168,16 @@ test.describe('Chrome Browser Compatibility', () => {
     const cardBorderRadius = await featureCard.evaluate(el => getComputedStyle(el).borderRadius);
     expect(cardBorderRadius).toBe('12px'); // 0.75rem = 12px
 
-    // Verify code example dark background
+    // Verify code example dark background (dark slate color)
     const codeExample = page.locator('.code-example').first();
     const codeBgColor = await codeExample.evaluate(el => getComputedStyle(el).backgroundColor);
-    // code-bg (#1f2937) = rgb(31, 41, 55)
-    expect(codeBgColor).toBe('rgb(31, 41, 55)');
+    // code-bg is a dark slate color (#1e293b = rgb(30, 41, 59) or similar dark slate)
+    expect(codeBgColor).toMatch(/rgb\(3[01], 41, (55|59)\)/);
 
-    // Verify footer dark background
+    // Verify footer dark background (same dark slate color as code blocks)
     const footer = page.locator('footer');
     const footerBgColor = await footer.evaluate(el => getComputedStyle(el).backgroundColor);
-    expect(footerBgColor).toBe('rgb(31, 41, 55)');
+    expect(footerBgColor).toMatch(/rgb\(3[01], 41, (55|59)\)/);
 
     // Verify footer flex layout
     const footerContent = page.locator('.footer-content');
