@@ -147,20 +147,20 @@ END</code></pre>
     <section id="project-status" class="project-status" data-testid="project-status">
       <h2>Project Status</h2>
       <div class="status-grid">
-        <div class="status-card implemented-features" data-status="implemented">
+        <div class="status-card implemented" data-status="implemented">
           <h3>Implemented Features</h3>
-          <ul>
-            <li class="feature-item">Memcached protocol compatibility (SET, GET, DELETE, etc.)</li>
-            <li class="feature-item">Persistent storage with SSTable format</li>
-            <li class="feature-item">LSM tree architecture with background compaction</li>
+          <ul class="implemented-features" data-testid="implemented-features">
+            <li class="feature-item">Tokio-based async networking with memcached protocol</li>
+            <li class="feature-item">Memtable with skip list data structure</li>
+            <li class="feature-item">Minor compaction (memtable to SSTable)</li>
+            <li class="feature-item">Major compaction (SSTable level compaction)</li>
             <li class="feature-item">Write-ahead logging (WAL) for durability</li>
-            <li class="feature-item">Async networking with Tokio runtime</li>
             <li class="feature-item">Configurable memtable and SSTable sizes</li>
           </ul>
         </div>
-        <div class="status-card planned-features" data-status="planned">
-          <h3>Planned Features</h3>
-          <ul>
+        <div class="status-card planned" data-status="planned">
+          <h3>Coming Soon</h3>
+          <ul class="planned-features" data-testid="planned-features">
             <li class="feature-item">Raft consensus for distributed replication</li>
             <li class="feature-item">Cluster mode with automatic sharding</li>
             <li class="feature-item">TTL (time-to-live) support for keys</li>

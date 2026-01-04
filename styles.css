@@ -377,15 +377,26 @@ body {
 
 .status-card {
   background-color: var(--bg-color);
-  padding: 2rem;
   border-radius: 0.75rem;
+  padding: 2rem;
   border: 1px solid var(--border-color);
 }
 
 .status-card h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.status-card.implemented h3 {
+  color: #059669;
+  border-bottom-color: #059669;
+}
+
+.status-card.planned h3 {
   color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
 }
 
 .status-card ul {
@@ -394,9 +405,8 @@ body {
 
 .status-card li {
   padding: 0.5rem 0;
-  color: var(--text-light);
-  border-bottom: 1px solid var(--border-color);
   padding-left: 1.5rem;
+  color: var(--text-light);
   position: relative;
 }
 
@@ -405,22 +415,19 @@ body {
   position: absolute;
   left: 0;
   top: 50%;
+  -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
   width: 8px;
   height: 8px;
   border-radius: 50%;
 }
 
-.implemented-features li::before {
-  background-color: #22c55e;
+.status-card.implemented li::before {
+  background-color: #059669;
 }
 
-.planned-features li::before {
-  background-color: #f59e0b;
-}
-
-.status-card li:last-child {
-  border-bottom: none;
+.status-card.planned li::before {
+  background-color: var(--primary-color);
 }
 
 /* Footer */
