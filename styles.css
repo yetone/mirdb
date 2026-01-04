@@ -56,6 +56,7 @@ main:focus {
 }
 
 html {
+  -webkit-scroll-behavior: smooth;
   scroll-behavior: smooth;
 }
 
@@ -68,12 +69,16 @@ body {
 
 /* Navigation */
 .navbar {
+  display: -webkit-flex;
   display: flex;
+  -webkit-justify-content: space-between;
   justify-content: space-between;
+  -webkit-align-items: center;
   align-items: center;
   padding: 1rem 2rem;
   background-color: var(--bg-color);
   border-bottom: 1px solid var(--border-color);
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -86,6 +91,7 @@ body {
 }
 
 .nav-links {
+  display: -webkit-flex;
   display: flex;
   gap: 2rem;
 }
@@ -105,10 +111,14 @@ body {
 .hero {
   padding: 5rem 2rem;
   text-align: center;
+  background: -webkit-linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
   background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
   min-height: 70vh;
+  display: -webkit-flex;
   display: flex;
+  -webkit-align-items: center;
   align-items: center;
+  -webkit-justify-content: center;
   justify-content: center;
 }
 
@@ -139,9 +149,12 @@ body {
 }
 
 .cta-buttons {
+  display: -webkit-flex;
   display: flex;
   gap: 1rem;
+  -webkit-justify-content: center;
   justify-content: center;
+  -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 
@@ -351,14 +364,19 @@ footer {
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
+  display: -webkit-flex;
   display: flex;
+  -webkit-justify-content: space-between;
   justify-content: space-between;
+  -webkit-align-items: center;
   align-items: center;
+  -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
 .footer-links {
+  display: -webkit-flex;
   display: flex;
   gap: 2rem;
 }
@@ -384,6 +402,7 @@ footer {
   }
 
   .navbar {
+    -webkit-flex-direction: column;
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
@@ -391,20 +410,26 @@ footer {
 
   .nav-links {
     gap: 0.5rem;
+    -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
+    -webkit-justify-content: center;
     justify-content: center;
   }
 
   .nav-links a {
     min-height: 44px;
     min-width: 44px;
+    display: -webkit-flex;
     display: flex;
+    -webkit-align-items: center;
     align-items: center;
+    -webkit-justify-content: center;
     justify-content: center;
     padding: 0.75rem 1rem;
   }
 
   .footer-content {
+    -webkit-flex-direction: column;
     flex-direction: column;
     text-align: center;
   }
@@ -416,8 +441,11 @@ footer {
   .footer-links a {
     min-height: 44px;
     min-width: 44px;
+    display: -webkit-flex;
     display: flex;
+    -webkit-align-items: center;
     align-items: center;
+    -webkit-justify-content: center;
     justify-content: center;
     padding: 0.75rem 1rem;
   }
