@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. Drop-in replacement with persistent storage using LSM tree architecture.">
+  <meta name="keywords" content="MirDB, key-value store, memcached, persistent storage, LSM tree, Rust, database">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container">
+      <div class="logo">
+        <a href="/">MirDB</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#getting-started">Getting Started</a></li>
+        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero" class="hero-section">
+      <div class="hero-content">
+        <h1>MirDB</h1>
+        <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+        <p class="hero-description">
+          A high-performance, persistent key-value store written in Rust that implements the Memcached protocol.
+          Unlike standard memcached, MirDB persists your data to disk, ensuring durability across restarts.
+        </p>
+        <div class="hero-cta">
+          <a href="#getting-started" class="btn btn-primary">Get Started</a>
+          <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="assets/logo.gif" alt="MirDB Logo">
+      </div>
+    </section>
+
+    <section id="features" class="features-section">
+      <div class="section-container">
+        <h2>Key Features</h2>
+        <p class="section-subtitle">Everything you need for a reliable, high-performance key-value store</p>
+
+        <div class="features-grid">
+          <article class="feature-card" data-feature="memcached-compatibility">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Memcached Compatibility</h3>
+            <p class="feature-description">
+              A drop-in replacement for existing memcached clients. Connect using any standard memcached client library
+              without changing your application code.
+            </p>
+          </article>
+
+          <article class="feature-card" data-feature="persistent-storage">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.29 7 12 12 20.71 7"/>
+                <line x1="12" y1="22" x2="12" y2="12"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Persistent Storage</h3>
+            <p class="feature-description">
+              Your data survives restarts. MirDB persists data to disk using SSTable-based storage, ensuring your
+              cached values are durable and never lost.
+            </p>
+          </article>
+
+          <article class="feature-card" data-feature="lsm-tree">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+                <line x1="2" y1="20" x2="22" y2="20"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">
+              Built on a Log-Structured Merge-tree for efficient write performance. Background compaction keeps
+              storage optimized without impacting query latency.
+            </p>
+          </article>
+
+          <article class="feature-card" data-feature="async-networking">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Async Networking</h3>
+            <p class="feature-description">
+              Built on Tokio for high-performance async I/O. Handle thousands of concurrent connections efficiently
+              with non-blocking network operations.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="getting-started" class="getting-started-section">
+      <div class="section-container">
+        <h2>Getting Started</h2>
+        <p class="section-subtitle">Start using MirDB in minutes</p>
+
+        <div class="code-example">
+          <div class="code-header">
+            <span class="code-title">Terminal</span>
+          </div>
+          <pre><code><span class="comment"># Start MirDB server</span>
+mirdb -c /path/to/config.toml
+
+<span class="comment"># Connect with any memcached client</span>
+telnet localhost 12333
+set mykey 0 0 5
+hello
+<span class="response">STORED</span>
+get mykey
+<span class="response">VALUE mykey 0 5
+hello
+END</span></code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-content">
+        <p>&copy; 2024 MirDB. Licensed under MIT.</p>
+        <nav class="footer-links">
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
