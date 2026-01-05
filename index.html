@@ -284,6 +284,42 @@
             font-size: 0.85rem;
         }
 
+        /* Configuration Section */
+        .configuration {
+            padding: 100px 0;
+            background-color: var(--surface-color);
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+        }
+
+        .config-item {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .config-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .config-value {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
         /* Footer */
         footer {
             background-color: var(--surface-color);
@@ -468,6 +504,35 @@ DELETED</pre>
                     <div class="command-item">
                         <span class="command-name">PREPEND</span>
                         <span class="command-desc">Prepend to value</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="configuration" id="configuration" data-testid="configuration-section">
+            <div class="container">
+                <h2 class="section-title">Default Configuration</h2>
+                <p class="section-subtitle">Key parameters and their default values</p>
+                <div class="config-grid">
+                    <div class="config-item" data-testid="config-listen-address">
+                        <span class="config-label">Listen Address</span>
+                        <span class="config-value" data-testid="config-value-listen-address">0.0.0.0:12333</span>
+                    </div>
+                    <div class="config-item" data-testid="config-max-lsm-levels">
+                        <span class="config-label">Max LSM Levels</span>
+                        <span class="config-value" data-testid="config-value-max-lsm-levels">7</span>
+                    </div>
+                    <div class="config-item" data-testid="config-sstable-max-size">
+                        <span class="config-label">SSTable Max Size</span>
+                        <span class="config-value" data-testid="config-value-sstable-max-size">100MB</span>
+                    </div>
+                    <div class="config-item" data-testid="config-memtable-max-size">
+                        <span class="config-label">Memtable Max Size</span>
+                        <span class="config-value" data-testid="config-value-memtable-max-size">4MB</span>
+                    </div>
+                    <div class="config-item" data-testid="config-block-size">
+                        <span class="config-label">Block Size</span>
+                        <span class="config-value" data-testid="config-value-block-size">4KB</span>
                     </div>
                 </div>
             </div>
