@@ -10,8 +10,8 @@ test.describe('GitHub Repository Navigation', () => {
     const navLinks = page.locator('header .nav-links');
     await expect(navLinks).toBeVisible();
 
-    // Find the GitHub link in navigation
-    const githubLink = navLinks.locator('a[href*="github"]');
+    // Find the GitHub link in navigation (specific to exact repo URL without #readme)
+    const githubLink = navLinks.locator('a[href="https://github.com/yetone/mirdb"]');
     await expect(githubLink).toBeVisible();
 
     // Verify the link text contains "GitHub"
@@ -37,8 +37,8 @@ test.describe('GitHub Repository Navigation', () => {
   });
 
   test('TC3: GitHub links navigate to valid repository URL', async ({ page }) => {
-    // Get header GitHub link
-    const headerGithubLink = page.locator('header .nav-links a[href*="github"]');
+    // Get header GitHub link (specific to exact repo URL)
+    const headerGithubLink = page.locator('header .nav-links a[href="https://github.com/yetone/mirdb"]');
     const headerHref = await headerGithubLink.getAttribute('href');
 
     // Verify it's a valid GitHub URL
@@ -49,7 +49,7 @@ test.describe('GitHub Repository Navigation', () => {
     expect(headerTarget).toBe('_blank');
 
     // Get footer GitHub link
-    const footerGithubLink = page.locator('footer .footer-links a[href*="github.com/yetone/mirdb"]').first();
+    const footerGithubLink = page.locator('footer .footer-links a[href="https://github.com/yetone/mirdb"]');
     const footerHref = await footerGithubLink.getAttribute('href');
 
     // Verify footer link is valid
@@ -82,8 +82,8 @@ test.describe('GitHub Repository Navigation', () => {
     // Navigate to the header nav area
     const navLinks = page.locator('header .nav-links a');
 
-    // Verify the GitHub link can be focused
-    const githubLink = page.locator('header .nav-links a[href*="github"]');
+    // Verify the GitHub link can be focused (specific to exact repo URL)
+    const githubLink = page.locator('header .nav-links a[href="https://github.com/yetone/mirdb"]');
     await githubLink.focus();
 
     // Verify the link is focused
@@ -94,7 +94,7 @@ test.describe('GitHub Repository Navigation', () => {
   test('Footer GitHub link is styled consistently with other footer links', async ({ page }) => {
     // Get footer links
     const footerLinks = page.locator('footer .footer-links a');
-    const githubLink = page.locator('footer .footer-links a[href*="github.com/yetone/mirdb"]').first();
+    const githubLink = page.locator('footer .footer-links a[href="https://github.com/yetone/mirdb"]');
 
     // Verify GitHub link exists
     await expect(githubLink).toBeVisible();
