@@ -10,12 +10,12 @@ test.describe('Key Value Propositions Display (REQ-2)', () => {
     await page.locator('#features').scrollIntoViewIfNeeded();
 
     // Check for memcached protocol support text
-    const memcachedFeature = page.locator('[data-testid="feature-memcached"]');
+    const memcachedFeature = page.locator('[data-testid~="feature-memcached"]');
     await expect(memcachedFeature).toBeVisible();
 
-    // Verify the heading mentions Memcached Protocol Support
+    // Verify the heading mentions Memcached Protocol
     const heading = memcachedFeature.locator('h3');
-    await expect(heading).toContainText(/Memcached Protocol Support/i);
+    await expect(heading).toContainText(/Memcached Protocol/i);
 
     // Verify the description mentions compatibility
     const description = memcachedFeature.locator('p');
@@ -31,7 +31,7 @@ test.describe('Key Value Propositions Display (REQ-2)', () => {
     await page.locator('#features').scrollIntoViewIfNeeded();
 
     // Check for persistence feature card
-    const persistenceFeature = page.locator('[data-testid="feature-persistence"]');
+    const persistenceFeature = page.locator('[data-testid~="feature-persistence"]');
     await expect(persistenceFeature).toBeVisible();
 
     // Verify the heading mentions Persistent Storage
@@ -53,7 +53,7 @@ test.describe('Key Value Propositions Display (REQ-2)', () => {
     await page.locator('#features').scrollIntoViewIfNeeded();
 
     // Check for LSM feature card
-    const lsmFeature = page.locator('[data-testid="feature-lsm"]');
+    const lsmFeature = page.locator('[data-testid~="feature-lsm"]');
     await expect(lsmFeature).toBeVisible();
 
     // Verify the heading mentions LSM Tree Architecture
@@ -83,16 +83,16 @@ test.describe('Key Value Propositions Display (REQ-2)', () => {
     await expect(featureCards).toHaveCount(3);
 
     // Verify each card is visually distinct (has its own heading)
-    const memcachedCard = page.locator('[data-testid="feature-memcached"]');
-    const persistenceCard = page.locator('[data-testid="feature-persistence"]');
-    const lsmCard = page.locator('[data-testid="feature-lsm"]');
+    const memcachedCard = page.locator('[data-testid~="feature-memcached"]');
+    const persistenceCard = page.locator('[data-testid~="feature-persistence"]');
+    const lsmCard = page.locator('[data-testid~="feature-lsm"]');
 
     await expect(memcachedCard).toBeVisible();
     await expect(persistenceCard).toBeVisible();
     await expect(lsmCard).toBeVisible();
 
     // Verify all three have distinct headings (key pillars)
-    await expect(memcachedCard.locator('h3')).toHaveText('Memcached Protocol Support');
+    await expect(memcachedCard.locator('h3')).toHaveText('Memcached Protocol');
     await expect(persistenceCard.locator('h3')).toHaveText('Persistent Storage');
     await expect(lsmCard.locator('h3')).toHaveText('LSM Tree Architecture');
   });

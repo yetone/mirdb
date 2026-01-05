@@ -382,25 +382,25 @@
             </div>
         </section>
 
-        <section class="features" id="features">
+        <section class="features" id="features" data-testid="features-section">
             <div class="container">
-                <h2 class="section-title">Why MirDB?</h2>
+                <h2 class="section-title" id="features-heading">Key Features</h2>
                 <p class="section-subtitle">Combine the simplicity of memcached with the durability of persistent storage</p>
-                <div class="features-grid">
-                    <div class="feature-card" data-testid="feature-memcached">
+                <div class="features-grid" data-testid="features-grid">
+                    <div class="feature-card" data-testid="feature-memcached feature-card-memcached">
                         <div class="feature-icon">&#128268;</div>
-                        <h3>Memcached Protocol Support</h3>
-                        <p>Drop-in compatibility with existing memcached clients. Use your favorite client library without any code changes.</p>
+                        <h3 class="feature-title" data-testid="feature-title-memcached">Memcached Protocol</h3>
+                        <p class="feature-description" data-testid="feature-description-memcached">Drop-in compatibility with existing memcached clients allows you to use your favorite client library without any code changes to your application.</p>
                     </div>
-                    <div class="feature-card" data-testid="feature-persistence">
+                    <div class="feature-card" data-testid="feature-persistence feature-card-persistent">
                         <div class="feature-icon">&#128190;</div>
-                        <h3>Persistent Storage</h3>
-                        <p>Data survives restarts using SSTable format. Never lose your cache data due to server restarts or failures.</p>
+                        <h3 class="feature-title" data-testid="feature-title-persistent">Persistent Storage</h3>
+                        <p class="feature-description" data-testid="feature-description-persistent">Your data survives restarts using SSTable format ensuring you never lose your cache data due to server restarts or unexpected failures.</p>
                     </div>
-                    <div class="feature-card" data-testid="feature-lsm">
+                    <div class="feature-card" data-testid="feature-lsm feature-card-lsm">
                         <div class="feature-icon">&#9889;</div>
-                        <h3>LSM Tree Architecture</h3>
-                        <p>Efficient write-heavy workloads with automatic background compaction. Optimized for high-throughput operations.</p>
+                        <h3 class="feature-title" data-testid="feature-title-lsm">LSM Tree Architecture</h3>
+                        <p class="feature-description" data-testid="feature-description-lsm">Efficient write-heavy workloads with automatic background compaction optimized for high-throughput operations and maximum performance.</p>
                     </div>
                 </div>
             </div>
