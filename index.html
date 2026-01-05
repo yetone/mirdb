@@ -320,6 +320,40 @@
             color: var(--accent-color);
         }
 
+        /* Project Status Section */
+        .project-status {
+            padding: 100px 0;
+        }
+
+        .tech-stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+        }
+
+        .tech-item {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tech-item-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .tech-item-value {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
         /* Footer */
         footer {
             background-color: var(--surface-color);
@@ -551,6 +585,31 @@ DELETED</pre>
                     <div class="config-item" data-testid="config-block-size">
                         <span class="config-label">Block Size</span>
                         <span class="config-value" data-testid="config-value-block-size">4KB</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="project-status" id="project-status" data-testid="project-status-section">
+            <div class="container">
+                <h2 class="section-title">Technical Stack</h2>
+                <p class="section-subtitle">Built with modern, high-performance technologies</p>
+                <div class="tech-stack-grid" data-testid="tech-stack-grid">
+                    <div class="tech-item" data-testid="tech-rust">
+                        <div class="tech-item-label">Language</div>
+                        <div class="tech-item-value">Rust</div>
+                    </div>
+                    <div class="tech-item" data-testid="tech-tokio">
+                        <div class="tech-item-label">Async Runtime</div>
+                        <div class="tech-item-value">Tokio</div>
+                    </div>
+                    <div class="tech-item" data-testid="tech-snappy">
+                        <div class="tech-item-label">Compression</div>
+                        <div class="tech-item-value">Snappy</div>
+                    </div>
+                    <div class="tech-item" data-testid="tech-crc32">
+                        <div class="tech-item-label">Checksums</div>
+                        <div class="tech-item-value">CRC32</div>
                     </div>
                 </div>
             </div>
