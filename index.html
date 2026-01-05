@@ -356,7 +356,17 @@
             font-size: 0.875rem;
         }
 
-        /* Responsive */
+        /* Responsive - Tablet (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .footer-links a {
+                padding: 12px 8px;
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+            }
+        }
+
+        /* Responsive - Mobile (below 768px) */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
@@ -377,6 +387,13 @@
             .footer-content {
                 flex-direction: column;
                 text-align: center;
+            }
+
+            .footer-links a {
+                padding: 12px 8px;
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
             }
         }
     </style>
