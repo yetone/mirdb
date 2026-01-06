@@ -17,7 +17,7 @@ test.describe('Quick Start Section', () => {
      */
     test('TC1: Quick-start section exists on the page', async ({ page }) => {
         // Navigate to quick-start section
-        const quickStartSection = page.locator('#quick-start');
+        const quickStartSection = page.locator('[data-testid="quick-start-section"]');
 
         // Verify section exists
         await expect(quickStartSection).toBeVisible();

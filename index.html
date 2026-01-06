@@ -8,6 +8,48 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Navigation Header -->
+  <header class="nav-header" data-testid="navigation">
+    <nav class="nav-container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-brand" data-testid="nav-brand">
+        <span class="nav-brand-name">MirDB</span>
+      </a>
+      <ul class="nav-links" data-testid="nav-links">
+        <li>
+          <a
+            href="#get-started"
+            class="nav-link"
+            data-testid="nav-getting-started"
+          >
+            Getting Started
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/yetone/mirdb#readme"
+            class="nav-link"
+            data-testid="nav-documentation"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Documentation
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/yetone/mirdb"
+            class="nav-link"
+            data-testid="nav-github"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
   <main>
     <!-- Hero Section -->
     <section class="hero" data-testid="hero-section">
@@ -143,7 +185,7 @@
     </section>
 
     <!-- Quick Start Section -->
-    <section class="quick-start" id="quick-start" data-testid="quick-start-section">
+    <section class="quick-start" id="get-started" data-testid="quick-start-section">
       <h2>Quick Start</h2>
       <p class="section-description">Get up and running with MirDB in minutes.</p>
 
