@@ -86,6 +86,62 @@
       </div>
     </section>
 
+    <!-- Feature Comparison Section -->
+    <section class="comparison" id="comparison" data-testid="comparison-table">
+      <h2>Feature Comparison</h2>
+      <p class="section-description">See how MirDB compares to other key-value stores.</p>
+      <div class="table-container">
+        <table class="comparison-table" aria-label="Feature comparison between MirDB, Memcached, and Redis">
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">MirDB</th>
+              <th scope="col">Memcached</th>
+              <th scope="col">Redis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Persistence</th>
+              <td data-product="mirdb">Yes (LSM Tree)</td>
+              <td data-product="memcached">No (Memory only)</td>
+              <td data-product="redis">Yes (RDB/AOF)</td>
+            </tr>
+            <tr>
+              <th scope="row">Protocol</th>
+              <td data-product="mirdb">Memcached Compatible</td>
+              <td data-product="memcached">Memcached</td>
+              <td data-product="redis">RESP</td>
+            </tr>
+            <tr>
+              <th scope="row">Language</th>
+              <td data-product="mirdb">Rust</td>
+              <td data-product="memcached">C</td>
+              <td data-product="redis">C</td>
+            </tr>
+            <tr>
+              <th scope="row">Storage Engine</th>
+              <td data-product="mirdb">LSM Tree + SSTables</td>
+              <td data-product="memcached">Hash Table (RAM)</td>
+              <td data-product="redis">In-memory + Disk</td>
+            </tr>
+            <tr>
+              <th scope="row">Data Types</th>
+              <td data-product="mirdb">Key-Value</td>
+              <td data-product="memcached">Key-Value</td>
+              <td data-product="redis">Multiple (Strings, Lists, Sets, etc.)</td>
+            </tr>
+            <tr>
+              <th scope="row">Use Case</th>
+              <td data-product="mirdb">Persistent cache with Memcached clients</td>
+              <td data-product="memcached">High-speed in-memory caching</td>
+              <td data-product="redis">Versatile data store</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- Quick Start Section -->
     <section class="quick-start" id="quick-start" data-testid="quick-start-section">
       <h2>Quick Start</h2>
