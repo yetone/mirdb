@@ -1,10 +1,89 @@
 /**
  * MirDB Homepage JavaScript
  * Handles copy-to-clipboard functionality with visual feedback
+ * and dark mode theme toggling
  */
 
 (function() {
     'use strict';
+
+    const THEME_STORAGE_KEY = 'mirdb-theme';
+
+    /**
+     * Initialize theme based on stored preference or system preference
+     */
+    function initTheme() {
+        const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+
+        if (storedTheme) {
+            // User has explicitly set a preference
+            document.documentElement.setAttribute('data-theme', storedTheme);
+        }
+        // If no stored theme, let CSS handle system preference via @media (prefers-color-scheme)
+    }
+
+    /**
+     * Get the current effective theme
+     * @returns {string} 'light' or 'dark'
+     */
+    function getCurrentTheme() {
+        const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        if (storedTheme) {
+            return storedTheme;
+        }
+        // Check system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+        return 'light';
+    }
+
+    /**
+     * Toggle between light and dark theme
+     */
+    function toggleTheme() {
+        const currentTheme = getCurrentTheme();
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+
+        // Dispatch custom event for testing
+        document.dispatchEvent(new CustomEvent('theme-changed', {
+            detail: { theme: newTheme }
+        }));
+    }
+
+    /**
+     * Initialize theme toggle button
+     */
+    function initThemeToggle() {
+        const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+    }
+
+    /**
+     * Listen for system theme changes
+     */
+    function initSystemThemeListener() {
+        if (window.matchMedia) {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+            mediaQuery.addEventListener('change', (e) => {
+                // Only update if user hasn't set a manual preference
+                const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+                if (!storedTheme) {
+                    // Dispatch event for components that need to know
+                    document.dispatchEvent(new CustomEvent('theme-changed', {
+                        detail: { theme: e.matches ? 'dark' : 'light', source: 'system' }
+                    }));
+                }
+            });
+        }
+    }
 
     /**
      * Initialize copy functionality for all copy buttons
@@ -113,10 +192,20 @@
         }, 2000);
     }
 
+    /**
+     * Initialize all functionality
+     */
+    function init() {
+        initTheme();
+        initThemeToggle();
+        initSystemThemeListener();
+        initCopyButtons();
+    }
+
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCopyButtons);
+        document.addEventListener('DOMContentLoaded', init);
     } else {
-        initCopyButtons();
+        init();
     }
 })();
