@@ -77,10 +77,43 @@ body {
 .hero-tagline {
   font-size: 1.5rem;
   color: var(--color-text-muted);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Status Badges */
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.badge {
+  display: inline-block;
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.badge:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.badge img {
+  height: 20px;
+  vertical-align: middle;
+  display: block;
 }
 
 /* CTA Buttons */
@@ -159,6 +192,10 @@ body {
 
   .hero-tagline {
     font-size: 1.1rem;
+  }
+
+  .hero-badges {
+    gap: var(--spacing-xs);
   }
 
   .hero-cta-buttons {
