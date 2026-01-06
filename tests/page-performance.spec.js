@@ -12,9 +12,14 @@ const { test, expect } = require('@playwright/test');
  * - First Contentful Paint (FCP < 1.8s)
  * - Largest Contentful Paint (LCP < 2.5s)
  * - Total page weight excluding lazy-loaded assets (< 2MB)
+ *
+ * Note: These tests use Chrome DevTools Protocol (CDP) for network simulation
+ * and Chrome-specific Performance APIs, so they only run on Chromium browsers.
  */
 
+// Skip on non-Chromium browsers since CDP is Chrome-specific
 test.describe('Page Performance - NFR-1', () => {
+  test.skip(({ browserName }) => browserName !== 'chromium', 'Performance tests require Chromium for CDP support');
 
   /**
    * Test Case 1: Measure page load time on simulated 3G
