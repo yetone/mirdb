@@ -1,0 +1,22 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Product Homepage - Persistent Key-Value Store with Memcached Protocol",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "start": "npx serve -l 3000 ."
+  },
+  "keywords": ["mirdb", "key-value-store", "memcached"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yetone/mirdb/issues"
+  },
+  "homepage": "https://github.com/yetone/mirdb#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0"
+  }
+}
