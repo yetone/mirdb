@@ -336,6 +336,67 @@ body {
   }
 }
 
+/* Architecture Section */
+.architecture {
+  padding: var(--spacing-xl) var(--spacing-lg);
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: var(--color-background);
+}
+
+.architecture h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.architecture-diagram-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--color-background-alt);
+  border-radius: var(--border-radius);
+  border: 1px solid #e5e7eb;
+}
+
+.architecture-diagram {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+}
+
+/* Architecture Section Responsive */
+@media (max-width: 768px) {
+  .architecture {
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+
+  .architecture h2 {
+    font-size: 2rem;
+  }
+
+  .architecture-diagram-container {
+    padding: var(--spacing-sm);
+  }
+
+  .architecture-diagram {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .architecture h2 {
+    font-size: 1.75rem;
+  }
+
+  .architecture-diagram-container {
+    padding: var(--spacing-xs);
+  }
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,
