@@ -4,3 +4,8 @@
 node_modules/
 playwright-report/
 test-results/
+
+# Web frontend
+web/node_modules/
+web/test-results/
+web/playwright-report/
