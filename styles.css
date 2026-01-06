@@ -509,6 +509,69 @@ body {
   }
 }
 
+/* Usage Demonstration Section */
+.usage-demo {
+  padding: var(--spacing-xl) var(--spacing-lg);
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: var(--color-background-alt);
+}
+
+.usage-demo h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.usage-demo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--color-background);
+  border-radius: var(--border-radius);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.usage-demo-media {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: calc(var(--border-radius) - 2px);
+}
+
+/* Usage Demo Responsive */
+@media (max-width: 768px) {
+  .usage-demo {
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+
+  .usage-demo h2 {
+    font-size: 2rem;
+  }
+
+  .usage-demo-container {
+    padding: var(--spacing-sm);
+  }
+
+  .usage-demo-media {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .usage-demo h2 {
+    font-size: 1.75rem;
+  }
+
+  .usage-demo-container {
+    padding: var(--spacing-xs);
+  }
+}
+
 /* Architecture Section */
 .architecture {
   padding: var(--spacing-xl) var(--spacing-lg);
