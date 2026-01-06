@@ -8,7 +8,11 @@
     "test:headed": "playwright test --headed",
     "start": "npx serve -l 3000 ."
   },
-  "keywords": ["mirdb", "key-value-store", "memcached"],
+  "keywords": [
+    "mirdb",
+    "key-value-store",
+    "memcached"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
@@ -17,6 +21,7 @@
   },
   "homepage": "https://github.com/yetone/mirdb#readme",
   "devDependencies": {
-    "@playwright/test": "^1.57.0"
+    "@playwright/test": "^1.57.0",
+    "serve": "^14.2.5"
   }
 }

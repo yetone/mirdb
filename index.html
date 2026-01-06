@@ -44,6 +44,64 @@
         </div>
       </div>
     </section>
+
+    <!-- Quick Start Section -->
+    <section class="quick-start" id="quick-start" data-testid="quick-start-section">
+      <h2>Quick Start</h2>
+      <p class="section-description">Get up and running with MirDB in minutes.</p>
+
+      <!-- Installation Command -->
+      <div class="code-section">
+        <h3>Installation</h3>
+        <div class="code-block" data-testid="install-code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <button class="copy-btn" data-testid="copy-install-btn" aria-label="Copy installation command">
+              <span class="copy-icon">📋</span>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+          <pre><code data-testid="install-code">cargo install mirdb-server</code></pre>
+        </div>
+      </div>
+
+      <!-- Basic Usage Example -->
+      <div class="code-section">
+        <h3>Basic Usage</h3>
+        <div class="code-block" data-testid="usage-code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <button class="copy-btn" data-testid="copy-usage-btn" aria-label="Copy usage command">
+              <span class="copy-icon">📋</span>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+          <pre><code data-testid="usage-code"># Start the MirDB server
+mirdb-server --config /etc/mirdb.toml
+
+# Connect using any Memcached client
+# Example with telnet:
+telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+        </div>
+      </div>
+
+      <!-- Documentation Link -->
+      <div class="docs-link-section">
+        <p>For more detailed instructions and advanced configuration options:</p>
+        <a href="https://github.com/yetone/mirdb#readme" class="btn btn-docs" data-testid="docs-link" target="_blank" rel="noopener noreferrer">
+          📚 View Full Documentation
+        </a>
+      </div>
+    </section>
   </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
