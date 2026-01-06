@@ -253,6 +253,20 @@ body {
   border-radius: var(--border-radius);
   background-color: var(--color-background-alt);
   object-fit: contain;
+  /* Fallback for broken images */
+  min-width: 120px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fallback styling when logo image fails to load */
+.hero-logo[data-error="true"],
+.hero-logo:not([src]),
+.hero-logo[src=""] {
+  background-color: var(--color-primary);
+  color: #ffffff;
 }
 
 .hero-title {
@@ -302,6 +316,16 @@ body {
   height: 20px;
   vertical-align: middle;
   display: block;
+  /* Fallback for broken badge images */
+  min-width: 80px;
+  min-height: 20px;
+  background-color: var(--color-background-alt);
+  border-radius: 4px;
+}
+
+/* Fallback styling when badge image fails to load */
+.badge img[data-error="true"] {
+  background-color: var(--color-border);
 }
 
 /* CTA Buttons */
@@ -640,6 +664,18 @@ body {
   max-width: 800px;
   height: auto;
   border-radius: calc(var(--border-radius) - 2px);
+  /* Fallback for broken images */
+  min-height: 200px;
+  background-color: var(--color-background-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fallback styling when usage demo image fails to load */
+.usage-demo-media[data-error="true"] {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
 }
 
 /* Usage Demo Responsive */
@@ -1045,6 +1081,16 @@ body {
 .footer-badges img {
   height: 20px;
   display: block;
+  /* Fallback for broken badge images */
+  min-width: 80px;
+  min-height: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+/* Fallback styling when footer badge image fails to load */
+.footer-badges img[data-error="true"] {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Footer Responsive Design */

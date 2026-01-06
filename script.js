@@ -193,6 +193,40 @@
     }
 
     /**
+     * Initialize image error handlers for graceful fallback
+     */
+    function initImageErrorHandlers() {
+        const images = document.querySelectorAll('img');
+
+        images.forEach(img => {
+            // Handle images that may have already failed (cached failures)
+            if (img.complete && img.naturalHeight === 0) {
+                handleImageError(img);
+            }
+
+            // Add error handler for future load failures
+            img.addEventListener('error', function() {
+                handleImageError(this);
+            });
+        });
+    }
+
+    /**
+     * Handle image load error
+     * @param {HTMLImageElement} img - The image element that failed to load
+     */
+    function handleImageError(img) {
+        // Mark the image as having an error for CSS styling
+        img.setAttribute('data-error', 'true');
+
+        // Dispatch custom event for testing
+        img.dispatchEvent(new CustomEvent('image-error', {
+            bubbles: true,
+            detail: { src: img.src, alt: img.alt }
+        }));
+    }
+
+    /**
      * Initialize all functionality
      */
     function init() {
@@ -200,6 +234,7 @@
         initThemeToggle();
         initSystemThemeListener();
         initCopyButtons();
+        initImageErrorHandlers();
     }
 
     // Initialize when DOM is ready
