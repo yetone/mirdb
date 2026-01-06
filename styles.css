@@ -732,6 +732,219 @@ body {
   }
 }
 
+/* Technical Overview Section */
+.technical-overview {
+  padding: var(--spacing-xl) var(--spacing-lg);
+  max-width: 1100px;
+  margin: 0 auto;
+  background-color: var(--color-background-alt);
+  overflow-x: hidden;
+}
+
+.technical-overview h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.technical-overview-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.technical-overview-card {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.technical-overview-card h3 {
+  font-size: 1.5rem;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.card-description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+  font-size: 0.95rem;
+}
+
+/* Commands Grid */
+.commands-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.command-category h4 {
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+  font-weight: 600;
+}
+
+.commands-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.commands-list li {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.commands-list li:last-child {
+  border-bottom: none;
+}
+
+.commands-list code {
+  background-color: #f1f5f9;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Configuration Table */
+.config-table-container {
+  overflow-x: auto;
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.config-table thead {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.config-table th,
+.config-table td {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.config-table thead th {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.config-table tbody tr:hover {
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+.config-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.config-table code {
+  background-color: #f1f5f9;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Technical Overview Responsive */
+@media (max-width: 900px) {
+  .technical-overview-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .technical-overview {
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+
+  .technical-overview h2 {
+    font-size: 2rem;
+  }
+
+  .technical-overview-card {
+    padding: var(--spacing-md);
+  }
+
+  .technical-overview-card h3 {
+    font-size: 1.25rem;
+  }
+
+  .commands-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .technical-overview {
+    padding: var(--spacing-lg) var(--spacing-xs);
+  }
+
+  .technical-overview h2 {
+    font-size: 1.75rem;
+  }
+
+  .technical-overview-card {
+    padding: var(--spacing-sm);
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: var(--spacing-xs);
+    font-size: 0.75rem;
+  }
+
+  .commands-list li {
+    font-size: 0.8rem;
+  }
+
+  .command-category h4 {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .technical-overview {
+    padding: var(--spacing-md) 0.25rem;
+  }
+
+  .technical-overview-card {
+    padding: var(--spacing-xs);
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: 0.25rem;
+    font-size: 0.7rem;
+  }
+
+  .commands-list li {
+    font-size: 0.75rem;
+  }
+
+  .commands-list code {
+    font-size: 0.7rem;
+  }
+}
+
 /* Footer Section */
 .footer {
   background-color: var(--color-secondary);

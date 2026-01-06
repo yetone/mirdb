@@ -415,6 +415,106 @@ END</code></pre>
       </div>
     </section>
 
+    <!-- Technical Overview Section -->
+    <section class="technical-overview" id="technical-overview" data-testid="technical-overview-section">
+      <h2>Technical Overview</h2>
+      <p class="section-description">MirDB's supported commands and default configuration settings.</p>
+
+      <div class="technical-overview-content">
+        <!-- Supported Commands -->
+        <div class="technical-overview-card" data-testid="supported-commands">
+          <h3>Supported Commands</h3>
+          <p class="card-description">MirDB implements the Memcached text protocol with these commands:</p>
+
+          <div class="commands-grid">
+            <div class="command-category">
+              <h4>Storage Commands</h4>
+              <ul class="commands-list" data-testid="storage-commands-list">
+                <li><code>set</code> - Store a key-value pair</li>
+                <li><code>add</code> - Store only if key doesn't exist</li>
+                <li><code>replace</code> - Store only if key exists</li>
+                <li><code>append</code> - Append data to existing value</li>
+                <li><code>prepend</code> - Prepend data to existing value</li>
+              </ul>
+            </div>
+
+            <div class="command-category">
+              <h4>Retrieval Commands</h4>
+              <ul class="commands-list" data-testid="retrieval-commands-list">
+                <li><code>get</code> - Retrieve one or more keys</li>
+                <li><code>gets</code> - Retrieve with CAS token</li>
+              </ul>
+            </div>
+
+            <div class="command-category">
+              <h4>Deletion Commands</h4>
+              <ul class="commands-list" data-testid="deletion-commands-list">
+                <li><code>delete</code> - Remove a key</li>
+              </ul>
+            </div>
+
+            <div class="command-category">
+              <h4>MirDB-Specific Commands</h4>
+              <ul class="commands-list" data-testid="mirdb-commands-list">
+                <li><code>info</code> - Display database status</li>
+                <li><code>major_compaction</code> - Trigger manual compaction</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuration Defaults -->
+        <div class="technical-overview-card" data-testid="configuration-defaults">
+          <h3>Default Configuration</h3>
+          <p class="card-description">MirDB's default settings for quick deployment:</p>
+
+          <div class="config-table-container">
+            <table class="config-table" aria-label="MirDB default configuration values" data-testid="config-table">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Default Value</th>
+                  <th scope="col">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>addr</code></td>
+                  <td data-testid="config-port">0.0.0.0:12333</td>
+                  <td>Listen address and port</td>
+                </tr>
+                <tr>
+                  <td><code>work_dir</code></td>
+                  <td data-testid="config-work-dir">/tmp/mirdb</td>
+                  <td>Data directory path</td>
+                </tr>
+                <tr>
+                  <td><code>max_level</code></td>
+                  <td data-testid="config-max-level">7</td>
+                  <td>Maximum LSM tree levels</td>
+                </tr>
+                <tr>
+                  <td><code>sst_max_size</code></td>
+                  <td data-testid="config-sst-size">100MB</td>
+                  <td>Max SSTable file size</td>
+                </tr>
+                <tr>
+                  <td><code>mem_table_max_size</code></td>
+                  <td data-testid="config-memtable-size">4MB</td>
+                  <td>Max memtable size before flush</td>
+                </tr>
+                <tr>
+                  <td><code>block_size</code></td>
+                  <td data-testid="config-block-size">4KB</td>
+                  <td>Data block size</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- Footer Section -->
