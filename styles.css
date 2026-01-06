@@ -152,8 +152,10 @@ body {
 
 .hero-logo {
   width: 120px;
-  height: auto;
+  height: 120px;
   border-radius: var(--border-radius);
+  background-color: var(--color-background-alt);
+  object-fit: contain;
 }
 
 .hero-title {
