@@ -62,6 +62,7 @@ export default function HowItWorks() {
       id="how-it-works"
       className="py-16 px-4 sm:px-6 lg:px-8 bg-base-200"
       aria-labelledby="how-it-works-heading"
+      data-testid="how-it-works-section"
     >
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
