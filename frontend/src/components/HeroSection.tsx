@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export default function HeroSection() {
   return (
-    <section className="min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-base-100 to-base-200">
+    <section data-testid="hero-section" className="min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-base-100 to-base-200">
       <div className="max-w-4xl mx-auto text-center">
         <motion.h1
           className="text-4xl sm:text-5xl lg:text-6xl font-bold text-base-content mb-6"
