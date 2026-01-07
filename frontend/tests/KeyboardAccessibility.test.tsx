@@ -20,7 +20,11 @@ describe('Accessibility - Keyboard Navigation', () => {
         </MemoryRouter>
       )
 
-      // Tab to first focusable element (should be "Get Started Free" link)
+      // Tab through navbar links first (URL Shortener, Login, Register)
+      await user.tab() // Navbar: URL Shortener
+      await user.tab() // Navbar: Login
+      await user.tab() // Navbar: Register
+      // Tab to hero section "Get Started Free" link
       await user.tab()
 
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
@@ -39,8 +43,11 @@ describe('Accessibility - Keyboard Navigation', () => {
 
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
 
-      // Tab to the element to give it focus
-      await user.tab()
+      // Tab through navbar links first, then to hero CTA
+      await user.tab() // Navbar: URL Shortener
+      await user.tab() // Navbar: Login
+      await user.tab() // Navbar: Register
+      await user.tab() // Hero: Get Started Free
 
       // Element should have focus
       expect(document.activeElement).toBe(primaryCTA)
@@ -65,8 +72,11 @@ describe('Accessibility - Keyboard Navigation', () => {
         </MemoryRouter>
       )
 
-      // Tab to the primary CTA
-      await user.tab()
+      // Tab through navbar links first, then to hero CTA
+      await user.tab() // Navbar: URL Shortener
+      await user.tab() // Navbar: Login
+      await user.tab() // Navbar: Register
+      await user.tab() // Hero: Get Started Free
 
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
       expect(document.activeElement).toBe(primaryCTA)
@@ -87,8 +97,11 @@ describe('Accessibility - Keyboard Navigation', () => {
         </MemoryRouter>
       )
 
-      // Tab to the primary CTA
-      await user.tab()
+      // Tab through navbar links first, then to hero CTA
+      await user.tab() // Navbar: URL Shortener
+      await user.tab() // Navbar: Login
+      await user.tab() // Navbar: Register
+      await user.tab() // Hero: Get Started Free
 
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
       expect(document.activeElement).toBe(primaryCTA)
@@ -111,9 +124,12 @@ describe('Accessibility - Keyboard Navigation', () => {
         </MemoryRouter>
       )
 
-      // Tab to the first element, then tab again to reach Sign In
-      await user.tab() // Get Started Free
-      await user.tab() // Sign In
+      // Tab through navbar and hero section links
+      await user.tab() // Navbar: URL Shortener
+      await user.tab() // Navbar: Login
+      await user.tab() // Navbar: Register
+      await user.tab() // Hero: Get Started Free
+      await user.tab() // Hero: Sign In
 
       const signInLink = screen.getByRole('link', { name: /^sign in$/i })
       expect(document.activeElement).toBe(signInLink)
@@ -204,28 +220,36 @@ describe('Accessibility - Keyboard Navigation', () => {
       const allLinks = screen.getAllByRole('link')
 
       // Expected order based on DOM structure:
-      // 1. Hero Section: Get Started Free, Sign In
-      // 2. Footer: Login, Register
+      // 1. Navbar: URL Shortener (home), Login, Register
+      // 2. Hero Section: Get Started Free, Sign In
+      // 3. Footer: Login, Register
 
-      // The homepage should have 4 links in total:
+      // The homepage should have 7 links in total:
+      // - URL Shortener (navbar)
+      // - Login (navbar)
+      // - Register (navbar)
       // - Get Started Free (hero)
       // - Sign In (hero)
       // - Login (footer)
       // - Register (footer)
-      expect(allLinks.length).toBe(4)
+      expect(allLinks.length).toBe(7)
 
       // Tab through and verify focus order
       const expectedFocusOrder = [
-        /get started free/i,
-        /^sign in$/i,
-        /^login$/i,
-        /^register$/i
+        /url shortener/i,     // Navbar home link
+        /^login$/i,           // Navbar login
+        /^register$/i,        // Navbar register
+        /get started free/i,  // Hero CTA
+        /^sign in$/i,         // Hero secondary CTA
+        /^login$/i,           // Footer login
+        /^register$/i         // Footer register
       ]
 
-      for (const expectedPattern of expectedFocusOrder) {
+      for (let i = 0; i < expectedFocusOrder.length; i++) {
         await user.tab()
-        const expectedElement = screen.getByRole('link', { name: expectedPattern })
-        expect(document.activeElement).toBe(expectedElement)
+        // Note: getAllByRole may return multiple matches for login/register
+        // We verify that the active element matches one of the expected patterns
+        expect(document.activeElement?.textContent?.toLowerCase()).toMatch(expectedFocusOrder[i])
       }
     })
 
@@ -238,27 +262,27 @@ describe('Accessibility - Keyboard Navigation', () => {
         </MemoryRouter>
       )
 
-      // First, tab through all elements to reach the last one
-      await user.tab() // Get Started Free
-      await user.tab() // Sign In
-      await user.tab() // Login
-      await user.tab() // Register
+      // First, tab through all elements to reach the last one (footer register)
+      await user.tab() // Navbar: URL Shortener
+      await user.tab() // Navbar: Login
+      await user.tab() // Navbar: Register
+      await user.tab() // Hero: Get Started Free
+      await user.tab() // Hero: Sign In
+      await user.tab() // Footer: Login
+      await user.tab() // Footer: Register
 
-      const registerLink = screen.getByRole('link', { name: /^register$/i })
-      expect(document.activeElement).toBe(registerLink)
+      // Verify we're at footer register
+      expect(document.activeElement?.textContent?.toLowerCase()).toContain('register')
 
       // Now shift+tab back
-      await user.tab({ shift: true }) // Should go to Login
-      const loginLink = screen.getByRole('link', { name: /^login$/i })
-      expect(document.activeElement).toBe(loginLink)
+      await user.tab({ shift: true }) // Should go to Footer Login
+      expect(document.activeElement?.textContent?.toLowerCase()).toContain('login')
 
-      await user.tab({ shift: true }) // Should go to Sign In
-      const signInLink = screen.getByRole('link', { name: /^sign in$/i })
-      expect(document.activeElement).toBe(signInLink)
+      await user.tab({ shift: true }) // Should go to Hero Sign In
+      expect(document.activeElement?.textContent?.toLowerCase()).toContain('sign in')
 
-      await user.tab({ shift: true }) // Should go to Get Started Free
-      const primaryCTA = screen.getByRole('link', { name: /get started free/i })
-      expect(document.activeElement).toBe(primaryCTA)
+      await user.tab({ shift: true }) // Should go to Hero Get Started Free
+      expect(document.activeElement?.textContent?.toLowerCase()).toContain('get started')
     })
 
     it('focus stays within the page elements (no unexpected focus traps)', async () => {
