@@ -178,7 +178,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-base-200">
-      <Navbar variant="transparent" />
+      <header>
+        <Navbar variant="transparent" />
+      </header>
+
+      <main>
 
       {/* Hero Section */}
       <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20" data-testid="hero-section">
@@ -485,6 +489,8 @@ export default function Home() {
           </RouterLink>
         </div>
       </section>
+
+      </main>
 
       {/* Footer */}
       <footer className="footer footer-center p-10 bg-base-300 text-base-content" data-testid="homepage-footer">
