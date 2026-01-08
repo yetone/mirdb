@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Globe, BarChart3, Share2, Zap, ArrowRight, Copy, Check } from 'lucide-react';
+import { Link, Globe, BarChart3, Share2, Zap, ArrowRight, Copy, Check, Users, MousePointerClick, TrendingUp, Quote } from 'lucide-react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassMorphismCard from '../components/GlassMorphismCard';
@@ -30,6 +30,54 @@ const features = [
     title: 'Share & Collaborate',
     description: 'Share public stats with your team. Collaborate and make data-driven decisions together.',
     icon: <Share2 className="w-6 h-6" />,
+  },
+];
+
+const statistics = [
+  {
+    id: 'urls-shortened',
+    value: '10,000+',
+    label: 'URLs Shortened',
+    icon: <Link className="w-8 h-8" />,
+  },
+  {
+    id: 'total-clicks',
+    value: '1M+',
+    label: 'Total Clicks',
+    icon: <MousePointerClick className="w-8 h-8" />,
+  },
+  {
+    id: 'active-users',
+    value: '5,000+',
+    label: 'Active Users',
+    icon: <Users className="w-8 h-8" />,
+  },
+  {
+    id: 'uptime',
+    value: '99.9%',
+    label: 'Uptime',
+    icon: <TrendingUp className="w-8 h-8" />,
+  },
+];
+
+const testimonials = [
+  {
+    id: 'testimonial-1',
+    quote: 'This URL shortener has transformed how we share links. The analytics are incredibly insightful!',
+    author: 'Marketing Team',
+    role: 'Digital Agency',
+  },
+  {
+    id: 'testimonial-2',
+    quote: 'Simple, fast, and reliable. Exactly what we needed for our campaigns.',
+    author: 'Growth Lead',
+    role: 'Tech Startup',
+  },
+  {
+    id: 'testimonial-3',
+    quote: 'The geographic insights helped us understand our audience better than ever before.',
+    author: 'Content Creator',
+    role: 'Social Media Influencer',
   },
 ];
 
@@ -285,6 +333,61 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-semibold mb-2">Track performance</h3>
               <p className="text-base-content/70">Monitor clicks and analytics over time</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof Section */}
+      <section className="py-20 px-4 bg-gradient-to-br from-secondary/10 to-primary/10" data-testid="social-proof-section">
+        <div className="max-w-6xl mx-auto">
+          {/* Statistics Display */}
+          <div className="text-center mb-16" data-testid="statistics-section">
+            <h2 className="text-3xl font-bold mb-4">Trusted by Thousands</h2>
+            <p className="text-lg text-base-content/70 mb-12">Join the growing community of users who trust our platform</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8" data-testid="statistics-grid">
+              {statistics.map((stat) => (
+                <div
+                  key={stat.id}
+                  className="flex flex-col items-center p-6 rounded-xl bg-base-100/50 backdrop-blur-sm"
+                  data-testid={`statistic-${stat.id}`}
+                >
+                  <div className="text-primary mb-3" data-testid={`statistic-icon-${stat.id}`}>
+                    {stat.icon}
+                  </div>
+                  <div className="text-4xl font-bold mb-2" data-testid={`statistic-value-${stat.id}`}>
+                    {stat.value}
+                  </div>
+                  <div className="text-base-content/70 text-sm" data-testid={`statistic-label-${stat.id}`}>
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Testimonials Section */}
+          <div className="text-center" data-testid="testimonials-section">
+            <h2 className="text-3xl font-bold mb-4">What Our Users Say</h2>
+            <p className="text-lg text-base-content/70 mb-12">Hear from the people who use our platform every day</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6" data-testid="testimonials-grid">
+              {testimonials.map((testimonial) => (
+                <GlassMorphismCard
+                  key={testimonial.id}
+                  data-testid={`testimonial-card-${testimonial.id}`}
+                >
+                  <div className="flex flex-col items-center text-center">
+                    <Quote className="w-8 h-8 text-primary/50 mb-4" data-testid="testimonial-quote-icon" />
+                    <p className="text-base-content/80 italic mb-4" data-testid="testimonial-quote">
+                      "{testimonial.quote}"
+                    </p>
+                    <div className="mt-auto">
+                      <p className="font-semibold" data-testid="testimonial-author">{testimonial.author}</p>
+                      <p className="text-sm text-base-content/60" data-testid="testimonial-role">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </GlassMorphismCard>
+              ))}
             </div>
           </div>
         </div>

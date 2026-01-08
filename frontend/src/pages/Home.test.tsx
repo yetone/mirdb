@@ -695,3 +695,152 @@ describe('Home - Try It Now Demo Section', () => {
     });
   });
 });
+
+// Social Proof Section Tests (Scenario: Social Proof Elements - REQ-5)
+describe('Home - Social Proof Section', () => {
+  describe('Test Case 1: Statistics display showing URL count or similar metric is visible', () => {
+    it('renders social proof section', () => {
+      renderHome();
+
+      const socialProofSection = screen.getByTestId('social-proof-section');
+      expect(socialProofSection).toBeInTheDocument();
+    });
+
+    it('renders statistics section within social proof', () => {
+      renderHome();
+
+      const statisticsSection = screen.getByTestId('statistics-section');
+      expect(statisticsSection).toBeInTheDocument();
+    });
+
+    it('displays URLs shortened statistic', () => {
+      renderHome();
+
+      const urlsShortenedStat = screen.getByTestId('statistic-urls-shortened');
+      expect(urlsShortenedStat).toBeInTheDocument();
+
+      const value = screen.getByTestId('statistic-value-urls-shortened');
+      expect(value).toHaveTextContent('10,000+');
+
+      const label = screen.getByTestId('statistic-label-urls-shortened');
+      expect(label).toHaveTextContent('URLs Shortened');
+    });
+
+    it('displays statistics grid', () => {
+      renderHome();
+
+      const statisticsGrid = screen.getByTestId('statistics-grid');
+      expect(statisticsGrid).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: At least one statistic with numerical value and label is displayed', () => {
+    it('renders at least one statistic with numerical value', () => {
+      renderHome();
+
+      // Check for at least one statistic value
+      const statValues = screen.getAllByTestId(/^statistic-value-/);
+      expect(statValues.length).toBeGreaterThanOrEqual(1);
+
+      // Verify the first statistic has a value with numbers
+      expect(statValues[0].textContent).toMatch(/\d+/);
+    });
+
+    it('each statistic has a numerical value and label', () => {
+      renderHome();
+
+      const statistics = screen.getAllByTestId(/^statistic-(?!value|label|icon)/);
+      expect(statistics.length).toBeGreaterThanOrEqual(1);
+
+      statistics.forEach((stat) => {
+        // Check for value
+        const value = stat.querySelector('[data-testid^="statistic-value-"]');
+        expect(value).toBeInTheDocument();
+        expect(value?.textContent).not.toBe('');
+
+        // Check for label
+        const label = stat.querySelector('[data-testid^="statistic-label-"]');
+        expect(label).toBeInTheDocument();
+        expect(label?.textContent).not.toBe('');
+      });
+    });
+
+    it('displays multiple statistics (URLs, clicks, users, uptime)', () => {
+      renderHome();
+
+      expect(screen.getByTestId('statistic-urls-shortened')).toBeInTheDocument();
+      expect(screen.getByTestId('statistic-total-clicks')).toBeInTheDocument();
+      expect(screen.getByTestId('statistic-active-users')).toBeInTheDocument();
+      expect(screen.getByTestId('statistic-uptime')).toBeInTheDocument();
+    });
+
+    it('each statistic has an icon', () => {
+      renderHome();
+
+      const statIcons = screen.getAllByTestId(/^statistic-icon-/);
+      expect(statIcons.length).toBeGreaterThanOrEqual(1);
+
+      statIcons.forEach((icon) => {
+        const svgElement = icon.querySelector('svg');
+        expect(svgElement).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Test Case 3: Testimonials placeholder or section structure exists', () => {
+    it('renders testimonials section', () => {
+      renderHome();
+
+      const testimonialsSection = screen.getByTestId('testimonials-section');
+      expect(testimonialsSection).toBeInTheDocument();
+    });
+
+    it('renders testimonials grid', () => {
+      renderHome();
+
+      const testimonialsGrid = screen.getByTestId('testimonials-grid');
+      expect(testimonialsGrid).toBeInTheDocument();
+    });
+
+    it('renders at least one testimonial card', () => {
+      renderHome();
+
+      const testimonialCards = screen.getAllByTestId(/^testimonial-card-/);
+      expect(testimonialCards.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('each testimonial has a quote, author, and role', () => {
+      renderHome();
+
+      const testimonialCards = screen.getAllByTestId(/^testimonial-card-/);
+
+      testimonialCards.forEach((card) => {
+        const quote = card.querySelector('[data-testid="testimonial-quote"]');
+        expect(quote).toBeInTheDocument();
+        expect(quote?.textContent).not.toBe('');
+
+        const author = card.querySelector('[data-testid="testimonial-author"]');
+        expect(author).toBeInTheDocument();
+        expect(author?.textContent).not.toBe('');
+
+        const role = card.querySelector('[data-testid="testimonial-role"]');
+        expect(role).toBeInTheDocument();
+        expect(role?.textContent).not.toBe('');
+      });
+    });
+
+    it('testimonials have quote icon', () => {
+      renderHome();
+
+      const quoteIcons = screen.getAllByTestId('testimonial-quote-icon');
+      expect(quoteIcons.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('renders section headings for social proof', () => {
+      renderHome();
+
+      expect(screen.getByText('Trusted by Thousands')).toBeInTheDocument();
+      expect(screen.getByText('What Our Users Say')).toBeInTheDocument();
+    });
+  });
+});
