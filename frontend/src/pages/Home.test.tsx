@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Home from './Home';
+import { ThemeProvider } from '../contexts/ThemeContext';
 
 // Mock useNavigate
 const mockNavigate = vi.fn();
@@ -15,9 +16,11 @@ vi.mock('react-router-dom', async () => {
 
 const renderHome = () => {
   return render(
-    <BrowserRouter>
-      <Home />
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 

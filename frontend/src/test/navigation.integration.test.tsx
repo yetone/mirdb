@@ -5,17 +5,20 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import { ThemeProvider } from '../contexts/ThemeContext';
 
 // Test app wrapper with all routes for integration testing
 function TestApp({ initialEntries = ['/'] }: { initialEntries?: string[] }) {
   return (
-    <MemoryRouter initialEntries={initialEntries}>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </MemoryRouter>
+    <ThemeProvider>
+      <MemoryRouter initialEntries={initialEntries}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </MemoryRouter>
+    </ThemeProvider>
   );
 }
 

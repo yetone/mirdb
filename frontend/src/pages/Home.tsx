@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import GlassMorphismCard from '../components/GlassMorphismCard';
 import FuturisticButton from '../components/FuturisticButton';
 import Navbar from '../components/Navbar';
+import ThemeToggle from '../components/ThemeToggle';
 
 const features = [
   {
@@ -409,7 +410,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="footer footer-center p-10 bg-base-300 text-base-content">
+      <footer className="footer footer-center p-10 bg-base-300 text-base-content" data-testid="homepage-footer">
         <div>
           <p className="font-bold text-lg">URLShort</p>
           <p>Shorten, Share, Track</p>
@@ -418,6 +419,10 @@ export default function Home() {
           <a href="/privacy" className="link link-hover">Privacy Policy</a>
           <a href="/terms" className="link link-hover">Terms of Service</a>
           <a href="/contact" className="link link-hover">Contact</a>
+        </div>
+        <div className="flex items-center gap-4">
+          <span className="text-sm">Theme:</span>
+          <ThemeToggle />
         </div>
         <div>
           <p>&copy; {new Date().getFullYear()} URLShort. All rights reserved.</p>
