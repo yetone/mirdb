@@ -1,21 +1,28 @@
 # Dependencies
 node_modules/
 
-# Build outputs
+# Build output
 dist/
 build/
 
-# Local env files
+# Cache
+.cache
+.vite
+
+# Environment
+.env
 .env.local
 .env.*.local
-
-# IDE
-.vscode/
-.idea/
 
 # Logs
 *.log
 npm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
 
 # OS
 .DS_Store
