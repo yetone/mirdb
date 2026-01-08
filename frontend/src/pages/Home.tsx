@@ -178,14 +178,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-base-200">
+      {/* Skip to main content link for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 focus:bg-primary focus:text-primary-content focus:px-4 focus:py-2 focus:rounded-md"
+        data-testid="skip-link"
+      >
+        Skip to main content
+      </a>
       <header>
         <Navbar variant="transparent" />
       </header>
 
-      <main>
-
+      <main id="main-content">
       {/* Hero Section */}
-      <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20" data-testid="hero-section">
+      <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20" data-testid="hero-section" aria-labelledby="hero-heading">
         <motion.div
           className="hero-content text-center"
           initial="hidden"
@@ -195,6 +202,7 @@ export default function Home() {
         >
           <div className="max-w-2xl">
             <motion.h1
+              id="hero-heading"
               className="text-5xl font-bold mb-6"
               variants={heroVariants}
               data-testid="hero-headline-animated"
@@ -225,14 +233,14 @@ export default function Home() {
       </section>
 
       {/* Try It Now Demo Section */}
-      <section id="demo" className="py-20 px-4 bg-base-200/50" data-testid="demo-section">
+      <section id="demo" className="py-20 px-4 bg-base-200/50" data-testid="demo-section" aria-labelledby="demo-title">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Zap className="w-6 h-6 text-primary" />
-              <h2 className="text-3xl font-bold" data-testid="demo-title">Try It Now</h2>
+              <Zap className="w-6 h-6 text-primary" aria-hidden="true" />
+              <h2 id="demo-title" className="text-3xl font-bold" data-testid="demo-title">Try It Now</h2>
             </div>
-            <p className="text-base-content/70" data-testid="demo-subtitle">
+            <p id="demo-url-hint" className="text-base-content/70" data-testid="demo-subtitle">
               See how easy it is to shorten URLs. Enter a long URL below to preview.
             </p>
           </div>
@@ -241,11 +249,12 @@ export default function Home() {
             <div className="space-y-6">
               {/* Demo URL Input */}
               <div className="form-control">
-                <label className="label">
+                <label htmlFor="demo-url-input" className="label">
                   <span className="label-text font-medium">Your Long URL</span>
                 </label>
                 <div className="flex gap-2">
                   <input
+                    id="demo-url-input"
                     type="url"
                     placeholder="https://example.com/very/long/url/that/needs/shortening"
                     className="input input-bordered flex-1"
@@ -253,6 +262,7 @@ export default function Home() {
                     onChange={(e) => setDemoUrl(e.target.value)}
                     disabled={showDemoResult}
                     data-testid="demo-url-input"
+                    aria-describedby="demo-url-hint"
                   />
                   {!showDemoResult ? (
                     <button
@@ -268,7 +278,7 @@ export default function Home() {
                         </>
                       ) : (
                         <>
-                          <Zap className="w-4 h-4" />
+                          <Zap className="w-4 h-4" aria-hidden="true" />
                           Shorten
                         </>
                       )}
@@ -297,7 +307,7 @@ export default function Home() {
                   >
                     <div className="divider">
                       <span className="text-success flex items-center gap-1">
-                        <Check className="w-4 h-4" /> Preview Generated
+                        <Check className="w-4 h-4" aria-hidden="true" /> Preview Generated
                       </span>
                     </div>
 
@@ -314,11 +324,12 @@ export default function Home() {
                           className="btn btn-sm btn-ghost"
                           onClick={handleDemoCopy}
                           data-testid="demo-copy-button"
+                          aria-label={isCopied ? "Copied" : "Copy short URL to clipboard"}
                         >
                           {isCopied ? (
-                            <Check className="w-4 h-4 text-success" />
+                            <Check className="w-4 h-4 text-success" aria-hidden="true" />
                           ) : (
-                            <Copy className="w-4 h-4" />
+                            <Copy className="w-4 h-4" aria-hidden="true" />
                           )}
                         </button>
                       </div>
@@ -338,7 +349,7 @@ export default function Home() {
                           <p className="text-sm">Sign up for free to create real short URLs with analytics and tracking.</p>
                         </div>
                         <RouterLink to="/register" className="btn btn-sm btn-primary gap-1" data-testid="demo-signup-button">
-                          Sign Up Free <ArrowRight className="w-4 h-4" />
+                          Sign Up Free <ArrowRight className="w-4 h-4" aria-hidden="true" />
                         </RouterLink>
                       </div>
                     </motion.div>
@@ -351,9 +362,10 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 bg-base-100" data-testid="features-section" ref={featuresRef}>
+      <section id="features" className="py-20 px-4 bg-base-100" data-testid="features-section" ref={featuresRef} aria-labelledby="features-heading">
         <div className="max-w-6xl mx-auto">
           <motion.h2
+            id="features-heading"
             className="text-3xl font-bold text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             animate={featuresInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -389,9 +401,9 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 px-4 bg-base-200" data-testid="how-it-works-section">
+      <section id="how-it-works" className="py-20 px-4 bg-base-200" data-testid="how-it-works-section" aria-labelledby="how-it-works-heading">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12" data-testid="how-it-works-title">
+          <h2 id="how-it-works-heading" className="text-3xl font-bold text-center mb-12" data-testid="how-it-works-title">
             How It Works
           </h2>
           <div className="flex flex-col md:flex-row gap-8 justify-center" data-testid="how-it-works-steps-container">
@@ -421,11 +433,11 @@ export default function Home() {
       </section>
 
       {/* Social Proof Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-secondary/10 to-primary/10" data-testid="social-proof-section">
+      <section className="py-20 px-4 bg-gradient-to-br from-secondary/10 to-primary/10" data-testid="social-proof-section" aria-labelledby="social-proof-heading">
         <div className="max-w-6xl mx-auto">
           {/* Statistics Display */}
           <div className="text-center mb-16" data-testid="statistics-section">
-            <h2 className="text-3xl font-bold mb-4">Trusted by Thousands</h2>
+            <h2 id="social-proof-heading" className="text-3xl font-bold mb-4">Trusted by Thousands</h2>
             <p className="text-lg text-base-content/70 mb-12">Join the growing community of users who trust our platform</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8" data-testid="statistics-grid">
               {statistics.map((stat) => (
@@ -476,9 +488,9 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-primary text-primary-content">
+      <section className="py-20 px-4 bg-primary text-primary-content" aria-labelledby="cta-heading">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 id="cta-heading" className="text-3xl font-bold mb-4">
             Ready to get started?
           </h2>
           <p className="text-lg mb-8 opacity-80">

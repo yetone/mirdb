@@ -56,23 +56,23 @@ export default function ThemeToggle({ variant = 'dropdown', className = '' }: Th
         tabIndex={0}
         className="btn btn-ghost btn-circle"
         aria-label="Change theme"
-        role="button"
+        aria-haspopup="menu"
       >
         {themeIcons[theme]}
       </label>
       <ul
         tabIndex={0}
         className="dropdown-content z-[1] menu p-2 shadow-lg bg-base-200 rounded-box w-52"
-        role="listbox"
+        role="menu"
         aria-label="Theme options"
       >
         {availableThemes.map((t) => (
-          <li key={t}>
+          <li key={t} role="none">
             <button
               onClick={() => setTheme(t)}
               className={theme === t ? 'active' : ''}
-              role="option"
-              aria-selected={theme === t}
+              role="menuitemradio"
+              aria-checked={theme === t}
               aria-label={`${themeLabels[t]} theme`}
               data-testid={`theme-option-${t}`}
             >

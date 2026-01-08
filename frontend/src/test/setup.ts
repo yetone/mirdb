@@ -1,4 +1,8 @@
 import '@testing-library/jest-dom';
+import { toHaveNoViolations } from 'jest-axe';
+import { expect } from 'vitest';
+
+expect.extend(toHaveNoViolations);
 
 // Mock IntersectionObserver for framer-motion useInView hook
 class MockIntersectionObserver implements IntersectionObserver {

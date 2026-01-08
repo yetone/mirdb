@@ -75,19 +75,19 @@ describe('ThemeToggle Component', () => {
       await user.click(button);
 
       const cyberpunkOption = screen.getByTestId('theme-option-cyberpunk');
-      expect(cyberpunkOption).toHaveAttribute('aria-selected', 'true');
+      expect(cyberpunkOption).toHaveAttribute('aria-checked', 'true');
       expect(within(cyberpunkOption).getByText('Active')).toBeInTheDocument();
     });
 
-    it('has listbox role for accessibility', async () => {
+    it('has menu role for accessibility', async () => {
       const user = userEvent.setup();
       renderThemeToggle('light', 'dropdown');
 
       const button = screen.getByLabelText(/change theme/i);
       await user.click(button);
 
-      const listbox = screen.getByRole('listbox');
-      expect(listbox).toBeInTheDocument();
+      const menu = screen.getByRole('menu');
+      expect(menu).toBeInTheDocument();
     });
 
     it('persists theme choice to localStorage', async () => {

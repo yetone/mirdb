@@ -140,8 +140,7 @@ describe('Home - Theme Support - Test Case 3: Theme Toggle Integration', () => {
     expect(useThemeStore.getState().theme).toBe('light');
 
     // Find and click theme toggle to open dropdown
-    const themeToggle = screen.getByTestId('theme-toggle');
-    const toggleButton = within(themeToggle).getByRole('button');
+    const toggleButton = screen.getByLabelText(/change theme/i);
     await user.click(toggleButton);
 
     // Click on dark theme option
@@ -159,8 +158,7 @@ describe('Home - Theme Support - Test Case 3: Theme Toggle Integration', () => {
     renderHomeWithTheme('light');
 
     // Open theme dropdown and select dark
-    const themeToggle = screen.getByTestId('theme-toggle');
-    const toggleButton = within(themeToggle).getByRole('button');
+    const toggleButton = screen.getByLabelText(/change theme/i);
     await user.click(toggleButton);
 
     const darkOption = screen.getByTestId('theme-option-dark');
@@ -177,8 +175,7 @@ describe('Home - Theme Support - Test Case 3: Theme Toggle Integration', () => {
     renderHomeWithTheme('light');
 
     // Toggle to dark theme
-    const themeToggle = screen.getByTestId('theme-toggle');
-    const toggleButton = within(themeToggle).getByRole('button');
+    const toggleButton = screen.getByLabelText(/change theme/i);
     await user.click(toggleButton);
 
     const darkOption = screen.getByTestId('theme-option-dark');
@@ -211,8 +208,7 @@ describe('Home - Theme Support - Test Case 4: Cyberpunk Theme', () => {
     renderHomeWithTheme('light');
 
     // Open theme dropdown and select cyberpunk
-    const themeToggle = screen.getByTestId('theme-toggle');
-    const toggleButton = within(themeToggle).getByRole('button');
+    const toggleButton = screen.getByLabelText(/change theme/i);
     await user.click(toggleButton);
 
     const cyberpunkOption = screen.getByTestId('theme-option-cyberpunk');
@@ -298,8 +294,7 @@ describe('Home - Theme Support - Test Case 5: ThemeToggle Accessibility', () => 
     renderHomeWithTheme('light');
 
     // Open dropdown
-    const themeToggle = screen.getByTestId('theme-toggle');
-    const toggleButton = within(themeToggle).getByRole('button');
+    const toggleButton = screen.getByLabelText(/change theme/i);
     await user.click(toggleButton);
 
     // Check all theme options are present
@@ -317,14 +312,14 @@ describe('Home - Theme Support - Test Case 5: ThemeToggle Accessibility', () => 
     const toggleButton = screen.getByLabelText(/change theme/i);
     await user.click(toggleButton);
 
-    // Check for role="option" on theme options
+    // Check for role="menuitemradio" on theme options (WCAG compliant menu pattern)
     const lightOption = screen.getByTestId('theme-option-light');
-    expect(lightOption).toHaveAttribute('role', 'option');
-    expect(lightOption).toHaveAttribute('aria-selected', 'true');
+    expect(lightOption).toHaveAttribute('role', 'menuitemradio');
+    expect(lightOption).toHaveAttribute('aria-checked', 'true');
 
     const darkOption = screen.getByTestId('theme-option-dark');
-    expect(darkOption).toHaveAttribute('role', 'option');
-    expect(darkOption).toHaveAttribute('aria-selected', 'false');
+    expect(darkOption).toHaveAttribute('role', 'menuitemradio');
+    expect(darkOption).toHaveAttribute('aria-checked', 'false');
   });
 
   it('active theme is indicated in the dropdown', async () => {
@@ -335,9 +330,9 @@ describe('Home - Theme Support - Test Case 5: ThemeToggle Accessibility', () => 
     const toggleButton = screen.getByLabelText(/change theme/i);
     await user.click(toggleButton);
 
-    // Dark option should be marked as selected
+    // Dark option should be marked as checked
     const darkOption = screen.getByTestId('theme-option-dark');
-    expect(darkOption).toHaveAttribute('aria-selected', 'true');
+    expect(darkOption).toHaveAttribute('aria-checked', 'true');
 
     // Should contain "Active" badge
     expect(within(darkOption).getByText('Active')).toBeInTheDocument();
