@@ -1,5 +1,7 @@
 import { Link, Globe, BarChart3, Share2 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import GlassMorphismCard from '../components/GlassMorphismCard'
+import FuturisticButton from '../components/FuturisticButton'
 
 const features = [
   {
@@ -29,10 +31,23 @@ const features = [
 ]
 
 export default function Home() {
+  const navigate = useNavigate()
+
+  const handleGetStarted = () => {
+    navigate('/register')
+  }
+
+  const handleLearnMore = () => {
+    const featuresSection = document.getElementById('features')
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <div className="min-h-screen bg-base-100">
       {/* Hero Section */}
-      <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20">
+      <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20" data-testid="hero-section">
         <div className="hero-content text-center">
           <div className="max-w-2xl">
             <h1 className="text-5xl font-bold mb-6">Shorten, Share, Track</h1>
@@ -40,8 +55,12 @@ export default function Home() {
               Create short, memorable links and track their performance with powerful analytics.
             </p>
             <div className="flex gap-4 justify-center">
-              <button className="btn btn-primary">Get Started Free</button>
-              <button className="btn btn-outline">Learn More</button>
+              <FuturisticButton variant="primary" size="lg" onClick={handleGetStarted}>
+                Get Started Free
+              </FuturisticButton>
+              <FuturisticButton variant="outline" size="lg" onClick={handleLearnMore}>
+                Learn More
+              </FuturisticButton>
             </div>
           </div>
         </div>

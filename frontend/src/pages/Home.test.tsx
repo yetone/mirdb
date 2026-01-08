@@ -1,7 +1,17 @@
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import Home from './Home'
+
+// Mock useNavigate
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom')
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  }
+})
 
 const renderHome = () => {
   return render(
@@ -203,6 +213,92 @@ describe('Home - Feature Cards Display', () => {
 
       const featureCards = screen.getAllByTestId(/^feature-card-/)
       expect(featureCards).toHaveLength(4)
+    })
+  })
+})
+
+describe('Home - Hero Section Rendering', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  // Test Case 1: Hero section contains h1 element with compelling headline text
+  describe('Test Case 1: Hero section headline', () => {
+    it('renders hero section with h1 headline', () => {
+      renderHome()
+
+      const headline = screen.getByRole('heading', { level: 1 })
+      expect(headline).toBeInTheDocument()
+      expect(headline).toHaveTextContent('Shorten, Share, Track')
+    })
+
+    it('renders hero section element', () => {
+      renderHome()
+
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeInTheDocument()
+    })
+  })
+
+  // Test Case 2: Subheadline paragraph explaining value proposition is visible
+  describe('Test Case 2: Subheadline value proposition', () => {
+    it('renders subheadline paragraph with value proposition', () => {
+      renderHome()
+
+      const subheadline = screen.getByText(/Create short, memorable links and track their performance/i)
+      expect(subheadline).toBeInTheDocument()
+      expect(subheadline.tagName.toLowerCase()).toBe('p')
+    })
+  })
+
+  // Test Case 3: Primary CTA button with 'Get Started Free' text is rendered
+  describe('Test Case 3: Primary CTA button', () => {
+    it('renders primary CTA button with "Get Started Free" text', () => {
+      renderHome()
+
+      const primaryCTA = screen.getByRole('button', { name: /Get Started Free/i })
+      expect(primaryCTA).toBeInTheDocument()
+    })
+
+    it('renders FuturisticButton components for CTAs', () => {
+      renderHome()
+
+      const buttons = screen.getAllByRole('button')
+      expect(buttons.length).toBeGreaterThanOrEqual(2)
+
+      expect(screen.getByRole('button', { name: /Get Started Free/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /Learn More/i })).toBeInTheDocument()
+    })
+  })
+
+  // Test Case 4: Click primary CTA navigates to /register route
+  describe('Test Case 4: Primary CTA navigation', () => {
+    it('navigates to /register when primary CTA is clicked', async () => {
+      renderHome()
+
+      const primaryCTA = screen.getByRole('button', { name: /Get Started Free/i })
+      fireEvent.click(primaryCTA)
+
+      await waitFor(() => {
+        expect(mockNavigate).toHaveBeenCalledWith('/register')
+      })
+    })
+  })
+
+  // Test Case 5: Click 'Learn More' secondary CTA scrolls to features section
+  describe('Test Case 5: Secondary CTA scroll behavior', () => {
+    it('scrolls to features section when Learn More is clicked', async () => {
+      const scrollIntoViewMock = vi.fn()
+      Element.prototype.scrollIntoView = scrollIntoViewMock
+
+      renderHome()
+
+      const secondaryCTA = screen.getByRole('button', { name: /Learn More/i })
+      fireEvent.click(secondaryCTA)
+
+      await waitFor(() => {
+        expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' })
+      })
     })
   })
 })
