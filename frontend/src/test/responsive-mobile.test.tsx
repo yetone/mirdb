@@ -5,6 +5,7 @@ import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import { ThemeProvider } from '../contexts/ThemeContext';
 
 // Mock useNavigate
 const mockNavigate = vi.fn();
@@ -69,22 +70,26 @@ const mockDesktopViewport = () => {
 
 const renderHome = () => {
   return render(
-    <BrowserRouter>
-      <Home />
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 
 // Test App wrapper for integration tests
 function TestApp({ initialEntries = ['/'] }: { initialEntries?: string[] }) {
   return (
-    <MemoryRouter initialEntries={initialEntries}>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </MemoryRouter>
+    <ThemeProvider>
+      <MemoryRouter initialEntries={initialEntries}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </MemoryRouter>
+    </ThemeProvider>
   );
 }
 
