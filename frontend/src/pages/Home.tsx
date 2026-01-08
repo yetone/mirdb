@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
-import { Link as LinkIcon, Globe, BarChart3, Share2 } from 'lucide-react';
+import { Link, Globe, BarChart3, Share2 } from 'lucide-react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import GlassMorphismCard from '../components/GlassMorphismCard';
+import FuturisticButton from '../components/FuturisticButton';
 import Navbar from '../components/Navbar';
 
 const features = [
@@ -8,7 +9,7 @@ const features = [
     id: 'url-shortening',
     title: 'URL Shortening',
     description: 'Create memorable short links in seconds. Transform long URLs into clean, shareable links.',
-    icon: <LinkIcon className="w-6 h-6" />,
+    icon: <Link className="w-6 h-6" />,
   },
   {
     id: 'analytics-dashboard',
@@ -31,12 +32,25 @@ const features = [
 ];
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/register');
+  };
+
+  const handleLearnMore = () => {
+    const featuresSection = document.getElementById('features');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-base-200">
       <Navbar variant="transparent" />
 
       {/* Hero Section */}
-      <section className="hero min-h-[80vh] bg-base-200">
+      <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20" data-testid="hero-section">
         <div className="hero-content text-center">
           <div className="max-w-2xl">
             <h1 className="text-5xl font-bold mb-6">
@@ -46,12 +60,12 @@ export default function Home() {
               Create short, memorable links in seconds. Track clicks, analyze your audience, and optimize your marketing with our powerful URL shortening service.
             </p>
             <div className="flex gap-4 justify-center">
-              <Link to="/register" className="btn btn-primary btn-lg">
+              <FuturisticButton variant="primary" size="lg" onClick={handleGetStarted}>
                 Get Started Free
-              </Link>
-              <a href="#features" className="btn btn-outline btn-lg">
+              </FuturisticButton>
+              <FuturisticButton variant="outline" size="lg" onClick={handleLearnMore}>
                 Learn More
-              </a>
+              </FuturisticButton>
             </div>
           </div>
         </div>
@@ -120,9 +134,9 @@ export default function Home() {
           <p className="text-lg mb-8 opacity-80">
             Join thousands of users who trust URLShort for their link management needs.
           </p>
-          <Link to="/register" className="btn btn-secondary btn-lg">
+          <RouterLink to="/register" className="btn btn-secondary btn-lg">
             Sign Up Free
-          </Link>
+          </RouterLink>
         </div>
       </section>
 
