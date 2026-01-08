@@ -308,32 +308,32 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 px-4 bg-base-200">
+      <section id="how-it-works" className="py-20 px-4 bg-base-200" data-testid="how-it-works-section">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-center mb-12" data-testid="how-it-works-title">
             How It Works
           </h2>
-          <div className="flex flex-col md:flex-row gap-8 justify-center">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-full bg-primary text-primary-content flex items-center justify-center text-2xl font-bold mb-4">
+          <div className="flex flex-col md:flex-row gap-8 justify-center" data-testid="how-it-works-steps-container">
+            <div className="flex flex-col items-center text-center" data-testid="how-it-works-step-1">
+              <div className="w-16 h-16 rounded-full bg-primary text-primary-content flex items-center justify-center text-2xl font-bold mb-4" data-testid="how-it-works-step-1-indicator">
                 1
               </div>
-              <h3 className="text-lg font-semibold mb-2">Paste your long URL</h3>
-              <p className="text-base-content/70">Enter any long URL you want to shorten</p>
+              <h3 className="text-lg font-semibold mb-2" data-testid="how-it-works-step-1-title">Paste your long URL</h3>
+              <p className="text-base-content/70" data-testid="how-it-works-step-1-description">Enter any long URL you want to shorten</p>
             </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-full bg-primary text-primary-content flex items-center justify-center text-2xl font-bold mb-4">
+            <div className="flex flex-col items-center text-center" data-testid="how-it-works-step-2">
+              <div className="w-16 h-16 rounded-full bg-primary text-primary-content flex items-center justify-center text-2xl font-bold mb-4" data-testid="how-it-works-step-2-indicator">
                 2
               </div>
-              <h3 className="text-lg font-semibold mb-2">Get your short link</h3>
-              <p className="text-base-content/70">Receive a compact, shareable URL instantly</p>
+              <h3 className="text-lg font-semibold mb-2" data-testid="how-it-works-step-2-title">Get your short link</h3>
+              <p className="text-base-content/70" data-testid="how-it-works-step-2-description">Receive a compact, shareable URL instantly</p>
             </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-full bg-primary text-primary-content flex items-center justify-center text-2xl font-bold mb-4">
+            <div className="flex flex-col items-center text-center" data-testid="how-it-works-step-3">
+              <div className="w-16 h-16 rounded-full bg-primary text-primary-content flex items-center justify-center text-2xl font-bold mb-4" data-testid="how-it-works-step-3-indicator">
                 3
               </div>
-              <h3 className="text-lg font-semibold mb-2">Track performance</h3>
-              <p className="text-base-content/70">Monitor clicks and analytics over time</p>
+              <h3 className="text-lg font-semibold mb-2" data-testid="how-it-works-step-3-title">Track performance</h3>
+              <p className="text-base-content/70" data-testid="how-it-works-step-3-description">Monitor clicks and analytics over time</p>
             </div>
           </div>
         </div>
