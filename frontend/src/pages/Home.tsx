@@ -196,7 +196,7 @@ export default function Home() {
       <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20 relative overflow-hidden" data-testid="hero-section" aria-labelledby="hero-heading">
         <BackgroundEffect data-testid="hero-background-effect" />
         <motion.div
-          className="hero-content text-center relative z-10"
+          className="hero-content text-center relative"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
