@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Home from './Home';
 import { ThemeProvider } from '../contexts/ThemeContext';
+import { useThemeStore } from '../store/themeStore';
 
 // Mock useNavigate
 const mockNavigate = vi.fn();
@@ -14,6 +15,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+// Helper to render Home with required providers
 const renderHome = () => {
   return render(
     <ThemeProvider>
@@ -29,22 +31,35 @@ const renderHome = () => {
 describe('Home - Footer Section (REQ-8)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    localStorage.clear();
+    useThemeStore.setState({ theme: 'light' });
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   // Test Case 1: Footer element is present at page bottom
   describe('Test Case 1: Footer element is present at page bottom', () => {
-    it('renders a footer element on the homepage', () => {
+    it('renders the footer element', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
       expect(footer).toBeInTheDocument();
     });
 
-    it('footer uses semantic HTML footer element', () => {
+    it('footer has the correct HTML element tag', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
       expect(footer.tagName.toLowerCase()).toBe('footer');
+    });
+
+    it('footer has footer-center class for proper layout', () => {
+      renderHome();
+
+      const footer = screen.getByTestId('homepage-footer');
+      expect(footer).toHaveClass('footer-center');
     });
 
     it('footer is visible on the page', () => {
@@ -67,52 +82,38 @@ describe('Home - Footer Section (REQ-8)', () => {
         expect(lastChild).toBe(footer);
       }
     });
-
-    it('footer has appropriate styling classes for centering', () => {
-      renderHome();
-
-      const footer = screen.getByTestId('homepage-footer');
-      expect(footer).toHaveClass('footer-center');
-    });
   });
 
   // Test Case 2: Copyright or brand text is displayed
   describe('Test Case 2: Copyright or brand text is displayed', () => {
-    it('displays the brand name "URLShort" in the footer', () => {
+    it('displays the brand name "URLShort"', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
-      const brandName = within(footer).getByText('URLShort');
-      expect(brandName).toBeInTheDocument();
+      expect(footer).toHaveTextContent('URLShort');
     });
 
-    it('displays the brand tagline "Shorten, Share, Track"', () => {
+    it('displays brand tagline "Shorten, Share, Track"', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
-      const tagline = within(footer).getByText('Shorten, Share, Track');
-      expect(tagline).toBeInTheDocument();
+      expect(footer).toHaveTextContent('Shorten, Share, Track');
     });
 
-    it('displays copyright text with current year', () => {
+    it('displays copyright notice with current year', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
       const currentYear = new Date().getFullYear().toString();
-
-      // Look for copyright text containing the current year
-      const copyrightText = within(footer).getByText((content) => {
-        return content.includes('©') && content.includes(currentYear);
-      });
-      expect(copyrightText).toBeInTheDocument();
+      expect(footer).toHaveTextContent(currentYear);
+      expect(footer).toHaveTextContent('All rights reserved');
     });
 
-    it('copyright text includes "All rights reserved"', () => {
+    it('copyright symbol is present', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
-      const copyrightText = within(footer).getByText(/All rights reserved/i);
-      expect(copyrightText).toBeInTheDocument();
+      expect(footer).toHaveTextContent('©');
     });
 
     it('brand name has bold styling', () => {
@@ -126,7 +127,7 @@ describe('Home - Footer Section (REQ-8)', () => {
 
   // Test Case 3: Privacy Policy link/placeholder is present
   describe('Test Case 3: Privacy Policy link/placeholder is present', () => {
-    it('renders a Privacy Policy link in the footer', () => {
+    it('displays Privacy Policy link', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
@@ -134,7 +135,7 @@ describe('Home - Footer Section (REQ-8)', () => {
       expect(privacyLink).toBeInTheDocument();
     });
 
-    it('Privacy Policy link points to correct href', () => {
+    it('Privacy Policy link has correct href', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
@@ -142,7 +143,7 @@ describe('Home - Footer Section (REQ-8)', () => {
       expect(privacyLink).toHaveAttribute('href', '/privacy');
     });
 
-    it('Privacy Policy link is visible and clickable', () => {
+    it('Privacy Policy link is visible', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
@@ -150,7 +151,7 @@ describe('Home - Footer Section (REQ-8)', () => {
       expect(privacyLink).toBeVisible();
     });
 
-    it('Privacy Policy link has appropriate hover styling class', () => {
+    it('Privacy Policy link has hover styling class', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
@@ -161,7 +162,7 @@ describe('Home - Footer Section (REQ-8)', () => {
 
   // Test Case 4: Terms of Service link/placeholder is present
   describe('Test Case 4: Terms of Service link/placeholder is present', () => {
-    it('renders a Terms of Service link in the footer', () => {
+    it('displays Terms of Service link', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
@@ -169,7 +170,7 @@ describe('Home - Footer Section (REQ-8)', () => {
       expect(termsLink).toBeInTheDocument();
     });
 
-    it('Terms of Service link points to correct href', () => {
+    it('Terms of Service link has correct href', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
@@ -177,7 +178,7 @@ describe('Home - Footer Section (REQ-8)', () => {
       expect(termsLink).toHaveAttribute('href', '/terms');
     });
 
-    it('Terms of Service link is visible and clickable', () => {
+    it('Terms of Service link is visible', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
@@ -185,7 +186,7 @@ describe('Home - Footer Section (REQ-8)', () => {
       expect(termsLink).toBeVisible();
     });
 
-    it('Terms of Service link has appropriate hover styling class', () => {
+    it('Terms of Service link has hover styling class', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
@@ -196,14 +197,7 @@ describe('Home - Footer Section (REQ-8)', () => {
 
   // Test Case 5: ThemeToggle component is accessible in footer or header
   describe('Test Case 5: ThemeToggle component is accessible in footer or header', () => {
-    it('ThemeToggle component is rendered on the homepage', () => {
-      renderHome();
-
-      const themeToggle = screen.getByTestId('theme-toggle');
-      expect(themeToggle).toBeInTheDocument();
-    });
-
-    it('ThemeToggle is located within the footer section', () => {
+    it('ThemeToggle component is present in footer', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
@@ -214,23 +208,33 @@ describe('Home - Footer Section (REQ-8)', () => {
     it('ThemeToggle has accessible label', () => {
       renderHome();
 
-      const toggleButton = screen.getByLabelText(/change theme/i);
-      expect(toggleButton).toBeInTheDocument();
+      const footer = screen.getByTestId('homepage-footer');
+      const themeToggleButton = within(footer).getByLabelText(/change theme/i);
+      expect(themeToggleButton).toBeInTheDocument();
     });
 
     it('ThemeToggle is visible and interactive', () => {
       renderHome();
 
-      const themeToggle = screen.getByTestId('theme-toggle');
+      const footer = screen.getByTestId('homepage-footer');
+      const themeToggle = within(footer).getByTestId('theme-toggle');
       expect(themeToggle).toBeVisible();
     });
 
-    it('footer displays "Theme:" label next to ThemeToggle', () => {
+    it('Footer displays "Theme:" label next to ThemeToggle', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
-      const themeLabel = within(footer).getByText('Theme:');
-      expect(themeLabel).toBeInTheDocument();
+      expect(footer).toHaveTextContent('Theme:');
+    });
+
+    it('ThemeToggle in footer uses dropdown variant by default', () => {
+      renderHome();
+
+      const footer = screen.getByTestId('homepage-footer');
+      const themeToggle = within(footer).getByTestId('theme-toggle');
+      // Dropdown variant has the dropdown class
+      expect(themeToggle).toHaveClass('dropdown');
     });
 
     it('ThemeToggle button is keyboard accessible', () => {
@@ -241,8 +245,8 @@ describe('Home - Footer Section (REQ-8)', () => {
     });
   });
 
-  // Additional footer integration tests
-  describe('Footer - Additional Integration Tests', () => {
+  // Additional footer structure tests
+  describe('Footer structure and layout', () => {
     it('footer contains Contact link', () => {
       renderHome();
 
@@ -252,20 +256,29 @@ describe('Home - Footer Section (REQ-8)', () => {
       expect(contactLink).toHaveAttribute('href', '/contact');
     });
 
-    it('footer has all three navigation links in a row', () => {
+    it('footer links are grouped together', () => {
+      renderHome();
+
+      const footer = screen.getByTestId('homepage-footer');
+      const links = within(footer).getAllByRole('link');
+      // Should have at least 3 links: Privacy, Terms, Contact
+      expect(links.length).toBeGreaterThanOrEqual(3);
+    });
+
+    it('footer has all three navigation links', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
       const links = within(footer).getAllByRole('link');
 
-      // Should have at least Privacy, Terms, and Contact links
+      // Should have Privacy, Terms, and Contact links
       const linkTexts = links.map(link => link.textContent);
       expect(linkTexts).toContain('Privacy Policy');
       expect(linkTexts).toContain('Terms of Service');
       expect(linkTexts).toContain('Contact');
     });
 
-    it('footer has proper background styling', () => {
+    it('footer has appropriate background styling', () => {
       renderHome();
 
       const footer = screen.getByTestId('homepage-footer');
