@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Home from './Home';
 
@@ -358,6 +358,339 @@ describe('Home - Hero Section Rendering', () => {
 
       await waitFor(() => {
         expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' });
+      });
+    });
+  });
+});
+
+// Try It Now Demo Section Tests (Scenario: Try It Now Demo Section - REQ-4)
+describe('Home - Try It Now Demo Section', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+  });
+
+  afterEach(() => {
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
+  });
+
+  // Test Case 1: Demo section with URL input field is visible
+  describe('Test Case 1: Demo section with URL input field is visible', () => {
+    it('renders the demo section', () => {
+      renderHome();
+
+      const demoSection = screen.getByTestId('demo-section');
+      expect(demoSection).toBeInTheDocument();
+    });
+
+    it('renders the demo title "Try It Now"', () => {
+      renderHome();
+
+      const demoTitle = screen.getByTestId('demo-title');
+      expect(demoTitle).toBeInTheDocument();
+      expect(demoTitle.textContent).toBe('Try It Now');
+    });
+
+    it('renders the demo subtitle with instructions', () => {
+      renderHome();
+
+      const demoSubtitle = screen.getByTestId('demo-subtitle');
+      expect(demoSubtitle).toBeInTheDocument();
+      expect(demoSubtitle.textContent).toContain('shorten URLs');
+    });
+
+    it('renders the demo card container', () => {
+      renderHome();
+
+      const demoCard = screen.getByTestId('demo-card');
+      expect(demoCard).toBeInTheDocument();
+    });
+
+    it('renders the demo URL input field', () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      expect(demoInput).toBeInTheDocument();
+      expect(demoInput).toHaveAttribute('type', 'url');
+    });
+
+    it('renders the demo shorten button', () => {
+      renderHome();
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      expect(shortenButton).toBeInTheDocument();
+      expect(shortenButton.textContent).toContain('Shorten');
+    });
+  });
+
+  // Test Case 2: Input field accepts and displays URL
+  describe('Test Case 2: Input field accepts and displays URL', () => {
+    it('accepts URL input text', () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input') as HTMLInputElement;
+      fireEvent.change(demoInput, { target: { value: 'https://example.com/very/long/url' } });
+
+      expect(demoInput.value).toBe('https://example.com/very/long/url');
+    });
+
+    it('updates input value when user types', () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input') as HTMLInputElement;
+      const testUrl = 'https://test.com/path';
+
+      fireEvent.change(demoInput, { target: { value: testUrl } });
+
+      expect(demoInput.value).toBe(testUrl);
+    });
+
+    it('displays placeholder text when empty', () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input') as HTMLInputElement;
+
+      expect(demoInput.placeholder).toContain('example.com');
+    });
+  });
+
+  // Test Case 3: Demo shows preview/animation of shortening UI (no actual API call)
+  describe('Test Case 3: Demo shows preview/animation of shortening UI (no actual API call)', () => {
+    it('shorten button is disabled when input is empty', () => {
+      renderHome();
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      expect(shortenButton).toBeDisabled();
+    });
+
+    it('shorten button is enabled when input has value', () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      expect(shortenButton).not.toBeDisabled();
+    });
+
+    it('shows loading state when shortening', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      expect(shortenButton.textContent).toContain('Shortening');
+    });
+
+    it('shows demo result after shortening animation completes', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      // Advance timer to complete the 1-second animation
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const demoResult = screen.getByTestId('demo-result');
+        expect(demoResult).toBeInTheDocument();
+      });
+    });
+
+    it('displays short URL preview after shortening', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const shortUrlPreview = screen.getByTestId('demo-short-url-preview');
+        expect(shortUrlPreview).toBeInTheDocument();
+      });
+    });
+
+    it('displays generated short URL code', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const shortUrl = screen.getByTestId('demo-short-url');
+        expect(shortUrl).toBeInTheDocument();
+        expect(shortUrl.textContent).toContain('short.url/');
+      });
+    });
+
+    it('shows copy button after shortening', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const copyButton = screen.getByTestId('demo-copy-button');
+        expect(copyButton).toBeInTheDocument();
+      });
+    });
+  });
+
+  // Test Case 4: Demo prompts user to sign up for actual functionality
+  describe('Test Case 4: Demo prompts user to sign up for actual functionality', () => {
+    it('shows signup prompt after demo shortening', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const signupPrompt = screen.getByTestId('demo-signup-prompt');
+        expect(signupPrompt).toBeInTheDocument();
+      });
+    });
+
+    it('signup prompt contains message about preview', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const signupPrompt = screen.getByTestId('demo-signup-prompt');
+        expect(signupPrompt.textContent).toContain('preview');
+      });
+    });
+
+    it('signup prompt contains signup button linking to register', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const signupButton = screen.getByTestId('demo-signup-button');
+        expect(signupButton).toBeInTheDocument();
+        expect(signupButton).toHaveAttribute('href', '/register');
+      });
+    });
+
+    it('signup button contains call to action text', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const signupButton = screen.getByTestId('demo-signup-button');
+        expect(signupButton.textContent).toContain('Sign Up');
+      });
+    });
+
+    it('shows "Try Another" button after shortening completes', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input');
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const resetButton = screen.getByTestId('demo-reset-button');
+        expect(resetButton).toBeInTheDocument();
+        expect(resetButton.textContent).toContain('Try Another');
+      });
+    });
+
+    it('resets demo when "Try Another" button is clicked', async () => {
+      renderHome();
+
+      const demoInput = screen.getByTestId('demo-url-input') as HTMLInputElement;
+      fireEvent.change(demoInput, { target: { value: 'https://example.com' } });
+
+      const shortenButton = screen.getByTestId('demo-shorten-button');
+      fireEvent.click(shortenButton);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      await waitFor(() => {
+        const resetButton = screen.getByTestId('demo-reset-button');
+        expect(resetButton).toBeInTheDocument();
+      });
+
+      const resetButton = screen.getByTestId('demo-reset-button');
+      fireEvent.click(resetButton);
+
+      // After reset, input should be empty and shorten button should be back
+      await waitFor(() => {
+        const newInput = screen.getByTestId('demo-url-input') as HTMLInputElement;
+        expect(newInput.value).toBe('');
+        const newShortenButton = screen.getByTestId('demo-shorten-button');
+        expect(newShortenButton).toBeInTheDocument();
       });
     });
   });
