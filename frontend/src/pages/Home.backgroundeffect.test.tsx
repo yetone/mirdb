@@ -48,16 +48,16 @@ describe('Home - Background Effect Integration', () => {
       expect(heroSection).toContainElement(backgroundEffect);
     });
 
-    it('renders animated background blobs', () => {
+    it('renders animated background orbs', () => {
       renderHome();
 
-      const blob1 = screen.getByTestId('background-effect-blob-1');
-      const blob2 = screen.getByTestId('background-effect-blob-2');
-      const blob3 = screen.getByTestId('background-effect-blob-3');
+      const orb1 = screen.getByTestId('background-effect-orb-1');
+      const orb2 = screen.getByTestId('background-effect-orb-2');
+      const orb3 = screen.getByTestId('background-effect-orb-3');
 
-      expect(blob1).toBeInTheDocument();
-      expect(blob2).toBeInTheDocument();
-      expect(blob3).toBeInTheDocument();
+      expect(orb1).toBeInTheDocument();
+      expect(orb2).toBeInTheDocument();
+      expect(orb3).toBeInTheDocument();
     });
   });
 
