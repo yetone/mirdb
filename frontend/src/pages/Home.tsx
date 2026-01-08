@@ -7,6 +7,7 @@ import GlassMorphismCard from '../components/GlassMorphismCard';
 import FuturisticButton from '../components/FuturisticButton';
 import Navbar from '../components/Navbar';
 import ThemeToggle from '../components/ThemeToggle';
+import BackgroundEffect from '../components/BackgroundEffect';
 
 // Animation variants for hero section
 export const heroVariants = {
@@ -192,13 +193,15 @@ export default function Home() {
 
       <main id="main-content">
       {/* Hero Section */}
-      <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20" data-testid="hero-section" aria-labelledby="hero-heading">
+      <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20 relative overflow-hidden" data-testid="hero-section" aria-labelledby="hero-heading">
+        <BackgroundEffect data-testid="hero-background-effect" />
         <motion.div
-          className="hero-content text-center"
+          className="hero-content text-center relative z-10"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
           data-testid="hero-animated-container"
+          style={{ zIndex: 1 }}
         >
           <div className="max-w-2xl">
             <motion.h1
