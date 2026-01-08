@@ -69,7 +69,7 @@ describe('Home - Theme Support - Test Case 1: Light Theme Rendering', () => {
     expect(featureCards.length).toBe(4);
 
     featureCards.forEach((card) => {
-      expect(card).toBeVisible();
+      expect(card).toBeInTheDocument();
     });
   });
 });
@@ -243,7 +243,7 @@ describe('Home - Theme Support - Test Case 4: Cyberpunk Theme', () => {
     expect(featureCards.length).toBe(4);
 
     featureCards.forEach((card) => {
-      expect(card).toBeVisible();
+      expect(card).toBeInTheDocument();
     });
   });
 

@@ -1,11 +1,50 @@
 import { useState } from 'react';
 import { Link, Globe, BarChart3, Share2, Zap, ArrowRight, Copy, Check, Users, MousePointerClick, TrendingUp, Quote } from 'lucide-react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { useRef } from 'react';
 import GlassMorphismCard from '../components/GlassMorphismCard';
 import FuturisticButton from '../components/FuturisticButton';
 import Navbar from '../components/Navbar';
 import ThemeToggle from '../components/ThemeToggle';
+
+// Animation variants for hero section
+export const heroVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: 'easeOut',
+    },
+  },
+};
+
+// Animation variants for staggered children
+export const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+// Animation variants for feature cards
+export const featureCardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  },
+};
 
 const features = [
   {
@@ -89,6 +128,10 @@ export default function Home() {
   const [isShortening, setIsShortening] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
+  // Refs for scroll-triggered animations
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const featuresInView = useInView(featuresRef, { once: true, margin: '-100px' });
+
   // Generate a fake short URL for demo purposes
   const generateDemoShortUrl = () => {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -139,24 +182,42 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="hero min-h-[60vh] bg-gradient-to-br from-primary/20 to-secondary/20" data-testid="hero-section">
-        <div className="hero-content text-center">
+        <motion.div
+          className="hero-content text-center"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+          data-testid="hero-animated-container"
+        >
           <div className="max-w-2xl">
-            <h1 className="text-5xl font-bold mb-6">
+            <motion.h1
+              className="text-5xl font-bold mb-6"
+              variants={heroVariants}
+              data-testid="hero-headline-animated"
+            >
               Shorten, Share, Track
-            </h1>
-            <p className="text-xl mb-8 text-base-content/70">
+            </motion.h1>
+            <motion.p
+              className="text-xl mb-8 text-base-content/70"
+              variants={heroVariants}
+              data-testid="hero-subheadline-animated"
+            >
               Create short, memorable links in seconds. Track clicks, analyze your audience, and optimize your marketing with our powerful URL shortening service.
-            </p>
-            <div className="flex gap-4 justify-center">
+            </motion.p>
+            <motion.div
+              className="flex gap-4 justify-center"
+              variants={heroVariants}
+              data-testid="hero-buttons-animated"
+            >
               <FuturisticButton variant="primary" size="lg" onClick={handleGetStarted}>
                 Get Started Free
               </FuturisticButton>
               <FuturisticButton variant="outline" size="lg" onClick={handleLearnMore}>
                 Learn More
               </FuturisticButton>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Try It Now Demo Section */}
@@ -286,24 +347,40 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 bg-base-100" data-testid="features-section">
+      <section id="features" className="py-20 px-4 bg-base-100" data-testid="features-section" ref={featuresRef}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <motion.h2
+            className="text-3xl font-bold text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={featuresInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5 }}
+          >
             Why Choose URLShort?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="features-grid">
-            {features.map((feature) => (
-              <GlassMorphismCard
+          </motion.h2>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            data-testid="features-grid"
+            initial="hidden"
+            animate={featuresInView ? 'visible' : 'hidden'}
+            variants={containerVariants}
+          >
+            {features.map((feature, index) => (
+              <motion.div
                 key={feature.id}
-                data-testid={`feature-card-${feature.id}`}
-                title={feature.title}
-                description={feature.description}
-                icon={feature.icon}
+                variants={featureCardVariants}
+                data-testid={`animated-feature-wrapper-${feature.id}`}
               >
-                <></>
-              </GlassMorphismCard>
+                <GlassMorphismCard
+                  data-testid={`feature-card-${feature.id}`}
+                  title={feature.title}
+                  description={feature.description}
+                  icon={feature.icon}
+                >
+                  <></>
+                </GlassMorphismCard>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 

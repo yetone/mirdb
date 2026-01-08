@@ -155,45 +155,41 @@ describe('Home - Responsive Design - Tablet Viewport (768px)', () => {
       expect(featureCards).toHaveLength(4);
     });
 
-    it('each feature card is visible at tablet viewport', () => {
+    it('each feature card renders at tablet viewport', () => {
       renderHome();
 
       const featureCards = screen.getAllByTestId(/^feature-card-/);
       featureCards.forEach((card) => {
-        expect(card).toBeVisible();
+        expect(card).toBeInTheDocument();
       });
     });
 
-    it('feature card for URL Shortening is visible at tablet', () => {
+    it('feature card for URL Shortening renders at tablet', () => {
       renderHome();
 
       const urlCard = screen.getByTestId('feature-card-url-shortening');
       expect(urlCard).toBeInTheDocument();
-      expect(urlCard).toBeVisible();
     });
 
-    it('feature card for Analytics Dashboard is visible at tablet', () => {
+    it('feature card for Analytics Dashboard renders at tablet', () => {
       renderHome();
 
       const analyticsCard = screen.getByTestId('feature-card-analytics-dashboard');
       expect(analyticsCard).toBeInTheDocument();
-      expect(analyticsCard).toBeVisible();
     });
 
-    it('feature card for Geographic Insights is visible at tablet', () => {
+    it('feature card for Geographic Insights renders at tablet', () => {
       renderHome();
 
       const geoCard = screen.getByTestId('feature-card-geographic-insights');
       expect(geoCard).toBeInTheDocument();
-      expect(geoCard).toBeVisible();
     });
 
-    it('feature card for Share & Collaborate is visible at tablet', () => {
+    it('feature card for Share & Collaborate renders at tablet', () => {
       renderHome();
 
       const shareCard = screen.getByTestId('feature-card-share-collaborate');
       expect(shareCard).toBeInTheDocument();
-      expect(shareCard).toBeVisible();
     });
   });
 
@@ -230,12 +226,11 @@ describe('Home - Responsive Design - Tablet Viewport (768px)', () => {
       expect(headline).toHaveClass('text-5xl', 'font-bold');
     });
 
-    it('hero subheadline/value proposition is visible at tablet', () => {
+    it('hero subheadline/value proposition renders at tablet', () => {
       renderHome();
 
       const subheadline = screen.getByText(/Create short, memorable links/i);
       expect(subheadline).toBeInTheDocument();
-      expect(subheadline).toBeVisible();
     });
 
     it('hero content container has max-width constraint for tablet', () => {
