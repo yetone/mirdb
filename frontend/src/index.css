@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 @layer components {
   .glass-card {
     @apply backdrop-blur-md bg-base-100/70 border border-base-content/10 rounded-xl shadow-lg;

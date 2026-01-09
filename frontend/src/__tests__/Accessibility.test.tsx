@@ -45,8 +45,9 @@ describe('Accessibility Compliance Tests', () => {
     it('theme toggle SVG icons are marked as decorative', () => {
       renderWithRouter(<NavigationHeader />)
 
-      const themeToggle = screen.getByTestId('theme-toggle')
-      const svg = themeToggle.querySelector('svg')
+      // There are multiple theme toggles (desktop and mobile), get all and check the first
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      const svg = themeToggles[0].querySelector('svg')
       expect(svg).toHaveAttribute('aria-hidden', 'true')
     })
 
@@ -151,9 +152,10 @@ describe('Accessibility Compliance Tests', () => {
     it('theme toggle has descriptive aria-label', () => {
       renderWithRouter(<NavigationHeader />)
 
-      const themeToggle = screen.getByTestId('theme-toggle')
-      expect(themeToggle).toHaveAttribute('aria-label')
-      const ariaLabel = themeToggle.getAttribute('aria-label')
+      // There are multiple theme toggles (desktop and mobile), check the first
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      expect(themeToggles[0]).toHaveAttribute('aria-label')
+      const ariaLabel = themeToggles[0].getAttribute('aria-label')
       expect(ariaLabel).toContain('theme')
     })
 
@@ -260,7 +262,8 @@ describe('Accessibility Compliance Tests', () => {
       const logo = screen.getByTestId('nav-logo')
       const featuresLink = screen.getByTestId('nav-features')
       const howItWorksLink = screen.getByTestId('nav-how-it-works')
-      const themeToggle = screen.getByTestId('theme-toggle')
+      // There are multiple theme toggles (desktop and mobile), get all and check the first
+      const themeToggles = screen.getAllByTestId('theme-toggle')
       const loginButton = screen.getByTestId('nav-login')
       const signupButton = screen.getByTestId('nav-signup')
 
@@ -272,7 +275,7 @@ describe('Accessibility Compliance Tests', () => {
       // Buttons use <button> tag
       expect(featuresLink.tagName).toBe('BUTTON')
       expect(howItWorksLink.tagName).toBe('BUTTON')
-      expect(themeToggle.tagName).toBe('BUTTON')
+      expect(themeToggles[0].tagName).toBe('BUTTON')
     })
 
     it('CTA buttons in hero section are focusable', () => {
