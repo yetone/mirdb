@@ -1,6 +1,7 @@
 import HeroSection from '../components/HeroSection'
 import FeaturesSection from '../components/FeaturesSection'
 import HowItWorksSection from '../components/HowItWorksSection'
+import UrlDemoSection from '../components/UrlDemoSection'
 import NavigationHeader from '../components/NavigationHeader'
 import Footer from '../components/Footer'
 
@@ -36,6 +37,9 @@ const Home: React.FC = () => {
 
         {/* How It Works Section */}
         <HowItWorksSection />
+
+        {/* URL Demo Section */}
+        <UrlDemoSection />
       </main>
 
       {/* Footer */}
