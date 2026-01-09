@@ -82,6 +82,7 @@ const HowItWorksSection: React.FC = () => {
       id="how-it-works"
       className="py-16 px-4 bg-base-200"
       aria-labelledby="how-it-works-heading"
+      data-testid="how-it-works-section"
     >
       <div className="max-w-6xl mx-auto">
         <h2
