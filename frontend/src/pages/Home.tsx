@@ -2,6 +2,7 @@ import HeroSection from '../components/HeroSection'
 import FeaturesSection from '../components/FeaturesSection'
 import HowItWorksSection from '../components/HowItWorksSection'
 import UrlDemoSection from '../components/UrlDemoSection'
+import StatisticsSection from '../components/StatisticsSection'
 import NavigationHeader from '../components/NavigationHeader'
 import Footer from '../components/Footer'
 
@@ -40,6 +41,9 @@ const Home: React.FC = () => {
 
         {/* URL Demo Section */}
         <UrlDemoSection />
+
+        {/* Statistics Section - Social Proof */}
+        <StatisticsSection />
       </main>
 
       {/* Footer */}
