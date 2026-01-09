@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import FuturisticButton from './FuturisticButton'
 
 export interface HeroSectionProps {
@@ -30,6 +30,12 @@ export function HeroSection(props: HeroSectionProps) {
     secondaryCtaLink = defaultProps.secondaryCtaLink,
   } = props
 
+  const shouldReduceMotion = useReducedMotion()
+
+  const animationProps = shouldReduceMotion
+    ? { initial: { opacity: 1, y: 0 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0 } }
+    : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } }
+
   return (
     <section
       data-testid="hero-section"
@@ -38,33 +44,30 @@ export function HeroSection(props: HeroSectionProps) {
       <div className="hero-content text-center">
         <motion.div
           className="max-w-2xl"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          {...animationProps}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6 }}
+          data-reduced-motion={shouldReduceMotion ? 'true' : 'false'}
         >
           <motion.h1
             data-testid="hero-headline"
             className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            {...animationProps}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6, delay: 0.2 }}
           >
             {headline}
           </motion.h1>
           <motion.p
             data-testid="hero-subheadline"
             className="text-lg md:text-xl text-base-content/80 mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            {...animationProps}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6, delay: 0.4 }}
           >
             {subheadline}
           </motion.p>
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            {...animationProps}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6, delay: 0.6 }}
           >
             <FuturisticButton
               as="link"

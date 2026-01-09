@@ -14,17 +14,29 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-base-100" data-testid="home-page">
+      {/* Skip to main content link for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-content focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-focus"
+        data-testid="skip-to-main"
+      >
+        Skip to main content
+      </a>
+
       {/* Navigation Header */}
       <NavigationHeader onScrollToSection={scrollToSection} />
 
-      {/* Hero Section */}
-      <HeroSection />
+      {/* Main Content */}
+      <main id="main-content">
+        {/* Hero Section */}
+        <HeroSection />
 
-      {/* Features Section */}
-      <FeaturesSection />
+        {/* Features Section */}
+        <FeaturesSection />
 
-      {/* How It Works Section */}
-      <HowItWorksSection />
+        {/* How It Works Section */}
+        <HowItWorksSection />
+      </main>
 
       {/* Footer */}
       <Footer />
