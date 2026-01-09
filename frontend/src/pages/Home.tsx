@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="min-h-screen bg-base-100" data-testid="home-page">
       {/* Navigation Header */}
       <NavigationHeader onScrollToSection={scrollToSection} />
 

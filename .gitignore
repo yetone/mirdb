@@ -1,3 +1,6 @@
 /target
 **/*.rs.bk
 .something/
+.pnpm-store/
+frontend/node_modules/
+frontend/dist/
