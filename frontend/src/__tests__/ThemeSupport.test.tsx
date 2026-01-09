@@ -64,7 +64,10 @@ describe('Theme Support and Toggle - Scenario Tests', () => {
         </BrowserRouter>
       )
 
-      const themeToggle = screen.getByTestId('theme-toggle')
+      // There may be multiple theme toggles (desktop and mobile), check at least one exists
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      expect(themeToggles.length).toBeGreaterThanOrEqual(1)
+      const themeToggle = themeToggles[0]
       expect(themeToggle).toBeInTheDocument()
       expect(themeToggle).toHaveAttribute('aria-label')
       expect(themeToggle.getAttribute('aria-label')).toContain('theme')
@@ -106,7 +109,9 @@ describe('Theme Support and Toggle - Scenario Tests', () => {
         </BrowserRouter>
       )
 
-      const themeToggle = screen.getByTestId('theme-toggle')
+      // There may be multiple theme toggles (desktop and mobile)
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      const themeToggle = themeToggles[0]
 
       // Verify initial state is light
       expect(document.documentElement.getAttribute('data-theme')).toBe('light')
@@ -127,7 +132,9 @@ describe('Theme Support and Toggle - Scenario Tests', () => {
         </BrowserRouter>
       )
 
-      const themeToggle = screen.getByTestId('theme-toggle')
+      // There may be multiple theme toggles (desktop and mobile)
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      const themeToggle = themeToggles[0]
       fireEvent.click(themeToggle)
 
       // Location should not change (no reload)

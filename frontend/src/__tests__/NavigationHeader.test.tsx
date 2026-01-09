@@ -53,8 +53,10 @@ describe('NavigationHeader', () => {
     it('renders theme toggle button', () => {
       renderWithRouter(<NavigationHeader />)
 
-      const themeToggle = screen.getByTestId('theme-toggle')
-      expect(themeToggle).toBeInTheDocument()
+      // There may be multiple theme toggles (desktop and mobile), check at least one exists
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      expect(themeToggles.length).toBeGreaterThanOrEqual(1)
+      expect(themeToggles[0]).toBeInTheDocument()
     })
 
     it('renders Log In button', () => {
@@ -190,14 +192,17 @@ describe('NavigationHeader', () => {
     it('theme toggle button is present', () => {
       renderWithRouter(<NavigationHeader />)
 
-      const themeToggle = screen.getByTestId('theme-toggle')
-      expect(themeToggle).toBeInTheDocument()
+      // There may be multiple theme toggles (desktop and mobile)
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      expect(themeToggles.length).toBeGreaterThanOrEqual(1)
+      expect(themeToggles[0]).toBeInTheDocument()
     })
 
     it('theme toggle button is clickable', () => {
       renderWithRouter(<NavigationHeader />)
 
-      const themeToggle = screen.getByTestId('theme-toggle')
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      const themeToggle = themeToggles[0]
       expect(themeToggle).not.toBeDisabled()
 
       // Should not throw when clicked
@@ -207,7 +212,8 @@ describe('NavigationHeader', () => {
     it('clicking theme toggle changes the theme', () => {
       renderWithRouter(<NavigationHeader />)
 
-      const themeToggle = screen.getByTestId('theme-toggle')
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      const themeToggle = themeToggles[0]
 
       // Initial theme is light
       expect(document.documentElement.getAttribute('data-theme')).toBe('light')
@@ -222,7 +228,8 @@ describe('NavigationHeader', () => {
     it('theme toggle has proper aria-label for accessibility', () => {
       renderWithRouter(<NavigationHeader />)
 
-      const themeToggle = screen.getByTestId('theme-toggle')
+      const themeToggles = screen.getAllByTestId('theme-toggle')
+      const themeToggle = themeToggles[0]
       expect(themeToggle).toHaveAttribute('aria-label')
       expect(themeToggle.getAttribute('aria-label')).toContain('theme')
     })
@@ -287,7 +294,7 @@ describe('NavigationHeader', () => {
       const logo = screen.getByTestId('nav-logo')
       const featuresLink = screen.getByTestId('nav-features')
       const howItWorksLink = screen.getByTestId('nav-how-it-works')
-      const themeToggle = screen.getByTestId('theme-toggle')
+      const themeToggles = screen.getAllByTestId('theme-toggle')
       const loginButton = screen.getByTestId('nav-login')
       const signupButton = screen.getByTestId('nav-signup')
 
@@ -295,7 +302,7 @@ describe('NavigationHeader', () => {
       expect(logo.tagName).toBe('A')
       expect(featuresLink.tagName).toBe('BUTTON')
       expect(howItWorksLink.tagName).toBe('BUTTON')
-      expect(themeToggle.tagName).toBe('BUTTON')
+      expect(themeToggles[0].tagName).toBe('BUTTON')
       expect(loginButton.tagName).toBe('A')
       expect(signupButton.tagName).toBe('A')
     })

@@ -43,8 +43,8 @@ test.describe('Responsive Design - Desktop', () => {
     const navSignup = page.getByTestId('nav-signup')
     await expect(navSignup).toBeVisible()
 
-    // Verify theme toggle is visible
-    const themeToggle = page.getByTestId('theme-toggle')
+    // Verify theme toggle is visible (use first() as there may be desktop and mobile toggles)
+    const themeToggle = page.getByTestId('theme-toggle').first()
     await expect(themeToggle).toBeVisible()
 
     // Scroll to features section and verify grid layout
@@ -86,8 +86,8 @@ test.describe('Responsive Design - Desktop', () => {
       await expect(element).toHaveText(navElement.expectedText)
     }
 
-    // Verify theme toggle button is visible
-    const themeToggle = page.getByTestId('theme-toggle')
+    // Verify theme toggle button is visible (use first() as there may be desktop and mobile toggles)
+    const themeToggle = page.getByTestId('theme-toggle').first()
     await expect(themeToggle).toBeVisible()
 
     // Verify no hamburger menu is present on desktop
