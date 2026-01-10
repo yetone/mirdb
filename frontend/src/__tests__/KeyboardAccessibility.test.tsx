@@ -301,8 +301,9 @@ describe('Keyboard Accessibility (NFR-4)', () => {
         screen.getByTestId('footer-link-terms'),
       ]
 
-      // Check that CTA and footer links have min-h-[44px] class for accessibility
-      expect(primaryCTA).toHaveClass('min-h-[44px]')
+      // Check that CTA and footer links meet minimum height accessibility requirements
+      // Primary CTA uses FuturisticButton which has min-h-[52px] (exceeds 44px requirement)
+      expect(primaryCTA.className).toContain('min-h-[52px]')
       expect(loginLink).toHaveClass('min-h-[44px]')
 
       footerLinks.forEach((link) => {

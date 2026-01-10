@@ -165,7 +165,7 @@ describe('Color Contrast Accessibility (NFR-5)', () => {
 
   // Test Case 3: Analyze CTA button text contrast
   describe('Test Case 3: CTA button text contrast', () => {
-    it('should have primary CTA button with high contrast (primary text on white background)', () => {
+    it('should have primary CTA button with high contrast (FuturisticButton gradient styling)', () => {
       render(
         <MemoryRouter>
           <HeroSection />
@@ -174,9 +174,11 @@ describe('Color Contrast Accessibility (NFR-5)', () => {
 
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
 
-      // Button uses white background with primary text color for high contrast
-      expect(primaryCTA).toHaveClass('bg-white')
-      expect(primaryCTA).toHaveClass('text-primary')
+      // FuturisticButton uses gradient background with primary-content text for theme adaptability
+      expect(primaryCTA.className).toContain('bg-gradient-to-r')
+      expect(primaryCTA.className).toContain('from-primary')
+      expect(primaryCTA.className).toContain('to-secondary')
+      expect(primaryCTA.className).toContain('text-primary-content')
       expect(primaryCTA).toHaveClass('btn')
       expect(primaryCTA).toHaveClass('btn-lg')
     })

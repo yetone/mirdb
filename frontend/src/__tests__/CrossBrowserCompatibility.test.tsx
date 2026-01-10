@@ -193,9 +193,9 @@ describe('Cross-Browser Homepage Compatibility', () => {
       )
 
       const ctaButton = screen.getByTestId('cta-register')
-      // CSS transitions supported in Safari 6.1+
+      // CSS transitions supported in Safari 6.1+ (FuturisticButton uses 300ms)
       expect(ctaButton.className).toContain('transition-all')
-      expect(ctaButton.className).toContain('duration-200')
+      expect(ctaButton.className).toContain('duration-300')
     })
 
     it('renders step cards with proper shadow (Safari box-shadow support)', () => {
@@ -260,8 +260,8 @@ describe('Cross-Browser Homepage Compatibility', () => {
       )
 
       const ctaButton = screen.getByTestId('cta-register')
-      // min-h- classes ensure touch targets are accessible on all devices
-      expect(ctaButton.className).toContain('min-h-[44px]')
+      // FuturisticButton lg size is 52px which exceeds the 44px accessibility requirement
+      expect(ctaButton.className).toContain('min-h-[52px]')
 
       const loginLink = screen.getByTestId('login-link')
       expect(loginLink.className).toContain('min-h-[44px]')
@@ -342,10 +342,12 @@ describe('Cross-Browser Homepage Compatibility', () => {
 
       const ctaButton = screen.getByTestId('cta-register')
 
-      // Verify standard button classes from DaisyUI
+      // Verify standard button classes from DaisyUI and FuturisticButton styling
       expect(ctaButton.className).toContain('btn')
       expect(ctaButton.className).toContain('btn-lg')
-      expect(ctaButton.className).toContain('btn-primary')
+      // FuturisticButton uses gradient styling instead of btn-primary
+      expect(ctaButton.className).toContain('bg-gradient-to-r')
+      expect(ctaButton.className).toContain('from-primary')
     })
 
     it('renders icons with proper viewBox for all browsers', () => {

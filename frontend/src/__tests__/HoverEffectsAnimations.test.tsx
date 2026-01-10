@@ -19,10 +19,12 @@ describe('Hover Effects and Animations', () => {
       const ctaButton = screen.getByTestId('cta-register')
       expect(ctaButton).toBeInTheDocument()
 
-      // Check for hover styling classes
+      // Check for FuturisticButton styling classes
       expect(ctaButton).toHaveClass('btn')
       expect(ctaButton).toHaveClass('btn-lg')
-      expect(ctaButton).toHaveClass('btn-primary')
+      // FuturisticButton uses gradient instead of btn-primary
+      expect(ctaButton.className).toContain('bg-gradient-to-r')
+      expect(ctaButton.className).toContain('from-primary')
     })
 
     it('should have hover:scale transform class for button scale effect', () => {
@@ -46,8 +48,8 @@ describe('Hover Effects and Animations', () => {
 
       const ctaButton = screen.getByTestId('cta-register')
       // Check for shadow and hover shadow enhancement
-      expect(ctaButton).toHaveClass('shadow-lg')
-      expect(ctaButton).toHaveClass('hover:shadow-xl')
+      expect(ctaButton.className).toContain('shadow-lg')
+      expect(ctaButton.className).toContain('hover:shadow-xl')
     })
 
     it('should have smooth transition for hover effects', () => {
@@ -58,12 +60,12 @@ describe('Hover Effects and Animations', () => {
       )
 
       const ctaButton = screen.getByTestId('cta-register')
-      // Check for transition classes (duration should be 200-300ms)
+      // Check for transition classes (FuturisticButton uses 300ms)
       expect(ctaButton).toHaveClass('transition-all')
-      expect(ctaButton).toHaveClass('duration-200')
+      expect(ctaButton).toHaveClass('duration-300')
     })
 
-    it('should have background color change on hover', () => {
+    it('should have hover border color enhancement', () => {
       render(
         <BrowserRouter>
           <HeroSection />
@@ -71,8 +73,8 @@ describe('Hover Effects and Animations', () => {
       )
 
       const ctaButton = screen.getByTestId('cta-register')
-      // Check for hover background color change
-      expect(ctaButton).toHaveClass('hover:bg-white/90')
+      // FuturisticButton has hover:border-primary instead of hover:bg-white/90
+      expect(ctaButton.className).toContain('hover:border-primary')
     })
   })
 

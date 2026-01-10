@@ -189,14 +189,16 @@ describe('Theme Support - Synthwave Theme', () => {
         </MemoryRouter>
       )
 
-      // Primary CTA button should be visible with proper styling
+      // Primary CTA button should be visible with FuturisticButton styling
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
       expect(primaryCTA).toBeInTheDocument()
       expect(primaryCTA).toHaveClass('btn')
       expect(primaryCTA).toHaveClass('btn-lg')
-      expect(primaryCTA).toHaveClass('btn-primary')
-      expect(primaryCTA).toHaveClass('bg-white')
-      expect(primaryCTA).toHaveClass('text-primary')
+      // FuturisticButton uses gradient styling instead of solid colors
+      expect(primaryCTA.className).toContain('bg-gradient-to-r')
+      expect(primaryCTA.className).toContain('from-primary')
+      expect(primaryCTA.className).toContain('to-secondary')
+      expect(primaryCTA.className).toContain('text-primary-content')
 
       // Secondary CTA link should be visible
       const loginLink = screen.getByTestId('login-link')
@@ -391,9 +393,9 @@ describe('Theme Support - Synthwave Theme', () => {
         </MemoryRouter>
       )
 
-      // Primary CTA should have minimum height for touch targets
+      // Primary CTA should have minimum height for touch targets (FuturisticButton lg size is 52px, exceeds 44px requirement)
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
-      expect(primaryCTA).toHaveClass('min-h-[44px]')
+      expect(primaryCTA.className).toContain('min-h-[52px]')
 
       // Login link should have minimum height
       const loginLink = screen.getByTestId('login-link')

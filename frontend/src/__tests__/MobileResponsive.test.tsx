@@ -181,8 +181,9 @@ describe('Mobile Responsive Design Tests (NFR-2)', () => {
     it('should have minimum 44px height on primary CTA button', () => {
       renderWithRouter(<HeroSection />)
 
+      // FuturisticButton lg size is 52px which exceeds the 44px accessibility requirement
       const ctaButton = screen.getByTestId('cta-register')
-      expect(ctaButton).toHaveClass('min-h-[44px]')
+      expect(ctaButton.className).toContain('min-h-[52px]')
     })
 
     it('should have minimum 44px height on login link', () => {

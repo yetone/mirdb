@@ -134,21 +134,21 @@ describe('Theme Support - Cyberpunk Theme', () => {
         </MemoryRouter>
       )
 
-      // Primary CTA button should be visible and accessible
+      // Primary CTA button should be visible and accessible with FuturisticButton styling
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
       expect(primaryCTA).toBeInTheDocument()
 
       // Button should have proper DaisyUI btn classes
       expect(primaryCTA).toHaveClass('btn')
       expect(primaryCTA).toHaveClass('btn-lg')
-      expect(primaryCTA).toHaveClass('btn-primary')
-
-      // Button has white background for contrast on gradient
-      expect(primaryCTA).toHaveClass('bg-white')
-      expect(primaryCTA).toHaveClass('text-primary')
+      // FuturisticButton uses gradient styling instead of btn-primary
+      expect(primaryCTA.className).toContain('bg-gradient-to-r')
+      expect(primaryCTA.className).toContain('from-primary')
+      expect(primaryCTA.className).toContain('to-secondary')
+      expect(primaryCTA.className).toContain('text-primary-content')
 
       // Button should have shadow for visibility
-      expect(primaryCTA).toHaveClass('shadow-lg')
+      expect(primaryCTA.className).toContain('shadow')
     })
 
     it('should render secondary CTA link with proper styling', () => {
@@ -172,9 +172,9 @@ describe('Theme Support - Cyberpunk Theme', () => {
         </MemoryRouter>
       )
 
-      // Primary CTA should have minimum height for touch targets
+      // Primary CTA should have minimum height for touch targets (FuturisticButton lg size is 52px)
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
-      expect(primaryCTA).toHaveClass('min-h-[44px]')
+      expect(primaryCTA.className).toContain('min-h-[52px]')
 
       // Login link should have minimum height
       const loginLink = screen.getByTestId('login-link')
@@ -191,10 +191,11 @@ describe('Theme Support - Cyberpunk Theme', () => {
       // Verify cyberpunk theme is active
       expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
 
-      // Primary CTA uses white bg with primary text for maximum contrast
+      // Primary CTA uses gradient background with theme-aware text color
       const primaryCTA = screen.getByTestId('cta-register')
-      expect(primaryCTA).toHaveClass('bg-white')
-      expect(primaryCTA).toHaveClass('text-primary')
+      expect(primaryCTA.className).toContain('bg-gradient-to-r')
+      expect(primaryCTA.className).toContain('from-primary')
+      expect(primaryCTA.className).toContain('text-primary-content')
 
       // This ensures the button remains readable regardless of the
       // cyberpunk theme's primary color (typically cyan/yellow)

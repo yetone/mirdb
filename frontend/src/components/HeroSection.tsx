@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { createContext, useContext, useMemo, useSyncExternalStore } from 'react'
+import FuturisticButton from './FuturisticButton'
 
 // Create a context for reduced motion preference that can be overridden in tests
 export const ReducedMotionContext = createContext<boolean | null>(null)
@@ -89,13 +90,15 @@ export default function HeroSection() {
           {...fadeInUpDelayed(0.4)}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <Link
+          <FuturisticButton
+            as="link"
             to="/register"
             data-testid="cta-register"
-            className="btn btn-lg btn-primary bg-white text-primary hover:bg-white/90 hover:scale-105 hover:shadow-xl border-none shadow-lg transition-all duration-200 min-h-[44px]"
+            variant="primary"
+            size="lg"
           >
             Get Started Free
-          </Link>
+          </FuturisticButton>
 
           <p className="text-white/80">
             Already have an account?{' '}

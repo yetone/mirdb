@@ -160,14 +160,16 @@ describe('Theme Support - Dark Mode', () => {
       // Verify dark theme is active
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
 
-      // Primary CTA button should be visible and styled properly
+      // Primary CTA button should be visible and styled with FuturisticButton styling
       const primaryCTA = screen.getByRole('link', { name: /get started free/i })
       expect(primaryCTA).toBeInTheDocument()
       expect(primaryCTA).toHaveClass('btn')
       expect(primaryCTA).toHaveClass('btn-lg')
-      expect(primaryCTA).toHaveClass('btn-primary')
-      expect(primaryCTA).toHaveClass('bg-white')
-      expect(primaryCTA).toHaveClass('text-primary')
+      // FuturisticButton uses gradient styling instead of solid colors
+      expect(primaryCTA.className).toContain('bg-gradient-to-r')
+      expect(primaryCTA.className).toContain('from-primary')
+      expect(primaryCTA.className).toContain('to-secondary')
+      expect(primaryCTA.className).toContain('text-primary-content')
 
       // Secondary CTA link should be visible
       const loginLink = screen.getByTestId('login-link')
