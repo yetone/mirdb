@@ -126,7 +126,7 @@ function HowItWorksSection() {
     : {
         initial: { opacity: 0, y: 30 },
         whileInView: { opacity: 1, y: 0 },
-        transition: { duration: 0.6, ease: 'easeOut' },
+        transition: { duration: 0.6, ease: 'easeOut' as const },
         viewport: { once: true, amount: 0.3 },
       }
 
@@ -137,7 +137,7 @@ function HowItWorksSection() {
       : {
           initial: { opacity: 0, y: 40 },
           whileInView: { opacity: 1, y: 0 },
-          transition: { duration: 0.5, delay: index * 0.15, ease: 'easeOut' },
+          transition: { duration: 0.5, delay: index * 0.15, ease: 'easeOut' as const },
           viewport: { once: true, amount: 0.2 },
         }
 
