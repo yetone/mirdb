@@ -1,11 +1,9 @@
 import HeroSection from '../components/HeroSection'
 
-function Home() {
+export default function Home() {
   return (
-    <div className="min-h-screen bg-base-200">
+    <main>
       <HeroSection />
-    </div>
+    </main>
   )
 }
-
-export default Home
