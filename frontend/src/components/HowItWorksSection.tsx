@@ -1,8 +1,22 @@
+import { motion } from 'framer-motion'
+import { useContext } from 'react'
+import { ReducedMotionContext } from './HeroSection'
+
 interface Step {
   number: number
   title: string
   description: string
   icon: React.ReactNode
+}
+
+// Hook to check reduced motion preference
+function useIsReducedMotion(): boolean {
+  const contextValue = useContext(ReducedMotionContext)
+  if (contextValue !== null) {
+    return contextValue
+  }
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 const ClipboardIcon = () => (
@@ -104,21 +118,50 @@ function StepCard({ step }: { step: Step }) {
 }
 
 function HowItWorksSection() {
+  const prefersReducedMotion = useIsReducedMotion()
+
+  // Animation variants for section header
+  const headerVariants = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, ease: 'easeOut' },
+        viewport: { once: true, amount: 0.3 },
+      }
+
+  // Animation variants for step cards with stagger effect
+  const cardVariants = (index: number) =>
+    prefersReducedMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 40 },
+          whileInView: { opacity: 1, y: 0 },
+          transition: { duration: 0.5, delay: index * 0.15, ease: 'easeOut' },
+          viewport: { once: true, amount: 0.2 },
+        }
+
   return (
     <section
       data-testid="how-it-works-section"
       className="py-16 px-4 bg-base-200"
     >
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+        <motion.h2
+          className="text-3xl md:text-4xl font-bold text-center mb-12"
+          data-testid="how-it-works-heading"
+          {...headerVariants}
+        >
           How It Works
-        </h2>
+        </motion.h2>
         <div
           data-testid="steps-container"
           className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
-          {steps.map((step) => (
-            <StepCard key={step.number} step={step} />
+          {steps.map((step, index) => (
+            <motion.div key={step.number} {...cardVariants(index)}>
+              <StepCard step={step} />
+            </motion.div>
           ))}
         </div>
       </div>

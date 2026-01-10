@@ -1,9 +1,22 @@
+import { motion } from 'framer-motion'
+import { useContext } from 'react'
 import GlassMorphismCard from './GlassMorphismCard'
+import { ReducedMotionContext } from './HeroSection'
 
 interface Feature {
   icon: React.ReactNode
   title: string
   description: string
+}
+
+// Hook to check reduced motion preference
+function useIsReducedMotion(): boolean {
+  const contextValue = useContext(ReducedMotionContext)
+  if (contextValue !== null) {
+    return contextValue
+  }
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 const features: Feature[] = [
@@ -73,27 +86,56 @@ const features: Feature[] = [
 ]
 
 function FeaturesSection() {
+  const prefersReducedMotion = useIsReducedMotion()
+
+  // Animation variants for section header
+  const headerVariants = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, ease: 'easeOut' },
+        viewport: { once: true, amount: 0.3 },
+      }
+
+  // Animation variants for feature cards with stagger effect
+  const cardVariants = (index: number) =>
+    prefersReducedMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 40 },
+          whileInView: { opacity: 1, y: 0 },
+          transition: { duration: 0.5, delay: index * 0.15, ease: 'easeOut' },
+          viewport: { once: true, amount: 0.2 },
+        }
+
   return (
     <section className="py-16 px-4 bg-base-200" data-testid="features-section">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-3xl font-bold text-center mb-12">
+        <motion.h2
+          className="text-3xl font-bold text-center mb-12"
+          data-testid="features-heading"
+          {...headerVariants}
+        >
           Powerful Features
-        </h2>
+        </motion.h2>
         <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           data-testid="features-grid"
         >
           {features.map((feature, index) => (
-            <GlassMorphismCard key={index} className="p-6">
-              <div
-                className="flex flex-col items-center text-center"
-                data-testid={`feature-card-${index}`}
-              >
-                <div className="text-primary mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-base-content/70">{feature.description}</p>
-              </div>
-            </GlassMorphismCard>
+            <motion.div key={index} {...cardVariants(index)}>
+              <GlassMorphismCard className="p-6">
+                <div
+                  className="flex flex-col items-center text-center"
+                  data-testid={`feature-card-${index}`}
+                >
+                  <div className="text-primary mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                  <p className="text-base-content/70">{feature.description}</p>
+                </div>
+              </GlassMorphismCard>
+            </motion.div>
           ))}
         </div>
       </div>
