@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import ErrorBoundary from '../components/ErrorBoundary'
 import HeroSection from '../components/HeroSection'
 import FeaturesSection from '../components/FeaturesSection'
 import HowItWorksSection from '../components/HowItWorksSection'
@@ -51,10 +52,18 @@ export default function Home() {
 
   return (
     <main>
-      <HeroSection />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <FooterSection />
+      <ErrorBoundary sectionName="Hero">
+        <HeroSection />
+      </ErrorBoundary>
+      <ErrorBoundary sectionName="Features">
+        <FeaturesSection />
+      </ErrorBoundary>
+      <ErrorBoundary sectionName="How It Works">
+        <HowItWorksSection />
+      </ErrorBoundary>
+      <ErrorBoundary sectionName="Footer">
+        <FooterSection />
+      </ErrorBoundary>
     </main>
   )
 }
