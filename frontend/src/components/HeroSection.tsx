@@ -92,7 +92,7 @@ export default function HeroSection() {
           <Link
             to="/register"
             data-testid="cta-register"
-            className="btn btn-lg btn-primary bg-white text-primary hover:bg-white/90 border-none shadow-lg min-h-[44px]"
+            className="btn btn-lg btn-primary bg-white text-primary hover:bg-white/90 hover:scale-105 hover:shadow-xl border-none shadow-lg transition-all duration-200 min-h-[44px]"
           >
             Get Started Free
           </Link>
