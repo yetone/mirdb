@@ -75,7 +75,7 @@ describe('FooterSection', () => {
         </BrowserRouter>
       )
 
-      const navSection = screen.getByTestId('footer-nav-links')
+      const navSection = screen.getByTestId('footer-nav')
       expect(navSection).toBeInTheDocument()
     })
   })
@@ -111,7 +111,7 @@ describe('FooterSection', () => {
         </BrowserRouter>
       )
 
-      const legalSection = screen.getByTestId('footer-legal-links')
+      const legalSection = screen.getByTestId('footer-legal')
       expect(legalSection).toBeInTheDocument()
     })
   })

@@ -41,7 +41,8 @@ export default function HeroSection() {
         >
           <Link
             to="/register"
-            className="btn btn-lg btn-primary bg-white text-primary hover:bg-white/90 border-none shadow-lg"
+            data-testid="cta-register"
+            className="btn btn-lg btn-primary bg-white text-primary hover:bg-white/90 border-none shadow-lg min-h-[44px]"
           >
             Get Started Free
           </Link>
@@ -51,7 +52,7 @@ export default function HeroSection() {
             <Link
               to="/login"
               data-testid="login-link"
-              className="link link-hover text-white font-semibold underline"
+              className="link link-hover text-white font-semibold underline inline-flex items-center min-h-[44px]"
             >
               Log in
             </Link>
