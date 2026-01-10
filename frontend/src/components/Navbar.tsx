@@ -1,23 +1,9 @@
-import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline'
-
-type Theme = 'light' | 'dark' | 'cyberpunk' | 'synthwave'
+import { useTheme } from '../contexts/ThemeContext'
 
 export default function Navbar() {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme
-    return savedTheme || 'light'
-  })
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem('theme', theme)
-  }, [theme])
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'))
-  }
+  const { theme, toggleTheme } = useTheme()
 
   return (
     <nav

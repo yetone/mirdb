@@ -1,17 +1,39 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { ThemeProvider } from '../contexts/ThemeContext'
 import App from '../App'
 import Home from '../pages/Home'
 
+// Helper to clean up theme after tests
+const cleanupTheme = () => {
+  document.documentElement.removeAttribute('data-theme')
+  localStorage.clear()
+}
+
+// Test wrapper that provides ThemeProvider
+const TestWrapper = ({ children, initialEntries = ['/'] }: { children: React.ReactNode; initialEntries?: string[] }) => (
+  <MemoryRouter initialEntries={initialEntries}>
+    <ThemeProvider>{children}</ThemeProvider>
+  </MemoryRouter>
+)
+
 describe('React Router Integration - Homepage at "/" route', () => {
+  beforeEach(() => {
+    cleanupTheme()
+  })
+
+  afterEach(() => {
+    cleanupTheme()
+  })
+
   // Test Case 1: Navigate to '/' route - Home page component is rendered
   describe('Test Case 1: Navigate to "/" route', () => {
     it('renders the Home page component at the root "/" route', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Verify Home component renders - it contains HeroSection, FeaturesSection, etc.
@@ -20,9 +42,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
 
     it('displays the hero section headline', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const headline = screen.getByRole('heading', { level: 1 })
@@ -31,9 +53,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
 
     it('displays all main sections of the homepage', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Hero section
@@ -54,9 +76,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
   describe('Test Case 2: Access "/" route without authentication', () => {
     it('renders homepage directly without redirecting to login', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Homepage should be visible
@@ -69,9 +91,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
 
     it('shows "Get Started" CTA button accessible without authentication', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // The "Get Started" CTA should be present, indicating the homepage loaded
@@ -82,9 +104,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
 
     it('shows "Log in" link for existing users (public route)', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // The login link should be present on the public homepage
@@ -94,11 +116,11 @@ describe('React Router Integration - Homepage at "/" route', () => {
     })
 
     it('does not require authentication context to render', () => {
-      // Render without any auth provider - should still work
+      // Render with ThemeProvider (required by Navbar)
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Homepage renders successfully
@@ -111,9 +133,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
   describe('Test Case 3: Route configuration verification', () => {
     it('Route for "/" points to Home component (renders Home content)', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Verify Home component content is rendered at root route
@@ -127,9 +149,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
 
     it('navigating to "/" does not render login or register content', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // App.tsx has placeholder content for /login and /register
@@ -142,9 +164,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
       // This test verifies the routing structure by checking behavior
       // When we navigate to "/", the Home component's unique content appears
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Home component has specific sections that wouldn't appear if route was misconfigured
@@ -163,9 +185,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
   describe('Navigation between routes', () => {
     it('other routes (/login, /register) render different content than homepage', () => {
       const { unmount } = render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // At "/" - Homepage content visible
@@ -175,9 +197,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
       unmount()
 
       render(
-        <MemoryRouter initialEntries={['/login']}>
+        <TestWrapper initialEntries={['/login']}>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // At "/login" - Login placeholder visible, no homepage
@@ -188,9 +210,9 @@ describe('React Router Integration - Homepage at "/" route', () => {
     it('homepage route "/" is distinct from other routes', () => {
       // Render at a non-existent route to verify "/" is specifically mapped
       render(
-        <MemoryRouter initialEntries={['/some-random-path']}>
+        <TestWrapper initialEntries={['/some-random-path']}>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // With current routing, unmatched routes render nothing

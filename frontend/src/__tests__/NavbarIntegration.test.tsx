@@ -2,7 +2,15 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
+import { ThemeProvider } from '../contexts/ThemeContext'
 import App from '../App'
+
+// Test wrapper that provides ThemeProvider
+const TestWrapper = ({ children, initialEntries = ['/'] }: { children: React.ReactNode; initialEntries?: string[] }) => (
+  <MemoryRouter initialEntries={initialEntries}>
+    <ThemeProvider>{children}</ThemeProvider>
+  </MemoryRouter>
+)
 
 /**
  * Navbar Integration Tests
@@ -32,9 +40,9 @@ describe('Navbar Integration', () => {
   describe('Navbar Presence', () => {
     it('should render Navbar component at top of homepage', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Verify Navbar is present
@@ -48,9 +56,9 @@ describe('Navbar Integration', () => {
 
     it('should display brand name in Navbar', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const navbar = screen.getByTestId('navbar')
@@ -60,9 +68,9 @@ describe('Navbar Integration', () => {
 
     it('should render Navbar with navigation role', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const navbar = screen.getByTestId('navbar')
@@ -74,9 +82,9 @@ describe('Navbar Integration', () => {
   describe('Theme Toggle', () => {
     it('should have a theme toggle button in Navbar', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const navbar = screen.getByTestId('navbar')
@@ -88,9 +96,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const themeToggle = screen.getByTestId('theme-toggle')
@@ -109,9 +117,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const themeToggle = screen.getByTestId('theme-toggle')
@@ -127,9 +135,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Verify homepage sections are present with initial theme
@@ -155,9 +163,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // In light mode, should show moon icon (to switch to dark)
@@ -176,9 +184,9 @@ describe('Navbar Integration', () => {
   describe('Navigation Links', () => {
     it('should have Login link in Navbar', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const navbar = screen.getByTestId('navbar')
@@ -189,9 +197,9 @@ describe('Navbar Integration', () => {
 
     it('should have Register link in Navbar', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const navbar = screen.getByTestId('navbar')
@@ -204,9 +212,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const navbar = screen.getByTestId('navbar')
@@ -221,9 +229,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const navbar = screen.getByTestId('navbar')
@@ -236,9 +244,9 @@ describe('Navbar Integration', () => {
 
     it('should have accessible touch targets for navigation links', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const navbar = screen.getByTestId('navbar')
@@ -257,9 +265,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Navigate to login using navbar link
@@ -275,9 +283,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Navigate to register using navbar link
@@ -293,9 +301,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       // Toggle theme to dark
@@ -317,9 +325,9 @@ describe('Navbar Integration', () => {
   describe('Theme Toggle Accessibility', () => {
     it('should have accessible label for theme toggle', () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const themeToggle = screen.getByTestId('theme-toggle')
@@ -330,9 +338,9 @@ describe('Navbar Integration', () => {
       const user = userEvent.setup()
 
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <TestWrapper>
           <App />
-        </MemoryRouter>
+        </TestWrapper>
       )
 
       const themeToggle = screen.getByTestId('theme-toggle')
