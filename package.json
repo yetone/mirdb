@@ -1,0 +1,23 @@
+{
+  "name": "url-shortener-homepage",
+  "version": "1.0.0",
+  "description": "Product Homepage for URL Shortener Service",
+  "main": "index.html",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "url-shortener",
+    "homepage"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^24.0.0"
+  }
+}

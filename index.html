@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener - Shorten, Share, Track</title>
+    <meta name="description" content="Create memorable short links instantly. Track clicks, analyze performance, and manage all your links in one place.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section Styles */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Primary CTA Button Styles */
+        .btn-primary-cta {
+            display: inline-block;
+            padding: 16px 40px;
+            background-color: #10b981;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+            min-width: 200px;
+        }
+
+        .btn-primary-cta:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-primary-cta:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-primary-cta:focus {
+            outline: 3px solid rgba(16, 185, 129, 0.5);
+            outline-offset: 2px;
+        }
+
+        /* Secondary CTA Styles */
+        .secondary-cta {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .secondary-cta a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
+            transition: opacity 0.2s ease;
+        }
+
+        .secondary-cta a:hover {
+            opacity: 0.8;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 5rem 2rem;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* How It Works Section */
+        .how-it-works-section {
+            padding: 5rem 2rem;
+            background: #f8f9fa;
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step {
+            text-align: center;
+            max-width: 250px;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .step p {
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        footer nav {
+            margin-bottom: 1rem;
+        }
+
+        footer nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: opacity 0.2s ease;
+        }
+
+        footer nav a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .btn-primary-cta {
+                padding: 14px 32px;
+                font-size: 1.1rem;
+            }
+
+            .steps-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .step {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section data-testid="hero-section" class="hero-section">
+        <div class="hero-content">
+            <h1 data-testid="hero-title" class="hero-title">Shorten, Share, Track</h1>
+            <p data-testid="hero-subtitle" class="hero-subtitle">
+                Create memorable short links instantly. Track clicks, analyze performance, and manage all your links in one place.
+            </p>
+            <div class="cta-container">
+                <a
+                    href="/register"
+                    data-testid="primary-cta-button"
+                    class="btn-primary-cta"
+                    role="button"
+                >
+                    Get Started Free
+                </a>
+                <p class="secondary-cta">
+                    Already have an account? <a href="/login" data-testid="login-link">Log in</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section data-testid="features-section" class="features-section">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card" data-testid="feature-url-shortening">
+                    <div class="feature-icon">🔗</div>
+                    <h3>URL Shortening</h3>
+                    <p>Create memorable, short links instantly. Transform long URLs into clean, shareable links with just one click.</p>
+                </div>
+                <div class="feature-card" data-testid="feature-analytics">
+                    <div class="feature-icon">📊</div>
+                    <h3>Analytics Dashboard</h3>
+                    <p>Track clicks, monitor geographic locations, and analyze referrer sources. Get insights that matter.</p>
+                </div>
+                <div class="feature-card" data-testid="feature-link-management">
+                    <div class="feature-icon">📁</div>
+                    <h3>Link Management</h3>
+                    <p>Organize and manage all your links in one place. Edit, delete, and track performance effortlessly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section data-testid="how-it-works-section" class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-container">
+                <div class="step" data-testid="step-1">
+                    <div class="step-number">1</div>
+                    <h3>Paste Your URL</h3>
+                    <p>Enter any long URL you want to shorten</p>
+                </div>
+                <div class="step" data-testid="step-2">
+                    <div class="step-number">2</div>
+                    <h3>Get Short Link</h3>
+                    <p>Instantly receive your shortened URL</p>
+                </div>
+                <div class="step" data-testid="step-3">
+                    <div class="step-number">3</div>
+                    <h3>Share & Track</h3>
+                    <p>Share your link and monitor its performance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer data-testid="footer-section">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+        </nav>
+        <p>&copy; 2024 URL Shortener. All rights reserved.</p>
+    </footer>
+</body>
+</html>
