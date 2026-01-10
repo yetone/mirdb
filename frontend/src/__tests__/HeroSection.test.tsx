@@ -49,9 +49,6 @@ describe('HeroSection', () => {
     it('should navigate to /login when login link is clicked', async () => {
       const user = userEvent.setup()
 
-      // Use MemoryRouter to track navigation
-      let testLocation: string | undefined
-
       render(
         <MemoryRouter initialEntries={['/']}>
           <HeroSection />

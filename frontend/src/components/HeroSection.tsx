@@ -46,12 +46,16 @@ export default function HeroSection() {
             Get Started Free
           </Link>
 
-          <Link
-            to="/login"
-            className="btn btn-lg btn-ghost text-white border-white/30 hover:bg-white/10"
-          >
-            Already have an account? Log in
-          </Link>
+          <p className="text-white/80">
+            Already have an account?{' '}
+            <Link
+              to="/login"
+              data-testid="login-link"
+              className="link link-hover text-white font-semibold underline"
+            >
+              Log in
+            </Link>
+          </p>
         </motion.div>
       </div>
     </section>
