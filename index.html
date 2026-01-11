@@ -340,6 +340,35 @@
             font-size: 1.5rem;
         }
 
+        .compaction-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .compaction-label {
+            font-size: 0.75rem;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .compaction-note {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        .architecture-description {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         /* Footer */
         footer {
             padding: 3rem 0;
@@ -538,15 +567,17 @@ Connected to localhost.
     <section id="architecture" class="architecture">
         <div class="container">
             <h2 class="section-title">Architecture</h2>
-            <div class="architecture-diagram">
-                <div class="architecture-layers">
-                    <div class="layer layer-client">Client (Memcached Protocol)</div>
+            <p class="architecture-description">MirDB uses an LSM (Log-Structured Merge) tree architecture for efficient write-heavy workloads with automatic minor and major compaction.</p>
+            <div class="architecture-diagram" role="img" aria-label="MirDB LSM tree architecture diagram showing data flow from client connections through memcached protocol to memtable using skip list, then to immutable memtable, and finally to SSTable storage levels L0 through L6 with compaction">
+                <div class="architecture-layers" aria-hidden="true">
+                    <div class="layer layer-client" data-testid="layer-client">Client (Memcached Protocol)</div>
                     <div class="arrow">&#8595;</div>
-                    <div class="layer layer-memtable">Memtable (Skip List)</div>
+                    <div class="layer layer-memtable" data-testid="layer-memtable">Memtable (Skip List)</div>
                     <div class="arrow">&#8595;</div>
-                    <div class="layer layer-immutable">Immutable Memtable</div>
-                    <div class="arrow">&#8595;</div>
-                    <div class="layer layer-sstable">SSTable Levels (L0 - L6)</div>
+                    <div class="layer layer-immutable" data-testid="layer-immutable">Immutable Memtable</div>
+                    <div class="arrow compaction-arrow">&#8595; <span class="compaction-label">Minor Compaction</span></div>
+                    <div class="layer layer-sstable" data-testid="layer-sstable">SSTable Levels (L0 - L6)</div>
+                    <div class="compaction-note">Major Compaction between levels</div>
                 </div>
             </div>
         </div>
