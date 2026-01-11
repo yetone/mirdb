@@ -23,6 +23,7 @@
       </a>
       <div class="nav-links">
         <a href="#features">Features</a>
+        <a href="#comparison">Comparison</a>
         <a href="#quick-start">Quick Start</a>
         <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
@@ -148,6 +149,79 @@
             <p class="feature-description" data-testid="feature-description">
               Both minor and major compaction are fully supported. Automatic background compaction keeps storage efficient and query performance optimal over time.
             </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section id="comparison" class="comparison-section" data-testid="comparison-section" aria-labelledby="comparison-title">
+      <div class="comparison-container">
+        <h2 id="comparison-title" class="section-title">How MirDB Compares</h2>
+        <p class="section-subtitle">See how MirDB stands out from other key-value stores</p>
+
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">MirDB</th>
+                <th scope="col">Memcached</th>
+                <th scope="col">Redis</th>
+                <th scope="col">LevelDB</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Feature">Persistence</td>
+                <td data-label="MirDB"><span class="check-yes" aria-label="Yes">✓</span> SSTable-based</td>
+                <td data-label="Memcached"><span class="check-no" aria-label="No">✗</span> Memory only</td>
+                <td data-label="Redis"><span class="check-yes" aria-label="Yes">✓</span> RDB/AOF</td>
+                <td data-label="LevelDB"><span class="check-yes" aria-label="Yes">✓</span> SSTable-based</td>
+              </tr>
+              <tr>
+                <td data-label="Feature">Memcached Protocol</td>
+                <td data-label="MirDB"><span class="check-yes" aria-label="Yes">✓</span> Native support</td>
+                <td data-label="Memcached"><span class="check-yes" aria-label="Yes">✓</span> Native</td>
+                <td data-label="Redis"><span class="check-no" aria-label="No">✗</span> Own protocol</td>
+                <td data-label="LevelDB"><span class="check-no" aria-label="No">✗</span> Embedded only</td>
+              </tr>
+              <tr>
+                <td data-label="Feature">Network Server</td>
+                <td data-label="MirDB"><span class="check-yes" aria-label="Yes">✓</span> Built-in</td>
+                <td data-label="Memcached"><span class="check-yes" aria-label="Yes">✓</span> Built-in</td>
+                <td data-label="Redis"><span class="check-yes" aria-label="Yes">✓</span> Built-in</td>
+                <td data-label="LevelDB"><span class="check-no" aria-label="No">✗</span> Library only</td>
+              </tr>
+              <tr>
+                <td data-label="Feature">Drop-in Replacement</td>
+                <td data-label="MirDB"><span class="check-yes" aria-label="Yes">✓</span> For memcached</td>
+                <td data-label="Memcached">—</td>
+                <td data-label="Redis"><span class="check-no" aria-label="No">✗</span> Different API</td>
+                <td data-label="LevelDB"><span class="check-no" aria-label="No">✗</span> Different API</td>
+              </tr>
+              <tr>
+                <td data-label="Feature">LSM Tree Storage</td>
+                <td data-label="MirDB"><span class="check-yes" aria-label="Yes">✓</span></td>
+                <td data-label="Memcached"><span class="check-no" aria-label="No">✗</span></td>
+                <td data-label="Redis"><span class="check-no" aria-label="No">✗</span></td>
+                <td data-label="LevelDB"><span class="check-yes" aria-label="Yes">✓</span></td>
+              </tr>
+              <tr>
+                <td data-label="Feature">Implementation</td>
+                <td data-label="MirDB">Rust + Tokio</td>
+                <td data-label="Memcached">C</td>
+                <td data-label="Redis">C</td>
+                <td data-label="LevelDB">C++</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="comparison-summary">
+          <div class="summary-card">
+            <h3>Why Choose MirDB?</h3>
+            <p>MirDB combines the simplicity of the memcached protocol with durable disk persistence. If you're using memcached but need your data to survive restarts, MirDB is a drop-in replacement that adds persistence without changing your client code.</p>
           </div>
         </div>
       </div>
