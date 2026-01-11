@@ -10,9 +10,9 @@
 }
 
 :root {
-  /* Colors */
-  --color-primary: #3b82f6;
-  --color-primary-dark: #2563eb;
+  /* Colors - WCAG AA compliant */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
   --color-secondary: #64748b;
   --color-background: #0f172a;
   --color-surface: #1e293b;
@@ -301,7 +301,7 @@ a:hover {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: #cbd5e1; /* Lighter color for better contrast (5.12:1 on #334155) */
 }
 
 .code-block pre {
