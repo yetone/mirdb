@@ -4,11 +4,16 @@
   "description": "MirDB Product Homepage",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:e2e": "npx playwright test",
+    "test:e2e:headed": "npx playwright test --headed",
+    "serve": "npx serve . -l 3001"
   },
   "devDependencies": {
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "@testing-library/dom": "^9.3.4"
+    "@testing-library/dom": "^9.3.4",
+    "@playwright/test": "^1.57.0",
+    "serve": "^14.2.0"
   }
 }
