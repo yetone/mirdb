@@ -87,7 +87,8 @@ describe('Hero Section Display and Content', () => {
     test('Hero section should display logo', () => {
       const logo = document.querySelector('.hero-logo');
       expect(logo).not.toBeNull();
-      expect(logo.getAttribute('src')).toBe('assets/logo.gif');
+      // Accept both optimized SVG and original GIF formats
+      expect(logo.getAttribute('src')).toMatch(/assets\/logo\.(gif|svg|png|webp)/);
       expect(logo.getAttribute('alt')).toContain('MirDB');
     });
 

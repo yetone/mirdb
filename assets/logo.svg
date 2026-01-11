@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="56" fill="#1e293b" stroke="url(#logoGradient)" stroke-width="2"/>
+  <!-- Database icon -->
+  <ellipse cx="60" cy="40" rx="30" ry="12" fill="url(#logoGradient)"/>
+  <path d="M30 40 L30 80 C30 86.627 43.431 92 60 92 C76.569 92 90 86.627 90 80 L90 40" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
+  <ellipse cx="60" cy="60" rx="30" ry="10" fill="none" stroke="url(#logoGradient)" stroke-width="2" opacity="0.6"/>
+  <ellipse cx="60" cy="80" rx="30" ry="10" fill="none" stroke="url(#logoGradient)" stroke-width="2" opacity="0.4"/>
+  <!-- MirDB Text -->
+  <text x="60" y="108" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="bold" fill="#f1f5f9" text-anchor="middle">MirDB</text>
+</svg>
