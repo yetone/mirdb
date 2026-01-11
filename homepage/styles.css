@@ -356,7 +356,82 @@ a:hover {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+
+/* Large Desktop (1280px+) */
+@media (min-width: 1280px) {
+  .hero-title {
+    font-size: 4.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.75rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-2xl);
+  }
+
+  .hero-cta {
+    gap: var(--spacing-lg);
+  }
+
+  .btn {
+    padding: var(--spacing-md) var(--spacing-2xl);
+  }
+}
+
+/* Standard Desktop (1024px - 1279px) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .hero-title {
+    font-size: 3.5rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.35rem;
+  }
+
+  .hero-description {
+    font-size: 1.05rem;
+  }
+
+  .section-title {
+    font-size: 2.25rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .nav-links {
+    gap: var(--spacing-lg);
+  }
+
+  .hero-cta {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .btn {
+    width: auto;
+    min-width: 160px;
+  }
+}
+
+/* Mobile Landscape and Small Tablets (max-width: 767px) */
+@media (max-width: 767px) {
   .hero-title {
     font-size: 2.5rem;
   }
@@ -392,6 +467,7 @@ a:hover {
   }
 }
 
+/* Small Mobile (max-width: 480px) */
 @media (max-width: 480px) {
   .nav-container {
     padding: var(--spacing-sm) var(--spacing-md);
