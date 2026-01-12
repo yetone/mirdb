@@ -5,7 +5,6 @@ import Home from './Home'
 import { AuthProvider } from '../contexts/AuthContext'
 import {
   hexToRgb,
-  parseColor,
   getContrastRatio,
   meetsWcagAA,
   meetsWcagAALargeText,
