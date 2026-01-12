@@ -379,6 +379,136 @@ body {
     white-space: nowrap;
 }
 
+/* Project Status Section */
+.project-status {
+    background: #f8f9fa;
+}
+
+.project-status .container {
+    max-width: 1000px;
+}
+
+.status-intro {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.status-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.status-card.implemented {
+    border-left: 4px solid #10b981;
+}
+
+.status-card.planned {
+    border-left: 4px solid #f59e0b;
+}
+
+.status-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.status-header h3 {
+    font-size: 1.4rem;
+    color: #1a1a2e;
+    margin: 0;
+}
+
+.status-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.status-icon.implemented-icon {
+    background: #d1fae5;
+    color: #10b981;
+}
+
+.status-icon.planned-icon {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.status-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.status-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.status-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.status-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.status-badge.check {
+    background: #d1fae5;
+    color: #10b981;
+}
+
+.status-badge.clock {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.feature-text {
+    color: #444;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .status-card {
+        padding: 20px;
+    }
+}
+
 /* Footer */
 .footer {
     background: #1a1a2e;
