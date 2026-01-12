@@ -7,6 +7,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -14,6 +15,9 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: #fff;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
 }
 
 /* Container */
@@ -160,11 +164,13 @@ body {
     background: #00d4ff;
     color: #1a1a2e;
     border: none;
-    padding: 5px 15px;
+    padding: 8px 15px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.8rem;
     font-weight: 600;
+    min-height: 32px;
+    min-width: 44px;
 }
 
 .copy-btn:hover {
@@ -520,6 +526,10 @@ body {
 .footer a {
     color: #00d4ff;
     text-decoration: none;
+    display: inline-block;
+    padding: 8px 0;
+    min-height: 24px;
+    line-height: 1.5;
 }
 
 .footer a:hover {
@@ -547,10 +557,22 @@ body {
     .btn {
         padding: 12px 25px;
         font-size: 1rem;
+        min-height: 44px;
+        min-width: 44px;
     }
 
     .section h2 {
         font-size: 2rem;
+    }
+
+    /* Table responsive wrapper */
+    .command-category {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .commands-table {
+        min-width: 500px;
     }
 }
 
@@ -563,6 +585,94 @@ body {
     .btn {
         width: 100%;
         max-width: 250px;
+        min-height: 44px;
+    }
+
+    /* Ensure container doesn't cause horizontal scroll */
+    .container {
+        padding: 0 15px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Code blocks should scroll horizontally, not overflow page */
+    .code-block {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        overflow-x: auto;
+    }
+
+    /* Make feature grid single column on mobile */
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Ensure data flow explanation is single column */
+    .data-flow-explanation {
+        grid-template-columns: 1fr;
+    }
+
+    /* Status grid single column on mobile */
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Architecture diagram responsive */
+    .lsm-diagram {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Prevent any element from causing overflow */
+    img, svg, video, canvas, audio, iframe, embed, object {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* Mobile viewport specific (375px and below) */
+@media (max-width: 375px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .hero {
+        padding: 20px 10px;
+    }
+
+    .section {
+        padding: 60px 10px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-tagline {
+        font-size: 1rem;
+    }
+
+    .btn {
+        padding: 14px 20px;
+        font-size: 0.95rem;
+        min-height: 44px;
+    }
+
+    /* Ensure feature cards don't overflow */
+    .feature-card {
+        padding: 20px;
+    }
+
+    /* Path explanation responsive */
+    .path-explanation {
+        padding: 15px;
+    }
+
+    .path-steps {
+        padding-left: 15px;
     }
 }
 
