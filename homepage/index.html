@@ -85,6 +85,51 @@ END</code></pre>
         </div>
     </section>
 
+    <!-- Architecture Section -->
+    <section id="architecture" class="section architecture">
+        <div class="container">
+            <h2>Architecture Overview</h2>
+            <p class="architecture-intro">MirDB uses an LSM (Log-Structured Merge) tree architecture for efficient write performance and persistent storage.</p>
+
+            <!-- Architecture Diagram -->
+            <div class="architecture-diagram">
+                <img
+                    src="../assets/lsm-architecture.svg"
+                    alt="LSM Tree Architecture Diagram showing data flow: Write requests go to WAL (Write-Ahead Log) for durability, then to Memtable (active skip list in memory), when full moves to Immutable Memtables queue, then through minor compaction to Level 0 SSTables, and finally through major compaction to higher level SSTables (sorted, non-overlapping). Read requests check Memtable first, then Immutable Memtables, then search through SSTable levels."
+                    id="architecture-diagram"
+                    class="lsm-diagram"
+                >
+            </div>
+
+            <!-- Data Flow Explanation -->
+            <div class="data-flow-explanation">
+                <!-- Write Path -->
+                <div class="path-explanation" id="write-path">
+                    <h3>Write Path</h3>
+                    <p>When data is written to MirDB, it follows this path to ensure durability and performance:</p>
+                    <ol class="path-steps">
+                        <li><strong>WAL (Write-Ahead Log)</strong> - Data is first written to the WAL for crash recovery and durability</li>
+                        <li><strong>Memtable</strong> - Data is then inserted into the active in-memory skip list for fast access</li>
+                        <li><strong>Immutable Memtables</strong> - When the memtable reaches its size limit (default 4MB), it becomes immutable and is queued for flushing</li>
+                        <li><strong>Level 0 SSTables</strong> - Minor compaction flushes immutable memtables to Level 0 SSTables on disk</li>
+                        <li><strong>Higher Level SSTables</strong> - Major compaction merges and sorts data into higher levels (Level 1+) with non-overlapping key ranges</li>
+                    </ol>
+                </div>
+
+                <!-- Read Path -->
+                <div class="path-explanation" id="read-path">
+                    <h3>Read Path</h3>
+                    <p>Read operations search for data in order of recency to optimize for recently written data:</p>
+                    <ol class="path-steps">
+                        <li><strong>Memtable</strong> - First checks the active memtable for the most recent writes</li>
+                        <li><strong>Immutable Memtables</strong> - Then searches immutable memtables (newest first) awaiting compaction</li>
+                        <li><strong>SSTables</strong> - Finally searches SSTable levels starting from Level 0, using binary search for sorted levels (L1+)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Configuration Section -->
     <section id="configuration" class="section configuration">
         <div class="container">
