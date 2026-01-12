@@ -101,6 +101,128 @@ block_size = "4K"</code></pre>
         </div>
     </section>
 
+    <!-- Commands Reference Section -->
+    <section id="commands" class="section commands">
+        <div class="container">
+            <h2>Commands Reference</h2>
+            <p>MirDB supports the standard memcached text protocol commands, plus MirDB-specific administrative commands.</p>
+
+            <!-- Storage Commands -->
+            <div class="command-category" id="storage-commands">
+                <h3>Storage Commands</h3>
+                <table class="commands-table">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Syntax</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-command="set">
+                            <td><code>SET</code></td>
+                            <td>Store a key-value pair</td>
+                            <td><code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code></td>
+                        </tr>
+                        <tr data-command="add">
+                            <td><code>ADD</code></td>
+                            <td>Store only if key doesn't exist</td>
+                            <td><code>add &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code></td>
+                        </tr>
+                        <tr data-command="replace">
+                            <td><code>REPLACE</code></td>
+                            <td>Store only if key exists</td>
+                            <td><code>replace &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code></td>
+                        </tr>
+                        <tr data-command="append">
+                            <td><code>APPEND</code></td>
+                            <td>Append data to existing value</td>
+                            <td><code>append &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code></td>
+                        </tr>
+                        <tr data-command="prepend">
+                            <td><code>PREPEND</code></td>
+                            <td>Prepend data to existing value</td>
+                            <td><code>prepend &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n&lt;data&gt;\r\n</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Retrieval Commands -->
+            <div class="command-category" id="retrieval-commands">
+                <h3>Retrieval Commands</h3>
+                <table class="commands-table">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Syntax</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-command="get">
+                            <td><code>GET</code></td>
+                            <td>Retrieve one or more keys</td>
+                            <td><code>get &lt;key1&gt; [&lt;key2&gt; ...]\r\n</code></td>
+                        </tr>
+                        <tr data-command="gets">
+                            <td><code>GETS</code></td>
+                            <td>Retrieve with CAS token</td>
+                            <td><code>gets &lt;key1&gt; [&lt;key2&gt; ...]\r\n</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Deletion Commands -->
+            <div class="command-category" id="deletion-commands">
+                <h3>Deletion Commands</h3>
+                <table class="commands-table">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Syntax</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-command="delete">
+                            <td><code>DELETE</code></td>
+                            <td>Remove a key</td>
+                            <td><code>delete &lt;key&gt; [noreply]\r\n</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Administrative Commands -->
+            <div class="command-category" id="administrative-commands">
+                <h3>Administrative Commands (MirDB-Specific)</h3>
+                <table class="commands-table">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Syntax</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-command="info">
+                            <td><code>INFO</code></td>
+                            <td>Display database status and level information</td>
+                            <td><code>info\r\n</code></td>
+                        </tr>
+                        <tr data-command="major_compaction">
+                            <td><code>MAJOR_COMPACTION</code></td>
+                            <td>Trigger manual compaction</td>
+                            <td><code>major_compaction\r\n</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
