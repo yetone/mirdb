@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Product Homepage",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "serve": "npx serve -l 3000"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.2.0"
+  },
+  "keywords": [
+    "mirdb",
+    "homepage",
+    "key-value-store"
+  ],
+  "author": "",
+  "license": "MIT"
+}

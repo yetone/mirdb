@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <img
+                src="../assets/logo.gif"
+                alt="MirDB Logo"
+                class="hero-logo"
+                id="mirdb-logo"
+            >
+            <h1 class="hero-title">MirDB</h1>
+            <p class="hero-tagline" id="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+            <div class="hero-ctas">
+                <a href="#quick-start" class="btn btn-primary" id="get-started-btn">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" id="github-btn">View on GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quick-start" class="section quick-start">
+        <div class="container">
+            <h2>Quick Start</h2>
+            <div class="quick-start-content">
+                <h3>Installation</h3>
+                <div class="code-block">
+                    <pre><code>cargo install mirdb-server</code></pre>
+                    <button class="copy-btn" data-clipboard-text="cargo install mirdb-server">Copy</button>
+                </div>
+
+                <h3>Basic Usage</h3>
+                <p>MirDB uses the standard memcached text protocol, so you can use any memcached client:</p>
+                <div class="code-block">
+                    <pre><code># Start the server
+mirdb-server
+
+# Connect using telnet or nc
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get a value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Memcached Protocol</h3>
+                    <p>Compatible with standard memcached text protocol. Use existing memcached clients seamlessly.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>Unlike memcached, MirDB persists data to disk using SSTables (Sorted String Tables).</p>
+                </div>
+                <div class="feature-card">
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Uses Log-Structured Merge-tree approach with memtables and multi-level SSTable compaction.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Async Networking</h3>
+                    <p>Built on Tokio for high-performance async I/O operations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section id="configuration" class="section configuration">
+        <div class="container">
+            <h2>Configuration</h2>
+            <p>MirDB is highly configurable. Here are the default settings:</p>
+            <div class="code-block">
+                <pre><code>addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdb"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+block_size = "4K"</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 MirDB. Open source under MIT License.</p>
+            <p><a href="https://github.com/yetone/mirdb">GitHub Repository</a></p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
