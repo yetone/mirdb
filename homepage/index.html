@@ -4,18 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.min.css">
 </head>
 <body>
     <!-- Hero Section -->
     <section id="hero" class="hero">
         <div class="hero-content">
-            <img
-                src="../assets/logo.gif"
-                alt="MirDB Logo"
-                class="hero-logo"
-                id="mirdb-logo"
-            >
+            <picture>
+                <source srcset="../assets/logo.webp" type="image/webp">
+                <img
+                    src="../assets/logo.gif"
+                    alt="MirDB Logo"
+                    class="hero-logo"
+                    id="mirdb-logo"
+                    loading="eager"
+                    decoding="async"
+                >
+            </picture>
             <h1 class="hero-title">MirDB</h1>
             <p class="hero-tagline" id="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
             <div class="hero-ctas">
@@ -98,6 +103,8 @@ END</code></pre>
                     alt="LSM Tree Architecture Diagram showing data flow: Write requests go to WAL (Write-Ahead Log) for durability, then to Memtable (active skip list in memory), when full moves to Immutable Memtables queue, then through minor compaction to Level 0 SSTables, and finally through major compaction to higher level SSTables (sorted, non-overlapping). Read requests check Memtable first, then Immutable Memtables, then search through SSTable levels."
                     id="architecture-diagram"
                     class="lsm-diagram"
+                    loading="lazy"
+                    decoding="async"
                 >
             </div>
 
