@@ -565,3 +565,53 @@ body {
         max-width: 250px;
     }
 }
+
+/* Tablet Responsive Styles (768px) */
+@media (max-width: 900px) {
+    /* Ensure data-flow-explanation adapts for tablet */
+    .data-flow-explanation {
+        grid-template-columns: 1fr;
+    }
+
+    /* Status grid for tablet */
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Feature cards for tablet - 2 columns */
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Commands table responsive wrapper */
+.command-category {
+    overflow-x: auto;
+}
+
+.commands-table {
+    min-width: 600px;
+}
+
+@media (max-width: 768px) {
+    /* Commands table scrollable on smaller screens */
+    .commands-table td:last-child code {
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .commands-table th,
+    .commands-table td {
+        padding: 12px 15px;
+    }
+
+    /* Ensure proper tablet layout */
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .feature-card {
+        padding: 20px;
+    }
+}
