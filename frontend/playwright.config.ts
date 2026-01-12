@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
 /**
- * Playwright configuration for e2e performance tests
+ * Playwright configuration for e2e tests including cross-browser compatibility
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
@@ -19,6 +19,18 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'edge',
+      use: { ...devices['Desktop Edge'] },
     },
   ],
   webServer: {
