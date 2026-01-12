@@ -1,9 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
-import App from './App'
 import Home from './pages/Home'
-import { AuthProvider, AuthContext, AuthContextType, User } from './contexts/AuthContext'
+import { AuthContext, AuthContextType, User } from './contexts/AuthContext'
 
 // Mock scrollIntoView
 Element.prototype.scrollIntoView = vi.fn()
@@ -26,15 +25,6 @@ Object.defineProperty(window, 'localStorage', { value: localStorageMock })
  * 2. Check route is public (no auth required) -> Landing page accessible without authentication
  * 3. Navigate to / while authenticated -> Landing page still renders (not redirect to dashboard)
  */
-
-// Helper to render the full App with MemoryRouter
-const renderApp = (initialEntries = ['/']) => {
-  return render(
-    <MemoryRouter initialEntries={initialEntries}>
-      <App />
-    </MemoryRouter>
-  )
-}
 
 // Helper to render with custom auth state
 const renderWithAuthState = (
