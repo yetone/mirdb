@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     checkAuth()
   }, [])
 
-  const login = async (username: string, password: string) => {
+  const login = async (username: string, _password: string) => {
     // In a real app, this would call the login API
     // For now, this is a placeholder that stores mock data
     const mockUser: User = {
