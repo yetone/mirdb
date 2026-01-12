@@ -268,6 +268,87 @@ block_size = "4K"</code></pre>
         </div>
     </section>
 
+    <!-- Project Status Section -->
+    <section id="project-status" class="section project-status">
+        <div class="container">
+            <h2>Project Status</h2>
+            <p class="status-intro">MirDB is actively developed. Here's our current progress and roadmap.</p>
+
+            <div class="status-grid">
+                <!-- Implemented Features -->
+                <div id="implemented-features" class="status-card implemented">
+                    <div class="status-header">
+                        <span class="status-icon implemented-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </span>
+                        <h3>Implemented</h3>
+                    </div>
+                    <ul class="status-list">
+                        <li data-status="implemented">
+                            <span class="status-badge check">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                            <span class="feature-text">Tokio-based async networking</span>
+                        </li>
+                        <li data-status="implemented">
+                            <span class="status-badge check">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                            <span class="feature-text">Memtable with skip list data structure</span>
+                        </li>
+                        <li data-status="implemented">
+                            <span class="status-badge check">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                            <span class="feature-text">Minor compaction (memtable to SSTable)</span>
+                        </li>
+                        <li data-status="implemented">
+                            <span class="status-badge check">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                            <span class="feature-text">Major compaction (level compaction)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Planned Features -->
+                <div id="planned-features" class="status-card planned">
+                    <div class="status-header">
+                        <span class="status-icon planned-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </span>
+                        <h3>Planned / Roadmap</h3>
+                    </div>
+                    <ul class="status-list">
+                        <li data-status="planned">
+                            <span class="status-badge clock">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                            </span>
+                            <span class="feature-text">Raft consensus for distributed operation</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
