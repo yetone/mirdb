@@ -3,6 +3,7 @@ import FeaturesSection from '../components/FeaturesSection'
 import HowItWorksSection from '../components/HowItWorksSection'
 import AnalyticsPreviewSection from '../components/AnalyticsPreviewSection'
 import DemoSection from '../components/DemoSection'
+import SocialProofSection from '../components/SocialProofSection'
 import FinalCTASection from '../components/FinalCTASection'
 import Footer from '../components/Footer'
 
@@ -14,6 +15,7 @@ const Home = () => {
       <HowItWorksSection />
       <DemoSection />
       <AnalyticsPreviewSection />
+      <SocialProofSection />
       <FinalCTASection />
       <Footer />
     </main>
