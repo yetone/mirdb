@@ -2,14 +2,26 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import Home from './Home'
+import { AuthProvider } from '../contexts/AuthContext'
 
 // Mock scrollIntoView
 Element.prototype.scrollIntoView = vi.fn()
 
+// Mock localStorage
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  clear: vi.fn(),
+  removeItem: vi.fn(),
+}
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
 const renderWithRouter = () => {
   return render(
     <MemoryRouter initialEntries={['/']}>
-      <Home />
+      <AuthProvider>
+        <Home />
+      </AuthProvider>
     </MemoryRouter>
   )
 }
@@ -28,6 +40,8 @@ describe('Responsive Design - Tablet (768px viewport)', () => {
   const TABLET_WIDTH = 768
 
   beforeEach(() => {
+    vi.clearAllMocks()
+    localStorageMock.getItem.mockReturnValue(null)
     setViewportWidth(TABLET_WIDTH)
   })
 

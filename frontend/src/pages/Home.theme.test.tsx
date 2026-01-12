@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import Home from './Home'
+import { AuthProvider } from '../contexts/AuthContext'
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -39,7 +40,9 @@ const getComputedThemeAttribute = () => {
 const renderWithRouter = () => {
   return render(
     <MemoryRouter initialEntries={['/']}>
-      <Home />
+      <AuthProvider>
+        <Home />
+      </AuthProvider>
     </MemoryRouter>
   )
 }

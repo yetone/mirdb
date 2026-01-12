@@ -1,20 +1,37 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import HeroSection from './HeroSection'
+import { AuthProvider } from '../contexts/AuthContext'
 
 // Mock scrollIntoView
 Element.prototype.scrollIntoView = vi.fn()
 
+// Mock localStorage
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  clear: vi.fn(),
+  removeItem: vi.fn(),
+}
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
 const renderWithRouter = (component: React.ReactElement, { initialEntries = ['/'] } = {}) => {
   return render(
     <MemoryRouter initialEntries={initialEntries}>
-      {component}
+      <AuthProvider>
+        {component}
+      </AuthProvider>
     </MemoryRouter>
   )
 }
 
 describe('HeroSection', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    localStorageMock.getItem.mockReturnValue(null)
+  })
+
   // Test Case 1: Hero section contains headline with tagline about URL shortening
   it('renders hero section with headline containing URL shortening tagline', () => {
     renderWithRouter(<HeroSection />)
@@ -37,7 +54,7 @@ describe('HeroSection', () => {
     expect(subheadline.textContent?.toLowerCase()).toMatch(/analytics|track|insight|statistics/)
   })
 
-  // Test Case 3: Get Started Free button navigates to /register
+  // Test Case 3: Get Started Free button navigates to /register (for unauthenticated users)
   it('renders Get Started Free button that links to /register', () => {
     renderWithRouter(<HeroSection />)
 

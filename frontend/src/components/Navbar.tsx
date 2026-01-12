@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
+import { useAuth } from '../contexts/AuthContext'
 
 const Navbar = () => {
+  const { isAuthenticated } = useAuth()
+
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId)
     if (section) {
@@ -56,20 +59,32 @@ const Navbar = () => {
             </button>
           </nav>
           <ThemeToggle />
-          <Link
-            to="/login"
-            data-testid="nav-login"
-            className="btn btn-ghost btn-sm"
-          >
-            Login
-          </Link>
-          <Link
-            to="/register"
-            data-testid="nav-register"
-            className="btn btn-primary btn-sm"
-          >
-            Register
-          </Link>
+          {isAuthenticated ? (
+            <Link
+              to="/dashboard"
+              data-testid="nav-dashboard"
+              className="btn btn-primary btn-sm"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                data-testid="nav-login"
+                className="btn btn-ghost btn-sm"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                data-testid="nav-register"
+                className="btn btn-primary btn-sm"
+              >
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

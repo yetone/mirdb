@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 
 const HeroSection = () => {
+  const { isAuthenticated } = useAuth()
+
   const scrollToFeatures = () => {
     const featuresSection = document.getElementById('features')
     if (featuresSection) {
@@ -36,13 +39,23 @@ const HeroSection = () => {
             Understand your audience with detailed insights and real-time statistics.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <Link
-              to="/register"
-              data-testid="hero-cta-primary"
-              className="btn btn-primary btn-lg"
-            >
-              Get Started Free
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                to="/dashboard"
+                data-testid="hero-cta-primary"
+                className="btn btn-primary btn-lg"
+              >
+                Go to Dashboard
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                data-testid="hero-cta-primary"
+                className="btn btn-primary btn-lg"
+              >
+                Get Started Free
+              </Link>
+            )}
             <button
               onClick={scrollToFeatures}
               data-testid="hero-cta-secondary"

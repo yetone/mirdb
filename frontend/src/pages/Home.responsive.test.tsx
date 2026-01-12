@@ -3,19 +3,31 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import Home from './Home'
 import App from '../App'
+import { AuthProvider } from '../contexts/AuthContext'
 
 // Mock scrollIntoView
 Element.prototype.scrollIntoView = vi.fn()
 
+// Mock localStorage
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  clear: vi.fn(),
+  removeItem: vi.fn(),
+}
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
 const renderWithRouter = () => {
   return render(
     <MemoryRouter initialEntries={['/']}>
-      <Home />
+      <AuthProvider>
+        <Home />
+      </AuthProvider>
     </MemoryRouter>
   )
 }
 
-// Render App (includes Navbar) for navigation tests
+// Render App (includes Navbar) for navigation tests - App already has AuthProvider
 const renderAppWithRouter = () => {
   return render(
     <MemoryRouter initialEntries={['/']}>
@@ -38,6 +50,8 @@ describe('Responsive Design - Mobile (375px viewport)', () => {
   const MOBILE_WIDTH = 375
 
   beforeEach(() => {
+    vi.clearAllMocks()
+    localStorageMock.getItem.mockReturnValue(null)
     setViewportWidth(MOBILE_WIDTH)
   })
 
@@ -222,6 +236,8 @@ describe('Responsive Design - Desktop (1280px viewport)', () => {
   const DESKTOP_WIDTH = 1280
 
   beforeEach(() => {
+    vi.clearAllMocks()
+    localStorageMock.getItem.mockReturnValue(null)
     setViewportWidth(DESKTOP_WIDTH)
   })
 
