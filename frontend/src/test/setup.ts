@@ -21,7 +21,7 @@ class MockIntersectionObserver implements IntersectionObserver {
   }
 }
 
-global.IntersectionObserver = MockIntersectionObserver
+window.IntersectionObserver = MockIntersectionObserver
 
 // Mock ResizeObserver
 class MockResizeObserver implements ResizeObserver {
@@ -31,4 +31,4 @@ class MockResizeObserver implements ResizeObserver {
   unobserve(): void {}
 }
 
-global.ResizeObserver = MockResizeObserver
+window.ResizeObserver = MockResizeObserver
