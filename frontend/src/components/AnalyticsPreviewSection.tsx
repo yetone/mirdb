@@ -324,9 +324,9 @@ const AnalyticsPreviewSection = () => {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <div data-testid="analytics-feature-highlights" className="space-y-6">
+            <ul data-testid="analytics-feature-highlights" className="space-y-6 list-none p-0 m-0">
               {analyticsFeatures.map((feature) => (
-                <motion.div
+                <motion.li
                   key={feature.id}
                   data-testid={`analytics-feature-${feature.id}`}
                   variants={itemVariants}
@@ -339,9 +339,9 @@ const AnalyticsPreviewSection = () => {
                     <h3 className="font-semibold text-lg mb-1">{feature.title}</h3>
                     <p className="text-base-content/70 text-sm">{feature.description}</p>
                   </div>
-                </motion.div>
+                </motion.li>
               ))}
-            </div>
+            </ul>
 
             {/* CTA Button */}
             <motion.div

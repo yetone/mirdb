@@ -83,15 +83,15 @@ const FeaturesSection = () => {
           </p>
         </motion.div>
 
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+        <motion.ul
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 list-none p-0 m-0"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
           {features.map((feature, index) => (
-            <motion.div
+            <motion.li
               key={index}
               variants={itemVariants}
               className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300"
@@ -103,9 +103,9 @@ const FeaturesSection = () => {
                 <h3 className="card-title">{feature.title}</h3>
                 <p className="text-base-content/70">{feature.description}</p>
               </div>
-            </motion.div>
+            </motion.li>
           ))}
-        </motion.div>
+        </motion.ul>
       </div>
     </section>
   )

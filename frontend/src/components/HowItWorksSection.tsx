@@ -77,22 +77,22 @@ const HowItWorksSection = () => {
           </p>
         </motion.div>
 
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+        <motion.ol
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto list-none p-0 m-0"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
           {steps.map((step) => (
-            <motion.div
+            <motion.li
               key={step.number}
               data-testid={`step-${step.number}`}
               variants={itemVariants}
               className="relative flex flex-col items-center text-center"
             >
               {/* Step number badge */}
-              <div className="w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-xl font-bold mb-4">
+              <div className="w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-xl font-bold mb-4" aria-hidden="true">
                 {step.number}
               </div>
 
@@ -107,11 +107,11 @@ const HowItWorksSection = () => {
 
               {/* Connector line for larger screens (except last item) */}
               {step.number < 3 && (
-                <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-0.5 bg-primary/20" />
+                <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-0.5 bg-primary/20" aria-hidden="true" />
               )}
-            </motion.div>
+            </motion.li>
           ))}
-        </motion.div>
+        </motion.ol>
       </div>
     </section>
   )
