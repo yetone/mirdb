@@ -19,19 +19,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Copy to clipboard functionality
     document.querySelectorAll('.copy-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const textToCopy = this.getAttribute('data-clipboard-text');
+        // Function to handle copy operation
+        function handleCopy(btn) {
+            const textToCopy = btn.getAttribute('data-clipboard-text');
 
             if (textToCopy) {
                 navigator.clipboard.writeText(textToCopy).then(() => {
-                    const originalText = this.textContent;
-                    this.textContent = 'Copied!';
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
                     setTimeout(() => {
-                        this.textContent = originalText;
+                        btn.textContent = originalText;
                     }, 2000);
                 }).catch(err => {
                     console.error('Failed to copy:', err);
                 });
+            }
+        }
+
+        // Handle click events
+        button.addEventListener('click', function() {
+            handleCopy(this);
+        });
+
+        // Handle keyboard events for accessibility (Enter and Space)
+        button.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault(); // Prevent default space scroll behavior
+                handleCopy(this);
             }
         });
     });

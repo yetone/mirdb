@@ -177,6 +177,23 @@ body {
     background: #0099cc;
 }
 
+.copy-btn:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.5);
+}
+
+.copy-btn:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+}
+
+.copy-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.5);
+}
+
 /* Features Section */
 .features {
     background: #fff;
