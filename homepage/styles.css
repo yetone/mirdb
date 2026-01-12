@@ -208,6 +208,83 @@ body {
     font-size: 0.95rem;
 }
 
+/* Architecture Section */
+.architecture {
+    background: #fff;
+}
+
+.architecture .container {
+    max-width: 1000px;
+}
+
+.architecture-intro {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.architecture-diagram {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.lsm-diagram {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.data-flow-explanation {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 40px;
+}
+
+.path-explanation {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    border-left: 4px solid #00d4ff;
+}
+
+.path-explanation h3 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #1a1a2e;
+}
+
+.path-explanation > p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.path-steps {
+    padding-left: 20px;
+    counter-reset: step-counter;
+}
+
+.path-steps li {
+    margin-bottom: 12px;
+    color: #444;
+    line-height: 1.6;
+}
+
+.path-steps li strong {
+    color: #1a1a2e;
+}
+
+@media (max-width: 768px) {
+    .data-flow-explanation {
+        grid-template-columns: 1fr;
+    }
+
+    .path-explanation {
+        padding: 20px;
+    }
+}
+
 /* Configuration Section */
 .configuration {
     background: #f8f9fa;

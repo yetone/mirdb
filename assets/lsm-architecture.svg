@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="lsm-title lsm-desc">
+  <title id="lsm-title">LSM Tree Architecture Diagram</title>
+  <desc id="lsm-desc">Data flow diagram showing how data moves through the LSM tree: Write requests go to WAL for durability, then to Memtable, then when full to Immutable Memtables, then through minor compaction to Level 0 SSTables, and finally through major compaction to higher level SSTables</desc>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="#1a1a2e"/>
+
+  <!-- Title -->
+  <text x="400" y="35" fill="#00d4ff" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle">LSM Tree Data Flow</text>
+
+  <!-- Write Request Arrow -->
+  <g id="write-request">
+    <rect x="30" y="80" width="140" height="50" rx="8" fill="#7b2cbf" stroke="#00d4ff" stroke-width="2"/>
+    <text x="100" y="112" fill="#fff" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Write Request</text>
+  </g>
+
+  <!-- Arrow from Write to WAL -->
+  <path d="M 170 105 L 210 105" stroke="#00d4ff" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- WAL Box -->
+  <g id="wal">
+    <rect x="220" y="70" width="140" height="70" rx="8" fill="#0f3460" stroke="#00d4ff" stroke-width="2"/>
+    <text x="290" y="100" fill="#00d4ff" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">WAL</text>
+    <text x="290" y="122" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="11" text-anchor="middle">(Write-Ahead Log)</text>
+  </g>
+
+  <!-- Arrow from WAL to Memtable -->
+  <path d="M 360 105 L 410 105" stroke="#00d4ff" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Memtable Box -->
+  <g id="memtable">
+    <rect x="420" y="70" width="160" height="70" rx="8" fill="#0f3460" stroke="#00d4ff" stroke-width="2"/>
+    <text x="500" y="100" fill="#00d4ff" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Memtable</text>
+    <text x="500" y="122" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="11" text-anchor="middle">(Active Skip List)</text>
+  </g>
+
+  <!-- "when full" label -->
+  <text x="500" y="165" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="11" font-style="italic" text-anchor="middle">when full</text>
+
+  <!-- Arrow from Memtable to Immutable -->
+  <path d="M 500 170 L 500 190" stroke="#00d4ff" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Immutable Memtables Box -->
+  <g id="imm-memtables">
+    <rect x="390" y="200" width="220" height="70" rx="8" fill="#0f3460" stroke="#00d4ff" stroke-width="2"/>
+    <text x="500" y="230" fill="#00d4ff" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Immutable Memtables</text>
+    <text x="500" y="252" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="11" text-anchor="middle">(Queue awaiting flush)</text>
+  </g>
+
+  <!-- "minor compaction" label -->
+  <text x="500" y="295" fill="#7b2cbf" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">minor compaction</text>
+
+  <!-- Arrow from Immutable to Level 0 -->
+  <path d="M 500 300 L 500 320" stroke="#7b2cbf" stroke-width="3" fill="none" marker-end="url(#arrowhead-purple)"/>
+
+  <!-- Level 0 SSTables Box -->
+  <g id="level0">
+    <rect x="370" y="330" width="260" height="60" rx="8" fill="#16213e" stroke="#00d4ff" stroke-width="2"/>
+    <text x="500" y="355" fill="#00d4ff" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Level 0 SSTables</text>
+    <text x="500" y="375" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="11" text-anchor="middle">(May overlap, recently flushed)</text>
+  </g>
+
+  <!-- "major compaction" label -->
+  <text x="500" y="415" fill="#7b2cbf" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">major compaction</text>
+
+  <!-- Arrow from Level 0 to Level N -->
+  <path d="M 500 420 L 500 440" stroke="#7b2cbf" stroke-width="3" fill="none" marker-end="url(#arrowhead-purple)"/>
+
+  <!-- Level 1+ SSTables Box -->
+  <g id="levelN">
+    <rect x="350" y="450" width="300" height="40" rx="8" fill="#16213e" stroke="#00d4ff" stroke-width="2"/>
+    <text x="500" y="477" fill="#00d4ff" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Level 1+ SSTables (Sorted, non-overlapping)</text>
+  </g>
+
+  <!-- Read Path Section -->
+  <g id="read-path">
+    <rect x="630" y="70" width="150" height="50" rx="8" fill="#7b2cbf" stroke="#00d4ff" stroke-width="2"/>
+    <text x="705" y="102" fill="#fff" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Read Request</text>
+  </g>
+
+  <!-- Read arrows -->
+  <path d="M 705 120 L 705 200" stroke="#00d4ff" stroke-width="2" stroke-dasharray="5,3" fill="none"/>
+  <text x="720" y="160" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="10" text-anchor="start">1. Check</text>
+  <text x="720" y="172" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="10" text-anchor="start">Memtable</text>
+
+  <path d="M 705 200 L 705 330" stroke="#00d4ff" stroke-width="2" stroke-dasharray="5,3" fill="none"/>
+  <text x="720" y="265" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="10" text-anchor="start">2. Check</text>
+  <text x="720" y="277" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="10" text-anchor="start">Imm Tables</text>
+
+  <path d="M 705 330 L 705 470" stroke="#00d4ff" stroke-width="2" stroke-dasharray="5,3" fill="none"/>
+  <text x="720" y="400" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="10" text-anchor="start">3. Search</text>
+  <text x="720" y="412" fill="#b8c5d6" font-family="Arial, sans-serif" font-size="10" text-anchor="start">SSTables</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#00d4ff"/>
+    </marker>
+    <marker id="arrowhead-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7b2cbf"/>
+    </marker>
+  </defs>
+</svg>
