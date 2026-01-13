@@ -9,7 +9,7 @@ import { ThemeToggle } from '../components/ThemeToggle'
 
 export function Home() {
   return (
-    <div className="min-h-screen bg-base-200 overflow-x-hidden">
+    <div className="min-h-screen bg-base-200 overflow-x-hidden" data-testid="homepage">
       {/* Navigation */}
       <nav className="navbar bg-base-100/50 backdrop-blur-md sticky top-0 z-50 px-2 sm:px-4">
         <div className="flex-1 min-w-0">

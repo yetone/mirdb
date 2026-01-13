@@ -22,7 +22,7 @@ function Register() {
       <p>
         Already have an account? <Link to="/login">Login</Link>
       </p>
-      <Link to="/">Back to Home</Link>
+      <Link to="/" data-testid="back-to-home-link">Back to Home</Link>
     </div>
   )
 }
