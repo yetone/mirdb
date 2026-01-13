@@ -149,12 +149,21 @@ function DemoSection() {
     setCopied(false)
 
     // Validate URL
-    if (!inputUrl.trim()) {
+    const trimmedUrl = inputUrl.trim()
+
+    if (!trimmedUrl) {
       setError('Please enter a URL')
       return
     }
 
-    if (!isValidUrl(inputUrl)) {
+    // Check for URL length (browsers typically support up to 2048 chars)
+    const MAX_URL_LENGTH = 2048
+    if (trimmedUrl.length > MAX_URL_LENGTH) {
+      setError(`URL is too long. Maximum length is ${MAX_URL_LENGTH} characters.`)
+      return
+    }
+
+    if (!isValidUrl(trimmedUrl)) {
       setError('Please enter a valid URL (e.g., https://example.com)')
       return
     }
