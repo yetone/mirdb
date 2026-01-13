@@ -1,0 +1,705 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Test Case 3: Home component snapshot > should match snapshot when rendered with all required providers 1`] = `
+<div>
+  <div
+    class="min-h-screen bg-base-200 overflow-x-hidden"
+    data-testid="homepage"
+  >
+    <nav
+      class="navbar bg-base-100/50 backdrop-blur-md sticky top-0 z-50 px-2 sm:px-4"
+    >
+      <div
+        class="flex-1 min-w-0"
+      >
+        <a
+          class="btn btn-ghost text-lg sm:text-xl px-2"
+          href="/"
+        >
+          URL Shortener
+        </a>
+      </div>
+      <div
+        class="flex-none flex items-center gap-1 sm:gap-2"
+      >
+        <button
+          aria-label="Switch to light mode"
+          class="btn btn-ghost btn-circle"
+          data-testid="theme-toggle"
+          tabindex="0"
+        >
+          <div
+            style="transform: none;"
+          >
+            <svg
+              class="lucide lucide-moon w-5 h-5"
+              data-testid="moon-icon"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <a
+          class="btn btn-ghost btn-sm sm:btn-md min-h-[44px] h-auto px-2 sm:px-4"
+          data-testid="login-link"
+          href="/login"
+        >
+          Login
+        </a>
+        <a
+          class="btn btn-primary btn-sm sm:btn-md min-h-[44px] h-auto px-2 sm:px-4"
+          data-testid="register-link"
+          href="/register"
+        >
+          Sign Up
+        </a>
+      </div>
+    </nav>
+    <section
+      class="hero min-h-[70vh] bg-base-300 px-4"
+      data-testid="hero-section"
+    >
+      <div
+        class="hero-content text-center w-full"
+      >
+        <div
+          class="max-w-2xl w-full"
+          data-testid="hero-content"
+          style="opacity: 0; transform: translateY(30px);"
+        >
+          <h1
+            class="text-3xl sm:text-5xl font-bold text-base-content"
+            data-testid="hero-headline"
+            style="opacity: 0; transform: translateY(20px);"
+          >
+            Shorten. Track. Share.
+          </h1>
+          <p
+            class="py-6 text-lg text-base-content"
+            data-testid="hero-subheadline"
+            style="opacity: 0; transform: translateY(20px);"
+          >
+            Transform long URLs into memorable short links. Track clicks, analyze performance, and manage all your links in one place.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            data-testid="hero-cta-buttons"
+            style="opacity: 0; transform: translateY(20px);"
+          >
+            <a
+              data-testid="get-started-btn"
+              href="/register"
+            >
+              <button
+                class="relative overflow-hidden font-semibold rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 bg-gradient-to-r from-primary to-secondary text-primary-content hover:shadow-lg hover:shadow-primary/25 px-8 py-4 text-lg cursor-pointer"
+                tabindex="0"
+                type="button"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0"
+                  style="transform: translateX(-100%);"
+                />
+                <span
+                  class="relative z-10"
+                >
+                  Get Started Free
+                </span>
+              </button>
+            </a>
+            <a
+              data-testid="login-btn"
+              href="/login"
+            >
+              <button
+                class="relative overflow-hidden font-semibold rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 border-2 border-primary bg-transparent text-primary hover:bg-primary/10 px-8 py-4 text-lg cursor-pointer"
+                tabindex="0"
+                type="button"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0"
+                  style="transform: translateX(-100%);"
+                />
+                <span
+                  class="relative z-10"
+                >
+                  Login
+                </span>
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      class="py-16 px-4 bg-base-100"
+      data-testid="demo-section"
+    >
+      <div
+        class="container mx-auto max-w-2xl"
+      >
+        <div
+          style="opacity: 0; transform: translateY(20px);"
+        >
+          <h2
+            class="text-3xl font-bold text-center mb-4"
+          >
+            Try It Now
+          </h2>
+          <p
+            class="text-center text-base-content mb-8"
+          >
+            Shorten your first URL in seconds - no sign-up required
+          </p>
+          <form
+            data-testid="demo-form"
+          >
+            <div
+              class="flex flex-col sm:flex-row gap-3"
+            >
+              <input
+                aria-label="URL to shorten"
+                class="input input-bordered flex-1 w-full"
+                data-testid="demo-url-input"
+                placeholder="Enter your long URL here..."
+                type="text"
+                value=""
+              />
+              <button
+                class="relative overflow-hidden font-semibold rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 bg-gradient-to-r from-primary to-secondary text-primary-content hover:shadow-lg hover:shadow-primary/25 px-6 py-3 text-base cursor-pointer"
+                data-testid="demo-shorten-button"
+                tabindex="0"
+                type="submit"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0"
+                  style="transform: translateX(-100%);"
+                />
+                <span
+                  class="relative z-10"
+                >
+                  Shorten
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section
+      class="py-20 px-4 sm:px-6 lg:px-8"
+      data-testid="features-section"
+      id="features"
+    >
+      <div
+        class="max-w-7xl mx-auto"
+      >
+        <div
+          class="text-center mb-16"
+        >
+          <h2
+            class="text-3xl sm:text-4xl font-bold text-base-content mb-4"
+          >
+            Powerful Features
+          </h2>
+          <p
+            class="text-lg text-base-content max-w-2xl mx-auto"
+          >
+            Everything you need to manage and track your links effectively
+          </p>
+        </div>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          data-testid="feature-cards-container"
+          style="opacity: 0;"
+        >
+          <div
+            style="opacity: 0; transform: translateY(20px);"
+          >
+            <div
+              class="backdrop-blur-md bg-base-100/30 border border-base-content/10 rounded-2xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] glassmorphism-card h-full flex flex-col"
+              data-testid="feature-card-url-shortening"
+            >
+              <div
+                class="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center text-primary mb-4"
+                data-testid="feature-icon-url-shortening"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-link w-8 h-8"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                  />
+                  <path
+                    d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                  />
+                </svg>
+              </div>
+              <h3
+                class="text-xl font-semibold text-base-content mb-2"
+                data-testid="feature-title-url-shortening"
+              >
+                URL Shortening
+              </h3>
+              <p
+                class="text-base-content flex-grow"
+                data-testid="feature-description-url-shortening"
+              >
+                Create short, memorable links in seconds. Generate unique, shareable codes for any URL.
+              </p>
+            </div>
+          </div>
+          <div
+            style="opacity: 0; transform: translateY(20px);"
+          >
+            <div
+              class="backdrop-blur-md bg-base-100/30 border border-base-content/10 rounded-2xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] glassmorphism-card h-full flex flex-col"
+              data-testid="feature-card-analytics"
+            >
+              <div
+                class="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center text-primary mb-4"
+                data-testid="feature-icon-analytics"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-bar-chart3 w-8 h-8"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 3v18h18"
+                  />
+                  <path
+                    d="M18 17V9"
+                  />
+                  <path
+                    d="M13 17V5"
+                  />
+                  <path
+                    d="M8 17v-3"
+                  />
+                </svg>
+              </div>
+              <h3
+                class="text-xl font-semibold text-base-content mb-2"
+                data-testid="feature-title-analytics"
+              >
+                Analytics Dashboard
+              </h3>
+              <p
+                class="text-base-content flex-grow"
+                data-testid="feature-description-analytics"
+              >
+                Track clicks, locations, referrers, and more. Get detailed insights into your link performance.
+              </p>
+            </div>
+          </div>
+          <div
+            style="opacity: 0; transform: translateY(20px);"
+          >
+            <div
+              class="backdrop-blur-md bg-base-100/30 border border-base-content/10 rounded-2xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] glassmorphism-card h-full flex flex-col"
+              data-testid="feature-card-link-management"
+            >
+              <div
+                class="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center text-primary mb-4"
+                data-testid="feature-icon-link-management"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-settings w-8 h-8"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
+                </svg>
+              </div>
+              <h3
+                class="text-xl font-semibold text-base-content mb-2"
+                data-testid="feature-title-link-management"
+              >
+                Link Management
+              </h3>
+              <p
+                class="text-base-content flex-grow"
+                data-testid="feature-description-link-management"
+              >
+                Organize, edit, and delete your links. Share them easily with built-in sharing features.
+              </p>
+            </div>
+          </div>
+          <div
+            style="opacity: 0; transform: translateY(20px);"
+          >
+            <div
+              class="backdrop-blur-md bg-base-100/30 border border-base-content/10 rounded-2xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] glassmorphism-card h-full flex flex-col"
+              data-testid="feature-card-themes"
+            >
+              <div
+                class="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center text-primary mb-4"
+                data-testid="feature-icon-themes"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-palette w-8 h-8"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="13.5"
+                    cy="6.5"
+                    fill="currentColor"
+                    r=".5"
+                  />
+                  <circle
+                    cx="17.5"
+                    cy="10.5"
+                    fill="currentColor"
+                    r=".5"
+                  />
+                  <circle
+                    cx="8.5"
+                    cy="7.5"
+                    fill="currentColor"
+                    r=".5"
+                  />
+                  <circle
+                    cx="6.5"
+                    cy="12.5"
+                    fill="currentColor"
+                    r=".5"
+                  />
+                  <path
+                    d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"
+                  />
+                </svg>
+              </div>
+              <h3
+                class="text-xl font-semibold text-base-content mb-2"
+                data-testid="feature-title-themes"
+              >
+                Multiple Themes
+              </h3>
+              <p
+                class="text-base-content flex-grow"
+                data-testid="feature-description-themes"
+              >
+                Customize your experience with dark mode and various theme options to suit your style.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      class="py-16 px-4 sm:px-6 lg:px-8 bg-base-300"
+      data-testid="social-proof-section"
+      id="social-proof"
+    >
+      <div
+        class="max-w-7xl mx-auto"
+      >
+        <div
+          class="text-center mb-12"
+        >
+          <h2
+            class="text-3xl sm:text-4xl font-bold text-base-content mb-4"
+          >
+            Trusted by Thousands
+          </h2>
+          <p
+            class="text-lg text-base-content max-w-2xl mx-auto"
+          >
+            Join our growing community of users who trust us with their links
+          </p>
+        </div>
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8"
+          data-testid="statistics-container"
+          style="opacity: 0;"
+        >
+          <div
+            class="text-center p-6 rounded-xl bg-base-100/50 backdrop-blur-sm border border-base-content/10 shadow-lg"
+            data-testid="stat-card-urls-shortened"
+            style="opacity: 0; transform: scale(0.8);"
+          >
+            <div
+              class="w-14 h-14 mx-auto rounded-full bg-primary/20 flex items-center justify-center text-primary mb-4"
+              data-testid="stat-icon-urls-shortened"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-link2 w-8 h-8"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 17H7A5 5 0 0 1 7 7h2"
+                />
+                <path
+                  d="M15 7h2a5 5 0 1 1 0 10h-2"
+                />
+                <line
+                  x1="8"
+                  x2="16"
+                  y1="12"
+                  y2="12"
+                />
+              </svg>
+            </div>
+            <div
+              class="text-3xl md:text-4xl font-bold text-base-content mb-2"
+              data-testid="stat-value-urls-shortened"
+            >
+              1.3M
+            </div>
+            <div
+              class="text-sm md:text-base text-base-content font-medium"
+              data-testid="stat-label-urls-shortened"
+            >
+              URLs Shortened
+            </div>
+          </div>
+          <div
+            class="text-center p-6 rounded-xl bg-base-100/50 backdrop-blur-sm border border-base-content/10 shadow-lg"
+            data-testid="stat-card-clicks-tracked"
+            style="opacity: 0; transform: scale(0.8);"
+          >
+            <div
+              class="w-14 h-14 mx-auto rounded-full bg-primary/20 flex items-center justify-center text-primary mb-4"
+              data-testid="stat-icon-clicks-tracked"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-mouse-pointer-click w-8 h-8"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m9 9 5 12 1.8-5.2L21 14Z"
+                />
+                <path
+                  d="M7.2 2.2 8 5.1"
+                />
+                <path
+                  d="m5.1 8-2.9-.8"
+                />
+                <path
+                  d="M14 4.1 12 6"
+                />
+                <path
+                  d="m6 12-1.9 2"
+                />
+              </svg>
+            </div>
+            <div
+              class="text-3xl md:text-4xl font-bold text-base-content mb-2"
+              data-testid="stat-value-clicks-tracked"
+            >
+              45.6M
+            </div>
+            <div
+              class="text-sm md:text-base text-base-content font-medium"
+              data-testid="stat-label-clicks-tracked"
+            >
+              Clicks Tracked
+            </div>
+          </div>
+          <div
+            class="text-center p-6 rounded-xl bg-base-100/50 backdrop-blur-sm border border-base-content/10 shadow-lg"
+            data-testid="stat-card-active-users"
+            style="opacity: 0; transform: scale(0.8);"
+          >
+            <div
+              class="w-14 h-14 mx-auto rounded-full bg-primary/20 flex items-center justify-center text-primary mb-4"
+              data-testid="stat-icon-active-users"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-users w-8 h-8"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                />
+                <circle
+                  cx="9"
+                  cy="7"
+                  r="4"
+                />
+                <path
+                  d="M22 21v-2a4 4 0 0 0-3-3.87"
+                />
+                <path
+                  d="M16 3.13a4 4 0 0 1 0 7.75"
+                />
+              </svg>
+            </div>
+            <div
+              class="text-3xl md:text-4xl font-bold text-base-content mb-2"
+              data-testid="stat-value-active-users"
+            >
+              12,500
+            </div>
+            <div
+              class="text-sm md:text-base text-base-content font-medium"
+              data-testid="stat-label-active-users"
+            >
+              Active Users
+            </div>
+          </div>
+          <div
+            class="text-center p-6 rounded-xl bg-base-100/50 backdrop-blur-sm border border-base-content/10 shadow-lg"
+            data-testid="stat-card-countries-reached"
+            style="opacity: 0; transform: scale(0.8);"
+          >
+            <div
+              class="w-14 h-14 mx-auto rounded-full bg-primary/20 flex items-center justify-center text-primary mb-4"
+              data-testid="stat-icon-countries-reached"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-globe w-8 h-8"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <path
+                  d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+                />
+                <path
+                  d="M2 12h20"
+                />
+              </svg>
+            </div>
+            <div
+              class="text-3xl md:text-4xl font-bold text-base-content mb-2"
+              data-testid="stat-value-countries-reached"
+            >
+              150
+            </div>
+            <div
+              class="text-sm md:text-base text-base-content font-medium"
+              data-testid="stat-label-countries-reached"
+            >
+              Countries Reached
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer
+      class="footer footer-center p-10 bg-base-300 text-base-content"
+      data-testid="footer-section"
+    >
+      <nav
+        class="grid grid-flow-col gap-4"
+        data-testid="footer-nav"
+      >
+        <a
+          class="link link-hover"
+          data-testid="footer-login-link"
+          href="/login"
+        >
+          Login
+        </a>
+        <a
+          class="link link-hover"
+          data-testid="footer-register-link"
+          href="/register"
+        >
+          Sign Up
+        </a>
+      </nav>
+      <aside>
+        <p
+          data-testid="footer-copyright"
+        >
+          © 2024 URL Shortener. All rights reserved.
+        </p>
+      </aside>
+    </footer>
+  </div>
+</div>
+`;
