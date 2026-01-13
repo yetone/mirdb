@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "test:e2e:mobile": "playwright test --project='Mobile Chrome'"
+    "test:e2e:mobile": "playwright test --project='Mobile Chrome'",
+    "test:e2e:cross-browser": "playwright test browser-compatibility.spec.ts --project=chromium --project=firefox --project=webkit"
   },
   "dependencies": {
     "clsx": "^2.1.1",
