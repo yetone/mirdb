@@ -9,35 +9,35 @@ import { ThemeToggle } from '../components/ThemeToggle'
 
 export function Home() {
   return (
-    <div className="min-h-screen bg-base-200">
+    <div className="min-h-screen bg-base-200 overflow-x-hidden">
       {/* Navigation */}
-      <nav className="navbar bg-base-100/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex-1">
-          <Link to="/" className="btn btn-ghost text-xl">URL Shortener</Link>
+      <nav className="navbar bg-base-100/50 backdrop-blur-md sticky top-0 z-50 px-2 sm:px-4">
+        <div className="flex-1 min-w-0">
+          <Link to="/" className="btn btn-ghost text-lg sm:text-xl px-2">URL Shortener</Link>
         </div>
-        <div className="flex-none gap-2">
+        <div className="flex-none flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
-          <Link to="/login" className="btn btn-ghost" data-testid="login-link">
+          <Link to="/login" className="btn btn-ghost btn-sm sm:btn-md min-h-[44px] h-auto px-2 sm:px-4" data-testid="login-link">
             Login
           </Link>
-          <Link to="/register" className="btn btn-primary" data-testid="register-link">
+          <Link to="/register" className="btn btn-primary btn-sm sm:btn-md min-h-[44px] h-auto px-2 sm:px-4" data-testid="register-link">
             Sign Up
           </Link>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="hero min-h-[70vh] bg-base-300" data-testid="hero-section">
-        <div className="hero-content text-center">
+      <section className="hero min-h-[70vh] bg-base-300 px-4" data-testid="hero-section">
+        <div className="hero-content text-center w-full">
           <motion.div
-            className="max-w-2xl"
+            className="max-w-2xl w-full"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
             data-testid="hero-content"
           >
             <motion.h1
-              className="text-5xl font-bold text-base-content"
+              className="text-3xl sm:text-5xl font-bold text-base-content"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -56,7 +56,7 @@ export function Home() {
               performance, and manage all your links in one place.
             </motion.p>
             <motion.div
-              className="flex gap-4 justify-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
