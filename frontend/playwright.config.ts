@@ -24,6 +24,16 @@ export default defineConfig({
       },
     },
     {
+      name: 'Tablet Chrome',
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 768, height: 1024 },
+        deviceScaleFactor: 2,
+        isMobile: false,
+        hasTouch: true,
+      },
+    },
+    {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
