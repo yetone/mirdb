@@ -358,3 +358,79 @@ describe('URL Shortening Demo Section', () => {
     })
   })
 })
+
+/**
+ * Footer Section Tests
+ * Implements test cases for scenario: Footer Section Display (REQ-8)
+ */
+describe('Footer Section Display', () => {
+  /**
+   * Test Case 1: Footer section is present at the bottom of the page
+   * Input: Render homepage and query for footer element
+   * Expected: Footer section is present at the bottom of the page
+   */
+  it('should render footer section on homepage', () => {
+    renderHome()
+
+    // Verify footer element exists
+    const footer = screen.getByTestId('footer-section')
+    expect(footer).toBeInTheDocument()
+    expect(footer.tagName.toLowerCase()).toBe('footer')
+  })
+
+  /**
+   * Test Case 2: Footer contains navigation links
+   * Input: Query for navigation links in footer
+   * Expected: Footer contains navigation links
+   */
+  it('should contain navigation links in footer', () => {
+    renderHome()
+
+    // Verify footer has navigation links
+    const footerNav = screen.getByTestId('footer-nav')
+    expect(footerNav).toBeInTheDocument()
+
+    // Check for specific navigation links
+    const loginLink = screen.getByTestId('footer-login-link')
+    expect(loginLink).toBeInTheDocument()
+    expect(loginLink).toHaveAttribute('href', '/login')
+
+    const registerLink = screen.getByTestId('footer-register-link')
+    expect(registerLink).toBeInTheDocument()
+    expect(registerLink).toHaveAttribute('href', '/register')
+  })
+
+  /**
+   * Test Case 3: Footer contains copyright information
+   * Input: Query for copyright text in footer
+   * Expected: Copyright information is displayed
+   */
+  it('should display copyright information in footer', () => {
+    renderHome()
+
+    // Verify copyright text exists
+    const copyrightText = screen.getByTestId('footer-copyright')
+    expect(copyrightText).toBeInTheDocument()
+    expect(copyrightText).toHaveTextContent(/©/)
+    expect(copyrightText).toHaveTextContent(/URL Shortener/i)
+    expect(copyrightText).toHaveTextContent(/all rights reserved/i)
+  })
+
+  /**
+   * Additional test: Footer links are accessible
+   */
+  it('should have accessible footer navigation links', () => {
+    renderHome()
+
+    const footerNav = screen.getByTestId('footer-nav')
+
+    // All links should be visible and accessible
+    const links = footerNav.querySelectorAll('a')
+    expect(links.length).toBeGreaterThan(0)
+
+    links.forEach((link) => {
+      expect(link).toBeVisible()
+      expect(link).toHaveAttribute('href')
+    })
+  })
+})

@@ -59,10 +59,18 @@ export function Home() {
       <SocialProofSection />
 
       {/* Footer */}
-      <footer className="footer footer-center p-10 bg-base-300 text-base-content">
-        <div>
-          <p>© 2024 URL Shortener. All rights reserved.</p>
-        </div>
+      <footer data-testid="footer-section" className="footer footer-center p-10 bg-base-300 text-base-content">
+        <nav data-testid="footer-nav" className="grid grid-flow-col gap-4">
+          <Link to="/login" data-testid="footer-login-link" className="link link-hover">
+            Login
+          </Link>
+          <Link to="/register" data-testid="footer-register-link" className="link link-hover">
+            Sign Up
+          </Link>
+        </nav>
+        <aside>
+          <p data-testid="footer-copyright">© 2024 URL Shortener. All rights reserved.</p>
+        </aside>
       </footer>
     </div>
   )
