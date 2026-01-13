@@ -27,25 +27,53 @@ export function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="hero min-h-[70vh] bg-base-300">
+      <section className="hero min-h-[70vh] bg-base-300" data-testid="hero-section">
         <div className="hero-content text-center">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl font-bold text-base-content">
+          <motion.div
+            className="max-w-2xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            data-testid="hero-content"
+          >
+            <motion.h1
+              className="text-5xl font-bold text-base-content"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              data-testid="hero-headline"
+            >
               Shorten. Track. Share.
-            </h1>
-            <p className="py-6 text-lg text-base-content">
+            </motion.h1>
+            <motion.p
+              className="py-6 text-lg text-base-content"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              data-testid="hero-subheadline"
+            >
               Transform long URLs into memorable short links. Track clicks, analyze
               performance, and manage all your links in one place.
-            </p>
-            <div className="flex gap-4 justify-center">
-              <Link to="/register" className="btn btn-primary" data-testid="get-started-btn">
-                Get Started Free
+            </motion.p>
+            <motion.div
+              className="flex gap-4 justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              data-testid="hero-cta-buttons"
+            >
+              <Link to="/register" data-testid="get-started-btn">
+                <FuturisticButton variant="primary" size="lg">
+                  Get Started Free
+                </FuturisticButton>
               </Link>
-              <Link to="/login" className="btn btn-outline" data-testid="login-btn">
-                Login
+              <Link to="/login" data-testid="login-btn">
+                <FuturisticButton variant="outline" size="lg">
+                  Login
+                </FuturisticButton>
               </Link>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 

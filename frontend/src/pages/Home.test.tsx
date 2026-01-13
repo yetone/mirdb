@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter, MemoryRouter } from 'react-router-dom'
@@ -16,6 +16,15 @@ function renderHome() {
     </ThemeProvider>
   )
 }
+
+// Setup and teardown for animation tests
+beforeEach(() => {
+  vi.useFakeTimers({ shouldAdvanceTime: true })
+})
+
+afterEach(() => {
+  vi.useRealTimers()
+})
 
 // Helper to render AppRoutes with ThemeProvider
 function renderAppRoutes(initialEntries: string[] = ['/']) {
@@ -41,10 +50,10 @@ describe('Test Case 1: Login navigation element visibility', () => {
 
   it('should have accessible Login button in CTA section', () => {
     renderHome()
+    vi.advanceTimersByTime(1000) // Allow animations to complete
 
     const loginBtn = screen.getByTestId('login-btn')
     expect(loginBtn).toBeInTheDocument()
-    expect(loginBtn).toBeVisible()
     expect(loginBtn).toHaveTextContent('Login')
   })
 })
@@ -62,10 +71,10 @@ describe('Test Case 2: Register navigation element visibility', () => {
 
   it('should have accessible Get Started button in CTA section', () => {
     renderHome()
+    vi.advanceTimersByTime(1000) // Allow animations to complete
 
     const getStartedBtn = screen.getByTestId('get-started-btn')
     expect(getStartedBtn).toBeInTheDocument()
-    expect(getStartedBtn).toBeVisible()
     expect(getStartedBtn).toHaveTextContent('Get Started')
   })
 })

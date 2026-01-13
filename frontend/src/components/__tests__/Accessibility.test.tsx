@@ -107,13 +107,23 @@ describe('Accessibility Compliance Tests', () => {
       // DaisyUI btn class includes built-in focus states
       const loginLink = screen.getByTestId('login-link')
       const registerLink = screen.getByTestId('register-link')
+
+      // loginLink and registerLink in navbar use btn class directly
+      expect(loginLink).toHaveClass('btn')
+      expect(registerLink).toHaveClass('btn')
+
+      // Hero CTA buttons now use FuturisticButton with focus:ring styling
+      // FuturisticButton has focus:ring-2 focus:ring-primary/50 which provides focus states
       const getStartedBtn = screen.getByTestId('get-started-btn')
       const loginBtn = screen.getByTestId('login-btn')
 
-      expect(loginLink).toHaveClass('btn')
-      expect(registerLink).toHaveClass('btn')
-      expect(getStartedBtn).toHaveClass('btn')
-      expect(loginBtn).toHaveClass('btn')
+      // These are Links wrapping FuturisticButton components
+      // Check the button inside has proper focus styling
+      const getStartedButton = getStartedBtn.querySelector('button')
+      const loginButton = loginBtn.querySelector('button')
+
+      expect(getStartedButton).toHaveClass('focus:ring-2')
+      expect(loginButton).toHaveClass('focus:ring-2')
     })
 
     it('should have form input with proper input classes for focus styling', () => {
@@ -287,14 +297,17 @@ describe('Accessibility Compliance Tests', () => {
     it('should have primary buttons with sufficient contrast', () => {
       renderHome()
 
-      const primaryButtons = [
-        screen.getByTestId('register-link'),
-        screen.getByTestId('get-started-btn'),
-      ]
+      // register-link in navbar uses DaisyUI btn-primary class
+      const registerLink = screen.getByTestId('register-link')
+      expect(registerLink).toHaveClass('btn-primary')
 
-      primaryButtons.forEach((button) => {
-        expect(button).toHaveClass('btn-primary')
-      })
+      // get-started-btn is now a Link wrapping FuturisticButton
+      // FuturisticButton uses gradient with primary color and primary-content text
+      const getStartedBtn = screen.getByTestId('get-started-btn')
+      const getStartedButton = getStartedBtn.querySelector('button')
+
+      expect(getStartedButton).toHaveClass('from-primary')
+      expect(getStartedButton).toHaveClass('text-primary-content')
     })
 
     it('should have secondary text with readable contrast ratio', () => {
