@@ -31,3 +31,22 @@ class MockIntersectionObserver implements IntersectionObserver {
 }
 
 global.IntersectionObserver = MockIntersectionObserver
+
+// Mock ResizeObserver
+class MockResizeObserver implements ResizeObserver {
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+}
+
+global.ResizeObserver = MockResizeObserver
+
+// Mock clipboard API
+Object.defineProperty(navigator, 'clipboard', {
+  value: {
+    writeText: async () => Promise.resolve(),
+    readText: async () => Promise.resolve(''),
+  },
+  writable: true,
+  configurable: true,
+})

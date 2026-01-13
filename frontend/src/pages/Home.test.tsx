@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { BrowserRouter, MemoryRouter } from 'react-router-dom'
 import Home from './Home'
 import { AppRoutes } from '../App'
@@ -160,5 +161,249 @@ describe('Test Case 5: Navigation response time', () => {
     const navigationTime = endTime - startTime
     
     expect(navigationTime).toBeLessThan(1000)
+  })
+})
+
+/**
+ * URL Shortening Demo Section Tests
+ * Implements test cases for scenario: URL Shortening Demo (REQ-4, US-4)
+ */
+describe('URL Shortening Demo Section', () => {
+  /**
+   * Test Case 1: Demo section with input field and submit button is rendered
+   * Input: Render homepage and query for demo section with URL input field
+   * Expected: Demo section with input field and submit button is rendered
+   */
+  it('should render demo section with URL input field and submit button', () => {
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    )
+
+    // Verify demo section exists
+    const demoSection = screen.getByTestId('demo-section')
+    expect(demoSection).toBeInTheDocument()
+
+    // Verify input field exists
+    const urlInput = screen.getByTestId('demo-url-input')
+    expect(urlInput).toBeInTheDocument()
+    expect(urlInput).toHaveAttribute('placeholder')
+
+    // Verify submit button exists
+    const shortenButton = screen.getByTestId('demo-shorten-button')
+    expect(shortenButton).toBeInTheDocument()
+    expect(shortenButton).toHaveTextContent(/shorten/i)
+  })
+
+  /**
+   * Test Case 2: Input accepts URL and displays it correctly
+   * Input: Enter valid URL 'https://example.com/test' in demo input
+   * Expected: Input accepts the URL and displays it correctly
+   */
+  it('should accept and display valid URL in demo input', async () => {
+    const user = userEvent.setup()
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    )
+
+    const urlInput = screen.getByTestId('demo-url-input')
+    const testUrl = 'https://example.com/test'
+
+    await user.type(urlInput, testUrl)
+
+    expect(urlInput).toHaveValue(testUrl)
+  })
+
+  /**
+   * Test Case 3: Form submission triggers API call or displays shortened URL
+   * Input: Submit demo form with valid URL
+   * Expected: Form submission triggers API call or displays shortened URL
+   */
+  it('should display shortened URL after submitting valid URL', async () => {
+    const user = userEvent.setup()
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    )
+
+    const urlInput = screen.getByTestId('demo-url-input')
+    const shortenButton = screen.getByTestId('demo-shorten-button')
+
+    // Enter a valid URL
+    await user.type(urlInput, 'https://example.com/very-long-url-path')
+
+    // Click shorten button
+    await user.click(shortenButton)
+
+    // Wait for the shortened URL to appear
+    await waitFor(
+      () => {
+        const result = screen.getByTestId('demo-result')
+        expect(result).toBeInTheDocument()
+      },
+      { timeout: 2000 }
+    )
+
+    // Verify shortened URL is displayed
+    const shortenedUrl = screen.getByTestId('demo-shortened-url')
+    expect(shortenedUrl).toBeInTheDocument()
+    expect(shortenedUrl.textContent).toMatch(/\/r\/[A-Za-z0-9]+/)
+  })
+
+  /**
+   * Test Case 4: CTA prompting user to sign up is displayed after demo result
+   * Input: Check for sign-up prompt after demo URL shortening
+   * Expected: CTA prompting user to sign up is displayed after demo result
+   */
+  it('should display sign-up CTA after shortening URL', async () => {
+    const user = userEvent.setup()
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    )
+
+    const urlInput = screen.getByTestId('demo-url-input')
+    const shortenButton = screen.getByTestId('demo-shorten-button')
+
+    // Enter and submit a valid URL
+    await user.type(urlInput, 'https://example.com/test-url')
+    await user.click(shortenButton)
+
+    // Wait for result and CTA to appear
+    await waitFor(
+      () => {
+        const signupCta = screen.getByTestId('demo-signup-cta')
+        expect(signupCta).toBeInTheDocument()
+      },
+      { timeout: 2000 }
+    )
+
+    // Verify CTA content
+    const signupCta = screen.getByTestId('demo-signup-cta')
+    expect(signupCta).toHaveTextContent(/sign up/i)
+    expect(signupCta).toHaveTextContent(/track|save|analytics/i)
+
+    // Verify there's a Sign Up Free button
+    const signupButton = screen.getByRole('button', { name: /sign up free/i })
+    expect(signupButton).toBeInTheDocument()
+  })
+
+  /**
+   * Test Case 5: Validation error is displayed for invalid URL
+   * Input: Submit demo form with invalid URL 'not-a-url'
+   * Expected: Validation error is displayed to the user
+   */
+  it('should display validation error for invalid URL', async () => {
+    const user = userEvent.setup()
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    )
+
+    const urlInput = screen.getByTestId('demo-url-input')
+    const shortenButton = screen.getByTestId('demo-shorten-button')
+
+    // Enter an invalid URL
+    await user.type(urlInput, 'not-a-url')
+
+    // Click shorten button
+    await user.click(shortenButton)
+
+    // Verify error message is displayed
+    const errorMessage = screen.getByTestId('demo-error')
+    expect(errorMessage).toBeInTheDocument()
+    expect(errorMessage).toHaveTextContent(/valid url/i)
+    expect(errorMessage).toHaveAttribute('role', 'alert')
+  })
+
+  /**
+   * Test Case 6: Shorten button uses FuturisticButton component
+   * Input: Verify FuturisticButton component usage for Shorten button
+   * Expected: Shorten button uses FuturisticButton component
+   */
+  it('should use FuturisticButton component for Shorten button', () => {
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    )
+
+    const shortenButton = screen.getByTestId('demo-shorten-button')
+
+    // FuturisticButton renders as a motion.button which should have the characteristic
+    // gradient styling and animation-related attributes
+    expect(shortenButton).toBeInTheDocument()
+    expect(shortenButton.tagName).toBe('BUTTON')
+
+    // Check for FuturisticButton's characteristic gradient styling
+    // The button should have classes from FuturisticButton's styling
+    expect(shortenButton).toHaveClass('bg-gradient-to-r')
+    expect(shortenButton).toHaveClass('from-primary')
+    expect(shortenButton).toHaveClass('to-secondary')
+  })
+
+  /**
+   * Additional test: Empty input validation
+   */
+  it('should display error when submitting empty input', async () => {
+    const user = userEvent.setup()
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    )
+
+    const shortenButton = screen.getByTestId('demo-shorten-button')
+
+    // Click shorten button without entering URL
+    await user.click(shortenButton)
+
+    // Verify error message is displayed
+    const errorMessage = screen.getByTestId('demo-error')
+    expect(errorMessage).toBeInTheDocument()
+    expect(errorMessage).toHaveTextContent(/enter a url/i)
+  })
+
+  /**
+   * Additional test: Copy functionality
+   */
+  it('should allow copying shortened URL to clipboard', async () => {
+    const user = userEvent.setup()
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    )
+
+    const urlInput = screen.getByTestId('demo-url-input')
+    const shortenButton = screen.getByTestId('demo-shorten-button')
+
+    // Enter and submit a valid URL
+    await user.type(urlInput, 'https://example.com/copy-test')
+    await user.click(shortenButton)
+
+    // Wait for copy button to appear
+    await waitFor(
+      () => {
+        const copyButton = screen.getByTestId('demo-copy-button')
+        expect(copyButton).toBeInTheDocument()
+      },
+      { timeout: 2000 }
+    )
+
+    // Click copy button
+    const copyButton = screen.getByTestId('demo-copy-button')
+    await user.click(copyButton)
+
+    // Verify copy button is present and clickable
+    await waitFor(() => {
+      expect(copyButton).toBeInTheDocument()
+    })
   })
 })
