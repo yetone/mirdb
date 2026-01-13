@@ -33,7 +33,7 @@ export function Home() {
             <h1 className="text-5xl font-bold text-base-content">
               Shorten. Track. Share.
             </h1>
-            <p className="py-6 text-lg text-base-content/80">
+            <p className="py-6 text-lg text-base-content">
               Transform long URLs into memorable short links. Track clicks, analyze
               performance, and manage all your links in one place.
             </p>
@@ -179,7 +179,7 @@ function DemoSection() {
           <h2 className="text-3xl font-bold text-center mb-4">
             Try It Now
           </h2>
-          <p className="text-center text-base-content/70 mb-8">
+          <p className="text-center text-base-content mb-8">
             Shorten your first URL in seconds - no sign-up required
           </p>
 

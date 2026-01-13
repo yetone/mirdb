@@ -69,7 +69,7 @@ export function FeaturesSection() {
           <h2 className="text-3xl sm:text-4xl font-bold text-base-content mb-4">
             Powerful Features
           </h2>
-          <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
+          <p className="text-lg text-base-content max-w-2xl mx-auto">
             Everything you need to manage and track your links effectively
           </p>
         </div>
@@ -102,7 +102,7 @@ export function FeaturesSection() {
                 </h3>
                 <p
                   data-testid={`feature-description-${feature.id}`}
-                  className="text-base-content/70 flex-grow"
+                  className="text-base-content flex-grow"
                 >
                   {feature.description}
                 </p>

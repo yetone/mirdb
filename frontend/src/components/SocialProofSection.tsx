@@ -82,7 +82,7 @@ export function SocialProofSection({
           <h2 className="text-3xl sm:text-4xl font-bold text-base-content mb-4">
             Trusted by Thousands
           </h2>
-          <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
+          <p className="text-lg text-base-content max-w-2xl mx-auto">
             Join our growing community of users who trust us with their links
           </p>
         </div>
@@ -116,7 +116,7 @@ export function SocialProofSection({
               </div>
               <div
                 data-testid={`stat-label-${stat.id}`}
-                className="text-sm md:text-base text-base-content/70 font-medium"
+                className="text-sm md:text-base text-base-content font-medium"
               >
                 {stat.label}
               </div>
