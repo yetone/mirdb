@@ -5,6 +5,7 @@ import { Copy, Check } from 'lucide-react'
 import { FeaturesSection } from '../components/FeaturesSection'
 import { SocialProofSection } from '../components/SocialProofSection'
 import { FuturisticButton } from '../components/FuturisticButton'
+import { ThemeToggle } from '../components/ThemeToggle'
 
 export function Home() {
   return (
@@ -15,6 +16,7 @@ export function Home() {
           <Link to="/" className="btn btn-ghost text-xl">URL Shortener</Link>
         </div>
         <div className="flex-none gap-2">
+          <ThemeToggle />
           <Link to="/login" className="btn btn-ghost" data-testid="login-link">
             Login
           </Link>

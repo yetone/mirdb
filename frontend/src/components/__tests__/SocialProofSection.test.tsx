@@ -1,18 +1,26 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from '../../contexts/ThemeContext'
 import { SocialProofSection } from '../SocialProofSection'
 import Home from '../../pages/Home'
 import { formatStatNumber } from '../../utils/formatNumber'
 
-// Test Case 1: Statistics section container is present in the DOM
-describe('Test Case 1: Social proof/statistics section presence', () => {
-  it('should render the social proof section container on homepage', async () => {
-    render(
+// Helper to render Home with ThemeProvider
+function renderHome() {
+  return render(
+    <ThemeProvider>
       <BrowserRouter>
         <Home />
       </BrowserRouter>
-    )
+    </ThemeProvider>
+  )
+}
+
+// Test Case 1: Statistics section container is present in the DOM
+describe('Test Case 1: Social proof/statistics section presence', () => {
+  it('should render the social proof section container on homepage', async () => {
+    renderHome()
 
     await waitFor(() => {
       const socialProofSection = screen.getByTestId('social-proof-section')

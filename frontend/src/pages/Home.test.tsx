@@ -2,18 +2,37 @@ import { describe, it, expect } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter, MemoryRouter } from 'react-router-dom'
+import { ThemeProvider } from '../contexts/ThemeContext'
 import Home from './Home'
 import { AppRoutes } from '../App'
+
+// Helper to render Home with ThemeProvider
+function renderHome() {
+  return render(
+    <ThemeProvider>
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    </ThemeProvider>
+  )
+}
+
+// Helper to render AppRoutes with ThemeProvider
+function renderAppRoutes(initialEntries: string[] = ['/']) {
+  return render(
+    <ThemeProvider>
+      <MemoryRouter initialEntries={initialEntries}>
+        <AppRoutes />
+      </MemoryRouter>
+    </ThemeProvider>
+  )
+}
 
 // Test Case 1: Unit test - Login navigation element is visible and accessible
 describe('Test Case 1: Login navigation element visibility', () => {
   it('should render Login link/button on homepage', () => {
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
-    
+    renderHome()
+
     const loginLink = screen.getByTestId('login-link')
     expect(loginLink).toBeInTheDocument()
     expect(loginLink).toBeVisible()
@@ -21,12 +40,8 @@ describe('Test Case 1: Login navigation element visibility', () => {
   })
 
   it('should have accessible Login button in CTA section', () => {
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
-    
+    renderHome()
+
     const loginBtn = screen.getByTestId('login-btn')
     expect(loginBtn).toBeInTheDocument()
     expect(loginBtn).toBeVisible()
@@ -37,12 +52,8 @@ describe('Test Case 1: Login navigation element visibility', () => {
 // Test Case 2: Unit test - Register/Sign Up navigation element is visible and accessible
 describe('Test Case 2: Register navigation element visibility', () => {
   it('should render Sign Up link on homepage', () => {
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
-    
+    renderHome()
+
     const registerLink = screen.getByTestId('register-link')
     expect(registerLink).toBeInTheDocument()
     expect(registerLink).toBeVisible()
@@ -50,12 +61,8 @@ describe('Test Case 2: Register navigation element visibility', () => {
   })
 
   it('should have accessible Get Started button in CTA section', () => {
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
-    
+    renderHome()
+
     const getStartedBtn = screen.getByTestId('get-started-btn')
     expect(getStartedBtn).toBeInTheDocument()
     expect(getStartedBtn).toBeVisible()
@@ -66,28 +73,20 @@ describe('Test Case 2: Register navigation element visibility', () => {
 // Test Case 3: Integration test - Click Login link and check router navigation
 describe('Test Case 3: Login navigation integration', () => {
   it('should navigate to /login when Login link is clicked', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <AppRoutes />
-      </MemoryRouter>
-    )
-    
+    renderAppRoutes()
+
     const loginLink = screen.getByTestId('login-link')
     fireEvent.click(loginLink)
-    
+
     expect(screen.getByTestId('login-page')).toBeInTheDocument()
   })
 
   it('should navigate to /login when Login button is clicked', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <AppRoutes />
-      </MemoryRouter>
-    )
-    
+    renderAppRoutes()
+
     const loginBtn = screen.getByTestId('login-btn')
     fireEvent.click(loginBtn)
-    
+
     expect(screen.getByTestId('login-page')).toBeInTheDocument()
   })
 })
@@ -95,28 +94,20 @@ describe('Test Case 3: Login navigation integration', () => {
 // Test Case 4: Integration test - Click Register/Sign Up button and check router navigation
 describe('Test Case 4: Register navigation integration', () => {
   it('should navigate to /register when Sign Up link is clicked', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <AppRoutes />
-      </MemoryRouter>
-    )
-    
+    renderAppRoutes()
+
     const registerLink = screen.getByTestId('register-link')
     fireEvent.click(registerLink)
-    
+
     expect(screen.getByTestId('register-page')).toBeInTheDocument()
   })
 
   it('should navigate to /register when Get Started button is clicked', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <AppRoutes />
-      </MemoryRouter>
-    )
-    
+    renderAppRoutes()
+
     const getStartedBtn = screen.getByTestId('get-started-btn')
     fireEvent.click(getStartedBtn)
-    
+
     expect(screen.getByTestId('register-page')).toBeInTheDocument()
   })
 })
@@ -125,41 +116,33 @@ describe('Test Case 4: Register navigation integration', () => {
 describe('Test Case 5: Navigation response time', () => {
   it('should complete Login navigation in less than 1 second', () => {
     const startTime = performance.now()
-    
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <AppRoutes />
-      </MemoryRouter>
-    )
-    
+
+    renderAppRoutes()
+
     const loginLink = screen.getByTestId('login-link')
     fireEvent.click(loginLink)
-    
+
     expect(screen.getByTestId('login-page')).toBeInTheDocument()
-    
+
     const endTime = performance.now()
     const navigationTime = endTime - startTime
-    
+
     expect(navigationTime).toBeLessThan(1000)
   })
 
   it('should complete Register navigation in less than 1 second', () => {
     const startTime = performance.now()
-    
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <AppRoutes />
-      </MemoryRouter>
-    )
-    
+
+    renderAppRoutes()
+
     const registerLink = screen.getByTestId('register-link')
     fireEvent.click(registerLink)
-    
+
     expect(screen.getByTestId('register-page')).toBeInTheDocument()
-    
+
     const endTime = performance.now()
     const navigationTime = endTime - startTime
-    
+
     expect(navigationTime).toBeLessThan(1000)
   })
 })
@@ -175,11 +158,7 @@ describe('URL Shortening Demo Section', () => {
    * Expected: Demo section with input field and submit button is rendered
    */
   it('should render demo section with URL input field and submit button', () => {
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
+    renderHome()
 
     // Verify demo section exists
     const demoSection = screen.getByTestId('demo-section')
@@ -203,11 +182,7 @@ describe('URL Shortening Demo Section', () => {
    */
   it('should accept and display valid URL in demo input', async () => {
     const user = userEvent.setup()
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
+    renderHome()
 
     const urlInput = screen.getByTestId('demo-url-input')
     const testUrl = 'https://example.com/test'
@@ -224,11 +199,7 @@ describe('URL Shortening Demo Section', () => {
    */
   it('should display shortened URL after submitting valid URL', async () => {
     const user = userEvent.setup()
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
+    renderHome()
 
     const urlInput = screen.getByTestId('demo-url-input')
     const shortenButton = screen.getByTestId('demo-shorten-button')
@@ -261,11 +232,7 @@ describe('URL Shortening Demo Section', () => {
    */
   it('should display sign-up CTA after shortening URL', async () => {
     const user = userEvent.setup()
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
+    renderHome()
 
     const urlInput = screen.getByTestId('demo-url-input')
     const shortenButton = screen.getByTestId('demo-shorten-button')
@@ -300,11 +267,7 @@ describe('URL Shortening Demo Section', () => {
    */
   it('should display validation error for invalid URL', async () => {
     const user = userEvent.setup()
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
+    renderHome()
 
     const urlInput = screen.getByTestId('demo-url-input')
     const shortenButton = screen.getByTestId('demo-shorten-button')
@@ -328,11 +291,7 @@ describe('URL Shortening Demo Section', () => {
    * Expected: Shorten button uses FuturisticButton component
    */
   it('should use FuturisticButton component for Shorten button', () => {
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
+    renderHome()
 
     const shortenButton = screen.getByTestId('demo-shorten-button')
 
@@ -353,11 +312,7 @@ describe('URL Shortening Demo Section', () => {
    */
   it('should display error when submitting empty input', async () => {
     const user = userEvent.setup()
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
+    renderHome()
 
     const shortenButton = screen.getByTestId('demo-shorten-button')
 
@@ -375,11 +330,7 @@ describe('URL Shortening Demo Section', () => {
    */
   it('should allow copying shortened URL to clipboard', async () => {
     const user = userEvent.setup()
-    render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
-    )
+    renderHome()
 
     const urlInput = screen.getByTestId('demo-url-input')
     const shortenButton = screen.getByTestId('demo-shorten-button')
