@@ -117,15 +117,24 @@ test.describe('Cross-Browser Homepage Compatibility', () => {
     const heroSection = page.locator('section.hero.bg-base-300');
     await expect(heroSection).toBeVisible();
 
-    // Verify button styling - primary button should have btn-primary class
-    const primaryBtn = page.getByTestId('get-started-btn');
+    // Verify FuturisticButton styling - primary button uses gradient styles
+    // The button is inside a Link wrapper, so we need to find the actual button element
+    const primaryBtnWrapper = page.getByTestId('get-started-btn');
+    await expect(primaryBtnWrapper).toBeVisible();
+    // Find the motion.button inside the Link wrapper
+    const primaryBtn = primaryBtnWrapper.locator('button');
     const primaryBtnClasses = await primaryBtn.getAttribute('class');
-    expect(primaryBtnClasses).toContain('btn-primary');
+    // FuturisticButton uses gradient classes instead of btn-primary
+    expect(primaryBtnClasses).toContain('bg-gradient-to-r');
+    expect(primaryBtnClasses).toContain('from-primary');
 
-    // Verify outline button styling
-    const outlineBtn = page.getByTestId('login-btn');
+    // Verify outline button styling - also FuturisticButton component
+    const outlineBtnWrapper = page.getByTestId('login-btn');
+    await expect(outlineBtnWrapper).toBeVisible();
+    const outlineBtn = outlineBtnWrapper.locator('button');
     const outlineBtnClasses = await outlineBtn.getAttribute('class');
-    expect(outlineBtnClasses).toContain('btn-outline');
+    // FuturisticButton outline variant uses border-primary
+    expect(outlineBtnClasses).toContain('border-primary');
 
     // Verify input field has proper styling
     const demoInput = page.getByTestId('demo-url-input');
@@ -133,8 +142,8 @@ test.describe('Cross-Browser Homepage Compatibility', () => {
     expect(inputClasses).toContain('input');
     expect(inputClasses).toContain('input-bordered');
 
-    // Verify typography is applied correctly
-    const headline = page.locator('h1.text-5xl');
+    // Verify typography is applied correctly - h1 can have responsive classes
+    const headline = page.locator('h1').filter({ hasText: 'Shorten. Track. Share.' });
     await expect(headline).toBeVisible();
 
     const headlineStyles = await headline.evaluate((el) => {
@@ -148,9 +157,9 @@ test.describe('Cross-Browser Homepage Compatibility', () => {
     // Font weight should be bold (700)
     expect(parseInt(headlineStyles.fontWeight)).toBeGreaterThanOrEqual(700);
 
-    // Font size should be appropriately large (text-5xl = 3rem = 48px)
+    // Font size should be appropriately large (responsive, at least 30px at desktop)
     const fontSize = parseFloat(headlineStyles.fontSize);
-    expect(fontSize).toBeGreaterThanOrEqual(40);
+    expect(fontSize).toBeGreaterThanOrEqual(30);
   });
 
   test('TC3: Interactive elements function correctly', async ({ page, browserName }) => {
