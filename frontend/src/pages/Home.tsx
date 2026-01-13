@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { FeaturesSection } from '../components/FeaturesSection'
+import { SocialProofSection } from '../components/SocialProofSection'
 
 export function Home() {
   return (
@@ -44,6 +45,9 @@ export function Home() {
 
       {/* Features Section */}
       <FeaturesSection />
+
+      {/* Social Proof Section */}
+      <SocialProofSection />
 
       {/* Footer */}
       <footer className="footer footer-center p-10 bg-base-300 text-base-content">
