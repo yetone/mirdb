@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Smooth scroll behavior for anchor navigation (REQ-10) */
+html {
+  scroll-behavior: smooth;
+}

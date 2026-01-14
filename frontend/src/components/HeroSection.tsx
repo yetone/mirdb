@@ -1,9 +1,18 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
+const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+  e.preventDefault()
+  const element = document.getElementById(targetId)
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
 const HeroSection = () => {
   return (
     <section
+      id="hero"
       className="min-h-screen flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300 px-4"
       data-testid="hero-section"
     >
@@ -50,6 +59,30 @@ const HeroSection = () => {
             Login
           </Link>
         </motion.div>
+
+        {/* Section Navigation Links */}
+        <motion.nav
+          className="flex flex-wrap justify-center gap-6 mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          aria-label="Page sections"
+        >
+          <a
+            href="#features"
+            onClick={(e) => handleSmoothScroll(e, 'features')}
+            className="link link-hover text-base-content/70 hover:text-primary transition-colors"
+          >
+            Features
+          </a>
+          <a
+            href="#demo"
+            onClick={(e) => handleSmoothScroll(e, 'demo')}
+            className="link link-hover text-base-content/70 hover:text-primary transition-colors"
+          >
+            Try It
+          </a>
+        </motion.nav>
       </div>
     </section>
   )
