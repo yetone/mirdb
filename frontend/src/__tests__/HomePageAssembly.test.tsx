@@ -307,11 +307,12 @@ describe('Home Page Assembly - Component Integration', () => {
   })
 
   describe('Section Order Verification', () => {
-    it('verifies correct section order: Hero -> Features -> Demo -> Footer', () => {
+    it('verifies correct section order: Hero -> Features -> Stats -> Demo -> Footer', () => {
       renderHomeWithRouter()
 
       const heroSection = screen.getByTestId('hero-section')
       const featuresSection = screen.getByTestId('features-section')
+      const statsSection = screen.getByTestId('stats-section')
       const demoSection = screen.getByTestId('demo-section')
       const footerSection = screen.getByTestId('footer-section')
 
@@ -322,26 +323,29 @@ describe('Home Page Assembly - Component Integration', () => {
       // Find indices of each section
       const heroIndex = sectionsArray.findIndex(el => el === heroSection || el.contains(heroSection))
       const featuresIndex = sectionsArray.findIndex(el => el === featuresSection || el.contains(featuresSection))
+      const statsIndex = sectionsArray.findIndex(el => el === statsSection || el.contains(statsSection))
       const demoIndex = sectionsArray.findIndex(el => el === demoSection || el.contains(demoSection))
       const footerIndex = sectionsArray.findIndex(el => el === footerSection || el.contains(footerSection))
 
       // Verify order
       expect(heroIndex).toBeLessThan(featuresIndex)
-      expect(featuresIndex).toBeLessThan(demoIndex)
+      expect(featuresIndex).toBeLessThan(statsIndex)
+      expect(statsIndex).toBeLessThan(demoIndex)
       expect(demoIndex).toBeLessThan(footerIndex)
     })
 
-    it('all four sections are rendered', () => {
+    it('all five sections are rendered', () => {
       renderHomeWithRouter()
 
       // All required sections must be present
       expect(screen.getByTestId('hero-section')).toBeInTheDocument()
       expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('stats-section')).toBeInTheDocument()
       expect(screen.getByTestId('demo-section')).toBeInTheDocument()
       expect(screen.getByTestId('footer-section')).toBeInTheDocument()
     })
 
-    it('DemoSection is present between Features and Footer', () => {
+    it('DemoSection is present between Stats and Footer', () => {
       renderHomeWithRouter()
 
       const demoSection = screen.getByTestId('demo-section')
@@ -351,9 +355,9 @@ describe('Home Page Assembly - Component Integration', () => {
       const mainElement = screen.getByRole('main')
       expect(mainElement).toContainElement(demoSection)
 
-      // Demo should be the third section inside main
+      // Demo should be the fourth section inside main (after Hero, Features, Stats)
       const sectionsInMain = mainElement.querySelectorAll('section')
-      expect(sectionsInMain[2]).toBe(demoSection)
+      expect(sectionsInMain[3]).toBe(demoSection)
     })
   })
 })
