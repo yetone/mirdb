@@ -103,6 +103,7 @@ function FeaturesSection() {
       id="features"
       className="py-16 px-4 sm:px-6 lg:px-8 bg-base-200"
       aria-labelledby="features-heading"
+      data-testid="features-section"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
