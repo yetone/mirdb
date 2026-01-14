@@ -5,12 +5,14 @@ import FooterSection from '../components/FooterSection'
 
 const Home = () => {
   return (
-    <main className="min-h-screen">
-      <HeroSection />
-      <FeaturesSection />
-      <DemoSection />
+    <>
+      <main className="min-h-screen">
+        <HeroSection />
+        <FeaturesSection />
+        <DemoSection />
+      </main>
       <FooterSection />
-    </main>
+    </>
   )
 }
 

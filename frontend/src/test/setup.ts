@@ -1,4 +1,9 @@
 import '@testing-library/jest-dom'
+import 'vitest-axe/extend-expect'
+import * as matchers from 'vitest-axe/matchers'
+import { expect } from 'vitest'
+
+expect.extend(matchers)
 
 // Mock IntersectionObserver for framer-motion's whileInView
 class MockIntersectionObserver implements IntersectionObserver {
