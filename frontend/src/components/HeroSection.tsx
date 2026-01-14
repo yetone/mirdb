@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import FuturisticButton from './FuturisticButton'
 
 const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
   e.preventDefault()
@@ -43,21 +43,25 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <Link
+          <FuturisticButton
+            as="link"
             to="/register"
-            className="btn btn-primary btn-lg"
+            variant="primary"
+            size="lg"
             data-testid="cta-get-started"
           >
             Get Started Free
-          </Link>
+          </FuturisticButton>
 
-          <Link
+          <FuturisticButton
+            as="link"
             to="/login"
-            className="btn btn-outline btn-lg"
+            variant="outline"
+            size="lg"
             data-testid="cta-login"
           >
             Login
-          </Link>
+          </FuturisticButton>
         </motion.div>
 
         <motion.nav

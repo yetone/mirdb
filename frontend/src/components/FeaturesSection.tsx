@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import GlassMorphismCard from './GlassMorphismCard'
 
 interface Feature {
   id: string
@@ -126,9 +127,8 @@ function FeaturesSection() {
           viewport={{ once: true, margin: '-100px' }}
         >
           {features.map((feature) => (
-            <motion.div
+            <GlassMorphismCard
               key={feature.id}
-              className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300"
               variants={itemVariants}
               data-testid="feature-card"
             >
@@ -141,7 +141,7 @@ function FeaturesSection() {
                 </h3>
                 <p className="text-base-content/70">{feature.description}</p>
               </div>
-            </motion.div>
+            </GlassMorphismCard>
           ))}
         </motion.div>
       </div>

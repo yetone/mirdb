@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import FuturisticButton from './FuturisticButton'
 
 interface DemoState {
   url: string
@@ -106,13 +106,13 @@ const DemoSection = () => {
               aria-label="URL to shorten"
             />
           </div>
-          <button
+          <FuturisticButton
             type="submit"
-            className="btn btn-primary"
+            variant="primary"
             data-testid="demo-submit-button"
           >
             Shorten URL
-          </button>
+          </FuturisticButton>
         </motion.form>
 
         {state.error && (
@@ -179,12 +179,12 @@ const DemoSection = () => {
                 and unlock powerful analytics.
               </p>
               <div className="card-actions justify-center">
-                <Link to="/register" className="btn btn-primary">
+                <FuturisticButton as="link" to="/register" variant="primary">
                   Create Free Account
-                </Link>
-                <Link to="/login" className="btn btn-outline">
+                </FuturisticButton>
+                <FuturisticButton as="link" to="/login" variant="outline">
                   Login
-                </Link>
+                </FuturisticButton>
               </div>
             </div>
           </motion.div>
