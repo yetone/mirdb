@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import Home from '../pages/Home'
-import { ThemeProvider, Theme, ThemePreference } from '../contexts/ThemeContext'
+import { ThemeProvider, ThemePreference } from '../contexts/ThemeContext'
 
 // Helper to render homepage with a specific theme
 const renderHomeWithTheme = (theme: ThemePreference) => {
