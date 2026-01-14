@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import Home from '../pages/Home'
 import HeroSection from '../components/HeroSection'
@@ -29,28 +30,23 @@ describe('Smooth Scroll Navigation (REQ-10)', () => {
       renderWithRouter(<Home />)
 
       // Check for section navigation links in hero
-      const featuresLink = screen.queryByRole('link', { name: /features/i })
-      const demoLink = screen.queryByRole('link', { name: /try it/i }) ||
-                       screen.queryByRole('link', { name: /demo/i })
+      const navFeatures = screen.getByTestId('nav-features')
+      const navDemo = screen.getByTestId('nav-demo')
 
-      // Navigation links should exist to sections
-      // Note: These may be anchor links or have onClick handlers
-      const heroSection = screen.getByTestId('hero-section')
-      expect(heroSection).toBeInTheDocument()
+      expect(navFeatures).toBeInTheDocument()
+      expect(navDemo).toBeInTheDocument()
     })
 
     it('should scroll to features section when anchor link is clicked', () => {
       renderWithRouter(<Home />)
 
       // Find the features anchor link
-      const featuresLink = document.querySelector('a[href="#features"]')
+      const featuresLink = screen.getByTestId('nav-features')
 
-      if (featuresLink) {
-        fireEvent.click(featuresLink)
+      fireEvent.click(featuresLink)
 
-        // Check that scrollIntoView was called
-        expect(scrollIntoViewMock).toHaveBeenCalled()
-      }
+      // Check that scrollIntoView was called
+      expect(scrollIntoViewMock).toHaveBeenCalled()
 
       // Verify features section exists and has the correct id
       const featuresSection = document.getElementById('features')
@@ -61,26 +57,47 @@ describe('Smooth Scroll Navigation (REQ-10)', () => {
       renderWithRouter(<Home />)
 
       // Check for anchor link targeting features
-      const anchors = document.querySelectorAll('a[href^="#"]')
-      const featuresAnchors = Array.from(anchors).filter(
-        a => a.getAttribute('href') === '#features'
-      )
-
-      // There should be at least one link to #features
-      expect(featuresAnchors.length).toBeGreaterThan(0)
+      const navFeatures = screen.getByTestId('nav-features')
+      expect(navFeatures).toHaveAttribute('href', '#features')
     })
 
     it('should have href="#demo" link that targets the demo section', () => {
       renderWithRouter(<Home />)
 
       // Check for anchor link targeting demo
-      const anchors = document.querySelectorAll('a[href^="#"]')
-      const demoAnchors = Array.from(anchors).filter(
-        a => a.getAttribute('href') === '#demo'
-      )
+      const navDemo = screen.getByTestId('nav-demo')
+      expect(navDemo).toHaveAttribute('href', '#demo')
+    })
 
-      // There should be at least one link to #demo
-      expect(demoAnchors.length).toBeGreaterThan(0)
+    it('should have navigation links within a nav element with proper aria-label', () => {
+      renderWithRouter(<HeroSection />)
+
+      const nav = screen.getByRole('navigation', { name: /page sections/i })
+      expect(nav).toBeInTheDocument()
+
+      const navFeatures = within(nav).getByTestId('nav-features')
+      const navDemo = within(nav).getByTestId('nav-demo')
+
+      expect(navFeatures).toBeInTheDocument()
+      expect(navDemo).toBeInTheDocument()
+    })
+
+    it('should allow keyboard navigation to section links', async () => {
+      const user = userEvent.setup()
+      renderWithRouter(<HeroSection />)
+
+      // Tab through to reach the section navigation links
+      // Order: Get Started -> Login -> Features -> Try It
+      await user.tab() // Get Started
+      await user.tab() // Login
+      await user.tab() // Features
+
+      const navFeatures = screen.getByTestId('nav-features')
+      expect(document.activeElement).toBe(navFeatures)
+
+      await user.tab() // Try It
+      const navDemo = screen.getByTestId('nav-demo')
+      expect(document.activeElement).toBe(navDemo)
     })
   })
 
@@ -122,6 +139,23 @@ describe('Smooth Scroll Navigation (REQ-10)', () => {
       const html = document.documentElement
       expect(html).toBeTruthy()
     })
+
+    it('should render the homepage with proper structure for smooth scrolling', () => {
+      renderWithRouter(<Home />)
+
+      // Verify the main container exists
+      const main = document.querySelector('main')
+      expect(main).toBeInTheDocument()
+
+      // Verify sections are present and in order
+      const heroSection = screen.getByTestId('hero-section')
+      const demoSection = screen.getByTestId('demo-section')
+      const footerSection = screen.getByTestId('footer-section')
+
+      expect(heroSection).toBeInTheDocument()
+      expect(demoSection).toBeInTheDocument()
+      expect(footerSection).toBeInTheDocument()
+    })
   })
 
   describe('Test Case 3: Section elements have proper id attributes', () => {
@@ -162,12 +196,11 @@ describe('Smooth Scroll Navigation (REQ-10)', () => {
       expect(demoSection).toBeInTheDocument()
 
       // Verify anchors match section ids
-      const anchors = document.querySelectorAll('a[href^="#"]')
-      const anchorTargets = Array.from(anchors).map(a => a.getAttribute('href'))
+      const navFeatures = screen.getByTestId('nav-features')
+      const navDemo = screen.getByTestId('nav-demo')
 
-      // Should have links to sections
-      expect(anchorTargets).toContain('#features')
-      expect(anchorTargets).toContain('#demo')
+      expect(navFeatures).toHaveAttribute('href', '#features')
+      expect(navDemo).toHaveAttribute('href', '#demo')
     })
 
     it('should have sections in correct DOM order for logical navigation', () => {
@@ -212,40 +245,58 @@ describe('Smooth Scroll Navigation (REQ-10)', () => {
       renderWithRouter(<Home />)
 
       // Find anchor link to features
-      const featuresLink = document.querySelector('a[href="#features"]')
+      const featuresLink = screen.getByTestId('nav-features')
 
-      if (featuresLink) {
-        fireEvent.click(featuresLink)
+      fireEvent.click(featuresLink)
 
-        // Verify scrollIntoView was called with smooth behavior
-        expect(scrollIntoViewMock).toHaveBeenCalledWith(
-          expect.objectContaining({ behavior: 'smooth' })
-        )
-      }
+      // Verify scrollIntoView was called with smooth behavior
+      expect(scrollIntoViewMock).toHaveBeenCalledWith(
+        expect.objectContaining({ behavior: 'smooth' })
+      )
     })
 
-    it('should prevent default browser jump and use smooth scroll', () => {
-      renderWithRouter(<Home />)
+    it('should render anchor links as standard <a> tags for native scroll behavior', () => {
+      renderWithRouter(<HeroSection />)
 
-      const featuresLink = document.querySelector('a[href="#features"]')
+      const navFeatures = screen.getByTestId('nav-features')
+      const navDemo = screen.getByTestId('nav-demo')
 
-      if (featuresLink) {
-        // Create a mock click event
-        const clickEvent = new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-        })
+      // Verify they are anchor tags (not buttons or other elements)
+      expect(navFeatures.tagName).toBe('A')
+      expect(navDemo.tagName).toBe('A')
 
-        featuresLink.dispatchEvent(clickEvent)
+      // Verify href attributes start with #
+      expect(navFeatures.getAttribute('href')?.startsWith('#')).toBe(true)
+      expect(navDemo.getAttribute('href')?.startsWith('#')).toBe(true)
+    })
+  })
 
-        // If using JavaScript scroll, scrollIntoView should be called
-        // with smooth behavior option
-        if (scrollIntoViewMock.mock.calls.length > 0) {
-          expect(scrollIntoViewMock).toHaveBeenCalledWith(
-            expect.objectContaining({ behavior: 'smooth' })
-          )
-        }
-      }
+  describe('Accessibility for smooth scroll navigation', () => {
+    it('should have hover and focus styles on navigation links', () => {
+      renderWithRouter(<HeroSection />)
+
+      const navFeatures = screen.getByTestId('nav-features')
+      const navDemo = screen.getByTestId('nav-demo')
+
+      // Check for transition-colors class which enables smooth hover effects
+      expect(navFeatures.classList.contains('transition-colors')).toBe(true)
+      expect(navDemo.classList.contains('transition-colors')).toBe(true)
+
+      // Check for hover styles
+      expect(navFeatures.classList.contains('hover:text-primary')).toBe(true)
+      expect(navDemo.classList.contains('hover:text-primary')).toBe(true)
+    })
+
+    it('should have link-hover class for consistent styling', () => {
+      renderWithRouter(<HeroSection />)
+
+      const navFeatures = screen.getByTestId('nav-features')
+      const navDemo = screen.getByTestId('nav-demo')
+
+      expect(navFeatures.classList.contains('link')).toBe(true)
+      expect(navFeatures.classList.contains('link-hover')).toBe(true)
+      expect(navDemo.classList.contains('link')).toBe(true)
+      expect(navDemo.classList.contains('link-hover')).toBe(true)
     })
   })
 })

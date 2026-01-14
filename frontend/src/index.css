@@ -6,3 +6,10 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

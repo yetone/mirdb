@@ -60,7 +60,6 @@ const HeroSection = () => {
           </Link>
         </motion.div>
 
-        {/* Section Navigation Links */}
         <motion.nav
           className="flex flex-wrap justify-center gap-6 mt-12"
           initial={{ opacity: 0, y: 20 }}
@@ -72,6 +71,7 @@ const HeroSection = () => {
             href="#features"
             onClick={(e) => handleSmoothScroll(e, 'features')}
             className="link link-hover text-base-content/70 hover:text-primary transition-colors"
+            data-testid="nav-features"
           >
             Features
           </a>
@@ -79,6 +79,7 @@ const HeroSection = () => {
             href="#demo"
             onClick={(e) => handleSmoothScroll(e, 'demo')}
             className="link link-hover text-base-content/70 hover:text-primary transition-colors"
+            data-testid="nav-demo"
           >
             Try It
           </a>
