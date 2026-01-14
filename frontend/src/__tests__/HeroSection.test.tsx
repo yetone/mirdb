@@ -159,3 +159,86 @@ describe('Get Started CTA Navigation Integration', () => {
     expect(document.activeElement).toBe(getStartedButton)
   })
 })
+
+// Scenario Test Case: Login CTA Navigation (REQ-3, US-3)
+describe('Login CTA Navigation Integration', () => {
+  // Test Case 1: Integration test - Click 'Login' button navigates to /login
+  it("navigates to /login when 'Login' button is clicked", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<HeroSection />} />
+          <Route
+            path="/login"
+            element={<div data-testid="login-page">Login Page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    const loginButton = screen.getByTestId('cta-login')
+    await user.click(loginButton)
+
+    // Verify navigation occurred
+    expect(screen.getByTestId('login-page')).toBeInTheDocument()
+  })
+
+  // Test Case 2: Unit test - Login button has href or onClick that targets /login
+  it("'Login' button has href attribute targeting /login", () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <HeroSection />
+      </MemoryRouter>
+    )
+
+    const loginButton = screen.getByTestId('cta-login')
+    expect(loginButton).toHaveAttribute('href', '/login')
+  })
+
+  // Test Case 3: Integration test - Keyboard accessibility (Enter key)
+  it("navigates to /login when Enter key is pressed on focused 'Login' button", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<HeroSection />} />
+          <Route
+            path="/login"
+            element={<div data-testid="login-page">Login Page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    const loginButton = screen.getByTestId('cta-login')
+
+    // Focus the button and press Enter
+    loginButton.focus()
+    expect(document.activeElement).toBe(loginButton)
+
+    await user.keyboard('{Enter}')
+
+    // Verify navigation occurred via keyboard
+    expect(screen.getByTestId('login-page')).toBeInTheDocument()
+  })
+
+  it("allows Tab navigation to 'Login' button for accessibility", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <HeroSection />
+      </MemoryRouter>
+    )
+
+    // Tab through the buttons - Get Started is first, then Login
+    await user.tab() // First tab goes to Get Started
+    await user.tab() // Second tab goes to Login
+
+    const loginButton = screen.getByTestId('cta-login')
+    expect(document.activeElement).toBe(loginButton)
+  })
+})
