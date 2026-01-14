@@ -5,6 +5,21 @@ import { expect } from 'vitest'
 
 expect.extend(matchers)
 
+// Mock window.matchMedia for theme detection in tests
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: (query: string) => ({
+    matches: query === '(prefers-color-scheme: dark)' ? false : false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => true,
+  }),
+})
+
 // Mock IntersectionObserver for framer-motion's whileInView
 class MockIntersectionObserver implements IntersectionObserver {
   root: Document | Element | null = null
