@@ -1,6 +1,7 @@
 import HeroSection from '../components/HeroSection'
 import FeaturesSection from '../components/FeaturesSection'
 import DemoSection from '../components/DemoSection'
+import FooterSection from '../components/FooterSection'
 
 const Home = () => {
   return (
@@ -8,6 +9,7 @@ const Home = () => {
       <HeroSection />
       <FeaturesSection />
       <DemoSection />
+      <FooterSection />
     </main>
   )
 }
