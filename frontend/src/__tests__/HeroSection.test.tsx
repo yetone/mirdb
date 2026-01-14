@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import userEvent from '@testing-library/user-event'
+import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom'
 import HeroSection from '../components/HeroSection'
 import Home from '../pages/Home'
 
@@ -87,5 +88,74 @@ describe('HeroSection', () => {
 
     expect(getStartedButton).toHaveAttribute('href', '/register')
     expect(loginButton).toHaveAttribute('href', '/login')
+  })
+})
+
+// Scenario Test Case 1: Integration test - Click 'Get Started' button navigates to /register
+describe('Get Started CTA Navigation Integration', () => {
+  it("navigates to /register when 'Get Started' button is clicked", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<HeroSection />} />
+          <Route
+            path="/register"
+            element={<div data-testid="register-page">Register Page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    const getStartedButton = screen.getByTestId('cta-get-started')
+    await user.click(getStartedButton)
+
+    // Verify navigation occurred
+    expect(screen.getByTestId('register-page')).toBeInTheDocument()
+  })
+
+  // Scenario Test Case 3: Integration test - Keyboard accessibility (Enter key)
+  it("navigates to /register when Enter key is pressed on focused 'Get Started' button", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<HeroSection />} />
+          <Route
+            path="/register"
+            element={<div data-testid="register-page">Register Page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    const getStartedButton = screen.getByTestId('cta-get-started')
+
+    // Focus the button and press Enter
+    getStartedButton.focus()
+    expect(document.activeElement).toBe(getStartedButton)
+
+    await user.keyboard('{Enter}')
+
+    // Verify navigation occurred via keyboard
+    expect(screen.getByTestId('register-page')).toBeInTheDocument()
+  })
+
+  it("allows Tab navigation to 'Get Started' button for accessibility", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <HeroSection />
+      </MemoryRouter>
+    )
+
+    // Tab to the Get Started button
+    await user.tab()
+
+    const getStartedButton = screen.getByTestId('cta-get-started')
+    expect(document.activeElement).toBe(getStartedButton)
   })
 })
