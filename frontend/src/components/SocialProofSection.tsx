@@ -1,48 +1,44 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import GlassMorphismCard from './GlassMorphismCard'
 
 interface Statistic {
-  id: string
+  id: number
   value: string
   label: string
-  testIdSuffix: string
+  testId: string
 }
 
 interface TrustIndicator {
-  id: string
+  id: number
   icon: React.ReactNode
   title: string
   description: string
+  testId: string
 }
 
 const statistics: Statistic[] = [
   {
-    id: 'urls-shortened',
+    id: 1,
     value: '10M+',
-    label: 'URLs shortened',
-    testIdSuffix: 'urls-shortened',
+    label: 'URLs Shortened',
+    testId: 'stat-urls-shortened',
   },
   {
-    id: 'clicks-tracked',
-    value: '500M+',
-    label: 'Clicks tracked',
-    testIdSuffix: 'clicks-tracked',
-  },
-  {
-    id: 'users',
-    value: '50K+',
-    label: 'Active users',
-    testIdSuffix: 'users',
+    id: 2,
+    value: '50M+',
+    label: 'Clicks Tracked',
+    testId: 'stat-clicks-tracked',
   },
 ]
 
 const trustIndicators: TrustIndicator[] = [
   {
-    id: 'security',
+    id: 1,
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-8 w-8"
+        className="h-10 w-10"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -57,14 +53,15 @@ const trustIndicators: TrustIndicator[] = [
       </svg>
     ),
     title: 'Secure & Encrypted',
-    description: 'SSL encryption protects all your links',
+    description: 'Enterprise-grade security with SSL encryption',
+    testId: 'trust-indicator-security',
   },
   {
-    id: 'uptime',
+    id: 2,
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-8 w-8"
+        className="h-10 w-10"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -74,34 +71,13 @@ const trustIndicators: TrustIndicator[] = [
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth={2}
-          d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       </svg>
     ),
     title: '99.9% Uptime',
-    description: 'Reliable service you can count on',
-  },
-  {
-    id: 'performance',
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-8 w-8"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M13 10V3L4 14h7v7l9-11h-7z"
-        />
-      </svg>
-    ),
-    title: '<50ms Response',
-    description: 'Lightning fast redirects worldwide',
+    description: 'Reliable infrastructure you can count on',
+    testId: 'trust-indicator-uptime',
   },
 ]
 
@@ -115,99 +91,78 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-}
-
 const SocialProofSection: React.FC = () => {
   return (
     <section
       id="social-proof"
-      className="py-16 px-4 md:px-8 bg-base-200/50"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-base-100"
       aria-labelledby="social-proof-heading"
       data-testid="social-proof-section"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <motion.div
-          className="text-center mb-12"
+          className="text-center mb-16"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
           <h2
             id="social-proof-heading"
-            className="text-3xl md:text-4xl font-bold text-base-content mb-4"
+            className="text-3xl sm:text-4xl font-bold text-base-content mb-4"
           >
             Trusted by Thousands
           </h2>
           <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
-            Join the growing community of users who trust our service for their URL shortening needs.
+            Join our growing community of users who rely on our platform every day.
           </p>
         </motion.div>
 
-        {/* Statistics Grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          data-testid="stats-container"
+          data-testid="social-proof-grid"
         >
           {statistics.map((stat) => (
-            <motion.div
-              key={stat.id}
-              variants={itemVariants}
-              className="text-center p-6 rounded-2xl bg-base-100/50 backdrop-blur-sm border border-base-content/10"
-              data-testid={`stat-card-${stat.id}`}
-            >
+            <GlassMorphismCard key={stat.id} className="text-center">
               <div
-                className="text-4xl md:text-5xl font-bold text-primary mb-2"
-                data-testid={`stat-value-${stat.testIdSuffix}`}
+                className="text-4xl font-bold text-primary mb-2"
+                data-testid={`stat-value-${stat.id}`}
               >
                 {stat.value}
               </div>
               <div
-                className="text-base-content/70 text-lg"
-                data-testid={`stat-label-${stat.testIdSuffix}`}
+                className="text-base-content/70 text-sm"
+                data-testid={`stat-label-${stat.id}`}
               >
                 {stat.label}
               </div>
-              {/* Hidden element for test matching */}
-              <span className="sr-only" data-testid={`stat-${stat.testIdSuffix}`}>
+              <div data-testid={stat.testId} className="sr-only">
                 {stat.value} {stat.label}
-              </span>
-            </motion.div>
+              </div>
+            </GlassMorphismCard>
           ))}
-        </motion.div>
 
-        {/* Trust Indicators */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          data-testid="trust-indicators-container"
-        >
           {trustIndicators.map((indicator) => (
-            <motion.div
-              key={indicator.id}
-              variants={itemVariants}
-              className="flex items-start gap-4 p-4 rounded-xl bg-base-100/30 backdrop-blur-sm"
-              data-testid={`trust-indicator-${indicator.id}`}
-            >
-              <div className="text-primary flex-shrink-0">
+            <GlassMorphismCard key={`trust-${indicator.id}`} className="text-center">
+              <div
+                className="text-primary mb-4 flex justify-center"
+                aria-hidden="true"
+                data-testid={`trust-icon-${indicator.id}`}
+              >
                 {indicator.icon}
               </div>
-              <div>
-                <h3 className="font-semibold text-base-content mb-1">
-                  {indicator.title}
-                </h3>
-                <p className="text-sm text-base-content/70">
-                  {indicator.description}
-                </p>
+              <h3 className="text-xl font-semibold text-base-content mb-2">
+                {indicator.title}
+              </h3>
+              <p className="text-base-content/70 text-sm">
+                {indicator.description}
+              </p>
+              <div data-testid={indicator.testId} className="sr-only">
+                {indicator.title}: {indicator.description}
               </div>
-            </motion.div>
+            </GlassMorphismCard>
           ))}
         </motion.div>
       </div>

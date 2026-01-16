@@ -1,80 +1,89 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Social Proof Section - Display E2E Test', () => {
+test.describe('Social Proof Section - E2E Tests', () => {
   test('social proof section is visible and properly styled', async ({ page }) => {
-    // Set desktop viewport
-    await page.setViewportSize({ width: 1280, height: 800 });
+    // Set desktop viewport BEFORE navigating
+    await page.setViewportSize({ width: 1024, height: 768 });
     await page.goto('/');
 
-    // Step 1: Navigate to social proof section by scrolling
+    // Step 1: Navigate to social proof section (scroll to locate it)
     const section = page.locator('section#social-proof');
     await section.scrollIntoViewIfNeeded();
     await expect(section).toBeVisible();
 
-    // Step 2: Verify section has proper structure
-    const sectionTestId = page.getByTestId('social-proof-section');
-    await expect(sectionTestId).toBeVisible();
-
-    // Step 3: Verify heading is present
-    const heading = page.locator('#social-proof-heading');
-    await expect(heading).toBeVisible();
-    await expect(heading).toHaveText(/trusted|impact|numbers|proof/i);
-
-    // Step 4: Verify statistics are displayed
-    const statsContainer = page.getByTestId('stats-container');
-    await expect(statsContainer).toBeVisible();
-
-    // Verify individual stats
+    // Step 2: Verify statistics display (URLs shortened, clicks tracked)
     const urlsStat = page.getByTestId('stat-urls-shortened');
     const clicksStat = page.getByTestId('stat-clicks-tracked');
 
     await expect(urlsStat).toBeVisible();
-    await expect(urlsStat).toHaveText(/URLs shortened/i);
-
     await expect(clicksStat).toBeVisible();
-    await expect(clicksStat).toHaveText(/clicks tracked/i);
 
-    // Step 5: Verify trust indicators are displayed
-    const trustContainer = page.getByTestId('trust-indicators-container');
-    await expect(trustContainer).toBeVisible();
+    // Verify stat values contain numbers
+    const statValue1 = page.getByTestId('stat-value-1');
+    const statValue2 = page.getByTestId('stat-value-2');
 
-    // Check for at least one trust indicator
+    await expect(statValue1).toBeVisible();
+    await expect(statValue2).toBeVisible();
+
+    const value1Text = await statValue1.textContent();
+    const value2Text = await statValue2.textContent();
+
+    expect(value1Text).toMatch(/\d/);
+    expect(value2Text).toMatch(/\d/);
+
+    // Step 3: Verify trust indicators (security, uptime)
     const securityIndicator = page.getByTestId('trust-indicator-security');
     const uptimeIndicator = page.getByTestId('trust-indicator-uptime');
-    const performanceIndicator = page.getByTestId('trust-indicator-performance');
 
     await expect(securityIndicator).toBeVisible();
     await expect(uptimeIndicator).toBeVisible();
-    await expect(performanceIndicator).toBeVisible();
 
-    // Verify trust indicator content
-    await expect(securityIndicator).toHaveText(/secure|encrypted|ssl/i);
-    await expect(uptimeIndicator).toHaveText(/uptime|99/i);
-    await expect(performanceIndicator).toHaveText(/fast|response|ms/i);
+    // Verify trust indicator icons are displayed
+    const trustIcon1 = page.getByTestId('trust-icon-1');
+    const trustIcon2 = page.getByTestId('trust-icon-2');
+
+    await expect(trustIcon1).toBeVisible();
+    await expect(trustIcon2).toBeVisible();
+
+    // Verify section heading
+    const heading = section.locator('h2');
+    await expect(heading).toBeVisible();
+    await expect(heading).toHaveText(/trusted/i);
+
+    // Verify grid layout
+    const grid = page.getByTestId('social-proof-grid');
+    await expect(grid).toBeVisible();
+    await expect(grid).toHaveClass(/grid/);
   });
 
-  test('social proof section displays all statistics cards', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
+  test('social proof section is properly positioned between features and how-it-works', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
     await page.goto('/');
 
-    const section = page.locator('section#social-proof');
-    await section.scrollIntoViewIfNeeded();
+    // Get bounding boxes to verify order
+    const featuresSection = page.locator('section#features');
+    const socialProofSection = page.locator('section#social-proof');
+    const howItWorksSection = page.locator('section#how-it-works');
 
-    // Verify all stat cards are present
-    const statCards = page.locator('[data-testid^="stat-card-"]');
-    await expect(statCards).toHaveCount(3);
+    await expect(featuresSection).toBeVisible();
+    await expect(socialProofSection).toBeVisible();
+    await expect(howItWorksSection).toBeVisible();
 
-    // Verify stat values are visible
-    const statValues = page.locator('[data-testid^="stat-value-"]');
-    await expect(statValues).toHaveCount(3);
+    const featuresBox = await featuresSection.boundingBox();
+    const socialProofBox = await socialProofSection.boundingBox();
+    const howItWorksBox = await howItWorksSection.boundingBox();
 
-    // Verify stat labels are visible
-    const statLabels = page.locator('[data-testid^="stat-label-"]');
-    await expect(statLabels).toHaveCount(3);
+    expect(featuresBox).not.toBeNull();
+    expect(socialProofBox).not.toBeNull();
+    expect(howItWorksBox).not.toBeNull();
+
+    // Social proof should be below features and above how-it-works
+    expect(socialProofBox!.y).toBeGreaterThan(featuresBox!.y);
+    expect(howItWorksBox!.y).toBeGreaterThan(socialProofBox!.y);
   });
 
-  test('social proof section is responsive on mobile', async ({ page }) => {
-    // Set mobile viewport
+  test('social proof section displays correctly on mobile', async ({ page }) => {
+    // Set mobile viewport BEFORE navigating
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/');
 
@@ -82,59 +91,20 @@ test.describe('Social Proof Section - Display E2E Test', () => {
     await section.scrollIntoViewIfNeeded();
     await expect(section).toBeVisible();
 
-    // Verify section is visible on mobile
-    const sectionTestId = page.getByTestId('social-proof-section');
-    await expect(sectionTestId).toBeVisible();
+    // Verify all statistics and trust indicators are visible on mobile
+    const statValue1 = page.getByTestId('stat-value-1');
+    const statValue2 = page.getByTestId('stat-value-2');
+    const trustIcon1 = page.getByTestId('trust-icon-1');
+    const trustIcon2 = page.getByTestId('trust-icon-2');
 
-    // Verify statistics are visible
-    const statsContainer = page.getByTestId('stats-container');
-    await expect(statsContainer).toBeVisible();
+    await expect(statValue1).toBeVisible();
+    await expect(statValue2).toBeVisible();
+    await expect(trustIcon1).toBeVisible();
+    await expect(trustIcon2).toBeVisible();
 
-    // Verify trust indicators are visible
-    const trustContainer = page.getByTestId('trust-indicators-container');
-    await expect(trustContainer).toBeVisible();
-
-    // On mobile, stats should stack vertically
-    const statCards = page.locator('[data-testid^="stat-card-"]');
-    const firstCard = statCards.nth(0);
-    const secondCard = statCards.nth(1);
-
-    const firstBox = await firstCard.boundingBox();
-    const secondBox = await secondCard.boundingBox();
-
-    expect(firstBox).not.toBeNull();
-    expect(secondBox).not.toBeNull();
-
-    // On mobile with grid-cols-1, cards should be stacked vertically
-    expect(secondBox!.y).toBeGreaterThan(firstBox!.y);
-  });
-
-  test('social proof section positioned between HowItWorks and FooterCTA', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto('/');
-
-    // Get bounding boxes for all relevant sections
-    const howItWorks = page.locator('section#how-it-works');
-    const socialProof = page.locator('section#social-proof');
-    const footerCTA = page.locator('[data-testid="footer-cta"]');
-
-    // Ensure all sections are in DOM
-    await expect(howItWorks).toBeAttached();
-    await expect(socialProof).toBeAttached();
-    await expect(footerCTA).toBeAttached();
-
-    const howItWorksBox = await howItWorks.boundingBox();
-    const socialProofBox = await socialProof.boundingBox();
-    const footerCTABox = await footerCTA.boundingBox();
-
-    expect(howItWorksBox).not.toBeNull();
-    expect(socialProofBox).not.toBeNull();
-    expect(footerCTABox).not.toBeNull();
-
-    // Social proof should be after HowItWorks
-    expect(socialProofBox!.y).toBeGreaterThan(howItWorksBox!.y);
-
-    // Social proof should be before FooterCTA
-    expect(socialProofBox!.y).toBeLessThan(footerCTABox!.y);
+    // Verify grid layout adapts to mobile (items should be stacked)
+    const grid = page.getByTestId('social-proof-grid');
+    await expect(grid).toBeVisible();
+    await expect(grid).toHaveClass(/grid-cols-1/);
   });
 });

@@ -7,9 +7,6 @@ vi.mock('framer-motion', () => ({
     div: ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) => (
       <div {...props}>{children}</div>
     ),
-    section: ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) => (
-      <section {...props}>{children}</section>
-    ),
   },
 }))
 
@@ -22,42 +19,27 @@ describe('SocialProofSection', () => {
       expect(section).toBeInTheDocument()
     })
 
-    it('renders with proper section element', () => {
+    it('renders the section heading', () => {
       render(<SocialProofSection />)
 
-      const section = screen.getByRole('region', { name: /social proof|trusted by|our impact/i })
-      expect(section).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(/trusted by|numbers/i)
     })
 
-    it('has a section heading', () => {
+    it('renders statistics and trust indicator cards', () => {
       render(<SocialProofSection />)
 
-      const heading = screen.getByRole('heading', { level: 2 })
-      expect(heading).toBeInTheDocument()
-    })
-
-    it('renders statistics cards', () => {
-      render(<SocialProofSection />)
-
-      const statsCards = screen.getAllByTestId(/stat-card-/)
-      expect(statsCards.length).toBeGreaterThanOrEqual(2)
-    })
-
-    it('renders trust indicators', () => {
-      render(<SocialProofSection />)
-
-      const trustIndicators = screen.getAllByTestId(/trust-indicator-/)
-      expect(trustIndicators.length).toBeGreaterThanOrEqual(1)
+      const cards = screen.getAllByTestId('glassmorphism-card')
+      expect(cards.length).toBeGreaterThanOrEqual(3)
     })
   })
 
-  describe('Test Case 2: Section displays metrics like X URLs shortened, Y clicks tracked', () => {
+  describe('Test Case 2: Section displays metrics like URLs shortened and clicks tracked', () => {
     it('displays URLs shortened statistic', () => {
       render(<SocialProofSection />)
 
       const urlsStat = screen.getByTestId('stat-urls-shortened')
       expect(urlsStat).toBeInTheDocument()
-      expect(urlsStat).toHaveTextContent(/URLs shortened/i)
+      expect(urlsStat).toHaveTextContent(/urls shortened/i)
     })
 
     it('displays clicks tracked statistic', () => {
@@ -68,37 +50,95 @@ describe('SocialProofSection', () => {
       expect(clicksStat).toHaveTextContent(/clicks tracked/i)
     })
 
-    it('displays statistics with numeric values', () => {
+    it('displays numeric values for statistics', () => {
       render(<SocialProofSection />)
 
-      const urlsStat = screen.getByTestId('stat-urls-shortened')
-      const clicksStat = screen.getByTestId('stat-clicks-tracked')
+      // Check that stat values contain numbers
+      const statValue1 = screen.getByTestId('stat-value-1')
+      const statValue2 = screen.getByTestId('stat-value-2')
 
-      // Check that stats contain numeric values (formatted with + or K/M suffix)
-      expect(urlsStat).toHaveTextContent(/\d+/)
-      expect(clicksStat).toHaveTextContent(/\d+/)
+      expect(statValue1.textContent).toMatch(/\d/)
+      expect(statValue2.textContent).toMatch(/\d/)
     })
 
-    it('displays statistics values prominently', () => {
+    it('displays statistic labels', () => {
       render(<SocialProofSection />)
 
-      const statValues = screen.getAllByTestId(/stat-value-/)
-      expect(statValues.length).toBeGreaterThanOrEqual(2)
+      const statLabel1 = screen.getByTestId('stat-label-1')
+      const statLabel2 = screen.getByTestId('stat-label-2')
 
-      statValues.forEach((value) => {
-        expect(value).toBeVisible()
-      })
+      expect(statLabel1).toBeInTheDocument()
+      expect(statLabel2).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 3: Trust indicators are displayed', () => {
+    it('displays security trust indicator', () => {
+      render(<SocialProofSection />)
+
+      const securityIndicator = screen.getByTestId('trust-indicator-security')
+      expect(securityIndicator).toBeInTheDocument()
     })
 
-    it('displays statistics labels', () => {
+    it('displays uptime trust indicator', () => {
       render(<SocialProofSection />)
 
-      const statLabels = screen.getAllByTestId(/stat-label-/)
-      expect(statLabels.length).toBeGreaterThanOrEqual(2)
+      const uptimeIndicator = screen.getByTestId('trust-indicator-uptime')
+      expect(uptimeIndicator).toBeInTheDocument()
+    })
+
+    it('displays trust indicator icons', () => {
+      render(<SocialProofSection />)
+
+      const trustIcon1 = screen.getByTestId('trust-icon-1')
+      const trustIcon2 = screen.getByTestId('trust-icon-2')
+
+      expect(trustIcon1).toBeInTheDocument()
+      expect(trustIcon2).toBeInTheDocument()
+    })
+  })
+
+  describe('Grid layout structure', () => {
+    it('renders statistics in a grid container', () => {
+      render(<SocialProofSection />)
+
+      const grid = screen.getByTestId('social-proof-grid')
+      expect(grid).toBeInTheDocument()
+      expect(grid).toHaveClass('grid')
+    })
+
+    it('has responsive grid classes for different viewport sizes', () => {
+      render(<SocialProofSection />)
+
+      const grid = screen.getByTestId('social-proof-grid')
+      expect(grid).toHaveClass('grid-cols-1')
+      expect(grid).toHaveClass('sm:grid-cols-2')
+      expect(grid).toHaveClass('lg:grid-cols-4')
+    })
+
+    it('has proper gap between grid items', () => {
+      render(<SocialProofSection />)
+
+      const grid = screen.getByTestId('social-proof-grid')
+      expect(grid).toHaveClass('gap-6')
     })
   })
 
   describe('Section structure and accessibility', () => {
+    it('renders with proper section element', () => {
+      render(<SocialProofSection />)
+
+      const section = screen.getByRole('region', { name: /trusted|numbers/i })
+      expect(section).toBeInTheDocument()
+    })
+
+    it('has section heading at h2 level', () => {
+      render(<SocialProofSection />)
+
+      const heading = screen.getByRole('heading', { level: 2 })
+      expect(heading).toBeInTheDocument()
+    })
+
     it('has proper aria-labelledby attribute', () => {
       render(<SocialProofSection />)
 
@@ -106,85 +146,41 @@ describe('SocialProofSection', () => {
       expect(section).toHaveAttribute('aria-labelledby', 'social-proof-heading')
     })
 
-    it('has proper id for scroll navigation', () => {
+    it('icons are marked as decorative with aria-hidden', () => {
       render(<SocialProofSection />)
 
-      const section = screen.getByTestId('social-proof-section')
-      expect(section).toHaveAttribute('id', 'social-proof')
-    })
+      const iconContainers = [
+        screen.getByTestId('trust-icon-1'),
+        screen.getByTestId('trust-icon-2'),
+      ]
 
-    it('icons/indicators are properly marked for accessibility', () => {
-      render(<SocialProofSection />)
-
-      const trustIndicators = screen.getAllByTestId(/trust-indicator-/)
-      trustIndicators.forEach((indicator) => {
-        const icon = indicator.querySelector('[aria-hidden="true"]')
-        expect(icon).toBeInTheDocument()
+      iconContainers.forEach((container) => {
+        expect(container).toHaveAttribute('aria-hidden', 'true')
       })
     })
   })
 
-  describe('Visual styling and layout', () => {
+  describe('Visual styling', () => {
     it('section has proper padding for visual separation', () => {
       render(<SocialProofSection />)
 
       const section = screen.getByTestId('social-proof-section')
-      expect(section).toHaveClass('py-16')
+      expect(section).toHaveClass('py-20')
+      expect(section).toHaveClass('px-4')
     })
 
-    it('section has background styling', () => {
+    it('section has background color class', () => {
       render(<SocialProofSection />)
 
       const section = screen.getByTestId('social-proof-section')
-      expect(section.className).toMatch(/bg-/)
+      expect(section).toHaveClass('bg-base-100')
     })
 
     it('has max-width container for content', () => {
       render(<SocialProofSection />)
 
-      const container = screen.getByTestId('social-proof-section').querySelector('.max-w-6xl, .max-w-7xl')
+      const container = screen.getByTestId('social-proof-section').querySelector('.max-w-7xl')
       expect(container).toBeInTheDocument()
-    })
-
-    it('statistics are displayed in a grid or flex layout', () => {
-      render(<SocialProofSection />)
-
-      const statsContainer = screen.getByTestId('stats-container')
-      expect(statsContainer).toBeInTheDocument()
-      const hasLayoutClass = statsContainer.className.includes('grid') || statsContainer.className.includes('flex')
-      expect(hasLayoutClass).toBe(true)
-    })
-
-    it('trust indicators are displayed in a grid or flex layout', () => {
-      render(<SocialProofSection />)
-
-      const trustContainer = screen.getByTestId('trust-indicators-container')
-      expect(trustContainer).toBeInTheDocument()
-      const hasLayoutClass = trustContainer.className.includes('grid') || trustContainer.className.includes('flex')
-      expect(hasLayoutClass).toBe(true)
-    })
-  })
-
-  describe('Trust indicators content', () => {
-    it('displays security-related trust indicator', () => {
-      render(<SocialProofSection />)
-
-      const section = screen.getByTestId('social-proof-section')
-      expect(section).toHaveTextContent(/secure|security|encrypted|ssl/i)
-    })
-
-    it('displays uptime or reliability indicator', () => {
-      render(<SocialProofSection />)
-
-      const section = screen.getByTestId('social-proof-section')
-      expect(section).toHaveTextContent(/uptime|reliable|availability|\d+%/i)
-    })
-
-    it('displays performance indicator', () => {
-      render(<SocialProofSection />)
-
-      const section = screen.getByTestId('social-proof-section')
-      expect(section).toHaveTextContent(/fast|speed|instant|performance|<\d+/i)
     })
   })
 })
