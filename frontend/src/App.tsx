@@ -4,6 +4,7 @@ import HeroSection from './components/HeroSection'
 import FeaturesSection from './components/FeaturesSection'
 import HowItWorksSection from './components/HowItWorksSection'
 import FooterCTA from './components/FooterCTA'
+import Footer from './components/Footer'
 import LoginPage from './pages/LoginPage'
 
 function Home() {
@@ -15,6 +16,7 @@ function Home() {
         <FeaturesSection />
         <HowItWorksSection />
         <FooterCTA />
+        <Footer />
       </main>
     </>
   )
