@@ -4,7 +4,6 @@ import HeroSection from './components/HeroSection'
 import FeaturesSection from './components/FeaturesSection'
 import SocialProofSection from './components/SocialProofSection'
 import HowItWorksSection from './components/HowItWorksSection'
-import SocialProofSection from './components/SocialProofSection'
 import FooterCTA from './components/FooterCTA'
 import Footer from './components/Footer'
 import LoginPage from './pages/LoginPage'
@@ -16,7 +15,6 @@ function Home() {
       <main className="min-h-screen bg-base-100 pt-16">
         <HeroSection />
         <FeaturesSection />
-        <SocialProofSection />
         <HowItWorksSection />
         <SocialProofSection />
         <FooterCTA />
