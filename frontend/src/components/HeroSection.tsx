@@ -2,12 +2,15 @@ import { motion } from 'framer-motion'
 import FuturisticButton from './FuturisticButton'
 import BackgroundEffect from './BackgroundEffect'
 import ThemeToggle from './ThemeToggle'
+import { useAuth } from '../contexts/AuthContext'
 
 interface HeroSectionProps {
   'data-testid'?: string
 }
 
 export default function HeroSection({ 'data-testid': testId }: HeroSectionProps) {
+  const { isAuthenticated } = useAuth()
+
   return (
     <section
       data-testid={testId || 'hero-section'}
@@ -49,25 +52,39 @@ export default function HeroSection({ 'data-testid': testId }: HeroSectionProps)
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <FuturisticButton
-            as="link"
-            to="/register"
-            variant="primary"
-            size="lg"
-            data-testid="cta-get-started"
-          >
-            Get Started Free
-          </FuturisticButton>
+          {isAuthenticated ? (
+            <FuturisticButton
+              as="link"
+              to="/dashboard"
+              variant="primary"
+              size="lg"
+              data-testid="cta-dashboard"
+            >
+              Go to Dashboard
+            </FuturisticButton>
+          ) : (
+            <>
+              <FuturisticButton
+                as="link"
+                to="/register"
+                variant="primary"
+                size="lg"
+                data-testid="cta-get-started"
+              >
+                Get Started Free
+              </FuturisticButton>
 
-          <FuturisticButton
-            as="link"
-            to="/login"
-            variant="secondary"
-            size="lg"
-            data-testid="cta-login"
-          >
-            Login
-          </FuturisticButton>
+              <FuturisticButton
+                as="link"
+                to="/login"
+                variant="secondary"
+                size="lg"
+                data-testid="cta-login"
+              >
+                Login
+              </FuturisticButton>
+            </>
+          )}
         </motion.div>
 
         <motion.nav
