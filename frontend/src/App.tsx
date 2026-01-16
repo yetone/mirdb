@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import HeroSection from './components/HeroSection'
 import FeaturesSection from './components/FeaturesSection'
 import HowItWorksSection from './components/HowItWorksSection'
+import FooterCTA from './components/FooterCTA'
 
 function Home() {
   return (
@@ -9,6 +10,7 @@ function Home() {
       <HeroSection />
       <FeaturesSection />
       <HowItWorksSection />
+      <FooterCTA />
     </main>
   )
 }
