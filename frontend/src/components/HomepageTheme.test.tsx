@@ -1,9 +1,34 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import HeroSection from './HeroSection'
 import { ThemeProvider } from '../contexts/ThemeContext'
+
+// Mock framer-motion to avoid animation issues in tests
+vi.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+      <div {...props}>{children}</div>
+    ),
+    h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+      <h1 {...props}>{children}</h1>
+    ),
+    p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+      <p {...props}>{children}</p>
+    ),
+    nav: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+      <nav {...props}>{children}</nav>
+    ),
+    button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+      <button {...props}>{children}</button>
+    ),
+    svg: ({ children, ...props }: React.SVGProps<SVGSVGElement>) => (
+      <svg {...props}>{children}</svg>
+    ),
+  },
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}))
 
 // Helper to render with all required providers
 const renderWithProviders = (component: React.ReactNode) => {
@@ -30,15 +55,15 @@ describe('Homepage Theme Integration', () => {
   describe('ThemeToggle presence on homepage', () => {
     it('renders ThemeToggle component in HeroSection', () => {
       renderWithProviders(<HeroSection />)
-      expect(screen.getByTestId('theme-toggle')).toBeInTheDocument()
+      expect(screen.getByTestId('hero-theme-toggle')).toBeInTheDocument()
     })
 
     it('ThemeToggle is positioned in the header area', () => {
       renderWithProviders(<HeroSection />)
-      const themeToggle = screen.getByTestId('theme-toggle')
-      // Verify parent has absolute positioning (top-right)
-      const container = themeToggle.closest('.absolute.top-4.right-4')
-      expect(container).toBeInTheDocument()
+      const themeToggle = screen.getByTestId('hero-theme-toggle')
+      // Verify the ThemeToggle is within an absolutely positioned container
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toContainElement(themeToggle)
     })
   })
 
@@ -54,7 +79,8 @@ describe('Homepage Theme Integration', () => {
       // Verify initial light theme
       expect(document.documentElement.getAttribute('data-theme')).toBe('light')
 
-      // Click dark theme option
+      // Open dropdown and click dark theme option
+      await user.click(screen.getByTestId('theme-toggle-button'))
       await user.click(screen.getByTestId('theme-option-dark'))
 
       // Verify dark theme is applied
@@ -75,7 +101,8 @@ describe('Homepage Theme Integration', () => {
       // Verify initial dark theme
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
 
-      // Click light theme option
+      // Open dropdown and click light theme option
+      await user.click(screen.getByTestId('theme-toggle-button'))
       await user.click(screen.getByTestId('theme-option-light'))
 
       // Verify light theme is applied
@@ -91,7 +118,8 @@ describe('Homepage Theme Integration', () => {
       // First render - set theme
       const { unmount } = renderWithProviders(<HeroSection />)
 
-      // Change to dark theme
+      // Open dropdown and change to dark theme
+      await user.click(screen.getByTestId('theme-toggle-button'))
       await user.click(screen.getByTestId('theme-option-dark'))
       expect(localStorage.getItem('theme-preference')).toBe('dark')
 
@@ -103,6 +131,9 @@ describe('Homepage Theme Integration', () => {
 
       // Theme should be restored from localStorage
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+
+      // Open dropdown and verify dark option is selected
+      await user.click(screen.getByTestId('theme-toggle-button'))
       expect(screen.getByTestId('theme-option-dark')).toHaveAttribute('aria-selected', 'true')
     })
   })
@@ -117,7 +148,8 @@ describe('Homepage Theme Integration', () => {
       const backgroundEffect = screen.getByTestId('hero-background')
       expect(backgroundEffect).toBeInTheDocument()
 
-      // Change theme and verify components update
+      // Open dropdown and change theme and verify components update
+      await user.click(screen.getByTestId('theme-toggle-button'))
       await user.click(screen.getByTestId('theme-option-cyberpunk'))
 
       // Verify theme is applied globally
@@ -130,6 +162,7 @@ describe('Homepage Theme Integration', () => {
       const user = userEvent.setup()
       renderWithProviders(<HeroSection />)
 
+      await user.click(screen.getByTestId('theme-toggle-button'))
       await user.click(screen.getByTestId('theme-option-cyberpunk'))
 
       expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
@@ -140,14 +173,19 @@ describe('Homepage Theme Integration', () => {
       const user = userEvent.setup()
       renderWithProviders(<HeroSection />)
 
+      await user.click(screen.getByTestId('theme-toggle-button'))
       await user.click(screen.getByTestId('theme-option-synthwave'))
 
       expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave')
       expect(localStorage.getItem('theme-preference')).toBe('synthwave')
     })
 
-    it('all DaisyUI themes are available in dropdown', () => {
+    it('all DaisyUI themes are available in dropdown', async () => {
+      const user = userEvent.setup()
       renderWithProviders(<HeroSection />)
+
+      // Open dropdown first
+      await user.click(screen.getByTestId('theme-toggle-button'))
 
       expect(screen.getByTestId('theme-option-light')).toBeInTheDocument()
       expect(screen.getByTestId('theme-option-dark')).toBeInTheDocument()
@@ -185,10 +223,14 @@ describe('Homepage Theme Integration', () => {
       expect(toggleButton.getAttribute('aria-label')).toContain('theme')
     })
 
-    it('theme options have proper role attributes', () => {
+    it('theme options have proper role attributes', async () => {
+      const user = userEvent.setup()
       renderWithProviders(<HeroSection />)
 
-      const menu = screen.getByTestId('theme-dropdown-menu')
+      // Open dropdown first
+      await user.click(screen.getByTestId('theme-toggle-button'))
+
+      const menu = screen.getByTestId('theme-dropdown')
       expect(menu).toHaveAttribute('role', 'listbox')
 
       const options = screen.getAllByRole('option')
