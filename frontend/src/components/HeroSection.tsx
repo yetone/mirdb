@@ -10,7 +10,6 @@ interface HeroSectionProps {
 
 export default function HeroSection({ 'data-testid': testId }: HeroSectionProps) {
   const { isAuthenticated } = useAuth()
-
   return (
     <section
       data-testid={testId || 'hero-section'}

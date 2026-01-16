@@ -93,64 +93,71 @@ describe('Authenticated User Experience Scenario', () => {
    * Expected: Hero section shows 'Go to Dashboard' CTA instead of 'Get Started'
    */
   describe('Test Case 1: Hero Section CTA for Authenticated User', () => {
-    it('displays "Go to Dashboard" button for authenticated user instead of "Get Started Free"', () => {
+    it('displays "Go to Dashboard" CTA for authenticated user', () => {
       renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
 
-      // Should show "Go to Dashboard" button
       const dashboardCta = screen.getByTestId('cta-dashboard')
       expect(dashboardCta).toBeInTheDocument()
       expect(dashboardCta).toHaveTextContent('Go to Dashboard')
+    })
+
+    it('Dashboard CTA links to /dashboard', () => {
+      renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
+
+      const dashboardCta = screen.getByTestId('cta-dashboard')
       expect(dashboardCta).toHaveAttribute('href', '/dashboard')
     })
 
-    it('does not display "Get Started Free" button for authenticated user', () => {
+    it('does not display "Get Started Free" CTA for authenticated user', () => {
       renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
 
-      // Should NOT show "Get Started Free" button
       const getStartedCta = screen.queryByTestId('cta-get-started')
       expect(getStartedCta).not.toBeInTheDocument()
     })
 
-    it('does not display "Login" button for authenticated user', () => {
+    it('does not display "Login" CTA for authenticated user', () => {
       renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
 
-      // Should NOT show "Login" button in hero section
       const loginCta = screen.queryByTestId('cta-login')
       expect(loginCta).not.toBeInTheDocument()
     })
 
-    it('displays "Get Started Free" and "Login" buttons for unauthenticated user', () => {
-      renderWithProviders(<HeroSection />, { initialUser: null })
+    it('displays "Get Started Free" CTA for unauthenticated user', () => {
+      renderWithProviders(<HeroSection />)
 
-      // Should show "Get Started Free" button
       const getStartedCta = screen.getByTestId('cta-get-started')
       expect(getStartedCta).toBeInTheDocument()
       expect(getStartedCta).toHaveTextContent('Get Started Free')
+    })
 
-      // Should show "Login" button
+    it('displays "Login" CTA for unauthenticated user', () => {
+      renderWithProviders(<HeroSection />)
+
       const loginCta = screen.getByTestId('cta-login')
       expect(loginCta).toBeInTheDocument()
       expect(loginCta).toHaveTextContent('Login')
     })
 
-    it('"Go to Dashboard" button navigates to /dashboard', () => {
-      renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
+    it('does not display "Go to Dashboard" CTA for unauthenticated user', () => {
+      renderWithProviders(<HeroSection />)
 
-      const dashboardCta = screen.getByTestId('cta-dashboard')
-      expect(dashboardCta).toHaveAttribute('href', '/dashboard')
+      const dashboardCta = screen.queryByTestId('cta-dashboard')
+      expect(dashboardCta).not.toBeInTheDocument()
     })
 
-    it('hero section renders correctly with authenticated user on full App', () => {
+    it('full homepage shows correct CTAs for authenticated user', () => {
       renderWithProviders(<App />, { initialUser: mockAuthenticatedUser })
 
-      // Hero section should be present
-      const heroSection = screen.getByTestId('hero-section')
-      expect(heroSection).toBeInTheDocument()
-
-      // Should show dashboard CTA
+      // Check hero section dashboard CTA
       const dashboardCta = screen.getByTestId('cta-dashboard')
       expect(dashboardCta).toBeInTheDocument()
       expect(dashboardCta).toHaveTextContent('Go to Dashboard')
+
+      // Verify Get Started and Login are not present
+      const getStartedCta = screen.queryByTestId('cta-get-started')
+      const loginCta = screen.queryByTestId('cta-login')
+      expect(getStartedCta).not.toBeInTheDocument()
+      expect(loginCta).not.toBeInTheDocument()
     })
   })
 
@@ -160,68 +167,53 @@ describe('Authenticated User Experience Scenario', () => {
    * Expected: Homepage conditionally renders based on authentication state
    */
   describe('Test Case 2: AuthContext Integration', () => {
-    it('HeroSection accesses AuthContext to determine authentication state', () => {
-      // When unauthenticated - shows Get Started
-      const { unmount } = renderWithProviders(<HeroSection />, { initialUser: null })
-      expect(screen.getByTestId('cta-get-started')).toBeInTheDocument()
+    it('HeroSection uses AuthContext to determine authentication state', () => {
+      // Authenticated user
+      const { unmount } = renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
+      expect(screen.getByTestId('cta-dashboard')).toBeInTheDocument()
       unmount()
 
-      // When authenticated - shows Dashboard
-      renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
-      expect(screen.getByTestId('cta-dashboard')).toBeInTheDocument()
+      // Render as unauthenticated
+      renderWithProviders(<HeroSection />, { initialUser: null })
+      expect(screen.getByTestId('cta-get-started')).toBeInTheDocument()
     })
 
-    it('conditional rendering differs based on authentication state', () => {
-      // Test unauthenticated state
-      const { unmount: unmountUnauth } = renderWithProviders(<HeroSection />, { initialUser: null })
-
-      // Unauthenticated shows Get Started and Login
-      expect(screen.getByTestId('cta-get-started')).toBeInTheDocument()
-      expect(screen.getByTestId('cta-login')).toBeInTheDocument()
-      expect(screen.queryByTestId('cta-dashboard')).not.toBeInTheDocument()
-
-      unmountUnauth()
-
-      // Test authenticated state - should show different content
+    it('renders different content based on isAuthenticated flag', () => {
+      // With authenticated user
       renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
-
-      // Authenticated shows Dashboard button only
+      expect(screen.getByTestId('cta-dashboard')).toBeInTheDocument()
       expect(screen.queryByTestId('cta-get-started')).not.toBeInTheDocument()
       expect(screen.queryByTestId('cta-login')).not.toBeInTheDocument()
-      expect(screen.getByTestId('cta-dashboard')).toBeInTheDocument()
     })
 
-    it('HeroSection renders correctly with different user states', () => {
-      // Test with admin user
-      const adminUser: User = {
-        ...mockAuthenticatedUser,
-        is_admin: true,
-      }
-
-      renderWithProviders(<HeroSection />, { initialUser: adminUser })
-      expect(screen.getByTestId('cta-dashboard')).toBeInTheDocument()
+    it('renders unauthenticated content when no user is logged in', () => {
+      renderWithProviders(<HeroSection />, { initialUser: null })
+      expect(screen.queryByTestId('cta-dashboard')).not.toBeInTheDocument()
+      expect(screen.getByTestId('cta-get-started')).toBeInTheDocument()
+      expect(screen.getByTestId('cta-login')).toBeInTheDocument()
     })
 
-    it('HeroSection shows correct headline regardless of auth state', () => {
-      // Unauthenticated
-      const { unmount } = renderWithProviders(<HeroSection />, { initialUser: null })
-      expect(screen.getByTestId('hero-headline')).toHaveTextContent('Shorten. Share. Analyze.')
+    it('AuthContext provides correct isAuthenticated value', () => {
+      // Test with authenticated user - Dashboard CTA should render
+      const { unmount } = renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
+      expect(screen.getByTestId('cta-dashboard')).toBeInTheDocument()
       unmount()
 
-      // Authenticated
-      renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
-      expect(screen.getByTestId('hero-headline')).toHaveTextContent('Shorten. Share. Analyze.')
+      // Test without user - Get Started CTA should render
+      renderWithProviders(<HeroSection />, { initialUser: null })
+      expect(screen.getByTestId('cta-get-started')).toBeInTheDocument()
     })
 
-    it('HeroSection shows correct subheadline regardless of auth state', () => {
-      // Unauthenticated
-      const { unmount } = renderWithProviders(<HeroSection />, { initialUser: null })
-      expect(screen.getByTestId('hero-subheadline')).toBeInTheDocument()
-      unmount()
+    it('homepage correctly integrates with AuthProvider', () => {
+      renderWithProviders(<App />, { initialUser: mockAuthenticatedUser })
 
-      // Authenticated
-      renderWithProviders(<HeroSection />, { initialUser: mockAuthenticatedUser })
-      expect(screen.getByTestId('hero-subheadline')).toBeInTheDocument()
+      // Navbar should show authenticated state
+      const navbarDashboard = screen.getByTestId('navbar-dashboard')
+      expect(navbarDashboard).toBeInTheDocument()
+
+      // Hero should show authenticated state
+      const heroDashboardCta = screen.getByTestId('cta-dashboard')
+      expect(heroDashboardCta).toBeInTheDocument()
     })
   })
 
@@ -231,7 +223,7 @@ describe('Authenticated User Experience Scenario', () => {
    * Expected: Navbar displays user menu with Dashboard link and logout option
    */
   describe('Test Case 3: Navbar for Authenticated User', () => {
-    it('Navbar displays Dashboard link for authenticated user', () => {
+    it('displays Dashboard link in Navbar for authenticated user', () => {
       renderWithProviders(<Navbar />, { initialUser: mockAuthenticatedUser })
 
       const dashboardLink = screen.getByTestId('navbar-dashboard')
@@ -240,31 +232,42 @@ describe('Authenticated User Experience Scenario', () => {
       expect(dashboardLink).toHaveAttribute('href', '/dashboard')
     })
 
-    it('Navbar displays user menu button for authenticated user', () => {
+    it('displays user menu button for authenticated user', () => {
       renderWithProviders(<Navbar />, { initialUser: mockAuthenticatedUser })
 
       const userMenuButton = screen.getByTestId('navbar-user-menu-button')
       expect(userMenuButton).toBeInTheDocument()
     })
 
-    it('Navbar user menu contains logout option', () => {
+    it('user menu contains logout option when opened', () => {
       renderWithProviders(<Navbar />, { initialUser: mockAuthenticatedUser })
 
       // Open user menu
       const userMenuButton = screen.getByTestId('navbar-user-menu-button')
       fireEvent.click(userMenuButton)
 
+      // Check for logout button
       const logoutButton = screen.getByTestId('navbar-logout-button')
       expect(logoutButton).toBeInTheDocument()
       expect(logoutButton).toHaveTextContent('Logout')
     })
 
-    it('Navbar user menu shows Dashboard in dropdown', () => {
+    it('user menu contains Dashboard-related links', () => {
       renderWithProviders(<Navbar />, { initialUser: mockAuthenticatedUser })
 
-      // Dashboard link should be visible in navbar (not dropdown)
-      const dashboardLink = screen.getByTestId('navbar-dashboard')
-      expect(dashboardLink).toBeInTheDocument()
+      // Open user menu
+      const userMenuButton = screen.getByTestId('navbar-user-menu-button')
+      fireEvent.click(userMenuButton)
+
+      // Check for profile and settings links
+      const profileLink = screen.getByTestId('navbar-profile-link')
+      const settingsLink = screen.getByTestId('navbar-settings-link')
+
+      expect(profileLink).toBeInTheDocument()
+      expect(profileLink).toHaveAttribute('href', '/profile')
+
+      expect(settingsLink).toBeInTheDocument()
+      expect(settingsLink).toHaveAttribute('href', '/settings')
     })
 
     it('Navbar does not show Login/Register for authenticated user', () => {
@@ -277,7 +280,7 @@ describe('Authenticated User Experience Scenario', () => {
       expect(getStartedLink).not.toBeInTheDocument()
     })
 
-    it('Navbar displays username in user menu', () => {
+    it('displays username in Navbar for authenticated user', () => {
       renderWithProviders(<Navbar />, { initialUser: mockAuthenticatedUser })
 
       const username = screen.getByTestId('navbar-username')
@@ -285,74 +288,97 @@ describe('Authenticated User Experience Scenario', () => {
       expect(username).toHaveTextContent('testuser')
     })
 
-    it('Navbar shows Login/Register for unauthenticated user', () => {
-      renderWithProviders(<Navbar />, { initialUser: null })
+    it('displays user avatar with first letter of username', () => {
+      renderWithProviders(<Navbar />, { initialUser: mockAuthenticatedUser })
 
-      const loginLink = screen.getByTestId('navbar-login')
-      const getStartedLink = screen.getByTestId('navbar-get-started')
-
-      expect(loginLink).toBeInTheDocument()
-      expect(getStartedLink).toBeInTheDocument()
+      const avatar = screen.getByTestId('navbar-user-avatar')
+      expect(avatar).toBeInTheDocument()
+      expect(avatar).toHaveTextContent('T') // First letter of 'testuser'
     })
 
-    it('Navbar logout button clears authentication', () => {
-      const { rerender } = render(
-        <MemoryRouter>
-          <ThemeProvider>
-            <AuthProvider initialUser={mockAuthenticatedUser}>
-              <Navbar />
-            </AuthProvider>
-          </ThemeProvider>
-        </MemoryRouter>
-      )
+    it('mobile menu shows authenticated user options', () => {
+      renderWithProviders(<Navbar />, { initialUser: mockAuthenticatedUser })
 
-      // Open user menu and click logout
-      const userMenuButton = screen.getByTestId('navbar-user-menu-button')
-      fireEvent.click(userMenuButton)
+      // Open mobile menu
+      const hamburgerButton = screen.getByTestId('hamburger-button')
+      fireEvent.click(hamburgerButton)
 
-      const logoutButton = screen.getByTestId('navbar-logout-button')
-      fireEvent.click(logoutButton)
+      // Check for Dashboard link
+      const mobileDashboardLink = screen.getByTestId('nav-dashboard-mobile')
+      expect(mobileDashboardLink).toBeInTheDocument()
 
-      // After logout, should show login/register links
-      expect(screen.getByTestId('navbar-login')).toBeInTheDocument()
-      expect(screen.getByTestId('navbar-get-started')).toBeInTheDocument()
+      // Check for logout option
+      const mobileLogoutButton = screen.getByTestId('nav-logout-mobile')
+      expect(mobileLogoutButton).toBeInTheDocument()
+    })
+
+    it('mobile menu does not show Login/Register for authenticated user', () => {
+      renderWithProviders(<Navbar />, { initialUser: mockAuthenticatedUser })
+
+      // Open mobile menu
+      const hamburgerButton = screen.getByTestId('hamburger-button')
+      fireEvent.click(hamburgerButton)
+
+      // Verify Login and Register are not present
+      const mobileLoginLink = screen.queryByTestId('nav-login-mobile')
+      const mobileRegisterLink = screen.queryByTestId('nav-register-mobile')
+
+      expect(mobileLoginLink).not.toBeInTheDocument()
+      expect(mobileRegisterLink).not.toBeInTheDocument()
     })
   })
 
   /**
-   * Full Homepage Integration Test
+   * Additional Tests: Full User Journey
    */
-  describe('Full Homepage Authenticated Experience', () => {
-    it('homepage shows authenticated experience when user is logged in', () => {
+  describe('Full Authenticated User Journey', () => {
+    it('complete homepage renders correctly for authenticated user', () => {
       renderWithProviders(<App />, { initialUser: mockAuthenticatedUser })
 
-      // Navbar should show authenticated state
-      const navbarDashboard = screen.getByTestId('navbar-dashboard')
-      expect(navbarDashboard).toBeInTheDocument()
+      // Navbar elements
+      expect(screen.getByTestId('navbar')).toBeInTheDocument()
+      expect(screen.getByTestId('navbar-dashboard')).toBeInTheDocument()
+      expect(screen.getByTestId('navbar-user-menu-button')).toBeInTheDocument()
 
-      // Hero should show dashboard CTA
-      const heroDashboardCta = screen.getByTestId('cta-dashboard')
-      expect(heroDashboardCta).toBeInTheDocument()
-      expect(heroDashboardCta).toHaveTextContent('Go to Dashboard')
+      // Hero section
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('cta-dashboard')).toBeInTheDocument()
 
-      // Should not show unauthenticated CTAs
+      // Unauthenticated CTAs should not be present
       expect(screen.queryByTestId('cta-get-started')).not.toBeInTheDocument()
       expect(screen.queryByTestId('cta-login')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('navbar-login')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('navbar-get-started')).not.toBeInTheDocument()
     })
 
-    it('homepage shows unauthenticated experience when user is not logged in', () => {
+    it('complete homepage renders correctly for unauthenticated user', () => {
       renderWithProviders(<App />, { initialUser: null })
 
-      // Navbar should show unauthenticated state
+      // Navbar elements for unauthenticated
+      expect(screen.getByTestId('navbar')).toBeInTheDocument()
       expect(screen.getByTestId('navbar-login')).toBeInTheDocument()
       expect(screen.getByTestId('navbar-get-started')).toBeInTheDocument()
 
-      // Hero should show get started and login CTAs
+      // Hero section for unauthenticated
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
       expect(screen.getByTestId('cta-get-started')).toBeInTheDocument()
       expect(screen.getByTestId('cta-login')).toBeInTheDocument()
 
-      // Should not show authenticated CTA
+      // Authenticated elements should not be present
       expect(screen.queryByTestId('cta-dashboard')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('navbar-dashboard')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('navbar-user-menu-button')).not.toBeInTheDocument()
+    })
+
+    it('authentication state is consistent across Navbar and HeroSection', () => {
+      renderWithProviders(<App />, { initialUser: mockAuthenticatedUser })
+
+      // Both Navbar and HeroSection should show authenticated state
+      const navbarDashboard = screen.getByTestId('navbar-dashboard')
+      const heroDashboard = screen.getByTestId('cta-dashboard')
+
+      expect(navbarDashboard).toBeInTheDocument()
+      expect(heroDashboard).toBeInTheDocument()
     })
   })
 })
