@@ -16,6 +16,9 @@ vi.mock('framer-motion', () => ({
     p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
       <p {...props}>{children}</p>
     ),
+    nav: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+      <nav {...props}>{children}</nav>
+    ),
   },
 }))
 
@@ -61,6 +64,86 @@ describe('FooterCTA', () => {
       expect(copyright).toBeInTheDocument()
       expect(copyright.textContent).toContain('URL Shortener')
     })
+
+    it('renders footer with navigation, legal links, and copyright (Test Case 1)', () => {
+      renderWithProviders(<FooterCTA />)
+      // Footer renders
+      expect(screen.getByTestId('footer-cta')).toBeInTheDocument()
+      // Navigation links section exists
+      expect(screen.getByTestId('footer-navigation')).toBeInTheDocument()
+      // Legal links section exists
+      expect(screen.getByTestId('footer-legal')).toBeInTheDocument()
+      // Copyright exists
+      expect(screen.getByTestId('footer-copyright')).toBeInTheDocument()
+    })
+  })
+
+  describe('Navigation Links (Test Case 2)', () => {
+    it('footer contains link to Home', () => {
+      renderWithProviders(<FooterCTA />)
+      const homeLink = screen.getByTestId('footer-nav-home')
+      expect(homeLink).toBeInTheDocument()
+      expect(homeLink).toHaveAttribute('href', '/')
+      expect(homeLink).toHaveTextContent('Home')
+    })
+
+    it('footer contains link to Login', () => {
+      renderWithProviders(<FooterCTA />)
+      const loginLink = screen.getByTestId('footer-nav-login')
+      expect(loginLink).toBeInTheDocument()
+      expect(loginLink).toHaveAttribute('href', '/login')
+      expect(loginLink).toHaveTextContent('Login')
+    })
+
+    it('footer contains link to Register', () => {
+      renderWithProviders(<FooterCTA />)
+      const registerLink = screen.getByTestId('footer-nav-register')
+      expect(registerLink).toBeInTheDocument()
+      expect(registerLink).toHaveAttribute('href', '/register')
+      expect(registerLink).toHaveTextContent('Register')
+    })
+
+    it('footer contains link to Dashboard', () => {
+      renderWithProviders(<FooterCTA />)
+      const dashboardLink = screen.getByTestId('footer-nav-dashboard')
+      expect(dashboardLink).toBeInTheDocument()
+      expect(dashboardLink).toHaveAttribute('href', '/dashboard')
+      expect(dashboardLink).toHaveTextContent('Dashboard')
+    })
+
+    it('all navigation links are within the navigation section', () => {
+      renderWithProviders(<FooterCTA />)
+      const navSection = screen.getByTestId('footer-navigation')
+      expect(navSection).toContainElement(screen.getByTestId('footer-nav-home'))
+      expect(navSection).toContainElement(screen.getByTestId('footer-nav-login'))
+      expect(navSection).toContainElement(screen.getByTestId('footer-nav-register'))
+      expect(navSection).toContainElement(screen.getByTestId('footer-nav-dashboard'))
+    })
+  })
+
+  describe('Legal Links (Test Case 3)', () => {
+    it('footer contains Terms of Service link', () => {
+      renderWithProviders(<FooterCTA />)
+      const termsLink = screen.getByTestId('footer-legal-terms')
+      expect(termsLink).toBeInTheDocument()
+      expect(termsLink).toHaveAttribute('href', '/terms')
+      expect(termsLink).toHaveTextContent('Terms of Service')
+    })
+
+    it('footer contains Privacy Policy link', () => {
+      renderWithProviders(<FooterCTA />)
+      const privacyLink = screen.getByTestId('footer-legal-privacy')
+      expect(privacyLink).toBeInTheDocument()
+      expect(privacyLink).toHaveAttribute('href', '/privacy')
+      expect(privacyLink).toHaveTextContent('Privacy Policy')
+    })
+
+    it('all legal links are within the legal section', () => {
+      renderWithProviders(<FooterCTA />)
+      const legalSection = screen.getByTestId('footer-legal')
+      expect(legalSection).toContainElement(screen.getByTestId('footer-legal-terms'))
+      expect(legalSection).toContainElement(screen.getByTestId('footer-legal-privacy'))
+    })
   })
 
   describe('CTA Button', () => {
@@ -102,6 +185,12 @@ describe('FooterCTA', () => {
       const footer = screen.getByTestId('footer-cta')
       expect(footer.tagName.toLowerCase()).toBe('footer')
     })
+
+    it('navigation section uses semantic nav element', () => {
+      renderWithProviders(<FooterCTA />)
+      const navSection = screen.getByTestId('footer-navigation')
+      expect(navSection.tagName.toLowerCase()).toBe('nav')
+    })
   })
 
   describe('Accessibility', () => {
@@ -109,6 +198,19 @@ describe('FooterCTA', () => {
       renderWithProviders(<FooterCTA />)
       const heading = screen.getByRole('heading', { level: 2 })
       expect(heading).toBeInTheDocument()
+    })
+
+    it('navigation section has aria-label', () => {
+      renderWithProviders(<FooterCTA />)
+      const navSection = screen.getByTestId('footer-navigation')
+      expect(navSection).toHaveAttribute('aria-label', 'Footer navigation')
+    })
+
+    it('all footer links are accessible', () => {
+      renderWithProviders(<FooterCTA />)
+      const links = screen.getAllByRole('link')
+      // Should have at least: Home, Login, Register, Dashboard, Terms, Privacy, Get Started
+      expect(links.length).toBeGreaterThanOrEqual(7)
     })
   })
 })
