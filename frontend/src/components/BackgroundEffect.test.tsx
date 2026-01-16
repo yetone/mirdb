@@ -44,15 +44,16 @@ describe('BackgroundEffect', () => {
   it('contains animated gradient orbs', () => {
     renderWithTheme(<BackgroundEffect data-testid="bg-effect" />)
     const element = screen.getByTestId('bg-effect')
-    // Check for blur class indicating gradient orbs
-    const children = element.querySelectorAll('.blur-3xl')
+    // Check for blur class indicating gradient orbs (using blur-2xl for performance)
+    const children = element.querySelectorAll('.blur-2xl')
     expect(children.length).toBeGreaterThanOrEqual(3)
   })
 
-  it('contains SVG noise texture overlay', () => {
+  it('contains gradient background elements', () => {
     renderWithTheme(<BackgroundEffect data-testid="bg-effect" />)
     const element = screen.getByTestId('bg-effect')
-    const svg = element.querySelector('svg')
-    expect(svg).toBeInTheDocument()
+    // Check for gradient orbs with rounded-full class
+    const gradientOrbs = element.querySelectorAll('.rounded-full')
+    expect(gradientOrbs.length).toBeGreaterThanOrEqual(3)
   })
 })
