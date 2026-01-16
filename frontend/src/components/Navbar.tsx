@@ -8,9 +8,11 @@ interface NavbarProps {
 }
 
 export default function Navbar({ 'data-testid': testId }: NavbarProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
 
   return (
     <motion.header
@@ -69,14 +71,14 @@ export default function Navbar({ 'data-testid': testId }: NavbarProps) {
           {/* Mobile Hamburger Button */}
           <button
             type="button"
-            onClick={toggleMenu}
+            onClick={toggleMobileMenu}
             className="md:hidden w-11 h-11 flex items-center justify-center rounded-lg hover:bg-base-200 transition-colors"
-            aria-expanded={isMenuOpen}
+            aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
-            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-            data-testid="hamburger-button"
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            data-testid="mobile-menu-button"
           >
-            <span className="sr-only">{isMenuOpen ? 'Close menu' : 'Open menu'}</span>
+            <span className="sr-only">{isMobileMenuOpen ? 'Close menu' : 'Open menu'}</span>
             <svg
               className="w-6 h-6 text-base-content"
               fill="none"
@@ -84,7 +86,7 @@ export default function Navbar({ 'data-testid': testId }: NavbarProps) {
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
-              {isMenuOpen ? (
+              {isMobileMenuOpen ? (
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -105,7 +107,7 @@ export default function Navbar({ 'data-testid': testId }: NavbarProps) {
 
         {/* Mobile Menu */}
         <AnimatePresence>
-          {isMenuOpen && (
+          {isMobileMenuOpen && (
             <motion.div
               id="mobile-menu"
               initial={{ opacity: 0, height: 0 }}
@@ -118,7 +120,7 @@ export default function Navbar({ 'data-testid': testId }: NavbarProps) {
               <div className="py-4 flex flex-col gap-2">
                 <a
                   href="#features"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className="block w-full px-4 py-3 min-h-[44px] text-base-content/70 hover:text-primary hover:bg-base-200 rounded-lg transition-colors"
                   data-testid="nav-features-mobile"
                 >
@@ -126,7 +128,7 @@ export default function Navbar({ 'data-testid': testId }: NavbarProps) {
                 </a>
                 <a
                   href="#how-it-works"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className="block w-full px-4 py-3 min-h-[44px] text-base-content/70 hover:text-primary hover:bg-base-200 rounded-lg transition-colors"
                   data-testid="nav-how-it-works-mobile"
                 >
@@ -139,7 +141,7 @@ export default function Navbar({ 'data-testid': testId }: NavbarProps) {
                     variant="outline"
                     size="md"
                     className="w-full min-h-[44px]"
-                    data-testid="nav-login-mobile"
+                    data-testid="mobile-nav-login"
                   >
                     Login
                   </FuturisticButton>
@@ -149,7 +151,7 @@ export default function Navbar({ 'data-testid': testId }: NavbarProps) {
                     variant="primary"
                     size="md"
                     className="w-full min-h-[44px]"
-                    data-testid="nav-register-mobile"
+                    data-testid="mobile-nav-get-started"
                   >
                     Get Started
                   </FuturisticButton>

@@ -85,7 +85,8 @@ export default function ThemeToggle({ 'data-testid': testId }: ThemeToggleProps)
           'flex items-center gap-2 px-3 py-2 rounded-lg',
           'bg-base-200 hover:bg-base-300 transition-colors',
           'text-base-content border border-base-300',
-          'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
+          'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+          'min-w-[44px] min-h-[44px]'
         )}
         aria-label="Toggle theme"
         aria-expanded={isOpen}
