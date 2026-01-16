@@ -15,7 +15,6 @@ function Home() {
       <main className="min-h-screen bg-base-100 pt-16">
         <HeroSection />
         <FeaturesSection />
-        <SocialProofSection />
         <HowItWorksSection />
         <FooterCTA />
         <Footer />
