@@ -375,7 +375,8 @@ test.describe('Responsive Design - Desktop View', () => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await page.goto('/');
 
-      const themeToggle = page.getByTestId('theme-toggle');
+      // Theme toggle in hero section has data-testid="hero-theme-toggle"
+      const themeToggle = page.getByTestId('hero-theme-toggle');
       await expect(themeToggle).toBeVisible();
     });
   });
