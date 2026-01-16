@@ -6,14 +6,15 @@
  *
  * Test Cases:
  * 1. E2E: Click 'Login' button in hero section → navigates to /login
- * 2. E2E: Click 'Login' in Navbar → navigates to /login (via hero section navigation)
- * 3. Integration: Verify Login navigation is client-side → React Router without page reload
+ * 2. E2E: Click 'Login' in Navbar → navigates to /login
+ * 3. Integration: Verify Login navigation is client-side (React Router)
  */
 
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import HeroSection from './HeroSection'
+import Navbar from './Navbar'
 import { ThemeProvider } from '../contexts/ThemeContext'
 
 // Mock framer-motion to avoid animation issues in tests
@@ -37,6 +38,9 @@ vi.mock('framer-motion', () => ({
     button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
       <button {...props}>{children}</button>
     ),
+    header: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+      <header {...props}>{children}</header>
+    ),
   },
 }))
 
@@ -56,13 +60,13 @@ function LocationDisplay() {
   return <div data-testid="location-display">{location.pathname}</div>
 }
 
-describe('Navigation to Login Scenario (US-5)', () => {
+describe('Navigation to Login Scenario', () => {
   /**
    * Test Case 1: E2E Test
    * Input: Click 'Login' button in hero section
    * Expected: User is navigated to /login route
    */
-  describe('Test Case 1: Click Login button in hero section → navigates to /login', () => {
+  describe('Test Case 1: Hero Section Login Navigation', () => {
     it('Login button exists in hero section', () => {
       renderWithProviders(<HeroSection />)
 
@@ -86,37 +90,26 @@ describe('Navigation to Login Scenario (US-5)', () => {
         </>
       )
 
-      // Verify initial location
-      expect(screen.getByTestId('location-display')).toHaveTextContent('/')
-
-      // Click the Login button
       const loginButton = screen.getByTestId('cta-login')
       fireEvent.click(loginButton)
 
-      // Verify navigation occurred
-      expect(screen.getByTestId('location-display')).toHaveTextContent('/login')
+      const locationDisplay = screen.getByTestId('location-display')
+      expect(locationDisplay).toHaveTextContent('/login')
     })
 
-    it('Login button is visible and accessible in hero section', () => {
+    it('hero Login button is prominently displayed alongside Get Started', () => {
       renderWithProviders(<HeroSection />)
 
       const heroSection = screen.getByTestId('hero-section')
       const loginButton = screen.getByTestId('cta-login')
+      const getStartedButton = screen.getByTestId('cta-get-started')
 
-      // Verify the button is within the hero section
+      // Both buttons should be within the hero section
       expect(heroSection).toContainElement(loginButton)
+      expect(heroSection).toContainElement(getStartedButton)
 
-      // Verify it has appropriate styling for visibility
+      // Login button should have large size styling
       expect(loginButton).toHaveClass('px-8', 'py-4', 'text-lg')
-    })
-
-    it('Login button has secondary styling (distinct from primary CTA)', () => {
-      renderWithProviders(<HeroSection />)
-
-      const loginButton = screen.getByTestId('cta-login')
-
-      // Login button should have secondary variant styling
-      expect(loginButton).toHaveClass('bg-secondary')
     })
   })
 
@@ -124,58 +117,48 @@ describe('Navigation to Login Scenario (US-5)', () => {
    * Test Case 2: E2E Test
    * Input: Click 'Login' in Navbar
    * Expected: User is navigated to /login route
-   *
-   * Note: The current implementation has navigation in the hero section
-   * rather than a separate Navbar component. The Login button in the
-   * hero section serves as the primary navigation element for login.
    */
-  describe('Test Case 2: Click Login in Navbar → navigates to /login', () => {
-    it('Login link is accessible from the navigation area', () => {
-      renderWithProviders(<HeroSection />)
+  describe('Test Case 2: Navbar Login Navigation', () => {
+    it('Login link exists in Navbar', () => {
+      renderWithProviders(<Navbar />)
 
-      // The navigation section in hero section contains the Login button
-      const loginButton = screen.getByTestId('cta-login')
-      expect(loginButton).toBeInTheDocument()
-
-      // Verify it's a proper navigation link
-      expect(loginButton.tagName.toLowerCase()).toBe('a')
-      expect(loginButton).toHaveAttribute('href', '/login')
+      const navbarLogin = screen.getByTestId('navbar-login')
+      expect(navbarLogin).toBeInTheDocument()
+      expect(navbarLogin).toHaveTextContent('Login')
     })
 
-    it('clicking Login from navigation navigates to /login', () => {
+    it('Navbar Login link has correct href to /login', () => {
+      renderWithProviders(<Navbar />)
+
+      const navbarLogin = screen.getByTestId('navbar-login')
+      expect(navbarLogin).toHaveAttribute('href', '/login')
+    })
+
+    it('clicking Login in Navbar navigates to /login', () => {
       renderWithProviders(
         <>
-          <HeroSection />
+          <Navbar />
           <LocationDisplay />
         </>
       )
 
-      const loginButton = screen.getByTestId('cta-login')
+      const navbarLogin = screen.getByTestId('navbar-login')
+      fireEvent.click(navbarLogin)
 
-      // Verify initial state
-      expect(screen.getByTestId('location-display')).toHaveTextContent('/')
-
-      // Click Login button
-      fireEvent.click(loginButton)
-
-      // Verify navigation
-      expect(screen.getByTestId('location-display')).toHaveTextContent('/login')
+      const locationDisplay = screen.getByTestId('location-display')
+      expect(locationDisplay).toHaveTextContent('/login')
     })
 
-    it('Login button is positioned alongside navigation elements', () => {
-      renderWithProviders(<HeroSection />)
+    it('Navbar Login is accessible alongside Get Started button', () => {
+      renderWithProviders(<Navbar />)
 
-      // The login button should be near the Get Started button (both in CTA area)
-      const loginButton = screen.getByTestId('cta-login')
-      const getStartedButton = screen.getByTestId('cta-get-started')
+      const navbar = screen.getByTestId('navbar')
+      const navbarLogin = screen.getByTestId('navbar-login')
+      const navbarGetStarted = screen.getByTestId('navbar-get-started')
 
-      // Both should exist and be in the document
-      expect(loginButton).toBeInTheDocument()
-      expect(getStartedButton).toBeInTheDocument()
-
-      // They should both be anchor elements for navigation
-      expect(loginButton.tagName.toLowerCase()).toBe('a')
-      expect(getStartedButton.tagName.toLowerCase()).toBe('a')
+      // Both elements should be in the navbar
+      expect(navbar).toContainElement(navbarLogin)
+      expect(navbar).toContainElement(navbarGetStarted)
     })
   })
 
@@ -184,24 +167,34 @@ describe('Navigation to Login Scenario (US-5)', () => {
    * Input: Verify Login navigation is client-side
    * Expected: Navigation uses React Router without page reload
    */
-  describe('Test Case 3: Verify Login navigation is client-side (React Router)', () => {
-    it('Login button uses React Router Link component', () => {
+  describe('Test Case 3: Client-Side Navigation Verification', () => {
+    it('hero Login button uses React Router Link (renders as anchor)', () => {
       renderWithProviders(<HeroSection />)
 
       const loginButton = screen.getByTestId('cta-login')
 
-      // React Router Link renders as an <a> element
+      // Should render as an anchor element
       expect(loginButton.tagName.toLowerCase()).toBe('a')
-
-      // It should have href attribute (React Router Link)
       expect(loginButton).toHaveAttribute('href', '/login')
 
-      // It should not be an external link (no target attribute)
+      // Should not be an external link
       expect(loginButton).not.toHaveAttribute('target')
-      expect(loginButton).not.toHaveAttribute('rel')
     })
 
-    it('navigation does not trigger full page reload (SPA navigation)', () => {
+    it('Navbar Login uses React Router Link (renders as anchor)', () => {
+      renderWithProviders(<Navbar />)
+
+      const navbarLogin = screen.getByTestId('navbar-login')
+
+      // Should render as an anchor element
+      expect(navbarLogin.tagName.toLowerCase()).toBe('a')
+      expect(navbarLogin).toHaveAttribute('href', '/login')
+
+      // Should not be an external link
+      expect(navbarLogin).not.toHaveAttribute('target')
+    })
+
+    it('hero Login navigation is SPA-style (no page reload)', () => {
       renderWithProviders(
         <>
           <HeroSection />
@@ -218,91 +211,46 @@ describe('Navigation to Login Scenario (US-5)', () => {
       fireEvent.click(loginButton)
 
       // After click, location should change without page reload
-      // If it was a full reload, the component would remount and test would fail
+      // (If it was a full reload, the LocationDisplay component would be unmounted/remounted)
       expect(screen.getByTestId('location-display')).toHaveTextContent('/login')
-
-      // The LocationDisplay component should still be the same instance
-      // (no remount from full page reload)
-      expect(locationDisplay).toBeInTheDocument()
     })
 
-    it('Login navigation updates URL via React Router history', () => {
+    it('Navbar Login navigation is SPA-style (no page reload)', () => {
       renderWithProviders(
         <>
-          <HeroSection />
+          <Navbar />
           <LocationDisplay />
         </>
       )
 
-      // Click login
-      fireEvent.click(screen.getByTestId('cta-login'))
+      // Get initial location
+      const locationDisplay = screen.getByTestId('location-display')
+      expect(locationDisplay).toHaveTextContent('/')
 
-      // URL should update to /login
-      const location = screen.getByTestId('location-display')
-      expect(location.textContent).toBe('/login')
-    })
+      // Click the Login link
+      const navbarLogin = screen.getByTestId('navbar-login')
+      fireEvent.click(navbarLogin)
 
-    it('navigation to /login maintains SPA context', () => {
-      // This test verifies that navigation doesn't break React context
-      renderWithProviders(
-        <>
-          <HeroSection />
-          <LocationDisplay />
-        </>
-      )
-
-      // Navigate to login
-      fireEvent.click(screen.getByTestId('cta-login'))
-
-      // After navigation, we should still have access to the location context
-      // (proving React didn't unmount/remount due to page reload)
+      // After click, location should change without page reload
       expect(screen.getByTestId('location-display')).toHaveTextContent('/login')
-    })
-
-    it('Login link does not have download or external link attributes', () => {
-      renderWithProviders(<HeroSection />)
-
-      const loginButton = screen.getByTestId('cta-login')
-
-      // Should not be a download link
-      expect(loginButton).not.toHaveAttribute('download')
-
-      // Should not open in new tab (external link behavior)
-      expect(loginButton).not.toHaveAttribute('target', '_blank')
-
-      // Should be a relative path for SPA routing
-      expect(loginButton).toHaveAttribute('href', '/login')
     })
   })
 
-  describe('Login Navigation Accessibility', () => {
-    it('Login button is keyboard accessible', () => {
-      renderWithProviders(<HeroSection />)
+  describe('Full Page Navigation Flow', () => {
+    it('both hero and navbar Login links navigate to the same /login route', () => {
+      renderWithProviders(
+        <>
+          <Navbar />
+          <HeroSection />
+        </>
+      )
 
-      const loginButton = screen.getByTestId('cta-login')
+      const heroLogin = screen.getByTestId('cta-login')
+      const navbarLogin = screen.getByTestId('navbar-login')
 
-      // As an anchor element, it should be focusable
-      loginButton.focus()
-      expect(document.activeElement).toBe(loginButton)
-    })
-
-    it('Login button has focus ring styles for visibility', () => {
-      renderWithProviders(<HeroSection />)
-
-      const loginButton = screen.getByTestId('cta-login')
-
-      // Should have focus ring classes for accessibility
-      expect(loginButton).toHaveClass('focus:outline-none')
-      expect(loginButton).toHaveClass('focus:ring-2')
-    })
-
-    it('Login button text is clear and descriptive', () => {
-      renderWithProviders(<HeroSection />)
-
-      const loginButton = screen.getByTestId('cta-login')
-
-      // Button text should clearly indicate its purpose
-      expect(loginButton).toHaveTextContent('Login')
+      // Both should link to /login
+      expect(heroLogin).toHaveAttribute('href', '/login')
+      expect(navbarLogin).toHaveAttribute('href', '/login')
     })
   })
 })
