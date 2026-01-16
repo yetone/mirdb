@@ -91,13 +91,17 @@ const containerVariants = {
   },
 }
 
-const SocialProofSection: React.FC = () => {
+interface SocialProofSectionProps {
+  'data-testid'?: string
+}
+
+const SocialProofSection: React.FC<SocialProofSectionProps> = ({ 'data-testid': testId }) => {
   return (
     <section
       id="social-proof"
       className="py-20 px-4 sm:px-6 lg:px-8 bg-base-100"
       aria-labelledby="social-proof-heading"
-      data-testid="social-proof-section"
+      data-testid={testId || 'social-proof-section'}
     >
       <div className="max-w-7xl mx-auto">
         <motion.div

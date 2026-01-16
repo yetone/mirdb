@@ -110,13 +110,17 @@ const containerVariants = {
   },
 }
 
-const FeaturesSection: React.FC = () => {
+interface FeaturesSectionProps {
+  'data-testid'?: string
+}
+
+const FeaturesSection: React.FC<FeaturesSectionProps> = ({ 'data-testid': testId }) => {
   return (
     <section
       id="features"
       className="py-20 px-4 sm:px-6 lg:px-8 bg-base-100"
       aria-labelledby="features-heading"
-      data-testid="features-section"
+      data-testid={testId || 'features-section'}
     >
       <div className="max-w-7xl mx-auto">
         <motion.div

@@ -1,28 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import HeroSection from './components/HeroSection'
-import FeaturesSection from './components/FeaturesSection'
-import SocialProofSection from './components/SocialProofSection'
-import HowItWorksSection from './components/HowItWorksSection'
-import FooterCTA from './components/FooterCTA'
-import Footer from './components/Footer'
+import Home from './pages/Home'
 import LoginPage from './pages/LoginPage'
-
-function Home() {
-  return (
-    <>
-      <Navbar />
-      <main className="min-h-screen bg-base-100 pt-16">
-        <HeroSection />
-        <FeaturesSection />
-        <HowItWorksSection />
-        <SocialProofSection />
-        <FooterCTA />
-        <Footer />
-      </main>
-    </>
-  )
-}
 
 function App() {
   return (

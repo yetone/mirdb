@@ -24,12 +24,17 @@ const steps: Step[] = [
   },
 ];
 
-const HowItWorksSection: React.FC = () => {
+interface HowItWorksSectionProps {
+  'data-testid'?: string
+}
+
+const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ 'data-testid': testId }) => {
   return (
     <section
       id="how-it-works"
       className="py-16 px-4 md:px-8"
       aria-labelledby="how-it-works-title"
+      data-testid={testId || 'how-it-works-section'}
     >
       <div className="max-w-6xl mx-auto">
         <h2
