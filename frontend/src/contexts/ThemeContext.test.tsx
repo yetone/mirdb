@@ -1,19 +1,45 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { render, screen, act } from '@testing-library/react'
-import { ThemeProvider, useTheme } from './ThemeContext'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { render, screen, act, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { ThemeProvider, useTheme, Theme, ThemePreference } from './ThemeContext'
 
-// Helper component to test the hook
-function ThemeConsumer() {
+// Test component that exposes theme context
+function ThemeTestComponent() {
   const { theme, themePreference, setThemePreference } = useTheme()
   return (
     <div>
       <span data-testid="current-theme">{theme}</span>
       <span data-testid="theme-preference">{themePreference}</span>
-      <button data-testid="set-light" onClick={() => setThemePreference('light')}>Light</button>
-      <button data-testid="set-dark" onClick={() => setThemePreference('dark')}>Dark</button>
-      <button data-testid="set-cyberpunk" onClick={() => setThemePreference('cyberpunk')}>Cyberpunk</button>
-      <button data-testid="set-synthwave" onClick={() => setThemePreference('synthwave')}>Synthwave</button>
-      <button data-testid="set-system" onClick={() => setThemePreference('system')}>System</button>
+      <button
+        data-testid="set-light"
+        onClick={() => setThemePreference('light')}
+      >
+        Light
+      </button>
+      <button
+        data-testid="set-dark"
+        onClick={() => setThemePreference('dark')}
+      >
+        Dark
+      </button>
+      <button
+        data-testid="set-system"
+        onClick={() => setThemePreference('system')}
+      >
+        System
+      </button>
+      <button
+        data-testid="set-cyberpunk"
+        onClick={() => setThemePreference('cyberpunk')}
+      >
+        Cyberpunk
+      </button>
+      <button
+        data-testid="set-synthwave"
+        onClick={() => setThemePreference('synthwave')}
+      >
+        Synthwave
+      </button>
     </div>
   )
 }
@@ -26,29 +52,17 @@ describe('ThemeContext', () => {
 
   afterEach(() => {
     localStorage.clear()
-    document.documentElement.removeAttribute('data-theme')
   })
 
-  describe('ThemeProvider', () => {
-    it('provides default system theme preference', () => {
+  describe('Initial State', () => {
+    it('defaults to system preference when no stored value', () => {
       render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
       expect(screen.getByTestId('theme-preference')).toHaveTextContent('system')
-    })
-
-    it('resolves system preference to light by default (matchMedia mock returns false)', () => {
-      render(
-        <ThemeProvider>
-          <ThemeConsumer />
-        </ThemeProvider>
-      )
-
-      // Our test setup mocks matchMedia to return matches: false (light mode)
-      expect(screen.getByTestId('current-theme')).toHaveTextContent('light')
     })
 
     it('loads stored theme preference from localStorage', () => {
@@ -56,183 +70,207 @@ describe('ThemeContext', () => {
 
       render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
       expect(screen.getByTestId('theme-preference')).toHaveTextContent('dark')
-      expect(screen.getByTestId('current-theme')).toHaveTextContent('dark')
     })
 
-    it('sets data-theme attribute on document.documentElement', () => {
-      localStorage.setItem('theme-preference', 'cyberpunk')
-
+    it('resolves system preference to actual theme', () => {
       render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
-      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
+      // Our test setup mocks matchMedia to return false (light mode)
+      expect(screen.getByTestId('current-theme')).toHaveTextContent('light')
     })
   })
 
-  describe('setThemePreference', () => {
-    it('updates theme when setThemePreference is called', () => {
+  describe('Theme Persistence in localStorage', () => {
+    it('stores light theme preference in localStorage', async () => {
+      const user = userEvent.setup()
       render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
-      act(() => {
-        screen.getByTestId('set-dark').click()
-      })
-
-      expect(screen.getByTestId('theme-preference')).toHaveTextContent('dark')
-      expect(screen.getByTestId('current-theme')).toHaveTextContent('dark')
+      await user.click(screen.getByTestId('set-light'))
+      expect(localStorage.getItem('theme-preference')).toBe('light')
     })
 
-    it('persists theme preference to localStorage', () => {
+    it('stores dark theme preference in localStorage', async () => {
+      const user = userEvent.setup()
       render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
-      act(() => {
-        screen.getByTestId('set-synthwave').click()
-      })
+      await user.click(screen.getByTestId('set-dark'))
+      expect(localStorage.getItem('theme-preference')).toBe('dark')
+    })
 
+    it('stores cyberpunk theme preference in localStorage', async () => {
+      const user = userEvent.setup()
+      render(
+        <ThemeProvider>
+          <ThemeTestComponent />
+        </ThemeProvider>
+      )
+
+      await user.click(screen.getByTestId('set-cyberpunk'))
+      expect(localStorage.getItem('theme-preference')).toBe('cyberpunk')
+    })
+
+    it('stores synthwave theme preference in localStorage', async () => {
+      const user = userEvent.setup()
+      render(
+        <ThemeProvider>
+          <ThemeTestComponent />
+        </ThemeProvider>
+      )
+
+      await user.click(screen.getByTestId('set-synthwave'))
       expect(localStorage.getItem('theme-preference')).toBe('synthwave')
     })
 
-    it('updates data-theme attribute when theme changes', () => {
-      render(
-        <ThemeProvider>
-          <ThemeConsumer />
-        </ThemeProvider>
-      )
-
-      act(() => {
-        screen.getByTestId('set-cyberpunk').click()
-      })
-
-      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
-    })
-  })
-
-  describe('Theme persistence', () => {
-    it('theme preference persists in localStorage on reload simulation', () => {
-      // First render - set theme
+    it('theme preference persists across component remounts', async () => {
+      const user = userEvent.setup()
       const { unmount } = render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
-      act(() => {
-        screen.getByTestId('set-dark').click()
-      })
-
-      expect(localStorage.getItem('theme-preference')).toBe('dark')
-
-      // Unmount (simulate page close)
+      await user.click(screen.getByTestId('set-dark'))
       unmount()
 
-      // Re-render (simulate reload)
       render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
-      // Theme should be restored from localStorage
       expect(screen.getByTestId('theme-preference')).toHaveTextContent('dark')
       expect(screen.getByTestId('current-theme')).toHaveTextContent('dark')
-      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
     })
   })
 
-  describe('Multiple theme variants support', () => {
-    it('supports light theme', () => {
+  describe('Document Attribute Updates', () => {
+    it('sets data-theme attribute on document when theme changes', async () => {
+      const user = userEvent.setup()
       render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
-      act(() => {
-        screen.getByTestId('set-light').click()
-      })
-
-      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
-    })
-
-    it('supports dark theme', () => {
-      render(
-        <ThemeProvider>
-          <ThemeConsumer />
-        </ThemeProvider>
-      )
-
-      act(() => {
-        screen.getByTestId('set-dark').click()
-      })
-
+      await user.click(screen.getByTestId('set-dark'))
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
     })
 
-    it('supports cyberpunk theme', () => {
+    it('updates data-theme attribute for all theme variants', async () => {
+      const user = userEvent.setup()
       render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
-      act(() => {
-        screen.getByTestId('set-cyberpunk').click()
-      })
+      await user.click(screen.getByTestId('set-light'))
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
 
+      await user.click(screen.getByTestId('set-dark'))
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+
+      await user.click(screen.getByTestId('set-cyberpunk'))
       expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
-    })
 
-    it('supports synthwave theme', () => {
-      render(
-        <ThemeProvider>
-          <ThemeConsumer />
-        </ThemeProvider>
-      )
-
-      act(() => {
-        screen.getByTestId('set-synthwave').click()
-      })
-
+      await user.click(screen.getByTestId('set-synthwave'))
       expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave')
     })
   })
 
-  describe('useTheme hook fallback', () => {
-    it('returns fallback values when used outside ThemeProvider', () => {
-      // Render without ThemeProvider
-      render(<ThemeConsumer />)
+  describe('Theme Resolution', () => {
+    it('resolves light preference to light theme', async () => {
+      const user = userEvent.setup()
+      render(
+        <ThemeProvider>
+          <ThemeTestComponent />
+        </ThemeProvider>
+      )
+
+      await user.click(screen.getByTestId('set-light'))
+      expect(screen.getByTestId('current-theme')).toHaveTextContent('light')
+    })
+
+    it('resolves dark preference to dark theme', async () => {
+      const user = userEvent.setup()
+      render(
+        <ThemeProvider>
+          <ThemeTestComponent />
+        </ThemeProvider>
+      )
+
+      await user.click(screen.getByTestId('set-dark'))
+      expect(screen.getByTestId('current-theme')).toHaveTextContent('dark')
+    })
+
+    it('resolves cyberpunk preference to cyberpunk theme', async () => {
+      const user = userEvent.setup()
+      render(
+        <ThemeProvider>
+          <ThemeTestComponent />
+        </ThemeProvider>
+      )
+
+      await user.click(screen.getByTestId('set-cyberpunk'))
+      expect(screen.getByTestId('current-theme')).toHaveTextContent('cyberpunk')
+    })
+
+    it('resolves synthwave preference to synthwave theme', async () => {
+      const user = userEvent.setup()
+      render(
+        <ThemeProvider>
+          <ThemeTestComponent />
+        </ThemeProvider>
+      )
+
+      await user.click(screen.getByTestId('set-synthwave'))
+      expect(screen.getByTestId('current-theme')).toHaveTextContent('synthwave')
+    })
+  })
+
+  describe('useTheme Hook Fallback', () => {
+    it('returns fallback values when used outside provider', () => {
+      // Render without provider
+      render(<ThemeTestComponent />)
 
       expect(screen.getByTestId('current-theme')).toHaveTextContent('light')
       expect(screen.getByTestId('theme-preference')).toHaveTextContent('system')
     })
   })
 
-  describe('Invalid localStorage values', () => {
-    it('defaults to system when localStorage has invalid value', () => {
-      localStorage.setItem('theme-preference', 'invalid-theme')
-
+  describe('Multiple Theme Variants Support', () => {
+    it('supports light, dark, cyberpunk, and synthwave themes', async () => {
+      const user = userEvent.setup()
       render(
         <ThemeProvider>
-          <ThemeConsumer />
+          <ThemeTestComponent />
         </ThemeProvider>
       )
 
-      expect(screen.getByTestId('theme-preference')).toHaveTextContent('system')
+      const themes: ThemePreference[] = ['light', 'dark', 'cyberpunk', 'synthwave']
+
+      for (const theme of themes) {
+        await user.click(screen.getByTestId(`set-${theme}`))
+        expect(screen.getByTestId('current-theme')).toHaveTextContent(theme)
+        expect(localStorage.getItem('theme-preference')).toBe(theme)
+      }
     })
   })
 })

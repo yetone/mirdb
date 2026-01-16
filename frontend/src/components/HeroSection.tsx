@@ -15,15 +15,12 @@ export default function HeroSection({ 'data-testid': testId }: HeroSectionProps)
     >
       <BackgroundEffect data-testid="hero-background" />
 
-      {/* Theme toggle in top-right corner */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
-        className="absolute top-4 right-4 z-20"
-      >
-        <ThemeToggle data-testid="theme-toggle" />
-      </motion.div>
+      {/* Header with Theme Toggle */}
+      <header className="absolute top-0 left-0 right-0 z-20 p-4">
+        <div className="container mx-auto flex justify-end items-center">
+          <ThemeToggle data-testid="hero-theme-toggle" />
+        </div>
+      </header>
 
       <div className="relative z-10 container mx-auto px-4 py-16 text-center">
         <motion.h1

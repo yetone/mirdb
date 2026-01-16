@@ -38,7 +38,11 @@ vi.mock('framer-motion', () => ({
     button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
       <button {...props}>{children}</button>
     ),
+    svg: ({ children, ...props }: React.SVGProps<SVGSVGElement>) => (
+      <svg {...props}>{children}</svg>
+    ),
   },
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
 const renderWithProviders = (component: React.ReactNode, initialRoute = '/') => {
