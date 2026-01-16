@@ -10,9 +10,9 @@
  * 3. E2E: Check Get Started button in footer CTA → navigates to /register
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { BrowserRouter, MemoryRouter, useLocation } from 'react-router-dom'
+import { MemoryRouter, useLocation } from 'react-router-dom'
 import HeroSection from './HeroSection'
 import FooterCTA from './FooterCTA'
 import { ThemeProvider } from '../contexts/ThemeContext'

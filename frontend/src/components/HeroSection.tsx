@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import FuturisticButton from './FuturisticButton'
 import BackgroundEffect from './BackgroundEffect'
+import ThemeToggle from './ThemeToggle'
 
 interface HeroSectionProps {
   'data-testid'?: string
@@ -13,6 +14,16 @@ export default function HeroSection({ 'data-testid': testId }: HeroSectionProps)
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       <BackgroundEffect data-testid="hero-background" />
+
+      {/* Theme toggle in top-right corner */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+        className="absolute top-4 right-4 z-20"
+      >
+        <ThemeToggle data-testid="theme-toggle" />
+      </motion.div>
 
       <div className="relative z-10 container mx-auto px-4 py-16 text-center">
         <motion.h1
