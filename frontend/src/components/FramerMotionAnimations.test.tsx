@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '../contexts/ThemeContext'
 import React from 'react'
@@ -16,9 +16,6 @@ import React from 'react'
  * 2. Motion components are configured with appropriate animation props
  * 3. Animation variants are properly defined
  */
-
-// Store original framer-motion module
-let originalFramerMotion: any
 
 // Track motion component usage
 const motionComponentUsage: Record<string, { count: number; props: any[] }> = {}
