@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
@@ -247,7 +247,7 @@ describe('ThemeToggle', () => {
   describe('Click Outside Behavior', () => {
     it('closes dropdown when clicking outside', async () => {
       const user = userEvent.setup()
-      const { container } = renderWithProviders(
+      renderWithProviders(
         <div>
           <div data-testid="outside-element">Outside</div>
           <ThemeToggle />

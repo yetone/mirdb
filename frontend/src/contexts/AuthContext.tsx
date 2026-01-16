@@ -57,7 +57,7 @@ export function AuthProvider({ children, initialUser = null }: AuthProviderProps
     checkAuth()
   }, [initialUser])
 
-  const login = async (username: string, password: string) => {
+  const login = async (username: string, _password: string) => {
     // In a real app, this would call the login API
     // For now, we simulate a login
     const mockUser: User = {
