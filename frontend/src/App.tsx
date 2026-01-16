@@ -4,6 +4,7 @@ import HeroSection from './components/HeroSection'
 import FeaturesSection from './components/FeaturesSection'
 import HowItWorksSection from './components/HowItWorksSection'
 import FooterCTA from './components/FooterCTA'
+import LoginPage from './pages/LoginPage'
 
 function Home() {
   return (
@@ -23,6 +24,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/login" element={<LoginPage />} />
     </Routes>
   )
 }
