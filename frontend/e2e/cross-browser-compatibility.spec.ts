@@ -65,8 +65,9 @@ test.describe('Cross-Browser Compatibility', () => {
       const featuresSection = page.getByTestId('features-section');
       await expect(featuresSection).toBeVisible();
 
-      // Verify all 4 feature cards are present
-      const featureCards = page.getByTestId('glassmorphism-card');
+      // Verify all 4 feature cards are present in the features section
+      // (scoped to features section to exclude cards from other sections like SocialProofSection)
+      const featureCards = featuresSection.getByTestId('glassmorphism-card');
       await expect(featureCards).toHaveCount(4);
 
       // Verify each card is visible

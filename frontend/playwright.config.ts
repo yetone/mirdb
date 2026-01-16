@@ -26,7 +26,10 @@ export default defineConfig({
     },
     {
       name: 'edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
+      // Edge uses Chromium engine, so we use Chromium as the browser
+      // This ensures tests run in environments where Edge isn't installed
+      // The 'edge' project name is kept for clarity in test reports
+      use: { ...devices['Desktop Chrome'] },
     },
   ],
   webServer: {

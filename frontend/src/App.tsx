@@ -16,6 +16,7 @@ function Home() {
         <FeaturesSection />
         <SocialProofSection />
         <HowItWorksSection />
+        <SocialProofSection />
         <FooterCTA />
         <Footer />
       </main>
