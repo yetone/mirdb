@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://urlshortener.app/sitemap.xml

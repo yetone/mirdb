@@ -39,6 +39,8 @@
     "@types/node": "^25.0.9",
     "axe-core": "^4.11.1",
     "jsdom": "^27.4.0",
+    "lighthouse": "^13.0.1",
+    "playwright-lighthouse": "^4.0.0",
     "vitest": "^4.0.17",
     "vitest-axe": "^0.1.0"
   }

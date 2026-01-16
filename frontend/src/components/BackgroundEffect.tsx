@@ -37,27 +37,16 @@ export default function BackgroundEffect({ 'data-testid': testId }: BackgroundEf
       className="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
       aria-hidden="true"
     >
-      {/* Primary gradient orb */}
+      {/* Optimized gradient orbs - reduced blur for performance */}
       <div
-        className={`absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br ${colors.primary} rounded-full blur-3xl animate-pulse`}
+        className={`absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br ${colors.primary} rounded-full blur-2xl opacity-70`}
       />
-      {/* Secondary gradient orb */}
       <div
-        className={`absolute top-1/2 right-1/4 w-80 h-80 bg-gradient-to-br ${colors.secondary} rounded-full blur-3xl animate-pulse`}
-        style={{ animationDelay: '1s' }}
+        className={`absolute top-1/2 right-1/4 w-80 h-80 bg-gradient-to-br ${colors.secondary} rounded-full blur-2xl opacity-70`}
       />
-      {/* Accent gradient orb */}
       <div
-        className={`absolute bottom-1/4 left-1/2 w-72 h-72 bg-gradient-to-br ${colors.accent} rounded-full blur-3xl animate-pulse`}
-        style={{ animationDelay: '2s' }}
+        className={`absolute bottom-1/4 left-1/2 w-72 h-72 bg-gradient-to-br ${colors.accent} rounded-full blur-2xl opacity-70`}
       />
-      {/* Noise texture overlay */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.03]">
-        <filter id="noise">
-          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#noise)" />
-      </svg>
     </div>
   )
 }
