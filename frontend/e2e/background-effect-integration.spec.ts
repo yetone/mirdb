@@ -51,10 +51,10 @@ test.describe('BackgroundEffect Component Integration - E2E Tests', () => {
       await page.evaluate(() => localStorage.clear());
       await page.reload();
 
-      // Set light theme explicitly
-      const toggleButton = page.getByTestId('theme-toggle-button');
+      // Set light theme explicitly (use hero-theme-toggle to avoid multiple matches)
+      const toggleButton = page.getByTestId('hero-theme-toggle').getByTestId('theme-toggle-button');
       await toggleButton.click();
-      await page.getByTestId('theme-option-light').click();
+      await page.getByTestId('theme-option-light').first().click();
 
       // Verify light theme is applied
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
@@ -76,10 +76,10 @@ test.describe('BackgroundEffect Component Integration - E2E Tests', () => {
     test('all gradient orbs are visible in light theme', async ({ page }) => {
       await page.goto('/');
 
-      // Set light theme
-      const toggleButton = page.getByTestId('theme-toggle-button');
+      // Set light theme (use hero-theme-toggle to avoid multiple matches)
+      const toggleButton = page.getByTestId('hero-theme-toggle').getByTestId('theme-toggle-button');
       await toggleButton.click();
-      await page.getByTestId('theme-option-light').click();
+      await page.getByTestId('theme-option-light').first().click();
 
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 
@@ -101,10 +101,10 @@ test.describe('BackgroundEffect Component Integration - E2E Tests', () => {
       await page.evaluate(() => localStorage.clear());
       await page.reload();
 
-      // Set dark theme explicitly
-      const toggleButton = page.getByTestId('theme-toggle-button');
+      // Set dark theme explicitly (use hero-theme-toggle to avoid multiple matches)
+      const toggleButton = page.getByTestId('hero-theme-toggle').getByTestId('theme-toggle-button');
       await toggleButton.click();
-      await page.getByTestId('theme-option-dark').click();
+      await page.getByTestId('theme-option-dark').first().click();
 
       // Verify dark theme is applied
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
@@ -126,10 +126,10 @@ test.describe('BackgroundEffect Component Integration - E2E Tests', () => {
     test('all gradient orbs are visible in dark theme', async ({ page }) => {
       await page.goto('/');
 
-      // Set dark theme
-      const toggleButton = page.getByTestId('theme-toggle-button');
+      // Set dark theme (use hero-theme-toggle to avoid multiple matches)
+      const toggleButton = page.getByTestId('hero-theme-toggle').getByTestId('theme-toggle-button');
       await toggleButton.click();
-      await page.getByTestId('theme-option-dark').click();
+      await page.getByTestId('theme-option-dark').first().click();
 
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
@@ -239,10 +239,10 @@ test.describe('BackgroundEffect Component Integration - E2E Tests', () => {
       await page.evaluate(() => localStorage.clear());
       await page.reload();
 
-      // Start with light theme
-      const toggleButton = page.getByTestId('theme-toggle-button');
+      // Start with light theme (use hero-theme-toggle to avoid multiple matches)
+      const toggleButton = page.getByTestId('hero-theme-toggle').getByTestId('theme-toggle-button');
       await toggleButton.click();
-      await page.getByTestId('theme-option-light').click();
+      await page.getByTestId('theme-option-light').first().click();
 
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 
@@ -253,7 +253,7 @@ test.describe('BackgroundEffect Component Integration - E2E Tests', () => {
 
       // Switch to dark theme
       await toggleButton.click();
-      await page.getByTestId('theme-option-dark').click();
+      await page.getByTestId('theme-option-dark').first().click();
 
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
@@ -264,9 +264,10 @@ test.describe('BackgroundEffect Component Integration - E2E Tests', () => {
     test('background effect supports cyberpunk theme', async ({ page }) => {
       await page.goto('/');
 
-      const toggleButton = page.getByTestId('theme-toggle-button');
+      // Use hero-theme-toggle to avoid multiple matches
+      const toggleButton = page.getByTestId('hero-theme-toggle').getByTestId('theme-toggle-button');
       await toggleButton.click();
-      await page.getByTestId('theme-option-cyberpunk').click();
+      await page.getByTestId('theme-option-cyberpunk').first().click();
 
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'cyberpunk');
 
@@ -282,9 +283,10 @@ test.describe('BackgroundEffect Component Integration - E2E Tests', () => {
     test('background effect supports synthwave theme', async ({ page }) => {
       await page.goto('/');
 
-      const toggleButton = page.getByTestId('theme-toggle-button');
+      // Use hero-theme-toggle to avoid multiple matches
+      const toggleButton = page.getByTestId('hero-theme-toggle').getByTestId('theme-toggle-button');
       await toggleButton.click();
-      await page.getByTestId('theme-option-synthwave').click();
+      await page.getByTestId('theme-option-synthwave').first().click();
 
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'synthwave');
 
