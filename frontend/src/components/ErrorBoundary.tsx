@@ -1,30 +1,38 @@
-import { Component, ReactNode } from 'react'
+import { Component, ErrorInfo, ReactNode } from 'react'
+import FuturisticButton from './FuturisticButton'
 
-interface ErrorBoundaryProps {
+interface Props {
   children: ReactNode
   fallback?: ReactNode
+  onError?: (error: Error, errorInfo: ErrorInfo) => void
+  'data-testid'?: string
 }
 
-interface ErrorBoundaryState {
+interface State {
   hasError: boolean
   error: Error | null
 }
 
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+export default class ErrorBoundary extends Component<Props, State> {
+  constructor(props: Props) {
     super(props)
     this.state = { hasError: false, error: null }
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+  static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error }
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error('ErrorBoundary caught an error:', error, errorInfo)
+    this.props.onError?.(error, errorInfo)
   }
 
   handleRetry = (): void => {
+    this.setState({ hasError: false, error: null })
+  }
+
+  handleRefresh = (): void => {
     window.location.reload()
   }
 
@@ -36,16 +44,19 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
       return (
         <div
-          data-testid="error-boundary-fallback"
-          className="flex flex-col items-center justify-center min-h-screen bg-base-100 p-4"
+          data-testid={this.props['data-testid'] || 'error-boundary-fallback'}
+          className="min-h-screen flex items-center justify-center bg-base-100"
+          role="alert"
+          aria-live="assertive"
         >
-          <div className="text-center max-w-md">
+          <div className="text-center p-8 max-w-md">
             <div className="mb-6">
               <svg
-                className="w-20 h-20 mx-auto text-error"
+                className="w-16 h-16 mx-auto text-error"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
               >
                 <path
@@ -60,16 +71,38 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               Something went wrong
             </h1>
             <p className="text-base-content/70 mb-6">
-              We're sorry, but something unexpected happened. Please try refreshing the page.
+              We're sorry, but something unexpected happened. Please try again or refresh the page.
             </p>
-            <button
-              type="button"
-              data-testid="error-boundary-retry"
-              onClick={this.handleRetry}
-              className="btn btn-primary"
-            >
-              Refresh Page
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <FuturisticButton
+                onClick={this.handleRetry}
+                variant="primary"
+                size="md"
+                data-testid="error-retry-button"
+              >
+                Try Again
+              </FuturisticButton>
+              <FuturisticButton
+                onClick={this.handleRefresh}
+                variant="secondary"
+                size="md"
+                data-testid="error-refresh-button"
+              >
+                Refresh Page
+              </FuturisticButton>
+            </div>
+            {process.env.NODE_ENV === 'development' && this.state.error && (
+              <details className="mt-6 text-left">
+                <summary className="cursor-pointer text-sm text-base-content/60 hover:text-base-content">
+                  Error details (development only)
+                </summary>
+                <pre className="mt-2 p-4 bg-base-200 rounded-lg text-xs overflow-auto max-h-40 text-error">
+                  {this.state.error.message}
+                  {'\n'}
+                  {this.state.error.stack}
+                </pre>
+              </details>
+            )}
           </div>
         </div>
       )
@@ -78,5 +111,3 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return this.props.children
   }
 }
-
-export default ErrorBoundary
