@@ -24,6 +24,10 @@ export default defineConfig({
       name: 'msedge',
       use: { ...devices['Desktop Edge'], channel: 'msedge' },
     },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
   webServer: {
     command: 'npx serve site -p 3000',
