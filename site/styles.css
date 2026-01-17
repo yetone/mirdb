@@ -159,6 +159,13 @@ section:nth-child(even) {
     margin-right: auto;
 }
 
+.section-subtitle {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
 /* Features Grid */
 .features-grid {
     display: grid;

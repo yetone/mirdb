@@ -7,11 +7,15 @@
     "test:e2e": "playwright test",
     "serve": "npx serve site -p 3000"
   },
-  "keywords": ["mirdb", "memcached", "key-value-store"],
+  "keywords": [
+    "mirdb",
+    "memcached",
+    "key-value-store"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.40.0",
-    "serve": "^14.2.0"
+    "serve": "^14.2.5"
   }
 }

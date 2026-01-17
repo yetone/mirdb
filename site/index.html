@@ -32,36 +32,42 @@
     <section class="features" id="features">
         <div class="container">
             <h2>Key Features</h2>
+            <p class="section-subtitle">Built for performance, designed for durability</p>
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card" id="feature-memcached-protocol" data-feature="memcached-protocol">
                     <div class="feature-icon">&#128640;</div>
                     <h3>Memcached Protocol Compatible</h3>
-                    <p>Use your existing memcached clients seamlessly. MirDB speaks the same language.</p>
+                    <p>Full compatibility with the memcached text protocol. Use your existing memcached clients without any modifications. Supports SET, GET, DELETE, ADD, REPLACE, APPEND, and PREPEND commands.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" id="feature-persistent-storage" data-feature="persistent-storage">
                     <div class="feature-icon">&#128190;</div>
-                    <h3>Persistent Storage</h3>
-                    <p>Data survives restarts with SSTable-based persistence and Write-Ahead Logging.</p>
+                    <h3>Persistent Storage with SSTables</h3>
+                    <p>Unlike traditional memcached, MirDB persists your data to disk using SSTables (Sorted String Tables). Your data survives restarts and system failures with automatic recovery.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" id="feature-lsm-tree" data-feature="lsm-tree">
                     <div class="feature-icon">&#128200;</div>
                     <h3>LSM-Tree Architecture</h3>
-                    <p>Optimized for write-heavy workloads with Log-Structured Merge-tree design.</p>
+                    <p>Built on a Log-Structured Merge-tree architecture for optimal write performance. Data flows through memtable to multi-level SSTables with configurable compaction strategies.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" id="feature-high-performance" data-feature="high-performance">
                     <div class="feature-icon">&#9889;</div>
-                    <h3>High Performance</h3>
-                    <p>Written in Rust for memory safety and blazing-fast performance.</p>
+                    <h3>High Performance with Rust</h3>
+                    <p>Written in Rust for maximum performance and memory safety. Leverages Tokio for async I/O operations, delivering low-latency responses with minimal resource overhead.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" id="feature-wal" data-feature="wal">
                     <div class="feature-icon">&#128736;</div>
-                    <h3>WAL Durability</h3>
-                    <p>Write-Ahead Log ensures crash recovery and data integrity.</p>
+                    <h3>Write-Ahead Log (WAL)</h3>
+                    <p>Every write is first logged to a Write-Ahead Log before being applied, ensuring durability and crash recovery. Data is never lost even during unexpected shutdowns.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" id="feature-compaction" data-feature="compaction">
                     <div class="feature-icon">&#128295;</div>
                     <h3>Configurable Compaction</h3>
-                    <p>Multi-level SSTable compaction keeps storage efficient and queries fast.</p>
+                    <p>Fine-tune compaction behavior with configurable triggers and thresholds. Supports both minor compaction (memtable to SSTable) and major compaction (level-to-level SSTable merging).</p>
+                </div>
+                <div class="feature-card" id="feature-skip-list" data-feature="skip-list">
+                    <div class="feature-icon">&#128209;</div>
+                    <h3>Skip List Memtable</h3>
+                    <p>In-memory data is stored in an efficient skip list data structure, providing O(log n) insert and lookup operations. Optimized for high-throughput write workloads.</p>
                 </div>
             </div>
         </div>
