@@ -281,11 +281,13 @@ section:nth-child(even) {
     background: var(--primary-color);
     color: white;
     border: none;
-    padding: 5px 15px;
+    padding: 10px 16px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.85rem;
     transition: background-color 0.3s ease;
+    min-height: 44px;
+    min-width: 44px;
 }
 
 .copy-btn:hover {
@@ -415,6 +417,10 @@ section:nth-child(even) {
     text-decoration: none;
     margin: 0 15px;
     transition: opacity 0.3s ease;
+    display: inline-block;
+    padding: 10px 5px;
+    min-height: 44px;
+    line-height: 24px;
 }
 
 .footer-links a:hover {
