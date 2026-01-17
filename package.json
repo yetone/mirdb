@@ -19,5 +19,8 @@
     "@playwright/test": "^1.40.0",
     "lighthouse": "^13.0.1",
     "serve": "^14.2.5"
+  },
+  "dependencies": {
+    "chrome-launcher": "^1.2.1"
   }
 }
