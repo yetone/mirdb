@@ -466,7 +466,7 @@ test.describe('Cross-Browser Compatibility - Edge', () => {
       expect(logoBoundingBox!.height).toBeGreaterThan(0);
 
       // Verify logo has correct attributes
-      await expect(logo).toHaveAttribute('src', '../assets/logo.gif');
+      await expect(logo).toHaveAttribute('src', 'assets/logo.gif');
       await expect(logo).toHaveAttribute('alt', 'MirDB Logo');
     });
 

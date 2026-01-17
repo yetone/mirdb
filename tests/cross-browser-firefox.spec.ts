@@ -217,7 +217,7 @@ test.describe('Cross-Browser Compatibility - Firefox', () => {
     await expect(logo).toBeVisible();
 
     // Verify logo has correct src attribute
-    await expect(logo).toHaveAttribute('src', '../assets/logo.gif');
+    await expect(logo).toHaveAttribute('src', 'assets/logo.gif');
 
     // Verify logo has alt text for accessibility
     await expect(logo).toHaveAttribute('alt', 'MirDB Logo');
