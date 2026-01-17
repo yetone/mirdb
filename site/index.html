@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility, written in Rust.">
+    <meta name="keywords" content="MirDB, key-value store, memcached, Rust, LSM-tree, database, persistent storage">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mirdb.io/">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
+    <meta property="og:description" content="A high-performance, persistent key-value store written in Rust with memcached protocol compatibility and LSM-tree architecture.">
+    <meta property="og:image" content="https://mirdb.io/assets/logo.gif">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mirdb.io/">
+    <meta property="og:site_name" content="MirDB">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
+    <meta name="twitter:description" content="A high-performance, persistent key-value store written in Rust with memcached protocol compatibility and LSM-tree architecture.">
+    <meta name="twitter:image" content="https://mirdb.io/assets/logo.gif">
+
+    <link rel="stylesheet" href="styles.css">
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "MirDB",
+        "description": "A high-performance, persistent key-value store written in Rust with memcached protocol compatibility and LSM-tree architecture.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Linux, macOS, Windows",
+        "url": "https://mirdb.io/",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "MirDB Team"
+        },
+        "license": "https://opensource.org/licenses/MIT",
+        "programmingLanguage": "Rust",
+        "softwareVersion": "0.1.0"
+    }
+    </script>
+</head>
+<body>
+    <!-- Noscript fallback for users with JavaScript disabled -->
+    <noscript>
+        <div style="background-color: #fff3cd; color: #856404; padding: 12px 20px; text-align: center; border-bottom: 1px solid #ffc107;">
+            <strong>Note:</strong> This page works best with JavaScript enabled. Some interactive features like code copying and syntax highlighting may not be available, but all content remains accessible.
+        </div>
+    </noscript>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <picture>
+                    <source srcset="assets/logo.webp" type="image/webp">
+                    <img src="assets/logo.gif" alt="MirDB Logo" class="logo" data-image="logo">
+                </picture>
+                <h1>MirDB</h1>
+                <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+                <p class="description">
+                    A high-performance, persistent key-value store written in Rust.
+                    MirDB combines memcached protocol compatibility with durable storage using LSM-tree architecture.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#getting-started" class="btn btn-primary" data-link="get-started">Get Started</a>
+                    <a href="https://github.com/example/mirdb" class="btn btn-secondary" target="_blank" rel="noopener" data-link="github-hero">View on GitHub</a>
+                </div>
+                <div class="badges" data-section="badges">
+                    <span data-badge="ci">
+                        <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener">
+                            <img src="https://img.shields.io/circleci/build/github/yetone/mirdb/master?label=CI&logo=circleci" alt="CircleCI Build Status">
+                        </a>
+                    </span>
+                    <span data-badge="version">
+                        <img src="https://img.shields.io/badge/version-0.1.0-blue?logo=rust" alt="Version 0.1.0">
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <p class="section-subtitle">Built for performance, designed for durability</p>
+            <div class="features-grid">
+                <div class="feature-card" id="feature-memcached-protocol" data-feature="memcached-protocol">
+                    <div class="feature-icon">&#128640;</div>
+                    <h3>Memcached Protocol Compatible</h3>
+                    <p>Full compatibility with the memcached text protocol. Use your existing memcached clients without any modifications. Supports SET, GET, DELETE, ADD, REPLACE, APPEND, and PREPEND commands.</p>
+                </div>
+                <div class="feature-card" id="feature-persistent-storage" data-feature="persistent-storage">
+                    <div class="feature-icon">&#128190;</div>
+                    <h3>Persistent Storage with SSTables</h3>
+                    <p>Unlike traditional memcached, MirDB persists your data to disk using SSTables (Sorted String Tables). Your data survives restarts and system failures with automatic recovery.</p>
+                </div>
+                <div class="feature-card" id="feature-lsm-tree" data-feature="lsm-tree">
+                    <div class="feature-icon">&#128200;</div>
+                    <h3>LSM-Tree Architecture</h3>
+                    <p>Built on a Log-Structured Merge-tree architecture for optimal write performance. Data flows through memtable to multi-level SSTables with configurable compaction strategies.</p>
+                </div>
+                <div class="feature-card" id="feature-high-performance" data-feature="high-performance">
+                    <div class="feature-icon">&#9889;</div>
+                    <h3>High Performance with Rust</h3>
+                    <p>Written in Rust for maximum performance and memory safety. Leverages Tokio for async I/O operations, delivering low-latency responses with minimal resource overhead.</p>
+                </div>
+                <div class="feature-card" id="feature-wal" data-feature="wal">
+                    <div class="feature-icon">&#128736;</div>
+                    <h3>Write-Ahead Log (WAL)</h3>
+                    <p>Every write is first logged to a Write-Ahead Log before being applied, ensuring durability and crash recovery. Data is never lost even during unexpected shutdowns.</p>
+                </div>
+                <div class="feature-card" id="feature-compaction" data-feature="compaction">
+                    <div class="feature-icon">&#128295;</div>
+                    <h3>Configurable Compaction</h3>
+                    <p>Fine-tune compaction behavior with configurable triggers and thresholds. Supports both minor compaction (memtable to SSTable) and major compaction (level-to-level SSTable merging).</p>
+                </div>
+                <div class="feature-card" id="feature-skip-list" data-feature="skip-list">
+                    <div class="feature-icon">&#128209;</div>
+                    <h3>Skip List Memtable</h3>
+                    <p>In-memory data is stored in an efficient skip list data structure, providing O(log n) insert and lookup operations. Optimized for high-throughput write workloads.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Commands Section -->
+    <section class="commands" id="commands">
+        <div class="container">
+            <h2>Supported Memcached Commands</h2>
+            <p class="section-description">MirDB supports the following memcached text protocol commands:</p>
+            <div class="commands-grid">
+                <div class="command-card" data-command="SET">
+                    <code class="command-name">SET</code>
+                    <p class="command-description">Store a key-value pair with optional TTL</p>
+                </div>
+                <div class="command-card" data-command="GET">
+                    <code class="command-name">GET</code>
+                    <p class="command-description">Retrieve the value for one or more keys</p>
+                </div>
+                <div class="command-card" data-command="DELETE">
+                    <code class="command-name">DELETE</code>
+                    <p class="command-description">Remove a key from the store</p>
+                </div>
+                <div class="command-card" data-command="ADD">
+                    <code class="command-name">ADD</code>
+                    <p class="command-description">Store only if the key does not exist</p>
+                </div>
+                <div class="command-card" data-command="REPLACE">
+                    <code class="command-name">REPLACE</code>
+                    <p class="command-description">Store only if the key already exists</p>
+                </div>
+                <div class="command-card" data-command="APPEND">
+                    <code class="command-name">APPEND</code>
+                    <p class="command-description">Append data to an existing value</p>
+                </div>
+                <div class="command-card" data-command="PREPEND">
+                    <code class="command-name">PREPEND</code>
+                    <p class="command-description">Prepend data to an existing value</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Example Section -->
+    <section class="code-example" id="code-example">
+        <div class="container">
+            <h2>Usage Example</h2>
+            <p class="section-description">Connect with any memcached client. Here's an example using Python:</p>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Python</span>
+                    <button class="copy-btn" onclick="copyCode()">Copy</button>
+                </div>
+                <pre><code id="example-code" class="language-python">from pymemcache.client import base
+
+# Connect to MirDB
+client = base.Client(('localhost', 12333))
+
+# Store a value
+client.set('mykey', 'Hello, MirDB!')
+
+# Retrieve the value
+result = client.get('mykey')
+print(result)  # b'Hello, MirDB!'
+
+# Delete the key
+client.delete('mykey')</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Demo Section -->
+    <section class="usage-demo" id="usage-demo">
+        <div class="container">
+            <h2>See It In Action</h2>
+            <p class="section-description">Watch MirDB in action with this quick demonstration:</p>
+            <div class="demo-container">
+                <picture>
+                    <source srcset="assets/usage.webp" type="image/webp">
+                    <img src="assets/usage.gif" alt="MirDB Usage Demonstration" class="demo-gif" loading="lazy" data-image="usage">
+                </picture>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture" id="architecture">
+        <div class="container">
+            <h2>Architecture</h2>
+            <p class="section-description">MirDB uses an LSM-tree architecture for efficient persistent storage:</p>
+            <div class="architecture-diagram" role="img" aria-label="MirDB LSM-tree architecture diagram showing data flow from Write-Ahead Log (WAL) to Memtable to SSTables across multiple levels">
+                <div class="arch-flow">
+                    <div class="arch-component" data-component="wal">
+                        <div class="component-box wal">WAL</div>
+                        <span class="component-label">Write-Ahead Log</span>
+                    </div>
+                    <span class="arch-arrow" aria-hidden="true">&#8594;</span>
+                    <div class="arch-component" data-component="memtable">
+                        <div class="component-box memtable">Memtable</div>
+                        <span class="component-label">Skip List</span>
+                    </div>
+                    <span class="arch-arrow" aria-hidden="true">&#8594;</span>
+                    <div class="arch-component" data-component="sstable">
+                        <div class="component-box sstable">SSTables</div>
+                        <span class="component-label">Level 0-6</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section class="getting-started" id="getting-started">
+        <div class="container">
+            <h2>Getting Started</h2>
+
+            <div class="step">
+                <h3>1. Build from Source</h3>
+                <div class="code-block">
+                    <pre><code class="language-bash">git clone https://github.com/example/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Run MirDB</h3>
+                <div class="code-block">
+                    <pre><code class="language-bash">./target/release/mirdb-server</code></pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>3. Connect with Memcached Client</h3>
+                <div class="code-block">
+                    <pre><code class="language-bash"># Default port: 12333
+telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section class="configuration" id="configuration">
+        <div class="container">
+            <h2>Default Configuration</h2>
+            <div class="config-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Listen Address</td>
+                            <td><code>0.0.0.0:12333</code></td>
+                        </tr>
+                        <tr>
+                            <td>Max LSM Levels</td>
+                            <td><code>7</code></td>
+                        </tr>
+                        <tr>
+                            <td>Work Directory</td>
+                            <td><code>/tmp/mirdb</code></td>
+                        </tr>
+                        <tr>
+                            <td>SSTable Max Size</td>
+                            <td><code>100MB</code></td>
+                        </tr>
+                        <tr>
+                            <td>Memtable Max Size</td>
+                            <td><code>4MB</code></td>
+                        </tr>
+                        <tr>
+                            <td>Block Size</td>
+                            <td><code>4KB</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" data-section="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="https://github.com/example/mirdb" target="_blank" rel="noopener" data-link="github-footer">GitHub</a>
+                    <a href="https://github.com/example/mirdb/issues" target="_blank" rel="noopener" data-link="issues">Issues</a>
+                    <a href="#getting-started" data-link="documentation">Documentation</a>
+                </div>
+                <p class="license" data-info="license">MIT License</p>
+                <p class="version" data-info="version">Version 0.1.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" integrity="sha512-AKaNmg8COK0zEbjTdMHJAPJ0z6VeNqvRvH4/d5M4sHJbQQUToMBtodq4HaV4fa+WV2UTfoperElm66c9/8cKmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" integrity="sha512-whYbDirv5BfrPLDGJH7WMUivcXQlJCKk5ESRB0eFrVVOl20+8dVYdJZjKBi/gnSQKpGSHNqxtnT2AN5g4lWlLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        function copyCode() {
+            const codeElement = document.getElementById('example-code');
+            navigator.clipboard.writeText(codeElement.textContent);
+            const btn = document.querySelector('.copy-btn');
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

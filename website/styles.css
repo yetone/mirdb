@@ -1,0 +1,324 @@
+/* CSS Variables for theming */
+:root {
+    --primary-color: #e44d26;
+    --primary-hover: #c73e1d;
+    --secondary-color: #333;
+    --secondary-hover: #555;
+    --bg-color: #0d1117;
+    --bg-secondary: #161b22;
+    --text-color: #c9d1d9;
+    --text-muted: #8b949e;
+    --heading-color: #f0f6fc;
+    --border-color: #30363d;
+    --code-bg: #1f2428;
+    --accent-color: #58a6ff;
+}
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--bg-color) 0%, var(--bg-secondary) 100%);
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero-logo {
+    margin-bottom: 2rem;
+}
+
+.logo {
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.project-name {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.tagline {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.description {
+    font-size: 1.125rem;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* CTA Buttons */
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-secondary);
+    border-color: var(--text-muted);
+    transform: translateY(-2px);
+}
+
+/* Features Section */
+.features {
+    padding: 5rem 2rem;
+    background-color: var(--bg-secondary);
+}
+
+.features h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--heading-color);
+    margin-bottom: 3rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background-color: var(--bg-color);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: border-color 0.2s ease;
+}
+
+.feature-card:hover {
+    border-color: var(--accent-color);
+}
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    color: var(--heading-color);
+    margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* Getting Started Section */
+.getting-started {
+    padding: 5rem 2rem;
+    background-color: var(--bg-color);
+}
+
+.getting-started h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--heading-color);
+    margin-bottom: 3rem;
+}
+
+.getting-started-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.step {
+    margin-bottom: 2rem;
+}
+
+.step h3 {
+    font-size: 1.125rem;
+    color: var(--heading-color);
+    margin-bottom: 0.75rem;
+}
+
+.step pre {
+    background-color: var(--code-bg);
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+}
+
+.step code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.875rem;
+    color: var(--text-color);
+}
+
+/* Usage Demo Section */
+.usage {
+    padding: 5rem 2rem;
+    background-color: var(--bg-secondary);
+}
+
+.usage h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--heading-color);
+    margin-bottom: 3rem;
+}
+
+.usage-demo {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.usage-gif {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+/* Footer */
+.footer {
+    padding: 3rem 2rem;
+    background-color: var(--bg-color);
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--accent-color);
+}
+
+.copyright {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .project-name {
+        font-size: 2.5rem;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+    }
+
+    .description {
+        font-size: 1rem;
+    }
+
+    .features h2,
+    .getting-started h2,
+    .usage h2 {
+        font-size: 2rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* Focus styles for keyboard navigation */
+.btn:focus,
+.footer-links a:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
