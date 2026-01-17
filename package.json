@@ -16,6 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.40.0",
+    "lighthouse": "^13.0.1",
     "serve": "^14.2.5"
   }
 }
