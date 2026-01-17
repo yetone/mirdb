@@ -156,19 +156,19 @@ client.delete('mykey')</code></pre>
         <div class="container">
             <h2>Architecture</h2>
             <p class="section-description">MirDB uses an LSM-tree architecture for efficient persistent storage:</p>
-            <div class="architecture-diagram">
+            <div class="architecture-diagram" role="img" aria-label="MirDB LSM-tree architecture diagram showing data flow from Write-Ahead Log (WAL) to Memtable to SSTables across multiple levels">
                 <div class="arch-flow">
-                    <div class="arch-component">
+                    <div class="arch-component" data-component="wal">
                         <div class="component-box wal">WAL</div>
                         <span class="component-label">Write-Ahead Log</span>
                     </div>
-                    <span class="arch-arrow">&#8594;</span>
-                    <div class="arch-component">
+                    <span class="arch-arrow" aria-hidden="true">&#8594;</span>
+                    <div class="arch-component" data-component="memtable">
                         <div class="component-box memtable">Memtable</div>
                         <span class="component-label">Skip List</span>
                     </div>
-                    <span class="arch-arrow">&#8594;</span>
-                    <div class="arch-component">
+                    <span class="arch-arrow" aria-hidden="true">&#8594;</span>
+                    <div class="arch-component" data-component="sstable">
                         <div class="component-box sstable">SSTables</div>
                         <span class="component-label">Level 0-6</span>
                     </div>
