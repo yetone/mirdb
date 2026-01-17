@@ -7,6 +7,8 @@
     <meta name="keywords" content="MirDB, key-value store, memcached, Rust, LSM-tree, database, persistent storage">
     <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <!-- Hero Section -->
@@ -121,7 +123,7 @@
                     <span class="code-language">Python</span>
                     <button class="copy-btn" onclick="copyCode()">Copy</button>
                 </div>
-                <pre><code id="example-code">from pymemcache.client import base
+                <pre><code id="example-code" class="language-python">from pymemcache.client import base
 
 # Connect to MirDB
 client = base.Client(('localhost', 12333))
@@ -173,7 +175,7 @@ client.delete('mykey')</code></pre>
             <div class="step">
                 <h3>1. Build from Source</h3>
                 <div class="code-block">
-                    <pre><code>git clone https://github.com/example/mirdb.git
+                    <pre><code class="language-bash">git clone https://github.com/example/mirdb.git
 cd mirdb
 cargo build --release</code></pre>
                 </div>
@@ -182,14 +184,14 @@ cargo build --release</code></pre>
             <div class="step">
                 <h3>2. Run MirDB</h3>
                 <div class="code-block">
-                    <pre><code>./target/release/mirdb-server</code></pre>
+                    <pre><code class="language-bash">./target/release/mirdb-server</code></pre>
                 </div>
             </div>
 
             <div class="step">
                 <h3>3. Connect with Memcached Client</h3>
                 <div class="code-block">
-                    <pre><code># Default port: 12333
+                    <pre><code class="language-bash"># Default port: 12333
 telnet localhost 12333
 set mykey 0 0 5
 hello
@@ -261,6 +263,10 @@ END</code></pre>
         </div>
     </footer>
 
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" integrity="sha512-AKaNmg8COK0zEbjTdMHJAPJ0z6VeNqvRvH4/d5M4sHJbQQUToMBtodq4HaV4fa+WV2UTfoperElm66c9/8cKmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" integrity="sha512-whYbDirv5BfrPLDGJH7WMUivcXQlJCKk5ESRB0eFrVVOl20+8dVYdJZjKBi/gnSQKpGSHNqxtnT2AN5g4lWlLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function copyCode() {
             const codeElement = document.getElementById('example-code');
