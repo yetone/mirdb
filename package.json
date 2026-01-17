@@ -1,0 +1,17 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB - Persistent Key-Value Store with Memcached Protocol",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "serve": "npx serve site -p 3000"
+  },
+  "keywords": ["mirdb", "memcached", "key-value-store"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.2.0"
+  }
+}

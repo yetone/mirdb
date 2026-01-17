@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility, written in Rust.">
+    <meta name="keywords" content="MirDB, key-value store, memcached, Rust, LSM-tree, database, persistent storage">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <img src="../assets/logo.gif" alt="MirDB Logo" class="logo">
+                <h1>MirDB</h1>
+                <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
+                <p class="description">
+                    A high-performance, persistent key-value store written in Rust.
+                    MirDB combines memcached protocol compatibility with durable storage using LSM-tree architecture.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                    <a href="https://github.com/example/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128640;</div>
+                    <h3>Memcached Protocol Compatible</h3>
+                    <p>Use your existing memcached clients seamlessly. MirDB speaks the same language.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128190;</div>
+                    <h3>Persistent Storage</h3>
+                    <p>Data survives restarts with SSTable-based persistence and Write-Ahead Logging.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128200;</div>
+                    <h3>LSM-Tree Architecture</h3>
+                    <p>Optimized for write-heavy workloads with Log-Structured Merge-tree design.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#9889;</div>
+                    <h3>High Performance</h3>
+                    <p>Written in Rust for memory safety and blazing-fast performance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128736;</div>
+                    <h3>WAL Durability</h3>
+                    <p>Write-Ahead Log ensures crash recovery and data integrity.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128295;</div>
+                    <h3>Configurable Compaction</h3>
+                    <p>Multi-level SSTable compaction keeps storage efficient and queries fast.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Commands Section -->
+    <section class="commands" id="commands">
+        <div class="container">
+            <h2>Supported Memcached Commands</h2>
+            <p class="section-description">MirDB supports the following memcached text protocol commands:</p>
+            <div class="commands-grid">
+                <div class="command-card" data-command="SET">
+                    <code class="command-name">SET</code>
+                    <p class="command-description">Store a key-value pair with optional TTL</p>
+                </div>
+                <div class="command-card" data-command="GET">
+                    <code class="command-name">GET</code>
+                    <p class="command-description">Retrieve the value for one or more keys</p>
+                </div>
+                <div class="command-card" data-command="DELETE">
+                    <code class="command-name">DELETE</code>
+                    <p class="command-description">Remove a key from the store</p>
+                </div>
+                <div class="command-card" data-command="ADD">
+                    <code class="command-name">ADD</code>
+                    <p class="command-description">Store only if the key does not exist</p>
+                </div>
+                <div class="command-card" data-command="REPLACE">
+                    <code class="command-name">REPLACE</code>
+                    <p class="command-description">Store only if the key already exists</p>
+                </div>
+                <div class="command-card" data-command="APPEND">
+                    <code class="command-name">APPEND</code>
+                    <p class="command-description">Append data to an existing value</p>
+                </div>
+                <div class="command-card" data-command="PREPEND">
+                    <code class="command-name">PREPEND</code>
+                    <p class="command-description">Prepend data to an existing value</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Example Section -->
+    <section class="code-example" id="code-example">
+        <div class="container">
+            <h2>Usage Example</h2>
+            <p class="section-description">Connect with any memcached client. Here's an example using Python:</p>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Python</span>
+                    <button class="copy-btn" onclick="copyCode()">Copy</button>
+                </div>
+                <pre><code id="example-code">from pymemcache.client import base
+
+# Connect to MirDB
+client = base.Client(('localhost', 12333))
+
+# Store a value
+client.set('mykey', 'Hello, MirDB!')
+
+# Retrieve the value
+result = client.get('mykey')
+print(result)  # b'Hello, MirDB!'
+
+# Delete the key
+client.delete('mykey')</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture" id="architecture">
+        <div class="container">
+            <h2>Architecture</h2>
+            <p class="section-description">MirDB uses an LSM-tree architecture for efficient persistent storage:</p>
+            <div class="architecture-diagram">
+                <div class="arch-flow">
+                    <div class="arch-component">
+                        <div class="component-box wal">WAL</div>
+                        <span class="component-label">Write-Ahead Log</span>
+                    </div>
+                    <span class="arch-arrow">&#8594;</span>
+                    <div class="arch-component">
+                        <div class="component-box memtable">Memtable</div>
+                        <span class="component-label">Skip List</span>
+                    </div>
+                    <span class="arch-arrow">&#8594;</span>
+                    <div class="arch-component">
+                        <div class="component-box sstable">SSTables</div>
+                        <span class="component-label">Level 0-6</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section class="getting-started" id="getting-started">
+        <div class="container">
+            <h2>Getting Started</h2>
+
+            <div class="step">
+                <h3>1. Build from Source</h3>
+                <div class="code-block">
+                    <pre><code>git clone https://github.com/example/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Run MirDB</h3>
+                <div class="code-block">
+                    <pre><code>./target/release/mirdb-server</code></pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>3. Connect with Memcached Client</h3>
+                <div class="code-block">
+                    <pre><code># Default port: 12333
+telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section class="configuration" id="configuration">
+        <div class="container">
+            <h2>Default Configuration</h2>
+            <div class="config-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Listen Address</td>
+                            <td><code>0.0.0.0:12333</code></td>
+                        </tr>
+                        <tr>
+                            <td>Max LSM Levels</td>
+                            <td><code>7</code></td>
+                        </tr>
+                        <tr>
+                            <td>Work Directory</td>
+                            <td><code>/tmp/mirdb</code></td>
+                        </tr>
+                        <tr>
+                            <td>SSTable Max Size</td>
+                            <td><code>100MB</code></td>
+                        </tr>
+                        <tr>
+                            <td>Memtable Max Size</td>
+                            <td><code>4MB</code></td>
+                        </tr>
+                        <tr>
+                            <td>Block Size</td>
+                            <td><code>4KB</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="https://github.com/example/mirdb" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://github.com/example/mirdb/issues" target="_blank" rel="noopener">Issues</a>
+                    <a href="#getting-started">Documentation</a>
+                </div>
+                <p class="license">MIT License</p>
+                <p class="version">Version 0.1.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyCode() {
+            const codeElement = document.getElementById('example-code');
+            navigator.clipboard.writeText(codeElement.textContent);
+            const btn = document.querySelector('.copy-btn');
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
