@@ -13,7 +13,10 @@
     <section id="hero" class="hero">
         <div class="hero-content">
             <div class="hero-logo">
-                <img src="../assets/logo.gif" alt="MirDB Logo" id="logo" class="logo">
+                <picture>
+                    <source srcset="../assets/logo.webp" type="image/webp">
+                    <img src="../assets/logo.gif" alt="MirDB Logo" id="logo" class="logo" data-image="logo">
+                </picture>
             </div>
             <h1 id="project-name" class="project-name">MirDB</h1>
             <p id="tagline" class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
@@ -98,7 +101,10 @@ END</code></pre>
     <section id="usage" class="usage">
         <h2>See It In Action</h2>
         <div class="usage-demo">
-            <img src="../assets/usage.gif" alt="MirDB Usage Demo" class="usage-gif">
+            <picture>
+                <source srcset="../assets/usage.webp" type="image/webp">
+                <img src="../assets/usage.gif" alt="MirDB Usage Demo" class="usage-gif" loading="lazy" data-image="usage">
+            </picture>
         </div>
     </section>
 

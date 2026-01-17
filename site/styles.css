@@ -309,6 +309,20 @@ section:nth-child(even) {
     line-height: 1.5;
 }
 
+/* Usage Demo Section */
+.usage-demo .demo-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.usage-demo .demo-gif {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
 /* Architecture Diagram */
 .architecture-diagram {
     margin-top: 40px;

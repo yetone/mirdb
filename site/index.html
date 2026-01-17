@@ -65,7 +65,10 @@
     <header class="hero">
         <div class="container">
             <div class="hero-content">
-                <img src="assets/logo.gif" alt="MirDB Logo" class="logo">
+                <picture>
+                    <source srcset="assets/logo.webp" type="image/webp">
+                    <img src="assets/logo.gif" alt="MirDB Logo" class="logo" data-image="logo">
+                </picture>
                 <h1>MirDB</h1>
                 <p class="tagline">Persistent Key-Value Store with Memcached Protocol</p>
                 <p class="description">
@@ -198,6 +201,20 @@ print(result)  # b'Hello, MirDB!'
 
 # Delete the key
 client.delete('mykey')</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Demo Section -->
+    <section class="usage-demo" id="usage-demo">
+        <div class="container">
+            <h2>See It In Action</h2>
+            <p class="section-description">Watch MirDB in action with this quick demonstration:</p>
+            <div class="demo-container">
+                <picture>
+                    <source srcset="assets/usage.webp" type="image/webp">
+                    <img src="assets/usage.gif" alt="MirDB Usage Demonstration" class="demo-gif" loading="lazy" data-image="usage">
+                </picture>
             </div>
         </div>
     </section>
