@@ -17,8 +17,10 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.40.0",
+    "@types/node": "^25.0.9",
     "lighthouse": "^13.0.1",
-    "serve": "^14.2.5"
+    "serve": "^14.2.5",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "chrome-launcher": "^1.2.1"
