@@ -1,10 +1,10 @@
 /* CSS Variables for theming */
 :root {
-    --primary-color: #e44d26;
-    --primary-hover: #c93d1a;
+    --primary-color: #c03a1e;
+    --primary-hover: #a03018;
     --secondary-color: #2a2a2a;
     --text-color: #333;
-    --text-light: #666;
+    --text-light: #595959;
     --bg-color: #ffffff;
     --bg-secondary: #f5f5f5;
     --bg-tertiary: #e8e8e8;
@@ -14,22 +14,24 @@
     --success-color: #4caf50;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --focus-color: #005fcc;
 }
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
     :root {
-        --primary-color: #ff6b47;
-        --primary-hover: #ff8a6b;
+        --primary-color: #ff7a5a;
+        --primary-hover: #ff9a7a;
         --secondary-color: #f0f0f0;
         --text-color: #e0e0e0;
-        --text-light: #a0a0a0;
+        --text-light: #b0b0b0;
         --bg-color: #1a1a1a;
         --bg-secondary: #252525;
         --bg-tertiary: #333;
         --border-color: #444;
         --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.4);
+        --focus-color: #66b3ff;
     }
 }
 
@@ -141,7 +143,8 @@ h3 {
 
 .btn-primary {
     background-color: var(--primary-color);
-    color: white;
+    color: #ffffff;
+    font-weight: 600;
 }
 
 .btn-primary:hover {
@@ -478,7 +481,17 @@ section:nth-child(even) {
 
 /* Focus states for keyboard navigation */
 a:focus,
-button:focus {
-    outline: 2px solid var(--primary-color);
+button:focus,
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--focus-color);
     outline-offset: 2px;
+}
+
+/* Ensure badge links have visible focus */
+.badges a:focus,
+.badges a:focus-visible {
+    outline: 3px solid var(--focus-color);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
