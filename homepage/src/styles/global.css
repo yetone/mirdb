@@ -38,7 +38,8 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: #7c7c7c;
+  /* Updated from #7c7c7c to #9ca3af for WCAG 2.1 AA contrast compliance (7:1 ratio on #1d1f21) */
+  color: #9ca3af;
 }
 
 .token.punctuation {
