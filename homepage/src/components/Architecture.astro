@@ -1,0 +1,209 @@
+---
+// Architecture section with LSM Tree diagram
+---
+
+<section id="architecture" class="py-16 bg-gray-50 dark:bg-gray-900" data-testid="architecture-section">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl">Architecture</h2>
+      <p class="mt-4 text-xl text-gray-500 dark:text-gray-400">
+        Understanding MirDB's LSM Tree-based storage model
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- LSM Tree Diagram -->
+      <div class="flex justify-center" data-testid="architecture-diagram-container">
+        <svg
+          data-testid="lsm-tree-diagram"
+          class="w-full max-w-lg h-auto diagram-svg"
+          viewBox="0 0 400 450"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-label="LSM Tree Architecture Diagram showing data flow from Write Operations through Memtable, WAL, SSTables at multiple levels, and Compaction process"
+        >
+          <title>LSM Tree Architecture Diagram</title>
+          <desc>Data flow visualization: Write operations enter the Memtable (in-memory), which flushes to Level 0 SSTables on disk. A Write-Ahead Log ensures durability. SSTables are organized in levels (L0, L1, L2) and undergo compaction to merge and optimize storage. Read operations check Memtable first, then SSTables.</desc>
+
+          <!-- Background - adapts to light/dark -->
+          <rect class="diagram-bg" width="400" height="450" rx="8"/>
+
+          <!-- Write Operations Input -->
+          <g data-testid="diagram-write-ops">
+            <rect x="140" y="15" width="120" height="35" rx="6" fill="#3b82f6"/>
+            <text x="200" y="38" text-anchor="middle" fill="white" font-size="12" font-weight="600">Write Operations</text>
+          </g>
+
+          <!-- Arrow from Write to Memtable -->
+          <path d="M200 50 L200 70" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+          <!-- Memtable (in-memory) -->
+          <g data-testid="diagram-memtable">
+            <rect x="100" y="75" width="200" height="50" rx="6" fill="#059669" stroke="#10b981" stroke-width="2"/>
+            <text x="200" y="100" text-anchor="middle" fill="white" font-size="14" font-weight="600">Memtable</text>
+            <text x="200" y="118" text-anchor="middle" fill="#a7f3d0" font-size="10">(In-Memory)</text>
+          </g>
+
+          <!-- WAL (Write-Ahead Log) -->
+          <g data-testid="diagram-wal">
+            <rect x="320" y="75" width="70" height="50" rx="6" fill="#7c3aed" stroke="#a78bfa" stroke-width="2"/>
+            <text x="355" y="100" text-anchor="middle" fill="white" font-size="11" font-weight="600">WAL</text>
+            <text x="355" y="115" text-anchor="middle" fill="#c4b5fd" font-size="8">Durability</text>
+          </g>
+
+          <!-- Arrow from Memtable to WAL -->
+          <path d="M300 100 L315 100" stroke="#a78bfa" stroke-width="2" stroke-dasharray="4"/>
+
+          <!-- Flush Arrow -->
+          <path d="M200 125 L200 155" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text class="diagram-label" x="230" y="145" font-size="10">Flush</text>
+
+          <!-- Level 0 SSTables -->
+          <g data-testid="diagram-sstable-l0">
+            <rect class="diagram-level-bg" x="50" y="160" width="300" height="55" rx="6" stroke-width="2"/>
+            <text class="diagram-label" x="80" y="180" font-size="10" font-weight="600">L0</text>
+            <rect x="100" y="170" width="55" height="35" rx="4" fill="#f59e0b"/>
+            <text x="127" y="192" text-anchor="middle" fill="white" font-size="10">SSTable</text>
+            <rect x="165" y="170" width="55" height="35" rx="4" fill="#f59e0b"/>
+            <text x="192" y="192" text-anchor="middle" fill="white" font-size="10">SSTable</text>
+            <rect x="230" y="170" width="55" height="35" rx="4" fill="#f59e0b"/>
+            <text x="257" y="192" text-anchor="middle" fill="white" font-size="10">SSTable</text>
+            <rect x="295" y="170" width="45" height="35" rx="4" fill="#f59e0b" opacity="0.5"/>
+            <text x="317" y="192" text-anchor="middle" fill="white" font-size="10">...</text>
+          </g>
+
+          <!-- Compaction Arrow L0 to L1 -->
+          <path d="M200 215 L200 245" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+          <text x="240" y="235" fill="#ef4444" font-size="10">Compaction</text>
+
+          <!-- Level 1 SSTables -->
+          <g data-testid="diagram-sstable-l1">
+            <rect class="diagram-level-bg" x="50" y="250" width="300" height="55" rx="6" stroke-width="2"/>
+            <text class="diagram-label" x="80" y="270" font-size="10" font-weight="600">L1</text>
+            <rect x="100" y="260" width="70" height="35" rx="4" fill="#f97316"/>
+            <text x="135" y="282" text-anchor="middle" fill="white" font-size="10">SSTable</text>
+            <rect x="180" y="260" width="70" height="35" rx="4" fill="#f97316"/>
+            <text x="215" y="282" text-anchor="middle" fill="white" font-size="10">SSTable</text>
+            <rect x="260" y="260" width="70" height="35" rx="4" fill="#f97316"/>
+            <text x="295" y="282" text-anchor="middle" fill="white" font-size="10">SSTable</text>
+          </g>
+
+          <!-- Compaction Arrow L1 to L2 -->
+          <path d="M200 305 L200 335" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+          <text x="240" y="325" fill="#ef4444" font-size="10">Compaction</text>
+
+          <!-- Level 2 SSTables -->
+          <g data-testid="diagram-sstable-l2">
+            <rect class="diagram-level-bg" x="50" y="340" width="300" height="55" rx="6" stroke-width="2"/>
+            <text class="diagram-label" x="80" y="360" font-size="10" font-weight="600">L2</text>
+            <rect x="100" y="350" width="90" height="35" rx="4" fill="#ea580c"/>
+            <text x="145" y="372" text-anchor="middle" fill="white" font-size="10">SSTable</text>
+            <rect x="200" y="350" width="90" height="35" rx="4" fill="#ea580c"/>
+            <text x="245" y="372" text-anchor="middle" fill="white" font-size="10">SSTable</text>
+            <rect x="300" y="358" width="30" height="20" rx="3" fill="#ea580c" opacity="0.5"/>
+            <text x="315" y="372" text-anchor="middle" fill="white" font-size="10">...</text>
+          </g>
+
+          <!-- Read Operations -->
+          <g data-testid="diagram-read-ops">
+            <rect x="10" y="160" width="30" height="150" rx="4" fill="#3b82f6" opacity="0.8"/>
+            <text x="25" y="240" text-anchor="middle" fill="white" font-size="9" transform="rotate(-90, 25, 240)">Read Path</text>
+          </g>
+
+          <!-- Legend -->
+          <g transform="translate(50, 410)">
+            <rect x="0" y="0" width="12" height="12" rx="2" fill="#059669"/>
+            <text class="diagram-label" x="18" y="10" font-size="9">Memory</text>
+            <rect x="70" y="0" width="12" height="12" rx="2" fill="#f59e0b"/>
+            <text class="diagram-label" x="88" y="10" font-size="9">Disk (SSTable)</text>
+            <rect x="170" y="0" width="12" height="12" rx="2" fill="#ef4444"/>
+            <text class="diagram-label" x="188" y="10" font-size="9">Compaction</text>
+            <rect x="260" y="0" width="12" height="12" rx="2" fill="#7c3aed"/>
+            <text class="diagram-label" x="278" y="10" font-size="9">WAL</text>
+          </g>
+
+          <!-- Arrow markers -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/>
+            </marker>
+            <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- Explanation Text -->
+      <div class="space-y-6" data-testid="architecture-explanation">
+        <div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">LSM Tree Storage Model</h3>
+          <p class="text-gray-500 dark:text-gray-400 leading-relaxed" data-testid="architecture-description">
+            MirDB uses a Log-Structured Merge Tree (LSM Tree) architecture optimized for
+            high-throughput write operations. This design provides excellent write performance
+            by converting random writes into sequential I/O patterns.
+          </p>
+        </div>
+
+        <div data-testid="data-flow-explanation">
+          <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Data Flow</h4>
+          <ul class="text-gray-500 dark:text-gray-400 space-y-2 list-disc list-inside">
+            <li data-testid="memtable-explanation">
+              <span class="text-green-600 dark:text-green-400 font-medium">Memtable:</span> Incoming writes are first stored in an in-memory sorted structure
+            </li>
+            <li data-testid="sstable-explanation">
+              <span class="text-amber-600 dark:text-amber-400 font-medium">SSTables:</span> When the memtable is full, it's flushed to disk as an immutable Sorted String Table
+            </li>
+            <li data-testid="compaction-explanation">
+              <span class="text-red-600 dark:text-red-400 font-medium">Compaction:</span> Background process merges SSTables across levels, removing duplicates and deleted keys
+            </li>
+          </ul>
+        </div>
+
+        <div data-testid="performance-characteristics">
+          <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Performance Characteristics</h4>
+          <ul class="text-gray-500 dark:text-gray-400 space-y-2 list-disc list-inside">
+            <li>
+              <span class="font-medium text-gray-800 dark:text-gray-200">Fast Writes:</span> Sequential disk I/O maximizes write throughput
+            </li>
+            <li>
+              <span class="font-medium text-gray-800 dark:text-gray-200">Efficient Reads:</span> Bloom filters and index blocks minimize disk reads
+            </li>
+            <li>
+              <span class="font-medium text-gray-800 dark:text-gray-200">Space Efficiency:</span> Compaction reclaims space from deleted and overwritten keys
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Light mode diagram styles */
+  .diagram-bg {
+    fill: #f3f4f6;
+  }
+  .diagram-label {
+    fill: #6b7280;
+  }
+  .diagram-level-bg {
+    fill: #e5e7eb;
+    stroke: #d1d5db;
+  }
+
+  /* Dark mode diagram styles */
+  @media (prefers-color-scheme: dark) {
+    .diagram-bg {
+      fill: #1f2937;
+    }
+    .diagram-label {
+      fill: #9ca3af;
+    }
+    .diagram-level-bg {
+      fill: #374151;
+      stroke: #4b5563;
+    }
+  }
+</style>

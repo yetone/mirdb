@@ -1,0 +1,35 @@
+{
+  "name": "homepage",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "MirDB Product Homepage",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
+  },
+  "keywords": [
+    "mirdb",
+    "key-value",
+    "database"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.16.11",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@iarna/toml": "^2.2.5",
+    "@playwright/test": "^1.57.0",
+    "lighthouse": "^13.0.1",
+    "playwright": "^1.57.0",
+    "sharp": "^0.34.5"
+  }
+}

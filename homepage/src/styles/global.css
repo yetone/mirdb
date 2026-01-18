@@ -1,0 +1,350 @@
+@import "tailwindcss";
+
+/* ===== Light Mode Prism Theme (Default) ===== */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #1f2937;
+  text-shadow: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1.5;
+  tab-size: 4;
+  hyphens: none;
+}
+
+pre[class*="language-"] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+  border-radius: 0.5em;
+  max-width: 100%;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #f3f4f6;
+}
+
+:not(pre) > code[class*="language-"] {
+  padding: 0.1em;
+  border-radius: 0.3em;
+}
+
+/* Light mode token colors */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6b7280;
+}
+
+.token.punctuation {
+  color: #4b5563;
+}
+
+.token.property,
+.token.keyword,
+.token.tag {
+  color: #7c3aed;
+}
+
+.token.class-name {
+  color: #b45309;
+  text-decoration: underline;
+}
+
+.token.boolean,
+.token.constant {
+  color: #059669;
+}
+
+.token.symbol,
+.token.deleted {
+  color: #dc2626;
+}
+
+.token.number {
+  color: #9333ea;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #16a34a;
+}
+
+.token.variable {
+  color: #7c3aed;
+}
+
+.token.operator {
+  color: #4b5563;
+}
+
+.token.entity {
+  color: #b45309;
+  cursor: help;
+}
+
+.token.url {
+  color: #0369a1;
+}
+
+.language-css .token.string,
+.style .token.string {
+  color: #16a34a;
+}
+
+.token.atrule,
+.token.attr-value {
+  color: #ca8a04;
+}
+
+.token.function {
+  color: #0369a1;
+}
+
+.token.regex {
+  color: #ea580c;
+}
+
+.token.important {
+  color: #dc2626;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+/* TOML specific highlighting - Light mode */
+.language-toml .token.key {
+  color: #7c3aed;
+}
+
+.language-toml .token.table {
+  color: #b45309;
+}
+
+.language-toml .token.table .token.punctuation {
+  color: #b45309;
+}
+
+/* Shell specific highlighting - Light mode */
+.language-bash .token.function,
+.language-shell .token.function {
+  color: #0369a1;
+}
+
+.language-bash .token.parameter,
+.language-shell .token.parameter {
+  color: #7c3aed;
+}
+
+/* Rust specific highlighting - Light mode */
+.language-rust .token.macro {
+  color: #0369a1;
+}
+
+.language-rust .token.lifetime-annotation {
+  color: #ca8a04;
+}
+
+/* ===== Dark Mode Prism Theme ===== */
+@media (prefers-color-scheme: dark) {
+  code[class*="language-"],
+  pre[class*="language-"] {
+    color: #c5c8c6;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+  }
+
+  :not(pre) > code[class*="language-"],
+  pre[class*="language-"] {
+    background: #1d1f21;
+  }
+
+  /* Dark mode token colors */
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    /* WCAG 2.1 AA contrast compliance (7:1 ratio on #1d1f21) */
+    color: #9ca3af;
+  }
+
+  .token.punctuation {
+    color: #c5c8c6;
+  }
+
+  .token.property,
+  .token.keyword,
+  .token.tag {
+    color: #96cbfe;
+  }
+
+  .token.class-name {
+    color: #ffffb6;
+    text-decoration: underline;
+  }
+
+  .token.boolean,
+  .token.constant {
+    color: #99cc99;
+  }
+
+  .token.symbol,
+  .token.deleted {
+    color: #f92672;
+  }
+
+  .token.number {
+    color: #ff73fd;
+  }
+
+  .token.selector,
+  .token.attr-name,
+  .token.string,
+  .token.char,
+  .token.builtin,
+  .token.inserted {
+    color: #a8ff60;
+  }
+
+  .token.variable {
+    color: #c6c5fe;
+  }
+
+  .token.operator {
+    color: #ededed;
+  }
+
+  .token.entity {
+    color: #ffffb6;
+    cursor: help;
+  }
+
+  .token.url {
+    color: #96cbfe;
+  }
+
+  .language-css .token.string,
+  .style .token.string {
+    color: #87c38a;
+  }
+
+  .token.atrule,
+  .token.attr-value {
+    color: #f9ee98;
+  }
+
+  .token.function {
+    color: #dad085;
+  }
+
+  .token.regex {
+    color: #e9c062;
+  }
+
+  .token.important {
+    color: #fd971f;
+  }
+
+  /* TOML specific highlighting - Dark mode */
+  .language-toml .token.key {
+    color: #96cbfe;
+  }
+
+  .language-toml .token.table {
+    color: #ffffb6;
+  }
+
+  .language-toml .token.table .token.punctuation {
+    color: #ffffb6;
+  }
+
+  /* Shell specific highlighting - Dark mode */
+  .language-bash .token.function,
+  .language-shell .token.function {
+    color: #dad085;
+  }
+
+  .language-bash .token.parameter,
+  .language-shell .token.parameter {
+    color: #c6c5fe;
+  }
+
+  /* Rust specific highlighting - Dark mode */
+  .language-rust .token.macro {
+    color: #dad085;
+  }
+
+  .language-rust .token.lifetime-annotation {
+    color: #f9ee98;
+  }
+}
+
+/* Code block container */
+.code-block-container {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.code-block-container:hover .copy-button {
+  opacity: 1;
+}
+
+/* Light mode copy button */
+.copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: #e5e7eb;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  color: #374151;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.copy-button:hover {
+  background: #d1d5db;
+}
+
+.copy-button.copied {
+  background: #059669;
+  border-color: #059669;
+  color: white;
+}
+
+/* Dark mode copy button */
+@media (prefers-color-scheme: dark) {
+  .copy-button {
+    background: #374151;
+    border: 1px solid #4b5563;
+    color: #d1d5db;
+  }
+
+  .copy-button:hover {
+    background: #4b5563;
+  }
+
+  .copy-button.copied {
+    background: #059669;
+    border-color: #059669;
+  }
+}

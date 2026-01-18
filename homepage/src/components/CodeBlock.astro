@@ -1,0 +1,63 @@
+---
+import Prism from 'prismjs';
+import 'prismjs/components/prism-bash';
+import 'prismjs/components/prism-toml';
+import 'prismjs/components/prism-rust';
+
+interface Props {
+  code: string;
+  language: 'bash' | 'toml' | 'rust' | 'shell';
+  title?: string;
+}
+
+const { code, language, title } = Astro.props;
+
+// Map shell to bash for Prism
+const prismLanguage = language === 'shell' ? 'bash' : language;
+const highlightedCode = Prism.highlight(code.trim(), Prism.languages[prismLanguage], prismLanguage);
+---
+
+<div class="code-block-container" data-testid={`code-block-${language}`}>
+  {title && (
+    <div class="bg-gray-200 dark:bg-gray-800 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-300 dark:border-gray-700 rounded-t-lg">
+      {title}
+    </div>
+  )}
+  <div class="relative">
+    <pre class={`language-${prismLanguage} ${title ? 'rounded-t-none' : ''}`}><code class={`language-${prismLanguage}`} set:html={highlightedCode} /></pre>
+    <button
+      class="copy-button"
+      data-code={code.trim()}
+      data-testid="copy-button"
+      aria-label="Copy code to clipboard"
+    >
+      Copy
+    </button>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.copy-button').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const btn = e.currentTarget as HTMLButtonElement;
+      const code = btn.dataset.code || '';
+
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+        btn.textContent = 'Error';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 2000);
+      }
+    });
+  });
+</script>
