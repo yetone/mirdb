@@ -56,7 +56,7 @@ get mykey`;
       <div class="step" data-testid="installation-step-1">
         <div class="flex items-start gap-4">
           <span class="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white" data-testid="step-number">1</span>
-          <div class="flex-grow">
+          <div class="flex-grow min-w-0">
             <h3 class="text-xl font-semibold mb-3">Install MirDB</h3>
             <p class="text-gray-300 mb-4">Install MirDB using Cargo, the Rust package manager:</p>
             <CodeBlock code={installCommand} language="shell" />
@@ -68,7 +68,7 @@ get mykey`;
       <div class="step" data-testid="installation-step-2">
         <div class="flex items-start gap-4">
           <span class="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white" data-testid="step-number">2</span>
-          <div class="flex-grow">
+          <div class="flex-grow min-w-0">
             <h3 class="text-xl font-semibold mb-3">Configure the Server</h3>
             <p class="text-gray-300 mb-4">Create a configuration file at <code class="bg-gray-700 px-2 py-1 rounded">/etc/mirdb.toml</code>:</p>
             <CodeBlock code={configToml} language="toml" title="mirdb.toml" />
@@ -80,7 +80,7 @@ get mykey`;
       <div class="step" data-testid="installation-step-3">
         <div class="flex items-start gap-4">
           <span class="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white" data-testid="step-number">3</span>
-          <div class="flex-grow">
+          <div class="flex-grow min-w-0">
             <h3 class="text-xl font-semibold mb-3">Start the Server</h3>
             <p class="text-gray-300 mb-4">Run MirDB and connect using the memcached protocol:</p>
             <CodeBlock code={shellUsage} language="bash" title="Terminal" />
@@ -92,7 +92,7 @@ get mykey`;
       <div class="step" data-testid="installation-step-4">
         <div class="flex items-start gap-4">
           <span class="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white" data-testid="step-number">4</span>
-          <div class="flex-grow">
+          <div class="flex-grow min-w-0">
             <h3 class="text-xl font-semibold mb-3">Integrate with Rust</h3>
             <p class="text-gray-300 mb-4">Connect to MirDB from your Rust application using the memcached protocol:</p>
             <CodeBlock code={rustExample} language="rust" title="main.rs" />
