@@ -1,62 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
+import QuickStart from '../components/QuickStart.astro';
+import '../styles/global.css';
 ---
 
-<Layout title="MirDB - Persistent Key-Value Store">
+<Layout title="MirDB - Persistent Key-Value Store with Memcached Compatibility">
   <main>
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-b from-blue-600 to-blue-800 text-white py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <img src="/logo.gif" alt="MirDB Logo" class="w-24 h-24 mx-auto mb-6" />
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">MirDB</h1>
-        <p class="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
-          Persistent Key-Value Store with Memcached Protocol Compatibility
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="#quick-start"
-            class="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors"
-          >
-            Get Started
-          </a>
-          <a
-            href="https://github.com/pister/mirdb"
-            class="inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors"
-          >
-            View on GitHub
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Features Section -->
+    <Hero />
     <Features />
-
-    <!-- Quick Start Section -->
-    <section id="quick-start" class="py-16 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Quick Start</h2>
-        <div class="max-w-3xl mx-auto">
-          <div class="bg-gray-900 rounded-lg p-6 text-gray-100">
-            <pre class="overflow-x-auto"><code># Clone and build
-git clone https://github.com/pister/mirdb.git
-cd mirdb
-cargo build --release
-
-# Run the server
-./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
-          </div>
-        </div>
-      </div>
-    </section>
+    <QuickStart />
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-8">
+    <footer class="bg-gray-950 text-gray-400 py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <p>MirDB is released under the MIT License</p>
         <p class="mt-2">
-          <a href="https://github.com/pister/mirdb" class="text-blue-400 hover:text-blue-300">
+          <a href="https://github.com/pjtatlow/mirdb" class="text-blue-400 hover:text-blue-300">
             View on GitHub
           </a>
         </p>
