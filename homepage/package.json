@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
+    "@iarna/toml": "^2.2.5",
     "@playwright/test": "^1.57.0",
     "lighthouse": "^13.0.1",
     "playwright": "^1.57.0",
