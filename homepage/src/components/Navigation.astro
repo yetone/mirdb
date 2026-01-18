@@ -10,7 +10,7 @@ const navItems = [
 const githubUrl = 'https://github.com/pjtatlow/mirdb';
 ---
 
-<nav class="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800" data-testid="navigation">
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800" data-testid="navigation">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
@@ -19,7 +19,7 @@ const githubUrl = 'https://github.com/pjtatlow/mirdb';
           <source srcset="/logo.webp" type="image/webp" />
           <img src="/logo.png" alt="MirDB Logo" class="w-8 h-8" />
         </picture>
-        <span class="text-xl font-bold text-white">MirDB</span>
+        <span class="text-xl font-bold text-gray-900 dark:text-white">MirDB</span>
       </a>
 
       <!-- Desktop Navigation -->
@@ -27,7 +27,7 @@ const githubUrl = 'https://github.com/pjtatlow/mirdb';
         {navItems.map((item) => (
           <a
             href={item.href}
-            class="text-gray-300 hover:text-white transition-colors"
+            class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
             data-testid={`nav-${item.id}`}
           >
             {item.label}
@@ -37,7 +37,7 @@ const githubUrl = 'https://github.com/pjtatlow/mirdb';
           href={githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-gray-300 hover:text-white transition-colors flex items-center gap-1"
+          class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1"
           data-testid="nav-github"
         >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -50,7 +50,7 @@ const githubUrl = 'https://github.com/pjtatlow/mirdb';
       <!-- Mobile Menu Button -->
       <button
         type="button"
-        class="md:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+        class="md:hidden p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-white"
         data-testid="mobile-menu-button"
         aria-label="Toggle menu"
         id="mobile-menu-button"
@@ -67,11 +67,11 @@ const githubUrl = 'https://github.com/pjtatlow/mirdb';
 
   <!-- Mobile Menu -->
   <div class="md:hidden hidden" data-testid="mobile-menu" id="mobile-menu">
-    <div class="px-2 pt-2 pb-3 space-y-1 bg-gray-900 border-t border-gray-800">
+    <div class="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       {navItems.map((item) => (
         <a
           href={item.href}
-          class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors mobile-nav-link"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors mobile-nav-link"
           data-testid={`mobile-nav-${item.id}`}
         >
           {item.label}
@@ -81,7 +81,7 @@ const githubUrl = 'https://github.com/pjtatlow/mirdb';
         href={githubUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors"
+        class="flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         data-testid="mobile-nav-github"
       >
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

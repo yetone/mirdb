@@ -45,9 +45,11 @@ const {
     <meta name="keywords" content="Rust key-value database, memcached compatible, LSM Tree database, persistent storage, high-performance database" />
     <meta name="author" content="MirDB Contributors" />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#1f2937" />
+    <meta name="theme-color" content="#f9fafb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
   </head>
-  <body class="min-h-screen bg-gray-900 text-gray-100">
+  <body class="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
     <slot />
   </body>
 </html>

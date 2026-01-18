@@ -19,7 +19,7 @@ const highlightedCode = Prism.highlight(code.trim(), Prism.languages[prismLangua
 
 <div class="code-block-container" data-testid={`code-block-${language}`}>
   {title && (
-    <div class="bg-gray-800 px-4 py-2 text-sm text-gray-400 border-b border-gray-700 rounded-t-lg">
+    <div class="bg-gray-200 dark:bg-gray-800 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-300 dark:border-gray-700 rounded-t-lg">
       {title}
     </div>
   )}

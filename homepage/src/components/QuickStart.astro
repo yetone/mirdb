@@ -47,9 +47,9 @@ hello
 get mykey`;
 ---
 
-<section id="quick-start" class="py-16 bg-gray-800" data-testid="quick-start-section">
+<section id="quick-start" class="py-16 bg-gray-100 dark:bg-gray-800" data-testid="quick-start-section">
   <div class="container mx-auto px-4 max-w-4xl">
-    <h2 class="text-3xl font-bold mb-8 text-center">Quick Start</h2>
+    <h2 class="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-gray-100">Quick Start</h2>
 
     <div class="space-y-8">
       <!-- Step 1: Installation -->
@@ -57,8 +57,8 @@ get mykey`;
         <div class="flex items-start gap-4">
           <span class="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white" data-testid="step-number">1</span>
           <div class="flex-grow min-w-0">
-            <h3 class="text-xl font-semibold mb-3">Install MirDB</h3>
-            <p class="text-gray-300 mb-4">Install MirDB using Cargo, the Rust package manager:</p>
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Install MirDB</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Install MirDB using Cargo, the Rust package manager:</p>
             <CodeBlock code={installCommand} language="shell" />
           </div>
         </div>
@@ -69,8 +69,8 @@ get mykey`;
         <div class="flex items-start gap-4">
           <span class="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white" data-testid="step-number">2</span>
           <div class="flex-grow min-w-0">
-            <h3 class="text-xl font-semibold mb-3">Configure the Server</h3>
-            <p class="text-gray-300 mb-4">Create a configuration file at <code class="bg-gray-700 px-2 py-1 rounded">/etc/mirdb.toml</code>:</p>
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Configure the Server</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Create a configuration file at <code class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-gray-800 dark:text-gray-200">/etc/mirdb.toml</code>:</p>
             <CodeBlock code={configToml} language="toml" title="mirdb.toml" />
           </div>
         </div>
@@ -81,8 +81,8 @@ get mykey`;
         <div class="flex items-start gap-4">
           <span class="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white" data-testid="step-number">3</span>
           <div class="flex-grow min-w-0">
-            <h3 class="text-xl font-semibold mb-3">Start the Server</h3>
-            <p class="text-gray-300 mb-4">Run MirDB and connect using the memcached protocol:</p>
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Start the Server</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Run MirDB and connect using the memcached protocol:</p>
             <CodeBlock code={shellUsage} language="bash" title="Terminal" />
           </div>
         </div>
@@ -93,8 +93,8 @@ get mykey`;
         <div class="flex items-start gap-4">
           <span class="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white" data-testid="step-number">4</span>
           <div class="flex-grow min-w-0">
-            <h3 class="text-xl font-semibold mb-3">Integrate with Rust</h3>
-            <p class="text-gray-300 mb-4">Connect to MirDB from your Rust application using the memcached protocol:</p>
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Integrate with Rust</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Connect to MirDB from your Rust application using the memcached protocol:</p>
             <CodeBlock code={rustExample} language="rust" title="main.rs" />
           </div>
         </div>

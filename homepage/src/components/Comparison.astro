@@ -70,11 +70,11 @@ const features = [
 ];
 ---
 
-<section id="comparison" class="py-16 bg-gray-800" data-testid="comparison-section">
+<section id="comparison" class="py-16 bg-gray-100 dark:bg-gray-800" data-testid="comparison-section">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-gray-100 sm:text-4xl">How MirDB Compares</h2>
-      <p class="mt-4 text-xl text-gray-400">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl">How MirDB Compares</h2>
+      <p class="mt-4 text-xl text-gray-500 dark:text-gray-400">
         See how MirDB stacks up against other key-value storage solutions
       </p>
     </div>
@@ -82,11 +82,11 @@ const features = [
     <div class="overflow-x-auto" data-testid="comparison-table-container">
       <table class="w-full min-w-[640px] border-collapse" data-testid="comparison-table">
         <thead>
-          <tr class="border-b border-gray-700">
-            <th class="py-4 px-4 text-left text-gray-400 font-medium" data-testid="comparison-header-feature">Feature</th>
+          <tr class="border-b border-gray-300 dark:border-gray-700">
+            <th class="py-4 px-4 text-left text-gray-500 dark:text-gray-400 font-medium" data-testid="comparison-header-feature">Feature</th>
             {solutions.map((solution) => (
               <th
-                class={`py-4 px-4 text-center font-semibold ${solution.id === 'mirdb' ? 'text-blue-400' : 'text-gray-300'}`}
+                class={`py-4 px-4 text-center font-semibold ${solution.id === 'mirdb' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'}`}
                 data-testid={`comparison-header-${solution.id}`}
               >
                 {solution.name}
@@ -97,15 +97,15 @@ const features = [
         <tbody>
           {features.map((feature, index) => (
             <tr
-              class={`border-b border-gray-700 ${index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-850'}`}
+              class={`border-b border-gray-300 dark:border-gray-700 ${index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-900'}`}
               data-testid={`comparison-row-${feature.id}`}
             >
-              <td class="py-4 px-4 text-gray-300 font-medium" data-testid={`comparison-feature-${feature.id}`}>
+              <td class="py-4 px-4 text-gray-800 dark:text-gray-200 font-medium" data-testid={`comparison-feature-${feature.id}`}>
                 {feature.name}
               </td>
               {solutions.map((solution) => (
                 <td
-                  class={`py-4 px-4 text-center ${solution.id === 'mirdb' ? 'text-blue-400 font-semibold' : 'text-gray-400'}`}
+                  class={`py-4 px-4 text-center ${solution.id === 'mirdb' ? 'text-blue-700 dark:text-blue-300 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}
                   data-testid={`comparison-cell-${feature.id}-${solution.id}`}
                 >
                   {feature.values[solution.id]}
@@ -118,7 +118,7 @@ const features = [
     </div>
 
     <div class="mt-8 text-center">
-      <p class="text-gray-400 text-sm">
+      <p class="text-gray-500 dark:text-gray-400 text-sm">
         MirDB combines the best of both worlds: memcached protocol compatibility with LSM Tree persistence.
       </p>
     </div>
