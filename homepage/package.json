@@ -12,7 +12,11 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed"
   },
-  "keywords": ["mirdb", "key-value", "database"],
+  "keywords": [
+    "mirdb",
+    "key-value",
+    "database"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -22,6 +26,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
-    "playwright": "^1.57.0"
+    "lighthouse": "^13.0.1",
+    "playwright": "^1.57.0",
+    "sharp": "^0.34.5"
   }
 }
