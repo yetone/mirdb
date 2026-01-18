@@ -1,16 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
 import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
 import QuickStart from '../components/QuickStart.astro';
+import Documentation from '../components/Documentation.astro';
 import '../styles/global.css';
 ---
 
 <Layout title="MirDB - Persistent Key-Value Store with Memcached Compatibility">
-  <main>
+  <Navigation />
+  <main class="pt-16">
     <Hero />
     <Features />
     <QuickStart />
+    <Documentation />
 
     <!-- Footer -->
     <footer class="bg-gray-950 text-gray-400 py-8">
