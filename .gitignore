@@ -1,2 +1,12 @@
 /target
 **/*.rs.bk
+.something/
+
+# Node.js
+node_modules/
+dist/
+.astro/
+
+# Playwright
+playwright-report/
+test-results/
