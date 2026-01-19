@@ -368,6 +368,118 @@ code {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 }
 
+/* Benchmarks Section */
+.benchmarks {
+    padding: 5rem 2rem;
+    background-color: var(--bg-color);
+}
+
+.benchmarks h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.benchmarks .section-description {
+    text-align: center;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+}
+
+.benchmark-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto 3rem;
+}
+
+.benchmark-card {
+    background-color: var(--bg-alt);
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.benchmark-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-description {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.comparison-section {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.comparison-section h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.benchmark-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg-alt);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.benchmark-table th,
+.benchmark-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.benchmark-table th {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    font-weight: 600;
+}
+
+.benchmark-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.benchmark-table tbody tr:hover {
+    background-color: var(--bg-color);
+}
+
+.improvement {
+    color: #22c55e;
+    font-weight: 600;
+}
+
+.benchmark-note {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-align: center;
+    font-style: italic;
+}
+
 /* Status Section */
 .status {
     padding: 5rem 2rem;
@@ -461,8 +573,22 @@ code {
     .features h2,
     .quick-start h2,
     .demo h2,
-    .status h2 {
+    .status h2,
+    .benchmarks h2 {
         font-size: 2rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+    }
+
+    .benchmark-table {
+        font-size: 0.875rem;
+    }
+
+    .benchmark-table th,
+    .benchmark-table td {
+        padding: 0.75rem 0.5rem;
     }
 
     .btn {
