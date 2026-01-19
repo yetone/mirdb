@@ -1,16 +1,19 @@
 /* CSS Variables */
 :root {
-    --primary-color: #e44d26;
+    --primary-color: #c73e1d;
+    --primary-color-hover: #a83317;
     --secondary-color: #1a1a2e;
     --accent-color: #16213e;
     --text-color: #333;
-    --text-light: #666;
+    --text-light: #595959;
     --background: #ffffff;
     --background-alt: #f8f9fa;
     --border-color: #e0e0e0;
     --code-bg: #1e1e1e;
     --code-text: #d4d4d4;
     --success-color: #28a745;
+    --focus-color: #005fcc;
+    --step-heading-color: #ff8c69;
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
     --spacing-md: 2rem;
@@ -20,6 +23,27 @@
     --border-radius: 8px;
     --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Skip link for accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--focus-color);
+    color: #ffffff !important;
+    padding: 8px 16px;
+    z-index: 10000;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus,
+.skip-link:hover {
+    top: 0;
+    outline: none;
+    color: #ffffff !important;
 }
 
 /* Reset */
@@ -73,7 +97,7 @@ a {
 }
 
 a:hover {
-    color: #c73e1d;
+    color: var(--primary-color-hover);
 }
 
 /* Button Styles */
@@ -95,8 +119,8 @@ a:hover {
 }
 
 .btn-primary:hover {
-    background: #c73e1d;
-    border-color: #c73e1d;
+    background: var(--primary-color-hover);
+    border-color: var(--primary-color-hover);
     color: white;
 }
 
@@ -383,7 +407,7 @@ a:hover {
 }
 
 .step h3 {
-    color: var(--primary-color);
+    color: var(--step-heading-color);
     margin-bottom: var(--spacing-sm);
     font-size: 1.25rem;
 }
@@ -422,7 +446,7 @@ pre code {
 }
 
 .usage-demo h3 {
-    color: var(--primary-color);
+    color: var(--step-heading-color);
     margin-bottom: var(--spacing-md);
 }
 
@@ -458,7 +482,7 @@ pre code {
 .footer-links h4,
 .footer-info h4 {
     margin-bottom: var(--spacing-sm);
-    color: var(--primary-color);
+    color: #ff9b7d;
 }
 
 .footer-links ul,
@@ -553,7 +577,40 @@ pre code {
 
 /* Focus styles for keyboard navigation */
 a:focus,
-button:focus {
-    outline: 2px solid var(--primary-color);
+button:focus,
+.btn:focus,
+[tabindex]:focus {
+    outline: 3px solid var(--focus-color);
+    outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--focus-color);
+    outline-offset: 2px;
+}
+
+/* Ensure footer links have visible focus */
+.footer-links a:focus,
+.footer-links a:focus-visible {
+    outline: 3px solid var(--focus-color);
+    outline-offset: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Navigation links focus */
+.nav-links a:focus,
+.nav-links a:focus-visible {
+    outline: 3px solid var(--focus-color);
+    outline-offset: 2px;
+}
+
+/* Logo focus */
+.logo:focus,
+.logo:focus-visible {
+    outline: 3px solid var(--focus-color);
     outline-offset: 2px;
 }
