@@ -195,14 +195,14 @@
             <h2>Getting Started</h2>
             <p class="section-description">Get up and running in minutes</p>
 
-            <div class="step">
+            <div class="step" data-testid="step-clone-build">
                 <h3>1. Clone and Build</h3>
                 <pre><code>git clone https://github.com/yetone/mirdb.git
 cd mirdb
 cargo build --release</code></pre>
             </div>
 
-            <div class="step">
+            <div class="step" data-testid="step-configure">
                 <h3>2. Configure (Optional)</h3>
                 <p>Create a <code>config.toml</code> file:</p>
                 <pre><code>addr = "0.0.0.0:12333"
@@ -212,12 +212,12 @@ sst_max_size = "100M"
 mem_table_max_size = "4M"</code></pre>
             </div>
 
-            <div class="step">
+            <div class="step" data-testid="step-run-server">
                 <h3>3. Run the Server</h3>
                 <pre><code>./target/release/mirdb-server</code></pre>
             </div>
 
-            <div class="step">
+            <div class="step" data-testid="step-connect-client">
                 <h3>4. Connect with Memcached Client</h3>
                 <p>Use any memcached client to connect:</p>
                 <pre><code># Using telnet
