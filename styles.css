@@ -192,7 +192,7 @@ body {
 }
 
 .code-lang {
-    color: #94a3b8;
+    color: #cbd5e1;
     font-size: 0.85rem;
     font-weight: 500;
 }
@@ -436,11 +436,11 @@ code {
 
 .license {
     margin-bottom: 0.5rem;
-    color: var(--text-muted);
+    color: #94a3b8;
 }
 
 .copyright {
-    color: var(--text-muted);
+    color: #94a3b8;
     font-size: 0.9rem;
 }
 
