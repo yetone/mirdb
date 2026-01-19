@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A high-performance, persistent key-value store with memcached protocol compatibility, powered by Rust.">
+  <title>MirDB - Persistent Key-Value Store with Memcached Compatibility</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Hero Section -->
+  <header class="hero" id="hero">
+    <div class="container">
+      <img src="../assets/logo.gif" alt="MirDB Logo" class="logo">
+      <h1>MirDB</h1>
+      <p class="tagline">Persistent Key-Value Store with Memcached Compatibility</p>
+      <p class="description">A high-performance, durable caching solution that combines the simplicity of memcached with the reliability of persistent storage.</p>
+      <div class="cta-buttons">
+        <a href="#getting-started" class="btn btn-primary">Get Started</a>
+        <a href="https://github.com/mirdb/mirdb" class="btn btn-secondary">View on GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Value Proposition Section -->
+  <section id="value-proposition" class="value-proposition" data-section="value-proposition">
+    <div class="container">
+      <h2 class="section-title">Why Choose MirDB?</h2>
+      <div class="pillars">
+        <article class="pillar pillar-persistence" data-pillar="persistence">
+          <div class="pillar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Persistence</h3>
+          <p class="pillar-description">LSM tree-based storage with Write-Ahead Logging (WAL) ensures your data survives restarts and crashes. Never lose cached data again with durable, disk-backed storage.</p>
+        </article>
+
+        <article class="pillar pillar-compatibility" data-pillar="compatibility">
+          <div class="pillar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Compatibility</h3>
+          <p class="pillar-description">Drop-in memcached protocol support means you can use your existing clients and tools. Migrate seamlessly without changing a single line of application code.</p>
+        </article>
+
+        <article class="pillar pillar-performance" data-pillar="performance">
+          <div class="pillar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Performance</h3>
+          <p class="pillar-description">Rust-powered async I/O with Tokio delivers exceptional throughput and low latency. Benefit from memory safety and zero-cost abstractions without sacrificing speed.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 class="section-title">Core Features</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <h3>GET/SET/DELETE with TTL</h3>
+          <p>Full support for standard cache operations with configurable time-to-live expiration.</p>
+        </div>
+        <div class="feature">
+          <h3>Background Compaction</h3>
+          <p>Automatic minor and major compaction keeps storage optimized without manual intervention.</p>
+        </div>
+        <div class="feature">
+          <h3>Crash Recovery</h3>
+          <p>Write-ahead logging ensures data integrity even after unexpected shutdowns.</p>
+        </div>
+        <div class="feature">
+          <h3>TOML Configuration</h3>
+          <p>Simple, human-readable configuration files for easy deployment and management.</p>
+        </div>
+        <div class="feature">
+          <h3>7-Level LSM Tree</h3>
+          <p>Multi-level storage hierarchy with optimized merging for balanced read/write performance.</p>
+        </div>
+        <div class="feature">
+          <h3>Snappy Compression</h3>
+          <p>Efficient data compression reduces disk usage while maintaining fast access times.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Getting Started Section -->
+  <section id="getting-started" class="getting-started">
+    <div class="container">
+      <h2 class="section-title">Getting Started</h2>
+      <div class="steps">
+        <div class="step">
+          <h3>1. Build from Source</h3>
+          <pre><code>git clone https://github.com/mirdb/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+        </div>
+        <div class="step">
+          <h3>2. Configure</h3>
+          <pre><code># etc/mirdb.toml
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdb"
+sst_max_size = "100M"
+mem_table_max_size = "4M"</code></pre>
+        </div>
+        <div class="step">
+          <h3>3. Run</h3>
+          <pre><code>./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+        </div>
+        <div class="step">
+          <h3>4. Connect</h3>
+          <pre><code># Use any memcached client
+telnet localhost 12333
+set mykey 0 3600 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>MirDB v0.1.0 | <a href="https://github.com/mirdb/mirdb">GitHub</a> | MIT License</p>
+    </div>
+  </footer>
+</body>
+</html>
