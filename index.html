@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+    <meta property="og:description" content="A persistent key-value store with Memcached protocol compatibility. Built with Rust and Tokio for high performance async I/O.">
+    <meta property="og:image" content="assets/logo.gif">
+    <meta property="og:type" content="website">
     <title>MirDB - Persistent Key-Value Store</title>
     <style>
         * {
@@ -527,7 +531,8 @@
     </style>
 </head>
 <body>
-    <section class="hero" data-testid="hero">
+    <header>
+        <section class="hero" data-testid="hero">
         <img src="assets/logo.gif" alt="MirDB Logo" class="logo">
         <h1>MirDB</h1>
         <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
@@ -542,9 +547,11 @@
                 Learn More
             </a>
         </div>
-    </section>
+        </section>
+    </header>
 
-    <section id="features" class="features" data-testid="features">
+    <main>
+        <section id="features" class="features" data-testid="features">
         <div class="container">
             <h2>Key Features</h2>
             <p class="section-description">
@@ -683,6 +690,7 @@ END</pre>
             </div>
         </div>
     </section>
+    </main>
 
     <footer data-testid="footer">
         <div class="container">
