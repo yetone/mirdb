@@ -1,0 +1,16 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Product Homepage",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "serve": "npx serve docs -l 3000"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@playwright/test": "^1.40.0",
+    "lighthouse": "^13.0.1",
+    "serve": "^14.2.0"
+  }
+}
