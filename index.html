@@ -207,6 +207,102 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Usage Section */
+        .usage {
+            padding: 5rem 2rem;
+            background-color: var(--bg-dark);
+        }
+
+        .usage .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .usage h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .usage .section-description {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            font-size: 1.125rem;
+        }
+
+        .usage .demo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .usage .terminal-demo {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .usage .code-block {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 700px;
+            overflow-x: auto;
+        }
+
+        .usage .code-block pre {
+            margin: 0;
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .usage .code-block .comment {
+            color: var(--text-secondary);
+        }
+
+        .usage .code-block .command {
+            color: var(--accent-green);
+        }
+
+        .usage .ease-message {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 600px;
+            margin-top: 1rem;
+        }
+
+        .usage .ease-message strong {
+            color: var(--accent-green);
+        }
+
+        @media (max-width: 768px) {
+            .usage {
+                padding: 3rem 1.5rem;
+            }
+
+            .usage h2 {
+                font-size: 2rem;
+            }
+
+            .usage .code-block {
+                padding: 1rem;
+            }
+
+            .usage .code-block pre {
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -270,6 +366,36 @@
                     <h3>Major Compaction</h3>
                     <p class="description">Background major compaction merges and optimizes SSTable files, reducing storage overhead and improving read performance over time.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="usage" class="usage" data-testid="usage">
+        <div class="container">
+            <h2>Quick Start</h2>
+            <p class="section-description">
+                Getting started with MirDB is simple. Use any memcached client you're already familiar with.
+            </p>
+            <div class="demo-container">
+                <img src="assets/usage.gif" alt="MirDB usage demonstration" class="terminal-demo" data-testid="usage-demo">
+                <div class="code-block" data-testid="code-block">
+                    <pre><span class="comment"># Connect using any memcached client</span>
+<span class="command">telnet localhost 11211</span>
+
+<span class="comment"># Set a key-value pair</span>
+<span class="command">set mykey 0 0 5</span>
+hello
+STORED
+
+<span class="comment"># Retrieve the value</span>
+<span class="command">get mykey</span>
+VALUE mykey 0 5
+hello
+END</pre>
+                </div>
+                <p class="ease-message">
+                    <strong>It's just like using memcached</strong> — drop-in compatible with your existing memcached clients, but with persistent storage that survives restarts.
+                </p>
             </div>
         </div>
     </section>
