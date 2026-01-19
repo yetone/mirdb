@@ -29,12 +29,13 @@ test.describe('Hero Section Display', () => {
   });
 
   test('TC3: Tagline with Persistent Key-Value Store and Memcached Protocol is visible', async ({ page }) => {
-    // Check for the value proposition tagline
-    const tagline = page.locator('text=/Persistent Key-Value Store/i');
+    // Check for the value proposition tagline in the hero section
+    const heroSection = page.locator('.hero, section.hero, [data-testid="hero"]').first();
+    const tagline = heroSection.locator('text=/Persistent Key-Value Store/i');
     await expect(tagline).toBeVisible();
 
-    // Also verify Memcached Protocol is mentioned
-    const memcachedText = page.locator('text=/Memcached Protocol/i');
+    // Also verify Memcached Protocol is mentioned in the hero tagline
+    const memcachedText = heroSection.locator('text=/Memcached Protocol/i');
     await expect(memcachedText).toBeVisible();
   });
 
