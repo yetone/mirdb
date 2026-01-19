@@ -51,6 +51,43 @@
         </div>
     </section>
 
+    <!-- Code Examples Section -->
+    <section class="code-examples" id="code-examples">
+        <h2>Code Examples</h2>
+        <p class="section-description">MirDB uses the standard Memcached protocol. Here's how to perform basic SET and GET operations:</p>
+        <div class="code-block-wrapper">
+            <div class="code-header">
+                <span class="code-lang">Memcached Protocol</span>
+                <button class="copy-btn" id="copy-code-btn" aria-label="Copy code to clipboard">
+                    <span class="copy-icon">📋</span>
+                    <span class="copy-text">Copy</span>
+                </button>
+            </div>
+            <pre class="syntax-highlight"><code id="code-example" class="language-memcached"><span class="comment"># Connect to MirDB server</span>
+<span class="command">telnet</span> <span class="host">localhost</span> <span class="port">12333</span>
+
+<span class="comment"># SET operation - store a value</span>
+<span class="keyword">set</span> <span class="key">mykey</span> <span class="flags">0</span> <span class="exptime">0</span> <span class="bytes">5</span>
+<span class="value">hello</span>
+<span class="response">STORED</span>
+
+<span class="comment"># GET operation - retrieve a value</span>
+<span class="keyword">get</span> <span class="key">mykey</span>
+<span class="response">VALUE mykey 0 5</span>
+<span class="value">hello</span>
+<span class="response">END</span>
+
+<span class="comment"># SET with expiration (60 seconds)</span>
+<span class="keyword">set</span> <span class="key">tempkey</span> <span class="flags">0</span> <span class="exptime">60</span> <span class="bytes">9</span>
+<span class="value">temporary</span>
+<span class="response">STORED</span>
+
+<span class="comment"># DELETE operation</span>
+<span class="keyword">delete</span> <span class="key">mykey</span>
+<span class="response">DELETED</span></code></pre>
+        </div>
+    </section>
+
     <!-- Quick Start Section -->
     <section class="quick-start" id="quick-start">
         <h2>Quick Start</h2>
@@ -133,5 +170,59 @@ END</code></pre>
             <p class="copyright">&copy; 2024 MirDB Project</p>
         </div>
     </footer>
+
+    <script>
+        // Copy to clipboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyBtn = document.getElementById('copy-code-btn');
+            const codeBlock = document.getElementById('code-example');
+
+            if (copyBtn && codeBlock) {
+                copyBtn.addEventListener('click', async function() {
+                    const codeText = codeBlock.textContent;
+
+                    try {
+                        await navigator.clipboard.writeText(codeText);
+
+                        // Visual feedback
+                        const copyText = copyBtn.querySelector('.copy-text');
+                        const originalText = copyText.textContent;
+                        copyText.textContent = 'Copied!';
+                        copyBtn.classList.add('copied');
+
+                        setTimeout(function() {
+                            copyText.textContent = originalText;
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        // Fallback for older browsers
+                        const textArea = document.createElement('textarea');
+                        textArea.value = codeText;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-999999px';
+                        document.body.appendChild(textArea);
+                        textArea.select();
+
+                        try {
+                            document.execCommand('copy');
+                            const copyText = copyBtn.querySelector('.copy-text');
+                            const originalText = copyText.textContent;
+                            copyText.textContent = 'Copied!';
+                            copyBtn.classList.add('copied');
+
+                            setTimeout(function() {
+                                copyText.textContent = originalText;
+                                copyBtn.classList.remove('copied');
+                            }, 2000);
+                        } catch (e) {
+                            console.error('Failed to copy:', e);
+                        }
+
+                        document.body.removeChild(textArea);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
