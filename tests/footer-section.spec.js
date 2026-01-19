@@ -19,124 +19,146 @@ test.describe('Footer Section Display', () => {
   });
 
   /**
-   * Test Case 1: Check for license information
+   * Test Case 1: Footer displays license information
    * Input: Check for license information
    * Expected: Footer displays license information (e.g., MIT, Apache 2.0)
    */
   test('TC1: Footer displays license information', async ({ page }) => {
-    // Locate the footer section
-    const footer = page.locator('footer, .footer');
+    // Scroll to footer to ensure it is visible
+    const footer = page.locator('[data-testid="footer-section"]');
+    await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
 
-    // Scroll to footer to ensure it's in viewport
-    await footer.scrollIntoViewIfNeeded();
+    // Find the license information element
+    const licenseElement = page.locator('[data-testid="footer-license"]');
+    await expect(licenseElement).toBeVisible();
 
-    // Check that the footer contains license information
-    const footerText = await footer.textContent();
+    // Get the license text
+    const licenseText = await licenseElement.textContent();
 
-    // Verify that license information is present (MIT, Apache 2.0, or other common licenses)
-    const hasLicenseInfo = /MIT|Apache|GPL|BSD|ISC|License/i.test(footerText);
+    // Verify license information is displayed (should contain common license types)
+    const hasLicenseInfo =
+      licenseText.toLowerCase().includes('license') ||
+      licenseText.toLowerCase().includes('mit') ||
+      licenseText.toLowerCase().includes('apache') ||
+      licenseText.toLowerCase().includes('bsd') ||
+      licenseText.toLowerCase().includes('gpl');
+
     expect(hasLicenseInfo).toBeTruthy();
 
-    // Specifically check for MIT License as specified in PRD
-    expect(footerText.toLowerCase()).toContain('mit');
+    // Specifically verify MIT license as mentioned in PRD
+    expect(licenseText).toContain('MIT');
   });
 
   /**
-   * Test Case 2: Check for version information
+   * Test Case 2: Footer displays version information
    * Input: Check for version information
    * Expected: Footer displays version number (0.1.0)
    */
   test('TC2: Footer displays version number (0.1.0)', async ({ page }) => {
-    // Locate the footer section
-    const footer = page.locator('footer, .footer');
+    // Scroll to footer to ensure it is visible
+    const footer = page.locator('[data-testid="footer-section"]');
+    await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
 
-    // Scroll to footer to ensure it's in viewport
-    await footer.scrollIntoViewIfNeeded();
+    // Find the version information element
+    const versionElement = page.locator('[data-testid="footer-version"]');
+    await expect(versionElement).toBeVisible();
 
-    // Check that the footer contains version information
-    const footerText = await footer.textContent();
+    // Get the version text
+    const versionText = await versionElement.textContent();
 
-    // Verify that version number is present
-    const hasVersionInfo = /v?0\.1\.0|version.*0\.1\.0/i.test(footerText);
-    expect(hasVersionInfo).toBeTruthy();
+    // Verify version number is displayed
+    expect(versionText.toLowerCase()).toContain('version');
+    expect(versionText).toContain('0.1.0');
   });
 
   /**
-   * Test Case 3: Check for project repository link
+   * Test Case 3: Footer contains link to GitHub repository
    * Input: Check for project repository link
    * Expected: Footer contains link to GitHub repository
    */
   test('TC3: Footer contains link to GitHub repository', async ({ page }) => {
-    // Locate the footer section
-    const footer = page.locator('footer, .footer');
+    // Scroll to footer to ensure it is visible
+    const footer = page.locator('[data-testid="footer-section"]');
+    await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
 
-    // Scroll to footer to ensure it's in viewport
-    await footer.scrollIntoViewIfNeeded();
+    // Find the GitHub link in footer
+    const githubLink = page.locator('[data-testid="footer-github-link"]');
+    await expect(githubLink).toBeVisible();
 
-    // Find GitHub link in footer
-    const footerGitHubLink = footer.locator('a[href*="github.com"]');
-    await expect(footerGitHubLink.first()).toBeVisible();
+    // Get the href attribute
+    const href = await githubLink.getAttribute('href');
 
     // Verify the link points to GitHub
-    const href = await footerGitHubLink.first().getAttribute('href');
     expect(href).toContain('github.com');
 
-    // Verify the link contains a valid repository path pattern
-    const urlPattern = /github\.com\/[^\/]+\/[^\/]+/;
-    expect(href).toMatch(urlPattern);
+    // Verify it's a valid link (has href)
+    expect(href).toBeTruthy();
+
+    // Verify the link text mentions GitHub
+    const linkText = await githubLink.textContent();
+    expect(linkText.toLowerCase()).toContain('github');
   });
 
   /**
-   * Additional test: Footer is visible at the bottom of the page
+   * Additional test: Footer section is visible at the bottom of the page
    */
-  test('Footer is visible at the bottom of the page', async ({ page }) => {
+  test('Footer section is visible at page bottom', async ({ page }) => {
     // Scroll to the bottom of the page
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
-    // Wait for any animations to complete
-    await page.waitForTimeout(300);
-
-    // Locate the footer section
-    const footer = page.locator('footer, .footer');
+    // Wait for footer to be visible
+    const footer = page.locator('[data-testid="footer-section"]');
     await expect(footer).toBeVisible();
 
-    // Verify footer has proper structure (contains a container)
-    const container = footer.locator('.container, [class*="container"]');
-    const containerCount = await container.count();
-
-    // Footer should have content organized in a container
-    expect(containerCount).toBeGreaterThanOrEqual(0);
+    // Verify the footer element exists
+    const footerBox = await footer.boundingBox();
+    expect(footerBox).toBeTruthy();
   });
 
   /**
-   * Additional test: Footer contains all required elements together
+   * Additional test: Footer info section contains all required information
    */
-  test('Footer contains all required elements (license, version, GitHub link)', async ({ page }) => {
-    // Locate the footer section
-    const footer = page.locator('footer, .footer');
+  test('Footer info section contains version, license, and port information', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.locator('[data-testid="footer-section"]');
+    await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
 
-    // Scroll to footer to ensure it's in viewport
+    // Find the footer info section
+    const footerInfo = page.locator('[data-testid="footer-info"]');
+    await expect(footerInfo).toBeVisible();
+
+    // Get all text content from footer info
+    const infoText = await footerInfo.textContent();
+
+    // Verify all required information is present
+    expect(infoText).toContain('Version');
+    expect(infoText).toContain('0.1.0');
+    expect(infoText).toContain('License');
+    expect(infoText).toContain('MIT');
+  });
+
+  /**
+   * Additional test: GitHub link opens in new tab (security best practice)
+   */
+  test('GitHub link has proper security attributes', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.locator('[data-testid="footer-section"]');
     await footer.scrollIntoViewIfNeeded();
 
-    // Get footer content
-    const footerText = await footer.textContent();
+    // Find the GitHub link
+    const githubLink = page.locator('[data-testid="footer-github-link"]');
 
-    // Check for all three required elements
-    const hasLicense = /MIT/i.test(footerText);
-    const hasVersion = /0\.1\.0/i.test(footerText);
+    // Verify it opens in new tab
+    const target = await githubLink.getAttribute('target');
+    expect(target).toBe('_blank');
 
-    // Check for GitHub link
-    const footerGitHubLink = footer.locator('a[href*="github.com"]');
-    const hasGitHubLink = await footerGitHubLink.count() > 0;
-
-    // All elements should be present
-    expect(hasLicense).toBeTruthy();
-    expect(hasVersion).toBeTruthy();
-    expect(hasGitHubLink).toBeTruthy();
+    // Verify security attributes for external links
+    const rel = await githubLink.getAttribute('rel');
+    expect(rel).toContain('noopener');
   });
 
 });
