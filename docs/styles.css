@@ -469,6 +469,7 @@ pre code {
 .footer-links li,
 .footer-info li {
     margin-bottom: var(--spacing-xs);
+    line-height: 1.8;
 }
 
 .footer-links a {
@@ -522,6 +523,20 @@ pre code {
 
     .features-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Mobile touch targets - minimum 44px touch area */
+    .footer-links a,
+    .footer-info li {
+        display: inline-block;
+        min-height: 44px;
+        line-height: 44px;
+        padding: 0 0.5rem;
+    }
+
+    .footer-links li,
+    .footer-info li {
+        margin-bottom: 0.25rem;
     }
 }
 
