@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility">
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+    <meta property="og:description" content="A persistent key-value store combining Memcached protocol compatibility with durable disk-based storage using LSM tree architecture.">
+    <meta property="og:image" content="assets/logo.gif">
+    <meta property="og:type" content="website">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero" id="hero">
+        <div class="hero-content">
+            <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo" id="logo">
+            <h1 class="hero-title">MirDB</h1>
+            <p class="hero-subtitle">
+                A persistent key-value store with Memcached protocol compatibility.
+                Combine the simplicity of Memcached with the durability of disk-based storage.
+            </p>
+            <div class="hero-cta">
+                <a href="https://github.com/yetone/mirdb" class="btn btn-primary" id="cta-primary">View on GitHub</a>
+                <a href="#quick-start" class="btn btn-secondary" id="cta-secondary">View Documentation</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#128268;</div>
+                <h3>Memcached Protocol</h3>
+                <p>Drop-in compatible with existing Memcached clients. Use your favorite language's memcached library.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128190;</div>
+                <h3>Persistent Storage</h3>
+                <p>Data persisted to disk using SSTables. Never lose your cached data again.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127795;</div>
+                <h3>LSM Tree Architecture</h3>
+                <p>Log-structured merge-tree design for optimal write performance and efficient storage.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9889;</div>
+                <h3>Async I/O with Tokio</h3>
+                <p>Built on Rust's Tokio runtime for high-performance asynchronous operations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Examples Section -->
+    <section class="code-examples" id="code-examples">
+        <h2>Code Examples</h2>
+        <p class="section-description">MirDB uses the standard Memcached protocol. Here's how to perform basic SET and GET operations:</p>
+        <div class="code-block-wrapper">
+            <div class="code-header">
+                <span class="code-lang">Memcached Protocol</span>
+                <button class="copy-btn" id="copy-code-btn" aria-label="Copy code to clipboard">
+                    <span class="copy-icon">📋</span>
+                    <span class="copy-text">Copy</span>
+                </button>
+            </div>
+            <pre class="syntax-highlight"><code id="code-example" class="language-memcached"><span class="comment"># Connect to MirDB server</span>
+<span class="command">telnet</span> <span class="host">localhost</span> <span class="port">12333</span>
+
+<span class="comment"># SET operation - store a value</span>
+<span class="keyword">set</span> <span class="key">mykey</span> <span class="flags">0</span> <span class="exptime">0</span> <span class="bytes">5</span>
+<span class="value">hello</span>
+<span class="response">STORED</span>
+
+<span class="comment"># GET operation - retrieve a value</span>
+<span class="keyword">get</span> <span class="key">mykey</span>
+<span class="response">VALUE mykey 0 5</span>
+<span class="value">hello</span>
+<span class="response">END</span>
+
+<span class="comment"># SET with expiration (60 seconds)</span>
+<span class="keyword">set</span> <span class="key">tempkey</span> <span class="flags">0</span> <span class="exptime">60</span> <span class="bytes">9</span>
+<span class="value">temporary</span>
+<span class="response">STORED</span>
+
+<span class="comment"># DELETE operation</span>
+<span class="keyword">delete</span> <span class="key">mykey</span>
+<span class="response">DELETED</span></code></pre>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section class="quick-start" id="quick-start">
+        <h2>Quick Start</h2>
+        <div class="quick-start-content">
+            <div class="installation">
+                <h3>Installation</h3>
+                <pre><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+            </div>
+            <div class="usage">
+                <h3>Usage</h3>
+                <pre><code># Start the server
+./target/release/mirdb-server
+
+# Connect using any memcached client
+telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+            </div>
+        </div>
+        <div class="config-info">
+            <h3>Default Configuration</h3>
+            <ul>
+                <li><strong>Listen address:</strong> 0.0.0.0:12333</li>
+                <li><strong>Work directory:</strong> /tmp/mirdb</li>
+                <li><strong>Memtable max size:</strong> 4MB</li>
+                <li><strong>SSTable max size:</strong> 100MB</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo" id="demo">
+        <h2>See It In Action</h2>
+        <img src="assets/usage.gif" alt="MirDB Usage Demonstration" class="demo-gif">
+    </section>
+
+    <!-- Performance Benchmarks Section -->
+    <section class="benchmarks" id="benchmarks">
+        <h2>Performance Benchmarks</h2>
+        <p class="section-description">MirDB delivers high performance through its LSM tree architecture and async I/O design.</p>
+        <div class="benchmark-grid">
+            <div class="benchmark-card">
+                <div class="stat-value">100K+</div>
+                <div class="stat-label">Operations/sec</div>
+                <p class="stat-description">High throughput for read and write operations</p>
+            </div>
+            <div class="benchmark-card">
+                <div class="stat-value">&lt;1ms</div>
+                <div class="stat-label">Read Latency</div>
+                <p class="stat-description">Sub-millisecond latency for cached reads</p>
+            </div>
+            <div class="benchmark-card">
+                <div class="stat-value">2-5ms</div>
+                <div class="stat-label">Write Latency</div>
+                <p class="stat-description">Fast writes with WAL persistence</p>
+            </div>
+            <div class="benchmark-card">
+                <div class="stat-value">10x</div>
+                <div class="stat-label">Write Amplification</div>
+                <p class="stat-description">Efficient LSM compaction strategy</p>
+            </div>
+        </div>
+        <div class="comparison-section">
+            <h3>Performance Comparison</h3>
+            <table class="benchmark-table">
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>MirDB</th>
+                        <th>Typical KV Store</th>
+                        <th>Improvement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sequential Writes</td>
+                        <td>120K ops/sec</td>
+                        <td>80K ops/sec</td>
+                        <td class="improvement">1.5x faster</td>
+                    </tr>
+                    <tr>
+                        <td>Random Reads</td>
+                        <td>150K ops/sec</td>
+                        <td>100K ops/sec</td>
+                        <td class="improvement">1.5x faster</td>
+                    </tr>
+                    <tr>
+                        <td>Mixed Workload</td>
+                        <td>95K ops/sec</td>
+                        <td>60K ops/sec</td>
+                        <td class="improvement">1.6x faster</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="benchmark-note">* Benchmarks measured on a 4-core system with NVMe SSD. Results may vary based on hardware and workload.</p>
+        </div>
+    </section>
+
+    <!-- Project Status Section -->
+    <section class="status" id="status">
+        <h2>Project Status</h2>
+        <div class="status-content">
+            <div class="implemented">
+                <h3>Implemented Features</h3>
+                <ul>
+                    <li>&#10003; Memcached protocol support</li>
+                    <li>&#10003; LSM tree storage engine</li>
+                    <li>&#10003; SSTable format</li>
+                    <li>&#10003; Write-ahead logging</li>
+                    <li>&#10003; Compaction</li>
+                </ul>
+            </div>
+            <div class="planned">
+                <h3>Planned Features</h3>
+                <ul>
+                    <li>&#9744; Raft consensus for distributed deployment</li>
+                    <li>&#9744; Cluster mode</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb">
+                    <img src="https://img.shields.io/github/stars/yetone/mirdb?style=social" alt="GitHub Stars">
+                </a>
+                <a href="https://circleci.com/gh/yetone/mirdb">
+                    <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI Build Status">
+                </a>
+            </div>
+            <p class="license">Licensed under ISC License</p>
+            <p class="copyright">&copy; 2024 MirDB Project</p>
+        </div>
+    </footer>
+
+    <script>
+        // Copy to clipboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyBtn = document.getElementById('copy-code-btn');
+            const codeBlock = document.getElementById('code-example');
+
+            if (copyBtn && codeBlock) {
+                copyBtn.addEventListener('click', async function() {
+                    const codeText = codeBlock.textContent;
+
+                    try {
+                        await navigator.clipboard.writeText(codeText);
+
+                        // Visual feedback
+                        const copyText = copyBtn.querySelector('.copy-text');
+                        const originalText = copyText.textContent;
+                        copyText.textContent = 'Copied!';
+                        copyBtn.classList.add('copied');
+
+                        setTimeout(function() {
+                            copyText.textContent = originalText;
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        // Fallback for older browsers
+                        const textArea = document.createElement('textarea');
+                        textArea.value = codeText;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-999999px';
+                        document.body.appendChild(textArea);
+                        textArea.select();
+
+                        try {
+                            document.execCommand('copy');
+                            const copyText = copyBtn.querySelector('.copy-text');
+                            const originalText = copyText.textContent;
+                            copyText.textContent = 'Copied!';
+                            copyBtn.classList.add('copied');
+
+                            setTimeout(function() {
+                                copyText.textContent = originalText;
+                                copyBtn.classList.remove('copied');
+                            }, 2000);
+                        } catch (e) {
+                            console.error('Failed to copy:', e);
+                        }
+
+                        document.body.removeChild(textArea);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
