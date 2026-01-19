@@ -17,6 +17,16 @@ module.exports = defineConfig({
       name: 'chromium',
       use: { browserName: 'chromium' },
     },
+    {
+      name: 'firefox',
+      use: { browserName: 'firefox' },
+    },
+    {
+      name: 'webkit',
+      use: { browserName: 'webkit' },
+    },
+    // Edge uses Chromium engine, tested via chromium project
+    // Chrome is also tested via chromium project
   ],
   webServer: {
     command: 'npx serve docs -l 3000',
