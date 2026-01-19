@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero" id="hero">
+        <div class="hero-content">
+            <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo" id="logo">
+            <h1 class="hero-title">MirDB</h1>
+            <p class="hero-subtitle">
+                A persistent key-value store with Memcached protocol compatibility.
+                Combine the simplicity of Memcached with the durability of disk-based storage.
+            </p>
+            <div class="hero-cta">
+                <a href="https://github.com/yetone/mirdb" class="btn btn-primary" id="cta-primary">View on GitHub</a>
+                <a href="#quick-start" class="btn btn-secondary" id="cta-secondary">View Documentation</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#128268;</div>
+                <h3>Memcached Protocol</h3>
+                <p>Drop-in compatible with existing Memcached clients. Use your favorite language's memcached library.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128190;</div>
+                <h3>Persistent Storage</h3>
+                <p>Data persisted to disk using SSTables. Never lose your cached data again.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127795;</div>
+                <h3>LSM Tree Architecture</h3>
+                <p>Log-structured merge-tree design for optimal write performance and efficient storage.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9889;</div>
+                <h3>Async I/O with Tokio</h3>
+                <p>Built on Rust's Tokio runtime for high-performance asynchronous operations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section class="quick-start" id="quick-start">
+        <h2>Quick Start</h2>
+        <div class="quick-start-content">
+            <div class="installation">
+                <h3>Installation</h3>
+                <pre><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+            </div>
+            <div class="usage">
+                <h3>Usage</h3>
+                <pre><code># Start the server
+./target/release/mirdb-server
+
+# Connect using any memcached client
+telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+            </div>
+        </div>
+        <div class="config-info">
+            <h3>Default Configuration</h3>
+            <ul>
+                <li><strong>Listen address:</strong> 0.0.0.0:12333</li>
+                <li><strong>Work directory:</strong> /tmp/mirdb</li>
+                <li><strong>Memtable max size:</strong> 4MB</li>
+                <li><strong>SSTable max size:</strong> 100MB</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo" id="demo">
+        <h2>See It In Action</h2>
+        <img src="assets/usage.gif" alt="MirDB Usage Demonstration" class="demo-gif">
+    </section>
+
+    <!-- Project Status Section -->
+    <section class="status" id="status">
+        <h2>Project Status</h2>
+        <div class="status-content">
+            <div class="implemented">
+                <h3>Implemented Features</h3>
+                <ul>
+                    <li>&#10003; Memcached protocol support</li>
+                    <li>&#10003; LSM tree storage engine</li>
+                    <li>&#10003; SSTable format</li>
+                    <li>&#10003; Write-ahead logging</li>
+                    <li>&#10003; Compaction</li>
+                </ul>
+            </div>
+            <div class="planned">
+                <h3>Planned Features</h3>
+                <ul>
+                    <li>&#9744; Raft consensus for distributed deployment</li>
+                    <li>&#9744; Cluster mode</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb">
+                    <img src="https://img.shields.io/github/stars/yetone/mirdb?style=social" alt="GitHub Stars">
+                </a>
+                <a href="https://circleci.com/gh/yetone/mirdb">
+                    <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI Build Status">
+                </a>
+            </div>
+            <p class="license">Licensed under ISC License</p>
+            <p class="copyright">&copy; 2024 MirDB Project</p>
+        </div>
+    </footer>
+</body>
+</html>
