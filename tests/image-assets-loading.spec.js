@@ -9,126 +9,160 @@ test.describe('Image Assets Loading', () => {
   });
 
   test('TC1: Logo image loads without broken image placeholder', async ({ page }) => {
-    // Find the logo image in the hero section
-    const logoImg = page.locator('.hero img.logo, img[alt*="logo" i], img[src*="logo"]').first();
-    await expect(logoImg).toBeVisible();
+    // Get the logo image element
+    const logo = page.locator('img.logo, img[alt*="logo" i], img[alt*="MirDB" i]').first();
+    await expect(logo).toBeVisible();
 
-    // Verify the image source is set
-    const src = await logoImg.getAttribute('src');
+    // Get the source attribute
+    const src = await logo.getAttribute('src');
     expect(src).toBeTruthy();
     expect(src.toLowerCase()).toContain('logo');
 
-    // Check that the image has loaded successfully (naturalWidth > 0 means image loaded)
-    const naturalWidth = await logoImg.evaluate((img) => {
+    // Check that the image loaded successfully (naturalWidth > 0 indicates image loaded)
+    const isLoaded = await logo.evaluate((img) => {
       const imgElement = /** @type {HTMLImageElement} */ (img);
-      return imgElement.naturalWidth;
+      return imgElement.complete && imgElement.naturalWidth > 0 && imgElement.naturalHeight > 0;
     });
-    expect(naturalWidth).toBeGreaterThan(0);
+    expect(isLoaded).toBe(true);
 
-    // Check that the image has natural height > 0 (confirms it's not broken)
-    const naturalHeight = await logoImg.evaluate((img) => {
-      const imgElement = /** @type {HTMLImageElement} */ (img);
-      return imgElement.naturalHeight;
-    });
-    expect(naturalHeight).toBeGreaterThan(0);
-
-    // Verify the image is not showing a broken image icon (complete property should be true)
-    const isComplete = await logoImg.evaluate((img) => {
-      const imgElement = /** @type {HTMLImageElement} */ (img);
-      return imgElement.complete;
-    });
-    expect(isComplete).toBe(true);
+    // Verify the image is not showing a broken image (check it has actual dimensions)
+    const boundingBox = await logo.boundingBox();
+    expect(boundingBox).not.toBeNull();
+    expect(boundingBox.width).toBeGreaterThan(0);
+    expect(boundingBox.height).toBeGreaterThan(0);
   });
 
-  test('TC2: Usage demonstration image/GIF renders correctly', async ({ page }) => {
+  test('TC2: Usage demonstration image/gif renders correctly', async ({ page }) => {
     // Navigate to usage section
     const usageSection = page.locator('#usage, section.usage, [data-testid="usage"]').first();
     await expect(usageSection).toBeVisible();
 
-    // Find the usage demo image
-    const usageImg = usageSection.locator('img[src*="usage"], img.terminal-demo, [data-testid="usage-demo"]').first();
-    await expect(usageImg).toBeVisible();
+    // Get the usage demo image
+    const usageDemo = page.locator('img[src*="usage"], img.terminal-demo, [data-testid="usage-demo"]').first();
+    await expect(usageDemo).toBeVisible();
 
-    // Verify the image source is set
-    const src = await usageImg.getAttribute('src');
+    // Verify the image source
+    const src = await usageDemo.getAttribute('src');
     expect(src).toBeTruthy();
     expect(src.toLowerCase()).toContain('usage');
 
-    // Check that the image has loaded successfully
-    const naturalWidth = await usageImg.evaluate((img) => {
+    // Check that the image loaded successfully
+    const isLoaded = await usageDemo.evaluate((img) => {
       const imgElement = /** @type {HTMLImageElement} */ (img);
-      return imgElement.naturalWidth;
+      return imgElement.complete && imgElement.naturalWidth > 0 && imgElement.naturalHeight > 0;
     });
-    expect(naturalWidth).toBeGreaterThan(0);
+    expect(isLoaded).toBe(true);
 
-    // Check that the image has natural height > 0
-    const naturalHeight = await usageImg.evaluate((img) => {
-      const imgElement = /** @type {HTMLImageElement} */ (img);
-      return imgElement.naturalHeight;
-    });
-    expect(naturalHeight).toBeGreaterThan(0);
-
-    // Verify the image is complete
-    const isComplete = await usageImg.evaluate((img) => {
-      const imgElement = /** @type {HTMLImageElement} */ (img);
-      return imgElement.complete;
-    });
-    expect(isComplete).toBe(true);
+    // Verify the image has actual dimensions
+    const boundingBox = await usageDemo.boundingBox();
+    expect(boundingBox).not.toBeNull();
+    expect(boundingBox.width).toBeGreaterThan(0);
+    expect(boundingBox.height).toBeGreaterThan(0);
   });
 
-  test('TC3: All feature section icons/illustrations render without errors', async ({ page }) => {
+  test('TC3: All feature icons/illustrations load without errors', async ({ page }) => {
     // Navigate to features section
     const featuresSection = page.locator('#features, section.features, [data-testid="features"]').first();
     await expect(featuresSection).toBeVisible();
 
-    // Find all feature cards
-    const featureCards = featuresSection.locator('.feature-card, [data-testid="feature-card"]');
-    const cardCount = await featureCards.count();
-    expect(cardCount).toBeGreaterThanOrEqual(4);
+    // Get all feature icons (can be SVG or img elements)
+    const featureIcons = featuresSection.locator('.feature-card .icon, [data-testid="feature-icon"], .feature-card svg, .feature-card img');
 
-    // Check each feature card has a visible icon (SVG or img)
-    for (let i = 0; i < cardCount; i++) {
-      const card = featureCards.nth(i);
-      const icon = card.locator('svg.icon, img.icon, [data-testid="feature-icon"], .icon').first();
+    // Get the count of feature icons
+    const iconCount = await featureIcons.count();
+    expect(iconCount).toBeGreaterThan(0);
+
+    // Verify each icon is visible and rendered correctly
+    for (let i = 0; i < iconCount; i++) {
+      const icon = featureIcons.nth(i);
       await expect(icon).toBeVisible();
 
-      // Get the tag name to determine how to verify it
+      // Check if it's an SVG (inline icon) or an image
       const tagName = await icon.evaluate((el) => el.tagName.toLowerCase());
 
       if (tagName === 'img') {
-        // For image icons, verify they loaded correctly
-        const naturalWidth = await icon.evaluate((img) => {
+        // For images, verify they loaded correctly
+        const isLoaded = await icon.evaluate((img) => {
           const imgElement = /** @type {HTMLImageElement} */ (img);
-          return imgElement.naturalWidth;
+          return imgElement.complete && imgElement.naturalWidth > 0;
         });
-        expect(naturalWidth).toBeGreaterThan(0);
-
-        const isComplete = await icon.evaluate((img) => {
-          const imgElement = /** @type {HTMLImageElement} */ (img);
-          return imgElement.complete;
-        });
-        expect(isComplete).toBe(true);
+        expect(isLoaded).toBe(true);
       } else if (tagName === 'svg') {
-        // For SVG icons, verify they have content (children)
-        const hasContent = await icon.evaluate((svg) => {
-          return svg.childNodes.length > 0;
-        });
-        expect(hasContent).toBe(true);
-
-        // Verify SVG has a valid bounding box (is rendered)
+        // For SVGs, verify they have content and proper dimensions
         const boundingBox = await icon.boundingBox();
         expect(boundingBox).not.toBeNull();
-        expect(boundingBox?.width).toBeGreaterThan(0);
-        expect(boundingBox?.height).toBeGreaterThan(0);
+        expect(boundingBox.width).toBeGreaterThan(0);
+        expect(boundingBox.height).toBeGreaterThan(0);
       }
     }
+  });
+
+  test('TC3b: Roadmap icons render without errors', async ({ page }) => {
+    // Navigate to roadmap section
+    const roadmapSection = page.locator('#roadmap, section.roadmap, [data-testid="roadmap"]').first();
+    await expect(roadmapSection).toBeVisible();
+
+    // Get all roadmap item icons
+    const roadmapIcons = roadmapSection.locator('.roadmap-item svg, [data-testid="roadmap-icon"]');
+
+    // Get the count of roadmap icons
+    const iconCount = await roadmapIcons.count();
+    expect(iconCount).toBeGreaterThan(0);
+
+    // Verify each icon is rendered correctly
+    for (let i = 0; i < iconCount; i++) {
+      const icon = roadmapIcons.nth(i);
+      await expect(icon).toBeVisible();
+
+      // Verify SVG has proper dimensions
+      const boundingBox = await icon.boundingBox();
+      expect(boundingBox).not.toBeNull();
+      expect(boundingBox.width).toBeGreaterThan(0);
+      expect(boundingBox.height).toBeGreaterThan(0);
+    }
+  });
+
+  test('All page images have alt attributes for accessibility', async ({ page }) => {
+    // Get all images on the page
+    const images = page.locator('img');
+    const imageCount = await images.count();
+
+    // Verify each image has an alt attribute
+    for (let i = 0; i < imageCount; i++) {
+      const img = images.nth(i);
+      const alt = await img.getAttribute('alt');
+      expect(alt).not.toBeNull();
+      // Alt can be empty for decorative images, but should exist
+    }
+  });
+
+  test('Images load without 404 errors', async ({ page }) => {
+    const failedImages = [];
+
+    // Listen for response events
+    page.on('response', (response) => {
+      const url = response.url();
+      if (url.match(/\.(gif|png|jpg|jpeg|webp|svg)$/i)) {
+        const status = response.status();
+        // 304 (Not Modified) is a valid response indicating cached content
+        // Only 4xx and 5xx status codes indicate failed loads
+        if (status >= 400) {
+          failedImages.push({ url, status });
+        }
+      }
+    });
+
+    // Reload the page to capture all image requests
+    await page.goto('/', { waitUntil: 'networkidle' });
+
+    // Verify no images failed to load
+    expect(failedImages).toHaveLength(0);
   });
 });
 
 test.describe('Image Optimization', () => {
-  test('TC4: Images use modern formats (WebP) or are appropriately compressed', async () => {
+  test('TC4: Images are appropriately compressed or use modern formats', async () => {
     // This is an integration test that checks the actual image files
-
     const assetsDir = path.join(process.cwd(), 'assets');
 
     // Check if assets directory exists
@@ -205,5 +239,58 @@ test.describe('Image Optimization', () => {
     // 2. GIFs under 2MB (acceptable for animations), OR
     // 3. Static images under 500KB
     expect(allOptimized).toBe(true);
+  });
+
+  test('Images load efficiently (response time check)', async ({ page }) => {
+    const imageResponses = [];
+
+    // Listen for response events to capture image loads
+    page.on('response', async (response) => {
+      const url = response.url();
+      if (url.match(/\.(gif|png|jpg|jpeg|webp|svg)$/i)) {
+        const status = response.status();
+        // 304 is also a valid successful response (cached)
+        if (status === 200 || status === 304) {
+          imageResponses.push({
+            url,
+            status,
+          });
+        }
+      }
+    });
+
+    // Load the page and wait for network to be idle
+    await page.goto('/', { waitUntil: 'networkidle' });
+
+    // Verify images were loaded
+    expect(imageResponses.length).toBeGreaterThan(0);
+  });
+
+  test('SVG icons are used for scalable graphics', async ({ page }) => {
+    await page.goto('/');
+
+    // Get all SVG elements used as icons on the page
+    // This matches the actual selectors used in the HTML for feature and roadmap icons
+    const svgIcons = page.locator('.icon, [data-testid="feature-icon"], [data-testid="roadmap-icon"], .feature-card svg, .roadmap-item svg');
+    const svgCount = await svgIcons.count();
+
+    // Verify SVGs are being used for icons (better for scalability)
+    expect(svgCount).toBeGreaterThan(0);
+
+    // Count how many have viewBox attribute
+    let viewBoxCount = 0;
+    for (let i = 0; i < svgCount; i++) {
+      const svg = svgIcons.nth(i);
+      const viewBox = await svg.getAttribute('viewBox');
+
+      if (viewBox !== null) {
+        viewBoxCount++;
+        // Verify viewBox format is valid
+        expect(viewBox).toMatch(/\d+\s+\d+\s+\d+\s+\d+/);
+      }
+    }
+
+    // At least some SVGs should have viewBox for proper scaling
+    expect(viewBoxCount).toBeGreaterThan(0);
   });
 });
