@@ -394,6 +394,136 @@
                 justify-content: center;
             }
         }
+
+        /* Roadmap Section */
+        .roadmap {
+            padding: 5rem 2rem;
+            background-color: var(--bg-secondary);
+        }
+
+        .roadmap .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .roadmap h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .roadmap .section-description {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1.125rem;
+        }
+
+        .roadmap-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .roadmap-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-green), var(--accent-blue));
+        }
+
+        .roadmap-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding: 1.25rem;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .roadmap-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateX(4px);
+        }
+
+        .roadmap-item::before {
+            content: '';
+            position: absolute;
+            left: -1.75rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--bg-dark);
+            border: 2px solid var(--accent-green);
+        }
+
+        .roadmap-item.completed::before {
+            background-color: var(--accent-green);
+        }
+
+        .roadmap-item.upcoming::before {
+            border-color: var(--accent-blue);
+            background-color: var(--bg-dark);
+        }
+
+        .roadmap-item .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.625rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            margin-bottom: 0.75rem;
+        }
+
+        .roadmap-item.completed .status-badge {
+            background-color: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+        }
+
+        .roadmap-item.upcoming .status-badge {
+            background-color: rgba(88, 166, 255, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .roadmap-item h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .roadmap-item .description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .roadmap {
+                padding: 3rem 1.5rem;
+            }
+
+            .roadmap h2 {
+                font-size: 2rem;
+            }
+
+            .roadmap-timeline {
+                padding-left: 1.5rem;
+            }
+
+            .roadmap-item::before {
+                left: -1.25rem;
+                width: 10px;
+                height: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -487,6 +617,69 @@ END</pre>
                 <p class="ease-message">
                     <strong>It's just like using memcached</strong> — drop-in compatible with your existing memcached clients, but with persistent storage that survives restarts.
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="roadmap" data-testid="roadmap">
+        <div class="container">
+            <h2>Roadmap</h2>
+            <p class="section-description">
+                See what's been accomplished and what exciting features are coming next.
+            </p>
+            <div class="roadmap-timeline">
+                <div class="roadmap-item completed" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Completed
+                    </span>
+                    <h3>Memcached Protocol Support</h3>
+                    <p class="description">Full compatibility with memcached protocol, enabling seamless integration with existing clients and tools.</p>
+                </div>
+                <div class="roadmap-item completed" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Completed
+                    </span>
+                    <h3>SSTable Storage Engine</h3>
+                    <p class="description">Persistent storage using SSTables with skiplist-based memtables for efficient data management.</p>
+                </div>
+                <div class="roadmap-item completed" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Completed
+                    </span>
+                    <h3>Compaction Support</h3>
+                    <p class="description">Both minor and major compaction implemented for optimal storage efficiency and read performance.</p>
+                </div>
+                <div class="roadmap-item upcoming" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Upcoming
+                    </span>
+                    <h3>Raft Consensus Support</h3>
+                    <p class="description">Distributed consensus using Raft protocol for high availability and fault tolerance across multiple nodes.</p>
+                </div>
+                <div class="roadmap-item upcoming" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Upcoming
+                    </span>
+                    <h3>Cluster Management</h3>
+                    <p class="description">Automatic node discovery, load balancing, and cluster health monitoring capabilities.</p>
+                </div>
             </div>
         </div>
     </section>
