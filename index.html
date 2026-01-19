@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+    <meta property="og:description" content="A persistent key-value store with Memcached protocol compatibility. Built with Rust and Tokio for high performance async I/O.">
+    <meta property="og:image" content="assets/logo.gif">
+    <meta property="og:type" content="website">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0d1117;
+            --bg-secondary: #161b22;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-green: #3fb950;
+            --accent-blue: #58a6ff;
+            --border-color: #30363d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-secondary) 100%);
+        }
+
+        .hero .logo {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        .hero .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .hero .btn-primary {
+            background-color: var(--accent-green);
+            color: #0d1117;
+        }
+
+        .hero .btn-primary:hover {
+            background-color: #2ea043;
+        }
+
+        .hero .btn-secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        .hero .btn-secondary:hover {
+            background-color: var(--bg-secondary);
+            border-color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.125rem;
+            }
+
+            .hero .logo {
+                max-width: 280px;
+            }
+
+            .hero .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .hero .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            background-color: var(--bg-secondary);
+        }
+
+        .features .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .features .section-description {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1.125rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .feature-card .icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card .description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .features {
+                padding: 3rem 1.5rem;
+            }
+
+            .features h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Usage Section */
+        .usage {
+            padding: 5rem 2rem;
+            background-color: var(--bg-dark);
+        }
+
+        .usage .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .usage h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .usage .section-description {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            font-size: 1.125rem;
+        }
+
+        .usage .demo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .usage .terminal-demo {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .usage .code-block {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 700px;
+            overflow-x: auto;
+        }
+
+        .usage .code-block pre {
+            margin: 0;
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .usage .code-block .comment {
+            color: var(--text-secondary);
+        }
+
+        .usage .code-block .command {
+            color: var(--accent-green);
+        }
+
+        .usage .ease-message {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 600px;
+            margin-top: 1rem;
+        }
+
+        .usage .ease-message strong {
+            color: var(--accent-green);
+        }
+
+        @media (max-width: 768px) {
+            .usage {
+                padding: 3rem 1.5rem;
+            }
+
+            .usage h2 {
+                font-size: 2rem;
+            }
+
+            .usage .code-block {
+                padding: 1rem;
+            }
+
+            .usage .code-block pre {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Footer Section */
+        footer {
+            padding: 3rem 2rem;
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        footer .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        footer .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        footer .footer-tagline {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        footer .footer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        footer .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        footer .footer-link svg {
+            fill: currentColor;
+        }
+
+        footer .footer-bottom {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        footer .license {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                padding: 2rem 1.5rem;
+            }
+
+            footer .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            footer .footer-brand {
+                align-items: center;
+            }
+
+            footer .footer-links {
+                justify-content: center;
+            }
+        }
+
+        /* Roadmap Section */
+        .roadmap {
+            padding: 5rem 2rem;
+            background-color: var(--bg-secondary);
+        }
+
+        .roadmap .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .roadmap h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .roadmap .section-description {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1.125rem;
+        }
+
+        .roadmap-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .roadmap-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-green), var(--accent-blue));
+        }
+
+        .roadmap-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding: 1.25rem;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .roadmap-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateX(4px);
+        }
+
+        .roadmap-item::before {
+            content: '';
+            position: absolute;
+            left: -1.75rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--bg-dark);
+            border: 2px solid var(--accent-green);
+        }
+
+        .roadmap-item.completed::before {
+            background-color: var(--accent-green);
+        }
+
+        .roadmap-item.upcoming::before {
+            border-color: var(--accent-blue);
+            background-color: var(--bg-dark);
+        }
+
+        .roadmap-item .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.625rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            margin-bottom: 0.75rem;
+        }
+
+        .roadmap-item.completed .status-badge {
+            background-color: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+        }
+
+        .roadmap-item.upcoming .status-badge {
+            background-color: rgba(88, 166, 255, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .roadmap-item h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .roadmap-item .description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .roadmap {
+                padding: 3rem 1.5rem;
+            }
+
+            .roadmap h2 {
+                font-size: 2rem;
+            }
+
+            .roadmap-timeline {
+                padding-left: 1.5rem;
+            }
+
+            .roadmap-item::before {
+                left: -1.25rem;
+                width: 10px;
+                height: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <section class="hero" data-testid="hero">
+        <img src="assets/logo.gif" alt="MirDB Logo" class="logo">
+        <h1>MirDB</h1>
+        <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+        <div class="cta-buttons">
+            <a href="https://github.com/yetone/mirdb" class="btn btn-primary cta-primary" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                Get Started
+            </a>
+            <a href="#features" class="btn btn-secondary cta-secondary">
+                Learn More
+            </a>
+        </div>
+        </section>
+    </header>
+
+    <main>
+        <section id="features" class="features" data-testid="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <p class="section-description">
+                MirDB combines the simplicity of Memcached with the durability of persistent storage.
+            </p>
+            <div class="features-grid">
+                <div class="feature-card" data-testid="feature-card">
+                    <svg class="icon" data-testid="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <h3>Memcached Protocol</h3>
+                    <p class="description">Seamlessly integrate with existing memcached clients using Tokio for high-performance async I/O. Drop-in replacement for your current cache layer.</p>
+                </div>
+                <div class="feature-card" data-testid="feature-card">
+                    <svg class="icon" data-testid="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    <h3>Skiplist Memtable</h3>
+                    <p class="description">Efficient in-memory data structure using a skiplist-based memtable for fast read and write operations with O(log n) complexity.</p>
+                </div>
+                <div class="feature-card" data-testid="feature-card">
+                    <svg class="icon" data-testid="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    <h3>Minor Compaction</h3>
+                    <p class="description">Automatic minor compaction flushes memtable to SSTable files, ensuring data durability while maintaining high write throughput.</p>
+                </div>
+                <div class="feature-card" data-testid="feature-card">
+                    <svg class="icon" data-testid="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                    <h3>Major Compaction</h3>
+                    <p class="description">Background major compaction merges and optimizes SSTable files, reducing storage overhead and improving read performance over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="usage" class="usage" data-testid="usage">
+        <div class="container">
+            <h2>Quick Start</h2>
+            <p class="section-description">
+                Getting started with MirDB is simple. Use any memcached client you're already familiar with.
+            </p>
+            <div class="demo-container">
+                <img src="assets/usage.gif" alt="MirDB usage demonstration" class="terminal-demo" data-testid="usage-demo">
+                <div class="code-block" data-testid="code-block">
+                    <pre><span class="comment"># Connect using any memcached client</span>
+<span class="command">telnet localhost 11211</span>
+
+<span class="comment"># Set a key-value pair</span>
+<span class="command">set mykey 0 0 5</span>
+hello
+STORED
+
+<span class="comment"># Retrieve the value</span>
+<span class="command">get mykey</span>
+VALUE mykey 0 5
+hello
+END</pre>
+                </div>
+                <p class="ease-message">
+                    <strong>It's just like using memcached</strong> — drop-in compatible with your existing memcached clients, but with persistent storage that survives restarts.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="roadmap" data-testid="roadmap">
+        <div class="container">
+            <h2>Roadmap</h2>
+            <p class="section-description">
+                See what's been accomplished and what exciting features are coming next.
+            </p>
+            <div class="roadmap-timeline">
+                <div class="roadmap-item completed" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Completed
+                    </span>
+                    <h3>Memcached Protocol Support</h3>
+                    <p class="description">Full compatibility with memcached protocol, enabling seamless integration with existing clients and tools.</p>
+                </div>
+                <div class="roadmap-item completed" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Completed
+                    </span>
+                    <h3>SSTable Storage Engine</h3>
+                    <p class="description">Persistent storage using SSTables with skiplist-based memtables for efficient data management.</p>
+                </div>
+                <div class="roadmap-item completed" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Completed
+                    </span>
+                    <h3>Compaction Support</h3>
+                    <p class="description">Both minor and major compaction implemented for optimal storage efficiency and read performance.</p>
+                </div>
+                <div class="roadmap-item upcoming" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Upcoming
+                    </span>
+                    <h3>Raft Consensus Support</h3>
+                    <p class="description">Distributed consensus using Raft protocol for high availability and fault tolerance across multiple nodes.</p>
+                </div>
+                <div class="roadmap-item upcoming" data-testid="roadmap-item">
+                    <span class="status-badge">
+                        <svg data-testid="roadmap-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Upcoming
+                    </span>
+                    <h3>Cluster Management</h3>
+                    <p class="description">Automatic node discovery, load balancing, and cluster health monitoring capabilities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <footer data-testid="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">MirDB</span>
+                    <p class="footer-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="footer-link" data-testid="circleci-badge">
+                        <img src="https://circleci.com/gh/yetone/mirdb.svg?style=shield" alt="CircleCI Build Status" width="100" height="20">
+                    </a>
+                    <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="footer-link github-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        GitHub
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="license">Released under the MIT License</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
