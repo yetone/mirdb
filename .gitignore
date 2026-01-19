@@ -1,2 +1,8 @@
 /target
 **/*.rs.bk
+.something/
+
+# Node.js
+node_modules/
+test-results/
+playwright-report/
