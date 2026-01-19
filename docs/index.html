@@ -270,6 +270,13 @@ DELETED</code></pre>
     </section>
     </main>
 
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" data-testid="back-to-top" aria-label="Back to top" title="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
     <!-- Footer -->
     <footer class="footer" data-testid="footer-section">
         <div class="container">
@@ -300,5 +307,35 @@ DELETED</code></pre>
             </div>
         </div>
     </footer>
+
+    <!-- Back to Top Script -->
+    <script>
+        (function() {
+            const backToTopBtn = document.getElementById('back-to-top');
+
+            // Show/hide button based on scroll position
+            function toggleBackToTop() {
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            }
+
+            // Scroll to top when clicked
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Listen for scroll events
+            window.addEventListener('scroll', toggleBackToTop);
+
+            // Initial check
+            toggleBackToTop();
+        })();
+    </script>
 </body>
 </html>
