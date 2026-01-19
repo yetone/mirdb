@@ -202,6 +202,8 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
+    min-height: 44px;
+    min-width: 44px;
     background-color: #475569;
     color: #e2e8f0;
     border: none;
@@ -417,6 +419,15 @@ code {
     gap: 1rem;
     justify-content: center;
     margin-bottom: 1.5rem;
+}
+
+.footer-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.5rem;
 }
 
 .footer-links img {
