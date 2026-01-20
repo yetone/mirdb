@@ -1,12 +1,25 @@
-const { defineConfig } = require('@playwright/test');
+const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
     testDir: './tests',
     testMatch: '*.e2e.spec.js',
     timeout: 30000,
     use: {
-        browserName: 'chromium',
         headless: true
     },
-    reporter: 'list'
+    reporter: 'list',
+    projects: [
+        {
+            name: 'chromium',
+            use: { ...devices['Desktop Chrome'] }
+        },
+        {
+            name: 'firefox',
+            use: { ...devices['Desktop Firefox'] }
+        },
+        {
+            name: 'webkit',
+            use: { ...devices['Desktop Safari'] }
+        }
+    ]
 });
