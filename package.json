@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "MirDB product homepage",
   "scripts": {
-    "test": "node tests/hero-section.test.js && node tests/quick-start.test.js",
+    "test": "node tests/hero-section.test.js && node tests/quick-start.test.js && node tests/features.test.js && npx playwright test tests/features.e2e.spec.js",
     "test:hero": "node tests/hero-section.test.js",
-    "test:quickstart": "node tests/quick-start.test.js"
+    "test:quickstart": "node tests/quick-start.test.js",
+    "test:features": "node tests/features.test.js",
+    "test:e2e": "npx playwright test tests/features.e2e.spec.js"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "jsdom": "^24.0.0"
   }
 }
