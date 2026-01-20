@@ -9,6 +9,33 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Skip link for keyboard navigation accessibility */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e94560;
+    color: #fff;
+    padding: 12px 24px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 0 0 6px 6px;
+    z-index: 1000;
+    transition: top 0.2s ease-in-out;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+}
+
+/* Main content focus style for skip link target */
+#main-content:focus {
+    outline: none;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
@@ -69,6 +96,12 @@ body {
     transform: translateY(-2px);
 }
 
+.btn:focus {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+    transform: translateY(-2px);
+}
+
 .btn-primary {
     background-color: #e94560;
     color: #fff;
@@ -90,6 +123,12 @@ body {
 
 .badges img {
     height: 20px;
+}
+
+.badges a:focus {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+    border-radius: 3px;
 }
 
 /* Features Section */
@@ -309,6 +348,13 @@ footer {
 
 .footer-links a:hover {
     color: #fff;
+}
+
+.footer-links a:focus {
+    color: #fff;
+    outline: 2px solid #e94560;
+    outline-offset: 3px;
+    border-radius: 2px;
 }
 
 .copyright {
