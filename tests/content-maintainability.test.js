@@ -1,0 +1,285 @@
+/**
+ * Content Maintainability Tests
+ * Tests for verifying the homepage content is easily maintainable (NFR-4)
+ */
+
+const fs = require('fs');
+const path = require('path');
+const { JSDOM } = require('jsdom');
+
+// Load HTML and CSS files
+const htmlPath = path.join(__dirname, '..', 'index.html');
+const cssPath = path.join(__dirname, '..', 'styles.css');
+const html = fs.readFileSync(htmlPath, 'utf8');
+const css = fs.readFileSync(cssPath, 'utf8');
+
+// Parse HTML with JSDOM
+const dom = new JSDOM(html);
+const document = dom.window.document;
+
+// Test results tracking
+let passed = 0;
+let failed = 0;
+const results = [];
+
+function test(name, fn) {
+    try {
+        fn();
+        passed++;
+        results.push({ name, status: 'pass' });
+        console.log(`\x1b[32m✓\x1b[0m ${name}`);
+    } catch (error) {
+        failed++;
+        results.push({ name, status: 'fail', error: error.message });
+        console.log(`\x1b[31m✗\x1b[0m ${name}`);
+        console.log(`  Error: ${error.message}`);
+    }
+}
+
+function assert(condition, message) {
+    if (!condition) {
+        throw new Error(message);
+    }
+}
+
+console.log('\n=== Content Maintainability Tests (NFR-4) ===\n');
+
+// Test Case 1: HTML uses clear, well-organized structure
+test('TC1: HTML uses semantic and well-organized structure', () => {
+    // Check for semantic elements
+    const header = document.querySelector('header');
+    const main = document.querySelector('main');
+    const footer = document.querySelector('footer');
+    const sections = document.querySelectorAll('section');
+
+    assert(header, 'HTML should have a semantic header element');
+    assert(main, 'HTML should have a semantic main element');
+    assert(footer, 'HTML should have a semantic footer element');
+    assert(sections.length >= 3, `HTML should have distinct content sections (found ${sections.length})`);
+
+    // Verify sections are contained within main
+    const sectionsInMain = main.querySelectorAll('section');
+    assert(sectionsInMain.length >= 3, 'Content sections should be organized within main element');
+});
+
+test('TC1b: HTML has proper document structure', () => {
+    // Check for proper HTML5 doctype (indicated by html element with lang)
+    const htmlElement = document.querySelector('html');
+    assert(htmlElement && htmlElement.getAttribute('lang'), 'HTML should have lang attribute for accessibility');
+
+    // Check for head with essential meta tags
+    const head = document.querySelector('head');
+    assert(head, 'HTML should have head element');
+
+    const charset = document.querySelector('meta[charset]');
+    assert(charset, 'HTML should have charset meta tag');
+
+    const viewport = document.querySelector('meta[name="viewport"]');
+    assert(viewport, 'HTML should have viewport meta tag for responsiveness');
+
+    const title = document.querySelector('title');
+    assert(title && title.textContent.trim().length > 0, 'HTML should have a descriptive title');
+});
+
+test('TC1c: HTML sections have clear class-based organization', () => {
+    // Sections should have descriptive class names for easy identification
+    const sections = document.querySelectorAll('section');
+    const sectionClasses = [];
+
+    sections.forEach(section => {
+        const className = section.className;
+        assert(className && className.length > 0,
+            'Each section should have a descriptive class name');
+        sectionClasses.push(className);
+    });
+
+    // Verify class names are descriptive (not generic like 'section1', 'section2')
+    const genericPatterns = /^(section|div|container)\d*$/i;
+    sectionClasses.forEach(className => {
+        assert(!genericPatterns.test(className),
+            `Section class "${className}" should be descriptive, not generic`);
+    });
+});
+
+// Test Case 2: Content is organized in easily editable sections
+test('TC2: Content is organized in clearly separated sections', () => {
+    // Check that key content areas are identifiable
+    const heroSection = document.querySelector('.hero') || document.querySelector('header');
+    const featuresSection = document.querySelector('.features');
+    const quickStartSection = document.querySelector('.quick-start') || document.querySelector('#quick-start');
+    const commandsSection = document.querySelector('.commands');
+    const statusSection = document.querySelector('.status');
+
+    assert(heroSection, 'Hero/header section should be identifiable');
+    assert(featuresSection, 'Features section should be identifiable with .features class');
+    assert(quickStartSection, 'Quick start section should be identifiable');
+    assert(commandsSection, 'Commands section should be identifiable with .commands class');
+    assert(statusSection, 'Status section should be identifiable with .status class');
+});
+
+test('TC2b: Text content is not embedded in JavaScript', () => {
+    // Check that main content is in HTML, not generated by JS
+    const scripts = document.querySelectorAll('script');
+    let inlineScriptContent = '';
+
+    scripts.forEach(script => {
+        if (!script.src) {
+            inlineScriptContent += script.textContent;
+        }
+    });
+
+    // If there's inline JS, check it doesn't contain large text blocks
+    if (inlineScriptContent.length > 0) {
+        // Look for long strings that might be content
+        const longStrings = inlineScriptContent.match(/["'][^"']{100,}["']/g);
+        assert(!longStrings || longStrings.length === 0,
+            'Long text content should not be embedded in JavaScript');
+    }
+
+    // Verify main content sections have direct HTML text
+    const features = document.querySelectorAll('.feature-card');
+    features.forEach((feature, index) => {
+        const text = feature.textContent.trim();
+        assert(text.length > 0,
+            `Feature card ${index + 1} should have visible HTML content`);
+    });
+});
+
+test('TC2c: Links and URLs are maintainable', () => {
+    // Check that external links use consistent patterns
+    const externalLinks = document.querySelectorAll('a[href^="http"]');
+
+    // Verify links have proper attributes for security/accessibility
+    externalLinks.forEach((link, index) => {
+        const href = link.getAttribute('href');
+        const rel = link.getAttribute('rel');
+        const target = link.getAttribute('target');
+
+        if (target === '_blank') {
+            assert(rel && rel.includes('noopener'),
+                `External link ${index + 1} (${href}) should have rel="noopener" for security`);
+        }
+    });
+});
+
+// Test Case 3: CSS is organized logically and easy to modify
+test('TC3: CSS is organized with section comments', () => {
+    // Check for CSS comment organization
+    const cssCommentPattern = /\/\*[^*]*\*+([^/*][^*]*\*+)*\//g;
+    const comments = css.match(cssCommentPattern) || [];
+
+    assert(comments.length >= 5,
+        `CSS should have organizational comments (found ${comments.length})`);
+
+    // Check for section-based comments
+    const sectionKeywords = ['hero', 'feature', 'footer', 'responsive', 'reset', 'base',
+                            'quick', 'command', 'status', 'button', 'section'];
+    let foundSections = 0;
+
+    const cssLower = css.toLowerCase();
+    sectionKeywords.forEach(keyword => {
+        if (cssLower.includes(keyword)) {
+            foundSections++;
+        }
+    });
+
+    assert(foundSections >= 4,
+        `CSS should have clear section organization (found ${foundSections} section-related keywords)`);
+});
+
+test('TC3b: CSS uses consistent naming conventions', () => {
+    // Extract class names from CSS
+    const classPattern = /\.([\w-]+)\s*[{,]/g;
+    const classNames = [];
+    let match;
+
+    while ((match = classPattern.exec(css)) !== null) {
+        classNames.push(match[1]);
+    }
+
+    // Remove duplicates
+    const uniqueClasses = [...new Set(classNames)];
+
+    assert(uniqueClasses.length > 10,
+        `CSS should have multiple defined classes (found ${uniqueClasses.length})`);
+
+    // Check naming convention consistency (kebab-case or camelCase)
+    const kebabCase = uniqueClasses.filter(c => c.includes('-'));
+    const camelCase = uniqueClasses.filter(c => /[a-z][A-Z]/.test(c));
+
+    // Most classes should follow one convention
+    const primaryConvention = kebabCase.length >= camelCase.length ? 'kebab-case' : 'camelCase';
+    const primaryCount = Math.max(kebabCase.length, camelCase.length);
+
+    // Allow for single-word classes that don't need separators
+    const singleWord = uniqueClasses.filter(c => !c.includes('-') && !/[A-Z]/.test(c.slice(1)));
+    const mixedConvention = uniqueClasses.length - primaryCount - singleWord.length;
+
+    assert(mixedConvention < uniqueClasses.length * 0.2,
+        `CSS naming should be consistent (${primaryConvention}), found ${mixedConvention} inconsistent names`);
+});
+
+test('TC3c: CSS has responsive design organization', () => {
+    // Check for media queries
+    const mediaQueryPattern = /@media[^{]+\{/g;
+    const mediaQueries = css.match(mediaQueryPattern) || [];
+
+    assert(mediaQueries.length >= 1,
+        `CSS should have media queries for responsiveness (found ${mediaQueries.length})`);
+
+    // Check that responsive styles are grouped together
+    const cssLines = css.split('\n');
+    let responsiveSection = false;
+    let responsiveLineStart = -1;
+
+    cssLines.forEach((line, index) => {
+        if (line.toLowerCase().includes('responsive') || line.includes('@media')) {
+            if (!responsiveSection) {
+                responsiveSection = true;
+                responsiveLineStart = index;
+            }
+        }
+    });
+
+    assert(responsiveSection, 'CSS should have identifiable responsive design section');
+});
+
+test('TC3d: CSS avoids inline styles in HTML', () => {
+    // Check that HTML doesn't have inline styles
+    const elementsWithStyle = document.querySelectorAll('[style]');
+
+    // Allow minimal inline styles but flag excessive use
+    assert(elementsWithStyle.length <= 2,
+        `HTML should minimize inline styles for maintainability (found ${elementsWithStyle.length})`);
+});
+
+test('TC3e: HTML uses external CSS file', () => {
+    // Check for external stylesheet link
+    const styleLink = document.querySelector('link[rel="stylesheet"]');
+    assert(styleLink, 'HTML should link to external CSS file');
+
+    const href = styleLink.getAttribute('href');
+    assert(href && href.endsWith('.css'),
+        'External stylesheet should be a .css file');
+
+    // Check there are no large embedded style blocks
+    const styleElements = document.querySelectorAll('style');
+    let totalInlineCSS = 0;
+
+    styleElements.forEach(style => {
+        totalInlineCSS += style.textContent.length;
+    });
+
+    // Allow small inline styles (e.g., critical CSS) but flag large blocks
+    assert(totalInlineCSS < 500,
+        `HTML should not have large embedded CSS blocks (found ${totalInlineCSS} chars)`);
+});
+
+// Summary
+console.log(`\n=== Test Summary ===`);
+console.log(`Passed: ${passed}`);
+console.log(`Failed: ${failed}`);
+console.log(`Total: ${passed + failed}`);
+
+// Exit with appropriate code
+process.exit(failed > 0 ? 1 : 0);
