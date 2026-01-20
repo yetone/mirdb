@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "MirDB product homepage",
   "scripts": {
-    "test": "node tests/quick-start.test.js"
+    "test": "node tests/hero-section.test.js && node tests/quick-start.test.js",
+    "test:hero": "node tests/hero-section.test.js",
+    "test:quickstart": "node tests/quick-start.test.js"
   },
   "devDependencies": {
     "jsdom": "^24.0.0"
