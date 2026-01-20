@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="hero">
+        <div class="container">
+            <img src="assets/logo.gif" alt="MirDB Logo - Animated database logo" class="logo">
+            <h1>MirDB</h1>
+            <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+            <div class="cta-buttons">
+                <a href="#quick-start" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
+            <div class="badges">
+                <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer">
+                    <img src="https://atompunk.yetone.fun/github/yetone/mirdb?v=2" alt="CircleCI Build Status">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Memcached Compatible</h3>
+                    <p>Works with existing memcached clients out of the box. Use familiar commands like GET, SET, and DELETE.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>Data survives restarts using SSTable storage. Your data is safe with write-ahead logging.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>High Performance</h3>
+                    <p>LSM tree architecture with background compaction for optimal read and write performance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="quick-start" class="quick-start">
+        <div class="container">
+            <h2>Quick Start</h2>
+
+            <div class="quick-start-content">
+                <div class="installation">
+                    <h3>Installation</h3>
+                    <p>Clone the repository and build with Cargo:</p>
+                    <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run the server
+cargo run --release</code></pre>
+                    <p>The server will start listening on <code>0.0.0.0:12333</code> by default.</p>
+                </div>
+
+                <div class="usage">
+                    <h3>Usage Example</h3>
+                    <p>Connect using telnet or any memcached client:</p>
+                    <pre><code class="language-bash"># Connect to the server
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete the value
+delete mykey
+DELETED</code></pre>
+                </div>
+
+                <div class="demo">
+                    <h3>See It In Action</h3>
+                    <img src="assets/usage.gif" alt="MirDB usage demonstration showing terminal commands for connecting and interacting with the database" class="usage-gif">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="commands">
+        <div class="container">
+            <h2>Supported Commands</h2>
+            <div class="commands-list">
+                <div class="command-item">
+                    <code>SET key flags exptime bytes</code>
+                    <span>Store a key-value pair</span>
+                </div>
+                <div class="command-item">
+                    <code>GET key</code>
+                    <span>Retrieve a value by key</span>
+                </div>
+                <div class="command-item">
+                    <code>DELETE key</code>
+                    <span>Remove a key-value pair</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="status">
+        <div class="container">
+            <h2>Project Status</h2>
+            <ul class="status-list">
+                <li class="completed">Tokio with memcached protocol</li>
+                <li class="completed">Memtable with skiplist</li>
+                <li class="completed">Minor compaction</li>
+                <li class="completed">Major compaction</li>
+                <li class="planned">Raft consensus (planned)</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://github.com/yetone/mirdb/blob/master/README.md" target="_blank" rel="noopener noreferrer">Documentation</a>
+                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+            </div>
+            <p class="copyright">MirDB - Built with Rust</p>
+        </div>
+    </footer>
+</body>
+</html>
