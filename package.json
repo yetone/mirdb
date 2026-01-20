@@ -1,0 +1,24 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB product homepage",
+  "scripts": {
+    "test": "node tests/hero-section.test.js && node tests/quick-start.test.js && node tests/features.test.js && node tests/commands.test.js && node tests/github-navigation.test.js && node tests/footer-section.test.js && node tests/accessibility-semantic.test.js && node tests/accessibility-images.test.js && node tests/privacy-tracking.test.js && npx playwright test tests/",
+    "test:accessibility": "node tests/accessibility-semantic.test.js && node tests/accessibility-images.test.js",
+    "test:privacy": "node tests/privacy-tracking.test.js && npx playwright test tests/privacy-tracking.e2e.spec.js",
+    "test:privacy-e2e": "npx playwright test tests/privacy-tracking.e2e.spec.js",
+    "test:hero": "node tests/hero-section.test.js",
+    "test:quickstart": "node tests/quick-start.test.js",
+    "test:features": "node tests/features.test.js",
+    "test:commands": "node tests/commands.test.js",
+    "test:github": "node tests/github-navigation.test.js",
+    "test:footer": "node tests/footer-section.test.js",
+    "test:e2e": "npx playwright test tests/",
+    "test:github-e2e": "npx playwright test tests/github-navigation.e2e.spec.js",
+    "test:broken-assets-e2e": "npx playwright test tests/broken-assets.e2e.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "jsdom": "^24.0.0"
+  }
+}
