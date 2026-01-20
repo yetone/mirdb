@@ -15,7 +15,7 @@ html {
     top: -100px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #e94560;
+    background-color: #c73750;
     color: #fff;
     padding: 12px 24px;
     text-decoration: none;
@@ -103,7 +103,7 @@ body {
 }
 
 .btn-primary {
-    background-color: #e94560;
+    background-color: #c73750;
     color: #fff;
 }
 
@@ -358,7 +358,7 @@ footer {
 }
 
 .copyright {
-    color: #666;
+    color: #9090a0;
     font-size: 0.9rem;
 }
 
