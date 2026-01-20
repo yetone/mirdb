@@ -14,7 +14,8 @@
     "test:github": "node tests/github-navigation.test.js",
     "test:footer": "node tests/footer-section.test.js",
     "test:e2e": "npx playwright test tests/",
-    "test:github-e2e": "npx playwright test tests/github-navigation.e2e.spec.js"
+    "test:github-e2e": "npx playwright test tests/github-navigation.e2e.spec.js",
+    "test:broken-assets-e2e": "npx playwright test tests/broken-assets.e2e.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
