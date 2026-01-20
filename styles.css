@@ -162,6 +162,8 @@ body {
     padding: 20px;
     overflow-x: auto;
     margin-bottom: 15px;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 .quick-start code {
@@ -299,6 +301,10 @@ footer {
     text-decoration: none;
     margin: 0 15px;
     transition: color 0.2s;
+    display: inline-block;
+    padding: 10px 5px;
+    min-height: 44px;
+    line-height: 24px;
 }
 
 .footer-links a:hover {
@@ -312,6 +318,11 @@ footer {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+
     .hero {
         padding: 60px 0;
     }
@@ -332,5 +343,21 @@ footer {
         flex-direction: column;
         gap: 10px;
         text-align: center;
+    }
+
+    .quick-start pre {
+        max-width: calc(100vw - 40px);
+        overflow-x: auto;
+        white-space: pre;
+    }
+
+    .quick-start code {
+        font-size: 0.75rem;
+    }
+
+    .container {
+        padding: 0 20px;
+        max-width: 100%;
+        overflow-x: hidden;
     }
 }
