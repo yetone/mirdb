@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A blazing fast, persistent key-value store with Memcached protocol support">
+  <title>MirDB - Lightning-Fast Key-Value Storage</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <div class="logo">
+        <span class="logo-text">MirDB</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#docs">Documentation</a></li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      <a href="#get-started" class="nav-cta">Get Started</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <h1 class="hero-headline">Lightning-Fast Persistent Key-Value Storage</h1>
+        <p class="hero-subheadline">
+          MirDB combines blazing speed with rock-solid persistence.
+          Drop-in Memcached compatibility means zero learning curve for your team.
+        </p>
+        <div class="hero-cta-container">
+          <button class="cta-primary" id="cta-primary" onclick="handleGetStarted()">
+            Get Started Free
+          </button>
+          <a href="#demo" class="cta-secondary">View Demo</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="../assets/usage.gif" alt="MirDB in action" class="hero-image" loading="lazy">
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <h2>Why Choose MirDB?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#9889;</div>
+          <h3>Blazing Fast</h3>
+          <p>In-memory performance with skiplist-based memtable for sub-millisecond operations.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128274;</div>
+          <h3>Persistent Storage</h3>
+          <p>Your data survives restarts with SSTable-based persistence and compaction.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128268;</div>
+          <h3>Drop-in Compatible</h3>
+          <p>Full Memcached protocol support means instant integration with existing tools.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>MirDB</h4>
+        <p>Open-source key-value store</p>
+      </div>
+      <div class="footer-section">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#docs">Documentation</a></li>
+          <li><a href="https://github.com/yetone/mirdb">GitHub</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:contact@mirdb.io">contact@mirdb.io</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MirDB. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
