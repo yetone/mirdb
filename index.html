@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A blazing fast persistent key-value store with Memcached protocol support">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="header" data-testid="header">
+    <nav class="nav-container">
+      <a href="/" class="logo" data-testid="logo">
+        <img src="assets/logo.gif" alt="MirDB Logo" class="logo-image">
+        <span class="logo-text">MirDB</span>
+      </a>
+      <ul class="nav-links" data-testid="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#showcase">Showcase</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+      <a href="#get-started" class="cta-button nav-cta" data-testid="nav-cta">Get Started</a>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu" data-testid="mobile-menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" data-testid="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-headline" data-testid="hero-headline">Lightning-Fast Key-Value Storage</h1>
+      <p class="hero-subheadline" data-testid="hero-subheadline">
+        MirDB is a persistent key-value store with Memcached protocol support.
+        Store and retrieve data at blazing speeds with enterprise-grade reliability.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#get-started" class="cta-button primary" data-testid="hero-cta-primary">Start Free Trial</a>
+        <a href="#showcase" class="cta-button secondary" data-testid="hero-cta-secondary">See Demo</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="assets/usage.gif" alt="MirDB in action" class="hero-image" data-testid="hero-image">
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features-section" data-testid="features-section">
+    <div class="section-header">
+      <h2 class="section-title">Why Choose MirDB?</h2>
+      <p class="section-subtitle">Powerful features designed for modern applications</p>
+    </div>
+    <div class="features-grid" data-testid="features-grid">
+      <!-- Feature 1: Memcached Protocol -->
+      <div class="feature-card" data-testid="feature-card">
+        <div class="feature-icon" data-testid="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 10h-4V6"></path>
+            <path d="M14 10l7.586-7.586a2 2 0 0 0-2.828-2.828L11.172 7.172A4 4 0 0 0 10 10v4"></path>
+            <path d="M10 14v4a4 4 0 0 0 4 4h4"></path>
+            <circle cx="7" cy="17" r="5"></circle>
+          </svg>
+        </div>
+        <h3 class="feature-title" data-testid="feature-title">Memcached Protocol</h3>
+        <p class="feature-description" data-testid="feature-description">
+          Drop-in replacement for Memcached with persistent storage. Use your existing Memcached clients without any code changes.
+        </p>
+      </div>
+
+      <!-- Feature 2: Skip List Memtable -->
+      <div class="feature-card" data-testid="feature-card">
+        <div class="feature-icon" data-testid="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </div>
+        <h3 class="feature-title" data-testid="feature-title">Skip List Architecture</h3>
+        <p class="feature-description" data-testid="feature-description">
+          High-performance memtable implementation using skip lists for O(log n) operations and efficient range queries.
+        </p>
+      </div>
+
+      <!-- Feature 3: Automatic Compaction -->
+      <div class="feature-card" data-testid="feature-card">
+        <div class="feature-icon" data-testid="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4"></path>
+            <path d="M12 18v4"></path>
+            <path d="m4.93 4.93 2.83 2.83"></path>
+            <path d="m16.24 16.24 2.83 2.83"></path>
+            <path d="M2 12h4"></path>
+            <path d="M18 12h4"></path>
+            <path d="m4.93 19.07 2.83-2.83"></path>
+            <path d="m16.24 7.76 2.83-2.83"></path>
+          </svg>
+        </div>
+        <h3 class="feature-title" data-testid="feature-title">Automatic Compaction</h3>
+        <p class="feature-description" data-testid="feature-description">
+          Built-in minor and major compaction ensures optimal storage efficiency and consistent read performance over time.
+        </p>
+      </div>
+
+      <!-- Feature 4: Tokio Runtime -->
+      <div class="feature-card" data-testid="feature-card">
+        <div class="feature-icon" data-testid="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"></path>
+          </svg>
+        </div>
+        <h3 class="feature-title" data-testid="feature-title">Async-First Design</h3>
+        <p class="feature-description" data-testid="feature-description">
+          Built on Tokio for maximum concurrency. Handle thousands of concurrent connections with minimal resource usage.
+        </p>
+      </div>
+
+      <!-- Feature 5: Persistent Storage -->
+      <div class="feature-card" data-testid="feature-card">
+        <div class="feature-icon" data-testid="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+            <path d="M3 5V19a9 3 0 0 0 18 0V5"></path>
+            <path d="M3 12a9 3 0 0 0 18 0"></path>
+          </svg>
+        </div>
+        <h3 class="feature-title" data-testid="feature-title">Durable Storage</h3>
+        <p class="feature-description" data-testid="feature-description">
+          Unlike Memcached, your data survives restarts. SSTable-based persistence ensures data durability without sacrificing speed.
+        </p>
+      </div>
+
+      <!-- Feature 6: Easy Deployment -->
+      <div class="feature-card" data-testid="feature-card">
+        <div class="feature-icon" data-testid="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <h3 class="feature-title" data-testid="feature-title">Simple Deployment</h3>
+        <p class="feature-description" data-testid="feature-description">
+          Single binary deployment with minimal configuration. Get up and running in minutes with sensible defaults.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Showcase Section -->
+  <section id="showcase" class="showcase-section" data-testid="showcase-section">
+    <div class="section-header">
+      <h2 class="section-title">See It In Action</h2>
+      <p class="section-subtitle">MirDB works seamlessly with your existing Memcached workflow</p>
+    </div>
+    <div class="showcase-content">
+      <img src="assets/usage.gif" alt="MirDB Usage Demo" class="showcase-image" data-testid="showcase-image">
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="testimonials-section" data-testid="testimonials-section">
+    <div class="section-header">
+      <h2 class="section-title">Trusted by Developers</h2>
+      <p class="section-subtitle">Join thousands of developers using MirDB in production</p>
+    </div>
+    <div class="testimonials-grid" data-testid="testimonials-grid">
+      <div class="testimonial-card" data-testid="testimonial-card">
+        <div class="testimonial-content">
+          <p class="testimonial-text">"MirDB cut our cache invalidation issues in half. The persistence feature is a game-changer for our microservices architecture."</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-info">
+            <span class="author-name">Sarah Chen</span>
+            <span class="author-title">Lead Engineer, TechFlow</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card" data-testid="testimonial-card">
+        <div class="testimonial-content">
+          <p class="testimonial-text">"Switching from Memcached was seamless. Our existing clients work without modification, and we get persistence as a bonus."</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-info">
+            <span class="author-name">Marcus Rodriguez</span>
+            <span class="author-title">CTO, DataScale</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing" class="pricing-section" data-testid="pricing-section">
+    <div class="section-header">
+      <h2 class="section-title">Simple, Transparent Pricing</h2>
+      <p class="section-subtitle">Start free, scale as you grow</p>
+    </div>
+    <div class="pricing-grid" data-testid="pricing-grid">
+      <div class="pricing-card" data-testid="pricing-card">
+        <h3 class="pricing-tier">Open Source</h3>
+        <div class="pricing-price">
+          <span class="price-amount">Free</span>
+          <span class="price-period">forever</span>
+        </div>
+        <ul class="pricing-features">
+          <li>Full feature set</li>
+          <li>Community support</li>
+          <li>GitHub access</li>
+          <li>Self-hosted</li>
+        </ul>
+        <a href="https://github.com/yetone/mirdb" class="cta-button secondary">View on GitHub</a>
+      </div>
+      <div class="pricing-card featured" data-testid="pricing-card">
+        <h3 class="pricing-tier">Enterprise</h3>
+        <div class="pricing-price">
+          <span class="price-amount">Contact Us</span>
+          <span class="price-period">custom pricing</span>
+        </div>
+        <ul class="pricing-features">
+          <li>Priority support</li>
+          <li>SLA guarantees</li>
+          <li>Custom features</li>
+          <li>Dedicated assistance</li>
+        </ul>
+        <a href="#contact" class="cta-button primary">Contact Sales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" data-testid="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4 class="footer-title">MirDB</h4>
+        <p class="footer-description">A blazing fast persistent key-value store with Memcached protocol support.</p>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-title">Links</h4>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="https://github.com/yetone/mirdb">Documentation</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-title">Connect</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/yetone/mirdb">GitHub</a></li>
+          <li><a href="https://circleci.com/gh/yetone/mirdb">CI Status</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MirDB. Open source under MIT License.</p>
+    </div>
+  </footer>
+
+  <script src="src/main.js"></script>
+</body>
+</html>
