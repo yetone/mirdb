@@ -46,4 +46,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lastScroll = currentScroll;
   });
+
+  // Analytics: Track CTA button clicks
+  document.querySelectorAll('[data-analytics-event]').forEach(element => {
+    element.addEventListener('click', function() {
+      const eventName = this.getAttribute('data-analytics-event');
+      const eventCategory = this.getAttribute('data-event-category') || 'cta';
+      const eventLabel = this.getAttribute('data-analytics') || this.textContent.trim();
+
+      // Track event using gtag if available
+      if (typeof gtag === 'function') {
+        gtag('event', eventName, {
+          'event_category': eventCategory,
+          'event_label': eventLabel
+        });
+      }
+
+      // Also push to dataLayer for GTM compatibility
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          'event': eventName,
+          'eventCategory': eventCategory,
+          'eventLabel': eventLabel
+        });
+      }
+    });
+  });
 });

@@ -6,6 +6,22 @@
   <meta name="description" content="MirDB - A blazing fast persistent key-value store with Memcached protocol support">
   <title>MirDB - Persistent Key-Value Store</title>
   <link rel="stylesheet" href="src/styles.css">
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+
+    // Track CTA click events
+    function trackEvent(eventName, eventCategory, eventLabel) {
+      gtag('event', eventName, {
+        'event_category': eventCategory,
+        'event_label': eventLabel
+      });
+    }
+  </script>
 </head>
 <body>
   <!-- Navigation Header -->
@@ -21,7 +37,7 @@
         <li><a href="#testimonials">Testimonials</a></li>
         <li><a href="#pricing">Pricing</a></li>
       </ul>
-      <a href="#get-started" class="cta-button nav-cta" data-testid="nav-cta">Get Started</a>
+      <a href="#get-started" class="cta-button nav-cta" data-testid="nav-cta" data-analytics-event="cta_click" data-event-category="navigation" data-analytics="nav_get_started">Get Started</a>
       <button class="mobile-menu-toggle" aria-label="Toggle menu" data-testid="mobile-menu-toggle">
         <span></span>
         <span></span>
@@ -39,8 +55,8 @@
         Store and retrieve data at blazing speeds with enterprise-grade reliability.
       </p>
       <div class="hero-cta-group">
-        <a href="#get-started" class="cta-button primary" data-testid="hero-cta-primary">Start Free Trial</a>
-        <a href="#showcase" class="cta-button secondary" data-testid="hero-cta-secondary">See Demo</a>
+        <a href="#get-started" class="cta-button primary" data-testid="hero-cta-primary" data-analytics-event="cta_click" data-event-category="hero" data-analytics="hero_start_free_trial">Start Free Trial</a>
+        <a href="#showcase" class="cta-button secondary" data-testid="hero-cta-secondary" data-analytics-event="cta_click" data-event-category="hero" data-analytics="hero_see_demo">See Demo</a>
       </div>
     </div>
     <div class="hero-visual">
@@ -214,7 +230,7 @@
           <li>GitHub access</li>
           <li>Self-hosted</li>
         </ul>
-        <a href="https://github.com/yetone/mirdb" class="cta-button secondary">View on GitHub</a>
+        <a href="https://github.com/yetone/mirdb" class="cta-button secondary" data-analytics-event="cta_click" data-event-category="pricing" data-analytics="pricing_view_github">View on GitHub</a>
       </div>
       <div class="pricing-card featured" data-testid="pricing-card">
         <h3 class="pricing-tier">Enterprise</h3>
@@ -228,7 +244,7 @@
           <li>Custom features</li>
           <li>Dedicated assistance</li>
         </ul>
-        <a href="#contact" class="cta-button primary">Contact Sales</a>
+        <a href="#contact" class="cta-button primary" data-analytics-event="cta_click" data-event-category="pricing" data-analytics="pricing_contact_sales">Contact Sales</a>
       </div>
     </div>
   </section>
