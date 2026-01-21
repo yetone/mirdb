@@ -249,6 +249,39 @@
     </div>
   </section>
 
+  <!-- Newsletter Signup Section -->
+  <section id="newsletter" class="newsletter-section" data-testid="newsletter-section">
+    <div class="section-header">
+      <h2 class="section-title">Stay Updated</h2>
+      <p class="section-subtitle">Get the latest news, updates, and tips delivered to your inbox</p>
+    </div>
+    <form class="newsletter-form" data-testid="newsletter-form" id="newsletter-form">
+      <div class="newsletter-input-group">
+        <label for="newsletter-email" class="visually-hidden">Email address</label>
+        <input
+          type="email"
+          id="newsletter-email"
+          name="email"
+          class="newsletter-email"
+          data-testid="newsletter-email"
+          placeholder="Enter your email address"
+          required
+          aria-label="Email address for newsletter subscription"
+          autocomplete="email"
+        >
+        <button type="submit" class="cta-button primary newsletter-submit" data-testid="newsletter-submit" data-analytics-event="newsletter_signup" data-event-category="newsletter" data-analytics="newsletter_subscribe">
+          Subscribe
+        </button>
+      </div>
+      <div class="newsletter-message newsletter-success hidden" data-testid="newsletter-success" aria-live="polite" role="status">
+        Thank you for subscribing! We'll keep you updated.
+      </div>
+      <div class="newsletter-message newsletter-error hidden" data-testid="newsletter-error" aria-live="polite" role="alert">
+        Please enter a valid email address.
+      </div>
+    </form>
+  </section>
+
   <!-- Footer -->
   <footer class="footer" data-testid="footer">
     <div class="footer-content">
