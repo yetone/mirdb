@@ -4,17 +4,23 @@
   "description": "Product Landing Page Design for MirDB",
   "main": "index.html",
   "scripts": {
-    "test": "jest --config jest.config.js",
+    "test": "jest --config jest.config.cjs",
     "test:coverage": "jest --coverage",
+    "test:e2e": "npx playwright test",
     "serve": "npx http-server -p 8080"
   },
+  "type": "module",
   "devDependencies": {
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
+    "@playwright/test": "^1.57.0",
     "@testing-library/dom": "^9.3.0",
-    "@testing-library/jest-dom": "^6.1.0"
+    "@testing-library/jest-dom": "^6.1.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
   },
-  "keywords": ["landing-page", "mirdb"],
+  "keywords": [
+    "landing-page",
+    "mirdb"
+  ],
   "author": "",
   "license": "MIT"
 }
