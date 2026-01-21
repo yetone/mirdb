@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB is a blazing fast, persistent key-value store with Memcached protocol support. Sub-millisecond operations, rock-solid persistence, and zero learning curve">
+  <title>MirDB - Lightning-Fast Key-Value Storage</title>
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="MirDB - Lightning-Fast Key-Value Storage">
+  <meta property="og:description" content="MirDB is a blazing fast, persistent key-value store with Memcached protocol support. Sub-millisecond operations, rock-solid persistence, and zero learning curve.">
+  <meta property="og:image" content="https://mirdb.io/assets/og-image.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mirdb.io/">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mirdb.io/">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <div class="logo">
+        <span class="logo-text">MirDB</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#docs">Documentation</a></li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      <a href="#get-started" class="nav-cta">Get Started</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <h1 class="hero-headline">Lightning-Fast Persistent Key-Value Storage</h1>
+        <p class="hero-subheadline">
+          MirDB combines blazing speed with rock-solid persistence.
+          Drop-in Memcached compatibility means zero learning curve for your team.
+        </p>
+        <div class="hero-cta-container">
+          <button class="cta-primary" id="cta-primary" onclick="handleGetStarted()">
+            Get Started Free
+          </button>
+          <a href="#demo" class="cta-secondary">View Demo</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="../assets/usage.gif" alt="MirDB in action" class="hero-image" loading="lazy">
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <h2>Why Choose MirDB?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#9889;</div>
+          <h3>Blazing Fast</h3>
+          <p>In-memory performance with skiplist-based memtable for sub-millisecond operations.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128274;</div>
+          <h3>Persistent Storage</h3>
+          <p>Your data survives restarts with SSTable-based persistence and compaction.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128268;</div>
+          <h3>Drop-in Compatible</h3>
+          <p>Full Memcached protocol support means instant integration with existing tools.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="product-showcase" id="product-showcase">
+      <h2>See MirDB in Action</h2>
+      <p class="showcase-description">Experience the power and simplicity of MirDB through our intuitive interface and lightning-fast operations.</p>
+      <div class="showcase-gallery">
+        <div class="showcase-item">
+          <img
+            src="../assets/usage.gif"
+            alt="MirDB command-line interface demonstrating key-value operations with real-time performance metrics"
+            class="showcase-image"
+            width="800"
+            height="500"
+            loading="lazy"
+          >
+          <p class="showcase-caption">Real-time key-value operations with performance monitoring</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="social-proof" id="social-proof">
+      <h2>Trusted by Developers</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=sarah" alt="Sarah Chen, Senior Backend Engineer" class="testimonial-image">
+          <blockquote class="testimonial-quote">
+            MirDB transformed our caching layer. We migrated from Redis and saw a 40% reduction in latency while gaining persistence. The Memcached compatibility made the switch seamless.
+          </blockquote>
+          <div class="testimonial-attribution">
+            <span class="testimonial-name">Sarah Chen</span>
+            <span class="testimonial-context">Senior Backend Engineer, TechScale Inc.</span>
+          </div>
+        </div>
+        <div class="testimonial">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=marcus" alt="Marcus Johnson, CTO" class="testimonial-image">
+          <blockquote class="testimonial-quote">
+            As a startup, we needed a solution that was both fast and reliable without breaking the bank. MirDB delivered exactly that. Our session storage has never been more stable.
+          </blockquote>
+          <div class="testimonial-attribution">
+            <span class="testimonial-name">Marcus Johnson</span>
+            <span class="testimonial-context">CTO, DataFlow Startup</span>
+          </div>
+        </div>
+        <div class="testimonial">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=elena" alt="Elena Rodriguez, Platform Lead" class="testimonial-image">
+          <blockquote class="testimonial-quote">
+            The skiplist-based memtable is brilliant. We handle millions of key-value operations daily, and MirDB keeps everything running smoothly with predictable performance.
+          </blockquote>
+          <div class="testimonial-attribution">
+            <span class="testimonial-name">Elena Rodriguez</span>
+            <span class="testimonial-context">Platform Lead, CloudNative Systems</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section" id="pricing">
+      <div class="cta-section-content">
+        <h2>Ready to Supercharge Your Data Layer?</h2>
+        <p class="cta-description">
+          MirDB is open-source and free to use. Get started in minutes with our simple setup guide,
+          or explore our documentation to learn how MirDB can transform your application's performance.
+        </p>
+        <div class="cta-buttons">
+          <a href="https://github.com/yetone/mirdb" class="cta-primary cta-button">
+            Get Started Free
+          </a>
+          <a href="#docs" class="cta-secondary">
+            Read Documentation
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-container">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
+            <span>What is MirDB and how does it differ from Redis or Memcached?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" id="faq-answer-1" hidden>
+            <p>MirDB is a blazing-fast, persistent key-value store that combines the speed of in-memory databases like Memcached with the durability of disk-based storage. Unlike Redis, MirDB uses a skiplist-based memtable architecture for consistent sub-millisecond performance, and unlike Memcached, it persists your data across restarts using SSTable-based storage with automatic compaction.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
+            <span>Is MirDB compatible with my existing Memcached client?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" id="faq-answer-2" hidden>
+            <p>Yes! MirDB implements the full Memcached protocol, which means you can use any existing Memcached client library in your preferred programming language. Simply point your client to MirDB instead of Memcached, and you'll get persistence and improved performance without changing a single line of application code.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
+            <span>How do I get started with MirDB?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" id="faq-answer-3" hidden>
+            <p>Getting started is easy! Clone the repository from GitHub, build the project using Cargo (Rust's package manager), and run the server. MirDB will start listening on the default Memcached port. Check our documentation for detailed installation instructions, configuration options, and best practices for production deployments.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
+            <span>Is MirDB suitable for production use?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" id="faq-answer-4" hidden>
+            <p>MirDB is designed with production workloads in mind. It features automatic data compaction, crash recovery, and efficient memory management. However, as with any database, we recommend thorough testing with your specific workload and data patterns before deploying to production. Join our community to learn from others who are using MirDB in production environments.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>MirDB</h3>
+        <p>Open-source key-value store</p>
+      </div>
+      <div class="footer-section">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#docs">Documentation</a></li>
+          <li><a href="https://github.com/yetone/mirdb">GitHub</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="mailto:contact@mirdb.io">contact@mirdb.io</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MirDB. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
