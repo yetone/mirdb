@@ -7,9 +7,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "serve": "npx http-server . -p 3000"
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "jsdom": "^25.0.1",
