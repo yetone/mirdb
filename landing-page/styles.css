@@ -575,7 +575,7 @@ body {
   text-align: center;
   padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
+  color: var(--border-color); /* Use lighter color for better contrast on dark background */
 }
 
 /* Responsive Design */
