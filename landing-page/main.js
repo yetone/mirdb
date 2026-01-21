@@ -20,6 +20,27 @@ function handleGetStarted() {
 window.handleGetStarted = handleGetStarted;
 
 /**
+ * Initialize FAQ accordion functionality
+ */
+function initFaqAccordion() {
+  const faqQuestions = document.querySelectorAll('.faq-question');
+
+  faqQuestions.forEach(question => {
+    question.addEventListener('click', function() {
+      const answer = this.nextElementSibling;
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+      // Toggle current item
+      this.setAttribute('aria-expanded', !isExpanded);
+      answer.hidden = isExpanded;
+    });
+  });
+}
+
+// Make function available globally for testing
+window.initFaqAccordion = initFaqAccordion;
+
+/**
  * Initialize the landing page
  */
 function initLandingPage() {
@@ -48,6 +69,9 @@ function initLandingPage() {
       }
     });
   }
+
+  // Initialize FAQ accordion
+  initFaqAccordion();
 }
 
 // Initialize when DOM is ready
