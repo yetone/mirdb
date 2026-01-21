@@ -361,6 +361,93 @@ body {
   font-size: 0.875rem;
 }
 
+/* CTA Section Styles */
+.cta-section {
+  padding: 80px 24px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+  text-align: center;
+}
+
+.cta-section-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  color: var(--background);
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.cta-description {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-section .cta-primary {
+  background: var(--background);
+  color: var(--primary-color);
+  padding: 16px 32px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+  min-width: 180px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-section .cta-primary:hover {
+  background: var(--background-secondary);
+  transform: translateY(-2px);
+}
+
+.cta-section .cta-primary:focus {
+  outline: 2px solid var(--background);
+  outline-offset: 2px;
+}
+
+.cta-section .cta-secondary {
+  padding: 16px 32px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  background: transparent;
+  color: var(--background);
+  border: 2px solid var(--background);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  min-width: 180px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-section .cta-secondary:hover {
+  background: var(--background);
+  color: var(--primary-color);
+}
+
+.cta-section .cta-secondary:focus {
+  outline: 2px solid var(--background);
+  outline-offset: 2px;
+}
+
 /* Footer Styles */
 .footer {
   background: var(--text-primary);
