@@ -21,6 +21,10 @@ module.exports = defineConfig({
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
+    {
+      name: 'edge',
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    },
   ],
   webServer: {
     command: 'npx http-server . -p 8080 -c-1',
