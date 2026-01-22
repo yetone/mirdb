@@ -308,7 +308,7 @@
             flex: 1;
         }
 
-        .step-content h4 {
+        .step-content h3 {
             margin-bottom: 0.5rem;
         }
 
@@ -371,21 +371,25 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <a href="#" class="logo">MirDB</a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#code-example">Usage</a></li>
-                <li><a href="#quickstart">Quick Start</a></li>
-                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-            </ul>
-        </div>
-    </nav>
+    <!-- Header with Navigation -->
+    <header>
+        <nav aria-label="Main navigation">
+            <div class="container">
+                <a href="#" class="logo">MirDB</a>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#code-example">Usage</a></li>
+                    <li><a href="#quickstart">Quick Start</a></li>
+                    <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero" aria-label="Introduction">
         <div class="container">
             <img src="../assets/logo.gif" alt="MirDB Logo" class="hero-logo" loading="lazy">
             <h1>MirDB: Persistent Key-Value Store with Memcached Protocol</h1>
@@ -502,34 +506,35 @@ Connected to localhost.
                 <div class="step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h4>Clone the repository</h4>
+                        <h3>Clone the repository</h3>
                         <pre><code>git clone https://github.com/yetone/mirdb.git</code></pre>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h4>Build the project</h4>
+                        <h3>Build the project</h3>
                         <pre><code>cargo build --release</code></pre>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h4>Run MirDB server</h4>
+                        <h3>Run MirDB server</h3>
                         <pre><code>./target/release/mirdb-server</code></pre>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h4>Connect and use</h4>
+                        <h3>Connect and use</h3>
                         <pre><code>telnet localhost 12333</code></pre>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer>
