@@ -6,13 +6,13 @@ test.describe('Accessibility - Image Alt Text', () => {
     await page.goto('/');
   });
 
-  test('TC1: Logo (logo.gif) has descriptive alt text', async ({ page }) => {
+  test('TC1: Logo has descriptive alt text', async ({ page }) => {
     // Check the hero logo image
     const heroLogo = page.locator('.hero-logo');
     await expect(heroLogo).toBeVisible();
 
-    // Verify the logo has the correct source
-    await expect(heroLogo).toHaveAttribute('src', 'assets/logo.gif');
+    // Verify the logo has the optimized placeholder source for performance
+    await expect(heroLogo).toHaveAttribute('src', 'assets/logo-placeholder.svg');
 
     // Verify the logo has descriptive alt text
     const altText = await heroLogo.getAttribute('alt');
