@@ -659,9 +659,11 @@ body {
 
 /* Focus styles for accessibility */
 a:focus,
-button:focus {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+button:focus,
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--color-primary) !important;
+    outline-offset: 2px !important;
 }
 
 /* High contrast mode support */
