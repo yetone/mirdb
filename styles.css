@@ -500,8 +500,8 @@ body {
     vertical-align: middle;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Responsive Design - Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
     .nav {
         flex-direction: column;
         gap: 1rem;
@@ -551,6 +551,73 @@ body {
     .quick-start h2,
     .roadmap h2 {
         font-size: 1.75rem;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Responsive Design - Mobile (below 768px) */
+@media (max-width: 767px) {
+    .nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .hero {
+        padding: 3rem 1rem 4rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero-tagline {
+        font-size: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9375rem;
+    }
+
+    .hero-ctas {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-ctas .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .features,
+    .demo,
+    .quick-start,
+    .roadmap {
+        padding: 2.5rem 0;
+    }
+
+    .features h2,
+    .demo h2,
+    .quick-start h2,
+    .roadmap h2 {
+        font-size: 1.5rem;
     }
 
     .features-grid {
