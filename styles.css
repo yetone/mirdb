@@ -565,6 +565,26 @@ body {
         flex-direction: column;
         text-align: center;
     }
+
+    /* Touch target sizes for mobile accessibility (min 44x44px per WCAG 2.1) */
+    .nav-links a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .copy-btn {
+        min-height: 44px;
+        padding: 0.5rem 1rem;
+    }
+
+    .footer-links a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 0.75rem;
+    }
 }
 
 /* Focus styles for accessibility */
