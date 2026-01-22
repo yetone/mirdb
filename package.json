@@ -1,0 +1,22 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB product homepage",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "serve": "npx http-server . -p 8080 -c-1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "lighthouse": "^13.0.1",
+    "playwright-lighthouse": "^4.0.0"
+  },
+  "keywords": [
+    "mirdb",
+    "homepage",
+    "key-value-store"
+  ],
+  "author": "yetone",
+  "license": "MIT"
+}

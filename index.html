@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol, built in Rust for speed and reliability">
+    <meta name="keywords" content="MirDB, key-value store, Memcached, Rust, database, LSM-tree, persistent storage">
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/yetone/mirdb">
+    <meta property="og:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+    <meta property="og:description" content="MirDB is a high-performance persistent key-value store with Memcached protocol compatibility, built in Rust for speed and reliability.">
+    <meta property="og:image" content="assets/logo.gif">
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://github.com/yetone/mirdb">
+    <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+    <!-- Critical CSS for above-the-fold content -->
+    <style>
+        :root {
+            --color-primary: #2563eb;
+            --color-primary-dark: #1d4ed8;
+            --color-background: #ffffff;
+            --color-surface: #f8fafc;
+            --color-text: #1e293b;
+            --color-text-muted: #64748b;
+            --color-border: #e2e8f0;
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; font-family: var(--font-sans); font-size: 16px; line-height: 1.6; color: var(--color-text); background-color: var(--color-background); }
+        .skip-link { position: absolute; top: -40px; left: 0; background: var(--color-primary); color: white; padding: 0.5rem 1rem; z-index: 100; text-decoration: none; border-radius: 0 0 var(--radius-sm) 0; }
+        .skip-link:focus { top: 0; }
+        .header { position: sticky; top: 0; background: var(--color-background); border-bottom: 1px solid var(--color-border); z-index: 50; }
+        .nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; }
+        .nav-brand { display: flex; align-items: center; gap: 0.75rem; }
+        .nav-logo { width: 40px; height: 40px; border-radius: var(--radius-sm); }
+        .nav-title { font-size: 1.25rem; font-weight: 700; color: var(--color-text); }
+        .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+        .nav-links a { color: var(--color-text-muted); text-decoration: none; font-weight: 500; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.625rem 1.25rem; font-size: 0.9375rem; font-weight: 600; text-decoration: none; border-radius: var(--radius-md); border: none; cursor: pointer; }
+        .btn-primary { background: var(--color-primary); color: white; }
+        .btn-secondary { background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); }
+        .hero { padding: 4rem 1.5rem 6rem; text-align: center; background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-background) 100%); }
+        .hero-content { max-width: 800px; margin: 0 auto; }
+        .hero-logo { width: 150px; height: auto; margin-bottom: 1.5rem; border-radius: var(--radius-lg); }
+        .hero h1 { font-size: 3rem; font-weight: 800; margin: 0 0 1rem; color: var(--color-text); }
+        .hero-tagline { font-size: 1.375rem; color: var(--color-text); margin: 0 0 0.5rem; font-weight: 500; }
+        .hero-subtitle { font-size: 1.125rem; color: var(--color-text-muted); margin: 0 0 2rem; }
+        .hero-ctas { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .hero-badge img { height: 20px; }
+    </style>
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://circleci.com" crossorigin>
+    <!-- Preload main stylesheet for non-blocking load -->
+    <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="styles.css"></noscript>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-brand">
+                <img src="assets/logo.gif" alt="MirDB Logo" class="nav-logo" width="48" height="48" loading="lazy" decoding="async" data-static-src="assets/logo-placeholder.svg" data-reduced-motion="true">
+                <span class="nav-title">MirDB</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-content">
+                <img src="assets/logo.gif" alt="MirDB Logo - A persistent key-value store" class="hero-logo" width="200" height="200" loading="eager" fetchpriority="high" data-static-src="assets/logo-placeholder.svg" data-reduced-motion="true">
+                <h1 id="hero-title">MirDB</h1>
+                <p class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+                <p class="hero-subtitle">Built in Rust for speed and reliability</p>
+                <div class="hero-ctas">
+                    <a href="#quick-start" class="btn btn-primary">Get Started</a>
+                    <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                </div>
+                <div class="hero-badge">
+                    <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer">
+                        <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI Build Status" width="104" height="20" loading="lazy">
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features" aria-labelledby="features-title">
+            <div class="container">
+                <h2 id="features-title">Key Features</h2>
+                <p class="features-intro">Discover what makes MirDB a powerful choice for your key-value storage needs.</p>
+
+                <div class="features-grid">
+                    <article class="feature-card" data-feature="memcached-protocol">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Memcached Protocol</h3>
+                        <p class="feature-description">Drop-in replacement with a familiar API. Seamlessly integrate with existing Memcached clients and infrastructure.</p>
+                    </article>
+
+                    <article class="feature-card" data-feature="persistent-storage">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                                <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Persistent Storage</h3>
+                        <p class="feature-description">LSM-tree based durability ensures your data survives restarts. Never lose your key-value pairs again.</p>
+                    </article>
+
+                    <article class="feature-card" data-feature="high-performance">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-2V9h-2V7h4v10z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">High Performance</h3>
+                        <p class="feature-description">Skip list memtables enable blazing-fast read and write operations for optimal throughput.</p>
+                    </article>
+
+                    <article class="feature-card" data-feature="automatic-compaction">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                                <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Automatic Compaction</h3>
+                        <p class="feature-description">Minor and major compaction support keeps your storage optimized automatically.</p>
+                    </article>
+
+                    <article class="feature-card" data-feature="configurable">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                                <path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Configurable</h3>
+                        <p class="feature-description">TOML-based configuration provides flexible customization for your specific needs.</p>
+                    </article>
+
+                    <article class="feature-card" data-feature="async-io">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                                <path d="M7.77 6.76L6.23 5.48.82 12l5.41 6.52 1.54-1.28L3.42 12l4.35-5.24zM7 13h2v-2H7v2zm10-2h-2v2h2v-2zm-6 2h2v-2h-2v2zm6.77-7.52l-1.54 1.28L20.58 12l-4.35 5.24 1.54 1.28L23.18 12l-5.41-6.52z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Async I/O</h3>
+                        <p class="feature-description">Built on Tokio for efficient networking, handling thousands of concurrent connections with ease.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="demo" class="demo" aria-labelledby="demo-title">
+            <div class="container">
+                <h2 id="demo-title">See It in Action</h2>
+                <p class="demo-intro">Watch MirDB handle key-value operations in real-time.</p>
+                <div class="demo-content">
+                    <img src="assets/usage.gif" alt="MirDB terminal demonstration showing set, get, and delete operations with Memcached protocol commands" class="demo-gif" width="900" height="506" loading="lazy" decoding="async" data-reduced-motion="true">
+                </div>
+            </div>
+        </section>
+
+        <section id="quick-start" class="quick-start" aria-labelledby="quickstart-title">
+            <div class="container">
+                <h2 id="quickstart-title">Quick Start</h2>
+                <p class="quickstart-intro">Get MirDB up and running in minutes.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Installation</span>
+                        <button class="copy-btn" data-copy="install" aria-label="Copy installation commands">Copy</button>
+                    </div>
+                    <pre><code id="install-code"># Clone the repository
+git clone https://github.com/yetone/mirdb
+
+# Build with Cargo
+cd mirdb && cargo build --release
+
+# Run the server
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Basic Operations</span>
+                        <button class="copy-btn" data-copy="operations" aria-label="Copy operation examples">Copy</button>
+                    </div>
+                    <pre><code id="operations-code"># Set a value
+set mykey 0 3600 5
+hello
+
+# Get a value
+get mykey
+
+# Delete a value
+delete mykey</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="roadmap" aria-labelledby="roadmap-title">
+            <div class="container">
+                <h2 id="roadmap-title">Roadmap</h2>
+                <div class="roadmap-content">
+                    <div class="roadmap-section">
+                        <h3>Completed</h3>
+                        <ul class="roadmap-list completed">
+                            <li>Tokio with memcached protocol</li>
+                            <li>Memtable with skiplist</li>
+                            <li>Minor compaction</li>
+                            <li>Major compaction</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-section">
+                        <h3>Planned</h3>
+                        <ul class="roadmap-list planned">
+                            <li>Raft consensus support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <p class="footer-author">Created by <a href="mailto:yetoneful@gmail.com">yetone</a></p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer">
+                        <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI Build Status" width="104" height="18" loading="lazy">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Copy functionality
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const codeId = this.getAttribute('data-copy') + '-code';
+                const code = document.getElementById(codeId);
+                if (code) {
+                    navigator.clipboard.writeText(code.textContent).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'Copied!';
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                        }, 2000);
+                    });
+                }
+            });
+        });
+
+        // Reduced motion support - replace animated GIFs with static alternatives
+        function handleReducedMotion() {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            if (prefersReducedMotion) {
+                document.documentElement.classList.add('reduced-motion');
+
+                // Replace GIFs with static alternatives where available
+                document.querySelectorAll('img[data-reduced-motion="true"]').forEach(img => {
+                    const staticSrc = img.getAttribute('data-static-src');
+                    if (staticSrc) {
+                        // Store original GIF src and swap to static
+                        img.setAttribute('data-gif-src', img.src);
+                        img.src = staticSrc;
+                        img.classList.add('gif-paused');
+                    }
+                });
+            } else {
+                document.documentElement.classList.remove('reduced-motion');
+
+                // Restore GIFs if motion preference changed
+                document.querySelectorAll('img.gif-paused').forEach(img => {
+                    const gifSrc = img.getAttribute('data-gif-src');
+                    if (gifSrc) {
+                        img.src = gifSrc;
+                        img.classList.remove('gif-paused');
+                    }
+                });
+            }
+        }
+
+        // Run on load
+        handleReducedMotion();
+
+        // Listen for changes to the reduced motion preference
+        window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', handleReducedMotion);
+    </script>
+</body>
+</html>

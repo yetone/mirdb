@@ -1,0 +1,41 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "Product Homepage for MirDB - Persistent Key-Value Store with Memcached Protocol",
+  "main": "index.html",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "serve": "npx serve .",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^9.3.4",
+    "@testing-library/jest-dom": "^6.4.2",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.js"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "html"
+    ],
+    "verbose": true
+  },
+  "keywords": [
+    "mirdb",
+    "memcached",
+    "key-value-store",
+    "persistent-storage",
+    "homepage"
+  ],
+  "license": "MIT"
+}
