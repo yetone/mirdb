@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached protocol. High performance, Rust-powered, with LSM tree architecture.">
+    <meta name="keywords" content="mirdb, key-value store, memcached, persistent storage, LSM tree, Rust">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --code-bg: #1e293b;
+            --border-color: #334155;
+            --accent-color: #38bdf8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* Badges */
+        .badges {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+        }
+
+        /* Code Example Section */
+        .code-example {
+            padding: 6rem 0;
+            background: var(--card-bg);
+        }
+
+        .code-example .container {
+            max-width: 800px;
+        }
+
+        .code-block {
+            background: var(--bg-color);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-header {
+            background: var(--border-color);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ef4444; }
+        .code-dot.yellow { background: #eab308; }
+        .code-dot.green { background: #22c55e; }
+
+        .code-title {
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .code-content code {
+            color: var(--text-color);
+        }
+
+        /* Syntax highlighting */
+        .code-comment { color: #6b7280; }
+        .code-command { color: #22c55e; }
+        .code-string { color: #38bdf8; }
+        .code-response { color: #a78bfa; }
+        .code-prompt { color: #f59e0b; }
+
+        /* Usage Demo Section */
+        .usage-demo {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .usage-demo figure {
+            margin: 0;
+            display: inline-block;
+        }
+
+        .usage-demo img {
+            max-width: 100%;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .usage-demo figcaption {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Quick Start Section */
+        .quickstart {
+            padding: 6rem 0;
+        }
+
+        .quickstart .container {
+            max-width: 800px;
+        }
+
+        .quickstart-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content pre {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .step-content code {
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.875rem;
+            color: var(--accent-color);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">MirDB</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#code-example">Usage</a></li>
+                <li><a href="#quickstart">Quick Start</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <img src="../assets/logo.gif" alt="MirDB Logo" class="hero-logo" loading="lazy">
+            <h1>MirDB: Persistent Key-Value Store with Memcached Protocol</h1>
+            <p class="hero-tagline">It is painless as using memcached, but with disk persistence powered by Rust.</p>
+            <div class="cta-buttons">
+                <a href="#quickstart" class="btn btn-primary" id="cta-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" id="cta-github">View on GitHub</a>
+            </div>
+            <div class="badges">
+                <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer">
+                    <img src="https://circleci.com/gh/yetone/mirdb.svg?style=shield" alt="CircleCI Build Status">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128268;</div>
+                    <h3>Memcached Compatible</h3>
+                    <p>Drop-in replacement for memcached clients. Use the familiar text protocol you already know.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128190;</div>
+                    <h3>Persistent Storage</h3>
+                    <p>SSTable-based disk persistence ensures your data survives restarts and crashes.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#9889;</div>
+                    <h3>High Performance</h3>
+                    <p>Rust-powered async I/O with Tokio for blazing fast network operations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#127795;</div>
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Efficient write-heavy workloads with Log-Structured Merge Tree design.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128203;</div>
+                    <h3>Skip List Memtable</h3>
+                    <p>Fast in-memory operations with concurrent skip list implementation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128472;</div>
+                    <h3>Automatic Compaction</h3>
+                    <p>Both minor and major compaction support to optimize storage efficiency.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Example Section (Usage Demonstration) -->
+    <section id="code-example" class="code-example">
+        <div class="container">
+            <h2 class="section-title">Usage Example</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">
+                Connect via telnet and use standard memcached commands
+            </p>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                    <span class="code-title">Terminal - memcached protocol example</span>
+                </div>
+                <div class="code-content">
+                    <pre><code><span class="code-comment"># Connect to MirDB server</span>
+<span class="code-prompt">$</span> <span class="code-command">telnet localhost 12333</span>
+Trying 127.0.0.1...
+Connected to localhost.
+
+<span class="code-comment"># Store a key-value pair</span>
+<span class="code-command">set mykey 0 0 5</span>
+<span class="code-string">hello</span>
+<span class="code-response">STORED</span>
+
+<span class="code-comment"># Retrieve the value</span>
+<span class="code-command">get mykey</span>
+<span class="code-response">VALUE mykey 0 5</span>
+<span class="code-string">hello</span>
+<span class="code-response">END</span>
+
+<span class="code-comment"># Delete the key</span>
+<span class="code-command">delete mykey</span>
+<span class="code-response">DELETED</span></code></pre>
+                </div>
+            </div>
+            <!-- Usage Demonstration GIF -->
+            <div class="usage-demo" data-testid="usage-section">
+                <figure>
+                    <img
+                        src="../assets/usage.gif"
+                        alt="MirDB Usage Demo - Terminal demonstration showing set, get, and delete commands with the memcached protocol"
+                        loading="lazy"
+                        style="max-width: 100%;"
+                    >
+                    <figcaption class="caption" data-testid="usage-caption">
+                        Terminal interaction demonstrating MirDB's memcached-compatible commands: set, get, and delete operations in action
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quickstart" class="quickstart">
+        <div class="container">
+            <h2 class="section-title">Quick Start</h2>
+            <div class="quickstart-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Clone the repository</h4>
+                        <pre><code>git clone https://github.com/yetone/mirdb.git</code></pre>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Build the project</h4>
+                        <pre><code>cargo build --release</code></pre>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Run MirDB server</h4>
+                        <pre><code>./target/release/mirdb-server</code></pre>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Connect and use</h4>
+                        <pre><code>telnet localhost 12333</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a>
+            </div>
+            <p class="copyright">MirDB - A Persistent Key-Value Store with Memcached Protocol</p>
+        </div>
+    </footer>
+</body>
+</html>
