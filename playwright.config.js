@@ -25,6 +25,14 @@ module.exports = defineConfig({
       name: 'edge',
       use: { ...devices['Desktop Edge'], channel: 'msedge' },
     },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'webkit-mobile',
+      use: { ...devices['iPhone 12'] },
+    },
   ],
   webServer: {
     command: 'npx http-server . -p 8080 -c-1',
