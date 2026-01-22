@@ -65,7 +65,7 @@
     <header class="header">
         <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-brand">
-                <img src="assets/logo-placeholder.svg" alt="MirDB Logo" class="nav-logo" width="48" height="48" loading="lazy" decoding="async">
+                <img src="assets/logo.gif" alt="MirDB Logo" class="nav-logo" width="48" height="48" loading="lazy" decoding="async" data-static-src="assets/logo-placeholder.svg" data-reduced-motion="true">
                 <span class="nav-title">MirDB</span>
             </div>
             <ul class="nav-links">
@@ -80,7 +80,7 @@
     <main id="main-content">
         <section class="hero" aria-labelledby="hero-title">
             <div class="hero-content">
-                <img src="assets/logo-placeholder.svg" alt="MirDB Logo - A persistent key-value store" class="hero-logo" width="200" height="200" loading="eager" fetchpriority="high">
+                <img src="assets/logo.gif" alt="MirDB Logo - A persistent key-value store" class="hero-logo" width="200" height="200" loading="eager" fetchpriority="high" data-static-src="assets/logo-placeholder.svg" data-reduced-motion="true">
                 <h1 id="hero-title">MirDB</h1>
                 <p class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
                 <p class="hero-subtitle">Built in Rust for speed and reliability</p>
@@ -170,7 +170,7 @@
                 <h2 id="demo-title">See It in Action</h2>
                 <p class="demo-intro">Watch MirDB handle key-value operations in real-time.</p>
                 <div class="demo-content">
-                    <img src="assets/usage.gif" alt="MirDB terminal demonstration showing set, get, and delete operations" class="demo-gif" width="900" height="506" loading="lazy" decoding="async">
+                    <img src="assets/usage.gif" alt="MirDB terminal demonstration showing set, get, and delete operations with Memcached protocol commands" class="demo-gif" width="900" height="506" loading="lazy" decoding="async" data-reduced-motion="true">
                 </div>
             </div>
         </section>
@@ -271,12 +271,42 @@ delete mykey</code></pre>
             });
         });
 
-        // Reduced motion support
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.querySelectorAll('img[src$=".gif"]').forEach(img => {
-                img.style.animationPlayState = 'paused';
-            });
+        // Reduced motion support - replace animated GIFs with static alternatives
+        function handleReducedMotion() {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            if (prefersReducedMotion) {
+                document.documentElement.classList.add('reduced-motion');
+
+                // Replace GIFs with static alternatives where available
+                document.querySelectorAll('img[data-reduced-motion="true"]').forEach(img => {
+                    const staticSrc = img.getAttribute('data-static-src');
+                    if (staticSrc) {
+                        // Store original GIF src and swap to static
+                        img.setAttribute('data-gif-src', img.src);
+                        img.src = staticSrc;
+                        img.classList.add('gif-paused');
+                    }
+                });
+            } else {
+                document.documentElement.classList.remove('reduced-motion');
+
+                // Restore GIFs if motion preference changed
+                document.querySelectorAll('img.gif-paused').forEach(img => {
+                    const gifSrc = img.getAttribute('data-gif-src');
+                    if (gifSrc) {
+                        img.src = gifSrc;
+                        img.classList.remove('gif-paused');
+                    }
+                });
+            }
         }
+
+        // Run on load
+        handleReducedMotion();
+
+        // Listen for changes to the reduced motion preference
+        window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', handleReducedMotion);
     </script>
 </body>
 </html>
