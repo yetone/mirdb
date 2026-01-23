@@ -412,3 +412,202 @@ describe('SEO Meta Tags (Scenario 14)', () => {
     });
   });
 });
+
+describe('External Link Security (Scenario 16)', () => {
+  /**
+   * Helper function to identify external links
+   * External links are anchor elements that:
+   * - Have an href starting with http:// or https://
+   * - AND do not point to the current domain
+   */
+  const isExternalLink = (anchor: HTMLAnchorElement): boolean => {
+    const href = anchor.getAttribute('href');
+    if (!href) return false;
+    // Check if it's an absolute URL (starts with http:// or https://)
+    if (href.startsWith('http://') || href.startsWith('https://')) {
+      // Check if it's not pointing to the current domain
+      try {
+        const url = new URL(href);
+        return url.hostname !== window.location.hostname;
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  };
+
+  /**
+   * Helper function to get all external links in the document
+   */
+  const getExternalLinks = (): HTMLAnchorElement[] => {
+    const allAnchors = document.querySelectorAll('a');
+    return Array.from(allAnchors).filter(isExternalLink);
+  };
+
+  /**
+   * Sensitive data patterns to check in URLs
+   * These patterns indicate potentially sensitive information that should not be in external links
+   */
+  const sensitivePatterns = [
+    /token=/i,
+    /api_key=/i,
+    /apikey=/i,
+    /auth=/i,
+    /password=/i,
+    /secret=/i,
+    /session=/i,
+    /jwt=/i,
+    /bearer=/i,
+    /access_token=/i,
+    /refresh_token=/i,
+    /private_key=/i,
+    /credential=/i,
+  ];
+
+  describe('Security Attributes on External Links', () => {
+    it('should ensure all external links have rel="noopener noreferrer"', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const externalLinks = getExternalLinks();
+
+      // If there are external links, they must have proper security attributes
+      externalLinks.forEach((link) => {
+        const rel = link.getAttribute('rel');
+        expect(rel).toBeTruthy();
+        expect(rel).toContain('noopener');
+        expect(rel).toContain('noreferrer');
+      });
+
+      // This test passes if:
+      // 1. There are no external links (nothing to secure)
+      // 2. All external links have rel="noopener noreferrer"
+    });
+
+    it('should verify external links have target="_blank" for new tab behavior', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const externalLinks = getExternalLinks();
+
+      // External links should open in a new tab for user convenience and security
+      externalLinks.forEach((link) => {
+        const target = link.getAttribute('target');
+        expect(target).toBe('_blank');
+      });
+    });
+
+    it('should verify external links do not contain sensitive data in URLs', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const externalLinks = getExternalLinks();
+
+      externalLinks.forEach((link) => {
+        const href = link.getAttribute('href') || '';
+        // Check that the URL does not contain any sensitive patterns
+        sensitivePatterns.forEach((pattern) => {
+          expect(href).not.toMatch(pattern);
+        });
+      });
+    });
+  });
+
+  describe('External Link Security for Authenticated Users', () => {
+    it('should ensure external links have security attributes even when authenticated', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({
+          isAuthenticated: true,
+          user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        }),
+      });
+
+      const externalLinks = getExternalLinks();
+
+      externalLinks.forEach((link) => {
+        const rel = link.getAttribute('rel');
+        expect(rel).toBeTruthy();
+        expect(rel).toContain('noopener');
+        expect(rel).toContain('noreferrer');
+      });
+    });
+
+    it('should not leak user tokens in external link URLs when authenticated', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({
+          isAuthenticated: true,
+          user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        }),
+      });
+
+      const externalLinks = getExternalLinks();
+
+      // Check for any user-specific sensitive data patterns
+      const userSensitivePatterns = [
+        /user_id=/i,
+        /user=/i,
+        /email=/i,
+        /username=/i,
+        ...sensitivePatterns,
+      ];
+
+      externalLinks.forEach((link) => {
+        const href = link.getAttribute('href') || '';
+        userSensitivePatterns.forEach((pattern) => {
+          expect(href).not.toMatch(pattern);
+        });
+      });
+    });
+  });
+
+  describe('Internal Links Distinction', () => {
+    it('should have internal links using React Router (no external URLs for navigation)', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Get all navigation-related links
+      const allLinks = document.querySelectorAll('a');
+      const internalLinks = Array.from(allLinks).filter((link) => !isExternalLink(link));
+
+      // Internal navigation links should use relative paths
+      internalLinks.forEach((link) => {
+        const href = link.getAttribute('href');
+        if (href) {
+          // Internal links should start with "/" (relative paths) or be "#" anchors
+          const isRelativePath = href.startsWith('/') || href.startsWith('#');
+          expect(isRelativePath).toBe(true);
+        }
+      });
+    });
+
+    it('should verify Login link is internal, not external', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const loginLinks = screen.getAllByRole('link', { name: /login/i });
+      loginLinks.forEach((link) => {
+        expect(link).toHaveAttribute('href', '/login');
+        // Should not be an external link
+        expect(link.getAttribute('href')).not.toMatch(/^https?:\/\//);
+      });
+    });
+
+    it('should verify Register link is internal, not external', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const registerLinks = screen.getAllByRole('link', { name: /register/i });
+      registerLinks.forEach((link) => {
+        expect(link).toHaveAttribute('href', '/register');
+        // Should not be an external link
+        expect(link.getAttribute('href')).not.toMatch(/^https?:\/\//);
+      });
+    });
+  });
+});
