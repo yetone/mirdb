@@ -1,27 +1,28 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import UrlStats from './pages/UrlStats';
+import Settings from './pages/Settings';
+import ProtectedLayout from './components/ProtectedLayout';
+import AdminRoute from './components/AdminRoute';
 
-const App: React.FC = () => {
+function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <ThemeProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-        </ThemeProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route element={<ProtectedLayout />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/stats/:shortCode" element={<UrlStats />} />
+        <Route element={<AdminRoute />}>
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+      </Route>
+    </Routes>
   );
-};
+}
 
 export default App;

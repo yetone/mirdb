@@ -1,91 +1,83 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import api from '../api';
 
-export interface User {
+interface User {
   id: number;
   username: string;
   email: string;
   is_admin: number;
 }
 
-export interface AuthContextValue {
+interface AuthContextType {
+  user: User | null;
+  loading: boolean;
   isAuthenticated: boolean;
   isAdmin: boolean;
-  loading: boolean;
-  user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => void;
-  register: (username: string, email: string, password: string) => Promise<void>;
 }
 
-export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const initAuth = async () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          // In a real app, validate token with backend
-          const storedUser = localStorage.getItem('user');
-          if (storedUser) {
-            setUser(JSON.parse(storedUser));
-          }
+          const response = await api.get('/api/users/me');
+          setUser(response.data);
         } catch {
           localStorage.removeItem('token');
-          localStorage.removeItem('user');
         }
       }
       setLoading(false);
     };
-    checkAuth();
+
+    initAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    // In a real app, call the login API
-    const mockUser: User = { id: 1, username: 'testuser', email, is_admin: 0 };
-    localStorage.setItem('token', 'mock-token');
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    setUser(mockUser);
+  const login = async (username: string, password: string) => {
+    const formData = new URLSearchParams();
+    formData.append('username', username);
+    formData.append('password', password);
+
+    const response = await api.post('/api/token', formData, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+
+    localStorage.setItem('token', response.data.access_token);
+
+    const userResponse = await api.get('/api/users/me');
+    setUser(userResponse.data);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
     setUser(null);
   };
 
-  const register = async (username: string, email: string, password: string) => {
-    // In a real app, call the register API
-    const mockUser: User = { id: 1, username, email, is_admin: 0 };
-    localStorage.setItem('token', 'mock-token');
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    setUser(mockUser);
-  };
-
-  const value: AuthContextValue = {
+  const value: AuthContextType = {
+    user,
+    loading,
     isAuthenticated: !!user,
     isAdmin: user?.is_admin === 1,
-    loading,
-    user,
     login,
     logout,
-    register,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = (): AuthContextValue => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
+
+export { AuthContext };

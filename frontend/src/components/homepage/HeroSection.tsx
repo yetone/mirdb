@@ -10,66 +10,59 @@
  * - Optional BackgroundEffect integration
  *
  * Related Requirements: REQ-1, REQ-2, REQ-4, REQ-8
- *
- * Expected exports:
- * - HeroSection: React.FC component
- *
- * Props:
- * - None (uses AuthContext internally)
- *
- * Dependencies:
- * - AuthContext: For conditional CTA rendering
- * - FuturisticButton: For CTA buttons
- * - BackgroundEffect: For visual background
- * - react-router-dom: For navigation links
  */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
+import FuturisticButton from '../FuturisticButton';
+import BackgroundEffect from '../BackgroundEffect';
 
-export const HeroSection: React.FC = () => {
+const HeroSection: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <section className="hero min-h-screen bg-base-200">
-      <div className="hero-content text-center">
-        <div className="max-w-2xl">
-          <h1 className="text-5xl font-bold">
-            Shorten Links. Track Clicks. Grow Insights.
-          </h1>
-          <p className="py-6 text-lg">
-            Create memorable, short links instantly. Track every click with detailed
-            statistics and understand your audience with geographic and device insights.
-          </p>
-          <div className="flex gap-4 justify-center">
-            {isAuthenticated ? (
-              <Link
-                to="/dashboard"
-                className="btn btn-primary btn-lg"
-              >
-                Go to Dashboard
-              </Link>
-            ) : (
-              <>
-                <Link
-                  to="/register"
-                  className="btn btn-primary btn-lg"
-                  data-testid="get-started-button"
-                >
-                  Get Started
-                </Link>
-                <Link
-                  to="/login"
-                  className="btn btn-outline btn-lg"
-                  data-testid="login-button"
-                >
-                  Login
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
+    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+      <BackgroundEffect />
+      <div className="container mx-auto px-4 text-center z-10">
+        <motion.h1
+          className="text-4xl md:text-6xl font-bold mb-6"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Shorten Links. Track Clicks. Grow Insights.
+        </motion.h1>
+        <motion.p
+          className="text-lg md:text-xl text-base-content/70 mb-8 max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          Transform long URLs into memorable short links and gain powerful analytics
+          to understand your audience better.
+        </motion.p>
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          {isAuthenticated ? (
+            <FuturisticButton to="/dashboard" variant="primary" className="btn-lg">
+              Go to Dashboard
+            </FuturisticButton>
+          ) : (
+            <>
+              <FuturisticButton to="/register" variant="primary" className="btn-lg">
+                Get Started
+              </FuturisticButton>
+              <FuturisticButton to="/login" variant="outline" className="btn-lg">
+                Login
+              </FuturisticButton>
+            </>
+          )}
+        </motion.div>
       </div>
     </section>
   );

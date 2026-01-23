@@ -12,98 +12,105 @@
 import React, { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import { AuthContext, AuthContextValue } from '../../src/contexts/AuthContext';
-import { ThemeContext, ThemeContextValue } from '../../src/contexts/ThemeContext';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { AuthContext } from '../../src/contexts/AuthContext';
+import { ThemeProvider } from '../../src/contexts/ThemeContext';
+import { vi } from 'vitest';
 
-export interface MockAuthContextOptions {
-  isAuthenticated?: boolean;
-  isAdmin?: boolean;
-  loading?: boolean;
-  user?: { id: number; username: string; email: string; is_admin: number } | null;
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  is_admin: number;
 }
 
-export interface MockThemeContextOptions {
-  theme?: string;
+interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => void;
 }
 
-export const createMockAuthContext = (
-  options: MockAuthContextOptions = {}
-): AuthContextValue => {
-  const {
-    isAuthenticated = false,
-    isAdmin = false,
-    loading = false,
-    user = null,
-  } = options;
+type Theme = 'light' | 'dark' | 'cyberpunk' | 'synthwave' | 'retro' | 'valentine' | 'night';
 
-  return {
-    isAuthenticated,
-    isAdmin,
-    loading,
-    user,
-    login: async () => {},
-    logout: () => {},
-    register: async () => {},
-  };
-};
+interface ThemeContextType {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+}
 
-export const createMockThemeContext = (
-  options: MockThemeContextOptions = {}
-): ThemeContextValue => {
-  const { theme = 'dark' } = options;
+export const createMockAuthContext = (overrides?: Partial<AuthContextType>): AuthContextType => ({
+  user: null,
+  loading: false,
+  isAuthenticated: false,
+  isAdmin: false,
+  login: vi.fn(),
+  logout: vi.fn(),
+  ...overrides,
+});
 
-  return {
-    theme,
-    setTheme: () => {},
-  };
-};
+export const createMockThemeContext = (overrides?: Partial<ThemeContextType>): ThemeContextType => ({
+  theme: 'light',
+  setTheme: vi.fn(),
+  ...overrides,
+});
 
-interface ProvidersProps {
-  children: ReactNode;
-  authContext?: AuthContextValue;
-  themeContext?: ThemeContextValue;
+interface ProviderOptions {
+  authContext?: Partial<AuthContextType>;
+  themeContext?: Partial<ThemeContextType>;
   initialEntries?: string[];
+  useMemoryRouter?: boolean;
 }
 
-const AllProviders: React.FC<ProvidersProps> = ({
-  children,
-  authContext = createMockAuthContext(),
-  themeContext = createMockThemeContext(),
-  initialEntries = ['/'],
-}) => {
+interface AllProvidersProps {
+  children: ReactNode;
+  options?: ProviderOptions;
+}
+
+const AllProviders: React.FC<AllProvidersProps> = ({ children, options = {} }) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
+  const authValue = createMockAuthContext(options.authContext);
+
+  const RouterWrapper = options.useMemoryRouter ? MemoryRouter : BrowserRouter;
+  const routerProps = options.useMemoryRouter && options.initialEntries
+    ? { initialEntries: options.initialEntries }
+    : {};
+
   return (
-    <MemoryRouter initialEntries={initialEntries}>
-      <AuthContext.Provider value={authContext}>
-        <ThemeContext.Provider value={themeContext}>
-          {children}
-        </ThemeContext.Provider>
-      </AuthContext.Provider>
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <RouterWrapper {...routerProps}>
+        <ThemeProvider>
+          <AuthContext.Provider value={authValue}>
+            {children}
+          </AuthContext.Provider>
+        </ThemeProvider>
+      </RouterWrapper>
+    </QueryClientProvider>
   );
 };
 
-export interface RenderWithProvidersOptions extends Omit<RenderOptions, 'wrapper'> {
-  authContext?: AuthContextValue;
-  themeContext?: ThemeContextValue;
-  initialEntries?: string[];
-}
-
 export const renderWithProviders = (
   ui: ReactElement,
-  options: RenderWithProvidersOptions = {}
+  options?: ProviderOptions & Omit<RenderOptions, 'wrapper'>
 ) => {
-  const { authContext, themeContext, initialEntries, ...renderOptions } = options;
+  const { authContext, themeContext, initialEntries, useMemoryRouter, ...renderOptions } = options || {};
 
   return render(ui, {
     wrapper: ({ children }) => (
-      <AllProviders
-        authContext={authContext}
-        themeContext={themeContext}
-        initialEntries={initialEntries}
-      >
+      <AllProviders options={{ authContext, themeContext, initialEntries, useMemoryRouter }}>
         {children}
       </AllProviders>
     ),
     ...renderOptions,
   });
 };
+
+export default renderWithProviders;

@@ -2,25 +2,27 @@
  * Home Page Component
  * Owner: Multiple scenarios (coordination required)
  *
- * Main landing page that composes all homepage sections:
- * - Navbar (existing component)
- * - HeroSection
- * - FeatureCards
- * - HowItWorks
- * - StatsSection
- * - Footer
+ * Main landing page that composes all homepage sections
  *
  * Related Requirements: All homepage requirements
  */
 
 import React from 'react';
-import { HeroSection } from '../components/homepage';
+import Navbar from '../components/Navbar';
+import { HeroSection, FeatureCards, HowItWorks, StatsSection, Footer } from '../components/homepage';
 
-export const Home: React.FC = () => {
+const Home: React.FC = () => {
   return (
-    <main>
-      <HeroSection />
-    </main>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-1">
+        <HeroSection />
+        <FeatureCards />
+        <HowItWorks />
+        <StatsSection />
+      </main>
+      <Footer />
+    </div>
   );
 };
 

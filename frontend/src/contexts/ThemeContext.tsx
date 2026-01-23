@@ -1,38 +1,21 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, ReactNode } from 'react';
+import { useThemeStore } from '../store/uiStore';
 
-export interface ThemeContextValue {
-  theme: string;
-  setTheme: (theme: string) => void;
+type Theme = 'light' | 'dark' | 'cyberpunk' | 'synthwave' | 'retro' | 'valentine' | 'night';
+
+interface ThemeContextType {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
 }
 
-export const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-interface ThemeProviderProps {
-  children: ReactNode;
-}
-
-const AVAILABLE_THEMES = ['light', 'dark', 'cyberpunk', 'synthwave'];
-
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setThemeState] = useState<string>('dark');
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme && AVAILABLE_THEMES.includes(savedTheme)) {
-      setThemeState(savedTheme);
-    }
-  }, []);
+export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const { theme, setTheme } = useThemeStore();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
-
-  const setTheme = (newTheme: string) => {
-    if (AVAILABLE_THEMES.includes(newTheme)) {
-      localStorage.setItem('theme', newTheme);
-      setThemeState(newTheme);
-    }
-  };
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
@@ -41,10 +24,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   );
 };
 
-export const useTheme = (): ThemeContextValue => {
+export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
 };
+
+export { ThemeContext };
