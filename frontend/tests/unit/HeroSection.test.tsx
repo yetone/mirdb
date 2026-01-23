@@ -478,3 +478,189 @@ describe('Background Effects and Animations (Scenario 12)', () => {
     });
   });
 });
+
+/**
+ * FuturisticButton Component Integration Tests (Scenario 17)
+ *
+ * Test coverage:
+ * - Test Case 1: At least 2 FuturisticButton components are rendered in hero section
+ * - Test Case 2: Get Started button has primary/prominent styling
+ * - Test Case 3: Login button has secondary/subdued styling
+ * - Test Case 4: Button displays hover effect/animation
+ */
+describe('FuturisticButton Component Integration (Scenario 17)', () => {
+  describe('Test Case 1: FuturisticButton Component Rendering', () => {
+    it('should render at least 2 FuturisticButton components in hero section when unauthenticated', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Find the Get Started and Login buttons - both are FuturisticButton components
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const loginButton = screen.getByTestId('login-button');
+
+      expect(getStartedButton).toBeInTheDocument();
+      expect(loginButton).toBeInTheDocument();
+    });
+
+    it('should render FuturisticButton components as Links with proper href attributes', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const loginButton = screen.getByTestId('login-button');
+
+      // FuturisticButton with `to` prop renders as a Link
+      expect(getStartedButton).toHaveAttribute('href', '/register');
+      expect(loginButton).toHaveAttribute('href', '/login');
+    });
+
+    it('should render at least 1 FuturisticButton component when authenticated', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({
+          isAuthenticated: true,
+          user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        }),
+      });
+
+      // Authenticated users see the Dashboard button
+      const dashboardButton = screen.getByTestId('hero-cta-dashboard');
+      expect(dashboardButton).toBeInTheDocument();
+      expect(dashboardButton).toHaveAttribute('href', '/dashboard');
+    });
+  });
+
+  describe('Test Case 2: Primary CTA Styling', () => {
+    it('should apply primary variant styling to Get Started button', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      // FuturisticButton with variant="primary" applies btn-primary class
+      // The button is wrapped in a Link, so we need to check the span inside
+      const buttonSpan = getStartedButton.querySelector('span');
+      expect(buttonSpan).toHaveClass('btn-primary');
+    });
+
+    it('should apply btn-lg class for prominent sizing on Get Started button', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const buttonSpan = getStartedButton.querySelector('span');
+      expect(buttonSpan).toHaveClass('btn-lg');
+    });
+
+    it('should have primary styling on Dashboard button when authenticated', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({
+          isAuthenticated: true,
+          user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        }),
+      });
+
+      const dashboardButton = screen.getByTestId('hero-cta-dashboard');
+      const buttonSpan = dashboardButton.querySelector('span');
+      expect(buttonSpan).toHaveClass('btn-primary');
+      expect(buttonSpan).toHaveClass('btn-lg');
+    });
+  });
+
+  describe('Test Case 3: Secondary CTA Styling', () => {
+    it('should apply outline variant styling to Login button', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const loginButton = screen.getByTestId('login-button');
+      // FuturisticButton with variant="outline" applies btn-outline class
+      const buttonSpan = loginButton.querySelector('span');
+      expect(buttonSpan).toHaveClass('btn-outline');
+    });
+
+    it('should apply btn-lg class to Login button for consistent sizing', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const loginButton = screen.getByTestId('login-button');
+      const buttonSpan = loginButton.querySelector('span');
+      expect(buttonSpan).toHaveClass('btn-lg');
+    });
+
+    it('should have distinct styling between primary and secondary CTAs', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const loginButton = screen.getByTestId('login-button');
+
+      const getStartedSpan = getStartedButton.querySelector('span');
+      const loginSpan = loginButton.querySelector('span');
+
+      // Primary uses btn-primary, secondary uses btn-outline
+      expect(getStartedSpan).toHaveClass('btn-primary');
+      expect(getStartedSpan).not.toHaveClass('btn-outline');
+
+      expect(loginSpan).toHaveClass('btn-outline');
+      expect(loginSpan).not.toHaveClass('btn-primary');
+    });
+  });
+
+  describe('Test Case 4: Hover Effect and Animation', () => {
+    it('should render FuturisticButton span elements with motion wrapper', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const buttonSpan = getStartedButton.querySelector('span');
+
+      // FuturisticButton wraps the button text in motion.span which renders as a span
+      // The motion component has classes applied including btn for styling
+      expect(buttonSpan).toBeInTheDocument();
+      expect(buttonSpan).toHaveClass('btn');
+    });
+
+    it('should have FuturisticButton with transition classes for hover effects', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const buttonSpan = getStartedButton.querySelector('span');
+
+      // FuturisticButton includes transition-all duration-300 for smooth hover effects
+      expect(buttonSpan).toHaveClass('transition-all');
+      expect(buttonSpan).toHaveClass('duration-300');
+    });
+
+    it('should have FuturisticButton with overflow-hidden for animation containment', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const loginButton = screen.getByTestId('login-button');
+      const buttonSpan = loginButton.querySelector('span');
+
+      // FuturisticButton has overflow-hidden for containing animation effects
+      expect(buttonSpan).toHaveClass('overflow-hidden');
+    });
+
+    it('should have tabIndex for keyboard accessibility on button spans', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const buttonSpan = getStartedButton.querySelector('span');
+
+      // FuturisticButton with `to` prop sets tabIndex={0} on the span
+      expect(buttonSpan).toHaveAttribute('tabindex', '0');
+    });
+  });
+});
