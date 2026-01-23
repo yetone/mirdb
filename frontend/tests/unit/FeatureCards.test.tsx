@@ -156,3 +156,100 @@ describe('GlassMorphismCard Usage', () => {
     expect(gridContainer).toHaveClass('lg:grid-cols-3');
   });
 });
+
+/**
+ * Value Proposition Communication Tests (Scenario 19)
+ *
+ * Test coverage:
+ * - Feature cards clearly describe URL shortening capability
+ * - Feature cards clearly describe analytics capability
+ * - Feature cards clearly describe geographic tracking capability
+ */
+describe('Value Proposition Communication (Scenario 19)', () => {
+  it('should clearly describe URL shortening capability in features', () => {
+    renderWithProviders(<FeatureCards />);
+
+    // Check for URL shortening related content
+    const urlShorteningTitle = screen.getByText('URL Shortening');
+    expect(urlShorteningTitle).toBeInTheDocument();
+
+    // Description should clearly explain what the feature does
+    const description = screen.getByText(/short links/i);
+    expect(description).toBeInTheDocument();
+  });
+
+  it('should clearly describe analytics capability in features', () => {
+    renderWithProviders(<FeatureCards />);
+
+    // Check for analytics related content
+    const analyticsTitle = screen.getByText('Click Analytics');
+    expect(analyticsTitle).toBeInTheDocument();
+
+    // Description should mention tracking, statistics, or insights
+    const analyticsDescription = screen.getByText(/Track every click with detailed statistics/i);
+    expect(analyticsDescription).toBeInTheDocument();
+  });
+
+  it('should clearly describe geographic tracking capability in features', () => {
+    renderWithProviders(<FeatureCards />);
+
+    // Check for geographic tracking content
+    const geoTitle = screen.getByText('Geographic Insights');
+    expect(geoTitle).toBeInTheDocument();
+
+    // Description should mention location, audience, or GeoIP tracking
+    const geoDescription = screen.getByText(/where your audience is located|GeoIP/i);
+    expect(geoDescription).toBeInTheDocument();
+  });
+
+  it('should have all features clearly describing their purpose', () => {
+    renderWithProviders(<FeatureCards />);
+
+    // Each feature should have a title and description that explains its value
+    const expectedFeatures = [
+      { title: 'URL Shortening', descriptionPattern: /short links|memorable/i },
+      { title: 'Click Analytics', descriptionPattern: /Track every click with detailed statistics/i },
+      { title: 'Geographic Insights', descriptionPattern: /where your audience is located/i },
+      { title: 'Browser & Device Data', descriptionPattern: /how users access your links/i },
+      { title: 'Shareable Stats', descriptionPattern: /share.*tokens?|Share analytics publicly/i },
+      { title: 'Multi-Theme Support', descriptionPattern: /theme options|Customize your experience/i },
+    ];
+
+    expectedFeatures.forEach(({ title, descriptionPattern }) => {
+      // Title should be present
+      expect(screen.getByText(title)).toBeInTheDocument();
+
+      // Description matching the pattern should be present (use getAllByText if multiple matches possible)
+      const matches = screen.getAllByText(descriptionPattern);
+      expect(matches.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('should have features explaining core value proposition concepts', () => {
+    const { container } = renderWithProviders(<FeatureCards />);
+
+    // Get all feature card descriptions (p elements within cards)
+    const descriptions = container.querySelectorAll('.card-body p');
+    const allDescriptionText = Array.from(descriptions)
+      .map(el => el.textContent?.toLowerCase() || '')
+      .join(' ');
+
+    // Value proposition should cover these key concepts:
+    // 1. URL shortening / short links
+    expect(allDescriptionText).toContain('short');
+
+    // 2. Analytics / tracking / statistics
+    expect(
+      allDescriptionText.includes('track') ||
+      allDescriptionText.includes('analytics') ||
+      allDescriptionText.includes('statistics')
+    ).toBe(true);
+
+    // 3. Geographic / location insights
+    expect(
+      allDescriptionText.includes('geographic') ||
+      allDescriptionText.includes('location') ||
+      allDescriptionText.includes('audience')
+    ).toBe(true);
+  });
+});

@@ -215,6 +215,40 @@ describe('Hero Section Display and Content (Scenario 1)', () => {
         subheadlineText.includes('device')
       ).toBe(true);
     });
+
+    it('should have hero section designed to be above the fold on standard viewport', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const heroSection = screen.getByTestId('hero-section');
+
+      // Hero section should have min-h-[80vh] class to ensure it fills most of the viewport
+      // This ensures the value proposition is visible without scrolling on standard viewports
+      expect(heroSection).toHaveClass('min-h-[80vh]');
+
+      // Hero should be flex-centered to ensure content is visually prominent
+      expect(heroSection).toHaveClass('flex');
+      expect(heroSection).toHaveClass('items-center');
+      expect(heroSection).toHaveClass('justify-center');
+    });
+
+    it('should have all key value proposition elements visible in hero section', () => {
+      renderWithProviders(<HeroSection />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // All key value proposition elements should be present (above the fold)
+      const heroSection = screen.getByTestId('hero-section');
+      const headline = screen.getByTestId('hero-headline');
+      const subheadline = screen.getByTestId('hero-subheadline');
+      const getStartedButton = screen.getByTestId('get-started-button');
+
+      // All elements should be inside the hero section
+      expect(heroSection).toContainElement(headline);
+      expect(heroSection).toContainElement(subheadline);
+      expect(heroSection).toContainElement(getStartedButton);
+    });
   });
 });
 
