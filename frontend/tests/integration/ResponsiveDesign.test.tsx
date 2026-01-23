@@ -13,13 +13,17 @@
  * - describe('Desktop Layout')
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import { renderWithProviders } from '../utils/renderWithProviders';
 import Home from '../../src/pages/Home';
 
 /**
  * Helper to set up viewport width simulation for responsive tests
+ * Note: In JSDOM, we can't actually resize the viewport, but we can
+ * verify that responsive Tailwind classes are applied correctly.
+ * The actual responsive behavior is handled by CSS which is validated
+ * through the presence of responsive class names.
  */
 const setViewportWidth = (width: number) => {
   Object.defineProperty(window, 'innerWidth', {
@@ -339,5 +343,189 @@ describe('Responsive Design - Mobile Layout (Scenario 8)', () => {
       const ctaContainer = container.querySelector('.flex.flex-col.sm\\:flex-row.gap-4');
       expect(ctaContainer).toBeInTheDocument();
     });
+  });
+});
+
+describe('Responsive Design - Tablet Layout (Scenario 9)', () => {
+  const TABLET_WIDTH = 768;
+
+  beforeEach(() => {
+    setViewportWidth(TABLET_WIDTH);
+    window.matchMedia = createMatchMedia(TABLET_WIDTH);
+  });
+
+  afterEach(() => {
+    // Reset viewport
+    setViewportWidth(1024);
+  });
+
+  it('should render Home component at tablet viewport without errors', () => {
+    renderWithProviders(<Home />);
+
+    // Verify main sections are present
+    expect(screen.getByTestId('hero-section')).toBeInTheDocument();
+    expect(screen.getByText('Powerful Features')).toBeInTheDocument();
+    expect(screen.getByText('How It Works')).toBeInTheDocument();
+    expect(screen.getByText('Trusted by Millions')).toBeInTheDocument();
+  });
+
+  it('should display feature cards grid with responsive md: classes for 2-column layout', () => {
+    renderWithProviders(<Home />);
+
+    // Find the feature cards section
+    const featureSection = screen.getByText('Powerful Features').closest('section');
+    expect(featureSection).toBeInTheDocument();
+
+    // Get the grid container - it should have responsive classes
+    // At md breakpoint (768px), grid should show 2 columns
+    const gridContainer = featureSection?.querySelector('.grid');
+    expect(gridContainer).toBeInTheDocument();
+
+    // Verify the grid has responsive Tailwind classes for tablet
+    // grid-cols-1 md:grid-cols-2 lg:grid-cols-3
+    expect(gridContainer).toHaveClass('grid-cols-1');
+    expect(gridContainer).toHaveClass('md:grid-cols-2');
+    expect(gridContainer).toHaveClass('lg:grid-cols-3');
+
+    // Verify all 6 feature cards are rendered
+    const featureCards = within(featureSection!).getAllByRole('heading', { level: 3 });
+    expect(featureCards).toHaveLength(6);
+  });
+
+  it('should display hero headline with appropriate responsive sizing classes', () => {
+    renderWithProviders(<Home />);
+
+    const headline = screen.getByTestId('hero-headline');
+    expect(headline).toBeInTheDocument();
+
+    // Verify responsive text classes are present
+    // text-4xl md:text-6xl - smaller on mobile, larger on tablet/desktop
+    expect(headline).toHaveClass('text-4xl');
+    expect(headline).toHaveClass('md:text-6xl');
+  });
+
+  it('should display hero subheadline with responsive sizing', () => {
+    renderWithProviders(<Home />);
+
+    const subheadline = screen.getByTestId('hero-subheadline');
+    expect(subheadline).toBeInTheDocument();
+
+    // Verify responsive text classes
+    // text-lg md:text-xl
+    expect(subheadline).toHaveClass('text-lg');
+    expect(subheadline).toHaveClass('md:text-xl');
+  });
+
+  it('should display How It Works section with horizontal layout at tablet breakpoint', () => {
+    renderWithProviders(<Home />);
+
+    const howItWorksSection = screen.getByText('How It Works').closest('section');
+    expect(howItWorksSection).toBeInTheDocument();
+
+    // Find the flex container that holds the steps
+    const stepsContainer = howItWorksSection?.querySelector('.flex');
+    expect(stepsContainer).toBeInTheDocument();
+
+    // At md breakpoint, steps should be in a row (flex-row)
+    // flex-col md:flex-row
+    expect(stepsContainer).toHaveClass('flex-col');
+    expect(stepsContainer).toHaveClass('md:flex-row');
+  });
+
+  it('should display Stats section with responsive layout', () => {
+    renderWithProviders(<Home />);
+
+    const statsSection = screen.getByText('Trusted by Millions').closest('section');
+    expect(statsSection).toBeInTheDocument();
+
+    // Find the flex container for stats
+    const statsContainer = statsSection?.querySelector('.flex');
+    expect(statsContainer).toBeInTheDocument();
+
+    // Responsive layout classes
+    // flex-col md:flex-row for horizontal layout on tablet
+    expect(statsContainer).toHaveClass('flex-col');
+    expect(statsContainer).toHaveClass('md:flex-row');
+
+    // Verify responsive gap classes
+    expect(statsContainer).toHaveClass('gap-8');
+    expect(statsContainer).toHaveClass('md:gap-16');
+  });
+
+  it('should display stat values with responsive text sizing', () => {
+    renderWithProviders(<Home />);
+
+    // Find a stat value (e.g., "10M+")
+    const statValue = screen.getByText('10M+');
+    expect(statValue).toBeInTheDocument();
+
+    // Verify responsive text classes
+    // text-4xl md:text-5xl
+    expect(statValue).toHaveClass('text-4xl');
+    expect(statValue).toHaveClass('md:text-5xl');
+  });
+
+  it('should display section headings with responsive typography', () => {
+    renderWithProviders(<Home />);
+
+    // Check "Powerful Features" heading
+    const featuresHeading = screen.getByText('Powerful Features');
+    expect(featuresHeading).toHaveClass('text-3xl');
+    expect(featuresHeading).toHaveClass('md:text-4xl');
+
+    // Check "How It Works" heading
+    const howItWorksHeading = screen.getByText('How It Works');
+    expect(howItWorksHeading).toHaveClass('text-3xl');
+    expect(howItWorksHeading).toHaveClass('md:text-4xl');
+
+    // Check "Trusted by Millions" heading
+    const statsHeading = screen.getByText('Trusted by Millions');
+    expect(statsHeading).toHaveClass('text-3xl');
+    expect(statsHeading).toHaveClass('md:text-4xl');
+  });
+
+  it('should display CTA buttons with responsive layout', () => {
+    renderWithProviders(<Home />);
+
+    // Find the hero section
+    const heroSection = screen.getByTestId('hero-section');
+
+    // Find the container with CTA buttons (flex container)
+    // The button container should have flex-col sm:flex-row for responsive layout
+    const buttonContainer = heroSection.querySelector('.flex.flex-col.sm\\:flex-row');
+    expect(buttonContainer).toBeInTheDocument();
+
+    // At tablet width (768px), buttons should be in a row
+    expect(buttonContainer).toHaveClass('sm:flex-row');
+  });
+
+  it('should maintain readable content width with container class', () => {
+    renderWithProviders(<Home />);
+
+    // Hero section should have container for proper width
+    const heroSection = screen.getByTestId('hero-section');
+    const heroContainer = heroSection.querySelector('.container');
+    expect(heroContainer).toBeInTheDocument();
+    expect(heroContainer).toHaveClass('mx-auto');
+
+    // Feature section should have container
+    const featureSection = screen.getByText('Powerful Features').closest('section');
+    const featureContainer = featureSection?.querySelector('.container');
+    expect(featureContainer).toBeInTheDocument();
+  });
+
+  it('should display footer with centered layout', () => {
+    renderWithProviders(<Home />);
+
+    // Footer should be present with centered content
+    const footer = screen.getByRole('contentinfo');
+    expect(footer).toBeInTheDocument();
+    expect(footer).toHaveClass('footer-center');
+
+    // Verify navigation links are present in footer specifically
+    const footerLoginLink = within(footer).getByRole('link', { name: /login/i });
+    const footerRegisterLink = within(footer).getByRole('link', { name: /register/i });
+    expect(footerLoginLink).toBeInTheDocument();
+    expect(footerRegisterLink).toBeInTheDocument();
   });
 });
