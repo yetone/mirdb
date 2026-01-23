@@ -22,10 +22,15 @@ const HeroSection: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+    <section
+      data-testid="hero-section"
+      className="relative min-h-[80vh] flex items-center justify-center overflow-hidden"
+      aria-label="Hero section"
+    >
       <BackgroundEffect />
       <div className="container mx-auto px-4 text-center z-10">
         <motion.h1
+          data-testid="hero-headline"
           className="text-4xl md:text-6xl font-bold mb-6"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -34,6 +39,7 @@ const HeroSection: React.FC = () => {
           Shorten Links. Track Clicks. Grow Insights.
         </motion.h1>
         <motion.p
+          data-testid="hero-subheadline"
           className="text-lg md:text-xl text-base-content/70 mb-8 max-w-2xl mx-auto"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,15 +55,30 @@ const HeroSection: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           {isAuthenticated ? (
-            <FuturisticButton to="/dashboard" variant="primary" className="btn-lg">
+            <FuturisticButton
+              to="/dashboard"
+              variant="primary"
+              className="btn-lg"
+              data-testid="hero-cta-dashboard"
+            >
               Go to Dashboard
             </FuturisticButton>
           ) : (
             <>
-              <FuturisticButton to="/register" variant="primary" className="btn-lg">
+              <FuturisticButton
+                to="/register"
+                variant="primary"
+                className="btn-lg"
+                data-testid="get-started-button"
+              >
                 Get Started
               </FuturisticButton>
-              <FuturisticButton to="/login" variant="outline" className="btn-lg">
+              <FuturisticButton
+                to="/login"
+                variant="outline"
+                className="btn-lg"
+                data-testid="login-button"
+              >
                 Login
               </FuturisticButton>
             </>

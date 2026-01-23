@@ -9,6 +9,7 @@ interface FuturisticButtonProps {
   variant?: 'primary' | 'secondary' | 'outline';
   className?: string;
   type?: 'button' | 'submit';
+  'data-testid'?: string;
 }
 
 const FuturisticButton: React.FC<FuturisticButtonProps> = ({
@@ -18,6 +19,7 @@ const FuturisticButton: React.FC<FuturisticButtonProps> = ({
   variant = 'primary',
   className = '',
   type = 'button',
+  'data-testid': testId,
 }) => {
   const baseClasses = 'btn relative overflow-hidden transition-all duration-300';
   const variantClasses = {
@@ -32,11 +34,12 @@ const FuturisticButton: React.FC<FuturisticButtonProps> = ({
 
   if (to) {
     return (
-      <Link to={to}>
+      <Link to={to} data-testid={testId}>
         <motion.span
           className={buttonClasses}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          tabIndex={0}
         >
           {children}
         </motion.span>
@@ -51,6 +54,7 @@ const FuturisticButton: React.FC<FuturisticButtonProps> = ({
       className={buttonClasses}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
+      data-testid={testId}
     >
       {children}
     </MotionComponent>
