@@ -16,7 +16,7 @@ import { describe, it, expect } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders, createMockAuthContext } from '../utils/renderWithProviders';
-import { HeroSection } from '../../src/components/homepage/HeroSection';
+import HeroSection from '../../src/components/homepage/HeroSection';
 import Home from '../../src/pages/Home';
 import Login from '../../src/pages/Login';
 import Register from '../../src/pages/Register';
