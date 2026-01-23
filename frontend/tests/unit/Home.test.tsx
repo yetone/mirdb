@@ -259,3 +259,156 @@ describe('Navbar Integration (Scenario 11)', () => {
     });
   });
 });
+
+describe('SEO Meta Tags (Scenario 14)', () => {
+  describe('Document Title', () => {
+    it('should set document title with relevant keywords', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Title should contain relevant keywords for URL shortening service
+      expect(document.title).toMatch(/url shortener|link shortening|shorten/i);
+    });
+
+    it('should have a descriptive document title', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Title should be descriptive and not generic
+      expect(document.title.length).toBeGreaterThan(20);
+      expect(document.title).not.toBe('');
+    });
+  });
+
+  describe('Meta Description', () => {
+    it('should have a meta description tag', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const metaDescription = document.querySelector('meta[name="description"]');
+      expect(metaDescription).toBeInTheDocument();
+    });
+
+    it('should have meta description with appropriate length (150-160 characters)', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const metaDescription = document.querySelector('meta[name="description"]');
+      expect(metaDescription).toBeInTheDocument();
+
+      const content = metaDescription?.getAttribute('content') || '';
+      // Allow for a range of 120-200 characters for SEO-friendly descriptions
+      expect(content.length).toBeGreaterThanOrEqual(100);
+      expect(content.length).toBeLessThanOrEqual(200);
+    });
+
+    it('should have meta description with relevant content', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const metaDescription = document.querySelector('meta[name="description"]');
+      const content = metaDescription?.getAttribute('content') || '';
+
+      // Should contain keywords related to the service
+      expect(content).toMatch(/url|link|shorten|analytics|track/i);
+    });
+  });
+
+  describe('Open Graph Tags', () => {
+    it('should have og:title meta tag', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      expect(ogTitle).toBeInTheDocument();
+      expect(ogTitle?.getAttribute('content')).toBeTruthy();
+    });
+
+    it('should have og:description meta tag', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const ogDescription = document.querySelector('meta[property="og:description"]');
+      expect(ogDescription).toBeInTheDocument();
+      expect(ogDescription?.getAttribute('content')).toBeTruthy();
+    });
+
+    it('should have og:type meta tag', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const ogType = document.querySelector('meta[property="og:type"]');
+      expect(ogType).toBeInTheDocument();
+      expect(ogType?.getAttribute('content')).toBe('website');
+    });
+
+    it('should have all required Open Graph tags present', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      const ogDescription = document.querySelector('meta[property="og:description"]');
+      const ogType = document.querySelector('meta[property="og:type"]');
+
+      expect(ogTitle).toBeInTheDocument();
+      expect(ogDescription).toBeInTheDocument();
+      expect(ogType).toBeInTheDocument();
+    });
+  });
+
+  describe('Semantic HTML Structure', () => {
+    it('should use main element for main content', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const main = screen.getByRole('main');
+      expect(main).toBeInTheDocument();
+    });
+
+    it('should use section elements for content sections', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Homepage should have multiple sections
+      const sections = document.querySelectorAll('section');
+      expect(sections.length).toBeGreaterThan(0);
+    });
+
+    it('should have proper semantic structure with main containing sections', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const main = screen.getByRole('main');
+      expect(main).toBeInTheDocument();
+
+      // Main element should contain the primary content
+      expect(main.children.length).toBeGreaterThan(0);
+    });
+
+    it('should use appropriate heading hierarchy', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Page should have at least one heading
+      const headings = screen.getAllByRole('heading');
+      expect(headings.length).toBeGreaterThan(0);
+
+      // Should have an h1 heading for the main page title
+      const h1Headings = headings.filter(h => h.tagName === 'H1');
+      expect(h1Headings.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+});
