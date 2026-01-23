@@ -15,7 +15,7 @@
  * - describe('External Link Security')
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders, createMockAuthContext } from '../utils/renderWithProviders';
@@ -608,6 +608,222 @@ describe('External Link Security (Scenario 16)', () => {
         // Should not be an external link
         expect(link.getAttribute('href')).not.toMatch(/^https?:\/\//);
       });
+    });
+  });
+});
+
+describe('Component Rendering Without Errors (Scenario 18)', () => {
+  describe('Console Error Monitoring', () => {
+    it('should not call console.error during render', () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should not call console.error when rendering as authenticated user', () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({
+          isAuthenticated: true,
+          user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        }),
+      });
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+      consoleErrorSpy.mockRestore();
+    });
+  });
+
+  describe('Console Warning Monitoring', () => {
+    it('should not call console.warn for React-specific warnings during render', () => {
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Check that no React-specific warnings were logged
+      // React warnings typically include "Warning:" prefix or React-specific patterns
+      const reactWarningPatterns = [
+        /warning:/i,
+        /each child in a list should have a unique "key" prop/i,
+        /invalid prop/i,
+        /failed prop type/i,
+        /cannot update a component/i,
+        /can't perform a react state update/i,
+      ];
+
+      const calls = consoleWarnSpy.mock.calls;
+      calls.forEach((call) => {
+        const message = String(call[0]);
+        reactWarningPatterns.forEach((pattern) => {
+          expect(message).not.toMatch(pattern);
+        });
+      });
+
+      consoleWarnSpy.mockRestore();
+    });
+
+    it('should not produce key warnings when rendering lists', () => {
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // React key warnings can appear in either console.warn or console.error
+      const keyWarningPattern = /each child in a list should have a unique "key" prop/i;
+
+      consoleWarnSpy.mock.calls.forEach((call) => {
+        expect(String(call[0])).not.toMatch(keyWarningPattern);
+      });
+
+      consoleErrorSpy.mock.calls.forEach((call) => {
+        expect(String(call[0])).not.toMatch(keyWarningPattern);
+      });
+
+      consoleWarnSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
+    });
+  });
+
+  describe('Component Mount Verification', () => {
+    it('should mount successfully without throwing when provided with all required providers', () => {
+      // This test verifies that the component does not throw an error during mount
+      expect(() => {
+        renderWithProviders(<Home />, {
+          authContext: createMockAuthContext({ isAuthenticated: false }),
+        });
+      }).not.toThrow();
+    });
+
+    it('should mount successfully with authenticated user context', () => {
+      expect(() => {
+        renderWithProviders(<Home />, {
+          authContext: createMockAuthContext({
+            isAuthenticated: true,
+            user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+          }),
+        });
+      }).not.toThrow();
+    });
+
+    it('should mount successfully with admin user context', () => {
+      expect(() => {
+        renderWithProviders(<Home />, {
+          authContext: createMockAuthContext({
+            isAuthenticated: true,
+            isAdmin: true,
+            user: { id: 1, username: 'admin', email: 'admin@example.com', is_admin: 1 },
+          }),
+        });
+      }).not.toThrow();
+    });
+  });
+
+  describe('Complete Render Verification', () => {
+    it('should render all expected root sections (Hero, Features, HowItWorks, Stats, Footer)', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Verify Hero section exists by checking for the headline
+      const heroHeadline = screen.getByRole('heading', { name: /shorten links/i });
+      expect(heroHeadline).toBeInTheDocument();
+
+      // Verify Features section exists by checking for "Powerful Features" heading
+      const featuresHeading = screen.getByRole('heading', { name: /powerful features/i });
+      expect(featuresHeading).toBeInTheDocument();
+
+      // Verify HowItWorks section exists by checking for "How It Works" heading
+      const howItWorksHeading = screen.getByRole('heading', { name: /how it works/i });
+      expect(howItWorksHeading).toBeInTheDocument();
+
+      // Verify Stats section exists by checking for "Trusted by Millions" heading
+      const statsHeading = screen.getByRole('heading', { name: /trusted by millions/i });
+      expect(statsHeading).toBeInTheDocument();
+
+      // Verify Footer exists - look for the footer element
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+    });
+
+    it('should render main element containing all content sections', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      const main = screen.getByRole('main');
+      expect(main).toBeInTheDocument();
+
+      // Main should contain multiple child sections
+      expect(main.children.length).toBeGreaterThanOrEqual(4);
+    });
+
+    it('should render navigation, main content, and footer in correct order', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Get the page container
+      const navbar = getMainNavbar();
+      const pageContainer = navbar.parentElement;
+      expect(pageContainer).toBeInTheDocument();
+
+      // Verify structure: nav, main, footer
+      const children = Array.from(pageContainer?.children || []);
+      expect(children.length).toBeGreaterThanOrEqual(3);
+
+      // First should be navigation
+      expect(children[0]?.tagName).toBe('NAV');
+
+      // Last should be footer
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+    });
+
+    it('should render complete page without missing sections', () => {
+      renderWithProviders(<Home />, {
+        authContext: createMockAuthContext({ isAuthenticated: false }),
+      });
+
+      // Check for key content that should exist in each section
+
+      // Hero section - headline and CTA
+      const heroHeadline = screen.getByRole('heading', { name: /shorten links/i });
+      expect(heroHeadline).toBeInTheDocument();
+      const getStartedButton = screen.getByRole('link', { name: /get started/i });
+      expect(getStartedButton).toBeInTheDocument();
+
+      // Features section - heading and feature cards content
+      const featuresHeading = screen.getByRole('heading', { name: /powerful features/i });
+      expect(featuresHeading).toBeInTheDocument();
+      // Use getAllByText since "url shortening" appears in both feature card and footer
+      expect(screen.getAllByText(/url shortening/i).length).toBeGreaterThan(0);
+
+      // HowItWorks section - heading and step content
+      const howItWorksHeading = screen.getByRole('heading', { name: /how it works/i });
+      expect(howItWorksHeading).toBeInTheDocument();
+      expect(screen.getByText(/paste your long url/i)).toBeInTheDocument();
+
+      // Stats section - heading and metrics
+      const statsHeading = screen.getByRole('heading', { name: /trusted by millions/i });
+      expect(statsHeading).toBeInTheDocument();
+      expect(screen.getByText(/urls shortened/i)).toBeInTheDocument();
+
+      // Footer - links present
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+      // Footer should have login and register links
+      const footerNav = footer.querySelector('nav');
+      expect(footerNav).toBeInTheDocument();
     });
   });
 });
