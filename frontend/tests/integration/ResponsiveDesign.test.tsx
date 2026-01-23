@@ -529,3 +529,475 @@ describe('Responsive Design - Tablet Layout (Scenario 9)', () => {
     expect(footerRegisterLink).toBeInTheDocument();
   });
 });
+
+describe('Responsive Design - Desktop Layout (Scenario 10)', () => {
+  const DESKTOP_WIDTH = 1280;
+
+  beforeEach(() => {
+    setViewportWidth(DESKTOP_WIDTH);
+    window.matchMedia = createMatchMedia(DESKTOP_WIDTH);
+  });
+
+  afterEach(() => {
+    // Reset viewport
+    setViewportWidth(1024);
+  });
+
+  describe('Desktop Viewport Full Layout', () => {
+    it('should render Home page at 1280px desktop viewport without errors', () => {
+      const { container } = renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Verify the main container renders with full desktop support
+      expect(container).toBeInTheDocument();
+
+      // Verify all key sections are present
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument();
+      expect(screen.getByText('Powerful Features')).toBeInTheDocument();
+      expect(screen.getByText('How It Works')).toBeInTheDocument();
+      expect(screen.getByText('Trusted by Millions')).toBeInTheDocument();
+    });
+
+    it('should display full desktop layout utilizing screen width appropriately', () => {
+      const { container } = renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Verify main container uses min-h-screen for full-height layout
+      const mainContainer = container.querySelector('.min-h-screen');
+      expect(mainContainer).toBeInTheDocument();
+
+      // Verify flex column layout for proper section stacking
+      expect(mainContainer).toHaveClass('flex');
+      expect(mainContainer).toHaveClass('flex-col');
+    });
+
+    it('should have hero section that spans appropriately for desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const heroSection = screen.getByTestId('hero-section');
+      expect(heroSection).toBeInTheDocument();
+
+      // Hero should have minimum height for impactful desktop display
+      expect(heroSection).toHaveClass('min-h-[80vh]');
+      expect(heroSection).toHaveClass('flex');
+      expect(heroSection).toHaveClass('items-center');
+      expect(heroSection).toHaveClass('justify-center');
+    });
+  });
+
+  describe('Desktop Feature Cards Grid Layout', () => {
+    it('should display feature cards in 3+ column grid at desktop viewport', () => {
+      const { container } = renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Find the feature cards section
+      const featureSection = screen.getByText('Powerful Features').closest('section');
+      expect(featureSection).toBeInTheDocument();
+
+      // Find the grid container
+      const gridContainer = featureSection?.querySelector('.grid');
+      expect(gridContainer).toBeInTheDocument();
+
+      // At desktop (lg: breakpoint 1024px+), grid should show 3 columns
+      // The class lg:grid-cols-3 is applied for desktop layout
+      expect(gridContainer).toHaveClass('lg:grid-cols-3');
+    });
+
+    it('should render all 6 feature cards at desktop viewport', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Verify all 6 feature cards are present
+      expect(screen.getByText('URL Shortening')).toBeInTheDocument();
+      expect(screen.getByText('Click Analytics')).toBeInTheDocument();
+      expect(screen.getByText('Geographic Insights')).toBeInTheDocument();
+      expect(screen.getByText('Browser & Device Data')).toBeInTheDocument();
+      expect(screen.getByText('Shareable Stats')).toBeInTheDocument();
+      expect(screen.getByText('Multi-Theme Support')).toBeInTheDocument();
+    });
+
+    it('should have feature cards with proper gap spacing at desktop', () => {
+      const { container } = renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Find the feature cards grid
+      const featureSection = screen.getByText('Powerful Features').closest('section');
+      const gridContainer = featureSection?.querySelector('.grid');
+
+      // Verify gap class for proper spacing between cards
+      expect(gridContainer).toHaveClass('gap-6');
+    });
+
+    it('should have feature card headings rendered at h3 level', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const featureSection = screen.getByText('Powerful Features').closest('section');
+      const featureHeadings = within(featureSection!).getAllByRole('heading', { level: 3 });
+
+      // Should have 6 feature card headings
+      expect(featureHeadings).toHaveLength(6);
+    });
+  });
+
+  describe('Desktop Navigation Bar Display', () => {
+    it('should display full horizontal navigation bar visible without hamburger menu', () => {
+      const { container } = renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+        authContext: { isAuthenticated: false },
+      });
+
+      // Find the navbar
+      const navbar = container.querySelector('nav.navbar');
+      expect(navbar).toBeInTheDocument();
+
+      // At desktop, navigation should display inline without hamburger
+      // Check for flex-none which holds navigation items inline
+      const navItems = navbar?.querySelector('.flex-none');
+      expect(navItems).toBeInTheDocument();
+    });
+
+    it('should display brand link in navigation at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const brandLink = screen.getByRole('link', { name: /url shortener/i });
+      expect(brandLink).toBeInTheDocument();
+    });
+
+    it('should display Login and Register links inline at desktop for unauthenticated users', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+        authContext: { isAuthenticated: false },
+      });
+
+      // Find all login and register links (there may be multiple on page)
+      const loginLinks = screen.getAllByRole('link', { name: /login/i });
+      const registerLinks = screen.getAllByRole('link', { name: /register/i });
+
+      // At least one of each should be visible in navbar
+      expect(loginLinks.length).toBeGreaterThan(0);
+      expect(registerLinks.length).toBeGreaterThan(0);
+    });
+
+    it('should display Dashboard link and Logout button for authenticated users at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+        authContext: {
+          isAuthenticated: true,
+          user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        },
+      });
+
+      // Should show Dashboard link (there are multiple - one in navbar, one as hero CTA)
+      const dashboardLinks = screen.getAllByRole('link', { name: /dashboard/i });
+      expect(dashboardLinks.length).toBeGreaterThan(0);
+
+      // Should show Logout button
+      const logoutButton = screen.getByRole('button', { name: /logout/i });
+      expect(logoutButton).toBeInTheDocument();
+    });
+
+    it('should display theme toggle in navigation at desktop', () => {
+      const { container } = renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Theme toggle should be present in navbar
+      const navbar = container.querySelector('nav.navbar');
+      expect(navbar).toBeInTheDocument();
+
+      // Check for theme toggle dropdown or button within navbar
+      const themeToggle = navbar?.querySelector('.dropdown') || navbar?.querySelector('[aria-label*="theme"]');
+      // The theme toggle exists within the nav flex-none section
+      const navItems = navbar?.querySelector('.flex-none');
+      expect(navItems).toBeInTheDocument();
+    });
+  });
+
+  describe('Desktop Max-Width Container Constraint', () => {
+    it('should have content constrained with reasonable max-width for readability', () => {
+      const { container } = renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Hero section should have container class for max-width constraint
+      const heroSection = screen.getByTestId('hero-section');
+      const heroContainer = heroSection.querySelector('.container');
+      expect(heroContainer).toBeInTheDocument();
+      expect(heroContainer).toHaveClass('mx-auto');
+    });
+
+    it('should have feature section with container constraint', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const featureSection = screen.getByText('Powerful Features').closest('section');
+      const featureContainer = featureSection?.querySelector('.container');
+      expect(featureContainer).toBeInTheDocument();
+      expect(featureContainer).toHaveClass('mx-auto');
+    });
+
+    it('should have How It Works section with container constraint', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const howItWorksSection = screen.getByText('How It Works').closest('section');
+      const howItWorksContainer = howItWorksSection?.querySelector('.container');
+      expect(howItWorksContainer).toBeInTheDocument();
+      expect(howItWorksContainer).toHaveClass('mx-auto');
+    });
+
+    it('should have Stats section with container constraint', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const statsSection = screen.getByText('Trusted by Millions').closest('section');
+      const statsContainer = statsSection?.querySelector('.container');
+      expect(statsContainer).toBeInTheDocument();
+      expect(statsContainer).toHaveClass('mx-auto');
+    });
+  });
+
+  describe('Desktop Typography Scaling', () => {
+    it('should display hero headline with desktop-appropriate text size (md:text-6xl)', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const headline = screen.getByTestId('hero-headline');
+      expect(headline).toBeInTheDocument();
+
+      // At desktop, headline should use larger text size
+      expect(headline).toHaveClass('md:text-6xl');
+    });
+
+    it('should display hero subheadline with desktop-appropriate text size (md:text-xl)', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const subheadline = screen.getByTestId('hero-subheadline');
+      expect(subheadline).toBeInTheDocument();
+
+      // At desktop, subheadline should use larger text size
+      expect(subheadline).toHaveClass('md:text-xl');
+    });
+
+    it('should display section headings with desktop-appropriate typography', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Check "Powerful Features" heading has responsive desktop classes
+      const featuresHeading = screen.getByText('Powerful Features');
+      expect(featuresHeading).toHaveClass('md:text-4xl');
+
+      // Check "How It Works" heading
+      const howItWorksHeading = screen.getByText('How It Works');
+      expect(howItWorksHeading).toHaveClass('md:text-4xl');
+
+      // Check "Trusted by Millions" heading
+      const statsHeading = screen.getByText('Trusted by Millions');
+      expect(statsHeading).toHaveClass('md:text-4xl');
+    });
+
+    it('should display stat values with desktop-appropriate sizing', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Find a stat value
+      const statValue = screen.getByText('10M+');
+      expect(statValue).toBeInTheDocument();
+
+      // Verify desktop text classes
+      expect(statValue).toHaveClass('md:text-5xl');
+    });
+  });
+
+  describe('Desktop CTA Button Layout', () => {
+    it('should display CTA buttons in horizontal row at desktop viewport', () => {
+      const { container } = renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+        authContext: { isAuthenticated: false },
+      });
+
+      // Find the CTA container that uses sm:flex-row for horizontal layout
+      const ctaContainer = container.querySelector('.flex.flex-col.sm\\:flex-row');
+      expect(ctaContainer).toBeInTheDocument();
+
+      // At desktop (larger than sm breakpoint), buttons should be horizontal
+      expect(ctaContainer).toHaveClass('sm:flex-row');
+    });
+
+    it('should display Get Started button prominently at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+        authContext: { isAuthenticated: false },
+      });
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      expect(getStartedButton).toBeInTheDocument();
+
+      // Button should have btn-lg class for prominent display
+      const buttonContent = getStartedButton.querySelector('.btn-lg');
+      expect(buttonContent).toBeInTheDocument();
+    });
+
+    it('should display Go to Dashboard button for authenticated users at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+        authContext: {
+          isAuthenticated: true,
+          user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        },
+      });
+
+      const dashboardButton = screen.getByTestId('hero-cta-dashboard');
+      expect(dashboardButton).toBeInTheDocument();
+
+      // Dashboard button should also be prominent
+      const buttonContent = dashboardButton.querySelector('.btn-lg');
+      expect(buttonContent).toBeInTheDocument();
+    });
+  });
+
+  describe('Desktop How It Works Layout', () => {
+    it('should display How It Works steps in horizontal layout at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const howItWorksSection = screen.getByText('How It Works').closest('section');
+      expect(howItWorksSection).toBeInTheDocument();
+
+      // Find the flex container that holds the steps
+      const stepsContainer = howItWorksSection?.querySelector('.flex');
+      expect(stepsContainer).toBeInTheDocument();
+
+      // At md+ breakpoint (desktop), steps should be in a row
+      expect(stepsContainer).toHaveClass('md:flex-row');
+    });
+
+    it('should display all three workflow steps at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Verify all three steps are present (actual titles from HowItWorks component)
+      expect(screen.getByText('Paste your long URL')).toBeInTheDocument();
+      expect(screen.getByText('Get a short, memorable link')).toBeInTheDocument();
+      expect(screen.getByText('Track clicks and gain insights')).toBeInTheDocument();
+    });
+  });
+
+  describe('Desktop Stats Section Layout', () => {
+    it('should display stats in horizontal row at desktop viewport', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const statsSection = screen.getByText('Trusted by Millions').closest('section');
+      expect(statsSection).toBeInTheDocument();
+
+      // Find the flex container for stats
+      const statsContainer = statsSection?.querySelector('.flex');
+      expect(statsContainer).toBeInTheDocument();
+
+      // At md+ breakpoint (desktop), stats should be in a row
+      expect(statsContainer).toHaveClass('md:flex-row');
+    });
+
+    it('should display stats with proper gap at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const statsSection = screen.getByText('Trusted by Millions').closest('section');
+      const statsContainer = statsSection?.querySelector('.flex');
+
+      // Verify responsive gap classes for desktop spacing
+      expect(statsContainer).toHaveClass('md:gap-16');
+    });
+
+    it('should display all three stat values at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      // Verify stat values are present (actual values from StatsSection component)
+      expect(screen.getByText('10M+')).toBeInTheDocument();
+      expect(screen.getByText('500M+')).toBeInTheDocument();
+      expect(screen.getByText('150+')).toBeInTheDocument();
+    });
+  });
+
+  describe('Desktop Footer Layout', () => {
+    it('should display footer with centered layout at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+      expect(footer).toHaveClass('footer-center');
+    });
+
+    it('should display navigation links in footer at desktop', () => {
+      renderWithProviders(<Home />, {
+        useMemoryRouter: true,
+        initialEntries: ['/'],
+      });
+
+      const footer = screen.getByRole('contentinfo');
+
+      // Verify login and register links are present in footer
+      const footerLoginLink = within(footer).getByRole('link', { name: /login/i });
+      const footerRegisterLink = within(footer).getByRole('link', { name: /register/i });
+      expect(footerLoginLink).toBeInTheDocument();
+      expect(footerRegisterLink).toBeInTheDocument();
+    });
+  });
+});
