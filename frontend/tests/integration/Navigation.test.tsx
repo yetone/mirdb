@@ -42,6 +42,7 @@ describe('CTA Navigation', () => {
       renderWithProviders(<TestApp />, {
         authContext: createMockAuthContext({ isAuthenticated: false }),
         initialEntries: ['/'],
+        useMemoryRouter: true,
       });
 
       // Find the Get Started button
@@ -54,7 +55,7 @@ describe('CTA Navigation', () => {
 
       // Verify navigation to register page
       await waitFor(() => {
-        expect(screen.getByText('Register')).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Register' })).toBeInTheDocument();
       });
     });
 
@@ -75,6 +76,7 @@ describe('CTA Navigation', () => {
       renderWithProviders(<TestApp />, {
         authContext: createMockAuthContext({ isAuthenticated: false }),
         initialEntries: ['/'],
+        useMemoryRouter: true,
       });
 
       // Find the Login button
@@ -107,6 +109,7 @@ describe('Route Configuration', () => {
     renderWithProviders(<TestApp />, {
       authContext: createMockAuthContext({ isAuthenticated: false }),
       initialEntries: ['/'],
+      useMemoryRouter: true,
     });
 
     // Verify hero section content is displayed
@@ -118,6 +121,7 @@ describe('Route Configuration', () => {
     renderWithProviders(<TestApp />, {
       authContext: createMockAuthContext({ isAuthenticated: false }),
       initialEntries: ['/login'],
+      useMemoryRouter: true,
     });
 
     expect(screen.getByRole('heading', { name: 'Login' })).toBeInTheDocument();
@@ -127,6 +131,7 @@ describe('Route Configuration', () => {
     renderWithProviders(<TestApp />, {
       authContext: createMockAuthContext({ isAuthenticated: false }),
       initialEntries: ['/register'],
+      useMemoryRouter: true,
     });
 
     expect(screen.getByRole('heading', { name: 'Register' })).toBeInTheDocument();
@@ -138,6 +143,7 @@ describe('Public Route Access', () => {
     renderWithProviders(<TestApp />, {
       authContext: createMockAuthContext({ isAuthenticated: false }),
       initialEntries: ['/'],
+      useMemoryRouter: true,
     });
 
     expect(screen.getByText(/Shorten Links/)).toBeInTheDocument();
@@ -147,6 +153,7 @@ describe('Public Route Access', () => {
     renderWithProviders(<TestApp />, {
       authContext: createMockAuthContext({ isAuthenticated: false }),
       initialEntries: ['/login'],
+      useMemoryRouter: true,
     });
 
     expect(screen.getByRole('heading', { name: 'Login' })).toBeInTheDocument();
@@ -156,6 +163,7 @@ describe('Public Route Access', () => {
     renderWithProviders(<TestApp />, {
       authContext: createMockAuthContext({ isAuthenticated: false }),
       initialEntries: ['/register'],
+      useMemoryRouter: true,
     });
 
     expect(screen.getByRole('heading', { name: 'Register' })).toBeInTheDocument();
