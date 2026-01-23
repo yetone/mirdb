@@ -136,6 +136,63 @@ describe('Route Configuration', () => {
 
     expect(screen.getByRole('heading', { name: 'Register' })).toBeInTheDocument();
   });
+
+  // Scenario 20: Test Case 1 - Navigate to '/' route renders Home component
+  it('should render Home component when navigating to root route', () => {
+    renderWithProviders(<TestApp />, {
+      authContext: createMockAuthContext({ isAuthenticated: false }),
+      initialEntries: ['/'],
+      useMemoryRouter: true,
+    });
+
+    // Verify Home component is rendered with its main sections
+    // Use getAllByRole for navigation since there may be multiple nav elements (Navbar and Footer nav)
+    const navElements = screen.getAllByRole('navigation');
+    expect(navElements.length).toBeGreaterThanOrEqual(1); // At least one navigation element
+    expect(screen.getByRole('main')).toBeInTheDocument(); // Main content area
+    expect(screen.getByText(/Shorten Links/)).toBeInTheDocument(); // Hero headline
+  });
+
+  // Scenario 20: Test Case 2 - Access '/' without auth token renders without redirect
+  it('should render homepage without redirecting to login when no authentication token', () => {
+    renderWithProviders(<TestApp />, {
+      authContext: createMockAuthContext({
+        isAuthenticated: false,
+        loading: false,
+        user: null
+      }),
+      initialEntries: ['/'],
+      useMemoryRouter: true,
+    });
+
+    // Should NOT show login page (no redirect happened)
+    expect(screen.queryByRole('heading', { name: 'Login' })).not.toBeInTheDocument();
+
+    // Should show Home page content
+    expect(screen.getByText(/Shorten Links/)).toBeInTheDocument();
+    expect(screen.getByTestId('get-started-button')).toBeInTheDocument();
+  });
+
+  // Scenario 20: Test Case 3 - Home component is not wrapped in ProtectedLayout
+  it('should render homepage as publicly accessible (not wrapped in ProtectedLayout)', () => {
+    // When loading is true and user is not authenticated, ProtectedLayout would show loading spinner
+    // Home page should render immediately without showing loading state
+    renderWithProviders(<TestApp />, {
+      authContext: createMockAuthContext({
+        isAuthenticated: false,
+        loading: true, // Simulating loading state that would affect ProtectedLayout
+        user: null
+      }),
+      initialEntries: ['/'],
+      useMemoryRouter: true,
+    });
+
+    // Home should render even when auth is loading (not waiting for auth check like ProtectedLayout would)
+    expect(screen.getByText(/Shorten Links/)).toBeInTheDocument();
+
+    // Should NOT show loading spinner (which ProtectedLayout would show)
+    expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+  });
 });
 
 describe('Public Route Access', () => {
@@ -167,5 +224,36 @@ describe('Public Route Access', () => {
     });
 
     expect(screen.getByRole('heading', { name: 'Register' })).toBeInTheDocument();
+  });
+
+  // Scenario 20: Additional public access verification
+  it('should allow authenticated users to access home page without redirect', () => {
+    renderWithProviders(<TestApp />, {
+      authContext: createMockAuthContext({
+        isAuthenticated: true,
+        user: { id: 1, username: 'testuser', email: 'test@test.com', is_admin: 0 }
+      }),
+      initialEntries: ['/'],
+      useMemoryRouter: true,
+    });
+
+    // Home page should render for authenticated users too
+    expect(screen.getByText(/Shorten Links/)).toBeInTheDocument();
+  });
+
+  it('should render home page immediately without authentication check delay', () => {
+    // Test that home page doesn't wait for auth loading to complete
+    renderWithProviders(<TestApp />, {
+      authContext: createMockAuthContext({
+        isAuthenticated: false,
+        loading: true // Auth is still loading
+      }),
+      initialEntries: ['/'],
+      useMemoryRouter: true,
+    });
+
+    // Should render content immediately, not wait for auth
+    expect(screen.getByText(/Shorten Links/)).toBeInTheDocument();
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 });
