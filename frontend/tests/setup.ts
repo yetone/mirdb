@@ -10,7 +10,11 @@
  */
 
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { vi, expect } from 'vitest';
+import * as matchers from 'vitest-axe/matchers';
+
+// Extend Vitest's expect with axe matchers
+expect.extend(matchers);
 
 // Mock localStorage
 const localStorageMock = {
