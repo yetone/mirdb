@@ -10,5 +10,4 @@ export { FeaturesSection } from './FeaturesSection'
 export { HowItWorksSection } from './HowItWorksSection'
 export { SocialProofSection } from './SocialProofSection'
 export { CTASection } from './CTASection'
-// Export other components as they are created:
-// export { Footer } from './Footer'
+export { Footer } from './Footer'
