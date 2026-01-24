@@ -9,6 +9,6 @@ export { HeroSection } from './HeroSection'
 export { FeaturesSection } from './FeaturesSection'
 export { HowItWorksSection } from './HowItWorksSection'
 export { SocialProofSection } from './SocialProofSection'
+export { CTASection } from './CTASection'
 // Export other components as they are created:
-// export { CTASection } from './CTASection'
 // export { Footer } from './Footer'
