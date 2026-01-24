@@ -1,14 +1,31 @@
 /**
  * Home Page (Landing Page)
+ * Owner: Scenario 14 - Integration with Existing Components
  *
- * Main landing page that assembles all landing components.
- * Currently includes HeroSection - other sections will be added by their respective scenarios.
+ * Main landing page that assembles all landing components:
+ * - Navbar (existing component)
+ * - BackgroundEffect (existing component)
+ * - HeroSection (uses FuturisticButton)
+ * - FeaturesSection (uses GlassMorphismCard)
+ * - HowItWorksSection
+ * - SocialProofSection (uses GlassMorphismCard)
+ * - CTASection (uses FuturisticButton)
+ * - Footer
+ *
+ * All components integrate with ThemeContext for theming support.
  */
 
 import React from 'react'
 import Navbar from '../components/Navbar'
 import BackgroundEffect from '../components/BackgroundEffect'
-import { HeroSection } from '../components/landing'
+import {
+  HeroSection,
+  FeaturesSection,
+  HowItWorksSection,
+  SocialProofSection,
+  CTASection,
+  Footer,
+} from '../components/landing'
 
 export function Home() {
   return (
@@ -17,14 +34,12 @@ export function Home() {
       <BackgroundEffect />
       <main>
         <HeroSection />
-        {/* Other sections will be added by their respective scenarios:
-         * - FeaturesSection (Scenario 2)
-         * - HowItWorksSection (Scenario 4)
-         * - SocialProofSection (Scenario 5)
-         * - CTASection (Scenario 6)
-         * - Footer (Scenario 9)
-         */}
+        <FeaturesSection />
+        <HowItWorksSection />
+        <SocialProofSection />
+        <CTASection />
       </main>
+      <Footer />
     </div>
   )
 }
