@@ -9,10 +9,18 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
+interface ThemeProviderProps {
+  children: ReactNode
+  defaultTheme?: Theme
+}
+
+export function ThemeProvider({ children, defaultTheme = 'dark' }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem('theme')
-    return (stored as Theme) || 'dark'
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('theme')
+      return (stored as Theme) || defaultTheme
+    }
+    return defaultTheme
   })
 
   useEffect(() => {
@@ -34,3 +42,5 @@ export function useTheme() {
   }
   return context
 }
+
+export { ThemeContext }

@@ -19,7 +19,7 @@ interface WrapperProps {
 
 function AllProviders({ children }: WrapperProps) {
   return (
-    <ThemeProvider>
+    <ThemeProvider defaultTheme="dark">
       <AuthProvider>
         <BrowserRouter>
           {children}
@@ -46,3 +46,5 @@ export function createMockThemeContext(theme: string = 'dark') {
 export function createMockRouter(initialRoute: string = '/') {
   window.history.pushState({}, 'Test page', initialRoute)
 }
+
+export { render }
