@@ -239,3 +239,220 @@ describe('Scenario 4: Authenticated User CTA Behavior', () => {
     });
   });
 });
+
+/**
+ * Scenario 25: AuthContext Integration
+ *
+ * Tests that verify homepage correctly reads and responds to authentication state.
+ * These tests focus on the integration between the homepage components and AuthContext,
+ * ensuring that:
+ * - Unauthenticated state shows appropriate CTAs and login options
+ * - Authenticated state shows dashboard access and logged-in navigation
+ * - Auth state transitions (like logout) update the UI appropriately
+ */
+describe('Scenario 25: AuthContext Integration', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('Test Case 1: Render homepage with unauthenticated AuthContext', () => {
+    it('should show "Get Started" CTA when user is unauthenticated', () => {
+      render(<TestAppWithAuth isAuthenticated={false} />);
+
+      const heroCTA = screen.getByTestId('hero-cta');
+      expect(heroCTA).toBeInTheDocument();
+      expect(heroCTA).toHaveTextContent(/get started/i);
+    });
+
+    it('should display login options when user is unauthenticated', () => {
+      render(<TestAppWithAuth isAuthenticated={false} />);
+
+      // Hero section login link
+      const heroLoginLink = screen.getByTestId('hero-login-link');
+      expect(heroLoginLink).toBeInTheDocument();
+      expect(heroLoginLink).toHaveAttribute('href', '/login');
+
+      // Navbar login button
+      const navLoginButton = screen.getByTestId('nav-login');
+      expect(navLoginButton).toBeInTheDocument();
+      expect(navLoginButton).toHaveAttribute('href', '/login');
+
+      // Navbar register button
+      const navRegisterButton = screen.getByTestId('nav-register');
+      expect(navRegisterButton).toBeInTheDocument();
+      expect(navRegisterButton).toHaveAttribute('href', '/register');
+    });
+
+    it('should link Get Started CTA to registration page', () => {
+      render(<TestAppWithAuth isAuthenticated={false} />);
+
+      const heroCTA = screen.getByTestId('hero-cta');
+      expect(heroCTA).toHaveAttribute('href', '/register');
+    });
+
+    it('should display "Already have an account?" text for unauthenticated users', () => {
+      render(<TestAppWithAuth isAuthenticated={false} />);
+
+      expect(screen.getByText(/already have an account/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: Render homepage with authenticated AuthContext', () => {
+    it('should show "Go to Dashboard" CTA when user is authenticated', () => {
+      render(<TestAppWithAuth isAuthenticated={true} />);
+
+      const heroCTA = screen.getByTestId('hero-cta');
+      expect(heroCTA).toBeInTheDocument();
+      expect(heroCTA).toHaveTextContent(/go to dashboard/i);
+    });
+
+    it('should link dashboard CTA to /dashboard when authenticated', () => {
+      render(<TestAppWithAuth isAuthenticated={true} />);
+
+      const heroCTA = screen.getByTestId('hero-cta');
+      expect(heroCTA).toHaveAttribute('href', '/dashboard');
+    });
+
+    it('should show logged-in navigation state when authenticated', () => {
+      render(<TestAppWithAuth isAuthenticated={true} />);
+
+      // Login/Register links should NOT be visible in navbar
+      expect(screen.queryByTestId('nav-login')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('nav-register')).not.toBeInTheDocument();
+
+      // Dashboard links should be visible (hero CTA + navbar link)
+      const dashboardLinks = screen.getAllByRole('link', { name: /dashboard/i });
+      expect(dashboardLinks.length).toBeGreaterThanOrEqual(1);
+
+      // Logout button should be visible
+      expect(screen.getByRole('button', { name: /logout/i })).toBeInTheDocument();
+    });
+
+    it('should NOT show login link in hero when authenticated', () => {
+      render(<TestAppWithAuth isAuthenticated={true} />);
+
+      expect(screen.queryByTestId('hero-login-link')).not.toBeInTheDocument();
+      expect(screen.queryByText(/already have an account/i)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 3: Simulate logout while on homepage', () => {
+    /**
+     * Test wrapper that allows controlled auth state transitions
+     */
+    function AuthStateTransitionTestWrapper() {
+      const [isAuthenticated, setIsAuthenticated] = React.useState(true);
+      const [user, setUser] = React.useState({
+        id: 1,
+        username: 'testuser',
+        email: 'test@example.com',
+        is_admin: false,
+      });
+
+      const logout = () => {
+        setUser(null as unknown as typeof user);
+        setIsAuthenticated(false);
+      };
+
+      const authValue = {
+        user: isAuthenticated ? user : null,
+        isAuthenticated,
+        isLoading: false,
+        login: vi.fn(),
+        logout,
+        register: vi.fn(),
+      };
+
+      return (
+        <ThemeProvider>
+          <AuthContext.Provider value={authValue}>
+            <MemoryRouter initialEntries={['/']}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Routes>
+            </MemoryRouter>
+          </AuthContext.Provider>
+        </ThemeProvider>
+      );
+    }
+
+    it('should update CTAs to unauthenticated state after logout', async () => {
+      const user = userEvent.setup();
+
+      render(<AuthStateTransitionTestWrapper />);
+
+      // Initially authenticated - should see Dashboard CTA
+      expect(screen.getByTestId('hero-cta')).toHaveTextContent(/go to dashboard/i);
+
+      // Should see Logout button
+      const logoutButton = screen.getByRole('button', { name: /logout/i });
+      expect(logoutButton).toBeInTheDocument();
+
+      // Click logout
+      await user.click(logoutButton);
+
+      // After logout, should see Get Started CTA
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-cta')).toHaveTextContent(/get started/i);
+      });
+    });
+
+    it('should show login options after logout', async () => {
+      const user = userEvent.setup();
+
+      render(<AuthStateTransitionTestWrapper />);
+
+      // Initially, login options should not be visible (authenticated)
+      expect(screen.queryByTestId('hero-login-link')).not.toBeInTheDocument();
+
+      // Click logout
+      const logoutButton = screen.getByRole('button', { name: /logout/i });
+      await user.click(logoutButton);
+
+      // After logout, login options should be visible
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-login-link')).toBeInTheDocument();
+      });
+      expect(screen.getByText(/already have an account/i)).toBeInTheDocument();
+    });
+
+    it('should update navbar to show login/register after logout', async () => {
+      const user = userEvent.setup();
+
+      render(<AuthStateTransitionTestWrapper />);
+
+      // Initially authenticated - should NOT see nav login/register
+      expect(screen.queryByTestId('nav-login')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('nav-register')).not.toBeInTheDocument();
+
+      // Click logout
+      const logoutButton = screen.getByRole('button', { name: /logout/i });
+      await user.click(logoutButton);
+
+      // After logout, should see nav login/register
+      await waitFor(() => {
+        expect(screen.getByTestId('nav-login')).toBeInTheDocument();
+      });
+      expect(screen.getByTestId('nav-register')).toBeInTheDocument();
+    });
+
+    it('should update CTA href from /dashboard to /register after logout', async () => {
+      const user = userEvent.setup();
+
+      render(<AuthStateTransitionTestWrapper />);
+
+      // Initially authenticated - CTA should link to dashboard
+      expect(screen.getByTestId('hero-cta')).toHaveAttribute('href', '/dashboard');
+
+      // Click logout
+      const logoutButton = screen.getByRole('button', { name: /logout/i });
+      await user.click(logoutButton);
+
+      // After logout, CTA should link to register
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-cta')).toHaveAttribute('href', '/register');
+      });
+    });
+  });
+});
