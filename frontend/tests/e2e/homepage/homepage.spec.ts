@@ -697,6 +697,186 @@ test.describe('Framer Motion Animations - E2E', () => {
 });
 
 /**
+ * E2E tests for Smooth Scroll Behavior
+ * Scenario 27 - Smooth Scroll Behavior
+ *
+ * Tests that smooth scrolling works for anchor links and section navigation
+ */
+test.describe('Smooth Scroll Behavior - E2E', () => {
+  test.describe('Test Case 1: Click anchor link to features section', () => {
+    test('should smoothly scroll to features section when clicking anchor link', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Get initial scroll position
+      const initialScrollY = await page.evaluate(() => window.scrollY);
+      expect(initialScrollY).toBe(0);
+
+      // Create a temporary anchor link to #features and click it
+      // This simulates user clicking an anchor link to navigate to features
+      await page.evaluate(() => {
+        const link = document.createElement('a');
+        link.href = '#features';
+        link.id = 'test-features-link';
+        link.style.position = 'fixed';
+        link.style.top = '10px';
+        link.style.left = '10px';
+        link.style.zIndex = '9999';
+        link.textContent = 'Go to Features';
+        document.body.appendChild(link);
+      });
+
+      // Click the anchor link
+      await page.click('#test-features-link');
+
+      // Wait for scroll animation to complete (smooth scroll takes time)
+      await page.waitForTimeout(1000);
+
+      // Verify page scrolled to features section
+      const featuresSection = page.getByTestId('features-section');
+      await expect(featuresSection).toBeVisible();
+
+      // Get the features section position and verify scroll position
+      const featuresTop = await page.evaluate(() => {
+        const section = document.getElementById('features');
+        return section ? section.getBoundingClientRect().top + window.scrollY : 0;
+      });
+
+      const finalScrollY = await page.evaluate(() => window.scrollY);
+
+      // The scroll position should be close to the features section
+      // Allow some tolerance due to smooth scroll behavior
+      expect(finalScrollY).toBeGreaterThan(0);
+      expect(Math.abs(finalScrollY - featuresTop)).toBeLessThan(100);
+    });
+
+    test('should have features section with proper ID for anchor navigation', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Verify features section has the correct ID for anchor linking
+      const featuresSection = page.locator('#features');
+      await expect(featuresSection).toBeAttached();
+
+      // Verify it's the same as features-section testid
+      const testIdSection = page.getByTestId('features-section');
+      await expect(testIdSection).toHaveAttribute('id', 'features');
+    });
+
+    test('should smoothly scroll using hash navigation', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Navigate directly to the hash
+      await page.goto('/#features');
+
+      // Wait for smooth scroll animation
+      await page.waitForTimeout(1000);
+
+      // Verify the features section is in view
+      const featuresSection = page.getByTestId('features-section');
+      const isInViewport = await featuresSection.evaluate((el) => {
+        const rect = el.getBoundingClientRect();
+        return rect.top >= 0 && rect.top <= window.innerHeight;
+      });
+
+      expect(isInViewport).toBe(true);
+    });
+
+    test('should scroll smoothly without jarring jumps', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Set up scroll tracking
+      await page.evaluate(() => {
+        (window as any).__scrollPositions = [];
+        const trackScroll = () => {
+          (window as any).__scrollPositions.push({
+            y: window.scrollY,
+            time: performance.now(),
+          });
+        };
+        window.addEventListener('scroll', trackScroll);
+      });
+
+      // Navigate to features section
+      await page.evaluate(() => {
+        document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // Wait for scroll to complete
+      await page.waitForTimeout(1500);
+
+      // Get recorded scroll positions
+      const positions = await page.evaluate(() => (window as any).__scrollPositions);
+
+      // Verify there are multiple scroll events (indicating smooth animation)
+      // A jarring jump would only have 1-2 events, smooth scroll has many
+      expect(positions.length).toBeGreaterThan(5);
+
+      // Verify scroll positions increase progressively (no jumping back)
+      for (let i = 1; i < positions.length; i++) {
+        expect(positions[i].y).toBeGreaterThanOrEqual(positions[i - 1].y - 1); // Allow 1px tolerance
+      }
+    });
+  });
+
+  test.describe('Test Case 2: Check scroll-behavior CSS property', () => {
+    test('should have scroll-behavior: smooth applied to html element', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Check scroll-behavior CSS property on html element
+      const scrollBehavior = await page.evaluate(() => {
+        return window.getComputedStyle(document.documentElement).scrollBehavior;
+      });
+
+      expect(scrollBehavior).toBe('smooth');
+    });
+
+    test('should apply smooth scroll behavior consistently', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Verify the CSS is properly applied from stylesheet
+      const htmlStyles = await page.evaluate(() => {
+        const html = document.documentElement;
+        const computedStyle = window.getComputedStyle(html);
+        return {
+          scrollBehavior: computedStyle.scrollBehavior,
+          // Also check body to ensure it inherits or has no conflicting scroll behavior
+          bodyScrollBehavior: window.getComputedStyle(document.body).scrollBehavior,
+        };
+      });
+
+      // HTML should have smooth scroll
+      expect(htmlStyles.scrollBehavior).toBe('smooth');
+    });
+
+    test('should work across page refreshes', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Check scroll-behavior is applied
+      let scrollBehavior = await page.evaluate(() => {
+        return window.getComputedStyle(document.documentElement).scrollBehavior;
+      });
+      expect(scrollBehavior).toBe('smooth');
+
+      // Refresh the page
+      await page.reload();
+      await waitForHeroSection(page);
+
+      // Verify scroll-behavior is still applied after refresh
+      scrollBehavior = await page.evaluate(() => {
+        return window.getComputedStyle(document.documentElement).scrollBehavior;
+      });
+      expect(scrollBehavior).toBe('smooth');
+    });
+  });
+});
+
+/**
  * E2E tests for Error States - No JavaScript
  * Scenario 26 - Graceful degradation when JavaScript is disabled
  *
