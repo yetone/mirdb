@@ -919,3 +919,389 @@ test.describe('Error States - No JavaScript', () => {
     });
   });
 });
+
+/**
+ * E2E tests for Console Error Free
+ * Scenario 28 - Verify homepage renders without any JavaScript console errors
+ *
+ * Tests that no JavaScript errors appear in the browser console during:
+ * - Initial page load
+ * - Navigating through sections
+ * - Theme toggling
+ */
+test.describe('Console Error Free - E2E', () => {
+  test.describe('Test Case 1: Load homepage and check console', () => {
+    test('should load homepage without any JavaScript errors in console', async ({ page }) => {
+      // Collect all console errors
+      const consoleErrors: string[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          consoleErrors.push(msg.text());
+        }
+      });
+
+      // Listen for page errors (uncaught exceptions)
+      const pageErrors: string[] = [];
+      page.on('pageerror', (error) => {
+        pageErrors.push(error.message);
+      });
+
+      // Navigate to homepage
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Wait for any async operations to complete
+      await page.waitForTimeout(1000);
+
+      // Assert no console errors occurred
+      expect(consoleErrors).toEqual([]);
+      expect(pageErrors).toEqual([]);
+    });
+
+    test('should have no JavaScript errors after page fully loads', async ({ page }) => {
+      const consoleErrors: string[] = [];
+      const pageErrors: string[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          consoleErrors.push(msg.text());
+        }
+      });
+
+      page.on('pageerror', (error) => {
+        pageErrors.push(error.message);
+      });
+
+      // Navigate and wait for full load
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
+      await waitForHeroSection(page);
+
+      // Verify all major sections are visible (ensuring page fully rendered)
+      await expect(page.locator('.hero')).toBeVisible();
+      await expect(page.getByTestId('features-section')).toBeVisible();
+      await expect(page.getByTestId('how-it-works-section')).toBeVisible();
+      await expect(page.getByTestId('footer')).toBeVisible();
+
+      // Assert no errors
+      expect(consoleErrors.length).toBe(0);
+      expect(pageErrors.length).toBe(0);
+    });
+
+    test('should load all homepage components without triggering errors', async ({ page }) => {
+      const errors: { type: string; message: string }[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          errors.push({ type: 'console', message: msg.text() });
+        }
+      });
+
+      page.on('pageerror', (error) => {
+        errors.push({ type: 'pageerror', message: error.message });
+      });
+
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Verify all major components are present
+      const components = [
+        { name: 'Hero Section', selector: '.hero' },
+        { name: 'Features Section', selector: '[data-testid="features-section"]' },
+        { name: 'How It Works Section', selector: '[data-testid="how-it-works-section"]' },
+        { name: 'Footer', selector: '[data-testid="footer"]' },
+      ];
+
+      for (const component of components) {
+        const element = page.locator(component.selector);
+        await expect(element).toBeAttached();
+      }
+
+      // Final check for errors
+      expect(errors).toEqual([]);
+    });
+  });
+
+  test.describe('Test Case 2: Navigate through all homepage sections', () => {
+    test('should not produce errors when scrolling through sections', async ({ page }) => {
+      const consoleErrors: string[] = [];
+      const pageErrors: string[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          consoleErrors.push(msg.text());
+        }
+      });
+
+      page.on('pageerror', (error) => {
+        pageErrors.push(error.message);
+      });
+
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Scroll through each section to trigger any lazy-loaded content
+      const sections = [
+        page.locator('.hero'),
+        page.getByTestId('features-section'),
+        page.getByTestId('how-it-works-section'),
+        page.getByTestId('dashboard-preview-section'),
+        page.getByTestId('footer'),
+      ];
+
+      for (const section of sections) {
+        // Only scroll if section exists (dashboard-preview may be optional)
+        if (await section.count() > 0) {
+          await section.scrollIntoViewIfNeeded();
+          await page.waitForTimeout(300); // Wait for scroll animations
+        }
+      }
+
+      // Scroll back to top
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(300);
+
+      // Assert no errors during scrolling
+      expect(consoleErrors).toEqual([]);
+      expect(pageErrors).toEqual([]);
+    });
+
+    test('should not produce errors during Framer Motion scroll animations', async ({ page }) => {
+      const errors: string[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          errors.push(msg.text());
+        }
+      });
+
+      page.on('pageerror', (error) => {
+        errors.push(error.message);
+      });
+
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Scroll to features section to trigger whileInView animations
+      const featuresSection = page.getByTestId('features-section');
+      await featuresSection.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(500); // Wait for animations
+
+      // Scroll to How It Works section
+      const howItWorksSection = page.getByTestId('how-it-works-section');
+      await howItWorksSection.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(500);
+
+      // Check for feature cards (animated elements)
+      const featureCards = [
+        page.getByTestId('feature-card-url-shortening'),
+        page.getByTestId('feature-card-click-analytics'),
+        page.getByTestId('feature-card-geographic-insights'),
+        page.getByTestId('feature-card-shareable-stats'),
+      ];
+
+      for (const card of featureCards) {
+        await expect(card).toBeVisible();
+      }
+
+      // Assert no animation-related errors
+      expect(errors).toEqual([]);
+    });
+
+    test('should not produce errors when interacting with CTA buttons', async ({ page }) => {
+      const errors: string[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          errors.push(msg.text());
+        }
+      });
+
+      page.on('pageerror', (error) => {
+        errors.push(error.message);
+      });
+
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Hover over CTA button (triggers hover animations)
+      const ctaButton = page.getByTestId('hero-cta');
+      await ctaButton.hover();
+      await page.waitForTimeout(200);
+
+      // Hover over login link
+      const loginLink = page.getByTestId('hero-login-link');
+      await loginLink.hover();
+      await page.waitForTimeout(200);
+
+      // Move mouse away
+      await page.mouse.move(0, 0);
+
+      // Assert no errors during hover interactions
+      expect(errors).toEqual([]);
+    });
+  });
+
+  test.describe('Test Case 3: Toggle theme and check console', () => {
+    test('should not produce errors when toggling from light to dark theme', async ({ page }) => {
+      const errors: string[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          errors.push(msg.text());
+        }
+      });
+
+      page.on('pageerror', (error) => {
+        errors.push(error.message);
+      });
+
+      // Start with light theme
+      await page.goto('/');
+      await page.evaluate(() => {
+        localStorage.setItem('theme', 'light');
+      });
+      await page.reload();
+      await waitForHeroSection(page);
+
+      // Verify initial theme
+      const initialTheme = await page.evaluate(() =>
+        document.documentElement.getAttribute('data-theme')
+      );
+      expect(initialTheme).toBe('light');
+
+      // Toggle to dark theme
+      const themeToggle = page.getByRole('button', { name: /switch to dark mode/i });
+      await themeToggle.click();
+
+      // Wait for theme transition
+      await page.waitForTimeout(500);
+
+      // Verify theme changed
+      const newTheme = await page.evaluate(() =>
+        document.documentElement.getAttribute('data-theme')
+      );
+      expect(newTheme).toBe('dark');
+
+      // Assert no errors during theme transition
+      expect(errors).toEqual([]);
+    });
+
+    test('should not produce errors when toggling from dark to light theme', async ({ page }) => {
+      const errors: string[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          errors.push(msg.text());
+        }
+      });
+
+      page.on('pageerror', (error) => {
+        errors.push(error.message);
+      });
+
+      // Start with dark theme
+      await page.goto('/');
+      await page.evaluate(() => {
+        localStorage.setItem('theme', 'dark');
+      });
+      await page.reload();
+      await waitForHeroSection(page);
+
+      // Toggle to light theme
+      const themeToggle = page.getByRole('button', { name: /switch to light mode/i });
+      await themeToggle.click();
+
+      // Wait for theme transition
+      await page.waitForTimeout(500);
+
+      // Verify theme changed
+      const newTheme = await page.evaluate(() =>
+        document.documentElement.getAttribute('data-theme')
+      );
+      expect(newTheme).toBe('light');
+
+      // Assert no errors during theme transition
+      expect(errors).toEqual([]);
+    });
+
+    test('should not produce errors during multiple rapid theme toggles', async ({ page }) => {
+      const errors: string[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          errors.push(msg.text());
+        }
+      });
+
+      page.on('pageerror', (error) => {
+        errors.push(error.message);
+      });
+
+      await page.goto('/');
+      await page.evaluate(() => {
+        localStorage.setItem('theme', 'light');
+      });
+      await page.reload();
+      await waitForHeroSection(page);
+
+      // Perform multiple rapid theme toggles
+      for (let i = 0; i < 5; i++) {
+        // Find the current toggle button (name changes based on current theme)
+        const themeToggle = page.getByRole('button', { name: /switch to (dark|light) mode/i });
+        await themeToggle.click();
+        await page.waitForTimeout(100); // Small delay between toggles
+      }
+
+      // Wait for any pending transitions
+      await page.waitForTimeout(500);
+
+      // Assert no errors during rapid toggling
+      expect(errors).toEqual([]);
+    });
+
+    test('should not produce errors when toggling theme while scrolled', async ({ page }) => {
+      const errors: string[] = [];
+
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          errors.push(msg.text());
+        }
+      });
+
+      page.on('pageerror', (error) => {
+        errors.push(error.message);
+      });
+
+      await page.goto('/');
+      await page.evaluate(() => {
+        localStorage.setItem('theme', 'light');
+      });
+      await page.reload();
+      await waitForHeroSection(page);
+
+      // Scroll to features section
+      const featuresSection = page.getByTestId('features-section');
+      await featuresSection.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(300);
+
+      // Toggle theme while scrolled
+      const themeToggle = page.getByRole('button', { name: /switch to dark mode/i });
+      await themeToggle.click();
+      await page.waitForTimeout(500);
+
+      // Scroll to another section
+      const howItWorksSection = page.getByTestId('how-it-works-section');
+      await howItWorksSection.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(300);
+
+      // Verify sections are still visible after theme change
+      await expect(featuresSection).toBeVisible();
+      await expect(howItWorksSection).toBeVisible();
+
+      // Assert no errors
+      expect(errors).toEqual([]);
+    });
+  });
+});
