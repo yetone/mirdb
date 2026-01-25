@@ -30,12 +30,12 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" data-testid="login-page">
       <BackgroundEffect />
       <Navbar />
       <main className="pt-24 px-4 flex items-center justify-center min-h-screen">
         <GlassMorphismCard className="w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
+          <h1 className="text-3xl font-bold mb-6 text-center" data-testid="login-heading">Login</h1>
 
           {error && (
             <div className="alert alert-error mb-4">
@@ -43,7 +43,7 @@ export function Login() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" data-testid="login-form">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -55,6 +55,7 @@ export function Login() {
                 className="input input-bordered w-full"
                 placeholder="you@example.com"
                 required
+                data-testid="login-email"
               />
             </div>
 
@@ -69,6 +70,7 @@ export function Login() {
                 className="input input-bordered w-full"
                 placeholder="••••••••"
                 required
+                data-testid="login-password"
               />
             </div>
 

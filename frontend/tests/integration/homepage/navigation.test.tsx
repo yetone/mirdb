@@ -178,3 +178,172 @@ describe('Scenario 2: Navigation to Registration', () => {
     });
   });
 });
+
+describe('Scenario 3: Navigation to Login', () => {
+  describe('Test Case 1: Click "Login" button in navigation bar navigates to /login', () => {
+    it('should navigate to login page when clicking Login button in navbar', async () => {
+      const user = userEvent.setup();
+
+      render(<TestApp initialRoute="/" />);
+
+      // Verify we are on the homepage
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+        /shorten urls/i
+      );
+
+      // Find and click the Login button in navbar
+      const navLoginButton = screen.getByTestId('nav-login');
+      expect(navLoginButton).toBeInTheDocument();
+      expect(navLoginButton).toHaveTextContent(/login/i);
+
+      await user.click(navLoginButton);
+
+      // Verify navigation to login page
+      await waitFor(() => {
+        expect(screen.getByTestId('login-page')).toBeInTheDocument();
+      });
+
+      // Verify the login form is displayed
+      expect(screen.getByTestId('login-heading')).toHaveTextContent(/login/i);
+      expect(screen.getByTestId('login-form')).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: Click secondary "Login" link in hero section navigates to /login', () => {
+    it('should navigate to login page when clicking Login link in hero section', async () => {
+      const user = userEvent.setup();
+
+      render(<TestApp initialRoute="/" />);
+
+      // Verify we are on the homepage
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+        /shorten urls/i
+      );
+
+      // Find and click the Login link in hero section
+      const heroLoginLink = screen.getByTestId('hero-login-link');
+      expect(heroLoginLink).toBeInTheDocument();
+      expect(heroLoginLink).toHaveTextContent(/login/i);
+
+      await user.click(heroLoginLink);
+
+      // Verify navigation to login page
+      await waitFor(() => {
+        expect(screen.getByTestId('login-page')).toBeInTheDocument();
+      });
+
+      // Verify the login form is displayed
+      expect(screen.getByTestId('login-heading')).toHaveTextContent(/login/i);
+      expect(screen.getByTestId('login-form')).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 3: E2E - Click login and verify login form appears', () => {
+    it('should change browser URL to /login and display login form when clicking Login button', async () => {
+      const user = userEvent.setup();
+
+      render(<TestApp initialRoute="/" />);
+
+      // Verify initial state - homepage is displayed
+      const heroSection = screen.getByRole('heading', { level: 1 });
+      expect(heroSection).toBeInTheDocument();
+
+      // Click the Login button in navbar
+      const navLoginButton = screen.getByTestId('nav-login');
+      await user.click(navLoginButton);
+
+      // Verify navigation and form display
+      await waitFor(() => {
+        // Login page is displayed
+        expect(screen.getByTestId('login-page')).toBeInTheDocument();
+      });
+
+      // Verify login form elements are present
+      expect(screen.getByTestId('login-email')).toBeInTheDocument();
+      expect(screen.getByTestId('login-password')).toBeInTheDocument();
+
+      // Verify the form is interactive
+      const emailInput = screen.getByTestId('login-email');
+      await user.type(emailInput, 'test@example.com');
+      expect(emailInput).toHaveValue('test@example.com');
+
+      const passwordInput = screen.getByTestId('login-password');
+      await user.type(passwordInput, 'password123');
+      expect(passwordInput).toHaveValue('password123');
+    });
+  });
+
+  describe('Additional edge cases for login navigation', () => {
+    it('should have accessible link text for navbar Login button', async () => {
+      render(<TestApp initialRoute="/" />);
+
+      const navLoginButton = screen.getByTestId('nav-login');
+
+      // Verify the button is a link element with proper role
+      expect(navLoginButton).toBeInTheDocument();
+      expect(navLoginButton.tagName.toLowerCase()).toBe('a');
+      expect(navLoginButton).toHaveAttribute('href', '/login');
+    });
+
+    it('should have accessible link text for hero Login link', async () => {
+      render(<TestApp initialRoute="/" />);
+
+      const heroLoginLink = screen.getByTestId('hero-login-link');
+
+      // Verify the link is accessible
+      expect(heroLoginLink).toBeInTheDocument();
+      expect(heroLoginLink.tagName.toLowerCase()).toBe('a');
+      expect(heroLoginLink).toHaveAttribute('href', '/login');
+    });
+
+    it('should navigate from homepage to login and back to homepage', async () => {
+      const user = userEvent.setup();
+
+      render(<TestApp initialRoute="/" />);
+
+      // Start at homepage
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/shorten urls/i);
+
+      // Navigate to login via navbar
+      const navLoginButton = screen.getByTestId('nav-login');
+      await user.click(navLoginButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('login-page')).toBeInTheDocument();
+      });
+
+      // Navigate back to homepage via navbar logo
+      const logoLink = screen.getByText(/shorturl/i);
+      await user.click(logoLink);
+
+      await waitFor(() => {
+        expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/shorten urls/i);
+      });
+    });
+
+    it('should navigate from homepage to login via hero section link and back', async () => {
+      const user = userEvent.setup();
+
+      render(<TestApp initialRoute="/" />);
+
+      // Start at homepage
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/shorten urls/i);
+
+      // Navigate to login via hero section link
+      const heroLoginLink = screen.getByTestId('hero-login-link');
+      await user.click(heroLoginLink);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('login-page')).toBeInTheDocument();
+      });
+
+      // Navigate back to homepage via navbar logo
+      const logoLink = screen.getByText(/shorturl/i);
+      await user.click(logoLink);
+
+      await waitFor(() => {
+        expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/shorten urls/i);
+      });
+    });
+  });
+});
