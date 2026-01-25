@@ -8,10 +8,10 @@
  * - Common test fixtures and data
  */
 
-import React, { ReactElement } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '../../../src/contexts/AuthContext';
+import { AuthContext, AuthProvider } from '../../../src/contexts/AuthContext';
 import { ThemeProvider } from '../../../src/contexts/ThemeContext';
 
 interface ProvidersProps {
@@ -19,7 +19,7 @@ interface ProvidersProps {
 }
 
 /**
- * All providers wrapper for unit tests
+ * All providers wrapper for unit tests (uses real providers)
  */
 function AllProviders({ children }: ProvidersProps) {
   return (
@@ -29,16 +29,6 @@ function AllProviders({ children }: ProvidersProps) {
       </AuthProvider>
     </ThemeProvider>
   );
-}
-
-/**
- * Render with all providers (AuthContext, ThemeContext, BrowserRouter)
- */
-export function renderWithProviders(
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>
-) {
-  return render(ui, { wrapper: AllProviders, ...options });
 }
 
 /**
@@ -61,6 +51,14 @@ export const mockAuthContext = {
     logout: vi.fn(),
     register: vi.fn(),
   },
+  loading: {
+    user: null,
+    isAuthenticated: false,
+    isLoading: true,
+    login: vi.fn(),
+    logout: vi.fn(),
+    register: vi.fn(),
+  },
 };
 
 /**
@@ -75,4 +73,56 @@ export const mockThemeContext = {
     theme: 'dark',
     setTheme: vi.fn(),
   },
+};
+
+interface RenderWithProvidersOptions extends Omit<RenderOptions, 'wrapper'> {
+  authState?: typeof mockAuthContext.authenticated | typeof mockAuthContext.unauthenticated | typeof mockAuthContext.loading;
+}
+
+/**
+ * Create a custom provider wrapper with optional auth state override
+ */
+function createProviderWrapper(authState = mockAuthContext.unauthenticated) {
+  return function ProviderWrapper({ children }: { children: ReactNode }) {
+    return (
+      <ThemeProvider>
+        <AuthContext.Provider value={authState}>
+          <BrowserRouter>{children}</BrowserRouter>
+        </AuthContext.Provider>
+      </ThemeProvider>
+    );
+  };
+}
+
+/**
+ * Render with providers for unit tests
+ * Allows overriding auth state for testing different scenarios
+ */
+export function renderWithProviders(
+  ui: ReactElement,
+  { authState = mockAuthContext.unauthenticated, ...options }: RenderWithProvidersOptions = {}
+) {
+  const Wrapper = createProviderWrapper(authState);
+  return render(ui, { wrapper: Wrapper, ...options });
+}
+
+/**
+ * Render with all real providers (for tests that don't need mocked auth state)
+ */
+export function renderWithAllProviders(
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>
+) {
+  return render(ui, { wrapper: AllProviders, ...options });
+}
+
+/**
+ * Common test data fixtures
+ */
+export const testFixtures = {
+  heroHeadline: 'Shorten URLs. Track Every Click.',
+  heroSubheadline: 'Transform long, unwieldy URLs into clean, memorable short links',
+  primaryCtaText: 'Get Started',
+  secondaryCtaText: 'Login',
+  authenticatedCtaText: 'Go to Dashboard',
 };
