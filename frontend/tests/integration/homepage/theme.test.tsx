@@ -674,3 +674,177 @@ describe('Dark Mode Rendering - Scenario 13', () => {
     });
   });
 });
+
+// ===============================================
+// Scenario 19: Framer Motion Animations - Integration Tests
+// Test Case 3: Check hover effects on buttons
+// ===============================================
+
+describe('Framer Motion Animations - Integration Tests (Scenario 19)', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    document.documentElement.removeAttribute('data-theme');
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+    document.documentElement.removeAttribute('data-theme');
+  });
+
+  describe('Test Case 3: Check hover effects on buttons', () => {
+    it('should have transition classes on FuturisticButton', () => {
+      renderWithDarkTheme(
+        <FuturisticButton data-testid="test-btn">
+          Test Button
+        </FuturisticButton>
+      );
+
+      const button = screen.getByTestId('test-btn');
+      expect(button).toBeInTheDocument();
+
+      // FuturisticButton should have transition-all class
+      expect(button).toHaveClass('transition-all');
+    });
+
+    it('should have duration-300 class for 300ms transition', () => {
+      renderWithDarkTheme(
+        <FuturisticButton data-testid="test-btn">
+          Test Button
+        </FuturisticButton>
+      );
+
+      const button = screen.getByTestId('test-btn');
+
+      // Check for duration-300 class
+      expect(button).toHaveClass('duration-300');
+    });
+
+    it('should have hover:scale-105 class for hover effect', () => {
+      renderWithDarkTheme(
+        <FuturisticButton data-testid="test-btn">
+          Test Button
+        </FuturisticButton>
+      );
+
+      const button = screen.getByTestId('test-btn');
+
+      // Check for hover:scale-105 class
+      expect(button).toHaveClass('hover:scale-105');
+    });
+
+    it('should apply correct base classes for smooth transitions', () => {
+      renderWithDarkTheme(
+        <FuturisticButton data-testid="test-btn">
+          Test Button
+        </FuturisticButton>
+      );
+
+      const button = screen.getByTestId('test-btn');
+
+      // The FuturisticButton uses 'btn transition-all duration-300 hover:scale-105'
+      expect(button).toHaveClass('btn');
+      expect(button).toHaveClass('transition-all');
+      expect(button).toHaveClass('duration-300');
+      expect(button).toHaveClass('hover:scale-105');
+    });
+
+    it('should render hero CTA button with hover transition classes', () => {
+      renderWithDarkTheme(<HeroSection isAuthenticated={false} />);
+
+      const ctaButton = screen.getByTestId('hero-cta');
+      expect(ctaButton).toBeInTheDocument();
+
+      // Hero CTA uses FuturisticButton which has transition classes
+      expect(ctaButton).toHaveClass('transition-all');
+      expect(ctaButton).toHaveClass('duration-300');
+      expect(ctaButton).toHaveClass('hover:scale-105');
+    });
+
+    it('should have hover:underline class on login link', () => {
+      renderWithDarkTheme(<HeroSection isAuthenticated={false} />);
+
+      const loginLink = screen.getByTestId('hero-login-link');
+      expect(loginLink).toBeInTheDocument();
+
+      // Login link has hover:underline class
+      expect(loginLink).toHaveClass('hover:underline');
+    });
+
+    it('should have text-primary class for login link visibility', () => {
+      renderWithDarkTheme(<HeroSection isAuthenticated={false} />);
+
+      const loginLink = screen.getByTestId('hero-login-link');
+
+      // Login link uses text-primary for styling
+      expect(loginLink).toHaveClass('text-primary');
+    });
+
+    it('should render primary variant button maintaining transition classes', () => {
+      renderWithDarkTheme(
+        <FuturisticButton variant="primary" data-testid="test-btn">
+          Primary
+        </FuturisticButton>
+      );
+
+      const button = screen.getByTestId('test-btn');
+      expect(button).toHaveClass('btn-primary', 'transition-all');
+    });
+
+    it('should render secondary variant button maintaining transition classes', () => {
+      renderWithDarkTheme(
+        <FuturisticButton variant="secondary" data-testid="test-btn">
+          Secondary
+        </FuturisticButton>
+      );
+
+      const button = screen.getByTestId('test-btn');
+      expect(button).toHaveClass('btn-secondary', 'transition-all');
+    });
+
+    it('should render ghost variant button maintaining transition classes', () => {
+      renderWithDarkTheme(
+        <FuturisticButton variant="ghost" data-testid="test-btn">
+          Ghost
+        </FuturisticButton>
+      );
+
+      const button = screen.getByTestId('test-btn');
+      expect(button).toHaveClass('btn-ghost', 'transition-all');
+    });
+
+    it('should render button as link with hover transition classes', () => {
+      renderWithDarkTheme(
+        <FuturisticButton to="/test" data-testid="test-link-btn">
+          Link Button
+        </FuturisticButton>
+      );
+
+      const linkButton = screen.getByTestId('test-link-btn');
+
+      // Link buttons should also have transition classes
+      expect(linkButton.tagName.toLowerCase()).toBe('a');
+      expect(linkButton).toHaveClass('transition-all');
+      expect(linkButton).toHaveClass('duration-300');
+      expect(linkButton).toHaveClass('hover:scale-105');
+    });
+
+    it('should maintain transition classes across all button sizes', () => {
+      const sizes: Array<'sm' | 'md' | 'lg'> = ['sm', 'md', 'lg'];
+
+      for (const size of sizes) {
+        const { unmount } = renderWithDarkTheme(
+          <FuturisticButton size={size} data-testid="test-btn">
+            {size} Button
+          </FuturisticButton>
+        );
+
+        const button = screen.getByTestId('test-btn');
+        expect(button).toHaveClass('transition-all');
+        expect(button).toHaveClass('duration-300');
+        expect(button).toHaveClass('hover:scale-105');
+
+        unmount();
+      }
+    });
+  });
+});
