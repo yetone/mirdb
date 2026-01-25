@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShortURL - URL Shortening Service</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <div class="noscript-fallback" style="font-family: system-ui, -apple-system, sans-serif; padding: 2rem; max-width: 800px; margin: 0 auto;">
+        <header style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #ccc;">
+          <h1 style="font-size: 1.5rem; margin: 0;">ShortURL</h1>
+          <nav style="margin-top: 1rem;">
+            <a href="/login" style="margin-right: 1rem; color: #3b82f6; text-decoration: none;">Login</a>
+            <a href="/register" style="color: #3b82f6; text-decoration: none;">Register</a>
+          </nav>
+        </header>
+        <main>
+          <section style="margin-bottom: 2rem;">
+            <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Welcome to ShortURL</h2>
+            <p style="color: #666; line-height: 1.6;">Shorten URLs. Track Every Click.</p>
+            <p style="color: #666; line-height: 1.6;">Transform long, unwieldy URLs into clean, memorable short links that are easy to share anywhere.</p>
+          </section>
+          <section style="background: #f5f5f5; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem;">
+            <p style="margin: 0; color: #666;">
+              <strong>JavaScript Required:</strong> This application requires JavaScript for full functionality.
+              Please enable JavaScript in your browser to access all features including URL shortening, analytics dashboard, and more.
+            </p>
+          </section>
+          <section style="margin-bottom: 2rem;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Key Features</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">📎 Instant URL Shortening</li>
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">📊 Detailed Click Analytics</li>
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">🌍 Geographic Insights</li>
+              <li style="padding: 0.5rem 0;">🔗 Shareable Stats</li>
+            </ul>
+          </section>
+          <section>
+            <a href="/register" style="display: inline-block; padding: 0.75rem 1.5rem; background: #3b82f6; color: white; text-decoration: none; border-radius: 0.375rem;">Get Started</a>
+            <span style="margin-left: 1rem; color: #666;">Already have an account? <a href="/login" style="color: #3b82f6;">Login</a></span>
+          </section>
+        </main>
+        <footer style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ccc; color: #666; font-size: 0.875rem;">
+          <p>&copy; 2025 ShortURL. All rights reserved.</p>
+        </footer>
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
