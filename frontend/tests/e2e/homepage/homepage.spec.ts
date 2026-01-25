@@ -695,3 +695,227 @@ test.describe('Framer Motion Animations - E2E', () => {
     });
   });
 });
+
+/**
+ * E2E tests for Error States - No JavaScript
+ * Scenario 26 - Graceful degradation when JavaScript is disabled
+ *
+ * Tests that basic content is visible and navigation links work when JavaScript is disabled
+ */
+test.describe('Error States - No JavaScript', () => {
+  test.describe('Test Case 1: Load homepage with JavaScript disabled', () => {
+    test('should display noscript fallback content when JavaScript is disabled', async ({
+      browser,
+    }) => {
+      // Create a new context with JavaScript disabled
+      const context = await browser.newContext({
+        javaScriptEnabled: false,
+      });
+      const page = await context.newPage();
+
+      // Navigate to homepage
+      await page.goto('/');
+
+      // Verify noscript fallback is visible
+      const noscriptFallback = page.locator('.noscript-fallback');
+      await expect(noscriptFallback).toBeVisible();
+
+      // Verify main heading is visible
+      const heading = page.locator('.noscript-fallback h1');
+      await expect(heading).toBeVisible();
+      await expect(heading).toContainText('ShortURL');
+
+      // Verify welcome message is visible
+      const welcomeHeading = page.locator('.noscript-fallback h2');
+      await expect(welcomeHeading).toContainText('Welcome to ShortURL');
+
+      // Verify value proposition text is visible
+      const valueProposition = page.locator('.noscript-fallback').getByText('Shorten URLs. Track Every Click.');
+      await expect(valueProposition).toBeVisible();
+
+      // Verify JavaScript required message is displayed
+      const jsRequiredMessage = page.locator('.noscript-fallback').getByText('JavaScript Required');
+      await expect(jsRequiredMessage).toBeVisible();
+
+      await context.close();
+    });
+
+    test('should display key features list when JavaScript is disabled', async ({ browser }) => {
+      const context = await browser.newContext({
+        javaScriptEnabled: false,
+      });
+      const page = await context.newPage();
+
+      await page.goto('/');
+
+      // Verify features heading
+      const featuresHeading = page.locator('.noscript-fallback h3');
+      await expect(featuresHeading).toContainText('Key Features');
+
+      // Verify feature items are visible
+      const featuresList = page.locator('.noscript-fallback ul li');
+      const count = await featuresList.count();
+      expect(count).toBe(4);
+
+      // Verify specific features are listed
+      await expect(page.locator('.noscript-fallback').getByText('Instant URL Shortening')).toBeVisible();
+      await expect(page.locator('.noscript-fallback').getByText('Detailed Click Analytics')).toBeVisible();
+      await expect(page.locator('.noscript-fallback').getByText('Geographic Insights')).toBeVisible();
+      await expect(page.locator('.noscript-fallback').getByText('Shareable Stats')).toBeVisible();
+
+      await context.close();
+    });
+
+    test('should display footer with copyright when JavaScript is disabled', async ({ browser }) => {
+      const context = await browser.newContext({
+        javaScriptEnabled: false,
+      });
+      const page = await context.newPage();
+
+      await page.goto('/');
+
+      // Verify footer is visible
+      const footer = page.locator('.noscript-fallback footer');
+      await expect(footer).toBeVisible();
+
+      // Verify copyright text
+      await expect(footer).toContainText('ShortURL');
+      await expect(footer).toContainText('All rights reserved');
+
+      await context.close();
+    });
+  });
+
+  test.describe('Test Case 2: Check navigation links without JavaScript', () => {
+    test('should have functional Login link in header when JavaScript is disabled', async ({
+      browser,
+    }) => {
+      const context = await browser.newContext({
+        javaScriptEnabled: false,
+      });
+      const page = await context.newPage();
+
+      await page.goto('/');
+
+      // Find the Login link in the header navigation
+      const headerNav = page.locator('.noscript-fallback header nav');
+      const loginLink = headerNav.locator('a[href="/login"]');
+
+      await expect(loginLink).toBeVisible();
+      await expect(loginLink).toContainText('Login');
+
+      // Verify the href attribute
+      const href = await loginLink.getAttribute('href');
+      expect(href).toBe('/login');
+
+      // Click and verify navigation
+      await loginLink.click();
+      await expect(page).toHaveURL(/\/login/);
+
+      await context.close();
+    });
+
+    test('should have functional Register link in header when JavaScript is disabled', async ({
+      browser,
+    }) => {
+      const context = await browser.newContext({
+        javaScriptEnabled: false,
+      });
+      const page = await context.newPage();
+
+      await page.goto('/');
+
+      // Find the Register link in the header navigation
+      const headerNav = page.locator('.noscript-fallback header nav');
+      const registerLink = headerNav.locator('a[href="/register"]');
+
+      await expect(registerLink).toBeVisible();
+      await expect(registerLink).toContainText('Register');
+
+      // Verify the href attribute
+      const href = await registerLink.getAttribute('href');
+      expect(href).toBe('/register');
+
+      // Click and verify navigation
+      await registerLink.click();
+      await expect(page).toHaveURL(/\/register/);
+
+      await context.close();
+    });
+
+    test('should have functional Get Started CTA when JavaScript is disabled', async ({
+      browser,
+    }) => {
+      const context = await browser.newContext({
+        javaScriptEnabled: false,
+      });
+      const page = await context.newPage();
+
+      await page.goto('/');
+
+      // Find the Get Started button/link
+      const getStartedLink = page.locator('.noscript-fallback a').filter({ hasText: 'Get Started' });
+      await expect(getStartedLink).toBeVisible();
+
+      // Verify it links to register
+      const href = await getStartedLink.getAttribute('href');
+      expect(href).toBe('/register');
+
+      // Click and verify navigation
+      await getStartedLink.click();
+      await expect(page).toHaveURL(/\/register/);
+
+      await context.close();
+    });
+
+    test('should have functional Login link in CTA section when JavaScript is disabled', async ({
+      browser,
+    }) => {
+      const context = await browser.newContext({
+        javaScriptEnabled: false,
+      });
+      const page = await context.newPage();
+
+      await page.goto('/');
+
+      // Find the "Already have an account? Login" link
+      const ctaSection = page.locator('.noscript-fallback main section').last();
+      const loginLink = ctaSection.locator('a[href="/login"]');
+
+      await expect(loginLink).toBeVisible();
+      await expect(loginLink).toContainText('Login');
+
+      // Click and verify navigation
+      await loginLink.click();
+      await expect(page).toHaveURL(/\/login/);
+
+      await context.close();
+    });
+
+    test('should have all navigation links with proper href attributes', async ({ browser }) => {
+      const context = await browser.newContext({
+        javaScriptEnabled: false,
+      });
+      const page = await context.newPage();
+
+      await page.goto('/');
+
+      // Get all links in the noscript fallback
+      const allLinks = page.locator('.noscript-fallback a');
+      const linkCount = await allLinks.count();
+
+      // Should have multiple navigation links
+      expect(linkCount).toBeGreaterThanOrEqual(4);
+
+      // Verify each link has a valid href
+      for (let i = 0; i < linkCount; i++) {
+        const link = allLinks.nth(i);
+        const href = await link.getAttribute('href');
+        expect(href).toBeTruthy();
+        expect(href).toMatch(/^\/(login|register)?$/);
+      }
+
+      await context.close();
+    });
+  });
+});
