@@ -1,0 +1,84 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="675" fill="#1a1a2e"/>
+  
+  <!-- Header bar -->
+  <rect x="0" y="0" width="1200" height="60" fill="#16213e"/>
+  <text x="40" y="38" font-family="Arial, sans-serif" font-size="24" fill="#e94560" font-weight="bold">LinkTracker</text>
+  <circle cx="1100" cy="30" r="16" fill="#0f3460"/>
+  <circle cx="1150" cy="30" r="16" fill="#0f3460"/>
+  
+  <!-- Sidebar -->
+  <rect x="0" y="60" width="200" height="615" fill="#16213e"/>
+  <rect x="15" y="90" width="170" height="40" rx="8" fill="#0f3460"/>
+  <text x="45" y="117" font-family="Arial, sans-serif" font-size="14" fill="#e94560">Dashboard</text>
+  <rect x="15" y="145" width="170" height="40" rx="8" fill="#1a1a2e"/>
+  <text x="45" y="172" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0">My Links</text>
+  <rect x="15" y="200" width="170" height="40" rx="8" fill="#1a1a2e"/>
+  <text x="45" y="227" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0">Analytics</text>
+  <rect x="15" y="255" width="170" height="40" rx="8" fill="#1a1a2e"/>
+  <text x="45" y="282" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0">Settings</text>
+  
+  <!-- Main content area -->
+  <rect x="220" y="80" width="960" height="575" rx="12" fill="#16213e"/>
+  
+  <!-- Stats cards row -->
+  <rect x="240" y="100" width="220" height="100" rx="8" fill="#0f3460"/>
+  <text x="260" y="135" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0">Total Clicks</text>
+  <text x="260" y="175" font-family="Arial, sans-serif" font-size="32" fill="#e94560" font-weight="bold">12,847</text>
+  
+  <rect x="480" y="100" width="220" height="100" rx="8" fill="#0f3460"/>
+  <text x="500" y="135" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0">Active Links</text>
+  <text x="500" y="175" font-family="Arial, sans-serif" font-size="32" fill="#00d9ff" font-weight="bold">156</text>
+  
+  <rect x="720" y="100" width="220" height="100" rx="8" fill="#0f3460"/>
+  <text x="740" y="135" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0">Countries</text>
+  <text x="740" y="175" font-family="Arial, sans-serif" font-size="32" fill="#00ff88" font-weight="bold">42</text>
+  
+  <rect x="960" y="100" width="200" height="100" rx="8" fill="#0f3460"/>
+  <text x="980" y="135" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0">Avg CTR</text>
+  <text x="980" y="175" font-family="Arial, sans-serif" font-size="32" fill="#ffbb00" font-weight="bold">8.2%</text>
+  
+  <!-- Chart area -->
+  <rect x="240" y="220" width="520" height="280" rx="8" fill="#0f3460"/>
+  <text x="260" y="255" font-family="Arial, sans-serif" font-size="16" fill="#ffffff" font-weight="bold">Click Analytics</text>
+  <!-- Chart lines -->
+  <polyline points="280,450 340,420 400,380 460,400 520,350 580,320 640,360 700,280" stroke="#e94560" stroke-width="3" fill="none"/>
+  <polyline points="280,460 340,440 400,420 460,430 520,400 580,380 640,410 700,340" stroke="#00d9ff" stroke-width="3" fill="none"/>
+  <!-- X-axis labels -->
+  <text x="280" y="480" font-family="Arial, sans-serif" font-size="10" fill="#a0a0a0">Mon</text>
+  <text x="340" y="480" font-family="Arial, sans-serif" font-size="10" fill="#a0a0a0">Tue</text>
+  <text x="400" y="480" font-family="Arial, sans-serif" font-size="10" fill="#a0a0a0">Wed</text>
+  <text x="460" y="480" font-family="Arial, sans-serif" font-size="10" fill="#a0a0a0">Thu</text>
+  <text x="520" y="480" font-family="Arial, sans-serif" font-size="10" fill="#a0a0a0">Fri</text>
+  <text x="580" y="480" font-family="Arial, sans-serif" font-size="10" fill="#a0a0a0">Sat</text>
+  <text x="640" y="480" font-family="Arial, sans-serif" font-size="10" fill="#a0a0a0">Sun</text>
+  
+  <!-- Geographic map area -->
+  <rect x="780" y="220" width="380" height="280" rx="8" fill="#0f3460"/>
+  <text x="800" y="255" font-family="Arial, sans-serif" font-size="16" fill="#ffffff" font-weight="bold">Geographic Data</text>
+  <!-- Simplified world map representation -->
+  <ellipse cx="970" cy="380" rx="160" ry="90" stroke="#1a1a2e" stroke-width="2" fill="none"/>
+  <circle cx="880" cy="350" r="8" fill="#e94560" opacity="0.8"/>
+  <circle cx="920" cy="380" r="12" fill="#e94560" opacity="0.8"/>
+  <circle cx="1000" cy="360" r="6" fill="#00d9ff" opacity="0.8"/>
+  <circle cx="1040" cy="400" r="10" fill="#00ff88" opacity="0.8"/>
+  <circle cx="950" cy="420" r="5" fill="#ffbb00" opacity="0.8"/>
+  
+  <!-- Recent links table -->
+  <rect x="240" y="520" width="920" height="120" rx="8" fill="#0f3460"/>
+  <text x="260" y="555" font-family="Arial, sans-serif" font-size="16" fill="#ffffff" font-weight="bold">Recent Links</text>
+  <line x1="260" y1="575" x2="1140" y2="575" stroke="#1a1a2e" stroke-width="1"/>
+  <text x="260" y="600" font-family="Arial, sans-serif" font-size="12" fill="#a0a0a0">Short URL</text>
+  <text x="460" y="600" font-family="Arial, sans-serif" font-size="12" fill="#a0a0a0">Original URL</text>
+  <text x="800" y="600" font-family="Arial, sans-serif" font-size="12" fill="#a0a0a0">Clicks</text>
+  <text x="920" y="600" font-family="Arial, sans-serif" font-size="12" fill="#a0a0a0">Created</text>
+  <text x="1040" y="600" font-family="Arial, sans-serif" font-size="12" fill="#a0a0a0">Status</text>
+  <line x1="260" y1="615" x2="1140" y2="615" stroke="#1a1a2e" stroke-width="1"/>
+  <text x="260" y="635" font-family="Arial, sans-serif" font-size="12" fill="#00d9ff">lnk.to/abc123</text>
+  <text x="460" y="635" font-family="Arial, sans-serif" font-size="12" fill="#ffffff">example.com/very-long-url...</text>
+  <text x="800" y="635" font-family="Arial, sans-serif" font-size="12" fill="#ffffff">2,431</text>
+  <text x="920" y="635" font-family="Arial, sans-serif" font-size="12" fill="#ffffff">2 hours ago</text>
+  <rect x="1040" y="622" width="50" height="20" rx="4" fill="#00ff88" opacity="0.3"/>
+  <text x="1050" y="636" font-family="Arial, sans-serif" font-size="10" fill="#00ff88">Active</text>
+</svg>

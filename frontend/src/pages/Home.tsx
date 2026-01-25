@@ -1,7 +1,6 @@
-import React from 'react';
 import { Navbar } from '../components/Navbar';
 import { BackgroundEffect } from '../components/BackgroundEffect';
-import { HeroSection, FeaturesSection, HowItWorksSection, Footer } from '../components/homepage';
+import { HeroSection, FeaturesSection, HowItWorksSection, DashboardPreview, Footer } from '../components/homepage';
 
 export function Home() {
   return (
@@ -12,7 +11,7 @@ export function Home() {
         <HeroSection />
         <FeaturesSection />
         <HowItWorksSection />
-        {/* DashboardPreview will be added by Scenario 7 */}
+        <DashboardPreview />
         <Footer />
       </main>
     </div>

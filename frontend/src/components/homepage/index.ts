@@ -7,5 +7,5 @@
 export { HeroSection } from './HeroSection';
 export { FeaturesSection } from './FeaturesSection';
 export { HowItWorksSection } from './HowItWorksSection';
-// export { DashboardPreview } from './DashboardPreview';
+export { DashboardPreview } from './DashboardPreview';
 export { Footer } from './Footer';
