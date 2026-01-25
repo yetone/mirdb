@@ -868,3 +868,461 @@ describe('Scenario 10: Responsive Design - Tablet', () => {
     });
   });
 });
+
+describe('Scenario 11: Responsive Design - Desktop', () => {
+  beforeEach(() => {
+    // Set desktop viewport
+    setViewport('desktop');
+  });
+
+  afterEach(() => {
+    // Reset to default viewport
+    vi.restoreAllMocks();
+  });
+
+  describe('Test Case 1: Full desktop layout with horizontal navigation bar (1280px viewport)', () => {
+    it('should render homepage with full desktop layout at 1280px viewport width', () => {
+      // Set specific desktop width
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      Object.defineProperty(window, 'innerHeight', {
+        writable: true,
+        configurable: true,
+        value: 800,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      const { container } = render(<TestApp />);
+
+      // Verify the main container exists
+      const mainElement = container.querySelector('main');
+      expect(mainElement).toBeInTheDocument();
+
+      // Verify key sections are present
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+      expect(screen.getByTestId('features-section')).toBeInTheDocument();
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument();
+      expect(screen.getByTestId('dashboard-preview-section')).toBeInTheDocument();
+      expect(screen.getByTestId('footer')).toBeInTheDocument();
+    });
+
+    it('should display horizontal navigation bar on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Desktop navigation should be visible (hidden on mobile, visible on md+)
+      // Check for desktop navigation links
+      const navLogin = screen.getByTestId('nav-login');
+      const navRegister = screen.getByTestId('nav-register');
+
+      expect(navLogin).toBeInTheDocument();
+      expect(navRegister).toBeInTheDocument();
+    });
+
+    it('should hide hamburger menu on desktop viewport', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Hamburger menu should be hidden on desktop (using md:hidden class)
+      const hamburgerMenu = screen.getByTestId('hamburger-menu');
+      expect(hamburgerMenu).toBeInTheDocument();
+
+      // The hamburger button has class md:hidden which means it's hidden on md+ screens
+      // The parent container has md:hidden class
+      const hamburgerContainer = hamburgerMenu.closest('.md\\:hidden');
+      expect(hamburgerContainer).toBeInTheDocument();
+    });
+
+    it('should display navigation with proper spacing on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Check for desktop navigation container (hidden md:flex)
+      const navLogin = screen.getByTestId('nav-login');
+      const desktopNavContainer = navLogin.closest('.hidden.md\\:flex');
+
+      expect(desktopNavContainer).toBeInTheDocument();
+    });
+
+    it('should have all homepage sections properly contained at desktop width', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Verify all homepage sections are present
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+      expect(screen.getByTestId('features-section')).toBeInTheDocument();
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument();
+      expect(screen.getByTestId('dashboard-preview-section')).toBeInTheDocument();
+      expect(screen.getByTestId('footer')).toBeInTheDocument();
+
+      // Verify the hero CTA is accessible
+      expect(screen.getByTestId('hero-cta')).toBeInTheDocument();
+    });
+
+    it('should have responsive text that renders properly at desktop viewport', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Check that the main heading exists and is readable
+      const heading = screen.getByRole('heading', { level: 1 });
+      expect(heading).toBeInTheDocument();
+      expect(heading).toHaveTextContent(/shorten urls/i);
+    });
+  });
+
+  describe('Test Case 2: Feature cards display in horizontal row (4 columns)', () => {
+    it('should have features grid with 4-column layout on desktop (lg breakpoint)', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toBeInTheDocument();
+
+      // Check that the grid has lg:grid-cols-4 class for 4-column layout on desktop
+      expect(featuresGrid.className).toMatch(/lg:grid-cols-4/);
+    });
+
+    it('should display all 4 feature cards in the grid', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Verify all 4 feature cards are present
+      expect(screen.getByTestId('feature-card-url-shortening')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-card-click-analytics')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-card-geographic-insights')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-card-shareable-stats')).toBeInTheDocument();
+    });
+
+    it('should have feature cards with visible and readable content on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Check that feature titles are visible
+      expect(screen.getByTestId('feature-title-url-shortening')).toHaveTextContent('URL Shortening');
+      expect(screen.getByTestId('feature-title-click-analytics')).toHaveTextContent('Click Analytics');
+      expect(screen.getByTestId('feature-title-geographic-insights')).toHaveTextContent('Geographic Insights');
+      expect(screen.getByTestId('feature-title-shareable-stats')).toHaveTextContent('Shareable Stats');
+
+      // Check that feature descriptions are visible
+      expect(screen.getByTestId('feature-description-url-shortening')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-description-click-analytics')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-description-geographic-insights')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-description-shareable-stats')).toBeInTheDocument();
+    });
+
+    it('should have feature icons visible on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Check that feature icons are present
+      expect(screen.getByTestId('feature-icon-url-shortening')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-icon-click-analytics')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-icon-geographic-insights')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-icon-shareable-stats')).toBeInTheDocument();
+    });
+
+    it('should have proper grid gap between feature cards', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+
+      // Check that the grid has gap class for spacing between cards
+      expect(featuresGrid.className).toMatch(/gap-6/);
+    });
+  });
+
+  describe('Test Case 3: How It Works steps display horizontally in a row', () => {
+    it('should display How It Works section with horizontal layout on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      const howItWorksSection = screen.getByTestId('how-it-works-section');
+      expect(howItWorksSection).toBeInTheDocument();
+
+      // Find the grid container within the section
+      const gridContainer = howItWorksSection.querySelector('.grid');
+      expect(gridContainer).toBeInTheDocument();
+
+      // Check that it has md:grid-cols-3 class for horizontal layout
+      expect(gridContainer?.className).toMatch(/md:grid-cols-3/);
+    });
+
+    it('should display all 3 steps in horizontal row on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Verify all 3 steps are visible
+      expect(screen.getByTestId('step-1')).toBeInTheDocument();
+      expect(screen.getByTestId('step-2')).toBeInTheDocument();
+      expect(screen.getByTestId('step-3')).toBeInTheDocument();
+    });
+
+    it('should display connecting lines between steps on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      const howItWorksSection = screen.getByTestId('how-it-works-section');
+
+      // Check for the connecting line element (visible on md and above)
+      // The line has class "hidden md:block" so it should be present in DOM
+      const connectingLine = howItWorksSection.querySelector('.hidden.md\\:block');
+      expect(connectingLine).toBeInTheDocument();
+    });
+
+    it('should display all step content clearly on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Step 1 - Paste
+      const step1 = screen.getByTestId('step-1');
+      expect(step1).toHaveTextContent(/paste/i);
+
+      // Step 2 - Share
+      const step2 = screen.getByTestId('step-2');
+      expect(step2).toHaveTextContent(/share/i);
+
+      // Step 3 - Track/Analytics
+      const step3 = screen.getByTestId('step-3');
+      expect(step3).toHaveTextContent(/track|analytics/i);
+    });
+  });
+
+  describe('Additional desktop responsive tests', () => {
+    it('should have proper spacing and padding on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Check that features section has desktop-responsive padding
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection.className).toMatch(/md:px-8/);
+    });
+
+    it('should display dashboard preview section properly on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      const dashboardPreview = screen.getByTestId('dashboard-preview-section');
+      expect(dashboardPreview).toBeInTheDocument();
+    });
+
+    it('should display footer properly on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      const footer = screen.getByTestId('footer');
+      expect(footer).toBeInTheDocument();
+
+      // Verify footer content is visible
+      expect(screen.getByText(/shorturl/i)).toBeInTheDocument();
+    });
+
+    it('should have hero section with appropriate desktop layout', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Verify hero heading is present
+      const heading = screen.getByRole('heading', { level: 1 });
+      expect(heading).toBeInTheDocument();
+
+      // Check for the hero section container
+      const heroSection = heading.closest('section');
+      expect(heroSection).toBeInTheDocument();
+    });
+
+    it('should have CTAs properly sized for desktop interaction', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      const heroCTA = screen.getByTestId('hero-cta');
+      expect(heroCTA).toBeInTheDocument();
+
+      // Check that CTA maintains minimum touch target size
+      expect(heroCTA.className).toMatch(/min-h-\[44px\]/);
+      expect(heroCTA.className).toMatch(/min-w-\[44px\]/);
+    });
+
+    it('should maintain content hierarchy on desktop viewport', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1280,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Verify heading hierarchy exists
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+
+      // Features and How It Works should have h2 headings
+      const h2Headings = screen.getAllByRole('heading', { level: 2 });
+      expect(h2Headings.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should work properly at large desktop viewport (1920px)', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1920,
+      });
+      Object.defineProperty(window, 'innerHeight', {
+        writable: true,
+        configurable: true,
+        value: 1080,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Verify all key sections are present
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+      expect(screen.getByTestId('features-section')).toBeInTheDocument();
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument();
+      expect(screen.getByTestId('dashboard-preview-section')).toBeInTheDocument();
+      expect(screen.getByTestId('footer')).toBeInTheDocument();
+
+      // Desktop navigation should still be visible
+      expect(screen.getByTestId('nav-login')).toBeInTheDocument();
+      expect(screen.getByTestId('nav-register')).toBeInTheDocument();
+
+      // Features should still have 4-column layout
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid.className).toMatch(/lg:grid-cols-4/);
+    });
+
+    it('should have max-width constraints for content on large desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1920,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      render(<TestApp />);
+
+      // Check that sections have max-width constraints
+      const featuresSection = screen.getByTestId('features-section');
+      const maxWidthContainer = featuresSection.querySelector('.max-w-6xl');
+
+      expect(maxWidthContainer).toBeInTheDocument();
+    });
+  });
+});
