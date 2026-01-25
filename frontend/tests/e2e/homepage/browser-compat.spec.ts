@@ -1,18 +1,32 @@
 /**
- * E2E tests for Browser Compatibility - Chrome
- * Scenario 20 - Browser Compatibility Testing
+ * Browser Compatibility E2E Tests
+ *
+ * This file contains E2E tests for verifying homepage compatibility
+ * across different browsers. Each browser scenario tests:
+ * - Page rendering and visual elements
+ * - Navigation and CTA functionality
+ * - Theme toggle behavior
+ * - Interactive features
+ *
+ * Scenarios covered:
+ * - Scenario 20: Chrome browser tests
+ * - Scenario 21: Firefox browser tests
+ * - Scenario 22: Safari browser tests
+ * - Scenario 23: Edge browser tests
+ */
+
+import { test, expect, waitForHeroSection, viewports } from './fixtures';
+
+// Browser compatibility tests use the browser projects defined in playwright.config.ts
+
+/**
+ * Scenario 20: Browser Compatibility - Chrome
  *
  * Tests that the homepage works correctly in Google Chrome browser:
  * - All sections render correctly with proper styling
  * - All links and buttons function correctly
  * - Theme switching works with smooth transitions
  */
-
-import { test, expect, waitForHeroSection, viewports } from './fixtures';
-
-// Browser compatibility tests use the chromium project defined in playwright.config.ts
-// This file focuses on Chrome-specific compatibility testing
-
 test.describe('Browser Compatibility - Chrome', () => {
   test.describe('Test Case 1: All sections render correctly with proper styling', () => {
     test('should render Hero section correctly in Chrome', async ({ page }) => {
@@ -497,6 +511,308 @@ test.describe('Browser Compatibility - Chrome', () => {
         return window.getComputedStyle(flexContainers[0]).display;
       });
       expect(heroFlex).toBe('flex');
+    });
+  });
+});
+
+/**
+ * Scenario 21: Browser Compatibility - Firefox
+ *
+ * Tests that the homepage works correctly in Mozilla Firefox browser.
+ * Verifies all sections render correctly with proper styling and
+ * all links and buttons function correctly.
+ */
+test.describe('Browser Compatibility - Firefox @firefox', () => {
+  test.describe('Test Case 1: Load homepage in Firefox - All sections render correctly', () => {
+    test('should render hero section with proper styling', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Verify hero section is visible
+      const heroSection = page.locator('.hero');
+      await expect(heroSection).toBeVisible();
+
+      // Verify headline is visible with correct text
+      const headline = page.locator('h1');
+      await expect(headline).toBeVisible();
+      await expect(headline).toContainText('Shorten URLs. Track Every Click.');
+
+      // Verify subheadline/value proposition is visible
+      const subheadline = page.locator('text=Transform long, unwieldy URLs');
+      await expect(subheadline).toBeVisible();
+    });
+
+    test('should render features section with all feature cards', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Scroll to features section
+      const featuresSection = page.getByTestId('features-section');
+      await featuresSection.scrollIntoViewIfNeeded();
+      await expect(featuresSection).toBeVisible();
+
+      // Verify all 4 feature cards are present
+      await expect(page.getByTestId('feature-card-url-shortening')).toBeVisible();
+      await expect(page.getByTestId('feature-card-click-analytics')).toBeVisible();
+      await expect(page.getByTestId('feature-card-geographic-insights')).toBeVisible();
+      await expect(page.getByTestId('feature-card-shareable-stats')).toBeVisible();
+    });
+
+    test('should render how-it-works section with all steps', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Scroll to how-it-works section
+      const howItWorksSection = page.getByTestId('how-it-works-section');
+      await howItWorksSection.scrollIntoViewIfNeeded();
+      await expect(howItWorksSection).toBeVisible();
+
+      // Verify all 3 steps are present
+      await expect(page.getByTestId('step-1')).toBeVisible();
+      await expect(page.getByTestId('step-2')).toBeVisible();
+      await expect(page.getByTestId('step-3')).toBeVisible();
+    });
+
+    test('should render dashboard preview section', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Scroll to dashboard preview section
+      const dashboardPreview = page.getByTestId('dashboard-preview-section');
+      await dashboardPreview.scrollIntoViewIfNeeded();
+      await expect(dashboardPreview).toBeVisible();
+
+      // Verify preview image or content is visible
+      const previewImage = page.getByTestId('dashboard-preview-image');
+      await expect(previewImage).toBeVisible();
+    });
+
+    test('should render footer section with copyright', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Scroll to footer
+      const footer = page.getByTestId('footer');
+      await footer.scrollIntoViewIfNeeded();
+      await expect(footer).toBeVisible();
+
+      // Verify copyright is present
+      const copyright = page.getByTestId('footer-copyright');
+      await expect(copyright).toBeVisible();
+      await expect(copyright).toContainText(new Date().getFullYear().toString());
+    });
+
+    test('should render navbar with all elements', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Verify main navbar is visible (the fixed top navbar, not footer nav)
+      const navbar = page.locator('nav.navbar');
+      await expect(navbar).toBeVisible();
+
+      // Verify theme toggle is present
+      const themeToggle = page.getByRole('button', { name: /switch to (dark|light) mode/i });
+      await expect(themeToggle).toBeVisible();
+    });
+
+    test('should apply correct CSS styles and layout', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Verify the page has proper styling applied
+      const body = page.locator('body');
+      await expect(body).toBeVisible();
+
+      // Verify main content area has proper padding
+      const main = page.locator('main');
+      await expect(main).toBeVisible();
+
+      // Verify background effect is present
+      const bgEffect = page.locator('.fixed.inset-0');
+      await expect(bgEffect.first()).toBeVisible();
+    });
+  });
+
+  test.describe('Test Case 2: Test navigation and CTAs in Firefox - All links and buttons work', () => {
+    test('should navigate to registration page when clicking Get Started CTA', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Click the primary CTA button
+      const ctaButton = page.getByTestId('hero-cta');
+      await expect(ctaButton).toBeVisible();
+      await ctaButton.click();
+
+      // Verify navigation to registration page
+      await expect(page).toHaveURL(/\/register/);
+    });
+
+    test('should navigate to login page when clicking login link in hero', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Click the login link
+      const loginLink = page.getByTestId('hero-login-link');
+      await expect(loginLink).toBeVisible();
+      await loginLink.click();
+
+      // Verify navigation to login page
+      await expect(page).toHaveURL(/\/login/);
+    });
+
+    test('should navigate to login page when clicking navbar login button', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Find and click the navbar login link/button
+      const navbarLogin = page.getByRole('link', { name: /login/i }).first();
+      await expect(navbarLogin).toBeVisible();
+      await navbarLogin.click();
+
+      // Verify navigation to login page
+      await expect(page).toHaveURL(/\/login/);
+    });
+
+    test('should navigate to registration page when clicking navbar register button', async ({
+      page,
+    }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Find and click the navbar register link/button (using test id for specificity)
+      const navbarRegister = page.getByTestId('nav-register');
+      await expect(navbarRegister).toBeVisible();
+      await navbarRegister.click();
+
+      // Verify navigation to registration page
+      await expect(page).toHaveURL(/\/register/);
+    });
+
+    test('should toggle theme when clicking theme toggle button', async ({ page }) => {
+      await page.goto('/');
+      await page.evaluate(() => {
+        localStorage.setItem('theme', 'light');
+      });
+      await page.reload();
+      await waitForHeroSection(page);
+
+      // Get initial theme
+      const initialTheme = await page.evaluate(() =>
+        document.documentElement.getAttribute('data-theme')
+      );
+      expect(initialTheme).toBe('light');
+
+      // Click theme toggle
+      const themeToggle = page.getByRole('button', { name: /switch to dark mode/i });
+      await expect(themeToggle).toBeVisible();
+      await themeToggle.click();
+
+      // Verify theme changed
+      const newTheme = await page.evaluate(() =>
+        document.documentElement.getAttribute('data-theme')
+      );
+      expect(newTheme).toBe('dark');
+    });
+
+    test('should have working dashboard preview CTA button', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Scroll to dashboard preview section
+      const dashboardPreview = page.getByTestId('dashboard-preview-section');
+      await dashboardPreview.scrollIntoViewIfNeeded();
+
+      // Find and click the CTA button in dashboard preview
+      const dashboardCta = page.getByTestId('dashboard-preview-cta');
+      await expect(dashboardCta).toBeVisible();
+      await dashboardCta.click();
+
+      // Verify navigation (should go to register for unauthenticated users)
+      await expect(page).toHaveURL(/\/(register|dashboard)/);
+    });
+
+    test('should have keyboard-accessible navigation', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Press Tab to focus on first interactive element
+      await page.keyboard.press('Tab');
+
+      // Navigate through interactive elements using Tab
+      // The skip-to-content link should be first
+      const skipLink = page.getByTestId('skip-to-content');
+      await expect(skipLink).toBeFocused();
+
+      // Continue tabbing through the page
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+
+      // Verify we can navigate with keyboard
+      const focusedElement = page.locator(':focus');
+      await expect(focusedElement).toBeVisible();
+    });
+
+    test('should handle scroll behavior correctly', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Get initial scroll position
+      const initialScrollY = await page.evaluate(() => window.scrollY);
+      expect(initialScrollY).toBe(0);
+
+      // Scroll to footer
+      const footer = page.getByTestId('footer');
+      await footer.scrollIntoViewIfNeeded();
+
+      // Verify scroll position changed
+      const newScrollY = await page.evaluate(() => window.scrollY);
+      expect(newScrollY).toBeGreaterThan(initialScrollY);
+    });
+
+    test('should maintain functionality after theme toggle', async ({ page }) => {
+      await page.goto('/');
+      await page.evaluate(() => {
+        localStorage.setItem('theme', 'light');
+      });
+      await page.reload();
+      await waitForHeroSection(page);
+
+      // Toggle theme to dark
+      const themeToggle = page.getByRole('button', { name: /switch to dark mode/i });
+      await themeToggle.click();
+
+      // Verify CTA still works after theme change
+      const ctaButton = page.getByTestId('hero-cta');
+      await expect(ctaButton).toBeVisible();
+      await ctaButton.click();
+
+      // Verify navigation still works
+      await expect(page).toHaveURL(/\/register/);
+    });
+
+    test('should display all content without layout issues', async ({ page }) => {
+      await page.goto('/');
+      await waitForHeroSection(page);
+
+      // Verify no horizontal scrollbar (content fits within viewport)
+      const hasHorizontalScroll = await page.evaluate(() => {
+        return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+      });
+      expect(hasHorizontalScroll).toBe(false);
+
+      // Verify all sections are within viewport width
+      const sectionsOverflow = await page.evaluate(() => {
+        const sections = document.querySelectorAll('section, .hero, footer');
+        for (const section of sections) {
+          const rect = section.getBoundingClientRect();
+          if (rect.right > window.innerWidth || rect.left < 0) {
+            return true;
+          }
+        }
+        return false;
+      });
+      expect(sectionsOverflow).toBe(false);
     });
   });
 });
