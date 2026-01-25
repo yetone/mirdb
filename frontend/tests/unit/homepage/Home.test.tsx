@@ -182,43 +182,62 @@ describe('Home Page - Navigation Bar Display', () => {
 });
 
 /**
- * Component Reuse Tests
- * Owner: Scenario 24 - Component Reuse
+ * Component Reuse Tests - Scenario 24
+ * Owner: Scenario 24 - Component Reuse - Existing Components
  *
  * Tests that verify the homepage properly integrates and reuses
  * existing application components without modification:
  * - Navbar component
- * - ThemeToggle component (via Navbar)
- * - FuturisticButton component
- * - GlassMorphismCard component
- * - BackgroundEffect component
+ * - ThemeToggle component (integrated within Navbar)
+ * - FuturisticButton component (used in hero and dashboard preview sections)
+ * - GlassMorphismCard component (used in features section)
+ * - BackgroundEffect component (used for visual effects)
  */
-describe('Home Page - Component Reuse', () => {
+describe('Home Page - Component Reuse (Scenario 24)', () => {
   describe('Test Case 1: Navbar component integration', () => {
-    it('should render the existing Navbar component', () => {
+    it('should render the existing Navbar component from components/Navbar.tsx', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
-      // The Navbar component renders a <nav> with the navbar class
+      // Verify Navbar is rendered
       const navbar = getMainNavbar();
       expect(navbar).toBeInTheDocument();
+
+      // Verify Navbar has the expected DaisyUI classes (proves it's using the existing component)
       expect(navbar).toHaveClass('navbar');
+      expect(navbar).toHaveClass('bg-base-100/80');
+      expect(navbar).toHaveClass('backdrop-blur-md');
+      expect(navbar).toHaveClass('fixed');
     });
 
-    it('should use Navbar without modification - contains expected structure', () => {
+    it('should use Navbar without modification - verify expected structure', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
       const navbar = getMainNavbar();
 
-      // Navbar should have the fixed positioning and backdrop blur from original component
-      expect(navbar).toHaveClass('bg-base-100/80', 'backdrop-blur-md', 'fixed');
+      // Verify navbar-start section exists (from original Navbar component)
+      const navbarStart = navbar.querySelector('.navbar-start');
+      expect(navbarStart).toBeInTheDocument();
 
-      // Should have navbar-start section with brand link
-      const brandLink = screen.getByRole('link', { name: /shorturl/i });
-      expect(brandLink.closest('.navbar-start')).toBeInTheDocument();
-
-      // Should have navbar-end section (desktop)
+      // Verify navbar-end section exists (from original Navbar component)
       const navbarEnd = navbar.querySelector('.navbar-end');
       expect(navbarEnd).toBeInTheDocument();
+
+      // Verify brand link "ShortURL" exists (from original Navbar component)
+      const brandLink = screen.getByRole('link', { name: /shorturl/i });
+      expect(brandLink).toBeInTheDocument();
+    });
+
+    it('should use Navbar component that integrates with AuthContext', () => {
+      // Test with unauthenticated user
+      const { unmount } = renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+      expect(screen.getByTestId('nav-login')).toBeInTheDocument();
+      expect(screen.getByTestId('nav-register')).toBeInTheDocument();
+      unmount();
+
+      // Test with authenticated user
+      renderWithProviders(<Home />, { authState: mockAuthContext.authenticated });
+      const navbar = getMainNavbar();
+      expect(within(navbar).getByRole('button', { name: /logout/i })).toBeInTheDocument();
     });
 
     it('should render Navbar with its built-in responsive behavior', () => {
@@ -237,25 +256,42 @@ describe('Home Page - Component Reuse', () => {
   });
 
   describe('Test Case 2: ThemeToggle component integration', () => {
-    it('should render ThemeToggle through Navbar (component composition)', () => {
+    it('should render the existing ThemeToggle component within Navbar', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
-      // ThemeToggle is rendered inside Navbar
+      // ThemeToggle should be rendered with the proper aria-label pattern
       const themeToggle = screen.getByRole('button', { name: /switch to (light|dark) mode/i });
       expect(themeToggle).toBeInTheDocument();
     });
 
-    it('should have ThemeToggle working consistently with the app theme system', () => {
+    it('should use ThemeToggle with expected styling from original component', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
       const themeToggle = screen.getByRole('button', { name: /switch to (light|dark) mode/i });
 
-      // ThemeToggle should have the btn-ghost btn-circle styling
-      expect(themeToggle).toHaveClass('btn', 'btn-ghost', 'btn-circle');
+      // Verify it has the DaisyUI button classes from the original ThemeToggle component
+      expect(themeToggle).toHaveClass('btn');
+      expect(themeToggle).toHaveClass('btn-ghost');
+      expect(themeToggle).toHaveClass('btn-circle');
+    });
 
-      // ThemeToggle should contain an SVG icon for theme indication
-      const icon = themeToggle.querySelector('svg');
-      expect(icon).toBeInTheDocument();
+    it('should render ThemeToggle with SVG icon as in original component', () => {
+      renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+
+      const themeToggle = screen.getByRole('button', { name: /switch to (light|dark) mode/i });
+      const svgIcon = themeToggle.querySelector('svg');
+      expect(svgIcon).toBeInTheDocument();
+
+      // Verify SVG has the expected dimensions from original ThemeToggle
+      expect(svgIcon).toHaveClass('h-5', 'w-5');
+    });
+
+    it('should integrate ThemeToggle that works with ThemeContext', () => {
+      renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+
+      // The toggle should exist and be clickable (integration with ThemeContext)
+      const themeToggle = screen.getByRole('button', { name: /switch to (light|dark) mode/i });
+      expect(themeToggle).not.toBeDisabled();
     });
 
     it('should render ThemeToggle in both desktop and mobile nav areas', () => {
@@ -269,41 +305,68 @@ describe('Home Page - Component Reuse', () => {
     });
   });
 
-  describe('Test Case 3: FuturisticButton usage in CTAs', () => {
-    it('should use FuturisticButton for hero CTA', () => {
+  describe('Test Case 3: FuturisticButton component usage', () => {
+    it('should use FuturisticButton for primary CTA in hero section', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
+      // Hero CTA should use FuturisticButton (has the transition and hover effects)
       const heroCta = screen.getByTestId('hero-cta');
       expect(heroCta).toBeInTheDocument();
 
-      // FuturisticButton has specific classes: btn, transition-all, hover:scale-105
-      expect(heroCta).toHaveClass('btn', 'btn-primary');
+      // Verify it has the FuturisticButton classes
+      expect(heroCta).toHaveClass('btn');
+      expect(heroCta).toHaveClass('btn-primary');
+      expect(heroCta).toHaveClass('transition-all');
+      expect(heroCta).toHaveClass('duration-300');
+      expect(heroCta).toHaveClass('hover:scale-105');
+    });
 
-      // FuturisticButton renders as a Link when 'to' prop is provided
-      expect(heroCta.tagName).toBe('A');
+    it('should use FuturisticButton with proper link behavior', () => {
+      renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+
+      const heroCta = screen.getByTestId('hero-cta');
+
+      // FuturisticButton with 'to' prop renders as a Link
+      expect(heroCta.tagName.toLowerCase()).toBe('a');
       expect(heroCta).toHaveAttribute('href', '/register');
     });
 
-    it('should use FuturisticButton for Dashboard Preview CTA', () => {
+    it('should use FuturisticButton in dashboard preview section', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
       const dashboardPreviewCta = screen.getByTestId('dashboard-preview-cta');
       expect(dashboardPreviewCta).toBeInTheDocument();
 
-      // FuturisticButton applies btn and variant classes
-      expect(dashboardPreviewCta).toHaveClass('btn', 'btn-primary');
-      expect(dashboardPreviewCta).toHaveAttribute('href', '/register');
+      // Verify it has the FuturisticButton classes
+      expect(dashboardPreviewCta).toHaveClass('btn');
+      expect(dashboardPreviewCta).toHaveClass('btn-primary');
+      expect(dashboardPreviewCta).toHaveClass('transition-all');
+      expect(dashboardPreviewCta).toHaveClass('hover:scale-105');
     });
 
-    it('should apply FuturisticButton size variants correctly', () => {
+    it('should use FuturisticButton with correct size variants', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
+      // Hero CTA uses size="lg"
       const heroCta = screen.getByTestId('hero-cta');
-      const dashboardCta = screen.getByTestId('dashboard-preview-cta');
-
-      // Both CTAs use size="lg" which applies btn-lg and min-h/min-w for touch targets
       expect(heroCta).toHaveClass('btn-lg');
-      expect(dashboardCta).toHaveClass('btn-lg');
+      expect(heroCta).toHaveClass('min-h-[44px]');
+      expect(heroCta).toHaveClass('min-w-[44px]');
+
+      // Dashboard preview CTA also uses size="lg"
+      const dashboardPreviewCta = screen.getByTestId('dashboard-preview-cta');
+      expect(dashboardPreviewCta).toHaveClass('btn-lg');
+    });
+
+    it('should change FuturisticButton text based on auth state', () => {
+      // Unauthenticated: "Get Started"
+      const { unmount } = renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+      expect(screen.getByTestId('hero-cta')).toHaveTextContent('Get Started');
+      unmount();
+
+      // Authenticated: "Go to Dashboard"
+      renderWithProviders(<Home />, { authState: mockAuthContext.authenticated });
+      expect(screen.getByTestId('hero-cta')).toHaveTextContent('Go to Dashboard');
     });
 
     it('should use FuturisticButton with correct variant for authenticated users', () => {
@@ -320,17 +383,55 @@ describe('Home Page - Component Reuse', () => {
     });
   });
 
-  describe('Test Case 4: GlassMorphismCard usage', () => {
+  describe('Test Case 4: GlassMorphismCard component usage', () => {
     it('should use GlassMorphismCard for feature cards', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
-      // Features section contains GlassMorphismCards
+      // Check the features section exists
       const featuresSection = screen.getByTestId('features-section');
       expect(featuresSection).toBeInTheDocument();
 
-      // GlassMorphismCard has specific styling: bg-base-100/60 backdrop-blur-md rounded-xl
-      const featureCards = featuresSection.querySelectorAll('.bg-base-100\\/60.backdrop-blur-md.rounded-xl');
+      // Find feature cards - they should have GlassMorphismCard styling
+      const featureCards = featuresSection.querySelectorAll('.bg-base-100\\/60');
       expect(featureCards.length).toBe(4); // 4 feature cards
+    });
+
+    it('should use GlassMorphismCard with expected glass morphism styling', () => {
+      renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+
+      const featuresSection = screen.getByTestId('features-section');
+      const featureCards = featuresSection.querySelectorAll('.bg-base-100\\/60');
+
+      featureCards.forEach((card) => {
+        // Verify GlassMorphismCard classes
+        expect(card).toHaveClass('backdrop-blur-md');
+        expect(card).toHaveClass('rounded-xl');
+        expect(card).toHaveClass('border');
+        expect(card).toHaveClass('border-base-200');
+        expect(card).toHaveClass('p-6');
+        expect(card).toHaveClass('shadow-lg');
+      });
+    });
+
+    it('should use GlassMorphismCard in dashboard preview section', () => {
+      renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+
+      const dashboardPreviewSection = screen.getByTestId('dashboard-preview-section');
+      const glassCard = dashboardPreviewSection.querySelector('.bg-base-100\\/60');
+
+      expect(glassCard).toBeInTheDocument();
+      expect(glassCard).toHaveClass('backdrop-blur-md');
+      expect(glassCard).toHaveClass('rounded-xl');
+    });
+
+    it('should render all 4 feature cards using GlassMorphismCard', () => {
+      renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+
+      // Verify each feature card exists with its content
+      expect(screen.getByTestId('feature-card-url-shortening')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-card-click-analytics')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-card-geographic-insights')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-card-shareable-stats')).toBeInTheDocument();
     });
 
     it('should use GlassMorphismCard for How It Works steps', () => {
@@ -343,18 +444,6 @@ describe('Home Page - Component Reuse', () => {
       // Each step uses GlassMorphismCard
       const stepCards = howItWorksSection.querySelectorAll('.bg-base-100\\/60.backdrop-blur-md.rounded-xl');
       expect(stepCards.length).toBe(3); // 3 steps
-    });
-
-    it('should use GlassMorphismCard in Dashboard Preview', () => {
-      renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
-
-      // Dashboard Preview section uses GlassMorphismCard
-      const dashboardPreview = screen.getByTestId('dashboard-preview-section');
-      expect(dashboardPreview).toBeInTheDocument();
-
-      // Contains a GlassMorphismCard wrapper
-      const previewCard = dashboardPreview.querySelector('.bg-base-100\\/60.backdrop-blur-md.rounded-xl');
-      expect(previewCard).toBeInTheDocument();
     });
 
     it('should apply GlassMorphismCard border and shadow consistently', () => {
@@ -370,35 +459,58 @@ describe('Home Page - Component Reuse', () => {
     });
   });
 
-  describe('Test Case 5: BackgroundEffect integration', () => {
-    it('should render BackgroundEffect component', () => {
+  describe('Test Case 5: BackgroundEffect component integration', () => {
+    it('should render BackgroundEffect component for visual effects', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
-      // BackgroundEffect renders a fixed, full-screen container with -z-10
+      // BackgroundEffect renders a fixed positioned container
       const backgroundEffect = document.querySelector('.fixed.inset-0.-z-10');
       expect(backgroundEffect).toBeInTheDocument();
     });
 
-    it('should render BackgroundEffect with animated blur effects', () => {
+    it('should use BackgroundEffect with expected styling from original component', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
       const backgroundEffect = document.querySelector('.fixed.inset-0.-z-10');
-
-      // BackgroundEffect contains animated blur circles
-      const blurCircles = backgroundEffect?.querySelectorAll('.rounded-full.blur-3xl.animate-pulse');
-      expect(blurCircles?.length).toBeGreaterThanOrEqual(2);
+      expect(backgroundEffect).toHaveClass('overflow-hidden');
     });
 
-    it('should position BackgroundEffect behind all content', () => {
+    it('should render BackgroundEffect with animated gradient blobs', () => {
       renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
 
       const backgroundEffect = document.querySelector('.fixed.inset-0.-z-10');
 
-      // Should have negative z-index to appear behind content
-      expect(backgroundEffect).toHaveClass('-z-10');
+      // Find the animated gradient blobs
+      const primaryBlob = backgroundEffect?.querySelector('.bg-primary\\/20');
+      const secondaryBlob = backgroundEffect?.querySelector('.bg-secondary\\/20');
 
+      expect(primaryBlob).toBeInTheDocument();
+      expect(secondaryBlob).toBeInTheDocument();
+
+      // Verify they have animation classes
+      expect(primaryBlob).toHaveClass('animate-pulse');
+      expect(secondaryBlob).toHaveClass('animate-pulse');
+    });
+
+    it('should position BackgroundEffect behind other content', () => {
+      renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+
+      const backgroundEffect = document.querySelector('.fixed.inset-0.-z-10');
+
+      // -z-10 ensures it's behind other content
+      expect(backgroundEffect).toHaveClass('-z-10');
       // Should be positioned fixed to cover the entire viewport
       expect(backgroundEffect).toHaveClass('fixed', 'inset-0');
+    });
+
+    it('should render BackgroundEffect blobs with blur effect', () => {
+      renderWithProviders(<Home />, { authState: mockAuthContext.unauthenticated });
+
+      const backgroundEffect = document.querySelector('.fixed.inset-0.-z-10');
+      const blobs = backgroundEffect?.querySelectorAll('.blur-3xl');
+
+      // Both blobs should have blur effect
+      expect(blobs?.length).toBe(2);
     });
 
     it('should use BackgroundEffect with primary and secondary colors', () => {
