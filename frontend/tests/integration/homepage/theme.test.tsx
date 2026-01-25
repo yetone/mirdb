@@ -1,25 +1,31 @@
 /**
- * Integration tests for Dark Mode Rendering
+ * Integration tests for Theme Toggle Functionality and Dark Mode Rendering
  * Owner: Scenario 12 - Theme Toggle Functionality, Scenario 13 - Dark Mode Rendering
  *
  * Tests:
- * 1. Homepage renders with dark theme context
- * 2. Text contrast in dark mode
- * 3. GlassMorphismCard components render with dark mode styling
- * 4. FuturisticButton components render correctly in dark mode
+ * - Theme toggle switches between light and dark mode
+ * - Theme changes are applied to all homepage elements
+ * - ThemeToggle component is present in navigation
+ * - Theme preference is persisted
+ * - Homepage renders with dark theme context
+ * - Text contrast in dark mode
+ * - GlassMorphismCard components render with dark mode styling
+ * - FuturisticButton components render correctly in dark mode
  */
 
 import React, { ReactElement, ReactNode } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { ThemeContext, ThemeProvider } from '../../../src/contexts/ThemeContext';
-import { AuthContext } from '../../../src/contexts/AuthContext';
+import { AuthContext, AuthProvider } from '../../../src/contexts/AuthContext';
 import { Home } from '../../../src/pages/Home';
 import { FeaturesSection } from '../../../src/components/homepage/FeaturesSection';
 import { HeroSection } from '../../../src/components/homepage/HeroSection';
 import { GlassMorphismCard } from '../../../src/components/GlassMorphismCard';
 import { FuturisticButton } from '../../../src/components/FuturisticButton';
+import { Navbar } from '../../../src/components/Navbar';
+import { ThemeToggle } from '../../../src/components/ThemeToggle';
 
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
@@ -81,6 +87,330 @@ function renderWithDarkTheme(ui: ReactElement) {
 
   return render(ui, { wrapper: DarkThemeProvider });
 }
+
+/**
+ * Helper function to render components with all required providers
+ */
+function renderWithProviders(ui: React.ReactElement) {
+  return render(
+    <ThemeProvider>
+      <AuthProvider>
+        <MemoryRouter initialEntries={['/']}>{ui}</MemoryRouter>
+      </AuthProvider>
+    </ThemeProvider>
+  );
+}
+
+/**
+ * Helper to get current theme from document
+ */
+function getCurrentTheme(): string | null {
+  return document.documentElement.getAttribute('data-theme');
+}
+
+// ===============================================
+// Scenario 12: Theme Toggle Functionality Tests
+// ===============================================
+
+describe('Theme Toggle Functionality - Scenario 12', () => {
+  beforeEach(() => {
+    // Clear localStorage before each test
+    localStorage.clear();
+    // Reset document theme attribute
+    document.documentElement.removeAttribute('data-theme');
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+    document.documentElement.removeAttribute('data-theme');
+  });
+
+  describe('Test Case 1: Click theme toggle from light to dark mode', () => {
+    it('should switch homepage to dark theme with appropriate colors', async () => {
+      // Set initial theme to light
+      localStorage.setItem('theme', 'light');
+
+      renderWithProviders(<Home />);
+
+      // Wait for the page to render
+      await waitFor(() => {
+        expect(screen.getByText('Shorten URLs. Track Every Click.')).toBeInTheDocument();
+      });
+
+      // Verify initial light theme is applied
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('light');
+      });
+
+      // Find the theme toggle button
+      const themeToggle = screen.getByRole('button', { name: /switch to dark mode/i });
+      expect(themeToggle).toBeInTheDocument();
+
+      // Click to toggle to dark mode
+      fireEvent.click(themeToggle);
+
+      // Verify dark theme is now applied
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('dark');
+      });
+
+      // Verify localStorage is updated
+      expect(localStorage.getItem('theme')).toBe('dark');
+    });
+
+    it('should update aria-label when switching to dark mode', async () => {
+      localStorage.setItem('theme', 'light');
+
+      renderWithProviders(<Navbar />);
+
+      // Find toggle with light mode aria-label
+      const themeToggle = screen.getByRole('button', { name: /switch to dark mode/i });
+      expect(themeToggle).toBeInTheDocument();
+
+      // Click to toggle
+      fireEvent.click(themeToggle);
+
+      // Verify aria-label changed
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /switch to light mode/i })).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Test Case 2: Click theme toggle from dark to light mode', () => {
+    it('should switch homepage to light theme with appropriate colors', async () => {
+      // Set initial theme to dark
+      localStorage.setItem('theme', 'dark');
+
+      renderWithProviders(<Home />);
+
+      // Wait for page to render
+      await waitFor(() => {
+        expect(screen.getByText('Shorten URLs. Track Every Click.')).toBeInTheDocument();
+      });
+
+      // Verify initial dark theme is applied
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('dark');
+      });
+
+      // Find the theme toggle button
+      const themeToggle = screen.getByRole('button', { name: /switch to light mode/i });
+      expect(themeToggle).toBeInTheDocument();
+
+      // Click to toggle to light mode
+      fireEvent.click(themeToggle);
+
+      // Verify light theme is now applied
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('light');
+      });
+
+      // Verify localStorage is updated
+      expect(localStorage.getItem('theme')).toBe('light');
+    });
+
+    it('should display sun icon when in dark mode (to switch to light)', async () => {
+      localStorage.setItem('theme', 'dark');
+
+      renderWithProviders(<Navbar />);
+
+      // In dark mode, the sun icon should be displayed (to indicate switching to light)
+      const themeToggle = screen.getByRole('button', { name: /switch to light mode/i });
+
+      // The button should contain an SVG
+      const svg = themeToggle.querySelector('svg');
+      expect(svg).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 3: Verify theme toggle component renders', () => {
+    it('should render ThemeToggle component in navigation', async () => {
+      renderWithProviders(<Navbar />);
+
+      // ThemeToggle should be present in the navigation
+      const themeToggle = screen.getByRole('button', { name: /switch to (dark|light) mode/i });
+      expect(themeToggle).toBeInTheDocument();
+    });
+
+    it('should have correct button styling (btn btn-ghost btn-circle)', async () => {
+      renderWithProviders(<Navbar />);
+
+      const themeToggle = screen.getByRole('button', { name: /switch to (dark|light) mode/i });
+      expect(themeToggle).toHaveClass('btn', 'btn-ghost', 'btn-circle');
+    });
+
+    it('should render ThemeToggle in both desktop and mobile navigation', async () => {
+      renderWithProviders(<Navbar />);
+
+      // Check for theme toggle buttons (desktop and potentially mobile)
+      const themeToggles = screen.getAllByRole('button', { name: /switch to (dark|light) mode/i });
+      expect(themeToggles.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('should have accessible aria-label', async () => {
+      localStorage.setItem('theme', 'light');
+
+      renderWithProviders(<ThemeToggle />);
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('aria-label', 'Switch to dark mode');
+    });
+  });
+
+  describe('Theme persistence', () => {
+    it('should persist theme preference in localStorage', async () => {
+      localStorage.setItem('theme', 'light');
+
+      renderWithProviders(<Home />);
+
+      // Toggle to dark
+      const themeToggle = screen.getByRole('button', { name: /switch to dark mode/i });
+      fireEvent.click(themeToggle);
+
+      await waitFor(() => {
+        expect(localStorage.getItem('theme')).toBe('dark');
+      });
+
+      // Toggle back to light
+      const updatedToggle = screen.getByRole('button', { name: /switch to light mode/i });
+      fireEvent.click(updatedToggle);
+
+      await waitFor(() => {
+        expect(localStorage.getItem('theme')).toBe('light');
+      });
+    });
+
+    it('should apply stored theme on initial load', async () => {
+      // Pre-set theme in localStorage
+      localStorage.setItem('theme', 'dark');
+
+      renderWithProviders(<Home />);
+
+      // Theme should be applied from localStorage
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('dark');
+      });
+    });
+  });
+
+  describe('Theme toggle icon changes', () => {
+    it('should display moon icon in light mode', async () => {
+      localStorage.setItem('theme', 'light');
+
+      renderWithProviders(<ThemeToggle />);
+
+      const button = screen.getByRole('button');
+      const svg = button.querySelector('svg');
+      expect(svg).toBeInTheDocument();
+
+      // Moon icon has the specific path for moon shape
+      const moonPath = svg?.querySelector('path[d*="20.354"]');
+      expect(moonPath).toBeInTheDocument();
+    });
+
+    it('should display sun icon in dark mode', async () => {
+      localStorage.setItem('theme', 'dark');
+
+      renderWithProviders(<ThemeToggle />);
+
+      const button = screen.getByRole('button');
+      const svg = button.querySelector('svg');
+      expect(svg).toBeInTheDocument();
+
+      // Sun icon has the specific path for sun rays
+      const sunPath = svg?.querySelector('path[d*="12 3v1"]');
+      expect(sunPath).toBeInTheDocument();
+    });
+  });
+
+  describe('Theme applies to document', () => {
+    it('should set data-theme attribute on document root', async () => {
+      localStorage.setItem('theme', 'light');
+
+      renderWithProviders(<Home />);
+
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+      });
+
+      // Toggle theme
+      const themeToggle = screen.getByRole('button', { name: /switch to dark mode/i });
+      fireEvent.click(themeToggle);
+
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+      });
+    });
+  });
+
+  describe('Theme toggle works with all homepage sections visible', () => {
+    it('should toggle theme while all sections are present', async () => {
+      localStorage.setItem('theme', 'light');
+
+      renderWithProviders(<Home />);
+
+      // Verify all sections are present
+      await waitFor(() => {
+        expect(screen.getByText('Shorten URLs. Track Every Click.')).toBeInTheDocument(); // Hero
+      });
+      expect(screen.getByTestId('features-section')).toBeInTheDocument();
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument();
+      expect(screen.getByTestId('footer')).toBeInTheDocument();
+
+      // Toggle theme
+      const themeToggle = screen.getByRole('button', { name: /switch to dark mode/i });
+      fireEvent.click(themeToggle);
+
+      // Verify theme changed
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('dark');
+      });
+
+      // Verify all sections are still present after theme change
+      expect(screen.getByText('Shorten URLs. Track Every Click.')).toBeInTheDocument();
+      expect(screen.getByTestId('features-section')).toBeInTheDocument();
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument();
+      expect(screen.getByTestId('footer')).toBeInTheDocument();
+    });
+
+    it('should maintain theme after multiple toggles', async () => {
+      localStorage.setItem('theme', 'light');
+
+      renderWithProviders(<Home />);
+
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('light');
+      });
+
+      // Toggle multiple times
+      let themeToggle = screen.getByRole('button', { name: /switch to dark mode/i });
+      fireEvent.click(themeToggle);
+
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('dark');
+      });
+
+      themeToggle = screen.getByRole('button', { name: /switch to light mode/i });
+      fireEvent.click(themeToggle);
+
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('light');
+      });
+
+      themeToggle = screen.getByRole('button', { name: /switch to dark mode/i });
+      fireEvent.click(themeToggle);
+
+      await waitFor(() => {
+        expect(getCurrentTheme()).toBe('dark');
+      });
+    });
+  });
+});
+
+// ===============================================
+// Scenario 13: Dark Mode Rendering Tests
+// ===============================================
 
 describe('Dark Mode Rendering - Scenario 13', () => {
   beforeEach(() => {
