@@ -401,3 +401,474 @@ describe('Accessibility - Keyboard Navigation', () => {
     });
   });
 });
+
+/**
+ * Accessibility - Color Contrast Tests
+ * Owner: Scenario 17 - Accessibility - Color Contrast
+ *
+ * Verifies that text and interactive elements meet WCAG AA color contrast requirements.
+ * - Normal text: 4.5:1 contrast ratio minimum
+ * - Large text (18pt+): 3:1 contrast ratio minimum
+ * - Interactive elements: Must meet contrast requirements
+ */
+
+/**
+ * Calculate relative luminance of a color
+ * Per WCAG 2.1 formula: https://www.w3.org/WAI/WCAG21/Techniques/general/G17
+ */
+function getLuminance(r: number, g: number, b: number): number {
+  const [rs, gs, bs] = [r, g, b].map((c) => {
+    const sRGB = c / 255;
+    return sRGB <= 0.03928 ? sRGB / 12.92 : Math.pow((sRGB + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+}
+
+/**
+ * Calculate contrast ratio between two colors
+ * Per WCAG 2.1 formula
+ */
+function getContrastRatio(color1: { r: number; g: number; b: number }, color2: { r: number; g: number; b: number }): number {
+  const l1 = getLuminance(color1.r, color1.g, color1.b);
+  const l2 = getLuminance(color2.r, color2.g, color2.b);
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+/**
+ * Parse CSS color string to RGB values
+ * Supports rgb(), rgba(), and hex formats
+ */
+function parseColor(colorStr: string): { r: number; g: number; b: number } | null {
+  if (!colorStr || colorStr === 'transparent' || colorStr === 'rgba(0, 0, 0, 0)') {
+    return null;
+  }
+
+  // Handle rgb/rgba format
+  const rgbMatch = colorStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (rgbMatch) {
+    return {
+      r: parseInt(rgbMatch[1], 10),
+      g: parseInt(rgbMatch[2], 10),
+      b: parseInt(rgbMatch[3], 10),
+    };
+  }
+
+  // Handle hex format
+  const hexMatch = colorStr.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+  if (hexMatch) {
+    return {
+      r: parseInt(hexMatch[1], 16),
+      g: parseInt(hexMatch[2], 16),
+      b: parseInt(hexMatch[3], 16),
+    };
+  }
+
+  return null;
+}
+
+/**
+ * Get computed color from an element, traversing up if transparent
+ */
+function getEffectiveBackgroundColor(element: Element): { r: number; g: number; b: number } {
+  let currentElement: Element | null = element;
+
+  while (currentElement) {
+    const style = window.getComputedStyle(currentElement);
+    const bgColor = style.backgroundColor;
+    const parsed = parseColor(bgColor);
+
+    if (parsed && (parsed.r !== 0 || parsed.g !== 0 || parsed.b !== 0 || bgColor.includes('255'))) {
+      return parsed;
+    }
+
+    currentElement = currentElement.parentElement;
+  }
+
+  // Default to white background if nothing found
+  return { r: 255, g: 255, b: 255 };
+}
+
+/**
+ * Check if an element has large text (18pt+ or 14pt+ bold)
+ */
+function isLargeText(element: Element): boolean {
+  const style = window.getComputedStyle(element);
+  const fontSize = parseFloat(style.fontSize);
+  const fontWeight = parseInt(style.fontWeight, 10) || 400;
+
+  // 18pt = 24px, 14pt = 18.67px
+  // Large text: 18pt+ normal, or 14pt+ bold (700+)
+  return fontSize >= 24 || (fontSize >= 18.67 && fontWeight >= 700);
+}
+
+/**
+ * WCAG AA contrast requirements
+ */
+const WCAG_AA = {
+  NORMAL_TEXT: 4.5,
+  LARGE_TEXT: 3.0,
+};
+
+describe('Accessibility - Color Contrast', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Reset theme to light mode before each test
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
+  });
+
+  describe('Test Case 1: Audit color contrast in light mode', () => {
+    it('should have sufficient contrast for normal text elements in light mode', () => {
+      document.documentElement.setAttribute('data-theme', 'light');
+      renderHomePage();
+
+      // Get all text elements
+      const textElements = document.querySelectorAll('p, span, a:not([class*="btn"])');
+
+      textElements.forEach((element) => {
+        const htmlElement = element as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          const requiredRatio = isLargeText(element) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          // Normal text should have at least 4.5:1 contrast
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+
+    it('should have sufficient contrast for headings in light mode', () => {
+      document.documentElement.setAttribute('data-theme', 'light');
+      renderHomePage();
+
+      // Get all heading elements
+      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+      expect(headings.length).toBeGreaterThan(0);
+
+      headings.forEach((heading) => {
+        const htmlElement = heading as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          // Large text (headings) need at least 3:1 contrast
+          const requiredRatio = isLargeText(heading) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+
+    it('should have sufficient contrast for navigation links in light mode', () => {
+      document.documentElement.setAttribute('data-theme', 'light');
+      renderHomePage();
+
+      // Get navigation links
+      const navLinks = document.querySelectorAll('nav a, [data-testid="nav-login"], [data-testid="nav-register"]');
+
+      navLinks.forEach((link) => {
+        const htmlElement = link as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          const requiredRatio = isLargeText(link) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+  });
+
+  describe('Test Case 2: Audit color contrast in dark mode', () => {
+    it('should have sufficient contrast for normal text elements in dark mode', () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      renderHomePage();
+
+      // Get all text elements
+      const textElements = document.querySelectorAll('p, span, a:not([class*="btn"])');
+
+      textElements.forEach((element) => {
+        const htmlElement = element as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          const requiredRatio = isLargeText(element) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+
+    it('should have sufficient contrast for headings in dark mode', () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      renderHomePage();
+
+      // Get all heading elements
+      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+      expect(headings.length).toBeGreaterThan(0);
+
+      headings.forEach((heading) => {
+        const htmlElement = heading as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          const requiredRatio = isLargeText(heading) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+
+    it('should have sufficient contrast for navigation links in dark mode', () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      renderHomePage();
+
+      // Get navigation links
+      const navLinks = document.querySelectorAll('nav a, [data-testid="nav-login"], [data-testid="nav-register"]');
+
+      navLinks.forEach((link) => {
+        const htmlElement = link as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          const requiredRatio = isLargeText(link) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+
+    it('should have sufficient contrast for footer content in dark mode', () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      renderHomePage();
+
+      // Get footer elements
+      const footerElements = document.querySelectorAll('footer, footer *');
+
+      footerElements.forEach((element) => {
+        if (element.textContent && element.textContent.trim()) {
+          const htmlElement = element as HTMLElement;
+          const style = window.getComputedStyle(htmlElement);
+          const textColor = parseColor(style.color);
+          const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+          if (textColor && bgColor) {
+            const contrastRatio = getContrastRatio(textColor, bgColor);
+            const requiredRatio = isLargeText(element) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+            expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+          }
+        }
+      });
+    });
+  });
+
+  describe('Test Case 3: Check CTA button contrast', () => {
+    it('should have sufficient contrast for hero CTA button text against button background', () => {
+      renderHomePage();
+
+      const heroCta = screen.getByTestId('hero-cta');
+      expect(heroCta).toBeInTheDocument();
+
+      const style = window.getComputedStyle(heroCta);
+      const textColor = parseColor(style.color);
+      const bgColor = parseColor(style.backgroundColor);
+
+      if (textColor && bgColor) {
+        const contrastRatio = getContrastRatio(textColor, bgColor);
+        // Button text should have at least 4.5:1 contrast for normal text
+        // or 3:1 for large text (buttons are typically large)
+        const requiredRatio = isLargeText(heroCta) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+        expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+      }
+    });
+
+    it('should have sufficient contrast for dashboard preview CTA button', () => {
+      renderHomePage();
+
+      const dashboardCta = screen.getByTestId('dashboard-preview-cta');
+      expect(dashboardCta).toBeInTheDocument();
+
+      const style = window.getComputedStyle(dashboardCta);
+      const textColor = parseColor(style.color);
+      const bgColor = parseColor(style.backgroundColor);
+
+      if (textColor && bgColor) {
+        const contrastRatio = getContrastRatio(textColor, bgColor);
+        const requiredRatio = isLargeText(dashboardCta) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+        expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+      }
+    });
+
+    it('should have sufficient contrast for all primary buttons', () => {
+      renderHomePage();
+
+      // Get all primary buttons (btn-primary class from DaisyUI)
+      const primaryButtons = document.querySelectorAll('.btn-primary');
+
+      primaryButtons.forEach((button) => {
+        const htmlElement = button as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = parseColor(style.backgroundColor);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          const requiredRatio = isLargeText(button) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+
+    it('should have sufficient contrast for hero CTA in dark mode', () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      renderHomePage();
+
+      const heroCta = screen.getByTestId('hero-cta');
+      expect(heroCta).toBeInTheDocument();
+
+      const style = window.getComputedStyle(heroCta);
+      const textColor = parseColor(style.color);
+      const bgColor = parseColor(style.backgroundColor);
+
+      if (textColor && bgColor) {
+        const contrastRatio = getContrastRatio(textColor, bgColor);
+        const requiredRatio = isLargeText(heroCta) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+        expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+      }
+    });
+
+    it('should have sufficient contrast for navigation register button', () => {
+      renderHomePage();
+
+      const navRegister = screen.getByTestId('nav-register');
+      expect(navRegister).toBeInTheDocument();
+
+      const style = window.getComputedStyle(navRegister);
+      const textColor = parseColor(style.color);
+      const bgColor = parseColor(style.backgroundColor);
+
+      if (textColor && bgColor) {
+        const contrastRatio = getContrastRatio(textColor, bgColor);
+        const requiredRatio = isLargeText(navRegister) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+        expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+      }
+    });
+  });
+
+  describe('Additional color contrast validations', () => {
+    it('should have sufficient contrast for feature card titles', () => {
+      renderHomePage();
+
+      // Get feature card titles
+      const featureTitles = document.querySelectorAll('[data-testid^="feature-title-"]');
+
+      featureTitles.forEach((title) => {
+        const htmlElement = title as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          const requiredRatio = isLargeText(title) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+
+    it('should have sufficient contrast for feature card descriptions', () => {
+      renderHomePage();
+
+      // Get feature card descriptions
+      const featureDescriptions = document.querySelectorAll('[data-testid^="feature-description-"]');
+
+      featureDescriptions.forEach((desc) => {
+        const htmlElement = desc as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          const requiredRatio = isLargeText(desc) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+
+    it('should have sufficient contrast for how-it-works step content', () => {
+      renderHomePage();
+
+      // Get how-it-works step elements
+      const stepTitles = document.querySelectorAll('[data-testid^="how-it-works-step-"][data-testid$="-title"]');
+      const stepDescriptions = document.querySelectorAll('[data-testid^="how-it-works-step-"][data-testid$="-description"]');
+
+      [...stepTitles, ...stepDescriptions].forEach((element) => {
+        const htmlElement = element as HTMLElement;
+        const style = window.getComputedStyle(htmlElement);
+        const textColor = parseColor(style.color);
+        const bgColor = getEffectiveBackgroundColor(htmlElement);
+
+        if (textColor && bgColor) {
+          const contrastRatio = getContrastRatio(textColor, bgColor);
+          const requiredRatio = isLargeText(element) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+          expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+        }
+      });
+    });
+
+    it('should have sufficient contrast for login link in hero section', () => {
+      renderHomePage();
+
+      const heroLoginLink = screen.getByTestId('hero-login-link');
+      expect(heroLoginLink).toBeInTheDocument();
+
+      const style = window.getComputedStyle(heroLoginLink);
+      const textColor = parseColor(style.color);
+      const bgColor = getEffectiveBackgroundColor(heroLoginLink);
+
+      if (textColor && bgColor) {
+        const contrastRatio = getContrastRatio(textColor, bgColor);
+        const requiredRatio = isLargeText(heroLoginLink) ? WCAG_AA.LARGE_TEXT : WCAG_AA.NORMAL_TEXT;
+
+        expect(contrastRatio).toBeGreaterThanOrEqual(requiredRatio);
+      }
+    });
+  });
+});
