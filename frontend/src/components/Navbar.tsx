@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FuturisticButton } from './FuturisticButton'
 import { ThemeToggle } from './ThemeToggle'
+import { useAuth } from '../contexts/AuthContext'
 
 interface NavbarProps {
   onGetStarted?: () => void
@@ -10,6 +11,8 @@ interface NavbarProps {
 
 export function Navbar({ onGetStarted, onSignIn }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const { user, isAuthenticated, logout } = useAuth()
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -17,6 +20,16 @@ export function Navbar({ onGetStarted, onSignIn }: NavbarProps) {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false)
+  }
+
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen)
+  }
+
+  const handleLogout = () => {
+    logout()
+    setIsUserMenuOpen(false)
+    closeMobileMenu()
   }
 
   return (
@@ -41,22 +54,79 @@ export function Navbar({ onGetStarted, onSignIn }: NavbarProps) {
         {/* Desktop Auth Buttons and Theme Toggle */}
         <div className="hidden md:flex items-center gap-2 ml-4">
           <ThemeToggle />
-          <FuturisticButton
-            variant="outline"
-            size="sm"
-            onClick={onSignIn}
-            data-testid="sign-in-nav"
-          >
-            Sign In
-          </FuturisticButton>
-          <FuturisticButton
-            variant="primary"
-            size="sm"
-            onClick={onGetStarted}
-            data-testid="get-started-nav"
-          >
-            Get Started
-          </FuturisticButton>
+          {isAuthenticated ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="btn btn-ghost btn-sm"
+                data-testid="dashboard-link"
+              >
+                Dashboard
+              </Link>
+              <div className="relative" data-testid="user-menu">
+                <button
+                  onClick={toggleUserMenu}
+                  className="btn btn-ghost btn-sm flex items-center gap-2"
+                  aria-label="User menu"
+                  aria-expanded={isUserMenuOpen}
+                  data-testid="user-menu-button"
+                >
+                  <span className="text-sm truncate max-w-[120px]">{user?.email}</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className={`w-4 h-4 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`}
+                    aria-hidden="true"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                  </svg>
+                </button>
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-base-100 rounded-lg shadow-lg border border-base-300 py-2 z-50">
+                    <div className="px-4 py-2 text-sm text-base-content/70 border-b border-base-300">
+                      {user?.email}
+                    </div>
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 text-sm hover:bg-base-200 transition-colors"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-base-200 transition-colors text-error"
+                      data-testid="logout-button"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <FuturisticButton
+                variant="outline"
+                size="sm"
+                onClick={onSignIn}
+                data-testid="sign-in-nav"
+              >
+                Sign In
+              </FuturisticButton>
+              <FuturisticButton
+                variant="primary"
+                size="sm"
+                onClick={onGetStarted}
+                data-testid="get-started-nav"
+              >
+                Get Started
+              </FuturisticButton>
+            </>
+          )}
         </div>
 
         {/* Mobile Hamburger Button */}
@@ -126,30 +196,57 @@ export function Navbar({ onGetStarted, onSignIn }: NavbarProps) {
               <ThemeToggle />
             </div>
             <div className="divider my-2"></div>
-            <FuturisticButton
-              variant="outline"
-              size="md"
-              onClick={() => {
-                closeMobileMenu()
-                onSignIn?.()
-              }}
-              data-testid="mobile-sign-in"
-              className="min-h-[44px]"
-            >
-              Sign In
-            </FuturisticButton>
-            <FuturisticButton
-              variant="primary"
-              size="md"
-              onClick={() => {
-                closeMobileMenu()
-                onGetStarted?.()
-              }}
-              data-testid="mobile-get-started"
-              className="min-h-[44px]"
-            >
-              Get Started
-            </FuturisticButton>
+            {isAuthenticated ? (
+              <>
+                <div className="px-2 py-1 text-sm text-base-content/70">
+                  Signed in as {user?.email}
+                </div>
+                <Link
+                  to="/dashboard"
+                  className="btn btn-ghost justify-start min-h-[44px]"
+                  onClick={closeMobileMenu}
+                  data-testid="mobile-dashboard-link"
+                >
+                  Dashboard
+                </Link>
+                <FuturisticButton
+                  variant="outline"
+                  size="md"
+                  onClick={handleLogout}
+                  data-testid="mobile-logout"
+                  className="min-h-[44px]"
+                >
+                  Logout
+                </FuturisticButton>
+              </>
+            ) : (
+              <>
+                <FuturisticButton
+                  variant="outline"
+                  size="md"
+                  onClick={() => {
+                    closeMobileMenu()
+                    onSignIn?.()
+                  }}
+                  data-testid="mobile-sign-in"
+                  className="min-h-[44px]"
+                >
+                  Sign In
+                </FuturisticButton>
+                <FuturisticButton
+                  variant="primary"
+                  size="md"
+                  onClick={() => {
+                    closeMobileMenu()
+                    onGetStarted?.()
+                  }}
+                  data-testid="mobile-get-started"
+                  className="min-h-[44px]"
+                >
+                  Get Started
+                </FuturisticButton>
+              </>
+            )}
           </div>
         </div>
       )}

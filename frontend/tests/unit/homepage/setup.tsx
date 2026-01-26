@@ -18,6 +18,7 @@ import { ReactElement, ReactNode } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '../../../src/contexts/ThemeContext'
+import { AuthProvider } from '../../../src/contexts/AuthContext'
 import '@testing-library/jest-dom'
 
 interface WrapperProps {
@@ -27,7 +28,9 @@ interface WrapperProps {
 function AllTheProviders({ children }: WrapperProps) {
   return (
     <BrowserRouter>
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }

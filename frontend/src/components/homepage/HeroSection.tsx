@@ -8,13 +8,17 @@
 
 import { motion } from 'framer-motion'
 import { FuturisticButton } from '../FuturisticButton'
+import { useAuth } from '../../contexts/AuthContext'
 
 interface HeroSectionProps {
   onGetStarted?: () => void
   onSignIn?: () => void
+  onGoToDashboard?: () => void
 }
 
-export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
+export function HeroSection({ onGetStarted, onSignIn, onGoToDashboard }: HeroSectionProps) {
+  const { isAuthenticated } = useAuth()
+
   return (
     <section
       id="hero"
@@ -52,25 +56,39 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <FuturisticButton
-            variant="primary"
-            size="lg"
-            onClick={onGetStarted}
-            data-testid="get-started-button"
-            aria-label="Get started with URL shortening for free"
-          >
-            Get Started Free
-          </FuturisticButton>
+          {isAuthenticated ? (
+            <FuturisticButton
+              variant="primary"
+              size="lg"
+              onClick={onGoToDashboard}
+              data-testid="go-to-dashboard-button"
+              aria-label="Go to your dashboard"
+            >
+              Go to Dashboard
+            </FuturisticButton>
+          ) : (
+            <>
+              <FuturisticButton
+                variant="primary"
+                size="lg"
+                onClick={onGetStarted}
+                data-testid="get-started-button"
+                aria-label="Get started with URL shortening for free"
+              >
+                Get Started Free
+              </FuturisticButton>
 
-          <FuturisticButton
-            variant="outline"
-            size="lg"
-            onClick={onSignIn}
-            data-testid="sign-in-button"
-            aria-label="Sign in to your account"
-          >
-            Sign In
-          </FuturisticButton>
+              <FuturisticButton
+                variant="outline"
+                size="lg"
+                onClick={onSignIn}
+                data-testid="sign-in-button"
+                aria-label="Sign in to your account"
+              >
+                Sign In
+              </FuturisticButton>
+            </>
+          )}
         </motion.div>
 
         <motion.div

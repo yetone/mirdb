@@ -37,11 +37,15 @@ export default function Home() {
     navigate('/login')
   }
 
+  const handleGoToDashboard = () => {
+    navigate('/dashboard')
+  }
+
   return (
     <BackgroundEffect>
       <Navbar onGetStarted={handleGetStarted} onSignIn={handleSignIn} />
       <main>
-        <HeroSection onGetStarted={handleGetStarted} onSignIn={handleSignIn} />
+        <HeroSection onGetStarted={handleGetStarted} onSignIn={handleSignIn} onGoToDashboard={handleGoToDashboard} />
         <FeaturesSection />
         <HowItWorksSection />
       </main>

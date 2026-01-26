@@ -66,6 +66,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, within, fireEvent } from '@testing-library/react'
 import { BrowserRouter, MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '../../../src/contexts/ThemeContext'
+import { AuthProvider } from '../../../src/contexts/AuthContext'
 import Home from '../../../src/pages/Home'
 import { FeaturesSection } from '../../../src/components/homepage/FeaturesSection'
 import { GlassMorphismCard } from '../../../src/components/GlassMorphismCard'
@@ -76,7 +77,9 @@ import '@testing-library/jest-dom'
 function renderWithBrowserRouter(ui: React.ReactElement) {
   return render(
     <BrowserRouter>
-      <ThemeProvider>{ui}</ThemeProvider>
+      <ThemeProvider>
+        <AuthProvider>{ui}</AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }

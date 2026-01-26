@@ -19,6 +19,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '../../../src/contexts/ThemeContext'
+import { AuthProvider } from '../../../src/contexts/AuthContext'
 import Home from '../../../src/pages/Home'
 import { ThemeToggle } from '../../../src/components/ThemeToggle'
 import '@testing-library/jest-dom'
@@ -27,7 +28,9 @@ import '@testing-library/jest-dom'
 function renderWithProviders(ui: React.ReactElement) {
   return render(
     <BrowserRouter>
-      <ThemeProvider>{ui}</ThemeProvider>
+      <ThemeProvider>
+        <AuthProvider>{ui}</AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }
