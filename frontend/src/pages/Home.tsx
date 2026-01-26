@@ -19,7 +19,7 @@
  */
 import Navbar from '../components/Navbar'
 import BackgroundEffect from '../components/BackgroundEffect'
-import { HowItWorksSection, AnalyticsPreviewSection } from '../components/home'
+import { HowItWorksSection, AnalyticsPreviewSection, Footer } from '../components/home'
 
 export default function Home() {
   return (
@@ -45,7 +45,8 @@ export default function Home() {
         {/* AnalyticsPreviewSection - built by Scenario 9 */}
         <AnalyticsPreviewSection />
 
-        {/* Footer placeholder - to be built by Scenario 10 */}
+        {/* Footer - built by Scenario 10 */}
+        <Footer />
       </main>
     </div>
   )
