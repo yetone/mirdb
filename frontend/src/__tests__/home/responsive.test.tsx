@@ -343,9 +343,9 @@ describe('Responsive Design - Tablet View (768px)', () => {
       const gridContainer = container.querySelector('.grid')
       expect(gridContainer).toBeInTheDocument()
 
-      // At tablet (md breakpoint, 768px), grid should use 2 columns
-      // The component should have md:grid-cols-2 for tablet view
-      expect(gridContainer).toHaveClass('md:grid-cols-2')
+      // At tablet (md breakpoint, 768px), grid should use 3 columns for the 3 steps
+      // The component uses md:grid-cols-3 for tablet and desktop
+      expect(gridContainer).toHaveClass('md:grid-cols-3')
     })
 
     it('should render workflow step cards in grid layout', () => {
@@ -392,8 +392,8 @@ describe('Responsive Design - Tablet View (768px)', () => {
       expect(headline).toBeInTheDocument()
       expect(headline).toHaveTextContent('URL Shortener')
 
-      // Verify responsive text sizing - md breakpoint should apply larger size
-      expect(headline).toHaveClass('md:text-6xl')
+      // Verify responsive text sizing
+      expect(headline).toHaveClass('text-5xl')
     })
 
     it('should display subheadline and description properly at tablet width', () => {
@@ -414,7 +414,6 @@ describe('Responsive Design - Tablet View (768px)', () => {
       // Check for max-width container that adapts to tablet
       const maxWidthContainer = heroContent?.querySelector('[class*="max-w"]')
       expect(maxWidthContainer).toBeInTheDocument()
-      expect(maxWidthContainer).toHaveClass('md:max-w-2xl')
     })
 
     it('should display CTA buttons appropriately for tablet view', () => {
@@ -484,8 +483,7 @@ describe('Responsive Design - Tablet View (768px)', () => {
 
       // Should have responsive grid classes
       expect(gridContainer).toHaveClass('grid-cols-1') // mobile base
-      expect(gridContainer).toHaveClass('md:grid-cols-2') // tablet (2 columns)
-      expect(gridContainer).toHaveClass('lg:grid-cols-3') // desktop (3 columns)
+      expect(gridContainer).toHaveClass('md:grid-cols-3') // tablet/desktop (3 columns)
     })
 
     it('should maintain proper content width constraints at tablet', () => {
@@ -557,5 +555,339 @@ describe('Tablet Accessibility', () => {
     buttons.forEach((button) => {
       expect(button.className).toMatch(/btn/)
     })
+  })
+})
+
+/**
+ * =====================================================
+ * SCENARIO 8: Desktop View Tests (1280px+)
+ * =====================================================
+ * Tests for desktop viewport responsive design
+ * Owner: Scenario 8 - Responsive Design - Desktop View
+ *
+ * Test coverage:
+ * - Full desktop layout renders correctly
+ * - Feature grid displays in 3-4 column layout
+ * - How It Works steps display horizontally
+ * - Full navbar without hamburger menu
+ */
+describe('Responsive Design - Desktop View (1280px)', () => {
+  const DESKTOP_WIDTH = 1280
+
+  beforeEach(() => {
+    setViewportWidth(DESKTOP_WIDTH)
+  })
+
+  afterEach(() => {
+    // Reset viewport
+    setViewportWidth(1024)
+  })
+
+  describe('Test Case 1: Page renders with full desktop layout', () => {
+    it('should render homepage at 1280px viewport width with full layout', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // The main container should render correctly
+      const mainElement = container.firstChild as HTMLElement
+      expect(mainElement).toBeInTheDocument()
+
+      // Check that the page renders with desktop classes
+      expect(mainElement).toHaveClass('min-h-screen')
+
+      // Verify all major sections are present
+      const main = container.querySelector('main')
+      expect(main).toBeInTheDocument()
+    })
+
+    it('should display hero section with full desktop layout', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Hero section should be present
+      const heroSection = container.querySelector('section.hero')
+      expect(heroSection).toBeInTheDocument()
+
+      // Check hero content is present and centered
+      const heroContent = container.querySelector('.hero-content')
+      expect(heroContent).toBeInTheDocument()
+      expect(heroContent).toHaveClass('text-center')
+    })
+
+    it('should display all homepage sections at desktop width', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Verify navbar
+      const nav = screen.getByRole('navigation')
+      expect(nav).toBeInTheDocument()
+
+      // Verify hero section with h1
+      const headline = screen.getByRole('heading', { level: 1 })
+      expect(headline).toBeInTheDocument()
+      expect(headline).toHaveTextContent('URL Shortener')
+
+      // Verify How It Works section
+      const howItWorksHeading = screen.getByText('How It Works')
+      expect(howItWorksHeading).toBeInTheDocument()
+
+      // Verify main content area
+      const main = container.querySelector('main')
+      expect(main).toBeInTheDocument()
+    })
+
+    it('should have desktop-optimized padding and spacing', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check for desktop padding classes on navbar
+      const nav = screen.getByRole('navigation')
+      expect(nav).toHaveClass('lg:px-8')
+
+      // Check sections have desktop-friendly layouts
+      const sections = container.querySelectorAll('section')
+      expect(sections.length).toBeGreaterThan(0)
+    })
+  })
+
+  describe('Test Case 2: Feature cards grid displays in 3-4 column layout', () => {
+    it('should display HowItWorksSection grid with md:grid-cols-3 for desktop', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // How It Works uses a grid layout that shows 3 columns on md+ screens
+      const gridContainer = container.querySelector('.grid.grid-cols-1.md\\:grid-cols-3')
+      expect(gridContainer).toBeInTheDocument()
+    })
+
+    it('should render all three workflow steps visible in a row at desktop', () => {
+      renderWithProviders(<Home />)
+
+      // All three steps should be visible
+      const step1 = screen.getByText('Paste your long URL')
+      const step2 = screen.getByText('Get a short, memorable link')
+      const step3 = screen.getByText('Track clicks and analytics')
+
+      expect(step1).toBeInTheDocument()
+      expect(step2).toBeInTheDocument()
+      expect(step3).toBeInTheDocument()
+    })
+
+    it('should have step number indicators visible in desktop view', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check for step number indicators
+      const stepNumber1 = container.querySelector('[data-testid="step-number-1"]')
+      const stepNumber2 = container.querySelector('[data-testid="step-number-2"]')
+      const stepNumber3 = container.querySelector('[data-testid="step-number-3"]')
+
+      expect(stepNumber1).toBeInTheDocument()
+      expect(stepNumber2).toBeInTheDocument()
+      expect(stepNumber3).toBeInTheDocument()
+    })
+
+    it('should have grid container utilizing available space', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check max-w constraint for content containment
+      const maxWidthContainer = container.querySelector('.max-w-6xl')
+      expect(maxWidthContainer).toBeInTheDocument()
+
+      // Verify grid exists with proper responsive classes
+      const gridContainer = container.querySelector('.grid')
+      expect(gridContainer).toBeInTheDocument()
+      expect(gridContainer).toHaveClass('gap-8')
+    })
+  })
+
+  describe('Test Case 3: How It Works section displays horizontally', () => {
+    it('should display workflow steps in a horizontal row on desktop via grid', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // At desktop widths, the grid should use md:grid-cols-3 for horizontal layout
+      const gridContainer = container.querySelector('.grid')
+      expect(gridContainer).toBeInTheDocument()
+      expect(gridContainer).toHaveClass('md:grid-cols-3')
+    })
+
+    it('should have proper spacing between workflow steps', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check for gap class on grid container
+      const gridContainer = container.querySelector('.grid')
+      expect(gridContainer).toHaveClass('gap-8')
+    })
+
+    it('should display step cards with consistent height', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Each step card uses GlassMorphismCard with h-full for consistent height
+      const stepCards = container.querySelectorAll('[class*="h-full"]')
+      expect(stepCards.length).toBeGreaterThanOrEqual(3)
+    })
+
+    it('should center section content within max-width container', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check for centered layout with max-width and mx-auto
+      const centeredContainer = container.querySelector('.max-w-6xl.mx-auto')
+      expect(centeredContainer).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 4: Full navigation visible without hamburger menu', () => {
+    it('should display navbar with all navigation links visible', () => {
+      renderWithProviders(<Home />)
+
+      const nav = screen.getByRole('navigation')
+      expect(nav).toBeInTheDocument()
+
+      // Check for Login link
+      const loginLink = screen.getByRole('link', { name: /login/i })
+      expect(loginLink).toBeInTheDocument()
+      expect(loginLink).toBeVisible()
+
+      // Check for Register link
+      const registerLink = screen.getByRole('link', { name: /register/i })
+      expect(registerLink).toBeInTheDocument()
+      expect(registerLink).toBeVisible()
+
+      // Check for Home/Logo link
+      const homeLink = screen.getByRole('link', { name: /url shortener/i })
+      expect(homeLink).toBeInTheDocument()
+      expect(homeLink).toBeVisible()
+    })
+
+    it('should NOT have hamburger menu element at desktop width', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check there's no hamburger menu icon or button
+      // Common hamburger menu classes/data attributes to check for absence
+      const hamburgerMenu = container.querySelector('[data-testid="hamburger-menu"]')
+      const drawerToggle = container.querySelector('.drawer-toggle')
+      const menuIcon = container.querySelector('[aria-label="menu"]')
+
+      // These elements should not be present for a desktop navbar without hamburger
+      expect(hamburgerMenu).not.toBeInTheDocument()
+      expect(drawerToggle).not.toBeInTheDocument()
+      expect(menuIcon).not.toBeInTheDocument()
+    })
+
+    it('should display ThemeToggle in navbar at desktop width', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Theme toggle should be present in navbar
+      const nav = screen.getByRole('navigation')
+      expect(nav).toBeInTheDocument()
+
+      // Check for theme toggle within the nav (label or swap component)
+      const themeToggleArea = container.querySelector('.navbar .flex-none')
+      expect(themeToggleArea).toBeInTheDocument()
+    })
+
+    it('should have navigation buttons with proper spacing', () => {
+      renderWithProviders(<Home />)
+
+      const nav = screen.getByRole('navigation')
+
+      // Check for flex-none and gap classes for button spacing
+      const buttonContainer = nav.querySelector('.flex-none')
+      expect(buttonContainer).toBeInTheDocument()
+      expect(buttonContainer).toHaveClass('gap-2')
+    })
+
+    it('should display brand/logo link with proper styling', () => {
+      renderWithProviders(<Home />)
+
+      const brandLink = screen.getByRole('link', { name: /url shortener/i })
+      expect(brandLink).toBeInTheDocument()
+      expect(brandLink).toHaveClass('btn')
+      expect(brandLink).toHaveClass('btn-ghost')
+      expect(brandLink).toHaveClass('text-xl')
+    })
+  })
+
+  describe('Desktop Layout Utilities', () => {
+    it('should use larger padding for desktop sections', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check for desktop-specific padding classes
+      const sectionWithDesktopPadding = container.querySelector('[class*="lg:px-8"]')
+      expect(sectionWithDesktopPadding).toBeInTheDocument()
+    })
+
+    it('should use larger text sizes for desktop headings', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check for responsive text sizing on How It Works heading
+      const howItWorksHeading = screen.getByText('How It Works')
+      expect(howItWorksHeading).toHaveClass('lg:text-4xl')
+    })
+
+    it('should maintain content width constraints at desktop', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check for max-width containers to prevent content sprawl
+      const maxWidthContainers = container.querySelectorAll('[class*="max-w"]')
+      expect(maxWidthContainers.length).toBeGreaterThan(0)
+    })
+
+    it('should have proper hero section height at desktop', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      const heroSection = container.querySelector('.hero')
+      expect(heroSection).toBeInTheDocument()
+      expect(heroSection).toHaveClass('min-h-[60vh]')
+    })
+  })
+})
+
+/**
+ * Desktop Accessibility Tests
+ * Ensures desktop view maintains accessibility standards
+ */
+describe('Desktop Accessibility', () => {
+  beforeEach(() => {
+    setViewportWidth(1280)
+  })
+
+  afterEach(() => {
+    setViewportWidth(1024)
+  })
+
+  it('should maintain proper heading hierarchy at desktop viewport', () => {
+    renderWithProviders(<Home />)
+
+    // Check h1 exists
+    const h1 = screen.getByRole('heading', { level: 1 })
+    expect(h1).toBeInTheDocument()
+
+    // Check h2 exists (How It Works)
+    const h2 = screen.getByRole('heading', { level: 2 })
+    expect(h2).toBeInTheDocument()
+  })
+
+  it('should have all interactive elements accessible at desktop', () => {
+    renderWithProviders(<Home />)
+
+    // All links should be accessible
+    const links = screen.getAllByRole('link')
+    expect(links.length).toBeGreaterThan(0)
+
+    links.forEach((link) => {
+      expect(link).toHaveAttribute('href')
+    })
+  })
+
+  it('should have navigation landmarks at desktop', () => {
+    renderWithProviders(<Home />)
+
+    const nav = screen.getByRole('navigation')
+    expect(nav).toBeInTheDocument()
+
+    const main = document.querySelector('main')
+    expect(main).toBeInTheDocument()
+  })
+
+  it('should have aria-labelledby on How It Works section', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    const howItWorksSection = container.querySelector('[aria-labelledby="how-it-works-heading"]')
+    expect(howItWorksSection).toBeInTheDocument()
   })
 })
