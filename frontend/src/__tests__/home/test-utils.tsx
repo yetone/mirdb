@@ -6,7 +6,7 @@
  */
 import { ReactNode } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 import { AuthProvider } from '../../contexts/AuthContext'
 import { ThemeProvider } from '../../contexts/ThemeContext'
 
@@ -16,11 +16,11 @@ interface WrapperProps {
 
 function AllProviders({ children }: WrapperProps) {
   return (
-    <BrowserRouter>
+    <MemoryRouter>
       <ThemeProvider>
         <AuthProvider>{children}</AuthProvider>
       </ThemeProvider>
-    </BrowserRouter>
+    </MemoryRouter>
   )
 }
 
