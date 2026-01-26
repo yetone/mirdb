@@ -5,6 +5,15 @@
  * Common setup, mocks, and utilities for homepage unit tests.
  */
 
+// Mock IntersectionObserver for framer-motion's whileInView
+const mockIntersectionObserver = vi.fn()
+mockIntersectionObserver.mockReturnValue({
+  observe: () => null,
+  unobserve: () => null,
+  disconnect: () => null,
+})
+window.IntersectionObserver = mockIntersectionObserver
+
 import { ReactElement, ReactNode } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
