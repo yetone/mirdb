@@ -6,3 +6,4 @@
  */
 export { HowItWorksSection } from './HowItWorksSection'
 export { AnalyticsPreviewSection } from './AnalyticsPreviewSection'
+export { Footer } from './Footer'
