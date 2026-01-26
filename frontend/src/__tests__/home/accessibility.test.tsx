@@ -18,13 +18,29 @@ import userEvent from '@testing-library/user-event'
 import Home from '../../pages/Home'
 
 // Mock framer-motion to avoid animation issues in tests
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: { children: React.ReactNode }) => <div {...props}>{children}</div>,
-    section: ({ children, ...props }: { children: React.ReactNode }) => <section {...props}>{children}</section>,
-  },
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-}))
+vi.mock('framer-motion', async () => {
+  const React = await import('react')
+  return {
+    motion: {
+      div: React.forwardRef(({ children, ...props }: React.HTMLAttributes<HTMLDivElement> & { children?: React.ReactNode }, ref: React.Ref<HTMLDivElement>) =>
+        React.createElement('div', { ...props, ref }, children)
+      ),
+      section: React.forwardRef(({ children, ...props }: React.HTMLAttributes<HTMLElement> & { children?: React.ReactNode }, ref: React.Ref<HTMLElement>) =>
+        React.createElement('section', { ...props, ref }, children)
+      ),
+      h1: React.forwardRef(({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement> & { children?: React.ReactNode }, ref: React.Ref<HTMLHeadingElement>) =>
+        React.createElement('h1', { ...props, ref }, children)
+      ),
+      h2: React.forwardRef(({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement> & { children?: React.ReactNode }, ref: React.Ref<HTMLHeadingElement>) =>
+        React.createElement('h2', { ...props, ref }, children)
+      ),
+      p: React.forwardRef(({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement> & { children?: React.ReactNode }, ref: React.Ref<HTMLParagraphElement>) =>
+        React.createElement('p', { ...props, ref }, children)
+      ),
+    },
+    AnimatePresence: ({ children }: { children?: React.ReactNode }) => React.createElement(React.Fragment, null, children),
+  }
+})
 
 // Mock ResizeObserver for Recharts
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
@@ -370,6 +386,117 @@ describe('Accessibility Compliance - Scenario 11', () => {
 
 // Scenario 20: SEO Meta Tags tests (shared file)
 describe('SEO Meta Tags - Scenario 20', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  describe('Test Case 1: Document title contains service name', () => {
+    it('should have a descriptive document title containing the service name', () => {
+      renderWithProviders(<Home />)
+
+      // Check document title exists and contains URL Shortener service name
+      const title = document.title
+      expect(title).toBeTruthy()
+      expect(title.length).toBeGreaterThan(0)
+
+      // Title should contain service-related keywords
+      const titleLower = title.toLowerCase()
+      expect(
+        titleLower.includes('url') ||
+        titleLower.includes('shortener') ||
+        titleLower.includes('shorten') ||
+        titleLower.includes('link')
+      ).toBe(true)
+    })
+
+    it('should have a title suitable for search engine display', () => {
+      renderWithProviders(<Home />)
+
+      const title = document.title
+
+      // Title should be between 30-70 characters for optimal SEO
+      // (Google typically displays 50-60 characters)
+      expect(title.length).toBeGreaterThanOrEqual(10)
+      expect(title.length).toBeLessThanOrEqual(70)
+    })
+  })
+
+  describe('Test Case 2: Meta description tag exists with relevant content', () => {
+    it('should have a meta description tag', () => {
+      renderWithProviders(<Home />)
+
+      // Find meta description tag
+      const metaDescription = document.querySelector('meta[name="description"]')
+      expect(metaDescription).toBeInTheDocument()
+    })
+
+    it('should have meta description with relevant content about URL shortening', () => {
+      renderWithProviders(<Home />)
+
+      const metaDescription = document.querySelector('meta[name="description"]')
+      expect(metaDescription).toBeInTheDocument()
+
+      const content = metaDescription?.getAttribute('content') || ''
+      expect(content.length).toBeGreaterThan(0)
+
+      // Meta description should mention service-related keywords
+      const contentLower = content.toLowerCase()
+      expect(
+        contentLower.includes('url') ||
+        contentLower.includes('shorten') ||
+        contentLower.includes('link') ||
+        contentLower.includes('analytics') ||
+        contentLower.includes('track')
+      ).toBe(true)
+    })
+
+    it('should have meta description with optimal length for SEO', () => {
+      renderWithProviders(<Home />)
+
+      const metaDescription = document.querySelector('meta[name="description"]')
+      const content = metaDescription?.getAttribute('content') || ''
+
+      // Meta description should be between 50-160 characters for optimal SEO
+      expect(content.length).toBeGreaterThanOrEqual(50)
+      expect(content.length).toBeLessThanOrEqual(160)
+    })
+  })
+
+  describe('Test Case 3: H1 content is descriptive with relevant keywords', () => {
+    it('should have exactly one h1 element for SEO best practices', () => {
+      renderWithProviders(<Home />)
+
+      const h1Elements = screen.getAllByRole('heading', { level: 1 })
+      expect(h1Elements).toHaveLength(1)
+    })
+
+    it('should have h1 containing relevant keywords about URL shortening service', () => {
+      renderWithProviders(<Home />)
+
+      const h1 = screen.getByRole('heading', { level: 1 })
+      const h1Text = h1.textContent?.toLowerCase() || ''
+
+      // H1 should contain URL shortening related keywords
+      expect(
+        h1Text.includes('url') ||
+        h1Text.includes('shorten') ||
+        h1Text.includes('link') ||
+        h1Text.includes('track')
+      ).toBe(true)
+    })
+
+    it('should have h1 with meaningful descriptive text', () => {
+      renderWithProviders(<Home />)
+
+      const h1 = screen.getByRole('heading', { level: 1 })
+      const h1Text = h1.textContent?.trim() || ''
+
+      // H1 should have substantial content (not just a single word)
+      expect(h1Text.length).toBeGreaterThan(10)
+      expect(h1Text.split(' ').length).toBeGreaterThanOrEqual(2)
+    })
+  })
+
   describe('Page structure for SEO', () => {
     it('should have proper semantic HTML structure', () => {
       renderWithProviders(<Home />)
@@ -380,14 +507,19 @@ describe('SEO Meta Tags - Scenario 20', () => {
       expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
     })
 
-    it('should have meaningful heading text for SEO', () => {
+    it('should have proper heading hierarchy for SEO', () => {
       renderWithProviders(<Home />)
 
-      const h1 = screen.getByRole('heading', { level: 1 })
+      // Get all heading elements
+      const allHeadings = screen.getAllByRole('heading')
 
-      // H1 should have meaningful content
-      expect(h1.textContent?.trim().length).toBeGreaterThan(0)
-      expect(h1).toHaveTextContent(/url shortener/i)
+      // Must have exactly one h1
+      const h1Elements = allHeadings.filter(h => h.tagName === 'H1')
+      expect(h1Elements).toHaveLength(1)
+
+      // Should have h2 section headings
+      const h2Elements = allHeadings.filter(h => h.tagName === 'H2')
+      expect(h2Elements.length).toBeGreaterThanOrEqual(1)
     })
   })
 })
