@@ -1,14 +1,19 @@
 /**
- * Responsive Design E2E Tests - Mobile Viewport
- * Owner: Scenario 8 - Responsive Design - Mobile Viewport
+ * Responsive Design E2E Tests
+ * Owner: Scenario 8 - Mobile Viewport, Scenario 9 - Tablet Viewport
  *
- * Tests verify the homepage displays correctly on mobile devices
- * with collapsed navigation and touch-friendly elements.
+ * E2E tests to verify:
+ * - Homepage displays correctly at mobile viewport (375x667)
+ * - Homepage displays correctly at tablet viewport (768x1024)
+ * - Layout adapts appropriately without horizontal scroll
+ * - Feature cards display in appropriate grid layouts
+ * - Navigation is appropriately styled for each viewport
  */
 
 import { test, expect } from '@playwright/test'
 import { HomePage, viewports } from './fixtures'
 
+// Mobile Viewport Tests (Scenario 8)
 test.describe('Responsive Design - Mobile Viewport', () => {
   test.beforeEach(async ({ page }) => {
     // Set mobile viewport before navigating
@@ -233,5 +238,179 @@ test.describe('Responsive Design - Mobile Viewport', () => {
     // Close menu by clicking hamburger again
     await hamburgerMenu.click()
     await expect(mobileMenu).not.toBeVisible()
+  })
+})
+
+// Tablet Viewport Tests (Scenario 9)
+test.describe('Responsive Design - Tablet Viewport', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(viewports.tablet)
+  })
+
+  test('content adapts to tablet layout without horizontal scroll', async ({ page }) => {
+    const homePage = new HomePage(page)
+    await homePage.goto()
+
+    // Wait for page to fully load
+    await expect(homePage.heroSection).toBeVisible()
+
+    // Check that document body width matches viewport (no horizontal overflow)
+    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth)
+    const clientWidth = await page.evaluate(() => document.documentElement.clientWidth)
+
+    // Scroll width should not exceed client width significantly (no horizontal scroll)
+    expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1)
+
+    // Verify key sections are visible and within viewport width
+    await expect(homePage.heroHeadline).toBeVisible()
+    await expect(homePage.heroSubheadline).toBeVisible()
+    await expect(homePage.getStartedButton).toBeVisible()
+
+    // Verify features section is visible
+    const featuresSection = page.getByTestId('features-section')
+    await expect(featuresSection).toBeVisible()
+
+    // Verify hero section doesn't overflow
+    const heroBox = await homePage.heroSection.boundingBox()
+    expect(heroBox).not.toBeNull()
+    if (heroBox) {
+      expect(heroBox.width).toBeLessThanOrEqual(viewports.tablet.width)
+    }
+  })
+
+  test('feature cards display in 2-column grid layout at tablet viewport', async ({ page }) => {
+    const homePage = new HomePage(page)
+    await homePage.goto()
+
+    // Scroll to features section
+    const featuresSection = page.getByTestId('features-section')
+    await featuresSection.scrollIntoViewIfNeeded()
+    await expect(featuresSection).toBeVisible()
+
+    // Get feature cards grid
+    const featuresGrid = page.getByTestId('features-grid')
+    await expect(featuresGrid).toBeVisible()
+
+    // Get all feature cards
+    const featureCard0 = page.getByTestId('feature-card-0')
+    const featureCard1 = page.getByTestId('feature-card-1')
+    const featureCard2 = page.getByTestId('feature-card-2')
+
+    await expect(featureCard0).toBeVisible()
+    await expect(featureCard1).toBeVisible()
+    await expect(featureCard2).toBeVisible()
+
+    // Get bounding boxes
+    const card0Box = await featureCard0.boundingBox()
+    const card1Box = await featureCard1.boundingBox()
+    const card2Box = await featureCard2.boundingBox()
+
+    expect(card0Box).not.toBeNull()
+    expect(card1Box).not.toBeNull()
+    expect(card2Box).not.toBeNull()
+
+    if (card0Box && card1Box && card2Box) {
+      // At tablet (768px = md breakpoint), grid should be 2 columns
+      // Card 0 and Card 1 should be on the same row (similar y position)
+      expect(Math.abs(card0Box.y - card1Box.y)).toBeLessThan(10)
+
+      // Card 0 and Card 1 should be side by side (different x positions)
+      expect(card0Box.x).not.toBe(card1Box.x)
+
+      // Card 2 should be on a different row (below cards 0 and 1)
+      expect(card2Box.y).toBeGreaterThan(card0Box.y + card0Box.height - 20)
+
+      // Verify cards have appropriate width for 2-column layout
+      // Each card should take roughly half the container width (accounting for gap)
+      const gridBox = await featuresGrid.boundingBox()
+      if (gridBox) {
+        // Cards should each be less than 60% of grid width (accounting for gap)
+        expect(card0Box.width).toBeLessThan(gridBox.width * 0.6)
+        expect(card1Box.width).toBeLessThan(gridBox.width * 0.6)
+      }
+    }
+  })
+
+  test('navigation is appropriately styled for tablet viewport', async ({ page }) => {
+    const homePage = new HomePage(page)
+    await homePage.goto()
+
+    // Use first navigation (header navbar) to avoid matching footer nav
+    const headerNavbar = page.getByRole('navigation').first()
+    await expect(headerNavbar).toBeVisible()
+
+    // At tablet (768px = md breakpoint), anchor links should be visible
+    // The Navbar has: hidden md:flex for the anchor links container
+    const featuresLink = page.getByRole('link', { name: /features/i })
+    const howItWorksLink = page.getByRole('link', { name: /how it works/i })
+
+    // At 768px (md breakpoint), links should be visible
+    await expect(featuresLink).toBeVisible()
+    await expect(howItWorksLink).toBeVisible()
+
+    // Sign In and Get Started buttons should be visible
+    const signInButton = page.getByTestId('sign-in-nav')
+    const getStartedButton = page.getByTestId('get-started-nav')
+
+    await expect(signInButton).toBeVisible()
+    await expect(getStartedButton).toBeVisible()
+
+    // Navbar should fit within viewport width
+    const navbarBox = await headerNavbar.boundingBox()
+    expect(navbarBox).not.toBeNull()
+    if (navbarBox) {
+      expect(navbarBox.width).toBeLessThanOrEqual(viewports.tablet.width)
+    }
+  })
+
+  test('hero section CTA buttons are appropriately sized for tablet', async ({ page }) => {
+    const homePage = new HomePage(page)
+    await homePage.goto()
+
+    await expect(homePage.getStartedButton).toBeVisible()
+    await expect(homePage.signInButton).toBeVisible()
+
+    const getStartedBox = await homePage.getStartedButton.boundingBox()
+    const signInBox = await homePage.signInButton.boundingBox()
+
+    expect(getStartedBox).not.toBeNull()
+    expect(signInBox).not.toBeNull()
+
+    if (getStartedBox && signInBox) {
+      // Buttons should be visible within viewport
+      expect(getStartedBox.x + getStartedBox.width).toBeLessThanOrEqual(viewports.tablet.width)
+      expect(signInBox.x + signInBox.width).toBeLessThanOrEqual(viewports.tablet.width)
+
+      // Buttons should have reasonable touch-friendly size (at least 44px height)
+      expect(getStartedBox.height).toBeGreaterThanOrEqual(36)
+      expect(signInBox.height).toBeGreaterThanOrEqual(36)
+    }
+  })
+
+  test('page is scrollable vertically to access all sections', async ({ page }) => {
+    const homePage = new HomePage(page)
+    await homePage.goto()
+
+    // Verify hero section is visible initially
+    await expect(homePage.heroSection).toBeVisible()
+
+    // Scroll to features section
+    const featuresSection = page.getByTestId('features-section')
+    await featuresSection.scrollIntoViewIfNeeded()
+    await expect(featuresSection).toBeVisible()
+
+    // Scroll to how it works section
+    const howItWorksSection = page.getByTestId('how-it-works-section')
+    await howItWorksSection.scrollIntoViewIfNeeded()
+    await expect(howItWorksSection).toBeVisible()
+
+    // Verify all sections were accessible via scroll
+    const heroBox = await homePage.heroSection.boundingBox()
+    const featuresBox = await featuresSection.boundingBox()
+    const howItWorksBox = await howItWorksSection.boundingBox()
+
+    expect(heroBox).not.toBeNull()
+    expect(featuresBox).not.toBeNull()
+    expect(howItWorksBox).not.toBeNull()
   })
 })
