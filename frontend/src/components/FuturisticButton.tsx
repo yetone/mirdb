@@ -25,9 +25,9 @@ export function FuturisticButton({
   }
 
   const sizeClasses = {
-    sm: 'btn-sm',
-    md: 'btn-md',
-    lg: 'btn-lg',
+    sm: 'btn-sm min-h-[44px] min-w-[44px]',
+    md: 'btn-md min-h-[44px] min-w-[44px]',
+    lg: 'btn-lg min-h-[44px] min-w-[44px]',
   }
 
   return (
