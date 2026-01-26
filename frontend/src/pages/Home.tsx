@@ -8,7 +8,7 @@
 import { useNavigate } from 'react-router-dom'
 import { BackgroundEffect } from '../components/BackgroundEffect'
 import { Navbar } from '../components/Navbar'
-import { HeroSection, HowItWorksSection } from '../components/homepage'
+import { HeroSection, FeaturesSection, HowItWorksSection } from '../components/homepage'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -26,6 +26,7 @@ export default function Home() {
       <Navbar onGetStarted={handleGetStarted} onSignIn={handleSignIn} />
       <main>
         <HeroSection onGetStarted={handleGetStarted} onSignIn={handleSignIn} />
+        <FeaturesSection />
         <HowItWorksSection />
       </main>
     </BackgroundEffect>
