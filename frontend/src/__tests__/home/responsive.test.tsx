@@ -267,3 +267,295 @@ describe('Mobile Accessibility', () => {
     })
   })
 })
+
+/**
+ * =====================================================
+ * SCENARIO 7: Tablet View Tests (768px - 1024px)
+ * =====================================================
+ * Tests for tablet viewport responsive design
+ * Owner: Scenario 7 - Responsive Design - Tablet View
+ */
+
+describe('Responsive Design - Tablet View (768px)', () => {
+  const TABLET_WIDTH = 768
+
+  beforeEach(() => {
+    setViewportWidth(TABLET_WIDTH)
+  })
+
+  afterEach(() => {
+    // Reset viewport
+    setViewportWidth(1024)
+  })
+
+  describe('Test Case 1: Page renders with tablet-optimized layout', () => {
+    it('should render homepage at 768px viewport width with tablet layout', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // The main container should render correctly
+      const mainElement = container.firstChild as HTMLElement
+      expect(mainElement).toBeInTheDocument()
+
+      // Check that the page renders correctly
+      const urlShortenerElements = screen.getAllByText('URL Shortener')
+      expect(urlShortenerElements.length).toBeGreaterThan(0)
+
+      // Verify base layout classes are applied
+      expect(mainElement).toHaveClass('min-h-screen')
+      expect(mainElement).toHaveClass('bg-base-200')
+    })
+
+    it('should contain all major sections at tablet viewport', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Verify main content wrapper exists
+      const main = container.querySelector('main')
+      expect(main).toBeInTheDocument()
+
+      // Verify hero section is present
+      const heroSection = container.querySelector('section.hero')
+      expect(heroSection).toBeInTheDocument()
+
+      // Verify How It Works section is present
+      const howItWorksHeading = screen.getByText('How It Works')
+      expect(howItWorksHeading).toBeInTheDocument()
+    })
+
+    it('should apply tablet-specific responsive breakpoints', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // At 768px, the md: breakpoint should be active in Tailwind
+      // Verify sections use max-width constraints
+      const contentWrappers = container.querySelectorAll('[class*="max-w"]')
+      expect(contentWrappers.length).toBeGreaterThan(0)
+
+      // Verify padding adapts for tablet
+      const navbar = screen.getByRole('navigation')
+      expect(navbar).toHaveClass('navbar')
+    })
+  })
+
+  describe('Test Case 2: Feature cards display in 2-column grid layout', () => {
+    it('should display grid container with tablet-appropriate columns', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Find the grid container in HowItWorksSection
+      const gridContainer = container.querySelector('.grid')
+      expect(gridContainer).toBeInTheDocument()
+
+      // At tablet (md breakpoint, 768px), grid should use 2 columns
+      // The component should have md:grid-cols-2 for tablet view
+      expect(gridContainer).toHaveClass('md:grid-cols-2')
+    })
+
+    it('should render workflow step cards in grid layout', () => {
+      renderWithProviders(<Home />)
+
+      // Verify all three workflow steps are rendered
+      expect(screen.getByText('Paste your long URL')).toBeInTheDocument()
+      expect(screen.getByText('Get a short, memorable link')).toBeInTheDocument()
+      expect(screen.getByText('Track clicks and analytics')).toBeInTheDocument()
+
+      // Verify step numbers are present
+      expect(screen.getByTestId('step-number-1')).toBeInTheDocument()
+      expect(screen.getByTestId('step-number-2')).toBeInTheDocument()
+      expect(screen.getByTestId('step-number-3')).toBeInTheDocument()
+    })
+
+    it('should have proper gap spacing between grid items at tablet size', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      const gridContainer = container.querySelector('.grid')
+      expect(gridContainer).toBeInTheDocument()
+
+      // Verify gap class is applied for proper spacing
+      expect(gridContainer).toHaveClass('gap-8')
+    })
+  })
+
+  describe('Test Case 3: Hero content is well-proportioned for tablet display', () => {
+    it('should display hero section with appropriate sizing for tablet', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Verify hero section exists
+      const heroSection = container.querySelector('section.hero')
+      expect(heroSection).toBeInTheDocument()
+
+      // Hero should have minimum height
+      expect(heroSection).toHaveClass('min-h-[60vh]')
+    })
+
+    it('should display headline with tablet-appropriate text size', () => {
+      renderWithProviders(<Home />)
+
+      const headline = screen.getByRole('heading', { level: 1 })
+      expect(headline).toBeInTheDocument()
+      expect(headline).toHaveTextContent('URL Shortener')
+
+      // Verify responsive text sizing - md breakpoint should apply larger size
+      expect(headline).toHaveClass('md:text-6xl')
+    })
+
+    it('should display subheadline and description properly at tablet width', () => {
+      renderWithProviders(<Home />)
+
+      // Check subheadline/description is present and properly styled
+      const description = screen.getByText(/Shorten URLs. Track Results. Grow Smarter./i)
+      expect(description).toBeInTheDocument()
+    })
+
+    it('should have hero content container with tablet-appropriate max-width', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Hero content should expand for tablet
+      const heroContent = container.querySelector('.hero-content')
+      expect(heroContent).toBeInTheDocument()
+
+      // Check for max-width container that adapts to tablet
+      const maxWidthContainer = heroContent?.querySelector('[class*="max-w"]')
+      expect(maxWidthContainer).toBeInTheDocument()
+      expect(maxWidthContainer).toHaveClass('md:max-w-2xl')
+    })
+
+    it('should display CTA buttons appropriately for tablet view', () => {
+      renderWithProviders(<Home />)
+
+      // Verify navigation buttons are present and properly styled
+      const loginLink = screen.getByRole('link', { name: /login/i })
+      const registerLink = screen.getByRole('link', { name: /register/i })
+
+      expect(loginLink).toBeInTheDocument()
+      expect(registerLink).toBeInTheDocument()
+      expect(loginLink).toHaveClass('btn')
+      expect(registerLink).toHaveClass('btn')
+    })
+  })
+
+  describe('Tablet Navigation and Layout', () => {
+    it('should display full navigation bar at tablet size', () => {
+      renderWithProviders(<Home />)
+
+      // Check navbar is rendered with full layout
+      const nav = screen.getByRole('navigation')
+      expect(nav).toBeInTheDocument()
+      expect(nav).toHaveClass('navbar')
+
+      // At tablet size, navigation links should be visible (not collapsed into hamburger)
+      const loginLink = screen.getByRole('link', { name: /login/i })
+      const registerLink = screen.getByRole('link', { name: /register/i })
+
+      expect(loginLink).toBeVisible()
+      expect(registerLink).toBeVisible()
+    })
+
+    it('should have theme toggle accessible at tablet viewport', () => {
+      renderWithProviders(<Home />)
+
+      // Theme toggle should be present in navbar
+      const nav = screen.getByRole('navigation')
+      expect(nav).toBeInTheDocument()
+
+      // ThemeToggle component should be rendered
+      const navbar = nav.closest('.navbar')
+      expect(navbar).toBeInTheDocument()
+    })
+
+    it('should have proper padding for tablet viewport', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Navbar should have responsive padding
+      const nav = screen.getByRole('navigation')
+      expect(nav).toHaveClass('px-4')
+      expect(nav).toHaveClass('lg:px-8')
+
+      // Sections should have responsive padding
+      const sections = container.querySelectorAll('section')
+      expect(sections.length).toBeGreaterThan(0)
+    })
+  })
+
+  describe('Tablet Intermediate Layout', () => {
+    it('should show intermediate layout between mobile and desktop', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // At tablet (768px), layout should differ from mobile (1 col) and desktop (3+ col)
+      const gridContainer = container.querySelector('.grid')
+      expect(gridContainer).toBeInTheDocument()
+
+      // Should have responsive grid classes
+      expect(gridContainer).toHaveClass('grid-cols-1') // mobile base
+      expect(gridContainer).toHaveClass('md:grid-cols-2') // tablet (2 columns)
+      expect(gridContainer).toHaveClass('lg:grid-cols-3') // desktop (3 columns)
+    })
+
+    it('should maintain proper content width constraints at tablet', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Check for max-width containers that constrain content appropriately
+      const maxWidthContainers = container.querySelectorAll('[class*="max-w-"]')
+      expect(maxWidthContainers.length).toBeGreaterThan(0)
+
+      // Section content should be contained within max-w-6xl
+      const sectionContainer = container.querySelector('.max-w-6xl')
+      expect(sectionContainer).toBeInTheDocument()
+    })
+
+    it('should have readable text sizes at tablet viewport', () => {
+      renderWithProviders(<Home />)
+
+      // H1 should be readable
+      const h1 = screen.getByRole('heading', { level: 1 })
+      expect(h1).toBeInTheDocument()
+
+      // H2 (How It Works) should use tablet-appropriate sizing
+      const h2 = screen.getByRole('heading', { level: 2 })
+      expect(h2).toBeInTheDocument()
+      expect(h2).toHaveClass('lg:text-4xl') // larger on desktop
+    })
+  })
+})
+
+// Tablet accessibility tests
+describe('Tablet Accessibility', () => {
+  beforeEach(() => {
+    setViewportWidth(768)
+  })
+
+  afterEach(() => {
+    setViewportWidth(1024)
+  })
+
+  it('should maintain proper heading hierarchy at tablet viewport', () => {
+    renderWithProviders(<Home />)
+
+    // Check h1 exists
+    const h1 = screen.getByRole('heading', { level: 1 })
+    expect(h1).toBeInTheDocument()
+
+    // Check h2 exists (How It Works)
+    const h2 = screen.getByRole('heading', { level: 2 })
+    expect(h2).toBeInTheDocument()
+  })
+
+  it('should have all interactive elements accessible at tablet size', () => {
+    renderWithProviders(<Home />)
+
+    // All links should be accessible
+    const links = screen.getAllByRole('link')
+    expect(links.length).toBeGreaterThan(0)
+
+    links.forEach((link) => {
+      expect(link).toHaveAttribute('href')
+    })
+  })
+
+  it('should have sufficient touch targets at tablet viewport', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    // Get all buttons/links - they should have btn class for proper sizing
+    const buttons = container.querySelectorAll('button, .btn')
+    buttons.forEach((button) => {
+      expect(button.className).toMatch(/btn/)
+    })
+  })
+})

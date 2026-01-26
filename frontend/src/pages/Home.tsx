@@ -30,8 +30,8 @@ export default function Home() {
         {/* HeroSection placeholder - to be built by Scenario 1 */}
         <section className="hero min-h-[60vh] bg-base-200">
           <div className="hero-content text-center">
-            <div className="max-w-md">
-              <h1 className="text-5xl font-bold">URL Shortener</h1>
+            <div className="max-w-md md:max-w-2xl">
+              <h1 className="text-5xl md:text-6xl font-bold">URL Shortener</h1>
               <p className="py-6">Shorten URLs. Track Results. Grow Smarter.</p>
             </div>
           </div>
