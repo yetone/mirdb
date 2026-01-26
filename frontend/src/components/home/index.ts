@@ -4,6 +4,7 @@
  * This file is created by the first scenario builder.
  * Each component owner should add their export here.
  */
+export { HeroSection } from './HeroSection'
 export { HowItWorksSection } from './HowItWorksSection'
 export { AnalyticsPreviewSection } from './AnalyticsPreviewSection'
 export { Footer } from './Footer'
