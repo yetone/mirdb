@@ -1,5 +1,5 @@
 /**
- * Component Integration Tests - GlassMorphismCard
+ * Component Integration Tests - GlassMorphismCard and FuturisticButton
  * Owner: Scenario 17 - Component Integration - GlassMorphismCard
  * Owner: Scenario 18 - Component Integration - FuturisticButton
  *
@@ -8,6 +8,9 @@
  * - Cards render with glass morphism styling (backdrop-blur class)
  * - Card content (icons, titles, descriptions) renders correctly
  * - FuturisticButton integrates correctly in homepage sections
+ * - Button renders with futuristic styling classes
+ * - Click events fire and callbacks execute
+ * - Both primary and secondary variants render correctly
  */
 
 // Mock IntersectionObserver for framer-motion's whileInView
@@ -19,17 +22,58 @@ mockIntersectionObserver.mockReturnValue({
 })
 window.IntersectionObserver = mockIntersectionObserver
 
+// Mock PointerEvent for framer-motion gestures
+if (typeof window.PointerEvent === 'undefined') {
+  class MockPointerEvent extends MouseEvent {
+    pointerId: number
+    pressure: number
+    tangentialPressure: number
+    tiltX: number
+    tiltY: number
+    twist: number
+    width: number
+    height: number
+    pointerType: string
+    isPrimary: boolean
+
+    constructor(type: string, params: PointerEventInit = {}) {
+      super(type, params)
+      this.pointerId = params.pointerId ?? 0
+      this.pressure = params.pressure ?? 0
+      this.tangentialPressure = params.tangentialPressure ?? 0
+      this.tiltX = params.tiltX ?? 0
+      this.tiltY = params.tiltY ?? 0
+      this.twist = params.twist ?? 0
+      this.width = params.width ?? 1
+      this.height = params.height ?? 1
+      this.pointerType = params.pointerType ?? 'mouse'
+      this.isPrimary = params.isPrimary ?? true
+    }
+
+    getCoalescedEvents() {
+      return []
+    }
+
+    getPredictedEvents() {
+      return []
+    }
+  }
+  // @ts-ignore
+  window.PointerEvent = MockPointerEvent
+}
+
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import { render, screen, within, fireEvent } from '@testing-library/react'
+import { BrowserRouter, MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '../../../src/contexts/ThemeContext'
 import Home from '../../../src/pages/Home'
 import { FeaturesSection } from '../../../src/components/homepage/FeaturesSection'
 import { GlassMorphismCard } from '../../../src/components/GlassMorphismCard'
+import { FuturisticButton } from '../../../src/components/FuturisticButton'
 import '@testing-library/jest-dom'
 
-// Helper to render with all providers
-function renderWithProviders(ui: React.ReactElement) {
+// Helper to render with all providers (BrowserRouter version for GlassMorphismCard tests)
+function renderWithBrowserRouter(ui: React.ReactElement) {
   return render(
     <BrowserRouter>
       <ThemeProvider>{ui}</ThemeProvider>
@@ -37,10 +81,19 @@ function renderWithProviders(ui: React.ReactElement) {
   )
 }
 
+// Helper to render with all providers (MemoryRouter version for FuturisticButton tests)
+function renderWithProviders(ui: React.ReactElement) {
+  return render(
+    <MemoryRouter>
+      <ThemeProvider>{ui}</ThemeProvider>
+    </MemoryRouter>
+  )
+}
+
 describe('GlassMorphismCard Integration Tests', () => {
   describe('Test Case 1: Feature section with GlassMorphismCard components', () => {
     it('renders feature cards with glass morphism styling (backdrop-blur class)', () => {
-      renderWithProviders(<FeaturesSection />)
+      renderWithBrowserRouter(<FeaturesSection />)
 
       // Find all cards by their parent containers that use GlassMorphismCard
       const featuresGrid = screen.getByTestId('features-grid')
@@ -67,7 +120,7 @@ describe('GlassMorphismCard Integration Tests', () => {
     })
 
     it('GlassMorphismCard components have proper glass effect styling classes', () => {
-      renderWithProviders(<FeaturesSection />)
+      renderWithBrowserRouter(<FeaturesSection />)
 
       // Get the card-body elements and check their parent (GlassMorphismCard)
       const featureCards = [
@@ -94,7 +147,7 @@ describe('GlassMorphismCard Integration Tests', () => {
     })
 
     it('renders all three feature cards within GlassMorphismCard wrappers', () => {
-      renderWithProviders(<FeaturesSection />)
+      renderWithBrowserRouter(<FeaturesSection />)
 
       const featuresSection = screen.getByTestId('features-section')
       expect(featuresSection).toBeInTheDocument()
@@ -107,7 +160,7 @@ describe('GlassMorphismCard Integration Tests', () => {
     })
 
     it('feature section integrates correctly within full Home page', () => {
-      renderWithProviders(<Home />)
+      renderWithBrowserRouter(<Home />)
 
       // Verify features section exists on homepage
       const featuresSection = screen.getByTestId('features-section')
@@ -128,7 +181,7 @@ describe('GlassMorphismCard Integration Tests', () => {
 
   describe('Test Case 2: GlassMorphismCard content rendering', () => {
     it('renders icon correctly within GlassMorphismCard', () => {
-      renderWithProviders(<FeaturesSection />)
+      renderWithBrowserRouter(<FeaturesSection />)
 
       // Check each feature card has an icon
       for (let i = 0; i < 3; i++) {
@@ -146,7 +199,7 @@ describe('GlassMorphismCard Integration Tests', () => {
     })
 
     it('renders title correctly within GlassMorphismCard boundaries', () => {
-      renderWithProviders(<FeaturesSection />)
+      renderWithBrowserRouter(<FeaturesSection />)
 
       // Check each feature card has a title
       const expectedTitles = ['Fast URL Shortening', 'Detailed Analytics', 'Dashboard Management']
@@ -163,7 +216,7 @@ describe('GlassMorphismCard Integration Tests', () => {
     })
 
     it('renders description correctly within GlassMorphismCard boundaries', () => {
-      renderWithProviders(<FeaturesSection />)
+      renderWithBrowserRouter(<FeaturesSection />)
 
       for (let i = 0; i < 3; i++) {
         const description = screen.getByTestId(`feature-description-${i}`)
@@ -179,7 +232,7 @@ describe('GlassMorphismCard Integration Tests', () => {
     })
 
     it('all content (icon, title, description) renders together within single GlassMorphismCard', () => {
-      renderWithProviders(<FeaturesSection />)
+      renderWithBrowserRouter(<FeaturesSection />)
 
       for (let i = 0; i < 3; i++) {
         const cardBody = screen.getByTestId(`feature-card-${i}`)
@@ -321,7 +374,7 @@ describe('GlassMorphismCard Integration Tests', () => {
     })
 
     it('feature cards within FeaturesSection have animation container', () => {
-      renderWithProviders(<FeaturesSection />)
+      renderWithBrowserRouter(<FeaturesSection />)
 
       const featuresGrid = screen.getByTestId('features-grid')
       expect(featuresGrid).toBeInTheDocument()
@@ -334,6 +387,317 @@ describe('GlassMorphismCard Integration Tests', () => {
       glassMorphismCards.forEach((card) => {
         expect(card.tagName.toLowerCase()).toBe('div')
       })
+    })
+  })
+})
+
+describe('FuturisticButton Integration Tests', () => {
+  describe('Test Case 1: Render Get Started button using FuturisticButton', () => {
+    it('should render Get Started button with futuristic styling classes', () => {
+      renderWithProviders(<Home />)
+
+      const getStartedButton = screen.getByTestId('get-started-button')
+      expect(getStartedButton).toBeInTheDocument()
+
+      // Verify button has base futuristic styling classes
+      expect(getStartedButton).toHaveClass('btn')
+      expect(getStartedButton).toHaveClass('font-semibold')
+      expect(getStartedButton).toHaveClass('transition-all')
+      expect(getStartedButton).toHaveClass('duration-300')
+
+      // Verify primary variant styling
+      expect(getStartedButton).toHaveClass('btn-primary')
+
+      // Verify button is accessible with minimum touch target size
+      expect(getStartedButton).toHaveClass('min-h-[44px]')
+      expect(getStartedButton).toHaveClass('min-w-[44px]')
+    })
+
+    it('should render Sign In button with futuristic styling classes', () => {
+      renderWithProviders(<Home />)
+
+      const signInButton = screen.getByTestId('sign-in-button')
+      expect(signInButton).toBeInTheDocument()
+
+      // Verify button has base futuristic styling classes
+      expect(signInButton).toHaveClass('btn')
+      expect(signInButton).toHaveClass('font-semibold')
+      expect(signInButton).toHaveClass('transition-all')
+
+      // Verify outline variant styling
+      expect(signInButton).toHaveClass('btn-outline')
+    })
+
+    it('should render FuturisticButton with correct text content', () => {
+      renderWithProviders(<Home />)
+
+      // Use test IDs to be specific about which buttons we're checking
+      const getStartedButton = screen.getByTestId('get-started-button')
+      const signInButton = screen.getByTestId('sign-in-button')
+
+      expect(getStartedButton).toHaveTextContent('Get Started Free')
+      expect(signInButton).toHaveTextContent('Sign In')
+    })
+  })
+
+  describe('Test Case 2: Test FuturisticButton onClick handler', () => {
+    it('should fire onClick callback when Get Started button is clicked', () => {
+      const mockOnClick = vi.fn()
+
+      renderWithProviders(
+        <FuturisticButton onClick={mockOnClick} data-testid="test-button">
+          Test Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('test-button')
+      fireEvent.click(button)
+
+      expect(mockOnClick).toHaveBeenCalledTimes(1)
+    })
+
+    it('should fire onClick callback multiple times on multiple clicks', () => {
+      const mockOnClick = vi.fn()
+
+      renderWithProviders(
+        <FuturisticButton onClick={mockOnClick} data-testid="test-button">
+          Test Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('test-button')
+      fireEvent.click(button)
+      fireEvent.click(button)
+      fireEvent.click(button)
+
+      expect(mockOnClick).toHaveBeenCalledTimes(3)
+    })
+
+    it('should handle click event properly on homepage CTA buttons', () => {
+      renderWithProviders(<Home />)
+
+      const getStartedButton = screen.getByTestId('get-started-button')
+      expect(getStartedButton).toBeInTheDocument()
+
+      // Click should not throw any errors
+      fireEvent.click(getStartedButton)
+    })
+
+    it('should receive click event with proper event object', () => {
+      const mockOnClick = vi.fn()
+
+      renderWithProviders(
+        <FuturisticButton onClick={mockOnClick} data-testid="test-button">
+          Test Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('test-button')
+      fireEvent.click(button)
+
+      expect(mockOnClick).toHaveBeenCalledTimes(1)
+      // Verify the event object was passed
+      expect(mockOnClick.mock.calls[0][0]).toBeDefined()
+      expect(mockOnClick.mock.calls[0][0].type).toBe('click')
+    })
+  })
+
+  describe('Test Case 4: Test button with different variants (primary, secondary)', () => {
+    it('should render primary variant with btn-primary class', () => {
+      renderWithProviders(
+        <FuturisticButton variant="primary" data-testid="primary-button">
+          Primary Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('primary-button')
+      expect(button).toHaveClass('btn-primary')
+      expect(button).not.toHaveClass('btn-secondary')
+      expect(button).not.toHaveClass('btn-outline')
+    })
+
+    it('should render secondary variant with btn-secondary class', () => {
+      renderWithProviders(
+        <FuturisticButton variant="secondary" data-testid="secondary-button">
+          Secondary Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('secondary-button')
+      expect(button).toHaveClass('btn-secondary')
+      expect(button).not.toHaveClass('btn-primary')
+      expect(button).not.toHaveClass('btn-outline')
+    })
+
+    it('should render outline variant with btn-outline class', () => {
+      renderWithProviders(
+        <FuturisticButton variant="outline" data-testid="outline-button">
+          Outline Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('outline-button')
+      expect(button).toHaveClass('btn-outline')
+      expect(button).not.toHaveClass('btn-primary')
+      expect(button).not.toHaveClass('btn-secondary')
+    })
+
+    it('should default to primary variant when no variant is specified', () => {
+      renderWithProviders(
+        <FuturisticButton data-testid="default-button">
+          Default Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('default-button')
+      expect(button).toHaveClass('btn-primary')
+    })
+
+    it('should render different size variants correctly', () => {
+      const { rerender } = renderWithProviders(
+        <FuturisticButton size="sm" data-testid="size-button">
+          Small Button
+        </FuturisticButton>
+      )
+
+      let button = screen.getByTestId('size-button')
+      expect(button).toHaveClass('btn-sm')
+
+      rerender(
+        <MemoryRouter>
+          <ThemeProvider>
+            <FuturisticButton size="md" data-testid="size-button">
+              Medium Button
+            </FuturisticButton>
+          </ThemeProvider>
+        </MemoryRouter>
+      )
+
+      button = screen.getByTestId('size-button')
+      expect(button).toHaveClass('btn-md')
+
+      rerender(
+        <MemoryRouter>
+          <ThemeProvider>
+            <FuturisticButton size="lg" data-testid="size-button">
+              Large Button
+            </FuturisticButton>
+          </ThemeProvider>
+        </MemoryRouter>
+      )
+
+      button = screen.getByTestId('size-button')
+      expect(button).toHaveClass('btn-lg')
+    })
+
+    it('should accept custom className and merge with default classes', () => {
+      renderWithProviders(
+        <FuturisticButton className="custom-class" data-testid="custom-button">
+          Custom Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('custom-button')
+      expect(button).toHaveClass('custom-class')
+      // Should still have base classes
+      expect(button).toHaveClass('btn')
+      expect(button).toHaveClass('btn-primary')
+    })
+  })
+
+  describe('FuturisticButton Integration with Homepage', () => {
+    it('should use FuturisticButton for both hero section CTAs', () => {
+      renderWithProviders(<Home />)
+
+      // Both CTA buttons in hero section should use FuturisticButton styling
+      const getStartedButton = screen.getByTestId('get-started-button')
+      const signInButton = screen.getByTestId('sign-in-button')
+
+      // Verify both have base FuturisticButton classes
+      expect(getStartedButton).toHaveClass('btn')
+      expect(getStartedButton).toHaveClass('font-semibold')
+      expect(signInButton).toHaveClass('btn')
+      expect(signInButton).toHaveClass('font-semibold')
+    })
+
+    it('should have proper aria-labels for accessibility', () => {
+      renderWithProviders(<Home />)
+
+      const getStartedButton = screen.getByTestId('get-started-button')
+      const signInButton = screen.getByTestId('sign-in-button')
+
+      expect(getStartedButton).toHaveAttribute('aria-label')
+      expect(signInButton).toHaveAttribute('aria-label')
+    })
+
+    it('should render buttons within hero CTA container', () => {
+      renderWithProviders(<Home />)
+
+      const ctaContainer = screen.getByTestId('hero-cta-container')
+      const getStartedButton = screen.getByTestId('get-started-button')
+      const signInButton = screen.getByTestId('sign-in-button')
+
+      expect(ctaContainer).toContainElement(getStartedButton)
+      expect(ctaContainer).toContainElement(signInButton)
+    })
+
+    it('should distinguish primary and secondary CTA buttons', () => {
+      renderWithProviders(<Home />)
+
+      const getStartedButton = screen.getByTestId('get-started-button')
+      const signInButton = screen.getByTestId('sign-in-button')
+
+      // Get Started is primary
+      expect(getStartedButton).toHaveClass('btn-primary')
+
+      // Sign In is outline (secondary style)
+      expect(signInButton).toHaveClass('btn-outline')
+    })
+  })
+
+  describe('FuturisticButton uses Framer Motion', () => {
+    it('should render as a motion.button element', () => {
+      renderWithProviders(
+        <FuturisticButton data-testid="motion-button">
+          Motion Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('motion-button')
+      // Button should be rendered (framer-motion wraps it)
+      expect(button).toBeInTheDocument()
+      expect(button.tagName.toLowerCase()).toBe('button')
+    })
+
+    it('should be keyboard focusable', () => {
+      renderWithProviders(
+        <FuturisticButton data-testid="focus-button">
+          Focus Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('focus-button')
+      button.focus()
+
+      expect(document.activeElement).toBe(button)
+    })
+
+    it('should trigger onClick when clicked via fireEvent', () => {
+      const mockOnClick = vi.fn()
+
+      renderWithProviders(
+        <FuturisticButton onClick={mockOnClick} data-testid="keyboard-button">
+          Keyboard Button
+        </FuturisticButton>
+      )
+
+      const button = screen.getByTestId('keyboard-button')
+      button.focus()
+
+      // Use fireEvent.click which is more reliable in jsdom
+      fireEvent.click(button)
+
+      expect(mockOnClick).toHaveBeenCalled()
     })
   })
 })
