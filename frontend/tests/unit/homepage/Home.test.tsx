@@ -161,6 +161,75 @@ describe('Navigation Header', () => {
 })
 
 /**
+ * SEO and Meta Tags Tests
+ * Owner: Scenario 20 - SEO and Meta Tags
+ *
+ * Tests for SEO and meta tags to verify:
+ * - Page has a descriptive title tag
+ * - Meta description exists with meaningful content
+ * - Viewport meta tag exists with width=device-width
+ * - Open Graph meta tags exist for social sharing
+ */
+describe('SEO and Meta Tags', () => {
+  beforeEach(() => {
+    mockNavigate.mockClear()
+  })
+
+  it('document has a title containing relevant keywords like URL Shortener or brand name', () => {
+    render(<Home />)
+
+    // The document title is set in index.html and should contain URL Shortener
+    const title = document.title
+    // Check that title contains relevant keywords
+    const hasUrlShortener = /url\s*shortener/i.test(title)
+    const hasBrandKeywords = /shorten|share|track/i.test(title)
+
+    expect(hasUrlShortener || hasBrandKeywords).toBe(true)
+  })
+
+  it('meta description exists with meaningful content', () => {
+    render(<Home />)
+
+    // Query the meta description tag
+    const metaDescription = document.querySelector('meta[name="description"]')
+
+    expect(metaDescription).not.toBeNull()
+    expect(metaDescription?.getAttribute('content')).toBeTruthy()
+
+    // Check that the content is meaningful (more than just a few characters)
+    const content = metaDescription?.getAttribute('content') || ''
+    expect(content.length).toBeGreaterThan(20)
+  })
+
+  it('viewport meta tag exists with width=device-width', () => {
+    render(<Home />)
+
+    // Query the viewport meta tag
+    const metaViewport = document.querySelector('meta[name="viewport"]')
+
+    expect(metaViewport).not.toBeNull()
+
+    const content = metaViewport?.getAttribute('content') || ''
+    expect(content).toContain('width=device-width')
+  })
+
+  it('Open Graph title and description tags exist for social sharing', () => {
+    render(<Home />)
+
+    // Query Open Graph meta tags
+    const ogTitle = document.querySelector('meta[property="og:title"]')
+    const ogDescription = document.querySelector('meta[property="og:description"]')
+
+    expect(ogTitle).not.toBeNull()
+    expect(ogDescription).not.toBeNull()
+
+    // Verify they have content
+    expect(ogTitle?.getAttribute('content')).toBeTruthy()
+    expect(ogDescription?.getAttribute('content')).toBeTruthy()
+  })
+})
+
+/**
  * Accessibility - Screen Reader Compatibility Tests
  * Owner: Scenario 12 - Accessibility - Screen Reader Compatibility
  *
