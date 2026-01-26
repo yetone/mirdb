@@ -8,7 +8,7 @@
 import { useNavigate } from 'react-router-dom'
 import { BackgroundEffect } from '../components/BackgroundEffect'
 import { Navbar } from '../components/Navbar'
-import { HeroSection, FeaturesSection, HowItWorksSection } from '../components/homepage'
+import { HeroSection, FeaturesSection, HowItWorksSection, Footer } from '../components/homepage'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -29,6 +29,7 @@ export default function Home() {
         <FeaturesSection />
         <HowItWorksSection />
       </main>
+      <Footer />
     </BackgroundEffect>
   )
 }
