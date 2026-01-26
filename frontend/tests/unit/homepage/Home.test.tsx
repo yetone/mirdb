@@ -159,3 +159,115 @@ describe('Navigation Header', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/register')
   })
 })
+
+/**
+ * Accessibility - Screen Reader Compatibility Tests
+ * Owner: Scenario 12 - Accessibility - Screen Reader Compatibility
+ *
+ * Tests for screen reader accessibility to verify:
+ * - Exactly one h1 element (main headline)
+ * - Headings follow logical order (h1 > h2 > h3, no skipping)
+ * - All images have non-empty alt text or are marked decorative
+ * - Navigation uses <nav> element or role='navigation'
+ * - Main content uses <main> element or role='main'
+ */
+describe('Accessibility - Screen Reader Compatibility', () => {
+  beforeEach(() => {
+    mockNavigate.mockClear()
+  })
+
+  it('page has exactly one h1 element (main headline)', () => {
+    render(<Home />)
+
+    const h1Elements = screen.getAllByRole('heading', { level: 1 })
+    expect(h1Elements).toHaveLength(1)
+    expect(h1Elements[0]).toHaveTextContent('Shorten. Share. Track.')
+  })
+
+  it('headings follow logical order (h1 > h2 > h3, no skipping)', () => {
+    const { container } = render(<Home />)
+
+    // Get all heading elements in document order
+    const allHeadings = container.querySelectorAll('h1, h2, h3, h4, h5, h6')
+    const headingLevels = Array.from(allHeadings).map((h) =>
+      parseInt(h.tagName[1], 10)
+    )
+
+    // Verify there's at least an h1
+    expect(headingLevels[0]).toBe(1)
+
+    // Verify no heading skips more than one level
+    for (let i = 1; i < headingLevels.length; i++) {
+      const currentLevel = headingLevels[i]
+      const previousLevel = headingLevels[i - 1]
+
+      // When going deeper, should not skip levels (e.g., h1 to h3 skips h2)
+      if (currentLevel > previousLevel) {
+        expect(currentLevel - previousLevel).toBeLessThanOrEqual(1)
+      }
+      // When going up (returning to higher level), any jump is acceptable
+    }
+  })
+
+  it('all images have non-empty alt text or are marked decorative (aria-hidden)', () => {
+    const { container } = render(<Home />)
+
+    const images = container.querySelectorAll('img')
+    const svgs = container.querySelectorAll('svg')
+
+    // Check img elements have alt attributes
+    images.forEach((img) => {
+      const hasAlt = img.hasAttribute('alt')
+      const isDecorative =
+        img.getAttribute('alt') === '' ||
+        img.getAttribute('aria-hidden') === 'true' ||
+        img.getAttribute('role') === 'presentation'
+
+      expect(hasAlt || isDecorative).toBe(true)
+    })
+
+    // Check SVG icons are properly marked as decorative or have accessible labels
+    svgs.forEach((svg) => {
+      const isDecorative = svg.getAttribute('aria-hidden') === 'true'
+      const hasLabel =
+        svg.hasAttribute('aria-label') ||
+        svg.hasAttribute('aria-labelledby') ||
+        svg.getAttribute('role') === 'img'
+
+      // SVGs should either be decorative (aria-hidden) or have accessible labels
+      expect(isDecorative || hasLabel).toBe(true)
+    })
+  })
+
+  it('navigation uses <nav> element or role="navigation"', () => {
+    const { container } = render(<Home />)
+
+    // Check for nav elements
+    const navElements = container.querySelectorAll('nav')
+    const elementsWithNavRole = container.querySelectorAll('[role="navigation"]')
+
+    // There should be at least one navigation landmark
+    const totalNavLandmarks = navElements.length + elementsWithNavRole.length
+    expect(totalNavLandmarks).toBeGreaterThanOrEqual(1)
+
+    // Verify we can find navigation via role query
+    const navigations = screen.getAllByRole('navigation')
+    expect(navigations.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('main content uses <main> element or role="main"', () => {
+    const { container } = render(<Home />)
+
+    // Check for main element
+    const mainElements = container.querySelectorAll('main')
+    const elementsWithMainRole = container.querySelectorAll('[role="main"]')
+
+    // There should be exactly one main landmark
+    const totalMainLandmarks = mainElements.length + elementsWithMainRole.length
+    expect(totalMainLandmarks).toBe(1)
+
+    // Verify we can find main via role query
+    const main = screen.getByRole('main')
+    expect(main).toBeInTheDocument()
+  })
+})

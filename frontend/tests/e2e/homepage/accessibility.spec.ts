@@ -1,12 +1,13 @@
 /**
- * Accessibility E2E Tests - Keyboard Navigation
- * Owner: Scenario 11 - Accessibility - Keyboard Navigation
+ * Accessibility E2E Tests
+ * Owner: Scenario 11 - Keyboard Navigation, Scenario 12 - Screen Reader Compatibility
  *
  * E2E tests to verify:
  * - All interactive elements can be accessed using keyboard
  * - Focus indicators are visible on focused elements
  * - Buttons can be activated with Enter/Space keys
  * - Tab order is logical
+ * - Screen reader compatibility (semantic HTML, ARIA attributes, heading hierarchy)
  */
 
 import { test, expect } from '@playwright/test'
@@ -285,5 +286,160 @@ test.describe('Accessibility - Keyboard Navigation', () => {
 
     // Theme should have toggled back
     expect(finalTheme).toBe(initialTheme)
+  })
+})
+
+test.describe('Accessibility - Screen Reader Compatibility', () => {
+  let homePage: HomePage
+
+  test.beforeEach(async ({ page }) => {
+    homePage = new HomePage(page)
+    await homePage.goto()
+  })
+
+  test('page has exactly one h1 element (main headline)', async ({ page }) => {
+    const h1Elements = page.locator('h1')
+    await expect(h1Elements).toHaveCount(1)
+
+    const h1Text = await h1Elements.first().textContent()
+    expect(h1Text).toContain('Shorten. Share. Track.')
+  })
+
+  test('headings follow logical order (h1 > h2 > h3, no skipping)', async ({
+    page,
+  }) => {
+    // Get all heading elements in document order
+    const headings = await page
+      .locator('h1, h2, h3, h4, h5, h6')
+      .evaluateAll((elements) =>
+        elements.map((el) => ({
+          tag: el.tagName.toLowerCase(),
+          level: parseInt(el.tagName[1], 10),
+          text: el.textContent?.trim().substring(0, 50) || '',
+        }))
+      )
+
+    expect(headings.length).toBeGreaterThan(0)
+
+    // First heading should be h1
+    expect(headings[0].level).toBe(1)
+
+    // Verify no heading skips more than one level when going deeper
+    for (let i = 1; i < headings.length; i++) {
+      const currentLevel = headings[i].level
+      const previousLevel = headings[i - 1].level
+
+      // When going deeper (to a smaller heading), should not skip levels
+      if (currentLevel > previousLevel) {
+        expect(currentLevel - previousLevel).toBeLessThanOrEqual(1)
+      }
+    }
+  })
+
+  test('all images have non-empty alt text or are marked decorative', async ({
+    page,
+  }) => {
+    // Check img elements
+    const images = page.locator('img')
+    const imageCount = await images.count()
+
+    for (let i = 0; i < imageCount; i++) {
+      const img = images.nth(i)
+      const hasAlt = await img.evaluate(
+        (el) =>
+          el.hasAttribute('alt') ||
+          el.getAttribute('aria-hidden') === 'true' ||
+          el.getAttribute('role') === 'presentation'
+      )
+      expect(hasAlt).toBe(true)
+    }
+
+    // Check SVG icons are properly marked as decorative or have accessible labels
+    const svgs = page.locator('svg')
+    const svgCount = await svgs.count()
+
+    for (let i = 0; i < svgCount; i++) {
+      const svg = svgs.nth(i)
+      const isAccessible = await svg.evaluate(
+        (el) =>
+          el.getAttribute('aria-hidden') === 'true' ||
+          el.hasAttribute('aria-label') ||
+          el.hasAttribute('aria-labelledby') ||
+          el.getAttribute('role') === 'img'
+      )
+      expect(isAccessible).toBe(true)
+    }
+  })
+
+  test('navigation uses <nav> element or role="navigation"', async ({
+    page,
+  }) => {
+    // Check for nav elements or elements with role="navigation"
+    const navElements = page.locator('nav, [role="navigation"]')
+    const navCount = await navElements.count()
+
+    expect(navCount).toBeGreaterThanOrEqual(1)
+
+    // Verify at least one navigation landmark exists
+    const navigationLandmarks = page.getByRole('navigation')
+    await expect(navigationLandmarks.first()).toBeVisible()
+  })
+
+  test('main content uses <main> element or role="main"', async ({ page }) => {
+    // Check for main element or element with role="main"
+    const mainElements = page.locator('main, [role="main"]')
+    const mainCount = await mainElements.count()
+
+    // There should be exactly one main landmark
+    expect(mainCount).toBe(1)
+
+    // Verify main landmark is present
+    const mainLandmark = page.getByRole('main')
+    await expect(mainLandmark).toBeVisible()
+  })
+
+  test('all sections have aria-labelledby attributes', async ({ page }) => {
+    // Check that major sections have aria-labelledby for screen reader context
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toHaveAttribute('aria-labelledby', 'hero-heading')
+
+    const featuresSection = page.getByTestId('features-section')
+    await expect(featuresSection).toHaveAttribute(
+      'aria-labelledby',
+      'features-heading'
+    )
+
+    const howItWorksSection = page.getByTestId('how-it-works-section')
+    await expect(howItWorksSection).toHaveAttribute(
+      'aria-labelledby',
+      'how-it-works-heading'
+    )
+  })
+
+  test('interactive elements have accessible names', async ({ page }) => {
+    // Check Get Started button has accessible name
+    const getStartedButton = page.getByTestId('get-started-button')
+    await expect(getStartedButton).toHaveAttribute(
+      'aria-label',
+      'Get started with URL shortening for free'
+    )
+
+    // Check Sign In button has accessible name
+    const signInButton = page.getByTestId('sign-in-button')
+    await expect(signInButton).toHaveAttribute(
+      'aria-label',
+      'Sign in to your account'
+    )
+
+    // Check hamburger menu button has accessible label
+    await page.setViewportSize(viewports.mobile)
+    const hamburgerButton = page.getByTestId('hamburger-menu')
+    const hamburgerLabel = await hamburgerButton.getAttribute('aria-label')
+    expect(hamburgerLabel).toMatch(/open menu|close menu/i)
+  })
+
+  test('footer has contentinfo role', async ({ page }) => {
+    const footer = page.getByTestId('footer-section')
+    await expect(footer).toHaveAttribute('role', 'contentinfo')
   })
 })
