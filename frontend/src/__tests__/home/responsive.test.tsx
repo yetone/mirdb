@@ -343,9 +343,9 @@ describe('Responsive Design - Tablet View (768px)', () => {
       const gridContainer = container.querySelector('.grid')
       expect(gridContainer).toBeInTheDocument()
 
-      // At tablet (md breakpoint, 768px), grid should use 3 columns for the 3 steps
-      // The component uses md:grid-cols-3 for tablet and desktop
-      expect(gridContainer).toHaveClass('md:grid-cols-3')
+      // At tablet (md breakpoint, 768px), grid should use 2 columns for the 3 steps
+      // The component uses md:grid-cols-2 for tablet, lg:grid-cols-3 for desktop
+      expect(gridContainer).toHaveClass('md:grid-cols-2')
     })
 
     it('should render workflow step cards in grid layout', () => {
@@ -483,7 +483,8 @@ describe('Responsive Design - Tablet View (768px)', () => {
 
       // Should have responsive grid classes
       expect(gridContainer).toHaveClass('grid-cols-1') // mobile base
-      expect(gridContainer).toHaveClass('md:grid-cols-3') // tablet/desktop (3 columns)
+      expect(gridContainer).toHaveClass('md:grid-cols-2') // tablet (2 columns)
+      expect(gridContainer).toHaveClass('lg:grid-cols-3') // desktop (3 columns)
     })
 
     it('should maintain proper content width constraints at tablet', () => {
@@ -647,11 +648,12 @@ describe('Responsive Design - Desktop View (1280px)', () => {
   })
 
   describe('Test Case 2: Feature cards grid displays in 3-4 column layout', () => {
-    it('should display HowItWorksSection grid with md:grid-cols-3 for desktop', () => {
+    it('should display HowItWorksSection grid with lg:grid-cols-3 for desktop', () => {
       const { container } = renderWithProviders(<Home />)
 
-      // How It Works uses a grid layout that shows 3 columns on md+ screens
-      const gridContainer = container.querySelector('.grid.grid-cols-1.md\\:grid-cols-3')
+      // How It Works uses a grid layout that shows 3 columns on lg+ screens (desktop)
+      // The grid uses: grid-cols-1 (mobile) md:grid-cols-2 (tablet) lg:grid-cols-3 (desktop)
+      const gridContainer = container.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3')
       expect(gridContainer).toBeInTheDocument()
     })
 
@@ -699,10 +701,10 @@ describe('Responsive Design - Desktop View (1280px)', () => {
     it('should display workflow steps in a horizontal row on desktop via grid', () => {
       const { container } = renderWithProviders(<Home />)
 
-      // At desktop widths, the grid should use md:grid-cols-3 for horizontal layout
+      // At desktop widths (lg: breakpoint, 1024px+), the grid uses lg:grid-cols-3 for horizontal layout
       const gridContainer = container.querySelector('.grid')
       expect(gridContainer).toBeInTheDocument()
-      expect(gridContainer).toHaveClass('md:grid-cols-3')
+      expect(gridContainer).toHaveClass('lg:grid-cols-3')
     })
 
     it('should have proper spacing between workflow steps', () => {
