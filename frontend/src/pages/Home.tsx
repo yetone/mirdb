@@ -18,25 +18,23 @@
  * - React Router for navigation
  */
 import Navbar from '../components/Navbar'
-import { HeroSection, HowItWorksSection, AnalyticsPreviewSection, Footer } from '../components/home'
+import {
+  HeroSection,
+  FeaturesSection,
+  HowItWorksSection,
+  AnalyticsPreviewSection,
+  Footer,
+} from '../components/home'
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-base-200">
       <Navbar />
       <main>
-        {/* HeroSection - built by Scenario 1, BackgroundEffect integration by Scenario 13 */}
         <HeroSection />
-
-        {/* FeaturesSection placeholder - to be built by Scenario 2 */}
-
-        {/* HowItWorksSection - built by Scenario 3 */}
+        <FeaturesSection />
         <HowItWorksSection />
-
-        {/* AnalyticsPreviewSection - built by Scenario 9 */}
         <AnalyticsPreviewSection />
-
-        {/* Footer - built by Scenario 10 */}
         <Footer />
       </main>
     </div>

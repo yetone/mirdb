@@ -62,12 +62,12 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <Link to="/register">
-            <FuturisticButton variant="primary" size="lg">
+            <FuturisticButton variant="primary" size="lg" data-testid="cta-get-started">
               Get Started Free
             </FuturisticButton>
           </Link>
           <Link to="/login">
-            <FuturisticButton variant="secondary" size="lg">
+            <FuturisticButton variant="secondary" size="lg" data-testid="cta-login">
               Login
             </FuturisticButton>
           </Link>
