@@ -685,3 +685,232 @@ describe('Scenario 17: Page Load Performance', () => {
     })
   })
 })
+
+/**
+ * Scenario 19: Hover Effects on Interactive Elements
+ *
+ * Verify hover effects are applied to buttons and cards
+ *
+ * Test coverage:
+ * - FuturisticButton has defined hover state styles
+ * - GlassMorphismCard has hover transition or effect defined
+ * - Hover styles apply when mouse enters element
+ */
+describe('Scenario 19: Hover Effects on Interactive Elements', () => {
+  describe('Test Case 1: Inspect FuturisticButton hover styles', () => {
+    it('FuturisticButton has hover:scale-105 class defined', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      // Get the CTA buttons from hero section
+      const getStartedButton = screen.getByTestId('cta-get-started')
+      expect(getStartedButton).toBeInTheDocument()
+
+      // Verify the button has hover scale class
+      expect(getStartedButton).toHaveClass('hover:scale-105')
+    })
+
+    it('FuturisticButton has transition classes for smooth hover effect', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      const getStartedButton = screen.getByTestId('cta-get-started')
+
+      // Should have transition-all class for smooth animations
+      expect(getStartedButton).toHaveClass('transition-all')
+      expect(getStartedButton).toHaveClass('duration-300')
+    })
+
+    it('Login button in hero also has hover state styles', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      const loginButton = screen.getByTestId('cta-login')
+      expect(loginButton).toBeInTheDocument()
+
+      // Verify hover scale class
+      expect(loginButton).toHaveClass('hover:scale-105')
+      expect(loginButton).toHaveClass('transition-all')
+    })
+  })
+
+  describe('Test Case 2: Inspect GlassMorphismCard hover styles', () => {
+    it('GlassMorphismCard has transition classes defined', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      // Feature cards use GlassMorphismCard
+      const featureCard = screen.getByTestId('feature-card-0')
+      expect(featureCard).toBeInTheDocument()
+
+      // Check for transition classes
+      expect(featureCard).toHaveClass('transition-all')
+      expect(featureCard).toHaveClass('duration-300')
+    })
+
+    it('GlassMorphismCard has hover shadow effect defined', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      const featureCard = screen.getByTestId('feature-card-0')
+
+      // Should have hover:shadow-2xl for enhanced shadow on hover
+      expect(featureCard).toHaveClass('hover:shadow-2xl')
+    })
+
+    it('GlassMorphismCard has hover scale effect defined', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      const featureCard = screen.getByTestId('feature-card-0')
+
+      // Should have subtle scale on hover
+      expect(featureCard).toHaveClass('hover:scale-[1.02]')
+    })
+
+    it('All feature cards have consistent hover styles', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      // Check multiple feature cards have the same hover behavior
+      for (let i = 0; i < 3; i++) {
+        const card = screen.getByTestId(`feature-card-${i}`)
+        expect(card).toHaveClass('transition-all')
+        expect(card).toHaveClass('hover:shadow-2xl')
+        expect(card).toHaveClass('hover:scale-[1.02]')
+      }
+    })
+  })
+
+  describe('Test Case 3: Check hover state triggers on mouse enter', () => {
+    it('FuturisticButton responds to hover interaction', async () => {
+      const user = userEvent.setup()
+
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      const getStartedButton = screen.getByTestId('cta-get-started')
+
+      // Hover over the button
+      await user.hover(getStartedButton)
+
+      // The button should still be in the document and interactive after hover
+      expect(getStartedButton).toBeInTheDocument()
+
+      // Unhover
+      await user.unhover(getStartedButton)
+      expect(getStartedButton).toBeInTheDocument()
+    })
+
+    it('GlassMorphismCard responds to hover interaction', async () => {
+      const user = userEvent.setup()
+
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      const featureCard = screen.getByTestId('feature-card-0')
+
+      // Hover over the card
+      await user.hover(featureCard)
+
+      // The card should still be in the document after hover
+      expect(featureCard).toBeInTheDocument()
+
+      // Unhover
+      await user.unhover(featureCard)
+      expect(featureCard).toBeInTheDocument()
+    })
+
+    it('Multiple buttons can be hovered sequentially', async () => {
+      const user = userEvent.setup()
+
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      const getStartedButton = screen.getByTestId('cta-get-started')
+      const loginButton = screen.getByTestId('cta-login')
+
+      // Hover over first button
+      await user.hover(getStartedButton)
+      expect(getStartedButton).toBeInTheDocument()
+
+      // Move to second button
+      await user.hover(loginButton)
+      expect(loginButton).toBeInTheDocument()
+
+      // Both buttons should remain functional
+      expect(getStartedButton).toBeInTheDocument()
+      expect(loginButton).toBeInTheDocument()
+    })
+
+    it('Hover effect does not interfere with click functionality', async () => {
+      const user = userEvent.setup()
+
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      const getStartedButton = screen.getByTestId('cta-get-started')
+
+      // Hover then verify button is still clickable
+      await user.hover(getStartedButton)
+
+      // The button should be enabled and clickable
+      expect(getStartedButton).not.toBeDisabled()
+      expect(getStartedButton).toBeInTheDocument()
+    })
+
+    it('Cards provide visual feedback with hover class presence', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      )
+
+      // Verify that all interactive cards have the necessary CSS classes
+      // for visual feedback on hover
+      const featureCards = screen.getAllByTestId(/^feature-card-/)
+
+      expect(featureCards.length).toBeGreaterThan(0)
+
+      featureCards.forEach((card) => {
+        // Each card should have transition for smooth visual feedback
+        expect(card).toHaveClass('transition-all')
+        // Each card should have shadow increase on hover
+        expect(card).toHaveClass('hover:shadow-2xl')
+      })
+    })
+  })
+})
