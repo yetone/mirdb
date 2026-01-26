@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FuturisticButton } from './FuturisticButton'
+import { ThemeToggle } from './ThemeToggle'
 
 interface NavbarProps {
   onGetStarted?: () => void
@@ -37,8 +38,9 @@ export function Navbar({ onGetStarted, onSignIn }: NavbarProps) {
           </a>
         </div>
 
-        {/* Desktop Auth Buttons */}
+        {/* Desktop Auth Buttons and Theme Toggle */}
         <div className="hidden md:flex items-center gap-2 ml-4">
+          <ThemeToggle />
           <FuturisticButton
             variant="outline"
             size="sm"
@@ -118,6 +120,11 @@ export function Navbar({ onGetStarted, onSignIn }: NavbarProps) {
             >
               How It Works
             </a>
+            <div className="divider my-2"></div>
+            <div className="flex items-center justify-between px-2">
+              <span className="text-sm">Theme</span>
+              <ThemeToggle />
+            </div>
             <div className="divider my-2"></div>
             <FuturisticButton
               variant="outline"

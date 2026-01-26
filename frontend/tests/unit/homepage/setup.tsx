@@ -17,6 +17,7 @@ window.IntersectionObserver = mockIntersectionObserver
 import { ReactElement, ReactNode } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from '../../../src/contexts/ThemeContext'
 import '@testing-library/jest-dom'
 
 interface WrapperProps {
@@ -24,7 +25,11 @@ interface WrapperProps {
 }
 
 function AllTheProviders({ children }: WrapperProps) {
-  return <BrowserRouter>{children}</BrowserRouter>
+  return (
+    <BrowserRouter>
+      <ThemeProvider>{children}</ThemeProvider>
+    </BrowserRouter>
+  )
 }
 
 function customRender(

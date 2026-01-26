@@ -62,8 +62,11 @@ describe('Home Page', () => {
   it('renders the navbar component', () => {
     render(<Home />)
 
-    const navbar = screen.getByRole('navigation')
-    expect(navbar).toBeInTheDocument()
+    // Use getAllByRole since there are multiple navigation elements (navbar and footer)
+    const navElements = screen.getAllByRole('navigation')
+    expect(navElements.length).toBeGreaterThanOrEqual(1)
+    // The first navigation element should be the navbar
+    expect(navElements[0]).toHaveClass('navbar')
   })
 
   it('has the main content area', () => {
@@ -92,8 +95,11 @@ describe('Navigation Header', () => {
   it('renders navigation header in the DOM', () => {
     render(<Home />)
 
-    const navbar = screen.getByRole('navigation')
-    expect(navbar).toBeInTheDocument()
+    // Use getAllByRole since there are multiple navigation elements (navbar and footer)
+    const navElements = screen.getAllByRole('navigation')
+    expect(navElements.length).toBeGreaterThanOrEqual(1)
+    // The first navigation element should be the navbar
+    expect(navElements[0]).toHaveClass('navbar')
   })
 
   it('displays logo/brand element', () => {
