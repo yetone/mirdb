@@ -22,7 +22,7 @@ import { render, screen, fireEvent, waitFor, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { Navbar } from '../../src/components/Navbar'
-import { ThemeProvider, type ThemeName } from '../../src/contexts/ThemeContext'
+import { ThemeProvider, type Theme } from '../../src/contexts/ThemeContext'
 import { Home } from '../../src/pages/Home'
 
 // Mock framer-motion to avoid animation issues in tests
@@ -48,7 +48,7 @@ vi.mock('framer-motion', () => ({
 
 // Helper to wrap components with required providers
 function TestProviders({ children }: { children: React.ReactNode }) {
-  return <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
+  return <ThemeProvider initialTheme="light">{children}</ThemeProvider>
 }
 
 // Mock pages for route testing
@@ -353,11 +353,11 @@ describe('Home Page - Navbar Component', () => {
  */
 
 // Helper to render Home page with all required providers
-function renderHomePage(options: { defaultTheme?: ThemeName } = {}) {
-  const { defaultTheme = 'light' } = options
+function renderHomePage(options: { initialTheme?: Theme } = {}) {
+  const { initialTheme = 'light' } = options
   return render(
     <MemoryRouter initialEntries={['/']}>
-      <ThemeProvider defaultTheme={defaultTheme}>
+      <ThemeProvider initialTheme={initialTheme}>
         <Home />
       </ThemeProvider>
     </MemoryRouter>
@@ -382,7 +382,7 @@ function renderWithRouting() {
 
   return render(
     <MemoryRouter initialEntries={['/']}>
-      <ThemeProvider defaultTheme="light">
+      <ThemeProvider initialTheme="light">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<MockLoginPage />} />
@@ -605,13 +605,13 @@ describe('Homepage Integration - Scenario 8', () => {
    */
   describe('TC6: ThemeContext Integration', () => {
     it('should apply light theme by default', () => {
-      renderHomePage({ defaultTheme: 'light' })
+      renderHomePage({ initialTheme: 'light' })
 
       expect(document.documentElement.getAttribute('data-theme')).toBe('light')
     })
 
     it('should apply dark theme when specified', () => {
-      renderHomePage({ defaultTheme: 'dark' })
+      renderHomePage({ initialTheme: 'dark' })
 
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
     })
@@ -625,7 +625,7 @@ describe('Homepage Integration - Scenario 8', () => {
 
     it('should change theme when toggle is clicked', async () => {
       const user = userEvent.setup()
-      renderHomePage({ defaultTheme: 'light' })
+      renderHomePage({ initialTheme: 'light' })
 
       expect(document.documentElement.getAttribute('data-theme')).toBe('light')
 
@@ -641,7 +641,7 @@ describe('Homepage Integration - Scenario 8', () => {
 
     it('should maintain page content visibility across theme changes', async () => {
       const user = userEvent.setup()
-      renderHomePage({ defaultTheme: 'light' })
+      renderHomePage({ initialTheme: 'light' })
 
       // Verify content before theme change
       expect(screen.getByTestId('hero-section')).toBeInTheDocument()
