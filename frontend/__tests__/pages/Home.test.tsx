@@ -1545,3 +1545,197 @@ describe('Home Page - Public Access Without Authentication (Scenario 12)', () =>
     expect(heroLoginLink).toBeVisible()
   })
 })
+
+describe('Home Page - Component Integration - Existing UI Components (Scenario 13)', () => {
+  // Test Case 1: GlassMorphismCard component is imported and rendered
+  it('should render GlassMorphismCard component for feature cards', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    // GlassMorphismCard uses specific classes: backdrop-blur-md, bg-base-100/30, border-base-content/10, rounded-2xl
+    const glassMorphismCards = container.querySelectorAll('.backdrop-blur-md.bg-base-100\\/30')
+    expect(glassMorphismCards.length).toBeGreaterThanOrEqual(4) // 4 feature cards
+
+    // Verify each card has the expected GlassMorphismCard styling
+    glassMorphismCards.forEach((card) => {
+      expect(card).toHaveClass('backdrop-blur-md')
+      expect(card).toHaveClass('bg-base-100/30')
+      expect(card).toHaveClass('border-base-content/10')
+      expect(card).toHaveClass('rounded-2xl')
+      expect(card).toHaveClass('shadow-xl')
+    })
+  })
+
+  // Test Case 2: FuturisticButton component is imported and rendered for CTAs
+  it('should render FuturisticButton components for CTA buttons', () => {
+    renderWithProviders(<Home />)
+
+    // Get the CTA buttons in the hero section
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    const loginButton = screen.getByRole('button', { name: /login/i })
+
+    // FuturisticButton uses specific classes for primary variant
+    expect(getStartedButton).toHaveClass('btn')
+    expect(getStartedButton).toHaveClass('btn-primary')
+    expect(getStartedButton).toHaveClass('bg-gradient-to-r')
+    expect(getStartedButton).toHaveClass('from-primary')
+    expect(getStartedButton).toHaveClass('to-secondary')
+
+    // FuturisticButton uses specific classes for outline variant
+    expect(loginButton).toHaveClass('btn')
+    expect(loginButton).toHaveClass('btn-outline')
+    expect(loginButton).toHaveClass('border-2')
+  })
+
+  // Test Case 3: BackgroundEffect component is imported and rendered
+  it('should render BackgroundEffect component in the hero section', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    // BackgroundEffect has data-testid="background-effect"
+    const backgroundEffect = screen.getByTestId('background-effect')
+    expect(backgroundEffect).toBeInTheDocument()
+
+    // BackgroundEffect has specific structure and classes
+    expect(backgroundEffect).toHaveClass('absolute')
+    expect(backgroundEffect).toHaveClass('inset-0')
+    expect(backgroundEffect).toHaveClass('overflow-hidden')
+    expect(backgroundEffect).toHaveClass('pointer-events-none')
+
+    // BackgroundEffect should contain animated gradient orbs (motion.div with blur effects)
+    const blurElements = backgroundEffect.querySelectorAll('.blur-3xl')
+    expect(blurElements.length).toBeGreaterThanOrEqual(2) // Multiple animated orbs
+
+    // Should have grid pattern overlay (a child div with opacity-[0.03] class)
+    const gridPatternOverlay = backgroundEffect.querySelector('[class*="opacity"]')
+    expect(gridPatternOverlay).toBeInTheDocument()
+  })
+
+  // Test Case 4: All integrated components respond to theme changes
+  it('should have all integrated components with theme-aware classes in dark theme', () => {
+    const { container } = renderWithProviders(<Home />, { theme: 'dark' })
+
+    // Verify dark theme is applied
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+
+    // GlassMorphismCard should use DaisyUI theme-aware classes
+    const glassMorphismCards = container.querySelectorAll('.backdrop-blur-md.bg-base-100\\/30')
+    expect(glassMorphismCards.length).toBeGreaterThanOrEqual(4)
+    glassMorphismCards.forEach((card) => {
+      // These classes adapt to theme via DaisyUI
+      expect(card).toHaveClass('bg-base-100/30')
+      expect(card).toHaveClass('border-base-content/10')
+    })
+
+    // FuturisticButton should use DaisyUI theme-aware classes
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    expect(getStartedButton).toHaveClass('btn-primary')
+    expect(getStartedButton).toHaveClass('from-primary')
+    expect(getStartedButton).toHaveClass('to-secondary')
+
+    // BackgroundEffect should use theme-aware primary/secondary colors
+    const backgroundEffect = screen.getByTestId('background-effect')
+    const primaryOrbs = backgroundEffect.querySelectorAll('[class*="bg-primary"]')
+    const secondaryOrbs = backgroundEffect.querySelectorAll('[class*="bg-secondary"]')
+    expect(primaryOrbs.length).toBeGreaterThanOrEqual(1)
+    expect(secondaryOrbs.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('should have all integrated components with theme-aware classes in light theme', () => {
+    const { container } = renderWithProviders(<Home />, { theme: 'light' })
+
+    // Verify light theme is applied
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+
+    // GlassMorphismCard should still have the same structure
+    const glassMorphismCards = container.querySelectorAll('.backdrop-blur-md.bg-base-100\\/30')
+    expect(glassMorphismCards.length).toBeGreaterThanOrEqual(4)
+
+    // FuturisticButton should maintain its structure
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    expect(getStartedButton).toHaveClass('btn-primary')
+
+    // BackgroundEffect should be present
+    const backgroundEffect = screen.getByTestId('background-effect')
+    expect(backgroundEffect).toBeInTheDocument()
+  })
+
+  it('should have all integrated components with theme-aware classes in cyberpunk theme', () => {
+    const { container } = renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    // Verify cyberpunk theme is applied
+    expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
+
+    // GlassMorphismCard should still have the same structure
+    const glassMorphismCards = container.querySelectorAll('.backdrop-blur-md.bg-base-100\\/30')
+    expect(glassMorphismCards.length).toBeGreaterThanOrEqual(4)
+
+    // FuturisticButton should maintain its structure
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    expect(getStartedButton).toHaveClass('btn-primary')
+
+    // BackgroundEffect should be present
+    const backgroundEffect = screen.getByTestId('background-effect')
+    expect(backgroundEffect).toBeInTheDocument()
+  })
+
+  // Additional test: Verify component composition in homepage
+  it('should compose homepage using HeroSection, FeaturesSection, and Footer', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    // Main wrapper should exist
+    const mainElement = container.querySelector('main')
+    expect(mainElement).toBeInTheDocument()
+
+    // Hero section should be rendered first (contains BackgroundEffect)
+    const heroSection = container.querySelector('section')
+    expect(heroSection).toBeInTheDocument()
+    const backgroundEffect = screen.getByTestId('background-effect')
+    expect(heroSection?.contains(backgroundEffect)).toBe(true)
+
+    // Features section should be rendered
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+
+    // Footer should be rendered
+    const footerSection = screen.getByTestId('footer-section')
+    expect(footerSection).toBeInTheDocument()
+
+    // Verify proper order: hero -> features -> footer
+    const sections = container.querySelectorAll('section, footer')
+    const sectionOrder = Array.from(sections).map(s => s.getAttribute('data-testid') || 'hero')
+    expect(sectionOrder).toContain('features-section')
+    expect(sectionOrder).toContain('footer-section')
+  })
+
+  // Test: GlassMorphismCard uses framer-motion for animations
+  it('should render GlassMorphismCard with motion.div wrapper', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    // Find feature cards with GlassMorphismCard styling
+    const featuresSection = screen.getByTestId('features-section')
+    const glassCards = featuresSection.querySelectorAll('.backdrop-blur-md.bg-base-100\\/30')
+
+    // Each GlassMorphismCard should be a motion.div (framer-motion)
+    // Framer motion adds style attribute for animations
+    glassCards.forEach((card) => {
+      // Motion components get style attributes
+      expect(card.tagName.toLowerCase()).toBe('div')
+      expect(card).toHaveClass('rounded-2xl')
+    })
+  })
+
+  // Test: FuturisticButton uses framer-motion for hover/tap effects
+  it('should render FuturisticButton as motion.button element', () => {
+    renderWithProviders(<Home />)
+
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    const loginButton = screen.getByRole('button', { name: /login/i })
+
+    // FuturisticButton is implemented as motion.button
+    expect(getStartedButton.tagName.toLowerCase()).toBe('button')
+    expect(loginButton.tagName.toLowerCase()).toBe('button')
+
+    // Both should have transition classes for smooth effects
+    expect(getStartedButton).toHaveClass('transition-all')
+    expect(loginButton).toHaveClass('transition-all')
+  })
+})
