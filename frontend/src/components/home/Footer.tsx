@@ -58,7 +58,7 @@ export function Footer() {
                   <Link
                     to={link.href}
                     className="text-base-content/70 hover:text-primary transition-colors text-sm"
-                    data-testid={`footer-link-${link.label.toLowerCase().replace(' ', '-')}`}
+                    data-testid={`footer-link-${link.label.toLowerCase().replaceAll(' ', '-')}`}
                   >
                     {link.label}
                   </Link>
@@ -78,7 +78,7 @@ export function Footer() {
                   <Link
                     to={link.href}
                     className="text-base-content/70 hover:text-primary transition-colors text-sm"
-                    data-testid={`footer-link-${link.label.toLowerCase().replace(' ', '-')}`}
+                    data-testid={`footer-link-${link.label.toLowerCase().replaceAll(' ', '-')}`}
                   >
                     {link.label}
                   </Link>

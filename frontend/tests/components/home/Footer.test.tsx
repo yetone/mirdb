@@ -51,7 +51,7 @@ describe('Footer', () => {
       </TestWrapper>
     )
 
-    const homeLink = screen.getByTestId('footer-nav-home')
+    const homeLink = screen.getByTestId('footer-link-home')
     expect(homeLink).toBeInTheDocument()
     expect(homeLink).toHaveTextContent('Home')
     expect(homeLink).toHaveAttribute('href', '/')
@@ -65,7 +65,7 @@ describe('Footer', () => {
       </TestWrapper>
     )
 
-    const dashboardLink = screen.getByTestId('footer-nav-dashboard')
+    const dashboardLink = screen.getByTestId('footer-link-dashboard')
     expect(dashboardLink).toBeInTheDocument()
     expect(dashboardLink).toHaveTextContent('Dashboard')
     expect(dashboardLink).toHaveAttribute('href', '/dashboard')
@@ -79,7 +79,7 @@ describe('Footer', () => {
       </TestWrapper>
     )
 
-    const loginLink = screen.getByTestId('footer-nav-login')
+    const loginLink = screen.getByTestId('footer-link-login')
     expect(loginLink).toBeInTheDocument()
     expect(loginLink).toHaveTextContent('Login')
     expect(loginLink).toHaveAttribute('href', '/login')
@@ -93,7 +93,7 @@ describe('Footer', () => {
       </TestWrapper>
     )
 
-    const registerLink = screen.getByTestId('footer-nav-register')
+    const registerLink = screen.getByTestId('footer-link-register')
     expect(registerLink).toBeInTheDocument()
     expect(registerLink).toHaveTextContent('Register')
     expect(registerLink).toHaveAttribute('href', '/register')
@@ -107,7 +107,7 @@ describe('Footer', () => {
       </TestWrapper>
     )
 
-    const privacyLink = screen.getByTestId('footer-legal-privacy-policy')
+    const privacyLink = screen.getByTestId('footer-link-privacy-policy')
     expect(privacyLink).toBeInTheDocument()
     expect(privacyLink).toHaveTextContent('Privacy Policy')
     expect(privacyLink).toHaveAttribute('href', '/privacy')
@@ -121,7 +121,7 @@ describe('Footer', () => {
       </TestWrapper>
     )
 
-    const termsLink = screen.getByTestId('footer-legal-terms-of-service')
+    const termsLink = screen.getByTestId('footer-link-terms-of-service')
     expect(termsLink).toBeInTheDocument()
     expect(termsLink).toHaveTextContent('Terms of Service')
     expect(termsLink).toHaveAttribute('href', '/terms')
@@ -152,7 +152,7 @@ describe('Footer', () => {
       </TestWrapperWithMemoryRouter>
     )
 
-    const privacyLink = screen.getByTestId('footer-legal-privacy-policy')
+    const privacyLink = screen.getByTestId('footer-link-privacy-policy')
     fireEvent.click(privacyLink)
 
     const locationDisplay = screen.getByTestId('location-display')
@@ -167,7 +167,7 @@ describe('Footer', () => {
       </TestWrapperWithMemoryRouter>
     )
 
-    const termsLink = screen.getByTestId('footer-legal-terms-of-service')
+    const termsLink = screen.getByTestId('footer-link-terms-of-service')
     fireEvent.click(termsLink)
 
     const locationDisplay = screen.getByTestId('location-display')
@@ -204,10 +204,10 @@ describe('Footer', () => {
 
   // Additional test: All navigation links are functional
   it.each([
-    { testId: 'footer-nav-home', path: '/' },
-    { testId: 'footer-nav-dashboard', path: '/dashboard' },
-    { testId: 'footer-nav-login', path: '/login' },
-    { testId: 'footer-nav-register', path: '/register' },
+    { testId: 'footer-link-home', path: '/' },
+    { testId: 'footer-link-dashboard', path: '/dashboard' },
+    { testId: 'footer-link-login', path: '/login' },
+    { testId: 'footer-link-register', path: '/register' },
   ])('navigates correctly to $path when clicking $testId', ({ testId, path }) => {
     render(
       <TestWrapperWithMemoryRouter initialEntries={['/test']}>
