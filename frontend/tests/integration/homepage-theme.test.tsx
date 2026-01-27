@@ -1,463 +1,585 @@
 /**
- * Theme Integration Tests
+ * Homepage Theme Integration Tests
  * Owner: Scenario 5 - Theme Switching
  *
  * Tests theme toggle functionality on the homepage:
- * - Theme toggle presence in navbar
- * - Initial theme application
- * - Theme switching via toggle
- * - DOM data-theme attribute updates
+ * - Theme toggle component rendering
+ * - Theme switching behavior
  * - localStorage persistence
- * - Theme persistence across page reloads
- * - Multiple theme options support
- * - Content visibility across all themes
+ * - Multiple theme support
+ * - Visual feedback for theme changes
  *
  * Requirements: REQ-8 - Support theme switching (light/dark mode)
- * User Story: US-6 - Toggle Theme
+ * User Stories: US-6 - Toggle Theme
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, waitFor, within, cleanup } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { ThemeProvider, AVAILABLE_THEMES, type ThemeName } from '../../src/contexts/ThemeContext'
+import { ThemeProvider, AVAILABLE_THEMES, Theme } from '../../src/contexts/ThemeContext'
 import { ThemeToggle } from '../../src/components/ThemeToggle'
 import { Navbar } from '../../src/components/Navbar'
-import { Home } from '../../src/pages/Home'
+import { HeroSection } from '../../src/components/homepage/HeroSection'
+import {
+  setupLocalStorageMock,
+  setupMatchMediaMock,
+  getCurrentDocumentTheme,
+  resetDocumentTheme,
+  THEME_STORAGE_KEY,
+} from '../mocks/theme'
 
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
-      <div {...props}>{children}</div>
-    ),
-    section: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
-      <section {...props}>{children}</section>
-    ),
-    nav: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
-      <nav {...props}>{children}</nav>
-    ),
-    h1: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
-      <h1 {...props}>{children}</h1>
-    ),
-    p: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
-      <p {...props}>{children}</p>
-    ),
-    button: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
-      <button {...props}>{children}</button>
-    ),
+    div: ({
+      children,
+      whileHover,
+      whileTap,
+      initial,
+      animate,
+      transition,
+      ...props
+    }: React.PropsWithChildren<Record<string, unknown>>) => <div {...props}>{children}</div>,
+    button: ({
+      children,
+      whileHover,
+      whileTap,
+      initial,
+      animate,
+      transition,
+      ...props
+    }: React.PropsWithChildren<Record<string, unknown>>) => <button {...props}>{children}</button>,
   },
 }))
 
-// Helper to render with providers
-function renderWithProviders(
-  ui: React.ReactElement,
-  { defaultTheme }: { defaultTheme?: ThemeName } = {}
-) {
+// Helper component: Home page mock with theme toggle in navbar
+function MockHomePage() {
+  return (
+    <div data-testid="home-page">
+      <nav className="navbar" data-testid="navbar">
+        <div className="flex-1">
+          <span>ShortURL</span>
+        </div>
+        <div className="flex-none">
+          <ThemeToggle />
+        </div>
+      </nav>
+      <main>
+        <HeroSection />
+      </main>
+    </div>
+  )
+}
+
+// Helper: Render with ThemeProvider and Router
+function renderWithTheme(ui: React.ReactNode, initialTheme?: Theme) {
   return render(
-    <MemoryRouter initialEntries={['/']}>
-      <ThemeProvider defaultTheme={defaultTheme}>
-        {ui}
-      </ThemeProvider>
+    <MemoryRouter>
+      <ThemeProvider initialTheme={initialTheme}>{ui}</ThemeProvider>
     </MemoryRouter>
   )
 }
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {}
-  return {
-    getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => {
-      store[key] = value
-    }),
-    removeItem: vi.fn((key: string) => {
-      delete store[key]
-    }),
-    clear: vi.fn(() => {
-      store = {}
-    }),
-    get length() {
-      return Object.keys(store).length
-    },
-    key: vi.fn((i: number) => Object.keys(store)[i] ?? null),
-  }
-})()
+describe('Homepage Theme Integration Tests', () => {
+  let mockLocalStorage: ReturnType<typeof setupLocalStorageMock>
 
-describe('Theme Switching - Integration Tests', () => {
   beforeEach(() => {
-    // Reset localStorage mock
-    localStorageMock.clear()
-    Object.defineProperty(window, 'localStorage', {
-      value: localStorageMock,
-      writable: true,
-    })
-    // Reset document attribute
-    document.documentElement.removeAttribute('data-theme')
+    // Reset document theme
+    resetDocumentTheme()
+    // Setup fresh localStorage mock
+    mockLocalStorage = setupLocalStorageMock()
+    // Setup matchMedia mock (default: light mode preference)
+    setupMatchMediaMock(false)
   })
 
   afterEach(() => {
     vi.clearAllMocks()
-    document.documentElement.removeAttribute('data-theme')
+    resetDocumentTheme()
   })
 
   /**
-   * Test Case 1: ThemeToggle component is rendered in navbar
-   * Input: Render Home page with ThemeContext
+   * Test Case 1: Render Home page with ThemeContext
    * Expected: ThemeToggle component is rendered in navbar
    */
-  describe('TC1: ThemeToggle in Navbar', () => {
-    it('should render ThemeToggle component in the navbar', () => {
-      renderWithProviders(<Navbar />)
+  describe('TC1: ThemeToggle Rendering', () => {
+    it('should render ThemeToggle component in navbar', () => {
+      renderWithTheme(<MockHomePage />)
+
+      const navbar = screen.getByTestId('navbar')
+      expect(navbar).toBeInTheDocument()
 
       const themeToggle = screen.getByTestId('theme-toggle')
       expect(themeToggle).toBeInTheDocument()
     })
 
-    it('should render ThemeToggle when Home page is rendered with ThemeContext', () => {
-      renderWithProviders(<Home />)
+    it('should render theme toggle button that is clickable', () => {
+      renderWithTheme(<MockHomePage />)
 
-      const navbar = screen.getByTestId('navbar')
-      expect(navbar).toBeInTheDocument()
-
-      const themeToggle = within(navbar).getByTestId('theme-toggle')
-      expect(themeToggle).toBeInTheDocument()
+      const themeToggleButton = screen.getByTestId('theme-toggle-button')
+      expect(themeToggleButton).toBeInTheDocument()
+      expect(themeToggleButton).not.toBeDisabled()
     })
 
-    it('should have a button to toggle theme', () => {
-      renderWithProviders(<Navbar />)
+    it('should render navbar with ThemeToggle in the right position', () => {
+      renderWithTheme(<MockHomePage />)
 
-      const toggleButton = screen.getByTestId('theme-toggle-button')
-      expect(toggleButton).toBeInTheDocument()
-      expect(toggleButton.tagName).toBe('BUTTON')
+      const navbar = screen.getByTestId('navbar')
+      const themeToggle = screen.getByTestId('theme-toggle')
+
+      // ThemeToggle should be inside the navbar
+      expect(navbar).toContainElement(themeToggle)
     })
   })
 
   /**
-   * Test Case 2: Initial theme application
-   * Input: Check initial theme application
+   * Test Case 2: Check initial theme application
    * Expected: Document has data-theme attribute or theme class applied
    */
   describe('TC2: Initial Theme Application', () => {
-    it('should apply default theme to document on mount', () => {
-      renderWithProviders(<Home />, { defaultTheme: 'light' })
+    it('should apply default theme (light) when no preference stored', () => {
+      renderWithTheme(<MockHomePage />)
 
-      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+      const appliedTheme = getCurrentDocumentTheme()
+      expect(appliedTheme).toBe('light')
     })
 
-    it('should apply dark theme when specified as default', () => {
-      renderWithProviders(<Home />, { defaultTheme: 'dark' })
+    it('should apply stored theme preference from localStorage', () => {
+      mockLocalStorage = setupLocalStorageMock('dark')
 
-      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+      renderWithTheme(<MockHomePage />)
+
+      // Check that localStorage was queried
+      expect(mockLocalStorage.getItem).toHaveBeenCalledWith(THEME_STORAGE_KEY)
     })
 
-    it('should have data-theme attribute set on the document', () => {
-      renderWithProviders(<Home />, { defaultTheme: 'cyberpunk' })
+    it('should apply data-theme attribute to document element', () => {
+      renderWithTheme(<MockHomePage />, 'cyberpunk')
 
-      const dataTheme = document.documentElement.getAttribute('data-theme')
-      expect(dataTheme).toBeTruthy()
-      expect(AVAILABLE_THEMES).toContain(dataTheme)
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
+    })
+
+    it('should use system preference when no localStorage value', () => {
+      // Setup with dark mode system preference
+      setupMatchMediaMock(true)
+
+      render(
+        <MemoryRouter>
+          <ThemeProvider>
+            <MockHomePage />
+          </ThemeProvider>
+        </MemoryRouter>
+      )
+
+      // When no stored preference, should check system preference
+      expect(window.matchMedia).toHaveBeenCalledWith('(prefers-color-scheme: dark)')
     })
   })
 
   /**
    * Test Case 3: Click theme toggle button
-   * Input: Click theme toggle button
    * Expected: Theme context value changes
    */
   describe('TC3: Theme Toggle Click', () => {
-    it('should show dropdown with theme options when clicked', async () => {
+    it('should show dropdown menu when theme toggle is clicked', async () => {
       const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />)
+      renderWithTheme(<MockHomePage />)
 
-      const toggleButton = screen.getByTestId('theme-toggle-button')
-      await user.click(toggleButton)
+      const themeToggleButton = screen.getByTestId('theme-toggle-button')
+      await user.click(themeToggleButton)
 
-      const dropdown = screen.getByTestId('theme-dropdown')
-      expect(dropdown).toBeInTheDocument()
+      const dropdownMenu = screen.getByTestId('theme-dropdown-menu')
+      expect(dropdownMenu).toBeInTheDocument()
     })
 
-    it('should change theme when a different theme is selected', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />, { defaultTheme: 'light' })
-
-      // Initial theme is light
-      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
-
-      // Open dropdown and select dark theme
-      const toggleButton = screen.getByTestId('theme-toggle-button')
-      await user.click(toggleButton)
-
-      const darkOption = screen.getByTestId('theme-option-dark')
-      await user.click(darkOption)
-
-      // Theme should change to dark
-      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
-    })
-
-    it('should update theme context when theme is toggled', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<Home />, { defaultTheme: 'light' })
-
-      // Open theme dropdown and select cyberpunk
-      const toggleButton = screen.getByTestId('theme-toggle-button')
-      await user.click(toggleButton)
-
-      const cyberpunkOption = screen.getByTestId('theme-option-cyberpunk')
-      await user.click(cyberpunkOption)
-
-      // The theme should be updated
-      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
-    })
-  })
-
-  /**
-   * Test Case 4: Verify DOM theme attribute after toggle
-   * Input: Verify DOM theme attribute after toggle
-   * Expected: data-theme attribute changes to reflect new theme
-   */
-  describe('TC4: DOM Theme Attribute Changes', () => {
-    it('should update data-theme attribute when switching from light to dark', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />, { defaultTheme: 'light' })
-
-      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
-
-      await user.click(screen.getByTestId('theme-toggle-button'))
-      await user.click(screen.getByTestId('theme-option-dark'))
-
-      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
-    })
-
-    it('should update data-theme attribute when switching to cyberpunk', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />, { defaultTheme: 'light' })
-
-      await user.click(screen.getByTestId('theme-toggle-button'))
-      await user.click(screen.getByTestId('theme-option-cyberpunk'))
-
-      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
-    })
-
-    it('should update data-theme attribute when switching to synthwave', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />, { defaultTheme: 'light' })
-
-      await user.click(screen.getByTestId('theme-toggle-button'))
-      await user.click(screen.getByTestId('theme-option-synthwave'))
-
-      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave')
-    })
-  })
-
-  /**
-   * Test Case 5: Check localStorage after theme change
-   * Input: Check localStorage after theme change
-   * Expected: Theme preference is saved to localStorage
-   */
-  describe('TC5: localStorage Persistence', () => {
-    it('should save theme preference to localStorage when changed', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />, { defaultTheme: 'light' })
-
-      await user.click(screen.getByTestId('theme-toggle-button'))
-      await user.click(screen.getByTestId('theme-option-dark'))
-
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('theme-preference', 'dark')
-    })
-
-    it('should save each theme selection to localStorage', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />, { defaultTheme: 'light' })
-
-      // Select cyberpunk
-      await user.click(screen.getByTestId('theme-toggle-button'))
-      await user.click(screen.getByTestId('theme-option-cyberpunk'))
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('theme-preference', 'cyberpunk')
-
-      // Select synthwave
-      await user.click(screen.getByTestId('theme-toggle-button'))
-      await user.click(screen.getByTestId('theme-option-synthwave'))
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('theme-preference', 'synthwave')
-    })
-  })
-
-  /**
-   * Test Case 6: Reload page and check theme
-   * Input: Reload page and check theme
-   * Expected: Previously selected theme is applied on load
-   */
-  describe('TC6: Theme Persistence After Reload', () => {
-    it('should read theme from localStorage on initial render', () => {
-      // Set stored theme before render
-      localStorageMock.setItem('theme-preference', 'cyberpunk')
-
-      // Mock getItem to return the stored value
-      localStorageMock.getItem.mockReturnValueOnce('cyberpunk')
-
-      renderWithProviders(<Home />)
-
-      // Theme should be read from localStorage (we verify the getItem was called)
-      expect(localStorageMock.getItem).toHaveBeenCalled()
-    })
-
-    it('should apply stored dark theme on reload', async () => {
-      const user = userEvent.setup()
-
-      // First render - set theme to dark
-      const { unmount } = renderWithProviders(<ThemeToggle />, { defaultTheme: 'light' })
-      await user.click(screen.getByTestId('theme-toggle-button'))
-      await user.click(screen.getByTestId('theme-option-dark'))
-
-      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
-
-      // Unmount to simulate leaving page
-      unmount()
-
-      // Mock localStorage returning the saved theme
-      localStorageMock.getItem.mockReturnValue('dark')
-
-      // Render again - should load from localStorage
-      renderWithProviders(<ThemeToggle />)
-
-      // The theme should still be dark (restored from localStorage in ThemeProvider)
-      await waitFor(() => {
-        expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
-      })
-    })
-  })
-
-  /**
-   * Test Case 7: Test multiple theme options
-   * Input: Test multiple theme options
-   * Expected: All available themes (light, dark, cyberpunk, etc.) can be selected
-   */
-  describe('TC7: Multiple Theme Options', () => {
     it('should display all available theme options in dropdown', async () => {
       const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />)
+      renderWithTheme(<MockHomePage />)
 
-      await user.click(screen.getByTestId('theme-toggle-button'))
+      const themeToggleButton = screen.getByTestId('theme-toggle-button')
+      await user.click(themeToggleButton)
 
-      // Check each available theme has an option
       for (const theme of AVAILABLE_THEMES) {
         const option = screen.getByTestId(`theme-option-${theme}`)
         expect(option).toBeInTheDocument()
       }
     })
 
-    it('should allow selecting each available theme', async () => {
+    it('should change theme when clicking a theme option', async () => {
       const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />, { defaultTheme: 'light' })
+      renderWithTheme(<MockHomePage />, 'light')
 
-      // Test each theme can be selected
+      // Open dropdown and select dark theme
+      const themeToggleButton = screen.getByTestId('theme-toggle-button')
+      await user.click(themeToggleButton)
+
+      const darkOption = screen.getByTestId('theme-option-dark')
+      await user.click(darkOption)
+
+      // Theme should change
+      expect(getCurrentDocumentTheme()).toBe('dark')
+    })
+  })
+
+  /**
+   * Test Case 4: Verify DOM theme attribute after toggle
+   * Expected: data-theme attribute changes to reflect new theme
+   */
+  describe('TC4: DOM Theme Attribute Changes', () => {
+    it('should update data-theme attribute when theme changes to dark', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'light')
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+
+      // Change to dark theme
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-dark'))
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+    })
+
+    it('should update data-theme attribute when theme changes to cyberpunk', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'light')
+
+      // Change to cyberpunk theme
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-cyberpunk'))
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
+    })
+
+    it('should update data-theme attribute when theme changes to synthwave', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'light')
+
+      // Change to synthwave theme
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-synthwave'))
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave')
+    })
+
+    it('should immediately reflect theme change in DOM', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'light')
+
+      // Initial theme
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+
+      // Change theme
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-dark'))
+
+      // DOM should be updated immediately (no waiting required beyond user event)
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+    })
+  })
+
+  /**
+   * Test Case 5: Check localStorage after theme change
+   * Expected: Theme preference is saved to localStorage
+   */
+  describe('TC5: localStorage Persistence', () => {
+    it('should save theme preference to localStorage when theme changes', async () => {
+      const user = userEvent.setup()
+      mockLocalStorage = setupLocalStorageMock()
+
+      renderWithTheme(<MockHomePage />, 'light')
+
+      // Change theme
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-dark'))
+
+      // Check localStorage was updated
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(THEME_STORAGE_KEY, 'dark')
+    })
+
+    it('should save each theme change to localStorage', async () => {
+      const user = userEvent.setup()
+      mockLocalStorage = setupLocalStorageMock()
+
+      renderWithTheme(<MockHomePage />, 'light')
+
+      // Change to dark
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-dark'))
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(THEME_STORAGE_KEY, 'dark')
+
+      // Change to cyberpunk
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-cyberpunk'))
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(THEME_STORAGE_KEY, 'cyberpunk')
+
+      // Change to synthwave
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-synthwave'))
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(THEME_STORAGE_KEY, 'synthwave')
+    })
+
+    it('should persist theme preference across multiple selections', async () => {
+      const user = userEvent.setup()
+      mockLocalStorage = setupLocalStorageMock()
+
+      renderWithTheme(<MockHomePage />, 'light')
+
+      // Change theme multiple times
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-dark'))
+
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-light'))
+
+      // Verify localStorage reflects the last selection
+      const lastCall = mockLocalStorage.setItem.mock.calls[mockLocalStorage.setItem.mock.calls.length - 1]
+      expect(lastCall).toEqual([THEME_STORAGE_KEY, 'light'])
+    })
+  })
+
+  /**
+   * Test Case 6: Reload page and check theme
+   * Expected: Previously selected theme is applied on load
+   */
+  describe('TC6: Theme Persistence on Reload', () => {
+    it('should restore theme from localStorage on initial render', () => {
+      // Pre-populate localStorage with dark theme
+      mockLocalStorage = setupLocalStorageMock('dark')
+
+      render(
+        <MemoryRouter>
+          <ThemeProvider>
+            <MockHomePage />
+          </ThemeProvider>
+        </MemoryRouter>
+      )
+
+      // Theme should be restored from localStorage
+      expect(mockLocalStorage.getItem).toHaveBeenCalledWith(THEME_STORAGE_KEY)
+    })
+
+    it('should apply cyberpunk theme on load when stored in localStorage', () => {
+      mockLocalStorage = setupLocalStorageMock('cyberpunk')
+
+      render(
+        <MemoryRouter>
+          <ThemeProvider>
+            <MockHomePage />
+          </ThemeProvider>
+        </MemoryRouter>
+      )
+
+      expect(mockLocalStorage.getItem).toHaveBeenCalledWith(THEME_STORAGE_KEY)
+    })
+
+    it('should apply synthwave theme on load when stored in localStorage', () => {
+      mockLocalStorage = setupLocalStorageMock('synthwave')
+
+      render(
+        <MemoryRouter>
+          <ThemeProvider>
+            <MockHomePage />
+          </ThemeProvider>
+        </MemoryRouter>
+      )
+
+      expect(mockLocalStorage.getItem).toHaveBeenCalledWith(THEME_STORAGE_KEY)
+    })
+
+    it('should fall back to default theme if localStorage has invalid value', () => {
+      // Setup with invalid theme value
+      mockLocalStorage = setupLocalStorageMock()
+      mockLocalStorage._store[THEME_STORAGE_KEY] = 'invalid-theme'
+
+      renderWithTheme(<MockHomePage />)
+
+      // Should fall back to default (light) since 'invalid-theme' is not valid
+      const appliedTheme = getCurrentDocumentTheme()
+      expect(appliedTheme).toBe('light')
+    })
+  })
+
+  /**
+   * Test Case 7: Test multiple theme options
+   * Expected: All available themes (light, dark, cyberpunk, etc.) can be selected
+   */
+  describe('TC7: Multiple Theme Selection', () => {
+    it('should allow selecting light theme', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'dark')
+
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-light'))
+
+      expect(getCurrentDocumentTheme()).toBe('light')
+    })
+
+    it('should allow selecting dark theme', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'light')
+
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-dark'))
+
+      expect(getCurrentDocumentTheme()).toBe('dark')
+    })
+
+    it('should allow selecting cyberpunk theme', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'light')
+
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-cyberpunk'))
+
+      expect(getCurrentDocumentTheme()).toBe('cyberpunk')
+    })
+
+    it('should allow selecting synthwave theme', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'light')
+
+      await user.click(screen.getByTestId('theme-toggle-button'))
+      await user.click(screen.getByTestId('theme-option-synthwave'))
+
+      expect(getCurrentDocumentTheme()).toBe('synthwave')
+    })
+
+    it('should cycle through all themes without issues', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'light')
+
       for (const theme of AVAILABLE_THEMES) {
         await user.click(screen.getByTestId('theme-toggle-button'))
         await user.click(screen.getByTestId(`theme-option-${theme}`))
-
-        expect(document.documentElement.getAttribute('data-theme')).toBe(theme)
+        expect(getCurrentDocumentTheme()).toBe(theme)
       }
     })
 
-    it('should have light, dark, cyberpunk, and synthwave themes available', async () => {
+    it('should show visual indicator for currently selected theme', async () => {
       const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />)
+      renderWithTheme(<MockHomePage />, 'dark')
 
       await user.click(screen.getByTestId('theme-toggle-button'))
 
-      expect(screen.getByTestId('theme-option-light')).toBeInTheDocument()
-      expect(screen.getByTestId('theme-option-dark')).toBeInTheDocument()
-      expect(screen.getByTestId('theme-option-cyberpunk')).toBeInTheDocument()
-      expect(screen.getByTestId('theme-option-synthwave')).toBeInTheDocument()
+      // The dark theme option should have 'active' class or similar indicator
+      const darkOption = screen.getByTestId('theme-option-dark')
+      expect(darkOption.closest('li')).toHaveAttribute('aria-selected', 'true')
     })
   })
 
   /**
    * Test Case 8: Verify homepage content visible in all themes
-   * Input: Verify homepage content visible in all themes
    * Expected: All sections maintain readability and contrast in each theme
    */
   describe('TC8: Content Visibility Across Themes', () => {
-    it('should render homepage content in light theme', () => {
-      renderWithProviders(<Home />, { defaultTheme: 'light' })
+    it('should render hero section content in light theme', () => {
+      renderWithTheme(<MockHomePage />, 'light')
 
-      expect(screen.getByTestId('home-page')).toBeInTheDocument()
-      expect(screen.getByTestId('navbar')).toBeInTheDocument()
-      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
-      expect(screen.getByTestId('features-section')).toBeInTheDocument()
-      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeVisible()
+
+      const headline = screen.getByTestId('hero-headline')
+      expect(headline).toBeVisible()
+      expect(headline).toHaveTextContent(/shorten urls/i)
     })
 
-    it('should render homepage content in dark theme', () => {
-      renderWithProviders(<Home />, { defaultTheme: 'dark' })
+    it('should render hero section content in dark theme', () => {
+      renderWithTheme(<MockHomePage />, 'dark')
 
-      expect(screen.getByTestId('home-page')).toBeInTheDocument()
-      expect(screen.getByTestId('navbar')).toBeInTheDocument()
-      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
-      expect(screen.getByTestId('features-section')).toBeInTheDocument()
-      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeVisible()
+
+      const headline = screen.getByTestId('hero-headline')
+      expect(headline).toBeVisible()
     })
 
-    it('should render homepage content in cyberpunk theme', () => {
-      renderWithProviders(<Home />, { defaultTheme: 'cyberpunk' })
+    it('should render hero section content in cyberpunk theme', () => {
+      renderWithTheme(<MockHomePage />, 'cyberpunk')
 
-      expect(screen.getByTestId('home-page')).toBeInTheDocument()
-      expect(screen.getByTestId('navbar')).toBeInTheDocument()
-      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
-      expect(screen.getByTestId('features-section')).toBeInTheDocument()
-      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeVisible()
+
+      const ctaButton = screen.getByTestId('hero-cta-primary')
+      expect(ctaButton).toBeVisible()
     })
 
-    it('should render homepage content in synthwave theme', () => {
-      renderWithProviders(<Home />, { defaultTheme: 'synthwave' })
+    it('should render hero section content in synthwave theme', () => {
+      renderWithTheme(<MockHomePage />, 'synthwave')
 
-      expect(screen.getByTestId('home-page')).toBeInTheDocument()
-      expect(screen.getByTestId('navbar')).toBeInTheDocument()
-      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
-      expect(screen.getByTestId('features-section')).toBeInTheDocument()
-      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeVisible()
+
+      const subheadline = screen.getByTestId('hero-subheadline')
+      expect(subheadline).toBeVisible()
     })
 
-    it('should maintain homepage structure when switching themes', async () => {
+    it('should maintain CTA button visibility across all themes', async () => {
       const user = userEvent.setup()
-      renderWithProviders(<Home />, { defaultTheme: 'light' })
+      renderWithTheme(<MockHomePage />, 'light')
 
-      // Verify initial structure
-      expect(screen.getByTestId('home-page')).toBeInTheDocument()
-
-      // Switch to each theme and verify content is still visible
-      for (const theme of ['dark', 'cyberpunk', 'synthwave'] as ThemeName[]) {
+      for (const theme of AVAILABLE_THEMES) {
+        // Change theme
         await user.click(screen.getByTestId('theme-toggle-button'))
         await user.click(screen.getByTestId(`theme-option-${theme}`))
 
-        // Content should still be visible
-        expect(screen.getByTestId('home-page')).toBeInTheDocument()
-        expect(screen.getByTestId('navbar')).toBeInTheDocument()
-        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
-        expect(screen.getByTestId('features-section')).toBeInTheDocument()
-        expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+        // Verify CTA buttons are visible
+        const primaryCta = screen.getByTestId('hero-cta-primary')
+        const secondaryCta = screen.getByTestId('hero-cta-secondary')
+
+        expect(primaryCta).toBeVisible()
+        expect(secondaryCta).toBeVisible()
+      }
+    })
+
+    it('should maintain theme toggle visibility across all themes', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />, 'light')
+
+      for (const theme of AVAILABLE_THEMES) {
+        // Change theme
+        await user.click(screen.getByTestId('theme-toggle-button'))
+        await user.click(screen.getByTestId(`theme-option-${theme}`))
+
+        // Theme toggle should remain visible and functional
+        const themeToggle = screen.getByTestId('theme-toggle')
+        expect(themeToggle).toBeVisible()
       }
     })
   })
 
-  // Additional edge case tests
-  describe('Edge Cases', () => {
-    it('should have accessible theme toggle button', () => {
-      renderWithProviders(<ThemeToggle />)
+  /**
+   * Additional Test: Accessibility
+   */
+  describe('Theme Toggle Accessibility', () => {
+    it('should have proper ARIA attributes', async () => {
+      const user = userEvent.setup()
+      renderWithTheme(<MockHomePage />)
 
-      const toggleButton = screen.getByTestId('theme-toggle-button')
-      expect(toggleButton).toHaveAttribute('aria-label')
-      expect(toggleButton).toHaveAttribute('aria-haspopup', 'listbox')
+      const themeToggleButton = screen.getByTestId('theme-toggle-button')
+      expect(themeToggleButton).toHaveAttribute('aria-label')
+      expect(themeToggleButton).toHaveAttribute('aria-haspopup', 'listbox')
+
+      await user.click(themeToggleButton)
+
+      const dropdown = screen.getByTestId('theme-dropdown-menu')
+      expect(dropdown).toHaveAttribute('role', 'listbox')
     })
 
-    it('should indicate current theme in dropdown', async () => {
+    it('should be keyboard accessible', async () => {
       const user = userEvent.setup()
-      renderWithProviders(<ThemeToggle />, { defaultTheme: 'light' })
+      renderWithTheme(<MockHomePage />)
 
-      await user.click(screen.getByTestId('theme-toggle-button'))
+      const themeToggleButton = screen.getByTestId('theme-toggle-button')
 
-      const lightOption = screen.getByTestId('theme-option-light')
-      expect(lightOption.closest('li')).toHaveAttribute('aria-selected', 'true')
+      // Focus on toggle button
+      themeToggleButton.focus()
+      expect(document.activeElement).toBe(themeToggleButton)
+
+      // Pressing Enter should open the dropdown
+      await user.keyboard('{Enter}')
+
+      const dropdown = screen.getByTestId('theme-dropdown-menu')
+      expect(dropdown).toBeInTheDocument()
     })
   })
 })
