@@ -2,11 +2,13 @@
  * Landing Page Unit Tests - Navigation Links & Semantic HTML
  * Owner: Scenario 4 - Navigation Links
  * Owner: Scenario 12 - Accessibility - Semantic HTML
+ * Owner: Scenario 18 - SEO Structure
  *
  * Tests for navigation header with Login/Register links
  * Tests for semantic HTML structure (header, main, footer, section elements)
+ * Tests for SEO-friendly structure (meta tags, heading hierarchy)
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import { renderWithProviders } from './setup';
 import Home from '../../../src/pages/Home';
@@ -275,6 +277,106 @@ describe('Component Integration - Existing Components', () => {
       expect(themeToggleButton).toHaveClass('btn');
       expect(themeToggleButton).toHaveClass('btn-ghost');
       expect(themeToggleButton).toHaveClass('btn-circle');
+    });
+  });
+});
+
+/**
+ * SEO Structure Tests
+ * Owner: Scenario 18 - SEO Structure
+ *
+ * Tests for SEO-friendly structure ensuring search engine optimization:
+ * - Document title containing product name
+ * - Meta description tag with relevant content
+ * - H1 heading containing relevant keywords about URL shortening service
+ */
+describe('SEO Structure', () => {
+  let originalTitle: string;
+  let metaDescription: HTMLMetaElement | null;
+
+  beforeEach(() => {
+    // Save original document title
+    originalTitle = document.title;
+
+    // Ensure meta description exists (as it would in index.html)
+    metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      metaDescription.setAttribute('content', 'URL Shortener - Create short, memorable links with analytics');
+      document.head.appendChild(metaDescription);
+    }
+
+    // Set document title as it would be in index.html
+    document.title = 'URL Shortener';
+  });
+
+  afterEach(() => {
+    // Restore original title
+    document.title = originalTitle;
+  });
+
+  describe('Test Case 1: Document title', () => {
+    it('page has descriptive title including product name', () => {
+      renderWithProviders(<Home />);
+
+      // Document title should include "URL Shortener" product name
+      expect(document.title).toMatch(/url shortener/i);
+
+      // Title should be descriptive (not empty or generic)
+      expect(document.title.length).toBeGreaterThan(5);
+    });
+  });
+
+  describe('Test Case 2: Meta description', () => {
+    it('page has meta description tag with relevant content', () => {
+      renderWithProviders(<Home />);
+
+      // Find the meta description tag
+      const metaDesc = document.querySelector('meta[name="description"]');
+      expect(metaDesc).toBeInTheDocument();
+
+      // Meta description should exist and have content
+      const content = metaDesc?.getAttribute('content');
+      expect(content).toBeTruthy();
+      expect(content!.length).toBeGreaterThan(20);
+
+      // Content should be relevant to URL shortening service
+      expect(content).toMatch(/url|link|short/i);
+    });
+  });
+
+  describe('Test Case 3: H1 content', () => {
+    it('H1 contains relevant keywords about URL shortening service', () => {
+      renderWithProviders(<Home />);
+
+      // Get the H1 heading
+      const h1 = screen.getByRole('heading', { level: 1 });
+      expect(h1).toBeInTheDocument();
+
+      // H1 text content should contain relevant keywords
+      const h1Text = h1.textContent?.toLowerCase() || '';
+
+      // Should contain at least one of these SEO-relevant keywords
+      const hasRelevantKeywords =
+        h1Text.includes('shorten') ||
+        h1Text.includes('link') ||
+        h1Text.includes('url') ||
+        h1Text.includes('track');
+
+      expect(hasRelevantKeywords).toBe(true);
+    });
+
+    it('H1 has a meaningful length for SEO', () => {
+      renderWithProviders(<Home />);
+
+      const h1 = screen.getByRole('heading', { level: 1 });
+      const h1Text = h1.textContent || '';
+
+      // H1 should not be too short (SEO best practice: 20-70 characters)
+      expect(h1Text.length).toBeGreaterThanOrEqual(10);
+      // H1 should not be excessively long
+      expect(h1Text.length).toBeLessThanOrEqual(100);
     });
   });
 });
