@@ -168,3 +168,93 @@ describe('HeroSection - Animations and Visual Effects', () => {
     expect(content).toBeInTheDocument();
   });
 });
+
+/**
+ * FuturisticButton Usage Validation Tests
+ * Owner: Scenario 18 - UI Component Integration - FuturisticButton
+ *
+ * Test cases:
+ * 1. Primary CTA uses FuturisticButton component
+ * 2. FuturisticButton has correct styling and hover effects
+ */
+
+describe('HeroSection - FuturisticButton Integration', () => {
+  it('primary CTA uses FuturisticButton component with primary variant', () => {
+    render(<HeroSection />);
+
+    // The primary CTA "Get Started" button should use FuturisticButton
+    // FuturisticButton renders a motion.button with specific classes
+    const primaryButton = screen.getByRole('button', { name: /get started/i });
+    expect(primaryButton).toBeInTheDocument();
+
+    // FuturisticButton adds 'btn' and variant classes
+    expect(primaryButton).toHaveClass('btn');
+    expect(primaryButton).toHaveClass('btn-primary');
+  });
+
+  it('secondary CTA uses FuturisticButton component with secondary or ghost variant', () => {
+    render(<HeroSection />);
+
+    // The login button should also use FuturisticButton
+    const loginButton = screen.getByRole('button', { name: /login/i });
+    expect(loginButton).toBeInTheDocument();
+
+    // FuturisticButton adds 'btn' class
+    expect(loginButton).toHaveClass('btn');
+    // Should use a valid variant (secondary or ghost, not outline which doesn't exist)
+    const hasValidSecondaryVariant =
+      loginButton.classList.contains('btn-secondary') ||
+      loginButton.classList.contains('btn-ghost');
+    expect(hasValidSecondaryVariant).toBe(true);
+  });
+
+  it('FuturisticButton has correct size class for CTA buttons', () => {
+    render(<HeroSection />);
+
+    // Both CTA buttons should have large size for hero section prominence
+    const primaryButton = screen.getByRole('button', { name: /get started/i });
+    const loginButton = screen.getByRole('button', { name: /login/i });
+
+    // FuturisticButton with size="lg" adds btn-lg class
+    expect(primaryButton).toHaveClass('btn-lg');
+    expect(loginButton).toHaveClass('btn-lg');
+  });
+
+  it('FuturisticButton has overflow-hidden class for hover effect containment', () => {
+    render(<HeroSection />);
+
+    const primaryButton = screen.getByRole('button', { name: /get started/i });
+    const loginButton = screen.getByRole('button', { name: /login/i });
+
+    // FuturisticButton includes overflow-hidden for visual effects
+    expect(primaryButton).toHaveClass('overflow-hidden');
+    expect(loginButton).toHaveClass('overflow-hidden');
+  });
+
+  it('FuturisticButton has transition classes for smooth animations', () => {
+    render(<HeroSection />);
+
+    const primaryButton = screen.getByRole('button', { name: /get started/i });
+
+    // FuturisticButton includes transition-all and duration classes
+    expect(primaryButton).toHaveClass('transition-all');
+    expect(primaryButton).toHaveClass('duration-300');
+  });
+
+  it('both CTA buttons are accessible via proper button role', () => {
+    render(<HeroSection />);
+
+    // Get all buttons in the hero section
+    const buttons = screen.getAllByRole('button');
+
+    // Should have at least the two CTA buttons
+    expect(buttons.length).toBeGreaterThanOrEqual(2);
+
+    // Verify CTAs are keyboard accessible (not disabled)
+    const primaryButton = screen.getByRole('button', { name: /get started/i });
+    const loginButton = screen.getByRole('button', { name: /login/i });
+
+    expect(primaryButton).not.toBeDisabled();
+    expect(loginButton).not.toBeDisabled();
+  });
+});

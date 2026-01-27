@@ -53,7 +53,7 @@ export function HeroSection() {
               </FuturisticButton>
             </Link>
             <Link to="/login">
-              <FuturisticButton variant="outline" size="lg">
+              <FuturisticButton variant="secondary" size="lg">
                 Login
               </FuturisticButton>
             </Link>
