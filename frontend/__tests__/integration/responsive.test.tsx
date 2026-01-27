@@ -187,16 +187,16 @@ describe('Responsive Design - Mobile (320px)', () => {
     it('CTA buttons container uses flex-col layout on mobile', () => {
       renderWithProviders(<Home />);
 
-      // Get CTA links
-      const getStartedLink = screen.getByRole('link', { name: /get started/i });
-      const loginLink = screen.getByRole('link', { name: /login/i });
+      // Get hero section first, then find CTA links within it
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      const getStartedLink = within(heroSection).getByRole('link', { name: /get started/i });
+      const loginLink = within(heroSection).getByRole('link', { name: /login/i });
 
       expect(getStartedLink).toBeInTheDocument();
       expect(loginLink).toBeInTheDocument();
 
       // Find the CTA container by looking for the div with flex-col class
       // The container structure is: div.flex.flex-col > Link > FuturisticButton
-      const heroSection = screen.getByRole('region', { name: /hero section/i });
       const ctaContainer = heroSection.querySelector('.flex.flex-col');
       expect(ctaContainer).toBeInTheDocument();
       if (ctaContainer) {
@@ -207,7 +207,8 @@ describe('Responsive Design - Mobile (320px)', () => {
     it('primary CTA button is visible and clickable', () => {
       renderWithProviders(<Home />);
 
-      const primaryCta = screen.getByRole('link', { name: /get started/i });
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      const primaryCta = within(heroSection).getByRole('link', { name: /get started/i });
       expect(primaryCta).toBeInTheDocument();
       expect(primaryCta).toBeVisible();
       expect(primaryCta).toHaveAttribute('href', '/register');
@@ -216,7 +217,8 @@ describe('Responsive Design - Mobile (320px)', () => {
     it('secondary CTA (login) button is visible and clickable', () => {
       renderWithProviders(<Home />);
 
-      const loginCta = screen.getByRole('link', { name: /login/i });
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      const loginCta = within(heroSection).getByRole('link', { name: /login/i });
       expect(loginCta).toBeInTheDocument();
       expect(loginCta).toBeVisible();
       expect(loginCta).toHaveAttribute('href', '/login');
@@ -542,6 +544,309 @@ describe('Responsive Design - Tablet (768px)', () => {
       expect(screen.getByText('Links Created')).toBeInTheDocument();
       expect(screen.getByText('Clicks Tracked')).toBeInTheDocument();
       expect(screen.getByText('Happy Users')).toBeInTheDocument();
+    });
+  });
+});
+
+describe('Responsive Design - Desktop (1024px and 1440px)', () => {
+  describe('Test Case 1: Feature cards display in 3-column grid at 1024px', () => {
+    beforeEach(() => {
+      setViewportWidth(1024);
+    });
+
+    afterEach(() => {
+      setViewportWidth(1024);
+    });
+
+    it('renders Features section with 3-column grid layout', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toBeInTheDocument();
+
+      // Grid should have md:grid-cols-3 class for 3 columns on desktop
+      expect(hasResponsiveClass(featuresGrid, 'md:grid-cols-3')).toBe(true);
+    });
+
+    it('all three feature cards are rendered horizontally', () => {
+      renderWithProviders(<Home />);
+
+      const featureCard0 = screen.getByTestId('feature-card-0');
+      const featureCard1 = screen.getByTestId('feature-card-1');
+      const featureCard2 = screen.getByTestId('feature-card-2');
+
+      expect(featureCard0).toBeInTheDocument();
+      expect(featureCard1).toBeInTheDocument();
+      expect(featureCard2).toBeInTheDocument();
+
+      // Verify all feature titles are present
+      expect(screen.getByText('Instant URL Shortening')).toBeInTheDocument();
+      expect(screen.getByText('Detailed Analytics')).toBeInTheDocument();
+      expect(screen.getByText('Share Statistics')).toBeInTheDocument();
+    });
+
+    it('How It Works section displays 3-column grid on desktop', () => {
+      renderWithProviders(<Home />);
+
+      const stepsContainer = screen.getByTestId('steps-container');
+      expect(stepsContainer).toBeInTheDocument();
+      expect(hasResponsiveClass(stepsContainer, 'md:grid-cols-3')).toBe(true);
+    });
+
+    it('Social Proof stats display in 3-column grid on desktop', () => {
+      renderWithProviders(<Home />);
+
+      const statsGrid = screen.getByTestId('stats-grid');
+      expect(statsGrid).toBeInTheDocument();
+      expect(hasResponsiveClass(statsGrid, 'md:grid-cols-3')).toBe(true);
+    });
+  });
+
+  describe('Test Case 2: Feature cards display in 3-column grid at 1440px', () => {
+    beforeEach(() => {
+      setViewportWidth(1440);
+    });
+
+    afterEach(() => {
+      setViewportWidth(1024);
+    });
+
+    it('renders Features section with 3-column grid layout at large desktop', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toBeInTheDocument();
+
+      // Grid should have md:grid-cols-3 class for 3 columns
+      expect(hasResponsiveClass(featuresGrid, 'md:grid-cols-3')).toBe(true);
+    });
+
+    it('all three feature cards are visible at 1440px', () => {
+      renderWithProviders(<Home />);
+
+      const featureCard0 = screen.getByTestId('feature-card-0');
+      const featureCard1 = screen.getByTestId('feature-card-1');
+      const featureCard2 = screen.getByTestId('feature-card-2');
+
+      expect(featureCard0).toBeInTheDocument();
+      expect(featureCard1).toBeInTheDocument();
+      expect(featureCard2).toBeInTheDocument();
+    });
+
+    it('How It Works displays 3-column grid at 1440px', () => {
+      renderWithProviders(<Home />);
+
+      const stepsContainer = screen.getByTestId('steps-container');
+      expect(hasResponsiveClass(stepsContainer, 'md:grid-cols-3')).toBe(true);
+    });
+
+    it('Stats grid displays 3 columns at 1440px', () => {
+      renderWithProviders(<Home />);
+
+      const statsGrid = screen.getByTestId('stats-grid');
+      expect(hasResponsiveClass(statsGrid, 'md:grid-cols-3')).toBe(true);
+    });
+  });
+
+  describe('Test Case 3: Content is centered with max-width at 1024px', () => {
+    beforeEach(() => {
+      setViewportWidth(1024);
+    });
+
+    afterEach(() => {
+      setViewportWidth(1024);
+    });
+
+    it('Features section has centered container with max-width', () => {
+      renderWithProviders(<Home />);
+
+      const featuresSection = screen.getByTestId('features-section');
+      const container = featuresSection.querySelector('.max-w-7xl');
+      expect(container).toBeInTheDocument();
+
+      // Container should be centered with mx-auto
+      if (container) {
+        expect(hasResponsiveClass(container as HTMLElement, 'mx-auto')).toBe(true);
+      }
+    });
+
+    it('Hero section content is centered', () => {
+      renderWithProviders(<Home />);
+
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      const container = heroSection.querySelector('.container');
+      expect(container).toBeInTheDocument();
+
+      if (container) {
+        expect(hasResponsiveClass(container as HTMLElement, 'mx-auto')).toBe(true);
+        expect(hasResponsiveClass(container as HTMLElement, 'text-center')).toBe(true);
+      }
+    });
+
+    it('Social Proof section has centered container with max-width', () => {
+      renderWithProviders(<Home />);
+
+      const socialProofSection = screen.getByTestId('social-proof-section');
+      const container = socialProofSection.querySelector('.max-w-7xl');
+      expect(container).toBeInTheDocument();
+
+      if (container) {
+        expect(hasResponsiveClass(container as HTMLElement, 'mx-auto')).toBe(true);
+      }
+    });
+
+    it('How It Works section has centered container with max-width', () => {
+      renderWithProviders(<Home />);
+
+      // How It Works uses max-w-6xl
+      const howItWorksSection = screen.getByLabelText(/how it works/i);
+      const container = howItWorksSection.querySelector('.max-w-6xl');
+      expect(container).toBeInTheDocument();
+
+      if (container) {
+        expect(hasResponsiveClass(container as HTMLElement, 'mx-auto')).toBe(true);
+      }
+    });
+
+    it('headline uses appropriate desktop font sizes', () => {
+      renderWithProviders(<Home />);
+
+      const headline = screen.getByRole('heading', { level: 1 });
+      // Should have lg:text-6xl for large screens
+      expect(hasResponsiveClass(headline, 'lg:text-6xl')).toBe(true);
+    });
+  });
+
+  describe('Test Case 4: Content is centered with max-width at 1440px', () => {
+    beforeEach(() => {
+      setViewportWidth(1440);
+    });
+
+    afterEach(() => {
+      setViewportWidth(1024);
+    });
+
+    it('Features section has max-w-7xl container at 1440px', () => {
+      renderWithProviders(<Home />);
+
+      const featuresSection = screen.getByTestId('features-section');
+      const container = featuresSection.querySelector('.max-w-7xl');
+      expect(container).toBeInTheDocument();
+
+      // max-w-7xl is 80rem = 1280px which keeps content constrained at 1440px viewport
+      if (container) {
+        expect(hasResponsiveClass(container as HTMLElement, 'mx-auto')).toBe(true);
+      }
+    });
+
+    it('Hero section subheadline has max-width constraint', () => {
+      renderWithProviders(<Home />);
+
+      const subheadline = screen.getByText(/gain powerful insights/i);
+      expect(subheadline).toBeInTheDocument();
+
+      // Subheadline should have max-w-3xl class
+      expect(hasResponsiveClass(subheadline, 'max-w-3xl')).toBe(true);
+    });
+
+    it('all sections maintain appropriate max-width at large viewport', () => {
+      renderWithProviders(<Home />);
+
+      // Features: max-w-7xl
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection.querySelector('.max-w-7xl')).toBeInTheDocument();
+
+      // Social Proof: max-w-7xl
+      const socialProofSection = screen.getByTestId('social-proof-section');
+      expect(socialProofSection.querySelector('.max-w-7xl')).toBeInTheDocument();
+
+      // How It Works: max-w-6xl
+      const howItWorksSection = screen.getByLabelText(/how it works/i);
+      expect(howItWorksSection.querySelector('.max-w-6xl')).toBeInTheDocument();
+    });
+
+    it('CTA buttons use horizontal row layout on desktop', () => {
+      renderWithProviders(<Home />);
+
+      // Get hero section first, then find CTA links within it
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      const getStartedLink = within(heroSection).getByRole('link', { name: /get started/i });
+      const loginLink = within(heroSection).getByRole('link', { name: /login/i });
+
+      expect(getStartedLink).toBeInTheDocument();
+      expect(loginLink).toBeInTheDocument();
+
+      // CTA container should have sm:flex-row for horizontal layout on larger screens
+      const ctaContainer = heroSection.querySelector('.flex');
+      expect(ctaContainer).toBeInTheDocument();
+      if (ctaContainer) {
+        expect(hasResponsiveClass(ctaContainer as HTMLElement, 'sm:flex-row')).toBe(true);
+      }
+    });
+
+    it('desktop layout has proper spacing between grid items', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+      // Grid should have gap-8 for proper spacing
+      expect(hasResponsiveClass(featuresGrid, 'gap-8')).toBe(true);
+
+      const stepsContainer = screen.getByTestId('steps-container');
+      expect(hasResponsiveClass(stepsContainer, 'gap-8')).toBe(true);
+
+      const statsGrid = screen.getByTestId('stats-grid');
+      expect(hasResponsiveClass(statsGrid, 'gap-8')).toBe(true);
+    });
+  });
+
+  describe('Additional Desktop Tests', () => {
+    beforeEach(() => {
+      setViewportWidth(1024);
+    });
+
+    afterEach(() => {
+      setViewportWidth(1024);
+    });
+
+    it('desktop viewport shows connection line between steps', () => {
+      renderWithProviders(<Home />);
+
+      const stepsContainer = screen.getByTestId('steps-container');
+      // The connection line is hidden on mobile (md:block)
+      const connectionLine = stepsContainer.querySelector('.md\\:block');
+      expect(connectionLine).toBeInTheDocument();
+    });
+
+    it('desktop hides mobile arrow indicators', () => {
+      renderWithProviders(<Home />);
+
+      // Mobile arrows should have md:hidden class
+      const stepsContainer = screen.getByTestId('steps-container');
+      const mobileArrows = stepsContainer.querySelectorAll('.md\\:hidden');
+      // There should be arrows with md:hidden class
+      expect(mobileArrows.length).toBeGreaterThan(0);
+    });
+
+    it('all three steps are visible on desktop', () => {
+      renderWithProviders(<Home />);
+
+      expect(screen.getByTestId('step-1')).toBeInTheDocument();
+      expect(screen.getByTestId('step-2')).toBeInTheDocument();
+      expect(screen.getByTestId('step-3')).toBeInTheDocument();
+
+      expect(screen.getByTestId('step-1-title')).toHaveTextContent('Create');
+      expect(screen.getByTestId('step-2-title')).toHaveTextContent('Share');
+      expect(screen.getByTestId('step-3-title')).toHaveTextContent('Track');
+    });
+
+    it('landing page uses full viewport height', () => {
+      renderWithProviders(<Home />);
+
+      const landingPage = screen.getByTestId('landing-page');
+      expect(hasResponsiveClass(landingPage, 'min-h-screen')).toBe(true);
+
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      expect(hasResponsiveClass(heroSection, 'min-h-screen')).toBe(true);
     });
   });
 });
