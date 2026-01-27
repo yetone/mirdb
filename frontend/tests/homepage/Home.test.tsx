@@ -22,6 +22,7 @@ import { AuthProvider } from '../../src/contexts/AuthContext';
 import { renderWithProviders } from './testUtils';
 import Home from '../../src/pages/Home';
 import HeroSection from '../../src/components/homepage/HeroSection';
+import Footer from '../../src/components/homepage/Footer';
 import Navbar from '../../src/components/Navbar';
 
 const queryClient = new QueryClient({
@@ -312,6 +313,130 @@ describe('Scenario 3: Navigation to Login Page', () => {
       signInLinks.forEach(link => {
         expect(link).toHaveAttribute('href', '/login');
       });
+    });
+  });
+});
+
+/**
+ * Scenario 10: Footer Section Display
+ *
+ * Test that footer displays branding, navigation links, and copyright information.
+ *
+ * Steps:
+ * 1. Navigate to homepage
+ * 2. Scroll to bottom of page
+ * 3. Verify footer content
+ */
+describe('Scenario 10: Footer Section Display', () => {
+  describe('Test Case 1: Render HomePage and check for footer element', () => {
+    it('footer element is present at bottom of page', () => {
+      renderWithProviders(<Home />);
+
+      // Footer should be present
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+    });
+
+    it('footer renders as a semantic footer element', () => {
+      renderWithProviders(<Footer />);
+
+      // Footer should use semantic <footer> element
+      const footer = screen.getByRole('contentinfo');
+      expect(footer.tagName).toBe('FOOTER');
+    });
+  });
+
+  describe('Test Case 2: Check footer for login link', () => {
+    it('footer contains link to /login', () => {
+      renderWithProviders(<Footer />);
+
+      // Footer should contain Login link
+      const loginLink = screen.getByRole('link', { name: /Login/i });
+      expect(loginLink).toBeInTheDocument();
+      expect(loginLink).toHaveAttribute('href', '/login');
+    });
+
+    it('login link in footer is accessible', () => {
+      renderWithProviders(<Footer />);
+
+      const loginLink = screen.getByRole('link', { name: /Login/i });
+
+      // Link should be focusable
+      loginLink.focus();
+      expect(document.activeElement).toBe(loginLink);
+    });
+  });
+
+  describe('Test Case 3: Check footer for register link', () => {
+    it('footer contains link to /register', () => {
+      renderWithProviders(<Footer />);
+
+      // Footer should contain Register link
+      const registerLink = screen.getByRole('link', { name: /Register/i });
+      expect(registerLink).toBeInTheDocument();
+      expect(registerLink).toHaveAttribute('href', '/register');
+    });
+
+    it('register link in footer is accessible', () => {
+      renderWithProviders(<Footer />);
+
+      const registerLink = screen.getByRole('link', { name: /Register/i });
+
+      // Link should be focusable
+      registerLink.focus();
+      expect(document.activeElement).toBe(registerLink);
+    });
+  });
+
+  describe('Test Case 4: Check footer for copyright text', () => {
+    it('footer contains copyright notice with current year', () => {
+      renderWithProviders(<Footer />);
+
+      const currentYear = new Date().getFullYear();
+
+      // Footer should contain copyright text with current year
+      const copyrightText = screen.getByText(new RegExp(`© ${currentYear}`, 'i'));
+      expect(copyrightText).toBeInTheDocument();
+    });
+
+    it('copyright notice includes application name', () => {
+      renderWithProviders(<Footer />);
+
+      // Copyright should mention URL Shortener
+      const copyrightText = screen.getByText(/URL Shortener/i, { selector: 'p' });
+      expect(copyrightText).toBeInTheDocument();
+    });
+  });
+
+  describe('Footer Integration with Homepage', () => {
+    it('homepage includes footer with all required elements', () => {
+      renderWithProviders(<Home />);
+
+      // Get the footer
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+
+      // Check for branding - use getAllByText since "URL Shortener" appears multiple times in footer
+      const brandingElements = within(footer).getAllByText(/URL Shortener/i);
+      expect(brandingElements.length).toBeGreaterThan(0);
+
+      // Check for navigation links
+      expect(within(footer).getByRole('link', { name: /Login/i })).toHaveAttribute('href', '/login');
+      expect(within(footer).getByRole('link', { name: /Register/i })).toHaveAttribute('href', '/register');
+
+      // Check for copyright
+      const currentYear = new Date().getFullYear();
+      expect(within(footer).getByText(new RegExp(`© ${currentYear}`))).toBeInTheDocument();
+    });
+
+    it('footer navigation links are functional', async () => {
+      renderWithRoutes('/');
+
+      const footer = screen.getByRole('contentinfo');
+
+      // Test login link navigation
+      const loginLink = within(footer).getByRole('link', { name: /Login/i });
+      expect(loginLink).toHaveAttribute('href', '/login');
     });
   });
 });
