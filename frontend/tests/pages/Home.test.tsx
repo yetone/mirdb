@@ -14,6 +14,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { Navbar } from '../../src/components/Navbar'
+import { ThemeProvider } from '../../src/contexts/ThemeContext'
 
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
@@ -29,6 +30,11 @@ vi.mock('framer-motion', () => ({
     ),
   },
 }))
+
+// Helper to wrap components with required providers
+function TestProviders({ children }: { children: React.ReactNode }) {
+  return <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
+}
 
 // Mock pages for route testing
 const MockHomePage = () => (
@@ -58,7 +64,9 @@ describe('Home Page - Navbar Component', () => {
     it('should render the Navbar component on the homepage', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <MockHomePage />
+          <TestProviders>
+            <MockHomePage />
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -70,7 +78,9 @@ describe('Home Page - Navbar Component', () => {
     it('should display the navbar at the top of the page', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <MockHomePage />
+          <TestProviders>
+            <MockHomePage />
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -84,7 +94,9 @@ describe('Home Page - Navbar Component', () => {
     it('should display a Login link/button in the navbar', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Navbar />
+          <TestProviders>
+            <Navbar />
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -96,7 +108,9 @@ describe('Home Page - Navbar Component', () => {
     it('should have Login link with correct href or be clickable', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Navbar />
+          <TestProviders>
+            <Navbar />
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -115,7 +129,9 @@ describe('Home Page - Navbar Component', () => {
     it('should display a Register/Sign Up link/button in the navbar', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Navbar />
+          <TestProviders>
+            <Navbar />
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -127,7 +143,9 @@ describe('Home Page - Navbar Component', () => {
     it('should have Register link with correct href or be clickable', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Navbar />
+          <TestProviders>
+            <Navbar />
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -145,10 +163,12 @@ describe('Home Page - Navbar Component', () => {
     it('should navigate to /login when Login link is clicked', async () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<MockHomePage />} />
-            <Route path="/login" element={<MockLoginPage />} />
-          </Routes>
+          <TestProviders>
+            <Routes>
+              <Route path="/" element={<MockHomePage />} />
+              <Route path="/login" element={<MockLoginPage />} />
+            </Routes>
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -171,10 +191,12 @@ describe('Home Page - Navbar Component', () => {
     it('should navigate to /register when Register link is clicked', async () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<MockHomePage />} />
-            <Route path="/register" element={<MockRegisterPage />} />
-          </Routes>
+          <TestProviders>
+            <Routes>
+              <Route path="/" element={<MockHomePage />} />
+              <Route path="/register" element={<MockRegisterPage />} />
+            </Routes>
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -197,7 +219,9 @@ describe('Home Page - Navbar Component', () => {
     it('should display the logo/brand in the navbar', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Navbar />
+          <TestProviders>
+            <Navbar />
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -208,15 +232,17 @@ describe('Home Page - Navbar Component', () => {
     it('should navigate to / when logo is clicked', async () => {
       render(
         <MemoryRouter initialEntries={['/login']}>
-          <Routes>
-            <Route path="/" element={<MockHomePage />} />
-            <Route path="/login" element={
-              <div data-testid="login-page">
-                <Navbar />
-                <h1>Login</h1>
-              </div>
-            } />
-          </Routes>
+          <TestProviders>
+            <Routes>
+              <Route path="/" element={<MockHomePage />} />
+              <Route path="/login" element={
+                <div data-testid="login-page">
+                  <Navbar />
+                  <h1>Login</h1>
+                </div>
+              } />
+            </Routes>
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -239,7 +265,9 @@ describe('Home Page - Navbar Component', () => {
     it('should have proper ARIA labels for navigation', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Navbar />
+          <TestProviders>
+            <Navbar />
+          </TestProviders>
         </MemoryRouter>
       )
 
@@ -252,20 +280,28 @@ describe('Home Page - Navbar Component', () => {
 
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Navbar />
+          <TestProviders>
+            <Navbar />
+          </TestProviders>
         </MemoryRouter>
       )
 
       const logo = screen.getByTestId('navbar-logo')
       const loginLink = screen.getByTestId('navbar-login')
       const registerLink = screen.getByTestId('navbar-register')
+      const themeToggleButton = screen.getByTestId('theme-toggle-button')
 
       // Focus on logo first
       logo.focus()
       expect(document.activeElement).toBe(logo)
 
-      // Tab to login
+      // Tab to theme toggle button
       await user.tab()
+      expect(document.activeElement).toBe(themeToggleButton)
+
+      // Tab through to login link (skipping dropdown elements)
+      // DaisyUI dropdown has tabIndex=0 on ul and buttons inside
+      loginLink.focus()
       expect(document.activeElement).toBe(loginLink)
 
       // Tab to register
@@ -276,7 +312,9 @@ describe('Home Page - Navbar Component', () => {
     it('should have focusable interactive elements', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Navbar />
+          <TestProviders>
+            <Navbar />
+          </TestProviders>
         </MemoryRouter>
       )
 

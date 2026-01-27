@@ -6,13 +6,16 @@
  * - Logo/brand link (navigates to homepage)
  * - Login link (navigates to /login)
  * - Register/Sign Up link (navigates to /register)
+ * - Theme toggle (Scenario 5)
  * - Responsive mobile menu support
  *
  * Requirements: REQ-5 - Provide navigation links to Login and Register pages
- * User Stories: US-2 (Navigate to Registration), US-3 (Navigate to Login)
+ *               REQ-8 - Support theme switching
+ * User Stories: US-2 (Navigate to Registration), US-3 (Navigate to Login), US-6 (Toggle Theme)
  */
 
 import { Link } from 'react-router-dom'
+import { ThemeToggle } from './ThemeToggle'
 
 export interface NavbarProps {
   /** Optional additional CSS classes */
@@ -41,7 +44,8 @@ export function Navbar({ className = '' }: NavbarProps) {
         </div>
 
         {/* Desktop Navigation - Right Side */}
-        <div className="flex-none hidden md:flex gap-2">
+        <div className="flex-none hidden md:flex gap-2 items-center">
+          <ThemeToggle />
           <Link
             to="/login"
             className="btn btn-ghost"
