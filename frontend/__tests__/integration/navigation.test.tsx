@@ -85,18 +85,19 @@ function TestApp({ initialRoute = '/' }: TestAppProps) {
   );
 }
 
+/**
+ * Accessibility - Keyboard Navigation Tests
+ * Owner: Scenario 14 - Accessibility - Keyboard Navigation
+ *
+ * Test cases:
+ * 1. Tab through landing page - all interactive elements focusable
+ * 2. Focus indicator visible on focused button
+ * 3. Press Enter on focused CTA - navigates to /register
+ * 4. Skip-to-content link present for screen reader users
+ *
+ * These tests verify WCAG 2.1 AA compliance for keyboard accessibility as per NFR-2.
+ */
 describe('Accessibility - Keyboard Navigation Tests', () => {
-  /**
-   * Scenario 14: Accessibility - Keyboard Navigation
-   * Owner: Scenario 14
-   *
-   * Test cases:
-   * 1. Tab through landing page - all interactive elements focusable
-   * 2. Focus indicator visible on focused button
-   * 3. Press Enter on focused CTA - navigates to /register
-   * 4. Skip-to-content link present for screen reader users
-   */
-
   describe('Test Case 1: Tab through landing page', () => {
     it('all interactive elements (buttons, links) are focusable via Tab', async () => {
       const user = userEvent.setup();
@@ -318,12 +319,13 @@ describe('Navigation and CTA Links Integration Tests', () => {
     it('Login link has correct href attribute for /login', () => {
       render(<TestApp />);
 
-      // Find the Login link (first one - hero section)
+      // Find the Login links (hero and footer both have one)
       const loginLinks = screen.getAllByRole('link', { name: /login/i });
-      const loginLink = loginLinks[0];
 
-      // Verify href attribute
-      expect(loginLink).toHaveAttribute('href', '/login');
+      // Verify href attribute for all login links
+      loginLinks.forEach(link => {
+        expect(link).toHaveAttribute('href', '/login');
+      });
     });
   });
 
@@ -334,45 +336,40 @@ describe('Navigation and CTA Links Integration Tests', () => {
       // Verify both navigation links are present
       const registerLink = screen.getByRole('link', { name: /get started|create free account/i });
       const loginLinks = screen.getAllByRole('link', { name: /login/i });
-      const loginLink = loginLinks[0];
 
       expect(registerLink).toBeInTheDocument();
       expect(registerLink).toBeVisible();
-      expect(loginLink).toBeInTheDocument();
-      expect(loginLink).toBeVisible();
+      expect(loginLinks.length).toBeGreaterThan(0);
+      expect(loginLinks[0]).toBeInTheDocument();
+      expect(loginLinks[0]).toBeVisible();
     });
 
     it('CTA buttons are accessible and keyboard navigable', async () => {
       const user = userEvent.setup();
       render(<TestApp />);
 
-      // Get both links
+      // Get the hero section CTA link
       const registerLink = screen.getByRole('link', { name: /get started|create free account/i });
-      const loginLinks = screen.getAllByRole('link', { name: /login/i });
 
       // Tab to first link and verify focus
       await user.tab();
 
-      // Continue tabbing to find the CTA links (they should be focusable)
+      // Continue tabbing to find the CTA link (it should be focusable)
       let attempts = 0;
       const maxAttempts = 15;
       let foundRegister = false;
-      let foundLogin = false;
 
       while (attempts < maxAttempts) {
         if (document.activeElement === registerLink) {
           foundRegister = true;
+          break;
         }
-        if (loginLinks.includes(document.activeElement as HTMLElement)) {
-          foundLogin = true;
-        }
-        if (foundRegister && foundLogin) break;
         await user.tab();
         attempts++;
       }
 
-      // Verify both links were reachable via keyboard
-      expect(foundRegister || foundLogin).toBe(true);
+      // Verify the primary CTA link was reachable via keyboard
+      expect(foundRegister).toBe(true);
     });
   });
 });
