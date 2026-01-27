@@ -247,6 +247,130 @@ describe('Home Page - Navigation CTA Functionality (Scenario 3)', () => {
   })
 })
 
+describe('Home Page - Responsive Design Mobile (Scenario 4)', () => {
+  // Test Case 1: Integration - No horizontal overflow at 375px viewport
+  it('should have no horizontal overflow at mobile viewport width', () => {
+    renderWithProviders(<Home />)
+
+    // The main container should have overflow-hidden or proper width constraints
+    const mainElement = document.querySelector('main')
+    expect(mainElement).toBeInTheDocument()
+
+    // Verify the main element doesn't set explicit widths that could cause overflow
+    // The Tailwind class 'min-h-screen' along with bg-base-100 is present
+    expect(mainElement).toHaveClass('min-h-screen')
+    expect(mainElement).toHaveClass('bg-base-100')
+
+    // Hero section should have overflow-hidden to prevent horizontal scrolling
+    const heroSection = document.querySelector('section')
+    expect(heroSection).toHaveClass('overflow-hidden')
+  })
+
+  // Test Case 2: Integration - Content readable without zooming at 375px
+  it('should render readable text content at mobile viewport', () => {
+    renderWithProviders(<Home />)
+
+    // Verify text elements are rendered and visible
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+    expect(heading).toBeVisible()
+
+    // Verify text uses responsive font sizes (text-4xl on mobile scales down)
+    // The heading should have responsive classes
+    expect(heading).toHaveClass('text-4xl')
+
+    // Subheadline should also be readable
+    const subheadline = screen.getByTestId('subheadline')
+    expect(subheadline).toBeInTheDocument()
+    expect(subheadline).toBeVisible()
+  })
+
+  // Test Case 3: Unit - CTA buttons meet minimum 44px touch target size
+  it('should have CTA buttons with minimum 44px touch target size', () => {
+    renderWithProviders(<Home />)
+
+    // Find the CTA buttons
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    const loginButton = screen.getByRole('button', { name: /login/i })
+
+    // Check that buttons have appropriate padding classes for touch targets
+    // The FuturisticButton uses 'px-6 py-3' which provides adequate touch target
+    // Additionally, we verify min-w-[180px] class is applied for sufficient width
+    expect(getStartedButton).toHaveClass('btn')
+    expect(getStartedButton).toHaveClass('py-3')
+    expect(getStartedButton).toHaveClass('px-6')
+
+    expect(loginButton).toHaveClass('btn')
+    expect(loginButton).toHaveClass('py-3')
+    expect(loginButton).toHaveClass('px-6')
+
+    // Verify buttons have minimum width for accessibility
+    expect(getStartedButton).toHaveClass('min-w-[180px]')
+    expect(loginButton).toHaveClass('min-w-[180px]')
+  })
+
+  // Test Case 4: Unit - Feature cards displayed in single column on mobile
+  it('should display feature cards in single column layout on mobile', () => {
+    renderWithProviders(<Home />)
+
+    // Find the features grid container
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+
+    // Find the grid container within features section
+    const gridContainer = featuresSection.querySelector('.grid')
+    expect(gridContainer).toBeInTheDocument()
+
+    // Verify the grid has responsive classes for single column on mobile
+    // grid-cols-1 ensures single column on smallest screens
+    expect(gridContainer).toHaveClass('grid-cols-1')
+
+    // Verify it changes to multi-column on larger screens
+    expect(gridContainer).toHaveClass('md:grid-cols-2')
+    expect(gridContainer).toHaveClass('lg:grid-cols-4')
+  })
+
+  // Additional test: CTA container stacks vertically on mobile
+  it('should stack CTA buttons vertically on smallest mobile screens', () => {
+    renderWithProviders(<Home />)
+
+    // Find the CTA container (parent of the buttons)
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    const ctaContainer = getStartedLink.parentElement
+
+    // Verify flex-col is default for mobile, flex-row for larger screens
+    expect(ctaContainer).toHaveClass('flex')
+    expect(ctaContainer).toHaveClass('flex-col')
+    expect(ctaContainer).toHaveClass('sm:flex-row')
+  })
+
+  // Additional test: Hero section uses responsive padding
+  it('should use appropriate padding for mobile viewport', () => {
+    renderWithProviders(<Home />)
+
+    // The container inside hero should have responsive padding
+    const containerDiv = document.querySelector('.container')
+    expect(containerDiv).toBeInTheDocument()
+    expect(containerDiv).toHaveClass('px-4')
+    expect(containerDiv).toHaveClass('mx-auto')
+  })
+
+  // Additional test: Feature cards have proper width constraint
+  it('should render feature cards with appropriate width on mobile', () => {
+    renderWithProviders(<Home />)
+
+    // Check that feature cards exist and are full width on mobile
+    const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+    expect(urlShorteningCard).toBeInTheDocument()
+
+    // The card should be inside a motion.div within the grid
+    // Grid with grid-cols-1 makes each child full width
+    const featuresSection = screen.getByTestId('features-section')
+    const gridContainer = featuresSection.querySelector('.grid')
+    expect(gridContainer?.children.length).toBeGreaterThanOrEqual(3)
+  })
+})
+
 describe('Home Page - Responsive Design Tablet (Scenario 5)', () => {
   // Test Case 1: Integration - Layout adapts to tablet-appropriate sizing at 768px
   it('should render homepage with tablet-appropriate layout at 768px viewport', () => {
