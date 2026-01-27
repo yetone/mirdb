@@ -7,7 +7,7 @@
 
 export { HeroSection } from './HeroSection'
 export { FeaturesSection } from './FeaturesSection'
+export { HowItWorksSection } from './HowItWorksSection'
 // Other components will be added by their respective scenario builders:
-// export { HowItWorksSection } from './HowItWorksSection'
 // export { StatsSection } from './StatsSection'
 // export { FooterSection } from './FooterSection'
