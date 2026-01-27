@@ -6,3 +6,4 @@
 export { FeaturesSection } from './FeaturesSection'
 export { HeroSection } from './HeroSection'
 export { default as HowItWorksSection } from './HowItWorksSection'
+export { Footer } from './Footer'
