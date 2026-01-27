@@ -52,7 +52,7 @@ function StepCard({ step }: StepCardProps) {
           {step.number}
         </span>
         <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-        <p className="text-base-content/70">{step.description}</p>
+        <p className="text-base-content">{step.description}</p>
       </div>
     </GlassMorphismCard>
   )

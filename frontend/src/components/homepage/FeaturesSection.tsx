@@ -67,7 +67,7 @@ export function FeaturesSection({ features = defaultFeatures }: FeaturesSectionP
                   {feature.icon}
                 </span>
                 <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-base-content/70">{feature.description}</p>
+                <p className="text-base-content">{feature.description}</p>
               </div>
             </GlassMorphismCard>
           ))}

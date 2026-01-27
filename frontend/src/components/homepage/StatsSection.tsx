@@ -182,7 +182,7 @@ export function StatsSection({ stats = defaultStats }: StatsSectionProps) {
                       isVisible={isVisible}
                     />
                   </span>
-                  <span className="text-lg text-base-content/70">{stat.label}</span>
+                  <span className="text-lg text-base-content">{stat.label}</span>
                 </div>
               </GlassMorphismCard>
             </motion.div>

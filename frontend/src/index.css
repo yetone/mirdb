@@ -10,3 +10,57 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* Accessibility: Enhanced color contrast for WCAG 2.1 AA compliance */
+
+/* Override DaisyUI button colors for WCAG 2.1 AA compliance (4.5:1 contrast ratio) */
+/* These overrides use higher specificity to ensure they take precedence */
+.btn.btn-primary {
+  /* Dark purple background with white text for 4.5:1+ contrast */
+  background-color: oklch(45% 0.2 280) !important;
+  color: #ffffff !important;
+}
+
+.btn.btn-primary:hover {
+  background-color: oklch(40% 0.22 280) !important;
+}
+
+.btn.btn-ghost {
+  /* Ensure ghost buttons have proper text contrast */
+  color: oklch(30% 0 0) !important;
+}
+
+[data-theme="dark"] .btn.btn-primary {
+  /* For dark mode, use a brighter purple with dark text */
+  background-color: oklch(70% 0.18 280) !important;
+  color: #1a1a2e !important;
+}
+
+[data-theme="dark"] .btn.btn-ghost {
+  color: oklch(90% 0 0) !important;
+}
+
+@layer components {
+  /* Focus states for keyboard navigation - WCAG 2.1 AA requirement */
+  .btn:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  /* Link focus states */
+  a:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary rounded;
+  }
+}
+
+/* High contrast text utility classes for accessibility */
+@layer utilities {
+  /* Replaces text-base-content/70 with accessible contrast */
+  .text-accessible-secondary {
+    @apply text-base-content/90;
+  }
+
+  /* Replaces text-base-content/50 with accessible contrast */
+  .text-accessible-muted {
+    @apply text-base-content/75;
+  }
+}

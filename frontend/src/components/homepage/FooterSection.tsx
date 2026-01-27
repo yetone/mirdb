@@ -37,14 +37,14 @@ export function FooterSection() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-base-content/70 hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                    className="text-base-content hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
                   >
                     {link.label}
                   </a>
                 ) : (
                   <Link
                     to={link.href}
-                    className="text-base-content/70 hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                    className="text-base-content hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
                   >
                     {link.label}
                   </Link>
@@ -54,7 +54,7 @@ export function FooterSection() {
           </ul>
         </nav>
 
-        <div className="text-center text-base-content/50 text-sm">
+        <div className="text-center text-base-content text-sm">
           <p>© {currentYear} URL Shortener. All rights reserved.</p>
         </div>
       </div>
