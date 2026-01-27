@@ -14,4 +14,4 @@
 export { default as HeroSection } from './HeroSection';
 export { FeaturesSection } from './FeaturesSection';
 export { AnalyticsPreview } from './AnalyticsPreview';
-export { default as CTASection } from './CTASection';
+export { CTASection } from './CTASection';

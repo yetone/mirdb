@@ -23,7 +23,7 @@ interface CTASectionProps {
   onSignIn?: () => void;
 }
 
-const CTASection: React.FC<CTASectionProps> = ({ onCreateAccount, onSignIn }) => {
+export const CTASection: React.FC<CTASectionProps> = ({ onCreateAccount, onSignIn }) => {
   const navigate = useNavigate();
 
   const handleCreateAccount = () => {
@@ -46,12 +46,14 @@ const CTASection: React.FC<CTASectionProps> = ({ onCreateAccount, onSignIn }) =>
     <section
       className="py-20 px-4 text-center"
       data-testid="cta-section"
+      aria-labelledby="cta-heading"
     >
       <div className="max-w-3xl mx-auto">
         {/* Value Reinforcement Text */}
         <h2
+          id="cta-heading"
           className="text-3xl md:text-4xl font-bold mb-6 text-base-content"
-          data-testid="cta-value-text"
+          data-testid="cta-heading"
         >
           Ready to supercharge your links?
         </h2>
