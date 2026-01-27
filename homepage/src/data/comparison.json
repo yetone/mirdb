@@ -1,0 +1,35 @@
+{
+  "products": ["MirDB", "Memcached", "Redis"],
+  "features": [
+    {
+      "name": "Persistence",
+      "mirdb": true,
+      "memcached": false,
+      "redis": true
+    },
+    {
+      "name": "Memcached Protocol",
+      "mirdb": true,
+      "memcached": true,
+      "redis": false
+    },
+    {
+      "name": "In-Memory Speed",
+      "mirdb": true,
+      "memcached": true,
+      "redis": true
+    },
+    {
+      "name": "LSM-Tree Storage",
+      "mirdb": true,
+      "memcached": false,
+      "redis": false
+    },
+    {
+      "name": "Written in Rust",
+      "mirdb": true,
+      "memcached": false,
+      "redis": false
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+---
+/**
+ * Competitive positioning table component.
+ * Owner: Scenario 18 - Competitive Positioning Table
+ *
+ * Displays comparison table:
+ * - MirDB vs Memcached vs Redis
+ * - Features: Persistence, Memcached Protocol, LSM-Tree, Rust
+ */
+
+import comparisonJson from '../data/comparison.json';
+
+interface ComparisonFeature {
+  name: string;
+  mirdb: boolean;
+  memcached: boolean;
+  redis: boolean;
+}
+
+const comparisonData: ComparisonFeature[] = comparisonJson.features;
+---
+
+<section class="comparison section" id="comparison">
+  <div class="container">
+    <h2 class="section-title">How MirDB Compares</h2>
+    <p class="comparison-intro">
+      See how MirDB stacks up against other popular key-value stores.
+    </p>
+    <div class="table-wrapper" role="region" aria-label="Feature comparison table" tabindex="0">
+      <table class="comparison-table" data-testid="comparison-table">
+        <thead>
+          <tr>
+            <th scope="col">Feature</th>
+            <th scope="col" class="product-header mirdb-header">MirDB</th>
+            <th scope="col" class="product-header">Memcached</th>
+            <th scope="col" class="product-header">Redis</th>
+          </tr>
+        </thead>
+        <tbody>
+          {comparisonData.map((feature) => (
+            <tr data-feature={feature.name.toLowerCase().replace(/\s+/g, '-')}>
+              <td class="feature-name">{feature.name}</td>
+              <td class="feature-value mirdb-value" data-product="mirdb" data-feature-name={feature.name}>
+                <span class={feature.mirdb ? 'check' : 'cross'} aria-label={feature.mirdb ? 'Yes' : 'No'}>
+                  {feature.mirdb ? '✓' : '✗'}
+                </span>
+              </td>
+              <td class="feature-value" data-product="memcached" data-feature-name={feature.name}>
+                <span class={feature.memcached ? 'check' : 'cross'} aria-label={feature.memcached ? 'Yes' : 'No'}>
+                  {feature.memcached ? '✓' : '✗'}
+                </span>
+              </td>
+              <td class="feature-value" data-product="redis" data-feature-name={feature.name}>
+                <span class={feature.redis ? 'check' : 'cross'} aria-label={feature.redis ? 'Yes' : 'No'}>
+                  {feature.redis ? '✓' : '✗'}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .comparison-intro {
+    text-align: center;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-primary);
+  }
+
+  .table-wrapper:focus {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: var(--space-md) var(--space-lg);
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .comparison-table th {
+    background-color: var(--color-bg-secondary);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+  }
+
+  .comparison-table th:first-child,
+  .comparison-table td:first-child {
+    text-align: left;
+  }
+
+  .product-header {
+    min-width: 100px;
+  }
+
+  .mirdb-header {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .feature-name {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+  }
+
+  .feature-value {
+    font-size: var(--font-size-lg);
+  }
+
+  .mirdb-value {
+    background-color: rgba(37, 99, 235, 0.05);
+  }
+
+  .check {
+    color: var(--color-secondary);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .cross {
+    color: var(--color-text-muted);
+  }
+
+  .comparison-table tbody tr:hover {
+    background-color: var(--color-bg-secondary);
+  }
+
+  .comparison-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  @media (max-width: 768px) {
+    .comparison-table th,
+    .comparison-table td {
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .product-header {
+      min-width: 80px;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .comparison-table {
+      font-size: var(--font-size-sm);
+    }
+  }
+</style>
