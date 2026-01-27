@@ -326,3 +326,242 @@ describe('Scenario 7: Responsive Design - Tablet Viewport', () => {
     });
   });
 });
+
+/**
+ * Scenario 8: Responsive Design - Desktop Viewport (1024px+)
+ *
+ * Test homepage display on desktop screens (1024px+ width)
+ *
+ * Steps:
+ * 1. Set viewport to desktop (1024px width or larger)
+ * 2. Navigate to homepage
+ * 3. Verify full desktop layout with multi-column grids
+ * 4. Verify visual balance - content centered and balanced
+ */
+describe('Scenario 8: Responsive Design - Desktop Viewport', () => {
+  beforeEach(() => {
+    setViewportWidth(1024);
+  });
+
+  afterEach(() => {
+    resetViewport();
+  });
+
+  describe('Test Case 1: Render HomePage at 1024px viewport width', () => {
+    it('renders page with full desktop layout', () => {
+      renderWithProviders(<Home />);
+
+      // Verify all major sections are present
+      expect(
+        screen.getByRole('heading', { level: 1, name: /shorten urls/i })
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('features-section')).toBeInTheDocument();
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument();
+
+      // Verify hero section uses desktop layout with larger typography
+      const heroHeading = screen.getByRole('heading', {
+        level: 1,
+        name: /shorten urls/i,
+      });
+      expect(heroHeading.className).toContain('text-4xl');
+      expect(heroHeading.className).toContain('md:text-5xl');
+      expect(heroHeading.className).toContain('lg:text-6xl');
+    });
+
+    it('displays navigation buttons in row layout on desktop', () => {
+      renderWithProviders(<Home />);
+
+      // Find all CTA buttons - there are multiple (navbar and hero)
+      const getStartedButtons = screen.getAllByRole('link', { name: /get started/i });
+      const signInButtons = screen.getAllByRole('link', { name: /sign in/i });
+
+      // Multiple buttons should be present (navbar and hero section)
+      expect(getStartedButtons.length).toBeGreaterThanOrEqual(1);
+      expect(signInButtons.length).toBeGreaterThanOrEqual(1);
+
+      // Find the hero section CTA buttons container
+      const heroButtonContainer = document.querySelector('.flex.flex-col.sm\\:flex-row');
+      expect(heroButtonContainer).toBeInTheDocument();
+      expect(heroButtonContainer?.className).toContain('sm:flex-row');
+    });
+
+    it('uses container with centered content', () => {
+      renderWithProviders(<Home />);
+
+      // Find containers with mx-auto class (centered)
+      const containers = document.querySelectorAll('.container.mx-auto');
+      expect(containers.length).toBeGreaterThan(0);
+    });
+
+    it('renders all homepage sections at desktop viewport', () => {
+      renderWithProviders(<Home />);
+
+      // Hero section
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      expect(heroHeading).toBeInTheDocument();
+      expect(heroHeading.textContent).toMatch(/Shorten URLs/i);
+
+      // Features section with full desktop grid
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toBeInTheDocument();
+
+      // How It Works section with full desktop grid
+      const howItWorksSection = screen.getByTestId('how-it-works-section');
+      expect(howItWorksSection).toBeInTheDocument();
+
+      // CTA section
+      const ctaSection = screen.getByText(/Ready to Get Started/i);
+      expect(ctaSection).toBeInTheDocument();
+
+      // Footer
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: Feature cards display in 3-4 column grid layout', () => {
+    it('features grid has lg:grid-cols-4 class for 4-column desktop layout', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toBeInTheDocument();
+
+      // Verify responsive grid classes - at lg (1024px+), should use 4 columns
+      expect(featuresGrid.className).toContain('grid');
+      expect(featuresGrid.className).toContain('lg:grid-cols-4');
+    });
+
+    it('displays all 4 feature cards at desktop', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      // Verify all 4 feature cards are rendered
+      expect(screen.getByTestId('feature-card-0')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-card-1')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-card-2')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-card-3')).toBeInTheDocument();
+
+      // Verify feature titles
+      expect(screen.getByText('URL Shortening')).toBeInTheDocument();
+      expect(screen.getByText('Click Analytics')).toBeInTheDocument();
+      expect(screen.getByText('Dashboard Management')).toBeInTheDocument();
+      expect(screen.getByText('Share Statistics')).toBeInTheDocument();
+    });
+
+    it('has proper responsive grid classes for desktop breakpoint', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+
+      // Should have responsive grid classes: 1 col mobile, 2 col tablet, 4 col desktop
+      expect(featuresGrid.className).toContain('grid-cols-1');
+      expect(featuresGrid.className).toContain('md:grid-cols-2');
+      expect(featuresGrid.className).toContain('lg:grid-cols-4');
+    });
+  });
+
+  describe('Test Case 3: Content has max-width constraint', () => {
+    it('has container class with max-width constraint', () => {
+      renderWithProviders(<Home />);
+
+      // All major sections should use container class which provides max-width
+      const containers = document.querySelectorAll('.container');
+      expect(containers.length).toBeGreaterThan(0);
+
+      // Container class in Tailwind provides max-width at various breakpoints
+      containers.forEach((container) => {
+        expect(container.className).toContain('container');
+      });
+    });
+
+    it('has max-w constraint on hero content', () => {
+      renderWithProviders(<Home />);
+
+      // Hero section has max-w-4xl on the content wrapper
+      const heroContent = document.querySelector('.max-w-4xl');
+      expect(heroContent).toBeInTheDocument();
+    });
+
+    it('does not stretch content to full viewport width', () => {
+      renderWithProviders(<Home />);
+
+      // The features section text content should have max-width
+      const featuresDescription = document.querySelector('.max-w-2xl');
+      expect(featuresDescription).toBeInTheDocument();
+    });
+
+    it('centers content within the max-width container', () => {
+      renderWithProviders(<Home />);
+
+      // Containers should be centered with mx-auto
+      const centeredContainers = document.querySelectorAll('.mx-auto');
+      expect(centeredContainers.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('How It Works section desktop layout', () => {
+    it('displays steps in 4-column grid on desktop', () => {
+      renderWithProviders(<Home />);
+
+      const stepsGrid = screen.getByTestId('how-it-works-steps');
+      expect(stepsGrid.className).toContain('grid');
+      expect(stepsGrid.className).toContain('lg:grid-cols-4');
+    });
+
+    it('shows all 4 step indicators', () => {
+      renderWithProviders(<Home />);
+
+      expect(screen.getByTestId('step-indicator-1')).toBeInTheDocument();
+      expect(screen.getByTestId('step-indicator-2')).toBeInTheDocument();
+      expect(screen.getByTestId('step-indicator-3')).toBeInTheDocument();
+      expect(screen.getByTestId('step-indicator-4')).toBeInTheDocument();
+    });
+  });
+
+  describe('Desktop typography', () => {
+    it('uses larger typography on desktop breakpoints', () => {
+      renderWithProviders(<Home />);
+
+      // Main heading should scale up on desktop
+      const mainHeading = screen.getByRole('heading', {
+        level: 1,
+        name: /shorten urls/i,
+      });
+      expect(mainHeading.className).toContain('lg:text-6xl');
+
+      // Section headings should have responsive sizes
+      const featuresSection = screen.getByTestId('features-section');
+      const featuresHeading = within(featuresSection).getByRole('heading', { level: 2 });
+      expect(featuresHeading.className).toContain('md:text-4xl');
+    });
+  });
+
+  describe('Visual balance at desktop viewport', () => {
+    it('hero content is centered with max-width', () => {
+      renderWithProviders(<HeroSection />);
+
+      // Hero content wrapper should have max-w-4xl and mx-auto for centering
+      const heroContent = document.querySelector('.max-w-4xl.mx-auto');
+      expect(heroContent).toBeInTheDocument();
+    });
+
+    it('features section has centered content', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      // Section container should be centered
+      const container = document.querySelector('.container.mx-auto');
+      expect(container).toBeInTheDocument();
+
+      // Text content in features header should be centered
+      const centeredText = screen.getByText(/Everything you need/i);
+      expect(centeredText.className).toContain('mx-auto');
+    });
+
+    it('all sections use consistent container width', () => {
+      renderWithProviders(<Home />);
+
+      // Multiple containers should exist for different sections
+      const containers = document.querySelectorAll('.container.mx-auto');
+      expect(containers.length).toBeGreaterThanOrEqual(3);
+    });
+  });
+});
