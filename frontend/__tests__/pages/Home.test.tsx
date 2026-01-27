@@ -628,6 +628,320 @@ describe('Home Page - Theme Support - Dark Mode (Scenario 6)', () => {
   })
 })
 
+describe('Home Page - Theme Support - Cyberpunk Theme (Scenario 7)', () => {
+  beforeEach(() => {
+    // Set cyberpunk theme before each test
+    document.documentElement.setAttribute('data-theme', 'cyberpunk')
+    localStorage.setItem('theme', 'cyberpunk')
+  })
+
+  afterEach(() => {
+    // Clean up after each test
+    document.documentElement.removeAttribute('data-theme')
+    localStorage.removeItem('theme')
+  })
+
+  // Test Case 1: Integration - DaisyUI cyberpunk theme classes are applied
+  it('should render homepage with cyberpunk theme data attribute on document', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    // Verify cyberpunk theme is set on document
+    expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
+  })
+
+  it('should render main container with DaisyUI bg-base-100 class for theme support', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    const main = screen.getByRole('main')
+    expect(main).toBeInTheDocument()
+    // Main container uses bg-base-100 which adapts to cyberpunk theme
+    expect(main).toHaveClass('bg-base-100')
+  })
+
+  // Test Case 2: Unit - Components inherit cyberpunk color scheme
+  it('should render text content with theme-aware base-content colors', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    // Check the subheadline has theme-aware text color class
+    const subheadline = screen.getByTestId('subheadline')
+    expect(subheadline).toHaveClass('text-base-content/70')
+
+    // Check the heading is visible and rendered
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+    expect(heading).toBeVisible()
+  })
+
+  it('should render GlassMorphismCard components with cyberpunk theme styling', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    // Get feature cards that are wrapped in GlassMorphismCard
+    const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+    expect(urlShorteningCard).toBeInTheDocument()
+
+    // GlassMorphismCard uses theme-aware classes: bg-base-100/30, border-base-content/10
+    const cardContainer = urlShorteningCard.closest('[class*="backdrop-blur"]')
+    expect(cardContainer).toBeInTheDocument()
+    expect(cardContainer).toHaveClass('backdrop-blur-md')
+    expect(cardContainer).toHaveClass('bg-base-100/30')
+    expect(cardContainer).toHaveClass('border-base-content/10')
+  })
+
+  it('should render FuturisticButton components with cyberpunk theme styling', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    // Get the primary CTA button - uses btn-primary which adapts to cyberpunk theme
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    expect(getStartedButton).toBeInTheDocument()
+    expect(getStartedButton).toHaveClass('btn')
+    expect(getStartedButton).toHaveClass('btn-primary')
+
+    // Get the secondary/outline CTA button - uses btn-outline which adapts to theme
+    const loginButton = screen.getByRole('button', { name: /login/i })
+    expect(loginButton).toBeInTheDocument()
+    expect(loginButton).toHaveClass('btn')
+    expect(loginButton).toHaveClass('btn-outline')
+  })
+
+  it('should render primary accent colors using text-primary class', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    // Product name uses text-primary which adapts to cyberpunk theme
+    const productName = screen.getByText('URL Shortener')
+    expect(productName).toHaveClass('text-primary')
+
+    // Feature icons use text-primary
+    const urlShorteningIcon = screen.getByTestId('feature-icon-url-shortening')
+    expect(urlShorteningIcon).toHaveClass('text-primary')
+  })
+
+  it('should render features section descriptions with theme-aware colors', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+
+    // Check that feature descriptions use theme-aware classes
+    const featureDescription = screen.getByText('Create short, memorable links in seconds')
+    expect(featureDescription).toHaveClass('text-base-content/70')
+  })
+
+  it('should render BackgroundEffect with theme-aware colors in cyberpunk mode', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    const backgroundEffect = screen.getByTestId('background-effect')
+    expect(backgroundEffect).toBeInTheDocument()
+    // BackgroundEffect uses primary/secondary/accent colors with opacity
+    // that are defined by the cyberpunk theme
+    expect(backgroundEffect).toHaveClass('pointer-events-none')
+  })
+
+  it('should render headline with gradient using primary and secondary colors', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    // Find the gradient text span
+    const gradientSpan = screen.getByText('Track Clicks.')
+    expect(gradientSpan).toBeInTheDocument()
+    expect(gradientSpan).toHaveClass('bg-gradient-to-r')
+    expect(gradientSpan).toHaveClass('from-primary')
+    expect(gradientSpan).toHaveClass('to-secondary')
+  })
+
+  it('should render all four feature cards in cyberpunk theme', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    // Verify all feature cards are rendered
+    const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+    const clickAnalyticsCard = screen.getByTestId('feature-card-click-analytics')
+    const dashboardCard = screen.getByTestId('feature-card-dashboard')
+    const shareStatsCard = screen.getByTestId('feature-card-share-stats')
+
+    expect(urlShorteningCard).toBeInTheDocument()
+    expect(clickAnalyticsCard).toBeInTheDocument()
+    expect(dashboardCard).toBeInTheDocument()
+    expect(shareStatsCard).toBeInTheDocument()
+  })
+
+  it('should have hero section with proper structure in cyberpunk theme', () => {
+    renderWithProviders(<Home />, { theme: 'cyberpunk' })
+
+    // Hero section should have the main headline
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+    expect(heading.textContent).toContain('Shorten URLs')
+    expect(heading.textContent).toContain('Track Clicks')
+    expect(heading.textContent).toContain('Grow Your Reach')
+
+    // CTA buttons should be visible - there are multiple links (hero section and footer)
+    const getStartedLinks = screen.getAllByRole('link', { name: /get started/i })
+    const loginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroGetStartedLink = getStartedLinks.find(link => link.querySelector('button'))
+    const heroLoginLink = loginLinks.find(link => link.querySelector('button'))
+
+    expect(heroGetStartedLink).toBeVisible()
+    expect(heroLoginLink).toBeVisible()
+  })
+})
+
+describe('Home Page - Theme Support - Light Mode (Scenario 8)', () => {
+  beforeEach(() => {
+    // Set light theme before each test
+    document.documentElement.setAttribute('data-theme', 'light')
+    localStorage.setItem('theme', 'light')
+  })
+
+  afterEach(() => {
+    // Clean up after each test
+    document.documentElement.removeAttribute('data-theme')
+    localStorage.removeItem('theme')
+  })
+
+  // Test Case 1: Integration - Body/main container has light background color applied
+  it('should render main container with light theme background class', () => {
+    renderWithProviders(<Home />, { theme: 'light' })
+
+    const main = screen.getByRole('main')
+    expect(main).toBeInTheDocument()
+    // Main container uses bg-base-100 which adapts to theme
+    expect(main).toHaveClass('bg-base-100')
+    // Verify light theme is set on document
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+  })
+
+  // Test Case 2: Unit - Text content has appropriate dark color for contrast
+  it('should render text content with theme-aware contrast colors for light mode', () => {
+    renderWithProviders(<Home />, { theme: 'light' })
+
+    // Check the subheadline has theme-aware text color class
+    const subheadline = screen.getByTestId('subheadline')
+    expect(subheadline).toHaveClass('text-base-content/70')
+
+    // Check the heading is visible and rendered
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+    expect(heading).toBeVisible()
+  })
+
+  // Additional test: GlassMorphismCard components render correctly in light mode
+  it('should render GlassMorphismCard components with light theme styling', () => {
+    renderWithProviders(<Home />, { theme: 'light' })
+
+    // Get feature cards that are wrapped in GlassMorphismCard
+    const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+    expect(urlShorteningCard).toBeInTheDocument()
+
+    // GlassMorphismCard uses theme-aware classes: bg-base-100/30, border-base-content/10
+    const cardContainer = urlShorteningCard.closest('[class*="backdrop-blur"]')
+    expect(cardContainer).toBeInTheDocument()
+    expect(cardContainer).toHaveClass('backdrop-blur-md')
+    expect(cardContainer).toHaveClass('bg-base-100/30')
+    expect(cardContainer).toHaveClass('border-base-content/10')
+  })
+
+  // Additional test: FuturisticButton components render correctly in light mode
+  it('should render FuturisticButton components with light theme styling', () => {
+    renderWithProviders(<Home />, { theme: 'light' })
+
+    // Get the primary CTA button
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    expect(getStartedButton).toBeInTheDocument()
+    // Primary button uses btn-primary and gradient classes that adapt to theme
+    expect(getStartedButton).toHaveClass('btn')
+    expect(getStartedButton).toHaveClass('btn-primary')
+
+    // Get the secondary/outline CTA button
+    const loginButton = screen.getByRole('button', { name: /login/i })
+    expect(loginButton).toBeInTheDocument()
+    // Outline button uses btn-outline which adapts to theme
+    expect(loginButton).toHaveClass('btn')
+    expect(loginButton).toHaveClass('btn-outline')
+  })
+
+  // Additional test: Features section text has proper contrast in light mode
+  it('should render features section description with theme-aware text color in light mode', () => {
+    renderWithProviders(<Home />, { theme: 'light' })
+
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+
+    // Check that feature descriptions use theme-aware classes
+    const featureDescription = screen.getByText('Create short, memorable links in seconds')
+    expect(featureDescription).toHaveClass('text-base-content/70')
+  })
+
+  // Additional test: Primary colors adapt to light theme
+  it('should render primary accent colors that work with light theme', () => {
+    renderWithProviders(<Home />, { theme: 'light' })
+
+    // Product name uses text-primary which adapts to theme
+    const productName = screen.getByText('URL Shortener')
+    expect(productName).toHaveClass('text-primary')
+
+    // Feature icons use text-primary
+    const urlShorteningIcon = screen.getByTestId('feature-icon-url-shortening')
+    expect(urlShorteningIcon).toHaveClass('text-primary')
+  })
+
+  // Additional test: Background effect renders correctly in light mode
+  it('should render BackgroundEffect with theme-aware opacity in light mode', () => {
+    renderWithProviders(<Home />, { theme: 'light' })
+
+    const backgroundEffect = screen.getByTestId('background-effect')
+    expect(backgroundEffect).toBeInTheDocument()
+    // BackgroundEffect uses primary/secondary/accent colors with opacity
+    // that work across all themes
+    expect(backgroundEffect).toHaveClass('pointer-events-none')
+  })
+
+  // Additional test: Hero section headline adapts to light theme
+  it('should render hero headline with gradient text in light mode', () => {
+    renderWithProviders(<Home />, { theme: 'light' })
+
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+
+    // The gradient span within the heading
+    const gradientSpan = heading.querySelector('.bg-gradient-to-r')
+    expect(gradientSpan).toBeInTheDocument()
+    expect(gradientSpan).toHaveClass('text-transparent')
+    expect(gradientSpan).toHaveClass('bg-clip-text')
+    expect(gradientSpan).toHaveClass('from-primary')
+    expect(gradientSpan).toHaveClass('to-secondary')
+  })
+
+  // Additional test: All sections visible in light mode
+  it('should render all homepage sections correctly in light mode', () => {
+    renderWithProviders(<Home />, { theme: 'light' })
+
+    // Hero section
+    const heroHeading = screen.getByRole('heading', { level: 1 })
+    expect(heroHeading).toBeVisible()
+
+    // CTAs - there are multiple links (hero section and footer), find the ones in hero section
+    const getStartedLinks = screen.getAllByRole('link', { name: /get started/i })
+    const loginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroGetStartedLink = getStartedLinks.find(link => link.querySelector('button'))
+    const heroLoginLink = loginLinks.find(link => link.querySelector('button'))
+    expect(heroGetStartedLink).toBeVisible()
+    expect(heroLoginLink).toBeVisible()
+
+    // Features section
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+
+    // All feature cards
+    const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+    const clickAnalyticsCard = screen.getByTestId('feature-card-click-analytics')
+    const dashboardCard = screen.getByTestId('feature-card-dashboard')
+    const shareStatsCard = screen.getByTestId('feature-card-share-stats')
+
+    expect(urlShorteningCard).toBeInTheDocument()
+    expect(clickAnalyticsCard).toBeInTheDocument()
+    expect(dashboardCard).toBeInTheDocument()
+    expect(shareStatsCard).toBeInTheDocument()
+  })
+})
+
 describe('Home Page - Footer Section Display (Scenario 9)', () => {
   // Test Case 1: Footer section is present in the DOM
   it('should render footer section in the DOM', () => {
