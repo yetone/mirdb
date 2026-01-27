@@ -1,19 +1,42 @@
-import React from 'react'
+import { ReactNode } from 'react'
+import { motion, HTMLMotionProps } from 'framer-motion'
 
-interface GlassMorphismCardProps {
-  children: React.ReactNode
+interface GlassMorphismCardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
+  children: ReactNode
   className?: string
+  'data-testid'?: string
 }
 
-export const GlassMorphismCard: React.FC<GlassMorphismCardProps> = ({
+/**
+ * GlassMorphismCard - A card component with glassmorphism styling
+ * Features backdrop-filter blur for the frosted glass effect
+ * NFR-4 compliant design consistency component
+ */
+const GlassMorphismCard = ({
   children,
   className = '',
-}) => {
+  'data-testid': testId,
+  ...motionProps
+}: GlassMorphismCardProps) => {
   return (
-    <div
-      className={`backdrop-blur-md bg-base-100/70 border border-base-content/10 rounded-xl shadow-xl transition-all duration-300 hover:shadow-2xl hover:bg-base-100/80 ${className}`}
+    <motion.div
+      className={`
+        card
+        bg-base-100/80
+        backdrop-blur-md
+        border border-base-content/10
+        shadow-xl
+        hover:shadow-2xl
+        transition-shadow
+        duration-300
+        ${className}
+      `.replace(/\s+/g, ' ').trim()}
+      data-testid={testId}
+      {...motionProps}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }
+
+export default GlassMorphismCard
