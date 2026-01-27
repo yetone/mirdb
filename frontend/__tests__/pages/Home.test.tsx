@@ -246,3 +246,134 @@ describe('Home Page - Navigation CTA Functionality (Scenario 3)', () => {
     expect(loginLink).not.toHaveAttribute('tabindex', '-1')
   })
 })
+
+describe('Home Page - Responsive Design Tablet (Scenario 5)', () => {
+  // Test Case 1: Integration - Layout adapts to tablet-appropriate sizing at 768px
+  it('should render homepage with tablet-appropriate layout at 768px viewport', () => {
+    // Set viewport to tablet size (768px)
+    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 768 })
+    window.dispatchEvent(new Event('resize'))
+
+    renderWithProviders(<Home />)
+
+    // Verify main structure is present
+    const main = screen.getByRole('main')
+    expect(main).toBeInTheDocument()
+    expect(main).toHaveClass('min-h-screen')
+
+    // Hero section should exist and be visible
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+
+    // Features section should exist
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+  })
+
+  // Test Case 2: Unit - Feature cards use md:grid-cols-2 for 2-column layout on tablet
+  it('should have feature grid with md:grid-cols-2 class for tablet 2-column layout', () => {
+    renderWithProviders(<Home />)
+
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+
+    // The grid container should have md:grid-cols-2 for tablet (2-column) layout
+    const gridContainer = featuresSection.querySelector('.grid')
+    expect(gridContainer).toBeInTheDocument()
+    expect(gridContainer).toHaveClass('md:grid-cols-2')
+  })
+
+  // Test Case 3: Integration - No content overflow or clipping at 768px viewport
+  it('should not have horizontal overflow at tablet viewport width', () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 768 })
+    window.dispatchEvent(new Event('resize'))
+
+    renderWithProviders(<Home />)
+
+    // The main container should have overflow-hidden or proper containment
+    const heroSection = screen.getByRole('heading', { level: 1 }).closest('section')
+    expect(heroSection).toHaveClass('overflow-hidden')
+
+    // Hero section container should use proper width constraints
+    const container = heroSection?.querySelector('.container')
+    expect(container).toBeInTheDocument()
+    expect(container).toHaveClass('mx-auto')
+    expect(container).toHaveClass('px-4')
+  })
+
+  // Additional test: All sections are accessible at tablet viewport
+  it('should have all sections visible and accessible at tablet viewport', () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 768 })
+    window.dispatchEvent(new Event('resize'))
+
+    renderWithProviders(<Home />)
+
+    // Hero section visible
+    const heroHeading = screen.getByRole('heading', { level: 1 })
+    expect(heroHeading).toBeVisible()
+
+    // Features section visible
+    const featuresHeading = screen.getByRole('heading', { name: /powerful features/i })
+    expect(featuresHeading).toBeVisible()
+
+    // All feature cards visible
+    const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+    const clickAnalyticsCard = screen.getByTestId('feature-card-click-analytics')
+    const dashboardCard = screen.getByTestId('feature-card-dashboard')
+    const shareStatsCard = screen.getByTestId('feature-card-share-stats')
+
+    expect(urlShorteningCard).toBeVisible()
+    expect(clickAnalyticsCard).toBeVisible()
+    expect(dashboardCard).toBeVisible()
+    expect(shareStatsCard).toBeVisible()
+  })
+
+  // Test: Hero text adapts with md: responsive classes
+  it('should have hero headline with responsive text sizing using md: breakpoint', () => {
+    renderWithProviders(<Home />)
+
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+
+    // Headline should have md: responsive classes for tablet
+    expect(heading).toHaveClass('md:text-5xl')
+  })
+
+  // Test: CTA buttons work at tablet viewport
+  it('should have functional CTA buttons at tablet viewport', () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 768 })
+    window.dispatchEvent(new Event('resize'))
+
+    renderWithProviders(<Home />)
+
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    const loginLink = screen.getByRole('link', { name: /login/i })
+
+    expect(getStartedLink).toBeVisible()
+    expect(getStartedLink).toHaveAttribute('href', '/register')
+
+    expect(loginLink).toBeVisible()
+    expect(loginLink).toHaveAttribute('href', '/login')
+  })
+
+  // Test: Button layout adapts with sm: breakpoint for tablet
+  it('should have CTA buttons with responsive flex layout for tablet', () => {
+    renderWithProviders(<Home />)
+
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    const buttonsContainer = getStartedLink.parentElement
+
+    expect(buttonsContainer).toBeInTheDocument()
+    // Should have responsive flex direction: column on mobile, row on sm and up (includes tablet)
+    expect(buttonsContainer).toHaveClass('sm:flex-row')
+  })
+
+  // Test: Features section heading responsive classes
+  it('should have features heading with responsive text sizing for tablet', () => {
+    renderWithProviders(<Home />)
+
+    const featuresHeading = screen.getByRole('heading', { name: /powerful features/i })
+    expect(featuresHeading).toBeInTheDocument()
+    expect(featuresHeading).toHaveClass('md:text-4xl')
+  })
+})
