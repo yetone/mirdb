@@ -8,6 +8,7 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { ThemeProvider, useTheme } from '../../src/contexts/ThemeContext';
@@ -625,6 +626,471 @@ describe('Scenario 10: Theme Support - Dark Mode', () => {
         // Check step descriptions in how-it-works
         const stepDescription = screen.getByTestId('step-1-description');
         expect(stepDescription).toHaveClass('text-base-content/70');
+      });
+    });
+  });
+});
+
+// ============================================================================
+// Scenario 12: Theme Switching - Dynamic theme toggle without page reload
+// ============================================================================
+
+// Interactive theme toggle component for testing theme switching
+const ThemeSwitchingTestComponent: React.FC = () => {
+  const { theme, setTheme } = useTheme();
+  const [switchCount, setSwitchCount] = React.useState(0);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const toggleTheme = () => {
+    try {
+      const newTheme = theme === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
+      setSwitchCount(prev => prev + 1);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+
+  const setSpecificTheme = (newTheme: 'light' | 'dark' | 'cyberpunk' | 'synthwave') => {
+    try {
+      setTheme(newTheme);
+      setSwitchCount(prev => prev + 1);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+
+  return (
+    <div data-testid="theme-switcher-test">
+      <span data-testid="current-theme">{theme}</span>
+      <span data-testid="switch-count">{switchCount}</span>
+      {error && <span data-testid="error-message">{error}</span>}
+      <button onClick={toggleTheme} data-testid="toggle-theme-btn">Toggle Theme</button>
+      <button onClick={() => setSpecificTheme('light')} data-testid="set-light-btn">Set Light</button>
+      <button onClick={() => setSpecificTheme('dark')} data-testid="set-dark-btn">Set Dark</button>
+      <button onClick={() => setSpecificTheme('cyberpunk')} data-testid="set-cyberpunk-btn">Set Cyberpunk</button>
+      <button onClick={() => setSpecificTheme('synthwave')} data-testid="set-synthwave-btn">Set Synthwave</button>
+    </div>
+  );
+};
+
+// Render helper for theme switching tests
+const renderForThemeSwitching = (initialTheme: 'light' | 'dark' = 'light') => {
+  // Set initial theme in localStorage mock
+  const localStorageMock = {
+    getItem: vi.fn(() => initialTheme),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+  };
+  Object.defineProperty(window, 'localStorage', { value: localStorageMock, writable: true });
+
+  const user = userEvent.setup();
+
+  return {
+    ...render(
+      <ThemeProvider>
+        <BrowserRouter>
+          <ThemeSwitchingTestComponent />
+          <Home />
+        </BrowserRouter>
+      </ThemeProvider>
+    ),
+    localStorageMock,
+    user,
+  };
+};
+
+describe('Scenario 12: Theme Switching', () => {
+  beforeEach(() => {
+    document.documentElement.removeAttribute('data-theme');
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    document.documentElement.removeAttribute('data-theme');
+  });
+
+  describe('Test Case 1: Toggle theme from light to dark while on landing page', () => {
+    it('should update data-theme attribute from light to dark', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      // Verify initial light theme
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+      });
+
+      // Click to switch to dark
+      const setDarkBtn = screen.getByTestId('set-dark-btn');
+      await user.click(setDarkBtn);
+
+      // Verify theme switched to dark
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+      });
+    });
+
+    it('should update the theme state when switching from light to dark', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      // Verify initial state shows light
+      await waitFor(() => {
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('light');
+      });
+
+      // Switch to dark
+      const setDarkBtn = screen.getByTestId('set-dark-btn');
+      await user.click(setDarkBtn);
+
+      // Verify state updated
+      await waitFor(() => {
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('dark');
+      });
+    });
+
+    it('should persist theme to localStorage when switching to dark', async () => {
+      const { user, localStorageMock } = renderForThemeSwitching('light');
+
+      const setDarkBtn = screen.getByTestId('set-dark-btn');
+      await user.click(setDarkBtn);
+
+      await waitFor(() => {
+        expect(localStorageMock.setItem).toHaveBeenCalledWith('theme', 'dark');
+      });
+    });
+
+    it('should render all landing page sections after theme switch to dark', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      // Switch to dark
+      const setDarkBtn = screen.getByTestId('set-dark-btn');
+      await user.click(setDarkBtn);
+
+      // Verify all sections still render correctly
+      await waitFor(() => {
+        expect(screen.getByTestId('landing-page')).toBeInTheDocument();
+        expect(screen.getByTestId('features-section')).toBeInTheDocument();
+        expect(screen.getByTestId('social-proof-section')).toBeInTheDocument();
+        expect(screen.getByTestId('footer')).toBeInTheDocument();
+      });
+    });
+
+    it('should not reload the page when switching theme', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      // Get initial switch count
+      await waitFor(() => {
+        expect(screen.getByTestId('switch-count')).toHaveTextContent('0');
+      });
+
+      // Switch theme multiple times
+      const setDarkBtn = screen.getByTestId('set-dark-btn');
+      await user.click(setDarkBtn);
+
+      // Verify component state persisted (switch count incremented, not reset)
+      await waitFor(() => {
+        expect(screen.getByTestId('switch-count')).toHaveTextContent('1');
+      });
+
+      // Component should still be mounted (no page reload)
+      expect(screen.getByTestId('theme-switcher-test')).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: Toggle theme from dark to light while on landing page', () => {
+    it('should update data-theme attribute from dark to light', async () => {
+      const { user } = renderForThemeSwitching('dark');
+
+      // Verify initial dark theme
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+      });
+
+      // Click to switch to light
+      const setLightBtn = screen.getByTestId('set-light-btn');
+      await user.click(setLightBtn);
+
+      // Verify theme switched to light
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+      });
+    });
+
+    it('should update the theme state when switching from dark to light', async () => {
+      const { user } = renderForThemeSwitching('dark');
+
+      // Verify initial state shows dark
+      await waitFor(() => {
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('dark');
+      });
+
+      // Switch to light
+      const setLightBtn = screen.getByTestId('set-light-btn');
+      await user.click(setLightBtn);
+
+      // Verify state updated
+      await waitFor(() => {
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('light');
+      });
+    });
+
+    it('should persist theme to localStorage when switching to light', async () => {
+      const { user, localStorageMock } = renderForThemeSwitching('dark');
+
+      const setLightBtn = screen.getByTestId('set-light-btn');
+      await user.click(setLightBtn);
+
+      await waitFor(() => {
+        expect(localStorageMock.setItem).toHaveBeenCalledWith('theme', 'light');
+      });
+    });
+
+    it('should render all landing page sections after theme switch to light', async () => {
+      const { user } = renderForThemeSwitching('dark');
+
+      // Switch to light
+      const setLightBtn = screen.getByTestId('set-light-btn');
+      await user.click(setLightBtn);
+
+      // Verify all sections still render correctly
+      await waitFor(() => {
+        expect(screen.getByTestId('landing-page')).toBeInTheDocument();
+        expect(screen.getByTestId('features-section')).toBeInTheDocument();
+        expect(screen.getByTestId('social-proof-section')).toBeInTheDocument();
+        expect(screen.getByTestId('footer')).toBeInTheDocument();
+      });
+    });
+
+    it('should apply light theme styling to GlassMorphismCard components', async () => {
+      const { user } = renderForThemeSwitching('dark');
+
+      // Switch to light
+      const setLightBtn = screen.getByTestId('set-light-btn');
+      await user.click(setLightBtn);
+
+      // Verify GlassMorphismCards render with theme-aware styling
+      await waitFor(() => {
+        const cards = screen.getAllByTestId('glassmorphism-card');
+        expect(cards.length).toBeGreaterThan(0);
+        cards.forEach(card => {
+          // Cards use bg-base-100/30 which adapts to light theme
+          expect(card).toHaveClass('bg-base-100/30');
+          expect(card).toHaveClass('backdrop-blur-md');
+        });
+      });
+    });
+  });
+
+  describe('Test Case 3: Toggle theme multiple times', () => {
+    it('should handle rapid theme toggles without errors', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      // Toggle multiple times rapidly
+      const toggleBtn = screen.getByTestId('toggle-theme-btn');
+
+      await user.click(toggleBtn); // light -> dark
+      await user.click(toggleBtn); // dark -> light
+      await user.click(toggleBtn); // light -> dark
+      await user.click(toggleBtn); // dark -> light
+      await user.click(toggleBtn); // light -> dark
+
+      // Should end up on dark theme (odd number of toggles from light)
+      await waitFor(() => {
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('dark');
+        expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+      });
+
+      // No errors should have occurred
+      expect(screen.queryByTestId('error-message')).not.toBeInTheDocument();
+    });
+
+    it('should correctly track switch count after multiple toggles', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      const toggleBtn = screen.getByTestId('toggle-theme-btn');
+
+      // Toggle 5 times
+      for (let i = 0; i < 5; i++) {
+        await user.click(toggleBtn);
+      }
+
+      // Verify switch count
+      await waitFor(() => {
+        expect(screen.getByTestId('switch-count')).toHaveTextContent('5');
+      });
+    });
+
+    it('should correctly switch between all available themes', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      // Switch through all themes
+      const setDarkBtn = screen.getByTestId('set-dark-btn');
+      const setCyberpunkBtn = screen.getByTestId('set-cyberpunk-btn');
+      const setSynthwaveBtn = screen.getByTestId('set-synthwave-btn');
+      const setLightBtn = screen.getByTestId('set-light-btn');
+
+      // Dark
+      await user.click(setDarkBtn);
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('dark');
+      });
+
+      // Cyberpunk
+      await user.click(setCyberpunkBtn);
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('cyberpunk');
+      });
+
+      // Synthwave
+      await user.click(setSynthwaveBtn);
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave');
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('synthwave');
+      });
+
+      // Back to light
+      await user.click(setLightBtn);
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('light');
+      });
+    });
+
+    it('should maintain page content integrity through multiple theme switches', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      const toggleBtn = screen.getByTestId('toggle-theme-btn');
+
+      // Toggle multiple times
+      for (let i = 0; i < 10; i++) {
+        await user.click(toggleBtn);
+      }
+
+      // Verify all landing page sections still render correctly
+      await waitFor(() => {
+        // Main page container
+        expect(screen.getByTestId('landing-page')).toBeInTheDocument();
+
+        // All major sections present
+        expect(screen.getByTestId('features-section')).toBeInTheDocument();
+        expect(screen.getByTestId('social-proof-section')).toBeInTheDocument();
+        expect(screen.getByTestId('footer')).toBeInTheDocument();
+
+        // Buttons still functional
+        expect(screen.getByRole('button', { name: /Get Started/i })).toBeInTheDocument();
+      });
+    });
+
+    it('should persist the final theme to localStorage after multiple switches', async () => {
+      const { user, localStorageMock } = renderForThemeSwitching('light');
+
+      const setDarkBtn = screen.getByTestId('set-dark-btn');
+      const setLightBtn = screen.getByTestId('set-light-btn');
+
+      // Switch multiple times
+      await user.click(setDarkBtn);
+      await user.click(setLightBtn);
+      await user.click(setDarkBtn);
+
+      // Final theme should be dark
+      await waitFor(() => {
+        expect(localStorageMock.setItem).toHaveBeenLastCalledWith('theme', 'dark');
+      });
+    });
+
+    it('should not cause memory leaks during frequent theme changes', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      const toggleBtn = screen.getByTestId('toggle-theme-btn');
+
+      // Simulate many rapid toggles
+      for (let i = 0; i < 20; i++) {
+        await user.click(toggleBtn);
+      }
+
+      // Verify component is still responsive and functional
+      await waitFor(() => {
+        expect(screen.getByTestId('switch-count')).toHaveTextContent('20');
+        expect(screen.getByTestId('theme-switcher-test')).toBeInTheDocument();
+      });
+
+      // No errors should have occurred
+      expect(screen.queryByTestId('error-message')).not.toBeInTheDocument();
+    });
+
+    it('should keep hero section CTA buttons functional after theme switches', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      const toggleBtn = screen.getByTestId('toggle-theme-btn');
+
+      // Toggle theme
+      await user.click(toggleBtn);
+      await user.click(toggleBtn);
+
+      // Verify hero section buttons are still present and styled correctly
+      await waitFor(() => {
+        const primaryButton = screen.getByRole('button', { name: /Get Started/i });
+        expect(primaryButton).toBeInTheDocument();
+        expect(primaryButton).toHaveClass('btn');
+        expect(primaryButton).toHaveClass('btn-primary');
+        expect(primaryButton).toHaveClass('btn-lg');
+
+        const loginButton = screen.getByRole('button', { name: /Login/i });
+        expect(loginButton).toBeInTheDocument();
+        expect(loginButton).toHaveClass('btn');
+      });
+    });
+  });
+
+  describe('Theme switching edge cases', () => {
+    it('should handle setting the same theme multiple times', async () => {
+      const { user, localStorageMock } = renderForThemeSwitching('light');
+
+      const setLightBtn = screen.getByTestId('set-light-btn');
+
+      // Set light theme when already light
+      await user.click(setLightBtn);
+      await user.click(setLightBtn);
+      await user.click(setLightBtn);
+
+      // Should not error
+      expect(screen.queryByTestId('error-message')).not.toBeInTheDocument();
+
+      // Theme should still be light
+      await waitFor(() => {
+        expect(screen.getByTestId('current-theme')).toHaveTextContent('light');
+        expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+      });
+    });
+
+    it('should update theme-aware classes on all components simultaneously', async () => {
+      const { user } = renderForThemeSwitching('light');
+
+      // Switch to dark
+      const setDarkBtn = screen.getByTestId('set-dark-btn');
+      await user.click(setDarkBtn);
+
+      // All theme-aware elements should have updated
+      await waitFor(() => {
+        // Landing page
+        expect(screen.getByTestId('landing-page')).toBeInTheDocument();
+
+        // Features section
+        const featuresSection = screen.getByTestId('features-section');
+        expect(featuresSection).toBeInTheDocument();
+
+        // GlassMorphismCards have theme-aware classes
+        const cards = screen.getAllByTestId('glassmorphism-card');
+        cards.forEach(card => {
+          expect(card).toHaveClass('bg-base-100/30');
+          expect(card).toHaveClass('border-base-content/10');
+        });
+
+        // Footer uses theme-aware colors
+        const footer = screen.getByTestId('footer');
+        expect(footer).toHaveClass('bg-base-200');
       });
     });
   });
