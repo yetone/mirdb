@@ -6,7 +6,15 @@
  * feature icons have appropriate alt text or aria-labels.
  */
 
-import { describe, it, expect } from 'vitest';
+/**
+ * Error Handling - Missing Components Tests
+ * Owner: Scenario 20 - Error Handling - Missing Components
+ *
+ * Tests that verify graceful error handling when components
+ * fail to render or context providers are missing.
+ */
+
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, within } from '../test-utils';
 import Home from '../../src/pages/Home';
 
@@ -393,6 +401,174 @@ describe('SEO - Semantic HTML', () => {
 
       const footerElement = screen.getByRole('contentinfo');
       expect(footerElement).toHaveTextContent(/all rights reserved/i);
+    });
+  });
+});
+
+/**
+ * Error Handling - Missing Components Tests
+ * Owner: Scenario 20 - Error Handling - Missing Components
+ *
+ * Tests that verify graceful error handling when the LandingPage
+ * is rendered without required context providers or when component
+ * errors occur during normal rendering.
+ */
+import { render as rawRender } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import React from 'react';
+import { ThemeProvider } from '../../src/contexts/ThemeContext';
+
+describe('Error Handling - Missing Components', () => {
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+  let originalError: typeof console.error;
+
+  beforeEach(() => {
+    // Store original console.error
+    originalError = console.error;
+    // Spy on console.error to track any errors
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    // Restore console.error
+    consoleErrorSpy.mockRestore();
+    console.error = originalError;
+  });
+
+  describe('Test Case 1: Render LandingPage with missing context providers', () => {
+    it('should throw an error when Router context is missing', () => {
+      // Attempt to render Home without Router context
+      // React Router Link components require Router context
+      expect(() => {
+        rawRender(
+          <ThemeProvider>
+            <Home />
+          </ThemeProvider>
+        );
+      }).toThrow();
+    });
+
+    it('should show appropriate error about Router when Router is missing', () => {
+      // Verify the error is related to Router context
+      let thrownError: Error | null = null;
+      try {
+        rawRender(
+          <ThemeProvider>
+            <Home />
+          </ThemeProvider>
+        );
+      } catch (error) {
+        thrownError = error as Error;
+      }
+
+      expect(thrownError).not.toBeNull();
+      expect(thrownError).toBeInstanceOf(Error);
+      // React Router throws when Link is used outside Router context
+      // The error message mentions 'basename' from NavigationContext destructuring
+      expect(thrownError!.message).toMatch(/useHref|Router|route|basename|destructure/i);
+    });
+
+    it('should render correctly when all required providers are present', () => {
+      // This should NOT throw when all providers are present
+      expect(() => {
+        rawRender(
+          <ThemeProvider>
+            <BrowserRouter>
+              <Home />
+            </BrowserRouter>
+          </ThemeProvider>
+        );
+      }).not.toThrow();
+    });
+  });
+
+  describe('Test Case 2: Render LandingPage component - No uncaught errors', () => {
+    it('should render without any console errors during normal render', () => {
+      // Render with all required providers (using our custom render)
+      render(<Home />);
+
+      // Check that no errors were logged to console during render
+      // Filter out any React-specific deprecation warnings that might occur
+      const significantErrors = consoleErrorSpy.mock.calls.filter((call) => {
+        const message = call[0]?.toString() || '';
+        // Ignore React StrictMode double-render warnings and other non-critical warnings
+        return !message.includes('Warning:') && !message.includes('deprecated');
+      });
+
+      expect(significantErrors).toHaveLength(0);
+    });
+
+    it('should render all section components without errors', () => {
+      // Render the Home component
+      render(<Home />);
+
+      // Verify no errors occurred by checking all sections rendered
+      expect(screen.getByTestId('landing-page')).toBeInTheDocument();
+
+      // Check that all major sections are present (indicating no render errors)
+      expect(screen.getByRole('region', { name: /hero section/i })).toBeInTheDocument();
+      expect(screen.getByTestId('features-section')).toBeInTheDocument();
+      expect(screen.getByTestId('social-proof-section')).toBeInTheDocument();
+      expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+    });
+
+    it('should not throw any uncaught exceptions during render', () => {
+      // This test verifies that rendering doesn't throw
+      expect(() => {
+        render(<Home />);
+      }).not.toThrow();
+    });
+
+    it('should render successfully with all required providers', () => {
+      // Our custom render wraps with ThemeProvider and BrowserRouter
+      const { getByTestId } = render(<Home />);
+
+      // If we can get the landing-page element, render was successful
+      const landingPage = getByTestId('landing-page');
+      expect(landingPage).toBeInTheDocument();
+      expect(landingPage.tagName).toBe('MAIN');
+    });
+
+    it('should have all child components properly mounted', () => {
+      render(<Home />);
+
+      // Verify HeroSection rendered
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+
+      // Verify FeaturesSection rendered
+      expect(screen.getByText('Instant URL Shortening')).toBeInTheDocument();
+      expect(screen.getByText('Detailed Analytics')).toBeInTheDocument();
+      expect(screen.getByText('Share Statistics')).toBeInTheDocument();
+
+      // Verify HowItWorksSection rendered
+      expect(screen.getByText('Create')).toBeInTheDocument();
+      expect(screen.getByText('Share')).toBeInTheDocument();
+      expect(screen.getByText('Track')).toBeInTheDocument();
+
+      // Verify SocialProofSection rendered
+      expect(screen.getByText('Links Created')).toBeInTheDocument();
+      expect(screen.getByText('Clicks Tracked')).toBeInTheDocument();
+      expect(screen.getByText('Happy Users')).toBeInTheDocument();
+
+      // Verify Footer rendered
+      expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+    });
+
+    it('should handle repeated renders without accumulating errors', () => {
+      // Render multiple times to ensure no memory leaks or accumulating errors
+      for (let i = 0; i < 3; i++) {
+        const { unmount } = render(<Home />);
+        expect(screen.getByTestId('landing-page')).toBeInTheDocument();
+        unmount();
+      }
+
+      // No errors should have accumulated
+      const significantErrors = consoleErrorSpy.mock.calls.filter((call) => {
+        const message = call[0]?.toString() || '';
+        return !message.includes('Warning:') && !message.includes('deprecated');
+      });
+
+      expect(significantErrors).toHaveLength(0);
     });
   });
 });
