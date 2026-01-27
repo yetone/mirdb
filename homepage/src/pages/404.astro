@@ -1,0 +1,92 @@
+---
+/**
+ * Custom 404 error page.
+ * Owner: Scenario 17 - Error Handling - 404 Page
+ *
+ * Features:
+ * - Friendly error message
+ * - Link back to homepage
+ * - Consistent styling with rest of site
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pageTitle = '404 - Page Not Found | MirDB';
+const pageDescription = 'The page you are looking for could not be found.';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <main id="main-content" class="error-page">
+    <div class="container">
+      <div class="error-content">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Page Not Found</h2>
+        <p class="error-message">
+          The page you are looking for doesn't exist or has been moved.
+        </p>
+        <a href="/" class="btn btn-primary home-link">
+          Back to Homepage
+        </a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .error-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+  }
+
+  .error-content {
+    text-align: center;
+    max-width: 500px;
+  }
+
+  .error-code {
+    font-size: 8rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: var(--space-md);
+  }
+
+  .error-title {
+    font-size: var(--font-size-3xl);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-lg);
+  }
+
+  .error-message {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .home-link::before {
+    content: '\2190';
+  }
+
+  @media (max-width: 768px) {
+    .error-code {
+      font-size: 5rem;
+    }
+
+    .error-title {
+      font-size: var(--font-size-2xl);
+    }
+
+    .error-message {
+      font-size: var(--font-size-md);
+    }
+  }
+</style>
