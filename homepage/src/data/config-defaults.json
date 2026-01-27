@@ -1,0 +1,46 @@
+{
+  "configOptions": [
+    {
+      "name": "Listen Address",
+      "key": "addr",
+      "default": "0.0.0.0:12333",
+      "description": "Network address and port for server connections"
+    },
+    {
+      "name": "Memtable Max Size",
+      "key": "mem_table_max_size",
+      "default": "4MB",
+      "description": "Maximum size before memtable is flushed to disk"
+    },
+    {
+      "name": "SSTable Max Size",
+      "key": "sst_max_size",
+      "default": "100MB",
+      "description": "Maximum size for SSTable files"
+    },
+    {
+      "name": "Block Size",
+      "key": "block_size",
+      "default": "4KB",
+      "description": "Data block size for SSTable storage"
+    },
+    {
+      "name": "Max LSM Levels",
+      "key": "max_level",
+      "default": "7",
+      "description": "Maximum number of levels in the LSM tree"
+    },
+    {
+      "name": "Data Directory",
+      "key": "work_dir",
+      "default": "/tmp/mirdb",
+      "description": "Directory path for persistent data storage"
+    },
+    {
+      "name": "L0 Compaction Trigger",
+      "key": "l0_compaction_trigger",
+      "default": "4",
+      "description": "Number of Level 0 files before compaction triggers"
+    }
+  ]
+}

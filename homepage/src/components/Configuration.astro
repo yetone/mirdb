@@ -1,0 +1,194 @@
+---
+/**
+ * Configuration options section component.
+ * Owner: Scenario 15 - Configuration Display
+ *
+ * Displays default configuration values:
+ * - Listen address: 0.0.0.0:12333
+ * - Memtable max size: 4MB
+ * - SSTable max size: 100MB
+ * - Block size: 4KB
+ * - Max LSM levels: 7
+ */
+
+import configData from '../data/config-defaults.json';
+
+const { configOptions } = configData;
+---
+
+<section class="configuration section" id="configuration" aria-labelledby="configuration-title">
+  <div class="container">
+    <h2 class="section-title" id="configuration-title">Configuration Options</h2>
+    <p class="config-description">
+      MirDB is highly configurable through TOML configuration files. Below are the default values for key parameters.
+    </p>
+    <div class="config-grid" role="list" aria-label="Configuration options">
+      {configOptions.map((option) => (
+        <div class="config-item" role="listitem">
+          <div class="config-header">
+            <span class="config-name">{option.name}</span>
+            <code class="config-key">{option.key}</code>
+          </div>
+          <div class="config-value" data-config-key={option.key}>
+            <span class="config-default-label">Default:</span>
+            <code class="config-default">{option.default}</code>
+          </div>
+          <p class="config-desc">{option.description}</p>
+        </div>
+      ))}
+    </div>
+    <div class="config-example">
+      <h3 class="config-example-title">Example Configuration</h3>
+      <pre class="config-code"><code>{`# mirdb.toml
+addr = "0.0.0.0:12333"
+work_dir = "/var/lib/mirdb"
+
+mem_table_max_size = "4M"
+sst_max_size = "100M"
+block_size = "4K"
+max_level = 7
+
+l0_compaction_trigger = 4`}</code></pre>
+    </div>
+  </div>
+</section>
+
+<style>
+  .configuration {
+    background-color: var(--color-bg-secondary);
+  }
+
+  .config-description {
+    text-align: center;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto var(--space-2xl);
+  }
+
+  .config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .config-item {
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    transition: box-shadow var(--transition-fast);
+  }
+
+  .config-item:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .config-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .config-name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+  }
+
+  .config-key {
+    font-size: var(--font-size-xs);
+    background-color: var(--color-bg-tertiary);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .config-value {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .config-default-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .config-default {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+  }
+
+  .config-desc {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: var(--line-height-relaxed);
+  }
+
+  .config-example {
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    border: 1px solid var(--color-border);
+  }
+
+  .config-example-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-md);
+    color: var(--color-text-primary);
+  }
+
+  .config-code {
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    margin: 0;
+  }
+
+  .config-code code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+  }
+
+  @media (max-width: 768px) {
+    .config-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .config-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .config-item {
+      padding: var(--space-md);
+    }
+
+    .config-example {
+      padding: var(--space-md);
+    }
+
+    .config-code {
+      padding: var(--space-md);
+      font-size: var(--font-size-xs);
+    }
+  }
+</style>
