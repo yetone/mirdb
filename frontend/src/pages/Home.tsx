@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { FeaturesSection, HeroSection, HowItWorksSection } from '../components/landing';
+import { FeaturesSection, HeroSection, HowItWorksSection, SocialProofSection } from '../components/landing';
 
 export const Home: React.FC = () => {
   return (
@@ -34,7 +34,9 @@ export const Home: React.FC = () => {
       {/* How It Works Section */}
       <HowItWorksSection />
 
-      {/* Placeholder for SocialProofSection - to be implemented by Scenario 5 */}
+      {/* Social Proof Section */}
+      <SocialProofSection />
+
       {/* Placeholder for Footer - to be implemented by Scenario 6 */}
     </main>
   );
