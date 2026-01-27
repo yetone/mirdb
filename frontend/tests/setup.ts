@@ -28,13 +28,36 @@ Object.defineProperty(window, 'matchMedia', {
 })
 
 // Mock IntersectionObserver for scroll animations
-const mockIntersectionObserver = vi.fn()
-mockIntersectionObserver.mockReturnValue({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-})
-window.IntersectionObserver = mockIntersectionObserver
+class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | Document | null = null
+  readonly rootMargin: string = ''
+  readonly thresholds: ReadonlyArray<number> = []
+
+  private callback: IntersectionObserverCallback
+
+  constructor(callback: IntersectionObserverCallback, _options?: IntersectionObserverInit) {
+    this.callback = callback
+  }
+
+  observe = vi.fn((target: Element) => {
+    // Immediately trigger callback with isIntersecting: true for testing
+    this.callback([{
+      isIntersecting: true,
+      target,
+      boundingClientRect: {} as DOMRectReadOnly,
+      intersectionRatio: 1,
+      intersectionRect: {} as DOMRectReadOnly,
+      rootBounds: null,
+      time: Date.now(),
+    }], this)
+  })
+
+  unobserve = vi.fn()
+  disconnect = vi.fn()
+  takeRecords = vi.fn(() => [] as IntersectionObserverEntry[])
+}
+
+window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver
 
 // Mock localStorage
 const localStorageMock = {
