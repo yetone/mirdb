@@ -3,3 +3,4 @@
  */
 
 export { FeaturesSection } from './FeaturesSection'
+export { HeroSection } from './HeroSection'
