@@ -1,5 +1,5 @@
-import { motion, HTMLMotionProps } from 'framer-motion';
-import { ReactNode } from 'react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import type { ReactNode } from 'react';
 
 interface FuturisticButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
   children: ReactNode;

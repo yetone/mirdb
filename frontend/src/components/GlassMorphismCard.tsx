@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
+import type { ReactNode } from 'react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
 
 interface GlassMorphismCardProps extends HTMLMotionProps<'div'> {
   children: ReactNode;

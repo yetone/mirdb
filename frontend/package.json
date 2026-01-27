@@ -13,7 +13,9 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/vite": "^4.1.18",
+    "autoprefixer": "^10.4.23",
     "daisyui": "^5.5.14",
     "framer-motion": "^12.29.2",
     "lucide-react": "^0.563.0",
