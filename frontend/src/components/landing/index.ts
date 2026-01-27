@@ -13,8 +13,4 @@
  */
 
 export { HeroSection } from './HeroSection';
-// Future exports as other scenarios complete:
-// export { FeaturesSection } from './FeaturesSection';
-// export { HowItWorksSection } from './HowItWorksSection';
-// export { SocialProofSection } from './SocialProofSection';
-// export { Footer } from './Footer';
+export { HowItWorksSection } from './HowItWorksSection';

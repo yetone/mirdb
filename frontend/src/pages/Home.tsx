@@ -19,20 +19,24 @@
  * - Home: React.FC (default export)
  */
 
-import { HeroSection } from '../components/landing';
+import React from 'react';
+import { HeroSection, HowItWorksSection } from '../components/landing';
 
-function Home() {
+export const Home: React.FC = () => {
   return (
-    <main className="min-h-screen bg-base-100">
+    <main className="min-h-screen">
+      {/* Hero Section */}
       <HeroSection />
-      {/* Future sections will be added by other scenarios:
-          <FeaturesSection />
-          <HowItWorksSection />
-          <SocialProofSection />
-          <Footer />
-      */}
+
+      {/* Placeholder for FeaturesSection - to be implemented by Scenario 2 */}
+
+      {/* How It Works Section */}
+      <HowItWorksSection />
+
+      {/* Placeholder for SocialProofSection - to be implemented by Scenario 5 */}
+      {/* Placeholder for Footer - to be implemented by Scenario 6 */}
     </main>
   );
-}
+};
 
 export default Home;

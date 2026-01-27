@@ -19,17 +19,16 @@ afterEach(() => {
 });
 
 // Mock ResizeObserver
-class ResizeObserverMock {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-global.ResizeObserver = ResizeObserverMock;
+global.ResizeObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -42,38 +41,17 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock IntersectionObserver
-class IntersectionObserverMock {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-global.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver;
+global.IntersectionObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
 
-// Mock WebGL context for Three.js BackgroundEffect
-HTMLCanvasElement.prototype.getContext = vi.fn().mockImplementation((contextId) => {
-  if (contextId === 'webgl' || contextId === 'webgl2') {
-    return {
-      createShader: vi.fn(),
-      shaderSource: vi.fn(),
-      compileShader: vi.fn(),
-      getShaderParameter: vi.fn(() => true),
-      createProgram: vi.fn(),
-      attachShader: vi.fn(),
-      linkProgram: vi.fn(),
-      getProgramParameter: vi.fn(() => true),
-      useProgram: vi.fn(),
-      createBuffer: vi.fn(),
-      bindBuffer: vi.fn(),
-      bufferData: vi.fn(),
-      enable: vi.fn(),
-      clearColor: vi.fn(),
-      clear: vi.fn(),
-      viewport: vi.fn(),
-      getExtension: vi.fn(() => null),
-      getParameter: vi.fn(() => 0),
-      drawArrays: vi.fn(),
-      canvas: { width: 800, height: 600 },
-    };
-  }
-  return null;
-}) as unknown as typeof HTMLCanvasElement.prototype.getContext;
+// Mock localStorage
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });

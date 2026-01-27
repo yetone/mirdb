@@ -1,9 +1,4 @@
 /target
 **/*.rs.bk
 .something/
-
-# Node.js
 node_modules/
-dist/
-.env.local
-.env.*.local
