@@ -17,6 +17,7 @@ export const GlassMorphismCard: React.FC<GlassMorphismCardProps> = ({
       className={`backdrop-blur-md bg-base-100/30 border border-base-content/10 rounded-xl p-6 shadow-lg ${className}`}
       whileHover={hover ? { y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' } : undefined}
       transition={{ duration: 0.3 }}
+      data-testid="glassmorphism-card"
     >
       {children}
     </motion.div>

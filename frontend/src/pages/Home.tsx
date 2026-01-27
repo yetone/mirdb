@@ -20,15 +20,16 @@
  */
 
 import React from 'react';
-import { HeroSection, HowItWorksSection } from '../components/landing';
+import { FeaturesSection, HeroSection, HowItWorksSection } from '../components/landing';
 
 export const Home: React.FC = () => {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen" data-testid="landing-page">
       {/* Hero Section */}
       <HeroSection />
 
-      {/* Placeholder for FeaturesSection - to be implemented by Scenario 2 */}
+      {/* Features Section */}
+      <FeaturesSection />
 
       {/* How It Works Section */}
       <HowItWorksSection />
