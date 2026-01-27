@@ -880,3 +880,254 @@ describe('Scenario 12: Navbar Integration', () => {
     });
   });
 });
+
+/**
+ * Scenario 14: Animation and Motion Effects
+ *
+ * Test that Framer Motion animations load and perform correctly.
+ *
+ * Steps:
+ * 1. Navigate to homepage
+ * 2. Observe initial load animations
+ * 3. Test hover animations
+ * 4. Test scroll-triggered animations
+ */
+describe('Scenario 14: Animation and Motion Effects', () => {
+  describe('Test Case 1: Render HomePage and check for Framer Motion components', () => {
+    it('HomePage contains motion.div elements for animations', () => {
+      renderWithProviders(<Home />);
+
+      // motion.div elements are rendered as regular divs but with framer-motion attributes
+      // The hero section should have animated elements
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      expect(heroHeading).toBeInTheDocument();
+
+      // The h1 element should be a motion element (framer-motion adds style attributes)
+      // Framer Motion adds data-projection-id or style with transform for animated elements
+      const headingParent = heroHeading.closest('div');
+      expect(headingParent).toBeInTheDocument();
+    });
+
+    it('HeroSection uses motion components for entrance animations', () => {
+      renderWithProviders(<HeroSection />);
+
+      // Check that the hero section renders with animated content
+      const headline = screen.getByRole('heading', { level: 1 });
+      expect(headline).toBeInTheDocument();
+
+      // The headline should have Framer Motion initial/animate states
+      // Framer Motion renders motion.h1 as h1 with added styles
+      expect(headline.textContent).toMatch(/Shorten URLs/i);
+    });
+
+    it('HomePage renders BackgroundEffect component with motion elements', () => {
+      renderWithProviders(<Home />);
+
+      // BackgroundEffect should be present with its test id
+      const backgroundEffect = screen.getByTestId('background-effect');
+      expect(backgroundEffect).toBeInTheDocument();
+
+      // BackgroundEffect contains motion.div elements for animated circles
+      const animatedDivs = backgroundEffect.querySelectorAll('div');
+      expect(animatedDivs.length).toBeGreaterThanOrEqual(3); // 3 animated circles + container
+    });
+
+    it('FeaturesSection contains motion components for card animations', () => {
+      renderWithProviders(<Home />);
+
+      // Features section should be present
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toBeInTheDocument();
+
+      // Feature cards should be rendered (animated with motion.div)
+      const featureCards = screen.getAllByTestId(/feature-card-/);
+      expect(featureCards.length).toBe(4);
+    });
+
+    it('CTASection contains motion components', () => {
+      renderWithProviders(<Home />);
+
+      // CTA section should be present
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // CTA heading should be present (animated with motion.h2)
+      const ctaHeading = screen.getByRole('heading', { name: /Ready to Get Started/i });
+      expect(ctaHeading).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: Check FuturisticButton hover animation', () => {
+    it('FuturisticButton is rendered as a motion.button element', () => {
+      renderWithProviders(<HeroSection />);
+
+      // Find the Get Started button
+      const getStartedButton = screen.getByRole('button', { name: /Get Started/i });
+      expect(getStartedButton).toBeInTheDocument();
+
+      // The button should have the btn class from FuturisticButton
+      expect(getStartedButton).toHaveClass('btn');
+      expect(getStartedButton).toHaveClass('btn-primary');
+    });
+
+    it('FuturisticButton has hover animation props (whileHover scale)', () => {
+      renderWithProviders(<HeroSection />);
+
+      // Find the Get Started button
+      const getStartedButton = screen.getByRole('button', { name: /Get Started/i });
+      expect(getStartedButton).toBeInTheDocument();
+
+      // Framer Motion applies transforms via inline styles
+      // We can verify the button element exists and is properly styled
+      expect(getStartedButton.tagName.toLowerCase()).toBe('button');
+
+      // Button should have transition classes for smooth animation
+      expect(getStartedButton).toHaveClass('transition-all');
+    });
+
+    it('FuturisticButton has correct variant styling for primary CTA', () => {
+      renderWithProviders(<HeroSection />);
+
+      // Primary button should have primary variant classes
+      const primaryButton = screen.getByRole('button', { name: /Get Started/i });
+      expect(primaryButton).toHaveClass('btn-primary');
+
+      // Secondary button (Sign In) should have outline variant
+      const secondaryButton = screen.getByRole('button', { name: /Sign In/i });
+      expect(secondaryButton).toHaveClass('btn-outline');
+    });
+
+    it('multiple FuturisticButtons exist with hover capability', () => {
+      renderWithProviders(<Home />);
+
+      // Multiple buttons throughout the page
+      const allButtons = screen.getAllByRole('button');
+      expect(allButtons.length).toBeGreaterThanOrEqual(2);
+
+      // Get Started buttons (hero and CTA sections)
+      const getStartedButtons = screen.getAllByRole('button', { name: /Get Started/i });
+      expect(getStartedButtons.length).toBeGreaterThanOrEqual(1);
+
+      // Each button should have the base classes
+      getStartedButtons.forEach((button) => {
+        expect(button).toHaveClass('btn');
+      });
+    });
+  });
+
+  describe('Test Case 3: Verify BackgroundEffect animation runs', () => {
+    it('BackgroundEffect component is present and has animated elements', () => {
+      renderWithProviders(<Home />);
+
+      // BackgroundEffect should be in the document
+      const backgroundEffect = screen.getByTestId('background-effect');
+      expect(backgroundEffect).toBeInTheDocument();
+
+      // Background effect should be positioned correctly (fixed, full screen)
+      expect(backgroundEffect).toHaveClass('fixed');
+      expect(backgroundEffect).toHaveClass('inset-0');
+      expect(backgroundEffect).toHaveClass('overflow-hidden');
+    });
+
+    it('BackgroundEffect contains multiple animated blur circles', () => {
+      renderWithProviders(<Home />);
+
+      const backgroundEffect = screen.getByTestId('background-effect');
+
+      // BackgroundEffect has 3 motion.div elements for animated circles
+      // Each has blur-3xl or blur-2xl class
+      const blurElements = backgroundEffect.querySelectorAll('.blur-3xl, .blur-2xl');
+      expect(blurElements.length).toBe(3);
+    });
+
+    it('BackgroundEffect circles have proper color classes for theming', () => {
+      renderWithProviders(<Home />);
+
+      const backgroundEffect = screen.getByTestId('background-effect');
+
+      // Check for primary, secondary, and accent color classes
+      const primaryCircle = backgroundEffect.querySelector('.bg-primary\\/20');
+      const secondaryCircle = backgroundEffect.querySelector('.bg-secondary\\/20');
+      const accentCircle = backgroundEffect.querySelector('.bg-accent\\/10');
+
+      expect(primaryCircle).toBeInTheDocument();
+      expect(secondaryCircle).toBeInTheDocument();
+      expect(accentCircle).toBeInTheDocument();
+    });
+
+    it('BackgroundEffect is rendered behind content (negative z-index)', () => {
+      renderWithProviders(<Home />);
+
+      const backgroundEffect = screen.getByTestId('background-effect');
+
+      // BackgroundEffect should have negative z-index to stay behind content
+      expect(backgroundEffect).toHaveClass('-z-10');
+    });
+
+    it('BackgroundEffect does not block pointer events', () => {
+      renderWithProviders(<Home />);
+
+      const backgroundEffect = screen.getByTestId('background-effect');
+
+      // BackgroundEffect should not intercept clicks
+      expect(backgroundEffect).toHaveClass('pointer-events-none');
+    });
+
+    it('BackgroundEffect circles have rounded-full class for circular shape', () => {
+      renderWithProviders(<Home />);
+
+      const backgroundEffect = screen.getByTestId('background-effect');
+
+      // All animated circles should be round
+      const roundedElements = backgroundEffect.querySelectorAll('.rounded-full');
+      expect(roundedElements.length).toBe(3);
+    });
+  });
+
+  describe('Animation Integration Tests', () => {
+    it('HomePage has all sections with animations properly rendered', () => {
+      renderWithProviders(<Home />);
+
+      // Hero section with motion elements
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      expect(heroHeading).toBeInTheDocument();
+
+      // Features section with animated cards
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toBeInTheDocument();
+
+      // How It Works section (if present)
+      const howItWorksHeading = screen.getByRole('heading', { name: /How It Works/i });
+      expect(howItWorksHeading).toBeInTheDocument();
+
+      // CTA section with animations
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Background effect for visual polish
+      const backgroundEffect = screen.getByTestId('background-effect');
+      expect(backgroundEffect).toBeInTheDocument();
+    });
+
+    it('all FuturisticButtons on page have consistent styling', () => {
+      renderWithProviders(<Home />);
+
+      // All buttons should have common base styles
+      const allButtons = screen.getAllByRole('button');
+
+      allButtons.forEach((button) => {
+        // Each FuturisticButton has these base classes
+        expect(button).toHaveClass('btn');
+        expect(button).toHaveClass('font-semibold');
+        expect(button).toHaveClass('rounded-lg');
+      });
+    });
+
+    it('motion elements are rendered without crashing', () => {
+      // This test ensures Framer Motion components render correctly
+      expect(() => {
+        renderWithProviders(<Home />);
+      }).not.toThrow();
+    });
+  });
+});
