@@ -1,10 +1,18 @@
-import '@testing-library/jest-dom'
-import { vi } from 'vitest'
+import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
-// Mock window.matchMedia
+// Mock ResizeObserver for Recharts - must be a proper class
+class MockResizeObserver {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+global.ResizeObserver = MockResizeObserver;
+
+// Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -14,26 +22,34 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
-})
+});
 
-// Mock ResizeObserver
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}))
-
-// Mock Three.js WebGL
-vi.mock('three', async () => {
-  const actual = await vi.importActual('three')
-  return {
-    ...actual,
-    WebGLRenderer: vi.fn().mockImplementation(() => ({
-      setSize: vi.fn(),
-      setPixelRatio: vi.fn(),
-      render: vi.fn(),
-      dispose: vi.fn(),
-      domElement: document.createElement('canvas'),
-    })),
-  }
-})
+// Mock canvas for Three.js
+HTMLCanvasElement.prototype.getContext = vi.fn().mockImplementation(() => ({
+  fillStyle: '',
+  fillRect: vi.fn(),
+  clearRect: vi.fn(),
+  getImageData: vi.fn(() => ({
+    data: [],
+  })),
+  putImageData: vi.fn(),
+  createImageData: vi.fn(),
+  setTransform: vi.fn(),
+  drawImage: vi.fn(),
+  save: vi.fn(),
+  restore: vi.fn(),
+  scale: vi.fn(),
+  rotate: vi.fn(),
+  translate: vi.fn(),
+  transform: vi.fn(),
+  beginPath: vi.fn(),
+  closePath: vi.fn(),
+  moveTo: vi.fn(),
+  lineTo: vi.fn(),
+  clip: vi.fn(),
+  fill: vi.fn(),
+  stroke: vi.fn(),
+  arc: vi.fn(),
+  rect: vi.fn(),
+  measureText: vi.fn(() => ({ width: 0 })),
+})) as unknown as typeof HTMLCanvasElement.prototype.getContext;

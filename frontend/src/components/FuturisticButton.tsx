@@ -1,31 +1,30 @@
 import React from 'react';
 
-interface FuturisticButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface FuturisticButtonProps {
   children: React.ReactNode;
+  onClick?: () => void;
   variant?: 'primary' | 'secondary';
+  className?: string;
+  type?: 'button' | 'submit' | 'reset';
 }
 
-const FuturisticButton: React.FC<FuturisticButtonProps> = ({
+export const FuturisticButton: React.FC<FuturisticButtonProps> = ({
   children,
+  onClick,
   variant = 'primary',
   className = '',
-  disabled = false,
   type = 'button',
-  ...props
 }) => {
-  const baseStyles = 'px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2';
-
-  const variantStyles = {
-    primary: 'bg-primary text-primary-content hover:bg-primary-focus focus:ring-primary shadow-lg hover:shadow-primary/50',
-    secondary: 'bg-secondary text-secondary-content hover:bg-secondary-focus focus:ring-secondary shadow-lg hover:shadow-secondary/50',
-  };
+  const baseClasses = 'btn text-lg font-semibold transition-all duration-300 hover:scale-105';
+  const variantClasses = variant === 'primary'
+    ? 'btn-primary'
+    : 'btn-ghost border border-base-content/20';
 
   return (
     <button
       type={type}
-      disabled={disabled}
-      className={`${baseStyles} ${variantStyles[variant]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
-      {...props}
+      onClick={onClick}
+      className={`${baseClasses} ${variantClasses} ${className}`}
     >
       {children}
     </button>

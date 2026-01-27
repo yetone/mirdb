@@ -11,5 +11,6 @@
  * - CTASection
  */
 
-export { default as HeroSection } from './HeroSection'
-export { FeaturesSection } from './FeaturesSection'
+export { default as HeroSection } from './HeroSection';
+export { FeaturesSection } from './FeaturesSection';
+export { AnalyticsPreview } from './AnalyticsPreview';
