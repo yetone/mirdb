@@ -27,7 +27,7 @@
  */
 import { Link } from 'react-router-dom';
 import BackgroundEffect from '../components/BackgroundEffect';
-import { HeroSection, FeaturesSection } from '../components/landing';
+import { HeroSection, FeaturesSection, HowItWorksSection } from '../components/landing';
 import ThemeToggle from '../components/ThemeToggle';
 
 export default function Home() {
@@ -61,6 +61,9 @@ export default function Home() {
         <section id="features" aria-label="Features">
           <FeaturesSection />
         </section>
+
+        {/* How It Works section */}
+        <HowItWorksSection />
       </main>
 
       {/* Footer placeholder */}
