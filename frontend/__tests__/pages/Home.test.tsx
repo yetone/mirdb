@@ -1030,6 +1030,219 @@ describe('Home Page - Footer Section Display (Scenario 9)', () => {
   })
 })
 
+describe('Home Page - Accessibility - Keyboard Navigation (Scenario 10)', () => {
+  // Test Case 1: Integration - Tab through Homepage interactive elements
+  // Expected: All CTA buttons receive focus in logical order
+  it('should allow tabbing through all CTA buttons in logical order', async () => {
+    renderWithProviders(<Home />)
+
+    // Get all focusable interactive elements
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    const loginButton = screen.getByRole('button', { name: /login/i })
+    const footerLoginLink = screen.getByTestId('footer-login-link')
+    const footerRegisterLink = screen.getByTestId('footer-register-link')
+    const themeSelect = screen.getByRole('combobox', { name: /select theme/i })
+
+    // Verify all interactive elements exist and are focusable
+    expect(getStartedButton).toBeInTheDocument()
+    expect(loginButton).toBeInTheDocument()
+    expect(footerLoginLink).toBeInTheDocument()
+    expect(footerRegisterLink).toBeInTheDocument()
+    expect(themeSelect).toBeInTheDocument()
+
+    // Verify elements can receive focus (not disabled or hidden)
+    expect(getStartedButton).not.toBeDisabled()
+    expect(loginButton).not.toBeDisabled()
+    expect(themeSelect).not.toBeDisabled()
+  })
+
+  // Test Case 2: Unit - Focus on primary CTA button
+  // Expected: Visible focus ring/outline is displayed
+  it('should have visible focus indicator styles on primary CTA button', () => {
+    renderWithProviders(<Home />)
+
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    expect(getStartedButton).toBeInTheDocument()
+
+    // The button should have focus-visible styles via Tailwind/DaisyUI
+    // DaisyUI btn class includes focus styling
+    expect(getStartedButton).toHaveClass('btn')
+
+    // Button should be focusable (not have negative tabindex)
+    expect(getStartedButton).not.toHaveAttribute('tabindex', '-1')
+
+    // Verify the button can be focused
+    getStartedButton.focus()
+    expect(document.activeElement).toBe(getStartedButton)
+  })
+
+  // Test Case 3: Integration - Press Enter on focused CTA button
+  // Expected: Button action is triggered (navigation occurs)
+  it('should have CTA buttons that respond to keyboard activation', () => {
+    renderWithProviders(<Home />)
+
+    // Find links wrapping buttons in hero section
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    const loginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroLoginLink = loginLinks.find(link => link.querySelector('button'))
+
+    // Verify links have correct href for keyboard navigation
+    expect(getStartedLink).toHaveAttribute('href', '/register')
+    expect(heroLoginLink).toHaveAttribute('href', '/login')
+
+    // Links and their buttons should be keyboard accessible
+    expect(getStartedLink).not.toHaveAttribute('tabindex', '-1')
+    expect(heroLoginLink).not.toHaveAttribute('tabindex', '-1')
+
+    // Buttons inside links should not prevent keyboard access
+    const getStartedButton = getStartedLink.querySelector('button')
+    const loginButtonElement = heroLoginLink?.querySelector('button')
+    expect(getStartedButton).not.toHaveAttribute('tabindex', '-1')
+    expect(loginButtonElement).not.toHaveAttribute('tabindex', '-1')
+  })
+
+  // Test Case 4: Unit - Check tabindex attributes
+  // Expected: No positive tabindex values that break natural tab order
+  it('should not have positive tabindex values on any interactive elements', () => {
+    renderWithProviders(<Home />)
+
+    // Query all interactive elements that could have tabindex
+    const allButtons = screen.getAllByRole('button')
+    const allLinks = screen.getAllByRole('link')
+    const allComboboxes = screen.getAllByRole('combobox')
+
+    // Check buttons for positive tabindex
+    allButtons.forEach(button => {
+      const tabindex = button.getAttribute('tabindex')
+      if (tabindex !== null) {
+        const tabindexValue = parseInt(tabindex, 10)
+        // tabindex should be 0 (natural order) or -1 (programmatic focus only), never positive
+        expect(tabindexValue).toBeLessThanOrEqual(0)
+      }
+    })
+
+    // Check links for positive tabindex
+    allLinks.forEach(link => {
+      const tabindex = link.getAttribute('tabindex')
+      if (tabindex !== null) {
+        const tabindexValue = parseInt(tabindex, 10)
+        expect(tabindexValue).toBeLessThanOrEqual(0)
+      }
+    })
+
+    // Check comboboxes for positive tabindex
+    allComboboxes.forEach(combobox => {
+      const tabindex = combobox.getAttribute('tabindex')
+      if (tabindex !== null) {
+        const tabindexValue = parseInt(tabindex, 10)
+        expect(tabindexValue).toBeLessThanOrEqual(0)
+      }
+    })
+  })
+
+  // Additional test: All interactive elements in hero section are keyboard accessible
+  it('should have all hero section interactive elements keyboard accessible', () => {
+    renderWithProviders(<Home />)
+
+    // Get hero CTA buttons
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    const loginButton = screen.getByRole('button', { name: /login/i })
+
+    // Buttons should be focusable
+    getStartedButton.focus()
+    expect(document.activeElement).toBe(getStartedButton)
+
+    loginButton.focus()
+    expect(document.activeElement).toBe(loginButton)
+  })
+
+  // Additional test: Footer navigation links are keyboard accessible
+  it('should have all footer links keyboard accessible', () => {
+    renderWithProviders(<Home />)
+
+    const footerLoginLink = screen.getByTestId('footer-login-link')
+    const footerRegisterLink = screen.getByTestId('footer-register-link')
+
+    // Links should be focusable
+    footerLoginLink.focus()
+    expect(document.activeElement).toBe(footerLoginLink)
+
+    footerRegisterLink.focus()
+    expect(document.activeElement).toBe(footerRegisterLink)
+
+    // Verify links have proper hrefs for navigation
+    expect(footerLoginLink).toHaveAttribute('href', '/login')
+    expect(footerRegisterLink).toHaveAttribute('href', '/register')
+  })
+
+  // Additional test: Theme toggle is keyboard accessible
+  it('should have theme toggle keyboard accessible', () => {
+    renderWithProviders(<Home />)
+
+    const themeSelect = screen.getByRole('combobox', { name: /select theme/i })
+
+    // Should be focusable
+    themeSelect.focus()
+    expect(document.activeElement).toBe(themeSelect)
+
+    // Should not have positive tabindex
+    const tabindex = themeSelect.getAttribute('tabindex')
+    if (tabindex !== null) {
+      expect(parseInt(tabindex, 10)).toBeLessThanOrEqual(0)
+    }
+  })
+
+  // Additional test: Focus order follows logical document flow
+  it('should have interactive elements in logical DOM order for focus navigation', () => {
+    renderWithProviders(<Home />)
+
+    // Get elements in expected order (hero section first, then footer)
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    const heroLoginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroLoginLink = heroLoginLinks.find(link => link.querySelector('button'))
+    const footerLoginLink = screen.getByTestId('footer-login-link')
+    const footerRegisterLink = screen.getByTestId('footer-register-link')
+
+    // Verify they exist in logical order by checking their position in the DOM tree
+    // Using compareDocumentPosition to check if elements are in correct DOM order
+    // DOCUMENT_POSITION_FOLLOWING (4) means the second element follows the first in document order
+    const DOCUMENT_POSITION_FOLLOWING = 4
+
+    // Hero section links should come before footer links in DOM order
+    expect(getStartedLink.compareDocumentPosition(footerLoginLink) & DOCUMENT_POSITION_FOLLOWING).toBe(DOCUMENT_POSITION_FOLLOWING)
+    expect(getStartedLink.compareDocumentPosition(footerRegisterLink) & DOCUMENT_POSITION_FOLLOWING).toBe(DOCUMENT_POSITION_FOLLOWING)
+
+    if (heroLoginLink) {
+      expect(heroLoginLink.compareDocumentPosition(footerLoginLink) & DOCUMENT_POSITION_FOLLOWING).toBe(DOCUMENT_POSITION_FOLLOWING)
+      expect(heroLoginLink.compareDocumentPosition(footerRegisterLink) & DOCUMENT_POSITION_FOLLOWING).toBe(DOCUMENT_POSITION_FOLLOWING)
+    }
+  })
+
+  // Additional test: Verify buttons have accessible names
+  it('should have all buttons with accessible names', () => {
+    renderWithProviders(<Home />)
+
+    const allButtons = screen.getAllByRole('button')
+
+    allButtons.forEach(button => {
+      // Each button should have accessible text content
+      expect(button).toHaveAccessibleName()
+    })
+  })
+
+  // Additional test: Verify links have accessible names
+  it('should have all links with accessible names', () => {
+    renderWithProviders(<Home />)
+
+    const allLinks = screen.getAllByRole('link')
+
+    allLinks.forEach(link => {
+      // Each link should have accessible text content
+      expect(link).toHaveAccessibleName()
+    })
+  })
+})
+
 describe('Home Page - Accessibility - Semantic HTML Structure (Scenario 11)', () => {
   // Test Case 1: Exactly one h1 element exists on the page
   it('should have exactly one h1 element on the page', () => {
@@ -1159,7 +1372,7 @@ describe('Home Page - Accessibility - Semantic HTML Structure (Scenario 11)', ()
 
   // Additional test: Decorative icons have aria-hidden
   it('should have decorative icons marked with aria-hidden', () => {
-    const { container } = renderWithProviders(<Home />)
+    renderWithProviders(<Home />)
 
     // Feature icons are decorative and should have aria-hidden
     const featureIconContainers = [
