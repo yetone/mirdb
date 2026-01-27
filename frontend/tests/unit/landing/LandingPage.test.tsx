@@ -179,3 +179,102 @@ describe('Semantic HTML Structure', () => {
     });
   });
 });
+
+/**
+ * Component Integration Tests - Existing Components
+ * Owner: Scenario 16 - Component Integration - Existing Components
+ *
+ * Verifies that the landing page correctly uses the existing component library:
+ * - FuturisticButton for CTA buttons
+ * - GlassMorphismCard for feature cards
+ * - BackgroundEffect for visual enhancement
+ * - ThemeToggle in footer or navigation
+ */
+describe('Component Integration - Existing Components', () => {
+  describe('Test Case 1: FuturisticButton usage', () => {
+    it('CTA buttons use FuturisticButton components with Framer Motion animations', () => {
+      renderWithProviders(<Home />);
+
+      // FuturisticButton uses motion.button which has whileHover and whileTap animations
+      // Find CTA buttons - "Get Started" in hero and navigation
+      const getStartedButtons = screen.getAllByRole('button', { name: /get started/i });
+
+      // Verify at least one Get Started button exists (from HeroSection)
+      expect(getStartedButtons.length).toBeGreaterThanOrEqual(1);
+
+      // FuturisticButton renders as a motion.button with btn classes
+      getStartedButtons.forEach(button => {
+        // Should have btn class from DaisyUI styling
+        expect(button).toHaveClass('btn');
+        // Should have btn-primary class for primary variant
+        expect(button).toHaveClass('btn-primary');
+      });
+
+      // Check CTA section register button
+      const registerButton = screen.getByRole('button', { name: /create a free account/i });
+      expect(registerButton).toBeInTheDocument();
+      expect(registerButton).toHaveClass('btn');
+      expect(registerButton).toHaveClass('btn-primary');
+    });
+  });
+
+  describe('Test Case 2: GlassMorphismCard usage', () => {
+    it('feature cards use GlassMorphismCard component with glassmorphism styling', () => {
+      renderWithProviders(<Home />);
+
+      // GlassMorphismCard has specific classes for glassmorphism effect
+      // Find feature cards by their data-testid
+      const featureCards = screen.getAllByTestId('feature-card');
+
+      // Should have 4 feature cards
+      expect(featureCards.length).toBe(4);
+
+      // Each feature card should be inside a GlassMorphismCard wrapper
+      // GlassMorphismCard has classes: card, bg-base-200/50, backdrop-blur-lg, border, shadow-xl
+      featureCards.forEach(card => {
+        // The card wrapper (GlassMorphismCard) is the parent with card class
+        const cardWrapper = card.closest('.card');
+        expect(cardWrapper).toBeInTheDocument();
+        expect(cardWrapper).toHaveClass('card');
+        expect(cardWrapper).toHaveClass('backdrop-blur-lg');
+        expect(cardWrapper).toHaveClass('shadow-xl');
+      });
+    });
+  });
+
+  describe('Test Case 3: BackgroundEffect usage', () => {
+    it('BackgroundEffect component is rendered for visual enhancement', () => {
+      const { container } = renderWithProviders(<Home />);
+
+      // BackgroundEffect renders a fixed position div with gradient background
+      // It has classes: fixed, inset-0, -z-10, overflow-hidden
+      const backgroundEffect = container.querySelector('.fixed.inset-0.-z-10');
+      expect(backgroundEffect).toBeInTheDocument();
+
+      // Should contain gradient background div
+      const gradientBg = backgroundEffect?.querySelector('.bg-gradient-to-br');
+      expect(gradientBg).toBeInTheDocument();
+
+      // Should contain animated pulse elements
+      const pulseElements = backgroundEffect?.querySelectorAll('.animate-pulse');
+      expect(pulseElements?.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  describe('Test Case 4: ThemeToggle usage', () => {
+    it('ThemeToggle component is included in footer or navigation', () => {
+      renderWithProviders(<Home />);
+
+      // ThemeToggle renders a button with aria-label for switching themes
+      // It should be in the navigation header
+      const header = screen.getByRole('banner');
+      const themeToggleButton = within(header).getByRole('button', { name: /switch to (light|dark) mode/i });
+
+      expect(themeToggleButton).toBeInTheDocument();
+      // ThemeToggle uses btn-ghost btn-circle classes
+      expect(themeToggleButton).toHaveClass('btn');
+      expect(themeToggleButton).toHaveClass('btn-ghost');
+      expect(themeToggleButton).toHaveClass('btn-circle');
+    });
+  });
+});
