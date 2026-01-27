@@ -75,8 +75,10 @@ describe('Home Page - Hero Section Display (Scenario 1)', () => {
   it('should have Login button linked to /login', () => {
     renderWithProviders(<Home />)
 
-    const loginLink = screen.getByRole('link', { name: /login/i })
-    expect(loginLink).toHaveAttribute('href', '/login')
+    // There are multiple login links (hero section and footer), find the one in hero section
+    const loginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroLoginLink = loginLinks.find(link => link.querySelector('button'))
+    expect(heroLoginLink).toHaveAttribute('href', '/login')
   })
 
   it('should display product name', () => {
@@ -197,10 +199,11 @@ describe('Home Page - Navigation CTA Functionality (Scenario 3)', () => {
   it('should have Login CTA that navigates to /login', () => {
     renderWithProviders(<Home />)
 
-    // Find the link wrapping the Login button
-    const loginCtaLink = screen.getByRole('link', { name: /login/i })
-    expect(loginCtaLink).toBeInTheDocument()
-    expect(loginCtaLink).toHaveAttribute('href', '/login')
+    // Find the link wrapping the Login button (hero section has button inside link)
+    const loginCtaLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroLoginLink = loginCtaLinks.find(link => link.querySelector('button'))
+    expect(heroLoginLink).toBeInTheDocument()
+    expect(heroLoginLink).toHaveAttribute('href', '/login')
   })
 
   // Test Case 3: Unit - Primary CTA button exists with correct navigation target
@@ -227,23 +230,29 @@ describe('Home Page - Navigation CTA Functionality (Scenario 3)', () => {
   it('should display both CTAs prominently in the hero section', () => {
     renderWithProviders(<Home />)
 
-    const getStartedLink = screen.getByRole('link', { name: /get started/i })
-    const loginLink = screen.getByRole('link', { name: /login/i })
+    // There are multiple links (hero section and footer), find the ones in hero section
+    const getStartedLinks = screen.getAllByRole('link', { name: /get started/i })
+    const loginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroGetStartedLink = getStartedLinks.find(link => link.querySelector('button'))
+    const heroLoginLink = loginLinks.find(link => link.querySelector('button'))
 
-    expect(getStartedLink).toBeVisible()
-    expect(loginLink).toBeVisible()
+    expect(heroGetStartedLink).toBeVisible()
+    expect(heroLoginLink).toBeVisible()
   })
 
   // Test that CTAs are accessible
   it('should have CTAs that are keyboard accessible', () => {
     renderWithProviders(<Home />)
 
-    const getStartedLink = screen.getByRole('link', { name: /get started/i })
-    const loginLink = screen.getByRole('link', { name: /login/i })
+    // There are multiple links (hero section and footer), find the ones in hero section
+    const getStartedLinks = screen.getAllByRole('link', { name: /get started/i })
+    const loginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroGetStartedLink = getStartedLinks.find(link => link.querySelector('button'))
+    const heroLoginLink = loginLinks.find(link => link.querySelector('button'))
 
     // Links should not have negative tabindex
-    expect(getStartedLink).not.toHaveAttribute('tabindex', '-1')
-    expect(loginLink).not.toHaveAttribute('tabindex', '-1')
+    expect(heroGetStartedLink).not.toHaveAttribute('tabindex', '-1')
+    expect(heroLoginLink).not.toHaveAttribute('tabindex', '-1')
   })
 })
 
@@ -470,22 +479,27 @@ describe('Home Page - Responsive Design Tablet (Scenario 5)', () => {
 
     renderWithProviders(<Home />)
 
-    const getStartedLink = screen.getByRole('link', { name: /get started/i })
-    const loginLink = screen.getByRole('link', { name: /login/i })
+    // There are multiple links (hero section and footer), find the ones in hero section
+    const getStartedLinks = screen.getAllByRole('link', { name: /get started/i })
+    const loginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroGetStartedLink = getStartedLinks.find(link => link.querySelector('button'))
+    const heroLoginLink = loginLinks.find(link => link.querySelector('button'))
 
-    expect(getStartedLink).toBeVisible()
-    expect(getStartedLink).toHaveAttribute('href', '/register')
+    expect(heroGetStartedLink).toBeVisible()
+    expect(heroGetStartedLink).toHaveAttribute('href', '/register')
 
-    expect(loginLink).toBeVisible()
-    expect(loginLink).toHaveAttribute('href', '/login')
+    expect(heroLoginLink).toBeVisible()
+    expect(heroLoginLink).toHaveAttribute('href', '/login')
   })
 
   // Test: Button layout adapts with sm: breakpoint for tablet
   it('should have CTA buttons with responsive flex layout for tablet', () => {
     renderWithProviders(<Home />)
 
-    const getStartedLink = screen.getByRole('link', { name: /get started/i })
-    const buttonsContainer = getStartedLink.parentElement
+    // There are multiple links (hero section and footer), find the one in hero section
+    const getStartedLinks = screen.getAllByRole('link', { name: /get started/i })
+    const heroGetStartedLink = getStartedLinks.find(link => link.querySelector('button'))
+    const buttonsContainer = heroGetStartedLink?.parentElement
 
     expect(buttonsContainer).toBeInTheDocument()
     // Should have responsive flex direction: column on mobile, row on sm and up (includes tablet)
@@ -611,5 +625,93 @@ describe('Home Page - Theme Support - Dark Mode (Scenario 6)', () => {
     // BackgroundEffect uses primary/secondary/accent colors with opacity
     // that work across all themes
     expect(backgroundEffect).toHaveClass('pointer-events-none')
+  })
+})
+
+describe('Home Page - Footer Section Display (Scenario 9)', () => {
+  // Test Case 1: Footer section is present in the DOM
+  it('should render footer section in the DOM', () => {
+    renderWithProviders(<Home />)
+
+    const footer = screen.getByTestId('footer-section')
+    expect(footer).toBeInTheDocument()
+    expect(footer).toBeVisible()
+  })
+
+  // Test Case 2: Footer contains Login navigation link pointing to /login
+  it('should render Login navigation link in footer pointing to /login', () => {
+    renderWithProviders(<Home />)
+
+    const loginLink = screen.getByTestId('footer-login-link')
+    expect(loginLink).toBeInTheDocument()
+    expect(loginLink).toHaveAttribute('href', '/login')
+    expect(loginLink).toHaveTextContent('Login')
+  })
+
+  // Test Case 3: Footer contains Register navigation link pointing to /register
+  it('should render Register navigation link in footer pointing to /register', () => {
+    renderWithProviders(<Home />)
+
+    const registerLink = screen.getByTestId('footer-register-link')
+    expect(registerLink).toBeInTheDocument()
+    expect(registerLink).toHaveAttribute('href', '/register')
+    expect(registerLink).toHaveTextContent('Register')
+  })
+
+  // Test Case 4: Footer contains copyright text
+  it('should render copyright text in footer', () => {
+    renderWithProviders(<Home />)
+
+    const copyright = screen.getByTestId('footer-copyright')
+    expect(copyright).toBeInTheDocument()
+    expect(copyright.textContent).toContain('URL Shortener')
+    expect(copyright.textContent).toContain('All rights reserved')
+    // Should contain current year
+    const currentYear = new Date().getFullYear().toString()
+    expect(copyright.textContent).toContain(currentYear)
+  })
+
+  // Test Case 5: ThemeToggle component is rendered in footer
+  it('should render ThemeToggle component in footer', () => {
+    renderWithProviders(<Home />)
+
+    const themeToggleContainer = screen.getByTestId('footer-theme-toggle')
+    expect(themeToggleContainer).toBeInTheDocument()
+
+    // ThemeToggle renders a select element with aria-label "Select theme"
+    const themeSelect = screen.getByRole('combobox', { name: /select theme/i })
+    expect(themeSelect).toBeInTheDocument()
+  })
+
+  // Additional test: Footer links are keyboard accessible
+  it('should have keyboard accessible navigation links in footer', () => {
+    renderWithProviders(<Home />)
+
+    const loginLink = screen.getByTestId('footer-login-link')
+    const registerLink = screen.getByTestId('footer-register-link')
+
+    // Links should not have negative tabindex
+    expect(loginLink).not.toHaveAttribute('tabindex', '-1')
+    expect(registerLink).not.toHaveAttribute('tabindex', '-1')
+  })
+
+  // Additional test: Footer has proper navigation landmark
+  it('should have footer navigation with proper aria-label', () => {
+    renderWithProviders(<Home />)
+
+    const footerNav = screen.getByRole('navigation', { name: /footer navigation/i })
+    expect(footerNav).toBeInTheDocument()
+  })
+
+  // Additional test: ThemeToggle is functional
+  it('should have a functional theme selector in footer', () => {
+    renderWithProviders(<Home />)
+
+    const themeSelect = screen.getByRole('combobox', { name: /select theme/i })
+    expect(themeSelect).toBeInTheDocument()
+
+    // Should have multiple theme options
+    const options = themeSelect.querySelectorAll('option')
+    expect(options.length).toBeGreaterThan(1)
   })
 })
