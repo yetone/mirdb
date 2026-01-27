@@ -53,7 +53,7 @@ export const CTASection: React.FC<CTASectionProps> = ({ onCreateAccount, onSignI
         <h2
           id="cta-heading"
           className="text-3xl md:text-4xl font-bold mb-6 text-base-content"
-          data-testid="cta-heading"
+          data-testid="cta-value-text"
         >
           Ready to supercharge your links?
         </h2>
