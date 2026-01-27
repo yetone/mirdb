@@ -17,17 +17,18 @@
  */
 
 import { Navbar } from '../components/Navbar'
-import { HeroSection, FeaturesSection, HowItWorksSection } from '../components/homepage'
+import { HeroSection, FeaturesSection, HowItWorksSection, Footer } from '../components/homepage'
 
 export function Home() {
   return (
-    <div className="min-h-screen bg-base-100" data-testid="home-page">
+    <div className="min-h-screen bg-base-100 flex flex-col" data-testid="home-page">
       <Navbar />
-      <main className="pt-16">
+      <main className="pt-16 flex-1">
         <HeroSection />
         <FeaturesSection />
         <HowItWorksSection />
       </main>
+      <Footer />
     </div>
   )
 }

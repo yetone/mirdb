@@ -1,25 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Navbar } from './components/Navbar'
-import { HeroSection, FeaturesSection, HowItWorksSection } from './components/homepage'
+import { ThemeProvider } from './contexts/ThemeContext'
+import { Home } from './pages/Home'
 import './index.css'
-
-/**
- * Homepage component that composes all sections
- * This serves as the landing page for the URL Shortening Service
- */
-function HomePage() {
-  return (
-    <div className="min-h-screen bg-base-100" data-testid="homepage">
-      <Navbar />
-      {/* Main content with padding for fixed navbar */}
-      <main className="pt-16">
-        <HeroSection />
-        <FeaturesSection />
-        <HowItWorksSection />
-      </main>
-    </div>
-  )
-}
 
 /**
  * Mock Login page for routing
@@ -51,13 +33,15 @@ function RegisterPage() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      </Routes>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   )
 }
 
