@@ -617,3 +617,266 @@ describe('Scenario 11: Call-to-Action Section Display', () => {
     });
   });
 });
+
+/**
+ * Scenario 12: Navbar Integration
+ *
+ * Test that Navbar component integrates correctly with homepage.
+ *
+ * Steps:
+ * 1. Navigate to homepage
+ * 2. Verify Navbar presence
+ * 3. Verify Navbar links (Login, Register)
+ * 4. Verify ThemeToggle in Navbar
+ */
+describe('Scenario 12: Navbar Integration', () => {
+  describe('Test Case 1: Render HomePage and check for Navbar component', () => {
+    it('Navbar is rendered at top of page', () => {
+      renderWithProviders(<Home />);
+
+      // Navbar should be present using navigation role
+      const navbar = screen.getByRole('navigation');
+      expect(navbar).toBeInTheDocument();
+    });
+
+    it('Navbar renders as a semantic nav element', () => {
+      renderWithProviders(<Home />);
+
+      // Should be a semantic <nav> element
+      const navbar = screen.getByRole('navigation');
+      expect(navbar.tagName).toBe('NAV');
+    });
+
+    it('Navbar is positioned at the top (before main content)', () => {
+      renderWithProviders(<Home />);
+
+      // Navbar should come before the main content area
+      const navbar = screen.getByRole('navigation');
+      const mainContent = document.querySelector('main');
+
+      expect(navbar).toBeInTheDocument();
+      expect(mainContent).toBeInTheDocument();
+
+      // Navbar should precede main in the DOM order
+      const navPosition = navbar.compareDocumentPosition(mainContent!);
+      // Node.DOCUMENT_POSITION_FOLLOWING = 4 (mainContent comes after navbar)
+      expect(navPosition & Node.DOCUMENT_POSITION_FOLLOWING).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    });
+
+    it('Navbar has sticky positioning for visibility', () => {
+      renderWithProviders(<Home />);
+
+      const navbar = screen.getByRole('navigation');
+      expect(navbar).toHaveClass('sticky');
+      expect(navbar).toHaveClass('top-0');
+    });
+
+    it('Navbar includes application branding link', () => {
+      renderWithProviders(<Home />);
+
+      // Should have a link to home with the app name
+      const brandLink = screen.getByRole('link', { name: /URL Shortener/i });
+      expect(brandLink).toBeInTheDocument();
+      expect(brandLink).toHaveAttribute('href', '/');
+    });
+  });
+
+  describe('Test Case 2: Navbar shows Login and Register links when user not authenticated', () => {
+    it('Navbar shows Sign In link for unauthenticated users', () => {
+      renderWithProviders(<Home />);
+
+      // Find the navbar
+      const navbar = screen.getByRole('navigation');
+
+      // Sign In link should be in the navbar
+      const signInLink = within(navbar).getByRole('link', { name: /Sign In/i });
+      expect(signInLink).toBeInTheDocument();
+      expect(signInLink).toHaveAttribute('href', '/login');
+    });
+
+    it('Navbar shows Get Started (Register) link for unauthenticated users', () => {
+      renderWithProviders(<Home />);
+
+      // Find the navbar
+      const navbar = screen.getByRole('navigation');
+
+      // Get Started link should be in the navbar
+      const getStartedLink = within(navbar).getByRole('link', { name: /Get Started/i });
+      expect(getStartedLink).toBeInTheDocument();
+      expect(getStartedLink).toHaveAttribute('href', '/register');
+    });
+
+    it('both authentication links are accessible in navbar', () => {
+      renderWithProviders(<Home />);
+
+      const navbar = screen.getByRole('navigation');
+
+      // Both links should be present and accessible
+      const signInLink = within(navbar).getByRole('link', { name: /Sign In/i });
+      const getStartedLink = within(navbar).getByRole('link', { name: /Get Started/i });
+
+      // Links should be focusable (keyboard accessible)
+      signInLink.focus();
+      expect(document.activeElement).toBe(signInLink);
+
+      getStartedLink.focus();
+      expect(document.activeElement).toBe(getStartedLink);
+    });
+
+    it('navbar links are styled as buttons', () => {
+      renderWithProviders(<Home />);
+
+      const navbar = screen.getByRole('navigation');
+
+      const signInLink = within(navbar).getByRole('link', { name: /Sign In/i });
+      const getStartedLink = within(navbar).getByRole('link', { name: /Get Started/i });
+
+      // Sign In should be styled as a ghost button
+      expect(signInLink).toHaveClass('btn');
+      expect(signInLink).toHaveClass('btn-ghost');
+
+      // Get Started should be styled as a primary button
+      expect(getStartedLink).toHaveClass('btn');
+      expect(getStartedLink).toHaveClass('btn-primary');
+    });
+  });
+
+  describe('Test Case 3: ThemeToggle component is present in Navbar', () => {
+    it('ThemeToggle is rendered within Navbar', () => {
+      renderWithProviders(<Home />);
+
+      const navbar = screen.getByRole('navigation');
+
+      // ThemeToggle renders as a select element with aria-label
+      const themeToggle = within(navbar).getByRole('combobox', { name: /Select theme/i });
+      expect(themeToggle).toBeInTheDocument();
+    });
+
+    it('ThemeToggle has correct accessible label', () => {
+      renderWithProviders(<Home />);
+
+      const navbar = screen.getByRole('navigation');
+
+      const themeToggle = within(navbar).getByRole('combobox', { name: /Select theme/i });
+      expect(themeToggle).toHaveAttribute('aria-label', 'Select theme');
+    });
+
+    it('ThemeToggle contains expected theme options', () => {
+      renderWithProviders(<Home />);
+
+      const navbar = screen.getByRole('navigation');
+
+      const themeToggle = within(navbar).getByRole('combobox', { name: /Select theme/i });
+
+      // Check for expected theme options
+      const options = within(themeToggle).getAllByRole('option');
+      const themeNames = options.map(option => option.textContent?.toLowerCase());
+
+      expect(themeNames).toContain('light');
+      expect(themeNames).toContain('dark');
+      expect(themeNames).toContain('cyberpunk');
+      expect(themeNames).toContain('synthwave');
+    });
+
+    it('ThemeToggle is styled correctly', () => {
+      renderWithProviders(<Home />);
+
+      const navbar = screen.getByRole('navigation');
+
+      const themeToggle = within(navbar).getByRole('combobox', { name: /Select theme/i });
+      expect(themeToggle).toHaveClass('select');
+      expect(themeToggle).toHaveClass('select-bordered');
+      expect(themeToggle).toHaveClass('select-sm');
+    });
+
+    it('ThemeToggle is keyboard accessible', () => {
+      renderWithProviders(<Home />);
+
+      const navbar = screen.getByRole('navigation');
+
+      const themeToggle = within(navbar).getByRole('combobox', { name: /Select theme/i });
+
+      // ThemeToggle should be focusable
+      themeToggle.focus();
+      expect(document.activeElement).toBe(themeToggle);
+    });
+  });
+
+  describe('Navbar Integration Tests', () => {
+    it('Navbar component works correctly when rendered standalone', () => {
+      renderWithProviders(<Navbar />);
+
+      // Navbar should render
+      const navbar = screen.getByRole('navigation');
+      expect(navbar).toBeInTheDocument();
+
+      // Should have Sign In link
+      expect(screen.getByRole('link', { name: /Sign In/i })).toBeInTheDocument();
+
+      // Should have Get Started link
+      expect(screen.getByRole('link', { name: /Get Started/i })).toBeInTheDocument();
+
+      // Should have ThemeToggle
+      expect(screen.getByRole('combobox', { name: /Select theme/i })).toBeInTheDocument();
+    });
+
+    it('Navbar in Home matches standalone Navbar behavior', () => {
+      // Render Home page
+      const { unmount } = renderWithProviders(<Home />);
+      const homeNavbar = screen.getByRole('navigation');
+      const homeSignIn = within(homeNavbar).getByRole('link', { name: /Sign In/i });
+      const homeGetStarted = within(homeNavbar).getByRole('link', { name: /Get Started/i });
+      const homeThemeToggle = within(homeNavbar).getByRole('combobox', { name: /Select theme/i });
+
+      expect(homeSignIn).toHaveAttribute('href', '/login');
+      expect(homeGetStarted).toHaveAttribute('href', '/register');
+      expect(homeThemeToggle).toBeInTheDocument();
+
+      unmount();
+
+      // Render standalone Navbar
+      renderWithProviders(<Navbar />);
+      const standaloneNavbar = screen.getByRole('navigation');
+      const standaloneSignIn = within(standaloneNavbar).getByRole('link', { name: /Sign In/i });
+      const standaloneGetStarted = within(standaloneNavbar).getByRole('link', { name: /Get Started/i });
+      const standaloneThemeToggle = within(standaloneNavbar).getByRole('combobox', { name: /Select theme/i });
+
+      // Both should have the same behavior
+      expect(standaloneSignIn).toHaveAttribute('href', '/login');
+      expect(standaloneGetStarted).toHaveAttribute('href', '/register');
+      expect(standaloneThemeToggle).toBeInTheDocument();
+    });
+
+    it('Navbar navigation links work with route navigation', async () => {
+      const user = userEvent.setup();
+      renderWithRoutes('/');
+
+      const navbar = screen.getByRole('navigation');
+
+      // Click Sign In link
+      const signInLink = within(navbar).getByRole('link', { name: /Sign In/i });
+      await user.click(signInLink);
+
+      // Should navigate to login page
+      await waitFor(() => {
+        expect(screen.getByTestId('login-page')).toBeInTheDocument();
+      });
+    });
+
+    it('Navbar Get Started link navigates to register', async () => {
+      const user = userEvent.setup();
+      renderWithRoutes('/');
+
+      const navbar = screen.getByRole('navigation');
+
+      // Click Get Started link
+      const getStartedLink = within(navbar).getByRole('link', { name: /Get Started/i });
+      await user.click(getStartedLink);
+
+      // Should navigate to register page
+      await waitFor(() => {
+        expect(screen.getByTestId('register-page')).toBeInTheDocument();
+      });
+    });
+  });
+});
