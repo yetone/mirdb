@@ -14,7 +14,7 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion, useMotionValue, animate } from 'framer-motion'
 import { GlassMorphismCard } from '../GlassMorphismCard'
 import type { StatItem } from '../../types/homepage'
 

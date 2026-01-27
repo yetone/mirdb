@@ -11,7 +11,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor, act } from '../../../utils/test-utils'
+import { render, screen, act } from '../../../utils/test-utils'
 import { StatsSection } from '../../../../src/components/homepage/StatsSection'
 import type { StatItem } from '../../../../src/types/homepage'
 
@@ -248,9 +248,8 @@ describe('StatsSection', () => {
       const statsSection = screen.getByTestId('stats-section')
       expect(statsSection).toBeInTheDocument()
 
-      // Check that motion elements exist (Framer Motion handles the 60fps)
-      const motionElements = document.querySelectorAll('[style*="transform"]')
-      // Framer Motion applies transforms for smooth animations
+      // Framer Motion handles the 60fps animation performance
+      // The component is rendered and Framer Motion will optimize animations
       expect(statsSection).toBeInTheDocument()
     })
   })
