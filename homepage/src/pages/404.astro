@@ -1,0 +1,106 @@
+---
+/**
+ * Custom 404 error page.
+ * Owner: Scenario 17 - Error Handling - 404 Page
+ *
+ * Features:
+ * - Friendly error message
+ * - Link back to homepage
+ * - Consistent styling with rest of site
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pageTitle = '404 - Page Not Found | MirDB';
+const pageDescription = "The page you're looking for doesn't exist.";
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <main id="main-content" class="error-page">
+    <div class="container">
+      <div class="error-content">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Page Not Found</h2>
+        <p class="error-message">
+          Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
+        </p>
+        <a href="/" class="btn btn-primary home-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Back to Homepage
+        </a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .error-page {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-xl);
+  }
+
+  .error-content {
+    max-width: 500px;
+  }
+
+  .error-code {
+    font-size: 8rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    color: var(--color-primary);
+    margin-bottom: var(--space-md);
+  }
+
+  .error-title {
+    font-size: var(--font-size-3xl);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-lg);
+  }
+
+  .error-message {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .home-link svg {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .error-code {
+      font-size: 6rem;
+    }
+
+    .error-title {
+      font-size: var(--font-size-2xl);
+    }
+
+    .error-message {
+      font-size: var(--font-size-md);
+    }
+  }
+
+  @media (max-width: 375px) {
+    .error-code {
+      font-size: 4rem;
+    }
+
+    .error-title {
+      font-size: var(--font-size-xl);
+    }
+  }
+</style>

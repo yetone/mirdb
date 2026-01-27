@@ -1,0 +1,114 @@
+---
+/**
+ * Footer component.
+ * Owner: Scenario 13 - Footer Links and Information
+ *
+ * Contains:
+ * - License information/link
+ * - Contributing guidelines link
+ * - Community/support links
+ * - GitHub repository link
+ */
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="footer-logo">MirDB</span>
+        <p class="footer-copyright">MIT License</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-links-group">
+          <span class="footer-links-label">Repository</span>
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener">License</a>
+          <a href="https://github.com/yetone/mirdb/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a>
+        </div>
+        <div class="footer-links-group">
+          <span class="footer-links-label">Community</span>
+          <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Issues</a>
+          <a href="https://github.com/yetone/mirdb/discussions" target="_blank" rel="noopener">Discussions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-xl) 0;
+    margin-top: var(--space-3xl);
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .footer-logo {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+  }
+
+  .footer-copyright {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: var(--space-2xl);
+  }
+
+  .footer-links-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .footer-links-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .footer-links-group a {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .footer-links-group a:hover {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 640px) {
+    .footer-content {
+      flex-direction: column;
+      gap: var(--space-lg);
+      text-align: center;
+    }
+
+    .footer-links {
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .footer-links-group {
+      align-items: center;
+    }
+  }
+</style>

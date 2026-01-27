@@ -1,0 +1,80 @@
+---
+/**
+ * Key features section component.
+ * Owner: Scenario 2 - Key Features Section
+ *
+ * Displays feature cards for:
+ * - Memcached Protocol Compatibility
+ * - Persistent Storage
+ * - LSM-Tree Architecture
+ * - Write-Ahead Log
+ * - Configurable Compaction
+ *
+ * Uses FeatureCard component for each feature.
+ */
+
+import FeatureCard from './FeatureCard.astro';
+
+const features = [
+  {
+    title: 'Memcached Protocol',
+    description: 'Full compatibility with the memcached text protocol. Use your existing clients and tools.',
+    icon: '🔌'
+  },
+  {
+    title: 'Persistent Storage',
+    description: 'Unlike vanilla memcached, your data survives restarts. Built for durability.',
+    icon: '💾'
+  },
+  {
+    title: 'LSM-Tree Architecture',
+    description: 'Log-structured merge-tree design optimized for write-heavy workloads.',
+    icon: '🌳'
+  },
+  {
+    title: 'Write-Ahead Log',
+    description: 'Every write is logged before acknowledgment, ensuring crash recovery.',
+    icon: '📝'
+  },
+  {
+    title: 'Configurable Compaction',
+    description: 'Fine-tune compaction settings to balance write amplification and read performance.',
+    icon: '⚙️'
+  }
+];
+---
+
+<section class="features section" id="features">
+  <div class="container">
+    <h2 class="section-title">Key Features</h2>
+    <div class="features-grid">
+      {features.map((feature) => (
+        <FeatureCard
+          title={feature.title}
+          description={feature.description}
+          icon={feature.icon}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+
+  @media (max-width: 768px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 375px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

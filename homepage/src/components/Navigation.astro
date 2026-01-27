@@ -1,0 +1,89 @@
+---
+/**
+ * Main navigation component.
+ * Owner: Scenario 14 - Navigation and Smooth Scroll
+ *
+ * Features:
+ * - Section links with smooth scroll
+ * - URL hash updates
+ * - Active section highlighting
+ */
+
+const navLinks = [
+  { href: '#features', label: 'Features' },
+  { href: '#quick-start', label: 'Quick Start' },
+  { href: '#architecture', label: 'Architecture' },
+  { href: '#commands', label: 'Commands' },
+];
+---
+
+<nav class="nav" aria-label="Main navigation">
+  <div class="container flex-between">
+    <a href="/" class="nav-brand">MirDB</a>
+    <ul class="nav-links">
+      {navLinks.map((link) => (
+        <li>
+          <a href={link.href} class="nav-link">{link.label}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  import { initSmoothScroll } from '../scripts/navigation';
+
+  // Initialize smooth scroll when DOM is ready
+  document.addEventListener('DOMContentLoaded', initSmoothScroll);
+
+  // Also handle Astro page transitions if using View Transitions
+  document.addEventListener('astro:page-load', initSmoothScroll);
+</script>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+    z-index: 100;
+    padding: var(--space-md) 0;
+  }
+
+  .nav-brand {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: var(--space-lg);
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    color: var(--color-primary);
+    background: var(--color-bg-secondary);
+  }
+
+  .nav-link.active {
+    color: var(--color-primary);
+    background: var(--color-bg-secondary);
+  }
+
+  .nav-link:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+  }
+</style>

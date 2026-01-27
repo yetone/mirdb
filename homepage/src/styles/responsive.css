@@ -1,0 +1,132 @@
+/**
+ * Responsive design styles.
+ * Owner: Scenario 6 (mobile) & Scenario 7 (tablet)
+ *
+ * Breakpoints:
+ * - Mobile: max-width 375px (iPhone SE)
+ * - Tablet: max-width 768px (iPad)
+ * - Desktop: > 768px
+ *
+ * Includes:
+ * - Mobile hamburger menu styles
+ * - Feature card stacking
+ * - Grid adjustments
+ */
+
+/* ======================================
+ * TABLET STYLES (max-width: 768px)
+ * Owner: Scenario 7 - Responsive Design Tablet
+ * ====================================== */
+
+@media (max-width: 768px) {
+  /* Layout adjustments for tablet */
+  :root {
+    --content-padding: var(--space-lg);
+  }
+
+  /* Hero section tablet adjustments */
+  .hero {
+    padding: var(--space-2xl) 0;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-md);
+    max-width: 100%;
+  }
+
+  .hero-cta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+  }
+
+  /* Feature cards - 2 column layout for tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .feature-card {
+    padding: var(--space-lg);
+  }
+
+  /* Section spacing adjustments */
+  .section {
+    padding: var(--space-2xl) 0;
+  }
+
+  .section-title {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  /* Navigation adjustments for tablet */
+  .nav {
+    padding: var(--space-md) 0;
+  }
+
+  .nav-links {
+    gap: var(--space-md);
+  }
+
+  .nav-link {
+    font-size: var(--font-size-sm);
+    padding: var(--space-sm);
+  }
+
+  /* Commands section tablet layout */
+  .commands-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Code snippets */
+  .code-snippet {
+    font-size: var(--font-size-sm);
+  }
+
+  pre {
+    padding: var(--space-md);
+  }
+
+  /* Architecture diagram */
+  .architecture-diagram {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Comparison table */
+  .comparison-table {
+    font-size: var(--font-size-sm);
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: var(--space-sm);
+  }
+
+  /* Footer adjustments */
+  .footer-content {
+    flex-direction: column;
+    gap: var(--space-lg);
+    text-align: center;
+  }
+
+  .footer-links {
+    justify-content: center;
+  }
+}
+
+/* ======================================
+ * MOBILE STYLES (max-width: 375px)
+ * Owner: Scenario 6 - Responsive Design Mobile
+ * ====================================== */
+
+@media (max-width: 375px) {
+  /* Placeholder for Scenario 6 to implement mobile styles */
+  /* Mobile hamburger menu, single column layout, etc. */
+}

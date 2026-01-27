@@ -1,0 +1,35 @@
+---
+/**
+ * Main homepage for MirDB.
+ * Owner: First scenario builder (shared resource)
+ *
+ * Composes all sections into a complete landing page.
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Hero from '../components/Hero.astro';
+import Features from '../components/Features.astro';
+import QuickStart from '../components/QuickStart.astro';
+import Architecture from '../components/Architecture.astro';
+import Commands from '../components/Commands.astro';
+import ProjectStatus from '../components/ProjectStatus.astro';
+import Configuration from '../components/Configuration.astro';
+import Comparison from '../components/Comparison.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout>
+  <Navigation />
+  <main id="main-content">
+    <Hero />
+    <Features />
+    <QuickStart />
+    <Architecture />
+    <Commands />
+    <Configuration />
+    <Comparison />
+    <ProjectStatus />
+  </main>
+  <Footer />
+</BaseLayout>

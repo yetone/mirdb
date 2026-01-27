@@ -1,0 +1,48 @@
+---
+/**
+ * Base layout for all pages.
+ * Owner: First scenario builder
+ *
+ * Includes:
+ * - HTML document structure
+ * - Meta tags and SEO
+ * - Navigation component
+ * - Footer component
+ * - Global styles
+ * - Theme script injection
+ */
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'MirDB - Persistent Key-Value Store',
+  description = 'A persistent key-value store with memcached protocol compatibility, built with LSM-tree architecture for durability and performance.'
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    <link rel="stylesheet" href="/src/styles/responsive.css" />
+    <link rel="stylesheet" href="/src/styles/dark-mode.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+  @import '../styles/responsive.css';
+  @import '../styles/dark-mode.css';
+</style>
