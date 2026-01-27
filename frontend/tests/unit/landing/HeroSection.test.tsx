@@ -10,7 +10,7 @@
  * 5. Primary CTA navigates to /register
  */
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from './setup.js';
+import { render, screen, fireEvent } from './setup';
 import HeroSection from '../../../src/components/landing/HeroSection';
 
 // Mock useNavigate

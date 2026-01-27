@@ -7,7 +7,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
-import { render } from './setup.js';
+import { render } from './setup';
 import App from '../../../src/App';
 
 describe('Landing Page Routing Integration', () => {

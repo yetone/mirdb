@@ -13,7 +13,7 @@
 
 import '@testing-library/jest-dom'
 import { ReactElement } from 'react'
-import { render, RenderOptions } from '@testing-library/react'
+import { render as rtlRender, RenderOptions } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '../../../src/contexts/ThemeContext'
 import { AuthProvider } from '../../../src/contexts/AuthContext'
@@ -34,11 +34,18 @@ function AllProviders({ children }: WrapperProps) {
   )
 }
 
+export function render(
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>
+) {
+  return rtlRender(ui, { wrapper: AllProviders, ...options })
+}
+
 export function renderWithProviders(
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
 ) {
-  return render(ui, { wrapper: AllProviders, ...options })
+  return rtlRender(ui, { wrapper: AllProviders, ...options })
 }
 
 export function setViewport(width: number, height: number = 768) {
@@ -55,4 +62,11 @@ export function setViewport(width: number, height: number = 768) {
   window.dispatchEvent(new Event('resize'))
 }
 
-export * from '@testing-library/react'
+export {
+  screen,
+  fireEvent,
+  waitFor,
+  cleanup,
+  within,
+  act,
+} from '@testing-library/react'

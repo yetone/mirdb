@@ -13,8 +13,8 @@
 
 import '@testing-library/jest-dom'
 import { ReactElement } from 'react'
-import { render, RenderOptions } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import { render as rtlRender, RenderOptions } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '../../../src/contexts/ThemeContext'
 import { AuthProvider } from '../../../src/contexts/AuthContext'
 
@@ -22,15 +22,17 @@ interface WrapperProps {
   children: React.ReactNode
 }
 
+interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  initialEntries?: string[]
+}
+
 function IntegrationProviders({ children }: WrapperProps) {
   return (
-    <BrowserRouter>
-      <ThemeProvider>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <ThemeProvider>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 
@@ -38,7 +40,32 @@ export function renderForIntegration(
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
 ) {
-  return render(ui, { wrapper: IntegrationProviders, ...options })
+  return rtlRender(ui, { wrapper: IntegrationProviders, ...options })
 }
 
-export * from '@testing-library/react'
+export function render(
+  ui: ReactElement,
+  { initialEntries = ['/'], ...options }: ExtendedRenderOptions = {}
+) {
+  function Wrapper({ children }: WrapperProps) {
+    return (
+      <MemoryRouter initialEntries={initialEntries}>
+        <ThemeProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
+      </MemoryRouter>
+    )
+  }
+  return rtlRender(ui, { wrapper: Wrapper, ...options })
+}
+
+export {
+  screen,
+  fireEvent,
+  waitFor,
+  cleanup,
+  within,
+  act,
+} from '@testing-library/react'

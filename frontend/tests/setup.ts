@@ -3,6 +3,7 @@
  * Imports jest-dom matchers and mocks browser APIs
  */
 import '@testing-library/jest-dom'
+import { vi } from 'vitest'
 
 // Mock IntersectionObserver for framer-motion
 class MockIntersectionObserver implements IntersectionObserver {
@@ -34,3 +35,6 @@ class MockResizeObserver implements ResizeObserver {
 }
 
 global.ResizeObserver = MockResizeObserver
+
+// Mock scrollIntoView for all elements
+Element.prototype.scrollIntoView = vi.fn()
