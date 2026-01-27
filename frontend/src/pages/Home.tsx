@@ -27,7 +27,7 @@
  */
 import { Link } from 'react-router-dom';
 import BackgroundEffect from '../components/BackgroundEffect';
-import { HeroSection, FeaturesSection, HowItWorksSection } from '../components/landing';
+import { HeroSection, FeaturesSection, HowItWorksSection, CTASection } from '../components/landing';
 import ThemeToggle from '../components/ThemeToggle';
 
 export default function Home() {
@@ -64,6 +64,9 @@ export default function Home() {
 
         {/* How It Works section */}
         <HowItWorksSection />
+
+        {/* Final CTA section before footer */}
+        <CTASection />
       </main>
 
       {/* Footer placeholder */}
