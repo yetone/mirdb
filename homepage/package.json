@@ -8,9 +8,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "vitest run",
-    "test:unit": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test",
-    "test:all": "npm run test:unit && npm run test:e2e"
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e"
   },
   "dependencies": {
     "astro": "^4.0.0"
