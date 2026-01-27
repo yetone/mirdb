@@ -11,7 +11,7 @@ describe('FeaturesSection', () => {
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
 
     // Check for 4 feature cards
-    const cards = screen.getAllByTestId('glassmorphism-card')
+    const cards = screen.getAllByTestId('glass-morphism-card')
     expect(cards).toHaveLength(4)
   })
 
@@ -51,7 +51,7 @@ describe('FeaturesSection', () => {
   it('uses GlassMorphismCard component for all feature cards', () => {
     render(<FeaturesSection />)
 
-    const cards = screen.getAllByTestId('glassmorphism-card')
+    const cards = screen.getAllByTestId('glass-morphism-card')
     expect(cards).toHaveLength(4)
 
     // Verify each card has the glassmorphism styling
