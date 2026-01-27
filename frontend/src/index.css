@@ -9,6 +9,6 @@
 
 @layer components {
   .glass-morphism {
-    @apply backdrop-blur-md bg-opacity-20;
+    @apply backdrop-blur-md bg-base-100/20;
   }
 }
