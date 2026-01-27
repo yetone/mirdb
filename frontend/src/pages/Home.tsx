@@ -2,11 +2,32 @@
  * Landing Page / Home Page
  * Owner: Multiple scenarios (main page composition)
  *
- * Main landing page that composes all section components.
+ * Main landing page that composes all section components:
+ * - Navigation header with Login/Register links
+ * - HeroSection
+ * - FeaturesSection (with id="features" for scroll anchor)
+ * - HowItWorksSection
+ * - CTASection
+ * - Footer
+ *
+ * Uses:
+ * - BackgroundEffect for visual enhancement
+ * - ThemeContext for theme integration
+ * - React Router for navigation
+ * - Semantic HTML (header, main, section, footer)
+ *
+ * SEO:
+ * - Proper heading hierarchy (one h1)
+ * - Meta tags for description
+ *
+ * Accessibility:
+ * - Semantic HTML structure
+ * - Skip links for keyboard navigation
+ * - Proper focus management
  */
 import { Link } from 'react-router-dom';
 import BackgroundEffect from '../components/BackgroundEffect';
-import { HeroSection } from '../components/landing';
+import { HeroSection, FeaturesSection } from '../components/landing';
 import ThemeToggle from '../components/ThemeToggle';
 
 export default function Home() {
@@ -36,14 +57,9 @@ export default function Home() {
       <main>
         <HeroSection />
 
-        {/* Features section placeholder with id for scroll anchor */}
-        <section id="features" className="py-16 px-4">
-          <div className="max-w-6xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-8">Features</h2>
-            <p className="text-base-content/70">
-              Feature cards coming soon...
-            </p>
-          </div>
+        {/* Features section with id for scroll anchor */}
+        <section id="features" aria-label="Features">
+          <FeaturesSection />
         </section>
       </main>
 

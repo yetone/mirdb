@@ -3,32 +3,56 @@
  *
  * This file is created by the first scenario builder and
  * provides shared test utilities and setup.
+ *
+ * Includes:
+ * - Custom render function with providers (Router, Theme)
+ * - Mock implementations for context providers
+ * - Common test utilities and helpers
+ * - Viewport resize utilities for responsive tests
  */
-import { ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from '../../../src/contexts/ThemeContext';
+
+import '@testing-library/jest-dom'
+import { ReactElement } from 'react'
+import { render, RenderOptions } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from '../../../src/contexts/ThemeContext'
+import { AuthProvider } from '../../../src/contexts/AuthContext'
 
 interface WrapperProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
-// Custom render that wraps components with necessary providers
 function AllProviders({ children }: WrapperProps) {
   return (
     <BrowserRouter>
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
-  );
+  )
 }
 
-function customRender(
+export function renderWithProviders(
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
 ) {
-  return render(ui, { wrapper: AllProviders, ...options });
+  return render(ui, { wrapper: AllProviders, ...options })
 }
 
-// Re-export everything from testing-library
-export * from '@testing-library/react';
-export { customRender as render };
+export function setViewport(width: number, height: number = 768) {
+  Object.defineProperty(window, 'innerWidth', {
+    writable: true,
+    configurable: true,
+    value: width,
+  })
+  Object.defineProperty(window, 'innerHeight', {
+    writable: true,
+    configurable: true,
+    value: height,
+  })
+  window.dispatchEvent(new Event('resize'))
+}
+
+export * from '@testing-library/react'

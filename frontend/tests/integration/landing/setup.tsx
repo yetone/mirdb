@@ -3,41 +3,42 @@
  *
  * This file is created by the first scenario builder and
  * provides integration test utilities and setup.
+ *
+ * Includes:
+ * - Full app render with all providers
+ * - Router mock setup for navigation tests
+ * - Theme context mock for theme tests
+ * - Common assertions for integration scenarios
  */
-import { ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
-import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
-import { ThemeProvider } from '../../../src/contexts/ThemeContext';
-import { AuthProvider } from '../../../src/contexts/AuthContext';
 
-interface WrapperOptions {
-  initialEntries?: MemoryRouterProps['initialEntries'];
+import '@testing-library/jest-dom'
+import { ReactElement } from 'react'
+import { render, RenderOptions } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from '../../../src/contexts/ThemeContext'
+import { AuthProvider } from '../../../src/contexts/AuthContext'
+
+interface WrapperProps {
+  children: React.ReactNode
 }
 
-// Custom render that wraps components with full app providers
-function createWrapper({ initialEntries = ['/'] }: WrapperOptions = {}) {
-  return function Wrapper({ children }: { children: React.ReactNode }) {
-    return (
-      <MemoryRouter initialEntries={initialEntries}>
-        <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </ThemeProvider>
-      </MemoryRouter>
-    );
-  };
+function IntegrationProviders({ children }: WrapperProps) {
+  return (
+    <BrowserRouter>
+      <ThemeProvider>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  )
 }
 
-function customRender(
+export function renderForIntegration(
   ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'> & WrapperOptions
+  options?: Omit<RenderOptions, 'wrapper'>
 ) {
-  const { initialEntries, ...renderOptions } = options || {};
-  return render(ui, {
-    wrapper: createWrapper({ initialEntries }),
-    ...renderOptions,
-  });
+  return render(ui, { wrapper: IntegrationProviders, ...options })
 }
 
-// Re-export everything from testing-library
-export * from '@testing-library/react';
-export { customRender as render };
+export * from '@testing-library/react'

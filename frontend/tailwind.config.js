@@ -11,4 +11,4 @@ export default {
   daisyui: {
     themes: ["light", "dark", "cyberpunk", "synthwave"],
   },
-};
+}

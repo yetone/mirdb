@@ -1,32 +1,36 @@
-import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+/**
+ * Global test setup
+ * Imports jest-dom matchers and mocks browser APIs
+ */
+import '@testing-library/jest-dom'
 
-// Mock window.matchMedia for responsive design tests
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: vi.fn().mockImplementation((query) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
-});
+// Mock IntersectionObserver for framer-motion
+class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | null = null
+  readonly rootMargin: string = ''
+  readonly thresholds: ReadonlyArray<number> = []
 
-// Mock IntersectionObserver for Framer Motion
-class IntersectionObserverMock {
-  observe = vi.fn();
-  disconnect = vi.fn();
-  unobserve = vi.fn();
+  constructor(
+    private callback: IntersectionObserverCallback,
+    _options?: IntersectionObserverInit
+  ) {}
+
+  observe(_target: Element): void {}
+  unobserve(_target: Element): void {}
+  disconnect(): void {}
+  takeRecords(): IntersectionObserverEntry[] {
+    return []
+  }
 }
 
-Object.defineProperty(window, 'IntersectionObserver', {
-  writable: true,
-  value: IntersectionObserverMock,
-});
+global.IntersectionObserver = MockIntersectionObserver
 
-// Mock scrollIntoView
-Element.prototype.scrollIntoView = vi.fn();
+// Mock ResizeObserver
+class MockResizeObserver implements ResizeObserver {
+  constructor(_callback: ResizeObserverCallback) {}
+  observe(_target: Element): void {}
+  unobserve(_target: Element): void {}
+  disconnect(): void {}
+}
+
+global.ResizeObserver = MockResizeObserver
