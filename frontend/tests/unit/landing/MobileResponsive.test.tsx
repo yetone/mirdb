@@ -129,10 +129,10 @@ describe('Responsive Design - Mobile (375px)', () => {
 
       // Verify both CTAs are present
       const getStartedButton = screen.getByRole('button', { name: /get started/i });
-      const learnMoreButton = screen.getByRole('button', { name: /learn more/i });
+      const learnMoreLink = screen.getByRole('link', { name: /learn more/i });
 
       expect(getStartedButton).toBeInTheDocument();
-      expect(learnMoreButton).toBeInTheDocument();
+      expect(learnMoreLink).toBeInTheDocument();
     });
 
     it('hero content is centered and has proper spacing', () => {

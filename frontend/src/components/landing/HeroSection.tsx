@@ -81,13 +81,14 @@ export default function HeroSection({ onGetStarted, onLearnMore }: HeroSectionPr
             Get Started
           </FuturisticButton>
 
-          <button
+          <a
+            href="#features"
             onClick={handleLearnMore}
             className="link link-hover text-base-content/70 hover:text-primary transition-colors"
             aria-label="Learn more about our features"
           >
             Learn More
-          </button>
+          </a>
         </motion.div>
 
         {/* Visual Element - Dashboard Preview */}
