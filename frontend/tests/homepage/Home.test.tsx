@@ -12,7 +12,7 @@
  * - Error handling (Scenario 17)
  */
 import { describe, it, expect } from 'vitest';
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { render } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
@@ -21,6 +21,7 @@ import { ThemeProvider } from '../../src/contexts/ThemeContext';
 import { AuthProvider } from '../../src/contexts/AuthContext';
 import { renderWithProviders } from './testUtils';
 import Home from '../../src/pages/Home';
+import HeroSection from '../../src/components/homepage/HeroSection';
 import Navbar from '../../src/components/Navbar';
 
 const queryClient = new QueryClient({
@@ -31,6 +32,10 @@ const queryClient = new QueryClient({
   },
 });
 
+/**
+ * Custom render function with full router navigation support
+ * for testing actual route changes
+ */
 function renderWithRoutes(initialRoute = '/') {
   return render(
     <MemoryRouter initialEntries={[initialRoute]}>
@@ -50,30 +55,52 @@ function renderWithRoutes(initialRoute = '/') {
 }
 
 /**
+ * Helper to find the hero section's CTA button
+ * The hero section contains a FuturisticButton wrapped in a Link
+ * while the Navbar has a plain link without a button element inside
+ */
+function getHeroCTALink() {
+  const links = screen.getAllByRole('link', { name: /Get Started/i });
+  // The hero section link contains a button element; navbar link does not
+  return links.find(link => link.querySelector('button'));
+}
+
+/**
  * Scenario 2: Navigation to Registration Page
  *
  * Test that users can navigate from homepage to registration page via CTA buttons.
+ *
+ * Steps:
+ * 1. Navigate to homepage
+ * 2. Click primary CTA button (Get Started/Sign Up)
+ * 3. Verify navigation to /register route
  */
 describe('Scenario 2: Navigation to Registration Page', () => {
-  describe('Test Case 1: Click primary CTA button navigates to /register', () => {
-    it('navigates to /register when clicking "Get Started" CTA button in hero section', async () => {
+  describe('Test Case 1: Click primary CTA button (Get Started/Sign Up)', () => {
+    it('navigates to /register route when primary CTA "Get Started" button is clicked', async () => {
       const user = userEvent.setup();
       renderWithRoutes('/');
 
-      // Find all Get Started links (there are multiple: Navbar and Hero section)
-      const getStartedLinks = screen.getAllByRole('link', { name: /Get Started/i });
-      // At least one Get Started link should exist
-      expect(getStartedLinks.length).toBeGreaterThan(0);
+      // Step 1: Verify we are on the homepage (root URL)
+      const headline = screen.getByRole('heading', { level: 1 });
+      expect(headline).toBeInTheDocument();
+      expect(headline.textContent).toMatch(/Shorten URLs/i);
 
-      // Click the first Get Started link (either one should work)
-      await user.click(getStartedLinks[0]);
+      // Step 2: Find and click the primary CTA button in hero section
+      // There are multiple "Get Started" links - one in Navbar and one in HeroSection
+      // We target the one containing a button (the HeroSection CTA)
+      const heroCTALink = getHeroCTALink();
+      expect(heroCTALink).toBeInTheDocument();
 
-      // Verify navigation occurred to /register route
-      const registerPage = await screen.findByTestId('register-page');
-      expect(registerPage).toBeInTheDocument();
+      await user.click(heroCTALink!);
+
+      // Step 3: Verify navigation to /register route
+      await waitFor(() => {
+        expect(screen.getByTestId('register-page')).toBeInTheDocument();
+      });
     });
 
-    it('primary CTA button in hero section is visible and accessible', () => {
+    it('primary CTA button is easily identifiable in the hero section', () => {
       renderWithRoutes('/');
 
       // Find the hero section by looking for the h1 heading
@@ -89,21 +116,32 @@ describe('Scenario 2: Navigation to Registration Page', () => {
     });
   });
 
-  describe('Test Case 2: Registration link has correct href attribute', () => {
-    it('All Get Started links have href="/register"', () => {
+  describe('Test Case 2: Verify registration link href attribute', () => {
+    it('link has href="/register" attribute', () => {
+      renderWithProviders(<HeroSection />);
+
+      // Find the "Get Started" link and verify its href
+      const getStartedLink = screen.getByRole('link', { name: /Get Started/i });
+      expect(getStartedLink).toHaveAttribute('href', '/register');
+    });
+
+    it('HeroSection Get Started link navigates to /register route', () => {
       renderWithRoutes('/');
 
-      // Find all Get Started links
+      // All Get Started links should point to /register
       const getStartedLinks = screen.getAllByRole('link', { name: /Get Started/i });
       expect(getStartedLinks.length).toBeGreaterThan(0);
 
-      // All Get Started links should navigate to /register
-      getStartedLinks.forEach((link) => {
+      getStartedLinks.forEach(link => {
         expect(link).toHaveAttribute('href', '/register');
       });
+
+      // The hero section CTA (with button inside) specifically points to /register
+      const heroCTALink = getStartedLinks.find(link => link.querySelector('button'));
+      expect(heroCTALink).toHaveAttribute('href', '/register');
     });
 
-    it('Hero section CTA link wraps the FuturisticButton component', () => {
+    it('registration link is properly wrapped around the FuturisticButton', () => {
       renderWithRoutes('/');
 
       // Find the hero section
@@ -120,13 +158,26 @@ describe('Scenario 2: Navigation to Registration Page', () => {
     });
   });
 
-  describe('Homepage renders with navigation CTAs', () => {
-    it('renders the Home page with CTA links at "/" route', () => {
+  describe('User Journey: Homepage to Registration', () => {
+    it('completes full user journey from homepage to registration', async () => {
+      const user = userEvent.setup();
       renderWithRoutes('/');
 
-      // Verify the page renders with navigation elements
-      const getStartedLinks = screen.getAllByRole('link', { name: /Get Started/i });
-      expect(getStartedLinks.length).toBeGreaterThan(0);
+      // User lands on homepage
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+
+      // User sees the value proposition
+      expect(screen.getByText(/Transform your long URLs/i)).toBeInTheDocument();
+
+      // User decides to sign up and clicks Get Started in hero section
+      const heroCTALink = getHeroCTALink();
+      expect(heroCTALink).toBeInTheDocument();
+      await user.click(heroCTALink!);
+
+      // User is redirected to registration page
+      await waitFor(() => {
+        expect(screen.getByTestId('register-page')).toBeInTheDocument();
+      });
     });
 
     it('hero section contains registration CTA with correct navigation', () => {
