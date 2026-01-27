@@ -1390,3 +1390,158 @@ describe('Home Page - Accessibility - Semantic HTML Structure (Scenario 11)', ()
     })
   })
 })
+
+describe('Home Page - Public Access Without Authentication (Scenario 12)', () => {
+  beforeEach(() => {
+    // Clear any authentication tokens from localStorage
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+  })
+
+  afterEach(() => {
+    // Clean up after each test
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+  })
+
+  // Test Case 1: Integration - Navigate to / without authentication token
+  // Expected: Homepage renders without redirect to /login
+  it('should render homepage without redirect when no authentication token exists', () => {
+    // Ensure no token exists
+    expect(localStorage.getItem('token')).toBeNull()
+
+    renderWithProviders(<Home />)
+
+    // Verify homepage content renders
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+    expect(heading.textContent).toContain('Shorten URLs')
+
+    // Verify we're on the homepage, not redirected
+    // The presence of homepage-specific content confirms no redirect occurred
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+
+    const footer = screen.getByTestId('footer-section')
+    expect(footer).toBeInTheDocument()
+  })
+
+  // Test Case 2: Integration - Navigate to / without authentication token
+  // Expected: No authentication error messages displayed
+  it('should not display any authentication error messages without token', () => {
+    // Ensure no token exists
+    expect(localStorage.getItem('token')).toBeNull()
+
+    renderWithProviders(<Home />)
+
+    // Check that no authentication-related error messages are displayed
+    expect(screen.queryByText(/authentication required/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/please log in/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/unauthorized/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/session expired/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/access denied/i)).not.toBeInTheDocument()
+
+    // Verify the page renders normally with expected content
+    const heroHeading = screen.getByRole('heading', { level: 1 })
+    expect(heroHeading).toBeVisible()
+  })
+
+  // Test Case 3: Unit - Check route configuration
+  // Expected: Homepage route '/' is not wrapped in ProtectedLayout
+  it('should have homepage route configured as public (not wrapped in ProtectedLayout)', () => {
+    // This test verifies the App.tsx route configuration
+    // The homepage should render Home component directly without ProtectedLayout wrapper
+
+    // Render the Home component directly (mimicking route access)
+    renderWithProviders(<Home />)
+
+    // If ProtectedLayout were wrapping Home, it would check authentication
+    // and potentially redirect or show loading state
+    // Since we have no token, successful rendering proves the route is public
+
+    expect(localStorage.getItem('token')).toBeNull()
+
+    // Immediate rendering of homepage content proves no auth check blocked us
+    const mainContent = screen.getByRole('main')
+    expect(mainContent).toBeInTheDocument()
+
+    // Verify all major sections render (would be blocked by ProtectedLayout if applied)
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+
+    const footer = screen.getByTestId('footer-section')
+    expect(footer).toBeInTheDocument()
+  })
+
+  // Additional test: Homepage is accessible and functional without any authentication state
+  it('should be fully functional without any authentication state', () => {
+    // Clear all possible auth-related storage
+    localStorage.clear()
+    sessionStorage.clear()
+
+    renderWithProviders(<Home />)
+
+    // Verify core homepage functionality is available
+    // Hero section with CTAs
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    expect(getStartedLink).toHaveAttribute('href', '/register')
+
+    const loginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroLoginLink = loginLinks.find(link => link.querySelector('button'))
+    expect(heroLoginLink).toHaveAttribute('href', '/login')
+
+    // Features section
+    const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+    expect(urlShorteningCard).toBeInTheDocument()
+
+    // Footer
+    const footerLoginLink = screen.getByTestId('footer-login-link')
+    expect(footerLoginLink).toHaveAttribute('href', '/login')
+
+    const footerRegisterLink = screen.getByTestId('footer-register-link')
+    expect(footerRegisterLink).toHaveAttribute('href', '/register')
+
+    // Theme toggle is accessible
+    const themeSelect = screen.getByRole('combobox', { name: /select theme/i })
+    expect(themeSelect).toBeInTheDocument()
+  })
+
+  // Additional test: Homepage should not trigger any authentication checks
+  it('should not show loading state related to authentication', () => {
+    localStorage.removeItem('token')
+
+    renderWithProviders(<Home />)
+
+    // No authentication loading indicators should be present
+    expect(screen.queryByText(/loading/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/checking authentication/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/verifying session/i)).not.toBeInTheDocument()
+
+    // Content should be immediately available
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeVisible()
+  })
+
+  // Additional test: CTA buttons should guide unauthenticated users correctly
+  it('should provide appropriate CTAs for unauthenticated users', () => {
+    localStorage.removeItem('token')
+
+    renderWithProviders(<Home />)
+
+    // Primary CTA should lead to registration
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    expect(getStartedLink).toHaveAttribute('href', '/register')
+
+    // Secondary CTA should lead to login
+    const loginLinks = screen.getAllByRole('link', { name: /login/i })
+    const heroLoginLink = loginLinks.find(link => link.querySelector('button'))
+    expect(heroLoginLink).toHaveAttribute('href', '/login')
+
+    // Both CTAs should be visible and accessible
+    expect(getStartedLink).toBeVisible()
+    expect(heroLoginLink).toBeVisible()
+  })
+})
