@@ -1131,3 +1131,287 @@ describe('Scenario 14: Animation and Motion Effects', () => {
     });
   });
 });
+
+/**
+ * Scenario 15: Component Reuse and Consistency
+ *
+ * Test that homepage uses existing design system components consistently.
+ *
+ * Steps:
+ * 1. Audit component usage - Verify GlassMorphismCard is used for feature cards
+ * 2. Check button components - Verify FuturisticButton is used for CTAs
+ * 3. Verify styling patterns - Check that Tailwind/DaisyUI classes are used consistently
+ */
+describe('Scenario 15: Component Reuse and Consistency', () => {
+  describe('Test Case 1: Feature cards use GlassMorphismCard component', () => {
+    it('feature cards have GlassMorphismCard characteristic classes', () => {
+      renderWithProviders(<Home />);
+
+      // GlassMorphismCard applies: backdrop-blur-lg bg-base-100/70 border border-base-content/10 rounded-2xl shadow-xl
+      const featuresGrid = screen.getByTestId('features-grid');
+
+      // Each feature card should be wrapped in GlassMorphismCard
+      // GlassMorphismCard renders as a motion.div with specific classes
+      const cards = featuresGrid.querySelectorAll('.backdrop-blur-lg');
+      expect(cards.length).toBe(4); // All 4 feature cards use GlassMorphismCard
+    });
+
+    it('feature cards have glass morphism styling (bg-base-100/70)', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+
+      // Check for the translucent background class
+      const cards = featuresGrid.querySelectorAll('.bg-base-100\\/70');
+      expect(cards.length).toBe(4);
+    });
+
+    it('feature cards have rounded corners (rounded-2xl)', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+
+      // Check for rounded corners
+      const cards = featuresGrid.querySelectorAll('.rounded-2xl');
+      expect(cards.length).toBe(4);
+    });
+
+    it('feature cards have shadow effect (shadow-xl)', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+
+      // Check for shadow
+      const cards = featuresGrid.querySelectorAll('.shadow-xl');
+      expect(cards.length).toBe(4);
+    });
+
+    it('feature cards have border styling from GlassMorphismCard', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+
+      // Check for border class
+      const cards = featuresGrid.querySelectorAll('.border');
+      expect(cards.length).toBeGreaterThanOrEqual(4);
+    });
+  });
+
+  describe('Test Case 2: Primary CTAs use FuturisticButton component', () => {
+    it('hero section Get Started button uses FuturisticButton styling', () => {
+      renderWithProviders(<Home />);
+
+      // Find the hero section Get Started button
+      const heroSection = screen.getByRole('heading', { level: 1 }).closest('section');
+      expect(heroSection).toBeInTheDocument();
+
+      const getStartedButton = within(heroSection!).getByRole('button', { name: /Get Started/i });
+
+      // FuturisticButton applies: btn btn-primary for primary variant
+      expect(getStartedButton).toHaveClass('btn');
+      expect(getStartedButton).toHaveClass('btn-primary');
+      expect(getStartedButton).toHaveClass('font-semibold');
+      expect(getStartedButton).toHaveClass('rounded-lg');
+    });
+
+    it('hero section Sign In button uses FuturisticButton styling', () => {
+      renderWithProviders(<Home />);
+
+      const heroSection = screen.getByRole('heading', { level: 1 }).closest('section');
+      expect(heroSection).toBeInTheDocument();
+
+      const signInButton = within(heroSection!).getByRole('button', { name: /Sign In/i });
+
+      // FuturisticButton with outline variant applies: btn btn-outline btn-primary
+      expect(signInButton).toHaveClass('btn');
+      expect(signInButton).toHaveClass('btn-outline');
+      expect(signInButton).toHaveClass('font-semibold');
+      expect(signInButton).toHaveClass('rounded-lg');
+    });
+
+    it('CTA section button uses FuturisticButton styling', () => {
+      renderWithProviders(<Home />);
+
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      const ctaButton = within(ctaSection!).getByRole('button', { name: /Create Free Account/i });
+
+      // CTA button should have primary variant styling
+      expect(ctaButton).toHaveClass('btn');
+      expect(ctaButton).toHaveClass('btn-primary');
+      expect(ctaButton).toHaveClass('font-semibold');
+      expect(ctaButton).toHaveClass('rounded-lg');
+    });
+
+    it('all buttons have transition-all class for animations', () => {
+      renderWithProviders(<Home />);
+
+      const allButtons = screen.getAllByRole('button');
+
+      allButtons.forEach((button) => {
+        // FuturisticButton applies transition-all duration-300
+        expect(button).toHaveClass('transition-all');
+      });
+    });
+
+    it('buttons use relative and overflow-hidden for animation effects', () => {
+      renderWithProviders(<Home />);
+
+      const allButtons = screen.getAllByRole('button');
+
+      allButtons.forEach((button) => {
+        // FuturisticButton has relative overflow-hidden for potential effects
+        expect(button).toHaveClass('relative');
+        expect(button).toHaveClass('overflow-hidden');
+      });
+    });
+  });
+
+  describe('Test Case 3: Components use Tailwind classes instead of inline styles', () => {
+    it('hero section does not use inline styles on main elements', () => {
+      renderWithProviders(<Home />);
+
+      const heroSection = screen.getByRole('heading', { level: 1 }).closest('section');
+      expect(heroSection).toBeInTheDocument();
+
+      // Check that the section and its direct children don't have problematic inline styles
+      // Framer Motion may add transform styles for animation, which is acceptable
+      const inlineStyleAttribute = heroSection!.getAttribute('style');
+      if (inlineStyleAttribute) {
+        // Should not contain layout styles (margin, padding, width, height, etc.)
+        expect(inlineStyleAttribute).not.toMatch(/margin|padding|width:|height:/i);
+      }
+    });
+
+    it('feature cards use Tailwind utility classes for layout', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+
+      // The grid should use Tailwind grid classes
+      expect(featuresGrid).toHaveClass('grid');
+      expect(featuresGrid).toHaveClass('grid-cols-1');
+      expect(featuresGrid).toHaveClass('md:grid-cols-2');
+      expect(featuresGrid).toHaveClass('lg:grid-cols-4');
+      expect(featuresGrid).toHaveClass('gap-6');
+    });
+
+    it('CTA section uses Tailwind background classes', () => {
+      renderWithProviders(<Home />);
+
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Should use DaisyUI bg-base-200 class, not inline background styles
+      expect(ctaSection).toHaveClass('bg-base-200');
+
+      const inlineStyle = ctaSection!.getAttribute('style');
+      if (inlineStyle) {
+        expect(inlineStyle).not.toMatch(/background/i);
+      }
+    });
+
+    it('buttons do not use inline styles for sizing', () => {
+      renderWithProviders(<Home />);
+
+      const allButtons = screen.getAllByRole('button');
+
+      allButtons.forEach((button) => {
+        const inlineStyle = button.getAttribute('style');
+        if (inlineStyle) {
+          // Allow transform styles from Framer Motion, but not layout styles
+          expect(inlineStyle).not.toMatch(/width:|height:|padding:|margin:/i);
+        }
+      });
+    });
+
+    it('text elements use Tailwind typography classes', () => {
+      renderWithProviders(<Home />);
+
+      // Check the hero heading uses Tailwind text classes
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      expect(heroHeading).toHaveClass('text-4xl');
+      expect(heroHeading).toHaveClass('font-bold');
+
+      // Check the features heading
+      const featuresHeading = screen.getByRole('heading', { name: /Powerful Features/i });
+      expect(featuresHeading).toHaveClass('text-3xl');
+      expect(featuresHeading).toHaveClass('font-bold');
+    });
+
+    it('container elements use Tailwind spacing classes', () => {
+      renderWithProviders(<Home />);
+
+      // Features section should use consistent container classes
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toHaveClass('py-16');
+
+      // CTA section should use consistent spacing
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toHaveClass('py-16');
+    });
+
+    it('color styling uses DaisyUI theme classes', () => {
+      renderWithProviders(<Home />);
+
+      // Check that theme-aware classes are used
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+
+      // The hero heading has spans with text-primary and text-secondary
+      const primarySpan = heroHeading.querySelector('.text-primary');
+      const secondarySpan = heroHeading.querySelector('.text-secondary');
+
+      expect(primarySpan).toBeInTheDocument();
+      expect(secondarySpan).toBeInTheDocument();
+    });
+  });
+
+  describe('Design System Consistency Integration', () => {
+    it('homepage maintains consistent component usage throughout', () => {
+      renderWithProviders(<Home />);
+
+      // All buttons should follow the same pattern
+      const allButtons = screen.getAllByRole('button');
+      allButtons.forEach((button) => {
+        expect(button).toHaveClass('btn');
+        expect(button).toHaveClass('font-semibold');
+        expect(button).toHaveClass('rounded-lg');
+      });
+
+      // All feature cards should follow the GlassMorphismCard pattern
+      const featuresGrid = screen.getByTestId('features-grid');
+      const glassMorphismCards = featuresGrid.querySelectorAll('.backdrop-blur-lg.rounded-2xl.shadow-xl');
+      expect(glassMorphismCards.length).toBe(4);
+    });
+
+    it('no custom one-off button styles exist', () => {
+      renderWithProviders(<Home />);
+
+      // All buttons should use btn class (DaisyUI/FuturisticButton)
+      const allButtons = screen.getAllByRole('button');
+
+      allButtons.forEach((button) => {
+        // Should use DaisyUI btn base class, not custom classes
+        expect(button).toHaveClass('btn');
+        // Should not have ad-hoc background color classes that bypass the design system
+        expect(button.className).not.toMatch(/bg-blue-|bg-green-|bg-red-/);
+      });
+    });
+
+    it('card components consistently use GlassMorphismCard', () => {
+      renderWithProviders(<Home />);
+
+      // Feature cards should all have the same glass morphism treatment
+      const featuresGrid = screen.getByTestId('features-grid');
+      const cards = featuresGrid.querySelectorAll('.backdrop-blur-lg');
+
+      cards.forEach((card) => {
+        expect(card).toHaveClass('bg-base-100/70');
+        expect(card).toHaveClass('border');
+        expect(card).toHaveClass('rounded-2xl');
+        expect(card).toHaveClass('shadow-xl');
+      });
+    });
+  });
+});
