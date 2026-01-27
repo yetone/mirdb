@@ -30,61 +30,72 @@ export function Footer() {
 
   return (
     <footer
-      className="bg-base-200 py-8 px-4"
+      className="bg-base-300 py-8 px-4 sm:px-6 lg:px-8"
       data-testid="footer"
       role="contentinfo"
     >
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Navigation Links */}
-          <div>
-            <h3 className="font-semibold text-base-content mb-4">Navigation</h3>
-            <nav aria-label="Footer navigation">
-              <ul className="space-y-2">
-                {navigationLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-base-content/70 hover:text-primary transition-colors"
-                      data-testid={`footer-nav-${link.label.toLowerCase()}`}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-
-          {/* Legal Links */}
-          <div>
-            <h3 className="font-semibold text-base-content mb-4">Legal</h3>
-            <nav aria-label="Legal links">
-              <ul className="space-y-2">
-                {legalLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-base-content/70 hover:text-primary transition-colors"
-                      data-testid={`footer-legal-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-
-          {/* Copyright */}
-          <div className="md:text-right">
-            <p
-              className="text-base-content/60 text-sm"
-              data-testid="footer-copyright"
-            >
-              © {currentYear} URL Shortener. All rights reserved.
+          {/* Brand Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-base-content">
+              URL Shortener
+            </h3>
+            <p className="text-base-content/70 text-sm">
+              Shorten URLs, track clicks, and grow smarter with our powerful
+              link management platform.
             </p>
           </div>
+
+          {/* Navigation Links */}
+          <nav aria-label="Footer navigation">
+            <h4 className="text-base font-semibold text-base-content mb-4">
+              Navigation
+            </h4>
+            <ul className="space-y-2" data-testid="footer-nav-links">
+              {navigationLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-base-content/70 hover:text-primary transition-colors text-sm"
+                    data-testid={`footer-link-${link.label.toLowerCase().replace(' ', '-')}`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Legal Links */}
+          <nav aria-label="Legal links">
+            <h4 className="text-base font-semibold text-base-content mb-4">
+              Legal
+            </h4>
+            <ul className="space-y-2" data-testid="footer-legal-links">
+              {legalLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-base-content/70 hover:text-primary transition-colors text-sm"
+                    data-testid={`footer-link-${link.label.toLowerCase().replace(' ', '-')}`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        {/* Copyright Notice */}
+        <div className="border-t border-base-content/10 mt-8 pt-6 text-center">
+          <p
+            className="text-base-content/60 text-sm"
+            data-testid="footer-copyright"
+          >
+            © {currentYear} URL Shortener. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
