@@ -24,6 +24,7 @@ import Home from '../../src/pages/Home';
 import HeroSection from '../../src/components/homepage/HeroSection';
 import Footer from '../../src/components/homepage/Footer';
 import Navbar from '../../src/components/Navbar';
+import App from '../../src/App';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -1732,6 +1733,253 @@ describe('Scenario 17: Error Handling - Missing Resources', () => {
       buttons.forEach((button) => {
         expect(button).toHaveClass('btn');
       });
+    });
+  });
+});
+
+/**
+ * Scenario 16: Route Configuration
+ *
+ * Test that homepage is properly configured at root route.
+ *
+ * Steps:
+ * 1. Access root URL
+ * 2. Verify no redirect (homepage accessible to unauthenticated users)
+ * 3. Verify correct component renders (Home component at / route)
+ */
+describe('Scenario 16: Route Configuration', () => {
+  /**
+   * Helper function to render App with router
+   * This tests the actual App.tsx route configuration
+   */
+  function renderApp(initialRoute = '/') {
+    return render(
+      <MemoryRouter initialEntries={[initialRoute]}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </MemoryRouter>
+    );
+  }
+
+  describe('Test Case 1: Access "/" route without authentication', () => {
+    it('homepage renders without redirect to /login when accessing root URL', () => {
+      renderApp('/');
+
+      // Should render the homepage, not be redirected to login
+      const heroHeadline = screen.getByRole('heading', { level: 1 });
+      expect(heroHeadline).toBeInTheDocument();
+      expect(heroHeadline.textContent).toMatch(/Shorten URLs/i);
+
+      // Login page should NOT be visible
+      expect(screen.queryByText(/Welcome back/i)).not.toBeInTheDocument();
+      expect(screen.queryByRole('heading', { name: /Sign in to your account/i })).not.toBeInTheDocument();
+    });
+
+    it('unauthenticated users are NOT redirected away from root route', () => {
+      renderApp('/');
+
+      // Homepage content should be visible
+      const homepage = document.querySelector('.min-h-screen.bg-base-100');
+      expect(homepage).toBeInTheDocument();
+
+      // Hero section should be present (first section of homepage)
+      const heroSection = document.querySelector('section');
+      expect(heroSection).toBeInTheDocument();
+
+      // Should NOT be on login page
+      expect(screen.queryByTestId('login-page')).not.toBeInTheDocument();
+      expect(screen.queryByRole('form')).not.toBeInTheDocument();
+    });
+
+    it('homepage is accessible to all users (public route)', () => {
+      // Render as unauthenticated user
+      renderApp('/');
+
+      // Homepage should display all sections
+      expect(screen.getByRole('heading', { level: 1, name: /Shorten URLs/i })).toBeInTheDocument();
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+
+      // Features section should be visible
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toBeInTheDocument();
+
+      // CTA section should be visible
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Footer should be visible
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+    });
+
+    it('root route does not require authentication context to render', () => {
+      // Render without explicit authentication state - should still work
+      renderApp('/');
+
+      // Homepage content should render successfully
+      const headline = screen.getByRole('heading', { level: 1 });
+      expect(headline).toBeInTheDocument();
+
+      // Navigation should include login/register options (indicating unauthenticated state)
+      const signInLinks = screen.getAllByRole('link', { name: /Sign In/i });
+      expect(signInLinks.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Test Case 2: Check App.tsx route configuration', () => {
+    it('route path="/" renders Home component', () => {
+      renderApp('/');
+
+      // Verify Home component renders at root route
+      // Home component renders with specific structure
+      const homeContainer = document.querySelector('.min-h-screen.bg-base-100');
+      expect(homeContainer).toBeInTheDocument();
+
+      // Home includes Navbar
+      const navbar = screen.getByRole('navigation');
+      expect(navbar).toBeInTheDocument();
+
+      // Home includes main content with sections
+      const main = document.querySelector('main');
+      expect(main).toBeInTheDocument();
+
+      // Home includes Footer
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+    });
+
+    it('App routes "/" to Home component correctly', () => {
+      renderApp('/');
+
+      // Verify the h1 headline from HeroSection (child of Home)
+      const headline = screen.getByRole('heading', { level: 1 });
+      expect(headline.textContent).toMatch(/Shorten URLs\. Track Clicks\. Grow Your Reach\./i);
+
+      // Verify subheadline exists
+      expect(screen.getByText(/Transform your long URLs/i)).toBeInTheDocument();
+    });
+
+    it('Home component is NOT wrapped in ProtectedLayout at root route', () => {
+      renderApp('/');
+
+      // Homepage should render directly without protection
+      // If it were protected, we'd be redirected to login
+      const headline = screen.getByRole('heading', { level: 1 });
+      expect(headline).toBeInTheDocument();
+
+      // The homepage renders immediately without auth check
+      // Multiple "Get Started" links exist (navbar and hero), verify at least one
+      const getStartedLinks = screen.getAllByText(/Get Started/i);
+      expect(getStartedLinks.length).toBeGreaterThan(0);
+    });
+
+    it('root route is outside ProtectedLayout routes', async () => {
+      // Navigate to root - should show homepage
+      renderApp('/');
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+
+      // Dashboard route is protected and would redirect if accessed
+      // But root route is public
+      const heroSection = document.querySelector('section');
+      expect(heroSection).toBeInTheDocument();
+    });
+
+    it('routing configuration maps "/" to Home before any protected routes', () => {
+      renderApp('/');
+
+      // Home component structure verification
+      // Home component renders: div > Navbar, main > sections, Footer
+      const container = document.querySelector('.min-h-screen');
+      expect(container).toBeInTheDocument();
+
+      const navbar = screen.getByRole('navigation');
+      const main = document.querySelector('main');
+      const footer = screen.getByRole('contentinfo');
+
+      // Verify all Home component children are present
+      expect(navbar).toBeInTheDocument();
+      expect(main).toBeInTheDocument();
+      expect(footer).toBeInTheDocument();
+
+      // Main contains all sections
+      expect(main?.querySelectorAll('section').length).toBeGreaterThanOrEqual(4);
+    });
+  });
+
+  describe('Route Integration Tests', () => {
+    it('can navigate from "/" to "/login" route', async () => {
+      const user = userEvent.setup();
+      renderApp('/');
+
+      // Find and click Sign In link
+      const signInLinks = screen.getAllByRole('link', { name: /Sign In/i });
+      await user.click(signInLinks[0]);
+
+      // Should navigate to login page (Login.tsx has heading "Sign In" and "Don't have an account?" text)
+      await waitFor(() => {
+        // Login page specific text that doesn't exist on homepage
+        expect(screen.getByText(/Don't have an account\?/i)).toBeInTheDocument();
+      });
+    });
+
+    it('can navigate from "/" to "/register" route', async () => {
+      const user = userEvent.setup();
+      renderApp('/');
+
+      // Find and click Get Started link (registration)
+      const getStartedLinks = screen.getAllByRole('link', { name: /Get Started/i });
+      await user.click(getStartedLinks[0]);
+
+      // Should navigate to register page (Register.tsx has "Already have an account?" text)
+      await waitFor(() => {
+        expect(screen.getByText(/Already have an account\?/i)).toBeInTheDocument();
+      });
+    });
+
+    it('homepage brand link in navbar navigates back to "/"', () => {
+      renderApp('/');
+
+      // Brand link should point to home
+      const brandLink = screen.getByRole('link', { name: /URL Shortener/i });
+      expect(brandLink).toHaveAttribute('href', '/');
+    });
+
+    it('full page structure is correct at root route', () => {
+      renderApp('/');
+
+      // Verify complete page structure
+      // 1. Navbar at top
+      const navbar = screen.getByRole('navigation');
+      expect(navbar).toBeInTheDocument();
+
+      // 2. Main content area with sections
+      const main = document.querySelector('main');
+      expect(main).toBeInTheDocument();
+
+      // 3. HeroSection (with h1)
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      expect(heroHeading).toBeInTheDocument();
+
+      // 4. FeaturesSection
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toBeInTheDocument();
+
+      // 5. HowItWorksSection
+      const howItWorksHeading = screen.getByRole('heading', { name: /How It Works/i });
+      expect(howItWorksHeading).toBeInTheDocument();
+
+      // 6. CTASection
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // 7. Footer
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
     });
   });
 });
