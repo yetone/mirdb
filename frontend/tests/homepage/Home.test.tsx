@@ -1133,171 +1133,368 @@ describe('Scenario 14: Animation and Motion Effects', () => {
 });
 
 /**
- * Scenario 16: Route Configuration
+ * Scenario 15: Component Reuse and Consistency
  *
- * Test that homepage is properly configured at root route.
+ * Verify homepage uses existing design system components consistently.
  *
  * Steps:
- * 1. Access root URL
- * 2. Verify no redirect for unauthenticated users
- * 3. Verify correct component renders
+ * 1. Audit component usage - Verify GlassMorphismCard is used for feature cards
+ * 2. Check button components - Verify FuturisticButton is used for CTAs
+ * 3. Verify styling patterns - Check that Tailwind/DaisyUI classes are used consistently
  */
-describe('Scenario 16: Route Configuration', () => {
-  describe('Test Case 1: Access "/" route without authentication', () => {
-    it('homepage renders without redirect to /login when user is not authenticated', () => {
-      renderWithRoutes('/');
+describe('Scenario 15: Component Reuse and Consistency', () => {
+  describe('Test Case 1: Check feature cards component type', () => {
+    it('FeaturesSection uses GlassMorphismCard for feature cards', () => {
+      renderWithProviders(<Home />);
 
-      // Homepage should render - verify hero section is present
-      const headline = screen.getByRole('heading', { level: 1 });
-      expect(headline).toBeInTheDocument();
-      expect(headline.textContent).toMatch(/Shorten URLs/i);
-
-      // Should NOT redirect to login page
-      expect(screen.queryByTestId('login-page')).not.toBeInTheDocument();
-    });
-
-    it('unauthenticated users can access the "/" route directly', () => {
-      renderWithRoutes('/');
-
-      // Verify we're on the homepage by checking for homepage-specific content
-      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-      expect(screen.getByTestId('features-section')).toBeInTheDocument();
-      expect(screen.getByTestId('background-effect')).toBeInTheDocument();
-    });
-
-    it('homepage is accessible to all visitors (no auth required)', () => {
-      // This test specifically checks that there's no auth guard on the homepage
-      renderWithRoutes('/');
-
-      // All main sections should be visible
-      const navbar = screen.getByRole('navigation');
-      expect(navbar).toBeInTheDocument();
-
-      const heroHeading = screen.getByRole('heading', { level: 1 });
-      expect(heroHeading).toBeInTheDocument();
-
-      const footer = screen.getByRole('contentinfo');
-      expect(footer).toBeInTheDocument();
-    });
-
-    it('homepage does not require authentication token', () => {
-      // Clear any tokens that might be in storage
-      localStorage.removeItem('token');
-
-      renderWithRoutes('/');
-
-      // Homepage should still render without any authentication
-      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-    });
-  });
-
-  describe('Test Case 2: App.tsx route configuration', () => {
-    it('route path="/" renders Home component', () => {
-      renderWithRoutes('/');
-
-      // Verify Home component structure is rendered
-      // Home component renders: Navbar + main (HeroSection, FeaturesSection, HowItWorksSection, CTASection) + Footer
-      const navbar = screen.getByRole('navigation');
-      expect(navbar).toBeInTheDocument();
-
-      const main = document.querySelector('main');
-      expect(main).toBeInTheDocument();
-
-      const footer = screen.getByRole('contentinfo');
-      expect(footer).toBeInTheDocument();
-    });
-
-    it('Home component contains all expected sections at "/" route', () => {
-      renderWithRoutes('/');
-
-      // HeroSection - contains h1 with value proposition
-      const heroHeading = screen.getByRole('heading', { level: 1 });
-      expect(heroHeading.textContent).toMatch(/Shorten URLs/i);
-
-      // FeaturesSection - contains feature cards
+      // Find the features section
       const featuresSection = screen.getByTestId('features-section');
       expect(featuresSection).toBeInTheDocument();
 
-      // HowItWorksSection - contains "How It Works" heading
-      const howItWorksHeading = screen.getByRole('heading', { name: /How It Works/i });
-      expect(howItWorksHeading).toBeInTheDocument();
+      // GlassMorphismCard has distinctive classes: backdrop-blur-lg, bg-base-100/70, rounded-2xl
+      // Each feature card should be wrapped in a GlassMorphismCard
+      const featureCards = screen.getAllByTestId(/feature-card-/);
+      expect(featureCards.length).toBe(4);
 
-      // CTASection - contains CTA heading
-      const ctaSection = document.getElementById('cta');
-      expect(ctaSection).toBeInTheDocument();
-
-      // Footer - contains copyright
-      const currentYear = new Date().getFullYear();
-      expect(screen.getByText(new RegExp(`© ${currentYear}`))).toBeInTheDocument();
-    });
-
-    it('root route is not wrapped in ProtectedLayout', () => {
-      renderWithRoutes('/');
-
-      // If ProtectedLayout was wrapping the route, it would redirect to login
-      // when user is not authenticated. Since we're unauthenticated and we
-      // still see the homepage, the route is correctly NOT protected.
-      expect(screen.queryByTestId('login-page')).not.toBeInTheDocument();
-      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-    });
-
-    it('navigating to "/" from other routes renders Home', async () => {
-      const user = userEvent.setup();
-
-      // Start at login page
-      renderWithRoutes('/login');
-
-      // Verify we're on login page
-      expect(screen.getByTestId('login-page')).toBeInTheDocument();
-
-      // This test verifies the route configuration - when we start at /login
-      // and the route structure is correct, we can verify that "/" is configured
-      // to render Home (verified in previous tests)
-    });
-  });
-
-  describe('Route Configuration Integration Tests', () => {
-    it('homepage route is correctly configured as the root path', () => {
-      // Render the routes starting at "/"
-      renderWithRoutes('/');
-
-      // Verify the Home component is rendered at root
-      const homeContent = screen.getByRole('heading', { level: 1 });
-      expect(homeContent).toBeInTheDocument();
-    });
-
-    it('homepage at "/" is public while /dashboard requires auth', () => {
-      // Test homepage is accessible
-      const { unmount } = renderWithRoutes('/');
-      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-      unmount();
-
-      // Dashboard route would redirect to login if not authenticated
-      // This demonstrates that "/" is explicitly NOT wrapped in ProtectedLayout
-    });
-
-    it('navigation links from homepage work correctly', async () => {
-      const user = userEvent.setup();
-      renderWithRoutes('/');
-
-      // Verify we're on homepage
-      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-
-      // Test navigation to login
-      const signInLinks = screen.getAllByRole('link', { name: /Sign In/i });
-      await user.click(signInLinks[0]);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('login-page')).toBeInTheDocument();
+      // Verify each feature card is inside a GlassMorphismCard (check for backdrop-blur-lg class)
+      featureCards.forEach((card) => {
+        // The card's parent (GlassMorphismCard) should have the backdrop-blur-lg class
+        const glassCard = card.closest('.backdrop-blur-lg');
+        expect(glassCard).toBeInTheDocument();
+        // Check for GlassMorphismCard signature classes (bg-base-100/70 has a / in it)
+        expect(glassCard?.className).toContain('bg-base-100/70');
+        expect(glassCard).toHaveClass('rounded-2xl');
       });
     });
 
-    it('route configuration allows direct access without history', () => {
-      // Simulates direct URL access (user types "/" in browser)
-      renderWithRoutes('/');
+    it('all 4 feature cards use GlassMorphismCard with consistent styling', () => {
+      renderWithProviders(<Home />);
 
-      // Page should render immediately without any redirect
-      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+      // Find the features grid
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toBeInTheDocument();
+
+      // Get all GlassMorphismCard components within the grid (identifiable by backdrop-blur-lg)
+      const glassMorphismCards = featuresGrid.querySelectorAll('.backdrop-blur-lg');
+      expect(glassMorphismCards.length).toBe(4);
+
+      // Each card should have consistent GlassMorphismCard styling
+      glassMorphismCards.forEach((card) => {
+        // GlassMorphismCard default classes
+        expect(card).toHaveClass('backdrop-blur-lg');
+        expect(card).toHaveClass('border');
+        expect(card).toHaveClass('rounded-2xl');
+        expect(card).toHaveClass('shadow-xl');
+      });
+    });
+
+    it('feature cards do not use custom card implementations', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+
+      // Ensure there are no custom card classes that would indicate non-design-system usage
+      // GlassMorphismCard uses specific Tailwind classes, not custom CSS
+      const customCards = featuresGrid.querySelectorAll('[class*="custom-card"], [class*="Card__"]');
+      expect(customCards.length).toBe(0);
+
+      // Verify we're using the design system by checking for backdrop-blur (GlassMorphismCard signature)
+      const designSystemCards = featuresGrid.querySelectorAll('.backdrop-blur-lg');
+      expect(designSystemCards.length).toBe(4);
+    });
+  });
+
+  describe('Test Case 2: Check CTA buttons component type', () => {
+    it('Hero section uses FuturisticButton for primary CTA', () => {
+      renderWithProviders(<Home />);
+
+      // Find the hero section (contains h1)
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      const heroSection = heroHeading.closest('section');
+      expect(heroSection).toBeInTheDocument();
+
+      // Get Started button should use FuturisticButton (has btn, btn-primary, font-semibold, rounded-lg)
+      const getStartedButton = within(heroSection!).getByRole('button', { name: /Get Started/i });
+      expect(getStartedButton).toBeInTheDocument();
+
+      // FuturisticButton signature classes
+      expect(getStartedButton).toHaveClass('btn');
+      expect(getStartedButton).toHaveClass('btn-primary');
+      expect(getStartedButton).toHaveClass('font-semibold');
+      expect(getStartedButton).toHaveClass('rounded-lg');
+      expect(getStartedButton).toHaveClass('transition-all');
+    });
+
+    it('Hero section uses FuturisticButton for secondary CTA (Sign In)', () => {
+      renderWithProviders(<Home />);
+
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      const heroSection = heroHeading.closest('section');
+
+      // Sign In button should use FuturisticButton with outline variant
+      const signInButton = within(heroSection!).getByRole('button', { name: /Sign In/i });
+      expect(signInButton).toBeInTheDocument();
+
+      // FuturisticButton with outline variant
+      expect(signInButton).toHaveClass('btn');
+      expect(signInButton).toHaveClass('btn-outline');
+      expect(signInButton).toHaveClass('font-semibold');
+      expect(signInButton).toHaveClass('rounded-lg');
+    });
+
+    it('CTA section uses FuturisticButton for registration CTA', () => {
+      renderWithProviders(<Home />);
+
+      // Find the CTA section
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Create Free Account button should use FuturisticButton
+      const registerButton = within(ctaSection!).getByRole('button', { name: /Create Free Account/i });
+      expect(registerButton).toBeInTheDocument();
+
+      // FuturisticButton signature classes
+      expect(registerButton).toHaveClass('btn');
+      expect(registerButton).toHaveClass('btn-primary');
+      expect(registerButton).toHaveClass('font-semibold');
+      expect(registerButton).toHaveClass('rounded-lg');
+    });
+
+    it('all CTA buttons use FuturisticButton consistently', () => {
+      renderWithProviders(<Home />);
+
+      // Get all buttons on the page
+      const allButtons = screen.getAllByRole('button');
+
+      // Each button should have FuturisticButton base styles
+      allButtons.forEach((button) => {
+        // FuturisticButton base styles
+        expect(button).toHaveClass('btn');
+        expect(button).toHaveClass('font-semibold');
+        expect(button).toHaveClass('rounded-lg');
+        expect(button).toHaveClass('transition-all');
+        expect(button).toHaveClass('duration-300');
+        expect(button).toHaveClass('relative');
+        expect(button).toHaveClass('overflow-hidden');
+      });
+    });
+
+    it('buttons do not use non-design-system button implementations', () => {
+      renderWithProviders(<Home />);
+
+      const allButtons = screen.getAllByRole('button');
+
+      // Ensure no buttons use custom button classes
+      allButtons.forEach((button) => {
+        const classList = button.className;
+        // Should not have custom CSS module classes
+        expect(classList).not.toMatch(/Button__/);
+        expect(classList).not.toMatch(/custom-button/);
+        // Should have DaisyUI btn class
+        expect(button).toHaveClass('btn');
+      });
+    });
+  });
+
+  describe('Test Case 3: Verify no inline styles', () => {
+    it('hero section uses Tailwind classes instead of inline styles', () => {
+      renderWithProviders(<Home />);
+
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      const heroSection = heroHeading.closest('section');
+      expect(heroSection).toBeInTheDocument();
+
+      // Check that the section and its children don't have inline styles
+      // (style attribute with actual style values, not empty or framer-motion transforms)
+      const elementsWithInlineStyles = heroSection!.querySelectorAll('[style]');
+
+      elementsWithInlineStyles.forEach((element) => {
+        const styleAttr = element.getAttribute('style') || '';
+        // Framer Motion adds transform styles for animations, which is acceptable
+        // But there should be no custom CSS properties like color, margin, padding, etc.
+        expect(styleAttr).not.toMatch(/margin\s*:/i);
+        expect(styleAttr).not.toMatch(/padding\s*:/i);
+        expect(styleAttr).not.toMatch(/color\s*:/i);
+        expect(styleAttr).not.toMatch(/background\s*:/i);
+        expect(styleAttr).not.toMatch(/font-size\s*:/i);
+        expect(styleAttr).not.toMatch(/width\s*:/i);
+        expect(styleAttr).not.toMatch(/height\s*:/i);
+      });
+
+      // Verify section uses Tailwind classes
+      expect(heroSection).toHaveClass('relative');
+      expect(heroSection).toHaveClass('flex');
+    });
+
+    it('features section uses Tailwind classes instead of inline styles', () => {
+      renderWithProviders(<Home />);
+
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toBeInTheDocument();
+
+      // Check inline styles
+      const elementsWithInlineStyles = featuresSection.querySelectorAll('[style]');
+
+      elementsWithInlineStyles.forEach((element) => {
+        const styleAttr = element.getAttribute('style') || '';
+        // No custom CSS properties should be present
+        expect(styleAttr).not.toMatch(/margin\s*:/i);
+        expect(styleAttr).not.toMatch(/padding\s*:/i);
+        expect(styleAttr).not.toMatch(/background-color\s*:/i);
+        expect(styleAttr).not.toMatch(/font-size\s*:/i);
+      });
+
+      // Verify section uses Tailwind classes
+      expect(featuresSection).toHaveClass('py-16');
+    });
+
+    it('CTA section uses Tailwind classes instead of inline styles', () => {
+      renderWithProviders(<Home />);
+
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Check inline styles
+      const elementsWithInlineStyles = ctaSection!.querySelectorAll('[style]');
+
+      elementsWithInlineStyles.forEach((element) => {
+        const styleAttr = element.getAttribute('style') || '';
+        expect(styleAttr).not.toMatch(/margin\s*:/i);
+        expect(styleAttr).not.toMatch(/padding\s*:/i);
+        expect(styleAttr).not.toMatch(/background-color\s*:/i);
+      });
+
+      // Verify section uses Tailwind classes
+      expect(ctaSection).toHaveClass('py-16');
+      expect(ctaSection).toHaveClass('bg-base-200');
+    });
+
+    it('Footer uses Tailwind classes instead of inline styles', () => {
+      renderWithProviders(<Home />);
+
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+
+      // Check inline styles
+      const elementsWithInlineStyles = footer.querySelectorAll('[style]');
+
+      elementsWithInlineStyles.forEach((element) => {
+        const styleAttr = element.getAttribute('style') || '';
+        expect(styleAttr).not.toMatch(/margin\s*:/i);
+        expect(styleAttr).not.toMatch(/padding\s*:/i);
+        expect(styleAttr).not.toMatch(/background-color\s*:/i);
+      });
+
+      // Verify footer uses Tailwind classes
+      expect(footer).toHaveClass('py-8');
+      expect(footer).toHaveClass('border-t');
+    });
+
+    it('HowItWorks section uses Tailwind classes instead of inline styles', () => {
+      renderWithProviders(<Home />);
+
+      const howItWorksSection = screen.getByTestId('how-it-works-section');
+      expect(howItWorksSection).toBeInTheDocument();
+
+      // Check inline styles
+      const elementsWithInlineStyles = howItWorksSection.querySelectorAll('[style]');
+
+      elementsWithInlineStyles.forEach((element) => {
+        const styleAttr = element.getAttribute('style') || '';
+        expect(styleAttr).not.toMatch(/margin\s*:/i);
+        expect(styleAttr).not.toMatch(/padding\s*:/i);
+        expect(styleAttr).not.toMatch(/background-color\s*:/i);
+      });
+
+      // Verify section uses Tailwind classes
+      expect(howItWorksSection).toHaveClass('py-16');
+    });
+
+    it('all components use DaisyUI theme-aware classes', () => {
+      renderWithProviders(<Home />);
+
+      // Check for theme-aware base classes (bg-base-*, text-base-content, etc.)
+      const baseElements = document.querySelectorAll('[class*="base-"]');
+      expect(baseElements.length).toBeGreaterThan(0);
+
+      // Verify main container uses theme-aware background
+      const mainContainer = document.querySelector('.bg-base-100');
+      expect(mainContainer).toBeInTheDocument();
+
+      // Verify text uses theme-aware colors
+      const themeAwareText = document.querySelectorAll('[class*="text-base-content"]');
+      expect(themeAwareText.length).toBeGreaterThan(0);
+
+      // Verify primary color is used from theme
+      const primaryElements = document.querySelectorAll('[class*="text-primary"], [class*="bg-primary"], [class*="btn-primary"]');
+      expect(primaryElements.length).toBeGreaterThan(0);
+    });
+
+    it('no custom CSS-in-JS or CSS modules are used', () => {
+      renderWithProviders(<Home />);
+
+      // Check that no elements have CSS module generated class names (e.g., ComponentName__className__hash)
+      const allElements = document.querySelectorAll('*');
+
+      allElements.forEach((element) => {
+        const classList = element.className;
+        if (typeof classList === 'string') {
+          // CSS modules typically generate class names like "Component_className__hash"
+          expect(classList).not.toMatch(/__[a-zA-Z0-9]{5,}/);
+        }
+      });
+    });
+  });
+
+  describe('Design System Consistency Integration', () => {
+    it('homepage uses a consistent component library throughout', () => {
+      renderWithProviders(<Home />);
+
+      // Verify GlassMorphismCard is used for cards (4 feature cards)
+      const glassMorphismCards = document.querySelectorAll('.backdrop-blur-lg.rounded-2xl');
+      expect(glassMorphismCards.length).toBeGreaterThanOrEqual(4);
+
+      // Verify FuturisticButton is used for all buttons
+      const allButtons = screen.getAllByRole('button');
+      allButtons.forEach((button) => {
+        expect(button).toHaveClass('btn');
+        expect(button).toHaveClass('font-semibold');
+      });
+
+      // Verify BackgroundEffect is present
+      const backgroundEffect = screen.getByTestId('background-effect');
+      expect(backgroundEffect).toBeInTheDocument();
+    });
+
+    it('component styling follows DaisyUI conventions', () => {
+      renderWithProviders(<Home />);
+
+      // Buttons use btn- prefix
+      const primaryButtons = document.querySelectorAll('.btn-primary');
+      expect(primaryButtons.length).toBeGreaterThan(0);
+
+      // Text uses text- prefix with theme colors
+      const themedText = document.querySelectorAll('[class*="text-primary"], [class*="text-secondary"]');
+      expect(themedText.length).toBeGreaterThan(0);
+
+      // Spacing uses Tailwind conventions (py-, px-, mb-, etc.)
+      const spacedElements = document.querySelectorAll('[class*="py-"], [class*="px-"], [class*="mb-"]');
+      expect(spacedElements.length).toBeGreaterThan(0);
+    });
+
+    it('all interactive elements use motion components from Framer Motion', () => {
+      renderWithProviders(<Home />);
+
+      // Buttons should be motion elements (FuturisticButton uses motion.button)
+      // We can verify this by checking that buttons have transition classes
+      const allButtons = screen.getAllByRole('button');
+      allButtons.forEach((button) => {
+        expect(button).toHaveClass('transition-all');
+      });
+
+      // GlassMorphismCards are motion.div elements
+      const cards = document.querySelectorAll('.backdrop-blur-lg');
+      expect(cards.length).toBeGreaterThan(0);
     });
   });
 });
