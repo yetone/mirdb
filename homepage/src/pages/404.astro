@@ -12,7 +12,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const pageTitle = '404 - Page Not Found | MirDB';
-const pageDescription = 'The page you are looking for could not be found.';
+const pageDescription = "The page you're looking for doesn't exist.";
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -22,9 +22,13 @@ const pageDescription = 'The page you are looking for could not be found.';
         <h1 class="error-code">404</h1>
         <h2 class="error-title">Page Not Found</h2>
         <p class="error-message">
-          The page you are looking for doesn't exist or has been moved.
+          Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
         </p>
         <a href="/" class="btn btn-primary home-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
           Back to Homepage
         </a>
       </div>
@@ -34,23 +38,23 @@ const pageDescription = 'The page you are looking for could not be found.';
 
 <style>
   .error-page {
-    min-height: 100vh;
+    min-height: calc(100vh - 80px);
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     padding: var(--space-xl);
   }
 
   .error-content {
-    text-align: center;
     max-width: 500px;
   }
 
   .error-code {
     font-size: 8rem;
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
     line-height: 1;
+    color: var(--color-primary);
     margin-bottom: var(--space-md);
   }
 
@@ -72,13 +76,13 @@ const pageDescription = 'The page you are looking for could not be found.';
     gap: var(--space-sm);
   }
 
-  .home-link::before {
-    content: '\2190';
+  .home-link svg {
+    flex-shrink: 0;
   }
 
   @media (max-width: 768px) {
     .error-code {
-      font-size: 5rem;
+      font-size: 6rem;
     }
 
     .error-title {
@@ -87,6 +91,16 @@ const pageDescription = 'The page you are looking for could not be found.';
 
     .error-message {
       font-size: var(--font-size-md);
+    }
+  }
+
+  @media (max-width: 375px) {
+    .error-code {
+      font-size: 4rem;
+    }
+
+    .error-title {
+      font-size: var(--font-size-xl);
     }
   }
 </style>
