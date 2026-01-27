@@ -30,6 +30,16 @@ const navLinks = [
   </div>
 </nav>
 
+<script>
+  import { initSmoothScroll } from '../scripts/navigation';
+
+  // Initialize smooth scroll when DOM is ready
+  document.addEventListener('DOMContentLoaded', initSmoothScroll);
+
+  // Also handle Astro page transitions if using View Transitions
+  document.addEventListener('astro:page-load', initSmoothScroll);
+</script>
+
 <style>
   .nav {
     position: sticky;
@@ -65,5 +75,15 @@ const navLinks = [
   .nav-link:hover {
     color: var(--color-primary);
     background: var(--color-bg-secondary);
+  }
+
+  .nav-link.active {
+    color: var(--color-primary);
+    background: var(--color-bg-secondary);
+  }
+
+  .nav-link:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
   }
 </style>
