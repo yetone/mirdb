@@ -314,3 +314,234 @@ describe('Responsive Design - Mobile (320px)', () => {
     });
   });
 });
+
+describe('Responsive Design - Tablet (768px)', () => {
+  beforeEach(() => {
+    // Set viewport to tablet width (md breakpoint)
+    setViewportWidth(768);
+  });
+
+  afterEach(() => {
+    // Reset viewport
+    setViewportWidth(1024);
+  });
+
+  describe('Test Case 1: Hero section renders with appropriate sizing', () => {
+    it('renders Hero section at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      // Hero section should be rendered
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      expect(heroSection).toBeInTheDocument();
+
+      // Hero section should have min-h-screen for full viewport height
+      expect(hasResponsiveClass(heroSection, 'min-h-screen')).toBe(true);
+    });
+
+    it('hero headline has tablet-appropriate font size (md:text-5xl)', () => {
+      renderWithProviders(<Home />);
+
+      const headline = screen.getByRole('heading', { level: 1 });
+      expect(headline).toBeInTheDocument();
+      // Tablet should use md:text-5xl
+      expect(hasResponsiveClass(headline, 'md:text-5xl')).toBe(true);
+    });
+
+    it('hero subheadline has tablet-appropriate font size (md:text-xl)', () => {
+      renderWithProviders(<Home />);
+
+      // Find subheadline by unique text content
+      const subheadline = screen.getByText(/gain powerful insights/i);
+      expect(subheadline).toBeInTheDocument();
+      // Tablet should use md:text-xl
+      expect(hasResponsiveClass(subheadline, 'md:text-xl')).toBe(true);
+    });
+
+    it('hero content container has proper padding at tablet width', () => {
+      renderWithProviders(<Home />);
+
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      const container = heroSection.querySelector('.container');
+      expect(container).toBeInTheDocument();
+      // Container should have px-4 padding
+      if (container) {
+        expect(hasResponsiveClass(container as HTMLElement, 'px-4')).toBe(true);
+      }
+    });
+
+    it('hero CTA buttons display in row layout at tablet (sm:flex-row)', () => {
+      renderWithProviders(<Home />);
+
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      // Find the CTA container with flex-col sm:flex-row classes
+      const ctaContainer = heroSection.querySelector('.flex.flex-col');
+      expect(ctaContainer).toBeInTheDocument();
+      if (ctaContainer) {
+        // At 768px (above sm:640px), buttons should use sm:flex-row
+        expect(hasResponsiveClass(ctaContainer as HTMLElement, 'sm:flex-row')).toBe(true);
+      }
+    });
+  });
+
+  describe('Test Case 2: Feature cards adapt to tablet layout (2-column or responsive grid)', () => {
+    it('features section renders at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toBeInTheDocument();
+    });
+
+    it('features grid has md:grid-cols-3 class for tablet+ breakpoint', () => {
+      renderWithProviders(<Home />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toBeInTheDocument();
+      // Grid should have md:grid-cols-3 for tablet and above
+      expect(hasResponsiveClass(featuresGrid, 'md:grid-cols-3')).toBe(true);
+    });
+
+    it('all three feature cards are visible at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      const featureCard0 = screen.getByTestId('feature-card-0');
+      const featureCard1 = screen.getByTestId('feature-card-1');
+      const featureCard2 = screen.getByTestId('feature-card-2');
+
+      expect(featureCard0).toBeInTheDocument();
+      expect(featureCard1).toBeInTheDocument();
+      expect(featureCard2).toBeInTheDocument();
+    });
+
+    it('feature cards have proper content at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      // Verify feature titles are present
+      expect(screen.getByText('Instant URL Shortening')).toBeInTheDocument();
+      expect(screen.getByText('Detailed Analytics')).toBeInTheDocument();
+      expect(screen.getByText('Share Statistics')).toBeInTheDocument();
+    });
+
+    it('features section has responsive padding (sm:px-6 lg:px-8)', () => {
+      renderWithProviders(<Home />);
+
+      const featuresSection = screen.getByTestId('features-section');
+      // Section should have responsive padding classes
+      expect(hasResponsiveClass(featuresSection, 'px-4')).toBe(true);
+      expect(hasResponsiveClass(featuresSection, 'sm:px-6')).toBe(true);
+      expect(hasResponsiveClass(featuresSection, 'lg:px-8')).toBe(true);
+    });
+  });
+
+  describe('Test Case 3: All content is visible without horizontal scrolling', () => {
+    it('landing page main container does not overflow at tablet width', () => {
+      renderWithProviders(<Home />);
+
+      const landingPage = screen.getByTestId('landing-page');
+      expect(landingPage).toBeInTheDocument();
+      expect(hasResponsiveClass(landingPage, 'min-h-screen')).toBe(true);
+    });
+
+    it('hero section has overflow-hidden at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      expect(hasResponsiveClass(heroSection, 'overflow-hidden')).toBe(true);
+    });
+
+    it('all sections have max-width constraints preventing overflow', () => {
+      renderWithProviders(<Home />);
+
+      // Features section has max-w-7xl
+      const featuresSection = screen.getByTestId('features-section');
+      const featuresContainer = featuresSection.querySelector('.max-w-7xl');
+      expect(featuresContainer).toBeInTheDocument();
+
+      // Social proof section has max-w-7xl
+      const socialProofSection = screen.getByTestId('social-proof-section');
+      const socialProofContainer = socialProofSection.querySelector('.max-w-7xl');
+      expect(socialProofContainer).toBeInTheDocument();
+    });
+
+    it('How It Works section is visible at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      const stepsContainer = screen.getByTestId('steps-container');
+      expect(stepsContainer).toBeInTheDocument();
+
+      // All three steps should be visible
+      expect(screen.getByTestId('step-1')).toBeInTheDocument();
+      expect(screen.getByTestId('step-2')).toBeInTheDocument();
+      expect(screen.getByTestId('step-3')).toBeInTheDocument();
+    });
+
+    it('Social Proof section is visible at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      const statsGrid = screen.getByTestId('stats-grid');
+      expect(statsGrid).toBeInTheDocument();
+
+      // All three stat cards should be visible
+      expect(screen.getByTestId('stat-card-0')).toBeInTheDocument();
+      expect(screen.getByTestId('stat-card-1')).toBeInTheDocument();
+      expect(screen.getByTestId('stat-card-2')).toBeInTheDocument();
+    });
+
+    it('Footer is visible at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toBeInTheDocument();
+    });
+  });
+
+  describe('Additional Tablet Responsiveness Tests', () => {
+    it('features section heading uses tablet-appropriate font size (sm:text-4xl)', () => {
+      renderWithProviders(<Home />);
+
+      const featuresHeading = screen.getByText('Powerful Features');
+      expect(featuresHeading).toBeInTheDocument();
+      expect(hasResponsiveClass(featuresHeading, 'sm:text-4xl')).toBe(true);
+    });
+
+    it('hero section centers content properly at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      // Verify flex centering classes
+      expect(hasResponsiveClass(heroSection, 'flex')).toBe(true);
+      expect(hasResponsiveClass(heroSection, 'items-center')).toBe(true);
+      expect(hasResponsiveClass(heroSection, 'justify-center')).toBe(true);
+    });
+
+    it('CTA buttons are visible and functional at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      // Get hero section and query within it to avoid multiple login links from footer
+      const heroSection = screen.getByRole('region', { name: /hero section/i });
+      const getStartedLink = within(heroSection).getByRole('link', { name: /get started/i });
+      const loginLink = within(heroSection).getByRole('link', { name: /login/i });
+
+      expect(getStartedLink).toBeInTheDocument();
+      expect(getStartedLink).toBeVisible();
+      expect(getStartedLink).toHaveAttribute('href', '/register');
+
+      expect(loginLink).toBeInTheDocument();
+      expect(loginLink).toBeVisible();
+      expect(loginLink).toHaveAttribute('href', '/login');
+    });
+
+    it('stat values are readable at tablet viewport', () => {
+      renderWithProviders(<Home />);
+
+      // Verify all stat values are present
+      expect(screen.getByText('10M+')).toBeInTheDocument();
+      expect(screen.getByText('500M+')).toBeInTheDocument();
+      expect(screen.getByText('100K+')).toBeInTheDocument();
+
+      // Verify stat labels are present
+      expect(screen.getByText('Links Created')).toBeInTheDocument();
+      expect(screen.getByText('Clicks Tracked')).toBeInTheDocument();
+      expect(screen.getByText('Happy Users')).toBeInTheDocument();
+    });
+  });
+});
