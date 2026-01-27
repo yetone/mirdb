@@ -165,7 +165,7 @@ export function HowItWorksSection({ steps = defaultSteps }: HowItWorksSectionPro
             aria-hidden="true"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10" data-testid="steps-grid">
             {steps.map((step, index) => (
               <motion.div
                 key={step.id}
@@ -183,7 +183,7 @@ export function HowItWorksSection({ steps = defaultSteps }: HowItWorksSectionPro
                 </div>
 
                 {/* Step card */}
-                <div className="card bg-base-100 border border-base-300 shadow-md w-full">
+                <div className="card bg-base-100 border border-base-300 hover:border-primary/50 transition-colors shadow-md w-full">
                   <div className="card-body items-center">
                     {/* Icon */}
                     <div

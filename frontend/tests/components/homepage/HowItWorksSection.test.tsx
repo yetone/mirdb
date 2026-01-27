@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { HowItWorksSection } from '../../../src/components/homepage/HowItWorksSection'
+import { render, screen, within } from '@testing-library/react'
+import { HowItWorksSection, Step } from '../../../src/components/homepage/HowItWorksSection'
 
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
@@ -20,7 +20,7 @@ vi.mock('framer-motion', () => ({
   },
 }))
 
-const renderHowItWorksSection = (props = {}) => {
+const renderHowItWorksSection = (props: { steps?: Step[] } = {}) => {
   return render(<HowItWorksSection {...props} />)
 }
 
@@ -87,6 +87,35 @@ describe('HowItWorksSection', () => {
       const stepTitles = screen.getAllByTestId('step-title')
       expect(stepTitles).toHaveLength(3)
     })
+
+    it('should render custom steps when provided', () => {
+      const customSteps: Step[] = [
+        {
+          id: 'custom-1',
+          number: 1,
+          title: 'Custom Step 1',
+          description: 'Custom description 1',
+          icon: <svg data-testid="custom-icon-1" />,
+        },
+        {
+          id: 'custom-2',
+          number: 2,
+          title: 'Custom Step 2',
+          description: 'Custom description 2',
+          icon: <svg data-testid="custom-icon-2" />,
+        },
+        {
+          id: 'custom-3',
+          number: 3,
+          title: 'Custom Step 3',
+          description: 'Custom description 3',
+          icon: <svg data-testid="custom-icon-3" />,
+        },
+      ]
+      renderHowItWorksSection({ steps: customSteps })
+      const stepItems = screen.getAllByTestId('step-item')
+      expect(stepItems).toHaveLength(3)
+    })
   })
 
   // Test Case 4: Verify steps have visual numbering
@@ -124,12 +153,14 @@ describe('HowItWorksSection', () => {
   describe('Step 1 Content', () => {
     it('should have Step 1 mentioning signup or account creation', () => {
       renderHowItWorksSection()
-      const stepTitles = screen.getAllByTestId('step-title')
-      const stepDescriptions = screen.getAllByTestId('step-description')
+      const stepItems = screen.getAllByTestId('step-item')
+      const firstStep = within(stepItems[0])
+      const title = firstStep.getByTestId('step-title')
+      const description = firstStep.getByTestId('step-description')
 
-      const step1Title = stepTitles[0].textContent?.toLowerCase() || ''
-      const step1Description = stepDescriptions[0].textContent?.toLowerCase() || ''
-      const step1Content = step1Title + ' ' + step1Description
+      const titleText = title.textContent?.toLowerCase() || ''
+      const descriptionText = description.textContent?.toLowerCase() || ''
+      const step1Content = titleText + ' ' + descriptionText
 
       expect(step1Content).toMatch(/sign\s*up|account|create|register/i)
     })
@@ -145,12 +176,14 @@ describe('HowItWorksSection', () => {
   describe('Step 2 Content', () => {
     it('should have Step 2 mentioning URL shortening or pasting URL', () => {
       renderHowItWorksSection()
-      const stepTitles = screen.getAllByTestId('step-title')
-      const stepDescriptions = screen.getAllByTestId('step-description')
+      const stepItems = screen.getAllByTestId('step-item')
+      const secondStep = within(stepItems[1])
+      const title = secondStep.getByTestId('step-title')
+      const description = secondStep.getByTestId('step-description')
 
-      const step2Title = stepTitles[1].textContent?.toLowerCase() || ''
-      const step2Description = stepDescriptions[1].textContent?.toLowerCase() || ''
-      const step2Content = step2Title + ' ' + step2Description
+      const titleText = title.textContent?.toLowerCase() || ''
+      const descriptionText = description.textContent?.toLowerCase() || ''
+      const step2Content = titleText + ' ' + descriptionText
 
       expect(step2Content).toMatch(/url|shorten|paste|link/i)
     })
@@ -166,12 +199,14 @@ describe('HowItWorksSection', () => {
   describe('Step 3 Content', () => {
     it('should have Step 3 mentioning sharing or analytics tracking', () => {
       renderHowItWorksSection()
-      const stepTitles = screen.getAllByTestId('step-title')
-      const stepDescriptions = screen.getAllByTestId('step-description')
+      const stepItems = screen.getAllByTestId('step-item')
+      const thirdStep = within(stepItems[2])
+      const title = thirdStep.getByTestId('step-title')
+      const description = thirdStep.getByTestId('step-description')
 
-      const step3Title = stepTitles[2].textContent?.toLowerCase() || ''
-      const step3Description = stepDescriptions[2].textContent?.toLowerCase() || ''
-      const step3Content = step3Title + ' ' + step3Description
+      const titleText = title.textContent?.toLowerCase() || ''
+      const descriptionText = description.textContent?.toLowerCase() || ''
+      const step3Content = titleText + ' ' + descriptionText
 
       expect(step3Content).toMatch(/share|track|analytics/i)
     })
@@ -219,9 +254,64 @@ describe('HowItWorksSection', () => {
       expect(stepNumbers[1].textContent).toBe('2')
       expect(stepNumbers[2].textContent).toBe('3')
     })
+
+    it('should render steps in a grid container for horizontal layout', () => {
+      renderHowItWorksSection()
+      const stepsGrid = screen.getByTestId('steps-grid')
+      expect(stepsGrid).toBeInTheDocument()
+      expect(stepsGrid).toHaveClass('grid')
+      expect(stepsGrid).toHaveClass('md:grid-cols-3')
+    })
+
+    it('should have visual indicators that are aria-hidden for accessibility', () => {
+      renderHowItWorksSection()
+      const connector = screen.getByTestId('step-connector')
+      expect(connector).toHaveAttribute('aria-hidden', 'true')
+
+      const mobileConnectors = screen.getAllByTestId('mobile-connector')
+      mobileConnectors.forEach((connector) => {
+        expect(connector).toHaveAttribute('aria-hidden', 'true')
+      })
+    })
   })
 
-  // Additional tests for accessibility and structure
+  // Additional tests for step structure
+  describe('Step Structure', () => {
+    it('should have an icon in each step', () => {
+      renderHowItWorksSection()
+      const stepIcons = screen.getAllByTestId('step-icon')
+      expect(stepIcons).toHaveLength(3)
+
+      stepIcons.forEach((iconContainer) => {
+        const svg = iconContainer.querySelector('svg')
+        expect(svg).toBeInTheDocument()
+      })
+    })
+
+    it('should have a title for each step', () => {
+      renderHowItWorksSection()
+      const stepTitles = screen.getAllByTestId('step-title')
+      expect(stepTitles).toHaveLength(3)
+
+      stepTitles.forEach((title) => {
+        expect(title.textContent?.trim()).not.toBe('')
+      })
+    })
+
+    it('should have a description for each step', () => {
+      renderHowItWorksSection()
+      const stepDescriptions = screen.getAllByTestId('step-description')
+      expect(stepDescriptions).toHaveLength(3)
+
+      stepDescriptions.forEach((description) => {
+        expect(description.textContent?.trim()).not.toBe('')
+        // Description should be meaningful
+        expect(description.textContent!.length).toBeGreaterThan(20)
+      })
+    })
+  })
+
+  // Accessibility tests
   describe('Accessibility', () => {
     it('should have proper heading hierarchy', () => {
       renderHowItWorksSection()
@@ -242,12 +332,58 @@ describe('HowItWorksSection', () => {
         expect(icon).toHaveAttribute('aria-hidden', 'true')
       })
     })
+
+    it('should have h3 headings for step titles', () => {
+      renderHowItWorksSection()
+      const stepTitles = screen.getAllByTestId('step-title')
+      stepTitles.forEach((title) => {
+        expect(title.tagName).toBe('H3')
+      })
+    })
+
+    it('should have proper text contrast classes', () => {
+      renderHowItWorksSection()
+      const titles = screen.getAllByTestId('step-title')
+      const descriptions = screen.getAllByTestId('step-description')
+
+      titles.forEach((title) => {
+        expect(title).toHaveClass('text-base-content')
+      })
+
+      descriptions.forEach((desc) => {
+        expect(desc).toHaveClass('text-base-content/70')
+      })
+    })
+  })
+
+  // Layout tests
+  describe('Layout', () => {
+    it('should render steps in a grid container', () => {
+      renderHowItWorksSection()
+      const grid = screen.getByTestId('steps-grid')
+      expect(grid).toBeInTheDocument()
+      expect(grid).toHaveClass('grid')
+    })
+
+    it('should have responsive grid classes', () => {
+      renderHowItWorksSection()
+      const grid = screen.getByTestId('steps-grid')
+      expect(grid).toHaveClass('grid-cols-1')
+      expect(grid).toHaveClass('md:grid-cols-3')
+    })
+
+    it('should have a steps container with relative positioning', () => {
+      renderHowItWorksSection()
+      const container = screen.getByTestId('steps-container')
+      expect(container).toBeInTheDocument()
+      expect(container).toHaveClass('relative')
+    })
   })
 
   // Test with custom steps prop
   describe('Custom Steps', () => {
     it('should accept custom steps through props', () => {
-      const customSteps = [
+      const customSteps: Step[] = [
         {
           id: 'custom-1',
           number: 1,
