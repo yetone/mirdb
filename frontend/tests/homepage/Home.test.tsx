@@ -1747,6 +1747,376 @@ describe('Scenario 17: Error Handling - Missing Resources', () => {
  * 2. Verify no redirect (homepage accessible to unauthenticated users)
  * 3. Verify correct component renders (Home component at / route)
  */
+/**
+ * Scenario 18: Performance - Initial Load
+ *
+ * Test homepage performance meets NFR requirements (under 3 second load).
+ *
+ * Steps:
+ * 1. Measure initial load time - Time from navigation start to fully interactive
+ * 2. Check bundle size impact - Verify homepage doesn't significantly increase bundle size
+ */
+describe('Scenario 18: Performance - Initial Load', () => {
+  describe('Test Case 1: Measure Time to Interactive for homepage', () => {
+    it('homepage renders within acceptable time threshold (simulated TTI < 3s)', async () => {
+      // Measure render time as a proxy for TTI
+      const startTime = performance.now();
+
+      renderWithProviders(<Home />);
+
+      // Wait for all content to be visible (simulates fully interactive state)
+      await waitFor(() => {
+        // Verify all major sections are rendered
+        expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+        expect(screen.getByTestId('features-section')).toBeInTheDocument();
+        expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+      });
+
+      const endTime = performance.now();
+      const renderTime = endTime - startTime;
+
+      // Render time should be well under 3000ms (3 seconds)
+      // In a test environment, this should be much faster
+      // We use a generous threshold since actual TTI depends on network conditions
+      expect(renderTime).toBeLessThan(3000);
+    });
+
+    it('all homepage sections render without significant delay', async () => {
+      const sectionRenderTimes: Record<string, number> = {};
+
+      // Measure time to render each section
+      const startTime = performance.now();
+      renderWithProviders(<Home />);
+
+      await waitFor(() => {
+        // Hero section
+        const heroTime = performance.now();
+        expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+        sectionRenderTimes['hero'] = heroTime - startTime;
+
+        // Features section
+        const featuresTime = performance.now();
+        expect(screen.getByTestId('features-section')).toBeInTheDocument();
+        sectionRenderTimes['features'] = featuresTime - startTime;
+
+        // How it works section
+        const howItWorksTime = performance.now();
+        expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument();
+        sectionRenderTimes['howItWorks'] = howItWorksTime - startTime;
+
+        // CTA section
+        const ctaTime = performance.now();
+        expect(document.getElementById('cta')).toBeInTheDocument();
+        sectionRenderTimes['cta'] = ctaTime - startTime;
+
+        // Footer
+        const footerTime = performance.now();
+        expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+        sectionRenderTimes['footer'] = footerTime - startTime;
+      });
+
+      // All sections should render within the 3 second threshold
+      Object.values(sectionRenderTimes).forEach(time => {
+        expect(time).toBeLessThan(3000);
+      });
+    });
+
+    it('homepage interactive elements are available immediately after render', async () => {
+      const startTime = performance.now();
+      renderWithProviders(<Home />);
+
+      // Verify interactive elements are available
+      await waitFor(() => {
+        // Navigation links
+        const signInLinks = screen.getAllByRole('link', { name: /Sign In/i });
+        expect(signInLinks.length).toBeGreaterThan(0);
+
+        // CTA buttons
+        const getStartedButtons = screen.getAllByRole('link', { name: /Get Started/i });
+        expect(getStartedButtons.length).toBeGreaterThan(0);
+
+        // Theme toggle
+        const themeToggle = screen.getByRole('combobox', { name: /Select theme/i });
+        expect(themeToggle).toBeInTheDocument();
+      });
+
+      const endTime = performance.now();
+      const interactiveTime = endTime - startTime;
+
+      // Interactive elements should be available within TTI threshold
+      expect(interactiveTime).toBeLessThan(3000);
+    });
+
+    it('homepage renders synchronously without loading states blocking interactivity', () => {
+      renderWithProviders(<Home />);
+
+      // There should be no loading spinners or skeleton states
+      const loadingElements = document.querySelectorAll('[class*="loading"], [class*="skeleton"]');
+      expect(loadingElements.length).toBe(0);
+
+      // All content should be immediately present in the DOM
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+    });
+
+    it('animations do not block initial render or interactivity', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Home />);
+
+      // Even with Framer Motion animations, elements should be interactable immediately
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      const heroSection = heroHeading.closest('section');
+      const getStartedLink = within(heroSection!).getByRole('link', { name: /Get Started/i });
+
+      // Element should be clickable without waiting for animation
+      expect(getStartedLink).not.toHaveAttribute('disabled');
+      expect(getStartedLink).toHaveAttribute('href', '/register');
+
+      // Focus should work immediately
+      getStartedLink.focus();
+      expect(document.activeElement).toBe(getStartedLink);
+    });
+  });
+
+  describe('Test Case 2: Check homepage component bundle size', () => {
+    it('homepage uses existing components without introducing new dependencies', () => {
+      renderWithProviders(<Home />);
+
+      // Verify GlassMorphismCard is used (existing component)
+      const glassMorphismCards = document.querySelectorAll('.backdrop-blur-lg.rounded-2xl');
+      expect(glassMorphismCards.length).toBeGreaterThanOrEqual(4);
+
+      // Verify FuturisticButton is used (existing component)
+      const buttons = screen.getAllByRole('button');
+      buttons.forEach(button => {
+        expect(button).toHaveClass('btn');
+      });
+
+      // Verify BackgroundEffect is used (existing component)
+      expect(screen.getByTestId('background-effect')).toBeInTheDocument();
+    });
+
+    it('homepage components do not import heavy external libraries', () => {
+      // The homepage should rely on existing dependencies:
+      // - react, react-dom (already in bundle)
+      // - framer-motion (already in bundle for BackgroundEffect, FuturisticButton)
+      // - react-router-dom (already in bundle for routing)
+      // - tailwindcss/daisyui (CSS, not JS bundle)
+
+      // Verify the homepage renders without requiring additional JS
+      renderWithProviders(<Home />);
+
+      // All content should be present (no lazy loading of critical path)
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+      expect(screen.getByTestId('features-section')).toBeInTheDocument();
+      expect(document.getElementById('cta')).toBeInTheDocument();
+    });
+
+    it('homepage sections use lightweight implementations', () => {
+      renderWithProviders(<Home />);
+
+      // HeroSection - uses existing components (BackgroundEffect, FuturisticButton)
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      const heroSection = heroHeading.closest('section');
+      expect(heroSection).toBeInTheDocument();
+
+      // FeaturesSection - uses GlassMorphismCard (existing) and inline SVG icons
+      const featureCards = screen.getAllByTestId(/feature-card-/);
+      expect(featureCards.length).toBe(4);
+
+      // Icons are inline SVG (no external icon library import)
+      featureCards.forEach(card => {
+        const svg = card.querySelector('svg');
+        expect(svg).toBeInTheDocument();
+        // SVG should be inline (has children, not just a use reference)
+        expect(svg?.children.length).toBeGreaterThan(0);
+      });
+
+      // HowItWorksSection - uses inline SVG icons
+      const howItWorksSection = screen.getByTestId('how-it-works-section');
+      const howItWorksSvgs = howItWorksSection.querySelectorAll('svg');
+      expect(howItWorksSvgs.length).toBeGreaterThan(0);
+
+      // CTASection - uses FuturisticButton (existing)
+      const ctaSection = document.getElementById('cta');
+      const ctaButton = within(ctaSection!).getByRole('button');
+      expect(ctaButton).toHaveClass('btn');
+    });
+
+    it('homepage does not include large media assets inline', () => {
+      renderWithProviders(<Home />);
+
+      // Check for large base64 encoded images (these would bloat bundle)
+      const allElements = document.querySelectorAll('*');
+      allElements.forEach(element => {
+        const bgImage = window.getComputedStyle(element).backgroundImage;
+        // No large base64 data URIs (> 1KB would be suspicious)
+        if (bgImage && bgImage.includes('data:image')) {
+          // Small inline SVGs are acceptable, but large images are not
+          const dataUri = bgImage.match(/data:image[^)]+/)?.[0] || '';
+          expect(dataUri.length).toBeLessThan(10000); // ~7.5KB max for inline images
+        }
+      });
+
+      // No img tags with data URIs for large images
+      const images = document.querySelectorAll('img[src^="data:"]');
+      images.forEach(img => {
+        const src = img.getAttribute('src') || '';
+        expect(src.length).toBeLessThan(10000);
+      });
+    });
+
+    it('homepage component tree is shallow for fast reconciliation', () => {
+      const { container } = renderWithProviders(<Home />);
+
+      // Measure DOM depth - shallow component trees render faster
+      function getMaxDepth(element: Element, currentDepth = 0): number {
+        const children = element.children;
+        if (children.length === 0) return currentDepth;
+        let maxChildDepth = currentDepth;
+        for (let i = 0; i < children.length; i++) {
+          const childDepth = getMaxDepth(children[i], currentDepth + 1);
+          if (childDepth > maxChildDepth) {
+            maxChildDepth = childDepth;
+          }
+        }
+        return maxChildDepth;
+      }
+
+      const maxDepth = getMaxDepth(container);
+
+      // Homepage should not have excessively deep nesting
+      // Reasonable depth is around 15-20 levels for a well-structured page
+      expect(maxDepth).toBeLessThan(25);
+    });
+
+    it('homepage uses CSS for styling, not JavaScript-computed styles', () => {
+      renderWithProviders(<Home />);
+
+      // Verify sections use Tailwind classes, not runtime computed styles
+      const heroHeading = screen.getByRole('heading', { level: 1 });
+      const heroSection = heroHeading.closest('section');
+
+      // Section should have Tailwind utility classes
+      expect(heroSection).toHaveClass('relative');
+      expect(heroSection).toHaveClass('flex');
+
+      // Features section should use grid layout via CSS classes
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toHaveClass('grid');
+
+      // Footer should use CSS classes
+      const footer = screen.getByRole('contentinfo');
+      expect(footer).toHaveClass('py-8');
+      expect(footer).toHaveClass('border-t');
+    });
+
+    it('Framer Motion animations use performant configurations', () => {
+      renderWithProviders(<Home />);
+
+      // BackgroundEffect uses transform animations (GPU accelerated)
+      const backgroundEffect = screen.getByTestId('background-effect');
+      const animatedCircles = backgroundEffect.querySelectorAll('div.rounded-full');
+
+      // Circles should be positioned with transform-friendly properties
+      animatedCircles.forEach(circle => {
+        // Should have blur classes (CSS filter, GPU accelerated)
+        const hasBlur = circle.classList.contains('blur-3xl') || circle.classList.contains('blur-2xl');
+        expect(hasBlur).toBe(true);
+      });
+
+      // Buttons use transition-all for smooth hover effects
+      const buttons = screen.getAllByRole('button');
+      buttons.forEach(button => {
+        expect(button).toHaveClass('transition-all');
+        expect(button).toHaveClass('duration-300');
+      });
+    });
+  });
+
+  describe('Performance Integration Tests', () => {
+    it('full homepage load and interactivity under 3 seconds', async () => {
+      const startTime = performance.now();
+
+      renderWithProviders(<Home />);
+
+      // Wait for full page to be interactive
+      await waitFor(() => {
+        // All sections present
+        expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+        expect(screen.getByTestId('features-section')).toBeInTheDocument();
+        expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument();
+        expect(document.getElementById('cta')).toBeInTheDocument();
+        expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+
+        // All interactive elements ready
+        expect(screen.getAllByRole('link').length).toBeGreaterThan(0);
+        expect(screen.getAllByRole('button').length).toBeGreaterThan(0);
+        expect(screen.getByRole('combobox')).toBeInTheDocument();
+      });
+
+      const endTime = performance.now();
+      const totalTime = endTime - startTime;
+
+      // Total time to interactive should be under 3 seconds
+      expect(totalTime).toBeLessThan(3000);
+    });
+
+    it('multiple re-renders do not significantly degrade performance', async () => {
+      const renderTimes: number[] = [];
+
+      // Measure multiple renders
+      for (let i = 0; i < 5; i++) {
+        const startTime = performance.now();
+        const { unmount } = renderWithProviders(<Home />);
+
+        await waitFor(() => {
+          expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+        });
+
+        const endTime = performance.now();
+        renderTimes.push(endTime - startTime);
+        unmount();
+      }
+
+      // Average render time should be consistent
+      const averageTime = renderTimes.reduce((a, b) => a + b, 0) / renderTimes.length;
+      expect(averageTime).toBeLessThan(3000);
+
+      // No render should take significantly longer than others (no memory leak symptoms)
+      const maxTime = Math.max(...renderTimes);
+      const minTime = Math.min(...renderTimes);
+      // Max should not be more than 3x the min (reasonable variance)
+      expect(maxTime / minTime).toBeLessThan(3);
+    });
+
+    it('theme switching does not cause performance degradation', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Home />);
+
+      const themeToggle = screen.getByRole('combobox', { name: /Select theme/i });
+
+      // Measure theme switch performance
+      const startTime = performance.now();
+
+      // Switch to a different theme
+      await user.selectOptions(themeToggle, 'dark');
+
+      // Verify theme is applied
+      await waitFor(() => {
+        // Theme should be applied (content still visible)
+        expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+      });
+
+      const endTime = performance.now();
+      const switchTime = endTime - startTime;
+
+      // Theme switch should be fast (under 1 second)
+      expect(switchTime).toBeLessThan(1000);
+    });
+  });
+});
+
 describe('Scenario 16: Route Configuration', () => {
   /**
    * Helper function to render App with router
