@@ -267,6 +267,110 @@ describe('Accessibility - Keyboard Navigation Tests', () => {
   });
 });
 
+/**
+ * Routing Integration Tests
+ * Owner: Scenario 19 - Routing Integration
+ *
+ * Test cases:
+ * 1. Navigate to root path / - Landing page component is rendered
+ * 2. Check App.tsx routing configuration - Route for / renders Home component
+ *
+ * These tests verify that the landing page is correctly integrated
+ * with React Router at the root path (/).
+ */
+describe('Routing Integration Tests', () => {
+  describe('Test Case 1: Navigate to root path /', () => {
+    it('Landing page component is rendered at root path', () => {
+      render(<TestApp initialRoute="/" />);
+
+      // Verify we are at the root path
+      const locationDisplay = screen.getByTestId('location-display');
+      expect(locationDisplay).toHaveTextContent('/');
+
+      // Verify the landing page component is rendered
+      const landingPage = screen.getByTestId('landing-page');
+      expect(landingPage).toBeInTheDocument();
+    });
+
+    it('renders the main content area with semantic HTML', () => {
+      render(<TestApp initialRoute="/" />);
+
+      // Verify main element exists (semantic HTML)
+      const mainContent = screen.getByRole('main');
+      expect(mainContent).toBeInTheDocument();
+
+      // Verify main has the correct id for skip-to-content
+      expect(mainContent).toHaveAttribute('id', 'main-content');
+    });
+
+    it('renders all landing page sections at root path', () => {
+      render(<TestApp initialRoute="/" />);
+
+      // Verify key sections are present
+      // Hero section with headline
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+
+      // Features section
+      expect(screen.getByRole('heading', { name: /features/i })).toBeInTheDocument();
+
+      // How it works section
+      expect(screen.getByRole('heading', { name: /how it works/i })).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: Route configuration verification', () => {
+    it('Route for / renders Home component', () => {
+      render(<TestApp initialRoute="/" />);
+
+      // Verify the Home component is rendered (identified by landing-page testid)
+      const homePage = screen.getByTestId('landing-page');
+      expect(homePage).toBeInTheDocument();
+
+      // The Home component should be wrapped in main with id main-content
+      expect(homePage.tagName).toBe('MAIN');
+    });
+
+    it('Home component includes all required sections', () => {
+      render(<TestApp initialRoute="/" />);
+
+      // Hero section - check for primary CTA
+      const primaryCta = screen.getByRole('link', { name: /get started|create free account/i });
+      expect(primaryCta).toBeInTheDocument();
+
+      // Features section - check for feature cards
+      const features = screen.getAllByText(/instant url shortening|detailed analytics|share statistics/i);
+      expect(features.length).toBeGreaterThan(0);
+
+      // Social proof - check for stats (there may be multiple matches)
+      const statsElements = screen.getAllByText(/links created|clicks tracked|happy users/i);
+      expect(statsElements.length).toBeGreaterThan(0);
+    });
+
+    it('landing page integrates correctly with ThemeProvider', () => {
+      render(<TestApp initialRoute="/" />);
+
+      // Verify the page renders within the theme context
+      // The page should render without errors when ThemeProvider is present
+      const landingPage = screen.getByTestId('landing-page');
+      expect(landingPage).toBeInTheDocument();
+
+      // Content should be visible (theme is applied correctly)
+      expect(landingPage).toBeVisible();
+    });
+
+    it('landing page is the only component at root route', () => {
+      render(<TestApp initialRoute="/" />);
+
+      // Verify we're not on login or register pages
+      expect(screen.queryByTestId('login-page')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('register-page')).not.toBeInTheDocument();
+
+      // Only landing page is rendered
+      expect(screen.getByTestId('landing-page')).toBeInTheDocument();
+    });
+  });
+});
+
 describe('Navigation and CTA Links Integration Tests', () => {
   describe('Integration Tests - Navigation', () => {
     it('navigates to /register when clicking primary CTA button', async () => {
