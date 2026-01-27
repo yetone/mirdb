@@ -6,12 +6,14 @@
  * This is a placeholder that other scenarios will extend.
  */
 
-import { HowItWorksSection } from '../components/home'
+import { HeroSection, HowItWorksSection } from '../components/home'
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-base-200">
       <main>
+        {/* Hero Section - Scenario 1 */}
+        <HeroSection />
         {/* How It Works Section - Scenario 3 */}
         <HowItWorksSection />
       </main>
