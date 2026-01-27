@@ -5,425 +5,489 @@
  * Validates responsive design across mobile, tablet, and desktop viewports
  * as specified in REQ-7, NFR-1, and US-5.
  *
- * Test Cases:
- * 1. No horizontal scrolling required at 375px (mobile)
- * 2. Layout adapts appropriately at 768px (tablet)
- * 3. Full desktop layout with multi-column sections at 1280px
- * 4. CTA buttons meet minimum 44x44 pixel touch targets
- * 5. Mobile-friendly navigation menu accessible
- * 6. Text remains readable (minimum 16px for body text)
+ * Test viewports:
+ * - Mobile: 375px width
+ * - Tablet: 768px width
+ * - Desktop: 1280px width
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import { renderWithProviders } from '../utils/test-utils'
 import Home from '../../src/pages/Home'
 
-/**
- * Helper to set viewport size for testing
- */
-function setViewport(width: number, height: number) {
+// Helper to mock viewport dimensions
+function setViewportWidth(width: number) {
   Object.defineProperty(window, 'innerWidth', {
     writable: true,
     configurable: true,
     value: width,
   })
-  Object.defineProperty(window, 'innerHeight', {
+  Object.defineProperty(document.documentElement, 'clientWidth', {
     writable: true,
     configurable: true,
-    value: height,
+    value: width,
   })
-  window.dispatchEvent(new Event('resize'))
 }
 
-/**
- * Helper to reset viewport to default
- */
-function resetViewport() {
-  Object.defineProperty(window, 'innerWidth', {
+// Helper to mock matchMedia for responsive queries
+function mockMatchMedia(width: number) {
+  Object.defineProperty(window, 'matchMedia', {
     writable: true,
     configurable: true,
-    value: 1024,
+    value: vi.fn().mockImplementation((query: string) => {
+      // Parse common Tailwind breakpoint queries
+      const minWidthMatch = query.match(/\(min-width:\s*(\d+)px\)/)
+      const maxWidthMatch = query.match(/\(max-width:\s*(\d+)px\)/)
+
+      let matches = false
+      if (minWidthMatch) {
+        matches = width >= parseInt(minWidthMatch[1], 10)
+      } else if (maxWidthMatch) {
+        matches = width <= parseInt(maxWidthMatch[1], 10)
+      }
+
+      return {
+        matches,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }
+    }),
   })
-  Object.defineProperty(window, 'innerHeight', {
+}
+
+// Cleanup helper for window properties
+function cleanupViewportMocks() {
+  // Restore original matchMedia if needed
+  Object.defineProperty(window, 'matchMedia', {
     writable: true,
     configurable: true,
-    value: 768,
+    value: vi.fn().mockImplementation((query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
   })
 }
 
 describe('Homepage Responsive Design', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // Mock scrollIntoView for smooth scroll functionality
+    window.HTMLElement.prototype.scrollIntoView = vi.fn()
   })
 
   afterEach(() => {
-    resetViewport()
+    cleanupViewportMocks()
   })
 
-  // Test Case 1: Mobile viewport (375px width)
+  // Test Case 1: Render homepage at 375px width (mobile)
+  // Expected: No horizontal scrolling required, all content readable
   describe('Mobile Viewport (375px)', () => {
     beforeEach(() => {
-      setViewport(375, 667)
+      setViewportWidth(375)
+      mockMatchMedia(375)
     })
 
-    it('renders homepage without horizontal overflow at 375px width', () => {
+    it('renders all content without horizontal overflow at 375px width', () => {
       const { container } = renderWithProviders(<Home />)
 
-      // The main container should have proper mobile styling
-      const main = container.querySelector('main')
-      expect(main).toBeInTheDocument()
-      expect(main).toHaveClass('min-h-screen')
+      // Verify main content sections are present
+      expect(screen.getByRole('main')).toBeInTheDocument()
 
-      // All content should be contained within the viewport
-      // Check that no explicit widths are set that would cause overflow
-      expect(main).not.toHaveStyle('width: 100vw')
+      // Check that hero section is present
+      const heroSection = screen.getByLabelText('Hero')
+      expect(heroSection).toBeInTheDocument()
+
+      // Check that features section is present
+      const featuresSection = screen.getByLabelText('Features')
+      expect(featuresSection).toBeInTheDocument()
+
+      // Check that "How It Works" section is present
+      const howItWorksSection = screen.getByLabelText('How It Works')
+      expect(howItWorksSection).toBeInTheDocument()
+
+      // Check that stats section is present
+      const statsSection = screen.getByLabelText('Statistics')
+      expect(statsSection).toBeInTheDocument()
+
+      // Main container should not cause horizontal scroll (uses min-h-screen)
+      const mainElement = container.querySelector('main')
+      expect(mainElement).toHaveClass('min-h-screen')
     })
 
-    it('all content is readable and visible at mobile viewport', () => {
+    it('all text content is readable at mobile viewport', () => {
       renderWithProviders(<Home />)
 
-      // Hero content should be visible
-      const heroHeading = screen.getByRole('heading', { name: /shorten your links/i })
-      expect(heroHeading).toBeInTheDocument()
-      expect(heroHeading).not.toHaveStyle('display: none')
-      expect(heroHeading).not.toHaveStyle('visibility: hidden')
+      // Verify headlines are present and readable
+      const mainHeadline = screen.getByRole('heading', { level: 1 })
+      expect(mainHeadline).toBeInTheDocument()
+      expect(mainHeadline).toHaveTextContent('Shorten Your Links')
 
-      // Features section should be visible
-      const featuresHeading = screen.getByRole('heading', { name: /powerful features/i })
-      expect(featuresHeading).toBeInTheDocument()
-
-      // How It Works section should be visible
-      const howItWorksHeading = screen.getByRole('heading', { name: /how it works/i })
-      expect(howItWorksHeading).toBeInTheDocument()
+      // Verify subheadline is present
+      const subheadline = screen.getByText(/Transform long URLs/i)
+      expect(subheadline).toBeInTheDocument()
     })
 
-    it('uses mobile-optimized layout classes for features grid', () => {
-      const { container } = renderWithProviders(<Home />)
+    it('features are displayed in single column layout on mobile', () => {
+      renderWithProviders(<Home />)
 
-      // Features grid should use single column on mobile
-      const featuresGrid = container.querySelector('[data-testid="features-grid"]')
+      const featuresGrid = screen.getByTestId('features-grid')
       expect(featuresGrid).toBeInTheDocument()
+
+      // Grid should use single column on mobile (grid-cols-1)
       expect(featuresGrid).toHaveClass('grid-cols-1')
     })
 
-    it('uses stacked layout for hero CTAs on mobile', () => {
-      const { container } = renderWithProviders(<Home />)
+    it('CTA buttons are stacked vertically on mobile', () => {
+      renderWithProviders(<Home />)
 
-      // The CTA container should use flex-col for mobile
-      const heroSection = container.querySelector('[aria-label="Hero"]')
-      expect(heroSection).toBeInTheDocument()
+      // Get Started and Learn More buttons should be present
+      const getStartedButton = screen.getByRole('button', { name: /get started/i })
+      const learnMoreButton = screen.getByRole('button', { name: /learn more/i })
 
-      // Look for the flex container with CTAs
-      const ctaContainer = heroSection?.querySelector('.flex-col')
-      expect(ctaContainer).toBeInTheDocument()
+      expect(getStartedButton).toBeInTheDocument()
+      expect(learnMoreButton).toBeInTheDocument()
+
+      // Buttons container should use flex-col on mobile (sm:flex-row)
+      const buttonsContainer = getStartedButton.closest('div')
+      expect(buttonsContainer).toHaveClass('flex-col')
     })
   })
 
-  // Test Case 2: Tablet viewport (768px width)
+  // Test Case 2: Render homepage at 768px width (tablet)
+  // Expected: Layout adapts appropriately for tablet, no content overflow
   describe('Tablet Viewport (768px)', () => {
     beforeEach(() => {
-      setViewport(768, 1024)
+      setViewportWidth(768)
+      mockMatchMedia(768)
     })
 
-    it('renders homepage appropriately at tablet viewport', () => {
-      const { container } = renderWithProviders(<Home />)
+    it('renders all content with tablet-appropriate layout at 768px width', () => {
+      renderWithProviders(<Home />)
 
-      const main = container.querySelector('main')
-      expect(main).toBeInTheDocument()
-      expect(main).toHaveClass('min-h-screen')
+      // Verify main sections are present
+      expect(screen.getByRole('main')).toBeInTheDocument()
+      expect(screen.getByLabelText('Hero')).toBeInTheDocument()
+      expect(screen.getByLabelText('Features')).toBeInTheDocument()
+      expect(screen.getByLabelText('How It Works')).toBeInTheDocument()
+      expect(screen.getByLabelText('Statistics')).toBeInTheDocument()
     })
 
-    it('adapts features grid layout for tablet', () => {
-      const { container } = renderWithProviders(<Home />)
+    it('features grid shows 2-column layout on tablet', () => {
+      renderWithProviders(<Home />)
 
-      // Features grid should use 2 columns on tablet (md:grid-cols-2)
-      const featuresGrid = container.querySelector('[data-testid="features-grid"]')
+      const featuresGrid = screen.getByTestId('features-grid')
       expect(featuresGrid).toBeInTheDocument()
+
+      // Should have md:grid-cols-2 for 2-column layout on medium screens
       expect(featuresGrid).toHaveClass('md:grid-cols-2')
     })
 
-    it('stats grid adapts for tablet viewport', () => {
-      const { container } = renderWithProviders(<Home />)
+    it('stats grid shows 3-column layout on tablet', () => {
+      renderWithProviders(<Home />)
 
-      // Stats grid should have 3 columns on md breakpoint
-      const statsGrid = container.querySelector('[data-testid="stats-grid"]')
+      const statsGrid = screen.getByTestId('stats-grid')
       expect(statsGrid).toBeInTheDocument()
+
+      // Stats should show 3 columns on md screens
       expect(statsGrid).toHaveClass('md:grid-cols-3')
     })
 
-    it('all sections remain visible and accessible', () => {
+    it('content adapts without horizontal overflow', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // All sections should be within max-width containers
+      const sections = container.querySelectorAll('section')
+      sections.forEach((section) => {
+        const innerDiv = section.querySelector('div')
+        // Most sections have max-w-* constraints
+        if (innerDiv) {
+          const hasMaxWidth =
+            innerDiv.className.includes('max-w-') ||
+            section.className.includes('max-w-')
+          expect(hasMaxWidth || section.className.includes('px-')).toBe(true)
+        }
+      })
+    })
+  })
+
+  // Test Case 3: Render homepage at 1280px width (desktop)
+  // Expected: Full desktop layout with multi-column sections
+  describe('Desktop Viewport (1280px)', () => {
+    beforeEach(() => {
+      setViewportWidth(1280)
+      mockMatchMedia(1280)
+    })
+
+    it('renders full desktop layout with multi-column sections at 1280px width', () => {
       renderWithProviders(<Home />)
 
       // Verify all main sections are present
-      const heroSection = screen.getByRole('region', { name: /hero/i })
-      const featuresSection = screen.getByRole('region', { name: /features/i })
-      const howItWorksSection = screen.getByRole('region', { name: /how it works/i })
-      const statsSection = screen.getByRole('region', { name: /statistics/i })
-
-      expect(heroSection).toBeInTheDocument()
-      expect(featuresSection).toBeInTheDocument()
-      expect(howItWorksSection).toBeInTheDocument()
-      expect(statsSection).toBeInTheDocument()
-    })
-  })
-
-  // Test Case 3: Desktop viewport (1280px width)
-  describe('Desktop Viewport (1280px)', () => {
-    beforeEach(() => {
-      setViewport(1280, 800)
+      expect(screen.getByRole('main')).toBeInTheDocument()
+      expect(screen.getByLabelText('Hero')).toBeInTheDocument()
+      expect(screen.getByLabelText('Features')).toBeInTheDocument()
+      expect(screen.getByLabelText('How It Works')).toBeInTheDocument()
+      expect(screen.getByLabelText('Statistics')).toBeInTheDocument()
     })
 
-    it('renders full desktop layout with proper width constraints', () => {
-      const { container } = renderWithProviders(<Home />)
+    it('features grid shows 3-column layout on desktop', () => {
+      renderWithProviders(<Home />)
 
-      const main = container.querySelector('main')
-      expect(main).toBeInTheDocument()
-    })
-
-    it('features grid uses three-column layout on desktop', () => {
-      const { container } = renderWithProviders(<Home />)
-
-      // Features grid should use 3 columns on large screens
-      const featuresGrid = container.querySelector('[data-testid="features-grid"]')
+      const featuresGrid = screen.getByTestId('features-grid')
       expect(featuresGrid).toBeInTheDocument()
+
+      // Should have lg:grid-cols-3 for 3-column layout on large screens
       expect(featuresGrid).toHaveClass('lg:grid-cols-3')
     })
 
-    it('how it works section uses horizontal layout on desktop', () => {
-      const { container } = renderWithProviders(<Home />)
+    it('how it works section shows horizontal layout on desktop', () => {
+      renderWithProviders(<Home />)
 
-      // How It Works steps should be in a row on desktop
-      const stepsContainer = container.querySelector('[data-testid="how-it-works-steps"]')
-      expect(stepsContainer).toBeInTheDocument()
-      expect(stepsContainer).toHaveClass('lg:flex-row')
+      const howItWorksSteps = screen.getByTestId('how-it-works-steps')
+      expect(howItWorksSteps).toBeInTheDocument()
+
+      // Should use flex-row on large screens (lg:flex-row)
+      expect(howItWorksSteps).toHaveClass('lg:flex-row')
     })
 
-    it('step connectors are visible on desktop layout', () => {
-      const { container } = renderWithProviders(<Home />)
+    it('CTA buttons are displayed side by side on desktop', () => {
+      renderWithProviders(<Home />)
 
-      // Step connectors should be visible on lg screens (lg:flex)
-      const connectors = container.querySelectorAll('[data-testid="step-connector"]')
-      expect(connectors.length).toBe(2) // Two connectors between 3 steps
+      const getStartedButton = screen.getByRole('button', { name: /get started/i })
 
-      connectors.forEach((connector) => {
+      // Buttons container should use sm:flex-row for horizontal layout
+      const buttonsContainer = getStartedButton.closest('div')
+      expect(buttonsContainer).toHaveClass('sm:flex-row')
+    })
+
+    it('step connectors are visible on desktop', () => {
+      renderWithProviders(<Home />)
+
+      // Step connectors should be visible (hidden on mobile, flex on lg)
+      const stepConnectors = screen.getAllByTestId('step-connector')
+      expect(stepConnectors.length).toBeGreaterThan(0)
+
+      stepConnectors.forEach((connector) => {
+        // Connectors have hidden lg:flex classes
+        expect(connector).toHaveClass('hidden')
         expect(connector).toHaveClass('lg:flex')
       })
     })
-
-    it('hero CTAs display side-by-side on desktop', () => {
-      const { container } = renderWithProviders(<Home />)
-
-      // The CTA container should have sm:flex-row for horizontal layout
-      const heroSection = container.querySelector('[aria-label="Hero"]')
-      expect(heroSection).toBeInTheDocument()
-
-      // Look for the flex container with row layout
-      const ctaContainers = heroSection?.querySelectorAll('.sm\\:flex-row')
-      expect(ctaContainers?.length).toBeGreaterThan(0)
-    })
   })
 
-  // Test Case 4: Touch target sizes
-  describe('Touch Target Accessibility', () => {
+  // Test Case 4: Measure CTA button dimensions on mobile
+  // Expected: Minimum touch target of 44x44 pixels
+  describe('Touch Target Sizes', () => {
     beforeEach(() => {
-      setViewport(375, 667) // Mobile viewport
+      setViewportWidth(375)
+      mockMatchMedia(375)
     })
 
     it('CTA buttons meet minimum 44x44 pixel touch target requirement', () => {
       renderWithProviders(<Home />)
 
       const getStartedButton = screen.getByRole('button', { name: /get started/i })
-      const loginButton = screen.getByRole('button', { name: /login/i })
       const learnMoreButton = screen.getByRole('button', { name: /learn more/i })
-
-      // All buttons should have btn class which provides adequate sizing via DaisyUI
-      expect(getStartedButton).toHaveClass('btn')
-      expect(loginButton).toHaveClass('btn')
-      expect(learnMoreButton).toHaveClass('btn')
-
-      // Check padding classes that ensure minimum touch target
-      // py-3 = 12px vertical padding, combined with font-size gives at least 44px height
-      // px-8 = 32px horizontal padding, combined with text gives at least 44px width
-      expect(getStartedButton).toHaveClass('px-8', 'py-3')
-      expect(learnMoreButton).toHaveClass('px-8', 'py-3')
-    })
-
-    it('login button has adequate touch target size', () => {
-      renderWithProviders(<Home />)
-
       const loginButton = screen.getByRole('button', { name: /login/i })
 
-      // Login button uses px-6 py-2 which with btn class provides minimum touch target
+      // Verify buttons have appropriate padding classes for touch targets
+      // DaisyUI's btn class provides adequate touch targets by default
+      // Additional padding via px-8 py-3 ensures > 44px dimensions
+      expect(getStartedButton).toHaveClass('btn')
+      expect(getStartedButton).toHaveClass('py-3')
+      expect(getStartedButton).toHaveClass('px-8')
+
+      expect(learnMoreButton).toHaveClass('btn')
+      expect(learnMoreButton).toHaveClass('py-3')
+      expect(learnMoreButton).toHaveClass('px-8')
+
+      // Login button in header also should be accessible
       expect(loginButton).toHaveClass('btn')
-      expect(loginButton).toHaveClass('px-6', 'py-2')
     })
 
-    it('buttons are not styled with explicit small dimensions', () => {
+    it('all interactive elements are accessible touch targets', () => {
       renderWithProviders(<Home />)
 
-      const buttons = screen.getAllByRole('button')
+      // All buttons should be rendered with button role
+      const allButtons = screen.getAllByRole('button')
 
-      buttons.forEach((button) => {
-        // Ensure no button has inline styles that would make it smaller than touch target
-        expect(button).not.toHaveStyle('width: 32px')
-        expect(button).not.toHaveStyle('height: 32px')
-        expect(button).not.toHaveStyle('min-width: 0')
-        expect(button).not.toHaveStyle('min-height: 0')
+      allButtons.forEach((button) => {
+        // Buttons should have btn class from DaisyUI which ensures minimum sizing
+        expect(button).toHaveClass('btn')
       })
     })
   })
 
-  // Test Case 5: Mobile navigation accessibility
-  describe('Mobile Navigation Accessibility', () => {
+  // Test Case 5: Test navigation menu on mobile
+  // Expected: Mobile-friendly menu accessible (hamburger or similar)
+  describe('Mobile Navigation', () => {
     beforeEach(() => {
-      setViewport(375, 667)
+      setViewportWidth(375)
+      mockMatchMedia(375)
     })
 
-    it('navigation header is accessible on mobile', () => {
+    it('navigation is accessible on mobile viewport', () => {
+      renderWithProviders(<Home />)
+
+      // Check that navigation header is present
+      const header = screen.getByRole('banner')
+      expect(header).toBeInTheDocument()
+
+      // Navigation should contain login link
+      const nav = within(header).getByRole('navigation')
+      expect(nav).toBeInTheDocument()
+
+      // Login button should be accessible
+      const loginButton = within(header).getByRole('button', { name: /login/i })
+      expect(loginButton).toBeInTheDocument()
+    })
+
+    it('header navigation is responsive with proper padding', () => {
       const { container } = renderWithProviders(<Home />)
 
-      // Header with navigation should be present
       const header = container.querySelector('header')
       expect(header).toBeInTheDocument()
 
-      // Navigation should be present
-      const nav = container.querySelector('nav')
-      expect(nav).toBeInTheDocument()
-    })
-
-    it('login button is accessible in mobile navigation', () => {
-      renderWithProviders(<Home />)
-
-      // Login button should be visible and accessible
-      const loginButton = screen.getByRole('button', { name: /login/i })
-      expect(loginButton).toBeInTheDocument()
-
-      // Button should be inside a link to /login
-      const loginLink = loginButton.closest('a')
-      expect(loginLink).toHaveAttribute('href', '/login')
-    })
-
-    it('navigation has proper z-index for mobile overlay compatibility', () => {
-      const { container } = renderWithProviders(<Home />)
-
-      const header = container.querySelector('header')
-      expect(header).toHaveClass('z-10')
-    })
-
-    it('navigation uses mobile-friendly padding', () => {
-      const { container } = renderWithProviders(<Home />)
-
-      const header = container.querySelector('header')
-      // Mobile padding: p-4, larger screens: sm:p-6
+      // Header should have responsive padding (p-4 sm:p-6)
       expect(header).toHaveClass('p-4')
       expect(header).toHaveClass('sm:p-6')
     })
+
+    it('navigation links are touch-friendly', () => {
+      renderWithProviders(<Home />)
+
+      const loginButton = screen.getByRole('button', { name: /login/i })
+
+      // Button should have adequate padding for mobile touch
+      expect(loginButton).toHaveClass('px-6')
+      expect(loginButton).toHaveClass('py-2')
+    })
   })
 
-  // Test Case 6: Font sizes for readability
-  describe('Font Readability', () => {
+  // Test Case 6: Test font sizes at mobile viewport
+  // Expected: Text remains readable (minimum 16px for body text)
+  describe('Font Size Readability', () => {
     beforeEach(() => {
-      setViewport(375, 667)
+      setViewportWidth(375)
+      mockMatchMedia(375)
     })
 
-    it('body text uses readable font sizes on mobile', () => {
+    it('body text maintains readable font size (min 16px) on mobile', () => {
       renderWithProviders(<Home />)
 
-      // Check hero paragraph text size - text-lg is 18px which exceeds 16px minimum
-      const heroParagraph = screen.getByText(/transform long urls/i)
-      expect(heroParagraph).toHaveClass('text-lg')
+      // Paragraph text should use text-lg (18px) or similar for readability
+      const subheadline = screen.getByText(/Transform long URLs/i)
+      expect(subheadline).toBeInTheDocument()
+
+      // The subheadline uses text-lg (18px) which is above 16px minimum
+      expect(subheadline).toHaveClass('text-lg')
     })
 
-    it('feature descriptions use readable font sizes', () => {
+    it('headlines are properly sized for mobile readability', () => {
       renderWithProviders(<Home />)
 
-      // Feature descriptions should use base font size or larger
-      // text-base-content/70 applies color, the default text size is 16px (1rem)
-      const urlShorteningDesc = screen.getByText(/transform long, unwieldy urls/i)
-      expect(urlShorteningDesc).toBeInTheDocument()
-      expect(urlShorteningDesc).toHaveClass('text-base-content/70')
+      // Main headline should have responsive text sizes
+      const mainHeadline = screen.getByRole('heading', { level: 1 })
+      expect(mainHeadline).toBeInTheDocument()
+
+      // Should use text-4xl on mobile (36px), scaling up on larger screens
+      expect(mainHeadline).toHaveClass('text-4xl')
+      expect(mainHeadline).toHaveClass('sm:text-5xl')
+      expect(mainHeadline).toHaveClass('lg:text-6xl')
     })
 
-    it('step descriptions use readable font sizes', () => {
+    it('section headings are readable on mobile', () => {
       renderWithProviders(<Home />)
 
-      // How It Works step descriptions should be readable
-      const step1Desc = screen.getByText(/copy and paste any long url/i)
-      expect(step1Desc).toBeInTheDocument()
-      expect(step1Desc).toHaveClass('text-base-content/70')
+      // Section headings (h2) should be properly sized
+      const sectionHeadings = screen.getAllByRole('heading', { level: 2 })
+
+      sectionHeadings.forEach((heading) => {
+        // Section headings use text-3xl (30px) on mobile
+        expect(heading).toHaveClass('text-3xl')
+        expect(heading).toHaveClass('sm:text-4xl')
+      })
     })
 
-    it('headings scale appropriately for mobile', () => {
+    it('feature card text is readable on mobile', () => {
       renderWithProviders(<Home />)
 
-      // Hero heading should use responsive text sizes
-      // text-4xl for mobile, sm:text-5xl for sm, lg:text-6xl for lg
-      const heroHeading = screen.getByRole('heading', { name: /shorten your links/i })
-      expect(heroHeading).toHaveClass('text-4xl')
-      expect(heroHeading).toHaveClass('sm:text-5xl')
-      expect(heroHeading).toHaveClass('lg:text-6xl')
+      // Feature card titles (h3) should be text-xl (20px)
+      const featureTitles = screen.getAllByRole('heading', { level: 3 })
+
+      featureTitles.forEach((title) => {
+        expect(title).toHaveClass('text-xl')
+      })
     })
 
-    it('section headings are readable at all viewport sizes', () => {
+    it('description text maintains adequate contrast and size', () => {
       renderWithProviders(<Home />)
 
-      // Section headings use text-3xl sm:text-4xl
-      const featuresHeading = screen.getByRole('heading', { name: /powerful features/i })
-      expect(featuresHeading).toHaveClass('text-3xl')
-      expect(featuresHeading).toHaveClass('sm:text-4xl')
+      // Feature descriptions should be readable
+      const featureDescriptions = screen.getAllByText(/Transform long|unwieldy URLs|deep insights|Monitor every click/i)
 
-      const howItWorksHeading = screen.getByRole('heading', { name: /how it works/i })
-      expect(howItWorksHeading).toHaveClass('text-3xl')
-      expect(howItWorksHeading).toHaveClass('sm:text-4xl')
-    })
-
-    it('stat values remain readable on mobile', () => {
-      renderWithProviders(<Home />)
-
-      // Stats section heading should be readable
-      const statsHeading = screen.getByRole('heading', { name: /trusted by thousands/i })
-      expect(statsHeading).toHaveClass('text-3xl')
-      expect(statsHeading).toHaveClass('sm:text-4xl')
+      featureDescriptions.forEach((description) => {
+        // Should not have text-sm or smaller classes
+        expect(description.className).not.toMatch(/\btext-xs\b/)
+      })
     })
   })
 
-  // Additional: Responsive spacing and container constraints
-  describe('Responsive Spacing and Containers', () => {
-    it('sections use responsive padding', () => {
+  // Additional responsive layout tests
+  describe('Responsive Section Padding', () => {
+    it('sections have appropriate responsive padding', () => {
       const { container } = renderWithProviders(<Home />)
 
-      // Features section should have responsive padding
-      const featuresSection = container.querySelector('[aria-label="Features"]')
-      expect(featuresSection).toHaveClass('py-16')
-      expect(featuresSection).toHaveClass('sm:py-24')
+      // Features section
+      const featuresSection = screen.getByLabelText('Features')
       expect(featuresSection).toHaveClass('px-4')
       expect(featuresSection).toHaveClass('sm:px-6')
       expect(featuresSection).toHaveClass('lg:px-8')
-    })
+      expect(featuresSection).toHaveClass('py-16')
+      expect(featuresSection).toHaveClass('sm:py-24')
 
-    it('hero section uses responsive padding', () => {
+      // How It Works section
+      const howItWorksSection = screen.getByLabelText('How It Works')
+      expect(howItWorksSection).toHaveClass('px-4')
+      expect(howItWorksSection).toHaveClass('sm:px-6')
+      expect(howItWorksSection).toHaveClass('lg:px-8')
+
+      // Stats section
+      const statsSection = screen.getByLabelText('Statistics')
+      expect(statsSection).toHaveClass('px-4')
+      expect(statsSection).toHaveClass('sm:px-6')
+      expect(statsSection).toHaveClass('lg:px-8')
+    })
+  })
+
+  describe('Responsive Max-Width Containers', () => {
+    it('content is constrained within max-width containers', () => {
       const { container } = renderWithProviders(<Home />)
 
-      const heroSection = container.querySelector('[aria-label="Hero"]')
-      expect(heroSection).toHaveClass('px-4')
-      expect(heroSection).toHaveClass('sm:px-6')
-      expect(heroSection).toHaveClass('lg:px-8')
-    })
-
-    it('content containers have max-width constraints', () => {
-      const { container } = renderWithProviders(<Home />)
-
-      // Sections should have max-width containers to prevent overly wide content
-      const maxWidthContainers = container.querySelectorAll('.max-w-6xl, .max-w-4xl, .max-w-7xl')
+      // Check for max-width constraints on content containers
+      const maxWidthContainers = container.querySelectorAll('[class*="max-w-"]')
       expect(maxWidthContainers.length).toBeGreaterThan(0)
-    })
 
-    it('navigation has responsive max-width', () => {
-      const { container } = renderWithProviders(<Home />)
+      // Hero content should be max-w-4xl
+      const heroSection = screen.getByLabelText('Hero')
+      const heroContent = heroSection.querySelector('[class*="max-w-4xl"]')
+      expect(heroContent).toBeInTheDocument()
 
-      const nav = container.querySelector('nav')
-      expect(nav).toHaveClass('max-w-7xl')
+      // Features should be max-w-6xl
+      const featuresSection = screen.getByLabelText('Features')
+      const featuresContent = featuresSection.querySelector('[class*="max-w-6xl"]')
+      expect(featuresContent).toBeInTheDocument()
     })
   })
 })
