@@ -181,3 +181,68 @@ describe('Home Page - Features Section Display (Scenario 2)', () => {
     expect(heading).toHaveAttribute('id', 'features-heading')
   })
 })
+
+describe('Home Page - Navigation CTA Functionality (Scenario 3)', () => {
+  // Test Case 1: Integration - Click primary CTA navigates to /register
+  it('should have primary CTA (Get Started) that navigates to /register', () => {
+    renderWithProviders(<Home />)
+
+    // Find the link wrapping the Get Started button
+    const primaryCtaLink = screen.getByRole('link', { name: /get started/i })
+    expect(primaryCtaLink).toBeInTheDocument()
+    expect(primaryCtaLink).toHaveAttribute('href', '/register')
+  })
+
+  // Test Case 2: Integration - Click Login CTA navigates to /login
+  it('should have Login CTA that navigates to /login', () => {
+    renderWithProviders(<Home />)
+
+    // Find the link wrapping the Login button
+    const loginCtaLink = screen.getByRole('link', { name: /login/i })
+    expect(loginCtaLink).toBeInTheDocument()
+    expect(loginCtaLink).toHaveAttribute('href', '/login')
+  })
+
+  // Test Case 3: Unit - Primary CTA button exists with correct navigation target
+  it('should render primary CTA button with correct href attribute', () => {
+    renderWithProviders(<Home />)
+
+    const primaryCtaLinks = screen.getAllByRole('link', { name: /get started/i })
+    // Should have at least one link to /register
+    const registerLink = primaryCtaLinks.find(link => link.getAttribute('href') === '/register')
+    expect(registerLink).toBeDefined()
+  })
+
+  // Test Case 4: Unit - Login CTA button/link exists with correct navigation target
+  it('should render login CTA with correct href attribute', () => {
+    renderWithProviders(<Home />)
+
+    const loginCtaLinks = screen.getAllByRole('link', { name: /login/i })
+    // Should have at least one link to /login
+    const loginLink = loginCtaLinks.find(link => link.getAttribute('href') === '/login')
+    expect(loginLink).toBeDefined()
+  })
+
+  // Additional test: Both CTAs are visible in the hero section
+  it('should display both CTAs prominently in the hero section', () => {
+    renderWithProviders(<Home />)
+
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    const loginLink = screen.getByRole('link', { name: /login/i })
+
+    expect(getStartedLink).toBeVisible()
+    expect(loginLink).toBeVisible()
+  })
+
+  // Test that CTAs are accessible
+  it('should have CTAs that are keyboard accessible', () => {
+    renderWithProviders(<Home />)
+
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    const loginLink = screen.getByRole('link', { name: /login/i })
+
+    // Links should not have negative tabindex
+    expect(getStartedLink).not.toHaveAttribute('tabindex', '-1')
+    expect(loginLink).not.toHaveAttribute('tabindex', '-1')
+  })
+})
