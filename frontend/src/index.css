@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles */
+body {
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
