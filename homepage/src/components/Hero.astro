@@ -1,0 +1,81 @@
+---
+/**
+ * Hero section component.
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Displays:
+ * - MirDB animated logo
+ * - Tagline: "A Persistent Key-Value Store with Memcached Protocol"
+ * - Brief value proposition description
+ * - Primary CTA buttons: "Get Started", "View on GitHub"
+ * - CI/CD status badge
+ */
+---
+
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-content">
+      <img src="/assets/logo.gif" alt="MirDB Logo" class="hero-logo" width="120" height="120" />
+      <h1 class="hero-title">MirDB</h1>
+      <p class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+      <p class="hero-description">
+        High-performance persistent storage with familiar memcached interface.
+        Built on LSM-tree architecture with write-ahead logging for durability.
+      </p>
+      <div class="hero-cta">
+        <a href="#quick-start" class="btn btn-primary">Get Started</a>
+        <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: var(--space-3xl) 0;
+    text-align: center;
+    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-logo {
+    width: 120px;
+    height: auto;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .hero-description {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+</style>

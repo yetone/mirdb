@@ -1,0 +1,59 @@
+---
+/**
+ * Quick start section component.
+ * Owner: Scenario 3 - Quick Start Code Snippet
+ *
+ * Displays:
+ * - Installation/build command
+ * - Basic usage examples (SET/GET operations)
+ * - Connection snippet using memcached client
+ *
+ * Uses CodeSnippet component for syntax-highlighted code.
+ */
+---
+
+<section class="quick-start section" id="quick-start">
+  <div class="container">
+    <h2 class="section-title">Quick Start</h2>
+    <div class="quick-start-content">
+      <div class="quick-start-step">
+        <h3>1. Build from source</h3>
+        <pre><code>cargo build --release</code></pre>
+      </div>
+      <div class="quick-start-step">
+        <h3>2. Run MirDB</h3>
+        <pre><code>./target/release/mirdb-server</code></pre>
+      </div>
+      <div class="quick-start-step">
+        <h3>3. Connect with any memcached client</h3>
+        <pre><code>telnet localhost 12333
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quick-start-content {
+    display: grid;
+    gap: var(--space-xl);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .quick-start-step h3 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-md);
+    color: var(--color-text-primary);
+  }
+
+  .quick-start-step pre {
+    margin: 0;
+  }
+</style>

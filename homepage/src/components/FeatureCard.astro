@@ -1,0 +1,60 @@
+---
+/**
+ * Individual feature card component.
+ * Owner: Scenario 2 - Key Features Section
+ *
+ * Props:
+ * - title: string - Feature title
+ * - description: string - Feature description
+ * - icon?: string - Optional icon identifier
+ */
+interface Props {
+  title: string;
+  description: string;
+  icon?: string;
+}
+
+const { title, description, icon } = Astro.props;
+---
+
+<article class="feature-card">
+  {icon && <span class="feature-icon" aria-hidden="true">{icon}</span>}
+  <h3 class="feature-title">{title}</h3>
+  <p class="feature-description">{description}</p>
+</article>
+
+<style>
+  .feature-card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .feature-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: var(--space-md);
+  }
+
+  .feature-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-sm);
+    color: var(--color-text-primary);
+  }
+
+  .feature-description {
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: var(--line-height-relaxed);
+  }
+</style>

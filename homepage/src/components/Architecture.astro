@@ -1,0 +1,85 @@
+---
+/**
+ * Architecture overview section component.
+ * Owner: Scenario 4 - Architecture Overview Diagram
+ *
+ * Displays:
+ * - LSM-tree data flow diagram (WAL -> Memtable -> SSTable)
+ * - Component descriptions
+ * - Link to detailed documentation
+ */
+---
+
+<section class="architecture section" id="architecture">
+  <div class="container">
+    <h2 class="section-title">Architecture</h2>
+    <div class="architecture-content">
+      <div class="architecture-diagram">
+        <pre class="diagram">{`
+Write Request
+    │
+    ▼
+┌─────────┐
+│   WAL   │──── Write-Ahead Log for durability
+└────┬────┘
+     │
+     ▼
+┌──────────┐
+│ Memtable │──── Active in-memory skip list
+└────┬─────┘
+     │ (when full)
+     ▼
+┌────────────────┐
+│ Imm Memtables  │──── Immutable memtables queue
+└───────┬────────┘
+        │ (minor compaction)
+        ▼
+┌───────────────┐
+│ Level 0 SSTs  │──── Recently flushed, may overlap
+└───────┬───────┘
+        │ (major compaction)
+        ▼
+┌───────────────┐
+│ Level 1+ SSTs │──── Sorted, non-overlapping within level
+└───────────────┘
+        `}</pre>
+      </div>
+      <p class="architecture-description">
+        MirDB uses a Log-Structured Merge-Tree (LSM-tree) architecture optimized for write-heavy workloads.
+        All writes are first logged to the WAL for durability, then stored in an in-memory skip list (memtable).
+        When the memtable fills up, it's flushed to disk as a Sorted String Table (SSTable).
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .architecture-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .architecture-diagram {
+    background: var(--color-code-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    overflow-x: auto;
+  }
+
+  .diagram {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+    white-space: pre;
+  }
+
+  .architecture-description {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-relaxed);
+  }
+</style>

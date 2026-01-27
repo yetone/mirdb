@@ -1,0 +1,99 @@
+---
+/**
+ * Supported commands section component.
+ * Owner: Scenario 5 - Supported Commands Display
+ *
+ * Displays grid/table of memcached commands:
+ * - Storage: SET, ADD, REPLACE, APPEND, PREPEND
+ * - Retrieval: GET, GETS
+ * - Deletion: DELETE
+ * - MirDB-specific: INFO, MAJOR_COMPACTION
+ */
+
+const commandCategories = [
+  {
+    title: 'Storage',
+    commands: ['SET', 'ADD', 'REPLACE', 'APPEND', 'PREPEND']
+  },
+  {
+    title: 'Retrieval',
+    commands: ['GET', 'GETS']
+  },
+  {
+    title: 'Deletion',
+    commands: ['DELETE']
+  },
+  {
+    title: 'MirDB Specific',
+    commands: ['INFO', 'MAJOR_COMPACTION']
+  }
+];
+---
+
+<section class="commands section" id="commands">
+  <div class="container">
+    <h2 class="section-title">Supported Commands</h2>
+    <div class="commands-grid">
+      {commandCategories.map((category) => (
+        <div class="command-category">
+          <h3 class="command-category-title">{category.title}</h3>
+          <ul class="command-list">
+            {category.commands.map((cmd) => (
+              <li class="command-item"><code>{cmd}</code></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .commands-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .command-category {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+  }
+
+  .command-category-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .command-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .command-item {
+    margin-bottom: var(--space-sm);
+  }
+
+  .command-item code {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
+  @media (max-width: 768px) {
+    .commands-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 375px) {
+    .commands-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
