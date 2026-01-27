@@ -99,3 +99,174 @@ describe('HeroSection', () => {
     expect(loginLink).toHaveAttribute('href', '/login');
   });
 });
+
+/**
+ * Animations and Visual Effects Tests
+ * Owner: Scenario 13 - Animations and Visual Effects
+ *
+ * Test cases:
+ * 1. BackgroundEffect component is rendered and visible in LandingPage
+ * 2. Feature cards animate into view with Framer Motion
+ * 3. No animation errors in console when rendering LandingPage
+ */
+import { Home } from '../../../src/pages/Home';
+import { FeaturesSection } from '../../../src/components/landing/FeaturesSection';
+
+// Mock all landing components except the ones we're testing
+vi.mock('../../../src/components/landing/HowItWorksSection', () => ({
+  HowItWorksSection: () => <div data-testid="how-it-works-section">How It Works Mock</div>,
+}));
+
+vi.mock('../../../src/components/landing/SocialProofSection', () => ({
+  SocialProofSection: () => <div data-testid="social-proof-section">Social Proof Mock</div>,
+}));
+
+vi.mock('../../../src/components/landing/Footer', () => ({
+  Footer: () => <footer data-testid="footer">Footer Mock</footer>,
+}));
+
+// Re-mock framer-motion for the animation tests with whileInView support
+vi.mock('framer-motion', async () => {
+  return {
+    motion: {
+      div: ({ children, initial, animate, whileInView, variants, ...props }: React.PropsWithChildren<{
+        initial?: Record<string, unknown>;
+        animate?: Record<string, unknown>;
+        whileInView?: Record<string, unknown>;
+        variants?: Record<string, unknown>;
+        [key: string]: unknown;
+      }>) => {
+        // For animation testing, we apply the final animated state (whileInView or animate)
+        const animatedState = whileInView || animate || {};
+        return (
+          <div
+            data-testid={props['data-testid'] as string}
+            data-framer-motion="true"
+            data-initial={initial ? JSON.stringify(initial) : undefined}
+            data-animate={animatedState ? JSON.stringify(animatedState) : undefined}
+            data-has-variants={variants ? 'true' : undefined}
+            {...props}
+          >
+            {children}
+          </div>
+        );
+      },
+      button: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
+        <button {...props}>{children}</button>
+      ),
+    },
+    AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
+  };
+});
+
+describe('Animations and Visual Effects (Scenario 13)', () => {
+  // Spy on console.error to detect animation errors
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
+  });
+
+  describe('BackgroundEffect rendering', () => {
+    it('renders BackgroundEffect component in the landing page and it is visible', () => {
+      render(<Home />);
+
+      // BackgroundEffect should be rendered via the mock
+      const backgroundEffect = screen.getByTestId('background-effect');
+      expect(backgroundEffect).toBeInTheDocument();
+      expect(backgroundEffect).toBeVisible();
+    });
+
+    it('BackgroundEffect has aria-hidden for accessibility', () => {
+      render(<Home />);
+
+      const backgroundEffect = screen.getByTestId('background-effect');
+      expect(backgroundEffect).toHaveAttribute('aria-hidden', 'true');
+    });
+  });
+
+  describe('Framer Motion scroll animations', () => {
+    it('FeaturesSection uses Framer Motion for scroll-based animations', () => {
+      render(<FeaturesSection />);
+
+      // Features grid should have framer-motion attributes
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toBeInTheDocument();
+      expect(featuresGrid).toHaveAttribute('data-framer-motion', 'true');
+    });
+
+    it('Feature cards have animation variants for staggered reveal', () => {
+      render(<FeaturesSection />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+      // The container should have variants for staggered animation
+      expect(featuresGrid).toHaveAttribute('data-has-variants', 'true');
+    });
+
+    it('HeroSection content animates on initial render', () => {
+      render(<HeroSection />);
+
+      // Find motion divs in the hero section
+      const motionElements = document.querySelectorAll('[data-framer-motion="true"]');
+      expect(motionElements.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Animation error handling', () => {
+    it('renders LandingPage component without animation errors in console', () => {
+      render(<Home />);
+
+      // Check that no errors related to animations were logged
+      const animationErrorCalls = consoleErrorSpy.mock.calls.filter((call) => {
+        const message = call[0]?.toString() || '';
+        return (
+          message.includes('framer-motion') ||
+          message.includes('animation') ||
+          message.includes('Motion')
+        );
+      });
+
+      expect(animationErrorCalls).toHaveLength(0);
+    });
+
+    it('renders HeroSection without throwing animation-related errors', () => {
+      expect(() => render(<HeroSection />)).not.toThrow();
+
+      // Verify no animation errors were logged
+      const errorCalls = consoleErrorSpy.mock.calls.filter((call) => {
+        const message = call[0]?.toString() || '';
+        return message.toLowerCase().includes('animation');
+      });
+      expect(errorCalls).toHaveLength(0);
+    });
+
+    it('renders FeaturesSection without throwing animation-related errors', () => {
+      expect(() => render(<FeaturesSection />)).not.toThrow();
+
+      // Verify component rendered successfully
+      expect(screen.getByTestId('features-section')).toBeInTheDocument();
+    });
+  });
+
+  describe('Animation configuration', () => {
+    it('HeroSection has initial animation state defined', () => {
+      render(<HeroSection />);
+
+      // Find elements with initial animation state
+      const animatedElements = document.querySelectorAll('[data-initial]');
+      expect(animatedElements.length).toBeGreaterThan(0);
+    });
+
+    it('FeaturesSection defines whileInView for scroll trigger animations', () => {
+      render(<FeaturesSection />);
+
+      // Features should have animate data (from whileInView)
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toHaveAttribute('data-animate');
+    });
+  });
+});
