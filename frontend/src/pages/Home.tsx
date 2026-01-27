@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom'
 import { HeroSection } from '../components/homepage'
 import { BackgroundEffect } from '../components/BackgroundEffect'
+import { FuturisticButton } from '../components/FuturisticButton'
 
 export function Home() {
   const handleLearnMore = () => {
@@ -13,6 +15,16 @@ export function Home() {
   return (
     <main className="min-h-screen relative">
       <BackgroundEffect />
+      {/* Navigation header with Login CTA - Scenario 2 CTA integration */}
+      <header className="absolute top-0 left-0 right-0 z-10 p-4 sm:p-6">
+        <nav className="max-w-7xl mx-auto flex justify-end items-center">
+          <Link to="/login">
+            <FuturisticButton variant="ghost" className="px-6 py-2">
+              Login
+            </FuturisticButton>
+          </Link>
+        </nav>
+      </header>
       <HeroSection onLearnMoreClick={handleLearnMore} />
       {/* Other sections will be added by their respective scenario builders */}
       <section id="features" className="py-20">
