@@ -24,22 +24,32 @@ import { FeaturesSection, Footer, HeroSection, HowItWorksSection, SocialProofSec
 
 export const Home: React.FC = () => {
   return (
-    <main className="min-h-screen" data-testid="landing-page">
-      {/* Hero Section */}
-      <HeroSection />
+    <>
+      {/* Skip to content link for keyboard/screen reader users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-content focus:rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+      >
+        Skip to content
+      </a>
 
-      {/* Features Section */}
-      <FeaturesSection />
+      <main id="main-content" className="min-h-screen" data-testid="landing-page" tabIndex={-1}>
+        {/* Hero Section */}
+        <HeroSection />
 
-      {/* How It Works Section */}
-      <HowItWorksSection />
+        {/* Features Section */}
+        <FeaturesSection />
 
-      {/* Social Proof Section */}
-      <SocialProofSection />
+        {/* How It Works Section */}
+        <HowItWorksSection />
 
-      {/* Footer Section */}
-      <Footer />
-    </main>
+        {/* Social Proof Section */}
+        <SocialProofSection />
+
+        {/* Footer Section */}
+        <Footer />
+      </main>
+    </>
   );
 };
 
