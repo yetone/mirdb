@@ -31,7 +31,10 @@
     "vitest": "^4.0.18"
   },
   "devDependencies": {
+    "@axe-core/react": "^4.11.0",
     "@eslint/js": "^9.39.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest-axe": "^3.5.9",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
@@ -41,6 +44,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "jest-axe": "^10.0.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4",
