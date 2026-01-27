@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { HeroSection, FeaturesSection, HowItWorksSection } from '../components/homepage'
+import { HeroSection, FeaturesSection, HowItWorksSection, StatsSection } from '../components/homepage'
 import { BackgroundEffect } from '../components/BackgroundEffect'
 import { FuturisticButton } from '../components/FuturisticButton'
 
@@ -28,6 +28,7 @@ export function Home() {
       <HeroSection onLearnMoreClick={handleLearnMore} />
       <FeaturesSection />
       <HowItWorksSection />
+      <StatsSection />
     </main>
   )
 }
