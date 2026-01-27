@@ -1,0 +1,168 @@
+---
+/**
+ * Project status and roadmap section component.
+ * Owner: Scenario 12 - Project Status and Roadmap
+ *
+ * Displays:
+ * - Completed features checklist with checkmarks
+ * - Roadmap items (e.g., Raft consensus)
+ */
+
+import roadmapData from '../data/roadmap.json';
+
+const { completed, planned } = roadmapData;
+---
+
+<section class="project-status section" id="project-status">
+  <div class="container">
+    <h2 class="section-title">Project Status</h2>
+
+    <div class="status-grid">
+      <div class="status-column">
+        <h3 class="status-heading">
+          <span class="status-icon completed-icon" aria-hidden="true">&#10003;</span>
+          Completed Features
+        </h3>
+        <ul class="feature-list completed-list" role="list" aria-label="Completed features">
+          {completed.map((item) => (
+            <li class="feature-item completed" data-testid="completed-feature">
+              <span class="checkmark" aria-hidden="true">&#10003;</span>
+              <div class="feature-content">
+                <span class="feature-name">{item.feature}</span>
+                <span class="feature-description">{item.description}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="status-column">
+        <h3 class="status-heading">
+          <span class="status-icon roadmap-icon" aria-hidden="true">&#128640;</span>
+          Roadmap
+        </h3>
+        <ul class="feature-list roadmap-list" role="list" aria-label="Planned features">
+          {planned.map((item) => (
+            <li class="feature-item planned" data-testid="roadmap-item">
+              <span class="roadmap-bullet" aria-hidden="true">&#9679;</span>
+              <div class="feature-content">
+                <span class="feature-name">{item.feature}</span>
+                <span class="feature-description">{item.description}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .project-status {
+    background-color: var(--color-bg-secondary);
+  }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2xl);
+  }
+
+  .status-column {
+    background-color: var(--color-bg-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .status-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .status-icon {
+    font-size: var(--font-size-2xl);
+  }
+
+  .completed-icon {
+    color: var(--color-secondary);
+  }
+
+  .roadmap-icon {
+    color: var(--color-primary);
+  }
+
+  .feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .feature-item:last-child {
+    border-bottom: none;
+  }
+
+  .checkmark {
+    color: var(--color-secondary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(5, 150, 105, 0.1);
+    border-radius: var(--radius-full);
+  }
+
+  .roadmap-bullet {
+    color: var(--color-primary);
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feature-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .feature-name {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+  }
+
+  .feature-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: var(--line-height-relaxed);
+  }
+
+  @media (max-width: 768px) {
+    .status-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>

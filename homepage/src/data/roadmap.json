@@ -1,0 +1,54 @@
+{
+  "completed": [
+    {
+      "feature": "Memcached Protocol Support",
+      "description": "Full compatibility with memcached text protocol"
+    },
+    {
+      "feature": "Persistent Storage",
+      "description": "Data survives restarts via SSTable-based storage"
+    },
+    {
+      "feature": "LSM-Tree Architecture",
+      "description": "Log-structured merge-tree design for write optimization"
+    },
+    {
+      "feature": "Write-Ahead Logging",
+      "description": "Crash recovery through WAL implementation"
+    },
+    {
+      "feature": "Skip List Memtable",
+      "description": "In-memory skip list for fast writes and reads"
+    },
+    {
+      "feature": "Snappy Compression",
+      "description": "Optional data compression for storage efficiency"
+    },
+    {
+      "feature": "Cuckoo Filter",
+      "description": "Efficient key lookup with bloom filter alternative"
+    },
+    {
+      "feature": "7-Level Compaction",
+      "description": "Configurable multi-level SSTable compaction"
+    }
+  ],
+  "planned": [
+    {
+      "feature": "Raft Consensus",
+      "description": "Distributed consensus for high availability"
+    },
+    {
+      "feature": "Replication",
+      "description": "Multi-node data replication support"
+    },
+    {
+      "feature": "TTL Support",
+      "description": "Time-to-live expiration for keys"
+    },
+    {
+      "feature": "Binary Protocol",
+      "description": "Memcached binary protocol support"
+    }
+  ]
+}
