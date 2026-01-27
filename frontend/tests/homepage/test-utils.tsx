@@ -81,6 +81,17 @@ export function createMatchMedia(width: number) {
   });
 }
 
+// Set viewport width for responsive tests
+export const setViewportWidth = (width: number) => {
+  Object.defineProperty(window, 'innerWidth', {
+    writable: true,
+    configurable: true,
+    value: width,
+  });
+  window.matchMedia = createMatchMedia(width);
+  window.dispatchEvent(new Event('resize'));
+};
+
 // Reset all mocks between tests
 export function resetMocks() {
   mockNavigate.mockClear();

@@ -12,9 +12,9 @@
  */
 
 export { HeroSection } from './HeroSection';
+export { HowItWorksSection } from './HowItWorksSection';
 // Future exports will be added by other scenario builders:
 // export { FeaturesSection } from './FeaturesSection';
-// export { HowItWorksSection } from './HowItWorksSection';
 // export { StatsSection } from './StatsSection';
 // export { CTASection } from './CTASection';
 // export { DemoInput } from './DemoInput';
