@@ -11,7 +11,7 @@ export const GlassMorphismCard: React.FC<GlassMorphismCardProps> = ({
 }) => {
   return (
     <div
-      className={`backdrop-blur-md bg-white/10 dark:bg-gray-900/30 border border-white/20 dark:border-gray-700/30 rounded-xl shadow-lg ${className}`}
+      className={`backdrop-blur-md bg-base-100/30 border border-base-content/10 rounded-xl shadow-xl ${className}`}
       data-testid="glassmorphism-card"
     >
       {children}

@@ -1,9 +1,10 @@
-import { FeaturesSection } from '../components/homepage'
+import { HeroSection, FeaturesSection } from '../components/homepage'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-base-100">
+    <main className="min-h-screen bg-base-100">
+      <HeroSection />
       <FeaturesSection />
-    </div>
+    </main>
   )
 }
