@@ -1029,3 +1029,151 @@ describe('Home Page - Footer Section Display (Scenario 9)', () => {
     expect(options.length).toBeGreaterThan(1)
   })
 })
+
+describe('Home Page - Accessibility - Semantic HTML Structure (Scenario 11)', () => {
+  // Test Case 1: Exactly one h1 element exists on the page
+  it('should have exactly one h1 element on the page', () => {
+    renderWithProviders(<Home />)
+
+    const h1Elements = screen.getAllByRole('heading', { level: 1 })
+    expect(h1Elements).toHaveLength(1)
+    expect(h1Elements[0]).toBeInTheDocument()
+  })
+
+  // Test Case 2: Heading elements follow proper hierarchy without skipping levels
+  it('should have heading elements that follow proper hierarchy without skipping levels', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    // Get all heading elements in document order
+    const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6')
+    expect(headings.length).toBeGreaterThan(0)
+
+    // Check that headings follow proper hierarchy (no skipping levels)
+    let previousLevel = 0
+    const headingLevels: number[] = []
+
+    headings.forEach((heading) => {
+      const tagName = heading.tagName.toLowerCase()
+      const level = parseInt(tagName.charAt(1), 10)
+      headingLevels.push(level)
+
+      // For first heading, it should be h1
+      if (previousLevel === 0) {
+        expect(level).toBe(1)
+      } else {
+        // Heading level should not skip (e.g., no jumping from h1 to h3)
+        // It can go down one level, stay the same, or go back up to any previous level
+        const isValidTransition = level <= previousLevel + 1
+        expect(isValidTransition).toBe(true)
+      }
+      previousLevel = level
+    })
+
+    // Should have h1 as the first heading
+    expect(headingLevels[0]).toBe(1)
+  })
+
+  // Test Case 3: Main content area uses <main> element
+  it('should have main content area using <main> element', () => {
+    renderWithProviders(<Home />)
+
+    const mainElement = screen.getByRole('main')
+    expect(mainElement).toBeInTheDocument()
+    expect(mainElement.tagName.toLowerCase()).toBe('main')
+  })
+
+  // Test Case 4: Footer uses <footer> element
+  it('should have footer using <footer> element', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    const footerElement = container.querySelector('footer')
+    expect(footerElement).toBeInTheDocument()
+    expect(footerElement?.tagName.toLowerCase()).toBe('footer')
+
+    // Also verify it's the footer section we expect
+    const footerSection = screen.getByTestId('footer-section')
+    expect(footerSection.tagName.toLowerCase()).toBe('footer')
+  })
+
+  // Test Case 5: Icon-only buttons have aria-label attributes
+  it('should have icon-only buttons with aria-label attributes', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    // Find all buttons that might be icon-only
+    const allButtons = container.querySelectorAll('button')
+
+    // Check buttons that don't have visible text content
+    allButtons.forEach((button) => {
+      const textContent = button.textContent?.trim()
+      const hasText = textContent && textContent.length > 0
+
+      // If button has no text content, it should have aria-label
+      if (!hasText) {
+        expect(button).toHaveAttribute('aria-label')
+      }
+    })
+
+    // Verify interactive elements like the theme select have aria-label
+    const themeSelect = screen.getByRole('combobox', { name: /select theme/i })
+    expect(themeSelect).toHaveAttribute('aria-label')
+  })
+
+  // Additional test: Sections use semantic section elements
+  it('should use semantic section elements for content areas', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    // Check for semantic section elements
+    const sections = container.querySelectorAll('section')
+    expect(sections.length).toBeGreaterThan(0)
+
+    // Hero section should be a section element
+    const heroSection = screen.getByRole('heading', { level: 1 }).closest('section')
+    expect(heroSection).toBeInTheDocument()
+
+    // Features section should be a section element
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection.tagName.toLowerCase()).toBe('section')
+  })
+
+  // Additional test: Footer navigation has proper landmark
+  it('should have footer with navigation landmark', () => {
+    renderWithProviders(<Home />)
+
+    // Footer should have a navigation element with aria-label
+    const footerNav = screen.getByRole('navigation', { name: /footer navigation/i })
+    expect(footerNav).toBeInTheDocument()
+    expect(footerNav).toHaveAttribute('aria-label', 'Footer navigation')
+  })
+
+  // Additional test: Features section has proper aria-labelledby
+  it('should have features section with aria-labelledby referencing heading', () => {
+    renderWithProviders(<Home />)
+
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toHaveAttribute('aria-labelledby', 'features-heading')
+
+    const featuresHeading = document.getElementById('features-heading')
+    expect(featuresHeading).toBeInTheDocument()
+    expect(featuresHeading?.textContent).toContain('Powerful Features')
+  })
+
+  // Additional test: Decorative icons have aria-hidden
+  it('should have decorative icons marked with aria-hidden', () => {
+    const { container } = renderWithProviders(<Home />)
+
+    // Feature icons are decorative and should have aria-hidden
+    const featureIconContainers = [
+      screen.getByTestId('feature-icon-url-shortening'),
+      screen.getByTestId('feature-icon-click-analytics'),
+      screen.getByTestId('feature-icon-dashboard'),
+      screen.getByTestId('feature-icon-share-stats'),
+    ]
+
+    featureIconContainers.forEach((iconContainer) => {
+      expect(iconContainer).toHaveAttribute('aria-hidden', 'true')
+      // SVGs inside should also have aria-hidden
+      const svg = iconContainer.querySelector('svg')
+      expect(svg).toHaveAttribute('aria-hidden', 'true')
+    })
+  })
+})
