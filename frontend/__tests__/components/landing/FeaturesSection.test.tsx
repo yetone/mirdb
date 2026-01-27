@@ -180,4 +180,102 @@ describe('FeaturesSection', () => {
       expect(grid.className).toContain('md:grid-cols-3');
     });
   });
+
+  /**
+   * Scenario 17: UI Component Integration - GlassMorphismCard
+   *
+   * These tests verify that the FeaturesSection uses GlassMorphismCard
+   * correctly and that the component has the expected glass-like visual effect.
+   */
+  describe('Scenario 17: UI Component Integration - GlassMorphismCard', () => {
+    describe('Test Case 1: Feature cards render using GlassMorphismCard component', () => {
+      it('should render all feature cards using GlassMorphismCard component', () => {
+        render(<FeaturesSection />);
+
+        // GlassMorphismCard components have the data-testid="glassmorphism-card"
+        const glassMorphismCards = screen.getAllByTestId('glassmorphism-card');
+
+        // Should have exactly 3 GlassMorphismCard components for the 3 feature cards
+        expect(glassMorphismCards).toHaveLength(3);
+      });
+
+      it('should wrap each feature card content within a GlassMorphismCard', () => {
+        render(<FeaturesSection />);
+
+        const cards = screen.getAllByTestId('glassmorphism-card');
+
+        // Verify each GlassMorphismCard contains its corresponding feature card content
+        cards.forEach((card, index) => {
+          const featureCard = within(card).getByTestId(`feature-card-${index}`);
+          expect(featureCard).toBeInTheDocument();
+        });
+      });
+
+      it('should render GlassMorphismCard components within the features grid', () => {
+        render(<FeaturesSection />);
+
+        const featuresGrid = screen.getByTestId('features-grid');
+        const cards = within(featuresGrid).getAllByTestId('glassmorphism-card');
+
+        expect(cards).toHaveLength(3);
+      });
+    });
+
+    describe('Test Case 2: GlassMorphismCard has glass-like visual effect (backdrop-blur)', () => {
+      it('should have backdrop-blur class for glass-like effect', () => {
+        render(<FeaturesSection />);
+
+        const glassMorphismCards = screen.getAllByTestId('glassmorphism-card');
+
+        // Each GlassMorphismCard should have the backdrop-blur class for the glass effect
+        glassMorphismCards.forEach((card) => {
+          expect(card.className).toContain('backdrop-blur');
+        });
+      });
+
+      it('should have semi-transparent background for glass effect', () => {
+        render(<FeaturesSection />);
+
+        const glassMorphismCards = screen.getAllByTestId('glassmorphism-card');
+
+        // GlassMorphismCard uses bg-base-100/30 for semi-transparent background
+        glassMorphismCards.forEach((card) => {
+          expect(card.className).toContain('bg-base-100/30');
+        });
+      });
+
+      it('should have border for glass effect definition', () => {
+        render(<FeaturesSection />);
+
+        const glassMorphismCards = screen.getAllByTestId('glassmorphism-card');
+
+        // GlassMorphismCard uses border and border-base-content/10 for subtle border
+        glassMorphismCards.forEach((card) => {
+          expect(card.className).toContain('border');
+        });
+      });
+
+      it('should have rounded corners for polished glass appearance', () => {
+        render(<FeaturesSection />);
+
+        const glassMorphismCards = screen.getAllByTestId('glassmorphism-card');
+
+        // GlassMorphismCard uses rounded-xl for rounded corners
+        glassMorphismCards.forEach((card) => {
+          expect(card.className).toContain('rounded-xl');
+        });
+      });
+
+      it('should have shadow for depth effect', () => {
+        render(<FeaturesSection />);
+
+        const glassMorphismCards = screen.getAllByTestId('glassmorphism-card');
+
+        // GlassMorphismCard uses shadow-lg for shadow effect
+        glassMorphismCards.forEach((card) => {
+          expect(card.className).toContain('shadow-lg');
+        });
+      });
+    });
+  });
 });
