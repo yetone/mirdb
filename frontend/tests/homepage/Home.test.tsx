@@ -315,3 +315,180 @@ describe('Scenario 3: Navigation to Login Page', () => {
     });
   });
 });
+
+/**
+ * Scenario 11: Call-to-Action Section Display
+ *
+ * Test that the reinforcing CTA section near the bottom of the page
+ * is present and functional.
+ *
+ * Steps:
+ * 1. Navigate to homepage
+ * 2. Scroll to CTA section (before footer)
+ * 3. Verify CTA content (compelling message and registration button)
+ */
+describe('Scenario 11: Call-to-Action Section Display', () => {
+  describe('Test Case 1: Render HomePage and check for bottom CTA section', () => {
+    it('CTA section with signup encouragement is present', () => {
+      renderWithProviders(<Home />);
+
+      // Find the CTA section by its id
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+      expect(ctaSection?.tagName.toLowerCase()).toBe('section');
+    });
+
+    it('CTA section contains a compelling headline', () => {
+      renderWithProviders(<Home />);
+
+      // Find the CTA heading (should be h2)
+      const ctaHeading = screen.getByRole('heading', { name: /Ready to Get Started/i });
+      expect(ctaHeading).toBeInTheDocument();
+      expect(ctaHeading.tagName.toLowerCase()).toBe('h2');
+    });
+
+    it('CTA section contains signup encouragement message', () => {
+      renderWithProviders(<Home />);
+
+      // Find the encouraging message text
+      const encouragementText = screen.getByText(/Join thousands of users/i);
+      expect(encouragementText).toBeInTheDocument();
+
+      // Also check for free account mention
+      const freeAccountText = screen.getByText(/Create your free account/i);
+      expect(freeAccountText).toBeInTheDocument();
+    });
+
+    it('CTA section contains a registration button', () => {
+      renderWithProviders(<Home />);
+
+      // Find the CTA section
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Find the registration button within the CTA section
+      const registerButton = within(ctaSection!).getByRole('button', { name: /Create Free Account/i });
+      expect(registerButton).toBeInTheDocument();
+    });
+
+    it('CTA section is placed before the footer', () => {
+      renderWithProviders(<Home />);
+
+      const ctaSection = document.getElementById('cta');
+      const footer = document.querySelector('footer');
+
+      expect(ctaSection).toBeInTheDocument();
+      expect(footer).toBeInTheDocument();
+
+      // CTA section should come before footer in document order
+      const mainElement = document.querySelector('main');
+      expect(mainElement?.contains(ctaSection)).toBe(true);
+      expect(mainElement?.contains(footer)).toBe(false);
+    });
+
+    it('CTA section has proper accessibility attributes', () => {
+      renderWithProviders(<Home />);
+
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Section should be labeled
+      expect(ctaSection).toHaveAttribute('aria-labelledby', 'cta-heading');
+
+      // The heading should have the id referenced by aria-labelledby
+      const ctaHeading = document.getElementById('cta-heading');
+      expect(ctaHeading).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: Check bottom CTA button functionality', () => {
+    it('Button navigates to /register when clicked', async () => {
+      const user = userEvent.setup();
+      renderWithRoutes('/');
+
+      // Find the CTA section registration link
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Find the Create Free Account button link
+      const registerLink = within(ctaSection!).getByRole('link', { name: /Create Free Account/i });
+      expect(registerLink).toBeInTheDocument();
+      expect(registerLink).toHaveAttribute('href', '/register');
+
+      // Click the link
+      await user.click(registerLink);
+
+      // Verify navigation to /register route
+      await waitFor(() => {
+        expect(screen.getByTestId('register-page')).toBeInTheDocument();
+      });
+    });
+
+    it('CTA registration link has correct href attribute', () => {
+      renderWithProviders(<Home />);
+
+      // Find the CTA section
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Find the registration link
+      const registerLink = within(ctaSection!).getByRole('link', { name: /Create Free Account/i });
+      expect(registerLink).toHaveAttribute('href', '/register');
+    });
+
+    it('CTA button uses FuturisticButton component', () => {
+      renderWithProviders(<Home />);
+
+      // Find the CTA section
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // The button should exist and have the btn class from FuturisticButton
+      const button = within(ctaSection!).getByRole('button', { name: /Create Free Account/i });
+      expect(button).toBeInTheDocument();
+      expect(button).toHaveClass('btn');
+      expect(button).toHaveClass('btn-primary');
+    });
+
+    it('CTA button is keyboard accessible', async () => {
+      renderWithProviders(<Home />);
+
+      // Find the CTA section
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // Find the registration link
+      const registerLink = within(ctaSection!).getByRole('link', { name: /Create Free Account/i });
+
+      // Link should be focusable
+      registerLink.focus();
+      expect(document.activeElement).toBe(registerLink);
+    });
+  });
+
+  describe('User Journey: Homepage CTA to Registration', () => {
+    it('completes journey from homepage CTA section to registration', async () => {
+      const user = userEvent.setup();
+      renderWithRoutes('/');
+
+      // User lands on homepage
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+
+      // User scrolls to CTA section (simulated by finding it)
+      const ctaSection = document.getElementById('cta');
+      expect(ctaSection).toBeInTheDocument();
+
+      // User sees the encouraging message
+      expect(screen.getByText(/Ready to Get Started/i)).toBeInTheDocument();
+
+      // User clicks the Create Free Account button
+      const registerLink = within(ctaSection!).getByRole('link', { name: /Create Free Account/i });
+      await user.click(registerLink);
+
+      // User is navigated to registration page
+      await waitFor(() => {
+        expect(screen.getByTestId('register-page')).toBeInTheDocument();
+      });
+    });
+  });
+});
