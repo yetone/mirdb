@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { HeroSection } from '../components/homepage'
+import { HeroSection, FeaturesSection } from '../components/homepage'
 import { BackgroundEffect } from '../components/BackgroundEffect'
 import { FuturisticButton } from '../components/FuturisticButton'
 
@@ -27,9 +27,7 @@ export function Home() {
       </header>
       <HeroSection onLearnMoreClick={handleLearnMore} />
       {/* Other sections will be added by their respective scenario builders */}
-      <section id="features" className="py-20">
-        {/* FeaturesSection placeholder */}
-      </section>
+      <FeaturesSection />
     </main>
   )
 }
