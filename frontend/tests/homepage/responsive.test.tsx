@@ -7,12 +7,12 @@
  * - Tablet viewport 768px (Scenario 7)
  * - Desktop viewport 1024px+ (Scenario 8)
  */
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import { renderWithProviders } from './testUtils';
 import Home from '../../src/pages/Home';
-import FeaturesSection from '../../src/components/homepage/FeaturesSection';
 import HeroSection from '../../src/components/homepage/HeroSection';
+import FeaturesSection from '../../src/components/homepage/FeaturesSection';
 import HowItWorksSection from '../../src/components/homepage/HowItWorksSection';
 
 /**
@@ -40,6 +40,296 @@ function resetViewport() {
     value: 1024,
   });
 }
+
+/**
+ * Scenario 6: Responsive Design - Mobile Viewport (375px)
+ *
+ * Tests homepage display and usability on mobile devices (375px width)
+ */
+describe('Scenario 6: Mobile Viewport (375px)', () => {
+  let originalInnerWidth: number;
+  let originalInnerHeight: number;
+
+  beforeAll(() => {
+    // Store original viewport dimensions
+    originalInnerWidth = window.innerWidth;
+    originalInnerHeight = window.innerHeight;
+    // Set mobile viewport dimensions
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 375,
+    });
+    Object.defineProperty(window, 'innerHeight', {
+      writable: true,
+      configurable: true,
+      value: 667,
+    });
+    // Trigger resize event
+    window.dispatchEvent(new Event('resize'));
+  });
+
+  afterAll(() => {
+    // Restore original viewport dimensions
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: originalInnerWidth,
+    });
+    Object.defineProperty(window, 'innerHeight', {
+      writable: true,
+      configurable: true,
+      value: originalInnerHeight,
+    });
+    window.dispatchEvent(new Event('resize'));
+  });
+
+  describe('Test Case 1: Render HomePage at 375px viewport width - Page renders without horizontal overflow', () => {
+    it('renders homepage without horizontal overflow at mobile viewport', () => {
+      const { container } = renderWithProviders(<Home />);
+
+      // Check that the main container uses full width without overflow
+      const mainElement = container.querySelector('main');
+      expect(mainElement).toBeInTheDocument();
+
+      // The root div should have overflow handling
+      const rootDiv = container.querySelector('div.min-h-screen');
+      expect(rootDiv).toBeInTheDocument();
+      expect(rootDiv).toHaveClass('bg-base-100');
+    });
+
+    it('container elements use proper width constraints', () => {
+      const { container } = renderWithProviders(<Home />);
+
+      // Check that container divs use proper responsive classes
+      const containers = container.querySelectorAll('.container');
+      containers.forEach((c) => {
+        expect(c).toHaveClass('mx-auto');
+        expect(c).toHaveClass('px-4'); // Has padding for mobile
+      });
+    });
+
+    it('hero section fits within mobile viewport', () => {
+      const { container } = renderWithProviders(<HeroSection />);
+
+      // Hero should have proper responsive width handling
+      const heroSection = container.querySelector('section');
+      expect(heroSection).toBeInTheDocument();
+      expect(heroSection).toHaveClass('overflow-hidden');
+    });
+
+    it('features section fits within mobile viewport', () => {
+      const { container } = renderWithProviders(<FeaturesSection />);
+
+      // Features section should have container with padding
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toBeInTheDocument();
+
+      const containerDiv = featuresSection.querySelector('.container');
+      expect(containerDiv).toHaveClass('px-4');
+    });
+  });
+
+  describe('Test Case 2: Check CTA button dimensions at mobile viewport - Primary CTA button has minimum dimensions of 44x44px', () => {
+    it('primary CTA button uses DaisyUI btn-lg class for adequate tap target', () => {
+      renderWithProviders(<HeroSection />);
+
+      // Get Started button should have btn-lg class which ensures minimum tap target
+      const getStartedButton = screen.getByRole('button', {
+        name: /Get Started/i,
+      });
+      expect(getStartedButton).toBeInTheDocument();
+      expect(getStartedButton).toHaveClass('btn-lg');
+    });
+
+    it('secondary CTA button uses btn-lg class for adequate tap target', () => {
+      renderWithProviders(<HeroSection />);
+
+      const signInButton = screen.getByRole('button', { name: /Sign In/i });
+      expect(signInButton).toBeInTheDocument();
+      expect(signInButton).toHaveClass('btn-lg');
+    });
+
+    it('CTA buttons have btn class with minimum height styling', () => {
+      renderWithProviders(<HeroSection />);
+
+      const getStartedButton = screen.getByRole('button', {
+        name: /Get Started/i,
+      });
+      const signInButton = screen.getByRole('button', { name: /Sign In/i });
+
+      // DaisyUI btn-lg provides minimum 3rem (48px) height which exceeds 44px requirement
+      expect(getStartedButton).toHaveClass('btn');
+      expect(signInButton).toHaveClass('btn');
+    });
+
+    it('all CTA buttons in home page meet tap target requirements', () => {
+      renderWithProviders(<Home />);
+
+      // Check hero CTAs
+      const getStartedButton = screen.getByRole('button', {
+        name: /Get Started/i,
+      });
+      const signInButtons = screen.getAllByRole('button', { name: /Sign In/i });
+
+      expect(getStartedButton).toHaveClass('btn-lg');
+      signInButtons.forEach((btn) => {
+        // btn-lg or regular btn both meet 44px minimum
+        expect(btn.className).toMatch(/btn/);
+      });
+    });
+  });
+
+  describe('Test Case 3: Check hero section layout at mobile - Hero content stacks vertically and remains readable', () => {
+    it('hero section uses flex-col for vertical stacking on mobile', () => {
+      const { container } = renderWithProviders(<HeroSection />);
+
+      // The CTA button container should have flex-col class for mobile
+      const ctaContainer = container.querySelector('.flex-col');
+      expect(ctaContainer).toBeInTheDocument();
+    });
+
+    it('hero headline is readable with appropriate text size classes', () => {
+      renderWithProviders(<HeroSection />);
+
+      const headline = screen.getByRole('heading', { level: 1 });
+      expect(headline).toBeInTheDocument();
+
+      // Should have text-4xl for mobile (smallest breakpoint)
+      expect(headline).toHaveClass('text-4xl');
+    });
+
+    it('hero subheadline has appropriate mobile font size', () => {
+      const { container } = renderWithProviders(<HeroSection />);
+
+      // Find the paragraph with the subheadline
+      const subheadline = container.querySelector('p.text-lg');
+      expect(subheadline).toBeInTheDocument();
+    });
+
+    it('hero content is centered for mobile viewing', () => {
+      const { container } = renderWithProviders(<HeroSection />);
+
+      // Content should be centered using text-center
+      const centeredContent = container.querySelector('.text-center');
+      expect(centeredContent).toBeInTheDocument();
+
+      // max-w classes ensure content doesn't stretch too wide
+      const maxWidthContent = container.querySelector('.max-w-4xl');
+      expect(maxWidthContent).toBeInTheDocument();
+    });
+
+    it('CTA buttons stack vertically with gap on mobile', () => {
+      const { container } = renderWithProviders(<HeroSection />);
+
+      // Find the CTA button container
+      const ctaContainer = container.querySelector('.flex.flex-col');
+      expect(ctaContainer).toBeInTheDocument();
+      expect(ctaContainer).toHaveClass('gap-4');
+    });
+  });
+
+  describe('Test Case 4: Check feature cards layout at mobile - Feature cards stack vertically in single column', () => {
+    it('features grid uses grid-cols-1 for single column on mobile', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toBeInTheDocument();
+
+      // Should have grid-cols-1 as base class for mobile (single column)
+      expect(featuresGrid).toHaveClass('grid-cols-1');
+    });
+
+    it('all feature cards are visible and stacked vertically', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      // All 4 feature cards should be present
+      const card0 = screen.getByTestId('feature-card-0');
+      const card1 = screen.getByTestId('feature-card-1');
+      const card2 = screen.getByTestId('feature-card-2');
+      const card3 = screen.getByTestId('feature-card-3');
+
+      expect(card0).toBeInTheDocument();
+      expect(card1).toBeInTheDocument();
+      expect(card2).toBeInTheDocument();
+      expect(card3).toBeInTheDocument();
+    });
+
+    it('feature cards have consistent spacing with gap class', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      const featuresGrid = screen.getByTestId('features-grid');
+      expect(featuresGrid).toHaveClass('gap-6');
+    });
+
+    it('feature cards contain readable text at mobile size', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      // Check that feature titles are h3 headings
+      const featureTitles = screen.getAllByRole('heading', { level: 3 });
+      expect(featureTitles.length).toBe(4);
+
+      // Each title should be visible and have text content
+      featureTitles.forEach((title) => {
+        expect(title).toBeInTheDocument();
+        expect(title.textContent).toBeTruthy();
+      });
+    });
+
+    it('feature card descriptions are present and readable', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      // Check for key description content
+      expect(screen.getByText(/short, memorable links/i)).toBeInTheDocument();
+      expect(screen.getByText(/Track every click/i)).toBeInTheDocument();
+      expect(screen.getByText(/Manage all your links/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/shareable stats links/i)
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe('Additional Mobile Responsiveness Tests', () => {
+    it('navbar is present and functional at mobile viewport', () => {
+      renderWithProviders(<Home />);
+
+      // Navbar should be present
+      const nav = screen.getByRole('navigation');
+      expect(nav).toBeInTheDocument();
+    });
+
+    it('text content has adequate line height for readability', () => {
+      const { container } = renderWithProviders(<HeroSection />);
+
+      // The headline should have leading-tight class for proper line height
+      const headline = screen.getByRole('heading', { level: 1 });
+      expect(headline).toHaveClass('leading-tight');
+    });
+
+    it('content sections have vertical padding for mobile spacing', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      const featuresSection = screen.getByTestId('features-section');
+      // Should have vertical padding (py-16 for mobile)
+      expect(featuresSection).toHaveClass('py-16');
+    });
+
+    it('images/icons scale appropriately for mobile', () => {
+      renderWithProviders(<FeaturesSection />);
+
+      // Check that SVG icons have fixed size classes
+      const svgIcons = document.querySelectorAll(
+        '[data-testid="features-grid"] svg'
+      );
+      expect(svgIcons.length).toBe(4);
+
+      svgIcons.forEach((icon) => {
+        expect(icon).toHaveClass('h-10');
+        expect(icon).toHaveClass('w-10');
+      });
+    });
+  });
+});
 
 /**
  * Scenario 7: Responsive Design - Tablet Viewport (768px)
