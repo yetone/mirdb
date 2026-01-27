@@ -15,6 +15,8 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { ThemeProvider } from '../../src/contexts/ThemeContext'
 import { AuthProvider } from '../../src/contexts/AuthContext'
 
+type Theme = 'light' | 'dark' | 'cyberpunk' | 'synthwave' | 'retro' | 'valentine' | 'night'
+
 const createTestQueryClient = () =>
   new QueryClient({
     defaultOptions: {
@@ -26,6 +28,10 @@ const createTestQueryClient = () =>
 
 interface ProviderProps {
   children: React.ReactNode
+}
+
+interface RenderWithProvidersOptions extends Omit<RenderOptions, 'wrapper'> {
+  theme?: Theme
 }
 
 function AllProviders({ children }: ProviderProps) {
@@ -43,9 +49,18 @@ function AllProviders({ children }: ProviderProps) {
 
 export function renderWithProviders(
   ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>
+  options?: RenderWithProvidersOptions
 ) {
-  return render(ui, { wrapper: AllProviders, ...options })
+  const { theme, ...renderOptions } = options || {}
+
+  // Set theme on document element before rendering
+  if (theme) {
+    document.documentElement.setAttribute('data-theme', theme)
+    // Also set in localStorage for ThemeProvider initialization
+    localStorage.setItem('theme', theme)
+  }
+
+  return render(ui, { wrapper: AllProviders, ...renderOptions })
 }
 
 export * from '@testing-library/react'

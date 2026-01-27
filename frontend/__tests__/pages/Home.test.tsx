@@ -501,3 +501,115 @@ describe('Home Page - Responsive Design Tablet (Scenario 5)', () => {
     expect(featuresHeading).toHaveClass('md:text-4xl')
   })
 })
+
+describe('Home Page - Theme Support - Dark Mode (Scenario 6)', () => {
+  beforeEach(() => {
+    // Set dark theme before each test
+    document.documentElement.setAttribute('data-theme', 'dark')
+    localStorage.setItem('theme', 'dark')
+  })
+
+  afterEach(() => {
+    // Clean up after each test
+    document.documentElement.removeAttribute('data-theme')
+    localStorage.removeItem('theme')
+  })
+
+  // Test Case 1: Integration - Body/main container has dark background color applied
+  it('should render main container with dark theme background class', () => {
+    renderWithProviders(<Home />, { theme: 'dark' })
+
+    const main = screen.getByRole('main')
+    expect(main).toBeInTheDocument()
+    // Main container uses bg-base-100 which adapts to theme
+    expect(main).toHaveClass('bg-base-100')
+    // Verify dark theme is set on document
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+  })
+
+  // Test Case 2: Unit - Text content has appropriate light color for contrast
+  it('should render text content with theme-aware contrast colors', () => {
+    renderWithProviders(<Home />, { theme: 'dark' })
+
+    // Check the subheadline has theme-aware text color class
+    const subheadline = screen.getByTestId('subheadline')
+    expect(subheadline).toHaveClass('text-base-content/70')
+
+    // Check the heading is visible and rendered
+    const heading = screen.getByRole('heading', { level: 1 })
+    expect(heading).toBeInTheDocument()
+    expect(heading).toBeVisible()
+  })
+
+  // Test Case 3: Unit - GlassMorphismCard components have dark-appropriate styling
+  it('should render GlassMorphismCard components with dark theme styling', () => {
+    renderWithProviders(<Home />, { theme: 'dark' })
+
+    // Get feature cards that are wrapped in GlassMorphismCard
+    const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+    expect(urlShorteningCard).toBeInTheDocument()
+
+    // GlassMorphismCard uses theme-aware classes: bg-base-100/30, border-base-content/10
+    // The parent element should have these classes
+    const cardContainer = urlShorteningCard.closest('[class*="backdrop-blur"]')
+    expect(cardContainer).toBeInTheDocument()
+    expect(cardContainer).toHaveClass('backdrop-blur-md')
+    expect(cardContainer).toHaveClass('bg-base-100/30')
+    expect(cardContainer).toHaveClass('border-base-content/10')
+  })
+
+  // Test Case 4: Unit - FuturisticButton components have dark-appropriate styling
+  it('should render FuturisticButton components with dark theme styling', () => {
+    renderWithProviders(<Home />, { theme: 'dark' })
+
+    // Get the primary CTA button
+    const getStartedButton = screen.getByRole('button', { name: /get started/i })
+    expect(getStartedButton).toBeInTheDocument()
+    // Primary button uses btn-primary and gradient classes that adapt to theme
+    expect(getStartedButton).toHaveClass('btn')
+    expect(getStartedButton).toHaveClass('btn-primary')
+
+    // Get the secondary/outline CTA button
+    const loginButton = screen.getByRole('button', { name: /login/i })
+    expect(loginButton).toBeInTheDocument()
+    // Outline button uses btn-outline which adapts to theme
+    expect(loginButton).toHaveClass('btn')
+    expect(loginButton).toHaveClass('btn-outline')
+  })
+
+  // Additional test: Features section text has proper contrast
+  it('should render features section description with theme-aware text color', () => {
+    renderWithProviders(<Home />, { theme: 'dark' })
+
+    const featuresSection = screen.getByTestId('features-section')
+    expect(featuresSection).toBeInTheDocument()
+
+    // Check that feature descriptions use theme-aware classes
+    const featureDescription = screen.getByText('Create short, memorable links in seconds')
+    expect(featureDescription).toHaveClass('text-base-content/70')
+  })
+
+  // Additional test: Primary colors adapt to dark theme
+  it('should render primary accent colors that work with dark theme', () => {
+    renderWithProviders(<Home />, { theme: 'dark' })
+
+    // Product name uses text-primary which adapts to theme
+    const productName = screen.getByText('URL Shortener')
+    expect(productName).toHaveClass('text-primary')
+
+    // Feature icons use text-primary
+    const urlShorteningIcon = screen.getByTestId('feature-icon-url-shortening')
+    expect(urlShorteningIcon).toHaveClass('text-primary')
+  })
+
+  // Additional test: Background effect renders correctly in dark mode
+  it('should render BackgroundEffect with theme-aware opacity in dark mode', () => {
+    renderWithProviders(<Home />, { theme: 'dark' })
+
+    const backgroundEffect = screen.getByTestId('background-effect')
+    expect(backgroundEffect).toBeInTheDocument()
+    // BackgroundEffect uses primary/secondary/accent colors with opacity
+    // that work across all themes
+    expect(backgroundEffect).toHaveClass('pointer-events-none')
+  })
+})
