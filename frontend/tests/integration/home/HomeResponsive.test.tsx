@@ -374,3 +374,367 @@ describe('HomeResponsive - Mobile Viewport Tests (Scenario 7)', () => {
     })
   })
 })
+
+/**
+ * Tablet Viewport Tests (Scenario 8)
+ *
+ * Tests for tablet responsive design at 768px-1024px viewport widths.
+ * Verifies layout adaptation, section visibility, and proper styling.
+ */
+import { HowItWorks } from '@/components/home/HowItWorks'
+import { Footer } from '@/components/home/Footer'
+
+describe('HomeResponsive - Tablet Viewport Tests (Scenario 8)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  describe('Test Case 1: Render Home at 768px viewport width (tablet) - Component renders with appropriate tablet layout', () => {
+    it('should render Home component at 768px tablet width', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<Home />)
+
+      // Verify main element is rendered
+      const mainElement = screen.getByRole('main')
+      expect(mainElement).toBeInTheDocument()
+
+      // Verify all major sections are present
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeInTheDocument()
+
+      const featuresSection = screen.getByTestId('features-section')
+      expect(featuresSection).toBeInTheDocument()
+
+      const howItWorksSection = screen.getByTestId('how-it-works-section')
+      expect(howItWorksSection).toBeInTheDocument()
+
+      const footer = screen.getByTestId('footer')
+      expect(footer).toBeInTheDocument()
+    })
+
+    it('should apply md: breakpoint styles at 768px width', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<Home />)
+
+      // At 768px (md breakpoint), responsive classes should switch
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeInTheDocument()
+
+      // Hero headline should have md:text-6xl class
+      const headline = screen.getByRole('heading', { level: 1 })
+      expect(headline).toHaveClass('md:text-6xl')
+    })
+
+    it('should render HeroSection with tablet-appropriate layout', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<HeroSection />)
+
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeInTheDocument()
+
+      // Verify CTAs are in row layout at tablet size (sm:flex-row applies)
+      const ctaContainer = heroSection.querySelector('.sm\\:flex-row')
+      expect(ctaContainer).toBeInTheDocument()
+
+      // Both buttons should be visible
+      const getStartedButton = screen.getByRole('button', { name: /get started/i })
+      const loginButton = screen.getByRole('button', { name: /log in/i })
+      expect(getStartedButton).toBeVisible()
+      expect(loginButton).toBeVisible()
+    })
+  })
+
+  describe('Test Case 2: Check feature cards layout at 768px - Feature cards may display in 2-column or adaptive grid', () => {
+    it('should render feature cards in 3-column grid at tablet width (md:grid-cols-3)', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<FeaturesSection />)
+
+      const featuresSection = screen.getByTestId('features-section')
+      const gridContainer = featuresSection.querySelector('.grid')
+
+      expect(gridContainer).toBeInTheDocument()
+      // At md breakpoint (768px), the grid transitions to 3 columns
+      expect(gridContainer).toHaveClass('md:grid-cols-3')
+    })
+
+    it('should render exactly 3 feature cards at tablet width', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<FeaturesSection />)
+
+      const featureCards = screen.getAllByTestId('glass-morphism-card')
+      expect(featureCards).toHaveLength(3)
+    })
+
+    it('should maintain proper gap between feature cards at tablet width', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<FeaturesSection />)
+
+      const featuresSection = screen.getByTestId('features-section')
+      const gridContainer = featuresSection.querySelector('.grid')
+
+      // Grid should have gap classes
+      expect(gridContainer).toHaveClass('gap-6')
+      expect(gridContainer).toHaveClass('md:gap-8')
+    })
+
+    it('should display each feature card with icon, title, and description', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<FeaturesSection />)
+
+      // Check URL Shortening feature
+      const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+      expect(urlShorteningCard).toBeInTheDocument()
+      expect(within(urlShorteningCard).getByText('URL Shortening')).toBeInTheDocument()
+      expect(screen.getByTestId('feature-icon-url-shortening')).toBeInTheDocument()
+
+      // Check Analytics feature
+      const analyticsCard = screen.getByTestId('feature-card-analytics')
+      expect(analyticsCard).toBeInTheDocument()
+      expect(within(analyticsCard).getByText('Analytics Dashboard')).toBeInTheDocument()
+
+      // Check Link Management feature
+      const linkManagementCard = screen.getByTestId('feature-card-link-management')
+      expect(linkManagementCard).toBeInTheDocument()
+      expect(within(linkManagementCard).getByText('Link Management')).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 3: Render at 1024px viewport width - Layout transitions toward desktop appearance', () => {
+    it('should render Home component at 1024px width', () => {
+      mockViewportWidth(1024)
+      renderWithProviders(<Home />)
+
+      const mainElement = screen.getByRole('main')
+      expect(mainElement).toBeInTheDocument()
+
+      // All sections should be rendered
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      expect(screen.getByTestId('footer')).toBeInTheDocument()
+    })
+
+    it('should apply desktop-like styling at 1024px (above md breakpoint)', () => {
+      mockViewportWidth(1024)
+      renderWithProviders(<HeroSection />)
+
+      const headline = screen.getByRole('heading', { level: 1 })
+      // At 1024px, md: responsive classes are active
+      expect(headline).toHaveClass('md:text-6xl')
+
+      const description = screen.getByText(/transform long/i)
+      expect(description).toHaveClass('md:text-xl')
+    })
+
+    it('should render feature cards in 3-column grid at 1024px', () => {
+      mockViewportWidth(1024)
+      renderWithProviders(<FeaturesSection />)
+
+      const featuresSection = screen.getByTestId('features-section')
+      const gridContainer = featuresSection.querySelector('.grid')
+
+      expect(gridContainer).toHaveClass('md:grid-cols-3')
+    })
+
+    it('should render How It Works steps in 3-column layout at 1024px', () => {
+      mockViewportWidth(1024)
+      renderWithProviders(<HowItWorks />)
+
+      const howItWorksSection = screen.getByTestId('how-it-works-section')
+      const gridContainer = howItWorksSection.querySelector('ol.grid')
+
+      expect(gridContainer).toBeInTheDocument()
+      expect(gridContainer).toHaveClass('md:grid-cols-3')
+    })
+
+    it('should maintain CTA buttons in row layout at 1024px', () => {
+      mockViewportWidth(1024)
+      renderWithProviders(<HeroSection />)
+
+      const heroSection = screen.getByTestId('hero-section')
+      const ctaContainer = heroSection.querySelector('.sm\\:flex-row')
+
+      expect(ctaContainer).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 4: E2E Visual inspection at tablet breakpoints - No layout breaks or overlapping elements', () => {
+    it('should render all sections without errors at 768px', () => {
+      const consoleSpy = vi.spyOn(console, 'error')
+      mockViewportWidth(768)
+
+      renderWithProviders(<Home />)
+
+      // Should not have any React errors
+      expect(consoleSpy).not.toHaveBeenCalled()
+      consoleSpy.mockRestore()
+    })
+
+    it('should render all sections without errors at 1024px', () => {
+      const consoleSpy = vi.spyOn(console, 'error')
+      mockViewportWidth(1024)
+
+      renderWithProviders(<Home />)
+
+      expect(consoleSpy).not.toHaveBeenCalled()
+      consoleSpy.mockRestore()
+    })
+
+    it('should have proper max-width constraints at tablet widths to prevent overflow', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<Home />)
+
+      // Hero section has max-w-4xl
+      const heroSection = screen.getByTestId('hero-section')
+      const heroContainer = heroSection.querySelector('.max-w-4xl')
+      expect(heroContainer).toBeInTheDocument()
+
+      // Features section has max-w-6xl
+      const featuresSection = screen.getByTestId('features-section')
+      const featuresContainer = featuresSection.querySelector('.max-w-6xl')
+      expect(featuresContainer).toBeInTheDocument()
+
+      // How It Works section has max-w-6xl
+      const howItWorksSection = screen.getByTestId('how-it-works-section')
+      const howItWorksContainer = howItWorksSection.querySelector('.max-w-6xl')
+      expect(howItWorksContainer).toBeInTheDocument()
+
+      // Footer has max-w-4xl
+      const footer = screen.getByTestId('footer')
+      const footerContainer = footer.querySelector('.max-w-4xl')
+      expect(footerContainer).toBeInTheDocument()
+    })
+
+    it('should have proper padding on all sections at tablet width', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<Home />)
+
+      // Hero section has px-4
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toHaveClass('px-4')
+
+      // Features section has px-4
+      const featuresSection = screen.getByTestId('features-section')
+      expect(featuresSection).toHaveClass('px-4')
+
+      // How It Works section has px-4
+      const howItWorksSection = screen.getByTestId('how-it-works-section')
+      expect(howItWorksSection).toHaveClass('px-4')
+
+      // Footer has px-4
+      const footer = screen.getByTestId('footer')
+      expect(footer).toHaveClass('px-4')
+    })
+
+    it('should maintain readable text at tablet widths', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<Home />)
+
+      // Hero headline
+      const headline = screen.getByRole('heading', { level: 1 })
+      expect(headline.textContent).toBeTruthy()
+      expect(headline.className).not.toContain('truncate')
+
+      // Features heading
+      const featuresHeading = screen.getByRole('heading', { name: /powerful features/i })
+      expect(featuresHeading).toBeInTheDocument()
+
+      // How It Works heading
+      const howItWorksHeading = screen.getByRole('heading', { name: /how it works/i })
+      expect(howItWorksHeading).toBeInTheDocument()
+    })
+
+    it('should render Footer correctly at tablet widths', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<Footer />)
+
+      const footer = screen.getByTestId('footer')
+      expect(footer).toBeInTheDocument()
+
+      // Should have navigation links
+      expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: /login/i })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: /register/i })).toBeInTheDocument()
+
+      // Should have copyright text
+      expect(screen.getByText(/url shortener/i)).toBeInTheDocument()
+      expect(screen.getByText(/all rights reserved/i)).toBeInTheDocument()
+    })
+
+    it('should have all interactive elements accessible at tablet widths', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<Home />)
+
+      // CTA buttons
+      const getStartedButton = screen.getByRole('button', { name: /get started/i })
+      const loginButton = screen.getByRole('button', { name: /log in/i })
+      expect(getStartedButton).toBeVisible()
+      expect(loginButton).toBeVisible()
+
+      // Footer links
+      const homeLink = screen.getByRole('link', { name: /^home$/i })
+      const loginLink = screen.getByRole('link', { name: /login/i })
+      const registerLink = screen.getByRole('link', { name: /register/i })
+      expect(homeLink).toBeVisible()
+      expect(loginLink).toBeVisible()
+      expect(registerLink).toBeVisible()
+    })
+  })
+
+  describe('General Tablet Responsiveness', () => {
+    it('should render How It Works steps in proper layout at tablet width', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<HowItWorks />)
+
+      // All 3 steps should be visible
+      expect(screen.getByTestId('step-1')).toBeInTheDocument()
+      expect(screen.getByTestId('step-2')).toBeInTheDocument()
+      expect(screen.getByTestId('step-3')).toBeInTheDocument()
+
+      // Step numbers should be visible
+      expect(screen.getByTestId('step-number-1')).toHaveTextContent('1')
+      expect(screen.getByTestId('step-number-2')).toHaveTextContent('2')
+      expect(screen.getByTestId('step-number-3')).toHaveTextContent('3')
+    })
+
+    it('should maintain semantic structure at tablet widths', () => {
+      mockViewportWidth(768)
+      renderWithProviders(<Home />)
+
+      // Main element exists
+      const main = screen.getByRole('main')
+      expect(main).toBeInTheDocument()
+
+      // Footer element exists
+      const footer = screen.getByRole('contentinfo')
+      expect(footer).toBeInTheDocument()
+
+      // Proper heading hierarchy
+      const h1 = screen.getByRole('heading', { level: 1 })
+      expect(h1).toBeInTheDocument()
+
+      const h2s = screen.getAllByRole('heading', { level: 2 })
+      expect(h2s.length).toBeGreaterThanOrEqual(2) // Features and How It Works headings
+    })
+
+    it('should render at 900px (mid-tablet) without issues', () => {
+      mockViewportWidth(900)
+      renderWithProviders(<Home />)
+
+      // All sections should render
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      expect(screen.getByTestId('footer')).toBeInTheDocument()
+
+      // Feature cards should be in 3-column grid
+      const featuresSection = screen.getByTestId('features-section')
+      const gridContainer = featuresSection.querySelector('.grid')
+      expect(gridContainer).toHaveClass('md:grid-cols-3')
+    })
+  })
+})
