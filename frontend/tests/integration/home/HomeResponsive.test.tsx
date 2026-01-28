@@ -87,8 +87,8 @@ describe('HomeResponsive - Mobile Viewport Tests (Scenario 7)', () => {
       const mainElement = screen.getByRole('main')
       expect(mainElement).toBeInTheDocument()
 
-      // Check that main uses min-h-screen for full viewport height
-      expect(mainElement).toHaveClass('min-h-screen')
+      // Check that main uses flex-grow to take available space
+      expect(mainElement).toHaveClass('flex-grow')
     })
 
     it('should render HeroSection with proper mobile-friendly classes', () => {
