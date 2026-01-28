@@ -16,7 +16,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { Footer } from '@/components/home/Footer';
@@ -37,7 +37,7 @@ describe('Footer', () => {
   });
 
   // Test Case 2: Home link is present and links to /
-  it('displays Home link that points to home route', () => {
+  it('displays Home link that points to "/"', () => {
     renderWithRouter(<Footer />);
 
     const homeLink = screen.getByRole('link', { name: /home/i });
@@ -46,7 +46,7 @@ describe('Footer', () => {
   });
 
   // Test Case 3: Login link is present and links to /login
-  it('displays Login link that points to /login', () => {
+  it('displays Login link that points to "/login"', () => {
     renderWithRouter(<Footer />);
 
     const loginLink = screen.getByRole('link', { name: /login/i });
@@ -55,7 +55,7 @@ describe('Footer', () => {
   });
 
   // Test Case 4: Register link is present and links to /register
-  it('displays Register link that points to /register', () => {
+  it('displays Register link that points to "/register"', () => {
     renderWithRouter(<Footer />);
 
     const registerLink = screen.getByRole('link', { name: /register/i });
@@ -64,7 +64,7 @@ describe('Footer', () => {
   });
 
   // Test Case 5: Click Login link navigates to /login
-  it('Login link navigates to /login when clicked', async () => {
+  it('Login link navigates to /login', async () => {
     const user = userEvent.setup();
 
     render(
@@ -78,11 +78,12 @@ describe('Footer', () => {
 
     const loginLink = screen.getByRole('link', { name: /login/i });
     await user.click(loginLink);
+
     expect(screen.getByTestId('login-page')).toBeInTheDocument();
   });
 
   // Test Case 6: Click Register link navigates to /register
-  it('Register link navigates to /register when clicked', async () => {
+  it('Register link navigates to /register', async () => {
     const user = userEvent.setup();
 
     render(
@@ -96,55 +97,61 @@ describe('Footer', () => {
 
     const registerLink = screen.getByRole('link', { name: /register/i });
     await user.click(registerLink);
+
     expect(screen.getByTestId('register-page')).toBeInTheDocument();
   });
 
   // Test Case 7: Copyright text with symbol is present
-  it('displays copyright symbol and text', () => {
+  it('displays copyright text with copyright symbol', () => {
     renderWithRouter(<Footer />);
 
-    // Look for copyright symbol (© or &copy;) in the rendered text
-    const copyrightText = screen.getByText(/©/);
-    expect(copyrightText).toBeInTheDocument();
-    expect(copyrightText.textContent).toMatch(/URL Shortener/i);
+    const copyrightElement = screen.getByTestId('copyright');
+    expect(copyrightElement).toBeInTheDocument();
+    expect(copyrightElement.textContent).toMatch(/©/);
+    expect(copyrightElement.textContent).toMatch(/URL Shortener/i);
   });
 
   // Test Case 8: Copyright displays current year (2026)
-  it('displays current year in copyright', () => {
+  it('displays current year in copyright dynamically', () => {
     renderWithRouter(<Footer />);
 
     const currentYear = new Date().getFullYear().toString();
-    const copyrightText = screen.getByText(new RegExp(currentYear));
-    expect(copyrightText).toBeInTheDocument();
+    const copyrightElement = screen.getByTestId('copyright');
+
+    expect(copyrightElement.textContent).toContain(currentYear);
   });
 
   // Test Case 9: Footer has contentinfo role (via footer element or role attribute)
-  it('has contentinfo role for accessibility', () => {
+  it('uses semantic footer element with contentinfo role', () => {
     renderWithRouter(<Footer />);
 
-    const footer = screen.getByRole('contentinfo');
-    expect(footer).toBeInTheDocument();
+    const footerElement = screen.getByRole('contentinfo');
+    expect(footerElement).toBeInTheDocument();
+    expect(footerElement.tagName.toLowerCase()).toBe('footer');
   });
 
   // Test Case 10: Footer content is horizontally centered
-  it('has centered layout classes', () => {
+  it('has centered layout with flex items-center classes', () => {
     renderWithRouter(<Footer />);
 
-    const footer = screen.getByRole('contentinfo');
-    // Check for centering classes on the footer or its container
-    const container = footer.querySelector('.mx-auto');
-    expect(container).toBeInTheDocument();
-    expect(container?.className).toMatch(/items-center/);
+    const footerElement = screen.getByRole('contentinfo');
+    const innerContainer = footerElement.firstElementChild;
+
+    // Check for centering classes
+    expect(innerContainer?.className).toMatch(/mx-auto/);
+    expect(innerContainer?.className).toMatch(/items-center/);
+    expect(innerContainer?.className).toMatch(/flex/);
   });
 
-  // Additional tests for accessibility and semantic structure
-  it('has navigation landmark with accessible label', () => {
+  // Additional test for navigation accessibility
+  it('has accessible navigation with aria-label', () => {
     renderWithRouter(<Footer />);
 
     const nav = screen.getByRole('navigation', { name: /footer navigation/i });
     expect(nav).toBeInTheDocument();
   });
 
+  // Test navigation links are in a list for semantic structure
   it('navigation links are in a list for semantic structure', () => {
     renderWithRouter(<Footer />);
 
@@ -156,6 +163,20 @@ describe('Footer', () => {
     expect(listItems.length).toBe(3); // Home, Login, Register
   });
 
+  // Test all three links are present in navigation
+  it('contains all required navigation links', () => {
+    renderWithRouter(<Footer />);
+
+    const nav = screen.getByRole('navigation');
+    const links = within(nav).getAllByRole('link');
+
+    expect(links).toHaveLength(3);
+    expect(links[0]).toHaveTextContent(/home/i);
+    expect(links[1]).toHaveTextContent(/login/i);
+    expect(links[2]).toHaveTextContent(/register/i);
+  });
+
+  // Test all links have hover transition classes
   it('all links have hover transition classes', () => {
     renderWithRouter(<Footer />);
 

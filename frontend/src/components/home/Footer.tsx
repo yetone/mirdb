@@ -25,8 +25,9 @@ export function Footer() {
     <footer
       className="w-full py-8 px-4 border-t border-base-300 bg-base-200/50"
       role="contentinfo"
+      data-testid="footer"
     >
-      <div className="max-w-4xl mx-auto flex flex-col items-center space-y-4">
+      <div className="max-w-6xl mx-auto flex flex-col items-center space-y-4">
         {/* Navigation Links */}
         <nav aria-label="Footer navigation">
           <ul className="flex flex-wrap justify-center gap-6">
@@ -58,8 +59,8 @@ export function Footer() {
         </nav>
 
         {/* Copyright */}
-        <p className="text-sm text-base-content/60">
-          &copy; {currentYear} URL Shortener. All rights reserved.
+        <p className="text-sm text-base-content/60" data-testid="copyright">
+          © {currentYear} URL Shortener. All rights reserved.
         </p>
       </div>
     </footer>
