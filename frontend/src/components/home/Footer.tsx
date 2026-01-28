@@ -23,45 +23,46 @@ export function Footer() {
 
   return (
     <footer
-      className="w-full py-8 px-4 border-t border-base-300 bg-base-200/50"
+      className="py-8 px-4 border-t border-base-content/10"
       role="contentinfo"
-      data-testid="footer"
     >
-      <div className="max-w-6xl mx-auto flex flex-col items-center space-y-4">
-        {/* Navigation Links */}
-        <nav aria-label="Footer navigation">
-          <ul className="flex flex-wrap justify-center gap-6">
-            <li>
-              <Link
-                to="/"
-                className="text-base-content/70 hover:text-primary transition-colors"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/login"
-                className="text-base-content/70 hover:text-primary transition-colors"
-              >
-                Login
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/register"
-                className="text-base-content/70 hover:text-primary transition-colors"
-              >
-                Register
-              </Link>
-            </li>
-          </ul>
-        </nav>
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col items-center space-y-4">
+          {/* Navigation links */}
+          <nav aria-label="Footer navigation">
+            <ul className="flex flex-wrap justify-center gap-6">
+              <li>
+                <Link
+                  to="/"
+                  className="text-base-content/70 hover:text-primary transition-colors"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/login"
+                  className="text-base-content/70 hover:text-primary transition-colors"
+                >
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/register"
+                  className="text-base-content/70 hover:text-primary transition-colors"
+                >
+                  Register
+                </Link>
+              </li>
+            </ul>
+          </nav>
 
-        {/* Copyright */}
-        <p className="text-sm text-base-content/60" data-testid="copyright">
-          © {currentYear} URL Shortener. All rights reserved.
-        </p>
+          {/* Copyright */}
+          <p className="text-sm text-base-content/50">
+            © {currentYear} URL Shortener. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );

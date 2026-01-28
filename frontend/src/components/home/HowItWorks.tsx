@@ -26,8 +26,8 @@ interface Step {
   icon: React.ReactNode;
 }
 
-// Clipboard/Paste icon SVG
-const ClipboardIcon = () => (
+// Clipboard/Paste icon
+const PasteIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className="h-8 w-8"
@@ -45,8 +45,8 @@ const ClipboardIcon = () => (
   </svg>
 );
 
-// Link/Share icon SVG
-const ShareIcon = () => (
+// Link/Short URL icon
+const ShortLinkIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className="h-8 w-8"
@@ -59,13 +59,13 @@ const ShareIcon = () => (
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
-      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
     />
   </svg>
 );
 
-// Chart/Analytics icon SVG
-const ChartBarIcon = () => (
+// Analytics/Chart icon
+const AnalyticsIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className="h-8 w-8"
@@ -87,27 +87,27 @@ const steps: Step[] = [
   {
     id: 1,
     title: 'Paste Your URL',
-    description: 'Enter any long URL - no sign-up required to try. Simply paste your link and watch the magic happen.',
-    icon: <ClipboardIcon />,
+    description: 'Enter any long URL - no sign-up required to try.',
+    icon: <PasteIcon />,
   },
   {
     id: 2,
     title: 'Get Your Short Link',
-    description: 'Instantly receive a short, shareable link. Copy it with one click and share it anywhere.',
-    icon: <ShareIcon />,
+    description: 'Instantly receive a short, shareable link.',
+    icon: <ShortLinkIcon />,
   },
   {
     id: 3,
     title: 'Track Performance',
-    description: 'Monitor clicks and traffic with detailed analytics. See where your visitors come from and when they click.',
-    icon: <ChartBarIcon />,
+    description: 'Monitor clicks and traffic with detailed analytics.',
+    icon: <AnalyticsIcon />,
   },
 ];
 
 export function HowItWorks() {
   return (
     <section
-      className="py-16 md:py-24 px-4 bg-base-200"
+      className="py-16 md:py-24 px-4 bg-base-200/50"
       aria-labelledby="how-it-works-heading"
     >
       <div className="max-w-6xl mx-auto">
@@ -118,46 +118,32 @@ export function HowItWorks() {
           How It Works
         </h2>
 
-        <ol className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        {/* Ordered list for semantic structure */}
+        <ol
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          data-testid="how-it-works-steps"
+        >
           {steps.map((step) => (
             <li
               key={step.id}
               className="flex flex-col items-center text-center"
-              data-testid="step-item"
-              data-step={step.id}
+              data-testid="how-it-works-step"
             >
-              {/* Step container - wraps everything for test querying */}
-              <div data-testid={`step-${step.id}`}>
-                {/* Icon and number container */}
-                <div className="relative mb-6">
-                {/* Icon container */}
-                <div
-                  className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center text-primary"
-                  data-testid="step-icon"
-                >
-                  {step.icon}
-                </div>
-
-                {/* Step number badge */}
-                <div
-                  className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold"
-                  data-testid="step-number"
-                >
-                  {step.id}
-                </div>
+              {/* Step number indicator */}
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-content font-bold text-xl mb-4">
+                {step.id}
               </div>
 
-                {/* Title */}
-                <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-
-                {/* Description */}
-                <p
-                  className="text-base-content/70 max-w-xs"
-                  data-testid="step-description"
-                >
-                  {step.description}
-                </p>
+              {/* Icon */}
+              <div className="text-primary mb-4" data-testid="step-icon">
+                {step.icon}
               </div>
+
+              {/* Title */}
+              <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+
+              {/* Description */}
+              <p className="text-base-content/70">{step.description}</p>
             </li>
           ))}
         </ol>
