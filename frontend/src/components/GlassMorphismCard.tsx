@@ -1,39 +1,37 @@
 import { ReactNode } from 'react';
-import { clsx } from 'clsx';
+import { motion } from 'framer-motion';
+import { cn } from '../utils';
 
-export interface GlassMorphismCardProps {
+interface GlassMorphismCardProps {
   children: ReactNode;
   className?: string;
-  hoverEffect?: boolean;
+  hover?: boolean;
 }
 
-/**
- * GlassMorphismCard component
- *
- * A reusable card component with glass morphism styling effect.
- * Features backdrop blur, semi-transparent background, and subtle border.
- */
-export function GlassMorphismCard({
+export const GlassMorphismCard = ({
   children,
-  className = '',
-  hoverEffect = true,
-}: GlassMorphismCardProps) {
+  className,
+  hover = true,
+}: GlassMorphismCardProps) => {
+  const baseStyles = `
+    backdrop-blur-md
+    bg-base-100/30
+    border border-base-content/10
+    rounded-xl
+    shadow-xl
+  `;
+
   return (
-    <div
-      data-testid="glass-morphism-card"
-      className={clsx(
-        // Glass morphism base styles
-        'relative rounded-2xl',
-        'bg-white/10 dark:bg-white/5',
-        'backdrop-blur-md',
-        'border border-white/20 dark:border-white/10',
-        'shadow-xl',
-        // Hover effect
-        hoverEffect && 'transition-all duration-300 hover:bg-white/15 hover:scale-[1.02] hover:shadow-2xl',
-        className
-      )}
+    <motion.div
+      className={cn(baseStyles, className)}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={hover ? { scale: 1.02, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' } : undefined}
+      transition={{ duration: 0.3 }}
     >
       {children}
-    </div>
+    </motion.div>
   );
-}
+};
+
+export default GlassMorphismCard;
