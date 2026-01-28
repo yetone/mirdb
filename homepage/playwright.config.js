@@ -1,5 +1,11 @@
 /**
  * Playwright Configuration for E2E Tests
+ *
+ * Supports cross-browser testing across:
+ * - Chrome (Chromium)
+ * - Firefox (Gecko)
+ * - Safari (WebKit)
+ * - Edge (Chromium-based, uses chromium project)
  */
 
 const { defineConfig, devices } = require('@playwright/test');
@@ -22,6 +28,14 @@ module.exports = defineConfig({
         {
             name: 'chromium',
             use: { ...devices['Desktop Chrome'] }
+        },
+        {
+            name: 'firefox',
+            use: { ...devices['Desktop Firefox'] }
+        },
+        {
+            name: 'webkit',
+            use: { ...devices['Desktop Safari'] }
         }
     ],
     webServer: {
