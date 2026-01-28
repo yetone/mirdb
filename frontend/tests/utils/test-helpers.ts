@@ -1,97 +1,70 @@
 /**
  * Shared Test Utilities.
  *
- * Provides helper functions for testing React components with
- * the required providers (Router, Auth, Theme contexts).
+ * Expected exports:
+ * - renderWithProviders(component, options): Custom render with contexts
+ * - mockAuthContext(overrides): Create mock auth context
+ * - mockThemeContext(theme): Create mock theme context
+ * - createMockUser(): Generate test user data
  */
 
-import React, { ReactElement } from 'react'
-import { render, RenderOptions } from '@testing-library/react'
-import { BrowserRouter, MemoryRouter } from 'react-router-dom'
-import { AuthContext, AuthProvider } from '@/contexts/AuthContext'
-import { ThemeContext, ThemeProvider } from '@/contexts/ThemeContext'
-import type { User, AuthContextType, ThemeContextType } from '@/types/custom'
+import React from 'react';
+import { render, RenderOptions } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 
-interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
-  initialEntries?: string[]
-  authOverrides?: Partial<AuthContextType>
-  themeOverrides?: Partial<ThemeContextType>
+interface MockUser {
+  id: string;
+  email: string;
+  is_admin: boolean;
 }
 
-/**
- * Creates a mock user for testing
- */
-export function createMockUser(overrides?: Partial<User>): User {
+export function createMockUser(overrides: Partial<MockUser> = {}): MockUser {
   return {
-    id: 1,
-    username: 'testuser',
+    id: '1',
     email: 'test@example.com',
     is_admin: false,
     ...overrides,
-  }
+  };
 }
 
-/**
- * Creates a mock auth context for testing
- */
-export function mockAuthContext(overrides?: Partial<AuthContextType>): AuthContextType {
+export function mockAuthContext(overrides: {
+  isAuthenticated?: boolean;
+  user?: MockUser | null;
+  login?: () => Promise<void>;
+  logout?: () => void;
+} = {}) {
   return {
-    user: null,
     isAuthenticated: false,
-    isLoading: false,
+    user: null,
     login: async () => {},
     logout: () => {},
-    register: async () => {},
     ...overrides,
-  }
+  };
 }
 
-/**
- * Creates a mock theme context for testing
- */
-export function mockThemeContext(theme: string = 'light'): ThemeContextType {
+export function mockThemeContext(theme = 'dark') {
   return {
     theme,
     setTheme: () => {},
-  }
+  };
 }
 
-/**
- * Renders a component with all required providers
- */
+interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  withRouter?: boolean;
+}
+
 export function renderWithProviders(
-  ui: ReactElement,
-  {
-    initialEntries = ['/'],
-    authOverrides,
-    themeOverrides,
-    ...renderOptions
-  }: CustomRenderOptions = {}
+  ui: React.ReactElement,
+  options: CustomRenderOptions = {}
 ) {
-  const authContext = mockAuthContext(authOverrides)
-  const themeContext = mockThemeContext(themeOverrides?.theme)
+  const { withRouter = true, ...renderOptions } = options;
 
   function Wrapper({ children }: { children: React.ReactNode }) {
-    return React.createElement(
-      MemoryRouter,
-      { initialEntries },
-      React.createElement(
-        AuthContext.Provider,
-        { value: authContext },
-        React.createElement(
-          ThemeContext.Provider,
-          { value: themeContext },
-          children
-        )
-      )
-    )
+    if (withRouter) {
+      return React.createElement(BrowserRouter, null, children);
+    }
+    return React.createElement(React.Fragment, null, children);
   }
 
-  return {
-    ...render(ui, { wrapper: Wrapper, ...renderOptions }),
-    authContext,
-    themeContext,
-  }
+  return render(ui, { wrapper: Wrapper, ...renderOptions });
 }
-
-export { render }

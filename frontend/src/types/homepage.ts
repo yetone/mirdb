@@ -6,32 +6,20 @@
  */
 
 export interface Feature {
-  icon: string
-  title: string
-  description: string
+  icon: string;
+  title: string;
+  description: string;
 }
 
 export interface HowItWorksStep {
-  step: number
-  title: string
-  description: string
-  icon: string
+  step: number;
+  title: string;
+  description: string;
+  icon: string;
 }
 
 export interface HeroProps {
-  isAuthenticated: boolean
-  onGetStarted: () => void
-  onLogin: () => void
-}
-
-export interface FeaturesSectionProps {
-  features?: Feature[]
-}
-
-export interface HowItWorksSectionProps {
-  steps?: HowItWorksStep[]
-}
-
-export interface FooterProps {
-  copyrightYear?: number
+  isAuthenticated: boolean;
+  onGetStarted: () => void;
+  onLogin: () => void;
 }
