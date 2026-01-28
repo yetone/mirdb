@@ -195,8 +195,14 @@ h1, h2, h3, h4, h5, h6 {
     outline-offset: 2px;
 }
 
+.usage-demo {
+    margin-top: 3rem;
+    text-align: center;
+}
+
 .usage-gif {
-    max-width: 600px;
+    max-width: 100%;
+    width: 600px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
 }
