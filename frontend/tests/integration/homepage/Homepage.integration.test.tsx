@@ -282,8 +282,9 @@ describe('Theme Integration - Homepage elements respond to theme', () => {
     // The base classes (bg-base-100, text-base-content, etc.) automatically
     // adapt their colors based on the data-theme attribute
     // Homepage elements should now be themed differently
-    const navbar = screen.getByRole('navigation');
-    expect(navbar).toBeInTheDocument();
+    // There may be multiple navigation elements (navbar and footer nav)
+    const navElements = screen.getAllByRole('navigation');
+    expect(navElements.length).toBeGreaterThanOrEqual(1);
   });
 });
 
@@ -409,8 +410,9 @@ describe('Theme Integration - Dark theme on homepage', () => {
     const heroHeadline = screen.getByText(/shorten urls\. track every click/i);
     expect(heroHeadline).toBeInTheDocument();
 
-    const navbar = screen.getByRole('navigation');
-    expect(navbar).toBeInTheDocument();
+    // There may be multiple navigation elements (navbar and footer nav)
+    const navElements = screen.getAllByRole('navigation');
+    expect(navElements.length).toBeGreaterThanOrEqual(1);
 
     // Footer should be present
     expect(screen.getByText(/2026 URL Shortener/i)).toBeInTheDocument();
@@ -479,8 +481,9 @@ describe('Theme Integration - Cyberpunk theme on homepage', () => {
     const heroHeadline = screen.getByText(/shorten urls\. track every click/i);
     expect(heroHeadline).toBeInTheDocument();
 
-    const navbar = screen.getByRole('navigation');
-    expect(navbar).toBeInTheDocument();
+    // There may be multiple navigation elements (navbar and footer nav)
+    const navElements = screen.getAllByRole('navigation');
+    expect(navElements.length).toBeGreaterThanOrEqual(1);
   });
 
   // Test Case 7 (variant): Can switch to cyberpunk theme

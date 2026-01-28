@@ -4,15 +4,17 @@ import React from 'react';
 
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => {
-  // Create a generic motion component factory that strips framer-motion props
-  const createMotionComponent = (tag: string) =>
-    React.forwardRef(function MotionComponent(
+  // Helper to create a motion component mock for any HTML element
+  const createMotionComponent = (elementType: string) => {
+    return React.forwardRef(function MotionElement(
       props: React.HTMLAttributes<HTMLElement> & Record<string, unknown>,
       ref: React.Ref<HTMLElement>
     ) {
-      const { initial, animate, exit, whileHover, whileTap, transition, variants, ...rest } = props;
-      return React.createElement(tag, { ...rest, ref });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { initial, animate, exit, whileHover, whileTap, whileInView, transition, variants, ...rest } = props;
+      return React.createElement(elementType, { ...rest, ref });
     });
+  };
 
   return {
     motion: {
@@ -27,10 +29,10 @@ vi.mock('framer-motion', () => {
       footer: createMotionComponent('footer'),
       header: createMotionComponent('header'),
       nav: createMotionComponent('nav'),
+      main: createMotionComponent('main'),
       a: createMotionComponent('a'),
       ul: createMotionComponent('ul'),
       li: createMotionComponent('li'),
-      main: createMotionComponent('main'),
       article: createMotionComponent('article'),
       aside: createMotionComponent('aside'),
     },
