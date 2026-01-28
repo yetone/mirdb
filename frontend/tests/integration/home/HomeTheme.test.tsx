@@ -4,6 +4,7 @@
  *
  * Integration tests for theme support:
  * - Dark mode styling applies correctly (Scenario 9)
+ * - Cyberpunk/synthwave themes work (Scenario 10)
  * - Theme toggle changes appearance
  * - All sections respect theme context
  *
@@ -71,7 +72,7 @@ function ThemeToggler() {
 // Custom render function with theme provider
 function renderWithTheme(ui: React.ReactElement, initialTheme: Theme = 'dark') {
   return render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={['/']}>
       <TestThemeProvider initialTheme={initialTheme}>
         {ui}
       </TestThemeProvider>
@@ -265,6 +266,241 @@ describe('Scenario 9: Theme Support - Dark Mode', () => {
       const featureCard = screen.getByTestId('feature-card-url-shortening')
       const featureDescription = featureCard.querySelector('p')
       expect(featureDescription?.className).toContain('text-base-content')
+    })
+  })
+})
+
+describe('Scenario 10: Theme Support - Alternative Themes', () => {
+  beforeEach(() => {
+    // Clear any previous theme attributes
+    document.documentElement.removeAttribute('data-theme')
+  })
+
+  describe('Test Case 1: Render Home with ThemeContext set to cyberpunk', () => {
+    it('should render homepage with cyberpunk DaisyUI theme colors', () => {
+      renderWithTheme(<Home />, 'cyberpunk')
+
+      // Verify the theme attribute is set on document
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
+
+      // Verify all main sections are rendered
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      expect(screen.getByTestId('footer')).toBeInTheDocument()
+
+      // Verify primary elements use DaisyUI semantic classes (which will apply cyberpunk colors)
+      const heroHeading = screen.getByRole('heading', { level: 1 })
+      expect(heroHeading).toBeInTheDocument()
+
+      // Check for primary/secondary color classes in hero
+      expect(heroHeading.className).toContain('from-primary')
+      expect(heroHeading.className).toContain('to-secondary')
+    })
+
+    it('should apply cyberpunk theme to feature cards', () => {
+      renderWithTheme(<Home />, 'cyberpunk')
+
+      // Feature section should exist with proper theming
+      const featuresSection = screen.getByTestId('features-section')
+      expect(featuresSection).toBeInTheDocument()
+
+      // Feature icons should use primary color class
+      const urlShorteningCard = screen.getByTestId('feature-card-url-shortening')
+      expect(urlShorteningCard).toBeInTheDocument()
+
+      // Icons should have text-primary class (cyberpunk will apply its colors)
+      const urlShorteningIcon = screen.getByTestId('feature-icon-url-shortening')
+      expect(urlShorteningIcon.querySelector('svg')).toHaveClass('text-primary')
+    })
+  })
+
+  describe('Test Case 2: Render Home with ThemeContext set to synthwave', () => {
+    it('should render homepage with synthwave DaisyUI theme colors', () => {
+      renderWithTheme(<Home />, 'synthwave')
+
+      // Verify the theme attribute is set on document
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave')
+
+      // Verify all main sections are rendered
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      expect(screen.getByTestId('footer')).toBeInTheDocument()
+
+      // Verify primary elements use DaisyUI semantic classes
+      const heroHeading = screen.getByRole('heading', { level: 1 })
+      expect(heroHeading).toBeInTheDocument()
+    })
+
+    it('should apply synthwave theme to How It Works section', () => {
+      renderWithTheme(<Home />, 'synthwave')
+
+      // How it works section should exist with proper theming
+      const howItWorksSection = screen.getByTestId('how-it-works-section')
+      expect(howItWorksSection).toBeInTheDocument()
+
+      // Should use base-200 for background (synthwave will apply its colors)
+      expect(howItWorksSection.className).toContain('bg-base-200')
+
+      // Step numbers should use primary colors
+      const stepNumber1 = screen.getByTestId('step-number-1')
+      expect(stepNumber1).toHaveClass('bg-primary')
+      expect(stepNumber1).toHaveClass('text-primary-content')
+    })
+  })
+
+  describe('Test Case 3: Verify theme consistency across all sections with alternate themes', () => {
+    const alternateThemes: Theme[] = ['cyberpunk', 'synthwave']
+
+    alternateThemes.forEach((theme) => {
+      describe(`Theme: ${theme}`, () => {
+        it(`should apply ${theme} theme consistently to Hero section`, () => {
+          renderWithTheme(<Home />, theme)
+
+          expect(document.documentElement.getAttribute('data-theme')).toBe(theme)
+
+          // Hero section uses semantic color classes
+          const hero = screen.getByTestId('hero-section')
+          expect(hero).toBeInTheDocument()
+
+          // Hero description uses base-content color (more specific text to hero)
+          const description = hero.querySelector('p')
+          expect(description).toBeInTheDocument()
+          expect(description?.className).toContain('text-base-content')
+        })
+
+        it(`should apply ${theme} theme consistently to Features section`, () => {
+          renderWithTheme(<Home />, theme)
+
+          const features = screen.getByTestId('features-section')
+          expect(features).toBeInTheDocument()
+
+          // Feature cards should render with proper styling
+          const analyticsCard = screen.getByTestId('feature-card-analytics')
+          expect(analyticsCard).toBeInTheDocument()
+
+          // Feature description uses base-content color
+          const cardDescription = analyticsCard.querySelector('.text-base-content\\/70')
+          expect(cardDescription).toBeInTheDocument()
+        })
+
+        it(`should apply ${theme} theme consistently to How It Works section`, () => {
+          renderWithTheme(<Home />, theme)
+
+          const howItWorks = screen.getByTestId('how-it-works-section')
+          expect(howItWorks).toBeInTheDocument()
+
+          // Background uses base-200 (will apply theme colors)
+          expect(howItWorks.className).toContain('bg-base-200')
+
+          // Step icons use primary color
+          const stepIcon1 = screen.getByTestId('step-icon-1')
+          expect(stepIcon1.className).toContain('bg-primary')
+        })
+
+        it(`should apply ${theme} theme consistently to Footer section`, () => {
+          renderWithTheme(<Home />, theme)
+
+          const footer = screen.getByTestId('footer')
+          expect(footer).toBeInTheDocument()
+
+          // Footer uses base-200 background
+          expect(footer.className).toContain('bg-base-200')
+
+          // Links use base-content colors with hover to primary
+          const homeLink = screen.getByRole('link', { name: 'Home' })
+          expect(homeLink.className).toContain('text-base-content')
+          expect(homeLink.className).toContain('hover:text-primary')
+        })
+      })
+    })
+  })
+
+  describe('Test Case 4: Cycling through available themes - Integration portion', () => {
+    const allThemes: Theme[] = ['light', 'dark', 'cyberpunk', 'synthwave']
+
+    allThemes.forEach((theme) => {
+      it(`should render correctly with ${theme} theme without visual artifacts`, () => {
+        renderWithTheme(<Home />, theme)
+
+        // Verify theme is applied
+        expect(document.documentElement.getAttribute('data-theme')).toBe(theme)
+
+        // Verify all sections render without errors
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+        expect(screen.getByTestId('features-section')).toBeInTheDocument()
+        expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+        expect(screen.getByTestId('footer')).toBeInTheDocument()
+
+        // Verify key content is present
+        expect(screen.getByText('Shorten URLs, Amplify Your Reach')).toBeInTheDocument()
+        expect(screen.getByText('Powerful Features')).toBeInTheDocument()
+        expect(screen.getByText('How It Works')).toBeInTheDocument()
+
+        // Verify navigation links are present and functional
+        expect(screen.getByRole('link', { name: 'Get Started' })).toBeInTheDocument()
+        expect(screen.getByRole('link', { name: 'Log In' })).toBeInTheDocument()
+      })
+
+      it(`should maintain proper semantic structure with ${theme} theme`, () => {
+        renderWithTheme(<Home />, theme)
+
+        // Verify proper heading hierarchy exists
+        const h1 = screen.getByRole('heading', { level: 1 })
+        expect(h1).toBeInTheDocument()
+
+        const h2Elements = screen.getAllByRole('heading', { level: 2 })
+        expect(h2Elements.length).toBeGreaterThanOrEqual(2) // At least Features and How It Works
+
+        // Verify semantic structure
+        const main = document.querySelector('main')
+        expect(main).toBeInTheDocument()
+
+        const footer = screen.getByRole('contentinfo')
+        expect(footer).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('DaisyUI Semantic Color Usage Verification', () => {
+    it('should use DaisyUI semantic color classes throughout the homepage', () => {
+      renderWithTheme(<Home />, 'cyberpunk')
+
+      // Verify Hero section uses semantic colors
+      const heroHeading = screen.getByRole('heading', { level: 1 })
+      expect(heroHeading.className).toMatch(/from-primary/)
+      expect(heroHeading.className).toMatch(/to-secondary/)
+
+      // Verify Hero description uses base-content (get from hero section)
+      const heroSection = screen.getByTestId('hero-section')
+      const heroDescription = heroSection.querySelector('p')
+      expect(heroDescription?.className).toMatch(/text-base-content/)
+
+      // Verify How It Works uses bg-base-200
+      const howItWorks = screen.getByTestId('how-it-works-section')
+      expect(howItWorks.className).toMatch(/bg-base-200/)
+
+      // Verify Footer uses bg-base-200
+      const footer = screen.getByTestId('footer')
+      expect(footer.className).toMatch(/bg-base-200/)
+    })
+
+    it('should have consistent primary color usage across all sections', () => {
+      renderWithTheme(<Home />, 'synthwave')
+
+      // Primary color used in feature icons
+      const urlShorteningIcon = screen.getByTestId('feature-icon-url-shortening')
+      expect(urlShorteningIcon.querySelector('svg')).toHaveClass('text-primary')
+
+      // Primary color used in step numbers
+      const stepNumber1 = screen.getByTestId('step-number-1')
+      expect(stepNumber1).toHaveClass('bg-primary')
+
+      // Primary color used in link hover states (in class definition)
+      const loginFooterLink = screen.getByRole('navigation', { name: 'Footer navigation' })
+        .querySelector('a[href="/login"]')
+      expect(loginFooterLink?.className).toContain('hover:text-primary')
     })
   })
 })
