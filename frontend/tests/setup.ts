@@ -40,6 +40,8 @@ vi.mock('framer-motion', () => ({
       React.createElement('section', filterMotionProps(props)),
     article: (props: Record<string, unknown>) =>
       React.createElement('article', filterMotionProps(props)),
+    li: (props: Record<string, unknown>) =>
+      React.createElement('li', filterMotionProps(props)),
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
 }))

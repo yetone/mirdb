@@ -6,6 +6,6 @@
  */
 export { HeroSection } from './HeroSection'
 export { FeaturesSection } from './FeaturesSection'
+export { HowItWorks } from './HowItWorks'
 // Future exports for other scenarios:
-// export { HowItWorks } from './HowItWorks'
 // export { Footer } from './Footer'
