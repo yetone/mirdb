@@ -208,3 +208,92 @@ describe('Quick Start Installation Section', () => {
     });
   });
 });
+
+describe('GitHub Integration and Status Badges (Scenario 5)', () => {
+    beforeAll(() => {
+        const htmlContent = loadHomepageHTML();
+        document.documentElement.innerHTML = htmlContent;
+    });
+
+    describe('Test Case 1: GitHub link in hero section', () => {
+        test('Link to github.com/yetone/mirdb exists in hero or header area', () => {
+            const heroSection = document.querySelector('#hero');
+            expect(heroSection).not.toBeNull();
+
+            const githubLink = heroSection.querySelector('a[href*="github.com/yetone/mirdb"]');
+            expect(githubLink).not.toBeNull();
+            expect(githubLink.getAttribute('href')).toContain('github.com/yetone/mirdb');
+        });
+    });
+
+    describe('Test Case 2: GitHub link functionality', () => {
+        test('GitHub link has correct href attribute pointing to repository', () => {
+            const githubLinks = document.querySelectorAll('a[href*="github.com/yetone/mirdb"]');
+            expect(githubLinks.length).toBeGreaterThan(0);
+
+            const heroGithubLink = document.querySelector('#hero a[href*="github.com/yetone/mirdb"]');
+            expect(heroGithubLink).not.toBeNull();
+            expect(heroGithubLink.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
+        });
+
+        test('GitHub link opens in appropriate context', () => {
+            const heroGithubLink = document.querySelector('#hero a[href*="github.com/yetone/mirdb"]');
+            expect(heroGithubLink).not.toBeNull();
+            // Link should be accessible and have proper href
+            expect(heroGithubLink.hasAttribute('href')).toBe(true);
+        });
+    });
+
+    describe('Test Case 3: CI status badge', () => {
+        test('CircleCI badge image is present', () => {
+            const circleCIBadge = document.querySelector('img[src*="circleci.com"]');
+            expect(circleCIBadge).not.toBeNull();
+        });
+
+        test('CircleCI badge has correct source URL', () => {
+            const circleCIBadge = document.querySelector('img[src*="circleci.com"]');
+            expect(circleCIBadge).not.toBeNull();
+            expect(circleCIBadge.getAttribute('src')).toContain('circleci.com/gh/yetone/mirdb');
+        });
+
+        test('CircleCI badge has proper alt text', () => {
+            const circleCIBadge = document.querySelector('img[src*="circleci.com"]');
+            expect(circleCIBadge).not.toBeNull();
+            expect(circleCIBadge.getAttribute('alt')).toBeTruthy();
+            expect(circleCIBadge.getAttribute('alt').toLowerCase()).toContain('circleci');
+        });
+    });
+
+    describe('Test Case 5: GitHub link in footer', () => {
+        test('Footer contains link to GitHub repository', () => {
+            const footer = document.querySelector('footer');
+            expect(footer).not.toBeNull();
+
+            const footerGithubLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
+            expect(footerGithubLink).not.toBeNull();
+            expect(footerGithubLink.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
+        });
+
+        test('Footer GitHub link has accessible label', () => {
+            const footer = document.querySelector('footer');
+            const footerGithubLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
+            expect(footerGithubLink).not.toBeNull();
+
+            // Should have either visible text or aria-label
+            const hasAccessibleName = footerGithubLink.textContent.trim().length > 0 ||
+                                     footerGithubLink.getAttribute('aria-label');
+            expect(hasAccessibleName).toBeTruthy();
+        });
+    });
+
+    describe('Badge link functionality', () => {
+        test('CircleCI badge is wrapped in a link to CI dashboard', () => {
+            const circleCIBadge = document.querySelector('img[src*="circleci.com"]');
+            expect(circleCIBadge).not.toBeNull();
+
+            const parentLink = circleCIBadge.closest('a');
+            expect(parentLink).not.toBeNull();
+            expect(parentLink.getAttribute('href')).toContain('circleci.com/gh/yetone/mirdb');
+        });
+    });
+});

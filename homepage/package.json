@@ -9,9 +9,10 @@
     "serve": "npx serve -l 3000 ."
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "@playwright/test": "^1.40.0",
+    "jsdom": "^27.4.0",
     "serve": "^14.2.0"
   },
   "engines": {

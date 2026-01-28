@@ -12,5 +12,11 @@ module.exports = {
     collectCoverageFrom: [
         'scripts/**/*.js',
         '!**/node_modules/**'
-    ]
+    ],
+    transformIgnorePatterns: [
+        'node_modules/(?!(@exodus/bytes)/)'
+    ],
+    moduleNameMapper: {
+        '^@exodus/bytes$': '<rootDir>/tests/setup/__mocks__/exodus-bytes.js'
+    }
 };
