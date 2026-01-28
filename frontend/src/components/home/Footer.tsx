@@ -25,25 +25,25 @@ export function Footer() {
         >
           <Link
             to="/"
-            className="link link-hover text-base-content/70 hover:text-primary transition-colors"
+            className="link link-hover text-base-content/80 hover:text-primary transition-colors"
           >
             Home
           </Link>
           <Link
             to="/login"
-            className="link link-hover text-base-content/70 hover:text-primary transition-colors"
+            className="link link-hover text-base-content/80 hover:text-primary transition-colors"
           >
             Login
           </Link>
           <Link
             to="/register"
-            className="link link-hover text-base-content/70 hover:text-primary transition-colors"
+            className="link link-hover text-base-content/80 hover:text-primary transition-colors"
           >
             Register
           </Link>
         </nav>
 
-        <div className="text-center text-base-content/60 text-sm">
+        <div className="text-center text-base-content/80 text-sm">
           <p>&copy; {currentYear} URL Shortener. All rights reserved.</p>
         </div>
       </div>
