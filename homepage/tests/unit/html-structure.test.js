@@ -18,6 +18,9 @@
 
 const { loadHomepageHTML } = require('../setup/test-utils');
 
+/**
+ * Scenario 4: Quick Start Installation Section Tests
+ */
 describe('Quick Start Installation Section', () => {
   beforeEach(() => {
     // Load the homepage HTML into JSDOM (uses global document from jsdom environment)
@@ -209,91 +212,160 @@ describe('Quick Start Installation Section', () => {
   });
 });
 
-describe('GitHub Integration and Status Badges (Scenario 5)', () => {
-    beforeAll(() => {
-        const htmlContent = loadHomepageHTML();
-        document.documentElement.innerHTML = htmlContent;
+/**
+ * Scenario 5: GitHub Integration and Status Badges Tests
+ */
+describe('GitHub Integration and Status Badges', () => {
+  beforeEach(() => {
+    const html = loadHomepageHTML();
+    document.body.innerHTML = html;
+  });
+
+  describe('TC1: GitHub link in hero/header area', () => {
+    test('Link to github.com/yetone/mirdb exists in hero or header area', () => {
+      // Check for GitHub link in hero section
+      const heroSection = document.querySelector('#hero');
+      expect(heroSection).toBeTruthy();
+
+      const githubLinks = heroSection.querySelectorAll('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLinks.length).toBeGreaterThan(0);
     });
 
-    describe('Test Case 1: GitHub link in hero section', () => {
-        test('Link to github.com/yetone/mirdb exists in hero or header area', () => {
-            const heroSection = document.querySelector('#hero');
-            expect(heroSection).not.toBeNull();
+    test('GitHub link is prominent (in hero CTAs)', () => {
+      const heroCtaContainer = document.querySelector('.hero-ctas');
+      expect(heroCtaContainer).toBeTruthy();
 
-            const githubLink = heroSection.querySelector('a[href*="github.com/yetone/mirdb"]');
-            expect(githubLink).not.toBeNull();
-            expect(githubLink.getAttribute('href')).toContain('github.com/yetone/mirdb');
-        });
+      const githubLink = heroCtaContainer.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLink).toBeTruthy();
+    });
+  });
+
+  describe('TC2: GitHub link has correct href attribute', () => {
+    test('GitHub link points to correct repository URL', () => {
+      const githubLinks = document.querySelectorAll('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLinks.length).toBeGreaterThan(0);
+
+      // Check that at least one link has the exact URL
+      const hasCorrectUrl = Array.from(githubLinks).some(link => {
+        const href = link.getAttribute('href');
+        return href === 'https://github.com/yetone/mirdb';
+      });
+      expect(hasCorrectUrl).toBe(true);
     });
 
-    describe('Test Case 2: GitHub link functionality', () => {
-        test('GitHub link has correct href attribute pointing to repository', () => {
-            const githubLinks = document.querySelectorAll('a[href*="github.com/yetone/mirdb"]');
-            expect(githubLinks.length).toBeGreaterThan(0);
+    test('Hero GitHub link is functional (has valid href)', () => {
+      const heroGithubLink = document.querySelector('#hero a[href*="github.com"]');
+      expect(heroGithubLink).toBeTruthy();
 
-            const heroGithubLink = document.querySelector('#hero a[href*="github.com/yetone/mirdb"]');
-            expect(heroGithubLink).not.toBeNull();
-            expect(heroGithubLink.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
-        });
-
-        test('GitHub link opens in appropriate context', () => {
-            const heroGithubLink = document.querySelector('#hero a[href*="github.com/yetone/mirdb"]');
-            expect(heroGithubLink).not.toBeNull();
-            // Link should be accessible and have proper href
-            expect(heroGithubLink.hasAttribute('href')).toBe(true);
-        });
+      const href = heroGithubLink.getAttribute('href');
+      expect(href).toBeTruthy();
+      expect(href).toMatch(/^https?:\/\/github\.com\/yetone\/mirdb$/);
     });
 
-    describe('Test Case 3: CI status badge', () => {
-        test('CircleCI badge image is present', () => {
-            const circleCIBadge = document.querySelector('img[src*="circleci.com"]');
-            expect(circleCIBadge).not.toBeNull();
-        });
+    test('GitHub link opens in appropriate context', () => {
+      const heroGithubLink = document.querySelector('#hero a[href*="github.com/yetone/mirdb"]');
+      expect(heroGithubLink).not.toBeNull();
+      // Link should be accessible and have proper href
+      expect(heroGithubLink.hasAttribute('href')).toBe(true);
+    });
+  });
 
-        test('CircleCI badge has correct source URL', () => {
-            const circleCIBadge = document.querySelector('img[src*="circleci.com"]');
-            expect(circleCIBadge).not.toBeNull();
-            expect(circleCIBadge.getAttribute('src')).toContain('circleci.com/gh/yetone/mirdb');
-        });
-
-        test('CircleCI badge has proper alt text', () => {
-            const circleCIBadge = document.querySelector('img[src*="circleci.com"]');
-            expect(circleCIBadge).not.toBeNull();
-            expect(circleCIBadge.getAttribute('alt')).toBeTruthy();
-            expect(circleCIBadge.getAttribute('alt').toLowerCase()).toContain('circleci');
-        });
+  describe('TC3: CircleCI status badge', () => {
+    test('CircleCI badge image is present', () => {
+      const badgeImage = document.querySelector('img[src*="circleci"]');
+      expect(badgeImage).toBeTruthy();
     });
 
-    describe('Test Case 5: GitHub link in footer', () => {
-        test('Footer contains link to GitHub repository', () => {
-            const footer = document.querySelector('footer');
-            expect(footer).not.toBeNull();
+    test('CircleCI badge has correct src URL', () => {
+      const badgeImage = document.querySelector('img[src*="circleci"]');
+      expect(badgeImage).toBeTruthy();
 
-            const footerGithubLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
-            expect(footerGithubLink).not.toBeNull();
-            expect(footerGithubLink.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
-        });
-
-        test('Footer GitHub link has accessible label', () => {
-            const footer = document.querySelector('footer');
-            const footerGithubLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
-            expect(footerGithubLink).not.toBeNull();
-
-            // Should have either visible text or aria-label
-            const hasAccessibleName = footerGithubLink.textContent.trim().length > 0 ||
-                                     footerGithubLink.getAttribute('aria-label');
-            expect(hasAccessibleName).toBeTruthy();
-        });
+      const src = badgeImage.getAttribute('src');
+      expect(src).toContain('circleci.com/gh/yetone/mirdb');
     });
 
-    describe('Badge link functionality', () => {
-        test('CircleCI badge is wrapped in a link to CI dashboard', () => {
-            const circleCIBadge = document.querySelector('img[src*="circleci.com"]');
-            expect(circleCIBadge).not.toBeNull();
+    test('CircleCI badge has alt text for accessibility', () => {
+      const badgeImage = document.querySelector('img[src*="circleci"]');
+      expect(badgeImage).toBeTruthy();
 
-            const parentLink = circleCIBadge.closest('a');
-            expect(parentLink).not.toBeNull();
-            expect(parentLink.getAttribute('href')).toContain('circleci.com/gh/yetone/mirdb');
-        });
+      const altText = badgeImage.getAttribute('alt');
+      expect(altText).toBeTruthy();
+      expect(altText.toLowerCase()).toMatch(/circleci|build|status/);
     });
+
+    test('CircleCI badge uses shield style', () => {
+      const badgeImage = document.querySelector('img[src*="circleci"]');
+      expect(badgeImage).toBeTruthy();
+
+      const src = badgeImage.getAttribute('src');
+      expect(src).toContain('style=shield');
+    });
+  });
+
+  describe('TC5: GitHub link in footer', () => {
+    test('Footer contains link to GitHub repository', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      const githubLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLink).toBeTruthy();
+    });
+
+    test('Footer GitHub link has correct href', () => {
+      const footer = document.querySelector('footer');
+      const githubLink = footer.querySelector('a[href*="github.com"]');
+      expect(githubLink).toBeTruthy();
+
+      const href = githubLink.getAttribute('href');
+      expect(href).toBe('https://github.com/yetone/mirdb');
+    });
+
+    test('Footer GitHub link is accessible (has aria-label)', () => {
+      const footer = document.querySelector('footer');
+      const githubLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLink).toBeTruthy();
+
+      const ariaLabel = githubLink.getAttribute('aria-label');
+      expect(ariaLabel).toBeTruthy();
+      expect(ariaLabel.toLowerCase()).toMatch(/github/);
+    });
+
+    test('Footer GitHub link has accessible name', () => {
+      const footer = document.querySelector('footer');
+      const footerGithubLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(footerGithubLink).not.toBeNull();
+
+      // Should have either visible text or aria-label
+      const hasAccessibleName = footerGithubLink.textContent.trim().length > 0 ||
+                               footerGithubLink.getAttribute('aria-label');
+      expect(hasAccessibleName).toBeTruthy();
+    });
+  });
+
+  describe('Badge container and placement', () => {
+    test('CI badge is in footer section', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      const badgeImage = footer.querySelector('img[src*="circleci"]');
+      expect(badgeImage).toBeTruthy();
+    });
+
+    test('CI badge is wrapped in a link to CircleCI', () => {
+      const badgeLink = document.querySelector('a[href*="circleci.com"]');
+      expect(badgeLink).toBeTruthy();
+
+      const badgeImage = badgeLink.querySelector('img[src*="circleci"]');
+      expect(badgeImage).toBeTruthy();
+    });
+
+    test('CircleCI badge link points to CI dashboard', () => {
+      const circleCIBadge = document.querySelector('img[src*="circleci.com"]');
+      expect(circleCIBadge).not.toBeNull();
+
+      const parentLink = circleCIBadge.closest('a');
+      expect(parentLink).not.toBeNull();
+      expect(parentLink.getAttribute('href')).toContain('circleci.com/gh/yetone/mirdb');
+    });
+  });
 });
