@@ -17,7 +17,10 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="navbar bg-base-100/80 backdrop-blur-md border-b border-base-content/10 sticky top-0 z-50">
+    <nav
+      className="navbar bg-base-100/80 backdrop-blur-md border-b border-base-content/10 sticky top-0 z-50"
+      aria-label="Main navigation"
+    >
       <div className="container mx-auto px-4">
         <div className="flex-1">
           <Link
