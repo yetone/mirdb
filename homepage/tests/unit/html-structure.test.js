@@ -369,3 +369,177 @@ describe('GitHub Integration and Status Badges', () => {
     });
   });
 });
+
+/**
+ * Scenario 13: Footer Section Tests
+ */
+describe('Footer Section', () => {
+  beforeEach(() => {
+    const html = loadHomepageHTML();
+    document.body.innerHTML = html;
+  });
+
+  describe('TC1: Semantic footer element exists at bottom of page', () => {
+    test('Page contains a semantic footer element', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+    });
+
+    test('Footer uses semantic HTML5 footer tag', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+      expect(footer.tagName.toLowerCase()).toBe('footer');
+    });
+
+    test('Footer has appropriate role attribute for accessibility', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      // Footer should have contentinfo role (explicit or implicit)
+      const role = footer.getAttribute('role');
+      // HTML5 footer elements have implicit contentinfo role when used at top level
+      // Explicit role is optional but can be 'contentinfo'
+      if (role) {
+        expect(role).toBe('contentinfo');
+      }
+      // If no explicit role, the implicit role is contentinfo (valid)
+    });
+
+    test('Footer has a class for styling', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      // Footer should have a class (e.g., 'footer' for CSS styling)
+      expect(footer.classList.length).toBeGreaterThan(0);
+    });
+
+    test('Footer is the last major content element in body', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      // Footer should not be followed by any other main content sections
+      const nextElement = footer.nextElementSibling;
+      // Footer should either be last element or only followed by scripts
+      if (nextElement) {
+        expect(nextElement.tagName.toLowerCase()).toBe('script');
+      }
+    });
+  });
+
+  describe('TC2: Footer contains link to GitHub repository', () => {
+    test('Footer contains a GitHub link', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      const githubLink = footer.querySelector('a[href*="github.com"]');
+      expect(githubLink).toBeTruthy();
+    });
+
+    test('GitHub link in footer points to the correct repository', () => {
+      const footer = document.querySelector('footer');
+      const githubLink = footer.querySelector('a[href*="github.com"]');
+      expect(githubLink).toBeTruthy();
+
+      const href = githubLink.getAttribute('href');
+      expect(href).toBe('https://github.com/yetone/mirdb');
+    });
+
+    test('GitHub link has accessible name or text', () => {
+      const footer = document.querySelector('footer');
+      const githubLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLink).toBeTruthy();
+
+      // Link should have text content or aria-label for accessibility
+      const hasText = githubLink.textContent.trim().length > 0;
+      const hasAriaLabel = githubLink.hasAttribute('aria-label');
+      expect(hasText || hasAriaLabel).toBe(true);
+    });
+
+    test('GitHub link text mentions GitHub', () => {
+      const footer = document.querySelector('footer');
+      const githubLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLink).toBeTruthy();
+
+      const textContent = githubLink.textContent.toLowerCase();
+      const ariaLabel = (githubLink.getAttribute('aria-label') || '').toLowerCase();
+
+      expect(textContent.includes('github') || ariaLabel.includes('github')).toBe(true);
+    });
+  });
+
+  describe('TC3: Footer displays license type or links to license', () => {
+    test('Footer contains license information', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      const footerText = footer.textContent.toLowerCase();
+
+      // Check for common license mentions
+      const hasLicenseInfo =
+        footerText.includes('license') ||
+        footerText.includes('mit') ||
+        footerText.includes('apache') ||
+        footerText.includes('bsd') ||
+        footerText.includes('gpl');
+
+      expect(hasLicenseInfo).toBe(true);
+    });
+
+    test('License is MIT license', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      const footerText = footer.textContent.toLowerCase();
+      expect(footerText).toContain('mit');
+    });
+
+    test('License information is visible (not hidden)', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      // Find the element containing the license text
+      const footerContent = footer.querySelector('.footer-links, .footer-content');
+      expect(footerContent).toBeTruthy();
+
+      const licenseText = footerContent.textContent;
+      expect(licenseText.toLowerCase()).toContain('mit');
+    });
+  });
+
+  describe('Footer structure and content organization', () => {
+    test('Footer has a content container for layout', () => {
+      const footer = document.querySelector('footer');
+      expect(footer).toBeTruthy();
+
+      const contentContainer = footer.querySelector('.footer-content');
+      expect(contentContainer).toBeTruthy();
+    });
+
+    test('Footer links are grouped together', () => {
+      const footer = document.querySelector('footer');
+      const linksContainer = footer.querySelector('.footer-links');
+      expect(linksContainer).toBeTruthy();
+    });
+
+    test('Footer contains CI badge section', () => {
+      const footer = document.querySelector('footer');
+      const badgeSection = footer.querySelector('.footer-badge');
+      expect(badgeSection).toBeTruthy();
+    });
+
+    test('CI badge image is present in footer', () => {
+      const footer = document.querySelector('footer');
+      const badgeImage = footer.querySelector('img[src*="circleci"]');
+      expect(badgeImage).toBeTruthy();
+    });
+
+    test('CI badge is wrapped in a link', () => {
+      const footer = document.querySelector('footer');
+      const badgeLink = footer.querySelector('a[href*="circleci"]');
+      expect(badgeLink).toBeTruthy();
+
+      const badgeImage = badgeLink.querySelector('img');
+      expect(badgeImage).toBeTruthy();
+    });
+  });
+});
