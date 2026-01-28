@@ -24,8 +24,8 @@ function initCopyButtons() {
 
     copyButtons.forEach(function(button) {
         button.addEventListener('click', function() {
-            const codeBlock = this.closest('.code-block');
-            const code = codeBlock.querySelector('code');
+            const codeContainer = this.closest('.code-container');
+            const code = codeContainer.querySelector('code');
             const text = code.textContent;
 
             navigator.clipboard.writeText(text).then(function() {
