@@ -23,3 +23,15 @@ export interface HeroProps {
   onGetStarted: () => void;
   onLogin: () => void;
 }
+
+export interface FeaturesSectionProps {
+  features?: Feature[];
+}
+
+export interface HowItWorksSectionProps {
+  steps?: HowItWorksStep[];
+}
+
+export interface FooterProps {
+  copyrightYear?: number;
+}
