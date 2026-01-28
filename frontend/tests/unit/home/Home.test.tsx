@@ -199,3 +199,197 @@ describe('Home Page - Accessibility Semantic HTML', () => {
     })
   })
 })
+
+/**
+ * Home Page Unit Tests - Component Integration
+ * Owner: Scenario 15 - Component Integration - Existing UI Library
+ *
+ * Tests for verifying that homepage correctly integrates existing UI components:
+ * - BackgroundEffect for visual effects
+ * - GlassMorphismCard for feature cards
+ * - FuturisticButton for CTA buttons
+ * - ThemeToggle for theme switching
+ * - Navbar for navigation
+ */
+describe('Home Page - Component Integration', () => {
+  describe('Test Case 1: BackgroundEffect Integration', () => {
+    it('should render BackgroundEffect component for visual effects', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // BackgroundEffect renders a fixed div with gradient backgrounds
+      const backgroundEffect = container.querySelector('.fixed.inset-0.-z-10')
+      expect(backgroundEffect).toBeInTheDocument()
+
+      // Should have gradient backgrounds
+      const gradients = container.querySelectorAll('[class*="bg-gradient"]')
+      expect(gradients.length).toBeGreaterThan(0)
+    })
+
+    it('should have visual effects with proper z-index layering', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Background should be behind content with negative z-index
+      const backgroundLayer = container.querySelector('.-z-10')
+      expect(backgroundLayer).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 2: GlassMorphismCard Usage in Features Section', () => {
+    it('should use GlassMorphismCard components for feature cards', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // GlassMorphismCard adds card with glass effect classes
+      const glassCards = container.querySelectorAll('.card.bg-base-100\\/80.backdrop-blur-sm')
+      expect(glassCards.length).toBeGreaterThanOrEqual(3)
+    })
+
+    it('should have glass effect styling on feature cards', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // Each feature card should have the glass morphism styling
+      const featureSection = container.querySelector('[data-testid="features-section"]')
+      expect(featureSection).toBeInTheDocument()
+
+      // Check for backdrop-blur effect which is characteristic of GlassMorphismCard
+      const backdropBlurElements = featureSection?.querySelectorAll('.backdrop-blur-sm')
+      expect(backdropBlurElements?.length).toBeGreaterThanOrEqual(3)
+    })
+
+    it('should have shadow and border styling from GlassMorphismCard', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // GlassMorphismCard adds shadow-xl and border styling
+      const cardsWithShadow = container.querySelectorAll('.shadow-xl.border')
+      expect(cardsWithShadow.length).toBeGreaterThanOrEqual(3)
+    })
+  })
+
+  describe('Test Case 3: FuturisticButton Usage in CTAs', () => {
+    it('should use FuturisticButton components for CTA buttons', () => {
+      renderWithProviders(<Home />)
+
+      // CTA buttons should be present
+      const getStartedButton = screen.getByRole('button', { name: /get started/i })
+      const loginButton = screen.getByRole('button', { name: /log in/i })
+
+      expect(getStartedButton).toBeInTheDocument()
+      expect(loginButton).toBeInTheDocument()
+    })
+
+    it('should have FuturisticButton styling classes', () => {
+      renderWithProviders(<Home />)
+
+      const getStartedButton = screen.getByRole('button', { name: /get started/i })
+
+      // FuturisticButton adds btn base class and variant classes
+      expect(getStartedButton).toHaveClass('btn')
+      expect(getStartedButton).toHaveClass('btn-primary')
+    })
+
+    it('should have primary and ghost variants for different CTAs', () => {
+      renderWithProviders(<Home />)
+
+      const primaryButton = screen.getByRole('button', { name: /get started/i })
+      const ghostButton = screen.getByRole('button', { name: /log in/i })
+
+      // Primary CTA should have btn-primary
+      expect(primaryButton).toHaveClass('btn-primary')
+
+      // Secondary CTA should have btn-ghost
+      expect(ghostButton).toHaveClass('btn-ghost')
+    })
+
+    it('should have proper size classes for CTA buttons', () => {
+      renderWithProviders(<Home />)
+
+      const getStartedButton = screen.getByRole('button', { name: /get started/i })
+
+      // FuturisticButton with size="lg" adds btn-lg class
+      expect(getStartedButton).toHaveClass('btn-lg')
+    })
+  })
+
+  describe('Test Case 4: ThemeToggle Accessibility', () => {
+    it('should have ThemeToggle accessible from navbar', () => {
+      renderWithProviders(<Home />)
+
+      // ThemeToggle should be present and accessible
+      const themeButton = screen.getByRole('button', { name: /theme/i })
+      expect(themeButton).toBeInTheDocument()
+    })
+
+    it('should have theme dropdown menu accessible', () => {
+      const { container } = renderWithProviders(<Home />)
+
+      // ThemeToggle renders a dropdown
+      const dropdown = container.querySelector('.dropdown')
+      expect(dropdown).toBeInTheDocument()
+    })
+
+    it('should have theme options available', () => {
+      renderWithProviders(<Home />)
+
+      // Theme toggle button should be present
+      const themeToggle = screen.getByRole('button', { name: /theme/i })
+      expect(themeToggle).toBeInTheDocument()
+
+      // Theme options should be in the document (in dropdown menu)
+      expect(screen.getByText('Light')).toBeInTheDocument()
+      expect(screen.getByText('Dark')).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 5: Navbar Integration', () => {
+    it('should render Navbar component on homepage', () => {
+      renderWithProviders(<Home />)
+
+      const navbar = screen.getByTestId('navbar')
+      expect(navbar).toBeInTheDocument()
+    })
+
+    it('should have navigation links in navbar', () => {
+      renderWithProviders(<Home />)
+
+      // Navbar should have navigation role with main navigation label
+      const mainNav = screen.getByRole('navigation', { name: /main navigation/i })
+      expect(mainNav).toBeInTheDocument()
+
+      // Should have login and sign up links
+      const loginLink = within(mainNav).getByRole('link', { name: /log in/i })
+      const signUpLink = within(mainNav).getByRole('link', { name: /sign up/i })
+
+      expect(loginLink).toBeInTheDocument()
+      expect(signUpLink).toBeInTheDocument()
+    })
+
+    it('should have brand link to homepage', () => {
+      renderWithProviders(<Home />)
+
+      const navbar = screen.getByTestId('navbar')
+      const brandLink = within(navbar).getByRole('link', { name: /url shortener/i })
+
+      expect(brandLink).toBeInTheDocument()
+      expect(brandLink).toHaveAttribute('href', '/')
+    })
+
+    it('should include ThemeToggle within navbar', () => {
+      renderWithProviders(<Home />)
+
+      const navbar = screen.getByTestId('navbar')
+      const themeToggle = within(navbar).getByRole('button', { name: /theme/i })
+
+      expect(themeToggle).toBeInTheDocument()
+    })
+
+    it('should have proper navigation link targets', () => {
+      renderWithProviders(<Home />)
+
+      const navbar = screen.getByTestId('navbar')
+      const loginLink = within(navbar).getByRole('link', { name: /log in/i })
+      const signUpLink = within(navbar).getByRole('link', { name: /sign up/i })
+
+      expect(loginLink).toHaveAttribute('href', '/login')
+      expect(signUpLink).toHaveAttribute('href', '/register')
+    })
+  })
+})

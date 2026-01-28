@@ -3,11 +3,25 @@
  * Owner: Scenario 15 - Component Integration
  *
  * This is the primary homepage component that composes all sections.
- * Currently includes HeroSection. Other sections will be added by their respective scenarios.
+ *
+ * Expected exports:
+ * - Home: React.FC - Main homepage component
+ *
+ * Required sections:
+ * - HeroSection: Headline, description, and CTAs
+ * - FeaturesSection: Three feature cards
+ * - HowItWorks: Three-step process
+ * - Footer: Navigation links and copyright
+ *
+ * Integration points:
+ * - Uses ThemeContext for theme support
+ * - Uses React Router for navigation (Link components)
+ * - Uses existing components: BackgroundEffect, GlassMorphismCard, FuturisticButton, Navbar, ThemeToggle
  *
  * Accessibility: Skip-to-content link added by Scenario 12 for keyboard navigation.
  */
 import { BackgroundEffect } from '../components/BackgroundEffect'
+import { Navbar } from '../components/Navbar'
 import { HeroSection, FeaturesSection, HowItWorks, Footer } from '../components/home'
 
 export default function Home() {
@@ -20,6 +34,7 @@ export default function Home() {
       >
         Skip to main content
       </a>
+      <Navbar />
       <main id="main-content" className="relative flex-grow" tabIndex={-1}>
         <BackgroundEffect />
         <HeroSection />
