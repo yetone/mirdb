@@ -95,3 +95,104 @@ test.describe('Hero Section Display', () => {
     await expect(primaryCTA).toBeFocused();
   });
 });
+
+/**
+ * Scenario 15: Usage GIF Display E2E Tests
+ * Tests for usage demonstration GIF loading and visibility
+ */
+test.describe('Usage GIF Display', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC3: Check usage GIF loads without error', async ({ page }) => {
+    // Wait for the usage GIF to be present in DOM
+    const usageGif = page.locator('#usage-gif');
+    await expect(usageGif).toBeAttached();
+
+    // Check that the image loads successfully (no 404)
+    const gifSrc = await usageGif.getAttribute('src');
+    expect(gifSrc).toContain('usage.gif');
+
+    // Verify the image loads by checking natural dimensions
+    const loadState = await usageGif.evaluate((img) => {
+      return new Promise((resolve) => {
+        if (img.complete) {
+          resolve({
+            complete: true,
+            naturalWidth: img.naturalWidth,
+            naturalHeight: img.naturalHeight
+          });
+        } else {
+          img.onload = () => resolve({
+            complete: true,
+            naturalWidth: img.naturalWidth,
+            naturalHeight: img.naturalHeight
+          });
+          img.onerror = () => resolve({ complete: false, error: true });
+        }
+      });
+    });
+
+    expect(loadState.complete).toBe(true);
+    expect(loadState.naturalWidth).toBeGreaterThan(0);
+    expect(loadState.naturalHeight).toBeGreaterThan(0);
+  });
+
+  test('TC4: Verify GIF is visible in viewport', async ({ page }) => {
+    // Navigate to the usage demo section
+    const usageDemoSection = page.locator('#usage-demo');
+    await usageDemoSection.scrollIntoViewIfNeeded();
+
+    // Verify the section is in viewport
+    await expect(usageDemoSection).toBeInViewport();
+
+    // Verify the GIF within the section is visible
+    const usageGif = page.locator('#usage-gif');
+    await expect(usageGif).toBeVisible();
+    await expect(usageGif).toBeInViewport();
+  });
+
+  test('Usage demonstration section has proper heading', async ({ page }) => {
+    const usageDemoSection = page.locator('#usage-demo');
+    await expect(usageDemoSection).toBeVisible();
+
+    const heading = usageDemoSection.locator('h2');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText('See It In Action');
+  });
+
+  test('Usage GIF has appropriate alt text for accessibility', async ({ page }) => {
+    const usageGif = page.locator('#usage-gif');
+    await expect(usageGif).toBeAttached();
+
+    const altText = await usageGif.getAttribute('alt');
+    expect(altText).toBeTruthy();
+    expect(altText.length).toBeGreaterThan(10);
+    expect(altText.toLowerCase()).toMatch(/usage|demonstration|demo|mirdb/);
+  });
+
+  test('Usage GIF container has proper styling', async ({ page }) => {
+    const usageGif = page.locator('#usage-gif');
+    await expect(usageGif).toBeVisible();
+
+    // Check that the GIF has the usage-gif class for styling
+    await expect(usageGif).toHaveClass(/usage-gif/);
+  });
+
+  test('Usage demo section is accessible via scrolling', async ({ page }) => {
+    // Start at top of page
+    await page.evaluate(() => window.scrollTo(0, 0));
+
+    // Scroll down to find the usage demo section
+    const usageDemoSection = page.locator('#usage-demo');
+
+    // The section should become visible when scrolling through the page
+    await usageDemoSection.scrollIntoViewIfNeeded();
+    await expect(usageDemoSection).toBeInViewport();
+
+    // The GIF should be visible within the section
+    const usageGif = usageDemoSection.locator('.usage-gif');
+    await expect(usageGif).toBeVisible();
+  });
+});
