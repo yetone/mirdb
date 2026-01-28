@@ -543,3 +543,218 @@ describe('Footer Section', () => {
     });
   });
 });
+
+/**
+ * Scenario 16: Static File Structure Validation Tests
+ */
+const fs = require('fs');
+const path = require('path');
+
+describe('Static File Structure Validation', () => {
+  const homepageDir = path.join(__dirname, '../..');
+
+  describe('TC1: index.html file exists', () => {
+    test('index.html exists in the homepage directory', () => {
+      const indexPath = path.join(homepageDir, 'index.html');
+      expect(fs.existsSync(indexPath)).toBe(true);
+    });
+
+    test('index.html is a valid file (not empty)', () => {
+      const indexPath = path.join(homepageDir, 'index.html');
+      const stats = fs.statSync(indexPath);
+      expect(stats.size).toBeGreaterThan(0);
+    });
+
+    test('index.html contains DOCTYPE declaration', () => {
+      const indexPath = path.join(homepageDir, 'index.html');
+      const content = fs.readFileSync(indexPath, 'utf-8');
+      expect(content.trim().toLowerCase().startsWith('<!doctype html>')).toBe(true);
+    });
+  });
+
+  describe('TC2: main.css file exists', () => {
+    test('styles/main.css exists in the homepage directory', () => {
+      const cssPath = path.join(homepageDir, 'styles', 'main.css');
+      expect(fs.existsSync(cssPath)).toBe(true);
+    });
+
+    test('main.css is a valid file (not empty)', () => {
+      const cssPath = path.join(homepageDir, 'styles', 'main.css');
+      const stats = fs.statSync(cssPath);
+      expect(stats.size).toBeGreaterThan(0);
+    });
+
+    test('main.css contains CSS rules', () => {
+      const cssPath = path.join(homepageDir, 'styles', 'main.css');
+      const content = fs.readFileSync(cssPath, 'utf-8');
+      // Check for CSS selectors (contains { and })
+      expect(content).toMatch(/\{[\s\S]*\}/);
+    });
+  });
+
+  describe('TC3: main.js file exists', () => {
+    test('scripts/main.js exists in the homepage directory', () => {
+      const jsPath = path.join(homepageDir, 'scripts', 'main.js');
+      expect(fs.existsSync(jsPath)).toBe(true);
+    });
+
+    test('main.js is a valid file (not empty)', () => {
+      const jsPath = path.join(homepageDir, 'scripts', 'main.js');
+      const stats = fs.statSync(jsPath);
+      expect(stats.size).toBeGreaterThan(0);
+    });
+
+    test('main.js contains JavaScript code', () => {
+      const jsPath = path.join(homepageDir, 'scripts', 'main.js');
+      const content = fs.readFileSync(jsPath, 'utf-8');
+      // Check for JavaScript patterns (function declarations or DOMContentLoaded)
+      expect(content).toMatch(/function|addEventListener|const|let|var/);
+    });
+  });
+
+  describe('TC4: HTML syntax validation', () => {
+    let htmlContent;
+
+    beforeAll(() => {
+      const indexPath = path.join(homepageDir, 'index.html');
+      htmlContent = fs.readFileSync(indexPath, 'utf-8');
+    });
+
+    test('HTML has proper html root element', () => {
+      expect(htmlContent).toMatch(/<html[^>]*>/i);
+      expect(htmlContent).toMatch(/<\/html>/i);
+    });
+
+    test('HTML has proper head element', () => {
+      expect(htmlContent).toMatch(/<head[^>]*>/i);
+      expect(htmlContent).toMatch(/<\/head>/i);
+    });
+
+    test('HTML has proper body element', () => {
+      expect(htmlContent).toMatch(/<body[^>]*>/i);
+      expect(htmlContent).toMatch(/<\/body>/i);
+    });
+
+    test('HTML has lang attribute on html element', () => {
+      expect(htmlContent).toMatch(/<html[^>]*lang=["'][a-z]{2}["'][^>]*>/i);
+    });
+
+    test('HTML has charset meta tag', () => {
+      expect(htmlContent).toMatch(/<meta[^>]*charset=["']?utf-8["']?[^>]*>/i);
+    });
+
+    test('HTML has viewport meta tag', () => {
+      expect(htmlContent).toMatch(/<meta[^>]*name=["']viewport["'][^>]*>/i);
+    });
+
+    test('HTML has title element', () => {
+      expect(htmlContent).toMatch(/<title>[^<]+<\/title>/i);
+    });
+
+    test('All opened tags have corresponding closing tags for major elements', () => {
+      // Check major structural elements are properly closed
+      const majorTags = ['html', 'head', 'body', 'section', 'footer'];
+      majorTags.forEach(tag => {
+        const openCount = (htmlContent.match(new RegExp(`<${tag}[^>]*>`, 'gi')) || []).length;
+        const closeCount = (htmlContent.match(new RegExp(`</${tag}>`, 'gi')) || []).length;
+        expect(openCount).toBe(closeCount);
+      });
+    });
+  });
+
+  describe('TC5: CSS is linked correctly in HTML head', () => {
+    let htmlContent;
+
+    beforeAll(() => {
+      const indexPath = path.join(homepageDir, 'index.html');
+      htmlContent = fs.readFileSync(indexPath, 'utf-8');
+    });
+
+    test('CSS file is linked with link element', () => {
+      expect(htmlContent).toMatch(/<link[^>]*rel=["']stylesheet["'][^>]*>/i);
+    });
+
+    test('main.css is linked in the HTML', () => {
+      expect(htmlContent).toMatch(/<link[^>]*href=["'][^"']*main\.css["'][^>]*>/i);
+    });
+
+    test('CSS link is in the head section', () => {
+      const headMatch = htmlContent.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
+      expect(headMatch).toBeTruthy();
+      const headContent = headMatch[1];
+      expect(headContent).toMatch(/<link[^>]*href=["'][^"']*main\.css["'][^>]*>/i);
+    });
+
+    test('CSS link has correct rel attribute', () => {
+      const cssLinkMatch = htmlContent.match(/<link[^>]*href=["'][^"']*main\.css["'][^>]*/i);
+      expect(cssLinkMatch).toBeTruthy();
+      expect(cssLinkMatch[0]).toMatch(/rel=["']stylesheet["']/i);
+    });
+  });
+
+  describe('TC6: JS is linked correctly', () => {
+    let htmlContent;
+
+    beforeAll(() => {
+      const indexPath = path.join(homepageDir, 'index.html');
+      htmlContent = fs.readFileSync(indexPath, 'utf-8');
+    });
+
+    test('main.js is linked in the HTML', () => {
+      expect(htmlContent).toMatch(/<script[^>]*src=["'][^"']*main\.js["'][^>]*>/i);
+    });
+
+    test('main.js script is at end of body or has defer attribute', () => {
+      // Check if script is at end of body
+      const bodyMatch = htmlContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+      expect(bodyMatch).toBeTruthy();
+      const bodyContent = bodyMatch[1];
+
+      // Script should be near the end of body
+      const scriptMatch = bodyContent.match(/<script[^>]*src=["'][^"']*main\.js["'][^>]*>/i);
+      expect(scriptMatch).toBeTruthy();
+
+      // Check if it's at the end of body (within last 500 characters of body)
+      // or has defer attribute
+      const scriptPosition = bodyContent.lastIndexOf('main.js');
+      const isAtEnd = (bodyContent.length - scriptPosition) < 500;
+      const hasDefer = scriptMatch[0].toLowerCase().includes('defer');
+
+      expect(isAtEnd || hasDefer).toBe(true);
+    });
+
+    test('Script tag has proper src attribute', () => {
+      const scriptMatch = htmlContent.match(/<script[^>]*src=["']([^"']*main\.js)["'][^>]*>/i);
+      expect(scriptMatch).toBeTruthy();
+      expect(scriptMatch[1]).toContain('main.js');
+    });
+
+    test('Script tag does not have async attribute (to ensure proper loading order)', () => {
+      const scriptMatch = htmlContent.match(/<script[^>]*src=["'][^"']*main\.js["'][^>]*/i);
+      expect(scriptMatch).toBeTruthy();
+      // async attribute can cause scripts to execute out of order
+      // For main.js that depends on DOM, it should not use async
+      expect(scriptMatch[0].toLowerCase()).not.toMatch(/\basync\b/);
+    });
+  });
+
+  describe('Directory structure validation', () => {
+    test('styles directory exists', () => {
+      const stylesDir = path.join(homepageDir, 'styles');
+      expect(fs.existsSync(stylesDir)).toBe(true);
+      expect(fs.statSync(stylesDir).isDirectory()).toBe(true);
+    });
+
+    test('scripts directory exists', () => {
+      const scriptsDir = path.join(homepageDir, 'scripts');
+      expect(fs.existsSync(scriptsDir)).toBe(true);
+      expect(fs.statSync(scriptsDir).isDirectory()).toBe(true);
+    });
+
+    test('tests directory exists', () => {
+      const testsDir = path.join(homepageDir, 'tests');
+      expect(fs.existsSync(testsDir)).toBe(true);
+      expect(fs.statSync(testsDir).isDirectory()).toBe(true);
+    });
+  });
+});
