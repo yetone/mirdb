@@ -97,121 +97,105 @@ test.describe('Hero Section Display', () => {
 });
 
 /**
- * Scenario 15: Usage GIF Display Tests
- * Tests for the usage demonstration GIF that shows how MirDB works
+ * Scenario 15: Usage GIF Display E2E Tests
+ * Tests for usage demonstration GIF loading and visibility
  */
 test.describe('Usage GIF Display', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
-  test('TC3: Usage GIF loads without error (no 404 or network errors)', async ({ page }) => {
-    // Track network requests for the usage GIF
-    const gifRequests = [];
-    const failedRequests = [];
-
-    page.on('response', response => {
-      if (response.url().includes('usage.gif')) {
-        gifRequests.push({
-          url: response.url(),
-          status: response.status()
-        });
-        if (response.status() >= 400) {
-          failedRequests.push({
-            url: response.url(),
-            status: response.status()
-          });
-        }
-      }
-    });
-
-    // Verify the GIF element exists
+  test('TC3: Check usage GIF loads without error', async ({ page }) => {
+    // Wait for the usage GIF to be present in DOM
     const usageGif = page.locator('#usage-gif');
-    await expect(usageGif).toBeVisible();
+    await expect(usageGif).toBeAttached();
+
+    // Check that the image loads successfully (no 404)
+    const gifSrc = await usageGif.getAttribute('src');
+    expect(gifSrc).toContain('usage.gif');
 
     // Scroll to the GIF to trigger lazy loading
     await usageGif.scrollIntoViewIfNeeded();
 
-    // Wait for the image to load
-    await page.waitForFunction(
-      (selector) => {
-        const img = document.querySelector(selector);
-        return img && img.complete && img.naturalWidth > 0;
-      },
-      '#usage-gif',
-      { timeout: 10000 }
-    );
+    // Verify the image loads by checking natural dimensions
+    const loadState = await usageGif.evaluate((img) => {
+      return new Promise((resolve) => {
+        if (img.complete && img.naturalWidth > 0) {
+          resolve({
+            complete: true,
+            naturalWidth: img.naturalWidth,
+            naturalHeight: img.naturalHeight
+          });
+        } else {
+          img.onload = () => resolve({
+            complete: true,
+            naturalWidth: img.naturalWidth,
+            naturalHeight: img.naturalHeight
+          });
+          img.onerror = () => resolve({ complete: false, error: true });
+        }
+      });
+    });
 
-    // Verify no failed requests for the GIF (filter out any that occurred)
-    const successfulRequests = gifRequests.filter(r => r.status >= 200 && r.status < 400);
-    expect(successfulRequests.length).toBeGreaterThan(0);
+    expect(loadState.complete).toBe(true);
+    expect(loadState.naturalWidth).toBeGreaterThan(0);
+    expect(loadState.naturalHeight).toBeGreaterThan(0);
   });
 
-  test('TC4: Usage GIF is visible in viewport when scrolling through page', async ({ page }) => {
-    // Verify the usage GIF element exists
+  test('TC4: Verify GIF is visible in viewport', async ({ page }) => {
+    // Navigate to the usage demo section
+    const usageDemoSection = page.locator('#usage-demo');
+    await usageDemoSection.scrollIntoViewIfNeeded();
+
+    // Verify the section is in viewport
+    await expect(usageDemoSection).toBeInViewport();
+
+    // Verify the GIF within the section is visible
     const usageGif = page.locator('#usage-gif');
     await expect(usageGif).toBeVisible();
-
-    // Scroll to the usage GIF if not in viewport
-    await usageGif.scrollIntoViewIfNeeded();
-
-    // Verify it's in the viewport after scrolling
     await expect(usageGif).toBeInViewport();
   });
 
-  test('Usage GIF has correct src attribute', async ({ page }) => {
-    const usageGif = page.locator('#usage-gif');
-    await expect(usageGif).toBeVisible();
+  test('Usage demonstration section has proper heading', async ({ page }) => {
+    const usageDemoSection = page.locator('#usage-demo');
+    await expect(usageDemoSection).toBeVisible();
 
-    const src = await usageGif.getAttribute('src');
-    expect(src).toContain('usage.gif');
+    const heading = usageDemoSection.locator('h2');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText('See It In Action');
   });
 
-  test('Usage GIF has descriptive alt text for accessibility', async ({ page }) => {
+  test('Usage GIF has appropriate alt text for accessibility', async ({ page }) => {
     const usageGif = page.locator('#usage-gif');
-    await expect(usageGif).toBeVisible();
+    await expect(usageGif).toBeAttached();
 
     const altText = await usageGif.getAttribute('alt');
     expect(altText).toBeTruthy();
     expect(altText.length).toBeGreaterThan(10);
+    expect(altText.toLowerCase()).toMatch(/usage|demonstration|demo|mirdb/);
   });
 
-  test('Usage GIF container has appropriate styling', async ({ page }) => {
-    const usageGifContainer = page.locator('.usage-demo');
-    await expect(usageGifContainer).toBeVisible();
-
-    // Verify the container has proper layout
-    const boundingBox = await usageGifContainer.boundingBox();
-    expect(boundingBox.width).toBeGreaterThan(0);
-    expect(boundingBox.height).toBeGreaterThan(0);
-  });
-
-  test('Usage GIF displays after page load completes', async ({ page }) => {
-    // Wait for page to fully load
-    await page.waitForLoadState('load');
-
-    // Verify the usage GIF is visible
+  test('Usage GIF container has proper styling', async ({ page }) => {
     const usageGif = page.locator('#usage-gif');
     await expect(usageGif).toBeVisible();
 
-    // Scroll to trigger lazy loading
-    await usageGif.scrollIntoViewIfNeeded();
+    // Check that the GIF has the usage-gif class for styling
+    await expect(usageGif).toHaveClass(/usage-gif/);
+  });
 
-    // Wait for the image to fully load (lazy loading may delay this)
-    await page.waitForFunction(
-      (selector) => {
-        const img = document.querySelector(selector);
-        return img && img.complete && img.naturalWidth > 0;
-      },
-      '#usage-gif',
-      { timeout: 10000 }
-    );
+  test('Usage demo section is accessible via scrolling', async ({ page }) => {
+    // Start at top of page
+    await page.evaluate(() => window.scrollTo(0, 0));
 
-    // Verify it has natural dimensions (indicating image loaded)
-    const naturalWidth = await usageGif.evaluate((img) => img.naturalWidth);
-    const naturalHeight = await usageGif.evaluate((img) => img.naturalHeight);
+    // Scroll down to find the usage demo section
+    const usageDemoSection = page.locator('#usage-demo');
 
-    expect(naturalWidth).toBeGreaterThan(0);
-    expect(naturalHeight).toBeGreaterThan(0);
+    // The section should become visible when scrolling through the page
+    await usageDemoSection.scrollIntoViewIfNeeded();
+    await expect(usageDemoSection).toBeInViewport();
+
+    // The GIF should be visible within the section
+    const usageGif = usageDemoSection.locator('.usage-gif');
+    await expect(usageGif).toBeVisible();
   });
 });

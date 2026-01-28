@@ -4,12 +4,12 @@
  *
  * Tests for:
  * - Usage GIF element existence with correct src
- * - Accessibility alt text for usage GIF
+ * - Usage GIF alt text for accessibility
  */
 
 const { loadHomepageHTML } = require('../setup/test-utils');
 
-describe('Usage GIF Display', () => {
+describe('Usage GIF Display - Unit Tests', () => {
   beforeEach(() => {
     const html = loadHomepageHTML();
     document.body.innerHTML = html;
@@ -17,12 +17,11 @@ describe('Usage GIF Display', () => {
 
   describe('TC1: Check for usage GIF element', () => {
     test('Image element with src pointing to assets/usage.gif exists', () => {
-      // Find image element with usage.gif in src
       const usageGif = document.querySelector('img[src*="usage.gif"]');
       expect(usageGif).toBeTruthy();
     });
 
-    test('Usage GIF src attribute contains correct path', () => {
+    test('Usage GIF has correct src attribute', () => {
       const usageGif = document.querySelector('img[src*="usage.gif"]');
       expect(usageGif).toBeTruthy();
 
@@ -30,19 +29,24 @@ describe('Usage GIF Display', () => {
       expect(src).toContain('assets/usage.gif');
     });
 
-    test('Usage GIF has an id for easy targeting', () => {
+    test('Usage GIF is in a dedicated section', () => {
+      const usageDemoSection = document.querySelector('#usage-demo');
+      expect(usageDemoSection).toBeTruthy();
+
+      const usageGif = usageDemoSection.querySelector('img[src*="usage.gif"]');
+      expect(usageGif).toBeTruthy();
+    });
+
+    test('Usage GIF has appropriate ID for targeting', () => {
       const usageGif = document.querySelector('#usage-gif');
       expect(usageGif).toBeTruthy();
       expect(usageGif.tagName.toLowerCase()).toBe('img');
     });
 
-    test('Usage GIF is contained within a section or container', () => {
+    test('Usage GIF has appropriate class for styling', () => {
       const usageGif = document.querySelector('img[src*="usage.gif"]');
       expect(usageGif).toBeTruthy();
-
-      // Check that it has a parent container
-      const container = usageGif.closest('.usage-demo, .hero-demo, section');
-      expect(container).toBeTruthy();
+      expect(usageGif.classList.contains('usage-gif')).toBe(true);
     });
   });
 
@@ -53,69 +57,67 @@ describe('Usage GIF Display', () => {
 
       const altText = usageGif.getAttribute('alt');
       expect(altText).toBeTruthy();
-      expect(altText.length).toBeGreaterThan(10); // Should be descriptive
+      expect(altText.length).toBeGreaterThan(10);
     });
 
-    test('Alt text describes the usage demonstration', () => {
+    test('Usage GIF alt text describes the demonstration', () => {
       const usageGif = document.querySelector('img[src*="usage.gif"]');
       expect(usageGif).toBeTruthy();
 
       const altText = usageGif.getAttribute('alt').toLowerCase();
-      // Alt text should mention usage, demonstration, or how MirDB works
-      const isDescriptive =
+      expect(
         altText.includes('usage') ||
         altText.includes('demonstration') ||
         altText.includes('demo') ||
-        altText.includes('example') ||
-        altText.includes('mirdb') ||
-        altText.includes('terminal') ||
-        altText.includes('command');
-
-      expect(isDescriptive).toBe(true);
+        altText.includes('mirdb')
+      ).toBe(true);
     });
 
-    test('Alt text is not just a filename or generic text', () => {
+    test('Usage GIF alt text is not empty or placeholder', () => {
       const usageGif = document.querySelector('img[src*="usage.gif"]');
       expect(usageGif).toBeTruthy();
 
-      const altText = usageGif.getAttribute('alt').toLowerCase();
-      // Should not be generic placeholders
+      const altText = usageGif.getAttribute('alt');
+      expect(altText).not.toBe('');
       expect(altText).not.toBe('image');
       expect(altText).not.toBe('gif');
       expect(altText).not.toBe('usage.gif');
-      expect(altText).not.toBe('usage');
-    });
-
-    test('Usage GIF has loading attribute for performance', () => {
-      const usageGif = document.querySelector('img[src*="usage.gif"]');
-      expect(usageGif).toBeTruthy();
-
-      // Should have loading attribute for lazy loading (optional but recommended)
-      const loading = usageGif.getAttribute('loading');
-      if (loading) {
-        expect(['lazy', 'eager']).toContain(loading);
-      }
     });
   });
 
-  describe('Usage GIF placement and structure', () => {
-    test('Usage GIF is in a demo or showcase section', () => {
-      const usageGif = document.querySelector('img[src*="usage.gif"]');
-      expect(usageGif).toBeTruthy();
-
-      // Check for appropriate parent section or container
-      const parentSection = usageGif.closest('section, .usage-demo, .hero-demo, .demo-section');
-      expect(parentSection).toBeTruthy();
+  describe('Usage Demonstration Section Structure', () => {
+    test('Usage demo section has semantic HTML structure', () => {
+      const usageDemoSection = document.querySelector('#usage-demo');
+      expect(usageDemoSection).toBeTruthy();
+      expect(usageDemoSection.tagName.toLowerCase()).toBe('section');
     });
 
-    test('Usage GIF container has appropriate CSS class for styling', () => {
-      const usageGif = document.querySelector('img[src*="usage.gif"]');
-      expect(usageGif).toBeTruthy();
+    test('Usage demo section has accessible title', () => {
+      const usageDemoSection = document.querySelector('#usage-demo');
+      expect(usageDemoSection).toBeTruthy();
 
-      // The image or its container should have a class for styling
-      const hasClass = usageGif.classList.length > 0 ||
-                       usageGif.closest('[class*="usage"], [class*="demo"], [class*="gif"]');
-      expect(hasClass).toBeTruthy();
+      const titleId = usageDemoSection.getAttribute('aria-labelledby');
+      expect(titleId).toBeTruthy();
+
+      const titleElement = document.getElementById(titleId);
+      expect(titleElement).toBeTruthy();
+    });
+
+    test('Usage demo section has a heading', () => {
+      const usageDemoSection = document.querySelector('#usage-demo');
+      expect(usageDemoSection).toBeTruthy();
+
+      const heading = usageDemoSection.querySelector('h1, h2, h3');
+      expect(heading).toBeTruthy();
+    });
+
+    test('Usage demo section has description text', () => {
+      const usageDemoSection = document.querySelector('#usage-demo');
+      expect(usageDemoSection).toBeTruthy();
+
+      const description = usageDemoSection.querySelector('.usage-demo-description');
+      expect(description).toBeTruthy();
+      expect(description.textContent.trim().length).toBeGreaterThan(0);
     });
   });
 });

@@ -195,14 +195,29 @@ h1, h2, h3, h4, h5, h6 {
     outline-offset: 2px;
 }
 
+/* Usage demonstration section */
 .usage-demo {
-    margin-top: 3rem;
+    padding: 4rem 1rem;
     text-align: center;
+}
+
+.usage-demo h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.usage-demo-description {
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+}
+
+.usage-demo-container {
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .usage-gif {
     max-width: 100%;
-    width: 600px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
 }
