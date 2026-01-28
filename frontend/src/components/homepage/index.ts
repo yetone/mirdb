@@ -4,5 +4,6 @@
  * Re-exports all homepage-specific components for clean imports.
  */
 
+export { default as HeroSection } from './HeroSection';
 export { FeaturesSection } from './FeaturesSection';
 export { FeatureCard } from './FeatureCard';
