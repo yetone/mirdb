@@ -13,28 +13,28 @@ export function Navbar() {
   const { isAuthenticated, logout } = useAuth()
 
   return (
-    <nav className="navbar bg-base-100 shadow-lg" role="navigation" aria-label="Main navigation">
-      <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl">
+    <nav className="navbar bg-base-100 shadow-lg px-2 sm:px-4" role="navigation" aria-label="Main navigation">
+      <div className="flex-1 min-w-0">
+        <Link to="/" className="btn btn-ghost text-base sm:text-xl truncate">
           URL Shortener
         </Link>
       </div>
       <div className="flex-none">
         {isAuthenticated ? (
-          <div className="flex gap-2">
-            <Link to="/dashboard" className="btn btn-ghost">
+          <div className="flex gap-1 sm:gap-2">
+            <Link to="/dashboard" className="btn btn-ghost btn-sm sm:btn-md">
               Dashboard
             </Link>
-            <button onClick={logout} className="btn btn-ghost">
+            <button onClick={logout} className="btn btn-ghost btn-sm sm:btn-md">
               Logout
             </button>
           </div>
         ) : (
-          <div className="flex gap-2">
-            <Link to="/login" className="btn btn-ghost" data-testid="navbar-login">
+          <div className="flex gap-1 sm:gap-2">
+            <Link to="/login" className="btn btn-ghost btn-sm sm:btn-md" data-testid="navbar-login">
               Log In
             </Link>
-            <Link to="/register" className="btn btn-primary" data-testid="navbar-register">
+            <Link to="/register" className="btn btn-primary btn-sm sm:btn-md" data-testid="navbar-register">
               Sign Up
             </Link>
           </div>

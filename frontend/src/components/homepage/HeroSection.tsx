@@ -25,12 +25,12 @@ import { FuturisticButton } from '@/components/FuturisticButton'
 export function HeroSection({ isAuthenticated, onGetStarted, onLogin }: HeroProps) {
   return (
     <section className="hero min-h-[60vh] bg-base-200" aria-labelledby="hero-title">
-      <div className="hero-content text-center">
-        <div className="max-w-2xl">
-          <h1 id="hero-title" className="text-5xl font-bold mb-6">
+      <div className="hero-content text-center px-4">
+        <div className="max-w-2xl w-full">
+          <h1 id="hero-title" className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
             Shorten URLs, Track Performance
           </h1>
-          <p className="text-xl mb-8 text-base-content/70">
+          <p className="text-lg sm:text-xl mb-8 text-base-content/70">
             Create short, memorable links and get detailed analytics on every click.
             Know your audience with geographic insights and referrer tracking.
           </p>

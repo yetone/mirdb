@@ -61,7 +61,7 @@ export function FeaturesSection({ features }: FeaturesSectionProps) {
       <div className="max-w-6xl mx-auto">
         <h2
           id="features-title"
-          className="text-3xl font-bold text-center mb-12"
+          className="text-2xl sm:text-3xl font-bold text-center mb-12"
         >
           Powerful Features
         </h2>

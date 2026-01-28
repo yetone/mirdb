@@ -39,7 +39,7 @@ export function HowItWorksSection({ steps = defaultSteps }: HowItWorksSectionPro
   return (
     <section className="py-16 px-4 bg-base-200" aria-labelledby="how-it-works-title">
       <div className="max-w-4xl mx-auto">
-        <h2 id="how-it-works-title" className="text-3xl font-bold text-center mb-12">
+        <h2 id="how-it-works-title" className="text-2xl sm:text-3xl font-bold text-center mb-12">
           How It Works
         </h2>
         <div className="flex flex-col md:flex-row gap-8 justify-center">
