@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. Fast, reliable, and painless as using Memcached.">
+    <meta name="keywords" content="MirDB, key-value store, Memcached, persistent storage, Rust, LSM-tree">
+    <meta name="author" content="MirDB Contributors">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://yetone.github.io/mirdb/">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+    <meta property="og:description" content="A Persistent Key-Value Store with Memcached Protocol. Fast, reliable, and painless.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://yetone.github.io/mirdb/assets/logo.gif">
+    <meta property="og:url" content="https://yetone.github.io/mirdb/">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
+    <meta name="twitter:description" content="A Persistent Key-Value Store with Memcached Protocol. Fast, reliable, and painless.">
+    <meta name="twitter:image" content="https://yetone.github.io/mirdb/assets/logo.gif">
+
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+        <div class="hero-content">
+            <img src="assets/logo.gif" alt="MirDB Logo - Animated database icon" class="hero-logo" id="hero-logo">
+            <h1 id="hero-title">MirDB</h1>
+            <p class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+            <p class="hero-subtitle">Fast, reliable, and painless as using Memcached</p>
+            <div class="hero-ctas">
+                <a href="https://github.com/yetone/mirdb" class="btn btn-primary" id="cta-github" aria-label="View MirDB on GitHub">
+                    View on GitHub
+                </a>
+                <a href="#quick-start" class="btn btn-secondary" id="cta-docs" aria-label="Read MirDB Documentation">
+                    Read Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features" aria-labelledby="features-title">
+        <h2 id="features-title">Key Features</h2>
+        <div class="features-grid">
+            <div class="feature-card" data-feature="memcached">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <h3>Memcached Protocol</h3>
+                <p>Drop-in compatibility with existing Memcached clients. No code changes required.</p>
+            </div>
+            <div class="feature-card" data-feature="skiplist">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                    </svg>
+                </div>
+                <h3>Skip-list Memtable</h3>
+                <p>Efficient in-memory data structure for blazing fast writes and lookups.</p>
+            </div>
+            <div class="feature-card" data-feature="compaction">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                    </svg>
+                </div>
+                <h3>Automatic Compaction</h3>
+                <p>Minor and major compaction for optimized storage and consistent performance.</p>
+            </div>
+            <div class="feature-card" data-feature="tokio">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M13 2.05v3.03c3.39.49 6 3.39 6 6.92 0 .9-.18 1.75-.48 2.54l2.6 1.53c.56-1.24.88-2.62.88-4.07 0-5.18-3.95-9.45-9-9.95zM12 19c-3.87 0-7-3.13-7-7 0-3.53 2.61-6.43 6-6.92V2.05c-5.06.5-9 4.76-9 9.95 0 5.52 4.47 10 9.99 10 3.31 0 6.24-1.61 8.06-4.09l-2.6-1.53C16.17 17.98 14.21 19 12 19z"/>
+                    </svg>
+                </div>
+                <h3>Tokio Async Runtime</h3>
+                <p>Built on Tokio for high-performance async I/O and excellent scalability.</p>
+            </div>
+            <div class="feature-card" data-feature="persistent">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>
+                    </svg>
+                </div>
+                <h3>Persistent Storage</h3>
+                <p>LSM-tree based architecture ensures data durability and crash recovery.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Demonstration Section -->
+    <section id="usage-demo" class="usage-demo" aria-labelledby="usage-demo-title">
+        <h2 id="usage-demo-title">See It In Action</h2>
+        <p class="usage-demo-description">Watch how easy it is to use MirDB:</p>
+        <div class="usage-demo-container">
+            <img src="assets/usage.gif" alt="MirDB usage demonstration - shows terminal interaction with set and get commands" class="usage-gif" id="usage-gif" loading="lazy">
+        </div>
+    </section>
+
+    <!-- Code Example Section -->
+    <section id="code-example" class="code-example" aria-labelledby="code-example-title">
+        <h2 id="code-example-title">Quick Example</h2>
+        <p>Use any Memcached client to interact with MirDB:</p>
+        <div class="code-container">
+            <button class="copy-btn" id="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+            <pre><code class="language-bash"># Connect to MirDB using telnet
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quick-start" class="quick-start" aria-labelledby="quick-start-title">
+        <h2 id="quick-start-title">Quick Start</h2>
+        <div class="quick-start-steps">
+            <div class="step">
+                <span class="step-number">1</span>
+                <h3>Clone the repository</h3>
+                <div class="code-container">
+                    <pre><code class="language-bash">git clone https://github.com/yetone/mirdb.git
+cd mirdb</code></pre>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <h3>Build with Cargo</h3>
+                <div class="code-container">
+                    <pre><code class="language-bash">cargo build --release</code></pre>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <h3>Run MirDB</h3>
+                <div class="code-container">
+                    <pre><code class="language-bash">./target/release/mirdb</code></pre>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <h3>Connect to the server</h3>
+                <p class="step-description">MirDB runs on port 12333 by default. Connect using any Memcached client:</p>
+                <div class="code-container">
+                    <pre><code class="language-bash">telnet localhost 12333</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb" aria-label="MirDB GitHub Repository">GitHub</a>
+                <span class="footer-separator" aria-hidden="true">|</span>
+                <span>MIT License</span>
+            </div>
+            <div class="footer-badge">
+                <a href="https://circleci.com/gh/yetone/mirdb" aria-label="CircleCI Build Status">
+                    <img src="https://circleci.com/gh/yetone/mirdb.svg?style=shield" alt="CircleCI Build Status">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
