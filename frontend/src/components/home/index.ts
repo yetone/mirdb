@@ -7,5 +7,4 @@
 export { HeroSection } from './HeroSection'
 export { FeaturesSection } from './FeaturesSection'
 export { HowItWorks } from './HowItWorks'
-// Future exports for other scenarios:
-// export { Footer } from './Footer'
+export { Footer } from './Footer'
