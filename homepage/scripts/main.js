@@ -5,88 +5,67 @@
  *
  * Features:
  * - Copy-to-clipboard for code examples
- * - Theme toggle (dark/light mode)
  * - Smooth scroll navigation
+ *
+ * Dependencies:
+ * - Prism.js (loaded via CDN for syntax highlighting)
  */
 
-(function() {
-    'use strict';
+document.addEventListener('DOMContentLoaded', function() {
+    initCopyButtons();
+    initSmoothScroll();
+});
 
-    /**
-     * Copy code to clipboard functionality
-     */
-    function initCopyButtons() {
-        const copyButtons = document.querySelectorAll('.copy-btn');
+/**
+ * Initialize copy-to-clipboard functionality for code blocks
+ */
+function initCopyButtons() {
+    const copyButtons = document.querySelectorAll('.copy-btn');
 
-        copyButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                const codeContainer = button.closest('.code-container');
-                const codeElement = codeContainer.querySelector('code');
+    copyButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            const codeBlock = this.closest('.code-block');
+            const code = codeBlock.querySelector('code');
+            const text = code.textContent;
 
-                if (codeElement) {
-                    const textToCopy = codeElement.textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
 
-                    navigator.clipboard.writeText(textToCopy).then(function() {
-                        const originalText = button.textContent;
-                        button.textContent = 'Copied!';
-                        button.classList.add('copied');
-
-                        setTimeout(function() {
-                            button.textContent = originalText;
-                            button.classList.remove('copied');
-                        }, 2000);
-                    }).catch(function(err) {
-                        console.error('Failed to copy text:', err);
-                        button.textContent = 'Failed';
-                        setTimeout(function() {
-                            button.textContent = 'Copy';
-                        }, 2000);
-                    });
-                }
+                setTimeout(function() {
+                    button.textContent = 'Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy:', err);
+                button.textContent = 'Failed';
+                setTimeout(function() {
+                    button.textContent = 'Copy';
+                }, 2000);
             });
         });
-    }
+    });
+}
 
-    /**
-     * Smooth scroll for anchor links
-     */
-    function initSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-            anchor.addEventListener('click', function(e) {
-                const targetId = this.getAttribute('href');
+/**
+ * Initialize smooth scroll for anchor links
+ */
+function initSmoothScroll() {
+    const links = document.querySelectorAll('a[href^="#"]');
 
-                if (targetId === '#') return;
+    links.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#') return;
 
-                const targetElement = document.querySelector(targetId);
-
-                if (targetElement) {
-                    e.preventDefault();
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-
-                    // Update URL without triggering scroll
-                    if (history.pushState) {
-                        history.pushState(null, null, targetId);
-                    }
-                }
-            });
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         });
-    }
-
-    /**
-     * Initialize all functionality when DOM is ready
-     */
-    function init() {
-        initCopyButtons();
-        initSmoothScroll();
-    }
-
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-})();
+    });
+}

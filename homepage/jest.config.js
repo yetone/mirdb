@@ -1,13 +1,16 @@
-/** @type {import('jest').Config} */
+/**
+ * Jest Configuration for Unit Tests
+ */
+
 module.exports = {
-  testEnvironment: 'jsdom',
-  testMatch: ['**/tests/unit/**/*.test.js'],
-  moduleFileExtensions: ['js', 'json'],
-  setupFilesAfterEnv: ['<rootDir>/tests/setup/jest.setup.js'],
-  collectCoverageFrom: [
-    'scripts/**/*.js',
-    '!**/node_modules/**'
-  ],
-  coverageDirectory: 'coverage',
-  verbose: true
+    testEnvironment: 'jsdom',
+    testMatch: ['**/tests/unit/**/*.test.js'],
+    moduleFileExtensions: ['js'],
+    verbose: true,
+    testTimeout: 10000,
+    setupFilesAfterEnv: [],
+    collectCoverageFrom: [
+        'scripts/**/*.js',
+        '!**/node_modules/**'
+    ]
 };

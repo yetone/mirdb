@@ -52,28 +52,48 @@
     <section id="features" class="features" aria-labelledby="features-title">
         <h2 id="features-title">Key Features</h2>
         <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon" aria-hidden="true">&#128268;</div>
+            <div class="feature-card" data-feature="memcached">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
                 <h3>Memcached Protocol</h3>
                 <p>Drop-in compatibility with existing Memcached clients. No code changes required.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" aria-hidden="true">&#128200;</div>
+            <div class="feature-card" data-feature="skiplist">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                    </svg>
+                </div>
                 <h3>Skip-list Memtable</h3>
                 <p>Efficient in-memory data structure for blazing fast writes and lookups.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" aria-hidden="true">&#128736;</div>
+            <div class="feature-card" data-feature="compaction">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                    </svg>
+                </div>
                 <h3>Automatic Compaction</h3>
                 <p>Minor and major compaction for optimized storage and consistent performance.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" aria-hidden="true">&#9889;</div>
-                <h3>Async Runtime</h3>
+            <div class="feature-card" data-feature="tokio">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M13 2.05v3.03c3.39.49 6 3.39 6 6.92 0 .9-.18 1.75-.48 2.54l2.6 1.53c.56-1.24.88-2.62.88-4.07 0-5.18-3.95-9.45-9-9.95zM12 19c-3.87 0-7-3.13-7-7 0-3.53 2.61-6.43 6-6.92V2.05c-5.06.5-9 4.76-9 9.95 0 5.52 4.47 10 9.99 10 3.31 0 6.24-1.61 8.06-4.09l-2.6-1.53C16.17 17.98 14.21 19 12 19z"/>
+                    </svg>
+                </div>
+                <h3>Tokio Async Runtime</h3>
                 <p>Built on Tokio for high-performance async I/O and excellent scalability.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" aria-hidden="true">&#128190;</div>
+            <div class="feature-card" data-feature="persistent">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>
+                    </svg>
+                </div>
                 <h3>Persistent Storage</h3>
                 <p>LSM-tree based architecture ensures data durability and crash recovery.</p>
             </div>

@@ -1,25 +1,20 @@
 {
   "name": "mirdb-homepage",
   "version": "1.0.0",
-  "description": "MirDB Product Homepage - A static website showcasing the MirDB persistent key-value store",
+  "description": "MirDB Product Homepage",
   "scripts": {
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "jest --config jest.config.js",
     "test:e2e": "playwright test",
-    "serve": "npx http-server . -p 8080 -c-1"
+    "serve": "npx serve -l 3000 ."
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
-    "@testing-library/jest-dom": "^6.1.5",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0"
+    "jest-environment-jsdom": "^29.7.0",
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.2.0"
   },
-  "keywords": [
-    "mirdb",
-    "homepage",
-    "key-value-store",
-    "memcached"
-  ],
-  "author": "MirDB Contributors",
-  "license": "MIT"
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
