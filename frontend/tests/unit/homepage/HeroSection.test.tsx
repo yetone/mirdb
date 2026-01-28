@@ -13,7 +13,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import HeroSection from '../../../src/components/homepage/HeroSection';
 
@@ -64,51 +64,53 @@ describe('HeroSection', () => {
   it('displays primary CTA button with appropriate text', () => {
     renderWithRouter(<HeroSection />);
 
-    const primaryCTA = screen.getByTestId('hero-primary-cta');
-    expect(primaryCTA).toBeInTheDocument();
-    expect(primaryCTA).toHaveTextContent(/get started|create account|sign up/i);
+    const primaryCTALink = screen.getByTestId('hero-primary-cta');
+    expect(primaryCTALink).toBeInTheDocument();
+    expect(primaryCTALink).toHaveTextContent(/get started|create account|sign up/i);
   });
 
   // Test Case 5: Click primary CTA button navigates to /register
   it('primary CTA button links to /register route', async () => {
     renderWithRouter(<HeroSection />);
 
-    const primaryCTA = screen.getByTestId('hero-primary-cta');
-    expect(primaryCTA).toHaveAttribute('href', '/register');
+    const primaryCTALink = screen.getByTestId('hero-primary-cta');
+    expect(primaryCTALink).toHaveAttribute('href', '/register');
   });
 
   // Test Case 6: Check for secondary CTA link
   it('displays secondary CTA link for existing users to sign in', () => {
     renderWithRouter(<HeroSection />);
 
-    const secondaryCTA = screen.getByTestId('hero-secondary-cta');
-    expect(secondaryCTA).toBeInTheDocument();
-    expect(secondaryCTA).toHaveTextContent(/sign in|login/i);
+    const secondaryCTALink = screen.getByTestId('hero-secondary-cta');
+    expect(secondaryCTALink).toBeInTheDocument();
+    expect(secondaryCTALink).toHaveTextContent(/sign in|login/i);
   });
 
   // Test Case 7: Click secondary CTA navigates to /login
   it('secondary CTA link navigates to /login route', async () => {
     renderWithRouter(<HeroSection />);
 
-    const secondaryCTA = screen.getByTestId('hero-secondary-cta');
-    expect(secondaryCTA).toHaveAttribute('href', '/login');
+    const secondaryCTALink = screen.getByTestId('hero-secondary-cta');
+    expect(secondaryCTALink).toHaveAttribute('href', '/login');
   });
 
   // Test Case 8: Verify hero section uses FuturisticButton component
   it('CTA buttons use FuturisticButton styling', () => {
     renderWithRouter(<HeroSection />);
 
-    const primaryCTA = screen.getByTestId('hero-primary-cta');
-    const secondaryCTA = screen.getByTestId('hero-secondary-cta');
-
-    // FuturisticButton applies specific classes
-    // Check for some key styling indicators
-    expect(primaryCTA).toHaveClass('relative');
-    expect(secondaryCTA).toHaveClass('relative');
+    const primaryCTALink = screen.getByTestId('hero-primary-cta');
+    const secondaryCTALink = screen.getByTestId('hero-secondary-cta');
 
     // Both should be links (anchor elements rendered by Link component)
-    expect(primaryCTA.tagName).toBe('A');
-    expect(secondaryCTA.tagName).toBe('A');
+    expect(primaryCTALink.tagName).toBe('A');
+    expect(secondaryCTALink.tagName).toBe('A');
+
+    // FuturisticButton is inside the link - check the button has btn class
+    const primaryButton = within(primaryCTALink).getByRole('button');
+    const secondaryButton = within(secondaryCTALink).getByRole('button');
+
+    expect(primaryButton).toHaveClass('btn');
+    expect(secondaryButton).toHaveClass('btn');
   });
 
   // Additional test: Custom content props work correctly

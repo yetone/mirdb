@@ -12,8 +12,9 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import FuturisticButton from '../FuturisticButton';
+import { FuturisticButton } from '../FuturisticButton';
 import type { HeroContent } from '../../types/homepage';
 
 interface HeroSectionProps {
@@ -68,24 +69,18 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content = defaultContent }) =
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <FuturisticButton
-            href={primaryCTA.href}
-            variant="primary"
-            size="lg"
-            data-testid="hero-primary-cta"
-          >
-            {primaryCTA.label}
-          </FuturisticButton>
+          <Link to={primaryCTA.href} data-testid="hero-primary-cta">
+            <FuturisticButton variant="primary" size="lg">
+              {primaryCTA.label}
+            </FuturisticButton>
+          </Link>
 
           {secondaryCTA && (
-            <FuturisticButton
-              href={secondaryCTA.href}
-              variant="outline"
-              size="lg"
-              data-testid="hero-secondary-cta"
-            >
-              {secondaryCTA.label}
-            </FuturisticButton>
+            <Link to={secondaryCTA.href} data-testid="hero-secondary-cta">
+              <FuturisticButton variant="ghost" size="lg">
+                {secondaryCTA.label}
+              </FuturisticButton>
+            </Link>
           )}
         </motion.div>
       </div>
