@@ -23,6 +23,7 @@ export const GlassMorphismCard = ({
 
   return (
     <motion.div
+      data-testid="glass-morphism-card"
       className={cn(baseStyles, className)}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
