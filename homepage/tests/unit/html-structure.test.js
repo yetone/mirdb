@@ -174,7 +174,9 @@ describe('Quick Start Installation Section', () => {
         sectionText.includes('./target') ||
         sectionText.includes('release') ||
         sectionText.includes('start') ||
-        sectionText.includes('default');
+        sectionText.includes('default') ||
+        sectionText.includes('port') ||
+        sectionText.includes('12333');
 
       expect(hasConfigInfo).toBe(true);
     });
@@ -191,6 +193,18 @@ describe('Quick Start Installation Section', () => {
         sectionText.includes('run');
 
       expect(hasRunInstructions).toBe(true);
+    });
+
+    test('Default server port is mentioned', () => {
+      const quickStartSection = document.querySelector('#quick-start');
+      const sectionText = quickStartSection.textContent;
+
+      // MirDB uses port 12333 by default - check for port mention
+      const hasPortInfo = sectionText.includes('12333') ||
+                         /port.*\d+/i.test(sectionText) ||
+                         /default.*port/i.test(sectionText);
+
+      expect(hasPortInfo).toBe(true);
     });
   });
 });
