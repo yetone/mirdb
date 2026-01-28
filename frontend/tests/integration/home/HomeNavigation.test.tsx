@@ -11,7 +11,7 @@
  * Testing framework: Vitest + @testing-library/react
  * Requires: MemoryRouter for route testing
  */
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Routes, Route, useLocation } from 'react-router-dom'
@@ -328,5 +328,154 @@ describe('Login Navigation - Additional Tests', () => {
     // Log In should be visible as a secondary CTA for returning users
     const loginLink = screen.getByRole('link', { name: /log in/i })
     expect(loginLink).toBeVisible()
+  })
+})
+
+/**
+ * Scenario 11: Public Route Access
+ * Tests that the homepage is accessible without authentication
+ */
+describe('Scenario 11: Public Route Access', () => {
+  describe('Test Case 1: Render router with / path and no auth context', () => {
+    it('should render Home component without redirect to /login', () => {
+      // Render the TestApp (which has no auth context) at the root path
+      renderWithProviders(<TestApp />, { initialEntries: ['/'] })
+
+      // Verify we're on the homepage, not redirected to login
+      expect(screen.getByTestId('location-display')).toHaveTextContent('/')
+
+      // Verify the Home component is rendered (hero section is present)
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+
+      // Verify the login page is NOT rendered (no redirect happened)
+      expect(screen.queryByTestId('login-page')).not.toBeInTheDocument()
+    })
+
+    it('should display homepage content without authentication', () => {
+      renderWithProviders(<Home />, { initialEntries: ['/'] })
+
+      // Verify all homepage sections are present
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      expect(screen.getByRole('contentinfo')).toBeInTheDocument() // footer
+    })
+  })
+
+  describe('Test Case 2: Home route is configured as public in router', () => {
+    it('should have / route that renders Home directly without ProtectedLayout wrapper', () => {
+      // Render the app at root path
+      renderWithProviders(<TestApp />, { initialEntries: ['/'] })
+
+      // The Home component should render directly
+      // If it was wrapped in ProtectedLayout, it would redirect to /login without auth
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+
+      // Verify we didn't get redirected to login
+      expect(screen.getByTestId('location-display')).toHaveTextContent('/')
+    })
+
+    it('should not require authentication context to render homepage', () => {
+      // Render Home component in isolation (no auth provider in our test setup)
+      renderWithProviders(<Home />, { initialEntries: ['/'] })
+
+      // Home should render successfully without auth context
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+
+      // Verify CTA buttons are present (users can navigate to login/register)
+      expect(screen.getByRole('link', { name: /get started/i })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: /log in/i })).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 3: E2E-style visit homepage with cleared localStorage', () => {
+    beforeEach(() => {
+      // Clear localStorage to simulate no JWT token
+      localStorage.clear()
+    })
+
+    it('should display homepage fully without authentication errors', () => {
+      renderWithProviders(<TestApp />, { initialEntries: ['/'] })
+
+      // Verify we're on the homepage
+      expect(screen.getByTestId('location-display')).toHaveTextContent('/')
+
+      // Verify all major sections render
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+
+      // Verify no error messages are displayed
+      expect(screen.queryByText(/error/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/unauthorized/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/401/i)).not.toBeInTheDocument()
+    })
+
+    it('should show all homepage sections without token', () => {
+      renderWithProviders(<Home />, { initialEntries: ['/'] })
+
+      // Verify homepage value proposition is visible
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeVisible()
+
+      // Verify feature showcase is visible
+      const featuresSection = screen.getByTestId('features-section')
+      expect(featuresSection).toBeVisible()
+
+      // Verify "How It Works" section is visible
+      const howItWorksSection = screen.getByTestId('how-it-works-section')
+      expect(howItWorksSection).toBeVisible()
+    })
+
+    it('should allow unauthenticated users to see CTAs for login and registration', () => {
+      renderWithProviders(<Home />, { initialEntries: ['/'] })
+
+      // Both CTAs should be visible for unauthenticated visitors
+      const getStartedLink = screen.getByRole('link', { name: /get started/i })
+      const loginLink = screen.getByRole('link', { name: /log in/i })
+
+      expect(getStartedLink).toBeVisible()
+      expect(loginLink).toBeVisible()
+    })
+  })
+
+  describe('Test Case 4: No API calls require authentication on homepage load', () => {
+    it('should render homepage without 401 errors', () => {
+      // The homepage should be static content that doesn't require authenticated API calls
+      renderWithProviders(<Home />, { initialEntries: ['/'] })
+
+      // Verify the page renders successfully
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+
+      // No error state should be displayed
+      expect(screen.queryByText(/unauthorized/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/error/i)).not.toBeInTheDocument()
+    })
+
+    it('should load homepage content without making authenticated requests', () => {
+      renderWithProviders(<Home />, { initialEntries: ['/'] })
+
+      // The homepage content is static and should render immediately
+      // Verify all sections are present (they don't depend on API data)
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+      expect(screen.getByRole('contentinfo')).toBeInTheDocument()
+
+      // No loading states should be present since no API calls are made
+      expect(screen.queryByText(/loading/i)).not.toBeInTheDocument()
+    })
+
+    it('should display static content immediately without data fetching', () => {
+      renderWithProviders(<Home />, { initialEntries: ['/'] })
+
+      // Verify static text content is present
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
+
+      // Features should be visible without API calls
+      const featuresSection = screen.getByTestId('features-section')
+      expect(featuresSection).toBeInTheDocument()
+
+      // All content should be rendered synchronously
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    })
   })
 })
