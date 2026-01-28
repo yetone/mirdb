@@ -6,16 +6,18 @@
  * Currently includes HeroSection. Other sections will be added by their respective scenarios.
  */
 import { BackgroundEffect } from '../components/BackgroundEffect'
-import { HeroSection, FeaturesSection } from '../components/home'
+import { HeroSection, FeaturesSection, Footer } from '../components/home'
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen">
-      <BackgroundEffect />
-      <HeroSection />
-      <FeaturesSection />
-      {/* HowItWorks - to be added by Scenario 5 */}
-      {/* Footer - to be added by Scenario 6 */}
-    </main>
+    <div className="flex flex-col min-h-screen">
+      <main className="relative flex-grow">
+        <BackgroundEffect />
+        <HeroSection />
+        <FeaturesSection />
+        {/* HowItWorks - to be added by Scenario 5 */}
+      </main>
+      <Footer />
+    </div>
   )
 }
