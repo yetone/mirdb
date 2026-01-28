@@ -4,26 +4,35 @@ import React from 'react';
 
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => {
-  const MotionDiv = React.forwardRef(function MotionDiv(
-    props: React.HTMLAttributes<HTMLDivElement> & Record<string, unknown>,
-    ref: React.Ref<HTMLDivElement>
-  ) {
-    const { initial, animate, exit, whileHover, whileTap, transition, ...rest } = props;
-    return React.createElement('div', { ...rest, ref });
-  });
-
-  const MotionButton = React.forwardRef(function MotionButton(
-    props: React.HTMLAttributes<HTMLButtonElement> & Record<string, unknown>,
-    ref: React.Ref<HTMLButtonElement>
-  ) {
-    const { initial, animate, exit, whileHover, whileTap, transition, ...rest } = props;
-    return React.createElement('button', { ...rest, ref });
-  });
+  // Create a generic motion component factory that strips framer-motion props
+  const createMotionComponent = (tag: string) =>
+    React.forwardRef(function MotionComponent(
+      props: React.HTMLAttributes<HTMLElement> & Record<string, unknown>,
+      ref: React.Ref<HTMLElement>
+    ) {
+      const { initial, animate, exit, whileHover, whileTap, transition, variants, ...rest } = props;
+      return React.createElement(tag, { ...rest, ref });
+    });
 
   return {
     motion: {
-      div: MotionDiv,
-      button: MotionButton,
+      div: createMotionComponent('div'),
+      button: createMotionComponent('button'),
+      h1: createMotionComponent('h1'),
+      h2: createMotionComponent('h2'),
+      h3: createMotionComponent('h3'),
+      p: createMotionComponent('p'),
+      span: createMotionComponent('span'),
+      section: createMotionComponent('section'),
+      footer: createMotionComponent('footer'),
+      header: createMotionComponent('header'),
+      nav: createMotionComponent('nav'),
+      a: createMotionComponent('a'),
+      ul: createMotionComponent('ul'),
+      li: createMotionComponent('li'),
+      main: createMotionComponent('main'),
+      article: createMotionComponent('article'),
+      aside: createMotionComponent('aside'),
     },
     AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
   };
