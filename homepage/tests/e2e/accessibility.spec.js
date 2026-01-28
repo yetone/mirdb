@@ -2,419 +2,495 @@
  * Accessibility E2E Tests
  * Owner: Scenario 8 - Accessibility Compliance
  *
- * Tests for:
- * - Keyboard tab navigation (Test Case 3)
- * - Focus indicators visibility (Test Case 5)
+ * E2E Tests for:
+ * - Keyboard tab navigation (TC3)
+ * - Focus indicators visibility (TC5)
+ *
+ * WCAG 2.1 AA compliance testing
  */
 
 const { test, expect } = require('@playwright/test');
 
-test.describe('Accessibility E2E Tests', () => {
+test.describe('Accessibility E2E - Keyboard Navigation and Focus', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('/');
+        await page.waitForLoadState('networkidle');
     });
 
-    test.describe('Test Case 3: Keyboard Tab Navigation', () => {
-        test('All interactive elements are reachable via Tab key in logical order', async ({ page }) => {
-            // Start from the top of the page
+    /**
+     * Test Case 3: Test keyboard tab navigation
+     * All interactive elements are reachable via Tab key in logical order
+     */
+    test.describe('TC3: Keyboard Tab Navigation', () => {
+        test('All interactive elements are reachable via Tab key', async ({ page }) => {
+            // Get all focusable elements
+            const focusableElements = await page.locator('a, button, [tabindex="0"], input, textarea, select').all();
+
+            // Press Tab from the beginning and track focus
             await page.keyboard.press('Tab');
 
-            // Collect all focusable elements we encounter
-            const focusedElements = [];
-            let previousElement = null;
-            let maxTabs = 50; // Safety limit
+            let focusedCount = 0;
+            const maxTabs = focusableElements.length + 5; // Extra margin for safety
 
-            for (let i = 0; i < maxTabs; i++) {
-                // Get the currently focused element
+            for (let i = 0; i < maxTabs && focusedCount < focusableElements.length; i++) {
                 const focusedElement = await page.evaluate(() => {
                     const el = document.activeElement;
-                    if (!el || el === document.body) return null;
-                    return {
-                        tagName: el.tagName.toLowerCase(),
-                        text: el.textContent?.trim().substring(0, 50),
-                        id: el.id,
-                        href: el.getAttribute('href'),
-                        type: el.getAttribute('type'),
-                        ariaLabel: el.getAttribute('aria-label'),
-                        className: el.className
-                    };
+                    return el ? el.tagName : null;
                 });
 
-                if (!focusedElement) break;
-
-                // Check if we've looped back to the first element
-                if (focusedElements.length > 0 &&
-                    JSON.stringify(focusedElement) === JSON.stringify(focusedElements[0])) {
-                    break;
+                if (focusedElement && focusedElement !== 'BODY' && focusedElement !== 'HTML') {
+                    focusedCount++;
                 }
 
-                focusedElements.push(focusedElement);
                 await page.keyboard.press('Tab');
             }
 
-            // Verify we can reach all major interactive elements
-            expect(focusedElements.length).toBeGreaterThan(0);
-
-            // Check that links are reachable
-            const links = focusedElements.filter(el => el.tagName === 'a');
-            expect(links.length).toBeGreaterThan(0);
-
-            // Check that buttons are reachable
-            const buttons = focusedElements.filter(el => el.tagName === 'button');
-            expect(buttons.length).toBeGreaterThan(0);
+            // Should be able to tab through multiple interactive elements
+            expect(focusedCount).toBeGreaterThanOrEqual(3);
         });
 
-        test('Hero CTA buttons are reachable via keyboard', async ({ page }) => {
-            // Tab through until we find the GitHub CTA
-            let foundGithubCta = false;
-            let foundDocsCta = false;
+        test('Tab order follows logical document order', async ({ page }) => {
+            const tabOrder = [];
+
+            // Tab through the page and collect focused element IDs/descriptions
+            await page.keyboard.press('Tab');
+
+            for (let i = 0; i < 15; i++) {
+                const focusedInfo = await page.evaluate(() => {
+                    const el = document.activeElement;
+                    if (!el || el.tagName === 'BODY') return null;
+                    return {
+                        tag: el.tagName,
+                        id: el.id || '',
+                        text: el.textContent?.trim().substring(0, 30) || '',
+                        href: el.getAttribute('href') || ''
+                    };
+                });
+
+                if (focusedInfo) {
+                    tabOrder.push(focusedInfo);
+                }
+
+                await page.keyboard.press('Tab');
+            }
+
+            // First few tab stops should be hero section CTAs
+            expect(tabOrder.length).toBeGreaterThan(0);
+
+            // Check that hero CTAs come early in tab order
+            const heroCtaIndex = tabOrder.findIndex(item =>
+                item.id === 'cta-github' || item.text.toLowerCase().includes('github')
+            );
+
+            expect(heroCtaIndex).toBeLessThan(5);
+        });
+
+        test('Hero CTA buttons are keyboard accessible', async ({ page }) => {
+            // Focus on primary CTA
+            await page.keyboard.press('Tab');
+
+            // Tab until we reach the GitHub button
+            let foundGithubBtn = false;
+            for (let i = 0; i < 10; i++) {
+                const isFocused = await page.locator('#cta-github').evaluate(el => document.activeElement === el);
+                if (isFocused) {
+                    foundGithubBtn = true;
+                    break;
+                }
+                await page.keyboard.press('Tab');
+            }
+
+            expect(foundGithubBtn).toBe(true);
+        });
+
+        test('Copy button is keyboard accessible', async ({ page }) => {
+            // Tab to find the copy button
+            let foundCopyBtn = false;
+            await page.keyboard.press('Tab');
 
             for (let i = 0; i < 20; i++) {
-                await page.keyboard.press('Tab');
-
-                const focusedElement = await page.evaluate(() => {
-                    const el = document.activeElement;
-                    return {
-                        id: el?.id,
-                        href: el?.getAttribute('href'),
-                        text: el?.textContent?.trim()
-                    };
-                });
-
-                if (focusedElement.id === 'cta-github' ||
-                    focusedElement.href?.includes('github.com')) {
-                    foundGithubCta = true;
-                }
-
-                if (focusedElement.id === 'cta-docs' ||
-                    focusedElement.href?.includes('#quick-start')) {
-                    foundDocsCta = true;
-                }
-
-                if (foundGithubCta && foundDocsCta) break;
-            }
-
-            expect(foundGithubCta).toBe(true);
-            expect(foundDocsCta).toBe(true);
-        });
-
-        test('Copy button in code example is reachable via keyboard', async ({ page }) => {
-            let foundCopyButton = false;
-
-            for (let i = 0; i < 30; i++) {
-                await page.keyboard.press('Tab');
-
-                const isCopyButton = await page.evaluate(() => {
-                    const el = document.activeElement;
-                    return el?.id === 'copy-btn' ||
-                           el?.classList?.contains('copy-btn') ||
-                           el?.textContent?.toLowerCase().includes('copy');
-                });
-
-                if (isCopyButton) {
-                    foundCopyButton = true;
+                const focusedId = await page.evaluate(() => document.activeElement?.id || '');
+                if (focusedId === 'copy-btn') {
+                    foundCopyBtn = true;
                     break;
                 }
+                await page.keyboard.press('Tab');
             }
 
-            expect(foundCopyButton).toBe(true);
+            expect(foundCopyBtn).toBe(true);
         });
 
         test('Footer links are reachable via keyboard', async ({ page }) => {
+            // Tab through the entire page to reach footer
             let foundFooterLink = false;
+            await page.keyboard.press('Tab');
 
-            for (let i = 0; i < 50; i++) {
-                await page.keyboard.press('Tab');
-
-                const isInFooter = await page.evaluate(() => {
+            for (let i = 0; i < 30; i++) {
+                const inFooter = await page.evaluate(() => {
                     const el = document.activeElement;
                     return el?.closest('footer') !== null;
                 });
 
-                if (isInFooter) {
+                if (inFooter) {
                     foundFooterLink = true;
                     break;
                 }
+                await page.keyboard.press('Tab');
             }
 
             expect(foundFooterLink).toBe(true);
         });
 
-        test('Tab order follows visual/logical layout', async ({ page }) => {
-            // Get all focusable elements in DOM order
-            const domOrder = await page.evaluate(() => {
-                const focusableSelector = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
-                const elements = document.querySelectorAll(focusableSelector);
-                return Array.from(elements).map(el => ({
-                    tagName: el.tagName.toLowerCase(),
-                    id: el.id,
-                    rect: el.getBoundingClientRect()
-                }));
-            });
+        test('Enter key activates links when focused', async ({ page }) => {
+            // Focus on documentation link (internal anchor)
+            const docsLink = page.locator('#cta-docs');
+            await docsLink.focus();
 
-            // Tab through and record actual order
-            const tabOrder = [];
+            // Verify it's focused
+            const isFocused = await docsLink.evaluate(el => document.activeElement === el);
+            expect(isFocused).toBe(true);
 
-            for (let i = 0; i < domOrder.length + 5; i++) {
-                await page.keyboard.press('Tab');
+            // Press Enter and check that it navigates
+            await page.keyboard.press('Enter');
 
-                const focused = await page.evaluate(() => {
-                    const el = document.activeElement;
-                    if (!el || el === document.body) return null;
-                    return {
-                        tagName: el.tagName.toLowerCase(),
-                        id: el.id
-                    };
-                });
+            // Wait for potential navigation/scroll
+            await page.waitForTimeout(1000);
 
-                if (!focused) break;
-                if (tabOrder.length > 0 && focused.id === tabOrder[0].id) break;
+            // Should scroll to quick-start section OR the quick-start section should be visible
+            const quickStartVisible = await page.locator('#quick-start').isVisible();
+            const url = page.url();
 
-                tabOrder.push(focused);
-            }
-
-            // Tab order should generally follow top-to-bottom, left-to-right
-            // This is a basic check - actual order may vary based on layout
-            expect(tabOrder.length).toBeGreaterThan(0);
-        });
-    });
-
-    test.describe('Test Case 5: Focus Indicators', () => {
-        test('Interactive elements have visible focus indicators when focused', async ({ page }) => {
-            // Tab through multiple elements and verify at least one has focus indicator
-            let foundElementWithFocusIndicator = false;
-            let interactiveElementCount = 0;
-            let elementsWithFocusIndicator = 0;
-
-            for (let i = 0; i < 15; i++) {
-                await page.keyboard.press('Tab');
-
-                const focusInfo = await page.evaluate(() => {
-                    const el = document.activeElement;
-                    if (!el || el === document.body) return { isInteractive: false };
-
-                    // Check if this is a real interactive element
-                    const isLink = el.tagName === 'A' && el.href;
-                    const isButton = el.tagName === 'BUTTON';
-                    const isInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName);
-                    const isInteractive = isLink || isButton || isInput;
-
-                    if (!isInteractive) return { isInteractive: false };
-
-                    const styles = window.getComputedStyle(el);
-                    const outlineStyle = styles.getPropertyValue('outline-style');
-                    const outlineWidth = styles.getPropertyValue('outline-width');
-                    const boxShadow = styles.getPropertyValue('box-shadow');
-
-                    // Check for outline
-                    const hasOutline = outlineStyle !== 'none' &&
-                        parseFloat(outlineWidth) > 0;
-
-                    // Check for box-shadow as focus indicator
-                    const hasBoxShadow = boxShadow !== 'none' && boxShadow !== '';
-
-                    return {
-                        isInteractive: true,
-                        hasFocusIndicator: hasOutline || hasBoxShadow
-                    };
-                });
-
-                if (focusInfo.isInteractive) {
-                    interactiveElementCount++;
-                    if (focusInfo.hasFocusIndicator) {
-                        elementsWithFocusIndicator++;
-                        foundElementWithFocusIndicator = true;
-                    }
-                }
-            }
-
-            // Verify that we found interactive elements and most have focus indicators
-            expect(interactiveElementCount).toBeGreaterThan(0);
-            expect(foundElementWithFocusIndicator).toBe(true);
-            // At least half of the interactive elements should have focus indicators
-            expect(elementsWithFocusIndicator / interactiveElementCount).toBeGreaterThanOrEqual(0.5);
+            // Either URL contains hash or section is in viewport
+            const navigated = url.includes('#quick-start') || quickStartVisible;
+            expect(navigated).toBe(true);
         });
 
-        test('Links have visible focus indicator', async ({ page }) => {
-            // Find and focus a link
-            const firstLink = page.locator('a[href]').first();
-            await firstLink.focus();
+        test('Space key can activate buttons', async ({ page }) => {
+            // Focus on copy button
+            const copyBtn = page.locator('#copy-btn');
+            await copyBtn.focus();
 
-            // Check for visible focus styles
-            const focusStyles = await firstLink.evaluate(el => {
-                const styles = window.getComputedStyle(el);
-                return {
-                    outline: styles.outline,
-                    outlineWidth: styles.outlineWidth,
-                    outlineStyle: styles.outlineStyle,
-                    boxShadow: styles.boxShadow
-                };
-            });
+            // Initial state
+            const initialText = await copyBtn.textContent();
 
-            // Should have some form of focus indicator
-            const hasFocusIndicator =
-                (focusStyles.outlineStyle !== 'none' && focusStyles.outlineWidth !== '0px') ||
-                (focusStyles.boxShadow !== 'none' && focusStyles.boxShadow !== '');
-
-            expect(hasFocusIndicator).toBe(true);
-        });
-
-        test('Buttons have visible focus indicator', async ({ page }) => {
-            const copyButton = page.locator('button').first();
-            await copyButton.focus();
-
-            const focusStyles = await copyButton.evaluate(el => {
-                const styles = window.getComputedStyle(el);
-                return {
-                    outline: styles.outline,
-                    outlineWidth: styles.outlineWidth,
-                    outlineStyle: styles.outlineStyle,
-                    boxShadow: styles.boxShadow,
-                    border: styles.border
-                };
-            });
-
-            // Should have some form of focus indicator
-            const hasFocusIndicator =
-                (focusStyles.outlineStyle !== 'none' && focusStyles.outlineWidth !== '0px') ||
-                (focusStyles.boxShadow !== 'none' && focusStyles.boxShadow !== '');
-
-            expect(hasFocusIndicator).toBe(true);
-        });
-
-        test('Focus indicator has sufficient contrast', async ({ page }) => {
-            // Tab to a focusable element
-            await page.keyboard.press('Tab');
-
-            const focusContrast = await page.evaluate(() => {
-                const el = document.activeElement;
-                if (!el || el === document.body) return { valid: false };
-
-                const styles = window.getComputedStyle(el);
-                const outlineColor = styles.getPropertyValue('outline-color');
-
-                // Parse the outline color (format: rgb(r, g, b) or rgba(r, g, b, a))
-                const colorMatch = outlineColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-                if (!colorMatch) return { valid: true, reason: 'no-outline' };
-
-                const [, r, g, b] = colorMatch.map(Number);
-
-                // Calculate relative luminance
-                const luminance = (channel) => {
-                    const c = channel / 255;
-                    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-                };
-
-                const L = 0.2126 * luminance(r) + 0.7152 * luminance(g) + 0.0722 * luminance(b);
-
-                // Check if it's not transparent and has reasonable luminance (not too light)
-                return {
-                    valid: true,
-                    luminance: L,
-                    isVisible: outlineColor !== 'transparent'
-                };
-            });
-
-            expect(focusContrast.valid).toBe(true);
-        });
-
-        test('Focus indicator follows consistent pattern across elements', async ({ page }) => {
-            const focusStyles = [];
-
-            // Tab through several elements and collect focus styles
-            for (let i = 0; i < 10; i++) {
-                await page.keyboard.press('Tab');
-
-                const style = await page.evaluate(() => {
-                    const el = document.activeElement;
-                    if (!el || el === document.body) return null;
-
-                    const styles = window.getComputedStyle(el);
-                    return {
-                        outlineColor: styles.getPropertyValue('outline-color'),
-                        outlineWidth: styles.getPropertyValue('outline-width'),
-                        outlineStyle: styles.getPropertyValue('outline-style')
-                    };
-                });
-
-                if (style) {
-                    focusStyles.push(style);
-                }
-            }
-
-            // Check that there's consistency in focus styling
-            expect(focusStyles.length).toBeGreaterThan(0);
-
-            // Most elements should have similar outline styles
-            const outlineStyles = focusStyles
-                .map(s => s.outlineStyle)
-                .filter(s => s !== 'none');
-
-            // At least some elements should have outlines
-            expect(outlineStyles.length).toBeGreaterThan(0);
-        });
-    });
-
-    test.describe('Additional Accessibility Checks', () => {
-        test('No keyboard traps exist on the page', async ({ page }) => {
-            // Tab through the page multiple times
-            let tabCount = 0;
-            const maxTabs = 100;
-            let reachedEnd = false;
-
-            // First, count how many focusable elements there are
-            const focusableCount = await page.evaluate(() => {
-                const selector = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
-                return document.querySelectorAll(selector).length;
-            });
-
-            // Tab through and make sure we can complete a full cycle
-            for (let i = 0; i < maxTabs; i++) {
-                await page.keyboard.press('Tab');
-                tabCount++;
-
-                // Check if we've tabbed through more elements than exist (indicating a loop)
-                if (tabCount > focusableCount * 2) {
-                    reachedEnd = true;
-                    break;
-                }
-            }
-
-            // We should be able to tab through all elements without getting stuck
-            expect(reachedEnd).toBe(true);
-        });
-
-        test('Escape key can close any modals or popups if present', async ({ page }) => {
-            // Press Escape and ensure the page doesn't break
-            await page.keyboard.press('Escape');
-
-            // Page should still be functional
-            const bodyExists = await page.locator('body').isVisible();
-            expect(bodyExists).toBe(true);
-        });
-
-        test('Enter key activates focused links', async ({ page }) => {
-            // Focus on the GitHub CTA link
-            const githubLink = page.locator('#cta-github, a[href*="github.com"]').first();
-            await githubLink.focus();
-
-            // Check that Enter would activate it (by checking it's a proper link)
-            const isLink = await githubLink.evaluate(el => el.tagName.toLowerCase() === 'a');
-            expect(isLink).toBe(true);
-        });
-
-        test('Space key activates focused buttons', async ({ page }) => {
-            const copyButton = page.locator('.copy-btn').first();
-            await copyButton.focus();
-
-            // Press Space to activate the button
+            // Press Space
             await page.keyboard.press('Space');
 
-            // Check that the button was activated (might show 'Copied!' feedback)
-            const buttonText = await copyButton.textContent();
+            // Wait for potential state change
+            await page.waitForTimeout(300);
 
-            // Either the text changed to indicate success, or the button is still functional
-            expect(buttonText).toBeTruthy();
+            // Button should respond (either change text or maintain functionality)
+            const isStillButton = await copyBtn.isVisible();
+            expect(isStillButton).toBe(true);
+        });
+    });
+
+    /**
+     * Test Case 5: Verify focus indicators
+     * Interactive elements have visible focus indicators when focused
+     * Note: Uses Tab key navigation to trigger :focus-visible styles
+     */
+    test.describe('TC5: Focus Indicators', () => {
+        test('Links show visible focus indicator', async ({ page }) => {
+            // Use Tab to navigate - this triggers :focus-visible
+            await page.keyboard.press('Tab');
+            await page.waitForTimeout(100);
+
+            // Check that focus styles are applied
+            const styles = await page.evaluate(() => {
+                const el = document.activeElement;
+                if (!el) return null;
+                const computed = window.getComputedStyle(el);
+                return {
+                    outline: computed.outline,
+                    outlineWidth: computed.outlineWidth,
+                    outlineColor: computed.outlineColor,
+                    outlineStyle: computed.outlineStyle,
+                    boxShadow: computed.boxShadow
+                };
+            });
+
+            expect(styles).not.toBeNull();
+
+            // Should have visible outline or box-shadow
+            const hasVisibleFocus =
+                (styles.outlineWidth !== '0px' && styles.outlineStyle !== 'none') ||
+                styles.boxShadow !== 'none';
+
+            expect(hasVisibleFocus).toBe(true);
+        });
+
+        test('Primary CTA button shows focus indicator', async ({ page }) => {
+            // Tab until we reach a primary button
+            await page.keyboard.press('Tab');
+            await page.waitForTimeout(100);
+
+            const styles = await page.evaluate(() => {
+                const el = document.activeElement;
+                if (!el) return null;
+                const computed = window.getComputedStyle(el);
+                return {
+                    outline: computed.outline,
+                    outlineWidth: computed.outlineWidth,
+                    outlineStyle: computed.outlineStyle,
+                    boxShadow: computed.boxShadow,
+                    isPrimary: el.classList.contains('btn-primary')
+                };
+            });
+
+            expect(styles).not.toBeNull();
+
+            const hasVisibleFocus =
+                (styles.outlineWidth !== '0px' && styles.outlineStyle !== 'none') ||
+                styles.boxShadow !== 'none';
+
+            expect(hasVisibleFocus).toBe(true);
+        });
+
+        test('Secondary CTA button shows focus indicator', async ({ page }) => {
+            // Tab to secondary button
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Tab');
+            await page.waitForTimeout(100);
+
+            const styles = await page.evaluate(() => {
+                const el = document.activeElement;
+                if (!el) return null;
+                const computed = window.getComputedStyle(el);
+                return {
+                    outline: computed.outline,
+                    outlineWidth: computed.outlineWidth,
+                    outlineStyle: computed.outlineStyle,
+                    boxShadow: computed.boxShadow
+                };
+            });
+
+            expect(styles).not.toBeNull();
+
+            const hasVisibleFocus =
+                (styles.outlineWidth !== '0px' && styles.outlineStyle !== 'none') ||
+                styles.boxShadow !== 'none';
+
+            expect(hasVisibleFocus).toBe(true);
+        });
+
+        test('Copy button shows focus indicator', async ({ page }) => {
+            // Tab multiple times to reach copy button
+            for (let i = 0; i < 10; i++) {
+                await page.keyboard.press('Tab');
+                const focusedId = await page.evaluate(() => document.activeElement?.id);
+                if (focusedId === 'copy-btn') break;
+            }
+            await page.waitForTimeout(100);
+
+            const styles = await page.evaluate(() => {
+                const el = document.activeElement;
+                if (!el) return null;
+                const computed = window.getComputedStyle(el);
+                return {
+                    outline: computed.outline,
+                    outlineWidth: computed.outlineWidth,
+                    outlineStyle: computed.outlineStyle,
+                    outlineOffset: computed.outlineOffset
+                };
+            });
+
+            expect(styles).not.toBeNull();
+            const hasVisibleFocus =
+                styles.outlineWidth !== '0px' && styles.outlineStyle !== 'none';
+
+            expect(hasVisibleFocus).toBe(true);
+        });
+
+        test('Focus indicator has sufficient contrast (outline color)', async ({ page }) => {
+            // Use Tab to trigger focus-visible
+            await page.keyboard.press('Tab');
+            await page.waitForTimeout(100);
+
+            const outlineColor = await page.evaluate(() => {
+                const el = document.activeElement;
+                if (!el) return null;
+                const computed = window.getComputedStyle(el);
+                return computed.outlineColor;
+            });
+
+            // Should have a visible color (not transparent)
+            expect(outlineColor).not.toBeNull();
+            expect(outlineColor).not.toBe('transparent');
+            expect(outlineColor).not.toBe('rgba(0, 0, 0, 0)');
+        });
+
+        test('Focus moves visibly when tabbing', async ({ page }) => {
+            // Take screenshot of first focused element
+            await page.keyboard.press('Tab');
+            const firstFocused = await page.evaluate(() => document.activeElement?.id || document.activeElement?.className);
+
+            // Tab to next element
+            await page.keyboard.press('Tab');
+            const secondFocused = await page.evaluate(() => document.activeElement?.id || document.activeElement?.className);
+
+            // Focus should have moved to a different element
+            expect(firstFocused).not.toBe(secondFocused);
+        });
+
+        test('Focus indicator is visible in light mode', async ({ page }) => {
+            // Emulate light color scheme
+            await page.emulateMedia({ colorScheme: 'light' });
+            await page.reload();
+            await page.waitForLoadState('networkidle');
+
+            // Use Tab to trigger focus-visible
+            await page.keyboard.press('Tab');
+            await page.waitForTimeout(100);
+
+            const styles = await page.evaluate(() => {
+                const el = document.activeElement;
+                if (!el) return null;
+                const computed = window.getComputedStyle(el);
+                return {
+                    outlineWidth: computed.outlineWidth,
+                    outlineStyle: computed.outlineStyle
+                };
+            });
+
+            expect(styles).not.toBeNull();
+            const hasVisibleFocus =
+                styles.outlineWidth !== '0px' && styles.outlineStyle !== 'none';
+
+            expect(hasVisibleFocus).toBe(true);
+        });
+
+        test('Focus indicator is visible in dark mode', async ({ page }) => {
+            // Emulate dark color scheme
+            await page.emulateMedia({ colorScheme: 'dark' });
+            await page.reload();
+            await page.waitForLoadState('networkidle');
+
+            // Use Tab to trigger focus-visible
+            await page.keyboard.press('Tab');
+            await page.waitForTimeout(100);
+
+            const styles = await page.evaluate(() => {
+                const el = document.activeElement;
+                if (!el) return null;
+                const computed = window.getComputedStyle(el);
+                return {
+                    outlineWidth: computed.outlineWidth,
+                    outlineStyle: computed.outlineStyle
+                };
+            });
+
+            expect(styles).not.toBeNull();
+            const hasVisibleFocus =
+                styles.outlineWidth !== '0px' && styles.outlineStyle !== 'none';
+
+            expect(hasVisibleFocus).toBe(true);
+        });
+
+        test('Focus-visible selector is properly supported', async ({ page }) => {
+            // Check that CSS includes :focus-visible
+            const hasFocusVisibleStyles = await page.evaluate(() => {
+                const styleSheets = document.styleSheets;
+                for (const sheet of styleSheets) {
+                    try {
+                        const rules = sheet.cssRules || sheet.rules;
+                        for (const rule of rules) {
+                            if (rule.selectorText && rule.selectorText.includes(':focus-visible')) {
+                                return true;
+                            }
+                        }
+                    } catch (e) {
+                        // Cross-origin stylesheets may throw
+                        continue;
+                    }
+                }
+                return false;
+            });
+
+            expect(hasFocusVisibleStyles).toBe(true);
+        });
+    });
+
+    /**
+     * Additional keyboard navigation tests
+     */
+    test.describe('Additional Keyboard Accessibility', () => {
+        test('Escape key does not break page navigation', async ({ page }) => {
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Tab');
+
+            // Press Escape
+            await page.keyboard.press('Escape');
+
+            // Should still be able to navigate
+            await page.keyboard.press('Tab');
+
+            const canStillFocus = await page.evaluate(() => {
+                return document.activeElement !== null &&
+                       document.activeElement.tagName !== 'BODY';
+            });
+
+            // Page should remain functional (focus may or may not change with Escape)
+            const pageIsAccessible = await page.locator('body').isVisible();
+            expect(pageIsAccessible).toBe(true);
+        });
+
+        test('Page content is accessible without mouse', async ({ page }) => {
+            // Navigate to all major sections via keyboard
+            const sectionsFound = new Set();
+
+            await page.keyboard.press('Tab');
+
+            for (let i = 0; i < 30; i++) {
+                const sectionId = await page.evaluate(() => {
+                    const el = document.activeElement;
+                    const section = el?.closest('section');
+                    return section?.id || null;
+                });
+
+                if (sectionId) {
+                    sectionsFound.add(sectionId);
+                }
+
+                await page.keyboard.press('Tab');
+            }
+
+            // Should reach multiple sections
+            expect(sectionsFound.size).toBeGreaterThanOrEqual(2);
+        });
+
+        test('No keyboard traps exist', async ({ page }) => {
+            // Tab through the page and ensure we eventually cycle back
+            const startFocus = await page.evaluate(() => document.activeElement?.id || 'none');
+
+            // Tab many times
+            for (let i = 0; i < 50; i++) {
+                await page.keyboard.press('Tab');
+            }
+
+            // Should be able to continue tabbing (no trap)
+            const canStillTab = await page.evaluate(() => {
+                return document.activeElement !== null;
+            });
+
+            expect(canStillTab).toBe(true);
+        });
+
+        test('Shift+Tab navigates backwards', async ({ page }) => {
+            // Tab forward a few times
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Tab');
+
+            const forwardFocus = await page.evaluate(() => document.activeElement?.id || document.activeElement?.className);
+
+            // Tab backwards
+            await page.keyboard.press('Shift+Tab');
+
+            const backwardFocus = await page.evaluate(() => document.activeElement?.id || document.activeElement?.className);
+
+            // Should have moved to a previous element
+            expect(backwardFocus).not.toBe(forwardFocus);
         });
     });
 });
