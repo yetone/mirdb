@@ -30,12 +30,16 @@ vi.mock('framer-motion', () => ({
       React.createElement('div', filterMotionProps(props)),
     h1: (props: Record<string, unknown>) =>
       React.createElement('h1', filterMotionProps(props)),
+    h2: (props: Record<string, unknown>) =>
+      React.createElement('h2', filterMotionProps(props)),
     p: (props: Record<string, unknown>) =>
       React.createElement('p', filterMotionProps(props)),
     button: (props: Record<string, unknown>) =>
       React.createElement('button', filterMotionProps(props)),
     section: (props: Record<string, unknown>) =>
       React.createElement('section', filterMotionProps(props)),
+    article: (props: Record<string, unknown>) =>
+      React.createElement('article', filterMotionProps(props)),
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
 }))

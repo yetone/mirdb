@@ -5,7 +5,7 @@
  * Re-exports all homepage section components for clean imports.
  */
 export { HeroSection } from './HeroSection'
+export { FeaturesSection } from './FeaturesSection'
 // Future exports for other scenarios:
-// export { FeaturesSection } from './FeaturesSection'
 // export { HowItWorks } from './HowItWorks'
 // export { Footer } from './Footer'
