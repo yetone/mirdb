@@ -16,9 +16,35 @@ import { ThemeToggle } from '../components/shared/ThemeToggle';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
 }
 
-const { title, description = 'A persistent key-value store with Memcached protocol compatibility' } = Astro.props;
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://mirdb.example.com';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const {
+  title,
+  description = 'A persistent key-value store with Memcached protocol compatibility, built with an LSM-tree architecture for high write throughput.',
+  ogImage = `${siteUrl}/og-image.png`
+} = Astro.props;
+
+// JSON-LD structured data for SoftwareApplication
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MirDB",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Linux, macOS, Windows",
+  "description": description,
+  "url": siteUrl,
+  "softwareVersion": "0.1.0",
+  "author": {
+    "@type": "Organization",
+    "name": "MirDB Contributors"
+  },
+  "license": "https://opensource.org/licenses/MIT",
+  "programmingLanguage": "Rust",
+  "keywords": ["key-value store", "database", "memcached", "LSM-tree", "persistent storage"]
+};
 ---
 
 <!DOCTYPE html>
@@ -31,10 +57,25 @@ const { title, description = 'A persistent key-value store with Memcached protoc
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="MirDB" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <style is:global>
       @import '../styles/global.css';
