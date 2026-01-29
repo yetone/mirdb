@@ -11,6 +11,8 @@
  * - JSON-LD structured data
  */
 
+import ThemeToggle from '../components/shared/ThemeToggle';
+
 interface Props {
   title: string;
   description?: string;
@@ -37,8 +39,29 @@ const { title, description = 'A persistent key-value store with Memcached protoc
     <style is:global>
       @import '../styles/global.css';
     </style>
+
+    <!-- Theme initialization script to prevent flash -->
+    <script is:inline>
+      (function() {
+        const stored = localStorage.getItem('mirdb-theme');
+        if (stored === 'light') {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        } else if (stored === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        }
+      })();
+    </script>
   </head>
   <body class="bg-background text-text-primary min-h-screen">
+    <!-- Theme Toggle (Scenario 11) -->
+    <div class="fixed top-4 right-4 z-50">
+      <ThemeToggle client:load />
+    </div>
     <slot />
   </body>
 </html>

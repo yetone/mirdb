@@ -21,14 +21,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#0d1117',
-        surface: '#161b22',
-        border: '#30363d',
-        'text-primary': '#c9d1d9',
-        'text-secondary': '#8b949e',
-        accent: '#58a6ff',
-        success: '#3fb950',
-        warning: '#d29922',
+        background: 'var(--color-background)',
+        surface: 'var(--color-surface)',
+        border: 'var(--color-border)',
+        'text-primary': 'var(--color-text-primary)',
+        'text-secondary': 'var(--color-text-secondary)',
+        accent: 'var(--color-accent)',
+        success: 'var(--color-success)',
+        warning: 'var(--color-warning)',
       },
       fontFamily: {
         mono: ['JetBrains Mono', 'SF Mono', 'Consolas', 'monospace'],
