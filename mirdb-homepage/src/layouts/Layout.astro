@@ -11,7 +11,7 @@
  * - JSON-LD structured data
  */
 
-import ThemeToggle from '../components/shared/ThemeToggle';
+import { ThemeToggle } from '../components/shared/ThemeToggle';
 
 interface Props {
   title: string;
@@ -40,25 +40,27 @@ const { title, description = 'A persistent key-value store with Memcached protoc
       @import '../styles/global.css';
     </style>
 
-    <!-- Theme initialization script to prevent flash -->
+    <!-- Theme initialization script - runs before page renders to prevent flash -->
     <script is:inline>
       (function() {
-        const stored = localStorage.getItem('mirdb-theme');
-        if (stored === 'light') {
-          document.documentElement.classList.remove('dark');
-          document.documentElement.classList.add('light');
-        } else if (stored === 'dark') {
-          document.documentElement.classList.add('dark');
-          document.documentElement.classList.remove('light');
+        const STORAGE_KEY = 'mirdb-theme';
+        const stored = localStorage.getItem(STORAGE_KEY);
+        let theme = 'dark'; // Default to dark
+
+        if (stored === 'dark' || stored === 'light') {
+          theme = stored;
         } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-          document.documentElement.classList.remove('dark');
-          document.documentElement.classList.add('light');
+          theme = 'light';
         }
+
+        const root = document.documentElement;
+        root.classList.remove('dark', 'light');
+        root.classList.add(theme);
       })();
     </script>
   </head>
-  <body class="bg-background text-text-primary min-h-screen">
-    <!-- Theme Toggle (Scenario 11) -->
+  <body class="bg-background text-text-primary min-h-screen transition-colors duration-200">
+    <!-- Theme toggle fixed in top-right corner -->
     <div class="fixed top-4 right-4 z-50">
       <ThemeToggle client:load />
     </div>

@@ -21,6 +21,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Using CSS variables to support theme switching
         background: 'var(--color-background)',
         surface: 'var(--color-surface)',
         border: 'var(--color-border)',
