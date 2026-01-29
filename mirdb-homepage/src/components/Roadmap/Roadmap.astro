@@ -1,0 +1,129 @@
+---
+/**
+ * Roadmap Section.
+ * Owner: Scenario 8 - Roadmap Section
+ *
+ * Expected features:
+ * - Completed features with checkmarks
+ * - Planned features (Raft consensus)
+ * - Visual distinction between completed/planned
+ * - Timeline or list layout
+ */
+
+import roadmapData from '../../content/roadmap.json';
+import type { RoadmapItem } from '../../types/index';
+
+const roadmapItems = roadmapData as RoadmapItem[];
+const completedItems = roadmapItems.filter((item) => item.status === 'completed');
+const plannedItems = roadmapItems.filter((item) => item.status === 'planned');
+---
+
+<section
+  id="roadmap"
+  class="roadmap-section py-16 px-4 max-w-4xl mx-auto"
+  data-testid="roadmap-section"
+>
+  <h2 class="text-3xl font-mono font-bold text-center mb-12 text-text-primary">
+    Roadmap
+  </h2>
+
+  <div class="space-y-12">
+    <!-- Completed Features -->
+    <div data-testid="completed-features">
+      <h3 class="text-xl font-mono font-semibold mb-6 text-success flex items-center gap-2">
+        <svg
+          class="w-6 h-6"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd"></path>
+        </svg>
+        Completed
+      </h3>
+      <ul class="space-y-4" role="list" aria-label="Completed features">
+        {
+          completedItems.map((item) => (
+            <li
+              class="flex items-start gap-3 p-4 bg-surface rounded-lg border border-border"
+              data-testid="roadmap-item-completed"
+            >
+              <span
+                class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-success"
+                aria-hidden="true"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+              <div>
+                <h4 class="font-mono font-medium text-text-primary">
+                  {item.title}
+                </h4>
+                <p class="text-sm text-text-secondary mt-1">
+                  {item.description}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Planned Features -->
+    <div data-testid="planned-features">
+      <h3 class="text-xl font-mono font-semibold mb-6 text-warning flex items-center gap-2">
+        <svg
+          class="w-6 h-6"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+            clip-rule="evenodd"></path>
+        </svg>
+        Planned
+      </h3>
+      <ul class="space-y-4" role="list" aria-label="Planned features">
+        {
+          plannedItems.map((item) => (
+            <li
+              class="flex items-start gap-3 p-4 bg-surface rounded-lg border border-border border-dashed"
+              data-testid="roadmap-item-planned"
+            >
+              <span
+                class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-warning"
+                aria-hidden="true"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+              <div>
+                <h4 class="font-mono font-medium text-text-primary">
+                  {item.title}
+                </h4>
+                <p class="text-sm text-text-secondary mt-1">
+                  {item.description}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

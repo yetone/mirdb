@@ -1,0 +1,42 @@
+[
+  {
+    "name": "get",
+    "description": "Retrieve the value associated with a key. Returns the value if found, or nothing if the key does not exist.",
+    "syntax": "get <key>"
+  },
+  {
+    "name": "gets",
+    "description": "Retrieve the value and CAS (Check-And-Set) token for a key. Used for optimistic locking to prevent race conditions.",
+    "syntax": "gets <key>"
+  },
+  {
+    "name": "set",
+    "description": "Store a key-value pair. Overwrites any existing value for the key with the new value.",
+    "syntax": "set <key> <flags> <exptime> <bytes>"
+  },
+  {
+    "name": "add",
+    "description": "Store a key-value pair only if the key does not already exist. Fails if the key is already present.",
+    "syntax": "add <key> <flags> <exptime> <bytes>"
+  },
+  {
+    "name": "replace",
+    "description": "Store a key-value pair only if the key already exists. Fails if the key is not present.",
+    "syntax": "replace <key> <flags> <exptime> <bytes>"
+  },
+  {
+    "name": "append",
+    "description": "Append data to an existing key's value. Adds the new data to the end of the current value.",
+    "syntax": "append <key> <flags> <exptime> <bytes>"
+  },
+  {
+    "name": "prepend",
+    "description": "Prepend data to an existing key's value. Adds the new data to the beginning of the current value.",
+    "syntax": "prepend <key> <flags> <exptime> <bytes>"
+  },
+  {
+    "name": "delete",
+    "description": "Remove a key-value pair from the store. Returns success if the key was found and deleted.",
+    "syntax": "delete <key>"
+  }
+]

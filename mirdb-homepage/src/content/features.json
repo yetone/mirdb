@@ -1,0 +1,38 @@
+[
+  {
+    "id": "memcached-compatible",
+    "title": "Memcached Compatible",
+    "description": "Drop-in replacement for Memcached. Supports standard protocol including get, set, add, replace, append, prepend, and delete commands.",
+    "icon": "memcached"
+  },
+  {
+    "id": "persistent-storage",
+    "title": "Persistent Storage",
+    "description": "Data survives restarts via LSM-tree architecture. Write-ahead logging ensures durability with configurable sync policies.",
+    "icon": "storage"
+  },
+  {
+    "id": "high-performance",
+    "title": "High Performance",
+    "description": "Skip-list memtable for fast in-memory operations. Compressed SSTables reduce storage footprint while maintaining read performance.",
+    "icon": "performance"
+  },
+  {
+    "id": "configurable",
+    "title": "Configurable",
+    "description": "TOML-based configuration with sensible defaults. Fine-tune memory limits, compaction thresholds, and I/O parameters.",
+    "icon": "config"
+  },
+  {
+    "id": "compaction",
+    "title": "Compaction",
+    "description": "Automatic minor and major compaction for storage efficiency. Background processes merge SSTables and reclaim space from deleted keys.",
+    "icon": "compaction"
+  },
+  {
+    "id": "async-io",
+    "title": "Async I/O",
+    "description": "Built on Tokio for high concurrency. Asynchronous I/O operations maximize throughput on modern multi-core systems.",
+    "icon": "async"
+  }
+]

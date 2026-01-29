@@ -1,0 +1,290 @@
+---
+/**
+ * LSM-Tree SVG Illustration.
+ * Owner: Scenario 4 - Architecture Visualization
+ *
+ * Expected features:
+ * - Scalable SVG diagram
+ * - Dark mode compatible colors
+ * - Responsive sizing
+ * - Lazy loading for performance
+ */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`lsm-tree-svg ${className}`}>
+  <svg
+    viewBox="0 0 800 600"
+    xmlns="http://www.w3.org/2000/svg"
+    class="w-full h-auto max-w-4xl mx-auto"
+    role="img"
+    aria-labelledby="lsm-tree-title lsm-tree-desc"
+  >
+    <title id="lsm-tree-title">LSM-Tree Architecture Diagram</title>
+    <desc id="lsm-tree-desc">
+      Diagram showing the LSM-tree architecture with write path from WAL through Memtable to SSTables, and read path across SSTable levels L0-L7.
+    </desc>
+
+    <defs>
+      <!-- Arrow marker -->
+      <marker
+        id="arrowhead"
+        markerWidth="10"
+        markerHeight="7"
+        refX="9"
+        refY="3.5"
+        orient="auto"
+      >
+        <polygon points="0 0, 10 3.5, 0 7" fill="#58a6ff" />
+      </marker>
+
+      <!-- Write path arrow -->
+      <marker
+        id="arrowhead-write"
+        markerWidth="10"
+        markerHeight="7"
+        refX="9"
+        refY="3.5"
+        orient="auto"
+      >
+        <polygon points="0 0, 10 3.5, 0 7" fill="#3fb950" />
+      </marker>
+
+      <!-- Read path arrow -->
+      <marker
+        id="arrowhead-read"
+        markerWidth="10"
+        markerHeight="7"
+        refX="9"
+        refY="3.5"
+        orient="auto"
+      >
+        <polygon points="0 0, 10 3.5, 0 7" fill="#d29922" />
+      </marker>
+
+      <!-- Compaction arrow -->
+      <marker
+        id="arrowhead-compact"
+        markerWidth="10"
+        markerHeight="7"
+        refX="9"
+        refY="3.5"
+        orient="auto"
+      >
+        <polygon points="0 0, 10 3.5, 0 7" fill="#8b949e" />
+      </marker>
+    </defs>
+
+    <!-- Background -->
+    <rect width="800" height="600" fill="transparent" />
+
+    <!-- Legend -->
+    <g transform="translate(600, 20)" class="legend">
+      <text x="0" y="0" fill="#c9d1d9" font-size="12" font-weight="bold">Legend</text>
+      <line x1="0" y1="15" x2="30" y2="15" stroke="#3fb950" stroke-width="2" marker-end="url(#arrowhead-write)" />
+      <text x="40" y="20" fill="#c9d1d9" font-size="11">Write Path</text>
+      <line x1="0" y1="35" x2="30" y2="35" stroke="#d29922" stroke-width="2" marker-end="url(#arrowhead-read)" />
+      <text x="40" y="40" fill="#c9d1d9" font-size="11">Read Path</text>
+      <line x1="0" y1="55" x2="30" y2="55" stroke="#8b949e" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#arrowhead-compact)" />
+      <text x="40" y="60" fill="#c9d1d9" font-size="11">Compaction</text>
+    </g>
+
+    <!-- Write Request Label -->
+    <text x="40" y="50" fill="#3fb950" font-size="14" font-weight="bold" data-write-path>
+      Write Request
+    </text>
+    <line x1="40" y1="60" x2="40" y2="90" stroke="#3fb950" stroke-width="2" marker-end="url(#arrowhead-write)" data-write-path />
+
+    <!-- WAL (Write-Ahead Log) -->
+    <g transform="translate(20, 100)" data-component="wal">
+      <rect
+        width="120"
+        height="60"
+        rx="8"
+        fill="#161b22"
+        stroke="#3fb950"
+        stroke-width="2"
+      />
+      <text x="60" y="25" fill="#c9d1d9" font-size="14" font-weight="bold" text-anchor="middle">
+        WAL
+      </text>
+      <text x="60" y="45" fill="#8b949e" font-size="10" text-anchor="middle">
+        Write-Ahead Log
+      </text>
+    </g>
+
+    <!-- Arrow from WAL to Memtable -->
+    <line x1="140" y1="130" x2="190" y2="130" stroke="#3fb950" stroke-width="2" marker-end="url(#arrowhead-write)" data-write-path />
+
+    <!-- Memtable -->
+    <g transform="translate(200, 100)" data-component="memtable">
+      <rect
+        width="140"
+        height="60"
+        rx="8"
+        fill="#161b22"
+        stroke="#3fb950"
+        stroke-width="2"
+      />
+      <text x="70" y="25" fill="#c9d1d9" font-size="14" font-weight="bold" text-anchor="middle">
+        Memtable
+      </text>
+      <text x="70" y="45" fill="#8b949e" font-size="10" text-anchor="middle">
+        Skip List (in-memory)
+      </text>
+    </g>
+
+    <!-- Arrow from Memtable to Immutable Memtable -->
+    <line x1="340" y1="130" x2="390" y2="130" stroke="#3fb950" stroke-width="2" marker-end="url(#arrowhead-write)" data-write-path />
+    <text x="365" y="120" fill="#8b949e" font-size="9" text-anchor="middle">
+      freeze
+    </text>
+
+    <!-- Immutable Memtable -->
+    <g transform="translate(400, 100)" data-component="immutable-memtable">
+      <rect
+        width="160"
+        height="60"
+        rx="8"
+        fill="#161b22"
+        stroke="#58a6ff"
+        stroke-width="2"
+        stroke-dasharray="5,3"
+      />
+      <text x="80" y="25" fill="#c9d1d9" font-size="14" font-weight="bold" text-anchor="middle">
+        Immutable
+      </text>
+      <text x="80" y="45" fill="#8b949e" font-size="10" text-anchor="middle">
+        Memtable (frozen)
+      </text>
+    </g>
+
+    <!-- Arrow from Immutable Memtable to SSTable L0 -->
+    <path d="M 480 160 L 480 200 L 200 200 L 200 240" fill="none" stroke="#3fb950" stroke-width="2" marker-end="url(#arrowhead-write)" data-write-path />
+    <text x="350" y="215" fill="#8b949e" font-size="9" text-anchor="middle">
+      flush to disk
+    </text>
+
+    <!-- SSTable Levels Section -->
+    <text x="400" y="270" fill="#c9d1d9" font-size="16" font-weight="bold" text-anchor="middle" data-sstable-levels>
+      SSTable Levels
+    </text>
+
+    <!-- Level L0 -->
+    <g transform="translate(50, 290)" data-component="sstable-l0">
+      <rect
+        width="700"
+        height="45"
+        rx="6"
+        fill="#161b22"
+        stroke="#30363d"
+        stroke-width="1"
+      />
+      <text x="35" y="28" fill="#58a6ff" font-size="13" font-weight="bold">
+        L0
+      </text>
+      <!-- SSTable files in L0 -->
+      <rect x="70" y="10" width="80" height="25" rx="4" fill="#1f2937" stroke="#3fb950" stroke-width="1" />
+      <text x="110" y="27" fill="#c9d1d9" font-size="10" text-anchor="middle">SST-001</text>
+      <rect x="160" y="10" width="80" height="25" rx="4" fill="#1f2937" stroke="#58a6ff" stroke-width="1" />
+      <text x="200" y="27" fill="#c9d1d9" font-size="10" text-anchor="middle">SST-002</text>
+      <rect x="250" y="10" width="80" height="25" rx="4" fill="#1f2937" stroke="#58a6ff" stroke-width="1" />
+      <text x="290" y="27" fill="#c9d1d9" font-size="10" text-anchor="middle">SST-003</text>
+      <text x="360" y="27" fill="#8b949e" font-size="10">...</text>
+    </g>
+
+    <!-- Compaction arrow from L0 to L1 -->
+    <path d="M 400 340 L 400 360" fill="none" stroke="#8b949e" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#arrowhead-compact)" />
+    <text x="430" y="355" fill="#8b949e" font-size="9">compaction</text>
+
+    <!-- Level L1 -->
+    <g transform="translate(50, 370)" data-component="sstable-l1">
+      <rect
+        width="700"
+        height="45"
+        rx="6"
+        fill="#161b22"
+        stroke="#30363d"
+        stroke-width="1"
+      />
+      <text x="35" y="28" fill="#58a6ff" font-size="13" font-weight="bold">
+        L1
+      </text>
+      <rect x="70" y="10" width="100" height="25" rx="4" fill="#1f2937" stroke="#58a6ff" stroke-width="1" />
+      <text x="120" y="27" fill="#c9d1d9" font-size="10" text-anchor="middle">SST-010</text>
+      <rect x="180" y="10" width="100" height="25" rx="4" fill="#1f2937" stroke="#58a6ff" stroke-width="1" />
+      <text x="230" y="27" fill="#c9d1d9" font-size="10" text-anchor="middle">SST-011</text>
+      <text x="300" y="27" fill="#8b949e" font-size="10">...</text>
+    </g>
+
+    <!-- Compaction arrow from L1 to L2+ -->
+    <path d="M 400 420 L 400 440" fill="none" stroke="#8b949e" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#arrowhead-compact)" />
+
+    <!-- Levels L2-L7 -->
+    <g transform="translate(50, 450)" data-component="sstable-l2-l7">
+      <rect
+        width="700"
+        height="45"
+        rx="6"
+        fill="#161b22"
+        stroke="#30363d"
+        stroke-width="1"
+      />
+      <text x="30" y="28" fill="#58a6ff" font-size="13" font-weight="bold">
+        L2-L7
+      </text>
+      <rect x="90" y="10" width="120" height="25" rx="4" fill="#1f2937" stroke="#58a6ff" stroke-width="1" />
+      <text x="150" y="27" fill="#c9d1d9" font-size="10" text-anchor="middle">Larger SSTables</text>
+      <rect x="220" y="10" width="120" height="25" rx="4" fill="#1f2937" stroke="#58a6ff" stroke-width="1" />
+      <text x="280" y="27" fill="#c9d1d9" font-size="10" text-anchor="middle">Sorted Runs</text>
+      <text x="370" y="27" fill="#8b949e" font-size="10">... (exponentially larger)</text>
+    </g>
+
+    <!-- Read Path Overlay -->
+    <g class="read-path" data-read-path>
+      <text x="700" y="100" fill="#d29922" font-size="14" font-weight="bold">
+        Read
+      </text>
+      <!-- Read starts at Memtable -->
+      <path d="M 680 110 L 680 130 L 350 130" fill="none" stroke="#d29922" stroke-width="2" marker-end="url(#arrowhead-read)" />
+      <!-- If not found, check L0 -->
+      <path d="M 270 160 L 270 180 L 270 290 L 300 310" fill="none" stroke="#d29922" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowhead-read)" />
+      <text x="235" y="230" fill="#d29922" font-size="9" transform="rotate(-90, 235, 230)">if not found</text>
+      <!-- Continue to L1 -->
+      <path d="M 300 340 L 300 380 L 320 395" fill="none" stroke="#d29922" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowhead-read)" />
+      <!-- Continue to L2-L7 -->
+      <path d="M 300 420 L 300 460 L 320 475" fill="none" stroke="#d29922" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowhead-read)" />
+    </g>
+
+    <!-- Size indicators -->
+    <g transform="translate(760, 310)" class="size-indicator">
+      <text x="0" y="0" fill="#8b949e" font-size="10" text-anchor="end">Smaller</text>
+      <line x1="5" y1="10" x2="5" y2="170" stroke="#8b949e" stroke-width="1" />
+      <polygon points="5,10 0,20 10,20" fill="#8b949e" />
+      <polygon points="5,170 0,160 10,160" fill="#8b949e" />
+      <text x="0" y="185" fill="#8b949e" font-size="10" text-anchor="end">Larger</text>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .lsm-tree-svg {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .lsm-tree-svg svg {
+    min-width: 320px;
+  }
+
+  @media (max-width: 640px) {
+    .lsm-tree-svg svg {
+      font-size: 85%;
+    }
+  }
+</style>

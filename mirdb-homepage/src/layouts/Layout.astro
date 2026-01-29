@@ -1,0 +1,110 @@
+---
+/**
+ * Base layout component for all pages.
+ * Owner: First builder / Scenario 13 (SEO Optimization)
+ *
+ * Responsibilities:
+ * - HTML document structure
+ * - Meta tags (title, description, OG tags)
+ * - Global styles import
+ * - Theme initialization script
+ * - JSON-LD structured data
+ */
+
+import { ThemeToggle } from '../components/shared/ThemeToggle';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://mirdb.example.com';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const {
+  title,
+  description = 'A persistent key-value store with Memcached protocol compatibility, built with an LSM-tree architecture for high write throughput.',
+  ogImage = `${siteUrl}/og-image.png`
+} = Astro.props;
+
+// JSON-LD structured data for SoftwareApplication
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MirDB",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Linux, macOS, Windows",
+  "description": description,
+  "url": siteUrl,
+  "softwareVersion": "0.1.0",
+  "author": {
+    "@type": "Organization",
+    "name": "MirDB Contributors"
+  },
+  "license": "https://opensource.org/licenses/MIT",
+  "programmingLanguage": "Rust",
+  "keywords": ["key-value store", "database", "memcached", "LSM-tree", "persistent storage"]
+};
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="MirDB" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <style is:global>
+      @import '../styles/global.css';
+    </style>
+
+    <!-- Theme initialization script - runs before page renders to prevent flash -->
+    <script is:inline>
+      (function() {
+        const STORAGE_KEY = 'mirdb-theme';
+        const stored = localStorage.getItem(STORAGE_KEY);
+        let theme = 'dark'; // Default to dark
+
+        if (stored === 'dark' || stored === 'light') {
+          theme = stored;
+        } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+          theme = 'light';
+        }
+
+        const root = document.documentElement;
+        root.classList.remove('dark', 'light');
+        root.classList.add(theme);
+      })();
+    </script>
+  </head>
+  <body class="bg-background text-text-primary min-h-screen transition-colors duration-200">
+    <!-- Theme toggle fixed in top-right corner -->
+    <div class="fixed top-4 right-4 z-50">
+      <ThemeToggle client:load />
+    </div>
+    <slot />
+  </body>
+</html>

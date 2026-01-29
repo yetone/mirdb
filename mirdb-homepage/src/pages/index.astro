@@ -1,0 +1,81 @@
+---
+/**
+ * Homepage - Main entry point.
+ * Owner: First builder, extended by all component scenarios
+ *
+ * Structure:
+ * - Import Layout
+ * - Import all section components
+ * - Compose full page with proper section ordering
+ *
+ * Section order:
+ * 1. Navbar
+ * 2. Hero
+ * 3. Features
+ * 4. Terminal
+ * 5. Architecture
+ * 6. Configuration
+ * 7. Installation
+ * 8. Commands
+ * 9. Roadmap
+ * 10. Footer
+ */
+
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navigation/Navbar.astro';
+import Hero from '../components/Hero/Hero.astro';
+import FeaturesGrid from '../components/Features/FeaturesGrid.astro';
+import { InteractiveTerminal } from '../components/Terminal/InteractiveTerminal';
+import ArchitectureDiagram from '../components/Architecture/ArchitectureDiagram.astro';
+import ConfigurationReference from '../components/Configuration/ConfigurationReference.astro';
+import Installation from '../components/Installation/Installation.astro';
+import SupportedCommands from '../components/Commands/SupportedCommands.astro';
+import Roadmap from '../components/Roadmap/Roadmap.astro';
+import { Footer } from '../components/Footer/Footer';
+---
+
+<Layout
+  title="MirDB - Persistent Key-Value Store with Memcached Protocol"
+  description="A high-performance persistent key-value store with Memcached protocol compatibility, built with an LSM-tree architecture for high write throughput."
+>
+  <!-- Navigation Bar (Scenario 17) -->
+  <Navbar />
+
+  <!-- Header containing site branding and hero (Scenario 13 - SEO Optimization) -->
+  <header role="banner">
+    <!-- Hero Section (Scenario 1) -->
+    <Hero />
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="py-16 px-4">
+      <FeaturesGrid />
+    </section>
+
+    <!-- Terminal Section (Scenario 3) -->
+    <section id="terminal" class="py-16">
+      <h2 class="text-2xl font-bold font-mono text-text-primary mb-8 text-center">Try It Out</h2>
+      <InteractiveTerminal client:load />
+    </section>
+
+    <!-- Architecture Section (Scenario 4) -->
+    <ArchitectureDiagram />
+
+    <!-- Configuration Section (Scenario 5) -->
+    <ConfigurationReference />
+
+    <!-- Installation Section (Scenario 6) -->
+    <Installation />
+
+    <!-- Commands Section (Scenario 7) -->
+    <SupportedCommands />
+
+    <!-- Roadmap Section (Scenario 8) -->
+    <Roadmap />
+  </main>
+
+  <!-- Footer Section (Scenario 9) -->
+  <Footer />
+</Layout>

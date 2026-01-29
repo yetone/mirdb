@@ -1,0 +1,73 @@
+---
+/**
+ * Supported Commands Table Section.
+ * Owner: Scenario 7 - Supported Commands Table
+ *
+ * Expected features:
+ * - Table displaying 8 Memcached commands
+ * - Commands: get, gets, set, add, replace, append, prepend, delete
+ * - Description for each command
+ * - Responsive table design for mobile
+ */
+
+import commandsData from '../../content/commands.json';
+import type { Command } from '../../types/index';
+
+const commands: Command[] = commandsData;
+---
+
+<section id="commands" class="py-16 px-4" data-testid="commands-section">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl font-mono font-bold text-center mb-8 text-text-primary">
+      Supported Commands
+    </h2>
+    <p class="text-text-secondary text-center mb-8 max-w-2xl mx-auto">
+      MirDB supports the following Memcached protocol commands, providing full compatibility with existing clients and libraries.
+    </p>
+
+    <!-- Mobile-friendly scrollable container -->
+    <div class="overflow-x-auto rounded-lg border border-border" data-testid="commands-table-container">
+      <table class="w-full min-w-[500px]" data-testid="commands-table">
+        <thead class="bg-surface">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-mono font-semibold text-text-primary border-b border-border">
+              Command
+            </th>
+            <th class="px-6 py-4 text-left text-sm font-mono font-semibold text-text-primary border-b border-border">
+              Description
+            </th>
+            <th class="px-6 py-4 text-left text-sm font-mono font-semibold text-text-primary border-b border-border">
+              Syntax
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {commands.map((command, index) => (
+            <tr
+              class={`${index % 2 === 0 ? 'bg-background' : 'bg-surface/50'} hover:bg-surface transition-colors`}
+              data-testid={`command-row-${command.name}`}
+            >
+              <td class="px-6 py-4 border-b border-border">
+                <code class="text-accent font-mono font-semibold" data-testid={`command-name-${command.name}`}>
+                  {command.name}
+                </code>
+              </td>
+              <td class="px-6 py-4 text-text-secondary text-sm border-b border-border" data-testid={`command-description-${command.name}`}>
+                {command.description}
+              </td>
+              <td class="px-6 py-4 border-b border-border">
+                <code class="text-text-primary font-mono text-xs bg-surface px-2 py-1 rounded" data-testid={`command-syntax-${command.name}`}>
+                  {command.syntax}
+                </code>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-text-secondary text-sm text-center mt-6">
+      All commands follow the standard Memcached text protocol specification.
+    </p>
+  </div>
+</section>

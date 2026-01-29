@@ -1,0 +1,35 @@
+---
+/**
+ * Footer Section.
+ * Owner: Scenario 9 - Footer Section
+ *
+ * Expected features:
+ * - GitHub repository link
+ * - License information
+ * - Acknowledgments section
+ * - Copyright notice
+ */
+
+import { Footer as FooterComponent } from './Footer';
+
+interface Props {
+  class?: string;
+  githubUrl?: string;
+  licenseType?: string;
+  licenseUrl?: string;
+}
+
+const {
+  class: className = '',
+  githubUrl = 'https://github.com/mirdb/mirdb',
+  licenseType = 'MIT',
+  licenseUrl = 'https://opensource.org/licenses/MIT'
+} = Astro.props;
+---
+
+<FooterComponent
+  className={className}
+  githubUrl={githubUrl}
+  licenseType={licenseType}
+  licenseUrl={licenseUrl}
+/>

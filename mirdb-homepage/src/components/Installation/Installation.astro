@@ -1,0 +1,26 @@
+---
+/**
+ * Installation Instructions Section.
+ * Owner: Scenario 6 - Installation Instructions Section
+ *
+ * Expected features:
+ * - Prerequisites (Rust toolchain)
+ * - Build from source instructions
+ * - Run with configuration instructions
+ * - Code blocks with copy buttons
+ */
+
+import { InstallationSection } from './InstallationSection';
+---
+
+<section id="installation" class="py-16 px-4" data-testid="installation">
+  <div class="container mx-auto">
+    <h2 class="text-2xl md:text-3xl font-bold font-mono text-text-primary mb-2 text-center">
+      Installation
+    </h2>
+    <p class="text-text-secondary text-center mb-12 max-w-2xl mx-auto">
+      Get MirDB up and running in under 5 minutes
+    </p>
+    <InstallationSection client:load />
+  </div>
+</section>

@@ -1,0 +1,44 @@
+---
+/**
+ * Individual Feature Card Component.
+ * Owner: Scenario 2 - Features Grid Implementation
+ *
+ * Expected props:
+ * - icon: string (icon name or SVG)
+ * - title: string
+ * - description: string
+ */
+
+import Icon from '../shared/Icon.astro';
+
+interface Props {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+const { icon, title, description } = Astro.props;
+---
+
+<article
+  class="feature-card bg-surface border border-border rounded-lg p-6 hover:border-accent transition-colors duration-200"
+  data-testid="feature-card"
+>
+  <div class="flex items-center gap-3 mb-4">
+    <div class="text-accent">
+      <Icon name={icon} size="lg" />
+    </div>
+    <h3 class="text-lg font-mono font-semibold text-text-primary" data-testid="feature-title">
+      {title}
+    </h3>
+  </div>
+  <p class="text-text-secondary text-sm leading-relaxed" data-testid="feature-description">
+    {description}
+  </p>
+</article>
+
+<style>
+  .feature-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+</style>
