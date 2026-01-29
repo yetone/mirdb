@@ -1,0 +1,217 @@
+---
+/**
+ * Architecture Diagram Section.
+ * Owner: Scenario 4 - Architecture Visualization
+ *
+ * Expected features:
+ * - LSM-tree architecture diagram (Mermaid or SVG)
+ * - Write path: WAL -> Memtable -> Immutable Memtable -> SSTable
+ * - Read path: Memtable -> SSTable levels (L0-L7)
+ * - Compaction process visualization
+ * - Component descriptions
+ */
+
+import LSMTreeSVG from './LSMTreeSVG.astro';
+---
+
+<section id="architecture" class="py-16 px-4" aria-labelledby="architecture-heading">
+  <div class="max-w-6xl mx-auto">
+    <h2 id="architecture-heading" class="text-3xl font-bold font-mono text-text-primary mb-4 text-center">
+      Architecture
+    </h2>
+    <p class="text-text-secondary text-center mb-12 max-w-2xl mx-auto">
+      MirDB uses an LSM-tree (Log-Structured Merge-tree) architecture optimized for high write throughput and efficient storage.
+    </p>
+
+    <!-- Lazy-loaded diagram wrapper -->
+    <div
+      class="architecture-diagram-container mb-12"
+      data-lazy-diagram
+    >
+      <noscript>
+        <LSMTreeSVG />
+      </noscript>
+      <div class="lazy-placeholder hidden" aria-hidden="true">
+        <div class="flex items-center justify-center h-64 bg-surface rounded-lg border border-border">
+          <p class="text-text-secondary">Loading architecture diagram...</p>
+        </div>
+      </div>
+      <div class="lazy-content">
+        <LSMTreeSVG />
+      </div>
+    </div>
+
+    <!-- Component Descriptions -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-component-descriptions>
+      <!-- WAL -->
+      <article class="bg-surface rounded-lg p-6 border border-border" data-description="wal">
+        <h3 class="text-lg font-bold font-mono text-accent mb-2">
+          Write-Ahead Log (WAL)
+        </h3>
+        <p class="text-text-secondary text-sm">
+          All write operations are first appended to the WAL for durability. In case of a crash, uncommitted data can be recovered from the log, ensuring no data loss.
+        </p>
+      </article>
+
+      <!-- Memtable -->
+      <article class="bg-surface rounded-lg p-6 border border-border" data-description="memtable">
+        <h3 class="text-lg font-bold font-mono text-success mb-2">
+          Memtable
+        </h3>
+        <p class="text-text-secondary text-sm">
+          An in-memory skip list that buffers recent writes. Provides fast O(log n) lookups and insertions. When it reaches capacity, it becomes immutable and is flushed to disk.
+        </p>
+      </article>
+
+      <!-- Immutable Memtable -->
+      <article class="bg-surface rounded-lg p-6 border border-border" data-description="immutable-memtable">
+        <h3 class="text-lg font-bold font-mono text-accent mb-2">
+          Immutable Memtable
+        </h3>
+        <p class="text-text-secondary text-sm">
+          A frozen memtable awaiting flush to disk. While it's being flushed, a new active memtable accepts incoming writes, ensuring continuous write availability.
+        </p>
+      </article>
+
+      <!-- SSTable -->
+      <article class="bg-surface rounded-lg p-6 border border-border" data-description="sstable">
+        <h3 class="text-lg font-bold font-mono text-accent mb-2">
+          SSTable (Sorted String Table)
+        </h3>
+        <p class="text-text-secondary text-sm">
+          Immutable, sorted files stored on disk. Each SSTable contains a block index for efficient binary search. Data is compressed for optimal storage efficiency.
+        </p>
+      </article>
+
+      <!-- Compaction -->
+      <article class="bg-surface rounded-lg p-6 border border-border" data-description="compaction">
+        <h3 class="text-lg font-bold font-mono text-warning mb-2">
+          Compaction
+        </h3>
+        <p class="text-text-secondary text-sm">
+          Background process that merges and sorts SSTables across levels. Minor compaction moves L0 files to L1; major compaction merges files into deeper levels (L2-L7), removing deleted entries and duplicates.
+        </p>
+      </article>
+
+      <!-- Read/Write Paths -->
+      <article class="bg-surface rounded-lg p-6 border border-border" data-description="paths">
+        <h3 class="text-lg font-bold font-mono text-accent mb-2">
+          Read &amp; Write Paths
+        </h3>
+        <p class="text-text-secondary text-sm">
+          <strong class="text-success">Writes:</strong> WAL → Memtable → Immutable → SSTable (L0).<br />
+          <strong class="text-warning">Reads:</strong> Check Memtable first, then traverse SSTable levels (L0→L7) until found.
+        </p>
+      </article>
+    </div>
+
+    <!-- SSTable Levels explanation -->
+    <div class="mt-8 bg-surface rounded-lg p-6 border border-border" data-levels-explanation>
+      <h3 class="text-lg font-bold font-mono text-text-primary mb-4">
+        SSTable Levels (L0-L7)
+      </h3>
+      <div class="grid md:grid-cols-2 gap-4 text-sm text-text-secondary">
+        <div>
+          <p class="mb-2">
+            <strong class="text-accent">Level 0:</strong> Freshly flushed SSTables. Files may have overlapping key ranges.
+          </p>
+          <p class="mb-2">
+            <strong class="text-accent">Level 1+:</strong> SSTables with non-overlapping key ranges within each level.
+          </p>
+        </div>
+        <div>
+          <p class="mb-2">
+            <strong class="text-accent">Size Ratio:</strong> Each level is ~10x larger than the previous level.
+          </p>
+          <p>
+            <strong class="text-accent">Compaction Trigger:</strong> When a level exceeds its size threshold, compaction moves data to the next level.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Lazy loading for the architecture diagram
+  function initLazyDiagram() {
+    const container = document.querySelector('[data-lazy-diagram]');
+    if (!container) return;
+
+    const lazyContent = container.querySelector('.lazy-content') as HTMLElement | null;
+    const placeholder = container.querySelector('.lazy-placeholder');
+
+    if (!lazyContent) return;
+
+    // Check if IntersectionObserver is supported
+    if ('IntersectionObserver' in window) {
+      // Hide content initially
+      lazyContent.style.opacity = '0';
+      lazyContent.style.transition = 'opacity 0.3s ease-in-out';
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // Show the diagram
+              (lazyContent as HTMLElement).style.opacity = '1';
+              if (placeholder) {
+                placeholder.classList.add('hidden');
+              }
+              // Mark as loaded
+              container.setAttribute('data-loaded', 'true');
+              observer.disconnect();
+            }
+          });
+        },
+        {
+          rootMargin: '100px 0px', // Start loading 100px before visible
+          threshold: 0.1,
+        }
+      );
+
+      observer.observe(container);
+    } else {
+      // Fallback: show immediately if IntersectionObserver not supported
+      lazyContent.style.opacity = '1';
+      if (placeholder) {
+        placeholder.classList.add('hidden');
+      }
+      container.setAttribute('data-loaded', 'true');
+    }
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLazyDiagram);
+  } else {
+    initLazyDiagram();
+  }
+</script>
+
+<style>
+  .architecture-diagram-container {
+    position: relative;
+  }
+
+  .lazy-placeholder {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lazy-content {
+    opacity: 1;
+  }
+
+  /* Mobile-specific layout adjustments */
+  @media (max-width: 640px) {
+    .architecture-diagram-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    [data-component-descriptions] {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
