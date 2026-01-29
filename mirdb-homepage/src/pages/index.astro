@@ -22,6 +22,7 @@
  */
 
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero/Hero.astro';
 import FeaturesGrid from '../components/Features/FeaturesGrid.astro';
 import { InteractiveTerminal } from '../components/Terminal/InteractiveTerminal';
 ---
@@ -32,10 +33,7 @@ import { InteractiveTerminal } from '../components/Terminal/InteractiveTerminal'
 >
   <main class="container mx-auto px-4 py-8">
     <!-- Hero Section (Scenario 1) -->
-    <section id="hero" class="py-20 text-center">
-      <h1 class="text-4xl md:text-6xl font-mono font-bold mb-4">MirDB</h1>
-      <p class="text-xl text-text-secondary mb-8">Persistent Key-Value Store with Memcached Protocol</p>
-    </section>
+    <Hero />
 
     <!-- Features Section (Scenario 2) -->
     <section id="features" class="py-16 px-4">
