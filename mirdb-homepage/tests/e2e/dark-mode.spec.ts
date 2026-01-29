@@ -165,11 +165,11 @@ test.describe('Dark Mode Support', () => {
 
   test.describe('Theme Persistence', () => {
     test('theme selection persists across page reloads', async ({ page }) => {
-      // Start in dark mode
-      await page.addInitScript(() => {
-        localStorage.setItem('mirdb-theme', 'dark');
-      });
+      // Navigate to the page first (no preset localStorage)
       await page.goto('/');
+
+      // Wait for page load
+      await page.waitForLoadState('domcontentloaded');
 
       const toggle = page.getByTestId('theme-toggle');
 
@@ -178,14 +178,23 @@ test.describe('Dark Mode Support', () => {
         return;
       }
 
-      // Switch to light mode
-      await toggle.click();
-      await expect(page.locator('html')).toHaveClass(/light/);
+      // Ensure we start in dark mode and switch to light
+      const currentTheme = await page.locator('html').getAttribute('class');
+      if (!currentTheme?.includes('light')) {
+        // Click to switch to light mode
+        await toggle.click();
+        await expect(page.locator('html')).toHaveClass(/light/);
+      }
 
-      // Reload the page
+      // Verify localStorage was set
+      const storedTheme = await page.evaluate(() => localStorage.getItem('mirdb-theme'));
+      expect(storedTheme).toBe('light');
+
+      // Reload the page - do NOT use addInitScript as it runs before localStorage is checked
       await page.reload();
+      await page.waitForLoadState('domcontentloaded');
 
-      // Should still be in light mode
+      // Should still be in light mode (persisted via localStorage)
       await expect(page.locator('html')).toHaveClass(/light/);
     });
 
