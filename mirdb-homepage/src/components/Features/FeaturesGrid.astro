@@ -1,0 +1,36 @@
+---
+/**
+ * Features Grid Component.
+ * Owner: Scenario 2 - Features Grid Implementation
+ *
+ * Expected features:
+ * - 6 feature cards in responsive grid
+ * - Cards: Memcached Compatible, Persistent Storage, High Performance,
+ *   Configurable, Compaction, Async I/O
+ * - Each card has icon, title, description
+ */
+
+import FeatureCard from './FeatureCard.astro';
+import featuresData from '../../content/features.json';
+import type { Feature } from '../../types/index';
+
+const features: Feature[] = featuresData;
+---
+
+<section class="features-grid max-w-6xl mx-auto" data-testid="features-grid">
+  <h2 class="text-3xl font-mono font-bold text-center mb-12 text-text-primary">
+    Why MirDB?
+  </h2>
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    data-testid="features-container"
+  >
+    {features.map((feature) => (
+      <FeatureCard
+        icon={feature.icon}
+        title={feature.title}
+        description={feature.description}
+      />
+    ))}
+  </div>
+</section>

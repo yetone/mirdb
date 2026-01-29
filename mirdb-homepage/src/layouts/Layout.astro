@@ -1,0 +1,43 @@
+---
+/**
+ * Base layout component for all pages.
+ * Owner: First builder / Scenario 13 (SEO Optimization)
+ *
+ * Responsibilities:
+ * - HTML document structure
+ * - Meta tags (title, description, OG tags)
+ * - Global styles import
+ * - Theme initialization script
+ * - JSON-LD structured data
+ */
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body class="bg-background text-text-primary min-h-screen">
+    <slot />
+  </body>
+</html>

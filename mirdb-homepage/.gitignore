@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test output
+test-results/
+playwright-report/
+coverage/
+
+# Temporary files
+*.tmp
+.temp/
