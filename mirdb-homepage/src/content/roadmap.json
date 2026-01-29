@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Tokio networking",
+    "description": "Async I/O networking layer built on Tokio runtime for high-performance concurrent connections",
+    "status": "completed"
+  },
+  {
+    "title": "Memtable implementation",
+    "description": "In-memory skip-list based memtable for fast key-value operations",
+    "status": "completed"
+  },
+  {
+    "title": "Minor compaction",
+    "description": "Automatic flush of immutable memtables to SSTable files on disk",
+    "status": "completed"
+  },
+  {
+    "title": "Major compaction",
+    "description": "Background merge of SSTables across levels for storage efficiency and read optimization",
+    "status": "completed"
+  },
+  {
+    "title": "Raft consensus",
+    "description": "Distributed consensus protocol for high availability and data replication across nodes",
+    "status": "planned"
+  }
+]
