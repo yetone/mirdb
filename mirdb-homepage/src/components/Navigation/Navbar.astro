@@ -1,0 +1,122 @@
+---
+/**
+ * Navigation Bar Component.
+ * Owner: Scenario 17 - Navigation and Anchor Links
+ *
+ * Expected features:
+ * - Logo/brand link
+ * - Anchor links to page sections
+ * - Sticky/fixed positioning option
+ * - Mobile menu trigger
+ */
+
+import { MobileMenu } from './MobileMenu';
+
+interface NavLink {
+  href: string;
+  label: string;
+}
+
+const navLinks: NavLink[] = [
+  { href: '#features', label: 'Features' },
+  { href: '#architecture', label: 'Architecture' },
+  { href: '#configuration', label: 'Configuration' },
+  { href: '#installation', label: 'Installation' },
+  { href: '#commands', label: 'Commands' },
+  { href: '#roadmap', label: 'Roadmap' },
+];
+---
+
+<nav
+  class="sticky top-0 z-40 w-full bg-background/95 backdrop-blur-sm border-b border-border"
+  role="navigation"
+  aria-label="Main navigation"
+>
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo/Brand -->
+      <a
+        href="#"
+        class="flex items-center space-x-2 text-text-primary hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+        aria-label="MirDB Home"
+      >
+        <span class="font-mono font-bold text-xl">MirDB</span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <div class="hidden md:flex items-center space-x-1">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="nav-link px-4 py-2 text-sm font-medium text-text-secondary hover:text-accent transition-colors rounded-md hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            data-nav-link
+          >
+            {link.label}
+          </a>
+        ))}
+        <a
+          href="https://github.com/mirdb/mirdb"
+          class="ml-4 px-4 py-2 text-sm font-medium bg-accent text-background rounded-md hover:bg-accent/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+      </div>
+
+      <!-- Mobile Menu Component -->
+      <div class="md:hidden">
+        <MobileMenu client:load navLinks={navLinks} />
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Handle smooth scrolling with URL hash updates
+  document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('[data-nav-link]');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const href = (link as HTMLAnchorElement).getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+
+        e.preventDefault();
+        const targetId = href.slice(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          // Update URL hash
+          history.pushState(null, '', href);
+
+          // Scroll to target - CSS handles smooth vs instant based on prefers-reduced-motion
+          targetElement.scrollIntoView({
+            behavior: prefersReducedMotion ? 'auto' : 'smooth',
+            block: 'start',
+          });
+
+          // Set focus on target for accessibility
+          targetElement.setAttribute('tabindex', '-1');
+          targetElement.focus({ preventScroll: true });
+        }
+      });
+    });
+
+    // Handle initial hash on page load
+    const hash = window.location.hash;
+    if (hash) {
+      const targetElement = document.getElementById(hash.slice(1));
+      if (targetElement) {
+        // Use setTimeout to ensure the page has rendered
+        setTimeout(() => {
+          targetElement.scrollIntoView({
+            behavior: prefersReducedMotion ? 'auto' : 'smooth',
+            block: 'start',
+          });
+        }, 100);
+      }
+    }
+  });
+</script>

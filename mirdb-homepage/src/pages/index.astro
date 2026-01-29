@@ -22,6 +22,7 @@
  */
 
 import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navigation/Navbar.astro';
 import Hero from '../components/Hero/Hero.astro';
 import FeaturesGrid from '../components/Features/FeaturesGrid.astro';
 import { InteractiveTerminal } from '../components/Terminal/InteractiveTerminal';
@@ -37,6 +38,9 @@ import { Footer } from '../components/Footer/Footer';
   title="MirDB - Persistent Key-Value Store with Memcached Protocol"
   description="A high-performance persistent key-value store with Memcached protocol compatibility, built with an LSM-tree architecture for high write throughput."
 >
+  <!-- Navigation Bar (Scenario 17) -->
+  <Navbar />
+
   <!-- Header containing site branding and hero (Scenario 13 - SEO Optimization) -->
   <header role="banner">
     <!-- Hero Section (Scenario 1) -->
