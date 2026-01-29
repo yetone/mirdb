@@ -9,8 +9,9 @@
       "@types/*": ["src/types/*"]
     },
     "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    "jsxImportSource": "react",
+    "types": ["node"]
   },
-  "include": ["src/**/*", "tests/**/*", ".astro/types.d.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", ".astro/types.d.ts"],
+  "exclude": ["node_modules", "dist", "tests"]
 }
