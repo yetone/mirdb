@@ -23,15 +23,16 @@
 
 import Layout from '../layouts/Layout.astro';
 import FeaturesGrid from '../components/Features/FeaturesGrid.astro';
+import { InteractiveTerminal } from '../components/Terminal/InteractiveTerminal';
 ---
 
 <Layout
   title="MirDB - Persistent Key-Value Store with Memcached Protocol"
   description="A high-performance persistent key-value store with Memcached protocol compatibility, built with an LSM-tree architecture for high write throughput."
 >
-  <main>
+  <main class="container mx-auto px-4 py-8">
     <!-- Hero Section (Scenario 1) -->
-    <section id="hero" class="py-20 px-4 text-center">
+    <section id="hero" class="py-20 text-center">
       <h1 class="text-4xl md:text-6xl font-mono font-bold mb-4">MirDB</h1>
       <p class="text-xl text-text-secondary mb-8">Persistent Key-Value Store with Memcached Protocol</p>
     </section>
@@ -41,7 +42,11 @@ import FeaturesGrid from '../components/Features/FeaturesGrid.astro';
       <FeaturesGrid />
     </section>
 
-    <!-- Terminal Section (Scenario 3) - placeholder -->
+    <!-- Terminal Section (Scenario 3) -->
+    <section id="terminal" class="py-16">
+      <h2 class="text-2xl font-bold font-mono text-text-primary mb-8 text-center">Try It Out</h2>
+      <InteractiveTerminal client:load />
+    </section>
 
     <!-- Architecture Section (Scenario 4) - placeholder -->
 

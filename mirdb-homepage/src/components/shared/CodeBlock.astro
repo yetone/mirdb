@@ -1,0 +1,46 @@
+---
+/**
+ * Reusable Code Block Component.
+ * Owner: First scenario needing code blocks (Scenario 3 or 6)
+ *
+ * Expected features:
+ * - Syntax highlighting (Rust, TOML, shell)
+ * - Copy button integration
+ * - Line numbers option
+ * - Dark theme styling
+ */
+
+interface Props {
+  code: string;
+  language: string;
+  showLineNumbers?: boolean;
+}
+
+const { code, language, showLineNumbers = false } = Astro.props;
+
+const lines = code.split('\n');
+---
+
+<div class="code-block-wrapper relative bg-background border border-border rounded-lg overflow-hidden">
+  <div class="code-header flex items-center justify-between px-4 py-2 bg-surface border-b border-border">
+    <span class="text-text-secondary text-xs font-mono">{language}</span>
+  </div>
+  <pre class="code-block font-mono text-sm leading-relaxed overflow-x-auto p-4" data-language={language}>
+    {showLineNumbers ? (
+      <code class="flex">
+        <span class="line-numbers select-none pr-4 text-text-secondary border-r border-border mr-4">
+          {lines.map((_, i) => <span class="block">{i + 1}</span>)}
+        </span>
+        <span class="code-content">{code}</span>
+      </code>
+    ) : (
+      <code>{code}</code>
+    )}
+  </pre>
+</div>
+
+<style>
+  .code-block {
+    background-color: var(--color-background, #0d1117);
+  }
+</style>

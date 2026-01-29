@@ -5,13 +5,20 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: 'happy-dom',
+    environment: 'jsdom',
     setupFiles: ['./tests/setup.ts'],
     include: ['tests/**/*.test.{ts,tsx}'],
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.{ts,tsx}'],
+    },
   },
   resolve: {
     alias: {
       '@': '/src',
+      '@components': '/src/components',
+      '@layouts': '/src/layouts',
+      '@types': '/src/types',
     },
   },
 });

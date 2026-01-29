@@ -13,10 +13,10 @@
 
 interface Props {
   title: string;
-  description: string;
+  description?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description = 'A persistent key-value store with Memcached protocol compatibility' } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -34,8 +34,9 @@ const { title, description } = Astro.props;
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
 
-    <!-- Global Styles -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
+    <style is:global>
+      @import '../styles/global.css';
+    </style>
   </head>
   <body class="bg-background text-text-primary min-h-screen">
     <slot />
