@@ -19,6 +19,8 @@ test.describe('Navigation and Anchor Links', () => {
   });
 
   test.describe('Desktop Navigation', () => {
+    test.use({ viewport: { width: 1280, height: 720 } });
+
     test('should display navigation bar with all section links', async ({ page }) => {
       const navbar = page.locator('nav[aria-label="Main navigation"]');
       await expect(navbar).toBeVisible();
@@ -90,12 +92,14 @@ test.describe('Navigation and Anchor Links', () => {
     });
 
     test('should display MirDB brand link', async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 720 });
       const brandLink = page.locator('nav[aria-label="Main navigation"] a[aria-label="MirDB Home"]');
       await expect(brandLink).toBeVisible();
       await expect(brandLink).toContainText('MirDB');
     });
 
     test('should display GitHub button', async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 720 });
       const desktopNav = page.locator('nav[aria-label="Main navigation"] .hidden.md\\:flex');
       const githubLink = desktopNav.locator('a[href="https://github.com/mirdb/mirdb"]');
       await expect(githubLink).toBeVisible();
@@ -104,6 +108,8 @@ test.describe('Navigation and Anchor Links', () => {
   });
 
   test.describe('URL Hash Navigation', () => {
+    test.use({ viewport: { width: 1280, height: 720 } });
+
     test('should scroll to Features section when loading with #features hash', async ({ page }) => {
       await page.goto('/#features');
 
@@ -134,6 +140,8 @@ test.describe('Navigation and Anchor Links', () => {
   });
 
   test.describe('Smooth Scrolling', () => {
+    test.use({ viewport: { width: 1280, height: 720 } });
+
     test('should use smooth scroll animation when navigating', async ({ page }) => {
       // Check that CSS smooth scroll is enabled
       const scrollBehavior = await page.evaluate(() => {
@@ -254,6 +262,8 @@ test.describe('Navigation and Anchor Links', () => {
   });
 
   test.describe('Navbar Styling', () => {
+    test.use({ viewport: { width: 1280, height: 720 } });
+
     test('should have sticky navigation', async ({ page }) => {
       const navbar = page.locator('nav[aria-label="Main navigation"]');
       const position = await navbar.evaluate((el) => getComputedStyle(el).position);
@@ -273,6 +283,8 @@ test.describe('Navigation and Anchor Links', () => {
   });
 
   test.describe('Accessibility', () => {
+    test.use({ viewport: { width: 1280, height: 720 } });
+
     test('should have proper ARIA labels on navigation', async ({ page }) => {
       const navbar = page.locator('nav[aria-label="Main navigation"]');
       await expect(navbar).toHaveAttribute('aria-label', 'Main navigation');
