@@ -157,7 +157,8 @@ test.describe('Accessibility Compliance', () => {
         return style.getPropertyValue('--color-accent').trim();
       });
 
-      // Accent color varies by theme (dark: #58a6ff, light: #0969da)
+      // Accent color varies by theme: dark (#58a6ff) or light (#0969da)
+      // Both provide sufficient contrast for focus indicators
       expect(['#58a6ff', '#0969da']).toContain(accentColor);
     });
 
@@ -488,6 +489,21 @@ test.describe('Accessibility Compliance', () => {
 
   test.describe('Color Contrast (Test Case 8)', () => {
     test('text colors meet WCAG AA contrast ratios', async ({ page }) => {
+      // Set dark mode preference in localStorage before navigating
+      await page.addInitScript(() => {
+        localStorage.setItem('mirdb-theme', 'dark');
+      });
+
+      // Navigate to page (dark mode will be applied on load)
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
+
+      // Ensure dark class is applied
+      await page.evaluate(() => {
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+      });
+
       // Get the defined color values
       const colors = await page.evaluate(() => {
         const root = document.documentElement;
@@ -531,14 +547,15 @@ test.describe('Accessibility Compliance', () => {
 
     test('focus indicators have sufficient contrast', async ({ page }) => {
       // The focus outline uses accent color which varies by theme
-      // Dark: #58a6ff, Light: #0969da - both provide good contrast
+      // Dark theme: #58a6ff provides good contrast against #0d1117
+      // Light theme: #0969da provides good contrast against #ffffff
       const accentColor = await page.evaluate(() => {
         return getComputedStyle(document.documentElement)
           .getPropertyValue('--color-accent')
           .trim();
       });
 
-      // Both theme accent colors are valid
+      // Both theme accent colors provide sufficient focus indicator contrast
       expect(['#58a6ff', '#0969da']).toContain(accentColor);
     });
   });
