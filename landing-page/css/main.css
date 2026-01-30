@@ -67,6 +67,31 @@ body {
   min-height: 100vh;
 }
 
+/* ==========================================================================
+   Skip Link - Owner: Scenario 12 (Accessibility Compliance)
+   ========================================================================== */
+
+.skip-link {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  z-index: 200;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
