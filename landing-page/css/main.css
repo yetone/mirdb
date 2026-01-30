@@ -10,7 +10,7 @@
  */
 
 :root {
-  /* Colors - Dark theme as primary (developer-focused dark mode) */
+  /* Colors - Dark theme as primary (developer-friendly dark mode) */
   --color-bg: #0d1117;
   --color-bg-secondary: #161b22;
   --color-text: #c9d1d9;
@@ -20,8 +20,11 @@
   --color-accent-hover: #79b8ff;
   --color-border: #30363d;
   --color-code-bg: #1f2428;
+
+  /* Link colors for dark mode visibility */
   --color-link: #58a6ff;
   --color-link-hover: #79b8ff;
+  --color-link-visited: #a371f7;
 
   /* Status colors for dark mode */
   --color-success: #3fb950;
