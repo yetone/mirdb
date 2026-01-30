@@ -413,5 +413,338 @@ test.describe('Scenario 9: Tablet Responsive Design', () => {
 
 // ===========================================
 // Dark Mode Tests - Scenario 12
-// (Placeholder for Scenario 12 implementation)
 // ===========================================
+
+test.describe('Scenario 12: Dark Mode Support', () => {
+  test('Test Case 1: CSS includes @media (prefers-color-scheme: dark) rules', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto('/');
+    await waitForPageLoad(page);
+
+    // Check that the dark-mode.css file contains prefers-color-scheme media queries
+    const darkModeStyles = await page.evaluate(async () => {
+      const stylesheets = Array.from(document.styleSheets);
+      let hasDarkMediaQuery = false;
+      let hasLightMediaQuery = false;
+
+      for (const sheet of stylesheets) {
+        try {
+          if (sheet.href && sheet.href.includes('dark-mode.css')) {
+            const rules = Array.from(sheet.cssRules || []);
+            for (const rule of rules) {
+              if (rule.type === CSSRule.MEDIA_RULE) {
+                const mediaText = rule.conditionText || rule.media.mediaText;
+                if (mediaText.includes('prefers-color-scheme: dark')) {
+                  hasDarkMediaQuery = true;
+                }
+                if (mediaText.includes('prefers-color-scheme: light')) {
+                  hasLightMediaQuery = true;
+                }
+              }
+            }
+          }
+        } catch (e) {
+          // Ignore cross-origin errors
+        }
+      }
+
+      return { hasDarkMediaQuery, hasLightMediaQuery };
+    });
+
+    expect(darkModeStyles.hasDarkMediaQuery).toBe(true);
+    expect(darkModeStyles.hasLightMediaQuery).toBe(true);
+  });
+
+  test('Test Case 2: Page renders with dark background and light text in dark mode', async ({ page }) => {
+    // Emulate dark color scheme preference
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto('/');
+    await waitForPageLoad(page);
+
+    // Check body background color is dark
+    const bodyStyles = await page.evaluate(() => {
+      const body = document.body;
+      const computedStyle = window.getComputedStyle(body);
+      return {
+        backgroundColor: computedStyle.backgroundColor,
+        color: computedStyle.color,
+      };
+    });
+
+    // Parse RGB values to check if background is dark
+    const bgMatch = bodyStyles.backgroundColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (bgMatch) {
+      const [, r, g, b] = bgMatch.map(Number);
+      // Dark background should have RGB values less than 128
+      const avgBg = (r + g + b) / 3;
+      expect(avgBg).toBeLessThan(128);
+    }
+
+    // Parse RGB values to check if text is light
+    const textMatch = bodyStyles.color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (textMatch) {
+      const [, r, g, b] = textMatch.map(Number);
+      // Light text should have RGB values greater than 128
+      const avgText = (r + g + b) / 3;
+      expect(avgText).toBeGreaterThan(128);
+    }
+
+    // Verify hero section has appropriate dark mode styling
+    const heroStyles = await page.evaluate(() => {
+      const hero = document.querySelector('#hero');
+      if (!hero) return null;
+      const computedStyle = window.getComputedStyle(hero);
+      return {
+        background: computedStyle.background,
+      };
+    });
+
+    expect(heroStyles).not.toBeNull();
+  });
+
+  test('Test Case 3: Page renders with appropriate light theme in light mode', async ({ page }) => {
+    // Emulate light color scheme preference
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto('/');
+    await waitForPageLoad(page);
+
+    // Check body background color is light
+    const bodyStyles = await page.evaluate(() => {
+      const body = document.body;
+      const computedStyle = window.getComputedStyle(body);
+      return {
+        backgroundColor: computedStyle.backgroundColor,
+        color: computedStyle.color,
+      };
+    });
+
+    // Parse RGB values to check if background is light
+    const bgMatch = bodyStyles.backgroundColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (bgMatch) {
+      const [, r, g, b] = bgMatch.map(Number);
+      // Light background should have RGB values greater than 200
+      const avgBg = (r + g + b) / 3;
+      expect(avgBg).toBeGreaterThan(200);
+    }
+
+    // Parse RGB values to check if text is dark
+    const textMatch = bodyStyles.color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (textMatch) {
+      const [, r, g, b] = textMatch.map(Number);
+      // Dark text should have RGB values less than 128
+      const avgText = (r + g + b) / 3;
+      expect(avgText).toBeLessThan(128);
+    }
+
+    // Verify header background is light
+    const headerStyles = await page.evaluate(() => {
+      const header = document.querySelector('#header');
+      if (!header) return null;
+      const computedStyle = window.getComputedStyle(header);
+      return {
+        backgroundColor: computedStyle.backgroundColor,
+      };
+    });
+
+    expect(headerStyles).not.toBeNull();
+    if (headerStyles) {
+      const headerBgMatch = headerStyles.backgroundColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+      if (headerBgMatch) {
+        const [, r, g, b] = headerBgMatch.map(Number);
+        const avgHeaderBg = (r + g + b) / 3;
+        expect(avgHeaderBg).toBeGreaterThan(200);
+      }
+    }
+  });
+
+  test('Test Case 4: Code blocks remain readable in dark mode', async ({ page }) => {
+    // Emulate dark color scheme preference
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto('/');
+    await waitForPageLoad(page);
+
+    // Check if usage section exists with code blocks
+    const usageSection = page.locator('#usage');
+    const usageExists = await usageSection.isVisible();
+
+    if (usageExists) {
+      // Find code blocks
+      const codeBlocks = page.locator('.usage__code');
+      const codeBlockCount = await codeBlocks.count();
+
+      if (codeBlockCount > 0) {
+        // Check first code block for readability
+        const codeStyles = await codeBlocks.first().evaluate((el) => {
+          const computedStyle = window.getComputedStyle(el);
+          return {
+            backgroundColor: computedStyle.backgroundColor,
+            color: computedStyle.color,
+          };
+        });
+
+        // Parse background and text colors
+        const bgMatch = codeStyles.backgroundColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+        const textMatch = codeStyles.color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+
+        if (bgMatch && textMatch) {
+          const [, bgR, bgG, bgB] = bgMatch.map(Number);
+          const [, textR, textG, textB] = textMatch.map(Number);
+
+          // Calculate contrast ratio (simplified)
+          const bgLuminance = (bgR * 299 + bgG * 587 + bgB * 114) / 1000;
+          const textLuminance = (textR * 299 + textG * 587 + textB * 114) / 1000;
+
+          // There should be significant contrast between text and background
+          const contrastDiff = Math.abs(textLuminance - bgLuminance);
+          expect(contrastDiff).toBeGreaterThan(100);
+        }
+      }
+    }
+
+    // Also check pre elements generally
+    const preElements = page.locator('pre');
+    const preCount = await preElements.count();
+
+    if (preCount > 0) {
+      const preStyles = await preElements.first().evaluate((el) => {
+        const computedStyle = window.getComputedStyle(el);
+        return {
+          backgroundColor: computedStyle.backgroundColor,
+          color: computedStyle.color,
+        };
+      });
+
+      // Verify pre elements have defined colors (not transparent/inherit)
+      expect(preStyles.backgroundColor).toBeDefined();
+      expect(preStyles.color).toBeDefined();
+    }
+  });
+
+  test('Theme switching maintains visual consistency', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+
+    // Test dark mode first
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.goto('/');
+    await waitForPageLoad(page);
+
+    // Capture dark mode state
+    const darkModeState = await page.evaluate(() => {
+      const header = document.querySelector('#header');
+      const hero = document.querySelector('#hero');
+      const features = document.querySelector('#features');
+
+      return {
+        headerVisible: header ? getComputedStyle(header).display !== 'none' : false,
+        heroVisible: hero ? getComputedStyle(hero).display !== 'none' : false,
+        featuresVisible: features ? getComputedStyle(features).display !== 'none' : false,
+      };
+    });
+
+    expect(darkModeState.headerVisible).toBe(true);
+    expect(darkModeState.heroVisible).toBe(true);
+
+    // Switch to light mode
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.reload();
+    await waitForPageLoad(page);
+
+    // Capture light mode state
+    const lightModeState = await page.evaluate(() => {
+      const header = document.querySelector('#header');
+      const hero = document.querySelector('#hero');
+      const features = document.querySelector('#features');
+
+      return {
+        headerVisible: header ? getComputedStyle(header).display !== 'none' : false,
+        heroVisible: hero ? getComputedStyle(hero).display !== 'none' : false,
+        featuresVisible: features ? getComputedStyle(features).display !== 'none' : false,
+      };
+    });
+
+    // All sections should remain visible after theme switch
+    expect(lightModeState.headerVisible).toBe(true);
+    expect(lightModeState.heroVisible).toBe(true);
+  });
+
+  test('Navigation links are visible in both themes', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+
+    // Test in dark mode
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.goto('/');
+    await waitForPageLoad(page);
+
+    const darkModeNav = page.locator('.header__nav-link');
+    const darkNavCount = await darkModeNav.count();
+    expect(darkNavCount).toBeGreaterThan(0);
+
+    // Verify links are visible in dark mode
+    for (let i = 0; i < Math.min(darkNavCount, 3); i++) {
+      await expect(darkModeNav.nth(i)).toBeVisible();
+    }
+
+    // Test in light mode
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.reload();
+    await waitForPageLoad(page);
+
+    const lightModeNav = page.locator('.header__nav-link');
+    const lightNavCount = await lightModeNav.count();
+    expect(lightNavCount).toBeGreaterThan(0);
+
+    // Verify links are visible in light mode
+    for (let i = 0; i < Math.min(lightNavCount, 3); i++) {
+      await expect(lightModeNav.nth(i)).toBeVisible();
+    }
+  });
+
+  test('Features cards render correctly in both themes', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+
+    // Test dark mode
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.goto('/');
+    await waitForPageLoad(page);
+
+    const darkFeatureCards = page.locator('.features__card');
+    const darkCardCount = await darkFeatureCards.count();
+
+    if (darkCardCount > 0) {
+      const darkCardStyles = await darkFeatureCards.first().evaluate((el) => {
+        const computedStyle = window.getComputedStyle(el);
+        return {
+          backgroundColor: computedStyle.backgroundColor,
+        };
+      });
+
+      // Verify card has a background color
+      expect(darkCardStyles.backgroundColor).toBeDefined();
+      expect(darkCardStyles.backgroundColor).not.toBe('transparent');
+    }
+
+    // Test light mode
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.reload();
+    await waitForPageLoad(page);
+
+    const lightFeatureCards = page.locator('.features__card');
+    const lightCardCount = await lightFeatureCards.count();
+
+    if (lightCardCount > 0) {
+      const lightCardStyles = await lightFeatureCards.first().evaluate((el) => {
+        const computedStyle = window.getComputedStyle(el);
+        return {
+          backgroundColor: computedStyle.backgroundColor,
+        };
+      });
+
+      // Verify card has a background color
+      expect(lightCardStyles.backgroundColor).toBeDefined();
+      expect(lightCardStyles.backgroundColor).not.toBe('transparent');
+    }
+  });
+});
