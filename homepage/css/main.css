@@ -85,6 +85,60 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
+/* ===========================================
+   Focus Styles - Accessibility (Owner: Scenario 10)
+   WCAG 2.1 AA requires visible focus indicators
+   =========================================== */
+
+/* Global focus styles for all interactive elements */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Focus-visible for keyboard-only focus (modern browsers) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline when using focus-visible polyfill */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Specific focus styles for hero CTA buttons - higher specificity */
+.hero__cta:focus,
+.hero__cta:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Ensure all buttons and links have focus styles - higher specificity */
+.header__nav-link:focus,
+.header__nav-link:focus-visible,
+.header__menu-toggle:focus,
+.header__menu-toggle:focus-visible,
+.usage__copy-btn:focus,
+.usage__copy-btn:focus-visible,
+.footer__link:focus,
+.footer__link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 img {
   max-width: 100%;
   height: auto;
