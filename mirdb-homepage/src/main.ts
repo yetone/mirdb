@@ -13,6 +13,7 @@
 import { renderFeatures } from './components/Features';
 import { renderUsageExamples } from './components/UsageExamples';
 import { renderArchitecture } from './components/Architecture';
+import { renderFooter } from './components/Footer';
 
 function initApp(): void {
   // Render Features section (Scenario 2)
@@ -34,6 +35,13 @@ function initApp(): void {
   if (architectureContainer) {
     const architectureSection = renderArchitecture();
     architectureContainer.replaceWith(architectureSection);
+  }
+
+  // Render Footer section (Scenario 6)
+  const footerContainer = document.getElementById('footer');
+  if (footerContainer) {
+    const footerSection = renderFooter();
+    footerContainer.replaceWith(footerSection);
   }
 }
 

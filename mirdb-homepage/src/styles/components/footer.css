@@ -2,3 +2,96 @@
  * Footer Styles
  * Owner: Scenario 6 - Footer and Project Badges
  */
+
+.footer-section {
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.footer-container {
+  max-width: 72rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.badges-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.badge-link {
+  display: inline-block;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.badge-link:hover {
+  opacity: 0.8;
+}
+
+.badge-image {
+  height: 1.25rem;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4b5563;
+  transition: color 0.2s ease-in-out;
+}
+
+.github-link:hover {
+  color: #111827;
+}
+
+.github-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.github-text {
+  font-weight: 500;
+}
+
+.license-info {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.license-info a {
+  color: #2563eb;
+  transition: color 0.2s ease-in-out;
+}
+
+.license-info a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.author-attribution {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.links-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .badges-section {
+    gap: 0.75rem;
+  }
+
+  .footer-section {
+    padding: 2rem 1rem;
+  }
+}
