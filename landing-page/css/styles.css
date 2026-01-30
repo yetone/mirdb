@@ -88,3 +88,36 @@ section {
   background-color: var(--color-text);
   color: var(--color-bg-primary);
 }
+
+/* Focus styles for WCAG 2.1 AA compliance */
+/* Ensure all interactive elements have visible focus indicators */
+.btn:focus,
+.btn:focus-visible {
+  outline: 2px solid var(--color-accent-coral);
+  outline-offset: 2px;
+}
+
+a:focus,
+a:focus-visible {
+  outline: 2px solid var(--color-accent-coral);
+  outline-offset: 2px;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--color-accent-coral);
+  outline-offset: 2px;
+}
+
+/* Skip focus styles when clicking, only show for keyboard navigation */
+.btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button:focus:not(:focus-visible) {
+  outline: none;
+}
