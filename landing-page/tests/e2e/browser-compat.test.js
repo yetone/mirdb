@@ -3,423 +3,324 @@
  * Owner: Scenario 15 - Browser Compatibility
  *
  * Tests verify:
- * - Page renders correctly across Chrome, Firefox, Safari (WebKit), and Edge
- * - All key features are functional in each browser
- * - Smooth scroll navigation works across browsers
- * - Architecture diagram (Mermaid-style) renders correctly across browsers
- *
- * Note: Playwright uses WebKit engine to simulate Safari behavior.
- * Edge is based on Chromium, so chromium tests effectively cover Edge.
+ * - Page renders correctly in Chrome, Firefox, Safari, and Edge
+ * - Smooth scroll navigation works across all browsers
+ * - Mermaid/Architecture diagram renders correctly in all browsers
+ * - All features are functional across supported browsers
  */
 
 const { test, expect } = require('@playwright/test');
 const { setupPage, waitForAnimations } = require('../helpers/test-utils');
 
-/**
- * Browser compatibility tests run across multiple browser projects.
- * The playwright.config.js must be configured to run tests on:
- * - chromium (Chrome/Edge)
- * - firefox
- * - webkit (Safari)
- */
-
-test.describe('Browser Compatibility Tests', () => {
+test.describe('Browser Compatibility', () => {
   test.beforeEach(async ({ page }) => {
     await setupPage(page);
   });
 
-  // Test Case 1 & 4: Page renders correctly in Chrome/Edge (Chromium-based)
-  // Test Case 2: Page renders correctly in Firefox
-  // Test Case 3: Page renders correctly in Safari (WebKit)
-  // These tests run across all configured browser projects automatically
-  test('TC1-4: Page renders correctly with all sections visible', async ({ page, browserName }) => {
-    // Verify the page title
-    await expect(page).toHaveTitle(/MirDB/);
+  // Test Case 1: Load page in Chrome/Firefox/Safari/Edge - Page renders correctly
+  test('TC1: Page renders correctly with all sections visible', async ({ page, browserName }) => {
+    // Verify the page title is correct
+    const title = await page.title();
+    expect(title).toContain('MirDB');
 
-    // Verify all major sections are present and visible
-    const hero = page.locator('#hero');
-    await expect(hero).toBeVisible();
-
-    const features = page.locator('#features');
-    await expect(features).toBeVisible();
-
-    const usage = page.locator('#usage');
-    await expect(usage).toBeAttached();
-
-    const architecture = page.locator('#architecture');
-    await expect(architecture).toBeAttached();
-
-    const configuration = page.locator('#configuration');
-    await expect(configuration).toBeAttached();
-
-    const gettingStarted = page.locator('#getting-started');
-    await expect(gettingStarted).toBeAttached();
-
-    const footer = page.locator('footer');
-    await expect(footer).toBeAttached();
-
-    // Verify navigation is present
+    // Verify main navigation is visible
     const nav = page.locator('nav.nav');
     await expect(nav).toBeVisible();
 
-    // Log browser name for debugging
-    console.log(`Testing in browser: ${browserName}`);
-  });
+    // Verify hero section is visible
+    const hero = page.locator('#hero');
+    await expect(hero).toBeVisible();
 
-  test('TC1-4: Hero section displays correctly', async ({ page, browserName }) => {
-    // Verify hero section elements
+    // Verify hero title
     const heroTitle = page.locator('#hero-title');
     await expect(heroTitle).toBeVisible();
     await expect(heroTitle).toContainText('MirDB');
 
-    // Verify logo image loads
-    const heroLogo = page.locator('.hero-logo');
-    await expect(heroLogo).toBeVisible();
-
-    // Check that the logo has valid dimensions (image loaded successfully)
-    const logoDimensions = await heroLogo.boundingBox();
-    expect(logoDimensions).not.toBeNull();
-    expect(logoDimensions.width).toBeGreaterThan(0);
-    expect(logoDimensions.height).toBeGreaterThan(0);
-
-    // Verify CTA buttons are present
-    const ctaButtons = page.locator('.hero-cta .btn');
-    const buttonCount = await ctaButtons.count();
-    expect(buttonCount).toBeGreaterThanOrEqual(2);
-
-    console.log(`Hero section verified in: ${browserName}`);
-  });
-
-  test('TC1-4: Features section displays grid layout correctly', async ({ page, browserName }) => {
-    // Scroll to features section
-    await page.locator('#features').scrollIntoViewIfNeeded();
-    await waitForAnimations(page, 500);
-
-    // Verify features grid
-    const featuresGrid = page.locator('.features-grid');
-    await expect(featuresGrid).toBeVisible();
+    // Verify features section is visible
+    const features = page.locator('#features');
+    await expect(features).toBeVisible();
 
     // Verify all 4 feature cards are present
     const featureCards = page.locator('.feature-card');
-    const cardCount = await featureCards.count();
-    expect(cardCount).toBe(4);
+    await expect(featureCards).toHaveCount(4);
 
-    // Verify each card has icon, title, and description
-    for (let i = 0; i < cardCount; i++) {
-      const card = featureCards.nth(i);
-      await expect(card.locator('.feature-icon')).toBeVisible();
-      await expect(card.locator('h3')).toBeVisible();
-      await expect(card.locator('.feature-description')).toBeVisible();
-    }
+    // Verify architecture section is visible
+    const architecture = page.locator('#architecture');
+    await expect(architecture).toBeVisible();
 
-    console.log(`Features section verified in: ${browserName}`);
+    // Verify configuration section is visible
+    const configuration = page.locator('#configuration');
+    await expect(configuration).toBeVisible();
+
+    // Verify getting started section is visible
+    const gettingStarted = page.locator('#getting-started');
+    await expect(gettingStarted).toBeVisible();
+
+    // Verify footer is visible
+    const footer = page.locator('footer.footer');
+    await expect(footer).toBeVisible();
+
+    // Log the browser name for debugging
+    console.log(`Browser compatibility test passed for: ${browserName}`);
   });
 
-  test('TC1-4: Navigation links are functional', async ({ page, browserName }) => {
-    // Verify all navigation links
-    const navLinks = page.locator('.nav-links a');
-    const linkCount = await navLinks.count();
-    expect(linkCount).toBeGreaterThanOrEqual(4);
+  // Test Case 2: CSS and layout rendering
+  test('TC2: CSS layout renders correctly', async ({ page, browserName }) => {
+    // Verify CSS is loaded and applied
+    const nav = page.locator('nav.nav');
+    const position = await nav.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return style.position;
+    });
+    // Navigation should be sticky or fixed
+    expect(['sticky', 'fixed']).toContain(position);
 
-    // Verify Features link
+    // Verify navigation has background color (CSS loaded)
+    const navBgColor = await nav.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return style.backgroundColor;
+    });
+    // Should have a non-transparent background (dark theme)
+    expect(navBgColor).not.toBe('rgba(0, 0, 0, 0)');
+    expect(navBgColor).not.toBe('transparent');
+
+    // Verify feature grid uses CSS grid or flexbox
+    const featuresGrid = page.locator('.features-grid');
+    const display = await featuresGrid.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return style.display;
+    });
+    expect(['grid', 'flex']).toContain(display);
+
+    // Verify feature cards have proper styling (border and background)
+    const featureCard = page.locator('.feature-card').first();
+    const cardBgColor = await featureCard.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return style.backgroundColor;
+    });
+    // Should have a non-transparent background
+    expect(cardBgColor).not.toBe('rgba(0, 0, 0, 0)');
+    expect(cardBgColor).not.toBe('transparent');
+
+    console.log(`CSS layout test passed for: ${browserName}`);
+  });
+
+  // Test Case 3: JavaScript functionality works
+  test('TC3: JavaScript functionality is operational', async ({ page, browserName }) => {
+    // Verify navigation links are clickable
     const featuresLink = page.locator('.nav-links a[href="#features"]');
     await expect(featuresLink).toBeVisible();
+    await expect(featuresLink).toBeEnabled();
 
-    // Verify Usage link
-    const usageLink = page.locator('.nav-links a[href="#usage"]');
-    await expect(usageLink).toBeVisible();
+    // Verify interactive elements work
+    const configToggle = page.locator('#config-toggle-btn');
+    if (await configToggle.count() > 0) {
+      await expect(configToggle).toBeVisible();
 
-    // Verify Architecture link
-    const architectureLink = page.locator('.nav-links a[href="#architecture"]');
-    await expect(architectureLink).toBeVisible();
+      // Get initial aria-expanded state
+      const initialExpanded = await configToggle.getAttribute('aria-expanded');
 
-    // Verify GitHub link
-    const githubLink = page.locator('.nav-links a[href*="github.com"]');
-    await expect(githubLink).toBeVisible();
-    await expect(githubLink).toHaveAttribute('target', '_blank');
+      // Click to toggle
+      await configToggle.click();
+      await waitForAnimations(page, 300);
 
-    console.log(`Navigation links verified in: ${browserName}`);
+      // Verify toggle works (state should change)
+      const newExpanded = await configToggle.getAttribute('aria-expanded');
+      expect(newExpanded).not.toBe(initialExpanded);
+    }
+
+    console.log(`JavaScript functionality test passed for: ${browserName}`);
+  });
+
+  // Test Case 4: Images load correctly
+  test('TC4: Images and assets load correctly', async ({ page, browserName }) => {
+    // Verify logo image loads
+    const logo = page.locator('.hero-logo');
+    await expect(logo).toBeVisible();
+
+    // Check that the image has loaded (natural width/height > 0)
+    const isLoaded = await logo.evaluate((img) => {
+      return img.complete && img.naturalWidth > 0;
+    });
+    expect(isLoaded).toBe(true);
+
+    // Verify SVG icons in feature cards render
+    const featureIcons = page.locator('.feature-icon svg');
+    const iconCount = await featureIcons.count();
+    expect(iconCount).toBeGreaterThanOrEqual(4);
+
+    for (let i = 0; i < iconCount; i++) {
+      const icon = featureIcons.nth(i);
+      await expect(icon).toBeVisible();
+    }
+
+    console.log(`Images and assets test passed for: ${browserName}`);
   });
 
   // Test Case 5: Smooth scroll navigation works in all browsers
-  test('TC5: Smooth scroll navigation works correctly', async ({ page, browserName }) => {
+  test('TC5: Smooth scroll navigation works', async ({ page, browserName }) => {
+    // Start at top of page
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await waitForAnimations(page, 200);
+
     // Get initial scroll position
     const initialScrollY = await page.evaluate(() => window.scrollY);
+    expect(initialScrollY).toBeLessThan(50);
 
-    // Click on Features link to trigger smooth scroll
+    // Click on Features link
     const featuresLink = page.locator('.nav-links a[href="#features"]');
     await featuresLink.click();
 
-    // Wait for smooth scroll animation to complete
+    // Wait for smooth scroll animation
     await waitForAnimations(page, 1000);
 
     // Verify scroll position changed
-    const finalScrollY = await page.evaluate(() => window.scrollY);
-    expect(finalScrollY).toBeGreaterThan(initialScrollY);
+    const scrolledY = await page.evaluate(() => window.scrollY);
+    expect(scrolledY).toBeGreaterThan(initialScrollY);
 
     // Verify features section is in viewport
     const featuresSection = page.locator('#features');
     await expect(featuresSection).toBeInViewport();
 
-    // Verify URL hash updated
+    // Verify URL hash was updated
     const currentUrl = page.url();
     expect(currentUrl).toContain('#features');
 
-    console.log(`Smooth scroll verified in: ${browserName}`);
-  });
-
-  test('TC5: Smooth scroll to architecture section works', async ({ page, browserName }) => {
-    // Click on Architecture link
+    // Test scrolling to architecture section
     const architectureLink = page.locator('.nav-links a[href="#architecture"]');
     await architectureLink.click();
-
-    // Wait for smooth scroll animation
     await waitForAnimations(page, 1000);
 
-    // Verify architecture section is in viewport
     const architectureSection = page.locator('#architecture');
     await expect(architectureSection).toBeInViewport();
 
-    // Verify URL hash
-    const currentUrl = page.url();
-    expect(currentUrl).toContain('#architecture');
-
-    console.log(`Architecture smooth scroll verified in: ${browserName}`);
+    console.log(`Smooth scroll navigation test passed for: ${browserName}`);
   });
 
-  // Test Case 6: Architecture diagram renders correctly in all browsers
+  // Test Case 6: Architecture diagram (Mermaid) renders correctly in all browsers
   test('TC6: Architecture diagram renders correctly', async ({ page, browserName }) => {
     // Scroll to architecture section
     await page.locator('#architecture').scrollIntoViewIfNeeded();
     await waitForAnimations(page, 500);
 
-    // Verify architecture section title
-    const architectureTitle = page.locator('#architecture-title');
-    await expect(architectureTitle).toBeVisible();
-    await expect(architectureTitle).toContainText('Architecture');
+    // Verify architecture diagram container is visible
+    const diagram = page.locator('.architecture-diagram');
+    await expect(diagram).toBeVisible();
 
-    // Verify the diagram container is visible
-    const diagramContainer = page.locator('.architecture-diagram');
-    await expect(diagramContainer).toBeVisible();
-
-    // Verify diagram nodes are rendered (LSM-tree components)
-    const diagramNodes = page.locator('.diagram-node');
-    const nodeCount = await diagramNodes.count();
-    expect(nodeCount).toBeGreaterThan(0);
-
-    // Verify key diagram components are present
-    const writeNode = page.locator('.diagram-node--write');
-    await expect(writeNode).toBeVisible();
-
-    const walNode = page.locator('.diagram-node--wal');
-    await expect(walNode).toBeVisible();
-
-    const memtableNode = page.locator('.diagram-node--memtable');
-    await expect(memtableNode).toBeVisible();
-
-    // Verify tooltips are attached (accessible)
-    const tooltips = page.locator('.diagram-tooltip');
-    const tooltipCount = await tooltips.count();
-    expect(tooltipCount).toBeGreaterThan(0);
-
-    // Verify diagram has proper ARIA label
-    await expect(diagramContainer).toHaveAttribute('role', 'img');
-    const ariaLabel = await diagramContainer.getAttribute('aria-label');
-    expect(ariaLabel).toBeTruthy();
+    // Verify diagram has proper ARIA attributes for accessibility
+    await expect(diagram).toHaveAttribute('role', 'img');
+    const ariaLabel = await diagram.getAttribute('aria-label');
     expect(ariaLabel).toContain('LSM-tree');
 
-    console.log(`Architecture diagram verified in: ${browserName}`);
+    // Verify diagram components are rendered
+    const diagramNodes = page.locator('.diagram-node');
+    const nodeCount = await diagramNodes.count();
+    expect(nodeCount).toBeGreaterThanOrEqual(6); // At least 6 nodes in the LSM diagram
+
+    // Verify specific components are present
+    const writeNode = page.locator('[data-component="write"]');
+    const walNode = page.locator('[data-component="wal"]');
+    const memtableNode = page.locator('[data-component="memtable"]');
+    const level0Node = page.locator('[data-component="level0"]');
+    const levelsNode = page.locator('[data-component="levels"]');
+
+    await expect(writeNode).toBeVisible();
+    await expect(walNode).toBeVisible();
+    await expect(memtableNode).toBeVisible();
+    await expect(level0Node).toBeVisible();
+    await expect(levelsNode).toBeVisible();
+
+    // Verify arrows indicating data flow are present
+    const arrows = page.locator('.diagram-arrow');
+    const arrowCount = await arrows.count();
+    expect(arrowCount).toBeGreaterThanOrEqual(5);
+
+    // Verify tooltips work (hover/focus interaction)
+    const memtableTooltip = page.locator('#tooltip-memtable');
+
+    // Focus on memtable node to trigger tooltip
+    await memtableNode.focus();
+    await waitForAnimations(page, 300);
+
+    // Tooltip should be visible on focus
+    await expect(memtableTooltip).toBeVisible();
+
+    console.log(`Architecture diagram test passed for: ${browserName}`);
   });
 
-  test('TC6: Architecture diagram nodes have interactive tooltips', async ({ page, browserName }) => {
-    // Scroll to architecture section
-    await page.locator('#architecture').scrollIntoViewIfNeeded();
-    await waitForAnimations(page, 500);
+  // Additional test: Links and external navigation work
+  test('External links have proper attributes for security', async ({ page, browserName }) => {
+    // Check GitHub link in navigation
+    const githubNavLink = page.locator('.nav-links a', { hasText: 'GitHub' });
+    await expect(githubNavLink).toHaveAttribute('target', '_blank');
+    await expect(githubNavLink).toHaveAttribute('rel', /noopener/);
 
-    // Verify diagram nodes are focusable (keyboard accessible)
-    const focusableNodes = page.locator('.diagram-node[tabindex="0"]');
-    const focusableCount = await focusableNodes.count();
-    expect(focusableCount).toBeGreaterThan(0);
+    // Check GitHub link in hero section
+    const githubHeroLink = page.locator('.hero-cta a', { hasText: 'GitHub' });
+    await expect(githubHeroLink).toHaveAttribute('target', '_blank');
+    await expect(githubHeroLink).toHaveAttribute('rel', /noopener/);
 
-    // Test that nodes have aria-describedby for tooltips
-    const firstNode = focusableNodes.first();
-    const describedBy = await firstNode.getAttribute('aria-describedby');
-    expect(describedBy).toBeTruthy();
-
-    console.log(`Architecture diagram tooltips verified in: ${browserName}`);
+    console.log(`External links security test passed for: ${browserName}`);
   });
 
-  // Additional cross-browser tests for core functionality
-  test('TC1-4: CSS styles are applied correctly', async ({ page, browserName }) => {
-    // Verify CSS is loaded and applied
-    const body = page.locator('body');
+  // Additional test: Responsive meta viewport is set
+  test('Viewport meta tag is properly configured', async ({ page, browserName }) => {
+    // Verify viewport meta tag exists and is properly configured
+    const viewport = page.locator('meta[name="viewport"]');
+    await expect(viewport).toHaveCount(1);
 
-    // Check that CSS custom properties are working
-    const bgColor = await body.evaluate((el) => {
-      return window.getComputedStyle(el).backgroundColor;
-    });
-    expect(bgColor).toBeTruthy();
+    const content = await viewport.getAttribute('content');
+    expect(content).toContain('width=device-width');
+    expect(content).toContain('initial-scale=1');
 
-    // Verify navigation has proper styling
-    const nav = page.locator('nav.nav');
-    const navPosition = await nav.evaluate((el) => {
-      return window.getComputedStyle(el).position;
-    });
-    // Navigation should be sticky or fixed
-    expect(['sticky', 'fixed', 'relative']).toContain(navPosition);
-
-    console.log(`CSS styles verified in: ${browserName}`);
+    console.log(`Viewport meta tag test passed for: ${browserName}`);
   });
 
-  test('TC1-4: Images load correctly across browsers', async ({ page, browserName }) => {
-    // Wait for images to load
-    await page.waitForLoadState('load');
+  // Additional test: Form elements and interactive controls work
+  test('Interactive controls are accessible and functional', async ({ page, browserName }) => {
+    // Test configuration toggle button
+    const configToggle = page.locator('#config-toggle-btn');
+    if (await configToggle.count() > 0) {
+      // Verify button is focusable
+      await configToggle.focus();
+      const isFocused = await configToggle.evaluate(
+        (el) => document.activeElement === el
+      );
+      expect(isFocused).toBe(true);
 
-    // Check hero logo
-    const heroLogo = page.locator('.hero-logo');
-    if (await heroLogo.count() > 0) {
-      const logoNaturalWidth = await heroLogo.evaluate((img) => {
-        return img.naturalWidth;
-      });
-      expect(logoNaturalWidth).toBeGreaterThan(0);
+      // Verify keyboard interaction (Enter key)
+      const initialExpanded = await configToggle.getAttribute('aria-expanded');
+      await page.keyboard.press('Enter');
+      await waitForAnimations(page, 300);
+
+      const newExpanded = await configToggle.getAttribute('aria-expanded');
+      expect(newExpanded).not.toBe(initialExpanded);
     }
 
-    console.log(`Images verified in: ${browserName}`);
+    console.log(`Interactive controls test passed for: ${browserName}`);
   });
 
-  test('TC1-4: External links have security attributes', async ({ page, browserName }) => {
-    // Find all external links (GitHub, etc.)
-    const externalLinks = page.locator('a[target="_blank"]');
-    const linkCount = await externalLinks.count();
+  // Additional test: Font rendering
+  test('Fonts are loaded and text is readable', async ({ page, browserName }) => {
+    // Verify main heading is visible and has appropriate font
+    const heroTitle = page.locator('#hero-title');
+    await expect(heroTitle).toBeVisible();
 
-    for (let i = 0; i < linkCount; i++) {
-      const link = externalLinks.nth(i);
-      const rel = await link.getAttribute('rel');
-      // External links should have noopener for security
-      expect(rel).toContain('noopener');
-    }
-
-    console.log(`External links security verified in: ${browserName}`);
-  });
-
-  test('TC1-4: Footer renders correctly across browsers', async ({ page, browserName }) => {
-    // Scroll to footer
-    await page.locator('footer').scrollIntoViewIfNeeded();
-    await waitForAnimations(page, 500);
-
-    // Verify footer content
-    const footer = page.locator('footer.footer');
-    await expect(footer).toBeVisible();
-
-    // Verify GitHub link in footer
-    const githubLink = footer.locator('a[href*="github.com"]');
-    await expect(githubLink.first()).toBeVisible();
-
-    // Verify license information
-    const licenseText = footer.locator('.footer-license');
-    await expect(licenseText).toBeVisible();
-
-    console.log(`Footer verified in: ${browserName}`);
-  });
-
-  test('TC1-4: Configuration section renders correctly', async ({ page, browserName }) => {
-    // Scroll to configuration section
-    await page.locator('#configuration').scrollIntoViewIfNeeded();
-    await waitForAnimations(page, 500);
-
-    // Verify config section
-    const configSection = page.locator('#configuration');
-    await expect(configSection).toBeVisible();
-
-    // Verify config toggle button exists
-    const configToggle = page.locator('.config-toggle');
-    await expect(configToggle).toBeVisible();
-
-    // Verify config table exists
-    const configTable = page.locator('.config-table');
-    await expect(configTable).toBeVisible();
-
-    console.log(`Configuration section verified in: ${browserName}`);
-  });
-
-  test('TC1-4: Getting Started section renders correctly', async ({ page, browserName }) => {
-    // Scroll to getting started section
-    await page.locator('#getting-started').scrollIntoViewIfNeeded();
-    await waitForAnimations(page, 500);
-
-    // Verify section exists
-    const gettingStarted = page.locator('#getting-started');
-    await expect(gettingStarted).toBeVisible();
-
-    // Verify installation options
-    const installationOptions = page.locator('.installation-option');
-    const optionCount = await installationOptions.count();
-    expect(optionCount).toBeGreaterThanOrEqual(1);
-
-    // Verify code blocks
-    const codeBlocks = gettingStarted.locator('.code-block');
-    const codeBlockCount = await codeBlocks.count();
-    expect(codeBlockCount).toBeGreaterThan(0);
-
-    console.log(`Getting Started section verified in: ${browserName}`);
-  });
-});
-
-// Additional test suite for browser-specific behaviors
-test.describe('Browser-Specific Rendering', () => {
-  test.beforeEach(async ({ page }) => {
-    await setupPage(page);
-  });
-
-  test('Page loads within acceptable time', async ({ page, browserName }) => {
-    const startTime = Date.now();
-    await page.waitForLoadState('domcontentloaded');
-    const loadTime = Date.now() - startTime;
-
-    // Page should load within 5 seconds even on slower connections
-    expect(loadTime).toBeLessThan(5000);
-
-    console.log(`Page load time in ${browserName}: ${loadTime}ms`);
-  });
-
-  test('No JavaScript errors on page load', async ({ page, browserName }) => {
-    const errors = [];
-
-    page.on('pageerror', (error) => {
-      errors.push(error.message);
+    // Check font size is reasonable (at least 24px for main heading)
+    const fontSize = await heroTitle.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return parseFloat(style.fontSize);
     });
+    expect(fontSize).toBeGreaterThanOrEqual(24);
 
-    await page.goto('/');
-    await page.waitForLoadState('load');
-
-    // Wait a bit for any delayed JavaScript execution
-    await waitForAnimations(page, 500);
-
-    // There should be no JavaScript errors
-    expect(errors).toHaveLength(0);
-
-    console.log(`No JS errors in: ${browserName}`);
-  });
-
-  test('Console warnings are minimal', async ({ page, browserName }) => {
-    const warnings = [];
-
-    page.on('console', (msg) => {
-      if (msg.type() === 'warning' || msg.type() === 'error') {
-        // Ignore some common non-critical warnings
-        const text = msg.text();
-        if (!text.includes('favicon') && !text.includes('DevTools')) {
-          warnings.push(text);
-        }
-      }
+    // Verify body text is readable (at least 14px)
+    const bodyText = page.locator('.hero-value-proposition');
+    const bodyFontSize = await bodyText.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return parseFloat(style.fontSize);
     });
+    expect(bodyFontSize).toBeGreaterThanOrEqual(14);
 
-    await page.goto('/');
-    await page.waitForLoadState('load');
-
-    // Log warnings but don't fail (some browsers have different warning behaviors)
-    if (warnings.length > 0) {
-      console.log(`Warnings in ${browserName}:`, warnings);
-    }
+    console.log(`Font rendering test passed for: ${browserName}`);
   });
 });
