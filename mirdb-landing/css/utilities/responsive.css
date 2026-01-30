@@ -2,12 +2,557 @@
  * Responsive Utilities
  * Owner: Scenario 10 - Responsive Design
  *
- * Expected content:
- * - Mobile-first base styles
+ * Mobile-first responsive design system
+ * - Base styles target mobile devices (< 768px)
  * - @media (min-width: 768px) - Tablet breakpoint
  * - @media (min-width: 1024px) - Desktop breakpoint
  * - Container max-width rules
  * - Touch target size utilities
  */
 
-/* Placeholder - to be implemented by Scenario 10 */
+/* =================================================================
+   CSS Custom Properties for Responsive Breakpoints
+   ================================================================= */
+:root {
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
+
+  /* Touch target minimum size (WCAG 2.1 / Apple HIG) */
+  --touch-target-min: 44px;
+
+  /* Container padding responsive values */
+  --container-padding-mobile: var(--spacing-md);
+  --container-padding-tablet: var(--spacing-lg);
+  --container-padding-desktop: var(--spacing-xl);
+}
+
+/* =================================================================
+   Mobile-First Base Styles (< 768px)
+   All base styles target mobile by default
+   ================================================================= */
+
+/* Container - Mobile first with fluid width */
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--container-padding-mobile);
+}
+
+/* Section containers - mobile padding */
+section {
+  padding: var(--spacing-2xl) 0;
+}
+
+.section__container {
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+/* Touch-friendly targets - Mobile utility classes */
+.touch-target {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+/* Ensure all interactive elements have adequate touch targets on mobile */
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+.btn {
+  min-height: var(--touch-target-min);
+}
+
+/* Hide on mobile utility */
+.hide-mobile {
+  display: none;
+}
+
+/* Show only on mobile utility */
+.show-mobile {
+  display: block;
+}
+
+/* Stack layout utility for mobile */
+.stack-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* Full-width utility for mobile */
+.full-width-mobile {
+  width: 100%;
+}
+
+/* Text alignment utilities - mobile */
+.text-center-mobile {
+  text-align: center;
+}
+
+/* Grid utilities - single column on mobile */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+/* Responsive images - ensure they scale properly */
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent horizontal overflow on mobile */
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Ensure text doesn't cause horizontal scroll */
+* {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Code blocks overflow handling for mobile */
+pre,
+code {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* =================================================================
+   Small Tablet Breakpoint (480px+)
+   Slight adjustments for larger phones / small tablets
+   ================================================================= */
+@media (min-width: 480px) {
+  .container {
+    padding-inline: var(--spacing-lg);
+  }
+
+  .section__container {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  /* Grid can be 2 columns for some content */
+  .grid-responsive-sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =================================================================
+   Tablet Breakpoint (768px+)
+   Two-column layouts, adjusted spacing
+   ================================================================= */
+@media (min-width: 768px) {
+  /* Container - larger padding, still fluid */
+  .container {
+    padding-inline: var(--container-padding-tablet);
+    max-width: var(--container-max-width);
+  }
+
+  /* Section containers - larger padding */
+  section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .section__container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: var(--spacing-3xl) var(--container-padding-tablet);
+  }
+
+  /* Grid utilities - two columns on tablet */
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  /* Show on tablet and up */
+  .hide-mobile {
+    display: block;
+  }
+
+  /* Hide on tablet and up */
+  .show-mobile {
+    display: none;
+  }
+
+  /* Unstack on tablet */
+  .stack-mobile {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  /* Reset full-width on tablet */
+  .full-width-mobile {
+    width: auto;
+  }
+
+  /* Text alignment reset */
+  .text-center-mobile {
+    text-align: left;
+  }
+
+  /* Two column layout utility */
+  .two-column {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+    align-items: start;
+  }
+
+  /* Flex row utility */
+  .flex-row-tablet {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-lg);
+  }
+}
+
+/* =================================================================
+   Desktop Breakpoint (1024px+)
+   Full desktop layout, three-column grids, side-by-side layouts
+   ================================================================= */
+@media (min-width: 1024px) {
+  /* Container - fixed max-width with larger padding */
+  .container {
+    padding-inline: var(--container-padding-desktop);
+    max-width: var(--container-max-width);
+  }
+
+  .section__container {
+    padding: var(--spacing-3xl) var(--container-padding-desktop);
+  }
+
+  /* Grid utilities - three columns on desktop */
+  .grid-responsive {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Three column layout utility */
+  .three-column {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  /* Side-by-side layout utility */
+  .side-by-side {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    align-items: center;
+  }
+
+  /* Flex row with larger gaps */
+  .flex-row-tablet {
+    gap: var(--spacing-xl);
+  }
+}
+
+/* =================================================================
+   Large Desktop Breakpoint (1440px+)
+   Maximum container width, optimized for large screens
+   ================================================================= */
+@media (min-width: 1440px) {
+  .container {
+    max-width: var(--container-max-width);
+  }
+
+  /* Larger section padding for big screens */
+  section {
+    padding: var(--spacing-3xl) var(--spacing-xl);
+  }
+}
+
+/* =================================================================
+   Touch Target Utilities
+   Ensure all interactive elements meet WCAG 2.1 AAA guidelines
+   ================================================================= */
+
+/* Utility class for ensuring touch-friendly sizing */
+.touch-friendly {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure adequate spacing between touch targets */
+.touch-spacing {
+  margin: calc(var(--touch-target-min) / 4);
+}
+
+/* Make links touch-friendly with padding */
+.touch-link {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  min-height: var(--touch-target-min);
+}
+
+/* =================================================================
+   Responsive Typography
+   Fluid typography that scales with viewport
+   ================================================================= */
+
+/* Body text - already set in styles.css but ensure responsiveness */
+body {
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+  line-height: 1.6;
+}
+
+/* Headings responsive sizing */
+h1 {
+  font-size: clamp(1.75rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+/* Ensure readable line lengths */
+p,
+li {
+  max-width: 70ch;
+}
+
+/* =================================================================
+   Responsive Spacing Utilities
+   ================================================================= */
+
+/* Responsive margin utilities */
+.mt-responsive {
+  margin-top: var(--spacing-lg);
+}
+
+.mb-responsive {
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .mt-responsive {
+    margin-top: var(--spacing-xl);
+  }
+
+  .mb-responsive {
+    margin-bottom: var(--spacing-xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mt-responsive {
+    margin-top: var(--spacing-2xl);
+  }
+
+  .mb-responsive {
+    margin-bottom: var(--spacing-2xl);
+  }
+}
+
+/* Responsive padding utilities */
+.p-responsive {
+  padding: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .p-responsive {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .p-responsive {
+    padding: var(--spacing-xl);
+  }
+}
+
+/* =================================================================
+   Responsive Visibility Utilities
+   ================================================================= */
+
+/* Hide at specific breakpoints */
+@media (max-width: 479px) {
+  .hide-xs {
+    display: none !important;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .hide-sm {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hide-md {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hide-lg {
+    display: none !important;
+  }
+}
+
+/* Show at specific breakpoints only */
+.show-xs {
+  display: none !important;
+}
+
+.show-sm {
+  display: none !important;
+}
+
+.show-md {
+  display: none !important;
+}
+
+.show-lg {
+  display: none !important;
+}
+
+@media (max-width: 479px) {
+  .show-xs {
+    display: block !important;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .show-sm {
+    display: block !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .show-md {
+    display: block !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .show-lg {
+    display: block !important;
+  }
+}
+
+/* =================================================================
+   Responsive Flexbox Utilities
+   ================================================================= */
+
+/* Flex direction utilities */
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (min-width: 768px) {
+  .flex-col-md {
+    flex-direction: column;
+  }
+
+  .flex-row-md {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 1024px) {
+  .flex-col-lg {
+    flex-direction: column;
+  }
+
+  .flex-row-lg {
+    flex-direction: row;
+  }
+}
+
+/* Flex wrap utilities */
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+/* =================================================================
+   Aspect Ratio Utilities for Images/Media
+   ================================================================= */
+
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+/* =================================================================
+   Print Styles - Responsive for Print Media
+   ================================================================= */
+@media print {
+  /* Reset responsive utilities for print */
+  .hide-mobile,
+  .show-mobile,
+  .hide-xs,
+  .hide-sm,
+  .hide-md,
+  .hide-lg {
+    display: block !important;
+  }
+
+  /* Single column for print */
+  .grid-responsive,
+  .two-column,
+  .three-column,
+  .side-by-side {
+    grid-template-columns: 1fr;
+  }
+
+  /* Remove animations and transitions */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =================================================================
+   Reduced Motion Support
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable transitions for reduced motion preference */
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
