@@ -483,10 +483,148 @@ h1, h2, h3, h4, h5, h6 {
    ====================== */
 
 .usage {
-  min-height: 100px;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background-color: var(--color-bg);
 }
 
-/* Usage styles will be added by Scenario 5 */
+.usage__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.usage__title {
+  font-size: var(--font-size-3xl);
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.usage__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.usage__example {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+}
+
+.usage__example:last-child {
+  margin-bottom: 0;
+}
+
+.usage__example-title {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.usage__example-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.usage__code-wrapper {
+  position: relative;
+}
+
+.usage__code-block {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  overflow-x: auto;
+  margin: 0;
+  border: 1px solid var(--color-border);
+}
+
+.usage__code-block code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: 1.6;
+  white-space: pre;
+  display: block;
+}
+
+/* Copy button styles */
+.usage__copy-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.usage__copy-btn:hover {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-color: var(--color-primary);
+}
+
+.usage__copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.usage__copy-btn--success {
+  background-color: var(--color-success);
+  color: white;
+  border-color: var(--color-success);
+}
+
+.usage__copy-btn--error {
+  background-color: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
+
+.usage__copy-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Syntax highlighting token styles */
+.token.command {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.token.response {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.token.number {
+  color: #f59e0b;
+}
+
+.token.comment {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.token.string {
+  color: #10b981;
+}
 
 /* ======================
    Status Section Styles

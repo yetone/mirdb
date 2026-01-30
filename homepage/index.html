@@ -195,7 +195,136 @@
 
     <!-- Usage Section - Owner: Scenario 5 -->
     <section id="usage" class="usage">
-      <!-- Usage content will be added by Scenario 5 -->
+      <div class="usage__container">
+        <h2 class="usage__title">Usage & Code Examples</h2>
+        <p class="usage__subtitle">MirDB supports the standard memcached protocol. Use your existing clients with these commands.</p>
+
+        <!-- SET Command Example -->
+        <div class="usage__example">
+          <h3 class="usage__example-title">SET - Store a Value</h3>
+          <p class="usage__example-description">Store a key-value pair with optional expiration time and flags.</p>
+          <div class="usage__code-wrapper">
+            <pre class="usage__code-block"><code class="language-bash">set mykey 0 0 5
+hello
+STORED</code></pre>
+            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- GET Command Example -->
+        <div class="usage__example">
+          <h3 class="usage__example-title">GET - Retrieve a Value</h3>
+          <p class="usage__example-description">Retrieve the value associated with a key.</p>
+          <div class="usage__code-wrapper">
+            <pre class="usage__code-block"><code class="language-bash">get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ADD Command Example -->
+        <div class="usage__example">
+          <h3 class="usage__example-title">ADD - Add Only if Key Doesn't Exist</h3>
+          <p class="usage__example-description">Store a value only if the key doesn't already exist.</p>
+          <div class="usage__code-wrapper">
+            <pre class="usage__code-block"><code class="language-bash">add newkey 0 0 4
+test
+STORED</code></pre>
+            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- REPLACE Command Example -->
+        <div class="usage__example">
+          <h3 class="usage__example-title">REPLACE - Replace Existing Value</h3>
+          <p class="usage__example-description">Replace a value only if the key already exists.</p>
+          <div class="usage__code-wrapper">
+            <pre class="usage__code-block"><code class="language-bash">replace mykey 0 0 5
+world
+STORED</code></pre>
+            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- APPEND Command Example -->
+        <div class="usage__example">
+          <h3 class="usage__example-title">APPEND - Append to Existing Value</h3>
+          <p class="usage__example-description">Append data to an existing key's value.</p>
+          <div class="usage__code-wrapper">
+            <pre class="usage__code-block"><code class="language-bash">append mykey 0 0 6
+_extra
+STORED</code></pre>
+            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PREPEND Command Example -->
+        <div class="usage__example">
+          <h3 class="usage__example-title">PREPEND - Prepend to Existing Value</h3>
+          <p class="usage__example-description">Prepend data to an existing key's value.</p>
+          <div class="usage__code-wrapper">
+            <pre class="usage__code-block"><code class="language-bash">prepend mykey 0 0 4
+pre_
+STORED</code></pre>
+            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- DELETE Command Example -->
+        <div class="usage__example">
+          <h3 class="usage__example-title">DELETE - Remove a Key</h3>
+          <p class="usage__example-description">Delete a key and its associated value.</p>
+          <div class="usage__code-wrapper">
+            <pre class="usage__code-block"><code class="language-bash">delete mykey
+DELETED</code></pre>
+            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Status Section - Owner: Scenario 6 -->
@@ -272,5 +401,7 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/prism.js"></script>
+  <script src="js/copy-code.js"></script>
 </body>
 </html>
