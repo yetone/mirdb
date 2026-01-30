@@ -3,4 +3,179 @@
  * Owner: Scenario 5 - Architecture Section with Diagram
  */
 
-/* Placeholder - to be implemented by Scenario 5 */
+/* Section container */
+.architecture {
+  background-color: var(--color-bg-secondary);
+  padding: var(--spacing-4xl) 0;
+}
+
+/* Section title */
+.architecture__title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Intro text */
+.architecture__intro {
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto var(--spacing-3xl);
+  line-height: 1.6;
+}
+
+/* Diagram container */
+.architecture__diagram-container {
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-3xl);
+  overflow-x: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Mermaid diagram */
+.architecture__diagram {
+  display: flex;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.architecture__diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mermaid specific overrides for dark theme */
+.architecture__diagram .nodeLabel {
+  color: var(--color-text);
+}
+
+.architecture__diagram .edgeLabel {
+  color: var(--color-text);
+  background-color: var(--color-bg-primary);
+}
+
+/* Components section */
+.architecture__components {
+  margin-top: var(--spacing-3xl);
+}
+
+.architecture__components-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* Components grid */
+.architecture__components-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-xl);
+}
+
+/* Individual component card */
+.architecture__component {
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.architecture__component:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Component icon */
+.architecture__component-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--spacing-lg);
+  background-color: var(--color-accent-blue);
+  border-radius: var(--radius-md);
+  color: var(--color-accent-coral);
+}
+
+/* Component title */
+.architecture__component-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Component description */
+.architecture__component-description {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .architecture__components-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .architecture {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .architecture__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .architecture__intro {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-md);
+  }
+
+  .architecture__diagram-container {
+    padding: var(--spacing-md);
+    margin-left: calc(-1 * var(--spacing-md));
+    margin-right: calc(-1 * var(--spacing-md));
+    border-radius: 0;
+  }
+
+  .architecture__components-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .architecture__component {
+    padding: var(--spacing-lg);
+  }
+
+  .architecture__components-title {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* Accessibility - reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .architecture__component {
+    transition: none;
+  }
+
+  .architecture__component:hover {
+    transform: none;
+  }
+}
