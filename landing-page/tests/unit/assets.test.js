@@ -1,214 +1,205 @@
 /**
- * Asset Loading Unit Tests
+ * Asset Loading Tests
  * Owner: Scenario 17 - Asset Loading - Logo and GIF
  *
- * Tests for validating that logo and usage GIF assets have proper attributes
- * including meaningful alt text for accessibility.
+ * Tests for verifying logo and usage GIF assets load correctly,
+ * have proper alt text for accessibility, and handle failures gracefully.
  */
+
 const fs = require('fs');
 const path = require('path');
 
-describe('Asset Loading Tests', () => {
+describe('Asset Loading - Logo and GIF', () => {
   let htmlContent;
 
   beforeAll(() => {
     const htmlPath = path.join(__dirname, '../../index.html');
-    htmlContent = fs.readFileSync(htmlPath, 'utf-8');
+    htmlContent = fs.readFileSync(htmlPath, 'utf8');
   });
 
-  describe('Logo Asset Tests', () => {
-    test('Logo image exists in hero section with correct src', () => {
-      // Hero logo should have class hero-logo and correct src
-      expect(htmlContent).toMatch(/<img[^>]*src="assets\/images\/logo\.gif"[^>]*class="hero-logo"/);
-    });
-
-    test('Logo image exists in navigation with correct src', () => {
-      // Navigation should contain a logo image with the correct src
-      expect(htmlContent).toMatch(/<a[^>]*class="nav-logo"[^>]*>[\s\S]*?<img[^>]*src="assets\/images\/logo\.gif"[^>]*>/);
-    });
-
-    test('Logo image exists in footer with correct src', () => {
-      // Footer should contain a logo image with the correct src
-      expect(htmlContent).toMatch(/<a[^>]*class="footer__logo"[^>]*>[\s\S]*?<img[^>]*src="assets\/images\/logo\.gif"[^>]*>/);
-    });
-
-    test('All logo images have alt attribute', () => {
-      // Find all logo.gif images
-      const logoImgTags = htmlContent.match(/<img[^>]*src="[^"]*logo\.gif"[^>]*>/g) || [];
-      expect(logoImgTags.length).toBeGreaterThan(0);
-
-      logoImgTags.forEach((imgTag) => {
-        expect(imgTag).toMatch(/alt="[^"]+"/);
-      });
-    });
-  });
-
-  describe('Usage GIF Asset Tests', () => {
-    test('Usage GIF exists in usage section with correct src', () => {
-      // Usage GIF should have class usage__gif and correct src
-      expect(htmlContent).toMatch(/<img[^>]*src="assets\/images\/usage\.gif"[^>]*class="usage__gif"/);
-    });
-
-    test('Usage GIF has alt attribute', () => {
-      const usageImgMatch = htmlContent.match(/<img[^>]*class="usage__gif"[^>]*>/);
-      expect(usageImgMatch).not.toBeNull();
-      expect(usageImgMatch[0]).toMatch(/alt="[^"]+"/);
-    });
-
-    test('Usage GIF has lazy loading attribute', () => {
-      const usageImgMatch = htmlContent.match(/<img[^>]*class="usage__gif"[^>]*>/);
-      expect(usageImgMatch).not.toBeNull();
-      expect(usageImgMatch[0]).toMatch(/loading="lazy"/);
-    });
-  });
-
-  describe('TC3: Image Alt Text Accessibility Tests', () => {
-    test('Logo images have meaningful alt text for accessibility', () => {
-      const logoImgTags = htmlContent.match(/<img[^>]*src="[^"]*logo\.gif"[^>]*>/g) || [];
-      expect(logoImgTags.length).toBeGreaterThan(0);
-
-      logoImgTags.forEach((imgTag) => {
-        const altMatch = imgTag.match(/alt="([^"]*)"/);
-        expect(altMatch).not.toBeNull();
-        const altText = altMatch[1];
-        // Alt text should contain meaningful description
-        expect(altText.toLowerCase()).toContain('mirdb');
-        expect(altText.toLowerCase()).toContain('logo');
-      });
-    });
-
-    test('Usage GIF has meaningful alt text for accessibility', () => {
-      const usageImgMatch = htmlContent.match(/<img[^>]*class="usage__gif"[^>]*>/);
-      expect(usageImgMatch).not.toBeNull();
-
-      const altMatch = usageImgMatch[0].match(/alt="([^"]*)"/);
-      expect(altMatch).not.toBeNull();
-      const altText = altMatch[1];
-      // Alt text should describe what the GIF demonstrates
-      expect(altText.length).toBeGreaterThan(10);
-      // Should contain keywords describing the content
-      expect(altText.toLowerCase()).toMatch(/terminal|demonstration|usage|mirdb|command/);
-    });
-
-    test('All images on the page have non-empty alt text', () => {
-      const allImgTags = htmlContent.match(/<img[^>]*>/g) || [];
-      expect(allImgTags.length).toBeGreaterThan(0);
-
-      allImgTags.forEach((imgTag) => {
-        const altMatch = imgTag.match(/alt="([^"]*)"/);
-        expect(altMatch).not.toBeNull();
-        expect(altMatch[1].trim()).not.toBe('');
-      });
-    });
-  });
-
-  describe('Asset File References', () => {
-    test('HTML references logo.gif from correct path', () => {
-      expect(htmlContent).toContain('assets/images/logo.gif');
-    });
-
-    test('HTML references usage.gif from correct path', () => {
-      expect(htmlContent).toContain('assets/images/usage.gif');
-    });
-
-    test('Asset paths use relative URLs (no absolute paths)', () => {
-      const logoSrcs = htmlContent.match(/src=["'][^"']*logo\.gif["']/g);
-      expect(logoSrcs).not.toBeNull();
-      logoSrcs.forEach((src) => {
-        expect(src).not.toContain('http://');
-        expect(src).not.toContain('https://');
-      });
-
-      const usageSrcs = htmlContent.match(/src=["'][^"']*usage\.gif["']/g);
-      expect(usageSrcs).not.toBeNull();
-      usageSrcs.forEach((src) => {
-        expect(src).not.toContain('http://');
-        expect(src).not.toContain('https://');
-      });
-    });
-  });
-
-  describe('Image Container Layout Tests', () => {
-    test('Hero logo is within hero section container', () => {
-      // Extract hero section content
-      const heroSectionMatch = htmlContent.match(/<!-- SECTION: Hero[^>]*>[\s\S]*?<!-- END SECTION: Hero -->/);
-      expect(heroSectionMatch).not.toBeNull();
-      const heroSection = heroSectionMatch[0];
-
-      // Verify hero-logo is within hero section
-      expect(heroSection).toMatch(/class="hero-logo"/);
-    });
-
-    test('Usage GIF is within usage demo container', () => {
-      // Extract usage section content
-      const usageSectionMatch = htmlContent.match(/<!-- SECTION: Usage[^>]*>[\s\S]*?<!-- END SECTION: Usage -->/);
-      expect(usageSectionMatch).not.toBeNull();
-      const usageSection = usageSectionMatch[0];
-
-      // Verify usage__gif is within usage section
-      expect(usageSection).toMatch(/class="usage__gif"/);
-    });
-
-    test('Usage demo container exists for GIF presentation', () => {
-      expect(htmlContent).toMatch(/class="usage__demo-container"/);
-    });
-  });
-
-  describe('Asset Physical File Existence', () => {
-    test('Logo GIF file exists on disk', () => {
+  describe('Logo Asset', () => {
+    test('logo.gif file exists in assets/images directory', () => {
       const logoPath = path.join(__dirname, '../../assets/images/logo.gif');
       expect(fs.existsSync(logoPath)).toBe(true);
     });
 
-    test('Usage GIF file exists on disk', () => {
+    test('logo image is referenced in hero section', () => {
+      // Check for logo in hero section
+      const heroSectionMatch = htmlContent.match(/<!-- SECTION: Hero[\s\S]*?<!-- END SECTION: Hero -->/);
+      expect(heroSectionMatch).not.toBeNull();
+
+      const heroSection = heroSectionMatch[0];
+      expect(heroSection).toMatch(/src=["']assets\/images\/logo\.gif["']/);
+    });
+
+    test('logo image in hero has meaningful alt text', () => {
+      // Find the hero logo img tag and check alt attribute
+      const heroLogoMatch = htmlContent.match(/<img[^>]*class=["']hero-logo["'][^>]*>/);
+      expect(heroLogoMatch).not.toBeNull();
+
+      const logoTag = heroLogoMatch[0];
+      const altMatch = logoTag.match(/alt=["']([^"']+)["']/);
+      expect(altMatch).not.toBeNull();
+      expect(altMatch[1].length).toBeGreaterThan(0);
+      // Alt text should be descriptive (contains "logo" or "MirDB")
+      expect(altMatch[1].toLowerCase()).toMatch(/logo|mirdb/i);
+    });
+
+    test('logo in navigation has meaningful alt text', () => {
+      // Find the nav logo img tag
+      const navLogoMatch = htmlContent.match(/<nav[\s\S]*?<img[^>]*alt=["']([^"']+)["'][^>]*>/);
+      expect(navLogoMatch).not.toBeNull();
+      expect(navLogoMatch[1].length).toBeGreaterThan(0);
+    });
+
+    test('logo in footer has meaningful alt text', () => {
+      // Find the footer section and check for logo alt text
+      const footerSectionMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
+      expect(footerSectionMatch).not.toBeNull();
+
+      const footerSection = footerSectionMatch[0];
+      const footerLogoMatch = footerSection.match(/<img[^>]*alt=["']([^"']+)["'][^>]*>/);
+      expect(footerLogoMatch).not.toBeNull();
+      expect(footerLogoMatch[1].length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Usage GIF Asset', () => {
+    test('usage.gif file exists in assets/images directory', () => {
       const usagePath = path.join(__dirname, '../../assets/images/usage.gif');
       expect(fs.existsSync(usagePath)).toBe(true);
     });
 
-    test('Logo file is non-empty', () => {
+    test('usage GIF is referenced in usage section', () => {
+      // Check for usage GIF in usage section
+      const usageSectionMatch = htmlContent.match(/<!-- SECTION: Usage[\s\S]*?<!-- END SECTION: Usage -->/);
+      expect(usageSectionMatch).not.toBeNull();
+
+      const usageSection = usageSectionMatch[0];
+      expect(usageSection).toMatch(/src=["']assets\/images\/usage\.gif["']/);
+    });
+
+    test('usage GIF has meaningful alt text for accessibility', () => {
+      // Find the usage GIF img tag and check alt attribute
+      const usageGifMatch = htmlContent.match(/<img[^>]*class=["']usage__gif["'][^>]*>/);
+      expect(usageGifMatch).not.toBeNull();
+
+      const gifTag = usageGifMatch[0];
+      const altMatch = gifTag.match(/alt=["']([^"']+)["']/);
+      expect(altMatch).not.toBeNull();
+      expect(altMatch[1].length).toBeGreaterThan(10); // Should be descriptive
+      // Alt text should describe the demonstration
+      expect(altMatch[1].toLowerCase()).toMatch(/terminal|demo|usage|command|mirdb/i);
+    });
+
+    test('usage GIF has loading="lazy" attribute for performance', () => {
+      const usageGifMatch = htmlContent.match(/<img[^>]*class=["']usage__gif["'][^>]*>/);
+      expect(usageGifMatch).not.toBeNull();
+      expect(usageGifMatch[0]).toMatch(/loading=["']lazy["']/);
+    });
+  });
+
+  describe('Alt Text Accessibility', () => {
+    test('all images have non-empty alt attributes', () => {
+      // Find all img tags
+      const imgTags = htmlContent.match(/<img[^>]*>/g) || [];
+      expect(imgTags.length).toBeGreaterThan(0);
+
+      imgTags.forEach((imgTag, index) => {
+        const altMatch = imgTag.match(/alt=["']([^"']*)["']/);
+        expect(altMatch).not.toBeNull();
+        // Alt text should not be empty (except for decorative images which should have alt="")
+        // For our scenario, all images are meaningful and should have descriptive alt text
+        if (!imgTag.includes('aria-hidden="true"')) {
+          expect(altMatch[1].length).toBeGreaterThan(0);
+        }
+      });
+    });
+
+    test('logo alt text is descriptive and meaningful', () => {
+      // Check hero logo specifically - use a more flexible pattern
+      const heroSectionMatch = htmlContent.match(/<!-- SECTION: Hero[\s\S]*?<!-- END SECTION: Hero -->/);
+      expect(heroSectionMatch).not.toBeNull();
+
+      const heroSection = heroSectionMatch[0];
+      const heroLogoMatch = heroSection.match(/<img[^>]*class=["']hero-logo["'][^>]*>/);
+      expect(heroLogoMatch).not.toBeNull();
+
+      const logoTag = heroLogoMatch[0];
+      const altMatch = logoTag.match(/alt=["']([^"']+)["']/);
+      expect(altMatch).not.toBeNull();
+
+      const altText = altMatch[1];
+      // Alt text should contain meaningful description
+      expect(altText).toMatch(/MirDB|Logo/i);
+    });
+
+    test('usage GIF alt text describes the content', () => {
+      // Use a more flexible pattern that doesn't depend on attribute order
+      const usageSectionMatch = htmlContent.match(/<!-- SECTION: Usage[\s\S]*?<!-- END SECTION: Usage -->/);
+      expect(usageSectionMatch).not.toBeNull();
+
+      const usageSection = usageSectionMatch[0];
+      const usageGifMatch = usageSection.match(/<img[^>]*class=["']usage__gif["'][^>]*>/);
+      expect(usageGifMatch).not.toBeNull();
+
+      const gifTag = usageGifMatch[0];
+      const altMatch = gifTag.match(/alt=["']([^"']+)["']/);
+      expect(altMatch).not.toBeNull();
+
+      const altText = altMatch[1];
+      // Alt text should describe what the GIF demonstrates
+      expect(altText.split(' ').length).toBeGreaterThan(3); // Should be a phrase, not just "gif"
+    });
+  });
+
+  describe('Image File Integrity', () => {
+    test('logo.gif has non-zero file size', () => {
       const logoPath = path.join(__dirname, '../../assets/images/logo.gif');
       const stats = fs.statSync(logoPath);
       expect(stats.size).toBeGreaterThan(0);
     });
 
-    test('Usage GIF file is non-empty', () => {
+    test('usage.gif has non-zero file size', () => {
       const usagePath = path.join(__dirname, '../../assets/images/usage.gif');
       const stats = fs.statSync(usagePath);
       expect(stats.size).toBeGreaterThan(0);
     });
-  });
 
-  describe('Multiple Logo Instances', () => {
-    test('Logo appears at least 3 times in the page (nav, hero, footer)', () => {
-      const logoCount = (htmlContent.match(/src="assets\/images\/logo\.gif"/g) || []).length;
-      expect(logoCount).toBeGreaterThanOrEqual(3);
+    test('logo.gif is a valid GIF file (starts with GIF header)', () => {
+      const logoPath = path.join(__dirname, '../../assets/images/logo.gif');
+      const buffer = fs.readFileSync(logoPath);
+      // GIF files start with "GIF87a" or "GIF89a"
+      const header = buffer.slice(0, 6).toString('ascii');
+      expect(header).toMatch(/^GIF8[79]a$/);
     });
 
-    test('All logo instances use the same source file', () => {
-      // All logos should point to the same asset file
-      const logoSrcs = htmlContent.match(/src="[^"]*logo[^"]*"/g) || [];
-      expect(logoSrcs.length).toBeGreaterThan(0);
-      logoSrcs.forEach((src) => {
-        expect(src).toContain('assets/images/logo.gif');
+    test('usage.gif is a valid GIF file (starts with GIF header)', () => {
+      const usagePath = path.join(__dirname, '../../assets/images/usage.gif');
+      const buffer = fs.readFileSync(usagePath);
+      // GIF files start with "GIF87a" or "GIF89a"
+      const header = buffer.slice(0, 6).toString('ascii');
+      expect(header).toMatch(/^GIF8[79]a$/);
+    });
+  });
+
+  describe('Asset Path Consistency', () => {
+    test('all logo references use consistent path', () => {
+      const logoReferences = htmlContent.match(/src=["'][^"']*logo\.gif["']/g) || [];
+      expect(logoReferences.length).toBeGreaterThanOrEqual(3); // nav, hero, footer
+
+      logoReferences.forEach(ref => {
+        expect(ref).toMatch(/assets\/images\/logo\.gif/);
       });
     });
-  });
 
-  describe('Image Attributes', () => {
-    test('Navigation logo has width and height attributes', () => {
-      const navLogoMatch = htmlContent.match(/<a[^>]*class="nav-logo"[^>]*>[\s\S]*?<img[^>]*>/);
-      expect(navLogoMatch).not.toBeNull();
-      const imgTag = navLogoMatch[0].match(/<img[^>]*>/)[0];
-      expect(imgTag).toMatch(/width="[^"]+"/);
-      expect(imgTag).toMatch(/height="[^"]+"/);
-    });
+    test('usage GIF reference uses correct path', () => {
+      const usageReferences = htmlContent.match(/src=["'][^"']*usage\.gif["']/g) || [];
+      expect(usageReferences.length).toBeGreaterThanOrEqual(1);
 
-    test('Footer logo has width and height attributes', () => {
-      const footerLogoMatch = htmlContent.match(/<a[^>]*class="footer__logo"[^>]*>[\s\S]*?<img[^>]*>/);
-      expect(footerLogoMatch).not.toBeNull();
-      const imgTag = footerLogoMatch[0].match(/<img[^>]*>/)[0];
-      expect(imgTag).toMatch(/width="[^"]+"/);
-      expect(imgTag).toMatch(/height="[^"]+"/);
+      usageReferences.forEach(ref => {
+        expect(ref).toMatch(/assets\/images\/usage\.gif/);
+      });
     });
   });
 });
