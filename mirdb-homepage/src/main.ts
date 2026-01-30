@@ -13,6 +13,7 @@
 import { renderFeatures } from './components/Features';
 import { renderUsageExamples } from './components/UsageExamples';
 import { renderArchitecture } from './components/Architecture';
+import { renderGettingStarted } from './components/GettingStarted';
 import { renderFooter } from './components/Footer';
 
 function initApp(): void {
@@ -35,6 +36,13 @@ function initApp(): void {
   if (architectureContainer) {
     const architectureSection = renderArchitecture();
     architectureContainer.replaceWith(architectureSection);
+  }
+
+  // Render Getting Started section (Scenario 5)
+  const gettingStartedContainer = document.getElementById('getting-started');
+  if (gettingStartedContainer) {
+    const gettingStartedSection = renderGettingStarted();
+    gettingStartedContainer.replaceWith(gettingStartedSection);
   }
 
   // Render Footer section (Scenario 6)
