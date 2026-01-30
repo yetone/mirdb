@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="MirDB LSM-tree Architecture Diagram">
+  <title>MirDB LSM-tree Architecture</title>
+  <desc>High-level component diagram showing the LSM-tree based storage engine with memtable, WAL, SSTables, and compaction processes</desc>
+
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#161b22"/>
+      <stop offset="100%" style="stop-color:#0d1117"/>
+    </linearGradient>
+    <linearGradient id="componentGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#21262d"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bgGradient)"/>
+
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" fill="#c9d1d9" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="24" font-weight="bold">MirDB LSM-tree Architecture</text>
+
+  <!-- Client Layer -->
+  <g id="client-layer">
+    <rect x="250" y="70" width="300" height="50" rx="8" fill="url(#componentGradient)" stroke="#58a6ff" stroke-width="2"/>
+    <text x="400" y="100" text-anchor="middle" fill="#58a6ff" font-family="-apple-system, sans-serif" font-size="14" font-weight="600">Client (Memcached Protocol)</text>
+  </g>
+
+  <!-- Write Path Arrow -->
+  <path d="M400 120 L400 145" stroke="#8b949e" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#8b949e"/>
+    </marker>
+  </defs>
+
+  <!-- WAL (Write-Ahead Log) -->
+  <g id="wal-layer">
+    <rect x="100" y="155" width="180" height="70" rx="8" fill="url(#componentGradient)" stroke="#f85149" stroke-width="2"/>
+    <text x="190" y="185" text-anchor="middle" fill="#f85149" font-family="-apple-system, sans-serif" font-size="14" font-weight="600">Write-Ahead Log</text>
+    <text x="190" y="210" text-anchor="middle" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="11">(WAL - Durability)</text>
+  </g>
+
+  <!-- Memtable -->
+  <g id="memtable-layer">
+    <rect x="310" y="155" width="180" height="70" rx="8" fill="url(#componentGradient)" stroke="#238636" stroke-width="2"/>
+    <text x="400" y="185" text-anchor="middle" fill="#238636" font-family="-apple-system, sans-serif" font-size="14" font-weight="600">Memtable</text>
+    <text x="400" y="210" text-anchor="middle" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="11">(Skip List - In-Memory)</text>
+  </g>
+
+  <!-- Immutable Memtables -->
+  <g id="imm-memtable-layer">
+    <rect x="520" y="155" width="180" height="70" rx="8" fill="url(#componentGradient)" stroke="#a371f7" stroke-width="2"/>
+    <text x="610" y="185" text-anchor="middle" fill="#a371f7" font-family="-apple-system, sans-serif" font-size="14" font-weight="600">Immutable Memtables</text>
+    <text x="610" y="210" text-anchor="middle" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="11">(Queue awaiting flush)</text>
+  </g>
+
+  <!-- Arrows from client to WAL and Memtable -->
+  <path d="M400 120 L190 155" stroke="#8b949e" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M400 120 L400 155" stroke="#8b949e" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Arrow from Memtable to Imm Memtables -->
+  <path d="M490 190 L520 190" stroke="#8b949e" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="505" y="182" text-anchor="middle" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="9">full</text>
+
+  <!-- Minor Compaction Label and Arrow -->
+  <g id="minor-compaction">
+    <path d="M610 225 L610 275" stroke="#d29922" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arrowhead)"/>
+    <text x="680" y="255" fill="#d29922" font-family="-apple-system, sans-serif" font-size="11" font-weight="500">Minor Compaction</text>
+  </g>
+
+  <!-- Level 0 SSTables -->
+  <g id="level0-layer">
+    <rect x="200" y="285" width="400" height="70" rx="8" fill="url(#componentGradient)" stroke="#79c0ff" stroke-width="2"/>
+    <text x="400" y="315" text-anchor="middle" fill="#79c0ff" font-family="-apple-system, sans-serif" font-size="14" font-weight="600">Level 0 SSTables</text>
+    <text x="400" y="340" text-anchor="middle" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="11">(Recently flushed - may overlap)</text>
+
+    <!-- SST files representation -->
+    <g transform="translate(220, 310)">
+      <rect x="0" y="15" width="40" height="25" rx="3" fill="#21262d" stroke="#79c0ff" stroke-width="1"/>
+      <text x="20" y="32" text-anchor="middle" fill="#79c0ff" font-size="9">.sst</text>
+    </g>
+    <g transform="translate(275, 310)">
+      <rect x="0" y="15" width="40" height="25" rx="3" fill="#21262d" stroke="#79c0ff" stroke-width="1"/>
+      <text x="20" y="32" text-anchor="middle" fill="#79c0ff" font-size="9">.sst</text>
+    </g>
+    <g transform="translate(330, 310)">
+      <rect x="0" y="15" width="40" height="25" rx="3" fill="#21262d" stroke="#79c0ff" stroke-width="1"/>
+      <text x="20" y="32" text-anchor="middle" fill="#79c0ff" font-size="9">.sst</text>
+    </g>
+    <g transform="translate(385, 310)">
+      <rect x="0" y="15" width="40" height="25" rx="3" fill="#21262d" stroke="#79c0ff" stroke-width="1"/>
+      <text x="20" y="32" text-anchor="middle" fill="#79c0ff" font-size="9">.sst</text>
+    </g>
+  </g>
+
+  <!-- Major Compaction Label and Arrow -->
+  <g id="major-compaction">
+    <path d="M400 355 L400 395" stroke="#f0883e" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arrowhead)"/>
+    <text x="490" y="380" fill="#f0883e" font-family="-apple-system, sans-serif" font-size="11" font-weight="500">Major Compaction</text>
+  </g>
+
+  <!-- Level 1+ SSTables -->
+  <g id="level1-layer">
+    <rect x="200" y="405" width="400" height="70" rx="8" fill="url(#componentGradient)" stroke="#7ee787" stroke-width="2"/>
+    <text x="400" y="435" text-anchor="middle" fill="#7ee787" font-family="-apple-system, sans-serif" font-size="14" font-weight="600">Level 1+ SSTables</text>
+    <text x="400" y="460" text-anchor="middle" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="11">(Sorted, non-overlapping within level)</text>
+
+    <!-- SST files representation sorted -->
+    <g transform="translate(220, 430)">
+      <rect x="0" y="15" width="50" height="25" rx="3" fill="#21262d" stroke="#7ee787" stroke-width="1"/>
+      <text x="25" y="32" text-anchor="middle" fill="#7ee787" font-size="8">a-c.sst</text>
+    </g>
+    <g transform="translate(285, 430)">
+      <rect x="0" y="15" width="50" height="25" rx="3" fill="#21262d" stroke="#7ee787" stroke-width="1"/>
+      <text x="25" y="32" text-anchor="middle" fill="#7ee787" font-size="8">d-f.sst</text>
+    </g>
+    <g transform="translate(350, 430)">
+      <rect x="0" y="15" width="50" height="25" rx="3" fill="#21262d" stroke="#7ee787" stroke-width="1"/>
+      <text x="25" y="32" text-anchor="middle" fill="#7ee787" font-size="8">g-i.sst</text>
+    </g>
+    <g transform="translate(415, 430)">
+      <rect x="0" y="15" width="50" height="25" rx="3" fill="#21262d" stroke="#7ee787" stroke-width="1"/>
+      <text x="25" y="32" text-anchor="middle" fill="#7ee787" font-size="8">j-m.sst</text>
+    </g>
+  </g>
+
+  <!-- Disk Storage -->
+  <g id="disk-layer">
+    <rect x="200" y="500" width="400" height="50" rx="8" fill="url(#componentGradient)" stroke="#30363d" stroke-width="2"/>
+    <text x="400" y="530" text-anchor="middle" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="14" font-weight="600">Persistent Disk Storage</text>
+  </g>
+
+  <!-- Arrow to disk -->
+  <path d="M400 475 L400 500" stroke="#8b949e" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Legend -->
+  <g id="legend" transform="translate(50, 500)">
+    <text x="0" y="0" fill="#c9d1d9" font-family="-apple-system, sans-serif" font-size="12" font-weight="600">Legend:</text>
+    <rect x="0" y="10" width="12" height="12" fill="#238636"/>
+    <text x="18" y="20" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="10">In-Memory</text>
+    <rect x="0" y="30" width="12" height="12" fill="#79c0ff"/>
+    <text x="18" y="40" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="10">On-Disk</text>
+    <line x1="0" y1="55" x2="20" y2="55" stroke="#d29922" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="25" y="58" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="10">Compaction</text>
+  </g>
+
+  <!-- Read Path Indicator -->
+  <g id="read-path" transform="translate(680, 290)">
+    <text x="0" y="0" fill="#c9d1d9" font-family="-apple-system, sans-serif" font-size="11" font-weight="600">Read Path</text>
+    <text x="0" y="15" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="9">1. Memtable</text>
+    <text x="0" y="28" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="9">2. Imm Tables</text>
+    <text x="0" y="41" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="9">3. L0 SSTables</text>
+    <text x="0" y="54" fill="#8b949e" font-family="-apple-system, sans-serif" font-size="9">4. L1+ SSTables</text>
+  </g>
+</svg>

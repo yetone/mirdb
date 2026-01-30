@@ -134,7 +134,63 @@
 
     <!-- Architecture Section - Owner: Scenario 4 -->
     <section id="architecture" class="architecture">
-      <!-- Architecture content will be added by Scenario 4 -->
+      <div class="architecture__container">
+        <h2 class="architecture__title">Architecture</h2>
+        <p class="architecture__subtitle">Built on LSM-tree for high write throughput and efficient storage</p>
+
+        <!-- Architecture Diagram -->
+        <div class="architecture__diagram">
+          <img src="images/architecture.svg" alt="MirDB LSM-tree Architecture Diagram showing data flow from client through memtable, WAL, and SSTables" class="architecture__diagram-img">
+        </div>
+
+        <!-- Component Explanations -->
+        <div class="architecture__components">
+          <!-- Memtable Component -->
+          <div class="architecture__component" data-component="memtable">
+            <div class="architecture__component-header">
+              <h3 class="architecture__component-title">Memtable (Skip List)</h3>
+              <span class="architecture__component-badge">In-Memory</span>
+            </div>
+            <p class="architecture__component-description">
+              The Memtable serves as the active write buffer, implemented using a skip list data structure for O(log n) insertions and lookups. When the Memtable reaches its size threshold (default 4MB), it becomes immutable and is queued for compaction while a fresh Memtable takes over.
+            </p>
+          </div>
+
+          <!-- SSTable Component -->
+          <div class="architecture__component" data-component="sstable">
+            <div class="architecture__component-header">
+              <h3 class="architecture__component-title">SSTables (Sorted String Tables)</h3>
+              <span class="architecture__component-badge architecture__component-badge--disk">On-Disk</span>
+            </div>
+            <p class="architecture__component-description">
+              SSTables are immutable, sorted files stored on disk. Each SSTable contains data blocks with prefix compression, an index block for efficient key lookup, and a Cuckoo filter for fast negative lookups. Files are organized into levels, with Level 0 allowing overlaps and higher levels maintaining strict key ordering.
+            </p>
+          </div>
+
+          <!-- WAL Component -->
+          <div class="architecture__component" data-component="wal">
+            <div class="architecture__component-header">
+              <h3 class="architecture__component-title">Write-Ahead Log (WAL)</h3>
+              <span class="architecture__component-badge architecture__component-badge--durability">Durability</span>
+            </div>
+            <p class="architecture__component-description">
+              The Write-Ahead Log ensures durability by persisting every write to disk before acknowledging it. Each WAL segment corresponds to one Memtable. In case of crash, the WAL allows complete data recovery by rebuilding Memtables from the logged operations.
+            </p>
+          </div>
+
+          <!-- Compaction Component -->
+          <div class="architecture__component" data-component="compaction">
+            <div class="architecture__component-header">
+              <h3 class="architecture__component-title">Compaction</h3>
+              <span class="architecture__component-badge architecture__component-badge--background">Background</span>
+            </div>
+            <p class="architecture__component-description">
+              <strong>Minor Compaction:</strong> Flushes immutable Memtables to Level 0 SSTables when the Memtable is full.<br>
+              <strong>Major Compaction:</strong> Merges SSTables between levels to reduce read amplification and reclaim space. Triggered when Level 0 accumulates too many files or when level sizes exceed thresholds.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Usage Section - Owner: Scenario 5 -->
