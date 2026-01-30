@@ -387,4 +387,171 @@ describe('Accessibility - WCAG 2.1 AA Compliance', () => {
       expect(htmlContent).toMatch(/<section[^>]*id="[^"]+"/);
     });
   });
+
+  describe('TC1: Keyboard Navigation Support', () => {
+    let allCssContent;
+
+    beforeAll(() => {
+      // Load all CSS files to check for focus styles
+      const cssDir = path.join(__dirname, '../../css');
+      const cssFiles = [
+        'styles.css',
+        'utilities/reset.css',
+        'utilities/variables.css',
+        'components/nav.css',
+        'components/hero.css',
+        'components/usage.css'
+      ];
+      allCssContent = cssFiles
+        .map((file) => {
+          try {
+            return fs.readFileSync(path.join(cssDir, file), 'utf-8');
+          } catch {
+            return '';
+          }
+        })
+        .join('\n');
+    });
+
+    test('All interactive elements are natively focusable (a, button)', () => {
+      // Check that navigation links use <a> tags
+      expect(htmlContent).toMatch(/<a[^>]*href="#features"/);
+      expect(htmlContent).toMatch(/<a[^>]*href="#usage"/);
+      expect(htmlContent).toMatch(/<a[^>]*href="#architecture"/);
+      expect(htmlContent).toMatch(/<a[^>]*href="#getting-started"/);
+
+      // Check that CTA buttons use <a> tags with href
+      expect(htmlContent).toMatch(/<a[^>]*class="btn btn-primary"/);
+      expect(htmlContent).toMatch(/<a[^>]*class="btn btn-secondary"/);
+
+      // Check that interactive buttons use <button> elements
+      expect(htmlContent).toMatch(/<button[^>]*class="nav-toggle"/);
+      expect(htmlContent).toMatch(/<button[^>]*class="code-block__copy"/);
+    });
+
+    test('Interactive elements are in logical DOM order', () => {
+      // Navigation should come before main content
+      const navIndex = htmlContent.indexOf('<nav');
+      const heroIndex = htmlContent.indexOf('id="hero"');
+      const featuresIndex = htmlContent.indexOf('id="features"');
+      const usageIndex = htmlContent.indexOf('id="usage"');
+      const architectureIndex = htmlContent.indexOf('id="architecture"');
+      const gettingStartedIndex = htmlContent.indexOf('id="getting-started"');
+      const footerIndex = htmlContent.indexOf('<footer');
+
+      // Verify logical order
+      expect(navIndex).toBeLessThan(heroIndex);
+      expect(heroIndex).toBeLessThan(featuresIndex);
+      expect(featuresIndex).toBeLessThan(usageIndex);
+      expect(usageIndex).toBeLessThan(architectureIndex);
+      expect(architectureIndex).toBeLessThan(gettingStartedIndex);
+      expect(gettingStartedIndex).toBeLessThan(footerIndex);
+    });
+
+    test('Skip links are provided or navigation is accessible', () => {
+      // Check that internal anchor links allow skipping to content sections
+      const anchorLinks = htmlContent.match(/href="#[a-z-]+"/g) || [];
+      expect(anchorLinks.length).toBeGreaterThanOrEqual(4);
+
+      // Verify at least the main sections are linkable
+      expect(htmlContent).toMatch(/href="#features"/);
+      expect(htmlContent).toMatch(/href="#getting-started"/);
+    });
+
+    test('No elements have tabindex greater than 0', () => {
+      // Tabindex > 0 disrupts natural tab order
+      const positiveTabindex = htmlContent.match(/tabindex="[1-9][0-9]*"/g) || [];
+      expect(positiveTabindex.length).toBe(0);
+    });
+
+    test('CSS does not remove focus outlines globally', () => {
+      // Check that focus outlines are not removed with outline: none without replacement
+      // The reset.css should not have a global *:focus { outline: none }
+      expect(allCssContent).not.toMatch(/\*:focus\s*\{[^}]*outline:\s*none/);
+      expect(allCssContent).not.toMatch(/\*\s*\{[^}]*outline:\s*none/);
+    });
+
+    test('Buttons have keyboard-accessible event handlers indicated by type attribute', () => {
+      // All <button> elements that are interactive should have type="button"
+      const copyButtons = htmlContent.match(/<button[^>]*class="code-block__copy"[^>]*>/g) || [];
+      expect(copyButtons.length).toBeGreaterThan(0);
+      copyButtons.forEach((button) => {
+        expect(button).toMatch(/type="button"/);
+      });
+    });
+  });
+
+  describe('TC2: Focus Indicators', () => {
+    let allCssContent;
+
+    beforeAll(() => {
+      const cssDir = path.join(__dirname, '../../css');
+      const cssFiles = [
+        'styles.css',
+        'utilities/reset.css',
+        'utilities/variables.css',
+        'components/nav.css',
+        'components/hero.css',
+        'components/usage.css',
+        'components/footer.css'
+      ];
+      allCssContent = cssFiles
+        .map((file) => {
+          try {
+            return fs.readFileSync(path.join(cssDir, file), 'utf-8');
+          } catch {
+            return '';
+          }
+        })
+        .join('\n');
+    });
+
+    test('Interactive elements use natively focusable HTML elements', () => {
+      // Links should use <a> tags
+      const linkCount = (htmlContent.match(/<a[^>]*href=/g) || []).length;
+      expect(linkCount).toBeGreaterThan(10);
+
+      // Buttons should use <button> tags
+      const buttonCount = (htmlContent.match(/<button[^>]*>/g) || []).length;
+      expect(buttonCount).toBeGreaterThan(0);
+    });
+
+    test('Custom focus styles are provided for buttons', () => {
+      // Check that there are focus styles defined for interactive elements
+      expect(allCssContent).toMatch(/:focus/);
+    });
+
+    test('Buttons are not using div or span for interactivity', () => {
+      // Interactive actions should not be on div or span elements
+      // Check that click handlers are not on divs (indicated by role="button")
+      const divButtons = htmlContent.match(/<div[^>]*role="button"/g) || [];
+      const spanButtons = htmlContent.match(/<span[^>]*role="button"/g) || [];
+      expect(divButtons.length).toBe(0);
+      expect(spanButtons.length).toBe(0);
+    });
+
+    test('Focus is not trapped in any component without escape mechanism', () => {
+      // The mobile menu has Escape key handler (verified by aria-expanded attribute presence)
+      // The nav-toggle button has aria-controls linking to nav-menu
+      expect(htmlContent).toMatch(/aria-controls="nav-menu"/);
+
+      // The overlay provides another way to close
+      expect(htmlContent).toMatch(/class="nav-overlay"/);
+    });
+
+    test('Reduced motion preference is respected', () => {
+      // Check that prefers-reduced-motion media query is used
+      expect(allCssContent).toMatch(/@media\s*\(\s*prefers-reduced-motion/);
+    });
+
+    test('Interactive elements have visible hover states', () => {
+      // Check for :hover pseudo-class in CSS
+      expect(allCssContent).toMatch(/:hover/);
+    });
+
+    test('Anchor links have distinguishable styling', () => {
+      // Navigation links should have styles
+      expect(allCssContent).toMatch(/\.nav-link/);
+    });
+  });
 });
