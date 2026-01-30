@@ -332,10 +332,114 @@ flowchart TB
   <!-- END SECTION: Architecture -->
 
   <!-- SECTION: Getting Started - Scenario 6 -->
-  <section id="getting-started" class="getting-started">
+  <section id="getting-started" class="getting-started section">
     <div class="container">
-      <h2>Get Started in Minutes</h2>
-      <!-- Getting started guide to be implemented by Scenario 6 -->
+      <h2 class="getting-started__title">Get Started in Minutes</h2>
+      <p class="getting-started__description">Install MirDB and start using it with your existing Memcached clients in just a few steps.</p>
+
+      <div class="getting-started__content">
+        <!-- Step 1: Installation -->
+        <div class="getting-started__step">
+          <div class="getting-started__step-header">
+            <span class="getting-started__step-number">1</span>
+            <h3 class="getting-started__step-title">Install MirDB</h3>
+          </div>
+          <p class="getting-started__step-description">Install MirDB using Cargo, Rust's package manager. Make sure you have Rust installed first.</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-block__header">
+              <span class="code-block__language">Installation</span>
+              <button class="code-block__copy" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-bash">cargo install mirdb</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 2: Configuration -->
+        <div class="getting-started__step">
+          <div class="getting-started__step-header">
+            <span class="getting-started__step-number">2</span>
+            <h3 class="getting-started__step-title">Configure (Optional)</h3>
+          </div>
+          <p class="getting-started__step-description">Create a configuration file to customize MirDB settings. Save this as <code>mirdb.toml</code>:</p>
+          <div class="code-block" data-language="toml">
+            <div class="code-block__header">
+              <span class="code-block__language">mirdb.toml</span>
+              <button class="code-block__copy" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-toml"># MirDB Configuration
+[server]
+port = 11211
+host = "127.0.0.1"
+
+[storage]
+data_dir = "./data"
+wal_enabled = true
+
+[memtable]
+max_size = 67108864  # 64MB</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 3: Run -->
+        <div class="getting-started__step">
+          <div class="getting-started__step-header">
+            <span class="getting-started__step-number">3</span>
+            <h3 class="getting-started__step-title">Start the Server</h3>
+          </div>
+          <p class="getting-started__step-description">Run MirDB with your configuration. It will start listening for Memcached protocol connections.</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-block__header">
+              <span class="code-block__language">Start Server</span>
+              <button class="code-block__copy" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-bash"># Start with default settings
+mirdb
+
+# Or with custom config
+mirdb --config mirdb.toml</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documentation Link -->
+      <div class="getting-started__docs">
+        <p class="getting-started__docs-text">Ready to dive deeper?</p>
+        <a href="https://github.com/yetone/mirdb#readme" class="btn btn-primary getting-started__docs-link" target="_blank" rel="noopener noreferrer">
+          View Full Documentation
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
     </div>
   </section>
   <!-- END SECTION: Getting Started -->
