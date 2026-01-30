@@ -1,154 +1,197 @@
-// @ts-check
-const { test, expect } = require('@playwright/test');
-const { setupPage } = require('../helpers/test-utils');
-
 /**
- * Architecture Section E2E Tests
+ * MirDB Landing Page - Architecture Section E2E Tests
  * Owner: Scenario 4 - Architecture Overview Section
  *
- * Tests verify:
- * - Presence of LSM-tree architecture diagram (Mermaid.js or SVG)
- * - Diagram shows memtable component in data flow
- * - Diagram shows SSTable components and levels
- * - WAL explanation text is present
- * - Compaction explanation (minor and major) is present
+ * Tests for:
+ * - LSM-tree architecture diagram presence
+ * - Memtable component in diagram
+ * - SSTable components in diagram
+ * - WAL explanation text
+ * - Compaction explanation text
  * - Interactive hover states on diagram components
  */
+
+const { test, expect } = require('@playwright/test');
+const { setupPage, waitForAnimations } = require('../helpers/test-utils');
 
 test.describe('Architecture Section', () => {
   test.beforeEach(async ({ page }) => {
     await setupPage(page);
+    // Scroll to architecture section
+    await page.locator('#architecture').scrollIntoViewIfNeeded();
+    await waitForAnimations(page, 500);
   });
 
   test('architecture diagram is present', async ({ page }) => {
-    // Navigate to architecture section
-    await page.locator('#architecture').scrollIntoViewIfNeeded();
+    // Test Case 1: Check for architecture diagram
+    const diagram = page.locator('.architecture-diagram');
+    await expect(diagram).toBeVisible();
 
-    // Check for architecture diagram - could be Mermaid.js (.mermaid), SVG, or a custom diagram
-    const diagramContainer = page.locator('#architecture .architecture-diagram, #architecture svg, #architecture .mermaid');
-    await expect(diagramContainer.first()).toBeVisible();
-
-    // Verify the diagram shows LSM-tree architecture concept
-    const architectureSection = page.locator('#architecture');
-    const sectionText = await architectureSection.textContent();
-
-    // The diagram or surrounding text should reference LSM-tree
-    expect(sectionText?.toLowerCase()).toMatch(/lsm|log-structured|storage/i);
+    // Verify it has the role of img with proper aria-label
+    await expect(diagram).toHaveAttribute('role', 'img');
+    const ariaLabel = await diagram.getAttribute('aria-label');
+    expect(ariaLabel).toContain('LSM-tree');
   });
 
   test('diagram shows memtable component', async ({ page }) => {
-    await page.locator('#architecture').scrollIntoViewIfNeeded();
+    // Test Case 2: Verify diagram shows memtable component
+    const memtableNode = page.locator('[data-component="memtable"]');
+    await expect(memtableNode).toBeVisible();
 
-    // Check that memtable is shown in the diagram or described
-    const architectureSection = page.locator('#architecture');
+    // Check that memtable label is present
+    const memtableLabel = memtableNode.locator('.node-label');
+    await expect(memtableLabel).toContainText('Memtable');
 
-    // Look for memtable in diagram elements or text
-    const memtableElement = page.locator('#architecture [data-component="memtable"], #architecture .memtable, #architecture text:has-text("Memtable"), #architecture :has-text("memtable")').first();
-
-    // Either the diagram element exists or the text mentions memtable
-    const sectionText = await architectureSection.textContent();
-    const hasMemtableText = sectionText?.toLowerCase().includes('memtable');
-    const hasMemtableElement = await memtableElement.count() > 0;
-
-    expect(hasMemtableText || hasMemtableElement).toBeTruthy();
+    // Check that skip list detail is mentioned
+    const memtableDetail = memtableNode.locator('.node-detail');
+    await expect(memtableDetail).toContainText('Skip List');
   });
 
-  test('diagram shows SSTable components and levels', async ({ page }) => {
-    await page.locator('#architecture').scrollIntoViewIfNeeded();
+  test('diagram shows SSTable components', async ({ page }) => {
+    // Test Case 3: Verify diagram shows SSTables and multiple levels
+    // Check for Level 0 SSTables
+    const level0Node = page.locator('[data-component="level0"]');
+    await expect(level0Node).toBeVisible();
+    const level0Label = level0Node.locator('.node-label');
+    await expect(level0Label).toContainText('Level 0 SSTables');
 
-    const architectureSection = page.locator('#architecture');
-    const sectionText = await architectureSection.textContent();
-
-    // Check for SSTable mention
-    const hasSSTables = sectionText?.toLowerCase().includes('sstable') ||
-                        sectionText?.toLowerCase().includes('sst') ||
-                        sectionText?.toLowerCase().includes('sorted string table');
-    expect(hasSSTables).toBeTruthy();
-
-    // Check for levels mention (Level 0, Level 1, etc.)
-    const hasLevels = sectionText?.toLowerCase().includes('level') ||
-                      sectionText?.match(/l[0-9]/i);
-    expect(hasLevels).toBeTruthy();
+    // Check for Level 1+ SSTables
+    const levelsNode = page.locator('[data-component="levels"]');
+    await expect(levelsNode).toBeVisible();
+    const levelsLabel = levelsNode.locator('.node-label');
+    await expect(levelsLabel).toContainText('Level 1+ SSTables');
   });
 
   test('WAL explanation is present', async ({ page }) => {
-    await page.locator('#architecture').scrollIntoViewIfNeeded();
+    // Test Case 4: Check for WAL explanation
+    const walExplanation = page.locator('#explanation-wal');
+    await expect(walExplanation).toBeVisible();
 
-    const architectureSection = page.locator('#architecture');
-    const sectionText = await architectureSection.textContent();
+    // Check for heading
+    const walHeading = walExplanation.locator('h3');
+    await expect(walHeading).toContainText('Write-Ahead Log');
 
-    // Check for WAL (Write-Ahead Log) mention and durability explanation
-    const hasWAL = sectionText?.toLowerCase().includes('wal') ||
-                   sectionText?.toLowerCase().includes('write-ahead log') ||
-                   sectionText?.toLowerCase().includes('write ahead log');
-    expect(hasWAL).toBeTruthy();
+    // Check for durability keyword
+    const walContent = await walExplanation.textContent();
+    expect(walContent.toLowerCase()).toContain('durability');
 
-    // Check for durability explanation
-    const hasDurability = sectionText?.toLowerCase().includes('durability') ||
-                          sectionText?.toLowerCase().includes('persist') ||
-                          sectionText?.toLowerCase().includes('crash') ||
-                          sectionText?.toLowerCase().includes('recovery');
-    expect(hasDurability).toBeTruthy();
+    // WAL node should also be in diagram
+    const walNode = page.locator('[data-component="wal"]');
+    await expect(walNode).toBeVisible();
   });
 
   test('compaction explanation is present', async ({ page }) => {
-    await page.locator('#architecture').scrollIntoViewIfNeeded();
+    // Test Case 5: Check for compaction explanation
+    const compactionExplanation = page.locator('#explanation-compaction');
+    await expect(compactionExplanation).toBeVisible();
 
-    const architectureSection = page.locator('#architecture');
-    const sectionText = await architectureSection.textContent();
+    // Check for heading
+    const compactionHeading = compactionExplanation.locator('h3');
+    await expect(compactionHeading).toContainText('Compaction');
 
-    // Check for compaction mention
-    const hasCompaction = sectionText?.toLowerCase().includes('compaction');
-    expect(hasCompaction).toBeTruthy();
+    // Check for minor and major compaction mentions
+    const compactionContent = await compactionExplanation.textContent();
+    expect(compactionContent.toLowerCase()).toContain('minor');
+    expect(compactionContent.toLowerCase()).toContain('major');
 
-    // Check for minor and major compaction specifically
-    const hasMinorCompaction = sectionText?.toLowerCase().includes('minor');
-    const hasMajorCompaction = sectionText?.toLowerCase().includes('major');
+    // Verify minor compaction explanation
+    expect(compactionContent).toContain('Flushes immutable memtables');
 
-    // Both minor and major compaction should be explained
-    expect(hasMinorCompaction).toBeTruthy();
-    expect(hasMajorCompaction).toBeTruthy();
+    // Verify major compaction explanation
+    expect(compactionContent).toContain('Merges Level N SSTables');
   });
 
   test('diagram has interactive hover states', async ({ page }) => {
-    await page.locator('#architecture').scrollIntoViewIfNeeded();
+    // Test Case 6: Hovering over diagram components shows additional information
 
-    // Find interactive diagram components
-    const diagramComponents = page.locator('#architecture [data-component], #architecture .diagram-node, #architecture .architecture-component');
+    // Test memtable hover
+    const memtableNode = page.locator('[data-component="memtable"]');
+    const memtableTooltip = page.locator('#tooltip-memtable');
 
-    // Ensure there are hoverable components
-    const componentCount = await diagramComponents.count();
+    // Initially tooltip should not be visible
+    await expect(memtableTooltip).not.toBeVisible();
 
-    if (componentCount > 0) {
-      // Hover over the first component and check for tooltip or hover state
-      const firstComponent = diagramComponents.first();
-      await firstComponent.hover();
+    // Hover over the memtable node
+    await memtableNode.hover();
+    await waitForAnimations(page, 300);
 
-      // Check for tooltip, title attribute, or CSS hover effect
-      const hasTooltip = await page.locator('#architecture .tooltip:visible, #architecture [role="tooltip"]:visible').count() > 0;
-      const hasTitleAttr = await firstComponent.getAttribute('title');
-      const hasDataTooltip = await firstComponent.getAttribute('data-tooltip');
+    // Tooltip should now be visible
+    await expect(memtableTooltip).toBeVisible();
 
-      // At least one hover indicator should be present
-      expect(hasTooltip || hasTitleAttr || hasDataTooltip).toBeTruthy();
-    } else {
-      // Alternative: Check for SVG elements with hover capability
-      const svgElements = page.locator('#architecture svg [data-component], #architecture svg .hoverable, #architecture svg g[data-tooltip]');
-      const svgCount = await svgElements.count();
+    // Tooltip should contain additional information
+    const tooltipText = await memtableTooltip.textContent();
+    expect(tooltipText).toContain('in-memory');
+    expect(tooltipText).toContain('skip list');
 
-      if (svgCount > 0) {
-        const firstSvgElement = svgElements.first();
-        await firstSvgElement.hover();
+    // Test WAL hover
+    const walNode = page.locator('[data-component="wal"]');
+    const walTooltip = page.locator('#tooltip-wal');
 
-        const hasTitle = await firstSvgElement.locator('title').count() > 0;
-        const hasDataTooltip = await firstSvgElement.getAttribute('data-tooltip');
-        expect(hasTitle || hasDataTooltip).toBeTruthy();
-      } else {
-        // Check for CSS-based hover interactions with description cards
-        const hoverCards = page.locator('#architecture .component-card, #architecture .hover-info');
-        const cardCount = await hoverCards.count();
-        expect(cardCount).toBeGreaterThan(0);
-      }
-    }
+    await walNode.hover();
+    await waitForAnimations(page, 300);
+    await expect(walTooltip).toBeVisible();
+
+    // WAL tooltip should mention durability/recovery
+    const walTooltipText = await walTooltip.textContent();
+    expect(walTooltipText.toLowerCase()).toContain('durability');
+  });
+
+  test('diagram components are keyboard accessible', async ({ page }) => {
+    // Additional test: keyboard navigation and focus states
+    const memtableNode = page.locator('[data-component="memtable"]');
+    const memtableTooltip = page.locator('#tooltip-memtable');
+
+    // Tab to the memtable node (it should have tabindex="0")
+    await memtableNode.focus();
+    await waitForAnimations(page, 300);
+
+    // Check that the node is focused
+    const isFocused = await memtableNode.evaluate((el) => document.activeElement === el);
+    expect(isFocused).toBe(true);
+
+    // Tooltip should be visible on focus
+    await expect(memtableTooltip).toBeVisible();
+  });
+
+  test('architecture section has proper heading', async ({ page }) => {
+    // Verify section structure
+    const architectureSection = page.locator('#architecture');
+    await expect(architectureSection).toBeVisible();
+
+    const heading = page.locator('#architecture-title');
+    await expect(heading).toContainText('Architecture');
+    await expect(heading).toHaveAttribute('id', 'architecture-title');
+  });
+
+  test('diagram shows data flow from writes to storage', async ({ page }) => {
+    // Verify the complete data flow is represented
+    const writeNode = page.locator('[data-component="write"]');
+    const walNode = page.locator('[data-component="wal"]');
+    const memtableNode = page.locator('[data-component="memtable"]');
+    const immNode = page.locator('[data-component="imm"]');
+    const level0Node = page.locator('[data-component="level0"]');
+    const levelsNode = page.locator('[data-component="levels"]');
+
+    // All nodes should be visible
+    await expect(writeNode).toBeVisible();
+    await expect(walNode).toBeVisible();
+    await expect(memtableNode).toBeVisible();
+    await expect(immNode).toBeVisible();
+    await expect(level0Node).toBeVisible();
+    await expect(levelsNode).toBeVisible();
+
+    // Check arrows indicating data flow
+    const arrows = page.locator('.diagram-arrow');
+    const arrowCount = await arrows.count();
+    expect(arrowCount).toBeGreaterThanOrEqual(5); // At least 5 arrows for the flow
+  });
+
+  test('compaction labels are visible in diagram', async ({ page }) => {
+    // Check that compaction process labels are in the diagram
+    const minorLabel = page.locator('.arrow-label:has-text("Minor Compaction")');
+    const majorLabel = page.locator('.arrow-label:has-text("Major Compaction")');
+
+    await expect(minorLabel).toBeVisible();
+    await expect(majorLabel).toBeVisible();
   });
 });
