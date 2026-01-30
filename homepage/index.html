@@ -200,7 +200,64 @@
 
     <!-- Status Section - Owner: Scenario 6 -->
     <section id="status" class="status">
-      <!-- Status content will be added by Scenario 6 -->
+      <div class="status__container">
+        <h2 class="status__title">Project Status & Roadmap</h2>
+        <p class="status__subtitle">Track our progress and see what's coming next</p>
+
+        <div class="status__content">
+          <div class="status__column">
+            <h3 class="status__column-title">Implemented Features</h3>
+            <ul class="status__checklist">
+              <li class="status__item status__item--completed" data-completed="true">
+                <span class="status__check">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="status__text">Tokio with memcached protocol</span>
+              </li>
+              <li class="status__item status__item--completed" data-completed="true">
+                <span class="status__check">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="status__text">Memtable with skiplist</span>
+              </li>
+              <li class="status__item status__item--completed" data-completed="true">
+                <span class="status__check">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="status__text">Minor compaction</span>
+              </li>
+              <li class="status__item status__item--completed" data-completed="true">
+                <span class="status__check">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="status__text">Major compaction</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="status__column">
+            <h3 class="status__column-title">Planned Features</h3>
+            <ul class="status__checklist">
+              <li class="status__item status__item--pending" data-completed="false">
+                <span class="status__check status__check--pending">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                </span>
+                <span class="status__text">Raft consensus protocol</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Getting Started Section - Owner: Scenario 13 -->

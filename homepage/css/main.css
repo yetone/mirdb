@@ -494,10 +494,110 @@ h1, h2, h3, h4, h5, h6 {
    ====================== */
 
 .status {
-  min-height: 100px;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background-color: var(--color-bg);
 }
 
-/* Status styles will be added by Scenario 6 */
+.status__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.status__title {
+  font-size: var(--font-size-3xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.status__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.status__content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-2xl);
+  text-align: left;
+}
+
+.status__column {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+}
+
+.status__column-title {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.status__checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.status__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.status__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.status__item:last-child {
+  border-bottom: none;
+}
+
+.status__check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status__item--completed .status__check {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.status__item--pending .status__check,
+.status__item--planned .status__check,
+.status__check--pending {
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  border: 2px solid var(--color-border);
+}
+
+.status__text {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.status__item--completed .status__text {
+  color: var(--color-text);
+}
+
+.status__item--pending .status__text,
+.status__item--planned .status__text {
+  color: var(--color-text-muted);
+}
 
 /* ======================
    Getting Started Section Styles
