@@ -12,11 +12,11 @@
 const VIEWPORTS = {
   mobile: { width: 375, height: 667 },
   tablet: { width: 768, height: 1024 },
-  desktop: { width: 1280, height: 800 },
+  desktop: { width: 1280, height: 720 },
 };
 
 /**
- * Navigate to the landing page
+ * Navigate to the landing page and wait for it to load
  * @param {import('@playwright/test').Page} page
  */
 async function setupPage(page) {
@@ -25,23 +25,35 @@ async function setupPage(page) {
 }
 
 /**
- * Set viewport for specific device
+ * Set viewport for a specific device type
  * @param {import('@playwright/test').Page} page
  * @param {'mobile' | 'tablet' | 'desktop'} device
  */
 async function setViewport(page, device) {
   const viewport = VIEWPORTS[device];
-  if (viewport) {
-    await page.setViewportSize(viewport);
+  if (!viewport) {
+    throw new Error(`Unknown device type: ${device}`);
   }
+  await page.setViewportSize(viewport);
 }
 
 /**
  * Wait for CSS animations to complete
  * @param {import('@playwright/test').Page} page
+ * @param {number} timeout - Timeout in milliseconds
  */
-async function waitForAnimations(page) {
-  await page.waitForTimeout(500);
+async function waitForAnimations(page, timeout = 1000) {
+  await page.waitForTimeout(timeout);
+}
+
+/**
+ * Check if an element has focus
+ * @param {import('@playwright/test').Page} page
+ * @param {string} selector
+ */
+async function hasFocus(page, selector) {
+  const element = page.locator(selector);
+  return await element.evaluate((el) => document.activeElement === el);
 }
 
 module.exports = {
@@ -49,4 +61,5 @@ module.exports = {
   setupPage,
   setViewport,
   waitForAnimations,
+  hasFocus,
 };

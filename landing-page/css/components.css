@@ -8,21 +8,12 @@
  * - Navigation (.nav, .nav-link)
  * - Code blocks (.code-block)
  * - Badges and labels
- *
- * Expected Classes:
- * .feature-card - Feature card container with hover effects
- * .feature-icon - Icon container within feature card
- * .btn - Base button styles
- * .code-block - Syntax highlighted code container
  */
 
-/* Section title */
-.section-title {
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
-}
+/* ==========================================================================
+   Features Section
+   ========================================================================== */
 
-/* Features Section */
 .features {
   background-color: var(--color-bg);
 }
@@ -33,27 +24,35 @@
   gap: var(--spacing-lg);
 }
 
+/* Feature Card */
 .feature-card {
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   padding: var(--spacing-lg);
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .feature-card:hover {
   border-color: var(--color-accent);
   transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
+.feature-card:focus-within {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Feature Icon */
 .feature-icon {
-  color: var(--color-accent);
-  margin-bottom: var(--spacing-md);
   display: flex;
   align-items: center;
   justify-content: center;
   width: 64px;
   height: 64px;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-accent);
   background-color: rgba(88, 166, 255, 0.1);
   border-radius: var(--border-radius);
 }
@@ -63,13 +62,223 @@
   height: 32px;
 }
 
+/* Feature Title */
 .feature-card h3 {
-  font-size: 1.25rem;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text);
+}
+
+/* Feature Description */
+.feature-description {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Code Blocks
+   ========================================================================== */
+
+.code-block {
+  position: relative;
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.code-block code {
+  background: none;
+  padding: 0;
+}
+
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.code-block-title {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.copy-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.copy-btn:hover {
+  background-color: var(--color-bg);
+  border-color: var(--color-text-secondary);
+  color: var(--color-text);
+}
+
+.copy-btn.copied {
+  background-color: rgba(63, 185, 80, 0.2);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+/* ==========================================================================
+   Badges
+   ========================================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 3px;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.badge-success {
+  background-color: rgba(63, 185, 80, 0.15);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.badge-info {
+  background-color: rgba(88, 166, 255, 0.15);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Cards (General)
+   ========================================================================== */
+
+.card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+}
+
+.card-header {
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.card-body {
+  color: var(--color-text-secondary);
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+.list-styled {
+  list-style: none;
+  padding: 0;
+}
+
+.list-styled li {
+  position: relative;
+  padding-left: var(--spacing-md);
   margin-bottom: var(--spacing-xs);
 }
 
-.feature-description {
+.list-styled li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Navigation Styles (supplements main.css)
+   ========================================================================== */
+
+.nav {
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: var(--spacing-sm) 0;
+}
+
+.nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--color-text);
+}
+
+.nav-logo:hover {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-md);
+  margin: 0;
+}
+
+.nav-links a {
   color: var(--color-text-secondary);
-  line-height: 1.7;
-  margin-bottom: 0;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   Footer Styles (supplements main.css)
+   ========================================================================== */
+
+.footer {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.footer p {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-xs);
 }

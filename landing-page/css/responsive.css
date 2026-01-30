@@ -6,10 +6,16 @@
  * - Mobile: < 768px (default mobile-first styles)
  * - Tablet: 768px - 1024px
  * - Desktop: > 1024px
- *
- * Expected Media Queries:
- * @media (min-width: 768px) - Tablet and up
- * @media (min-width: 1024px) - Desktop
- *
- * Each scenario owns their respective breakpoint styles.
  */
+
+/* Mobile-first base styles are in main.css */
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  /* Placeholder - Owner: Scenario 10 */
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  /* Placeholder - Owner: Scenario 11 */
+}
