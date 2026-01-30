@@ -57,10 +57,59 @@
     </section>
 
     <!-- SECTION: Features - Owner: Scenario 2 -->
-    <section id="features" aria-labelledby="features-title">
+    <section id="features" class="features" aria-labelledby="features-title">
       <div class="container">
-        <h2 id="features-title">Features</h2>
-        <!-- Feature cards will be added by Scenario 2 -->
+        <h2 id="features-title" class="section-title">Features</h2>
+        <div class="features-grid">
+          <!-- Feature 1: Memcached Compatible -->
+          <article class="feature-card" aria-labelledby="feature-memcached-title">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3 id="feature-memcached-title">Memcached Compatible</h3>
+            <p class="feature-description">Existing memcached clients work without modification. Use your favorite language's memcached library and connect to MirDB seamlessly. Supports get, set, delete, and more standard commands.</p>
+          </article>
+
+          <!-- Feature 2: Persistent Storage -->
+          <article class="feature-card" aria-labelledby="feature-persistent-title">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+            </div>
+            <h3 id="feature-persistent-title">Persistent Storage</h3>
+            <p class="feature-description">Built on LSM-tree architecture with SSTable-based storage. Your data survives restarts with write-ahead logging for durability. No more cold cache problems.</p>
+          </article>
+
+          <!-- Feature 3: High Performance -->
+          <article class="feature-card" aria-labelledby="feature-performance-title">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <h3 id="feature-performance-title">High Performance</h3>
+            <p class="feature-description">Powered by skip-list memtable implementation for fast in-memory operations. Intelligent compaction strategies optimize read and write performance automatically.</p>
+          </article>
+
+          <!-- Feature 4: Configurable -->
+          <article class="feature-card" aria-labelledby="feature-config-title">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+            <h3 id="feature-config-title">Configurable</h3>
+            <p class="feature-description">Flexible configuration options for various deployment scenarios. Tune memtable size, SSTable limits, compaction triggers, and more via simple TOML configuration.</p>
+          </article>
+        </div>
       </div>
     </section>
 
