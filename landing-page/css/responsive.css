@@ -1,0 +1,664 @@
+/**
+ * MirDB Landing Page - Responsive Styles
+ * Owner: Scenario 9 (mobile), 10 (tablet), 11 (desktop)
+ *
+ * Breakpoints:
+ * - Mobile: < 768px (default mobile-first styles)
+ * - Tablet: 768px - 1024px
+ * - Desktop: > 1024px
+ */
+
+/* ==========================================================================
+   Mobile-First Base Styles (< 768px) - Owner: Scenario 9
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* Prevent horizontal scrolling on mobile */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Ensure minimum font size for readability - 16px minimum */
+  body {
+    font-size: 16px;
+  }
+
+  /* Override all small font sizes to meet minimum 16px */
+  p, li, span, td, th, label, input, textarea, select,
+  .feature-description, .code-description, .footer-license,
+  .footer-attribution, .config-file-name, .node-detail,
+  .node-label, .arrow-label, .explanation-card p,
+  .explanation-features li, .step-description, .documentation-link p,
+  .configuration-intro, .architecture-intro, .getting-started-intro,
+  .usage-intro {
+    font-size: 1rem !important; /* 16px minimum */
+    line-height: 1.6;
+  }
+
+  /* Navigation - Mobile scrollable navigation (override hero.css display:none) */
+  .nav {
+    padding: var(--spacing-sm) 0;
+  }
+
+  .nav .container {
+    flex-wrap: nowrap;
+    gap: var(--spacing-sm);
+  }
+
+  .nav-logo {
+    flex-shrink: 0;
+  }
+
+  /* Critical: Override display:none from hero.css to show navigation */
+  .nav-links {
+    display: flex !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    white-space: nowrap;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) 0;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  .nav-links li {
+    flex-shrink: 0;
+  }
+
+  .nav-links a {
+    display: flex;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    min-height: 44px;
+    min-width: 44px;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+
+  /* Hero Section - Mobile */
+  .hero {
+    padding: var(--spacing-xl) 0;
+    min-height: auto;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-tagline {
+    font-size: 1.1rem !important;
+  }
+
+  .hero-value-proposition {
+    font-size: 1rem !important;
+    padding: 0 var(--spacing-sm);
+  }
+
+  .hero-logo {
+    width: 150px;
+    height: 150px;
+    max-width: 150px;
+  }
+
+  /* CTA Buttons - Touch-friendly sizing */
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  /* Features Grid - Single column on mobile */
+  .features-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--spacing-md);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card h3 {
+    font-size: 1.125rem;
+  }
+
+  /* Code Blocks - Horizontally scrollable within container */
+  pre, .code-block {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: calc(100vw - var(--spacing-md) * 2);
+    width: 100%;
+  }
+
+  pre code, .code-block code {
+    display: block;
+    white-space: pre;
+    word-wrap: normal;
+  }
+
+  /* Code example containers */
+  .code-example, .config-collapsible, .quick-start, .installation-option {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .code-example .code-block,
+  .config-code,
+  .quick-start .code-block,
+  .installation-steps .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Configuration table - scrollable on mobile */
+  .config-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+
+  .config-table {
+    min-width: 600px;
+  }
+
+  /* Architecture diagram - responsive */
+  .architecture-diagram {
+    max-width: 100%;
+    padding: var(--spacing-md);
+    overflow-x: auto;
+  }
+
+  .diagram-node {
+    max-width: 100%;
+  }
+
+  /* Explanation cards - single column */
+  .architecture-explanations {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Installation options - single column */
+  .installation-options {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Footer - stacked layout */
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-lg);
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footer-link {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Section spacing adjustments */
+  section {
+    padding: var(--spacing-xl) 0;
+  }
+
+  /* Container - constrain width and prevent overflow */
+  .container {
+    padding: 0 var(--spacing-md);
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Touch targets for interactive elements */
+  .btn, .footer-link, .copy-btn, .config-toggle {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Inline links don't need minimum size */
+  p a, li a, td a, .footer-license a, .footer-attribution a {
+    min-height: auto;
+    min-width: auto;
+    display: inline;
+  }
+
+  /* Copy button touch-friendly */
+  .copy-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Skip link styling */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 200;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .skip-link:focus {
+    top: 0;
+  }
+
+  /* Ensure all sections don't overflow */
+  #hero, #features, #usage, #architecture, #configuration, #getting-started {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+
+/* ==========================================================================
+   Tablet Styles (768px - 1024px) - Owner: Scenario 10
+   ========================================================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Prevent horizontal scrolling on tablet */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Navigation - Fully visible on tablet */
+  .nav {
+    padding: var(--spacing-md) 0;
+  }
+
+  .nav .container {
+    gap: var(--spacing-lg);
+  }
+
+  .nav-links {
+    display: flex !important; /* Override any mobile display:none */
+    flex-wrap: nowrap;
+    gap: var(--spacing-md);
+    overflow-x: visible;
+  }
+
+  .nav-links a {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.9rem;
+  }
+
+  /* Hero Section - Tablet sizing */
+  .hero {
+    padding: var(--spacing-2xl) 0;
+    min-height: 80vh;
+  }
+
+  .hero-content {
+    max-width: 700px;
+    padding: var(--spacing-xl);
+  }
+
+  .hero-logo {
+    width: 180px;
+    height: 180px;
+    max-width: 180px;
+  }
+
+  .hero-title {
+    font-size: 2.75rem;
+    line-height: 1.2;
+  }
+
+  .hero-tagline {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero-value-proposition {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl);
+  }
+
+  .hero-cta {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .hero-cta .btn {
+    min-width: 160px;
+  }
+
+  /* Features Grid - 2 columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .feature-description {
+    font-size: 0.95rem;
+  }
+
+  /* Architecture explanations - 2 columns */
+  .architecture-explanations {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-lg);
+  }
+
+  .architecture-diagram {
+    max-width: 450px;
+    padding: var(--spacing-lg);
+  }
+
+  /* Installation options - 2 columns */
+  .installation-options {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-lg);
+  }
+
+  .installation-option {
+    padding: var(--spacing-lg);
+  }
+
+  /* Configuration section */
+  .config-collapsible {
+    max-width: 700px;
+  }
+
+  .config-table {
+    min-width: auto;
+  }
+
+  /* Footer - Row layout on tablet */
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .footer-links {
+    flex-wrap: nowrap;
+  }
+
+  /* Section spacing */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  /* Container - moderate padding */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Code blocks - prevent overflow */
+  pre, .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Quick start section */
+  .quick-start {
+    padding: var(--spacing-lg);
+  }
+
+  /* Ensure all sections don't overflow */
+  #hero, #features, #usage, #architecture, #configuration, #getting-started {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Configuration table - ensure scrollable on tablet if needed */
+  .config-table-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+}
+
+/* Tablet and up (general styles that apply to tablet and larger) */
+@media (min-width: 768px) {
+  /* General tablet-and-up styles */
+  body {
+    font-size: 16px;
+  }
+
+  /* Ensure nav is always visible at tablet+ */
+  .nav-links {
+    display: flex !important;
+  }
+}
+
+/* ==========================================================================
+   Desktop Styles (> 1024px) - Owner: Scenario 11
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  /* Ensure no horizontal scrolling on desktop */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Navigation - Full horizontal display on desktop */
+  .nav {
+    padding: var(--spacing-md) 0;
+  }
+
+  .nav .container {
+    gap: var(--spacing-xl);
+  }
+
+  .nav-links {
+    display: flex !important;
+    flex-wrap: nowrap;
+    gap: var(--spacing-lg);
+    overflow-x: visible;
+  }
+
+  .nav-links a {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1rem;
+  }
+
+  /* Hero Section - Desktop full layout */
+  .hero {
+    padding: var(--spacing-3xl) 0;
+    min-height: 90vh;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    padding: var(--spacing-2xl);
+  }
+
+  .hero-logo {
+    width: 200px;
+    height: 200px;
+    max-width: 200px;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    line-height: 1.1;
+  }
+
+  .hero-tagline {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero-value-proposition {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    max-width: 700px;
+    margin: 0 auto var(--spacing-2xl);
+  }
+
+  .hero-cta {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--spacing-lg);
+  }
+
+  .hero-cta .btn {
+    min-width: 180px;
+    padding: var(--spacing-md) var(--spacing-2xl);
+    font-size: 1.1rem;
+  }
+
+  /* Features Grid - 4 columns on desktop */
+  .features-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-xl);
+  }
+
+  .feature-card h3 {
+    font-size: 1.15rem;
+  }
+
+  .feature-description {
+    font-size: 0.95rem;
+  }
+
+  /* Architecture explanations - 2 columns on desktop */
+  .architecture-explanations {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-xl);
+  }
+
+  .architecture-diagram {
+    max-width: 500px;
+    padding: var(--spacing-xl);
+  }
+
+  /* Installation options - 2 columns on desktop */
+  .installation-options {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-xl);
+  }
+
+  .installation-option {
+    padding: var(--spacing-xl);
+  }
+
+  /* Configuration section */
+  .config-collapsible {
+    max-width: 800px;
+  }
+
+  .config-table {
+    min-width: auto;
+  }
+
+  /* Footer - Row layout on desktop */
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .footer-links {
+    flex-wrap: nowrap;
+  }
+
+  .footer-info {
+    text-align: left;
+  }
+
+  /* Section spacing - generous padding on desktop */
+  section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  /* Container - comfortable padding on desktop */
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+
+  /* Code blocks - proper sizing on desktop */
+  pre, .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Quick start section */
+  .quick-start {
+    padding: var(--spacing-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Ensure all sections don't overflow */
+  #hero, #features, #usage, #architecture, #configuration, #getting-started {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Configuration table - no scroll needed on desktop */
+  .config-table-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  /* Diagram tooltips - positioned to the side on desktop */
+  .diagram-tooltip {
+    width: 280px;
+  }
+}

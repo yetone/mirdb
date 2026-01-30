@@ -1,0 +1,15 @@
+{
+  "name": "mirdb-landing-page",
+  "version": "1.0.0",
+  "description": "Landing page for MirDB - A Persistent Key-Value Store with Memcached Protocol",
+  "scripts": {
+    "test": "playwright test",
+    "test:unit": "playwright test tests/unit/",
+    "test:e2e": "playwright test tests/e2e/",
+    "serve": "npx serve ."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.0.0"
+  }
+}

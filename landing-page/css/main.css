@@ -1,0 +1,1061 @@
+/**
+ * MirDB Landing Page - Main Styles
+ * Owner: First scenario builder (Scenario 16 owns color scheme)
+ *
+ * This file contains:
+ * - CSS custom properties (variables) for theming
+ * - Base element styles
+ * - Typography
+ * - Dark mode color scheme
+ */
+
+:root {
+  /* Colors - Dark theme as primary (developer-friendly dark mode) */
+  --color-bg: #0d1117;
+  --color-bg-secondary: #161b22;
+  --color-text: #c9d1d9;
+  --color-text-muted: #8b949e;
+  --color-text-secondary: #8b949e;
+  --color-accent: #58a6ff;
+  --color-accent-hover: #79b8ff;
+  --color-border: #30363d;
+  --color-code-bg: #1f2428;
+
+  /* Link colors for dark mode visibility */
+  --color-link: #58a6ff;
+  --color-link-hover: #79b8ff;
+  --color-link-visited: #a371f7;
+
+  /* Status colors for dark mode */
+  --color-success: #3fb950;
+  --color-warning: #d29922;
+  --color-error: #f85149;
+
+  /* Syntax highlighting colors for code blocks */
+  --color-syntax-keyword: #ff7b72;
+  --color-syntax-string: #a5d6ff;
+  --color-syntax-number: #79c0ff;
+  --color-syntax-comment: #8b949e;
+  --color-syntax-function: #d2a8ff;
+  --color-syntax-variable: #ffa657;
+
+  /* Border radius */
+  --border-radius: 8px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Container widths */
+  --container-max: 1200px;
+  --container-padding: var(--spacing-lg);
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+}
+
+/* Reset and base styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   Skip Link - Owner: Scenario 12 (Accessibility Compliance)
+   ========================================================================== */
+
+.skip-link {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  z-index: 200;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+a:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Code blocks */
+code, pre {
+  font-family: var(--font-mono);
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-sm);
+}
+
+code {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.9em;
+}
+
+pre {
+  padding: var(--spacing-md);
+  overflow-x: auto;
+}
+
+/* Container utility */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Section base styles */
+section {
+  padding: var(--spacing-3xl) 0;
+}
+
+/* Navigation base */
+.nav {
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--container-padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--color-text);
+}
+
+.nav-logo:hover {
+  color: var(--color-accent);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-lg);
+}
+
+.nav-link {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  transition: color var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--color-text);
+}
+
+/* Hero section base */
+.hero {
+  text-align: center;
+  padding: var(--spacing-3xl) 0;
+  background-color: var(--color-bg-secondary);
+}
+
+.hero-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.hero-logo {
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-tagline {
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-description {
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+  color: var(--color-text-muted);
+}
+
+.hero-cta {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+/* Section containers */
+.features-container,
+.usage-container,
+.architecture-container,
+.configuration-container,
+.getting-started-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* ==========================================================================
+   Footer Section - Owner: Scenario 7
+   ========================================================================== */
+
+.footer {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-2xl) 0;
+}
+
+.footer .container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text);
+  font-weight: 500;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.footer-link:hover {
+  background-color: var(--color-code-bg);
+  color: var(--color-accent);
+}
+
+.footer-link:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.footer-link svg {
+  flex-shrink: 0;
+}
+
+.footer-github-link svg {
+  color: currentColor;
+}
+
+.footer-info {
+  text-align: center;
+}
+
+.footer-license {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-license a {
+  color: var(--color-accent);
+}
+
+.footer-license a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.footer-attribution {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+
+.footer-attribution a {
+  color: var(--color-accent);
+}
+
+.footer-attribution a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.footer-year {
+  color: var(--color-text-muted);
+}
+
+.footer-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.ci-badge-link {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  transition: opacity var(--transition-fast);
+}
+
+.ci-badge-link:hover {
+  opacity: 0.8;
+}
+
+.ci-badge-link:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.ci-badge {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+/* Responsive footer styles */
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-info {
+    text-align: left;
+  }
+}
+
+/* ==========================================================================
+   Architecture Section - Owner: Scenario 4
+   ========================================================================== */
+
+.architecture {
+  background-color: var(--color-bg);
+}
+
+.architecture-intro {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--spacing-2xl);
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}
+
+/* Diagram Container */
+.architecture-diagram {
+  max-width: 500px;
+  margin: 0 auto var(--spacing-2xl);
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.diagram-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* Diagram Nodes */
+.diagram-node {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  padding: var(--spacing-md);
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--transition-normal),
+              transform var(--transition-normal),
+              box-shadow var(--transition-normal);
+}
+
+.diagram-node:hover,
+.diagram-node:focus {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);
+  outline: none;
+}
+
+.diagram-node:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.node-icon {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.node-label {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.node-detail {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-xs);
+}
+
+/* Diagram Tooltips */
+.diagram-tooltip {
+  position: absolute;
+  left: calc(100% + var(--spacing-md));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 250px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.diagram-tooltip::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent var(--color-accent) transparent transparent;
+}
+
+.diagram-node:hover .diagram-tooltip,
+.diagram-node:focus .diagram-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Diagram Arrows */
+.diagram-arrow {
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  line-height: 1;
+  padding: var(--spacing-xs) 0;
+}
+
+.diagram-arrow--labeled {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.arrow-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-secondary);
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* Node Color Variants */
+.diagram-node--write {
+  border-color: #58a6ff;
+}
+
+.diagram-node--wal {
+  border-color: #f0883e;
+  background-color: rgba(240, 136, 62, 0.05);
+}
+
+.diagram-node--memtable {
+  border-color: #3fb950;
+  background-color: rgba(63, 185, 80, 0.05);
+}
+
+.diagram-node--imm {
+  border-color: #a371f7;
+  background-color: rgba(163, 113, 247, 0.05);
+}
+
+.diagram-node--level0 {
+  border-color: #79c0ff;
+  background-color: rgba(121, 192, 255, 0.05);
+}
+
+.diagram-node--levels {
+  border-color: #d2a8ff;
+  background-color: rgba(210, 168, 255, 0.05);
+}
+
+/* Explanation Cards */
+.architecture-explanations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-2xl);
+}
+
+.explanation-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+}
+
+.explanation-card h3 {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-accent);
+  font-size: 1.1rem;
+}
+
+.explanation-card p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.explanation-card strong {
+  color: var(--color-text);
+}
+
+.explanation-card code {
+  background-color: var(--color-code-bg);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85em;
+  color: var(--color-accent);
+}
+
+.explanation-features {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--spacing-md);
+}
+
+.explanation-features li {
+  position: relative;
+  padding-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.explanation-features li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
+
+/* Responsive adjustments for diagram */
+@media (max-width: 768px) {
+  .diagram-tooltip {
+    position: fixed;
+    left: 50%;
+    top: auto;
+    bottom: var(--spacing-lg);
+    transform: translateX(-50%);
+    width: calc(100% - var(--spacing-2xl));
+    max-width: 350px;
+  }
+
+  .diagram-tooltip::before {
+    display: none;
+  }
+
+  .architecture-diagram {
+    padding: var(--spacing-md);
+  }
+
+  .diagram-node {
+    padding: var(--spacing-sm);
+  }
+
+  .node-icon {
+    font-size: 1.25rem;
+  }
+
+  .node-label {
+    font-size: 0.85rem;
+  }
+}
+
+/* ==========================================================================
+   Configuration Section - Owner: Scenario 5
+   ========================================================================== */
+
+.configuration-section {
+  background-color: var(--color-bg);
+}
+
+.configuration-intro {
+  text-align: center;
+  color: var(--color-text-muted);
+  max-width: 700px;
+  margin: 0 auto var(--spacing-2xl);
+  font-size: 1.1rem;
+}
+
+/* Collapsible Configuration */
+.config-collapsible {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-2xl);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.config-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-bg-secondary);
+  border: none;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.config-toggle:hover {
+  background-color: var(--color-code-bg);
+}
+
+.config-toggle:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.config-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  transition: transform var(--transition-normal);
+}
+
+.config-toggle[aria-expanded="false"] .config-toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.config-content {
+  overflow: hidden;
+  transition: max-height var(--transition-normal), opacity var(--transition-normal);
+  max-height: 600px;
+  opacity: 1;
+}
+
+.config-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.config-code-wrapper {
+  border-top: 1px solid var(--color-border);
+}
+
+.config-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-code-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.config-file-name {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.config-code {
+  margin: 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-code-bg);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  border-radius: 0;
+}
+
+/* TOML Syntax Highlighting */
+.toml-comment {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.toml-key {
+  color: var(--color-accent);
+}
+
+.toml-string {
+  color: #a5d6ff;
+}
+
+.toml-number {
+  color: #79c0ff;
+}
+
+/* Parameter Documentation Table */
+.config-parameters {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.config-parameters h3 {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.config-table-wrapper {
+  overflow-x: auto;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.config-table th,
+.config-table td {
+  padding: var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.config-table th {
+  background-color: var(--color-code-bg);
+  color: var(--color-text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.config-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.config-table tbody tr:hover {
+  background-color: var(--color-code-bg);
+}
+
+.config-table td:first-child {
+  white-space: nowrap;
+}
+
+.config-table td:first-child code,
+.config-table td:last-child code {
+  background-color: var(--color-code-bg);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--color-accent);
+}
+
+.config-table td:nth-child(2) {
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Getting Started Section - Owner: Scenario 6
+   ========================================================================== */
+
+.getting-started {
+  background-color: var(--color-bg);
+}
+
+.getting-started-intro {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--spacing-2xl);
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}
+
+.installation-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.installation-option {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+}
+
+.installation-option h3.step-header {
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.15rem;
+}
+
+.installation-option > p {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.installation-steps {
+  list-style: none;
+  counter-reset: step-counter;
+  padding: 0;
+}
+
+.installation-steps li {
+  counter-increment: step-counter;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  padding-left: var(--spacing-2xl);
+}
+
+.installation-steps li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.installation-steps .step-description {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.installation-steps .code-block {
+  margin: 0;
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+
+.installation-steps .code-block code {
+  display: block;
+  padding: var(--spacing-md);
+  background: none;
+  white-space: pre;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+/* Quick Start Section */
+.quick-start {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.quick-start h3.step-header {
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.15rem;
+}
+
+.quick-start > p {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.quick-start .code-block {
+  margin: 0;
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+
+.quick-start .code-block code {
+  display: block;
+  padding: var(--spacing-md);
+  background: none;
+  white-space: pre;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* Documentation Link */
+.documentation-link {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.documentation-link p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.documentation-link a {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.documentation-link a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+/* Responsive adjustments for Getting Started */
+@media (max-width: 768px) {
+  .installation-options {
+    grid-template-columns: 1fr;
+  }
+
+  .installation-option,
+  .quick-start {
+    padding: var(--spacing-lg);
+  }
+
+  .installation-steps li {
+    padding-left: var(--spacing-xl);
+  }
+
+  .installation-steps li::before {
+    width: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
