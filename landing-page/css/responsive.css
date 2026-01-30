@@ -480,7 +480,185 @@
   }
 }
 
-/* Desktop */
+/* ==========================================================================
+   Desktop Styles (> 1024px) - Owner: Scenario 11
+   ========================================================================== */
+
 @media (min-width: 1024px) {
-  /* Placeholder - Owner: Scenario 11 */
+  /* Ensure no horizontal scrolling on desktop */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Navigation - Full horizontal display on desktop */
+  .nav {
+    padding: var(--spacing-md) 0;
+  }
+
+  .nav .container {
+    gap: var(--spacing-xl);
+  }
+
+  .nav-links {
+    display: flex !important;
+    flex-wrap: nowrap;
+    gap: var(--spacing-lg);
+    overflow-x: visible;
+  }
+
+  .nav-links a {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1rem;
+  }
+
+  /* Hero Section - Desktop full layout */
+  .hero {
+    padding: var(--spacing-3xl) 0;
+    min-height: 90vh;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    padding: var(--spacing-2xl);
+  }
+
+  .hero-logo {
+    width: 200px;
+    height: 200px;
+    max-width: 200px;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    line-height: 1.1;
+  }
+
+  .hero-tagline {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero-value-proposition {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    max-width: 700px;
+    margin: 0 auto var(--spacing-2xl);
+  }
+
+  .hero-cta {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--spacing-lg);
+  }
+
+  .hero-cta .btn {
+    min-width: 180px;
+    padding: var(--spacing-md) var(--spacing-2xl);
+    font-size: 1.1rem;
+  }
+
+  /* Features Grid - 4 columns on desktop */
+  .features-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-xl);
+  }
+
+  .feature-card h3 {
+    font-size: 1.15rem;
+  }
+
+  .feature-description {
+    font-size: 0.95rem;
+  }
+
+  /* Architecture explanations - 2 columns on desktop */
+  .architecture-explanations {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-xl);
+  }
+
+  .architecture-diagram {
+    max-width: 500px;
+    padding: var(--spacing-xl);
+  }
+
+  /* Installation options - 2 columns on desktop */
+  .installation-options {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-xl);
+  }
+
+  .installation-option {
+    padding: var(--spacing-xl);
+  }
+
+  /* Configuration section */
+  .config-collapsible {
+    max-width: 800px;
+  }
+
+  .config-table {
+    min-width: auto;
+  }
+
+  /* Footer - Row layout on desktop */
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .footer-links {
+    flex-wrap: nowrap;
+  }
+
+  .footer-info {
+    text-align: left;
+  }
+
+  /* Section spacing - generous padding on desktop */
+  section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  /* Container - comfortable padding on desktop */
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+
+  /* Code blocks - proper sizing on desktop */
+  pre, .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Quick start section */
+  .quick-start {
+    padding: var(--spacing-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Ensure all sections don't overflow */
+  #hero, #features, #usage, #architecture, #configuration, #getting-started {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Configuration table - no scroll needed on desktop */
+  .config-table-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  /* Diagram tooltips - positioned to the side on desktop */
+  .diagram-tooltip {
+    width: 280px;
+  }
 }
