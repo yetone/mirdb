@@ -32,7 +32,10 @@
         <img src="images/logo.gif" alt="MirDB Logo" class="header__logo">
         <p class="header__tagline">A Persistent Key-Value Store with Memcached Protocol</p>
       </div>
-      <nav class="header__nav" aria-label="Main navigation">
+      <button class="header__menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="header-nav">
+        <span class="header__menu-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="header__nav" id="header-nav" aria-label="Main navigation">
         <ul class="header__nav-list">
           <li><a href="#features" class="header__nav-link">Features</a></li>
           <li><a href="#architecture" class="header__nav-link">Architecture</a></li>

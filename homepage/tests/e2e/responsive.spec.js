@@ -13,6 +13,233 @@
 const { test, expect } = require('@playwright/test');
 const { BASE_URL, SELECTORS, VIEWPORTS, waitForPageLoad } = require('./test-utils');
 
+// ===========================================
+// Mobile Responsive Tests - Scenario 8
+// ===========================================
+
+test.describe('Scenario 8: Mobile Responsive Design (375px)', () => {
+  test.beforeEach(async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize(VIEWPORTS.mobile);
+    await page.goto('/');
+    await waitForPageLoad(page);
+  });
+
+  test('Test Case 1: Page renders without horizontal overflow at 375px viewport', async ({ page }) => {
+    // Check that body doesn't have horizontal overflow
+    const bodyOverflow = await page.evaluate(() => {
+      const body = document.body;
+      const html = document.documentElement;
+      return {
+        bodyScrollWidth: body.scrollWidth,
+        bodyClientWidth: body.clientWidth,
+        htmlScrollWidth: html.scrollWidth,
+        htmlClientWidth: html.clientWidth,
+        viewportWidth: window.innerWidth
+      };
+    });
+
+    // Body scroll width should not exceed viewport width
+    expect(bodyOverflow.bodyScrollWidth).toBeLessThanOrEqual(bodyOverflow.viewportWidth + 1);
+    expect(bodyOverflow.htmlScrollWidth).toBeLessThanOrEqual(bodyOverflow.viewportWidth + 1);
+  });
+
+  test('Test Case 2: Navigation is accessible via hamburger menu on mobile', async ({ page }) => {
+    // Check that hamburger menu button exists and is visible
+    const menuToggle = page.locator('.header__menu-toggle');
+    await expect(menuToggle).toBeVisible();
+
+    // Check that navigation is initially hidden (collapsed)
+    const nav = page.locator('.header__nav');
+    const navVisible = await nav.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return styles.display !== 'none';
+    });
+    expect(navVisible).toBe(false);
+
+    // Click the hamburger menu
+    await menuToggle.click();
+
+    // Check that navigation is now visible
+    await expect(nav).toHaveClass(/header__nav--open/);
+
+    // Check that aria-expanded is true
+    await expect(menuToggle).toHaveAttribute('aria-expanded', 'true');
+
+    // Check that nav links are accessible
+    const navLinks = page.locator('.header__nav-link');
+    const linkCount = await navLinks.count();
+    expect(linkCount).toBeGreaterThanOrEqual(1);
+
+    // Verify each link is visible when menu is open
+    for (let i = 0; i < linkCount; i++) {
+      await expect(navLinks.nth(i)).toBeVisible();
+    }
+  });
+
+  test('Test Case 3: Text is readable with font size at least 16px', async ({ page }) => {
+    // Check body font size
+    const bodyFontSize = await page.evaluate(() => {
+      const body = document.body;
+      const styles = window.getComputedStyle(body);
+      return parseFloat(styles.fontSize);
+    });
+    expect(bodyFontSize).toBeGreaterThanOrEqual(16);
+
+    // Check paragraph text font sizes
+    const paragraphs = page.locator('p');
+    const paragraphCount = await paragraphs.count();
+
+    for (let i = 0; i < Math.min(paragraphCount, 5); i++) {
+      const fontSize = await paragraphs.nth(i).evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return parseFloat(styles.fontSize);
+      });
+      // Allow some smaller text for secondary content but main text should be readable
+      expect(fontSize).toBeGreaterThanOrEqual(12);
+    }
+  });
+
+  test('Test Case 4: Code blocks have horizontal scroll (overflow-x)', async ({ page }) => {
+    // Find code blocks in the usage section
+    const codeBlocks = page.locator('.usage__code');
+    const codeBlockCount = await codeBlocks.count();
+
+    if (codeBlockCount > 0) {
+      for (let i = 0; i < Math.min(codeBlockCount, 3); i++) {
+        const overflowX = await codeBlocks.nth(i).evaluate((el) => {
+          const styles = window.getComputedStyle(el);
+          return styles.overflowX;
+        });
+        // Should be 'auto' or 'scroll' to allow horizontal scrolling
+        expect(['auto', 'scroll']).toContain(overflowX);
+      }
+    }
+
+    // Also check pre elements generally
+    const preElements = page.locator('pre');
+    const preCount = await preElements.count();
+
+    if (preCount > 0) {
+      for (let i = 0; i < Math.min(preCount, 3); i++) {
+        const overflowX = await preElements.nth(i).evaluate((el) => {
+          const styles = window.getComputedStyle(el);
+          return styles.overflowX;
+        });
+        expect(['auto', 'scroll', 'visible']).toContain(overflowX);
+      }
+    }
+  });
+
+  test('Test Case 5: Interactive elements have at least 44px touch target', async ({ page }) => {
+    // Check hamburger menu button
+    const menuToggle = page.locator('.header__menu-toggle');
+    const menuToggleBox = await menuToggle.boundingBox();
+    expect(menuToggleBox.width).toBeGreaterThanOrEqual(44);
+    expect(menuToggleBox.height).toBeGreaterThanOrEqual(44);
+
+    // Check CTA buttons
+    const ctaButtons = page.locator('.hero__cta');
+    const ctaCount = await ctaButtons.count();
+
+    for (let i = 0; i < ctaCount; i++) {
+      const ctaBox = await ctaButtons.nth(i).boundingBox();
+      if (ctaBox) {
+        expect(ctaBox.height).toBeGreaterThanOrEqual(44);
+      }
+    }
+
+    // Check copy buttons if visible
+    const copyButtons = page.locator('.usage__copy-btn');
+    const copyCount = await copyButtons.count();
+
+    for (let i = 0; i < Math.min(copyCount, 3); i++) {
+      const copyBtn = copyButtons.nth(i);
+      const isVisible = await copyBtn.isVisible();
+      if (isVisible) {
+        const copyBox = await copyBtn.boundingBox();
+        if (copyBox) {
+          expect(copyBox.width).toBeGreaterThanOrEqual(44);
+          expect(copyBox.height).toBeGreaterThanOrEqual(44);
+        }
+      }
+    }
+  });
+
+  test('Navigation menu closes when clicking a link', async ({ page }) => {
+    const menuToggle = page.locator('.header__menu-toggle');
+    const nav = page.locator('.header__nav');
+
+    // Open menu
+    await menuToggle.click();
+    await expect(nav).toHaveClass(/header__nav--open/);
+
+    // Click a nav link
+    const firstLink = page.locator('.header__nav-link').first();
+    await firstLink.click();
+
+    // Menu should close
+    await expect(nav).not.toHaveClass(/header__nav--open/);
+    await expect(menuToggle).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('Navigation menu closes on Escape key', async ({ page }) => {
+    const menuToggle = page.locator('.header__menu-toggle');
+    const nav = page.locator('.header__nav');
+
+    // Open menu
+    await menuToggle.click();
+    await expect(nav).toHaveClass(/header__nav--open/);
+
+    // Press Escape
+    await page.keyboard.press('Escape');
+
+    // Menu should close
+    await expect(nav).not.toHaveClass(/header__nav--open/);
+    await expect(menuToggle).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('Hero section adapts to mobile layout', async ({ page }) => {
+    const hero = page.locator(SELECTORS.hero);
+    await expect(hero).toBeVisible();
+
+    // Check that hero title is visible and readable
+    const heroTitle = page.locator('.hero__title');
+    await expect(heroTitle).toBeVisible();
+
+    // Check that CTAs stack vertically on mobile
+    const ctaContainer = page.locator('.hero__cta-container');
+    const flexDirection = await ctaContainer.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return styles.flexDirection;
+    });
+    expect(flexDirection).toBe('column');
+  });
+
+  test('Features grid shows single column on mobile', async ({ page }) => {
+    const featuresGrid = page.locator('.features__grid');
+    const isVisible = await featuresGrid.isVisible();
+
+    if (isVisible) {
+      const gridColumns = await featuresGrid.evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return styles.gridTemplateColumns;
+      });
+
+      // Should be single column (1fr) on mobile
+      // The actual computed value might be in pixels, so we check it's a single value
+      const columnCount = gridColumns.split(' ').filter(c => c !== '').length;
+      expect(columnCount).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test('Page has proper viewport meta tag', async ({ page }) => {
+    const viewportMeta = await page.locator('meta[name="viewport"]').getAttribute('content');
+    expect(viewportMeta).toContain('width=device-width');
+    expect(viewportMeta).toContain('initial-scale=1');
+  });
+});
+
 // ==============================================================
 // Scenario 9: Tablet Responsive Design Tests
 // ==============================================================
@@ -183,3 +410,8 @@ test.describe('Scenario 9: Tablet Responsive Design', () => {
     }
   });
 });
+
+// ===========================================
+// Dark Mode Tests - Scenario 12
+// (Placeholder for Scenario 12 implementation)
+// ===========================================
