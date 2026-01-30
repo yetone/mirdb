@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "MirDB Product Homepage - A static single-page website showcasing MirDB's capabilities",
   "main": "index.html",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
-    "serve": "npx serve . -l 3000",
     "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed"
+    "test:e2e": "npx playwright test tests/e2e/",
+    "test:headed": "npx playwright test --headed",
+    "serve": "npx http-server . -p 8080 -c-1"
   },
   "keywords": [
     "mirdb",
@@ -15,8 +19,9 @@
     "memcached"
   ],
   "license": "MIT",
+  "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
-    "serve": "^14.2.0"
+    "@playwright/test": "^1.58.0",
+    "http-server": "^14.1.1"
   }
 }

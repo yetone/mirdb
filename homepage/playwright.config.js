@@ -11,9 +11,9 @@ module.exports = defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: 'list',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',
   },
   projects: [
@@ -23,8 +23,9 @@ module.exports = defineConfig({
     },
   ],
   webServer: {
-    command: 'npx serve . -l 3000',
-    url: 'http://localhost:3000',
+    command: 'npx http-server . -p 8080 -c-1',
+    url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
+    timeout: 30000,
   },
 });
