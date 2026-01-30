@@ -1,0 +1,33 @@
+/**
+ * Getting Started Section Styles
+ * Owner: Scenario 6 - Getting Started Section
+ *
+ * Expected content:
+ * - Section container layout
+ * - Step-by-step instruction list styles
+ * - Installation command code blocks
+ * - Configuration example styles
+ * - Documentation link button/link styles
+ */
+
+/* Placeholder - Scenario 6 will implement */
+#getting-started {
+  background-color: var(--color-bg-primary);
+}
+
+.getting-started-steps {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.step {
+  margin-bottom: var(--spacing-xl);
+}
+
+.step h3 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.step pre {
+  margin-top: var(--spacing-sm);
+}

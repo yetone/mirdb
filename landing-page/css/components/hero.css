@@ -1,0 +1,58 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Expected content:
+ * - Hero container layout (centered, full viewport height option)
+ * - Logo positioning and sizing
+ * - Headline (h1) and subheadline styles
+ * - CTA button group layout
+ * - Primary and secondary button variants
+ * - Responsive adjustments for mobile
+ */
+
+/* Placeholder - Scenario 1 will implement */
+.hero {
+  padding-top: calc(var(--nav-height) + var(--spacing-3xl));
+  padding-bottom: var(--spacing-3xl);
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero .container {
+  text-align: center;
+}
+
+.hero-logo {
+  max-width: 200px;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.hero-title {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-cta {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: var(--font-size-5xl);
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-xl);
+  }
+}

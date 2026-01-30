@@ -1,0 +1,39 @@
+/**
+ * Footer Section Styles
+ * Owner: Scenario 7 - Footer Section
+ *
+ * Expected content:
+ * - Footer container layout
+ * - Link styles
+ * - License and attribution text
+ * - Copyright notice
+ * - Responsive adjustments
+ */
+
+/* Placeholder - Scenario 7 will implement */
+.site-footer {
+  background-color: var(--color-bg-secondary);
+  padding: var(--spacing-2xl) 0;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--color-text-muted);
+}
+
+.footer-links a:hover {
+  color: var(--color-accent-coral);
+}
+
+.footer-attribution {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}

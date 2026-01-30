@@ -1,0 +1,35 @@
+/**
+ * Architecture Section Styles
+ * Owner: Scenario 5 - Architecture Section with Diagram
+ *
+ * Expected content:
+ * - Section container layout
+ * - Mermaid diagram container
+ * - Diagram responsive sizing
+ * - Component explanation cards/list
+ * - Dark theme for Mermaid diagrams
+ */
+
+/* Placeholder - Scenario 5 will implement */
+#architecture {
+  background-color: var(--color-bg-secondary);
+}
+
+.architecture-diagram {
+  background-color: var(--color-bg-primary);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-xl);
+  overflow-x: auto;
+}
+
+.architecture-components {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .architecture-components {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,46 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 3 - Features Section Display
+ *
+ * Expected content:
+ * - Section container with padding
+ * - Section title styles
+ * - Feature grid layout (3 columns desktop, 1 mobile)
+ * - Feature card styles (icon, title, description)
+ * - Card hover effects (subtle lift)
+ * - Icon styling
+ */
+
+/* Placeholder - Scenario 3 will implement */
+#features {
+  background-color: var(--color-bg-secondary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+.feature-card {
+  background-color: var(--color-bg-primary);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.feature-card h3 {
+  margin-bottom: var(--spacing-sm);
+}
+
+@media (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

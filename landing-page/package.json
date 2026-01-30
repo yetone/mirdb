@@ -1,0 +1,23 @@
+{
+  "name": "mirdb-landing-page",
+  "version": "1.0.0",
+  "description": "Landing page for MirDB persistent key-value store",
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest --testPathPattern=tests/unit",
+    "test:integration": "jest --testPathPattern=tests/integration",
+    "test:e2e": "npx playwright test",
+    "lint": "eslint js/**/*.js",
+    "serve": "npx http-server -p 3000"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "@playwright/test": "^1.40.0",
+    "eslint": "^8.56.0"
+  },
+  "dependencies": {
+    "prismjs": "^1.29.0",
+    "mermaid": "^10.6.0"
+  }
+}

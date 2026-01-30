@@ -1,0 +1,108 @@
+/**
+ * Main CSS Entry Point
+ * Owner: First builder
+ *
+ * Import order: reset → variables → responsive → animations → components
+ */
+
+/* Utilities */
+@import url('./utilities/reset.css');
+@import url('./utilities/variables.css');
+@import url('./utilities/responsive.css');
+@import url('./utilities/animations.css');
+
+/* Components */
+@import url('./components/nav.css');
+@import url('./components/hero.css');
+@import url('./components/features.css');
+@import url('./components/usage.css');
+@import url('./components/architecture.css');
+@import url('./components/getting-started.css');
+@import url('./components/footer.css');
+
+/* Base styles */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+a {
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-accent-coral);
+}
+
+/* Section base styles */
+section {
+  padding: var(--spacing-3xl) 0;
+}
+
+.section-title {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .section-title {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--spacing-2xl);
+  }
+}
+
+/* Button styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--color-accent-coral);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #d13d55;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid var(--color-text);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-text);
+  color: var(--color-bg-primary);
+}
+
+/* Code blocks */
+code {
+  font-family: var(--font-code);
+}
+
+pre {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  overflow-x: auto;
+}
+
+pre code {
+  font-size: var(--font-size-sm);
+}
