@@ -15,8 +15,21 @@ import { renderUsageExamples } from './components/UsageExamples';
 import { renderArchitecture } from './components/Architecture';
 import { renderGettingStarted } from './components/GettingStarted';
 import { renderFooter } from './components/Footer';
+import { renderNavigation, initNavigation } from './components/Navigation';
+import { initSmoothScroll } from './utils/smooth-scroll';
 
 function initApp(): void {
+  // Initialize smooth scrolling (Scenario 14)
+  initSmoothScroll();
+
+  // Render Navigation (Scenario 14)
+  const navigationContainer = document.getElementById('navigation');
+  if (navigationContainer) {
+    const navSection = renderNavigation();
+    navigationContainer.replaceWith(navSection);
+    initNavigation();
+  }
+
   // Render Features section (Scenario 2)
   const featuresContainer = document.getElementById('features');
   if (featuresContainer) {
