@@ -14,6 +14,14 @@
 
   <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
 
+  <!-- Performance: DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://github.com">
+
+  <!-- Performance: Preload critical resources -->
+  <link rel="preload" href="css/styles.css" as="style">
+  <link rel="preload" href="css/components/hero.css" as="style">
+  <link rel="preload" href="assets/images/logo.gif" as="image">
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/components/nav.css">
@@ -472,10 +480,10 @@ telnet localhost 11211</code></pre>
     </div>
   </footer>
 
-  <!-- JavaScript -->
-  <script src="js/utils/helpers.js"></script>
-  <script src="js/modules/smooth-scroll.js"></script>
-  <script src="js/modules/scroll-animations.js"></script>
-  <script src="js/main.js"></script>
+  <!-- JavaScript - Deferred for performance (non-blocking) -->
+  <script src="js/utils/helpers.js" defer></script>
+  <script src="js/modules/smooth-scroll.js" defer></script>
+  <script src="js/modules/scroll-animations.js" defer></script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>

@@ -2,14 +2,15 @@
  * Animation Utilities
  * Owner: Scenario 3 (created), Scenario 8 (optimizes)
  *
- * Expected content:
- * - @keyframes fadeIn, fadeInUp, fadeInLeft, fadeInRight
- * - .animate-on-scroll class
- * - prefers-reduced-motion media query
- * - GPU-accelerated transform animations
+ * Performance optimizations by Scenario 8:
+ * - GPU-accelerated transforms (transform, opacity only)
+ * - will-change hints for compositor optimization
+ * - contain: layout style for paint isolation
+ * - prefers-reduced-motion support
+ * - Minimized repaints via transform3d hints
  */
 
-/* Keyframe Animations */
+/* Keyframe Animations - GPU accelerated via transform/opacity only */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -118,7 +119,7 @@
   animation: fadeInRight 500ms ease forwards;
 }
 
-/* Reduced motion: disable animations */
+/* Reduced motion: disable animations for accessibility */
 @media (prefers-reduced-motion: reduce) {
   .animate-on-scroll,
   .animate-on-scroll.is-visible {
@@ -134,5 +135,24 @@
   .fade-in-right-anim {
     animation: none;
     opacity: 1;
+  }
+}
+
+/* Performance: Clear will-change after animation completes to free GPU memory */
+.animate-on-scroll.is-visible {
+  will-change: auto;
+}
+
+/* Performance: Use contain property for better paint isolation */
+.animate-on-scroll {
+  contain: layout style;
+}
+
+/* Performance: Optimize for 60fps by limiting animation scope */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-on-scroll {
+    /* Use transform3d to hint GPU acceleration */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 }
