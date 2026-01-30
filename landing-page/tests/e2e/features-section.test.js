@@ -114,7 +114,7 @@ test.describe('Features Section Grid', () => {
 
   test('Features section is accessible from navigation', async ({ page }) => {
     // Click on Features link in navigation
-    const featuresLink = page.locator('.nav-link[href="#features"]');
+    const featuresLink = page.locator('.nav-links a[href="#features"]');
     await expect(featuresLink).toBeVisible();
     await featuresLink.click();
 
