@@ -298,9 +298,186 @@
   }
 }
 
-/* Tablet and up */
+/* ==========================================================================
+   Tablet Styles (768px - 1024px) - Owner: Scenario 10
+   ========================================================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Prevent horizontal scrolling on tablet */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Navigation - Fully visible on tablet */
+  .nav {
+    padding: var(--spacing-md) 0;
+  }
+
+  .nav .container {
+    gap: var(--spacing-lg);
+  }
+
+  .nav-links {
+    display: flex !important; /* Override any mobile display:none */
+    flex-wrap: nowrap;
+    gap: var(--spacing-md);
+    overflow-x: visible;
+  }
+
+  .nav-links a {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.9rem;
+  }
+
+  /* Hero Section - Tablet sizing */
+  .hero {
+    padding: var(--spacing-2xl) 0;
+    min-height: 80vh;
+  }
+
+  .hero-content {
+    max-width: 700px;
+    padding: var(--spacing-xl);
+  }
+
+  .hero-logo {
+    width: 180px;
+    height: 180px;
+    max-width: 180px;
+  }
+
+  .hero-title {
+    font-size: 2.75rem;
+    line-height: 1.2;
+  }
+
+  .hero-tagline {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero-value-proposition {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl);
+  }
+
+  .hero-cta {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .hero-cta .btn {
+    min-width: 160px;
+  }
+
+  /* Features Grid - 2 columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .feature-description {
+    font-size: 0.95rem;
+  }
+
+  /* Architecture explanations - 2 columns */
+  .architecture-explanations {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-lg);
+  }
+
+  .architecture-diagram {
+    max-width: 450px;
+    padding: var(--spacing-lg);
+  }
+
+  /* Installation options - 2 columns */
+  .installation-options {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-lg);
+  }
+
+  .installation-option {
+    padding: var(--spacing-lg);
+  }
+
+  /* Configuration section */
+  .config-collapsible {
+    max-width: 700px;
+  }
+
+  .config-table {
+    min-width: auto;
+  }
+
+  /* Footer - Row layout on tablet */
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .footer-links {
+    flex-wrap: nowrap;
+  }
+
+  /* Section spacing */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  /* Container - moderate padding */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Code blocks - prevent overflow */
+  pre, .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Quick start section */
+  .quick-start {
+    padding: var(--spacing-lg);
+  }
+
+  /* Ensure all sections don't overflow */
+  #hero, #features, #usage, #architecture, #configuration, #getting-started {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Configuration table - ensure scrollable on tablet if needed */
+  .config-table-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+}
+
+/* Tablet and up (general styles that apply to tablet and larger) */
 @media (min-width: 768px) {
-  /* Placeholder - Owner: Scenario 10 */
+  /* General tablet-and-up styles */
+  body {
+    font-size: 16px;
+  }
+
+  /* Ensure nav is always visible at tablet+ */
+  .nav-links {
+    display: flex !important;
+  }
 }
 
 /* Desktop */
