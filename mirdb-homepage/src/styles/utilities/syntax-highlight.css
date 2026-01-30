@@ -1,0 +1,80 @@
+/**
+ * Syntax Highlighting Styles.
+ * Owner: Scenario 3 - Usage Examples with Syntax Highlighting
+ *
+ * Provides terminal-style syntax highlighting for memcached protocol commands.
+ * Color scheme designed for dark terminal background with high contrast.
+ */
+
+/* Code block container */
+.code-block {
+  background-color: #1e1e1e;
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+  border: 1px solid #333;
+}
+
+/* Code content */
+.code-content {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #d4d4d4;
+  white-space: pre;
+  display: block;
+}
+
+/* Syntax highlighting tokens */
+.syntax-command {
+  color: #569cd6;
+  font-weight: 600;
+}
+
+.syntax-key {
+  color: #9cdcfe;
+}
+
+.syntax-value {
+  color: #ce9178;
+}
+
+.syntax-number {
+  color: #b5cea8;
+}
+
+.syntax-response {
+  color: #6a9955;
+  font-weight: 500;
+}
+
+.syntax-text {
+  color: #d4d4d4;
+}
+
+/* Terminal-style appearance enhancements */
+.code-block::before {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* Scrollbar styling for code blocks */
+.code-block::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block::-webkit-scrollbar-track {
+  background: #2d2d2d;
+  border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
