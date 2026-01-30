@@ -1,5 +1,5 @@
 // @ts-check
-const { defineConfig, devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright Configuration for Browser Compatibility Testing
@@ -11,7 +11,7 @@ const { defineConfig, devices } = require('@playwright/test');
  * - WebKit: Safari
  */
 
-module.exports = defineConfig({
+export default defineConfig({
   testDir: './tests',
   testMatch: ['**/*.spec.js', '**/integration/*.test.js'],
   fullyParallel: true,

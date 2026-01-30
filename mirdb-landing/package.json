@@ -2,15 +2,18 @@
   "name": "mirdb-landing",
   "version": "1.0.0",
   "description": "MirDB Product Landing Page",
+  "type": "module",
   "scripts": {
     "test": "npx playwright test",
     "test:e2e": "npx playwright test tests/e2e/",
-    "test:unit": "node --test tests/unit/",
+    "test:unit": "node --test tests/unit/*.test.js",
     "test:lighthouse": "lighthouse http://localhost:8080 --output json",
     "serve": "npx http-server . -p 8080 -c-1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.40.0",
+    "axe-core": "^4.11.1",
     "http-server": "^14.1.1"
   },
   "keywords": [
