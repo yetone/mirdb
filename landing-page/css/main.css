@@ -235,24 +235,141 @@ section {
   padding: 0 var(--container-padding);
 }
 
-/* Footer base */
+/* ==========================================================================
+   Footer Section - Owner: Scenario 7
+   ========================================================================== */
+
 .footer {
   background-color: var(--color-bg-secondary);
   border-top: 1px solid var(--color-border);
-  padding: var(--spacing-xl) 0;
-  text-align: center;
+  padding: var(--spacing-2xl) 0;
 }
 
-.footer-container {
+.footer .container {
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--container-padding);
 }
 
-.footer p {
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text);
+  font-weight: 500;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.footer-link:hover {
+  background-color: var(--color-code-bg);
+  color: var(--color-accent);
+}
+
+.footer-link:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.footer-link svg {
+  flex-shrink: 0;
+}
+
+.footer-github-link svg {
+  color: currentColor;
+}
+
+.footer-info {
+  text-align: center;
+}
+
+.footer-license {
   color: var(--color-text-muted);
   font-size: 0.9rem;
   margin-bottom: var(--spacing-sm);
+}
+
+.footer-license a {
+  color: var(--color-accent);
+}
+
+.footer-license a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.footer-attribution {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+
+.footer-attribution a {
+  color: var(--color-accent);
+}
+
+.footer-attribution a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.footer-year {
+  color: var(--color-text-muted);
+}
+
+.footer-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.ci-badge-link {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  transition: opacity var(--transition-fast);
+}
+
+.ci-badge-link:hover {
+  opacity: 0.8;
+}
+
+.ci-badge-link:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.ci-badge {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+/* Responsive footer styles */
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-info {
+    text-align: left;
+  }
 }
 
 /* ==========================================================================
