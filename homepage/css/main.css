@@ -1,0 +1,980 @@
+/**
+ * MirDB Homepage - Main Stylesheet
+ * Owner: Scenario 1 - Header and Navigation (primary), shared by all
+ *
+ * Structure:
+ * - CSS Variables (colors, fonts, spacing)
+ * - Base/Reset styles
+ * - Typography
+ * - Layout utilities
+ * - Component-specific styles (added by each scenario owner)
+ *
+ * Dark mode: Use CSS variables that adapt based on prefers-color-scheme
+ */
+
+/* CSS Variables - shared across all components */
+:root {
+  /* Colors - Dark theme as default */
+  --color-bg: #0d1117;
+  --color-bg-secondary: #161b22;
+  --color-surface: #21262d;
+  --color-background: #161b22;
+  --color-text: #c9d1d9;
+  --color-text-muted: #8b949e;
+  --color-primary: #58a6ff;
+  --color-primary-hover: #79b8ff;
+  --color-border: #30363d;
+  --color-accent: #238636;
+  --color-success: #238636;
+
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  --font-size-base: 16px;
+  --font-size-sm: 0.875rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Layout */
+  --max-width: 1200px;
+  --header-height: 64px;
+  --border-radius: 0.5rem;
+}
+
+/* Base/Reset styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* ===========================================
+   Focus Styles - Accessibility (Owner: Scenario 10)
+   WCAG 2.1 AA requires visible focus indicators
+   =========================================== */
+
+/* Global focus styles for all interactive elements */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Focus-visible for keyboard-only focus (modern browsers) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline when using focus-visible polyfill */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Specific focus styles for hero CTA buttons - higher specificity */
+.hero__cta:focus,
+.hero__cta:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Ensure all buttons and links have focus styles - higher specificity */
+.header__nav-link:focus,
+.header__nav-link:focus-visible,
+.header__menu-toggle:focus,
+.header__menu-toggle:focus-visible,
+.usage__copy-btn:focus,
+.usage__copy-btn:focus-visible,
+.footer__link:focus,
+.footer__link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+/* Layout utilities */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* ===========================================
+   Header Section Styles - Owner: Scenario 1
+   =========================================== */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  height: var(--header-height);
+}
+
+.header__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header__logo {
+  height: 40px;
+  width: auto;
+}
+
+.header__tagline {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  max-width: 300px;
+}
+
+.header__nav-list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.header__nav-link {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.header__nav-link:hover {
+  color: var(--color-primary);
+  background-color: rgba(88, 166, 255, 0.1);
+}
+
+.header__nav-link--github {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.header__nav-link--github:hover {
+  background-color: #2ea043;
+  color: white;
+}
+
+/* ======================
+   Hero Section Styles
+   Owner: Scenario 2
+   ====================== */
+
+.hero {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  text-align: center;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero__title {
+  font-size: var(--font-size-4xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero__subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero__badges {
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero__badge-link {
+  display: inline-block;
+  transition: opacity 0.2s ease;
+}
+
+.hero__badge-link:hover {
+  opacity: 0.8;
+}
+
+.hero__badge {
+  height: 20px;
+}
+
+.hero__cta-container {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero__cta {
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.hero__cta--primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.hero__cta--primary:hover {
+  background-color: var(--color-primary-hover);
+  color: white;
+}
+
+.hero__cta--secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.hero__cta--secondary:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* ======================
+   Features Section Styles
+   Owner: Scenario 3
+   ====================== */
+
+.features {
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background-color: var(--color-surface);
+}
+
+.features__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.features__title {
+  font-size: var(--font-size-3xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.features__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+}
+
+.features__card {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-align: left;
+}
+
+.features__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.features__card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-primary);
+}
+
+.features__card-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.features__card-title {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.features__card-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ======================
+   Architecture Section Styles
+   Owner: Scenario 4
+   ====================== */
+
+.architecture {
+  min-height: 100px;
+}
+
+/* Architecture styles will be added by Scenario 4 */
+
+/* ======================
+   Usage Section Styles
+   Owner: Scenario 5
+   ====================== */
+
+.usage {
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background-color: var(--color-bg);
+}
+
+.usage__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.usage__title {
+  font-size: var(--font-size-3xl);
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.usage__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.usage__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+.usage__section {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+}
+
+.usage__section-title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.usage__section-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+.usage__example {
+  margin-bottom: var(--spacing-xl);
+}
+
+.usage__example:last-child {
+  margin-bottom: 0;
+}
+
+.usage__example-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.usage__example-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.usage__code-block {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+.usage__code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.usage__code-lang {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-mono);
+  text-transform: lowercase;
+}
+
+.usage__copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.usage__copy-btn:hover {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+
+.usage__copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.usage__copy-btn--success {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+.usage__copy-btn--error {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.usage__code {
+  margin: 0;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+.usage__code code {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  padding: 0;
+}
+
+/* Syntax highlighting tokens */
+.token.comment {
+  color: #6a737d;
+  font-style: italic;
+}
+
+.token.keyword {
+  color: #f97583;
+  font-weight: 500;
+}
+
+.token.string {
+  color: #9ecbff;
+}
+
+.token.number {
+  color: #79b8ff;
+}
+
+.token.response {
+  color: #85e89d;
+  font-weight: 500;
+}
+
+.token.placeholder {
+  color: #ffab70;
+}
+
+.token.operator {
+  color: #f97583;
+}
+
+/* ======================
+   Status Section Styles
+   Owner: Scenario 6
+   ====================== */
+
+.status {
+  min-height: 100px;
+}
+
+/* Status styles will be added by Scenario 6 */
+
+/* ======================
+   Getting Started Section Styles
+   Owner: Scenario 13
+   ====================== */
+
+.getting-started {
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background-color: var(--color-surface);
+}
+
+.getting-started__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.getting-started__title {
+  font-size: var(--font-size-3xl);
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.getting-started__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.getting-started__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+.getting-started__section {
+  background-color: var(--color-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+}
+
+.getting-started__section-title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.getting-started__section-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+.getting-started__step {
+  margin-bottom: var(--spacing-xl);
+}
+
+.getting-started__step:last-child {
+  margin-bottom: 0;
+}
+
+.getting-started__step-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.getting-started__step-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.getting-started__code-block {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.getting-started__code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.getting-started__code-lang {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-mono);
+  text-transform: lowercase;
+}
+
+.getting-started__copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.getting-started__copy-btn:hover {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+
+.getting-started__copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.getting-started__copy-btn--success {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+.getting-started__copy-btn--error {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.getting-started__code {
+  margin: 0;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+.getting-started__code code {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  padding: 0;
+}
+
+.getting-started__note {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background-color: rgba(88, 166, 255, 0.1);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  border-left-width: 4px;
+}
+
+.getting-started__note-icon {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.getting-started__note-content {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.getting-started__note-content strong {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-primary);
+}
+
+.getting-started__note-content p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.getting-started__note-content code {
+  font-family: var(--font-family-mono);
+  background-color: var(--color-bg);
+  padding: 0.125em 0.375em;
+  border-radius: 3px;
+  font-size: 0.875em;
+}
+
+/* Responsive styles for getting started section */
+@media (max-width: 768px) {
+  .getting-started {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .getting-started__section {
+    padding: var(--spacing-lg);
+  }
+
+  .getting-started__note {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}
+
+/* ======================
+   Footer Section Styles
+   Owner: Scenario 7
+   ====================== */
+
+.footer {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-xl);
+  margin-top: auto;
+}
+
+.footer__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.footer__content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--spacing-3xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.footer__brand {
+  max-width: 300px;
+}
+
+.footer__logo-text {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text);
+  display: block;
+  margin-bottom: var(--spacing-md);
+}
+
+.footer__description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.footer__links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+}
+
+.footer__links-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer__links-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-md);
+}
+
+.footer__links-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.footer__link {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+  padding: var(--spacing-xs) 0;
+}
+
+.footer__link:hover {
+  color: var(--color-primary);
+}
+
+.footer__link:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer__copyright {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.footer__license {
+  color: var(--color-text-muted);
+}
+
+.footer__separator {
+  color: var(--color-border);
+}
+
+.footer__year {
+  color: var(--color-text-muted);
+}
+
+.footer__attribution {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Responsive footer styles */
+@media (max-width: 768px) {
+  .footer__content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+  }
+
+  .footer__brand {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .footer__links {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    text-align: center;
+  }
+
+  .footer__links-list {
+    align-items: center;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+  }
+
+  .footer__copyright {
+    justify-content: center;
+  }
+}
+
+/* ===========================================
+   Section Placeholders (for other scenarios)
+   =========================================== */
+
+section {
+  min-height: 100px;
+}
+
+main {
+  padding-top: var(--spacing-xl);
+}

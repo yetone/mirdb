@@ -1,0 +1,224 @@
+/**
+ * MirDB Homepage - Dark Mode Theme
+ * Owner: Scenario 12 - Dark Mode Support
+ *
+ * Implements prefers-color-scheme media query
+ * Dark mode is the default theme per PRD recommendation
+ *
+ * Expected behavior:
+ * - Detect system preference
+ * - Apply appropriate color scheme
+ * - Maintain readability for all components
+ */
+
+/* Dark mode styles (default theme - explicitly defined for clarity) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Colors - Dark theme */
+    --color-bg: #0d1117;
+    --color-bg-secondary: #161b22;
+    --color-surface: #21262d;
+    --color-background: #161b22;
+    --color-text: #c9d1d9;
+    --color-text-muted: #8b949e;
+    --color-primary: #58a6ff;
+    --color-primary-hover: #79b8ff;
+    --color-border: #30363d;
+    --color-accent: #238636;
+    --color-success: #238636;
+
+    /* Code block colors for dark mode */
+    --code-bg: #161b22;
+    --code-text: #e6edf3;
+    --code-comment: #8b949e;
+    --code-keyword: #ff7b72;
+    --code-string: #a5d6ff;
+    --code-number: #79c0ff;
+    --code-response: #7ee787;
+  }
+
+  /* Ensure body has dark background */
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  /* Code block specific styling for dark mode */
+  .usage__code,
+  pre,
+  code {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+  }
+
+  .usage__code-block {
+    background-color: var(--code-bg);
+    border-color: var(--color-border);
+  }
+
+  /* Syntax highlighting tokens for dark mode */
+  .token.comment {
+    color: var(--code-comment);
+  }
+
+  .token.keyword {
+    color: var(--code-keyword);
+  }
+
+  .token.string {
+    color: var(--code-string);
+  }
+
+  .token.number {
+    color: var(--code-number);
+  }
+
+  .token.response {
+    color: var(--code-response);
+  }
+}
+
+/* Light mode styles */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Colors - Light theme */
+    --color-bg: #ffffff;
+    --color-bg-secondary: #f6f8fa;
+    --color-surface: #f6f8fa;
+    --color-background: #ffffff;
+    --color-text: #1f2328;
+    --color-text-muted: #656d76;
+    --color-primary: #0969da;
+    --color-primary-hover: #0550ae;
+    --color-border: #d0d7de;
+    --color-accent: #1a7f37;
+    --color-success: #1a7f37;
+
+    /* Code block colors for light mode */
+    --code-bg: #f6f8fa;
+    --code-text: #24292f;
+    --code-comment: #6e7781;
+    --code-keyword: #cf222e;
+    --code-string: #0a3069;
+    --code-number: #0550ae;
+    --code-response: #116329;
+  }
+
+  /* Ensure body has light background */
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  /* Code block specific styling for light mode */
+  .usage__code,
+  pre,
+  code {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+  }
+
+  .usage__code-block {
+    background-color: var(--code-bg);
+    border-color: var(--color-border);
+  }
+
+  /* Header styles for light mode */
+  .header {
+    background-color: var(--color-bg-secondary);
+    border-bottom-color: var(--color-border);
+  }
+
+  /* Hero section for light mode */
+  .hero {
+    background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  }
+
+  /* Features section for light mode */
+  .features {
+    background-color: var(--color-surface);
+  }
+
+  .features__card {
+    background-color: var(--color-background);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .features__card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .features__card-icon {
+    background-color: #ddf4ff;
+    color: var(--color-primary);
+  }
+
+  /* Usage section for light mode */
+  .usage {
+    background-color: var(--color-bg);
+  }
+
+  .usage__section {
+    background-color: var(--color-surface);
+  }
+
+  .usage__code-header {
+    background-color: #eaeef2;
+    border-bottom-color: var(--color-border);
+  }
+
+  .usage__copy-btn {
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .usage__copy-btn:hover {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    border-color: var(--color-text-muted);
+  }
+
+  /* Footer for light mode */
+  .footer {
+    background-color: var(--color-bg-secondary);
+    border-top-color: var(--color-border);
+  }
+
+  /* Syntax highlighting tokens for light mode */
+  .token.comment {
+    color: var(--code-comment);
+  }
+
+  .token.keyword {
+    color: var(--code-keyword);
+  }
+
+  .token.string {
+    color: var(--code-string);
+  }
+
+  .token.number {
+    color: var(--code-number);
+  }
+
+  .token.response {
+    color: var(--code-response);
+  }
+
+  /* Navigation link hover states for light mode */
+  .header__nav-link:hover {
+    color: var(--color-primary);
+    background-color: rgba(9, 105, 218, 0.1);
+  }
+
+  /* CTA buttons for light mode */
+  .hero__cta--secondary {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .hero__cta--secondary:hover {
+    background-color: var(--color-primary);
+    color: #ffffff;
+  }
+}

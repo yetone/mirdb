@@ -1,0 +1,554 @@
+<!--
+  MirDB Product Homepage
+  A static single-page website showcasing MirDB's capabilities
+
+  Structure:
+  - Header with logo, tagline, navigation
+  - Hero section with value proposition and CTA
+  - Features section with capability cards
+  - Architecture section with diagram
+  - Usage section with code examples
+  - Status section with feature checklist
+  - Getting Started section with installation
+  - Footer with links
+
+  Theme: Supports dark/light mode via prefers-color-scheme
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+
+  <!-- SEO Meta Tags - Owner: Scenario 14 -->
+  <meta name="description" content="MirDB is a persistent key-value store with memcached protocol compatibility. Built with Rust for high performance and memory safety.">
+  <meta name="keywords" content="MirDB, key-value store, memcached, persistent storage, LSM-tree, Rust, database">
+  <meta name="author" content="MirDB Contributors">
+
+  <!-- Open Graph Tags for Social Sharing -->
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
+  <meta property="og:description" content="Drop-in replacement for memcached with persistent storage. Built with Rust for memory safety and high performance.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yetone.github.io/mirdb/">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
+  <meta name="twitter:description" content="Drop-in replacement for memcached with persistent storage. Built with Rust.">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://yetone.github.io/mirdb/">
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/dark-mode.css">
+</head>
+<body>
+  <!-- Header Section - Owner: Scenario 1 -->
+  <header id="header" class="header">
+    <div class="header__container">
+      <div class="header__brand">
+        <img src="images/logo.gif" alt="MirDB Logo" class="header__logo">
+        <p class="header__tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+      </div>
+      <button class="header__menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="header-nav">
+        <span class="header__menu-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="header__nav" id="header-nav" aria-label="Main navigation">
+        <ul class="header__nav-list">
+          <li><a href="#features" class="header__nav-link">Features</a></li>
+          <li><a href="#architecture" class="header__nav-link">Architecture</a></li>
+          <li><a href="#usage" class="header__nav-link">Usage</a></li>
+          <li><a href="https://github.com/yetone/mirdb" class="header__nav-link header__nav-link--github" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section - Owner: Scenario 2 -->
+    <section id="hero" class="hero">
+      <div class="hero__container">
+        <h1 class="hero__title">MirDB: A Persistent Key-Value Store with Memcached Protocol</h1>
+        <p class="hero__subtitle">Drop-in replacement for memcached with persistent storage. Built with Rust for memory safety and high performance.</p>
+
+        <div class="hero__badges">
+          <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="hero__badge-link">
+            <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI Build Status" class="hero__badge">
+          </a>
+        </div>
+
+        <div class="hero__cta-container">
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="hero__cta hero__cta--primary">View on GitHub</a>
+          <a href="#getting-started" class="hero__cta hero__cta--secondary">Get Started</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section - Owner: Scenario 3 -->
+    <section id="features" class="features">
+      <div class="features__container">
+        <h2 class="features__title">Key Features</h2>
+        <p class="features__subtitle">Powerful capabilities that set MirDB apart</p>
+
+        <div class="features__grid">
+          <!-- Memcached Protocol Feature -->
+          <div class="features__card" data-feature="memcached-protocol">
+            <div class="features__card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <h3 class="features__card-title">Memcached Protocol</h3>
+            <p class="features__card-description">
+              Drop-in replacement compatibility with the memcached protocol. Use your existing memcached clients and libraries without any code changes.
+            </p>
+          </div>
+
+          <!-- Persistent Storage Feature -->
+          <div class="features__card" data-feature="persistent-storage">
+            <div class="features__card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+              </svg>
+            </div>
+            <h3 class="features__card-title">Persistent Storage</h3>
+            <p class="features__card-description">
+              Built on LSM-tree architecture for durable data persistence. Your data survives restarts with write-ahead logging and efficient compaction.
+            </p>
+          </div>
+
+          <!-- High Performance Feature -->
+          <div class="features__card" data-feature="high-performance">
+            <div class="features__card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <h3 class="features__card-title">High Performance</h3>
+            <p class="features__card-description">
+              Skip list-based memtable for fast in-memory writes. SSTable compaction ensures optimal read performance and efficient disk usage.
+            </p>
+          </div>
+
+          <!-- Rust Implementation Feature -->
+          <div class="features__card" data-feature="rust-implementation">
+            <div class="features__card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M12 22V12"></path>
+                <path d="M20.5 7.5L12 12 3.5 7.5"></path>
+                <path d="M3.5 16.5L12 12l8.5 4.5"></path>
+              </svg>
+            </div>
+            <h3 class="features__card-title">Rust Implementation</h3>
+            <p class="features__card-description">
+              Written in Rust for memory safety and high performance. No garbage collection pauses, zero-cost abstractions, and fearless concurrency.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section - Owner: Scenario 4 -->
+    <section id="architecture" class="architecture">
+      <!-- Architecture content will be added by Scenario 4 -->
+    </section>
+
+    <!-- Usage Section - Owner: Scenario 5 -->
+    <section id="usage" class="usage">
+      <div class="usage__container">
+        <h2 class="usage__title">Usage & Examples</h2>
+        <p class="usage__subtitle">Get started with MirDB using familiar memcached commands</p>
+
+        <div class="usage__content">
+          <!-- Basic Commands Section -->
+          <div class="usage__section">
+            <h3 class="usage__section-title">Basic Storage Commands</h3>
+            <p class="usage__section-description">MirDB supports the standard memcached text protocol. Connect using telnet or any memcached client.</p>
+
+            <!-- SET Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">SET - Store a value</h4>
+              <p class="usage__example-description">Store a key-value pair with optional expiration time.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-set" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-set"><code># Connect to MirDB server
+telnet localhost 11211
+
+# SET command syntax: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+set mykey 0 3600 5
+hello
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- GET Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">GET - Retrieve a value</h4>
+              <p class="usage__example-description">Retrieve one or more values by key.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-get" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-get"><code># GET command syntax: get &lt;key&gt;
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Commands Section -->
+          <div class="usage__section">
+            <h3 class="usage__section-title">Additional Commands</h3>
+            <p class="usage__section-description">MirDB supports the full range of memcached storage and manipulation commands.</p>
+
+            <!-- ADD Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">ADD - Store only if key doesn't exist</h4>
+              <p class="usage__example-description">Store a value only if the key does not already exist.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-add" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-add"><code># ADD command: add &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+add newkey 0 0 5
+world
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- REPLACE Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">REPLACE - Update existing key only</h4>
+              <p class="usage__example-description">Update a value only if the key already exists.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-replace" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-replace"><code># REPLACE command: replace &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+replace mykey 0 0 6
+updated
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- APPEND Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">APPEND - Add data to end of existing value</h4>
+              <p class="usage__example-description">Append data to the end of an existing value.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-append" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-append"><code># APPEND command: append &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+append mykey 0 0 6
+_suffix
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- PREPEND Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">PREPEND - Add data to beginning of existing value</h4>
+              <p class="usage__example-description">Prepend data to the beginning of an existing value.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-prepend" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-prepend"><code># PREPEND command: prepend &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+prepend mykey 0 0 7
+prefix_
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- DELETE Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">DELETE - Remove a key</h4>
+              <p class="usage__example-description">Delete a key-value pair from the store.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-delete" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-delete"><code># DELETE command: delete &lt;key&gt;
+delete mykey
+DELETED</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Status Section - Owner: Scenario 6 -->
+    <section id="status" class="status">
+      <!-- Status content will be added by Scenario 6 -->
+    </section>
+
+    <!-- Getting Started Section - Owner: Scenario 13 -->
+    <section id="getting-started" class="getting-started">
+      <div class="getting-started__container">
+        <h2 class="getting-started__title">Getting Started</h2>
+        <p class="getting-started__subtitle">Build MirDB from source and connect with memcached clients</p>
+
+        <div class="getting-started__content">
+          <!-- Installation Section -->
+          <div class="getting-started__section">
+            <h3 class="getting-started__section-title">Installation</h3>
+            <p class="getting-started__section-description">MirDB is written in Rust. Build it from source using cargo.</p>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">1. Clone the repository</h4>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">bash</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-clone" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-bash" id="code-clone"><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb</code></pre>
+              </div>
+            </div>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">2. Build with Cargo</h4>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">bash</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-build" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-bash" id="code-build"><code># Build in release mode for best performance
+cargo build --release
+
+# The binary will be at target/release/mirdb-server</code></pre>
+              </div>
+            </div>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">3. Run the server</h4>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">bash</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-run" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-bash" id="code-run"><code># Run the server (listens on port 12333 by default)
+./target/release/mirdb-server
+
+# Data is stored in /tmp/mirdb by default</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connection Section -->
+          <div class="getting-started__section">
+            <h3 class="getting-started__section-title">Connecting to MirDB</h3>
+            <p class="getting-started__section-description">Connect using telnet or any memcached-compatible client on port 12333.</p>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">Using Telnet</h4>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">bash</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-telnet" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-bash" id="code-telnet"><code># Connect to MirDB using telnet
+telnet localhost 12333
+
+# Now you can use memcached commands:
+set mykey 0 0 5
+hello
+STORED
+
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+              </div>
+            </div>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">Using a Memcached Client</h4>
+              <p class="getting-started__step-description">You can use any memcached client library. Here's an example with Python:</p>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">python</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-python" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-python" id="code-python"><code>from pymemcache.client import base
+
+# Connect to MirDB on port 12333
+client = base.Client(('localhost', 12333))
+
+# Store a value
+client.set('greeting', 'Hello, MirDB!')
+
+# Retrieve it
+result = client.get('greeting')
+print(result)  # b'Hello, MirDB!'</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Configuration Note -->
+          <div class="getting-started__note">
+            <div class="getting-started__note-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            </div>
+            <div class="getting-started__note-content">
+              <strong>Default Configuration</strong>
+              <p>MirDB listens on <code>0.0.0.0:12333</code> by default and stores data in <code>/tmp/mirdb</code>. Check the project documentation for configuration options.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section - Owner: Scenario 7 -->
+  <footer id="footer" class="footer">
+    <div class="footer__container">
+      <div class="footer__content">
+        <div class="footer__brand">
+          <span class="footer__logo-text">MirDB</span>
+          <p class="footer__description">A persistent key-value store with memcached protocol compatibility, built with Rust for performance and reliability.</p>
+        </div>
+
+        <div class="footer__links">
+          <div class="footer__links-group">
+            <h4 class="footer__links-title">Project</h4>
+            <ul class="footer__links-list">
+              <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="footer__link">GitHub Repository</a></li>
+              <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer" class="footer__link">Issues & Bug Reports</a></li>
+              <li><a href="https://github.com/yetone/mirdb/discussions" target="_blank" rel="noopener noreferrer" class="footer__link">Discussions</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__links-group">
+            <h4 class="footer__links-title">Community</h4>
+            <ul class="footer__links-list">
+              <li><a href="https://github.com/yetone/mirdb/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="footer__link">Contributing Guidelines</a></li>
+              <li><a href="https://github.com/yetone/mirdb/pulls" target="_blank" rel="noopener noreferrer" class="footer__link">Pull Requests</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__links-group">
+            <h4 class="footer__links-title">Resources</h4>
+            <ul class="footer__links-list">
+              <li><a href="#features" class="footer__link">Features</a></li>
+              <li><a href="#architecture" class="footer__link">Architecture</a></li>
+              <li><a href="#usage" class="footer__link">Usage</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copyright">
+          <span class="footer__license">Released under the MIT License</span>
+          <span class="footer__separator">|</span>
+          <span class="footer__year">© 2024 MirDB</span>
+        </p>
+        <p class="footer__attribution">
+          Built with <span aria-label="love">❤</span> using Rust
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/prism.js"></script>
+  <script src="js/copy-code.js"></script>
+</body>
+</html>
