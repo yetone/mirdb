@@ -6,7 +6,7 @@
     "test": "jest",
     "test:unit": "jest --testPathPattern=tests/unit",
     "test:integration": "jest --testPathPattern=tests/integration",
-    "test:e2e": "npx playwright test",
+    "test:e2e": "playwright test",
     "lint": "eslint js/**/*.js",
     "serve": "npx http-server -p 3000"
   },
@@ -18,6 +18,6 @@
   },
   "dependencies": {
     "prismjs": "^1.29.0",
-    "mermaid": "^10.6.0"
+    "mermaid": "^10.6.1"
   }
 }

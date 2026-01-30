@@ -6,10 +6,10 @@
   <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
   <meta name="description" content="MirDB is a high-performance persistent key-value store compatible with Memcached protocol. Built with Rust and LSM-tree architecture.">
 
-  <!-- Open Graph / Social Media -->
-  <meta property="og:type" content="website">
+  <!-- Open Graph / Social -->
   <meta property="og:title" content="MirDB - Persistent Key-Value Store">
   <meta property="og:description" content="Drop-in Memcached replacement with persistent storage">
+  <meta property="og:type" content="website">
   <meta property="og:image" content="/assets/images/og-image.png">
 
   <!-- Twitter Card -->
@@ -17,18 +17,26 @@
   <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
   <meta name="twitter:description" content="Drop-in Memcached replacement with persistent storage">
 
+  <!-- Keywords -->
+  <meta name="keywords" content="Rust key-value store, persistent memcached, LSM-tree database, embedded database Rust, memcached alternative">
+
   <!-- Favicon -->
-  <link rel="icon" type="image/gif" href="/assets/images/logo.gif">
+  <link rel="icon" type="image/gif" href="assets/images/logo.gif">
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Preload fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- SECTION: Navigation - Scenario 2 -->
   <nav class="main-nav" id="main-nav" role="navigation" aria-label="Main navigation">
     <div class="container nav-container">
       <a href="#" class="nav-logo" aria-label="MirDB Home">
-        <img src="/assets/images/logo.gif" alt="MirDB Logo" width="40" height="40">
+        <img src="assets/images/logo.gif" alt="MirDB Logo" width="40" height="40">
         <span class="nav-logo-text">MirDB</span>
       </a>
 
@@ -57,160 +65,138 @@
   </nav>
   <!-- END SECTION: Navigation -->
 
-  <main>
-    <!-- SECTION: Hero - Scenario 1 -->
-    <section id="hero" class="hero">
-      <div class="container">
-        <img src="/assets/images/logo.gif" alt="MirDB Logo" class="hero-logo">
-        <h1 class="hero-title">MirDB: Persistent Key-Value Store</h1>
-        <p class="hero-subtitle">Memcached-compatible with LSM-tree performance</p>
+  <!-- SECTION: Hero - Scenario 1 -->
+  <section id="hero" class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <img src="assets/images/logo.gif" alt="MirDB Logo" class="hero-logo">
+        <h1 class="hero-title">MirDB</h1>
+        <p class="hero-subtitle">Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+        <p class="hero-tagline">A high-performance, Rust-powered database with LSM-tree architecture. Drop-in replacement for Memcached with data persistence.</p>
         <div class="hero-cta">
           <a href="#getting-started" class="btn btn-primary">Get Started</a>
           <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
         </div>
       </div>
-    </section>
-    <!-- END SECTION: Hero -->
+    </div>
+  </section>
+  <!-- END SECTION: Hero -->
 
-    <!-- SECTION: Features - Scenario 3 -->
-    <section id="features">
-      <div class="container">
-        <h2 class="section-title">Why MirDB?</h2>
-        <div class="features-grid">
-          <div class="feature-card">
-            <h3>Persistent Storage</h3>
-            <p>Your data survives restarts</p>
+  <!-- SECTION: Features - Scenario 3 -->
+  <section id="features" class="features section">
+    <div class="container">
+      <h2 class="features__title">Why MirDB?</h2>
+      <div class="features__grid">
+        <!-- Feature 1: Persistent Storage -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
           </div>
-          <div class="feature-card">
-            <h3>Memcached Protocol</h3>
-            <p>Drop-in replacement, no code changes</p>
+          <h3 class="feature-card__title">Persistent Storage</h3>
+          <p class="feature-card__description">Your data survives restarts. Unlike in-memory caches, MirDB persists data to disk ensuring durability.</p>
+        </article>
+
+        <!-- Feature 2: Memcached Protocol -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
           </div>
-          <div class="feature-card">
-            <h3>LSM-Tree Architecture</h3>
-            <p>Optimized for write-heavy workloads</p>
+          <h3 class="feature-card__title">Memcached Protocol</h3>
+          <p class="feature-card__description">Drop-in replacement with no code changes. Use your existing Memcached clients seamlessly.</p>
+        </article>
+
+        <!-- Feature 3: LSM-Tree Architecture -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
           </div>
-          <div class="feature-card">
-            <h3>Minor/Major Compaction</h3>
-            <p>Automatic storage optimization</p>
+          <h3 class="feature-card__title">LSM-Tree Architecture</h3>
+          <p class="feature-card__description">Optimized for write-heavy workloads with Log-Structured Merge-Tree design for high throughput.</p>
+        </article>
+
+        <!-- Feature 4: Compaction -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
           </div>
-          <div class="feature-card">
-            <h3>Rust-Powered</h3>
-            <p>Memory safety and performance</p>
+          <h3 class="feature-card__title">Minor/Major Compaction</h3>
+          <p class="feature-card__description">Automatic storage optimization through intelligent minor and major compaction processes.</p>
+        </article>
+
+        <!-- Feature 5: Rust-Powered -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
           </div>
-          <div class="feature-card">
-            <h3>Async I/O</h3>
-            <p>Built on Tokio for scalability</p>
+          <h3 class="feature-card__title">Rust-Powered</h3>
+          <p class="feature-card__description">Memory safety and performance without compromise. Built with Rust for reliability and speed.</p>
+        </article>
+
+        <!-- Feature 6: Async I/O -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
           </div>
-        </div>
+          <h3 class="feature-card__title">Async I/O</h3>
+          <p class="feature-card__description">Built on Tokio for scalability. Handle thousands of concurrent connections efficiently.</p>
+        </article>
       </div>
-    </section>
-    <!-- END SECTION: Features -->
+    </div>
+  </section>
+  <!-- END SECTION: Features -->
 
-    <!-- SECTION: Usage - Scenario 4 -->
-    <section id="usage">
-      <div class="container">
-        <h2 class="section-title">Simple as Memcached</h2>
-        <div class="usage-content">
-          <div class="code-block">
-            <pre><code># Start MirDB server
-mirdb-server --port 11211
+  <!-- SECTION: Usage - Scenario 4 -->
+  <section id="usage" class="usage">
+    <div class="container">
+      <h2>Simple as Memcached</h2>
+      <!-- Code examples to be implemented by Scenario 4 -->
+    </div>
+  </section>
+  <!-- END SECTION: Usage -->
 
-# Use any Memcached client
-telnet localhost 11211
-set mykey 0 0 5
-hello
-STORED
-get mykey
-VALUE mykey 0 5
-hello
-END</code></pre>
-          </div>
-          <div class="usage-demo">
-            <img src="/assets/images/usage.gif" alt="MirDB usage demonstration" loading="lazy">
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- END SECTION: Usage -->
+  <!-- SECTION: Architecture - Scenario 5 -->
+  <section id="architecture" class="architecture">
+    <div class="container">
+      <h2>How It Works</h2>
+      <!-- Architecture diagram to be implemented by Scenario 5 -->
+    </div>
+  </section>
+  <!-- END SECTION: Architecture -->
 
-    <!-- SECTION: Architecture - Scenario 5 -->
-    <section id="architecture">
-      <div class="container">
-        <h2 class="section-title">How It Works</h2>
-        <div class="architecture-diagram">
-          <div class="mermaid">
-            graph TD
-              A[Client] -->|Write| B[Memtable]
-              B --> C[WAL]
-              B -->|Flush| D[SSTable]
-              A -->|Read| B
-              A -->|Read| D
-              D -->|Compaction| D
-          </div>
-        </div>
-        <div class="architecture-components">
-          <div class="component-card">
-            <h3>Memtable</h3>
-            <p>In-memory skip list for fast writes</p>
-          </div>
-          <div class="component-card">
-            <h3>WAL</h3>
-            <p>Write-ahead log for durability</p>
-          </div>
-          <div class="component-card">
-            <h3>SSTable</h3>
-            <p>Sorted string tables on disk</p>
-          </div>
-          <div class="component-card">
-            <h3>Compaction</h3>
-            <p>Background storage optimization</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- END SECTION: Architecture -->
-
-    <!-- SECTION: Getting Started - Scenario 6 -->
-    <section id="getting-started">
-      <div class="container">
-        <h2 class="section-title">Get Started in Minutes</h2>
-        <div class="getting-started-steps">
-          <div class="step">
-            <h3>1. Install MirDB</h3>
-            <pre><code>cargo install mirdb-server</code></pre>
-          </div>
-          <div class="step">
-            <h3>2. Start the Server</h3>
-            <pre><code>mirdb-server --port 11211 --data-dir ./data</code></pre>
-          </div>
-          <div class="step">
-            <h3>3. Connect with Any Memcached Client</h3>
-            <pre><code>// Python example
-import pymemcache
-client = pymemcache.Client(('localhost', 11211))
-client.set('key', 'value')
-print(client.get('key'))</code></pre>
-          </div>
-          <p style="text-align: center; margin-top: var(--spacing-xl);">
-            <a href="https://github.com/yetone/mirdb#readme" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Full Documentation</a>
-          </p>
-        </div>
-      </div>
-    </section>
-    <!-- END SECTION: Getting Started -->
-  </main>
+  <!-- SECTION: Getting Started - Scenario 6 -->
+  <section id="getting-started" class="getting-started">
+    <div class="container">
+      <h2>Get Started in Minutes</h2>
+      <!-- Getting started guide to be implemented by Scenario 6 -->
+    </div>
+  </section>
+  <!-- END SECTION: Getting Started -->
 
   <!-- SECTION: Footer - Scenario 7 -->
-  <footer class="site-footer">
+  <footer class="footer">
     <div class="container">
-      <div class="footer-links">
-        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
-        <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a>
-      </div>
-      <p class="footer-attribution">
-        Created by <a href="https://github.com/yetone" target="_blank" rel="noopener noreferrer">yetone</a>
-      </p>
+      <p>&copy; 2024 MirDB. Created by <a href="https://github.com/yetone" target="_blank" rel="noopener noreferrer">yetone</a>.</p>
+      <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </footer>
   <!-- END SECTION: Footer -->

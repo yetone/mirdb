@@ -1,6 +1,5 @@
 /**
  * Jest Configuration
- * Owner: First builder
  */
 module.exports = {
   testEnvironment: 'jsdom',
@@ -8,12 +7,11 @@ module.exports = {
     '**/tests/unit/**/*.test.js',
     '**/tests/integration/**/*.test.js'
   ],
-  moduleNameMapper: {},
-  setupFilesAfterEnv: [],
-  testPathIgnorePatterns: ['/node_modules/', '/tests/e2e/'],
-  verbose: true,
+  moduleFileExtensions: ['js', 'json'],
   collectCoverageFrom: [
     'js/**/*.js',
-    '!js/vendor/**'
-  ]
+    '!js/main.js'
+  ],
+  coverageDirectory: 'coverage',
+  verbose: true
 };

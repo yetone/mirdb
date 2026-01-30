@@ -1,43 +1,58 @@
 /**
  * Hero Section Styles
  * Owner: Scenario 1 - Hero Section Display
- *
- * Expected content:
- * - Hero container layout (centered, full viewport height option)
- * - Logo positioning and sizing
- * - Headline (h1) and subheadline styles
- * - CTA button group layout
- * - Primary and secondary button variants
- * - Responsive adjustments for mobile
  */
 
-/* Placeholder - Scenario 1 will implement */
 .hero {
-  padding-top: calc(var(--nav-height) + var(--spacing-3xl));
-  padding-bottom: var(--spacing-3xl);
-  min-height: 80vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
-}
-
-.hero .container {
+  justify-content: center;
+  padding: var(--spacing-4xl) 0;
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-primary) 0%,
+    var(--color-bg-secondary) 50%,
+    var(--color-accent-blue) 100%
+  );
   text-align: center;
 }
 
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeIn var(--transition-slow) ease;
+}
+
 .hero-logo {
-  max-width: 200px;
+  width: 150px;
+  height: 150px;
   margin: 0 auto var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
 }
 
 .hero-title {
-  font-size: var(--font-size-4xl);
+  font-size: var(--font-size-6xl);
+  font-weight: 800;
+  color: var(--color-white);
   margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
 }
 
 .hero-subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--color-accent-coral);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-tagline {
   font-size: var(--font-size-lg);
   color: var(--color-text-muted);
-  margin-bottom: var(--spacing-xl);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-2xl);
+  line-height: 1.7;
 }
 
 .hero-cta {
@@ -47,12 +62,53 @@
   flex-wrap: wrap;
 }
 
-@media (min-width: 768px) {
+.hero-cta .btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .hero-logo {
+    width: 100px;
+    height: 100px;
+  }
+
   .hero-title {
-    font-size: var(--font-size-5xl);
+    font-size: var(--font-size-4xl);
   }
 
   .hero-subtitle {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-5xl);
   }
 }

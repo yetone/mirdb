@@ -3,59 +3,75 @@
  * Owner: First builder
  */
 
-*, *::before, *::after {
+/* Box sizing */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
+/* Remove default margins and padding */
 * {
   margin: 0;
   padding: 0;
 }
 
+/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
-  -webkit-text-size-adjust: 100%;
 }
 
+/* Body defaults */
 body {
   min-height: 100vh;
   line-height: 1.6;
+  text-rendering: optimizeSpeed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-img, picture, video, canvas, svg {
+/* Images and media */
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
 
-input, button, textarea, select {
+/* Form elements inherit fonts */
+input,
+button,
+textarea,
+select {
   font: inherit;
 }
 
-p, h1, h2, h3, h4, h5, h6 {
-  overflow-wrap: break-word;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-ul, ol {
+/* Remove list styles */
+ul,
+ol {
   list-style: none;
 }
 
-button {
-  cursor: pointer;
-  background: none;
-  border: none;
+/* Links */
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-/* Reduced motion */
+/* Buttons */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Remove animations for reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

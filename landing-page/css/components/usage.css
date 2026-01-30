@@ -1,43 +1,6 @@
 /**
  * Usage Section Styles
  * Owner: Scenario 4 - Usage Section with Code Examples
- *
- * Expected content:
- * - Section container layout
- * - Code block container styles
- * - Syntax highlighting theme (dark)
- * - Copy button positioning (top-right of code block)
- * - Copy feedback animation
- * - GIF/demo container styles
- * - Responsive code block (horizontal scroll on mobile)
  */
 
-/* Placeholder - Scenario 4 will implement */
-#usage {
-  background-color: var(--color-bg-primary);
-}
-
-.usage-content {
-  display: grid;
-  gap: var(--spacing-2xl);
-}
-
-.code-block {
-  position: relative;
-}
-
-.usage-demo {
-  text-align: center;
-}
-
-.usage-demo img {
-  max-width: 100%;
-  border-radius: var(--radius-md);
-}
-
-@media (min-width: 1024px) {
-  .usage-content {
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-  }
-}
+/* Placeholder - to be implemented by Scenario 4 */

@@ -1,24 +1,22 @@
 /**
  * CSS Custom Properties (Variables)
  * Owner: Scenario 13 - Visual Design - Color Scheme
- *
- * This file contains foundational CSS variables used throughout the site.
- * Scenario 13 will fill in the complete implementation.
  */
-
 :root {
-  /* Colors - Dark theme */
+  /* Color palette */
   --color-bg-primary: #1a1a2e;
   --color-bg-secondary: #16213e;
   --color-accent-blue: #0f3460;
   --color-accent-coral: #e94560;
   --color-text: #eaeaea;
   --color-text-muted: #a0a0a0;
+  --color-white: #ffffff;
+  --color-black: #000000;
 
   /* Typography */
-  --font-heading: Inter, system-ui, -apple-system, sans-serif;
-  --font-body: Inter, system-ui, -apple-system, sans-serif;
-  --font-code: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-heading: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-code: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
 
   /* Font sizes */
   --font-size-xs: 0.75rem;
@@ -30,6 +28,7 @@
   --font-size-3xl: 1.875rem;
   --font-size-4xl: 2.25rem;
   --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -39,6 +38,7 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
+  --spacing-4xl: 6rem;
 
   /* Border radius */
   --radius-sm: 0.25rem;
@@ -47,23 +47,20 @@
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
   /* Transitions */
   --transition-fast: 150ms ease;
-  --transition-normal: 300ms ease;
+  --transition-base: 300ms ease;
   --transition-slow: 500ms ease;
 
   /* Z-index layers */
+  --z-base: 0;
   --z-dropdown: 100;
   --z-sticky: 200;
   --z-fixed: 300;
-  --z-modal-backdrop: 400;
-  --z-modal: 500;
-
-  /* Layout */
-  --nav-height: 70px;
-  --container-max-width: 1200px;
+  --z-modal: 400;
+  --z-tooltip: 500;
 }

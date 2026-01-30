@@ -4,10 +4,10 @@
  */
 
 /**
- * Debounce function for performance
+ * Debounce function for performance optimization
  * @param {Function} fn - Function to debounce
  * @param {number} delay - Delay in milliseconds
- * @returns {Function} - Debounced function
+ * @returns {Function} Debounced function
  */
 export function debounce(fn, delay) {
   let timeoutId;
@@ -20,8 +20,8 @@ export function debounce(fn, delay) {
 /**
  * Throttle function for scroll events
  * @param {Function} fn - Function to throttle
- * @param {number} limit - Minimum time between calls in milliseconds
- * @returns {Function} - Throttled function
+ * @param {number} limit - Limit in milliseconds
+ * @returns {Function} Throttled function
  */
 export function throttle(fn, limit) {
   let inThrottle;
@@ -36,16 +36,16 @@ export function throttle(fn, limit) {
 
 /**
  * Check if user prefers reduced motion
- * @returns {boolean} - True if user prefers reduced motion
+ * @returns {boolean} True if user prefers reduced motion
  */
 export function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 /**
- * Check if element is visible in viewport
+ * Check if element is in viewport
  * @param {HTMLElement} el - Element to check
- * @returns {boolean} - True if element is in viewport
+ * @returns {boolean} True if element is visible in viewport
  */
 export function isElementInViewport(el) {
   const rect = el.getBoundingClientRect();

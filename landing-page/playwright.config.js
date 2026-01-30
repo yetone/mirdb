@@ -1,26 +1,20 @@
 /**
  * Playwright Configuration
- * Owner: First builder
  */
 const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests/e2e',
-  fullyParallel: false,
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: 1,
-  workers: 1,
-  reporter: [['list'], ['html', { open: 'never' }]],
-  timeout: 30000,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'off',
-    headless: true,
-    launchOptions: {
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    }
+    video: 'on-first-retry'
   },
   projects: [
     {
@@ -28,14 +22,26 @@ module.exports = defineConfig({
       use: { ...devices['Desktop Chrome'] }
     },
     {
-      name: 'Mobile Chrome',
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] }
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] }
+    },
+    {
+      name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] }
+    },
+    {
+      name: 'mobile-safari',
+      use: { ...devices['iPhone 12'] }
     }
   ],
   webServer: {
-    command: 'npx http-server -p 3000 -c-1',
+    command: 'npx http-server -p 3000',
     url: 'http://localhost:3000',
-    reuseExistingServer: true,
-    timeout: 30000
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000
   }
 });
