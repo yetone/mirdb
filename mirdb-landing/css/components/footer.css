@@ -1,0 +1,50 @@
+/**
+ * Footer Section Styles
+ * Owner: Scenario 7 - Footer Section
+ *
+ * Expected styles:
+ * - .footer: Footer container
+ * - .footer__logo: Footer logo
+ * - .footer__links: Link groups
+ * - .footer__license: License information
+ * - .footer__credits: Contributor credits
+ */
+
+.footer {
+    background-color: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.footer__container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.footer__copyright {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+.footer__link {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer__link:hover {
+    color: var(--color-accent-teal);
+}
+
+.footer__link:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
+}

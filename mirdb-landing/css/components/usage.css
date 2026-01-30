@@ -1,0 +1,32 @@
+/**
+ * Usage Documentation Styles
+ * Owner: Scenario 4 - Usage Documentation Section
+ *
+ * Expected styles:
+ * - .usage: Section container
+ * - .usage__tabs: Tab container
+ * - .usage__tab: Individual tab button
+ * - .usage__panel: Code panel
+ * - .code-block: Syntax highlighted code
+ * - .copy-btn: Copy to clipboard button
+ * - Configuration examples styling
+ */
+
+.usage {
+    background-color: var(--color-bg-primary);
+}
+
+.usage__content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.code-block {
+    background-color: var(--color-bg-secondary);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    line-height: 1.7;
+}

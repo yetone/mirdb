@@ -1,6 +1,7 @@
-import { defineConfig, devices } from '@playwright/test';
+// @ts-check
+const { defineConfig, devices } = require('@playwright/test');
 
-export default defineConfig({
+module.exports = defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -18,7 +19,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npx http-server . -p 8080',
+    command: 'npx http-server . -p 8080 -c-1',
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,

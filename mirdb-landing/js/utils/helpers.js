@@ -8,41 +8,59 @@
  * - prefersReducedMotion(): Check reduced motion preference
  */
 
-/**
- * Debounce function calls
- * @param {Function} fn - Function to debounce
- * @param {number} delay - Delay in milliseconds
- * @returns {Function} Debounced function
- */
-export function debounce(fn, delay) {
-  let timeoutId;
-  return function (...args) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
+(function() {
+    'use strict';
 
-/**
- * Throttle function calls
- * @param {Function} fn - Function to throttle
- * @param {number} limit - Limit in milliseconds
- * @returns {Function} Throttled function
- */
-export function throttle(fn, limit) {
-  let inThrottle;
-  return function (...args) {
-    if (!inThrottle) {
-      fn.apply(this, args);
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
+    /**
+     * Debounce function - delays execution until after wait milliseconds
+     * have elapsed since the last time it was invoked
+     * @param {Function} fn - Function to debounce
+     * @param {number} delay - Delay in milliseconds
+     * @returns {Function} Debounced function
+     */
+    function debounce(fn, delay) {
+        var timeoutId;
+        return function() {
+            var context = this;
+            var args = arguments;
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(function() {
+                fn.apply(context, args);
+            }, delay);
+        };
     }
-  };
-}
 
-/**
- * Check if user prefers reduced motion
- * @returns {boolean} True if reduced motion is preferred
- */
-export function prefersReducedMotion() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
+    /**
+     * Throttle function - ensures function is called at most once per limit
+     * @param {Function} fn - Function to throttle
+     * @param {number} limit - Minimum time between calls in milliseconds
+     * @returns {Function} Throttled function
+     */
+    function throttle(fn, limit) {
+        var inThrottle;
+        return function() {
+            var context = this;
+            var args = arguments;
+            if (!inThrottle) {
+                fn.apply(context, args);
+                inThrottle = true;
+                setTimeout(function() {
+                    inThrottle = false;
+                }, limit);
+            }
+        };
+    }
+
+    /**
+     * Check if user prefers reduced motion
+     * @returns {boolean} True if user prefers reduced motion
+     */
+    function prefersReducedMotion() {
+        return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    // Export to window for non-module usage
+    window.debounce = debounce;
+    window.throttle = throttle;
+    window.prefersReducedMotion = prefersReducedMotion;
+})();

@@ -1,0 +1,46 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 3 - Features Showcase Section
+ *
+ * Expected styles:
+ * - .features: Section container
+ * - .features__grid: 3-column responsive grid
+ * - .feature-card: Individual feature card
+ * - .feature-card__icon: Feature icon
+ * - .feature-card__title: Feature title
+ * - .feature-card__description: Feature description
+ * - Scroll-triggered animations
+ */
+
+.features {
+    background-color: var(--color-bg-secondary);
+}
+
+.features__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.feature-card {
+    background-color: var(--color-bg-primary);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-card__title {
+    color: var(--color-accent-teal);
+    margin-bottom: var(--spacing-sm);
+}
+
+.feature-card__description {
+    color: var(--color-text-secondary);
+    margin-bottom: 0;
+}

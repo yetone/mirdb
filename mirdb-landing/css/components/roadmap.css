@@ -1,0 +1,54 @@
+/**
+ * Roadmap Section Styles
+ * Owner: Scenario 6 - Project Roadmap Section
+ *
+ * Expected styles:
+ * - .roadmap: Section container
+ * - .roadmap__timeline: Timeline container
+ * - .roadmap__item: Timeline item
+ * - .roadmap__item--completed: Completed feature
+ * - .roadmap__item--planned: Planned feature
+ * - .roadmap__contribution-link: GitHub issues link
+ */
+
+.roadmap {
+    background-color: var(--color-bg-primary);
+}
+
+.roadmap__content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.roadmap__list {
+    list-style: none;
+}
+
+.roadmap__item {
+    padding: var(--spacing-md) 0;
+    padding-left: var(--spacing-xl);
+    position: relative;
+    color: var(--color-text-secondary);
+}
+
+.roadmap__item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border);
+}
+
+.roadmap__item--completed::before {
+    background-color: var(--color-accent-teal);
+    border-color: var(--color-accent-teal);
+}
+
+.roadmap__item--planned::before {
+    background-color: transparent;
+    border-color: var(--color-accent-rust);
+}
