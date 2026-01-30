@@ -1,0 +1,17 @@
+/**
+ * MirDB Landing Page - Component Styles
+ * Owner: Scenario 2 - Features Section Grid
+ *
+ * This file contains styles for:
+ * - Feature cards (.feature-card)
+ * - Buttons (.btn, .btn-primary, .btn-secondary)
+ * - Navigation (.nav, .nav-link)
+ * - Code blocks (.code-block)
+ * - Badges and labels
+ *
+ * Expected Classes:
+ * .feature-card - Feature card container with hover effects
+ * .feature-icon - Icon container within feature card
+ * .btn - Base button styles
+ * .code-block - Syntax highlighted code container
+ */
