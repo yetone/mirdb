@@ -326,7 +326,153 @@ DELETED</code></pre>
 
     <!-- Getting Started Section - Owner: Scenario 13 -->
     <section id="getting-started" class="getting-started">
-      <!-- Getting started content will be added by Scenario 13 -->
+      <div class="getting-started__container">
+        <h2 class="getting-started__title">Getting Started</h2>
+        <p class="getting-started__subtitle">Build MirDB from source and connect with memcached clients</p>
+
+        <div class="getting-started__content">
+          <!-- Installation Section -->
+          <div class="getting-started__section">
+            <h3 class="getting-started__section-title">Installation</h3>
+            <p class="getting-started__section-description">MirDB is written in Rust. Build it from source using cargo.</p>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">1. Clone the repository</h4>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">bash</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-clone" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-bash" id="code-clone"><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb</code></pre>
+              </div>
+            </div>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">2. Build with Cargo</h4>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">bash</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-build" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-bash" id="code-build"><code># Build in release mode for best performance
+cargo build --release
+
+# The binary will be at target/release/mirdb-server</code></pre>
+              </div>
+            </div>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">3. Run the server</h4>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">bash</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-run" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-bash" id="code-run"><code># Run the server (listens on port 12333 by default)
+./target/release/mirdb-server
+
+# Data is stored in /tmp/mirdb by default</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connection Section -->
+          <div class="getting-started__section">
+            <h3 class="getting-started__section-title">Connecting to MirDB</h3>
+            <p class="getting-started__section-description">Connect using telnet or any memcached-compatible client on port 12333.</p>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">Using Telnet</h4>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">bash</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-telnet" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-bash" id="code-telnet"><code># Connect to MirDB using telnet
+telnet localhost 12333
+
+# Now you can use memcached commands:
+set mykey 0 0 5
+hello
+STORED
+
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+              </div>
+            </div>
+
+            <div class="getting-started__step">
+              <h4 class="getting-started__step-title">Using a Memcached Client</h4>
+              <p class="getting-started__step-description">You can use any memcached client library. Here's an example with Python:</p>
+              <div class="getting-started__code-block">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">python</span>
+                  <button class="getting-started__copy-btn" data-copy-target="code-python" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="getting-started__code language-python" id="code-python"><code>from pymemcache.client import base
+
+# Connect to MirDB on port 12333
+client = base.Client(('localhost', 12333))
+
+# Store a value
+client.set('greeting', 'Hello, MirDB!')
+
+# Retrieve it
+result = client.get('greeting')
+print(result)  # b'Hello, MirDB!'</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Configuration Note -->
+          <div class="getting-started__note">
+            <div class="getting-started__note-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            </div>
+            <div class="getting-started__note-content">
+              <strong>Default Configuration</strong>
+              <p>MirDB listens on <code>0.0.0.0:12333</code> by default and stores data in <code>/tmp/mirdb</code>. Check the project documentation for configuration options.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 

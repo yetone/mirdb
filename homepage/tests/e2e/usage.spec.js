@@ -200,3 +200,157 @@ test.describe('Usage and Code Examples Section', () => {
     await expect(firstLabel).toContainText('bash');
   });
 });
+
+/**
+ * Getting Started Section Tests
+ * Owner: Scenario 13 - Getting Started Section
+ *
+ * Tests:
+ * - Getting started section presence with id='getting-started'
+ * - Installation instructions with cargo build commands
+ * - Default port 12333 is mentioned
+ * - Connection examples (telnet or memcached client)
+ */
+test.describe('Getting Started Section', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForPageLoad(page);
+  });
+
+  test('TC1: Getting started section exists with id="getting-started"', async ({ page }) => {
+    // Test case 1: Check getting started section exists
+    const gettingStartedSection = page.locator('#getting-started');
+    await expect(gettingStartedSection).toBeVisible();
+    await expect(gettingStartedSection).toHaveClass(/getting-started/);
+  });
+
+  test('TC2: Cargo build instructions are present', async ({ page }) => {
+    // Test case 2: Search for 'cargo' or build instructions
+    const gettingStartedSection = page.locator('#getting-started');
+
+    // Look for cargo build command in code examples
+    const cargoExample = gettingStartedSection.locator('pre:has-text("cargo build")').first();
+    await expect(cargoExample).toBeVisible();
+
+    // Verify cargo build command is shown
+    const cargoCode = await cargoExample.textContent();
+    expect(cargoCode.toLowerCase()).toContain('cargo build');
+  });
+
+  test('TC3: Default port 12333 is mentioned', async ({ page }) => {
+    // Test case 3: Search for connection port
+    const gettingStartedSection = page.locator('#getting-started');
+
+    // Look for port 12333 in the content
+    const sectionText = await gettingStartedSection.textContent();
+    expect(sectionText).toContain('12333');
+  });
+
+  test('TC4: Telnet connection example is present', async ({ page }) => {
+    // Test case 4: Check for client connection example (telnet)
+    const gettingStartedSection = page.locator('#getting-started');
+
+    // Look for telnet connection example
+    const telnetExample = gettingStartedSection.locator('pre:has-text("telnet")').first();
+    await expect(telnetExample).toBeVisible();
+
+    // Verify telnet localhost command
+    const telnetCode = await telnetExample.textContent();
+    expect(telnetCode.toLowerCase()).toContain('telnet');
+    expect(telnetCode).toContain('localhost');
+  });
+
+  test('Getting started section has proper structure', async ({ page }) => {
+    // Verify section structure
+    const gettingStartedSection = page.locator('#getting-started');
+
+    // Check for title
+    const title = gettingStartedSection.locator('.getting-started__title');
+    await expect(title).toBeVisible();
+    await expect(title).toContainText('Getting Started');
+
+    // Check for subtitle
+    const subtitle = gettingStartedSection.locator('.getting-started__subtitle');
+    await expect(subtitle).toBeVisible();
+
+    // Check for section containers (Installation and Connecting)
+    const sections = gettingStartedSection.locator('.getting-started__section');
+    const sectionCount = await sections.count();
+    expect(sectionCount).toBeGreaterThanOrEqual(2);
+  });
+
+  test('Installation section has step-by-step instructions', async ({ page }) => {
+    // Verify installation steps
+    const gettingStartedSection = page.locator('#getting-started');
+    const steps = gettingStartedSection.locator('.getting-started__step');
+
+    const stepCount = await steps.count();
+    expect(stepCount).toBeGreaterThanOrEqual(3);
+
+    // Check that steps have titles
+    const stepTitles = gettingStartedSection.locator('.getting-started__step-title');
+    const titleCount = await stepTitles.count();
+    expect(titleCount).toBeGreaterThanOrEqual(3);
+  });
+
+  test('Code blocks have copy buttons', async ({ page }) => {
+    // Verify copy buttons exist
+    const gettingStartedSection = page.locator('#getting-started');
+    const copyButtons = gettingStartedSection.locator('.getting-started__copy-btn');
+
+    const count = await copyButtons.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Check first copy button has proper attributes
+    const firstCopyBtn = copyButtons.first();
+    await expect(firstCopyBtn).toBeVisible();
+    await expect(firstCopyBtn).toHaveAttribute('data-copy-target');
+    await expect(firstCopyBtn).toHaveAttribute('aria-label', 'Copy to clipboard');
+  });
+
+  test('Git clone command is present', async ({ page }) => {
+    // Verify git clone command
+    const gettingStartedSection = page.locator('#getting-started');
+    const cloneExample = gettingStartedSection.locator('pre:has-text("git clone")').first();
+    await expect(cloneExample).toBeVisible();
+
+    const cloneCode = await cloneExample.textContent();
+    expect(cloneCode).toContain('https://github.com/yetone/mirdb');
+  });
+
+  test('Python memcached client example is present', async ({ page }) => {
+    // Verify memcached client example
+    const gettingStartedSection = page.locator('#getting-started');
+    const pythonExample = gettingStartedSection.locator('pre:has-text("pymemcache")').first();
+    await expect(pythonExample).toBeVisible();
+  });
+
+  test('Default configuration note is visible', async ({ page }) => {
+    // Verify configuration note
+    const gettingStartedSection = page.locator('#getting-started');
+    const note = gettingStartedSection.locator('.getting-started__note');
+    await expect(note).toBeVisible();
+
+    // Check note mentions default port and data directory
+    const noteText = await note.textContent();
+    expect(noteText).toContain('12333');
+    expect(noteText).toContain('/tmp/mirdb');
+  });
+
+  test('Code header shows language labels', async ({ page }) => {
+    // Verify language labels in getting started section
+    const gettingStartedSection = page.locator('#getting-started');
+    const langLabels = gettingStartedSection.locator('.getting-started__code-lang');
+
+    const count = await langLabels.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Check for bash label
+    const bashLabel = gettingStartedSection.locator('.getting-started__code-lang:has-text("bash")');
+    await expect(bashLabel.first()).toBeVisible();
+
+    // Check for python label
+    const pythonLabel = gettingStartedSection.locator('.getting-started__code-lang:has-text("python")');
+    await expect(pythonLabel.first()).toBeVisible();
+  });
+});

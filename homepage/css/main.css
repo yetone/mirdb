@@ -613,10 +613,207 @@ h1, h2, h3, h4, h5, h6 {
    ====================== */
 
 .getting-started {
-  min-height: 100px;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background-color: var(--color-surface);
 }
 
-/* Getting started styles will be added by Scenario 13 */
+.getting-started__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.getting-started__title {
+  font-size: var(--font-size-3xl);
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.getting-started__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.getting-started__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+.getting-started__section {
+  background-color: var(--color-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+}
+
+.getting-started__section-title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.getting-started__section-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+.getting-started__step {
+  margin-bottom: var(--spacing-xl);
+}
+
+.getting-started__step:last-child {
+  margin-bottom: 0;
+}
+
+.getting-started__step-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.getting-started__step-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.getting-started__code-block {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.getting-started__code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.getting-started__code-lang {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-mono);
+  text-transform: lowercase;
+}
+
+.getting-started__copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.getting-started__copy-btn:hover {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+
+.getting-started__copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.getting-started__copy-btn--success {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+.getting-started__copy-btn--error {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.getting-started__code {
+  margin: 0;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+.getting-started__code code {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  padding: 0;
+}
+
+.getting-started__note {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background-color: rgba(88, 166, 255, 0.1);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  border-left-width: 4px;
+}
+
+.getting-started__note-icon {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.getting-started__note-content {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.getting-started__note-content strong {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-primary);
+}
+
+.getting-started__note-content p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.getting-started__note-content code {
+  font-family: var(--font-family-mono);
+  background-color: var(--color-bg);
+  padding: 0.125em 0.375em;
+  border-radius: 3px;
+  font-size: 0.875em;
+}
+
+/* Responsive styles for getting started section */
+@media (max-width: 768px) {
+  .getting-started {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .getting-started__section {
+    padding: var(--spacing-lg);
+  }
+
+  .getting-started__note {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}
 
 /* ======================
    Footer Section Styles
