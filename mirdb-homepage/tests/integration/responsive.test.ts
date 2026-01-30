@@ -837,6 +837,447 @@ describe('Tablet Responsive Design (768px viewport)', () => {
 });
 
 /**
+ * Desktop Responsive Design Tests (Scenario 9)
+ * Viewport: 1280px width (Standard desktop monitor resolution)
+ */
+describe('Desktop Responsive Design (1280px viewport)', () => {
+  let dom: JSDOM;
+  let document: Document;
+  let container: HTMLElement;
+
+  beforeEach(() => {
+    // Create JSDOM instance with desktop viewport simulation
+    dom = new JSDOM('<!DOCTYPE html><html><head></head><body><div id="app"></div></body></html>', {
+      url: 'http://localhost:4173',
+      pretendToBeVisual: true,
+    });
+    document = dom.window.document;
+    container = document.getElementById('app')!;
+
+    // Simulate desktop viewport (1280px)
+    Object.defineProperty(dom.window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1280,
+    });
+    Object.defineProperty(dom.window, 'innerHeight', {
+      writable: true,
+      configurable: true,
+      value: 800,
+    });
+
+    // Mock matchMedia for desktop viewport
+    dom.window.matchMedia = (query: string) => ({
+      matches: query.includes('min-width: 1024px') || query.includes('min-width: 768px'),
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => true,
+    });
+
+    // Bind document to global for component rendering
+    global.document = document;
+  });
+
+  afterEach(() => {
+    dom.window.close();
+  });
+
+  describe('Test Case 1: Layout displays at full desktop size with proper margins', () => {
+    it('should render all sections within desktop viewport bounds', () => {
+      // Render all components
+      const features = renderFeatures();
+      const usage = renderUsageExamples();
+      const architecture = renderArchitecture();
+      const gettingStarted = renderGettingStarted();
+      const footer = renderFooter();
+
+      container.appendChild(features);
+      container.appendChild(usage);
+      container.appendChild(architecture);
+      container.appendChild(gettingStarted);
+      container.appendChild(footer);
+
+      // Verify all sections are rendered
+      expect(container.querySelector('.features-section')).not.toBeNull();
+      expect(container.querySelector('.usage-section')).not.toBeNull();
+      expect(container.querySelector('.architecture-section')).not.toBeNull();
+      expect(container.querySelector('.getting-started-section')).not.toBeNull();
+      expect(container.querySelector('.footer-section')).not.toBeNull();
+    });
+
+    it('should have proper horizontal padding for desktop viewport', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      // Verify padding classes are applied
+      expect(features.className).toContain('px-4');
+    });
+
+    it('should have proper vertical padding for section spacing', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      expect(features.className).toContain('py-16');
+    });
+
+    it('should have centered containers with mx-auto', () => {
+      const features = renderFeatures();
+      const architecture = renderArchitecture();
+      const gettingStarted = renderGettingStarted();
+
+      container.appendChild(features);
+      container.appendChild(architecture);
+      container.appendChild(gettingStarted);
+
+      expect(features.querySelector('.features-container')?.className).toContain('mx-auto');
+      expect(architecture.querySelector('.architecture-container')?.className).toContain('mx-auto');
+      expect(gettingStarted.querySelector('.getting-started-container')?.className).toContain('mx-auto');
+    });
+
+    it('should have architecture section properly constrained', () => {
+      const architecture = renderArchitecture();
+      container.appendChild(architecture);
+
+      const archContainer = architecture.querySelector('.architecture-container');
+      expect(archContainer).not.toBeNull();
+      expect(archContainer?.className).toContain('max-w-6xl');
+      expect(archContainer?.className).toContain('mx-auto');
+    });
+  });
+
+  describe('Test Case 2: Features display in 3-column grid layout', () => {
+    it('should have lg:grid-cols-3 class for 3-column layout at desktop breakpoint', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const grid = features.querySelector('.features-grid');
+      expect(grid).not.toBeNull();
+      // At 1280px (lg breakpoint), grid should use 3 columns
+      expect(grid?.className).toContain('lg:grid-cols-3');
+    });
+
+    it('should render all 6 feature cards in the grid', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const cards = features.querySelectorAll('.feature-card');
+      expect(cards.length).toBe(6);
+    });
+
+    it('should have gap spacing between grid items', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const grid = features.querySelector('.features-grid');
+      expect(grid?.className).toContain('gap-8');
+    });
+
+    it('should have grid class applied for layout', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const grid = features.querySelector('.features-grid');
+      expect(grid?.className).toMatch(/\bgrid\b/);
+    });
+
+    it('should have responsive breakpoints from mobile to desktop', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const grid = features.querySelector('.features-grid');
+      // Mobile: 1 column, Tablet (md): 2 columns, Desktop (lg): 3 columns
+      expect(grid?.className).toContain('grid-cols-1');
+      expect(grid?.className).toContain('md:grid-cols-2');
+      expect(grid?.className).toContain('lg:grid-cols-3');
+    });
+
+    it('should have feature cards with proper padding', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const cards = features.querySelectorAll('.feature-card');
+      cards.forEach((card) => {
+        expect(card.className).toContain('p-6');
+      });
+    });
+  });
+
+  describe('Test Case 3: Content has reasonable max-width for readability', () => {
+    it('should have max-w-6xl (1152px) on features container for desktop', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const featuresContainer = features.querySelector('.features-container');
+      expect(featuresContainer).not.toBeNull();
+      // max-w-6xl = 72rem = 1152px which is close to 1200px
+      expect(featuresContainer?.className).toContain('max-w-6xl');
+    });
+
+    it('should have max-w-4xl on getting started container for desktop', () => {
+      const gettingStarted = renderGettingStarted();
+      container.appendChild(gettingStarted);
+
+      const gsContainer = gettingStarted.querySelector('.getting-started-container');
+      expect(gsContainer).not.toBeNull();
+      // max-w-4xl = 56rem = 896px - appropriate for text-heavy content
+      expect(gsContainer?.className).toContain('max-w-4xl');
+    });
+
+    it('should have max-w-6xl on architecture container for desktop', () => {
+      const architecture = renderArchitecture();
+      container.appendChild(architecture);
+
+      const archContainer = architecture.querySelector('.architecture-container');
+      expect(archContainer).not.toBeNull();
+      expect(archContainer?.className).toContain('max-w-6xl');
+    });
+
+    it('should have usage examples container with proper structure', () => {
+      const usage = renderUsageExamples();
+      container.appendChild(usage);
+
+      const usageExamplesContainer = usage.querySelector('.usage-examples-container');
+      expect(usageExamplesContainer).not.toBeNull();
+    });
+
+    it('should have max-w-6xl on footer container for desktop', () => {
+      const footer = renderFooter();
+      container.appendChild(footer);
+
+      const footerContainer = footer.querySelector('.footer-container');
+      expect(footerContainer).not.toBeNull();
+      expect(footerContainer?.className).toContain('max-w-6xl');
+    });
+
+    it('should have architecture diagram with max-width constraint', () => {
+      const architecture = renderArchitecture();
+      container.appendChild(architecture);
+
+      const diagram = architecture.querySelector('.architecture-diagram');
+      expect(diagram).not.toBeNull();
+      expect(diagram?.className).toContain('max-w-4xl');
+    });
+  });
+
+  describe('Test Case 4: Hero content is centered with appropriate padding', () => {
+    it('should have centered section titles on desktop', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const title = features.querySelector('.features-title');
+      expect(title).not.toBeNull();
+      expect(title?.className).toContain('text-center');
+    });
+
+    it('should have readable text size for section headings on desktop', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const title = features.querySelector('.features-title');
+      // text-3xl is appropriate for desktop
+      expect(title?.className).toContain('text-3xl');
+    });
+
+    it('should have centered architecture header content', () => {
+      const architecture = renderArchitecture();
+      container.appendChild(architecture);
+
+      const header = architecture.querySelector('.architecture-header');
+      expect(header).not.toBeNull();
+      expect(header?.className).toContain('text-center');
+    });
+
+    it('should have getting started section centered', () => {
+      const gettingStarted = renderGettingStarted();
+      container.appendChild(gettingStarted);
+
+      const title = gettingStarted.querySelector('.getting-started-title');
+      expect(title).not.toBeNull();
+      expect(title?.className).toContain('text-center');
+    });
+
+    it('should have centered description text under headings', () => {
+      const gettingStarted = renderGettingStarted();
+      container.appendChild(gettingStarted);
+
+      const description = gettingStarted.querySelector('.getting-started-description');
+      expect(description).not.toBeNull();
+      expect(description?.className).toContain('text-center');
+    });
+
+    it('should have proper font sizing hierarchy for desktop', () => {
+      const architecture = renderArchitecture();
+      container.appendChild(architecture);
+
+      // Main heading should be larger
+      const h2 = architecture.querySelector('h2');
+      expect(h2?.className).toContain('text-3xl');
+
+      // Subheadings should be smaller
+      const h3Elements = architecture.querySelectorAll('h3');
+      h3Elements.forEach((h3) => {
+        expect(h3.className).toMatch(/text-(xl|lg)/);
+      });
+    });
+  });
+
+  describe('Desktop-specific layout and spacing', () => {
+    it('should have architecture explanations in 2-column grid at desktop', () => {
+      const architecture = renderArchitecture();
+      container.appendChild(architecture);
+
+      const explanations = architecture.querySelector('.architecture-explanations');
+      expect(explanations).not.toBeNull();
+      expect(explanations?.className).toContain('md:grid-cols-2');
+    });
+
+    it('should have install grid using 2 columns at desktop size', () => {
+      const gettingStarted = renderGettingStarted();
+      container.appendChild(gettingStarted);
+
+      const installGrid = gettingStarted.querySelector('.install-grid');
+      expect(installGrid).not.toBeNull();
+      expect(installGrid?.className).toContain('md:grid-cols-2');
+    });
+
+    it('should have config grid layout at desktop size', () => {
+      const gettingStarted = renderGettingStarted();
+      container.appendChild(gettingStarted);
+
+      const configGrid = gettingStarted.querySelector('.config-grid');
+      expect(configGrid).not.toBeNull();
+      expect(configGrid?.className).toContain('md:grid-cols-2');
+    });
+
+    it('should have feature cards with hover transitions for desktop interaction', () => {
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      const cards = features.querySelectorAll('.feature-card');
+      cards.forEach((card) => {
+        expect(card.className).toContain('transition');
+        expect(card.className).toContain('hover:transform');
+        expect(card.className).toContain('hover:-translate-y-1');
+      });
+    });
+
+    it('should have code blocks with proper overflow handling', () => {
+      const gettingStarted = renderGettingStarted();
+      container.appendChild(gettingStarted);
+
+      const codeBlocks = gettingStarted.querySelectorAll('.code-block');
+      expect(codeBlocks.length).toBeGreaterThan(0);
+
+      codeBlocks.forEach((block) => {
+        expect(block.className).toContain('overflow-x-auto');
+      });
+    });
+
+    it('should have footer badges section properly laid out for desktop', () => {
+      const footer = renderFooter();
+      container.appendChild(footer);
+
+      const badgesSection = footer.querySelector('.badges-section');
+      expect(badgesSection).not.toBeNull();
+      expect(badgesSection?.className).toContain('flex');
+      expect(badgesSection?.className).toContain('flex-wrap');
+      expect(badgesSection?.className).toContain('justify-center');
+    });
+  });
+
+  describe('Desktop viewport accessibility and navigation', () => {
+    it('should have proper section IDs for anchor navigation', () => {
+      const features = renderFeatures();
+      const usage = renderUsageExamples();
+      const architecture = renderArchitecture();
+      const gettingStarted = renderGettingStarted();
+      const footer = renderFooter();
+
+      container.appendChild(features);
+      container.appendChild(usage);
+      container.appendChild(architecture);
+      container.appendChild(gettingStarted);
+      container.appendChild(footer);
+
+      expect(features.id).toBe('features');
+      expect(usage.id).toBe('usage');
+      expect(architecture.id).toBe('architecture');
+      expect(gettingStarted.id).toBe('getting-started');
+      expect(footer.id).toBe('footer');
+    });
+
+    it('should have proper ARIA labels on sections', () => {
+      const usage = renderUsageExamples();
+      const architecture = renderArchitecture();
+
+      container.appendChild(usage);
+      container.appendChild(architecture);
+
+      expect(usage.getAttribute('aria-labelledby')).toBe('usage-title');
+      expect(architecture.getAttribute('aria-labelledby')).toBe('architecture-heading');
+    });
+
+    it('should have proper heading hierarchy for desktop reading', () => {
+      const features = renderFeatures();
+      const architecture = renderArchitecture();
+      const gettingStarted = renderGettingStarted();
+
+      container.appendChild(features);
+      container.appendChild(architecture);
+      container.appendChild(gettingStarted);
+
+      // Each section should have an h2
+      const h2Elements = container.querySelectorAll('h2');
+      expect(h2Elements.length).toBeGreaterThanOrEqual(3);
+
+      // Architecture should have h3 for subsections
+      const archH3Elements = architecture.querySelectorAll('h3');
+      expect(archH3Elements.length).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  describe('Desktop viewport wide screen handling', () => {
+    it('should constrain content within max-width even on very wide screens', () => {
+      // Simulate ultra-wide monitor (2560px)
+      Object.defineProperty(dom.window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 2560,
+      });
+
+      const features = renderFeatures();
+      container.appendChild(features);
+
+      // Content should still be constrained by max-w-6xl
+      const featuresContainer = features.querySelector('.features-container');
+      expect(featuresContainer?.className).toContain('max-w-6xl');
+      expect(featuresContainer?.className).toContain('mx-auto');
+    });
+
+    it('should center content on wide screens using mx-auto', () => {
+      const architecture = renderArchitecture();
+      container.appendChild(architecture);
+
+      const archContainer = architecture.querySelector('.architecture-container');
+      expect(archContainer?.className).toContain('mx-auto');
+    });
+
+    it('should maintain readable line lengths on wide screens', () => {
+      const gettingStarted = renderGettingStarted();
+      container.appendChild(gettingStarted);
+
+      const gsContainer = gettingStarted.querySelector('.getting-started-container');
+      // max-w-4xl ensures text doesn't stretch too wide
+      expect(gsContainer?.className).toContain('max-w-4xl');
+    });
+  });
+});
+
+/**
  * Touch interaction tests for mobile devices
  */
 describe('Mobile Touch Interactions', () => {
