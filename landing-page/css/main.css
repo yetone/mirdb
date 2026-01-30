@@ -255,6 +255,134 @@ section {
   margin-bottom: var(--spacing-sm);
 }
 
+/* Architecture Section - Owner: Scenario 4 */
+.architecture {
+  background-color: var(--color-bg);
+}
+
+.architecture-intro {
+  text-align: center;
+  color: var(--color-text-muted);
+  max-width: 700px;
+  margin: 0 auto var(--spacing-2xl);
+  font-size: 1.1rem;
+}
+
+.architecture-diagram {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-2xl);
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+}
+
+.lsm-diagram {
+  width: 100%;
+  height: auto;
+  color: var(--color-text);
+}
+
+.lsm-diagram .diagram-label {
+  font-size: 14px;
+  font-weight: 600;
+  fill: var(--color-text);
+}
+
+.lsm-diagram .component-label {
+  font-size: 13px;
+  font-weight: 500;
+  fill: var(--color-text);
+}
+
+.lsm-diagram .diagram-annotation {
+  font-size: 11px;
+  fill: var(--color-text-muted);
+  font-style: italic;
+}
+
+.lsm-diagram .read-label {
+  fill: var(--color-accent);
+}
+
+.lsm-diagram .component-box {
+  fill: var(--color-bg);
+  stroke: var(--color-border);
+  stroke-width: 2;
+  transition: all var(--transition-normal);
+}
+
+.lsm-diagram .wal-box {
+  stroke: #f0883e;
+}
+
+.lsm-diagram .memtable-box {
+  stroke: #58a6ff;
+}
+
+.lsm-diagram .sstable-box {
+  stroke: #3fb950;
+}
+
+.lsm-diagram .sstable-box.levels {
+  stroke: #a371f7;
+}
+
+/* Hover effects on diagram components */
+.lsm-diagram .architecture-component:hover .component-box,
+.lsm-diagram .diagram-node:hover .component-box {
+  fill: var(--color-bg-secondary);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.lsm-diagram .architecture-component:hover .component-label {
+  fill: var(--color-accent);
+}
+
+.lsm-diagram .hoverable {
+  cursor: pointer;
+}
+
+/* Architecture component cards */
+.architecture-components {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.component-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-normal);
+}
+
+.component-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.15);
+}
+
+.component-card h3 {
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.1rem;
+}
+
+.component-card p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.component-card p strong {
+  color: var(--color-text);
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   html {
