@@ -1,11 +1,7 @@
 /**
  * Footer Section Unit Tests
  * Owner: Scenario 7 - Footer Section
- *
- * Test Cases:
- * - TC1: Check footer HTML structure (GitHub link, license info, author attribution, copyright notice)
- * - TC3: Verify license information displayed
- * - TC4: Verify author attribution (yetone credited)
+ * Tests for validating footer HTML structure, links, and attribution
  */
 const fs = require('fs');
 const path = require('path');
@@ -19,117 +15,162 @@ describe('Footer Section Unit Tests', () => {
   });
 
   describe('TC1: Footer HTML Structure', () => {
-    test('should contain footer element with correct class', () => {
-      expect(htmlContent).toMatch(/<footer[^>]*class="footer"[^>]*>/);
+    test('Footer element exists with correct class and role', () => {
+      expect(htmlContent).toMatch(/<footer[^>]*class="footer"[^>]*role="contentinfo"[^>]*>/);
     });
 
-    test('should contain GitHub repository link', () => {
-      expect(htmlContent).toMatch(/<a[^>]*href="https:\/\/github\.com\/yetone\/mirdb"[^>]*>/);
+    test('Footer contains container div', () => {
+      expect(htmlContent).toMatch(/<footer[^>]*>[\s\S]*<div class="container">/);
     });
 
-    test('should have GitHub link with target="_blank"', () => {
-      // Extract the footer section
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
-      const footerContent = footerMatch[0];
-      // Check for GitHub link with target="_blank" in footer
-      expect(footerContent).toMatch(/href="https:\/\/github\.com\/yetone\/mirdb"[^>]*target="_blank"/);
+    test('Footer has content section', () => {
+      expect(htmlContent).toMatch(/<div class="footer__content">/);
     });
 
-    test('should have GitHub link with rel="noopener noreferrer" for security', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
-      const footerContent = footerMatch[0];
-      expect(footerContent).toMatch(/rel="noopener noreferrer"/);
-    });
-
-    test('should contain license information', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
-      const footerContent = footerMatch[0];
-      // Check for license text (MIT or other common license)
-      expect(footerContent).toMatch(/license|License|MIT|Apache|GPL/i);
-    });
-
-    test('should contain author attribution for yetone', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
-      const footerContent = footerMatch[0];
-      expect(footerContent).toMatch(/yetone/i);
-    });
-
-    test('should contain copyright notice', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
-      const footerContent = footerMatch[0];
-      // Check for copyright symbol or text
-      expect(footerContent).toMatch(/(&copy;|©|Copyright)/i);
+    test('Footer has bottom section with license, attribution, and copyright', () => {
+      expect(htmlContent).toMatch(/<div class="footer__bottom">/);
     });
   });
 
-  describe('TC3: License Information Display', () => {
-    test('should display license type text', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
-      const footerContent = footerMatch[0];
-      // License text should be present and visible (MIT is the common Rust project license)
-      expect(footerContent).toMatch(/MIT License|Licensed under MIT|MIT/i);
+  describe('TC1: Footer Contains GitHub Link', () => {
+    test('Contains GitHub repository link', () => {
+      expect(htmlContent).toMatch(/<a[^>]*href="https:\/\/github\.com\/yetone\/mirdb"[^>]*class="footer__github-link"/);
     });
 
-    test('should have license in an element that can be styled', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
+    test('GitHub link opens in new tab', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
       const footerContent = footerMatch[0];
-      // License should be in a span, p, or div element with class for styling
-      expect(footerContent).toMatch(/<(span|p|div|a)[^>]*>[^<]*MIT[^<]*<\/(span|p|div|a)>/i);
+      expect(footerContent).toMatch(/target="_blank"/);
+      expect(footerContent).toMatch(/rel="noopener noreferrer"/);
+    });
+
+    test('GitHub link has accessible label', () => {
+      expect(htmlContent).toMatch(/aria-label="View MirDB on GitHub"/);
+    });
+
+    test('GitHub section has SVG icon', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
+      const footerContent = footerMatch[0];
+      expect(footerContent).toMatch(/<svg[^>]*class="footer__github-icon"/);
+    });
+  });
+
+  describe('TC3: License Information Displayed', () => {
+    test('Footer contains license section', () => {
+      expect(htmlContent).toMatch(/<p class="footer__license">/);
+    });
+
+    test('License label is present', () => {
+      expect(htmlContent).toMatch(/<span class="footer__license-label">License:<\/span>/);
+    });
+
+    test('License links to repository for details', () => {
+      expect(htmlContent).toMatch(/<a[^>]*href="https:\/\/github\.com\/yetone\/mirdb"[^>]*class="footer__license-link"/);
     });
   });
 
   describe('TC4: Author Attribution', () => {
-    test('should credit author yetone in footer', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
+    test('Author yetone is credited in footer', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
       const footerContent = footerMatch[0];
       expect(footerContent).toMatch(/yetone/);
     });
 
-    test('should have author link to GitHub profile', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
-      const footerContent = footerMatch[0];
-      expect(footerContent).toMatch(/href="https:\/\/github\.com\/yetone"/);
+    test('Attribution section exists', () => {
+      expect(htmlContent).toMatch(/<p class="footer__attribution">/);
     });
 
-    test('should include created by or author attribution text', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
+    test('Author link points to GitHub profile', () => {
+      expect(htmlContent).toMatch(/<a[^>]*href="https:\/\/github\.com\/yetone"[^>]*class="footer__author-link"/);
+    });
 
-      const footerContent = footerMatch[0];
-      // Check for "Created by", "by", "Author:", or similar attribution text
-      expect(footerContent).toMatch(/(Created by|by|Author|Made by)/i);
+    test('Author link has data attribute for identification', () => {
+      expect(htmlContent).toMatch(/data-author="yetone"/);
     });
   });
 
-  describe('Footer Accessibility', () => {
-    test('should use semantic footer element', () => {
-      expect(htmlContent).toMatch(/<footer/);
+  describe('TC1: Copyright Notice', () => {
+    test('Copyright notice exists', () => {
+      expect(htmlContent).toMatch(/<p class="footer__copyright">/);
     });
 
-    test('should have container for proper layout', () => {
-      const footerMatch = htmlContent.match(/<!-- SECTION: Footer[\s\S]*?<!-- END SECTION: Footer -->/);
-      expect(footerMatch).not.toBeNull();
-
+    test('Copyright contains year and MirDB', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
       const footerContent = footerMatch[0];
-      expect(footerContent).toMatch(/class="container"/);
+      // Check for either © character or &copy; HTML entity
+      expect(footerContent).toMatch(/(&copy;|©).*MirDB/);
+    });
+  });
+
+  describe('Footer Navigation Links', () => {
+    test('Footer contains navigation links section', () => {
+      expect(htmlContent).toMatch(/<nav[^>]*class="footer__nav"[^>]*aria-label="Footer navigation"/);
+    });
+
+    test('Footer has link to Features section', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
+      const footerContent = footerMatch[0];
+      expect(footerContent).toMatch(/<a[^>]*href="#features"[^>]*class="footer__link"/);
+    });
+
+    test('Footer has link to Usage section', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
+      const footerContent = footerMatch[0];
+      expect(footerContent).toMatch(/<a[^>]*href="#usage"[^>]*class="footer__link"/);
+    });
+
+    test('Footer has link to Architecture section', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
+      const footerContent = footerMatch[0];
+      expect(footerContent).toMatch(/<a[^>]*href="#architecture"[^>]*class="footer__link"/);
+    });
+
+    test('Footer has link to Getting Started section', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
+      const footerContent = footerMatch[0];
+      expect(footerContent).toMatch(/<a[^>]*href="#getting-started"[^>]*class="footer__link"/);
+    });
+  });
+
+  describe('Footer Branding', () => {
+    test('Footer contains logo', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
+      const footerContent = footerMatch[0];
+      expect(footerContent).toMatch(/<img[^>]*src="assets\/images\/logo\.gif"/);
+    });
+
+    test('Footer has branding section', () => {
+      expect(htmlContent).toMatch(/<div class="footer__branding">/);
+    });
+
+    test('Footer has tagline', () => {
+      expect(htmlContent).toMatch(/<p class="footer__tagline">/);
+    });
+  });
+
+  describe('Accessibility', () => {
+    test('Footer has proper role attribute', () => {
+      expect(htmlContent).toMatch(/<footer[^>]*role="contentinfo"/);
+    });
+
+    test('Footer navigation has aria-label', () => {
+      expect(htmlContent).toMatch(/aria-label="Footer navigation"/);
+    });
+
+    test('GitHub icon is hidden from screen readers', () => {
+      const footerMatch = htmlContent.match(/<footer[\s\S]*?<\/footer>/);
+      expect(footerMatch).toBeTruthy();
+      const footerContent = footerMatch[0];
+      expect(footerContent).toMatch(/aria-hidden="true"/);
     });
   });
 });
