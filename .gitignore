@@ -2,3 +2,6 @@
 **/*.rs.bk
 .something/
 node_modules/
+mirdb-landing/node_modules/
+mirdb-landing/test-results/
+mirdb-landing/playwright-report/

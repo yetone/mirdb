@@ -16,8 +16,8 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/components/hero.css">
   <link rel="stylesheet" href="css/components/nav.css">
+  <link rel="stylesheet" href="css/components/hero.css">
   <link rel="stylesheet" href="css/components/features.css">
   <link rel="stylesheet" href="css/components/usage.css">
   <link rel="stylesheet" href="css/components/architecture.css">
@@ -30,15 +30,30 @@
   <!-- Skip to main content link for accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Navigation (Scenario 2 will implement) -->
-  <nav id="nav" class="nav" aria-label="Main navigation">
-    <div class="container nav__container">
-      <a href="#" class="nav__logo">MirDB</a>
-      <ul class="nav__links">
-        <li><a href="#features">Features</a></li>
-        <li><a href="#usage">Usage</a></li>
-        <li><a href="#architecture">Architecture</a></li>
-        <li><a href="#roadmap">Roadmap</a></li>
+  <!-- Navigation (Scenario 2) -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__container">
+      <a href="#" class="nav__logo" aria-label="MirDB Home">
+        <span class="nav__logo-text">MirDB</span>
+      </a>
+
+      <button class="nav__toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+      </button>
+
+      <ul class="nav__links" id="nav-links" role="menubar">
+        <li role="none"><a href="#features" class="nav__link" role="menuitem">Features</a></li>
+        <li role="none"><a href="#usage" class="nav__link" role="menuitem">Usage</a></li>
+        <li role="none"><a href="#architecture" class="nav__link" role="menuitem">Architecture</a></li>
+        <li role="none"><a href="#roadmap" class="nav__link" role="menuitem">Roadmap</a></li>
+        <li role="none"><a href="https://github.com/yetone/mirdb" class="nav__link nav__link--github" role="menuitem" target="_blank" rel="noopener noreferrer">
+          <svg class="nav__github-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a></li>
       </ul>
     </div>
   </nav>
@@ -180,40 +195,56 @@
 
     <!-- Usage Section (Scenario 4 will implement) -->
     <section id="usage" class="usage" aria-labelledby="usage-title">
-      <div class="container">
-        <h2 id="usage-title" class="section-title">Usage</h2>
-        <p>Code examples and usage documentation coming soon.</p>
+      <div class="section__container">
+        <h2 id="usage-title" class="section__title">Usage</h2>
+        <div class="usage__content">
+          <pre class="code-block"><code># Start MirDB server
+cargo run --release
+
+# Connect using any memcached client
+telnet localhost 11211</code></pre>
+        </div>
       </div>
     </section>
 
     <!-- Architecture Section (Scenario 5 will implement) -->
     <section id="architecture" class="architecture" aria-labelledby="architecture-title">
-      <div class="container">
-        <h2 id="architecture-title" class="section-title">Architecture</h2>
-        <p>Technical architecture diagrams coming soon.</p>
+      <div class="section__container">
+        <h2 id="architecture-title" class="section__title">Architecture</h2>
+        <div class="architecture__content">
+          <p>MirDB uses a Log-Structured Merge-tree (LSM-tree) architecture for efficient write performance and durable storage.</p>
+        </div>
       </div>
     </section>
 
     <!-- Roadmap Section (Scenario 6 will implement) -->
     <section id="roadmap" class="roadmap" aria-labelledby="roadmap-title">
-      <div class="container">
-        <h2 id="roadmap-title" class="section-title">Roadmap</h2>
-        <p>Project roadmap and feature timeline coming soon.</p>
+      <div class="section__container">
+        <h2 id="roadmap-title" class="section__title">Roadmap</h2>
+        <div class="roadmap__content">
+          <ul class="roadmap__list">
+            <li class="roadmap__item roadmap__item--completed">Basic memcached protocol support</li>
+            <li class="roadmap__item roadmap__item--completed">SSTable persistence</li>
+            <li class="roadmap__item roadmap__item--planned">Compaction strategies</li>
+            <li class="roadmap__item roadmap__item--planned">Clustering support</li>
+          </ul>
+        </div>
       </div>
     </section>
   </main>
 
   <!-- Footer (Scenario 7 will implement) -->
   <footer id="footer" class="footer">
-    <div class="container footer__container">
-      <p>&copy; 2024 MirDB. Licensed under MIT.</p>
-      <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <div class="footer__container">
+      <p class="footer__copyright">&copy; 2024 MirDB. MIT License.</p>
+      <a href="https://github.com/yetone/mirdb" class="footer__link" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </footer>
 
   <!-- JavaScript -->
   <script src="js/utils/helpers.js"></script>
+  <script src="js/modules/smooth-scroll.js"></script>
   <script src="js/modules/scroll-animations.js"></script>
-  <script type="module" src="js/main.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

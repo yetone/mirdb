@@ -19,10 +19,21 @@
   --color-text-primary: #ffffff;
   --color-text-secondary: #a0a0a0;
   --color-text-muted: #6b7280;
+  --color-border: #2a2a4e;
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --font-mono: 'Fira Code', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+  --font-family-base: var(--font-sans);
+  --font-family-mono: var(--font-mono);
+  --font-size-base: 16px;
+  --font-size-sm: 0.875rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
+  --line-height-base: 1.6;
+  --line-height-tight: 1.2;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -36,10 +47,12 @@
   /* Layout */
   --container-max-width: 1200px;
   --container-padding: var(--spacing-md);
+  --nav-height: 64px;
 
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-normal: 300ms ease;
+  --transition-base: var(--transition-normal);
   --transition-slow: 500ms ease;
 
   /* Border Radius */
@@ -52,6 +65,11 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+
+  /* Focus */
+  --focus-ring-color: var(--color-accent-teal);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
 }
 
 /* CSS Reset */
@@ -66,6 +84,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-height);
 }
 
 body {
@@ -85,7 +104,7 @@ ol {
   list-style: none;
 }
 
-/* Remove default link styles */
+/* Links */
 a {
   color: var(--color-accent-teal);
   text-decoration: none;
@@ -94,6 +113,12 @@ a {
 
 a:hover {
   color: var(--color-accent-rust);
+}
+
+a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
 }
 
 /* Images */
@@ -115,8 +140,18 @@ select {
   font: inherit;
 }
 
+/* Buttons */
 button {
+  font-family: inherit;
+  font-size: inherit;
   cursor: pointer;
+  background: none;
+  border: none;
+}
+
+button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
 }
 
 /* Headings */
@@ -153,10 +188,34 @@ pre {
   font-family: var(--font-mono);
 }
 
+pre {
+  background-color: var(--color-bg-secondary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+code {
+  font-size: var(--font-size-sm);
+}
+
 /* Focus visible for accessibility */
 :focus-visible {
   outline: 2px solid var(--color-accent-rust);
   outline-offset: 2px;
+}
+
+/* Section Container */
+.section__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+}
+
+.section__title {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  color: var(--color-text-primary);
 }
 
 /* Utility Classes */
@@ -167,8 +226,8 @@ pre {
   padding-inline: var(--container-padding);
 }
 
-.visually-hidden,
-.sr-only {
+.sr-only,
+.visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -178,6 +237,20 @@ pre {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+.visually-hidden:focus {
+  position: fixed;
+  width: auto;
+  height: auto;
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  z-index: 10000;
 }
 
 /* Section Base */

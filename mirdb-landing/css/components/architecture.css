@@ -1,9 +1,25 @@
 /**
  * Architecture Section Styles
  * Owner: Scenario 5 - Technical Architecture Section
+ *
+ * Expected styles:
+ * - .architecture: Section container
+ * - .architecture__diagram: Diagram container
+ * - .architecture__components: Component cards grid
+ * - .component-card: Individual component explanation
+ * - Data flow visualization styles
  */
 
 .architecture {
-  background-color: var(--color-bg-secondary);
-  padding: var(--spacing-3xl) 0;
+    background-color: var(--color-bg-secondary);
+}
+
+.architecture__content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.architecture__content p {
+    color: var(--color-text-secondary);
 }
