@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Test output
+coverage/
+test-results/
+playwright-report/
+
+# Lock files (optional)
+package-lock.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
