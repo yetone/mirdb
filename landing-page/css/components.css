@@ -404,3 +404,21 @@
   font-size: 0.9rem;
   margin-bottom: var(--spacing-xs);
 }
+
+/* ==========================================================================
+   Reduced Motion Support - Owner: Scenario 18 (Animation and Motion)
+   Respects user accessibility preferences for reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .feature-card {
+    transition: none;
+  }
+
+  .feature-card:hover {
+    transform: none;
+  }
+
+  .copy-btn {
+    transition: none;
+  }
+}

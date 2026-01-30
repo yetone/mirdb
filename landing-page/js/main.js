@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initNavigation();
   }
 
+  // Initialize animations - Owner: Scenario 18
+  if (typeof initAnimations === 'function') {
+    initAnimations();
+  }
+
   // Initialize configuration section collapsible - Owner: Scenario 5
   initConfigurationToggle();
 });

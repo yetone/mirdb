@@ -55,6 +55,41 @@
   text-decoration: none;
 }
 
+/* ==========================================================================
+   Animation Keyframes - Owner: Scenario 18 (Animation and Motion)
+   ========================================================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* Hero Section */
 .hero {
   min-height: 100vh;
@@ -76,6 +111,7 @@
   height: auto;
   margin-bottom: var(--spacing-lg);
   border-radius: var(--border-radius);
+  animation: scaleIn 0.6s ease-out forwards;
 }
 
 .hero-title {
@@ -86,6 +122,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: fadeInUp 0.6s ease-out 0.2s forwards;
+  opacity: 0;
 }
 
 .hero-tagline {
@@ -93,6 +131,8 @@
   color: var(--color-accent);
   margin-bottom: var(--spacing-md);
   font-weight: 500;
+  animation: fadeInUp 0.6s ease-out 0.4s forwards;
+  opacity: 0;
 }
 
 .hero-value-proposition {
@@ -103,6 +143,8 @@
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  animation: fadeInUp 0.6s ease-out 0.6s forwards;
+  opacity: 0;
 }
 
 .hero-cta {
@@ -110,6 +152,8 @@
   gap: var(--spacing-md);
   justify-content: center;
   flex-wrap: wrap;
+  animation: fadeInUp 0.6s ease-out 0.8s forwards;
+  opacity: 0;
 }
 
 /* Footer (basic styles) */
@@ -152,5 +196,21 @@
 @media (min-width: 768px) {
   .hero-logo {
     max-width: 250px;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Support - Owner: Scenario 18 (Animation and Motion)
+   Respects user accessibility preferences for reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo,
+  .hero-title,
+  .hero-tagline,
+  .hero-value-proposition,
+  .hero-cta {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
