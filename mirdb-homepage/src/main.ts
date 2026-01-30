@@ -10,9 +10,17 @@
  * - Initialize any interactive behaviors
  */
 
+import { renderFeatures } from './components/Features';
 import { renderUsageExamples } from './components/UsageExamples';
 
 function initApp(): void {
+  // Render Features section (Scenario 2)
+  const featuresContainer = document.getElementById('features');
+  if (featuresContainer) {
+    const featuresSection = renderFeatures();
+    featuresContainer.replaceWith(featuresSection);
+  }
+
   // Render Usage Examples section (Scenario 3)
   const usageContainer = document.getElementById('usage');
   if (usageContainer) {

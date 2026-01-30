@@ -17,6 +17,7 @@
 @tailwind utilities;
 
 /* Component styles */
+@import './components/features.css';
 @import './components/usage.css';
 
 /* Utility styles */
