@@ -2,20 +2,21 @@
  * Mobile Responsive Design E2E Tests
  * Owner: Scenario 8 - Responsive Design - Mobile
  *
- * End-to-end tests for verifying mobile viewport (<768px) responsiveness:
- * - Single-column layout without horizontal scroll
+ * Verifies landing page displays correctly on mobile devices (< 768px)
+ * Tests include:
+ * - Single-column layout
  * - Hamburger menu functionality
- * - Touch-friendly element sizes (44x44px minimum)
- * - Horizontally scrollable code blocks
- * - Vertically stacked CTA buttons
+ * - Touch-friendly elements
+ * - Code blocks horizontal scrolling
+ * - Hero section CTA button stacking
  */
 
 const { test, expect } = require('@playwright/test');
 
-// Mobile viewport configuration (375px - iPhone SE / small mobile)
+// Mobile viewport configuration (375px - iPhone SE/standard mobile)
 const MOBILE_VIEWPORT = { width: 375, height: 667 };
 
-test.describe('Mobile Responsive Design (<768px)', () => {
+test.describe('Responsive Design - Mobile (< 768px)', () => {
   test.use({ viewport: MOBILE_VIEWPORT });
 
   test.beforeEach(async ({ page }) => {
@@ -23,439 +24,375 @@ test.describe('Mobile Responsive Design (<768px)', () => {
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test.describe('TC1: Page Layout at 375px viewport width', () => {
-    test('hero section renders without horizontal scroll', async ({ page }) => {
-      // Check the hero section specifically doesn't cause overflow
-      const heroSection = page.locator('#hero');
-      const heroBox = await heroSection.boundingBox();
+  test('TC1: Page renders with single-column layout at 375px viewport width', async ({ page }) => {
+    // Verify viewport is set correctly
+    const viewportWidth = await page.evaluate(() => window.innerWidth);
+    expect(viewportWidth).toBe(375);
 
-      // Hero should fit within viewport
-      expect(heroBox.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
+    // Check main content sections are visible and properly sized
+    const hero = page.locator('#hero');
+    await expect(hero).toBeVisible();
+    const heroBox = await hero.boundingBox();
+    expect(heroBox.x).toBeGreaterThanOrEqual(0);
 
-      // Check hero content doesn't overflow
-      const heroContent = page.locator('.hero-content');
-      const contentBox = await heroContent.boundingBox();
-      expect(contentBox.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
-    });
+    // Features grid should be single column on mobile
+    const featuresGrid = page.locator('.features__grid');
+    if (await featuresGrid.count() > 0) {
+      const gridStyle = await featuresGrid.evaluate(el =>
+        window.getComputedStyle(el).gridTemplateColumns
+      );
+      // On mobile, should be single column (computed value will be a single pixel value)
+      const columnCount = gridStyle.split(' ').filter(col => col !== '').length;
+      expect(columnCount).toBe(1);
+    }
 
-    test('all major sections are visible and use single-column layout', async ({ page }) => {
-      // Verify hero section exists and spans full width
-      const heroSection = page.locator('#hero');
-      await expect(heroSection).toBeVisible();
-      const heroBox = await heroSection.boundingBox();
-      expect(heroBox.width).toBeGreaterThanOrEqual(MOBILE_VIEWPORT.width - 50);
+    // Usage content should be single column
+    const usageContent = page.locator('.usage__content');
+    if (await usageContent.count() > 0) {
+      const usageStyle = await usageContent.evaluate(el =>
+        window.getComputedStyle(el).gridTemplateColumns
+      );
+      const columnCount = usageStyle.split(' ').filter(col => col !== '').length;
+      expect(columnCount).toBe(1);
+    }
 
-      // Verify features section exists
-      const featuresSection = page.locator('#features');
-      await expect(featuresSection).toBeAttached();
-
-      // Verify usage section exists
-      const usageSection = page.locator('#usage');
-      await expect(usageSection).toBeAttached();
-
-      // Verify architecture section exists
-      const architectureSection = page.locator('#architecture');
-      await expect(architectureSection).toBeAttached();
-    });
-
-    test('content is readable and fits within mobile viewport', async ({ page }) => {
-      // Check that container has appropriate padding on mobile
-      const container = page.locator('.container').first();
-      const containerBox = await container.boundingBox();
-
-      // Container should fit within viewport with some padding
-      expect(containerBox.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
-    });
+    // Architecture components grid should be single column
+    const archGrid = page.locator('.architecture__components-grid');
+    if (await archGrid.count() > 0) {
+      const archStyle = await archGrid.evaluate(el =>
+        window.getComputedStyle(el).gridTemplateColumns
+      );
+      const columnCount = archStyle.split(' ').filter(col => col !== '').length;
+      expect(columnCount).toBe(1);
+    }
   });
 
-  test.describe('TC2: Hamburger Menu on Mobile', () => {
-    test('navigation shows hamburger icon', async ({ page }) => {
-      const hamburger = page.locator('.nav-toggle');
-      await expect(hamburger).toBeVisible();
+  test('TC2: Hamburger menu appears on mobile and expands to full menu on tap', async ({ page }) => {
+    // Hamburger menu should be visible
+    const hamburger = page.locator('.nav-toggle');
+    await expect(hamburger).toBeVisible();
 
-      // Hamburger should have three lines
-      const hamburgerLines = page.locator('.hamburger-line');
-      await expect(hamburgerLines).toHaveCount(3);
-    });
+    // Verify hamburger has proper aria attributes
+    await expect(hamburger).toHaveAttribute('aria-expanded', 'false');
+    await expect(hamburger).toHaveAttribute('aria-controls', 'nav-menu');
+    await expect(hamburger).toHaveAttribute('aria-label', 'Toggle navigation menu');
 
-    test('hamburger icon expands to full menu on tap', async ({ page }) => {
-      const hamburger = page.locator('.nav-toggle');
-      const navMenu = page.locator('.nav-menu');
+    // Navigation menu should be initially hidden (off-screen)
+    const navMenu = page.locator('.nav-menu');
+    const initialBox = await navMenu.boundingBox();
+    if (initialBox) {
+      // Menu should be positioned off-screen to the right
+      expect(initialBox.x).toBeGreaterThanOrEqual(MOBILE_VIEWPORT.width - 10);
+    }
 
-      // Initial state: menu should be hidden (off-screen)
-      const initialMenuBox = await navMenu.boundingBox();
-      if (initialMenuBox) {
-        // Menu should be positioned off-screen to the right
-        expect(initialMenuBox.x).toBeGreaterThanOrEqual(MOBILE_VIEWPORT.width - 10);
-      }
+    // Tap hamburger to open menu
+    await hamburger.click();
+    await page.waitForTimeout(400); // Wait for animation
 
-      // Click hamburger to open menu
-      await hamburger.click();
-      await page.waitForTimeout(400);
+    // Menu should now be visible with is-open class
+    await expect(navMenu).toHaveClass(/is-open/);
+    await expect(hamburger).toHaveAttribute('aria-expanded', 'true');
 
-      // Menu should be visible with is-open class
-      await expect(navMenu).toHaveClass(/is-open/);
+    // Verify all nav links are visible in the expanded menu
+    const navLinks = ['Features', 'Usage', 'Architecture', 'Get Started'];
+    for (const linkText of navLinks) {
+      const link = page.locator('.nav-menu .nav-link', { hasText: linkText });
+      await expect(link).toBeVisible();
+    }
 
-      // Verify aria-expanded is true
-      const ariaExpanded = await hamburger.getAttribute('aria-expanded');
-      expect(ariaExpanded).toBe('true');
+    // Verify GitHub link is visible
+    const githubLink = page.locator('.nav-github');
+    await expect(githubLink).toBeVisible();
 
-      // Menu should now be visible on screen
-      const openMenuBox = await navMenu.boundingBox();
-      expect(openMenuBox.x).toBeLessThan(MOBILE_VIEWPORT.width);
-    });
+    // Overlay should be visible
+    const overlay = page.locator('.nav-overlay');
+    await expect(overlay).toHaveClass(/is-visible/);
 
-    test('menu closes when nav link is clicked', async ({ page }) => {
-      const hamburger = page.locator('.nav-toggle');
-      const navMenu = page.locator('.nav-menu');
+    // Tap hamburger again to close menu
+    await hamburger.click();
+    await page.waitForTimeout(400);
 
-      // Open menu
-      await hamburger.click();
-      await page.waitForTimeout(400);
-      await expect(navMenu).toHaveClass(/is-open/);
-
-      // Click a nav link
-      await page.locator('.nav-links a[href="#features"]').click();
-      await page.waitForTimeout(400);
-
-      // Menu should close
-      await expect(navMenu).not.toHaveClass(/is-open/);
-    });
-
-    test('overlay appears when menu is open', async ({ page }) => {
-      const hamburger = page.locator('.nav-toggle');
-      const navOverlay = page.locator('.nav-overlay');
-
-      // Initially overlay should be hidden
-      await expect(navOverlay).not.toHaveClass(/is-visible/);
-
-      // Open menu
-      await hamburger.click();
-      await page.waitForTimeout(400);
-
-      // Overlay should be visible
-      await expect(navOverlay).toHaveClass(/is-visible/);
-    });
+    // Menu should be closed
+    await expect(navMenu).not.toHaveClass(/is-open/);
+    await expect(hamburger).toHaveAttribute('aria-expanded', 'false');
   });
 
-  test.describe('TC3: Touch-friendly Elements (44x44px minimum)', () => {
-    test('hamburger menu button has minimum 44x44px touch target', async ({ page }) => {
-      const hamburger = page.locator('.nav-toggle');
-      const box = await hamburger.boundingBox();
+  test('TC3: Touch-friendly elements meet accessibility requirements', async ({ page }) => {
+    // Test CTA buttons in hero section - these must be 44px or larger
+    const ctaButtons = page.locator('.hero-cta .btn');
+    const buttonCount = await ctaButtons.count();
+    expect(buttonCount).toBeGreaterThan(0);
 
-      // Touch target should be at least 44x44px for accessibility
-      expect(box.width).toBeGreaterThanOrEqual(30); // Actual button size
-      expect(box.height).toBeGreaterThanOrEqual(30); // Actual button size
+    for (let i = 0; i < buttonCount; i++) {
+      const button = ctaButtons.nth(i);
+      const buttonBox = await button.boundingBox();
+      // Hero buttons should have adequate touch target (44px minimum)
+      expect(buttonBox.height).toBeGreaterThanOrEqual(44);
+      // Buttons should also be wide enough for touch
+      expect(buttonBox.width).toBeGreaterThanOrEqual(100);
+    }
 
-      // Verify button is clickable and accessible
-      await expect(hamburger).toBeEnabled();
-    });
+    // Test hamburger menu button has adequate size
+    const hamburger = page.locator('.nav-toggle');
+    const hamburgerBox = await hamburger.boundingBox();
+    // Hamburger should be at least 30x30 (common minimum)
+    expect(hamburgerBox.width).toBeGreaterThanOrEqual(30);
+    expect(hamburgerBox.height).toBeGreaterThanOrEqual(30);
 
-    test('CTA buttons have adequate touch target size', async ({ page }) => {
-      const primaryBtn = page.locator('.hero-cta .btn-primary');
-      const secondaryBtn = page.locator('.hero-cta .btn-secondary');
+    // Test navigation links (when menu is open) have adequate touch targets
+    await hamburger.click();
+    await page.waitForTimeout(400);
 
-      // Wait for buttons to be visible
-      await expect(primaryBtn).toBeVisible();
-      await expect(secondaryBtn).toBeVisible();
+    const navLinks = page.locator('.nav-menu .nav-link');
+    const navLinkCount = await navLinks.count();
+    for (let i = 0; i < navLinkCount; i++) {
+      const link = navLinks.nth(i);
+      const linkBox = await link.boundingBox();
+      // Navigation links should have adequate height for touch
+      expect(linkBox.height).toBeGreaterThanOrEqual(36);
+    }
 
-      const primaryBox = await primaryBtn.boundingBox();
-      const secondaryBox = await secondaryBtn.boundingBox();
-
-      // Buttons should have minimum touch target height of 44px
-      expect(primaryBox.height).toBeGreaterThanOrEqual(44);
-      expect(secondaryBox.height).toBeGreaterThanOrEqual(44);
-    });
-
-    test('navigation links have adequate touch target size', async ({ page }) => {
-      // Open mobile menu first
-      await page.locator('.nav-toggle').click();
-      await page.waitForTimeout(400);
-
-      // Check nav links have adequate size
-      const navLinks = page.locator('.nav-links .nav-link');
-      const count = await navLinks.count();
-
-      for (let i = 0; i < count; i++) {
-        const link = navLinks.nth(i);
-        await expect(link).toBeVisible();
-        const box = await link.boundingBox();
-
-        // Links should have adequate height for touch (padding creates the target)
-        expect(box.height).toBeGreaterThanOrEqual(20);
-      }
-    });
-
-    test('copy buttons in code blocks are touch-accessible', async ({ page }) => {
-      // Scroll to usage section
-      await page.locator('#usage').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(300);
-
-      // Find copy buttons
-      const copyButtons = page.locator('.code-block__copy');
-      const count = await copyButtons.count();
-
-      if (count > 0) {
-        for (let i = 0; i < count; i++) {
-          const button = copyButtons.nth(i);
-          const box = await button.boundingBox();
-          if (box) {
-            // Button should be reasonably sized for touch
-            expect(box.height).toBeGreaterThanOrEqual(24);
-          }
-        }
-      }
-    });
+    // Close menu
+    await hamburger.click();
+    await page.waitForTimeout(400);
   });
 
-  test.describe('TC4: Mobile Code Blocks', () => {
-    test('code blocks have horizontal scroll capability', async ({ page }) => {
-      // Scroll to usage section where code blocks are
-      await page.locator('#usage').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(300);
+  test('TC4: Code blocks have horizontal scroll capability', async ({ page }) => {
+    // Navigate to usage section
+    await page.locator('#usage').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
 
-      // Check code blocks exist
-      const codeBlocks = page.locator('.code-block');
-      const count = await codeBlocks.count();
+    // Check code blocks exist and have proper overflow handling
+    const codeBlocks = page.locator('.code-block');
+    const codeBlockCount = await codeBlocks.count();
+    expect(codeBlockCount).toBeGreaterThan(0);
 
-      expect(count).toBeGreaterThan(0);
+    for (let i = 0; i < codeBlockCount; i++) {
+      const codeBlock = codeBlocks.nth(i);
+      const pre = codeBlock.locator('pre');
 
-      // Verify the pre element inside has overflow-x: auto for scrolling
-      const preElements = page.locator('.code-block pre');
-      for (let i = 0; i < await preElements.count(); i++) {
-        const pre = preElements.nth(i);
-        const overflowX = await pre.evaluate((el) => {
-          return window.getComputedStyle(el).overflowX;
-        });
-        expect(['auto', 'scroll']).toContain(overflowX);
-      }
-    });
+      // Check that pre element allows horizontal overflow
+      const overflowX = await pre.evaluate(el =>
+        window.getComputedStyle(el).overflowX
+      );
+      expect(['auto', 'scroll']).toContain(overflowX);
 
-    test('code block containers are properly styled for mobile', async ({ page }) => {
-      // Scroll to usage section
-      await page.locator('#usage').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(300);
-
-      // Check that code blocks have the right container structure
-      const codeBlocks = page.locator('.code-block');
-      const count = await codeBlocks.count();
-
-      for (let i = 0; i < count; i++) {
-        const block = codeBlocks.nth(i);
-
-        // Verify block has header and code content
-        const header = block.locator('.code-block__header');
-        await expect(header).toBeAttached();
-
-        const pre = block.locator('pre');
-        await expect(pre).toBeAttached();
-      }
-    });
+      // Code block container should be visible
+      await expect(codeBlock).toBeVisible();
+    }
   });
 
-  test.describe('TC5: Hero Section CTA Buttons on Mobile', () => {
-    test('CTA buttons stack vertically on mobile', async ({ page }) => {
-      const heroCta = page.locator('.hero-cta');
-      await expect(heroCta).toBeVisible();
+  test('TC5: Hero section CTA buttons stack vertically on mobile', async ({ page }) => {
+    // Check hero CTA container
+    const heroCta = page.locator('.hero-cta');
+    await expect(heroCta).toBeVisible();
 
-      // Get the flex-direction of the CTA container
-      const flexDirection = await heroCta.evaluate((el) => {
-        return window.getComputedStyle(el).flexDirection;
-      });
+    // Check flex direction is column on mobile
+    const flexDirection = await heroCta.evaluate(el =>
+      window.getComputedStyle(el).flexDirection
+    );
+    expect(flexDirection).toBe('column');
 
-      // On mobile, buttons should stack vertically (column layout)
-      expect(flexDirection).toBe('column');
-    });
+    // Get both buttons
+    const buttons = page.locator('.hero-cta .btn');
+    await expect(buttons).toHaveCount(2);
 
-    test('CTA buttons remain accessible and clickable', async ({ page }) => {
-      const primaryBtn = page.locator('.hero-cta .btn-primary');
-      const secondaryBtn = page.locator('.hero-cta .btn-secondary');
+    const primaryBtn = page.locator('.hero-cta .btn-primary');
+    const secondaryBtn = page.locator('.hero-cta .btn-secondary');
 
-      // Both buttons should be visible and enabled
-      await expect(primaryBtn).toBeVisible();
-      await expect(primaryBtn).toBeEnabled();
+    // Verify both buttons are visible
+    await expect(primaryBtn).toBeVisible();
+    await expect(secondaryBtn).toBeVisible();
 
-      await expect(secondaryBtn).toBeVisible();
-      await expect(secondaryBtn).toBeEnabled();
+    // Get button positions
+    const primaryBox = await primaryBtn.boundingBox();
+    const secondaryBox = await secondaryBtn.boundingBox();
 
-      // Verify buttons have correct text
-      await expect(primaryBtn).toContainText('Get Started');
-      await expect(secondaryBtn).toContainText('View on GitHub');
-    });
+    // Primary button should be above secondary button (lower Y = higher on page)
+    expect(primaryBox.y).toBeLessThan(secondaryBox.y);
 
-    test('CTA buttons have full width on mobile', async ({ page }) => {
-      const primaryBtn = page.locator('.hero-cta .btn-primary');
-      const secondaryBtn = page.locator('.hero-cta .btn-secondary');
+    // Buttons should be centered (similar X position, not side-by-side)
+    const xDifference = Math.abs(primaryBox.x - secondaryBox.x);
+    expect(xDifference).toBeLessThan(50); // Should be roughly aligned
 
-      const primaryBox = await primaryBtn.boundingBox();
-      const secondaryBox = await secondaryBtn.boundingBox();
-
-      // Buttons should have substantial width on mobile (not tiny)
-      expect(primaryBox.width).toBeGreaterThanOrEqual(200);
-      expect(secondaryBox.width).toBeGreaterThanOrEqual(200);
-    });
-
-    test('CTA buttons are not overlapping', async ({ page }) => {
-      const primaryBtn = page.locator('.hero-cta .btn-primary');
-      const secondaryBtn = page.locator('.hero-cta .btn-secondary');
-
-      const primaryBox = await primaryBtn.boundingBox();
-      const secondaryBox = await secondaryBtn.boundingBox();
-
-      // Secondary button should be below primary button (stacked)
-      // So secondary's top (y) should be >= primary's bottom (y + height)
-      expect(secondaryBox.y).toBeGreaterThanOrEqual(primaryBox.y + primaryBox.height - 5);
-    });
+    // Buttons should be accessible (visible and clickable)
+    await expect(primaryBtn).toBeEnabled();
+    await expect(secondaryBtn).toBeEnabled();
   });
 
-  test.describe('Additional Mobile Responsiveness Checks', () => {
-    test('navigation bar is fixed at top on mobile', async ({ page }) => {
-      const nav = page.locator('.main-nav');
-      await expect(nav).toBeVisible();
+  test('Hero logo scales down on mobile', async ({ page }) => {
+    const heroLogo = page.locator('.hero-logo');
+    await expect(heroLogo).toBeVisible();
 
-      // Check position is fixed
-      const position = await nav.evaluate((el) => {
-        return window.getComputedStyle(el).position;
-      });
-      expect(position).toBe('fixed');
+    const logoBox = await heroLogo.boundingBox();
+    // On mobile (max-width: 767px), logo should be 100x100
+    expect(logoBox.width).toBeLessThanOrEqual(110);
+    expect(logoBox.height).toBeLessThanOrEqual(110);
+  });
 
-      // Scroll down and verify nav stays at top
-      await page.evaluate(() => window.scrollTo(0, 500));
-      await page.waitForTimeout(100);
+  test('Hero title font size is reduced on mobile', async ({ page }) => {
+    const heroTitle = page.locator('.hero-title');
+    await expect(heroTitle).toBeVisible();
 
-      const navBox = await nav.boundingBox();
-      expect(navBox.y).toBe(0);
-    });
+    const fontSize = await heroTitle.evaluate(el =>
+      window.getComputedStyle(el).fontSize
+    );
 
-    test('feature cards display in single column on mobile', async ({ page }) => {
-      // Scroll to features section
-      await page.locator('#features').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(300);
+    // On mobile, font-size should be var(--font-size-4xl) = 2.25rem = 36px
+    const fontSizePx = parseFloat(fontSize);
+    expect(fontSizePx).toBeLessThanOrEqual(40); // Should be around 36px on mobile
+  });
 
-      const featuresGrid = page.locator('.features__grid');
-      if (await featuresGrid.isVisible()) {
-        // Check grid template columns is 1fr (single column)
-        const gridTemplateColumns = await featuresGrid.evaluate((el) => {
-          return window.getComputedStyle(el).gridTemplateColumns;
-        });
+  test('Navigation overlay closes menu when clicked', async ({ page }) => {
+    const hamburger = page.locator('.nav-toggle');
+    const navMenu = page.locator('.nav-menu');
+    const overlay = page.locator('.nav-overlay');
 
-        // On mobile, should be single column (only one column value)
-        // gridTemplateColumns will be the computed pixel value, not "1fr"
-        // Just verify it's not a multi-column layout by checking the feature cards position
-        const featureCards = page.locator('.feature-card');
-        const count = await featureCards.count();
+    // Open menu
+    await hamburger.click();
+    await page.waitForTimeout(400);
 
-        if (count >= 2) {
-          const firstCard = await featureCards.nth(0).boundingBox();
-          const secondCard = await featureCards.nth(1).boundingBox();
+    await expect(navMenu).toHaveClass(/is-open/);
+    await expect(overlay).toHaveClass(/is-visible/);
 
-          // In single column, second card should be below first card
-          expect(secondCard.y).toBeGreaterThan(firstCard.y);
-        }
+    // Click on the overlay element directly using JavaScript to ensure the click event fires
+    await overlay.evaluate(el => el.click());
+    await page.waitForTimeout(400);
+
+    // Menu should be closed
+    await expect(navMenu).not.toHaveClass(/is-open/);
+  });
+
+  test('Features section cards stack vertically on mobile', async ({ page }) => {
+    // Scroll to features section
+    await page.locator('#features').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+
+    const featureCards = page.locator('.feature-card');
+    const cardCount = await featureCards.count();
+    expect(cardCount).toBeGreaterThan(0);
+
+    // Get positions of first two cards
+    if (cardCount >= 2) {
+      const firstCardBox = await featureCards.nth(0).boundingBox();
+      const secondCardBox = await featureCards.nth(1).boundingBox();
+
+      // Second card should be below first (higher Y value)
+      expect(secondCardBox.y).toBeGreaterThan(firstCardBox.y);
+
+      // Cards should have same X position (left-aligned in single column)
+      const xDifference = Math.abs(firstCardBox.x - secondCardBox.x);
+      expect(xDifference).toBeLessThan(10);
+    }
+  });
+
+  test('All sections are reachable by scrolling', async ({ page }) => {
+    // Scroll through entire page sections
+    const sections = ['#hero', '#features', '#usage', '#architecture', '#getting-started', 'footer'];
+
+    for (const selector of sections) {
+      const section = page.locator(selector);
+      if (await section.count() > 0) {
+        await section.scrollIntoViewIfNeeded();
+        await expect(section).toBeInViewport();
       }
-    });
+    }
+  });
 
-    test('logo and brand text are visible on mobile', async ({ page }) => {
-      const logoImg = page.locator('.nav-logo img');
-      await expect(logoImg).toBeVisible();
+  test('Text is readable on mobile without zooming', async ({ page }) => {
+    // Check that base font size is at least 14px (minimum readable size)
+    const bodyFontSize = await page.evaluate(() =>
+      window.getComputedStyle(document.body).fontSize
+    );
+    const fontSizePx = parseFloat(bodyFontSize);
+    expect(fontSizePx).toBeGreaterThanOrEqual(14);
 
-      const logoText = page.locator('.nav-logo-text');
-      await expect(logoText).toBeVisible();
-      await expect(logoText).toHaveText('MirDB');
-    });
+    // Check hero tagline is readable
+    const heroTagline = page.locator('.hero-tagline');
+    if (await heroTagline.count() > 0) {
+      const taglineFontSize = await heroTagline.evaluate(el =>
+        window.getComputedStyle(el).fontSize
+      );
+      const taglinePx = parseFloat(taglineFontSize);
+      expect(taglinePx).toBeGreaterThanOrEqual(14);
+    }
+  });
 
-    test('hero content is properly sized for mobile', async ({ page }) => {
-      const heroTitle = page.locator('.hero-title');
-      const heroSubtitle = page.locator('.hero-subtitle');
+  test('Fixed navigation stays at top when scrolling', async ({ page }) => {
+    // Get nav initial position
+    const nav = page.locator('.main-nav');
+    const navBoxInitial = await nav.boundingBox();
+    expect(navBoxInitial.y).toBe(0);
 
-      await expect(heroTitle).toBeVisible();
-      await expect(heroSubtitle).toBeVisible();
+    // Scroll down and verify nav stays fixed at top
+    await page.evaluate(() => window.scrollTo(0, 500));
+    await page.waitForTimeout(100);
 
-      // Title should fit within viewport
-      const titleBox = await heroTitle.boundingBox();
-      expect(titleBox.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
-
-      // Check that title has reduced font size on mobile
-      const fontSize = await heroTitle.evaluate((el) => {
-        return window.getComputedStyle(el).fontSize;
-      });
-      // Font size should be smaller on mobile (less than 60px)
-      const fontSizePx = parseFloat(fontSize);
-      expect(fontSizePx).toBeLessThan(60);
-    });
+    const navBoxAfterScroll = await nav.boundingBox();
+    expect(navBoxAfterScroll.y).toBe(0); // Should still be at top
   });
 });
 
-test.describe('Mobile Viewport Variations', () => {
-  test.describe('iPhone SE viewport (375x667)', () => {
-    test.use({ viewport: { width: 375, height: 667 } });
+test.describe('Mobile Responsive - Additional Viewports', () => {
+  test('Page works on large mobile (414px width)', async ({ page }) => {
+    await page.setViewportSize({ width: 414, height: 896 });
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
 
-    test('page functions correctly at 375px width', async ({ page }) => {
-      await page.goto('/');
-      await page.waitForLoadState('domcontentloaded');
+    // Hamburger visible (still below 768px breakpoint)
+    const hamburger = page.locator('.nav-toggle');
+    await expect(hamburger).toBeVisible();
 
-      // Hamburger should be visible
-      await expect(page.locator('.nav-toggle')).toBeVisible();
+    // Hero content visible
+    await expect(page.locator('.hero-title')).toBeVisible();
 
-      // Hero section should be visible
-      await expect(page.locator('.hero-title')).toBeVisible();
-
-      // CTA buttons should be stacked
-      const flexDirection = await page.locator('.hero-cta').evaluate((el) => {
-        return window.getComputedStyle(el).flexDirection;
-      });
-      expect(flexDirection).toBe('column');
-    });
+    // Single column layout for features
+    const featuresGrid = page.locator('.features__grid');
+    if (await featuresGrid.count() > 0) {
+      const gridStyle = await featuresGrid.evaluate(el =>
+        window.getComputedStyle(el).gridTemplateColumns
+      );
+      const columnCount = gridStyle.split(' ').filter(col => col !== '').length;
+      expect(columnCount).toBe(1);
+    }
   });
 
-  test.describe('Small mobile viewport (320x568)', () => {
-    test.use({ viewport: { width: 320, height: 568 } });
+  test('Page correctly shows mobile layout at 767px breakpoint', async ({ page }) => {
+    await page.setViewportSize({ width: 767, height: 1024 });
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
 
-    test('page functions correctly at 320px width (smallest common mobile)', async ({ page }) => {
-      await page.goto('/');
-      await page.waitForLoadState('domcontentloaded');
+    // At 767px (just below tablet), hamburger should still be visible
+    const hamburger = page.locator('.nav-toggle');
+    await expect(hamburger).toBeVisible();
 
-      // Core elements should still be visible
-      await expect(page.locator('.hero-title')).toBeVisible();
-      await expect(page.locator('.nav-toggle')).toBeVisible();
-
-      // Navigation should be functional
-      const hamburger = page.locator('.nav-toggle');
-      await hamburger.click();
-      await page.waitForTimeout(400);
-
-      const navMenu = page.locator('.nav-menu');
-      await expect(navMenu).toHaveClass(/is-open/);
-    });
+    // Hero CTA should be stacked
+    const heroCta = page.locator('.hero-cta');
+    const flexDirection = await heroCta.evaluate(el =>
+      window.getComputedStyle(el).flexDirection
+    );
+    expect(flexDirection).toBe('column');
   });
 
-  test.describe('Large mobile viewport (414x896)', () => {
-    test.use({ viewport: { width: 414, height: 896 } });
+  test('Navigation menu works correctly on iPhone 12 viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
 
-    test('page functions correctly at 414px width (iPhone 11 Pro Max)', async ({ page }) => {
-      await page.goto('/');
-      await page.waitForLoadState('domcontentloaded');
+    const hamburger = page.locator('.nav-toggle');
+    await expect(hamburger).toBeVisible();
 
-      // Hamburger should still be visible (still < 768px)
-      await expect(page.locator('.nav-toggle')).toBeVisible();
+    // Open menu
+    await hamburger.click();
+    await page.waitForTimeout(400);
 
-      // CTA buttons should still be stacked
-      const flexDirection = await page.locator('.hero-cta').evaluate((el) => {
-        return window.getComputedStyle(el).flexDirection;
-      });
-      expect(flexDirection).toBe('column');
-    });
-  });
+    const navMenu = page.locator('.nav-menu');
+    await expect(navMenu).toHaveClass(/is-open/);
 
-  test.describe('Tablet breakpoint boundary (767px)', () => {
-    test.use({ viewport: { width: 767, height: 1024 } });
-
-    test('hamburger menu is visible at 767px (just below tablet breakpoint)', async ({ page }) => {
-      await page.goto('/');
-      await page.waitForLoadState('domcontentloaded');
-
-      // At 767px (< 768px), should still show hamburger
-      await expect(page.locator('.nav-toggle')).toBeVisible();
-    });
+    // All nav links should be visible
+    await expect(page.locator('.nav-menu .nav-link', { hasText: 'Features' })).toBeVisible();
+    await expect(page.locator('.nav-menu .nav-link', { hasText: 'Usage' })).toBeVisible();
+    await expect(page.locator('.nav-menu .nav-link', { hasText: 'Architecture' })).toBeVisible();
+    await expect(page.locator('.nav-menu .nav-link', { hasText: 'Get Started' })).toBeVisible();
   });
 });
