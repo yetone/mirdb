@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB is a persistent key-value store with memcached protocol compatibility, featuring LSM-tree architecture and built in Rust.">
+  <meta name="keywords" content="MirDB, key-value store, memcached, Rust, database, persistent storage, LSM tree">
+  <meta name="author" content="MirDB Contributors">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mirdb.io/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mirdb.io/">
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A high-performance persistent key-value store with Memcached protocol compatibility, built in Rust.">
+  <meta property="og:image" content="https://mirdb.io/assets/images/og-image.png">
+  <meta property="og:site_name" content="MirDB">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://mirdb.io/">
+  <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
+  <meta name="twitter:description" content="A high-performance persistent key-value store with Memcached protocol compatibility, built in Rust.">
+  <meta name="twitter:image" content="https://mirdb.io/assets/images/og-image.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "MirDB",
+    "description": "A high-performance persistent key-value store with Memcached protocol compatibility, built in Rust using LSM-tree architecture.",
+    "url": "https://mirdb.io/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux, macOS, Windows",
+    "programmingLanguage": "Rust",
+    "license": "https://opensource.org/licenses/MIT",
+    "author": {
+      "@type": "Organization",
+      "name": "MirDB Contributors",
+      "url": "https://github.com/yetone/mirdb"
+    },
+    "codeRepository": "https://github.com/yetone/mirdb",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <title>MirDB - Persistent Key-Value Store</title>
+
+  <!-- Performance: DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://github.com">
+
+  <!-- Performance: Preload critical resources -->
+  <link rel="preload" href="css/styles.css" as="style">
+  <link rel="preload" href="css/components/hero.css" as="style">
+  <link rel="preload" href="assets/images/logo.gif" as="image">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components/nav.css">
+  <link rel="stylesheet" href="css/components/hero.css">
+  <link rel="stylesheet" href="css/components/features.css">
+  <link rel="stylesheet" href="css/components/usage.css">
+  <link rel="stylesheet" href="css/components/architecture.css">
+  <link rel="stylesheet" href="css/components/roadmap.css">
+  <link rel="stylesheet" href="css/components/footer.css">
+  <link rel="stylesheet" href="css/utilities/animations.css">
+  <link rel="stylesheet" href="css/utilities/responsive.css">
+</head>
+<body>
+  <!-- Skip to main content link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation (Scenario 2) -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__container">
+      <a href="#" class="nav__logo" aria-label="MirDB Home">
+        <span class="nav__logo-text">MirDB</span>
+      </a>
+
+      <button class="nav__toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+      </button>
+
+      <ul class="nav__links" id="nav-links" role="menubar">
+        <li role="none"><a href="#features" class="nav__link" role="menuitem">Features</a></li>
+        <li role="none"><a href="#usage" class="nav__link" role="menuitem">Usage</a></li>
+        <li role="none"><a href="#architecture" class="nav__link" role="menuitem">Architecture</a></li>
+        <li role="none"><a href="#roadmap" class="nav__link" role="menuitem">Roadmap</a></li>
+        <li role="none"><a href="https://github.com/yetone/mirdb" class="nav__link nav__link--github" role="menuitem" target="_blank" rel="noopener noreferrer">
+          <svg class="nav__github-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero__content">
+        <img
+          src="assets/images/logo.gif"
+          alt="MirDB animated logo - A persistent key-value store"
+          class="hero__logo"
+          loading="eager"
+          decoding="async"
+        >
+        <h1 id="hero-title" class="hero__title">MirDB</h1>
+        <p class="hero__tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+        <div class="hero__cta-group">
+          <a
+            href="https://github.com/yetone/mirdb"
+            class="hero__cta hero__cta-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View MirDB on GitHub"
+          >
+            <svg class="hero__cta-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View on GitHub
+          </a>
+          <a
+            href="#usage"
+            class="hero__cta hero__cta-secondary"
+            aria-label="Get started with MirDB"
+          >
+            Get Started
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 3) -->
+    <section id="features" class="features" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title" class="section-title">Features</h2>
+        <div class="features__grid">
+          <!-- Memcached Protocol Card -->
+          <article class="feature-card animate-on-scroll">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" class="feature-icon">
+                <rect x="8" y="16" width="48" height="32" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="20" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="2"/>
+                <line x1="20" y1="36" x2="36" y2="36" stroke="currentColor" stroke-width="2"/>
+                <circle cx="52" cy="24" r="3" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Memcached Protocol Compatibility</h3>
+            <p class="feature-card__description">
+              Full compatibility with the memcached text protocol. Connect using your existing memcached clients
+              without any code changes. Supports GET, SET, DELETE, and other standard operations seamlessly.
+            </p>
+          </article>
+
+          <!-- Persistence Architecture Card -->
+          <article class="feature-card animate-on-scroll">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" class="feature-icon">
+                <rect x="12" y="8" width="40" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                <rect x="12" y="26" width="40" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                <rect x="12" y="44" width="40" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="20" x2="32" y2="26" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="38" x2="32" y2="44" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Persistence Architecture</h3>
+            <p class="feature-card__description">
+              Built on SSTable-based storage for true data durability. Unlike traditional in-memory caches,
+              MirDB persists your data to disk, ensuring it survives restarts and crashes.
+            </p>
+          </article>
+
+          <!-- LSM Tree Card -->
+          <article class="feature-card animate-on-scroll">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" class="feature-icon lsm-diagram">
+                <!-- Memtable (top) -->
+                <rect x="20" y="4" width="24" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                <text x="32" y="12" text-anchor="middle" font-size="6" fill="currentColor">MEM</text>
+                <!-- Arrow down -->
+                <line x1="32" y1="14" x2="32" y2="20" stroke="currentColor" stroke-width="1.5"/>
+                <polygon points="32,22 29,18 35,18" fill="currentColor"/>
+                <!-- Level 0 SSTables -->
+                <rect x="8" y="24" width="16" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="40" y="24" width="16" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <!-- Arrow down -->
+                <line x1="32" y1="32" x2="32" y2="38" stroke="currentColor" stroke-width="1.5"/>
+                <polygon points="32,40 29,36 35,36" fill="currentColor"/>
+                <!-- Level 1 SSTables -->
+                <rect x="4" y="42" width="12" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="20" y="42" width="12" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="36" y="42" width="12" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="52" y="42" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <!-- Labels -->
+                <text x="4" y="60" font-size="5" fill="currentColor">L0</text>
+                <text x="4" y="56" font-size="5" fill="currentColor">SST</text>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">LSM Tree Implementation</h3>
+            <p class="feature-card__description">
+              Powered by Log-Structured Merge-tree architecture. Data flows from the in-memory memtable
+              through multiple SSTable levels, optimizing for write-heavy workloads with efficient compaction.
+            </p>
+          </article>
+
+          <!-- Performance Card -->
+          <article class="feature-card animate-on-scroll">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" class="feature-icon">
+                <circle cx="32" cy="36" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="36" x2="32" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="32" y1="36" x2="44" y2="44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="32" cy="36" r="3" fill="currentColor"/>
+                <line x1="32" y1="14" x2="32" y2="16" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="56" x2="32" y2="58" stroke="currentColor" stroke-width="2"/>
+                <line x1="10" y1="36" x2="12" y2="36" stroke="currentColor" stroke-width="2"/>
+                <line x1="52" y1="36" x2="54" y2="36" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Performance Characteristics</h3>
+            <p class="feature-card__description">
+              High-throughput performance with Rust's zero-cost abstractions. Optimized read and write paths
+              deliver consistent low-latency responses under heavy load conditions.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Usage Section (Scenario 4 will implement) -->
+    <section id="usage" class="usage" aria-labelledby="usage-title">
+      <div class="section__container">
+        <h2 id="usage-title" class="section__title">Usage</h2>
+        <div class="usage__content">
+          <pre class="code-block"><code># Start MirDB server
+cargo run --release
+
+# Connect using any memcached client
+telnet localhost 11211</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section (Scenario 5) -->
+    <section id="architecture" class="section architecture" aria-labelledby="architecture-heading">
+      <div class="container">
+        <h2 id="architecture-heading" class="section-title">Technical Architecture</h2>
+        <p class="section-subtitle">
+          MirDB uses an LSM-tree (Log-Structured Merge-tree) architecture optimized for write-heavy workloads with efficient read performance.
+        </p>
+
+        <!-- Architecture Diagram -->
+        <div class="architecture__diagram-container">
+          <figure class="architecture__diagram">
+            <img
+              src="assets/images/architecture-diagram.svg"
+              alt="MirDB architecture diagram showing the data flow from client requests through the Network Layer (Tokio), to the Memtable (Skip List), Immutable Memtables queue, and multi-level SSTables (L0 through L6), with the Compaction Engine managing data organization across levels"
+              class="architecture__diagram-img"
+              loading="lazy"
+            >
+            <figcaption class="visually-hidden">
+              MirDB LSM-tree architecture with Network Layer, Memtable, Immutable Memtables, multi-level SSTables, and Compaction Engine
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Component Breakdown -->
+        <div class="architecture__components">
+          <h3 class="architecture__components-title">Core Components</h3>
+
+          <!-- Network Layer -->
+          <article class="component-card" aria-labelledby="component-network">
+            <div class="component-card__header">
+              <div class="component-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </div>
+              <h4 id="component-network" class="component-card__title">Network Layer</h4>
+            </div>
+            <p class="component-card__description">
+              Built on <strong>Tokio</strong> for high-performance async I/O. Implements the Memcached text protocol, enabling seamless integration with existing memcached clients across any programming language.
+            </p>
+          </article>
+
+          <!-- Memtable -->
+          <article class="component-card" aria-labelledby="component-memtable">
+            <div class="component-card__header">
+              <div class="component-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <line x1="3" y1="9" x2="21" y2="9"/>
+                  <line x1="9" y1="21" x2="9" y2="9"/>
+                </svg>
+              </div>
+              <h4 id="component-memtable" class="component-card__title">Memtable</h4>
+            </div>
+            <p class="component-card__description">
+              Active in-memory <strong>skip list</strong> data structure for fast writes. Default size of <strong>4MB</strong> provides efficient write buffering. All incoming writes are first stored here before being flushed to disk for durability.
+            </p>
+          </article>
+
+          <!-- Immutable Memtable -->
+          <article class="component-card" aria-labelledby="component-imm-memtable">
+            <div class="component-card__header">
+              <div class="component-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <line x1="3" y1="9" x2="21" y2="9"/>
+                  <line x1="9" y1="21" x2="9" y2="9"/>
+                  <path d="M16 12l-3 3-3-3" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h4 id="component-imm-memtable" class="component-card__title">Immutable Memtable</h4>
+            </div>
+            <p class="component-card__description">
+              When the active memtable reaches capacity, it becomes immutable and is queued for flushing. A new empty memtable takes its place, allowing writes to continue uninterrupted during background compaction.
+            </p>
+          </article>
+
+          <!-- SSTables -->
+          <article class="component-card" aria-labelledby="component-sstable">
+            <div class="component-card__header">
+              <div class="component-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+              </div>
+              <h4 id="component-sstable" class="component-card__title">SSTables (L0-L6)</h4>
+            </div>
+            <p class="component-card__description">
+              <strong>Sorted String Tables</strong> store data persistently on disk. Organized in 7 levels (L0-L6) with maximum file size of <strong>100MB</strong>. Uses <strong>block-based structure</strong> with 4KB blocks, prefix compression, and Cuckoo filters for efficient lookups.
+            </p>
+          </article>
+
+          <!-- Compaction Engine -->
+          <article class="component-card" aria-labelledby="component-compaction">
+            <div class="component-card__header">
+              <div class="component-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="17 1 21 5 17 9"/>
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                  <polyline points="7 23 3 19 7 15"/>
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                </svg>
+              </div>
+              <h4 id="component-compaction" class="component-card__title">Compaction Engine</h4>
+            </div>
+            <p class="component-card__description">
+              Manages data organization with two types: <strong>Minor compaction</strong> flushes immutable memtables to Level 0 SSTables. <strong>Major compaction</strong> merges SSTables between levels, maintaining sorted order and removing obsolete entries for optimal read performance.
+            </p>
+          </article>
+        </div>
+
+        <!-- Data Flow Visualization -->
+        <div class="architecture__dataflow">
+          <h3 class="architecture__dataflow-title">Data Flow</h3>
+
+          <div class="dataflow-container">
+            <!-- Write Path -->
+            <div class="dataflow-path dataflow-path--write">
+              <h4 class="dataflow-path__title">
+                <span class="dataflow-path__icon" aria-hidden="true">&#x2193;</span>
+                Write Path
+              </h4>
+              <ol class="dataflow-path__steps">
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">1</span>
+                  <span class="dataflow-step__text">Client sends SET command via Memcached protocol</span>
+                </li>
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">2</span>
+                  <span class="dataflow-step__text">Write-Ahead Log (WAL) records operation for durability</span>
+                </li>
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">3</span>
+                  <span class="dataflow-step__text">Data inserted into active Memtable (skip list)</span>
+                </li>
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">4</span>
+                  <span class="dataflow-step__text">When Memtable fills (4MB), becomes immutable</span>
+                </li>
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">5</span>
+                  <span class="dataflow-step__text">Background thread flushes to Level 0 SSTable</span>
+                </li>
+              </ol>
+            </div>
+
+            <!-- Read Path -->
+            <div class="dataflow-path dataflow-path--read">
+              <h4 class="dataflow-path__title">
+                <span class="dataflow-path__icon" aria-hidden="true">&#x2191;</span>
+                Read Path
+              </h4>
+              <ol class="dataflow-path__steps">
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">1</span>
+                  <span class="dataflow-step__text">Client sends GET command via Memcached protocol</span>
+                </li>
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">2</span>
+                  <span class="dataflow-step__text">Check active Memtable first (fastest lookup)</span>
+                </li>
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">3</span>
+                  <span class="dataflow-step__text">Check immutable Memtables (newest to oldest)</span>
+                </li>
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">4</span>
+                  <span class="dataflow-step__text">Search SSTables: L0 (linear), L1-L6 (binary search)</span>
+                </li>
+                <li class="dataflow-step">
+                  <span class="dataflow-step__number">5</span>
+                  <span class="dataflow-step__text">Cuckoo filter optimizes negative lookups</span>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap Section (Scenario 6) -->
+    <section id="roadmap" class="roadmap" aria-labelledby="roadmap-title">
+      <div class="section__container">
+        <h2 id="roadmap-title" class="section__title">Project Status</h2>
+        <p class="roadmap__subtitle">Track our progress and find ways to contribute</p>
+
+        <div class="roadmap__content">
+          <!-- Completed Features -->
+          <div class="roadmap__category">
+            <h3 class="roadmap__category-title">
+              <span class="roadmap__category-icon roadmap__category-icon--completed" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                </svg>
+              </span>
+              Completed Features
+            </h3>
+            <ul class="roadmap__list" aria-label="Completed features">
+              <li class="roadmap__item roadmap__item--completed">
+                <span class="roadmap__check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                  </svg>
+                </span>
+                <span class="roadmap__item-text">Tokio-based async networking</span>
+              </li>
+              <li class="roadmap__item roadmap__item--completed">
+                <span class="roadmap__check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                  </svg>
+                </span>
+                <span class="roadmap__item-text">Memcached protocol support</span>
+              </li>
+              <li class="roadmap__item roadmap__item--completed">
+                <span class="roadmap__check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                  </svg>
+                </span>
+                <span class="roadmap__item-text">Memtable with skip list</span>
+              </li>
+              <li class="roadmap__item roadmap__item--completed">
+                <span class="roadmap__check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                  </svg>
+                </span>
+                <span class="roadmap__item-text">Minor compaction</span>
+              </li>
+              <li class="roadmap__item roadmap__item--completed">
+                <span class="roadmap__check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                  </svg>
+                </span>
+                <span class="roadmap__item-text">Major compaction</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="roadmap__category">
+            <h3 class="roadmap__category-title">
+              <span class="roadmap__category-icon roadmap__category-icon--planned" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </span>
+              Planned Features
+            </h3>
+            <ul class="roadmap__list" aria-label="Planned features">
+              <li class="roadmap__item roadmap__item--planned">
+                <span class="roadmap__planned-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <circle cx="12" cy="12" r="4"/>
+                  </svg>
+                </span>
+                <span class="roadmap__item-text">Raft consensus</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Contribution Links -->
+        <div class="roadmap__contribute">
+          <h3 class="roadmap__contribute-title">Want to Contribute?</h3>
+          <p class="roadmap__contribute-text">
+            We welcome contributions from the community! Check out our open issues to get started.
+          </p>
+          <div class="roadmap__contribute-links">
+            <a
+              href="https://github.com/yetone/mirdb/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"
+              class="roadmap__contribution-link roadmap__contribution-link--primary"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View good first issues on GitHub"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              Good First Issues
+            </a>
+            <a
+              href="https://github.com/yetone/mirdb/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22"
+              class="roadmap__contribution-link roadmap__contribution-link--secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View help wanted issues on GitHub"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              Help Wanted
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 7) -->
+  <footer id="footer" class="footer" role="contentinfo">
+    <div class="footer__container">
+      <!-- Footer Logo/Brand -->
+      <div class="footer__brand">
+        <span class="footer__logo" aria-hidden="true">MirDB</span>
+        <p class="footer__tagline">A Persistent Key-Value Store</p>
+      </div>
+
+      <!-- Footer Links -->
+      <nav class="footer__links" aria-label="Footer navigation">
+        <div class="footer__link-group">
+          <h3 class="footer__link-title">Resources</h3>
+          <ul class="footer__link-list">
+            <li>
+              <a href="https://github.com/yetone/mirdb" class="footer__link" target="_blank" rel="noopener noreferrer">
+                <svg class="footer__link-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                GitHub Repository
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/yetone/mirdb#readme" class="footer__link" target="_blank" rel="noopener noreferrer">
+                Documentation
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/yetone/mirdb/issues" class="footer__link" target="_blank" rel="noopener noreferrer">
+                Report Issues
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer__link-group">
+          <h3 class="footer__link-title">Community</h3>
+          <ul class="footer__link-list">
+            <li>
+              <a href="https://github.com/yetone/mirdb/graphs/contributors" class="footer__link" target="_blank" rel="noopener noreferrer">
+                Contributors
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/yetone/mirdb/blob/master/CONTRIBUTING.md" class="footer__link" target="_blank" rel="noopener noreferrer">
+                Contributing Guide
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- Footer Bottom: License and Copyright -->
+      <div class="footer__bottom">
+        <p class="footer__license">
+          Released under the <a href="https://opensource.org/licenses/MIT" class="footer__link footer__link--inline" target="_blank" rel="noopener noreferrer">MIT License</a>
+        </p>
+        <p class="footer__copyright">&copy; 2024 MirDB Contributors</p>
+        <p class="footer__credits">
+          Built with <span aria-label="love">❤</span> using Rust
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript - Deferred for performance (non-blocking) -->
+  <script src="js/utils/helpers.js" defer></script>
+  <script src="js/modules/smooth-scroll.js" defer></script>
+  <script src="js/modules/scroll-animations.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

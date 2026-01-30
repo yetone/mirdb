@@ -1,0 +1,143 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Implementation
+ *
+ * Expected styles:
+ * - .hero: Full viewport height, centered content
+ * - .hero__logo: Animated logo styling
+ * - .hero__title: Main heading (MirDB)
+ * - .hero__tagline: Subtitle styling
+ * - .hero__cta-primary: Primary button (GitHub)
+ * - .hero__cta-secondary: Secondary button (Get Started)
+ */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--spacing-xl) var(--container-padding);
+  padding-top: calc(var(--nav-height) + var(--spacing-xl));
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+  text-align: center;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 800px;
+}
+
+.hero__logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: var(--spacing-xl);
+  border-radius: var(--radius-md);
+}
+
+.hero__title {
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+}
+
+.hero__tagline {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-2xl);
+  max-width: 600px;
+}
+
+.hero__cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  min-width: 160px;
+  min-height: 44px;
+}
+
+.hero__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.hero__cta:active {
+  transform: translateY(0);
+}
+
+.hero__cta:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.hero__cta-primary {
+  background-color: var(--color-accent-rust);
+  color: var(--color-bg-primary);
+}
+
+.hero__cta-primary:hover {
+  background-color: #e6b08f;
+  color: var(--color-bg-primary);
+}
+
+.hero__cta-secondary {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-accent-teal);
+}
+
+.hero__cta-secondary:hover {
+  background-color: var(--color-accent-teal);
+  color: var(--color-bg-primary);
+}
+
+/* GitHub icon styling */
+.hero__cta-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: var(--spacing-sm);
+}
+
+/* Responsive styles for mobile */
+@media (max-width: 767px) {
+  .hero {
+    padding: var(--spacing-lg) var(--spacing-md);
+    padding-top: calc(var(--nav-height) + var(--spacing-lg));
+  }
+
+  .hero__logo {
+    width: 100px;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero__tagline {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .hero__cta-group {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .hero__cta {
+    width: 100%;
+  }
+}

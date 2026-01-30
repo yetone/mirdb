@@ -1,0 +1,158 @@
+/**
+ * Animation Utilities
+ * Owner: Scenario 3 (created), Scenario 8 (optimizes)
+ *
+ * Performance optimizations by Scenario 8:
+ * - GPU-accelerated transforms (transform, opacity only)
+ * - will-change hints for compositor optimization
+ * - contain: layout style for paint isolation
+ * - prefers-reduced-motion support
+ * - Minimized repaints via transform3d hints
+ */
+
+/* Keyframe Animations - GPU accelerated via transform/opacity only */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Base animation class for scroll-triggered elements */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 500ms ease, transform 500ms ease;
+  will-change: opacity, transform;
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animation variants */
+.animate-on-scroll.fade-in-left {
+  transform: translateX(-30px);
+}
+
+.animate-on-scroll.fade-in-left.is-visible {
+  transform: translateX(0);
+}
+
+.animate-on-scroll.fade-in-right {
+  transform: translateX(30px);
+}
+
+.animate-on-scroll.fade-in-right.is-visible {
+  transform: translateX(0);
+}
+
+.animate-on-scroll.fade-in-scale {
+  transform: scale(0.95);
+}
+
+.animate-on-scroll.fade-in-scale.is-visible {
+  transform: scale(1);
+}
+
+/* Utility classes for direct animation application */
+.fade-in {
+  animation: fadeIn 500ms ease forwards;
+}
+
+.fade-in-up {
+  animation: fadeInUp 500ms ease forwards;
+}
+
+.fade-in-left-anim {
+  animation: fadeInLeft 500ms ease forwards;
+}
+
+.fade-in-right-anim {
+  animation: fadeInRight 500ms ease forwards;
+}
+
+/* Reduced motion: disable animations for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll,
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  .fade-in,
+  .fade-in-up,
+  .fade-in-left-anim,
+  .fade-in-right-anim {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Performance: Clear will-change after animation completes to free GPU memory */
+.animate-on-scroll.is-visible {
+  will-change: auto;
+}
+
+/* Performance: Use contain property for better paint isolation */
+.animate-on-scroll {
+  contain: layout style;
+}
+
+/* Performance: Optimize for 60fps by limiting animation scope */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-on-scroll {
+    /* Use transform3d to hint GPU acceleration */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
