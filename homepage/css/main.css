@@ -1,0 +1,229 @@
+/**
+ * MirDB Homepage - Main Stylesheet
+ * Owner: Scenario 1 - Header and Navigation (primary), shared by all
+ *
+ * Structure:
+ * - CSS Variables (colors, fonts, spacing)
+ * - Base/Reset styles
+ * - Typography
+ * - Layout utilities
+ * - Component-specific styles (added by each scenario owner)
+ *
+ * Dark mode: Use CSS variables that adapt based on prefers-color-scheme
+ */
+
+/* CSS Variables - shared across all components */
+:root {
+  /* Colors */
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-secondary: #6b7280;
+  --color-background: #ffffff;
+  --color-surface: #f3f4f6;
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-success: #10b981;
+
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-size-base: 16px;
+  --font-size-sm: 0.875rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Layout */
+  --max-width: 1200px;
+  --border-radius: 0.5rem;
+}
+
+/* Base/Reset styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+/* Layout utilities */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* ======================
+   Hero Section Styles
+   Owner: Scenario 2
+   ====================== */
+
+.hero {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  text-align: center;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero__title {
+  font-size: var(--font-size-4xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero__subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero__badges {
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero__badge-link {
+  display: inline-block;
+  transition: opacity 0.2s ease;
+}
+
+.hero__badge-link:hover {
+  opacity: 0.8;
+}
+
+.hero__badge {
+  height: 20px;
+}
+
+.hero__cta-container {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero__cta {
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.hero__cta--primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.hero__cta--primary:hover {
+  background-color: var(--color-primary-hover);
+  color: white;
+}
+
+.hero__cta--secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.hero__cta--secondary:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* ======================
+   Header Section Styles
+   Owner: Scenario 1
+   ====================== */
+
+/* Header styles will be added by Scenario 1 */
+
+/* ======================
+   Features Section Styles
+   Owner: Scenario 3
+   ====================== */
+
+/* Features styles will be added by Scenario 3 */
+
+/* ======================
+   Architecture Section Styles
+   Owner: Scenario 4
+   ====================== */
+
+/* Architecture styles will be added by Scenario 4 */
+
+/* ======================
+   Usage Section Styles
+   Owner: Scenario 5
+   ====================== */
+
+/* Usage styles will be added by Scenario 5 */
+
+/* ======================
+   Status Section Styles
+   Owner: Scenario 6
+   ====================== */
+
+/* Status styles will be added by Scenario 6 */
+
+/* ======================
+   Footer Section Styles
+   Owner: Scenario 7
+   ====================== */
+
+/* Footer styles will be added by Scenario 7 */

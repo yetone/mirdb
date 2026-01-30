@@ -1,0 +1,21 @@
+/**
+ * MirDB Homepage - Responsive Styles
+ * Owners: Scenario 8 (Mobile), Scenario 9 (Tablet)
+ *
+ * Breakpoints:
+ * - Mobile: max-width: 480px
+ * - Tablet: max-width: 768px
+ * - Desktop: min-width: 769px
+ *
+ * Each breakpoint section contains overrides for all components
+ */
+
+/* Mobile styles */
+@media (max-width: 480px) {
+  /* Mobile-specific overrides */
+}
+
+/* Tablet styles */
+@media (max-width: 768px) and (min-width: 481px) {
+  /* Tablet-specific overrides */
+}

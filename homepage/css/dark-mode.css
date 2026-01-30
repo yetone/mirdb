@@ -1,0 +1,24 @@
+/**
+ * MirDB Homepage - Dark Mode Theme
+ * Owner: Scenario 12 - Dark Mode Support
+ *
+ * Implements prefers-color-scheme media query
+ * Dark mode is the default theme per PRD recommendation
+ *
+ * Expected behavior:
+ * - Detect system preference
+ * - Apply appropriate color scheme
+ * - Maintain readability for all components
+ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode color overrides */
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Light mode color overrides */
+  }
+}
