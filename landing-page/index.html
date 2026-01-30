@@ -17,11 +17,19 @@
   <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
   <meta name="twitter:description" content="Drop-in Memcached replacement with persistent storage">
 
+  <!-- Keywords -->
+  <meta name="keywords" content="Rust key-value store, persistent memcached, LSM-tree database, embedded database Rust, memcached alternative">
+
   <!-- Favicon -->
   <link rel="icon" type="image/gif" href="assets/images/logo.gif">
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Preload fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- SECTION: Navigation - Scenario 2 -->
@@ -57,10 +65,84 @@
   <!-- END SECTION: Hero -->
 
   <!-- SECTION: Features - Scenario 3 -->
-  <section id="features" class="features">
+  <section id="features" class="features section">
     <div class="container">
-      <h2>Why MirDB?</h2>
-      <!-- Feature cards to be implemented by Scenario 3 -->
+      <h2 class="features__title">Why MirDB?</h2>
+      <div class="features__grid">
+        <!-- Feature 1: Persistent Storage -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Persistent Storage</h3>
+          <p class="feature-card__description">Your data survives restarts. Unlike in-memory caches, MirDB persists data to disk ensuring durability.</p>
+        </article>
+
+        <!-- Feature 2: Memcached Protocol -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Memcached Protocol</h3>
+          <p class="feature-card__description">Drop-in replacement with no code changes. Use your existing Memcached clients seamlessly.</p>
+        </article>
+
+        <!-- Feature 3: LSM-Tree Architecture -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">LSM-Tree Architecture</h3>
+          <p class="feature-card__description">Optimized for write-heavy workloads with Log-Structured Merge-Tree design for high throughput.</p>
+        </article>
+
+        <!-- Feature 4: Compaction -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Minor/Major Compaction</h3>
+          <p class="feature-card__description">Automatic storage optimization through intelligent minor and major compaction processes.</p>
+        </article>
+
+        <!-- Feature 5: Rust-Powered -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Rust-Powered</h3>
+          <p class="feature-card__description">Memory safety and performance without compromise. Built with Rust for reliability and speed.</p>
+        </article>
+
+        <!-- Feature 6: Async I/O -->
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Async I/O</h3>
+          <p class="feature-card__description">Built on Tokio for scalability. Handle thousands of concurrent connections efficiently.</p>
+        </article>
+      </div>
     </div>
   </section>
   <!-- END SECTION: Features -->
