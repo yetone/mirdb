@@ -1,0 +1,173 @@
+/**
+ * Getting Started Section Styles
+ * Owner: Scenario 5 - Getting Started Section
+ */
+
+.getting-started-section {
+  scroll-margin-top: 80px;
+}
+
+.getting-started-title {
+  position: relative;
+}
+
+.getting-started-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  margin: 16px auto 0;
+  border-radius: 2px;
+}
+
+/* Installation Options */
+.install-option {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.install-option:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.install-option-title {
+  display: flex;
+  align-items: center;
+}
+
+.install-option-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+/* Code Blocks */
+.code-block-container {
+  position: relative;
+  margin-top: 8px;
+}
+
+.code-block {
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 #1f2937;
+}
+
+.code-block::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block::-webkit-scrollbar-track {
+  background: #1f2937;
+  border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+.code-content {
+  display: block;
+  line-height: 1.6;
+}
+
+/* Copy Button */
+.copy-button {
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.code-block-container:hover .copy-button {
+  opacity: 1;
+}
+
+.copy-button:focus {
+  opacity: 1;
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Configuration Grid */
+.config-item {
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.config-item:hover {
+  transform: scale(1.02);
+}
+
+.config-label {
+  display: block;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.config-value {
+  word-break: break-all;
+}
+
+/* Quick Start Section */
+.quick-start {
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Documentation Link */
+.documentation-link {
+  padding-top: 24px;
+}
+
+.doc-link {
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.doc-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.doc-link:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .getting-started-section {
+    padding: 48px 16px;
+  }
+
+  .getting-started-title {
+    font-size: 1.75rem;
+  }
+
+  .install-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .config-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .config-value {
+    font-size: 1.5rem;
+  }
+
+  .copy-button {
+    opacity: 1;
+  }
+}

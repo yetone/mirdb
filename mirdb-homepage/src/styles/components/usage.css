@@ -1,0 +1,90 @@
+/**
+ * Usage Examples Section Styles.
+ * Owner: Scenario 3 - Usage Examples with Syntax Highlighting
+ *
+ * Styles for the usage examples section displaying memcached commands.
+ */
+
+.usage-section {
+  padding: 4rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.usage-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.usage-intro {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 2.5rem;
+  font-size: 1.125rem;
+}
+
+.usage-examples-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.usage-example-card {
+  background-color: #f9fafb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.usage-example-description {
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.usage-example-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+  margin-top: 1rem;
+}
+
+.usage-example-label:first-of-type {
+  margin-top: 0;
+}
+
+.usage-command-block,
+.usage-response-block {
+  margin-top: 0.25rem;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .usage-section {
+    padding: 5rem 2rem;
+  }
+
+  .usage-title {
+    font-size: 2.5rem;
+  }
+
+  .usage-examples-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .usage-examples-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,0 +1,94 @@
+/**
+ * Navigation Styles
+ * Owner: Scenario 14 - Navigation and Smooth Scroll
+ */
+
+.main-nav {
+  @apply fixed top-0 left-0 right-0 z-50;
+  @apply bg-white/95 backdrop-blur-sm;
+  @apply border-b border-gray-200;
+  @apply shadow-sm;
+}
+
+.nav-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply flex items-center justify-between;
+  @apply h-16;
+}
+
+.nav-brand {
+  @apply text-xl font-bold text-blue-600;
+  @apply hover:text-blue-700;
+  @apply transition-colors duration-200;
+  @apply no-underline;
+}
+
+.nav-links {
+  @apply flex items-center gap-1 sm:gap-2;
+}
+
+.nav-link {
+  @apply px-3 py-2 rounded-md text-sm font-medium;
+  @apply text-gray-600 hover:text-gray-900;
+  @apply hover:bg-gray-100;
+  @apply transition-all duration-200;
+  @apply no-underline;
+}
+
+.nav-link.active,
+.nav-link[aria-current="true"] {
+  @apply text-blue-600 bg-blue-50;
+  @apply font-semibold;
+}
+
+/* Focus states for accessibility */
+.nav-link:focus-visible,
+.nav-brand:focus-visible {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Adjust body padding to account for fixed nav */
+body {
+  padding-top: 4rem; /* 64px to match nav height */
+}
+
+/* Scroll padding for anchor links */
+html {
+  scroll-padding-top: 5rem; /* 80px to account for fixed nav + some spacing */
+}
+
+/* Mobile responsive styles */
+@media (max-width: 640px) {
+  .nav-container {
+    @apply px-3;
+  }
+
+  .nav-links {
+    @apply gap-0.5;
+  }
+
+  .nav-link {
+    @apply px-2 py-1.5 text-xs;
+  }
+
+  .nav-brand {
+    @apply text-lg;
+  }
+}
+
+/* Smooth transitions for scroll-based active states */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  @apply absolute bottom-0 left-1/2 -translate-x-1/2;
+  @apply w-0 h-0.5 bg-blue-600;
+  @apply transition-all duration-300;
+}
+
+.nav-link.active::after,
+.nav-link[aria-current="true"]::after {
+  @apply w-4/5;
+}

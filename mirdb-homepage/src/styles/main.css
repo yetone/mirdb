@@ -1,0 +1,47 @@
+/**
+ * Main CSS Entry Point.
+ *
+ * Imports:
+ * - Tailwind base, components, utilities
+ * - Component-specific stylesheets
+ * - Utility stylesheets (animations, syntax highlighting)
+ *
+ * Global styles:
+ * - CSS custom properties for theming
+ * - Base typography
+ * - scroll-behavior: smooth
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Component styles */
+@import './components/navigation.css';
+@import './components/features.css';
+@import './components/usage.css';
+@import './components/architecture.css';
+
+/* Utility styles */
+@import './utilities/syntax-highlight.css';
+
+:root {
+  --color-primary: #3b82f6;
+  --color-secondary: #10b981;
+  --color-background: #ffffff;
+  --color-text: #1f2937;
+  --color-terminal-bg: #1e1e1e;
+  --color-terminal-text: #d4d4d4;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
