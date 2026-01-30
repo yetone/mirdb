@@ -119,10 +119,61 @@
     </section>
 
     <!-- SECTION: Usage - Owner: Scenario 3 -->
-    <section id="usage" aria-labelledby="usage-title">
+    <section id="usage" class="usage-section" aria-labelledby="usage-title">
       <div class="container">
         <h2 id="usage-title">Usage</h2>
-        <!-- Usage examples will be added by Scenario 3 -->
+        <p class="usage-intro">MirDB implements the memcached protocol, so you can use any existing memcached client. Here are the most common operations:</p>
+
+        <div class="usage-demo">
+          <img src="assets/images/usage.gif" alt="MirDB usage demonstration showing terminal commands" class="usage-gif" loading="lazy">
+        </div>
+
+        <div class="code-examples">
+          <!-- SET command example -->
+          <div class="code-example" data-command="set">
+            <div class="code-example-header">
+              <h3>Store a Value</h3>
+              <button type="button" class="copy-btn" aria-label="Copy set command to clipboard" data-copy-target="set-code">
+                <span class="copy-icon" aria-hidden="true">📋</span>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-block"><code id="set-code" class="language-shell"><span class="cmd-prompt">$</span> <span class="cmd-keyword">set</span> <span class="cmd-arg">mykey</span> <span class="cmd-flag">0</span> <span class="cmd-flag">3600</span> <span class="cmd-flag">5</span>
+<span class="cmd-input">hello</span>
+<span class="cmd-output">STORED</span></code></pre>
+            <p class="code-description">Set a key with flags (0), TTL in seconds (3600), and byte length (5)</p>
+          </div>
+
+          <!-- GET command example -->
+          <div class="code-example" data-command="get">
+            <div class="code-example-header">
+              <h3>Retrieve a Value</h3>
+              <button type="button" class="copy-btn" aria-label="Copy get command to clipboard" data-copy-target="get-code">
+                <span class="copy-icon" aria-hidden="true">📋</span>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-block"><code id="get-code" class="language-shell"><span class="cmd-prompt">$</span> <span class="cmd-keyword">get</span> <span class="cmd-arg">mykey</span>
+<span class="cmd-output">VALUE mykey 0 5</span>
+<span class="cmd-output">hello</span>
+<span class="cmd-output">END</span></code></pre>
+            <p class="code-description">Retrieve a value by key</p>
+          </div>
+
+          <!-- DELETE command example -->
+          <div class="code-example" data-command="delete">
+            <div class="code-example-header">
+              <h3>Delete a Value</h3>
+              <button type="button" class="copy-btn" aria-label="Copy delete command to clipboard" data-copy-target="delete-code">
+                <span class="copy-icon" aria-hidden="true">📋</span>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-block"><code id="delete-code" class="language-shell"><span class="cmd-prompt">$</span> <span class="cmd-keyword">delete</span> <span class="cmd-arg">mykey</span>
+<span class="cmd-output">DELETED</span></code></pre>
+            <p class="code-description">Remove a key from the store</p>
+          </div>
+        </div>
       </div>
     </section>
 
