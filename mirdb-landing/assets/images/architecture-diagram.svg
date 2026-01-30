@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="MirDB architecture diagram showing the data flow from client requests through the Network Layer (Tokio), to the Memtable (Skip List), Immutable Memtables queue, and multi-level SSTables (L0 through L6), with the Compaction Engine managing data organization across levels">
+  <title>MirDB LSM-Tree Architecture</title>
+  <desc>Architecture diagram showing: Network Layer (Tokio) at the top receiving client requests, connecting to the Memtable (Skip List), which feeds into Immutable Memtables, then to multi-level SSTables (L0-L6) on disk, with the Compaction Engine managing data organization between levels</desc>
+
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="networkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4ECDC4"/>
+      <stop offset="100%" style="stop-color:#3DBDB5"/>
+    </linearGradient>
+    <linearGradient id="memtableGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#DEA584"/>
+      <stop offset="100%" style="stop-color:#CE9574"/>
+    </linearGradient>
+    <linearGradient id="immutableGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#B87A5E"/>
+      <stop offset="100%" style="stop-color:#A86A4E"/>
+    </linearGradient>
+    <linearGradient id="sstableGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0f3460"/>
+      <stop offset="100%" style="stop-color:#1a4070"/>
+    </linearGradient>
+    <linearGradient id="compactionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6b5b95"/>
+      <stop offset="100%" style="stop-color:#7b6ba5"/>
+    </linearGradient>
+
+    <!-- Arrow marker -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a0a0a0"/>
+    </marker>
+    <marker id="arrowheadTeal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4ECDC4"/>
+    </marker>
+    <marker id="arrowheadRust" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#DEA584"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bgGradient)"/>
+
+  <!-- Client Request Icon -->
+  <g transform="translate(400, 25)">
+    <circle cx="0" cy="12" r="10" fill="none" stroke="#a0a0a0" stroke-width="2"/>
+    <circle cx="0" cy="8" r="4" fill="#a0a0a0"/>
+    <path d="M-6 18 Q0 24 6 18" stroke="#a0a0a0" stroke-width="2" fill="none"/>
+    <text x="0" y="40" fill="#a0a0a0" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">Client Request</text>
+  </g>
+
+  <!-- Arrow from client to network -->
+  <line x1="400" y1="70" x2="400" y2="95" stroke="#a0a0a0" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Network Layer (Tokio) -->
+  <g transform="translate(200, 100)">
+    <rect width="400" height="60" rx="8" fill="url(#networkGradient)" opacity="0.9"/>
+    <text x="200" y="30" fill="#1a1a2e" font-family="Inter, sans-serif" font-size="18" font-weight="bold" text-anchor="middle">Network Layer</text>
+    <text x="200" y="48" fill="#1a1a2e" font-family="monospace" font-size="12" text-anchor="middle">(Tokio - Async I/O)</text>
+  </g>
+
+  <!-- Arrow from network to memtable -->
+  <line x1="400" y1="160" x2="400" y2="185" stroke="#a0a0a0" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Memtable (Skip List) -->
+  <g transform="translate(200, 190)">
+    <rect width="400" height="60" rx="8" fill="url(#memtableGradient)" opacity="0.9"/>
+    <text x="200" y="30" fill="#1a1a2e" font-family="Inter, sans-serif" font-size="18" font-weight="bold" text-anchor="middle">Memtable</text>
+    <text x="200" y="48" fill="#1a1a2e" font-family="monospace" font-size="12" text-anchor="middle">(Skip List - 4MB default)</text>
+    <!-- In-memory indicator -->
+    <rect x="350" y="10" width="40" height="18" rx="4" fill="#1a1a2e" opacity="0.3"/>
+    <text x="370" y="23" fill="#1a1a2e" font-family="Inter, sans-serif" font-size="10" text-anchor="middle">RAM</text>
+  </g>
+
+  <!-- Arrow from memtable to immutable memtable -->
+  <path d="M400 250 L400 275" stroke="#a0a0a0" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="420" y="268" fill="#a0a0a0" font-family="Inter, sans-serif" font-size="10">when full</text>
+
+  <!-- Immutable Memtable Queue -->
+  <g transform="translate(200, 280)">
+    <rect width="400" height="50" rx="8" fill="url(#immutableGradient)" opacity="0.9"/>
+    <text x="200" y="28" fill="#1a1a2e" font-family="Inter, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Immutable Memtables</text>
+    <text x="200" y="43" fill="#1a1a2e" font-family="monospace" font-size="11" text-anchor="middle">(Queue awaiting flush)</text>
+    <!-- In-memory indicator -->
+    <rect x="350" y="8" width="40" height="16" rx="4" fill="#1a1a2e" opacity="0.3"/>
+    <text x="370" y="20" fill="#1a1a2e" font-family="Inter, sans-serif" font-size="9" text-anchor="middle">RAM</text>
+  </g>
+
+  <!-- Minor Compaction Arrow -->
+  <path d="M400 330 L400 360" stroke="#DEA584" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowheadRust)"/>
+  <text x="480" y="350" fill="#DEA584" font-family="Inter, sans-serif" font-size="11" font-weight="bold">Minor Compaction</text>
+
+  <!-- Disk separator line -->
+  <line x1="50" y1="370" x2="750" y2="370" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="70" y="365" fill="#6b7280" font-family="Inter, sans-serif" font-size="10">DISK</text>
+
+  <!-- SSTables Container -->
+  <g transform="translate(50, 380)">
+    <!-- Level 0 -->
+    <g transform="translate(0, 0)">
+      <rect width="180" height="40" rx="6" fill="url(#sstableGradient)" stroke="#4ECDC4" stroke-width="2"/>
+      <text x="90" y="18" fill="#ffffff" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Level 0</text>
+      <text x="90" y="33" fill="#a0a0a0" font-family="monospace" font-size="10" text-anchor="middle">(may overlap)</text>
+    </g>
+
+    <!-- Level 1 -->
+    <g transform="translate(190, 0)">
+      <rect width="120" height="40" rx="6" fill="url(#sstableGradient)" stroke="#3DBDB5" stroke-width="1.5"/>
+      <text x="60" y="18" fill="#ffffff" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Level 1</text>
+      <text x="60" y="33" fill="#a0a0a0" font-family="monospace" font-size="10" text-anchor="middle">(sorted)</text>
+    </g>
+
+    <!-- Level 2 -->
+    <g transform="translate(320, 0)">
+      <rect width="120" height="40" rx="6" fill="url(#sstableGradient)" stroke="#2CADA4" stroke-width="1.5"/>
+      <text x="60" y="18" fill="#ffffff" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Level 2</text>
+      <text x="60" y="33" fill="#a0a0a0" font-family="monospace" font-size="10" text-anchor="middle">(sorted)</text>
+    </g>
+
+    <!-- Levels 3-6 (collapsed) -->
+    <g transform="translate(450, 0)">
+      <rect width="100" height="40" rx="6" fill="url(#sstableGradient)" stroke="#1C9D94" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="50" y="18" fill="#ffffff" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">L3-L6</text>
+      <text x="50" y="33" fill="#a0a0a0" font-family="monospace" font-size="10" text-anchor="middle">(sorted)</text>
+    </g>
+
+    <!-- SSTable files indication -->
+    <g transform="translate(560, 0)">
+      <rect x="0" y="5" width="130" height="30" rx="4" fill="#0f3460" opacity="0.5"/>
+      <text x="65" y="24" fill="#a0a0a0" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">Max 100MB/file</text>
+    </g>
+  </g>
+
+  <!-- Major Compaction Arrows between levels -->
+  <g transform="translate(50, 430)">
+    <path d="M150 0 L220 0" stroke="#6b5b95" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <path d="M280 0 L350 0" stroke="#6b5b95" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <path d="M410 0 L480 0" stroke="#6b5b95" stroke-width="2" marker-end="url(#arrowhead)"/>
+  </g>
+
+  <!-- Compaction Engine -->
+  <g transform="translate(200, 470)">
+    <rect width="400" height="50" rx="8" fill="url(#compactionGradient)" opacity="0.9"/>
+    <text x="200" y="28" fill="#ffffff" font-family="Inter, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Compaction Engine</text>
+    <text x="200" y="43" fill="#d0d0d0" font-family="monospace" font-size="11" text-anchor="middle">(Background threads - Minor &amp; Major compaction)</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(550, 530)">
+    <text x="0" y="0" fill="#a0a0a0" font-family="Inter, sans-serif" font-size="11" font-weight="bold">Legend:</text>
+    <rect x="0" y="10" width="12" height="12" rx="2" fill="#DEA584"/>
+    <text x="18" y="20" fill="#a0a0a0" font-family="Inter, sans-serif" font-size="10">In-Memory</text>
+    <rect x="80" y="10" width="12" height="12" rx="2" fill="#0f3460" stroke="#4ECDC4" stroke-width="1"/>
+    <text x="98" y="20" fill="#a0a0a0" font-family="Inter, sans-serif" font-size="10">On-Disk (SSTable)</text>
+    <line x1="180" y1="16" x2="200" y2="16" stroke="#a0a0a0" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="208" y="20" fill="#a0a0a0" font-family="Inter, sans-serif" font-size="10">Compaction</text>
+  </g>
+
+  <!-- Data flow indicators on left side -->
+  <g transform="translate(30, 180)">
+    <text x="0" y="0" fill="#4ECDC4" font-family="Inter, sans-serif" font-size="12" font-weight="bold" transform="rotate(-90)">Write Path</text>
+    <path d="M-10 10 L-10 200" stroke="#4ECDC4" stroke-width="2" marker-end="url(#arrowheadTeal)"/>
+  </g>
+
+  <!-- Read path indicator on right side -->
+  <g transform="translate(770, 380)">
+    <text x="0" y="0" fill="#DEA584" font-family="Inter, sans-serif" font-size="12" font-weight="bold" transform="rotate(90)">Read Path</text>
+    <path d="M-10 -200 L-10 10" stroke="#DEA584" stroke-width="2" marker-end="url(#arrowheadRust)"/>
+  </g>
+</svg>
