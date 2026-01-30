@@ -134,194 +134,183 @@
 
     <!-- Architecture Section - Owner: Scenario 4 -->
     <section id="architecture" class="architecture">
-      <div class="architecture__container">
-        <h2 class="architecture__title">Architecture</h2>
-        <p class="architecture__subtitle">Built on LSM-tree for high write throughput and efficient storage</p>
-
-        <!-- Architecture Diagram -->
-        <div class="architecture__diagram">
-          <img src="images/architecture.svg" alt="MirDB LSM-tree Architecture Diagram showing data flow from client through memtable, WAL, and SSTables" class="architecture__diagram-img">
-        </div>
-
-        <!-- Component Explanations -->
-        <div class="architecture__components">
-          <!-- Memtable Component -->
-          <div class="architecture__component" data-component="memtable">
-            <div class="architecture__component-header">
-              <h3 class="architecture__component-title">Memtable (Skip List)</h3>
-              <span class="architecture__component-badge">In-Memory</span>
-            </div>
-            <p class="architecture__component-description">
-              The Memtable serves as the active write buffer, implemented using a skip list data structure for O(log n) insertions and lookups. When the Memtable reaches its size threshold (default 4MB), it becomes immutable and is queued for compaction while a fresh Memtable takes over.
-            </p>
-          </div>
-
-          <!-- SSTable Component -->
-          <div class="architecture__component" data-component="sstable">
-            <div class="architecture__component-header">
-              <h3 class="architecture__component-title">SSTables (Sorted String Tables)</h3>
-              <span class="architecture__component-badge architecture__component-badge--disk">On-Disk</span>
-            </div>
-            <p class="architecture__component-description">
-              SSTables are immutable, sorted files stored on disk. Each SSTable contains data blocks with prefix compression, an index block for efficient key lookup, and a Cuckoo filter for fast negative lookups. Files are organized into levels, with Level 0 allowing overlaps and higher levels maintaining strict key ordering.
-            </p>
-          </div>
-
-          <!-- WAL Component -->
-          <div class="architecture__component" data-component="wal">
-            <div class="architecture__component-header">
-              <h3 class="architecture__component-title">Write-Ahead Log (WAL)</h3>
-              <span class="architecture__component-badge architecture__component-badge--durability">Durability</span>
-            </div>
-            <p class="architecture__component-description">
-              The Write-Ahead Log ensures durability by persisting every write to disk before acknowledging it. Each WAL segment corresponds to one Memtable. In case of crash, the WAL allows complete data recovery by rebuilding Memtables from the logged operations.
-            </p>
-          </div>
-
-          <!-- Compaction Component -->
-          <div class="architecture__component" data-component="compaction">
-            <div class="architecture__component-header">
-              <h3 class="architecture__component-title">Compaction</h3>
-              <span class="architecture__component-badge architecture__component-badge--background">Background</span>
-            </div>
-            <p class="architecture__component-description">
-              <strong>Minor Compaction:</strong> Flushes immutable Memtables to Level 0 SSTables when the Memtable is full.<br>
-              <strong>Major Compaction:</strong> Merges SSTables between levels to reduce read amplification and reclaim space. Triggered when Level 0 accumulates too many files or when level sizes exceed thresholds.
-            </p>
-          </div>
-        </div>
-      </div>
+      <!-- Architecture content will be added by Scenario 4 -->
     </section>
 
     <!-- Usage Section - Owner: Scenario 5 -->
     <section id="usage" class="usage">
       <div class="usage__container">
-        <h2 class="usage__title">Usage & Code Examples</h2>
-        <p class="usage__subtitle">MirDB supports the standard memcached protocol. Use your existing clients with these commands.</p>
+        <h2 class="usage__title">Usage & Examples</h2>
+        <p class="usage__subtitle">Get started with MirDB using familiar memcached commands</p>
 
-        <!-- SET Command Example -->
-        <div class="usage__example">
-          <h3 class="usage__example-title">SET - Store a Value</h3>
-          <p class="usage__example-description">Store a key-value pair with optional expiration time and flags.</p>
-          <div class="usage__code-wrapper">
-            <pre class="usage__code-block"><code class="language-bash">set mykey 0 0 5
+        <div class="usage__content">
+          <!-- Basic Commands Section -->
+          <div class="usage__section">
+            <h3 class="usage__section-title">Basic Storage Commands</h3>
+            <p class="usage__section-description">MirDB supports the standard memcached text protocol. Connect using telnet or any memcached client.</p>
+
+            <!-- SET Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">SET - Store a value</h4>
+              <p class="usage__example-description">Store a key-value pair with optional expiration time.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-set" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-set"><code># Connect to MirDB server
+telnet localhost 11211
+
+# SET command syntax: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+set mykey 0 3600 5
 hello
 STORED</code></pre>
-            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
-            </button>
-          </div>
-        </div>
+              </div>
+            </div>
 
-        <!-- GET Command Example -->
-        <div class="usage__example">
-          <h3 class="usage__example-title">GET - Retrieve a Value</h3>
-          <p class="usage__example-description">Retrieve the value associated with a key.</p>
-          <div class="usage__code-wrapper">
-            <pre class="usage__code-block"><code class="language-bash">get mykey
+            <!-- GET Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">GET - Retrieve a value</h4>
+              <p class="usage__example-description">Retrieve one or more values by key.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-get" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-get"><code># GET command syntax: get &lt;key&gt;
+get mykey
 VALUE mykey 0 5
 hello
 END</code></pre>
-            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
-            </button>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <!-- ADD Command Example -->
-        <div class="usage__example">
-          <h3 class="usage__example-title">ADD - Add Only if Key Doesn't Exist</h3>
-          <p class="usage__example-description">Store a value only if the key doesn't already exist.</p>
-          <div class="usage__code-wrapper">
-            <pre class="usage__code-block"><code class="language-bash">add newkey 0 0 4
-test
-STORED</code></pre>
-            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
-            </button>
-          </div>
-        </div>
+          <!-- Additional Commands Section -->
+          <div class="usage__section">
+            <h3 class="usage__section-title">Additional Commands</h3>
+            <p class="usage__section-description">MirDB supports the full range of memcached storage and manipulation commands.</p>
 
-        <!-- REPLACE Command Example -->
-        <div class="usage__example">
-          <h3 class="usage__example-title">REPLACE - Replace Existing Value</h3>
-          <p class="usage__example-description">Replace a value only if the key already exists.</p>
-          <div class="usage__code-wrapper">
-            <pre class="usage__code-block"><code class="language-bash">replace mykey 0 0 5
+            <!-- ADD Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">ADD - Store only if key doesn't exist</h4>
+              <p class="usage__example-description">Store a value only if the key does not already exist.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-add" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-add"><code># ADD command: add &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+add newkey 0 0 5
 world
 STORED</code></pre>
-            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
-            </button>
-          </div>
-        </div>
+              </div>
+            </div>
 
-        <!-- APPEND Command Example -->
-        <div class="usage__example">
-          <h3 class="usage__example-title">APPEND - Append to Existing Value</h3>
-          <p class="usage__example-description">Append data to an existing key's value.</p>
-          <div class="usage__code-wrapper">
-            <pre class="usage__code-block"><code class="language-bash">append mykey 0 0 6
-_extra
+            <!-- REPLACE Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">REPLACE - Update existing key only</h4>
+              <p class="usage__example-description">Update a value only if the key already exists.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-replace" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-replace"><code># REPLACE command: replace &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+replace mykey 0 0 6
+updated
 STORED</code></pre>
-            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
-            </button>
-          </div>
-        </div>
+              </div>
+            </div>
 
-        <!-- PREPEND Command Example -->
-        <div class="usage__example">
-          <h3 class="usage__example-title">PREPEND - Prepend to Existing Value</h3>
-          <p class="usage__example-description">Prepend data to an existing key's value.</p>
-          <div class="usage__code-wrapper">
-            <pre class="usage__code-block"><code class="language-bash">prepend mykey 0 0 4
-pre_
+            <!-- APPEND Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">APPEND - Add data to end of existing value</h4>
+              <p class="usage__example-description">Append data to the end of an existing value.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-append" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-append"><code># APPEND command: append &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+append mykey 0 0 6
+_suffix
 STORED</code></pre>
-            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
-            </button>
-          </div>
-        </div>
+              </div>
+            </div>
 
-        <!-- DELETE Command Example -->
-        <div class="usage__example">
-          <h3 class="usage__example-title">DELETE - Remove a Key</h3>
-          <p class="usage__example-description">Delete a key and its associated value.</p>
-          <div class="usage__code-wrapper">
-            <pre class="usage__code-block"><code class="language-bash">delete mykey
+            <!-- PREPEND Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">PREPEND - Add data to beginning of existing value</h4>
+              <p class="usage__example-description">Prepend data to the beginning of an existing value.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-prepend" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-prepend"><code># PREPEND command: prepend &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;
+prepend mykey 0 0 7
+prefix_
+STORED</code></pre>
+              </div>
+            </div>
+
+            <!-- DELETE Command -->
+            <div class="usage__example">
+              <h4 class="usage__example-title">DELETE - Remove a key</h4>
+              <p class="usage__example-description">Delete a key-value pair from the store.</p>
+              <div class="usage__code-block">
+                <div class="usage__code-header">
+                  <span class="usage__code-lang">bash</span>
+                  <button class="usage__copy-btn" data-copy-target="code-delete" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="usage__code language-bash" id="code-delete"><code># DELETE command: delete &lt;key&gt;
+delete mykey
 DELETED</code></pre>
-            <button class="usage__copy-btn" data-copy-target aria-label="Copy code to clipboard">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
-            </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -329,64 +318,7 @@ DELETED</code></pre>
 
     <!-- Status Section - Owner: Scenario 6 -->
     <section id="status" class="status">
-      <div class="status__container">
-        <h2 class="status__title">Project Status & Roadmap</h2>
-        <p class="status__subtitle">Track our progress and see what's coming next</p>
-
-        <div class="status__content">
-          <div class="status__column">
-            <h3 class="status__column-title">Implemented Features</h3>
-            <ul class="status__checklist">
-              <li class="status__item status__item--completed" data-completed="true">
-                <span class="status__check">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </span>
-                <span class="status__text">Tokio with memcached protocol</span>
-              </li>
-              <li class="status__item status__item--completed" data-completed="true">
-                <span class="status__check">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </span>
-                <span class="status__text">Memtable with skiplist</span>
-              </li>
-              <li class="status__item status__item--completed" data-completed="true">
-                <span class="status__check">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </span>
-                <span class="status__text">Minor compaction</span>
-              </li>
-              <li class="status__item status__item--completed" data-completed="true">
-                <span class="status__check">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </span>
-                <span class="status__text">Major compaction</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="status__column">
-            <h3 class="status__column-title">Planned Features</h3>
-            <ul class="status__checklist">
-              <li class="status__item status__item--pending" data-completed="false">
-                <span class="status__check status__check--pending">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10"></circle>
-                  </svg>
-                </span>
-                <span class="status__text">Raft consensus protocol</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <!-- Status content will be added by Scenario 6 -->
     </section>
 
     <!-- Getting Started Section - Owner: Scenario 13 -->

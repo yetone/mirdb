@@ -2,123 +2,153 @@
  * MirDB Homepage - Syntax Highlighting
  * Owner: Scenario 5 - Usage and Code Examples
  *
- * Lightweight syntax highlighter for code blocks
- * Supports: bash for memcached command examples
+ * Lightweight syntax highlighting for bash/shell commands
+ * Supports: bash, shell for memcached protocol examples
  */
 
 (function() {
   'use strict';
 
   /**
-   * Prism-like syntax highlighting for bash/memcached commands
-   * Applies highlighting classes to code elements
+   * Syntax highlighting patterns for bash/shell
    */
-  const Prism = {
-    /**
-     * Token patterns for bash syntax
-     */
-    patterns: {
-      comment: /#.*/g,
-      string: /(["'])(?:\\.|(?!\1)[^\\])*\1/g,
-      command: /\b(set|get|gets|add|replace|append|prepend|delete|info|major_compaction)\b/gi,
-      response: /\b(STORED|END|DELETED|NOT_STORED|EXISTS|NOT_FOUND|VALUE|ERROR)\b/g,
-      number: /\b\d+\b/g,
-      key: /^([a-zA-Z_][a-zA-Z0-9_]*)\s/gm,
+  const PATTERNS = {
+    comment: {
+      pattern: /#.*/g,
+      className: 'token comment'
     },
-
-    /**
-     * Escapes HTML special characters
-     * @param {string} text - Text to escape
-     * @returns {string} - Escaped text
-     */
-    escapeHtml: function(text) {
-      return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    string: {
+      pattern: /(["'])(?:(?!\1)[^\\]|\\.)*\1/g,
+      className: 'token string'
     },
+    keyword: {
+      pattern: /\b(set|get|gets|add|replace|append|prepend|delete|telnet|localhost)\b/gi,
+      className: 'token keyword'
+    },
+    response: {
+      pattern: /\b(STORED|DELETED|NOT_STORED|EXISTS|NOT_FOUND|VALUE|END)\b/g,
+      className: 'token response'
+    },
+    number: {
+      pattern: /\b\d+\b/g,
+      className: 'token number'
+    },
+    operator: {
+      pattern: /[<>]/g,
+      className: 'token operator'
+    }
+  };
 
-    /**
-     * Highlights code with the given language
-     * @param {string} code - Code to highlight
-     * @param {string} language - Language identifier
-     * @returns {string} - Highlighted HTML
-     */
-    highlight: function(code, language) {
-      // Escape HTML first
-      let highlighted = this.escapeHtml(code);
+  /**
+   * Escape HTML special characters
+   * @param {string} text - Text to escape
+   * @returns {string} - Escaped text
+   */
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
 
-      // Apply syntax highlighting patterns
-      // Order matters: apply more specific patterns first
+  /**
+   * Apply syntax highlighting to a code block
+   * @param {string} code - Raw code text
+   * @param {string} language - Programming language
+   * @returns {string} - Highlighted HTML
+   */
+  function highlight(code, language) {
+    if (language !== 'bash' && language !== 'shell') {
+      return escapeHtml(code);
+    }
 
-      // Highlight memcached responses (STORED, END, DELETED, etc.)
+    // Process line by line to preserve structure
+    const lines = code.split('\n');
+    const highlightedLines = lines.map(function(line) {
+      // Check if line is a comment first
+      if (line.trim().startsWith('#')) {
+        return '<span class="token comment">' + escapeHtml(line) + '</span>';
+      }
+
+      // Check if line is a memcached response
+      if (/^(STORED|DELETED|NOT_STORED|EXISTS|NOT_FOUND|END)$/.test(line.trim())) {
+        return '<span class="token response">' + escapeHtml(line) + '</span>';
+      }
+
+      // Check if line starts with VALUE (response with data)
+      if (line.trim().startsWith('VALUE ')) {
+        return '<span class="token response">' + escapeHtml(line) + '</span>';
+      }
+
+      let highlighted = escapeHtml(line);
+
+      // Highlight keywords (memcached commands)
       highlighted = highlighted.replace(
-        this.patterns.response,
-        '<span class="token response">$&</span>'
-      );
-
-      // Highlight memcached commands (set, get, add, etc.)
-      highlighted = highlighted.replace(
-        this.patterns.command,
-        '<span class="token command">$&</span>'
+        /\b(set|get|gets|add|replace|append|prepend|delete|telnet)\b/gi,
+        '<span class="token keyword">$1</span>'
       );
 
       // Highlight numbers
       highlighted = highlighted.replace(
-        this.patterns.number,
-        '<span class="token number">$&</span>'
+        /\b(\d+)\b/g,
+        '<span class="token number">$1</span>'
       );
 
-      // Highlight comments
+      // Highlight localhost
       highlighted = highlighted.replace(
-        this.patterns.comment,
-        '<span class="token comment">$&</span>'
+        /\b(localhost)\b/g,
+        '<span class="token keyword">$1</span>'
+      );
+
+      // Highlight angle brackets (placeholders like <key>)
+      highlighted = highlighted.replace(
+        /(&lt;[^&]+&gt;)/g,
+        '<span class="token placeholder">$1</span>'
       );
 
       return highlighted;
-    },
-
-    /**
-     * Initializes syntax highlighting on all code blocks
-     */
-    highlightAll: function() {
-      const codeBlocks = document.querySelectorAll('code[class*="language-"]');
-
-      codeBlocks.forEach(function(block) {
-        const language = block.className.match(/language-(\w+)/);
-        if (language) {
-          const code = block.textContent;
-          block.innerHTML = Prism.highlight(code, language[1]);
-          block.setAttribute('data-highlighted', 'true');
-        }
-      });
-    },
-
-    /**
-     * Highlights a single element
-     * @param {HTMLElement} element - Code element to highlight
-     */
-    highlightElement: function(element) {
-      const language = element.className.match(/language-(\w+)/);
-      if (language) {
-        const code = element.textContent;
-        element.innerHTML = this.highlight(code, language[1]);
-        element.setAttribute('data-highlighted', 'true');
-      }
-    }
-  };
-
-  // Auto-initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      Prism.highlightAll();
     });
-  } else {
-    Prism.highlightAll();
+
+    return highlightedLines.join('\n');
   }
 
-  // Expose Prism globally
-  window.Prism = Prism;
+  /**
+   * Initialize syntax highlighting for all code blocks
+   */
+  function initHighlighting() {
+    const codeBlocks = document.querySelectorAll('pre.usage__code code, pre[class*="language-"] code');
+
+    codeBlocks.forEach(function(codeElement) {
+      const preElement = codeElement.parentElement;
+      const classList = preElement.className || '';
+
+      // Extract language from class name
+      let language = 'bash';
+      const languageMatch = classList.match(/language-(\w+)/);
+      if (languageMatch) {
+        language = languageMatch[1];
+      }
+
+      // Get raw code text
+      const rawCode = codeElement.textContent || '';
+
+      // Apply highlighting
+      codeElement.innerHTML = highlight(rawCode, language);
+
+      // Add highlighted class
+      preElement.classList.add('highlighted');
+    });
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHighlighting);
+  } else {
+    initHighlighting();
+  }
+
+  // Expose for potential external use
+  window.Prism = {
+    highlight: highlight,
+    highlightAll: initHighlighting
+  };
 })();

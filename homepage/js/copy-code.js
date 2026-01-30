@@ -14,12 +14,13 @@
   'use strict';
 
   /**
-   * Copies text to clipboard using modern Clipboard API with fallback
+   * Copy text to clipboard
    * @param {string} text - Text to copy
-   * @returns {Promise<boolean>} - True if copy was successful
+   * @returns {Promise<boolean>} - Success status
    */
   async function copyToClipboard(text) {
     try {
+      // Modern clipboard API
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(text);
         return true;
@@ -35,53 +36,96 @@
       textArea.focus();
       textArea.select();
 
-      const successful = document.execCommand('copy');
-      document.body.removeChild(textArea);
-
-      return successful;
+      try {
+        document.execCommand('copy');
+        return true;
+      } finally {
+        document.body.removeChild(textArea);
+      }
     } catch (err) {
-      console.error('Failed to copy to clipboard:', err);
+      console.error('Failed to copy text:', err);
       return false;
     }
   }
 
   /**
-   * Shows feedback on button after copy action
-   * @param {HTMLButtonElement} button - The copy button
+   * Show copy feedback on button
+   * @param {HTMLElement} button - Copy button element
    * @param {boolean} success - Whether copy was successful
    */
   function showCopyFeedback(button, success) {
-    const originalText = button.querySelector('span').textContent;
-    const feedbackText = success ? 'Copied!' : 'Failed';
+    const originalContent = button.innerHTML;
     const feedbackClass = success ? 'usage__copy-btn--success' : 'usage__copy-btn--error';
 
-    button.querySelector('span').textContent = feedbackText;
+    // Update button content
+    if (success) {
+      button.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>Copied!</span>
+      `;
+    } else {
+      button.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+        <span>Error</span>
+      `;
+    }
+
     button.classList.add(feedbackClass);
 
+    // Reset after delay
     setTimeout(function() {
-      button.querySelector('span').textContent = originalText;
+      button.innerHTML = originalContent;
       button.classList.remove(feedbackClass);
     }, 2000);
   }
 
   /**
-   * Handles click event on copy button
+   * Get code text from a code block
+   * @param {string} targetId - ID of the code element
+   * @returns {string} - Code text
+   */
+  function getCodeText(targetId) {
+    const codeElement = document.getElementById(targetId);
+    if (!codeElement) {
+      return '';
+    }
+
+    // Get the code element inside pre, or the pre itself
+    const code = codeElement.querySelector('code') || codeElement;
+    return code.textContent || '';
+  }
+
+  /**
+   * Handle copy button click
    * @param {Event} event - Click event
    */
   async function handleCopyClick(event) {
     const button = event.currentTarget;
-    const wrapper = button.closest('.usage__code-wrapper');
-    const codeBlock = wrapper.querySelector('code');
+    const targetId = button.getAttribute('data-copy-target');
 
-    if (codeBlock) {
-      const text = codeBlock.textContent;
-      const success = await copyToClipboard(text);
-      showCopyFeedback(button, success);
+    if (!targetId) {
+      console.error('Copy button missing data-copy-target attribute');
+      return;
     }
+
+    const codeText = getCodeText(targetId);
+    if (!codeText) {
+      console.error('Could not find code element:', targetId);
+      showCopyFeedback(button, false);
+      return;
+    }
+
+    const success = await copyToClipboard(codeText);
+    showCopyFeedback(button, success);
   }
 
   /**
-   * Initializes copy buttons on all code blocks
+   * Initialize copy buttons on all code blocks
    */
   function initCopyButtons() {
     const copyButtons = document.querySelectorAll('.usage__copy-btn');
@@ -89,19 +133,20 @@
     copyButtons.forEach(function(button) {
       // Remove any existing listeners to prevent duplicates
       button.removeEventListener('click', handleCopyClick);
-      // Add click listener
       button.addEventListener('click', handleCopyClick);
     });
   }
 
-  // Auto-initialize when DOM is ready
+  // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCopyButtons);
   } else {
     initCopyButtons();
   }
 
-  // Expose functions globally
-  window.copyToClipboard = copyToClipboard;
-  window.initCopyButtons = initCopyButtons;
+  // Expose functions for external use
+  window.CopyCode = {
+    init: initCopyButtons,
+    copyToClipboard: copyToClipboard
+  };
 })();
