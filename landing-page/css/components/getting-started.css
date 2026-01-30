@@ -1,9 +1,167 @@
 /**
  * Getting Started Section Styles
  * Owner: Scenario 6 - Getting Started Section
+ *
+ * Provides styles for the installation instructions, configuration examples,
+ * and documentation link in the Getting Started section.
  */
 
-/* Placeholder - to be implemented by Scenario 6 */
-#getting-started {
-  min-height: 200px;
+.getting-started {
+  background-color: var(--color-bg-primary);
+}
+
+.getting-started__title {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+.getting-started__description {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-3xl);
+}
+
+/* Steps Container */
+.getting-started__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Individual Step */
+.getting-started__step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.getting-started__step-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.getting-started__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-accent-coral);
+  color: var(--color-white);
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.getting-started__step-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.getting-started__step-description {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  margin: 0;
+  padding-left: calc(40px + var(--spacing-md));
+}
+
+.getting-started__step-description code {
+  font-family: var(--font-code);
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent-coral);
+}
+
+/* Code blocks inside steps inherit from usage.css */
+.getting-started__step .code-block {
+  margin-left: calc(40px + var(--spacing-md));
+}
+
+/* Documentation Link Section */
+.getting-started__docs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-3xl);
+  padding-top: var(--spacing-2xl);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.getting-started__docs-text {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  margin: 0;
+}
+
+.getting-started__docs-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.getting-started__docs-link svg {
+  transition: transform var(--transition-fast);
+}
+
+.getting-started__docs-link:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .getting-started__description {
+    font-size: var(--font-size-base);
+  }
+
+  .getting-started__step-number {
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-base);
+  }
+
+  .getting-started__step-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .getting-started__step-description {
+    padding-left: calc(32px + var(--spacing-md));
+    font-size: var(--font-size-sm);
+  }
+
+  .getting-started__step .code-block {
+    margin-left: 0;
+  }
+
+  .getting-started__docs {
+    text-align: center;
+  }
+
+  .getting-started__docs-text {
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (max-width: 480px) {
+  .getting-started__step-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .getting-started__step-description {
+    padding-left: 0;
+  }
 }
