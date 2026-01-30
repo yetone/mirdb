@@ -49,6 +49,22 @@ test.describe('Browser Compatibility - Core Functionality', () => {
     const nav = page.locator('.main-nav');
     await expect(nav).toBeVisible();
 
+    // Get viewport width to determine if mobile
+    const viewport = page.viewportSize();
+    const isMobile = viewport && viewport.width < 768;
+
+    if (isMobile) {
+      // On mobile, open hamburger menu first
+      const navToggle = page.locator('.nav-toggle');
+      await expect(navToggle).toBeVisible();
+      await navToggle.click();
+      await page.waitForTimeout(300); // Wait for menu animation
+
+      // Verify menu is open
+      const navMenu = page.locator('.nav-menu');
+      await expect(navMenu).toHaveClass(/is-open/);
+    }
+
     // Verify nav links are present
     const navLinks = page.locator('.nav-links a');
     await expect(navLinks).toHaveCount(4);
@@ -176,6 +192,18 @@ test.describe('Browser Compatibility - Core Functionality', () => {
     const html = page.locator('html');
     const scrollBehavior = await html.evaluate(el => getComputedStyle(el).scrollBehavior);
     expect(scrollBehavior).toBe('smooth');
+
+    // Get viewport width to determine if mobile
+    const viewport = page.viewportSize();
+    const isMobile = viewport && viewport.width < 768;
+
+    if (isMobile) {
+      // On mobile, open hamburger menu first
+      const navToggle = page.locator('.nav-toggle');
+      await expect(navToggle).toBeVisible();
+      await navToggle.click();
+      await page.waitForTimeout(300); // Wait for menu animation
+    }
 
     // Test actual scrolling
     await page.locator('.nav-link[href="#architecture"]').click();
