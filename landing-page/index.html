@@ -30,6 +30,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Prism.js for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
 <body>
   <!-- SECTION: Navigation - Scenario 2 -->
@@ -166,10 +169,70 @@
   <!-- END SECTION: Features -->
 
   <!-- SECTION: Usage - Scenario 4 -->
-  <section id="usage" class="usage">
+  <section id="usage" class="usage section">
     <div class="container">
-      <h2>Simple as Memcached</h2>
-      <!-- Code examples to be implemented by Scenario 4 -->
+      <h2 class="usage__title">Simple as Memcached</h2>
+      <p class="usage__description">Use familiar Memcached commands with your existing clients. MirDB speaks the same protocol.</p>
+
+      <div class="usage__content">
+        <div class="usage__code-examples">
+          <!-- Start Server Example -->
+          <div class="code-block" data-language="bash">
+            <div class="code-block__header">
+              <span class="code-block__language">Start the Server</span>
+              <button class="code-block__copy" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-bash"># Start MirDB server on default port
+mirdb --port 11211 --data-dir ./data</code></pre>
+          </div>
+
+          <!-- SET/GET Example -->
+          <div class="code-block" data-language="bash">
+            <div class="code-block__header">
+              <span class="code-block__language">Basic SET/GET Operations</span>
+              <button class="code-block__copy" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-bash"># Connect using telnet or any Memcached client
+telnet localhost 11211
+
+# SET a key-value pair (key, flags, exptime, bytes)
+SET mykey 0 0 5
+hello
+STORED
+
+# GET the value back
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+
+        <!-- Usage GIF/Demo -->
+        <div class="usage__demo">
+          <div class="usage__demo-container">
+            <img src="assets/images/usage.gif" alt="Terminal demonstration showing MirDB usage with SET and GET commands" class="usage__gif" loading="lazy">
+          </div>
+        </div>
+      </div>
     </div>
   </section>
   <!-- END SECTION: Usage -->
@@ -200,6 +263,10 @@
     </div>
   </footer>
   <!-- END SECTION: Footer -->
+
+  <!-- Prism.js for syntax highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" integrity="sha512-whYbDHo3UE82DLEdlWkFgxPPVcvLLRGRNkPMPPdHOmCLJMKKduRWVXXlKQTJKmTThSsdz/9QVHLP1jhrbPLTSg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <!-- Scripts -->
   <script type="module" src="js/main.js"></script>

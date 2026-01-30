@@ -3,4 +3,171 @@
  * Owner: Scenario 4 - Usage Section with Code Examples
  */
 
-/* Placeholder - to be implemented by Scenario 4 */
+.usage {
+  background-color: var(--color-bg-secondary);
+}
+
+.usage__title {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+.usage__description {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-3xl);
+}
+
+.usage__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+  align-items: start;
+}
+
+.usage__code-examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Code Block Container */
+.code-block {
+  position: relative;
+  background-color: #2d2d2d;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.code-block__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-block__language {
+  font-family: var(--font-code);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Copy Button */
+.code-block__copy {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.code-block__copy:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text);
+}
+
+.code-block__copy:focus {
+  outline: 2px solid var(--color-accent-coral);
+  outline-offset: 2px;
+}
+
+.code-block__copy.copied {
+  background-color: rgba(46, 204, 113, 0.2);
+  border-color: #2ecc71;
+  color: #2ecc71;
+}
+
+.code-block__copy .copy-text {
+  font-weight: 500;
+}
+
+/* Code Content */
+.code-block pre {
+  margin: 0;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  background-color: transparent !important;
+}
+
+.code-block pre code {
+  font-family: var(--font-code);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  background: none !important;
+  padding: 0 !important;
+}
+
+/* Override Prism.js default background */
+.code-block pre[class*="language-"],
+.code-block code[class*="language-"] {
+  background: transparent !important;
+}
+
+/* Usage Demo/GIF */
+.usage__demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.usage__demo-container {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background-color: #1e1e1e;
+}
+
+.usage__gif {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .usage__content {
+    grid-template-columns: 1fr;
+  }
+
+  .usage__demo {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .usage__description {
+    font-size: var(--font-size-base);
+  }
+
+  .code-block pre {
+    padding: var(--spacing-sm);
+  }
+
+  .code-block pre code {
+    font-size: var(--font-size-xs);
+  }
+
+  .code-block__header {
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+}

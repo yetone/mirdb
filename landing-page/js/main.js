@@ -7,6 +7,7 @@
 
 import { initNavigation } from './components/navigation.js';
 import { initSmoothScroll } from './components/smooth-scroll.js';
+import { initCopyButtons } from './components/copy-to-clipboard.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize navigation (mobile menu toggle)
@@ -15,8 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize smooth scroll for anchor links
   initSmoothScroll();
 
+  // Initialize copy-to-clipboard buttons (Scenario 4)
+  initCopyButtons();
+
   // Future initializations:
-  // - initCopyButtons() from copy-to-clipboard.js (Scenario 4)
   // - initScrollAnimations() from scroll-animations.js (Scenario 15)
   // - Mermaid diagram initialization (Scenario 5)
 });
