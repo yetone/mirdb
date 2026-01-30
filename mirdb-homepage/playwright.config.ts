@@ -1,3 +1,17 @@
+/**
+ * Playwright Configuration for Cross-Browser Testing
+ * Owner: Scenario 13 - Cross-Browser Compatibility
+ *
+ * Configured browsers:
+ * - Chromium (Chrome)
+ * - Firefox
+ * - WebKit (Safari)
+ * - Edge (requires MS Edge installed locally with channel: 'msedge')
+ *
+ * Note: Edge tests use the msedge channel which requires Microsoft Edge
+ * to be installed on the system. To skip Edge tests on systems without
+ * Edge installed, run: npx playwright test --project=chromium --project=firefox --project=webkit
+ */
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
@@ -23,6 +37,10 @@ export default defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'edge',
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
     },
   ],
   webServer: {
