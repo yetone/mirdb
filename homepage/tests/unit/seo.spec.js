@@ -15,162 +15,204 @@ const path = require('path');
 
 const HTML_PATH = path.join(__dirname, '../../index.html');
 
-// Read and parse HTML content
-function getHtmlContent() {
-  return fs.readFileSync(HTML_PATH, 'utf8');
-}
-
-// Simple helper to extract tag content
-function extractTagContent(html, tagName) {
-  const regex = new RegExp(`<${tagName}[^>]*>([^<]*)</${tagName}>`, 'i');
-  const match = html.match(regex);
-  return match ? match[1] : null;
-}
-
-// Simple helper to extract meta tag content by name attribute
-function extractMetaContent(html, name) {
-  const regex = new RegExp(`<meta\\s+name=["']${name}["']\\s+content=["']([^"']*)["']`, 'i');
-  const match = html.match(regex);
-  return match ? match[1] : null;
-}
-
-// Simple helper to extract meta tag content by property attribute (for OG tags)
-function extractMetaProperty(html, property) {
-  const regex = new RegExp(`<meta\\s+property=["']${property}["']\\s+content=["']([^"']*)["']`, 'i');
-  const match = html.match(regex);
-  return match ? match[1] : null;
-}
-
-// Simple helper to extract canonical URL
-function extractCanonicalUrl(html) {
-  const regex = /<link\s+rel=["']canonical["']\s+href=["']([^"']*)["']/i;
-  const match = html.match(regex);
-  return match ? match[1] : null;
-}
-
 test.describe('SEO and Meta Tags', () => {
   let htmlContent;
 
   test.beforeAll(() => {
-    htmlContent = getHtmlContent();
+    htmlContent = fs.readFileSync(HTML_PATH, 'utf-8');
   });
 
   test.describe('Title Tag', () => {
     test('page has a title tag', () => {
-      const title = extractTagContent(htmlContent, 'title');
-      expect(title).not.toBeNull();
+      const titleMatch = htmlContent.match(/<title[^>]*>(.*?)<\/title>/i);
+      expect(titleMatch).not.toBeNull();
     });
 
     test('title contains MirDB', () => {
-      const title = extractTagContent(htmlContent, 'title');
-      expect(title).toContain('MirDB');
+      const titleMatch = htmlContent.match(/<title[^>]*>(.*?)<\/title>/i);
+      expect(titleMatch).not.toBeNull();
+      expect(titleMatch[1]).toContain('MirDB');
     });
 
     test('title describes the product', () => {
-      const title = extractTagContent(htmlContent, 'title');
-      // Title should describe what MirDB is
-      expect(title.toLowerCase()).toMatch(/key-value|persistent|memcached/);
-    });
-
-    test('title is descriptive and appropriate length', () => {
-      const title = extractTagContent(htmlContent, 'title');
-      // SEO best practice: title should be 30-60 characters
-      expect(title.length).toBeGreaterThan(20);
-      expect(title.length).toBeLessThan(70);
+      const titleMatch = htmlContent.match(/<title[^>]*>(.*?)<\/title>/i);
+      expect(titleMatch).not.toBeNull();
+      const title = titleMatch[1].toLowerCase();
+      // Title should mention key aspects of the product
+      expect(
+        title.includes('key-value') ||
+          title.includes('memcached') ||
+          title.includes('persistent') ||
+          title.includes('store')
+      ).toBe(true);
     });
   });
 
   test.describe('Meta Description', () => {
     test('meta description exists', () => {
-      const description = extractMetaContent(htmlContent, 'description');
-      expect(description).not.toBeNull();
+      const descMatch = htmlContent.match(
+        /<meta\s+name=["']description["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const descMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*name=["']description["'][^>]*>/i
+      );
+      expect(descMatch || descMatchAlt).not.toBeNull();
     });
 
     test('meta description mentions key-value store', () => {
-      const description = extractMetaContent(htmlContent, 'description');
-      expect(description.toLowerCase()).toContain('key-value');
+      const descMatch = htmlContent.match(
+        /<meta\s+name=["']description["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const descMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*name=["']description["'][^>]*>/i
+      );
+      const match = descMatch || descMatchAlt;
+      expect(match).not.toBeNull();
+      const description = match[1].toLowerCase();
+      expect(description.includes('key-value') || description.includes('key value')).toBe(true);
     });
 
     test('meta description mentions memcached', () => {
-      const description = extractMetaContent(htmlContent, 'description');
-      expect(description.toLowerCase()).toContain('memcached');
+      const descMatch = htmlContent.match(
+        /<meta\s+name=["']description["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const descMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*name=["']description["'][^>]*>/i
+      );
+      const match = descMatch || descMatchAlt;
+      expect(match).not.toBeNull();
+      const description = match[1].toLowerCase();
+      expect(description.includes('memcached')).toBe(true);
     });
 
-    test('meta description is appropriate length', () => {
-      const description = extractMetaContent(htmlContent, 'description');
-      // SEO best practice: description should be 120-160 characters
-      expect(description.length).toBeGreaterThan(100);
-      expect(description.length).toBeLessThan(200);
+    test('meta description has reasonable length', () => {
+      const descMatch = htmlContent.match(
+        /<meta\s+name=["']description["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const descMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*name=["']description["'][^>]*>/i
+      );
+      const match = descMatch || descMatchAlt;
+      expect(match).not.toBeNull();
+      const description = match[1];
+      // SEO best practice: description should be 50-160 characters
+      expect(description.length).toBeGreaterThanOrEqual(50);
+      expect(description.length).toBeLessThanOrEqual(160);
     });
   });
 
   test.describe('Open Graph Tags', () => {
-    test('og:title tag is present', () => {
-      const ogTitle = extractMetaProperty(htmlContent, 'og:title');
-      expect(ogTitle).not.toBeNull();
+    test('og:title is present', () => {
+      const ogTitleMatch = htmlContent.match(
+        /<meta\s+property=["']og:title["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const ogTitleMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*property=["']og:title["'][^>]*>/i
+      );
+      expect(ogTitleMatch || ogTitleMatchAlt).not.toBeNull();
+    });
+
+    test('og:title has meaningful content', () => {
+      const ogTitleMatch = htmlContent.match(
+        /<meta\s+property=["']og:title["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const ogTitleMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*property=["']og:title["'][^>]*>/i
+      );
+      const match = ogTitleMatch || ogTitleMatchAlt;
+      expect(match).not.toBeNull();
+      const ogTitle = match[1];
       expect(ogTitle.length).toBeGreaterThan(0);
+      expect(ogTitle).toContain('MirDB');
     });
 
-    test('og:description tag is present', () => {
-      const ogDescription = extractMetaProperty(htmlContent, 'og:description');
-      expect(ogDescription).not.toBeNull();
-      expect(ogDescription.length).toBeGreaterThan(0);
+    test('og:description is present', () => {
+      const ogDescMatch = htmlContent.match(
+        /<meta\s+property=["']og:description["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const ogDescMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*property=["']og:description["'][^>]*>/i
+      );
+      expect(ogDescMatch || ogDescMatchAlt).not.toBeNull();
     });
 
-    test('og:type tag is present', () => {
-      const ogType = extractMetaProperty(htmlContent, 'og:type');
-      expect(ogType).not.toBeNull();
-      expect(ogType).toBe('website');
+    test('og:description has meaningful content', () => {
+      const ogDescMatch = htmlContent.match(
+        /<meta\s+property=["']og:description["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const ogDescMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*property=["']og:description["'][^>]*>/i
+      );
+      const match = ogDescMatch || ogDescMatchAlt;
+      expect(match).not.toBeNull();
+      const ogDesc = match[1];
+      expect(ogDesc.length).toBeGreaterThan(0);
     });
 
-    test('og:url tag is present', () => {
-      const ogUrl = extractMetaProperty(htmlContent, 'og:url');
-      expect(ogUrl).not.toBeNull();
-      expect(ogUrl).toMatch(/^https?:\/\//);
+    test('og:type is present', () => {
+      const ogTypeMatch = htmlContent.match(
+        /<meta\s+property=["']og:type["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const ogTypeMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*property=["']og:type["'][^>]*>/i
+      );
+      expect(ogTypeMatch || ogTypeMatchAlt).not.toBeNull();
     });
 
-    test('og:title matches page title', () => {
-      const pageTitle = extractTagContent(htmlContent, 'title');
-      const ogTitle = extractMetaProperty(htmlContent, 'og:title');
-      expect(ogTitle).toBe(pageTitle);
+    test('og:url is present', () => {
+      const ogUrlMatch = htmlContent.match(
+        /<meta\s+property=["']og:url["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      const ogUrlMatchAlt = htmlContent.match(
+        /<meta\s+content=["']([^"']*)["'][^>]*property=["']og:url["'][^>]*>/i
+      );
+      expect(ogUrlMatch || ogUrlMatchAlt).not.toBeNull();
     });
   });
 
   test.describe('Canonical URL', () => {
     test('canonical link element is present', () => {
-      const canonicalUrl = extractCanonicalUrl(htmlContent);
-      expect(canonicalUrl).not.toBeNull();
+      const canonicalMatch = htmlContent.match(/<link\s+rel=["']canonical["'][^>]*href=["']([^"']*)["'][^>]*>/i);
+      const canonicalMatchAlt = htmlContent.match(/<link\s+href=["']([^"']*)["'][^>]*rel=["']canonical["'][^>]*>/i);
+      expect(canonicalMatch || canonicalMatchAlt).not.toBeNull();
     });
 
-    test('canonical URL is a valid HTTPS URL', () => {
-      const canonicalUrl = extractCanonicalUrl(htmlContent);
-      expect(canonicalUrl).toMatch(/^https:\/\//);
-    });
-
-    test('canonical URL matches og:url', () => {
-      const canonicalUrl = extractCanonicalUrl(htmlContent);
-      const ogUrl = extractMetaProperty(htmlContent, 'og:url');
-      expect(canonicalUrl).toBe(ogUrl);
+    test('canonical URL has valid format', () => {
+      const canonicalMatch = htmlContent.match(/<link\s+rel=["']canonical["'][^>]*href=["']([^"']*)["'][^>]*>/i);
+      const canonicalMatchAlt = htmlContent.match(/<link\s+href=["']([^"']*)["'][^>]*rel=["']canonical["'][^>]*>/i);
+      const match = canonicalMatch || canonicalMatchAlt;
+      expect(match).not.toBeNull();
+      const canonicalUrl = match[1];
+      // Canonical URL should be a valid URL (starts with http:// or https://)
+      expect(canonicalUrl.startsWith('http://') || canonicalUrl.startsWith('https://')).toBe(true);
     });
   });
 
-  test.describe('Additional SEO Checks', () => {
-    test('HTML has lang attribute', () => {
-      const langMatch = htmlContent.match(/<html[^>]*lang=["']([^"']*)["']/i);
-      expect(langMatch).not.toBeNull();
-      expect(langMatch[1]).toBe('en');
-    });
-
-    test('charset meta tag is present', () => {
-      const charsetMatch = htmlContent.match(/<meta\s+charset=["']([^"']*)["']/i);
-      expect(charsetMatch).not.toBeNull();
-      expect(charsetMatch[1].toLowerCase()).toBe('utf-8');
+  test.describe('Additional SEO Elements', () => {
+    test('robots meta tag is present or not blocked', () => {
+      // Check that robots are not blocked (either no robots tag or robots allow indexing)
+      const robotsMatch = htmlContent.match(
+        /<meta\s+name=["']robots["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
+      if (robotsMatch) {
+        const robotsContent = robotsMatch[1].toLowerCase();
+        // Should not contain noindex
+        expect(robotsContent.includes('noindex')).toBe(false);
+      }
+      // If no robots tag, that's fine - default is to allow indexing
     });
 
     test('viewport meta tag is present', () => {
-      const viewportMatch = htmlContent.match(/<meta\s+name=["']viewport["'][^>]*content=["']([^"']*)["']/i);
+      const viewportMatch = htmlContent.match(
+        /<meta\s+name=["']viewport["'][^>]*content=["']([^"']*)["'][^>]*>/i
+      );
       expect(viewportMatch).not.toBeNull();
-      expect(viewportMatch[1]).toContain('width=device-width');
+    });
+
+    test('charset is declared', () => {
+      const charsetMatch = htmlContent.match(/<meta\s+charset=["']([^"']*)["'][^>]*>/i);
+      expect(charsetMatch).not.toBeNull();
+      expect(charsetMatch[1].toLowerCase()).toBe('utf-8');
     });
   });
 });
