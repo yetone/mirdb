@@ -1,0 +1,110 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 3 - Features Section Display
+ *
+ * Implements:
+ * - Section container with padding
+ * - Section title styles
+ * - Feature grid layout (3 columns desktop, 1 mobile)
+ * - Feature card styles (icon, title, description)
+ * - Card hover effects (subtle lift)
+ * - Icon styling
+ */
+
+/* Features Section Container */
+.features {
+  background-color: var(--color-bg-secondary);
+}
+
+.features__title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+@media (min-width: 768px) {
+  .features__title {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--spacing-3xl);
+  }
+}
+
+/* Features Grid */
+.features__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .features__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+}
+
+/* Feature Card */
+.feature-card {
+  background-color: var(--color-bg-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-card:hover {
+    transform: none;
+  }
+}
+
+/* Feature Card Icon */
+.feature-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-lg);
+  background: linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-coral));
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+}
+
+.feature-card__icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* Feature Card Title */
+.feature-card__title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Feature Card Description */
+.feature-card__description {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}

@@ -1,0 +1,123 @@
+/**
+ * Main CSS Entry Point
+ * Owner: First builder
+ *
+ * Import order: reset -> variables -> responsive -> animations -> components
+ */
+
+/* Utilities */
+@import url('./utilities/reset.css');
+@import url('./utilities/variables.css');
+@import url('./utilities/responsive.css');
+@import url('./utilities/animations.css');
+
+/* Components */
+@import url('./components/hero.css');
+@import url('./components/nav.css');
+@import url('./components/features.css');
+@import url('./components/usage.css');
+@import url('./components/architecture.css');
+@import url('./components/getting-started.css');
+@import url('./components/footer.css');
+
+/* Base styles */
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background-color: var(--color-bg-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: var(--font-size-5xl);
+}
+
+h2 {
+  font-size: var(--font-size-4xl);
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+}
+
+code {
+  font-family: var(--font-code);
+}
+
+/* Section base styles */
+section {
+  padding: var(--spacing-4xl) 0;
+}
+
+/* Button base styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--color-accent-coral);
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background-color: #d63a52;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-text);
+  border: 2px solid var(--color-text);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-text);
+  color: var(--color-bg-primary);
+}
+
+/* Focus styles for WCAG 2.1 AA compliance */
+/* Ensure all interactive elements have visible focus indicators */
+.btn:focus,
+.btn:focus-visible {
+  outline: 2px solid var(--color-accent-coral);
+  outline-offset: 2px;
+}
+
+a:focus,
+a:focus-visible {
+  outline: 2px solid var(--color-accent-coral);
+  outline-offset: 2px;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--color-accent-coral);
+  outline-offset: 2px;
+}
+
+/* Skip focus styles when clicking, only show for keyboard navigation */
+.btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button:focus:not(:focus-visible) {
+  outline: none;
+}

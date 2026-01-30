@@ -1,0 +1,214 @@
+/**
+ * Footer Section Styles
+ * Owner: Scenario 7 - Footer Section
+ *
+ * Styles for:
+ * - Footer container layout
+ * - Link styles
+ * - License and attribution text
+ * - Copyright notice
+ * - Responsive adjustments
+ */
+
+.footer {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-accent-blue);
+  padding: var(--spacing-3xl) 0 var(--spacing-xl);
+  margin-top: auto;
+}
+
+.footer__content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-2xl);
+  padding-bottom: var(--spacing-2xl);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Branding Section */
+.footer__branding {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.footer__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.footer__logo:hover {
+  opacity: 0.8;
+}
+
+.footer__logo img {
+  border-radius: var(--radius-sm);
+}
+
+.footer__logo-text {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+}
+
+.footer__tagline {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+/* Links Section */
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.footer__links-title,
+.footer__github-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.footer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.footer__link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast);
+}
+
+.footer__link:hover {
+  color: var(--color-accent-coral);
+}
+
+/* GitHub Section */
+.footer__github {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.footer__github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  width: fit-content;
+}
+
+.footer__github-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-accent-coral);
+  color: var(--color-accent-coral);
+}
+
+.footer__github-icon {
+  flex-shrink: 0;
+}
+
+/* Bottom Section */
+.footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-xl);
+}
+
+.footer__license,
+.footer__attribution,
+.footer__copyright {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.footer__license-label {
+  font-weight: 500;
+}
+
+.footer__license-link,
+.footer__author-link {
+  color: var(--color-accent-coral);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.footer__license-link:hover,
+.footer__author-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.footer__copyright {
+  color: var(--color-text-muted);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .footer {
+    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+  }
+
+  .footer__content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    text-align: center;
+  }
+
+  .footer__branding {
+    align-items: center;
+  }
+
+  .footer__tagline {
+    max-width: none;
+  }
+
+  .footer__nav {
+    align-items: center;
+  }
+
+  .footer__github {
+    align-items: center;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer__content {
+    padding-bottom: var(--spacing-xl);
+  }
+
+  .footer__logo-text {
+    font-size: var(--font-size-lg);
+  }
+}
