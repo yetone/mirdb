@@ -119,61 +119,10 @@
     </section>
 
     <!-- SECTION: Usage - Owner: Scenario 3 -->
-    <section id="usage" class="usage-section" aria-labelledby="usage-title">
+    <section id="usage" aria-labelledby="usage-title">
       <div class="container">
         <h2 id="usage-title">Usage</h2>
-        <p class="usage-intro">MirDB implements the memcached protocol, so you can use any existing memcached client. Here are the most common operations:</p>
-
-        <div class="usage-demo">
-          <img src="assets/images/usage.gif" alt="MirDB usage demonstration showing terminal commands" class="usage-gif" loading="lazy">
-        </div>
-
-        <div class="code-examples">
-          <!-- SET command example -->
-          <div class="code-example" data-command="set">
-            <div class="code-example-header">
-              <h3>Store a Value</h3>
-              <button type="button" class="copy-btn" aria-label="Copy set command to clipboard" data-copy-target="set-code">
-                <span class="copy-icon" aria-hidden="true">📋</span>
-                <span class="copy-text">Copy</span>
-              </button>
-            </div>
-            <pre class="code-block"><code id="set-code" class="language-shell"><span class="cmd-prompt">$</span> <span class="cmd-keyword">set</span> <span class="cmd-arg">mykey</span> <span class="cmd-flag">0</span> <span class="cmd-flag">3600</span> <span class="cmd-flag">5</span>
-<span class="cmd-input">hello</span>
-<span class="cmd-output">STORED</span></code></pre>
-            <p class="code-description">Set a key with flags (0), TTL in seconds (3600), and byte length (5)</p>
-          </div>
-
-          <!-- GET command example -->
-          <div class="code-example" data-command="get">
-            <div class="code-example-header">
-              <h3>Retrieve a Value</h3>
-              <button type="button" class="copy-btn" aria-label="Copy get command to clipboard" data-copy-target="get-code">
-                <span class="copy-icon" aria-hidden="true">📋</span>
-                <span class="copy-text">Copy</span>
-              </button>
-            </div>
-            <pre class="code-block"><code id="get-code" class="language-shell"><span class="cmd-prompt">$</span> <span class="cmd-keyword">get</span> <span class="cmd-arg">mykey</span>
-<span class="cmd-output">VALUE mykey 0 5</span>
-<span class="cmd-output">hello</span>
-<span class="cmd-output">END</span></code></pre>
-            <p class="code-description">Retrieve a value by key</p>
-          </div>
-
-          <!-- DELETE command example -->
-          <div class="code-example" data-command="delete">
-            <div class="code-example-header">
-              <h3>Delete a Value</h3>
-              <button type="button" class="copy-btn" aria-label="Copy delete command to clipboard" data-copy-target="delete-code">
-                <span class="copy-icon" aria-hidden="true">📋</span>
-                <span class="copy-text">Copy</span>
-              </button>
-            </div>
-            <pre class="code-block"><code id="delete-code" class="language-shell"><span class="cmd-prompt">$</span> <span class="cmd-keyword">delete</span> <span class="cmd-arg">mykey</span>
-<span class="cmd-output">DELETED</span></code></pre>
-            <p class="code-description">Remove a key from the store</p>
-          </div>
-        </div>
+        <!-- Usage examples will be added by Scenario 3 -->
       </div>
     </section>
 
@@ -181,110 +130,147 @@
     <section id="architecture" class="architecture" aria-labelledby="architecture-title">
       <div class="container">
         <h2 id="architecture-title">Architecture</h2>
-        <p class="architecture-intro">MirDB uses a Log-Structured Merge (LSM) tree storage engine for efficient writes and durable persistence.</p>
+        <p class="architecture-intro">
+          MirDB uses an LSM (Log-Structured Merge) tree architecture for high-performance persistent storage.
+          This design optimizes write throughput while maintaining efficient read operations.
+        </p>
 
-        <!-- SVG Architecture Diagram -->
-        <div class="architecture-diagram" role="img" aria-label="LSM-tree architecture diagram showing data flow from WAL through memtable to SSTables">
-          <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" class="lsm-diagram">
-            <!-- Background -->
-            <rect width="800" height="500" fill="transparent"/>
+        <!-- LSM-tree Architecture Diagram -->
+        <div class="architecture-diagram" role="img" aria-label="LSM-tree architecture diagram showing data flow from writes through memtable to SSTables">
+          <div class="diagram-container">
+            <!-- Write Request Entry Point -->
+            <div class="diagram-node diagram-node--write" data-component="write" tabindex="0" aria-describedby="tooltip-write">
+              <div class="node-icon">✍️</div>
+              <div class="node-label">Write Request</div>
+              <div class="diagram-tooltip" id="tooltip-write" role="tooltip">
+                Incoming write operations (set, add, replace) enter the system here and are processed sequentially.
+              </div>
+            </div>
 
-            <!-- Write Request Arrow -->
-            <g class="diagram-node" data-component="write" data-tooltip="Incoming write requests (set, add, replace commands)">
-              <text x="400" y="30" text-anchor="middle" class="diagram-label">Write Request</text>
-              <path d="M400 40 L400 70" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
-              <title>Incoming write requests (set, add, replace commands)</title>
-            </g>
+            <div class="diagram-arrow" aria-hidden="true">↓</div>
 
-            <!-- WAL Box -->
-            <g class="diagram-node architecture-component hoverable" data-component="wal" data-tooltip="Write-Ahead Log: Persists every write to disk before acknowledgment for crash recovery and durability">
-              <rect x="300" y="80" width="200" height="50" rx="5" class="component-box wal-box"/>
-              <text x="400" y="110" text-anchor="middle" class="component-label">WAL (Write-Ahead Log)</text>
-              <title>Write-Ahead Log: Persists every write to disk before acknowledgment for crash recovery and durability</title>
-            </g>
-            <path d="M400 130 L400 160" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <!-- WAL -->
+            <div class="diagram-node diagram-node--wal" data-component="wal" tabindex="0" aria-describedby="tooltip-wal">
+              <div class="node-icon">📝</div>
+              <div class="node-label">Write-Ahead Log (WAL)</div>
+              <div class="diagram-tooltip" id="tooltip-wal" role="tooltip">
+                All writes are first logged to the WAL for durability. If the server crashes, data can be recovered from this log.
+              </div>
+            </div>
 
-            <!-- Memtable Box -->
-            <g class="diagram-node architecture-component hoverable" data-component="memtable" data-tooltip="In-memory skip list for fast writes. Holds data until reaching size threshold (default 4MB)">
-              <rect x="300" y="170" width="200" height="50" rx="5" class="component-box memtable-box"/>
-              <text x="400" y="200" text-anchor="middle" class="component-label">Memtable (Skip List)</text>
-              <title>In-memory skip list for fast writes. Holds data until reaching size threshold (default 4MB)</title>
-            </g>
+            <div class="diagram-arrow" aria-hidden="true">↓</div>
 
-            <!-- Minor Compaction Label -->
-            <g class="diagram-node" data-component="minor-compaction" data-tooltip="Minor compaction: Flushes immutable memtables to Level 0 SSTables when memtable is full">
-              <text x="550" y="250" text-anchor="start" class="diagram-annotation">Minor Compaction</text>
-              <path d="M400 220 L400 280" stroke="currentColor" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
-              <title>Minor compaction: Flushes immutable memtables to Level 0 SSTables when memtable is full</title>
-            </g>
+            <!-- Memtable -->
+            <div class="diagram-node diagram-node--memtable" data-component="memtable" tabindex="0" aria-describedby="tooltip-memtable">
+              <div class="node-icon">🧠</div>
+              <div class="node-label">Memtable</div>
+              <div class="node-detail">Active Skip List (In-Memory)</div>
+              <div class="diagram-tooltip" id="tooltip-memtable" role="tooltip">
+                An in-memory skip list data structure for fast writes. When it reaches the configured size limit (default 4MB), it becomes immutable.
+              </div>
+            </div>
+
+            <div class="diagram-arrow diagram-arrow--labeled" aria-hidden="true">
+              <span class="arrow-label">When full</span>
+              ↓
+            </div>
+
+            <!-- Immutable Memtables -->
+            <div class="diagram-node diagram-node--imm" data-component="imm" tabindex="0" aria-describedby="tooltip-imm">
+              <div class="node-icon">📦</div>
+              <div class="node-label">Immutable Memtables</div>
+              <div class="node-detail">Queue awaiting compaction</div>
+              <div class="diagram-tooltip" id="tooltip-imm" role="tooltip">
+                Frozen memtables waiting to be flushed to disk. Multiple immutable memtables can queue up during heavy write loads.
+              </div>
+            </div>
+
+            <div class="diagram-arrow diagram-arrow--labeled" aria-hidden="true">
+              <span class="arrow-label">Minor Compaction</span>
+              ↓
+            </div>
 
             <!-- Level 0 SSTables -->
-            <g class="diagram-node architecture-component hoverable" data-component="level0" data-tooltip="Level 0 SSTables: Recently flushed data, files may have overlapping key ranges">
-              <rect x="250" y="290" width="300" height="50" rx="5" class="component-box sstable-box level0"/>
-              <text x="400" y="320" text-anchor="middle" class="component-label">Level 0 SSTables</text>
-              <title>Level 0 SSTables: Recently flushed data, files may have overlapping key ranges</title>
-            </g>
+            <div class="diagram-node diagram-node--level0" data-component="level0" tabindex="0" aria-describedby="tooltip-level0">
+              <div class="node-icon">💾</div>
+              <div class="node-label">Level 0 SSTables</div>
+              <div class="node-detail">Recently flushed, may overlap</div>
+              <div class="diagram-tooltip" id="tooltip-level0" role="tooltip">
+                Newly flushed SSTables land here. Files at this level may have overlapping key ranges, requiring linear search.
+              </div>
+            </div>
 
-            <!-- Major Compaction Label -->
-            <g class="diagram-node" data-component="major-compaction" data-tooltip="Major compaction: Merges SSTables between levels, triggered when L0 has 4+ files or level exceeds size threshold">
-              <text x="550" y="370" text-anchor="start" class="diagram-annotation">Major Compaction</text>
-              <path d="M400 340 L400 390" stroke="currentColor" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
-              <title>Major compaction: Merges SSTables between levels, triggered when L0 has 4+ files or level exceeds size threshold</title>
-            </g>
+            <div class="diagram-arrow diagram-arrow--labeled" aria-hidden="true">
+              <span class="arrow-label">Major Compaction</span>
+              ↓
+            </div>
 
             <!-- Level 1+ SSTables -->
-            <g class="diagram-node architecture-component hoverable" data-component="levels" data-tooltip="Level 1+ SSTables: Sorted, non-overlapping key ranges within each level. Supports up to 7 levels.">
-              <rect x="200" y="400" width="400" height="50" rx="5" class="component-box sstable-box levels"/>
-              <text x="400" y="430" text-anchor="middle" class="component-label">Level 1+ SSTables (Sorted, Non-overlapping)</text>
-              <title>Level 1+ SSTables: Sorted, non-overlapping key ranges within each level. Supports up to 7 levels.</title>
-            </g>
-
-            <!-- Disk Storage Indicator -->
-            <g class="diagram-node" data-component="disk">
-              <text x="400" y="480" text-anchor="middle" class="diagram-annotation">Persistent Disk Storage</text>
-              <title>Data stored persistently on disk</title>
-            </g>
-
-            <!-- Read Path Arrow (side) -->
-            <g class="diagram-node" data-component="read-path" data-tooltip="Read path: Check memtable first, then search SSTable levels from L0 to higher levels">
-              <path d="M180 200 L180 320 L240 320" stroke="var(--color-accent)" stroke-width="2" fill="none" marker-end="url(#arrowhead-read)"/>
-              <text x="120" y="260" text-anchor="middle" class="diagram-annotation read-label">Read Path</text>
-              <title>Read path: Check memtable first, then search SSTable levels from L0 to higher levels</title>
-            </g>
-
-            <!-- Arrow Marker Definitions -->
-            <defs>
-              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                <polygon points="0 0, 10 3.5, 0 7" fill="currentColor"/>
-              </marker>
-              <marker id="arrowhead-read" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-accent)"/>
-              </marker>
-            </defs>
-          </svg>
+            <div class="diagram-node diagram-node--levels" data-component="levels" tabindex="0" aria-describedby="tooltip-levels">
+              <div class="node-icon">🗄️</div>
+              <div class="node-label">Level 1+ SSTables</div>
+              <div class="node-detail">Sorted, non-overlapping within level</div>
+              <div class="diagram-tooltip" id="tooltip-levels" role="tooltip">
+                Higher levels contain sorted, non-overlapping SSTables. Each level is ~10x larger than the previous. Binary search enables fast lookups.
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Component Explanations -->
-        <div class="architecture-components">
-          <div class="component-card hover-info" data-for="wal">
+        <div class="architecture-explanations">
+          <article class="explanation-card" id="explanation-wal">
             <h3>Write-Ahead Log (WAL)</h3>
-            <p>The WAL ensures durability by persisting every write to disk before acknowledging it. In case of a crash, MirDB recovers data by replaying the WAL. Each WAL segment corresponds to one memtable and uses Snappy compression for efficient storage.</p>
-          </div>
+            <p>
+              The WAL provides <strong>durability</strong> by persisting every write to disk before acknowledging it.
+              Each WAL segment corresponds to one memtable, with keys and values Snappy-compressed for efficiency.
+            </p>
+            <ul class="explanation-features">
+              <li>Writes are logged before updating the memtable</li>
+              <li>Crash recovery rebuilds memtables from WAL segments</li>
+              <li>Segments are deleted after successful compaction</li>
+            </ul>
+          </article>
 
-          <div class="component-card hover-info" data-for="memtable">
-            <h3>Memtable</h3>
-            <p>An in-memory skip list data structure that provides O(log n) insert and lookup operations. When the memtable reaches its size threshold (default 4MB), it becomes immutable and is queued for flushing to disk as an SSTable.</p>
-          </div>
+          <article class="explanation-card" id="explanation-memtable">
+            <h3>Memtable (Skip List)</h3>
+            <p>
+              The memtable is an in-memory <strong>skip list</strong> data structure optimized for concurrent reads and writes.
+              It provides O(log n) insertion and lookup performance.
+            </p>
+            <ul class="explanation-features">
+              <li>Default maximum size: 4MB (<code>mem_table_max_size</code>)</li>
+              <li>Maximum height: 32 levels (<code>mem_table_max_height</code>)</li>
+              <li>Becomes immutable when full, replaced by new empty memtable</li>
+            </ul>
+          </article>
 
-          <div class="component-card hover-info" data-for="sstable">
+          <article class="explanation-card" id="explanation-sstable">
             <h3>SSTables (Sorted String Tables)</h3>
-            <p>Immutable, sorted files stored on disk. Level 0 contains recently flushed data with potentially overlapping key ranges. Higher levels (1-7) maintain sorted, non-overlapping key ranges within each level for efficient binary search lookups.</p>
-          </div>
+            <p>
+              SSTables are immutable, sorted files on disk containing key-value pairs organized into blocks.
+              They form the persistent storage layer of the LSM-tree.
+            </p>
+            <ul class="explanation-features">
+              <li>Block-based format with configurable block size (default 4KB)</li>
+              <li>Bloom filters for efficient negative lookups</li>
+              <li>Index blocks enable binary search within files</li>
+            </ul>
+          </article>
 
-          <div class="component-card hover-info" data-for="compaction">
+          <article class="explanation-card" id="explanation-compaction">
             <h3>Compaction</h3>
-            <p><strong>Minor compaction</strong> flushes immutable memtables to Level 0 SSTables. <strong>Major compaction</strong> merges SSTables between levels when Level 0 has 4+ files or when a level exceeds its size threshold (10MB × 10^level). This process removes deleted keys and maintains read performance.</p>
-          </div>
+            <p>
+              Compaction merges SSTables to reclaim space and maintain read performance.
+              MirDB supports both <strong>minor</strong> and <strong>major</strong> compaction processes.
+            </p>
+            <ul class="explanation-features">
+              <li><strong>Minor compaction:</strong> Flushes immutable memtables to Level 0</li>
+              <li><strong>Major compaction:</strong> Merges Level N SSTables into Level N+1</li>
+              <li>Triggered when Level 0 reaches 4 files (<code>l0_compaction_trigger</code>)</li>
+              <li>Each level is ~10x larger than the previous</li>
+            </ul>
+          </article>
         </div>
       </div>
     </section>

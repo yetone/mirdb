@@ -255,132 +255,267 @@ section {
   margin-bottom: var(--spacing-sm);
 }
 
-/* Architecture Section - Owner: Scenario 4 */
+/* ==========================================================================
+   Architecture Section - Owner: Scenario 4
+   ========================================================================== */
+
 .architecture {
   background-color: var(--color-bg);
 }
 
 .architecture-intro {
   text-align: center;
-  color: var(--color-text-muted);
   max-width: 700px;
   margin: 0 auto var(--spacing-2xl);
+  color: var(--color-text-muted);
   font-size: 1.1rem;
 }
 
+/* Diagram Container */
 .architecture-diagram {
-  max-width: 800px;
+  max-width: 500px;
   margin: 0 auto var(--spacing-2xl);
-  background-color: var(--color-bg-secondary);
-  border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.diagram-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* Diagram Nodes */
+.diagram-node {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  padding: var(--spacing-md);
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--transition-normal),
+              transform var(--transition-normal),
+              box-shadow var(--transition-normal);
+}
+
+.diagram-node:hover,
+.diagram-node:focus {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);
+  outline: none;
+}
+
+.diagram-node:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.node-icon {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.node-label {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.node-detail {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-xs);
+}
+
+/* Diagram Tooltips */
+.diagram-tooltip {
+  position: absolute;
+  left: calc(100% + var(--spacing-md));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 250px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.diagram-tooltip::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent var(--color-accent) transparent transparent;
+}
+
+.diagram-node:hover .diagram-tooltip,
+.diagram-node:focus .diagram-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Diagram Arrows */
+.diagram-arrow {
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  line-height: 1;
+  padding: var(--spacing-xs) 0;
+}
+
+.diagram-arrow--labeled {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.arrow-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-secondary);
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
 }
 
-.lsm-diagram {
-  width: 100%;
-  height: auto;
-  color: var(--color-text);
+/* Node Color Variants */
+.diagram-node--write {
+  border-color: #58a6ff;
 }
 
-.lsm-diagram .diagram-label {
-  font-size: 14px;
-  font-weight: 600;
-  fill: var(--color-text);
+.diagram-node--wal {
+  border-color: #f0883e;
+  background-color: rgba(240, 136, 62, 0.05);
 }
 
-.lsm-diagram .component-label {
-  font-size: 13px;
-  font-weight: 500;
-  fill: var(--color-text);
+.diagram-node--memtable {
+  border-color: #3fb950;
+  background-color: rgba(63, 185, 80, 0.05);
 }
 
-.lsm-diagram .diagram-annotation {
-  font-size: 11px;
-  fill: var(--color-text-muted);
-  font-style: italic;
+.diagram-node--imm {
+  border-color: #a371f7;
+  background-color: rgba(163, 113, 247, 0.05);
 }
 
-.lsm-diagram .read-label {
-  fill: var(--color-accent);
+.diagram-node--level0 {
+  border-color: #79c0ff;
+  background-color: rgba(121, 192, 255, 0.05);
 }
 
-.lsm-diagram .component-box {
-  fill: var(--color-bg);
-  stroke: var(--color-border);
-  stroke-width: 2;
-  transition: all var(--transition-normal);
+.diagram-node--levels {
+  border-color: #d2a8ff;
+  background-color: rgba(210, 168, 255, 0.05);
 }
 
-.lsm-diagram .wal-box {
-  stroke: #f0883e;
-}
-
-.lsm-diagram .memtable-box {
-  stroke: #58a6ff;
-}
-
-.lsm-diagram .sstable-box {
-  stroke: #3fb950;
-}
-
-.lsm-diagram .sstable-box.levels {
-  stroke: #a371f7;
-}
-
-/* Hover effects on diagram components */
-.lsm-diagram .architecture-component:hover .component-box,
-.lsm-diagram .diagram-node:hover .component-box {
-  fill: var(--color-bg-secondary);
-  stroke-width: 3;
-  filter: drop-shadow(0 0 8px currentColor);
-}
-
-.lsm-diagram .architecture-component:hover .component-label {
-  fill: var(--color-accent);
-}
-
-.lsm-diagram .hoverable {
-  cursor: pointer;
-}
-
-/* Architecture component cards */
-.architecture-components {
+/* Explanation Cards */
+.architecture-explanations {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--spacing-lg);
-  margin-top: var(--spacing-xl);
+  margin-top: var(--spacing-2xl);
 }
 
-.component-card {
+.explanation-card {
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
-  transition: all var(--transition-normal);
 }
 
-.component-card:hover {
-  border-color: var(--color-accent);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.15);
-}
-
-.component-card h3 {
+.explanation-card h3 {
+  margin-bottom: var(--spacing-md);
   color: var(--color-accent);
-  margin-bottom: var(--spacing-sm);
   font-size: 1.1rem;
 }
 
-.component-card p {
+.explanation-card p {
   color: var(--color-text-muted);
   font-size: 0.95rem;
   line-height: 1.6;
-  margin-bottom: 0;
 }
 
-.component-card p strong {
+.explanation-card strong {
   color: var(--color-text);
+}
+
+.explanation-card code {
+  background-color: var(--color-code-bg);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85em;
+  color: var(--color-accent);
+}
+
+.explanation-features {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--spacing-md);
+}
+
+.explanation-features li {
+  position: relative;
+  padding-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.explanation-features li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
+
+/* Responsive adjustments for diagram */
+@media (max-width: 768px) {
+  .diagram-tooltip {
+    position: fixed;
+    left: 50%;
+    top: auto;
+    bottom: var(--spacing-lg);
+    transform: translateX(-50%);
+    width: calc(100% - var(--spacing-2xl));
+    max-width: 350px;
+  }
+
+  .diagram-tooltip::before {
+    display: none;
+  }
+
+  .architecture-diagram {
+    padding: var(--spacing-md);
+  }
+
+  .diagram-node {
+    padding: var(--spacing-sm);
+  }
+
+  .node-icon {
+    font-size: 1.25rem;
+  }
+
+  .node-label {
+    font-size: 0.85rem;
+  }
 }
 
 /* Reduced motion support */
