@@ -10,15 +10,34 @@
  */
 
 :root {
-  /* Colors - Dark theme as primary */
+  /* Colors - Dark theme as primary (developer-focused dark mode) */
   --color-bg: #0d1117;
   --color-bg-secondary: #161b22;
   --color-text: #c9d1d9;
   --color-text-muted: #8b949e;
+  --color-text-secondary: #8b949e;
   --color-accent: #58a6ff;
   --color-accent-hover: #79b8ff;
   --color-border: #30363d;
   --color-code-bg: #1f2428;
+  --color-link: #58a6ff;
+  --color-link-hover: #79b8ff;
+
+  /* Status colors for dark mode */
+  --color-success: #3fb950;
+  --color-warning: #d29922;
+  --color-error: #f85149;
+
+  /* Syntax highlighting colors for code blocks */
+  --color-syntax-keyword: #ff7b72;
+  --color-syntax-string: #a5d6ff;
+  --color-syntax-number: #79c0ff;
+  --color-syntax-comment: #8b949e;
+  --color-syntax-function: #d2a8ff;
+  --color-syntax-variable: #ffa657;
+
+  /* Border radius */
+  --border-radius: 8px;
 
   /* Typography */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
