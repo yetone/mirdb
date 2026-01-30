@@ -1,0 +1,74 @@
+/**
+ * Navigation Styles
+ * Owner: Scenario 2 - Navigation and Smooth Scrolling
+ *
+ * Expected styles:
+ * - .nav: Sticky navigation bar
+ * - .nav__logo: Navigation logo
+ * - .nav__links: Navigation links container
+ * - .nav__link: Individual link styling
+ * - .skip-link: Skip to content accessibility link
+ * - Mobile navigation (hamburger menu)
+ */
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  padding: var(--spacing-md) 0;
+}
+
+.nav__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent-rust);
+}
+
+.nav__logo:hover {
+  color: var(--color-accent-teal);
+}
+
+.nav__links {
+  display: flex;
+  gap: var(--spacing-lg);
+  list-style: none;
+}
+
+.nav__links a {
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.nav__links a:hover {
+  color: var(--color-accent-teal);
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: var(--spacing-md);
+  left: var(--spacing-md);
+  background: var(--color-accent-teal);
+  color: var(--color-bg-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  z-index: 9999;
+  clip: auto;
+  width: auto;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .nav__links {
+    display: none;
+  }
+}

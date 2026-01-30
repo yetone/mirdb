@@ -1,0 +1,8 @@
+/**
+ * Usage Documentation Styles
+ * Owner: Scenario 4 - Usage Documentation Section
+ */
+
+.usage {
+  padding: var(--spacing-3xl) 0;
+}

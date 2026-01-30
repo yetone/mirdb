@@ -1,0 +1,22 @@
+/**
+ * Footer Section Styles
+ * Owner: Scenario 7 - Footer Section
+ */
+
+.footer {
+  background-color: var(--color-bg-secondary);
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.footer__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.footer__container p {
+  color: var(--color-text-secondary);
+}

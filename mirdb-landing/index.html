@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility. Built with Rust and LSM-tree architecture for high-performance data storage.">
+  <title>MirDB - Persistent Key-Value Store</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components/hero.css">
+  <link rel="stylesheet" href="css/components/nav.css">
+  <link rel="stylesheet" href="css/components/features.css">
+  <link rel="stylesheet" href="css/components/usage.css">
+  <link rel="stylesheet" href="css/components/architecture.css">
+  <link rel="stylesheet" href="css/components/roadmap.css">
+  <link rel="stylesheet" href="css/components/footer.css">
+  <link rel="stylesheet" href="css/utilities/animations.css">
+  <link rel="stylesheet" href="css/utilities/responsive.css">
+</head>
+<body>
+  <!-- Skip to Content Link (Scenario 2) -->
+  <a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+
+  <!-- Navigation (Scenario 2) -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="container nav__container">
+      <a href="#" class="nav__logo">MirDB</a>
+      <ul class="nav__links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#usage">Usage</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero">
+      <div class="container hero__container">
+        <h1 class="hero__title">MirDB</h1>
+        <p class="hero__tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+        <div class="hero__cta">
+          <a href="https://github.com/yetone/mirdb" class="hero__cta-primary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          <a href="#usage" class="hero__cta-secondary">Get Started</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 3) -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="section-title">Features</h2>
+        <div class="features__grid">
+          <!-- Memcached Protocol Card -->
+          <article class="feature-card animate-on-scroll">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" class="feature-icon">
+                <rect x="8" y="16" width="48" height="32" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="20" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="2"/>
+                <line x1="20" y1="36" x2="36" y2="36" stroke="currentColor" stroke-width="2"/>
+                <circle cx="52" cy="24" r="3" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Memcached Protocol Compatibility</h3>
+            <p class="feature-card__description">
+              Full compatibility with the memcached text protocol. Connect using your existing memcached clients
+              without any code changes. Supports GET, SET, DELETE, and other standard operations seamlessly.
+            </p>
+          </article>
+
+          <!-- Persistence Architecture Card -->
+          <article class="feature-card animate-on-scroll">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" class="feature-icon">
+                <rect x="12" y="8" width="40" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                <rect x="12" y="26" width="40" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                <rect x="12" y="44" width="40" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="20" x2="32" y2="26" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="38" x2="32" y2="44" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Persistence Architecture</h3>
+            <p class="feature-card__description">
+              Built on SSTable-based storage for true data durability. Unlike traditional in-memory caches,
+              MirDB persists your data to disk, ensuring it survives restarts and crashes.
+            </p>
+          </article>
+
+          <!-- LSM Tree Card -->
+          <article class="feature-card animate-on-scroll">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" class="feature-icon lsm-diagram">
+                <!-- Memtable (top) -->
+                <rect x="20" y="4" width="24" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                <text x="32" y="12" text-anchor="middle" font-size="6" fill="currentColor">MEM</text>
+                <!-- Arrow down -->
+                <line x1="32" y1="14" x2="32" y2="20" stroke="currentColor" stroke-width="1.5"/>
+                <polygon points="32,22 29,18 35,18" fill="currentColor"/>
+                <!-- Level 0 SSTables -->
+                <rect x="8" y="24" width="16" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="40" y="24" width="16" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <!-- Arrow down -->
+                <line x1="32" y1="32" x2="32" y2="38" stroke="currentColor" stroke-width="1.5"/>
+                <polygon points="32,40 29,36 35,36" fill="currentColor"/>
+                <!-- Level 1 SSTables -->
+                <rect x="4" y="42" width="12" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="20" y="42" width="12" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="36" y="42" width="12" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="52" y="42" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <!-- Labels -->
+                <text x="4" y="60" font-size="5" fill="currentColor">L0</text>
+                <text x="4" y="56" font-size="5" fill="currentColor">SST</text>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">LSM Tree Implementation</h3>
+            <p class="feature-card__description">
+              Powered by Log-Structured Merge-tree architecture. Data flows from the in-memory memtable
+              through multiple SSTable levels, optimizing for write-heavy workloads with efficient compaction.
+            </p>
+          </article>
+
+          <!-- Performance Card -->
+          <article class="feature-card animate-on-scroll">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" class="feature-icon">
+                <circle cx="32" cy="36" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="36" x2="32" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="32" y1="36" x2="44" y2="44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="32" cy="36" r="3" fill="currentColor"/>
+                <line x1="32" y1="14" x2="32" y2="16" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="56" x2="32" y2="58" stroke="currentColor" stroke-width="2"/>
+                <line x1="10" y1="36" x2="12" y2="36" stroke="currentColor" stroke-width="2"/>
+                <line x1="52" y1="36" x2="54" y2="36" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Performance Characteristics</h3>
+            <p class="feature-card__description">
+              High-throughput performance with Rust's zero-cost abstractions. Optimized read and write paths
+              deliver consistent low-latency responses under heavy load conditions.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Usage Section (Scenario 4) -->
+    <section id="usage" class="usage">
+      <div class="container">
+        <h2 class="section-title">Usage</h2>
+        <p>Code examples and usage documentation coming soon.</p>
+      </div>
+    </section>
+
+    <!-- Architecture Section (Scenario 5) -->
+    <section id="architecture" class="architecture">
+      <div class="container">
+        <h2 class="section-title">Architecture</h2>
+        <p>Technical architecture diagrams coming soon.</p>
+      </div>
+    </section>
+
+    <!-- Roadmap Section (Scenario 6) -->
+    <section id="roadmap" class="roadmap">
+      <div class="container">
+        <h2 class="section-title">Roadmap</h2>
+        <p>Project roadmap and feature timeline coming soon.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 7) -->
+  <footer class="footer">
+    <div class="container footer__container">
+      <p>&copy; 2024 MirDB. Licensed under MIT.</p>
+      <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/utils/helpers.js"></script>
+  <script src="js/modules/scroll-animations.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

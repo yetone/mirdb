@@ -1,0 +1,138 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 3 - Features Showcase Section
+ *
+ * Expected styles:
+ * - .features: Section container
+ * - .features__grid: 3-column responsive grid
+ * - .feature-card: Individual feature card
+ * - .feature-card__icon: Feature icon
+ * - .feature-card__title: Feature title
+ * - .feature-card__description: Feature description
+ * - Scroll-triggered animations
+ */
+
+.features {
+  background-color: var(--color-bg-secondary);
+  padding: var(--spacing-3xl) 0;
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--spacing-xl);
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) {
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: 3 columns */
+@media (min-width: 1024px) {
+  .features__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature-card {
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  box-shadow: var(--shadow-md);
+  height: 100%;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-card__icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-accent-teal);
+}
+
+.feature-card__icon svg {
+  width: 64px;
+  height: 64px;
+}
+
+.feature-card__icon .feature-icon {
+  transition: color var(--transition-normal);
+}
+
+.feature-card:hover .feature-card__icon .feature-icon {
+  color: var(--color-accent-rust);
+}
+
+.feature-card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.3;
+}
+
+.feature-card__description {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+/* Animation states for scroll-triggered animations */
+.feature-card.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.feature-card.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animation delays */
+.features__grid .feature-card.animate-on-scroll:nth-child(1) {
+  transition-delay: 0ms;
+}
+
+.features__grid .feature-card.animate-on-scroll:nth-child(2) {
+  transition-delay: 100ms;
+}
+
+.features__grid .feature-card.animate-on-scroll:nth-child(3) {
+  transition-delay: 200ms;
+}
+
+.features__grid .feature-card.animate-on-scroll:nth-child(4) {
+  transition-delay: 300ms;
+}
+
+/* Reduced motion: show elements immediately */
+@media (prefers-reduced-motion: reduce) {
+  .feature-card.animate-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .feature-card:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,84 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Implementation
+ *
+ * Expected styles:
+ * - .hero: Full viewport height, centered content
+ * - .hero__logo: Animated logo styling
+ * - .hero__title: Main heading (MirDB)
+ * - .hero__tagline: Subtitle styling
+ * - .hero__cta-primary: Primary button (GitHub)
+ * - .hero__cta-secondary: Secondary button (Get Started)
+ */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-md);
+}
+
+.hero__container {
+  max-width: 800px;
+}
+
+.hero__title {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.hero__tagline {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.hero__cta {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero__cta-primary,
+.hero__cta-secondary {
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  display: inline-block;
+}
+
+.hero__cta-primary {
+  background-color: var(--color-accent-rust);
+  color: var(--color-bg-primary);
+}
+
+.hero__cta-primary:hover {
+  background-color: #c9956f;
+  color: var(--color-bg-primary);
+}
+
+.hero__cta-secondary {
+  border: 2px solid var(--color-accent-teal);
+  color: var(--color-accent-teal);
+}
+
+.hero__cta-secondary:hover {
+  background-color: var(--color-accent-teal);
+  color: var(--color-bg-primary);
+}
+
+@media (max-width: 768px) {
+  .hero__title {
+    font-size: 2.5rem;
+  }
+
+  .hero__tagline {
+    font-size: 1rem;
+  }
+}

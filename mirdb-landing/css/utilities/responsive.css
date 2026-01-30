@@ -1,0 +1,40 @@
+/**
+ * Responsive Utilities
+ * Owner: Scenario 10 - Responsive Design
+ *
+ * Breakpoints:
+ * - Mobile: <768px
+ * - Tablet: 768px-1024px
+ * - Desktop: >1024px
+ */
+
+/* Mobile-first base styles are in individual component files */
+
+/* Tablet breakpoint */
+@media (min-width: 768px) {
+  :root {
+    --container-padding: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 2.75rem;
+  }
+}
+
+/* Desktop breakpoint */
+@media (min-width: 1024px) {
+  :root {
+    --container-padding: 2rem;
+  }
+
+  .section-title {
+    font-size: 3rem;
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1400px;
+  }
+}

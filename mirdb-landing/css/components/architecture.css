@@ -1,0 +1,9 @@
+/**
+ * Architecture Section Styles
+ * Owner: Scenario 5 - Technical Architecture Section
+ */
+
+.architecture {
+  background-color: var(--color-bg-secondary);
+  padding: var(--spacing-3xl) 0;
+}

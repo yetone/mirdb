@@ -1,0 +1,8 @@
+/**
+ * Roadmap Section Styles
+ * Owner: Scenario 6 - Project Roadmap Section
+ */
+
+.roadmap {
+  padding: var(--spacing-3xl) 0;
+}
