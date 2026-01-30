@@ -18,4 +18,121 @@
 /* Tablet styles */
 @media (max-width: 768px) and (min-width: 481px) {
   /* Tablet-specific overrides */
+
+  /* Header - Scenario 9 */
+  .header__container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .header__tagline {
+    max-width: 200px;
+    font-size: 0.75rem;
+  }
+
+  .header__nav-list {
+    gap: var(--spacing-md);
+  }
+
+  .header__nav-link {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.8125rem;
+  }
+
+  /* Hero Section - Scenario 9 */
+  .hero {
+    padding: var(--spacing-2xl) var(--spacing-md);
+    min-height: 50vh;
+  }
+
+  .hero__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-lg);
+    max-width: 100%;
+  }
+
+  .hero__cta {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-base);
+  }
+
+  /* Features Section - Scenario 9 */
+  .features {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .features__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .features__card {
+    padding: var(--spacing-lg);
+  }
+
+  .features__card-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .features__card-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .features__card-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .features__card-description {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Architecture Section - Scenario 9 */
+  .architecture {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  /* Usage Section - Scenario 9 */
+  .usage {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .usage__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .usage__section {
+    padding: var(--spacing-lg);
+  }
+
+  .usage__section-title {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Status Section - Scenario 9 */
+  .status {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  /* Getting Started Section - Scenario 9 */
+  .getting-started {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  /* Footer Section - Scenario 9 */
+  .footer {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  /* Layout utilities */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
 }
