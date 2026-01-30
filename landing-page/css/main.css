@@ -704,6 +704,185 @@ section {
   color: var(--color-text-muted);
 }
 
+/* ==========================================================================
+   Getting Started Section - Owner: Scenario 6
+   ========================================================================== */
+
+.getting-started {
+  background-color: var(--color-bg);
+}
+
+.getting-started-intro {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--spacing-2xl);
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}
+
+.installation-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.installation-option {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+}
+
+.installation-option h3.step-header {
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.15rem;
+}
+
+.installation-option > p {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.installation-steps {
+  list-style: none;
+  counter-reset: step-counter;
+  padding: 0;
+}
+
+.installation-steps li {
+  counter-increment: step-counter;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  padding-left: var(--spacing-2xl);
+}
+
+.installation-steps li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.installation-steps .step-description {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.installation-steps .code-block {
+  margin: 0;
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+
+.installation-steps .code-block code {
+  display: block;
+  padding: var(--spacing-md);
+  background: none;
+  white-space: pre;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+/* Quick Start Section */
+.quick-start {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.quick-start h3.step-header {
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.15rem;
+}
+
+.quick-start > p {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.quick-start .code-block {
+  margin: 0;
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+
+.quick-start .code-block code {
+  display: block;
+  padding: var(--spacing-md);
+  background: none;
+  white-space: pre;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* Documentation Link */
+.documentation-link {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.documentation-link p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.documentation-link a {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.documentation-link a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+/* Responsive adjustments for Getting Started */
+@media (max-width: 768px) {
+  .installation-options {
+    grid-template-columns: 1fr;
+  }
+
+  .installation-option,
+  .quick-start {
+    padding: var(--spacing-lg);
+  }
+
+  .installation-steps li {
+    padding-left: var(--spacing-xl);
+  }
+
+  .installation-steps li::before {
+    width: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+  }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   html {

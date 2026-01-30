@@ -402,10 +402,78 @@
     </section>
 
     <!-- SECTION: Getting Started - Owner: Scenario 6 -->
-    <section id="getting-started" aria-labelledby="getting-started-title">
+    <section id="getting-started" class="getting-started" aria-labelledby="getting-started-title">
       <div class="container">
         <h2 id="getting-started-title">Getting Started</h2>
-        <!-- Getting started content will be added by Scenario 6 -->
+        <p class="getting-started-intro">
+          Get MirDB up and running in minutes. Choose the installation method that works best for you.
+        </p>
+
+        <div class="installation-options">
+          <!-- Option 1: Install from source -->
+          <div class="installation-option">
+            <h3 class="step-header">Option 1: Build from Source</h3>
+            <p>Clone the repository and build MirDB using Cargo:</p>
+            <ol class="installation-steps">
+              <li>
+                <span class="step-description">Clone the repository:</span>
+                <pre class="code-block"><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb</code></pre>
+              </li>
+              <li>
+                <span class="step-description">Build the project:</span>
+                <pre class="code-block"><code>cargo build --release</code></pre>
+              </li>
+              <li>
+                <span class="step-description">Run MirDB:</span>
+                <pre class="code-block"><code>./target/release/mirdb</code></pre>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Option 2: Install via Cargo -->
+          <div class="installation-option">
+            <h3 class="step-header">Option 2: Install via Cargo</h3>
+            <p>Install MirDB directly using Cargo (requires Rust toolchain):</p>
+            <ol class="installation-steps">
+              <li>
+                <span class="step-description">Install with cargo:</span>
+                <pre class="code-block"><code>cargo install mirdb</code></pre>
+              </li>
+              <li>
+                <span class="step-description">Run MirDB:</span>
+                <pre class="code-block"><code>mirdb</code></pre>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="quick-start">
+          <h3 class="step-header">Quick Start</h3>
+          <p>Once MirDB is running, you can connect using any memcached client. Here's a quick test using netcat:</p>
+          <pre class="code-block"><code># Connect to MirDB (default port: 12333)
+nc localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+        </div>
+
+        <!-- Documentation Link -->
+        <div class="documentation-link">
+          <p>
+            For comprehensive documentation, configuration options, and advanced usage,
+            visit the <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub repository documentation</a>.
+          </p>
+        </div>
       </div>
     </section>
   </main>
