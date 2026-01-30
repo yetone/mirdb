@@ -19,6 +19,7 @@
 /* Component styles */
 @import './components/features.css';
 @import './components/usage.css';
+@import './components/architecture.css';
 
 /* Utility styles */
 @import './utilities/syntax-highlight.css';

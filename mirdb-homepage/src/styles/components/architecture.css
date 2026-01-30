@@ -2,3 +2,64 @@
  * Architecture Section Styles
  * Owner: Scenario 4 - Architecture Diagram Section
  */
+
+.architecture-section {
+  scroll-margin-top: 4rem;
+}
+
+.architecture-diagram-container {
+  background: linear-gradient(to bottom right, #ffffff, #f8fafc);
+}
+
+.architecture-diagram {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.architecture-diagram:hover {
+  transform: scale(1.02);
+}
+
+.explanation-card {
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.explanation-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.lsm-tree-explanation strong,
+.compaction-explanation strong {
+  color: #1f2937;
+}
+
+.architecture-highlights {
+  border-left: 4px solid #3b82f6;
+}
+
+@media (max-width: 768px) {
+  .architecture-diagram-container {
+    padding: 1rem;
+  }
+
+  .architecture-diagram {
+    min-width: 600px;
+  }
+
+  .explanation-card {
+    padding: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .architecture-diagram,
+  .explanation-card {
+    transition: none;
+  }
+
+  .architecture-diagram:hover,
+  .explanation-card:hover {
+    transform: none;
+  }
+}

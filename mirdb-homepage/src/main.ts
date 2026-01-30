@@ -12,6 +12,7 @@
 
 import { renderFeatures } from './components/Features';
 import { renderUsageExamples } from './components/UsageExamples';
+import { renderArchitecture } from './components/Architecture';
 
 function initApp(): void {
   // Render Features section (Scenario 2)
@@ -26,6 +27,13 @@ function initApp(): void {
   if (usageContainer) {
     const usageSection = renderUsageExamples();
     usageContainer.replaceWith(usageSection);
+  }
+
+  // Render Architecture section (Scenario 4)
+  const architectureContainer = document.getElementById('architecture');
+  if (architectureContainer) {
+    const architectureSection = renderArchitecture();
+    architectureContainer.replaceWith(architectureSection);
   }
 }
 
