@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // when they are implemented by their respective scenario owners
   console.log('MirDB Landing Page initialized');
 
+  // Initialize navigation - Owner: Scenario 8
+  if (typeof initNavigation === 'function') {
+    initNavigation();
+  }
+
   // Initialize configuration section collapsible - Owner: Scenario 5
   initConfigurationToggle();
 });

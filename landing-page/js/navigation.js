@@ -13,47 +13,29 @@
  */
 
 /**
- * Smoothly scroll to a section by its ID
- * @param {string} sectionId - The ID of the section to scroll to
+ * Smooth scroll to a section by ID
+ * @param {string} sectionId - The ID of the section to scroll to (without #)
  */
 function scrollToSection(sectionId) {
   const section = document.getElementById(sectionId);
   if (section) {
+    // Check if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     section.scrollIntoView({
-      behavior: 'smooth',
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
       block: 'start'
     });
   }
 }
 
 /**
- * Initialize navigation handlers for smooth scrolling
- * Sets up click handlers on all internal navigation links
- */
-function initNavigation() {
-  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-  const navLogo = document.querySelector('.nav-logo');
-
-  // Handle navigation link clicks
-  navLinks.forEach(link => {
-    link.addEventListener('click', handleNavClick);
-  });
-
-  // Handle logo click (scroll to hero)
-  if (navLogo && navLogo.getAttribute('href')?.startsWith('#')) {
-    navLogo.addEventListener('click', handleNavClick);
-  }
-
-  // Track active section on scroll
-  trackActiveSection();
-}
-
-/**
- * Handle navigation link click events
+ * Handle navigation link clicks for smooth scrolling
  * @param {Event} event - The click event
  */
-function handleNavClick(event) {
-  const href = event.currentTarget.getAttribute('href');
+function handleNavLinkClick(event) {
+  const link = event.currentTarget;
+  const href = link.getAttribute('href');
 
   // Only handle internal anchor links
   if (href && href.startsWith('#')) {
@@ -70,48 +52,72 @@ function handleNavClick(event) {
 
 /**
  * Track active navigation state based on scroll position
- * Updates the active class on navigation links
  */
-function trackActiveSection() {
+function updateActiveNavState() {
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 
-  if (sections.length === 0 || navLinks.length === 0) return;
+  // Get current scroll position with offset for nav height
+  const scrollPosition = window.scrollY + 100;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const sectionId = entry.target.getAttribute('id');
-        updateActiveLink(sectionId, navLinks);
-      }
-    });
-  }, {
-    rootMargin: '-50% 0px -50% 0px',
-    threshold: 0
-  });
+  let currentSection = '';
 
   sections.forEach(section => {
-    observer.observe(section);
-  });
-}
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
 
-/**
- * Update the active link in navigation
- * @param {string} sectionId - The ID of the currently visible section
- * @param {NodeList} navLinks - The navigation links
- */
-function updateActiveLink(sectionId, navLinks) {
+    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+      currentSection = section.getAttribute('id');
+    }
+  });
+
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
-    if (href === `#${sectionId}`) {
-      link.classList.add('active');
+    if (href === `#${currentSection}`) {
+      link.classList.add('nav-link--active');
     } else {
-      link.classList.remove('active');
+      link.classList.remove('nav-link--active');
     }
   });
 }
 
-// Export for use in main.js and testing
+/**
+ * Initialize navigation handlers
+ */
+function initNavigation() {
+  // Get all navigation links (both in nav and logo)
+  const navLinks = document.querySelectorAll('.nav a[href^="#"]');
+
+  // Attach click handlers for smooth scrolling
+  navLinks.forEach(link => {
+    link.addEventListener('click', handleNavLinkClick);
+  });
+
+  // Track active navigation state on scroll
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    // Debounce scroll event
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout);
+    }
+    scrollTimeout = setTimeout(updateActiveNavState, 50);
+  });
+
+  // Set initial active state
+  updateActiveNavState();
+
+  // Handle keyboard navigation
+  navLinks.forEach(link => {
+    link.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        link.click();
+      }
+    });
+  });
+}
+
+// Export functions for use by main.js
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { initNavigation, scrollToSection };
 }
