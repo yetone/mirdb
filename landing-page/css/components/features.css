@@ -56,16 +56,16 @@
 /* Feature Card */
 .feature-card {
   background-color: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   text-align: center;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -83,7 +83,7 @@
   height: 80px;
   margin: 0 auto var(--spacing-lg);
   background: linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-coral));
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   color: var(--color-text);
 }
 
