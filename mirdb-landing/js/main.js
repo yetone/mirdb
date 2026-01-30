@@ -18,6 +18,8 @@
    * Initialize all JavaScript functionality
    */
   function init() {
+    console.log('MirDB Landing Page initialized');
+
     // Initialize scroll animations if available
     if (typeof window.initScrollAnimations === 'function') {
       window.initScrollAnimations();
