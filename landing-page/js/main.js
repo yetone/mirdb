@@ -13,4 +13,34 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialization will be handled by individual modules
   // when they are implemented by their respective scenario owners
   console.log('MirDB Landing Page initialized');
+
+  // Initialize configuration section collapsible - Owner: Scenario 5
+  initConfigurationToggle();
 });
+
+/**
+ * Initialize the configuration section collapsible toggle
+ * Owner: Scenario 5 - Configuration Section
+ */
+function initConfigurationToggle() {
+  var toggleBtn = document.getElementById('config-toggle-btn');
+  var content = document.getElementById('config-content');
+
+  if (!toggleBtn || !content) {
+    return;
+  }
+
+  toggleBtn.addEventListener('click', function() {
+    var isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+
+    // Toggle expanded state
+    toggleBtn.setAttribute('aria-expanded', !isExpanded);
+
+    // Toggle content visibility
+    if (isExpanded) {
+      content.classList.add('collapsed');
+    } else {
+      content.classList.remove('collapsed');
+    }
+  });
+}

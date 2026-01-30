@@ -526,7 +526,7 @@ section {
   background-color: var(--color-bg);
 }
 
-.config-intro {
+.configuration-intro {
   text-align: center;
   color: var(--color-text-muted);
   max-width: 700px;
@@ -536,91 +536,90 @@ section {
 
 /* Collapsible Configuration */
 .config-collapsible {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-2xl);
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-2xl);
   overflow: hidden;
 }
 
-.config-collapsible summary {
+.config-toggle {
+  width: 100%;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-bg-secondary);
+  border: none;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  background-color: var(--color-code-bg);
-  border-bottom: 1px solid var(--color-border);
-  list-style: none;
   transition: background-color var(--transition-fast);
 }
 
-.config-collapsible summary::-webkit-details-marker {
-  display: none;
+.config-toggle:hover {
+  background-color: var(--color-code-bg);
 }
 
-.config-collapsible summary:hover {
-  background-color: var(--color-bg-secondary);
-}
-
-.config-collapsible summary:focus {
+.config-toggle:focus {
   outline: 2px solid var(--color-accent);
   outline-offset: -2px;
 }
 
-.collapse-toggle .toggle-icon {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  border-left: 6px solid var(--color-accent);
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  transition: transform var(--transition-fast);
-}
-
-.config-collapsible[open] .toggle-icon {
-  transform: rotate(90deg);
-}
-
-.collapse-toggle .toggle-text {
-  font-weight: 600;
-  color: var(--color-text);
-  font-size: 1rem;
-}
-
-.config-example {
-  border-top: none;
-}
-
-.config-example .code-example-header {
+.config-toggle-icon {
   display: flex;
   align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  transition: transform var(--transition-normal);
+}
+
+.config-toggle[aria-expanded="false"] .config-toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.config-content {
+  overflow: hidden;
+  transition: max-height var(--transition-normal), opacity var(--transition-normal);
+  max-height: 600px;
+  opacity: 1;
+}
+
+.config-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.config-code-wrapper {
+  border-top: 1px solid var(--color-border);
+}
+
+.config-code-header {
+  display: flex;
   justify-content: space-between;
-  padding: var(--spacing-sm) var(--spacing-lg);
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--color-code-bg);
   border-bottom: 1px solid var(--color-border);
 }
 
-.config-example .code-example-header h3 {
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin: 0;
+.config-file-name {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
   color: var(--color-text-muted);
 }
 
-.config-code-block {
+.config-code {
   margin: 0;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
   background-color: var(--color-code-bg);
-  font-family: var(--font-mono);
   font-size: 0.875rem;
-  line-height: 1.7;
+  line-height: 1.6;
   overflow-x: auto;
-}
-
-.config-code-block code {
-  background: none;
-  padding: 0;
+  border-radius: 0;
 }
 
 /* TOML Syntax Highlighting */
@@ -630,7 +629,7 @@ section {
 }
 
 .toml-key {
-  color: #79c0ff;
+  color: var(--color-accent);
 }
 
 .toml-string {
@@ -638,76 +637,71 @@ section {
 }
 
 .toml-number {
-  color: #f0883e;
+  color: #79c0ff;
 }
 
 /* Parameter Documentation Table */
-.config-params {
-  margin-top: var(--spacing-xl);
+.config-parameters {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.config-params h3 {
+.config-parameters h3 {
+  text-align: center;
   margin-bottom: var(--spacing-lg);
   color: var(--color-text);
-  font-size: 1.25rem;
 }
 
-.params-table {
-  width: 100%;
-  border-collapse: collapse;
+.config-table-wrapper {
+  overflow-x: auto;
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  overflow: hidden;
 }
 
-.params-table th,
-.params-table td {
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.config-table th,
+.config-table td {
   padding: var(--spacing-md);
   text-align: left;
   border-bottom: 1px solid var(--color-border);
 }
 
-.params-table th {
+.config-table th {
   background-color: var(--color-code-bg);
   color: var(--color-text);
   font-weight: 600;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.params-table td {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  vertical-align: top;
-}
-
-.params-table td:first-child {
-  color: var(--color-accent);
-  font-weight: 500;
   white-space: nowrap;
 }
 
-.params-table td:nth-child(2) {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: #f0883e;
-  white-space: nowrap;
-}
-
-.params-table td code {
-  background-color: transparent;
-  padding: 0;
-  color: inherit;
-}
-
-.params-table tbody tr:hover {
-  background-color: rgba(88, 166, 255, 0.05);
-}
-
-.params-table tbody tr:last-child td {
+.config-table tbody tr:last-child td {
   border-bottom: none;
+}
+
+.config-table tbody tr:hover {
+  background-color: var(--color-code-bg);
+}
+
+.config-table td:first-child {
+  white-space: nowrap;
+}
+
+.config-table td:first-child code,
+.config-table td:last-child code {
+  background-color: var(--color-code-bg);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--color-accent);
+}
+
+.config-table td:nth-child(2) {
+  color: var(--color-text-muted);
 }
 
 /* Reduced motion support */

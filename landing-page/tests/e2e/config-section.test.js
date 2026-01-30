@@ -2,11 +2,10 @@
  * MirDB Landing Page - Configuration Section E2E Tests
  * Owner: Scenario 5 - Configuration Section
  *
- * Tests verify:
- * - Configuration section displays TOML example
- * - All key parameters are present (addr, work_dir, mem_table_max_size, sst_max_size)
- * - Parameter documentation table exists
- * - Section is collapsible/expandable
+ * Tests for:
+ * - TOML configuration example display
+ * - Parameter documentation table
+ * - Collapsible/expandable functionality
  */
 
 const { test, expect } = require('@playwright/test');
@@ -15,179 +14,176 @@ const { setupPage } = require('../helpers/test-utils');
 test.describe('Configuration Section', () => {
   test.beforeEach(async ({ page }) => {
     await setupPage(page);
+  });
+
+  test('TC1: TOML configuration example is displayed with proper syntax', async ({ page }) => {
     // Navigate to configuration section
-    await page.locator('#configuration').scrollIntoViewIfNeeded();
+    const configSection = page.locator('#configuration');
+    await configSection.scrollIntoViewIfNeeded();
+
+    // Check for code block with TOML syntax
+    const configCode = page.locator('#config-toml');
+    await expect(configCode).toBeVisible();
+
+    // Verify it contains TOML syntax elements
+    const codeContent = await configCode.textContent();
+    expect(codeContent).toContain('=');
+    expect(codeContent).toContain('#'); // TOML comments start with #
   });
 
-  // Test Case 1: Check for TOML configuration example
-  test('TC1: Configuration code block shows TOML syntax', async ({ page }) => {
+  test('TC2: Configuration shows addr parameter with correct value', async ({ page }) => {
     const configSection = page.locator('#configuration');
-    await expect(configSection).toBeVisible();
+    await configSection.scrollIntoViewIfNeeded();
 
-    // Check for the TOML code block
-    const tomlCodeBlock = configSection.locator('.config-code-block, .code-block, pre');
-    await expect(tomlCodeBlock.first()).toBeVisible();
+    // Check for addr parameter in the TOML example
+    const configCode = page.locator('#config-toml');
+    const codeContent = await configCode.textContent();
 
-    // Verify TOML syntax is present (key = value pattern)
-    const codeContent = await configSection.textContent();
-    // TOML uses = for assignment
-    expect(codeContent).toMatch(/\w+\s*=\s*["']/);
-  });
-
-  // Test Case 2: Verify addr parameter in config
-  test('TC2: Configuration shows addr parameter', async ({ page }) => {
-    const configSection = page.locator('#configuration');
-
-    // Find the configuration code
-    const codeContent = await configSection.textContent();
-
-    // Verify addr parameter is present with the expected value
+    // Verify addr = "0.0.0.0:12333" is present
     expect(codeContent).toContain('addr');
     expect(codeContent).toContain('0.0.0.0:12333');
   });
 
-  // Test Case 3: Verify work_dir parameter in config
   test('TC3: Configuration includes work_dir parameter', async ({ page }) => {
     const configSection = page.locator('#configuration');
+    await configSection.scrollIntoViewIfNeeded();
 
-    // Find the configuration code
-    const codeContent = await configSection.textContent();
+    const configCode = page.locator('#config-toml');
+    const codeContent = await configCode.textContent();
 
     // Verify work_dir parameter is present
     expect(codeContent).toContain('work_dir');
   });
 
-  // Test Case 4: Verify mem_table_max_size parameter
   test('TC4: Configuration includes mem_table_max_size parameter', async ({ page }) => {
     const configSection = page.locator('#configuration');
+    await configSection.scrollIntoViewIfNeeded();
 
-    // Find the configuration code
-    const codeContent = await configSection.textContent();
+    const configCode = page.locator('#config-toml');
+    const codeContent = await configCode.textContent();
 
     // Verify mem_table_max_size parameter is present
     expect(codeContent).toContain('mem_table_max_size');
   });
 
-  // Test Case 5: Verify sst_max_size parameter
   test('TC5: Configuration includes sst_max_size parameter', async ({ page }) => {
     const configSection = page.locator('#configuration');
+    await configSection.scrollIntoViewIfNeeded();
 
-    // Find the configuration code
-    const codeContent = await configSection.textContent();
+    const configCode = page.locator('#config-toml');
+    const codeContent = await configCode.textContent();
 
     // Verify sst_max_size parameter is present
     expect(codeContent).toContain('sst_max_size');
   });
 
-  // Test Case 6: Check for parameter descriptions table
-  test('TC6: Table or list explaining what each parameter does', async ({ page }) => {
+  test('TC6: Parameter descriptions table exists and documents parameters', async ({ page }) => {
     const configSection = page.locator('#configuration');
+    await configSection.scrollIntoViewIfNeeded();
 
-    // Check for either a table or a description list
-    const paramsTable = configSection.locator('.config-params, .params-table, table, dl');
-    await expect(paramsTable.first()).toBeVisible();
+    // Check for parameter table
+    const configTable = page.locator('.config-table');
+    await expect(configTable).toBeVisible();
 
-    // Verify some parameter descriptions exist
-    const sectionContent = await configSection.textContent();
+    // Check table has headers
+    const tableHeaders = configTable.locator('th');
+    await expect(tableHeaders).toHaveCount(3);
 
-    // Check that descriptions are present (should have multiple parameter names and descriptions)
-    expect(sectionContent).toContain('addr');
-    expect(sectionContent).toContain('work_dir');
-    expect(sectionContent).toContain('mem_table_max_size');
-    expect(sectionContent).toContain('sst_max_size');
+    // Check for Parameter, Description, Default columns
+    await expect(tableHeaders.nth(0)).toContainText('Parameter');
+    await expect(tableHeaders.nth(1)).toContainText('Description');
+    await expect(tableHeaders.nth(2)).toContainText('Default');
 
-    // Verify there are descriptive texts (not just parameter names)
-    // The section should have words like "directory", "size", "address", etc.
-    expect(sectionContent.toLowerCase()).toMatch(/directory|storage|address|size|memory/);
+    // Check that table has rows with parameter documentation
+    const tableRows = configTable.locator('tbody tr');
+    const rowCount = await tableRows.count();
+    expect(rowCount).toBeGreaterThan(0);
+
+    // Verify some key parameters are documented
+    const tableContent = await configTable.textContent();
+    expect(tableContent).toContain('addr');
+    expect(tableContent).toContain('work_dir');
+    expect(tableContent).toContain('mem_table_max_size');
+    expect(tableContent).toContain('sst_max_size');
   });
 
-  // Test Case 7: Configuration section is expandable/collapsible
-  test('TC7: Section can be collapsed to reduce visual clutter', async ({ page }) => {
+  test('TC7: Configuration section is collapsible and expandable', async ({ page }) => {
     const configSection = page.locator('#configuration');
+    await configSection.scrollIntoViewIfNeeded();
 
-    // Find the collapsible element (details/summary or custom toggle)
-    const collapsibleElement = configSection.locator('details, .collapsible, [data-collapsible]');
-    await expect(collapsibleElement.first()).toBeVisible();
+    // Find the toggle button
+    const toggleButton = page.locator('#config-toggle-btn');
+    await expect(toggleButton).toBeVisible();
 
-    // Check for a toggle button or summary element
-    const toggleElement = configSection.locator('summary, .collapse-toggle, [data-toggle]');
-    await expect(toggleElement.first()).toBeVisible();
+    // Verify initial state is expanded
+    const initialState = await toggleButton.getAttribute('aria-expanded');
+    expect(initialState).toBe('true');
 
-    // Get the collapsible content container
-    const contentContainer = collapsibleElement.first();
+    // Find the content container
+    const configContent = page.locator('#config-content');
+    await expect(configContent).toBeVisible();
 
-    // If it's a details element, test the native behavior
-    const tagName = await contentContainer.evaluate(el => el.tagName.toLowerCase());
+    // Click to collapse
+    await toggleButton.click();
 
-    if (tagName === 'details') {
-      // Test native details/summary behavior
-      const isOpenInitially = await contentContainer.getAttribute('open');
+    // Wait for animation
+    await page.waitForTimeout(300);
 
-      // Click to toggle
-      await toggleElement.first().click();
-      await page.waitForTimeout(300);
+    // Verify collapsed state
+    const collapsedState = await toggleButton.getAttribute('aria-expanded');
+    expect(collapsedState).toBe('false');
 
-      // Verify state changed
-      const isOpenAfterClick = await contentContainer.getAttribute('open');
-      expect(isOpenInitially !== isOpenAfterClick || isOpenAfterClick !== null).toBeTruthy();
-    } else {
-      // Test custom collapsible behavior
-      await toggleElement.first().click();
-      await page.waitForTimeout(300);
+    // Content should have collapsed class
+    await expect(configContent).toHaveClass(/collapsed/);
 
-      // Check if content visibility changed
-      const collapsedContent = configSection.locator('.collapse-content, .collapsible-content');
-      if (await collapsedContent.count() > 0) {
-        const isVisible = await collapsedContent.first().isVisible();
-        // Content should either be hidden or visible depending on initial state
-        expect(typeof isVisible).toBe('boolean');
-      }
-    }
+    // Click to expand again
+    await toggleButton.click();
+
+    // Wait for animation
+    await page.waitForTimeout(300);
+
+    // Verify expanded state
+    const expandedState = await toggleButton.getAttribute('aria-expanded');
+    expect(expandedState).toBe('true');
+
+    // Content should not have collapsed class
+    await expect(configContent).not.toHaveClass(/collapsed/);
   });
 
-  // Additional test: Configuration section has proper accessibility structure
-  test('Configuration section has proper accessibility structure', async ({ page }) => {
+  test('Configuration section has proper accessibility attributes', async ({ page }) => {
     const configSection = page.locator('#configuration');
+    await configSection.scrollIntoViewIfNeeded();
 
-    // Verify section has aria-labelledby
+    // Check section has aria-labelledby
     await expect(configSection).toHaveAttribute('aria-labelledby', 'configuration-title');
 
-    // Verify heading exists and is visible
-    const configTitle = page.locator('#configuration-title');
-    await expect(configTitle).toBeVisible();
-    await expect(configTitle).toHaveText('Configuration');
+    // Check toggle button has proper ARIA attributes
+    const toggleButton = page.locator('#config-toggle-btn');
+    await expect(toggleButton).toHaveAttribute('aria-expanded');
+    await expect(toggleButton).toHaveAttribute('aria-controls', 'config-content');
+
+    // Check table has aria-labelledby
+    const configTable = page.locator('.config-table');
+    await expect(configTable).toHaveAttribute('aria-labelledby', 'config-params-title');
   });
 
-  // Additional test: Code block has copy functionality
-  test('Configuration code block has copy button', async ({ page }) => {
+  test('Configuration section displays file name indicator', async ({ page }) => {
     const configSection = page.locator('#configuration');
+    await configSection.scrollIntoViewIfNeeded();
 
-    // Find copy button
-    const copyButton = configSection.locator('.copy-btn, [data-copy], button:has-text("Copy")');
-
-    // Copy button should be present if code block is large
-    if (await copyButton.count() > 0) {
-      await expect(copyButton.first()).toBeVisible();
-    }
+    // Check for file name in code header
+    const fileName = page.locator('.config-file-name');
+    await expect(fileName).toBeVisible();
+    await expect(fileName).toContainText('mirdb.toml');
   });
 
-  // Additional test: All config parameters are documented
-  test('All major configuration parameters have descriptions', async ({ page }) => {
+  test('Configuration has copy button for TOML example', async ({ page }) => {
     const configSection = page.locator('#configuration');
-    const sectionContent = await configSection.textContent();
+    await configSection.scrollIntoViewIfNeeded();
 
-    // Verify all major parameters from the PRD are mentioned
-    const requiredParams = [
-      'addr',
-      'work_dir',
-      'mem_table_max_size',
-      'sst_max_size',
-      'max_level',
-      'block_size'
-    ];
-
-    for (const param of requiredParams) {
-      expect(sectionContent).toContain(param);
-    }
+    // Check for copy button
+    const copyButton = page.locator('.config-code-wrapper .copy-btn');
+    await expect(copyButton).toBeVisible();
+    await expect(copyButton).toHaveAttribute('data-copy-target', 'config-toml');
   });
 });

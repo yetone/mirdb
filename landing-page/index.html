@@ -279,117 +279,124 @@
     <section id="configuration" class="configuration-section" aria-labelledby="configuration-title">
       <div class="container">
         <h2 id="configuration-title">Configuration</h2>
-        <p class="config-intro">MirDB is highly configurable through a TOML configuration file. Customize storage, performance, and network settings to match your deployment needs.</p>
+        <p class="configuration-intro">MirDB uses TOML configuration files for flexible deployment. Customize storage, memory, and compaction settings to match your workload.</p>
 
         <!-- Collapsible Configuration Example -->
-        <details class="config-collapsible" open>
-          <summary class="collapse-toggle">
-            <span class="toggle-icon" aria-hidden="true"></span>
-            <span class="toggle-text">Configuration Example (config.toml)</span>
-          </summary>
-
-          <div class="config-example">
-            <div class="code-example-header">
-              <h3>config.toml</h3>
-              <button type="button" class="copy-btn" aria-label="Copy configuration to clipboard" data-copy-target="config-code">
-                <span class="copy-icon" aria-hidden="true">📋</span>
-                <span class="copy-text">Copy</span>
-              </button>
-            </div>
-            <pre class="code-block config-code-block"><code id="config-code" class="language-toml"><span class="toml-comment"># MirDB Configuration File</span>
-
-<span class="toml-comment"># Network settings</span>
+        <div class="config-collapsible">
+          <button type="button" class="config-toggle" aria-expanded="true" aria-controls="config-content" id="config-toggle-btn">
+            <span class="config-toggle-text">Example Configuration</span>
+            <span class="config-toggle-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </button>
+          <div class="config-content" id="config-content" aria-labelledby="config-toggle-btn">
+            <div class="config-code-wrapper">
+              <div class="config-code-header">
+                <span class="config-file-name">mirdb.toml</span>
+                <button type="button" class="copy-btn" aria-label="Copy configuration to clipboard" data-copy-target="config-toml">
+                  <span class="copy-icon" aria-hidden="true">📋</span>
+                  <span class="copy-text">Copy</span>
+                </button>
+              </div>
+              <pre class="code-block config-code"><code id="config-toml" class="language-toml"><span class="toml-comment"># Network configuration</span>
 <span class="toml-key">addr</span> = <span class="toml-string">"0.0.0.0:12333"</span>
 
-<span class="toml-comment"># Storage settings</span>
-<span class="toml-key">work_dir</span> = <span class="toml-string">"/tmp/mirdb"</span>
+<span class="toml-comment"># Storage configuration</span>
 <span class="toml-key">max_level</span> = <span class="toml-number">7</span>
+<span class="toml-key">work_dir</span> = <span class="toml-string">"/tmp/mirdb"</span>
 
-<span class="toml-comment"># Memory table settings</span>
+<span class="toml-comment"># SSTable configuration</span>
+<span class="toml-key">sst_max_size</span> = <span class="toml-string">"100M"</span>
+
+<span class="toml-comment"># Memory table configuration</span>
 <span class="toml-key">mem_table_max_size</span> = <span class="toml-string">"4M"</span>
 <span class="toml-key">mem_table_max_height</span> = <span class="toml-number">32</span>
 <span class="toml-key">imm_mem_table_max_count</span> = <span class="toml-number">16</span>
 
-<span class="toml-comment"># SSTable settings</span>
-<span class="toml-key">sst_max_size</span> = <span class="toml-string">"100M"</span>
+<span class="toml-comment"># Block configuration</span>
 <span class="toml-key">block_size</span> = <span class="toml-string">"4K"</span>
 <span class="toml-key">block_restart_interval</span> = <span class="toml-number">16</span>
 
 <span class="toml-comment"># Compaction settings</span>
 <span class="toml-key">l0_compaction_trigger</span> = <span class="toml-number">4</span>
 <span class="toml-key">thread_sleep_ms</span> = <span class="toml-number">500</span></code></pre>
+            </div>
           </div>
-        </details>
+        </div>
 
         <!-- Parameter Documentation Table -->
-        <div class="config-params">
+        <div class="config-parameters">
           <h3 id="config-params-title">Configuration Parameters</h3>
-          <table class="params-table" aria-labelledby="config-params-title">
-            <thead>
-              <tr>
-                <th scope="col">Parameter</th>
-                <th scope="col">Default</th>
-                <th scope="col">Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>addr</code></td>
-                <td><code>0.0.0.0:12333</code></td>
-                <td>Network address and port for the server to listen on</td>
-              </tr>
-              <tr>
-                <td><code>work_dir</code></td>
-                <td><code>/tmp/mirdb</code></td>
-                <td>Directory for storing database files (WAL, SSTables)</td>
-              </tr>
-              <tr>
-                <td><code>max_level</code></td>
-                <td><code>7</code></td>
-                <td>Maximum number of levels in the LSM-tree</td>
-              </tr>
-              <tr>
-                <td><code>mem_table_max_size</code></td>
-                <td><code>4M</code></td>
-                <td>Maximum size of the in-memory table before flushing to disk</td>
-              </tr>
-              <tr>
-                <td><code>mem_table_max_height</code></td>
-                <td><code>32</code></td>
-                <td>Maximum height of the skip-list in the memory table</td>
-              </tr>
-              <tr>
-                <td><code>imm_mem_table_max_count</code></td>
-                <td><code>16</code></td>
-                <td>Maximum number of immutable memory tables before blocking writes</td>
-              </tr>
-              <tr>
-                <td><code>sst_max_size</code></td>
-                <td><code>100M</code></td>
-                <td>Maximum size of each SSTable file on disk</td>
-              </tr>
-              <tr>
-                <td><code>block_size</code></td>
-                <td><code>4K</code></td>
-                <td>Size of data blocks within SSTables</td>
-              </tr>
-              <tr>
-                <td><code>block_restart_interval</code></td>
-                <td><code>16</code></td>
-                <td>Number of keys between restart points in blocks</td>
-              </tr>
-              <tr>
-                <td><code>l0_compaction_trigger</code></td>
-                <td><code>4</code></td>
-                <td>Number of Level 0 files that triggers compaction</td>
-              </tr>
-              <tr>
-                <td><code>thread_sleep_ms</code></td>
-                <td><code>500</code></td>
-                <td>Sleep interval (ms) for background threads</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="config-table-wrapper">
+            <table class="config-table" aria-labelledby="config-params-title">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>addr</code></td>
+                  <td>Server listen address and port for memcached protocol connections</td>
+                  <td><code>0.0.0.0:12333</code></td>
+                </tr>
+                <tr>
+                  <td><code>work_dir</code></td>
+                  <td>Directory path for storing SSTable files and write-ahead logs</td>
+                  <td><code>/tmp/mirdb</code></td>
+                </tr>
+                <tr>
+                  <td><code>max_level</code></td>
+                  <td>Maximum number of levels in the LSM tree hierarchy</td>
+                  <td><code>7</code></td>
+                </tr>
+                <tr>
+                  <td><code>mem_table_max_size</code></td>
+                  <td>Maximum size of memtable before flushing to disk (supports K, M, G suffixes)</td>
+                  <td><code>4M</code></td>
+                </tr>
+                <tr>
+                  <td><code>mem_table_max_height</code></td>
+                  <td>Maximum height of the skip list used in the memtable</td>
+                  <td><code>32</code></td>
+                </tr>
+                <tr>
+                  <td><code>sst_max_size</code></td>
+                  <td>Maximum size of individual SSTable files (supports K, M, G suffixes)</td>
+                  <td><code>100M</code></td>
+                </tr>
+                <tr>
+                  <td><code>block_size</code></td>
+                  <td>Size of data blocks within SSTables (supports K, M, G suffixes)</td>
+                  <td><code>4K</code></td>
+                </tr>
+                <tr>
+                  <td><code>l0_compaction_trigger</code></td>
+                  <td>Number of Level 0 files that triggers major compaction</td>
+                  <td><code>4</code></td>
+                </tr>
+                <tr>
+                  <td><code>imm_mem_table_max_count</code></td>
+                  <td>Maximum number of immutable memtables queued for flushing</td>
+                  <td><code>16</code></td>
+                </tr>
+                <tr>
+                  <td><code>block_restart_interval</code></td>
+                  <td>Key prefix restart interval for delta encoding in blocks</td>
+                  <td><code>16</code></td>
+                </tr>
+                <tr>
+                  <td><code>thread_sleep_ms</code></td>
+                  <td>Background thread sleep interval in milliseconds</td>
+                  <td><code>500</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
