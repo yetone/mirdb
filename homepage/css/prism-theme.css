@@ -32,11 +32,12 @@ code[class*="language-"] {
 }
 
 /* Token colors matching Rust-inspired palette */
+/* Comment color updated for WCAG AA compliance (4.5:1 contrast on #2D2D2D) */
 .token.comment,
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: #8292a2;
+  color: #9EAAB8;
 }
 
 .token.punctuation {
@@ -122,10 +123,10 @@ code[class*="language-"] {
   color: #5c6773;
 }
 
-/* Inline code styling */
+/* Inline code styling - WCAG AA compliant */
 :not(pre) > code {
-  background-color: rgba(222, 165, 132, 0.15);
-  color: #DEA584;
+  background-color: rgba(110, 80, 64, 0.1);
+  color: #6E5040;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
   font-size: 0.9em;

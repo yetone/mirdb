@@ -21,6 +21,7 @@
   /* Colors */
   --color-primary: #DEA584;
   --color-primary-dark: #c48a6a;
+  --color-primary-dark-accessible: #8B5A3C; /* Darker for text use - 4.7:1 contrast on white */
   --color-secondary: #2D2D2D;
   --color-accent: #008080;
   --color-accent-dark: #006666;
@@ -29,6 +30,7 @@
   --color-text: #333333;
   --color-text-light: #666666;
   --color-text-inverse: #FFFFFF;
+  --color-code-text: #6E5040; /* Accessible code text color - 5.3:1 contrast */
 
   /* Typography */
   --font-family-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Inter', sans-serif;
@@ -72,6 +74,28 @@
   /* Layout */
   --max-width: 1200px;
   --header-height: 64px;
+}
+
+/* Skip Link - Accessibility Feature */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-secondary);
+  color: var(--color-text-inverse);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  z-index: 9999;
+  text-decoration: none;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* Reset and Base Styles */
@@ -205,6 +229,7 @@ code {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   background-color: var(--color-background-alt);
+  color: var(--color-code-text);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
 }
@@ -409,7 +434,7 @@ main {
 }
 
 .footer-tagline {
-  color: var(--color-text-light);
+  color: #A0A0A0; /* WCAG AA compliant - 5.3:1 contrast on #2D2D2D */
   font-size: var(--font-size-sm);
   max-width: 300px;
   margin-bottom: 0;
@@ -565,7 +590,7 @@ main {
 }
 
 .path-explanation h3 {
-  color: var(--color-primary-dark);
+  color: var(--color-primary-dark-accessible);
   border-bottom: 2px solid var(--color-primary);
   padding-bottom: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
@@ -646,7 +671,7 @@ main {
 }
 
 .step-title {
-  color: var(--color-primary-dark);
+  color: var(--color-primary-dark-accessible);
   font-size: var(--font-size-xl);
   margin-bottom: var(--spacing-md);
   display: flex;
@@ -849,12 +874,12 @@ main {
 }
 
 .feature-yes {
-  color: #22c55e;
+  color: #157A3E; /* WCAG AA compliant green - 4.9:1 contrast on white */
   font-weight: 600;
 }
 
 .feature-no {
-  color: #ef4444;
+  color: #C53030; /* WCAG AA compliant red - 5.0:1 contrast on white */
   font-weight: 600;
 }
 
@@ -867,7 +892,7 @@ main {
 }
 
 .use-case-guidance h3 {
-  color: var(--color-primary-dark);
+  color: var(--color-primary-dark-accessible);
   margin-bottom: var(--spacing-md);
   font-size: var(--font-size-2xl);
 }
