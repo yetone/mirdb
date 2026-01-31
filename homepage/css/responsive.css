@@ -1,0 +1,763 @@
+/**
+ * MirDB Homepage Responsive Styles
+ * Owner: Scenario 9 - Responsive Design Mobile
+ *
+ * Breakpoints:
+ * - Mobile: < 768px (single column, hamburger menu)
+ * - Tablet: 768px - 1023px (two columns, condensed nav)
+ * - Desktop: >= 1024px (three columns, full nav)
+ *
+ * Mobile-first approach recommended.
+ */
+
+/* ==========================================================================
+   Mobile Styles (< 768px)
+   ========================================================================== */
+
+/* Hamburger Menu Base Styles (visible only on mobile) */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 1001;
+}
+
+.hamburger-line {
+  display: block;
+  width: 24px;
+  height: 3px;
+  background-color: var(--color-text);
+  border-radius: 2px;
+  transition: transform var(--transition-base), opacity var(--transition-base);
+}
+
+.hamburger-line + .hamburger-line {
+  margin-top: 5px;
+}
+
+/* Hamburger animation when open */
+.hamburger-menu[aria-expanded="true"] .hamburger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger-menu[aria-expanded="true"] .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-menu[aria-expanded="true"] .hamburger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Mobile Navigation Menu */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-background);
+  z-index: 999;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform var(--transition-base), visibility var(--transition-base), opacity var(--transition-base);
+}
+
+.mobile-nav.is-open {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.mobile-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-nav li {
+  border-bottom: 1px solid var(--color-background-alt);
+}
+
+.mobile-nav li:last-child {
+  border-bottom: none;
+}
+
+.mobile-nav a {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-lg) var(--spacing-md);
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  text-decoration: none;
+  min-height: 48px;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.mobile-nav a:hover,
+.mobile-nav a:focus {
+  background-color: var(--color-background-alt);
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+/* Prevent body scroll when mobile menu is open */
+body.menu-open {
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  /* Show hamburger menu, hide nav links */
+  .nav-links {
+    display: none;
+  }
+
+  .hamburger-menu {
+    display: flex;
+  }
+
+  /* Show mobile nav */
+  .mobile-nav {
+    display: block;
+  }
+
+  .mobile-nav.is-open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Prevent horizontal scrolling */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  /* Hero Section Mobile Styles */
+  .hero {
+    padding: var(--spacing-xl) var(--spacing-md);
+    min-height: auto;
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-base);
+  }
+
+  .hero-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Section Styles */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .section-title {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Features Grid - Single Column */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Architecture Section Mobile */
+  .architecture-content {
+    padding: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .architecture-diagram {
+    padding: var(--spacing-md);
+    overflow-x: auto;
+    margin-left: calc(-1 * var(--spacing-md));
+    margin-right: calc(-1 * var(--spacing-md));
+    border-radius: 0;
+    max-width: calc(100% + 2 * var(--spacing-md));
+  }
+
+  .architecture-diagram .mermaid {
+    min-width: 0;
+    overflow-x: auto;
+  }
+
+  .architecture-diagram svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .path-explanation {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .path-steps {
+    padding-left: var(--spacing-lg);
+  }
+
+  .compaction-types {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .compaction-type {
+    padding: var(--spacing-md);
+  }
+
+  /* Quick Start Section Mobile */
+  .quickstart-step {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .quickstart-step pre {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-md);
+    margin-left: calc(-1 * var(--spacing-md));
+    margin-right: calc(-1 * var(--spacing-md));
+    border-radius: 0;
+  }
+
+  .step-title {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Configuration Section Mobile */
+  .config-example pre {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-md);
+  }
+
+  .config-table-wrapper {
+    margin-left: calc(-1 * var(--spacing-md));
+    margin-right: calc(-1 * var(--spacing-md));
+    border-radius: 0;
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Comparison Section Mobile */
+  .comparison-table {
+    font-size: var(--font-size-sm);
+    margin-left: calc(-1 * var(--spacing-md));
+    margin-right: calc(-1 * var(--spacing-md));
+    width: calc(100% + 2 * var(--spacing-md));
+    border-radius: 0;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .use-case-guidance {
+    padding: var(--spacing-lg);
+  }
+
+  .use-case-guidance h3 {
+    font-size: var(--font-size-xl);
+  }
+
+  .guidance-list li {
+    padding-left: var(--spacing-lg);
+  }
+
+  /* Footer Mobile Styles */
+  .footer {
+    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    text-align: center;
+  }
+
+  .footer-brand {
+    align-items: center;
+  }
+
+  .footer-tagline {
+    max-width: none;
+  }
+
+  .footer-links {
+    text-align: center;
+  }
+
+  .footer-links ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-license {
+    text-align: center;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+
+  /* Ensure touch targets meet 44px minimum */
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  /* Code blocks responsive */
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  code {
+    word-break: break-word;
+  }
+}
+
+/* ==========================================================================
+   Tablet Styles (768px - 1023px)
+   Owner: Scenario 10 - Responsive Design Tablet
+   ========================================================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Navigation - condensed for tablet */
+  .nav-links {
+    display: flex;
+    gap: var(--spacing-md);
+  }
+
+  .nav-links a {
+    font-size: var(--font-size-sm);
+  }
+
+  .hamburger-menu {
+    display: none;
+  }
+
+  /* Hero section tablet adjustments */
+  .hero {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-base);
+  }
+
+  .hero-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* Features grid - two columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Architecture section tablet layout */
+  .architecture-content {
+    max-width: 100%;
+  }
+
+  .architecture-diagram {
+    padding: var(--spacing-md);
+    overflow-x: auto;
+  }
+
+  .compaction-types {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  /* Quick start section tablet adjustments */
+  .quickstart-step {
+    max-width: 100%;
+  }
+
+  .quickstart-step pre {
+    overflow-x: auto;
+    font-size: var(--font-size-xs);
+  }
+
+  /* Configuration section tablet layout */
+  .config-content {
+    max-width: 100%;
+  }
+
+  .config-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Comparison section tablet layout */
+  .comparison-content {
+    max-width: 100%;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  .use-case-guidance {
+    padding: var(--spacing-lg);
+  }
+
+  /* Footer tablet layout */
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+
+  .footer-tagline {
+    max-width: 100%;
+    margin: 0 auto var(--spacing-md);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+
+  /* Section padding tablet adjustments */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .section-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  /* Container tablet padding */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+}
+
+/* ==========================================================================
+   Desktop Styles (1024px+) - Owner: Scenario 11
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  /* Navigation - Full horizontal navigation bar visible */
+  .hamburger-menu {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: none !important;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: var(--spacing-xl);
+  }
+
+  /* Header spans full width with proper layout */
+  .header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Features Grid - Three columns on desktop */
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  .feature-card {
+    padding: var(--spacing-xl);
+  }
+
+  /* Hero Section Desktop Styles */
+  .hero {
+    min-height: calc(100vh - var(--header-height));
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-5xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-xl);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  /* Hero CTA buttons side by side on desktop */
+  .hero-cta {
+    flex-direction: row;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-cta .btn {
+    width: auto;
+  }
+
+  /* Architecture Section Desktop - Side-by-side layouts */
+  .architecture-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .architecture-diagram {
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin-left: 0;
+    margin-right: 0;
+    overflow-x: auto;
+  }
+
+  /* Compaction types side by side on desktop */
+  .compaction-types {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  .compaction-type {
+    padding: var(--spacing-lg);
+  }
+
+  /* Quick Start Section Desktop */
+  .quickstart-step {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .quickstart-step pre {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-lg);
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: var(--radius-md);
+  }
+
+  .step-title {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Configuration Section Desktop */
+  .config-content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .config-example pre {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-lg);
+  }
+
+  .config-table-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: var(--radius-md);
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+  }
+
+  /* Comparison Section Desktop */
+  .comparison-content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .comparison-table {
+    font-size: var(--font-size-base);
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    border-radius: var(--radius-lg);
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .use-case-guidance {
+    padding: var(--spacing-xl);
+  }
+
+  .use-case-guidance h3 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .guidance-list li {
+    padding-left: var(--spacing-xl);
+  }
+
+  /* Footer Desktop Styles - Multi-column layout */
+  .footer {
+    padding: var(--spacing-3xl) 0 var(--spacing-xl);
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--spacing-2xl);
+    text-align: left;
+  }
+
+  .footer-brand {
+    align-items: flex-start;
+    grid-column: auto;
+  }
+
+  .footer-tagline {
+    max-width: 300px;
+  }
+
+  .footer-links {
+    text-align: left;
+  }
+
+  .footer-links ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-license {
+    text-align: left;
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
+    text-align: left;
+  }
+
+  /* Section Styles */
+  section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .section-title {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  /* Container Desktop padding */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Code blocks on desktop */
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  code {
+    word-break: normal;
+  }
+}

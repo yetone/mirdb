@@ -1,0 +1,133 @@
+/**
+ * Prism.js Theme for MirDB Homepage
+ * Owner: Scenario 18 - Code Syntax Highlighting (base)
+ * Extended by: Scenario 4 - Quick Start Guide Section
+ *
+ * Custom theme matching MirDB color palette.
+ * Supports: bash, toml, rust
+ *
+ * Background: #2D2D2D (dark slate)
+ * Text: #F5F5F5
+ */
+
+/* Override Prism default theme to match MirDB colors */
+pre[class*="language-"],
+code[class*="language-"] {
+  font-family: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+pre[class*="language-"] {
+  background-color: #2D2D2D;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+code[class*="language-"] {
+  background: transparent;
+}
+
+/* Token colors matching Rust-inspired palette */
+/* Comment color updated for WCAG AA compliance (4.5:1 contrast on #2D2D2D) */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #9EAAB8;
+}
+
+.token.punctuation {
+  color: #f8f8f2;
+}
+
+.token.namespace {
+  opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+  color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+  color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+  color: #e6db74;
+}
+
+.token.keyword {
+  color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+  color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+/* MirDB specific - highlight key configuration values */
+.token.key,
+.token.property {
+  color: #DEA584;
+}
+
+.token.string {
+  color: #a6e22e;
+}
+
+/* Line numbers (if enabled) */
+.line-numbers .line-numbers-rows {
+  border-right: 1px solid #3d4556;
+}
+
+.line-numbers-rows > span:before {
+  color: #5c6773;
+}
+
+/* Inline code styling - WCAG AA compliant */
+:not(pre) > code {
+  background-color: rgba(110, 80, 64, 0.1);
+  color: #6E5040;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}

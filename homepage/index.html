@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility. High-performance storage with LSM tree architecture written in Rust.">
+  <meta name="keywords" content="MirDB, key-value store, memcached, database, Rust, LSM tree, persistent storage">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A persistent key-value store with Memcached protocol compatibility">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://yetone.github.io/mirdb/assets/images/og-image.png">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
+  <meta name="twitter:description" content="A persistent key-value store with Memcached protocol compatibility">
+
+  <title>MirDB - Persistent Key-Value Store</title>
+
+  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Prism.js for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="css/prism-theme.css">
+
+  <!-- Mermaid.js for architecture diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        securityLevel: 'loose'
+      });
+    });
+  </script>
+</head>
+<body>
+  <!-- Skip Link for Keyboard Navigation (Accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header/Navigation -->
+  <header class="header" role="banner">
+    <div class="container">
+      <a href="#" class="logo" aria-label="MirDB Home">
+        <span aria-hidden="true">&#x1F5C4;</span>
+        MirDB
+      </a>
+      <nav role="navigation" aria-label="Main navigation">
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+          <li><a href="#quickstart">Quick Start</a></li>
+          <li><a href="#comparison">Comparison</a></li>
+          <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger-menu" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+    <!-- Mobile Navigation Menu -->
+    <nav class="mobile-nav" role="navigation" aria-label="Mobile navigation">
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#comparison">Comparison</a></li>
+        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content" role="main" tabindex="-1">
+    <!-- BEGIN: Hero Section (Scenario 1) -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <div class="hero-visual">
+          <div class="hero-logo" role="img" aria-label="MirDB Logo - Database icon representing persistent storage">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- Database icon with Rust-inspired design -->
+              <ellipse cx="60" cy="30" rx="45" ry="15" fill="#DEA584"/>
+              <path d="M15 30v60c0 8.284 20.147 15 45 15s45-6.716 45-15V30" stroke="#DEA584" stroke-width="4" fill="none"/>
+              <ellipse cx="60" cy="30" rx="45" ry="15" stroke="#c48a6a" stroke-width="2" fill="none"/>
+              <ellipse cx="60" cy="55" rx="45" ry="15" stroke="#DEA584" stroke-width="2" fill="none"/>
+              <ellipse cx="60" cy="80" rx="45" ry="15" stroke="#DEA584" stroke-width="2" fill="none"/>
+              <!-- Key symbol -->
+              <circle cx="60" cy="55" r="8" fill="#2D2D2D"/>
+              <rect x="58" y="55" width="4" height="20" fill="#2D2D2D"/>
+              <rect x="62" y="65" width="8" height="3" fill="#2D2D2D"/>
+              <rect x="62" y="70" width="6" height="3" fill="#2D2D2D"/>
+            </svg>
+          </div>
+        </div>
+
+        <h1 id="hero-title">MirDB</h1>
+        <p class="hero-tagline">Persistent Key-Value Storage, Memcached Simplicity</p>
+        <p class="hero-description">A persistent key-value store with Memcached protocol compatibility</p>
+
+        <div class="hero-cta">
+          <a href="#quickstart" class="btn btn-primary" data-testid="cta-get-started">Get Started</a>
+          <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer" data-testid="cta-github">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+    <!-- END: Hero Section (Scenario 1) -->
+
+    <!-- BEGIN: Features Section (Scenario 2) -->
+    <section id="features" class="features" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title" class="section-title">Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-card" data-feature="memcached-protocol">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+            <h3>Memcached Protocol Support</h3>
+            <p>Fully compatible with existing memcached clients. Drop-in replacement that works with your current infrastructure and client libraries.</p>
+          </article>
+
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm4-4H6v-2h10v2zm0-4H6V7h10v2z"/>
+              </svg>
+            </div>
+            <h3>Persistence</h3>
+            <p>Data survives restarts unlike traditional memcached. Your cached data persists to disk, ensuring durability and eliminating cache warm-up delays.</p>
+          </article>
+
+          <article class="feature-card" data-feature="lsm-tree">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7zm-4 6h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+              </svg>
+            </div>
+            <h3>LSM Tree Architecture</h3>
+            <p>Efficient storage with memtables and SSTable compaction. Write-optimized architecture that provides excellent performance for write-heavy workloads.</p>
+          </article>
+
+          <article class="feature-card" data-feature="high-performance">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M13 2.05v3.03c3.39.49 6 3.39 6 6.92 0 .9-.18 1.75-.48 2.54l2.6 1.53c.56-1.24.88-2.62.88-4.07 0-5.18-3.95-9.45-9-9.95zM12 19c-3.87 0-7-3.13-7-7 0-3.53 2.61-6.43 6-6.92V2.05c-5.06.5-9 4.76-9 9.95 0 5.52 4.47 10 9.99 10 3.31 0 6.24-1.61 8.06-4.09l-2.6-1.53C16.17 17.98 14.21 19 12 19z"/>
+              </svg>
+            </div>
+            <h3>High Performance</h3>
+            <p>Built for speed with skip list data structures and efficient memory management. Handles high-throughput workloads with minimal latency.</p>
+          </article>
+
+          <article class="feature-card" data-feature="rust-implementation">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+              </svg>
+            </div>
+            <h3>Rust Implementation</h3>
+            <p>Memory safety and performance benefits from Rust. Zero-cost abstractions and compile-time guarantees for reliable, secure operation.</p>
+          </article>
+
+          <article class="feature-card" data-feature="skip-list">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM10 9h8v2h-8zm0 3h4v2h-4zm0-6h8v2h-8z"/>
+              </svg>
+            </div>
+            <h3>Skip List</h3>
+            <p>Fast in-memory operations using skip list data structure. O(log n) search, insert, and delete operations for efficient memtable management.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- END: Features Section (Scenario 2) -->
+
+    <!-- BEGIN: Architecture Section (Scenario 3) -->
+    <section id="architecture" class="architecture" aria-labelledby="architecture-title">
+      <div class="container">
+        <h2 id="architecture-title" class="section-title">Architecture Overview</h2>
+        <p class="section-subtitle">Understanding MirDB's LSM tree-based storage engine</p>
+
+        <div class="architecture-content">
+          <!-- Architecture Diagram using Mermaid.js -->
+          <div class="architecture-diagram" role="img" aria-label="MirDB LSM Tree Architecture diagram showing write path from client through WAL, Memtable, Immutable Memtable to SSTables, and read path from client through Memtable, Immutable Memtables, and SSTable levels">
+            <pre class="mermaid" aria-hidden="true">
+graph TB
+    subgraph Write["Write Path"]
+        C1[Client] -->|"set key value"| S1[MirDB Server]
+        S1 --> WAL[Write-Ahead Log]
+        WAL --> MT[Memtable<br/>Skip List]
+        MT -->|"When Full"| IMM[Immutable Memtable]
+        IMM -->|"Minor Compaction"| L0[SSTable Level 0]
+        L0 -->|"Major Compaction"| L1[SSTable Level 1]
+        L1 -->|"Major Compaction"| L2[SSTable Level 2+]
+    end
+
+    subgraph Read["Read Path"]
+        C2[Client] -->|"get key"| S2[MirDB Server]
+        S2 --> CHK1[Check Memtable]
+        CHK1 -->|"Not Found"| CHK2[Check Immutable Memtables]
+        CHK2 -->|"Not Found"| CHK3[Check SSTables<br/>L0 → L1 → L2+]
+        CHK1 -->|"Found"| RET[Return Value]
+        CHK2 -->|"Found"| RET
+        CHK3 -->|"Found"| RET
+    end
+            </pre>
+            <!-- Accessible text description for screen readers -->
+            <div class="sr-only">
+              The diagram shows MirDB's LSM tree architecture with two main paths:
+              Write Path: Client sends data to MirDB Server, which writes to Write-Ahead Log (WAL), then to Memtable (Skip List), when full becomes Immutable Memtable, then minor compaction to SSTable Level 0, and major compaction to deeper levels.
+              Read Path: Client queries MirDB Server, which checks Memtable first, then Immutable Memtables if not found, finally checks SSTable levels from L0 to L2+ until value is found.
+            </div>
+          </div>
+
+          <!-- Write Path Explanation -->
+          <div class="path-explanation write-path">
+            <h3>Write Path</h3>
+            <p>MirDB uses a Log-Structured Merge (LSM) tree for efficient write operations:</p>
+            <ol class="path-steps">
+              <li>
+                <strong>WAL (Write-Ahead Log)</strong>: Every write operation is first recorded in the WAL for durability. This ensures data can be recovered after crashes.
+              </li>
+              <li>
+                <strong>Memtable</strong>: Data is written to an in-memory skip list structure called the Memtable for fast write and lookup performance.
+              </li>
+              <li>
+                <strong>Immutable Memtable</strong>: When the Memtable reaches its size limit, it becomes immutable and a new Memtable is created for incoming writes.
+              </li>
+              <li>
+                <strong>SSTables</strong>: Immutable Memtables are flushed to disk as Sorted String Tables (SSTables), organized in levels for efficient storage.
+              </li>
+            </ol>
+          </div>
+
+          <!-- Read Path Explanation -->
+          <div class="path-explanation read-path">
+            <h3>Read Path</h3>
+            <p>Reads follow a specific lookup order to find the most recent value:</p>
+            <ol class="path-steps">
+              <li>
+                <strong>Memtable</strong>: First, MirDB checks the active Memtable for the requested key, as it contains the most recent writes.
+              </li>
+              <li>
+                <strong>Immutable Memtables</strong>: If not found, the search continues through any Immutable Memtables awaiting flush to disk.
+              </li>
+              <li>
+                <strong>SSTable Levels</strong>: Finally, MirDB searches through SSTable levels from L0 to deeper levels (L1, L2, etc.) until the key is found or confirmed absent.
+              </li>
+            </ol>
+          </div>
+
+          <!-- Compaction Explanation -->
+          <div class="path-explanation compaction">
+            <h3>Compaction Process</h3>
+            <p>Compaction maintains storage efficiency and read performance:</p>
+            <div class="compaction-types">
+              <div class="compaction-type">
+                <h4>Minor Compaction</h4>
+                <p>When Immutable Memtables accumulate, they are flushed to SSTable Level 0. This process converts in-memory data to persistent disk storage while maintaining sorted order within each SSTable.</p>
+              </div>
+              <div class="compaction-type">
+                <h4>Major Compaction</h4>
+                <p>When a level accumulates too many SSTables, major compaction merges them into the next level. This process removes deleted keys, merges duplicate entries, and maintains sorted order across levels for efficient range queries.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END: Architecture Section (Scenario 3) -->
+
+    <!-- BEGIN: Quick Start Section (Scenario 4) -->
+    <section id="quickstart" class="quickstart" aria-labelledby="quickstart-title">
+      <div class="container">
+        <h2 id="quickstart-title" class="section-title">Quick Start</h2>
+        <p class="section-subtitle">Get MirDB running in minutes</p>
+
+        <!-- Step 1: Installation -->
+        <div class="quickstart-step">
+          <h3 class="step-title">1. Build from Source</h3>
+          <p>Clone the repository and build MirDB using Cargo:</p>
+          <pre data-testid="installation-commands"><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the release version
+cargo build --release</code></pre>
+        </div>
+
+        <!-- Step 2: Configuration -->
+        <div class="quickstart-step">
+          <h3 class="step-title">2. Configure MirDB</h3>
+          <p>Create a configuration file (e.g., <code>mirdb.toml</code>) with your settings:</p>
+          <pre data-testid="config-example"><code class="language-toml"># Network configuration
+addr = "0.0.0.0:12333"
+
+# Storage settings
+work_dir = "/var/lib/mirdb"
+max_level = 7
+
+# Memory table limits
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+# SSTable configuration
+sst_max_size = "100M"
+block_size = "4K"
+
+# Compaction triggers
+l0_compaction_trigger = 4</code></pre>
+        </div>
+
+        <!-- Step 3: Start the Server -->
+        <div class="quickstart-step">
+          <h3 class="step-title">3. Start the Server</h3>
+          <p>Launch the MirDB server with your configuration file:</p>
+          <pre data-testid="server-startup"><code class="language-bash"># Start mirdb-server with config file
+./target/release/mirdb-server -c mirdb.toml
+
+# Or use the default configuration
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+        </div>
+
+        <!-- Step 4: Basic Operations -->
+        <div class="quickstart-step">
+          <h3 class="step-title">4. Connect and Use</h3>
+          <p>Use any Memcached client to connect. Here's an example using telnet:</p>
+          <pre data-testid="basic-operations"><code class="language-bash"># Connect to MirDB
+telnet localhost 12333
+
+# SET a value (key, flags, exptime, bytes)
+set mykey 0 0 5
+hello
+STORED
+
+# GET the value back
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# DELETE the key
+delete mykey
+DELETED</code></pre>
+        </div>
+
+        <!-- Documentation Link -->
+        <div class="quickstart-docs">
+          <p>For more details on all available commands and advanced configuration options:</p>
+          <a href="https://github.com/yetone/mirdb#readme"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="btn btn-secondary"
+             data-testid="docs-link">
+            View Full Documentation
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- END: Quick Start Section (Scenario 4) -->
+
+    <!-- BEGIN: Configuration Section (Scenario 5) -->
+    <section id="configuration" class="configuration" aria-labelledby="configuration-title">
+      <div class="container">
+        <h2 id="configuration-title" class="section-title">Configuration Reference</h2>
+        <p class="section-subtitle">Configure MirDB to match your workload and environment</p>
+
+        <div class="config-content">
+          <div class="config-example">
+            <h3>Example Configuration File</h3>
+            <pre><code class="language-toml"># MirDB Configuration (default.conf)
+addr = "0.0.0.0:12333"
+work_dir = "/tmp/mirdb"
+mem_table_max_size = "4M"
+sst_max_size = "100M"
+max_level = 7
+l0_compaction_trigger = 4
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+thread_sleep_ms = 500</code></pre>
+          </div>
+
+          <div class="config-options">
+            <h3>Configuration Options</h3>
+            <div class="config-table-wrapper" role="region" aria-label="Configuration options table" tabindex="0">
+              <table class="config-table" data-testid="config-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Option</th>
+                    <th scope="col">Default</th>
+                    <th scope="col">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-config="addr">
+                    <td><code>addr</code></td>
+                    <td><code>0.0.0.0:12333</code></td>
+                    <td>Listen address and port for the MirDB server. Accepts connections from all interfaces on port 12333 by default.</td>
+                  </tr>
+                  <tr data-config="work_dir">
+                    <td><code>work_dir</code></td>
+                    <td><code>/tmp/mirdb</code></td>
+                    <td>Working directory for storing data files including WAL, SSTables, and metadata. Use a persistent location in production.</td>
+                  </tr>
+                  <tr data-config="mem_table_max_size">
+                    <td><code>mem_table_max_size</code></td>
+                    <td><code>4M</code></td>
+                    <td>Maximum size of the active memtable before it becomes immutable. Larger values reduce write amplification but increase memory usage.</td>
+                  </tr>
+                  <tr data-config="sst_max_size">
+                    <td><code>sst_max_size</code></td>
+                    <td><code>100M</code></td>
+                    <td>Maximum size of each SSTable file. Controls the granularity of compaction and affects read performance.</td>
+                  </tr>
+                  <tr data-config="max_level">
+                    <td><code>max_level</code></td>
+                    <td><code>7</code></td>
+                    <td>Maximum number of levels in the LSM tree. More levels allow for larger datasets but may increase read latency.</td>
+                  </tr>
+                  <tr data-config="l0_compaction_trigger">
+                    <td><code>l0_compaction_trigger</code></td>
+                    <td><code>4</code></td>
+                    <td>Number of Level 0 SSTables that triggers compaction. Lower values reduce read amplification at the cost of more frequent compactions.</td>
+                  </tr>
+                  <tr data-config="mem_table_max_height">
+                    <td><code>mem_table_max_height</code></td>
+                    <td><code>32</code></td>
+                    <td>Maximum height of the skip list in the memtable. Higher values improve lookup performance for large memtables.</td>
+                  </tr>
+                  <tr data-config="imm_mem_table_max_count">
+                    <td><code>imm_mem_table_max_count</code></td>
+                    <td><code>16</code></td>
+                    <td>Maximum number of immutable memtables before writes are stalled. Increase if flush rate cannot keep up with write rate.</td>
+                  </tr>
+                  <tr data-config="block_size">
+                    <td><code>block_size</code></td>
+                    <td><code>4K</code></td>
+                    <td>Size of data blocks in SSTables. Larger blocks improve compression but may increase read amplification.</td>
+                  </tr>
+                  <tr data-config="block_restart_interval">
+                    <td><code>block_restart_interval</code></td>
+                    <td><code>16</code></td>
+                    <td>Number of keys between restart points in SSTable blocks. Affects the trade-off between space efficiency and random access speed.</td>
+                  </tr>
+                  <tr data-config="thread_sleep_ms">
+                    <td><code>thread_sleep_ms</code></td>
+                    <td><code>500</code></td>
+                    <td>Sleep interval in milliseconds for background threads when idle. Lower values increase responsiveness but use more CPU.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END: Configuration Section (Scenario 5) -->
+
+    <!-- BEGIN: Comparison Section (Scenario 6) -->
+    <section id="comparison" class="comparison" aria-labelledby="comparison-title">
+      <div class="container">
+        <h2 id="comparison-title" class="section-title">Comparison</h2>
+        <p class="section-subtitle">How MirDB compares to other key-value stores</p>
+
+        <div class="comparison-content">
+          <table class="comparison-table" role="table" aria-label="Comparison of MirDB, Memcached, and Redis features">
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">MirDB</th>
+                <th scope="col">Memcached</th>
+                <th scope="col">Redis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-feature="persistence">
+                <th scope="row">Persistence</th>
+                <td><span class="feature-yes">Yes</span></td>
+                <td><span class="feature-no">No</span></td>
+                <td><span class="feature-yes">Yes</span></td>
+              </tr>
+              <tr data-feature="protocol">
+                <th scope="row">Protocol</th>
+                <td>Memcached</td>
+                <td>Memcached</td>
+                <td>Redis</td>
+              </tr>
+              <tr data-feature="memory-first">
+                <th scope="row">Memory-First</th>
+                <td><span class="feature-yes">Yes</span></td>
+                <td><span class="feature-yes">Yes</span></td>
+                <td><span class="feature-yes">Yes</span></td>
+              </tr>
+              <tr data-feature="storage">
+                <th scope="row">Storage Architecture</th>
+                <td>LSM Tree</td>
+                <td>N/A (memory only)</td>
+                <td>RDB / AOF</td>
+              </tr>
+              <tr data-feature="data-structures">
+                <th scope="row">Data Structures</th>
+                <td>Key-Value</td>
+                <td>Key-Value</td>
+                <td>Strings, Lists, Sets, Hashes, etc.</td>
+              </tr>
+              <tr data-feature="implementation">
+                <th scope="row">Implementation</th>
+                <td>Rust</td>
+                <td>C</td>
+                <td>C</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="use-case-guidance">
+            <h3>When to Choose MirDB</h3>
+            <p>MirDB is the ideal choice when you need:</p>
+            <ul class="guidance-list">
+              <li>
+                <strong>Persistence with Memcached compatibility</strong> - If you're using memcached but need your data to survive restarts, MirDB is a drop-in replacement that adds durability without changing your client code.
+              </li>
+              <li>
+                <strong>Simple key-value storage with durability</strong> - When you don't need Redis's complex data structures but require reliable persistence, MirDB offers a streamlined solution.
+              </li>
+              <li>
+                <strong>Write-optimized workloads</strong> - The LSM tree architecture excels at handling high write throughput while maintaining good read performance.
+              </li>
+              <li>
+                <strong>Memory safety guarantees</strong> - Built in Rust, MirDB provides compile-time memory safety guarantees without sacrificing performance.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END: Comparison Section (Scenario 6) -->
+  </main>
+
+  <!-- BEGIN: Footer Section (Scenario 7) -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo" aria-hidden="true">&#x1F5C4;</span>
+          <span class="footer-name">MirDB</span>
+          <p class="footer-tagline">A persistent key-value store with Memcached protocol compatibility</p>
+        </div>
+
+        <nav class="footer-links" aria-label="Footer navigation">
+          <h3 class="footer-links-title">Resources</h3>
+          <ul>
+            <li>
+              <a href="https://github.com/yetone/mirdb"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 data-testid="footer-github-link">
+                GitHub Repository
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/yetone/mirdb#readme"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 data-testid="footer-docs-link">
+                Documentation
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/yetone/mirdb/issues"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 data-testid="footer-issues-link">
+                Report Issues
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="footer-license">
+          <h3 class="footer-license-title">License</h3>
+          <p>MirDB is dual-licensed under <strong>MIT</strong> and <strong>Apache-2.0</strong> licenses.</p>
+          <p>Choose the license that best fits your project requirements.</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2024 MirDB. All rights reserved.</p>
+        <p class="footer-license-badge">Licensed under MIT / Apache-2.0</p>
+      </div>
+    </div>
+  </footer>
+  <!-- END: Footer Section (Scenario 7) -->
+
+  <script src="js/main.js"></script>
+  <!-- Prism.js for syntax highlighting -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-toml.min.js"></script>
+</body>
+</html>
