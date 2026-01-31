@@ -409,11 +409,38 @@ main {
   color: var(--color-text-inverse);
 }
 
+/* Footer grid with Flexbox fallback for browser compatibility (Scenario 15) */
 .footer-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  /* Flexbox fallback */
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-2xl);
   margin-bottom: var(--spacing-2xl);
+}
+
+.footer-content > * {
+  /* Flexbox fallback sizing */
+  flex: 1 1 200px;
+}
+
+.footer-brand {
+  flex: 2 1 300px;
+}
+
+/* CSS Grid enhancement when supported */
+@supports (display: grid) {
+  .footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+
+  .footer-content > * {
+    flex: none;
+  }
+
+  .footer-brand {
+    flex: none;
+  }
 }
 
 .footer-brand {
@@ -516,10 +543,31 @@ main {
   background-color: var(--color-background-alt);
 }
 
+/* CSS Grid with Flexbox fallback for browser compatibility (Scenario 15) */
 .features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* Flexbox fallback for browsers without CSS Grid support */
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-xl);
+}
+
+.features-grid > * {
+  /* Flexbox fallback: equal width items */
+  flex: 1 1 calc(33.333% - var(--spacing-xl));
+  min-width: 280px;
+}
+
+/* CSS Grid enhancement when supported */
+@supports (display: grid) {
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .features-grid > * {
+    flex: none;
+    min-width: 0;
+  }
 }
 
 .feature-card {
@@ -609,11 +657,30 @@ main {
   color: var(--color-accent);
 }
 
+/* Compaction types grid with Flexbox fallback for browser compatibility (Scenario 15) */
 .compaction-types {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* Flexbox fallback */
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-xl);
   margin-top: var(--spacing-lg);
+}
+
+.compaction-type {
+  /* Flexbox fallback sizing */
+  flex: 1 1 300px;
+}
+
+/* CSS Grid enhancement when supported */
+@supports (display: grid) {
+  .compaction-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .compaction-type {
+    flex: none;
+  }
 }
 
 .compaction-type {
