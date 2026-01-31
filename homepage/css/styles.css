@@ -357,7 +357,7 @@ main {
 .footer {
   background-color: var(--color-secondary);
   color: var(--color-text-inverse);
-  padding: var(--spacing-2xl) 0;
+  padding: var(--spacing-3xl) 0 var(--spacing-xl);
 }
 
 .footer a {
@@ -367,6 +367,108 @@ main {
 .footer a:hover,
 .footer a:focus {
   color: var(--color-text-inverse);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-logo {
+  font-size: var(--font-size-2xl);
+  margin-right: var(--spacing-sm);
+}
+
+.footer-name {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-inverse);
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-tagline {
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+  max-width: 300px;
+  margin-bottom: 0;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links-title,
+.footer-license-title {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-text-inverse);
+  margin-bottom: var(--spacing-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover,
+.footer-links a:focus {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.footer-license {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-license p {
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-license strong {
+  color: var(--color-primary);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-copyright {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.footer-license-badge {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--font-size-sm);
+  margin: 0;
 }
 
 /* Features Section Styles */
