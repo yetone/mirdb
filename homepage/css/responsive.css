@@ -1,0 +1,46 @@
+/**
+ * MirDB Homepage Responsive Styles
+ * Owner: Scenario 9 - Responsive Design Mobile
+ *
+ * Breakpoints:
+ * - Mobile: < 768px (single column, hamburger menu)
+ * - Tablet: 768px - 1023px (two columns, condensed nav)
+ * - Desktop: >= 1024px (three columns, full nav)
+ *
+ * Mobile-first approach recommended.
+ */
+
+/* Base mobile styles (will be expanded by Scenario 9) */
+@media (max-width: 767px) {
+  .nav-links {
+    display: none;
+  }
+
+  .hamburger-menu {
+    display: block;
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Tablet styles (will be expanded by Scenario 10) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific styles */
+}
+
+/* Desktop styles (will be expanded by Scenario 11) */
+@media (min-width: 1024px) {
+  .hamburger-menu {
+    display: none;
+  }
+}
