@@ -356,8 +356,98 @@ DELETED</code></pre>
     <!-- BEGIN: Configuration Section (Scenario 5) -->
     <section id="configuration" class="configuration" aria-labelledby="configuration-title">
       <div class="container">
-        <h2 id="configuration-title" class="section-title">Configuration</h2>
-        <!-- Configuration content to be added by Scenario 5 -->
+        <h2 id="configuration-title" class="section-title">Configuration Reference</h2>
+        <p class="section-subtitle">Configure MirDB to match your workload and environment</p>
+
+        <div class="config-content">
+          <div class="config-example">
+            <h3>Example Configuration File</h3>
+            <pre><code class="language-toml"># MirDB Configuration (default.conf)
+addr = "0.0.0.0:12333"
+work_dir = "/tmp/mirdb"
+mem_table_max_size = "4M"
+sst_max_size = "100M"
+max_level = 7
+l0_compaction_trigger = 4
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+thread_sleep_ms = 500</code></pre>
+          </div>
+
+          <div class="config-options">
+            <h3>Configuration Options</h3>
+            <div class="config-table-wrapper" role="region" aria-label="Configuration options table" tabindex="0">
+              <table class="config-table" data-testid="config-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Option</th>
+                    <th scope="col">Default</th>
+                    <th scope="col">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-config="addr">
+                    <td><code>addr</code></td>
+                    <td><code>0.0.0.0:12333</code></td>
+                    <td>Listen address and port for the MirDB server. Accepts connections from all interfaces on port 12333 by default.</td>
+                  </tr>
+                  <tr data-config="work_dir">
+                    <td><code>work_dir</code></td>
+                    <td><code>/tmp/mirdb</code></td>
+                    <td>Working directory for storing data files including WAL, SSTables, and metadata. Use a persistent location in production.</td>
+                  </tr>
+                  <tr data-config="mem_table_max_size">
+                    <td><code>mem_table_max_size</code></td>
+                    <td><code>4M</code></td>
+                    <td>Maximum size of the active memtable before it becomes immutable. Larger values reduce write amplification but increase memory usage.</td>
+                  </tr>
+                  <tr data-config="sst_max_size">
+                    <td><code>sst_max_size</code></td>
+                    <td><code>100M</code></td>
+                    <td>Maximum size of each SSTable file. Controls the granularity of compaction and affects read performance.</td>
+                  </tr>
+                  <tr data-config="max_level">
+                    <td><code>max_level</code></td>
+                    <td><code>7</code></td>
+                    <td>Maximum number of levels in the LSM tree. More levels allow for larger datasets but may increase read latency.</td>
+                  </tr>
+                  <tr data-config="l0_compaction_trigger">
+                    <td><code>l0_compaction_trigger</code></td>
+                    <td><code>4</code></td>
+                    <td>Number of Level 0 SSTables that triggers compaction. Lower values reduce read amplification at the cost of more frequent compactions.</td>
+                  </tr>
+                  <tr data-config="mem_table_max_height">
+                    <td><code>mem_table_max_height</code></td>
+                    <td><code>32</code></td>
+                    <td>Maximum height of the skip list in the memtable. Higher values improve lookup performance for large memtables.</td>
+                  </tr>
+                  <tr data-config="imm_mem_table_max_count">
+                    <td><code>imm_mem_table_max_count</code></td>
+                    <td><code>16</code></td>
+                    <td>Maximum number of immutable memtables before writes are stalled. Increase if flush rate cannot keep up with write rate.</td>
+                  </tr>
+                  <tr data-config="block_size">
+                    <td><code>block_size</code></td>
+                    <td><code>4K</code></td>
+                    <td>Size of data blocks in SSTables. Larger blocks improve compression but may increase read amplification.</td>
+                  </tr>
+                  <tr data-config="block_restart_interval">
+                    <td><code>block_restart_interval</code></td>
+                    <td><code>16</code></td>
+                    <td>Number of keys between restart points in SSTable blocks. Affects the trade-off between space efficiency and random access speed.</td>
+                  </tr>
+                  <tr data-config="thread_sleep_ms">
+                    <td><code>thread_sleep_ms</code></td>
+                    <td><code>500</code></td>
+                    <td>Sleep interval in milliseconds for background threads when idle. Lower values increase responsiveness but use more CPU.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <!-- END: Configuration Section (Scenario 5) -->

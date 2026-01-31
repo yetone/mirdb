@@ -572,3 +572,89 @@ main {
   color: var(--color-text-light);
   margin-bottom: var(--spacing-lg);
 }
+
+/* Configuration Section Styles (Scenario 5) */
+.configuration .section-subtitle {
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: var(--font-size-lg);
+  margin-top: calc(-1 * var(--spacing-lg));
+  margin-bottom: var(--spacing-2xl);
+}
+
+.config-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.config-example {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.config-example h3 {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+}
+
+.config-example pre {
+  background-color: var(--color-secondary);
+  color: #f8f8f2;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.config-example code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.config-options h3 {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+}
+
+.config-table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-background);
+}
+
+.config-table th,
+.config-table td {
+  padding: var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-background-alt);
+}
+
+.config-table th {
+  background-color: var(--color-secondary);
+  color: var(--color-text-inverse);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.config-table td code {
+  background-color: var(--color-background-alt);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+.config-table tbody tr:hover {
+  background-color: var(--color-background-alt);
+}
+
+.config-table tbody tr:last-child td {
+  border-bottom: none;
+}
