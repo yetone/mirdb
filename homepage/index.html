@@ -456,7 +456,77 @@ thread_sleep_ms = 500</code></pre>
     <section id="comparison" class="comparison" aria-labelledby="comparison-title">
       <div class="container">
         <h2 id="comparison-title" class="section-title">Comparison</h2>
-        <!-- Comparison content to be added by Scenario 6 -->
+        <p class="section-subtitle">How MirDB compares to other key-value stores</p>
+
+        <div class="comparison-content">
+          <table class="comparison-table" role="table" aria-label="Comparison of MirDB, Memcached, and Redis features">
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">MirDB</th>
+                <th scope="col">Memcached</th>
+                <th scope="col">Redis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-feature="persistence">
+                <th scope="row">Persistence</th>
+                <td><span class="feature-yes">Yes</span></td>
+                <td><span class="feature-no">No</span></td>
+                <td><span class="feature-yes">Yes</span></td>
+              </tr>
+              <tr data-feature="protocol">
+                <th scope="row">Protocol</th>
+                <td>Memcached</td>
+                <td>Memcached</td>
+                <td>Redis</td>
+              </tr>
+              <tr data-feature="memory-first">
+                <th scope="row">Memory-First</th>
+                <td><span class="feature-yes">Yes</span></td>
+                <td><span class="feature-yes">Yes</span></td>
+                <td><span class="feature-yes">Yes</span></td>
+              </tr>
+              <tr data-feature="storage">
+                <th scope="row">Storage Architecture</th>
+                <td>LSM Tree</td>
+                <td>N/A (memory only)</td>
+                <td>RDB / AOF</td>
+              </tr>
+              <tr data-feature="data-structures">
+                <th scope="row">Data Structures</th>
+                <td>Key-Value</td>
+                <td>Key-Value</td>
+                <td>Strings, Lists, Sets, Hashes, etc.</td>
+              </tr>
+              <tr data-feature="implementation">
+                <th scope="row">Implementation</th>
+                <td>Rust</td>
+                <td>C</td>
+                <td>C</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="use-case-guidance">
+            <h3>When to Choose MirDB</h3>
+            <p>MirDB is the ideal choice when you need:</p>
+            <ul class="guidance-list">
+              <li>
+                <strong>Persistence with Memcached compatibility</strong> - If you're using memcached but need your data to survive restarts, MirDB is a drop-in replacement that adds durability without changing your client code.
+              </li>
+              <li>
+                <strong>Simple key-value storage with durability</strong> - When you don't need Redis's complex data structures but require reliable persistence, MirDB offers a streamlined solution.
+              </li>
+              <li>
+                <strong>Write-optimized workloads</strong> - The LSM tree architecture excels at handling high write throughput while maintaining good read performance.
+              </li>
+              <li>
+                <strong>Memory safety guarantees</strong> - Built in Rust, MirDB provides compile-time memory safety guarantees without sacrificing performance.
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
     <!-- END: Comparison Section (Scenario 6) -->
