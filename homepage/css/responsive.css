@@ -374,22 +374,150 @@ body.menu-open {
 }
 
 /* ==========================================================================
-   Tablet Styles (768px - 1023px) - will be expanded by Scenario 10
+   Tablet Styles (768px - 1023px)
+   Owner: Scenario 10 - Responsive Design Tablet
    ========================================================================== */
 
 @media (min-width: 768px) and (max-width: 1023px) {
+  /* Navigation - condensed for tablet */
+  .nav-links {
+    display: flex;
+    gap: var(--spacing-md);
+  }
+
+  .nav-links a {
+    font-size: var(--font-size-sm);
+  }
+
+  .hamburger-menu {
+    display: none;
+  }
+
+  /* Hero section tablet adjustments */
+  .hero {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-base);
+  }
+
+  .hero-logo {
+    width: 100px;
+    height: 100px;
+  }
+
   /* Features grid - two columns on tablet */
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
   }
 
-  /* Footer two columns on tablet */
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Architecture section tablet layout */
+  .architecture-content {
+    max-width: 100%;
+  }
+
+  .architecture-diagram {
+    padding: var(--spacing-md);
+    overflow-x: auto;
+  }
+
+  .compaction-types {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  /* Quick start section tablet adjustments */
+  .quickstart-step {
+    max-width: 100%;
+  }
+
+  .quickstart-step pre {
+    overflow-x: auto;
+    font-size: var(--font-size-xs);
+  }
+
+  /* Configuration section tablet layout */
+  .config-content {
+    max-width: 100%;
+  }
+
+  .config-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Comparison section tablet layout */
+  .comparison-content {
+    max-width: 100%;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  .use-case-guidance {
+    padding: var(--spacing-lg);
+  }
+
+  /* Footer tablet layout */
   .footer-content {
     grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
   }
 
   .footer-brand {
     grid-column: 1 / -1;
+    text-align: center;
+  }
+
+  .footer-tagline {
+    max-width: 100%;
+    margin: 0 auto var(--spacing-md);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+
+  /* Section padding tablet adjustments */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .section-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  /* Container tablet padding */
+  .container {
+    padding: 0 var(--spacing-md);
   }
 }
 
