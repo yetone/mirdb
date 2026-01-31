@@ -97,8 +97,68 @@
     <!-- BEGIN: Features Section (Scenario 2) -->
     <section id="features" class="features" aria-labelledby="features-title">
       <div class="container">
-        <h2 id="features-title" class="section-title">Features</h2>
-        <!-- Features content to be added by Scenario 2 -->
+        <h2 id="features-title" class="section-title">Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-card" data-feature="memcached-protocol">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+            <h3>Memcached Protocol Support</h3>
+            <p>Fully compatible with existing memcached clients. Drop-in replacement that works with your current infrastructure and client libraries.</p>
+          </article>
+
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm4-4H6v-2h10v2zm0-4H6V7h10v2z"/>
+              </svg>
+            </div>
+            <h3>Persistence</h3>
+            <p>Data survives restarts unlike traditional memcached. Your cached data persists to disk, ensuring durability and eliminating cache warm-up delays.</p>
+          </article>
+
+          <article class="feature-card" data-feature="lsm-tree">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7zm-4 6h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+              </svg>
+            </div>
+            <h3>LSM Tree Architecture</h3>
+            <p>Efficient storage with memtables and SSTable compaction. Write-optimized architecture that provides excellent performance for write-heavy workloads.</p>
+          </article>
+
+          <article class="feature-card" data-feature="high-performance">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M13 2.05v3.03c3.39.49 6 3.39 6 6.92 0 .9-.18 1.75-.48 2.54l2.6 1.53c.56-1.24.88-2.62.88-4.07 0-5.18-3.95-9.45-9-9.95zM12 19c-3.87 0-7-3.13-7-7 0-3.53 2.61-6.43 6-6.92V2.05c-5.06.5-9 4.76-9 9.95 0 5.52 4.47 10 9.99 10 3.31 0 6.24-1.61 8.06-4.09l-2.6-1.53C16.17 17.98 14.21 19 12 19z"/>
+              </svg>
+            </div>
+            <h3>High Performance</h3>
+            <p>Built for speed with skip list data structures and efficient memory management. Handles high-throughput workloads with minimal latency.</p>
+          </article>
+
+          <article class="feature-card" data-feature="rust-implementation">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+              </svg>
+            </div>
+            <h3>Rust Implementation</h3>
+            <p>Memory safety and performance benefits from Rust. Zero-cost abstractions and compile-time guarantees for reliable, secure operation.</p>
+          </article>
+
+          <article class="feature-card" data-feature="skip-list">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM10 9h8v2h-8zm0 3h4v2h-4zm0-6h8v2h-8z"/>
+              </svg>
+            </div>
+            <h3>Skip List</h3>
+            <p>Fast in-memory operations using skip list data structure. O(log n) search, insert, and delete operations for efficient memtable management.</p>
+          </article>
+        </div>
       </div>
     </section>
     <!-- END: Features Section (Scenario 2) -->

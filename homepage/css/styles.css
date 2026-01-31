@@ -369,6 +369,53 @@ main {
   color: var(--color-text-inverse);
 }
 
+/* Features Section Styles */
+.features {
+  background-color: var(--color-background-alt);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+}
+
+.feature-card {
+  background-color: var(--color-background);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-card .feature-icon {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary);
+}
+
+.feature-card .feature-icon svg {
+  width: 48px;
+  height: 48px;
+}
+
+.feature-card h3 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.feature-card p {
+  color: var(--color-text-light);
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
 /* Architecture Section Styles */
 .architecture .section-subtitle {
   text-align: center;

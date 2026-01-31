@@ -31,11 +31,19 @@
   .hero-description {
     font-size: var(--font-size-base);
   }
+
+  /* Features grid - single column on mobile */
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Tablet styles (will be expanded by Scenario 10) */
 @media (min-width: 768px) and (max-width: 1023px) {
-  /* Tablet-specific styles */
+  /* Features grid - two columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Desktop styles (will be expanded by Scenario 11) */
