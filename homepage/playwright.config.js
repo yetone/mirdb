@@ -21,6 +21,10 @@ module.exports = defineConfig({
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    headless: true,
+    launchOptions: {
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+    },
   },
   projects: [
     {
@@ -48,5 +52,6 @@ module.exports = defineConfig({
     command: 'npx serve . -l 3000',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
   },
 });
