@@ -74,13 +74,15 @@
   /**
    * Mobile hamburger menu functionality
    * Handles toggle, aria attributes, and closing menu on link click
+   * Supports both .nav-links (desktop) and .mobile-nav (mobile) elements
    */
   function initMobileMenu() {
     const hamburgerButton = document.querySelector('.hamburger-menu');
     const navLinks = document.querySelector('.nav-links');
+    const mobileNav = document.querySelector('.mobile-nav');
     const header = document.querySelector('.header');
 
-    if (!hamburgerButton || !navLinks) return;
+    if (!hamburgerButton) return;
 
     // Toggle menu on button click
     hamburgerButton.addEventListener('click', function() {
@@ -99,18 +101,51 @@
     // Close menu on escape key
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Escape') {
-        closeMobileMenu();
-        hamburgerButton.focus();
+        const isMenuOpen = hamburgerButton.getAttribute('aria-expanded') === 'true';
+        if (isMenuOpen) {
+          closeMobileMenu();
+          hamburgerButton.focus();
+        }
       }
     });
 
-    // Close menu when nav link is clicked
-    const navLinkElements = navLinks.querySelectorAll('a');
-    navLinkElements.forEach(function(link) {
-      link.addEventListener('click', function() {
-        closeMobileMenu();
+    // Close menu when nav link is clicked (for .nav-links)
+    if (navLinks) {
+      const navLinkElements = navLinks.querySelectorAll('a');
+      navLinkElements.forEach(function(link) {
+        link.addEventListener('click', function() {
+          closeMobileMenu();
+        });
       });
-    });
+    }
+
+    // Close menu when nav link is clicked (for .mobile-nav)
+    if (mobileNav) {
+      mobileNav.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          // Small delay to allow smooth scroll to start
+          setTimeout(closeMobileMenu, 100);
+        });
+      });
+
+      // Handle keyboard navigation in mobile menu
+      mobileNav.addEventListener('keydown', function(e) {
+        const focusableElements = mobileNav.querySelectorAll('a');
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        // Tab trap within mobile menu
+        if (e.key === 'Tab') {
+          if (e.shiftKey && document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          } else if (!e.shiftKey && document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      });
+    }
   }
 
   /**
@@ -120,17 +155,38 @@
   function toggleMobileMenu(open) {
     const hamburgerButton = document.querySelector('.hamburger-menu');
     const navLinks = document.querySelector('.nav-links');
+    const mobileNav = document.querySelector('.mobile-nav');
 
-    if (!hamburgerButton || !navLinks) return;
+    if (!hamburgerButton) return;
 
     hamburgerButton.setAttribute('aria-expanded', open.toString());
-    navLinks.classList.toggle('nav-open', open);
+
+    // Toggle .nav-links if present
+    if (navLinks) {
+      navLinks.classList.toggle('nav-open', open);
+    }
+
+    // Toggle .mobile-nav if present (Scenario 9 mobile nav)
+    if (mobileNav) {
+      if (open) {
+        mobileNav.classList.add('is-open');
+        document.body.classList.add('menu-open');
+      } else {
+        mobileNav.classList.remove('is-open');
+        document.body.classList.remove('menu-open');
+      }
+    }
 
     if (open) {
       // Focus first nav link when opening
-      const firstLink = navLinks.querySelector('a');
-      if (firstLink) {
-        firstLink.focus();
+      const targetNav = mobileNav || navLinks;
+      if (targetNav) {
+        const firstLink = targetNav.querySelector('a');
+        if (firstLink) {
+          setTimeout(function() {
+            firstLink.focus();
+          }, 100);
+        }
       }
     }
   }
@@ -141,6 +197,9 @@
   function closeMobileMenu() {
     toggleMobileMenu(false);
   }
+
+  // Make closeMobileMenu accessible globally for anchor links
+  window.closeMobileMenu = closeMobileMenu;
 
   /**
    * Active navigation link highlighting based on scroll position
