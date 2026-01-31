@@ -23,6 +23,10 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/responsive.css">
 
+  <!-- Prism.js for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="css/prism-theme.css">
+
   <!-- Mermaid.js for architecture diagrams -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>
@@ -263,7 +267,88 @@ graph TB
     <section id="quickstart" class="quickstart" aria-labelledby="quickstart-title">
       <div class="container">
         <h2 id="quickstart-title" class="section-title">Quick Start</h2>
-        <!-- Quick Start content to be added by Scenario 4 -->
+        <p class="section-subtitle">Get MirDB running in minutes</p>
+
+        <!-- Step 1: Installation -->
+        <div class="quickstart-step">
+          <h3 class="step-title">1. Build from Source</h3>
+          <p>Clone the repository and build MirDB using Cargo:</p>
+          <pre data-testid="installation-commands"><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the release version
+cargo build --release</code></pre>
+        </div>
+
+        <!-- Step 2: Configuration -->
+        <div class="quickstart-step">
+          <h3 class="step-title">2. Configure MirDB</h3>
+          <p>Create a configuration file (e.g., <code>mirdb.toml</code>) with your settings:</p>
+          <pre data-testid="config-example"><code class="language-toml"># Network configuration
+addr = "0.0.0.0:12333"
+
+# Storage settings
+work_dir = "/var/lib/mirdb"
+max_level = 7
+
+# Memory table limits
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+# SSTable configuration
+sst_max_size = "100M"
+block_size = "4K"
+
+# Compaction triggers
+l0_compaction_trigger = 4</code></pre>
+        </div>
+
+        <!-- Step 3: Start the Server -->
+        <div class="quickstart-step">
+          <h3 class="step-title">3. Start the Server</h3>
+          <p>Launch the MirDB server with your configuration file:</p>
+          <pre data-testid="server-startup"><code class="language-bash"># Start mirdb-server with config file
+./target/release/mirdb-server -c mirdb.toml
+
+# Or use the default configuration
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+        </div>
+
+        <!-- Step 4: Basic Operations -->
+        <div class="quickstart-step">
+          <h3 class="step-title">4. Connect and Use</h3>
+          <p>Use any Memcached client to connect. Here's an example using telnet:</p>
+          <pre data-testid="basic-operations"><code class="language-bash"># Connect to MirDB
+telnet localhost 12333
+
+# SET a value (key, flags, exptime, bytes)
+set mykey 0 0 5
+hello
+STORED
+
+# GET the value back
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# DELETE the key
+delete mykey
+DELETED</code></pre>
+        </div>
+
+        <!-- Documentation Link -->
+        <div class="quickstart-docs">
+          <p>For more details on all available commands and advanced configuration options:</p>
+          <a href="https://github.com/yetone/mirdb#readme"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="btn btn-secondary"
+             data-testid="docs-link">
+            View Full Documentation
+          </a>
+        </div>
       </div>
     </section>
     <!-- END: Quick Start Section (Scenario 4) -->
@@ -297,5 +382,9 @@ graph TB
   <!-- END: Footer Section (Scenario 7) -->
 
   <script src="js/main.js"></script>
+  <!-- Prism.js for syntax highlighting -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-toml.min.js"></script>
 </body>
 </html>

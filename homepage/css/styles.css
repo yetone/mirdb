@@ -503,3 +503,72 @@ main {
   white-space: nowrap;
   border: 0;
 }
+
+/* Quick Start Section Styles */
+.quickstart {
+  background-color: var(--color-background);
+}
+
+.quickstart .section-subtitle {
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: var(--font-size-lg);
+  margin-top: calc(-1 * var(--spacing-lg));
+  margin-bottom: var(--spacing-2xl);
+}
+
+.quickstart-step {
+  margin-bottom: var(--spacing-2xl);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.quickstart-step:last-of-type {
+  margin-bottom: var(--spacing-xl);
+}
+
+.step-title {
+  color: var(--color-primary-dark);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.step-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+}
+
+.quickstart-step p {
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.quickstart-step pre {
+  margin: 0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.quickstart-step code {
+  font-size: var(--font-size-sm);
+}
+
+.quickstart-docs {
+  text-align: center;
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-background-alt);
+}
+
+.quickstart-docs p {
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-lg);
+}
