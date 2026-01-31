@@ -22,6 +22,18 @@
   <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Mermaid.js for architecture diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        securityLevel: 'loose'
+      });
+    });
+  </script>
 </head>
 <body>
   <!-- Header/Navigation -->
@@ -94,8 +106,95 @@
     <!-- BEGIN: Architecture Section (Scenario 3) -->
     <section id="architecture" class="architecture" aria-labelledby="architecture-title">
       <div class="container">
-        <h2 id="architecture-title" class="section-title">Architecture</h2>
-        <!-- Architecture content to be added by Scenario 3 -->
+        <h2 id="architecture-title" class="section-title">Architecture Overview</h2>
+        <p class="section-subtitle">Understanding MirDB's LSM tree-based storage engine</p>
+
+        <div class="architecture-content">
+          <!-- Architecture Diagram using Mermaid.js -->
+          <div class="architecture-diagram" role="img" aria-label="MirDB LSM Tree Architecture diagram showing write path from client through WAL, Memtable, Immutable Memtable to SSTables, and read path from client through Memtable, Immutable Memtables, and SSTable levels">
+            <pre class="mermaid" aria-hidden="true">
+graph TB
+    subgraph Write["Write Path"]
+        C1[Client] -->|"set key value"| S1[MirDB Server]
+        S1 --> WAL[Write-Ahead Log]
+        WAL --> MT[Memtable<br/>Skip List]
+        MT -->|"When Full"| IMM[Immutable Memtable]
+        IMM -->|"Minor Compaction"| L0[SSTable Level 0]
+        L0 -->|"Major Compaction"| L1[SSTable Level 1]
+        L1 -->|"Major Compaction"| L2[SSTable Level 2+]
+    end
+
+    subgraph Read["Read Path"]
+        C2[Client] -->|"get key"| S2[MirDB Server]
+        S2 --> CHK1[Check Memtable]
+        CHK1 -->|"Not Found"| CHK2[Check Immutable Memtables]
+        CHK2 -->|"Not Found"| CHK3[Check SSTables<br/>L0 → L1 → L2+]
+        CHK1 -->|"Found"| RET[Return Value]
+        CHK2 -->|"Found"| RET
+        CHK3 -->|"Found"| RET
+    end
+            </pre>
+            <!-- Accessible text description for screen readers -->
+            <div class="sr-only">
+              The diagram shows MirDB's LSM tree architecture with two main paths:
+              Write Path: Client sends data to MirDB Server, which writes to Write-Ahead Log (WAL), then to Memtable (Skip List), when full becomes Immutable Memtable, then minor compaction to SSTable Level 0, and major compaction to deeper levels.
+              Read Path: Client queries MirDB Server, which checks Memtable first, then Immutable Memtables if not found, finally checks SSTable levels from L0 to L2+ until value is found.
+            </div>
+          </div>
+
+          <!-- Write Path Explanation -->
+          <div class="path-explanation write-path">
+            <h3>Write Path</h3>
+            <p>MirDB uses a Log-Structured Merge (LSM) tree for efficient write operations:</p>
+            <ol class="path-steps">
+              <li>
+                <strong>WAL (Write-Ahead Log)</strong>: Every write operation is first recorded in the WAL for durability. This ensures data can be recovered after crashes.
+              </li>
+              <li>
+                <strong>Memtable</strong>: Data is written to an in-memory skip list structure called the Memtable for fast write and lookup performance.
+              </li>
+              <li>
+                <strong>Immutable Memtable</strong>: When the Memtable reaches its size limit, it becomes immutable and a new Memtable is created for incoming writes.
+              </li>
+              <li>
+                <strong>SSTables</strong>: Immutable Memtables are flushed to disk as Sorted String Tables (SSTables), organized in levels for efficient storage.
+              </li>
+            </ol>
+          </div>
+
+          <!-- Read Path Explanation -->
+          <div class="path-explanation read-path">
+            <h3>Read Path</h3>
+            <p>Reads follow a specific lookup order to find the most recent value:</p>
+            <ol class="path-steps">
+              <li>
+                <strong>Memtable</strong>: First, MirDB checks the active Memtable for the requested key, as it contains the most recent writes.
+              </li>
+              <li>
+                <strong>Immutable Memtables</strong>: If not found, the search continues through any Immutable Memtables awaiting flush to disk.
+              </li>
+              <li>
+                <strong>SSTable Levels</strong>: Finally, MirDB searches through SSTable levels from L0 to deeper levels (L1, L2, etc.) until the key is found or confirmed absent.
+              </li>
+            </ol>
+          </div>
+
+          <!-- Compaction Explanation -->
+          <div class="path-explanation compaction">
+            <h3>Compaction Process</h3>
+            <p>Compaction maintains storage efficiency and read performance:</p>
+            <div class="compaction-types">
+              <div class="compaction-type">
+                <h4>Minor Compaction</h4>
+                <p>When Immutable Memtables accumulate, they are flushed to SSTable Level 0. This process converts in-memory data to persistent disk storage while maintaining sorted order within each SSTable.</p>
+              </div>
+              <div class="compaction-type">
+                <h4>Major Compaction</h4>
+                <p>When a level accumulates too many SSTables, major compaction merges them into the next level. This process removes deleted keys, merges duplicate entries, and maintains sorted order across levels for efficient range queries.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <!-- END: Architecture Section (Scenario 3) -->
