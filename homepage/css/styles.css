@@ -276,6 +276,21 @@ pre code {
   text-decoration: none;
 }
 
+.nav-links a.active {
+  color: var(--color-primary);
+  position: relative;
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+}
+
 /* Main content offset for fixed header */
 main {
   padding-top: var(--header-height);
