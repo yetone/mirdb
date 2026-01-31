@@ -522,10 +522,11 @@ body.menu-open {
 }
 
 /* ==========================================================================
-   Desktop Styles (1024px+) - will be expanded by Scenario 11
+   Desktop Styles (1024px+) - Owner: Scenario 11
    ========================================================================== */
 
 @media (min-width: 1024px) {
+  /* Navigation - Full horizontal navigation bar visible */
   .hamburger-menu {
     display: none;
   }
@@ -536,5 +537,227 @@ body.menu-open {
 
   .nav-links {
     display: flex;
+    gap: var(--spacing-xl);
+  }
+
+  /* Header spans full width with proper layout */
+  .header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Features Grid - Three columns on desktop */
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  .feature-card {
+    padding: var(--spacing-xl);
+  }
+
+  /* Hero Section Desktop Styles */
+  .hero {
+    min-height: calc(100vh - var(--header-height));
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-5xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-xl);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  /* Hero CTA buttons side by side on desktop */
+  .hero-cta {
+    flex-direction: row;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-cta .btn {
+    width: auto;
+  }
+
+  /* Architecture Section Desktop - Side-by-side layouts */
+  .architecture-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .architecture-diagram {
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin-left: 0;
+    margin-right: 0;
+    overflow-x: auto;
+  }
+
+  /* Compaction types side by side on desktop */
+  .compaction-types {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  .compaction-type {
+    padding: var(--spacing-lg);
+  }
+
+  /* Quick Start Section Desktop */
+  .quickstart-step {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .quickstart-step pre {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-lg);
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: var(--radius-md);
+  }
+
+  .step-title {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Configuration Section Desktop */
+  .config-content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .config-example pre {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-lg);
+  }
+
+  .config-table-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: var(--radius-md);
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+  }
+
+  /* Comparison Section Desktop */
+  .comparison-content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .comparison-table {
+    font-size: var(--font-size-base);
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    border-radius: var(--radius-lg);
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .use-case-guidance {
+    padding: var(--spacing-xl);
+  }
+
+  .use-case-guidance h3 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .guidance-list li {
+    padding-left: var(--spacing-xl);
+  }
+
+  /* Footer Desktop Styles - Multi-column layout */
+  .footer {
+    padding: var(--spacing-3xl) 0 var(--spacing-xl);
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--spacing-2xl);
+    text-align: left;
+  }
+
+  .footer-brand {
+    align-items: flex-start;
+    grid-column: auto;
+  }
+
+  .footer-tagline {
+    max-width: 300px;
+  }
+
+  .footer-links {
+    text-align: left;
+  }
+
+  .footer-links ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-license {
+    text-align: left;
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
+    text-align: left;
+  }
+
+  /* Section Styles */
+  section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .section-title {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  /* Container Desktop padding */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Code blocks on desktop */
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  code {
+    word-break: normal;
   }
 }
