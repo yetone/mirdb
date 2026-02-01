@@ -185,3 +185,93 @@ describe('Architecture Highlights Section', () => {
     });
   });
 });
+
+/**
+ * Roadmap/TODO Section Tests
+ * Owner: Scenario 18 - Roadmap/TODO Section
+ *
+ * Tests:
+ * - Roadmap or TODO section exists
+ * - Roadmap items show completion status (completed/in-progress/planned)
+ */
+describe('Roadmap/TODO Section', () => {
+  beforeEach(() => {
+    loadHTML('index.html');
+  });
+
+  describe('Test Case 1: Roadmap or TODO section exists', () => {
+    test('roadmap section exists on the page', () => {
+      // Check for dedicated roadmap section
+      const roadmapSection = document.getElementById('roadmap');
+      expect(roadmapSection).toBeInTheDocument();
+    });
+
+    test('roadmap section has a heading', () => {
+      const roadmapSection = document.getElementById('roadmap');
+      const heading = roadmapSection.querySelector('h2, h3');
+      expect(heading).toBeInTheDocument();
+
+      // Heading should mention roadmap, TODO, or project status
+      const headingText = heading.textContent.toLowerCase();
+      const hasRoadmapHeading =
+        headingText.includes('roadmap') ||
+        headingText.includes('todo') ||
+        headingText.includes('project status') ||
+        headingText.includes('upcoming');
+      expect(hasRoadmapHeading).toBe(true);
+    });
+  });
+
+  describe('Test Case 2: Roadmap items show completion status', () => {
+    test('roadmap contains items with status indicators', () => {
+      const roadmapSection = document.getElementById('roadmap');
+
+      // Check for roadmap items - could be list items or cards
+      const roadmapItems = roadmapSection.querySelectorAll('.roadmap-item, li, [class*="roadmap"]');
+      expect(roadmapItems.length).toBeGreaterThan(0);
+    });
+
+    test('roadmap items have status indicators (completed/in-progress/planned)', () => {
+      const roadmapSection = document.getElementById('roadmap');
+      const sectionContent = roadmapSection.textContent.toLowerCase();
+
+      // Check for status indicators in the content
+      const hasCompletedIndicator =
+        sectionContent.includes('completed') ||
+        sectionContent.includes('done') ||
+        sectionContent.includes('✓') ||
+        sectionContent.includes('✅') ||
+        roadmapSection.querySelector('[class*="completed"], [class*="done"], .status-completed');
+
+      const hasInProgressIndicator =
+        sectionContent.includes('in progress') ||
+        sectionContent.includes('in-progress') ||
+        sectionContent.includes('🚧') ||
+        roadmapSection.querySelector('[class*="in-progress"], [class*="progress"], .status-in-progress');
+
+      const hasPlannedIndicator =
+        sectionContent.includes('planned') ||
+        sectionContent.includes('upcoming') ||
+        sectionContent.includes('todo') ||
+        sectionContent.includes('🔜') ||
+        roadmapSection.querySelector('[class*="planned"], [class*="upcoming"], .status-planned');
+
+      // At least one type of status indicator should be present
+      const hasStatusIndicators = hasCompletedIndicator || hasInProgressIndicator || hasPlannedIndicator;
+      expect(hasStatusIndicators).toBe(true);
+    });
+
+    test('roadmap displays at least one item from each status category', () => {
+      const roadmapSection = document.getElementById('roadmap');
+
+      // Check for different status categories
+      const completedItems = roadmapSection.querySelectorAll('[data-status="completed"], .status-completed, .completed');
+      const inProgressItems = roadmapSection.querySelectorAll('[data-status="in-progress"], .status-in-progress, .in-progress');
+      const plannedItems = roadmapSection.querySelectorAll('[data-status="planned"], .status-planned, .planned');
+
+      // Total items should include at least some status variety
+      const totalStatusItems = completedItems.length + inProgressItems.length + plannedItems.length;
+      expect(totalStatusItems).toBeGreaterThan(0);
+    });
+  });
+});

@@ -299,6 +299,126 @@
         </div>
     </section>
 
+    <!-- Roadmap/TODO Section (Scenario 18) -->
+    <section id="roadmap" class="py-20 px-4 bg-gray-800">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-4">Project Roadmap</h2>
+            <p class="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+                Track the development progress and upcoming features for MirDB.
+            </p>
+
+            <!-- Roadmap Items -->
+            <div class="space-y-4">
+                <!-- Completed Items -->
+                <div class="roadmap-item completed status-completed bg-gray-900 rounded-lg p-5 border-l-4 border-green-500" data-status="completed">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-green-400 mr-3" aria-hidden="true">✓</span>
+                            <h3 class="text-lg font-semibold">Core Key-Value Store</h3>
+                        </div>
+                        <span class="text-xs font-medium px-2 py-1 rounded bg-green-900 text-green-300">Completed</span>
+                    </div>
+                    <p class="text-gray-400 mt-2 ml-7">Basic get, set, and delete operations with Memcached protocol support.</p>
+                </div>
+
+                <div class="roadmap-item completed status-completed bg-gray-900 rounded-lg p-5 border-l-4 border-green-500" data-status="completed">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-green-400 mr-3" aria-hidden="true">✓</span>
+                            <h3 class="text-lg font-semibold">LSM-Tree Storage Engine</h3>
+                        </div>
+                        <span class="text-xs font-medium px-2 py-1 rounded bg-green-900 text-green-300">Completed</span>
+                    </div>
+                    <p class="text-gray-400 mt-2 ml-7">Persistent storage with Write-Ahead Log (WAL) and SSTable files.</p>
+                </div>
+
+                <div class="roadmap-item completed status-completed bg-gray-900 rounded-lg p-5 border-l-4 border-green-500" data-status="completed">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-green-400 mr-3" aria-hidden="true">✓</span>
+                            <h3 class="text-lg font-semibold">Skip List Memtable</h3>
+                        </div>
+                        <span class="text-xs font-medium px-2 py-1 rounded bg-green-900 text-green-300">Completed</span>
+                    </div>
+                    <p class="text-gray-400 mt-2 ml-7">Efficient in-memory data structure for fast reads and writes.</p>
+                </div>
+
+                <!-- In Progress Items -->
+                <div class="roadmap-item in-progress status-in-progress bg-gray-900 rounded-lg p-5 border-l-4 border-yellow-500" data-status="in-progress">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-yellow-400 mr-3" aria-hidden="true">⏳</span>
+                            <h3 class="text-lg font-semibold">Automatic Compaction</h3>
+                        </div>
+                        <span class="text-xs font-medium px-2 py-1 rounded bg-yellow-900 text-yellow-300">In Progress</span>
+                    </div>
+                    <p class="text-gray-400 mt-2 ml-7">Background minor and major compaction for storage optimization.</p>
+                </div>
+
+                <div class="roadmap-item in-progress status-in-progress bg-gray-900 rounded-lg p-5 border-l-4 border-yellow-500" data-status="in-progress">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-yellow-400 mr-3" aria-hidden="true">⏳</span>
+                            <h3 class="text-lg font-semibold">Bloom Filters</h3>
+                        </div>
+                        <span class="text-xs font-medium px-2 py-1 rounded bg-yellow-900 text-yellow-300">In Progress</span>
+                    </div>
+                    <p class="text-gray-400 mt-2 ml-7">Probabilistic data structure to reduce unnecessary disk reads.</p>
+                </div>
+
+                <!-- Planned Items -->
+                <div class="roadmap-item planned status-planned bg-gray-900 rounded-lg p-5 border-l-4 border-blue-500" data-status="planned">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-blue-400 mr-3" aria-hidden="true">◯</span>
+                            <h3 class="text-lg font-semibold">Replication Support</h3>
+                        </div>
+                        <span class="text-xs font-medium px-2 py-1 rounded bg-blue-900 text-blue-300">Planned</span>
+                    </div>
+                    <p class="text-gray-400 mt-2 ml-7">Leader-follower replication for high availability and fault tolerance.</p>
+                </div>
+
+                <div class="roadmap-item planned status-planned bg-gray-900 rounded-lg p-5 border-l-4 border-blue-500" data-status="planned">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-blue-400 mr-3" aria-hidden="true">◯</span>
+                            <h3 class="text-lg font-semibold">Cluster Mode</h3>
+                        </div>
+                        <span class="text-xs font-medium px-2 py-1 rounded bg-blue-900 text-blue-300">Planned</span>
+                    </div>
+                    <p class="text-gray-400 mt-2 ml-7">Distributed deployment with automatic sharding and load balancing.</p>
+                </div>
+
+                <div class="roadmap-item planned status-planned bg-gray-900 rounded-lg p-5 border-l-4 border-blue-500" data-status="planned">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-blue-400 mr-3" aria-hidden="true">◯</span>
+                            <h3 class="text-lg font-semibold">Monitoring Dashboard</h3>
+                        </div>
+                        <span class="text-xs font-medium px-2 py-1 rounded bg-blue-900 text-blue-300">Planned</span>
+                    </div>
+                    <p class="text-gray-400 mt-2 ml-7">Built-in metrics and visualization for performance monitoring.</p>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="mt-10 flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+                <div class="flex items-center">
+                    <span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span>
+                    Completed
+                </div>
+                <div class="flex items-center">
+                    <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
+                    In Progress
+                </div>
+                <div class="flex items-center">
+                    <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
+                    Planned
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Demo Section -->
     <section id="demo" class="py-20 px-4 bg-gray-900">
         <div class="max-w-4xl mx-auto">
