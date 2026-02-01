@@ -1,0 +1,17 @@
+{
+  "name": "mirdb-landing-page",
+  "version": "1.0.0",
+  "description": "MirDB Product Landing Page",
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest tests/unit",
+    "test:e2e": "jest tests/e2e",
+    "test:integration": "jest tests/integration"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "@testing-library/dom": "^9.0.0",
+    "@testing-library/jest-dom": "^6.0.0"
+  }
+}
