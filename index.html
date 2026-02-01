@@ -158,12 +158,53 @@
         </div>
     </section>
 
-    <!-- Demo Section (placeholder for Scenario 3) -->
-    <section id="demo" class="py-20 px-4">
+    <!-- Demo Section -->
+    <section id="demo" class="py-20 px-4 bg-gray-900">
         <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12">See It In Action</h2>
-            <div class="bg-gray-800 rounded-lg p-6">
-                <img src="assets/usage.gif" alt="MirDB Usage Demo" class="mx-auto rounded-lg">
+            <h2 class="text-3xl font-bold text-center mb-12">Quick Start</h2>
+
+            <!-- Usage GIF -->
+            <div class="mb-12 text-center">
+                <img id="usage-gif" src="assets/usage.gif" alt="MirDB Usage Demonstration" class="mx-auto rounded-lg shadow-lg max-w-full h-auto">
+            </div>
+
+            <!-- Installation Code Block -->
+            <div class="code-block-wrapper mb-6">
+                <div class="code-block-header bg-gray-700 px-4 py-2 rounded-t-lg flex justify-between items-center">
+                    <span class="text-gray-300 text-sm">Installation</span>
+                    <button class="copy-button bg-gray-600 hover:bg-gray-500 text-white text-sm px-3 py-1 rounded transition-colors" data-target="install-code" aria-label="Copy installation command">
+                        Copy
+                    </button>
+                </div>
+                <pre class="bg-gray-800 p-4 rounded-b-lg overflow-x-auto"><code id="install-code" class="language-bash"># Install via cargo
+cargo install mirdb</code></pre>
+            </div>
+
+            <!-- Server Start Code Block -->
+            <div class="code-block-wrapper mb-6">
+                <div class="code-block-header bg-gray-700 px-4 py-2 rounded-t-lg flex justify-between items-center">
+                    <span class="text-gray-300 text-sm">Start the Server</span>
+                    <button class="copy-button bg-gray-600 hover:bg-gray-500 text-white text-sm px-3 py-1 rounded transition-colors" data-target="server-code" aria-label="Copy server start command">
+                        Copy
+                    </button>
+                </div>
+                <pre class="bg-gray-800 p-4 rounded-b-lg overflow-x-auto"><code id="server-code" class="language-bash"># Start the server
+mirdb-server --port 11211</code></pre>
+            </div>
+
+            <!-- Usage Code Block -->
+            <div class="code-block-wrapper mb-6">
+                <div class="code-block-header bg-gray-700 px-4 py-2 rounded-t-lg flex justify-between items-center">
+                    <span class="text-gray-300 text-sm">Usage Example</span>
+                    <button class="copy-button bg-gray-600 hover:bg-gray-500 text-white text-sm px-3 py-1 rounded transition-colors" data-target="usage-code" aria-label="Copy usage example">
+                        Copy
+                    </button>
+                </div>
+                <pre class="bg-gray-800 p-4 rounded-b-lg overflow-x-auto"><code id="usage-code" class="language-bash"># Use with any Memcached client
+printf "set mykey 0 0 5\r\nhello\r\n" | nc localhost 11211
+
+# Get the value back
+printf "get mykey\r\n" | nc localhost 11211</code></pre>
             </div>
         </div>
     </section>
@@ -194,6 +235,9 @@ printf "set mykey 0 0 5\r\nhello\r\n" | nc localhost 11211</code></pre>
             </p>
         </div>
     </footer>
+
+    <!-- Copy to clipboard functionality -->
+    <script src="assets/js/copy-code.js"></script>
 
     <!-- Main JavaScript -->
     <script src="assets/js/main.js"></script>

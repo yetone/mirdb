@@ -50,9 +50,31 @@ function loadHTMLBody(filePath) {
   return document.body;
 }
 
+/**
+ * Query all elements matching a selector within a section
+ * @param {HTMLElement} section - The section to query within
+ * @param {string} selector - CSS selector
+ * @returns {NodeList} The matching elements
+ */
+function queryAllInSection(section, selector) {
+  return section.querySelectorAll(selector);
+}
+
+/**
+ * Check if element contains text
+ * @param {HTMLElement} element - The element to check
+ * @param {string} text - The text to search for
+ * @returns {boolean} True if text is found
+ */
+function containsText(element, text) {
+  return element.textContent.includes(text);
+}
+
 module.exports = {
   loadHTML,
   querySection,
   getComputedStyles,
-  loadHTMLBody
+  loadHTMLBody,
+  queryAllInSection,
+  containsText
 };

@@ -90,3 +90,45 @@ pre[class*="language-"] {
 code[class*="language-"] {
   font-size: 0.875rem;
 }
+
+/* Code block wrapper styling */
+.code-block-wrapper {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.code-block-wrapper pre {
+  margin: 0;
+}
+
+.code-block-wrapper code {
+  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Copy button states */
+.copy-button {
+  min-width: 60px;
+  text-align: center;
+}
+
+.copy-button.copied {
+  background-color: #10b981;
+}
+
+/* Feature card hover effect */
+.feature-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
