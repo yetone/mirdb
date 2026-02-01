@@ -124,3 +124,102 @@ describe('Hero Section Display', () => {
     });
   });
 });
+
+/**
+ * Project Status Badges Tests
+ * Owner: Scenario 5 - Project Status Badges
+ *
+ * Tests:
+ * - CI status badge image exists
+ * - Badge links to CI pipeline or project status page
+ */
+describe('Project Status Badges', () => {
+  beforeEach(() => {
+    loadHTML('index.html');
+  });
+
+  describe('Test Case 1: Query for status badge images', () => {
+    test('should have at least one CI status badge image', () => {
+      const heroSection = querySection('hero');
+      expect(heroSection).toBeInTheDocument();
+
+      const statusBadges = heroSection.querySelector('#status-badges');
+      expect(statusBadges).toBeInTheDocument();
+
+      const badgeImages = statusBadges.querySelectorAll('img');
+      expect(badgeImages.length).toBeGreaterThanOrEqual(1);
+    });
+
+    test('should have CircleCI badge image', () => {
+      const heroSection = querySection('hero');
+      expect(heroSection).toBeInTheDocument();
+
+      const circleciImage = heroSection.querySelector('#circleci-badge img');
+      expect(circleciImage).toBeInTheDocument();
+      expect(circleciImage.getAttribute('src')).toContain('circleci');
+      expect(circleciImage.getAttribute('alt')).toBeTruthy();
+    });
+
+    test('should have badge images with proper alt text', () => {
+      const heroSection = querySection('hero');
+      expect(heroSection).toBeInTheDocument();
+
+      const statusBadges = heroSection.querySelector('#status-badges');
+      expect(statusBadges).toBeInTheDocument();
+
+      const badgeImages = statusBadges.querySelectorAll('img');
+      badgeImages.forEach((img) => {
+        expect(img.getAttribute('alt')).toBeTruthy();
+      });
+    });
+  });
+
+  describe('Test Case 2: Check badge links', () => {
+    test('should have CircleCI badge linking to CI pipeline', () => {
+      const heroSection = querySection('hero');
+      expect(heroSection).toBeInTheDocument();
+
+      const circleciBadge = heroSection.querySelector('#circleci-badge');
+      expect(circleciBadge).toBeInTheDocument();
+      expect(circleciBadge.tagName.toLowerCase()).toBe('a');
+      expect(circleciBadge.getAttribute('href')).toContain('circleci.com');
+      expect(circleciBadge.getAttribute('target')).toBe('_blank');
+      expect(circleciBadge.getAttribute('rel')).toContain('noopener');
+    });
+
+    test('should have version badge linking to releases', () => {
+      const heroSection = querySection('hero');
+      expect(heroSection).toBeInTheDocument();
+
+      const versionBadge = heroSection.querySelector('#version-badge');
+      expect(versionBadge).toBeInTheDocument();
+      expect(versionBadge.tagName.toLowerCase()).toBe('a');
+      expect(versionBadge.getAttribute('href')).toContain('github.com');
+      expect(versionBadge.getAttribute('href')).toContain('releases');
+    });
+
+    test('should have badges within the hero section', () => {
+      const heroSection = querySection('hero');
+      expect(heroSection).toBeInTheDocument();
+
+      const statusBadges = heroSection.querySelector('#status-badges');
+      expect(statusBadges).toBeInTheDocument();
+
+      // Verify badges are direct children or descendants of hero section
+      expect(heroSection.contains(statusBadges)).toBe(true);
+    });
+
+    test('all badge links should have proper security attributes', () => {
+      const heroSection = querySection('hero');
+      expect(heroSection).toBeInTheDocument();
+
+      const statusBadges = heroSection.querySelector('#status-badges');
+      const badgeLinks = statusBadges.querySelectorAll('a');
+
+      badgeLinks.forEach((link) => {
+        expect(link.getAttribute('target')).toBe('_blank');
+        expect(link.getAttribute('rel')).toContain('noopener');
+      });
+    });
+  });
+});
