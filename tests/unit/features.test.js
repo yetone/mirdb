@@ -108,3 +108,80 @@ describe('Features Section Display', () => {
     });
   });
 });
+
+/**
+ * Architecture Highlights Section Tests
+ * Owner: Scenario 17 - Architecture Highlights Section
+ *
+ * Tests:
+ * - Architecture section exists
+ * - Tokio mention for async I/O
+ * - LSM-tree mention for storage architecture
+ */
+describe('Architecture Highlights Section', () => {
+  beforeEach(() => {
+    loadHTML('index.html');
+  });
+
+  describe('Test Case 1: Architecture or technical details section exists', () => {
+    test('architecture section or features section with architecture content exists', () => {
+      // Check for dedicated architecture section or features section containing architecture highlights
+      const architectureSection = document.getElementById('architecture');
+      const featuresSection = querySection('features');
+
+      // Either a dedicated architecture section exists, or features section contains architecture info
+      const hasArchitectureContent = architectureSection !== null ||
+        (featuresSection && (
+          featuresSection.textContent.toLowerCase().includes('tokio') ||
+          featuresSection.textContent.toLowerCase().includes('lsm') ||
+          featuresSection.textContent.toLowerCase().includes('skiplist') ||
+          featuresSection.textContent.toLowerCase().includes('skip list')
+        ));
+
+      expect(hasArchitectureContent).toBe(true);
+    });
+  });
+
+  describe('Test Case 2: Page mentions Tokio for async I/O', () => {
+    test('page contains Tokio mention for async functionality', () => {
+      const pageContent = document.body.textContent.toLowerCase();
+      const hasTokioMention = pageContent.includes('tokio');
+      expect(hasTokioMention).toBe(true);
+    });
+
+    test('Tokio is mentioned in context of async or performance', () => {
+      const pageContent = document.body.textContent.toLowerCase();
+      // Tokio should be mentioned alongside async, I/O, or performance concepts
+      const hasTokioWithContext =
+        (pageContent.includes('tokio') && pageContent.includes('async')) ||
+        (pageContent.includes('tokio') && pageContent.includes('i/o')) ||
+        (pageContent.includes('tokio') && pageContent.includes('throughput'));
+      expect(hasTokioWithContext).toBe(true);
+    });
+  });
+
+  describe('Test Case 3: Page mentions LSM-tree storage architecture', () => {
+    test('page contains LSM-tree mention', () => {
+      const pageContent = document.body.textContent.toLowerCase();
+      const hasLsmTreeMention =
+        pageContent.includes('lsm-tree') ||
+        pageContent.includes('lsm tree') ||
+        pageContent.includes('log-structured merge');
+      expect(hasLsmTreeMention).toBe(true);
+    });
+
+    test('LSM-tree is mentioned in context of storage or persistence', () => {
+      const featuresSection = querySection('features');
+      const architectureSection = document.getElementById('architecture');
+
+      const sectionToCheck = architectureSection || featuresSection;
+      expect(sectionToCheck).toBeInTheDocument();
+
+      const sectionContent = sectionToCheck.textContent.toLowerCase();
+      const hasLsmWithStorageContext =
+        (sectionContent.includes('lsm') && sectionContent.includes('storage')) ||
+        (sectionContent.includes('lsm') && sectionContent.includes('persist'));
+      expect(hasLsmWithStorageContext).toBe(true);
+    });
+  });
+});

@@ -197,6 +197,108 @@
         </div>
     </section>
 
+    <!-- Architecture Highlights Section (Scenario 17) -->
+    <section id="architecture" class="py-20 px-4 bg-gray-900">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-4">Architecture Highlights</h2>
+            <p class="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+                MirDB is built on a robust, modern architecture designed for performance and reliability.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Architecture Item 1: Tokio Async Runtime -->
+                <div class="architecture-card bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-600 rounded-lg p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Tokio Async Runtime</h3>
+                    </div>
+                    <p class="text-gray-300">
+                        Powered by Tokio for high-performance async I/O. Handle thousands of concurrent connections with minimal overhead using Rust's zero-cost abstractions.
+                    </p>
+                </div>
+
+                <!-- Architecture Item 2: LSM-Tree Storage -->
+                <div class="architecture-card bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-600 rounded-lg p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">LSM-Tree Storage</h3>
+                    </div>
+                    <p class="text-gray-300">
+                        Log-Structured Merge-tree (LSM-tree) architecture ensures efficient writes and persistent storage. Data flows from memtable to SSTable levels for optimal performance.
+                    </p>
+                </div>
+
+                <!-- Architecture Item 3: Skip List Memtable -->
+                <div class="architecture-card bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-600 rounded-lg p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Skip List Memtable</h3>
+                    </div>
+                    <p class="text-gray-300">
+                        In-memory skip list data structure provides O(log n) operations. Fast reads and writes with efficient memory usage before flushing to disk.
+                    </p>
+                </div>
+
+                <!-- Architecture Item 4: Automatic Compaction -->
+                <div class="architecture-card bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-orange-600 rounded-lg p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Compaction Engine</h3>
+                    </div>
+                    <p class="text-gray-300">
+                        Background minor and major compaction threads keep storage optimized. Automatic SSTable merging across levels maintains read performance.
+                    </p>
+                </div>
+
+                <!-- Architecture Item 5: Write-Ahead Log -->
+                <div class="architecture-card bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-600 rounded-lg p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Write-Ahead Log</h3>
+                    </div>
+                    <p class="text-gray-300">
+                        WAL ensures durability and crash recovery. Every write is logged before being applied, protecting your data against unexpected failures.
+                    </p>
+                </div>
+
+                <!-- Architecture Item 6: SSTable Format -->
+                <div class="architecture-card bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-cyan-600 rounded-lg p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">SSTable Files</h3>
+                    </div>
+                    <p class="text-gray-300">
+                        Sorted String Tables (SSTables) provide efficient on-disk storage. Block-based format with index enables fast point lookups and range scans.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Demo Section -->
     <section id="demo" class="py-20 px-4 bg-gray-900">
         <div class="max-w-4xl mx-auto">
