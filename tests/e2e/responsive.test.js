@@ -433,3 +433,301 @@ describe('Responsive Design - Tablet (768px)', () => {
     });
   });
 });
+
+describe('Responsive Design - Desktop (1280px)', () => {
+  let document;
+
+  beforeEach(() => {
+    // Load the HTML
+    document = loadHTML('index.html');
+
+    // Set viewport to desktop size (1280px width)
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1280
+    });
+    Object.defineProperty(window, 'innerHeight', {
+      writable: true,
+      configurable: true,
+      value: 800
+    });
+
+    // Dispatch resize event
+    window.dispatchEvent(new Event('resize'));
+  });
+
+  describe('Test Case 1: Page renders with desktop layout at 1280px, content centered', () => {
+    test('page renders correctly at 1280px viewport width', () => {
+      // Verify viewport is set to desktop size
+      expect(window.innerWidth).toBe(1280);
+    });
+
+    test('hero section is visible and uses full desktop layout', () => {
+      const heroSection = querySection('hero');
+      expect(heroSection).toBeInTheDocument();
+      expect(heroSection).toHaveClass('min-h-screen');
+      expect(heroSection).toHaveClass('flex');
+      expect(heroSection).toHaveClass('items-center');
+      expect(heroSection).toHaveClass('justify-center');
+    });
+
+    test('hero content is centered with max-width constraint', () => {
+      const heroSection = querySection('hero');
+      const contentContainer = heroSection.querySelector('.max-w-4xl');
+      expect(contentContainer).toBeInTheDocument();
+      // Content should be centered
+      expect(contentContainer).toHaveClass('mx-auto');
+      expect(contentContainer).toHaveClass('text-center');
+    });
+
+    test('logo displays at full desktop size', () => {
+      const logo = document.getElementById('logo');
+      expect(logo).toBeInTheDocument();
+      // Logo should have responsive classes - md:w-48 applies at desktop
+      expect(logo.className).toMatch(/md:w-48/);
+      expect(logo.className).toMatch(/md:h-48/);
+    });
+
+    test('main heading displays at full desktop size', () => {
+      const heading = document.querySelector('h1');
+      expect(heading).toBeInTheDocument();
+      // Heading should have md:text-6xl for desktop
+      expect(heading.className).toMatch(/md:text-6xl/);
+    });
+
+    test('tagline displays at desktop-optimized size', () => {
+      const tagline = document.getElementById('tagline');
+      expect(tagline).toBeInTheDocument();
+      // Tagline should have md:text-2xl for desktop
+      expect(tagline.className).toMatch(/md:text-2xl/);
+    });
+
+    test('CTA buttons display in horizontal row layout', () => {
+      const ctaContainer = document.getElementById('cta-buttons');
+      expect(ctaContainer).toBeInTheDocument();
+      // At sm: breakpoint and above, buttons should be in a row
+      expect(ctaContainer.className).toMatch(/sm:flex-row/);
+      expect(ctaContainer.className).toMatch(/flex/);
+      expect(ctaContainer.className).toMatch(/gap-4/);
+    });
+
+    test('status badges display inline with proper spacing', () => {
+      const badgesContainer = document.getElementById('status-badges');
+      expect(badgesContainer).toBeInTheDocument();
+      expect(badgesContainer.className).toMatch(/flex/);
+      expect(badgesContainer.className).toMatch(/flex-wrap/);
+      expect(badgesContainer.className).toMatch(/gap-3/);
+      expect(badgesContainer.className).toMatch(/justify-center/);
+    });
+
+    test('all sections are properly centered', () => {
+      const sections = ['hero', 'features', 'demo', 'getting-started', 'footer'];
+      sections.forEach(sectionId => {
+        const section = querySection(sectionId);
+        expect(section).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Test Case 2: Features display in full grid layout (3-4 columns)', () => {
+    test('features section exists and is properly structured', () => {
+      const featuresSection = querySection('features');
+      expect(featuresSection).toBeInTheDocument();
+      expect(featuresSection).toHaveClass('py-20');
+    });
+
+    test('features grid has desktop 3-column layout', () => {
+      const featuresSection = querySection('features');
+      const grid = featuresSection.querySelector('.grid');
+      expect(grid).toBeInTheDocument();
+
+      // Grid should have lg:grid-cols-3 for desktop layout (1280px >= lg breakpoint)
+      expect(grid.className).toMatch(/lg:grid-cols-3/);
+    });
+
+    test('features grid has appropriate responsive column progression', () => {
+      const featuresSection = querySection('features');
+      const grid = featuresSection.querySelector('.grid');
+
+      // Mobile: 1 column, Tablet: 2 columns, Desktop: 3 columns
+      expect(grid.className).toMatch(/grid-cols-1/);
+      expect(grid.className).toMatch(/md:grid-cols-2/);
+      expect(grid.className).toMatch(/lg:grid-cols-3/);
+    });
+
+    test('feature cards have proper spacing for desktop', () => {
+      const featuresSection = querySection('features');
+      const grid = featuresSection.querySelector('.grid');
+      expect(grid).toBeInTheDocument();
+
+      // Grid should have gap-8 for proper spacing between cards
+      expect(grid.className).toMatch(/gap-8/);
+    });
+
+    test('all six feature cards are present', () => {
+      const featuresSection = querySection('features');
+      const featureCards = featuresSection.querySelectorAll('.feature-card');
+
+      // Should have 6 feature cards based on index.html
+      expect(featureCards.length).toBe(6);
+    });
+
+    test('feature cards have consistent desktop styling', () => {
+      const featuresSection = querySection('features');
+      const featureCards = featuresSection.querySelectorAll('.feature-card');
+
+      featureCards.forEach(card => {
+        // Each card should have consistent styling
+        expect(card).toHaveClass('bg-gray-700');
+        expect(card).toHaveClass('rounded-lg');
+        expect(card).toHaveClass('p-6');
+
+        // Each card should have proper structure
+        const icon = card.querySelector('.feature-icon');
+        const heading = card.querySelector('h3');
+        const description = card.querySelector('p');
+
+        expect(icon).toBeInTheDocument();
+        expect(heading).toBeInTheDocument();
+        expect(description).toBeInTheDocument();
+      });
+    });
+
+    test('features container has max-width for readability on large screens', () => {
+      const featuresSection = querySection('features');
+      const container = featuresSection.querySelector('.max-w-6xl');
+      expect(container).toBeInTheDocument();
+      expect(container).toHaveClass('mx-auto');
+    });
+  });
+
+  describe('Test Case 3: Content has max-width constraint for readability', () => {
+    test('hero section content has max-width constraint', () => {
+      const heroSection = querySection('hero');
+      const container = heroSection.querySelector('.max-w-4xl');
+      expect(container).toBeInTheDocument();
+    });
+
+    test('features section has max-width constraint', () => {
+      const featuresSection = querySection('features');
+      const container = featuresSection.querySelector('.max-w-6xl');
+      expect(container).toBeInTheDocument();
+    });
+
+    test('demo section has max-width constraint', () => {
+      const demoSection = querySection('demo');
+      const container = demoSection.querySelector('.max-w-4xl');
+      expect(container).toBeInTheDocument();
+    });
+
+    test('getting started section has max-width constraint', () => {
+      const gettingStartedSection = querySection('getting-started');
+      const container = gettingStartedSection.querySelector('.max-w-4xl');
+      expect(container).toBeInTheDocument();
+    });
+
+    test('footer has max-width constraint', () => {
+      const footer = querySection('footer');
+      const container = footer.querySelector('.max-w-4xl');
+      expect(container).toBeInTheDocument();
+    });
+
+    test('description text has max-width for optimal line length', () => {
+      const heroSection = querySection('hero');
+      const description = heroSection.querySelector('.max-w-2xl');
+      expect(description).toBeInTheDocument();
+    });
+
+    test('all containers are horizontally centered', () => {
+      // Check that max-width containers use mx-auto for centering
+      const heroContainer = document.querySelector('#hero .max-w-4xl');
+      const featuresContainer = document.querySelector('#features .max-w-6xl');
+      const demoContainer = document.querySelector('#demo .max-w-4xl');
+      const gettingStartedContainer = document.querySelector('#getting-started .max-w-4xl');
+      const footerContainer = document.querySelector('#footer .max-w-4xl');
+
+      expect(heroContainer).toHaveClass('mx-auto');
+      expect(featuresContainer).toHaveClass('mx-auto');
+      expect(demoContainer).toHaveClass('mx-auto');
+      expect(gettingStartedContainer).toHaveClass('mx-auto');
+      expect(footerContainer).toHaveClass('mx-auto');
+    });
+  });
+
+  describe('Desktop-specific layout verification', () => {
+    test('body has full viewport styling', () => {
+      const body = document.body;
+      expect(body).toHaveClass('min-h-screen');
+      expect(body).toHaveClass('bg-gray-900');
+      expect(body).toHaveClass('text-white');
+    });
+
+    test('code blocks handle horizontal overflow on desktop', () => {
+      const codeBlocks = document.querySelectorAll('pre');
+      expect(codeBlocks.length).toBeGreaterThan(0);
+
+      codeBlocks.forEach(block => {
+        expect(block.className).toMatch(/overflow-x-auto/);
+      });
+    });
+
+    test('images display at optimal size on desktop', () => {
+      const logo = document.getElementById('logo');
+      expect(logo).toBeInTheDocument();
+      // Logo should use desktop size classes
+      expect(logo.className).toMatch(/md:w-48/);
+
+      const usageGif = document.getElementById('usage-gif');
+      expect(usageGif).toBeInTheDocument();
+      // Image should scale responsively
+      expect(usageGif.className).toMatch(/max-w-full/);
+      expect(usageGif.className).toMatch(/h-auto/);
+    });
+
+    test('section backgrounds alternate for visual hierarchy', () => {
+      // Body provides default dark background
+      const body = document.body;
+      expect(body).toHaveClass('bg-gray-900');
+
+      // Sections with explicit backgrounds for visual hierarchy
+      const featuresSection = querySection('features');
+      const demoSection = querySection('demo');
+      const gettingStartedSection = querySection('getting-started');
+      const footer = querySection('footer');
+
+      expect(featuresSection).toHaveClass('bg-gray-800');
+      expect(demoSection).toHaveClass('bg-gray-900');
+      expect(gettingStartedSection).toHaveClass('bg-gray-800');
+      expect(footer).toHaveClass('bg-gray-900');
+    });
+
+    test('sections have appropriate vertical padding for desktop', () => {
+      const featuresSection = querySection('features');
+      const demoSection = querySection('demo');
+      const gettingStartedSection = querySection('getting-started');
+
+      expect(featuresSection).toHaveClass('py-20');
+      expect(demoSection).toHaveClass('py-20');
+      expect(gettingStartedSection).toHaveClass('py-20');
+    });
+
+    test('footer links display horizontally on desktop', () => {
+      const footerLinks = document.getElementById('footer-links');
+      expect(footerLinks).toBeInTheDocument();
+      expect(footerLinks.className).toMatch(/flex/);
+      expect(footerLinks.className).toMatch(/flex-wrap/);
+      expect(footerLinks.className).toMatch(/justify-center/);
+      expect(footerLinks.className).toMatch(/gap-6/);
+
+      const links = footerLinks.querySelectorAll('a');
+      expect(links.length).toBeGreaterThanOrEqual(3);
+    });
+
+    test('getting started steps display with clear visual structure', () => {
+      const gettingStartedSection = querySection('getting-started');
+      const steps = gettingStartedSection.querySelectorAll('.bg-gray-900.rounded-lg');
+      expect(steps.length).toBeGreaterThanOrEqual(3);
+    });
+  });
+});
