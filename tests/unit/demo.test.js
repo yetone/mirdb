@@ -149,3 +149,145 @@ describe('Demo Section with Usage Examples', () => {
         });
     });
 });
+
+/**
+ * Syntax Highlighting Tests (Scenario 14)
+ * Owner: Scenario 14 - Code Syntax Highlighting (shared with Scenario 3)
+ *
+ * Tests:
+ * - Prism.js or similar syntax highlighting library is loaded
+ * - Code blocks have syntax highlighting classes applied
+ * - Code blocks have monospace font and appropriate background
+ */
+describe('Code Syntax Highlighting (Scenario 14)', () => {
+    beforeEach(() => {
+        loadHTML('index.html');
+    });
+
+    describe('Test Case 1: Syntax highlighting library is loaded', () => {
+        test('Prism.js CSS is linked in the head', () => {
+            const prismCSS = document.querySelector('link[href*="prism"]');
+            expect(prismCSS).toBeInTheDocument();
+            expect(prismCSS.getAttribute('rel')).toBe('stylesheet');
+        });
+
+        test('Prism.js core script is loaded', () => {
+            const prismScript = document.querySelector('script[src*="prism.min.js"]');
+            expect(prismScript).toBeInTheDocument();
+        });
+
+        test('Prism.js bash component is loaded for shell highlighting', () => {
+            const bashScript = document.querySelector('script[src*="prism-bash"]');
+            expect(bashScript).toBeInTheDocument();
+        });
+
+        test('Prism.js theme is a dark theme (prism-tomorrow)', () => {
+            const prismCSS = document.querySelector('link[href*="prism"]');
+            expect(prismCSS.getAttribute('href')).toContain('prism-tomorrow');
+        });
+
+        test('Prism.js is loaded from a CDN', () => {
+            const prismScript = document.querySelector('script[src*="prism.min.js"]');
+            expect(prismScript.getAttribute('src')).toContain('cdnjs.cloudflare.com');
+        });
+    });
+
+    describe('Test Case 2: Code blocks have syntax highlighting classes applied', () => {
+        test('code blocks have language-bash class for shell commands', () => {
+            const codeBlocks = document.querySelectorAll('pre code');
+            const bashBlocks = Array.from(codeBlocks).filter(code =>
+                code.classList.contains('language-bash')
+            );
+            expect(bashBlocks.length).toBeGreaterThan(0);
+        });
+
+        test('all code blocks in demo section have language class', () => {
+            const demoSection = querySection('demo');
+            const codeBlocks = demoSection.querySelectorAll('pre code');
+            expect(codeBlocks.length).toBeGreaterThan(0);
+
+            codeBlocks.forEach(code => {
+                expect(code.className).toMatch(/language-\w+/);
+            });
+        });
+
+        test('all code blocks in getting-started section have language class', () => {
+            const gettingStartedSection = querySection('getting-started');
+            const codeBlocks = gettingStartedSection.querySelectorAll('pre code');
+            expect(codeBlocks.length).toBeGreaterThan(0);
+
+            codeBlocks.forEach(code => {
+                expect(code.className).toMatch(/language-\w+/);
+            });
+        });
+
+        test('installation code block has correct language class', () => {
+            const installCode = document.getElementById('install-code');
+            expect(installCode).toBeInTheDocument();
+            expect(installCode.classList.contains('language-bash')).toBe(true);
+        });
+
+        test('server code block has correct language class', () => {
+            const serverCode = document.getElementById('server-code');
+            expect(serverCode).toBeInTheDocument();
+            expect(serverCode.classList.contains('language-bash')).toBe(true);
+        });
+
+        test('usage code block has correct language class', () => {
+            const usageCode = document.getElementById('usage-code');
+            expect(usageCode).toBeInTheDocument();
+            expect(usageCode.classList.contains('language-bash')).toBe(true);
+        });
+    });
+
+    describe('Test Case 3: Code blocks have monospace font and appropriate background', () => {
+        test('pre elements have background styling classes', () => {
+            const preElements = document.querySelectorAll('#demo pre, #getting-started pre');
+            expect(preElements.length).toBeGreaterThan(0);
+
+            preElements.forEach(pre => {
+                expect(pre.className).toContain('bg-gray-800');
+            });
+        });
+
+        test('code blocks have overflow handling for long lines', () => {
+            const preElements = document.querySelectorAll('#demo pre');
+            preElements.forEach(pre => {
+                expect(pre.className).toContain('overflow-x-auto');
+            });
+        });
+
+        test('pre elements have padding for readability', () => {
+            const preElements = document.querySelectorAll('#demo pre, #getting-started pre');
+            preElements.forEach(pre => {
+                expect(pre.className).toMatch(/p-\d/);
+            });
+        });
+
+        test('pre elements have rounded corners', () => {
+            const preElements = document.querySelectorAll('#demo pre');
+            preElements.forEach(pre => {
+                expect(pre.className).toMatch(/rounded/);
+            });
+        });
+
+        test('code blocks are wrapped in semantic pre elements', () => {
+            const codeElements = document.querySelectorAll('pre code');
+            codeElements.forEach(code => {
+                expect(code.parentElement.tagName).toBe('PRE');
+            });
+        });
+
+        test('code block structure supports visual distinction', () => {
+            const demoSection = querySection('demo');
+            const codeBlockWrappers = demoSection.querySelectorAll('.code-block-wrapper');
+            expect(codeBlockWrappers.length).toBeGreaterThanOrEqual(3);
+
+            codeBlockWrappers.forEach(wrapper => {
+                const header = wrapper.querySelector('.code-block-header');
+                expect(header).toBeInTheDocument();
+                expect(header.className).toContain('bg-gray-700');
+            });
+        });
+    });
+});
