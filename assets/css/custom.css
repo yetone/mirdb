@@ -1,0 +1,92 @@
+/**
+ * Custom CSS styles beyond Tailwind.
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Includes:
+ * - Custom animations
+ * - Code block styles
+ * - Brand-specific overrides
+ */
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Logo animation enhancement */
+#logo {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero section animations */
+#hero h1 {
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+#hero #tagline {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+#hero p:not(#tagline) {
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+#hero #cta-buttons {
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Focus styles for accessibility */
+a:focus,
+button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* CTA button hover effects */
+#github-cta:hover,
+#get-started-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+#github-cta,
+#get-started-cta {
+  transition: all 0.2s ease-out;
+}
+
+/* Code block styling */
+pre[class*="language-"] {
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+code[class*="language-"] {
+  font-size: 0.875rem;
+}
