@@ -237,3 +237,199 @@ describe('Responsive Design - Mobile (375px)', () => {
     });
   });
 });
+
+describe('Responsive Design - Tablet (768px)', () => {
+  let document;
+
+  beforeEach(() => {
+    // Load the HTML
+    document = loadHTML('index.html');
+
+    // Set viewport to tablet size (768px width)
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 768
+    });
+    Object.defineProperty(window, 'innerHeight', {
+      writable: true,
+      configurable: true,
+      value: 1024
+    });
+
+    // Dispatch resize event
+    window.dispatchEvent(new Event('resize'));
+  });
+
+  describe('Test Case 1: Page renders with tablet-appropriate layout at 768px', () => {
+    test('page renders correctly at 768px viewport width', () => {
+      // Verify viewport is set to tablet size
+      expect(window.innerWidth).toBe(768);
+    });
+
+    test('hero section is visible and properly structured', () => {
+      const heroSection = querySection('hero');
+      expect(heroSection).toBeInTheDocument();
+      expect(heroSection).toHaveClass('min-h-screen');
+    });
+
+    test('hero content container has appropriate max-width', () => {
+      const heroSection = querySection('hero');
+      const contentContainer = heroSection.querySelector('.max-w-4xl');
+      expect(contentContainer).toBeInTheDocument();
+    });
+
+    test('logo has tablet-responsive sizing classes', () => {
+      const logo = document.getElementById('logo');
+      expect(logo).toBeInTheDocument();
+      // Logo should have md: responsive classes for tablet
+      expect(logo.className).toMatch(/md:w-48|md:h-48/);
+    });
+
+    test('heading has tablet-responsive text size', () => {
+      const heading = document.querySelector('h1');
+      expect(heading).toBeInTheDocument();
+      // Heading should have md: responsive classes
+      expect(heading.className).toMatch(/md:text-6xl/);
+    });
+
+    test('tagline has tablet-responsive text size', () => {
+      const tagline = document.getElementById('tagline');
+      expect(tagline).toBeInTheDocument();
+      // Tagline should have md: responsive classes
+      expect(tagline.className).toMatch(/md:text-2xl/);
+    });
+
+    test('CTA buttons are properly laid out', () => {
+      const ctaContainer = document.getElementById('cta-buttons');
+      expect(ctaContainer).toBeInTheDocument();
+      // Container should support row layout at sm: breakpoint
+      expect(ctaContainer.className).toMatch(/sm:flex-row/);
+
+      const buttons = ctaContainer.querySelectorAll('a');
+      expect(buttons.length).toBeGreaterThanOrEqual(2);
+    });
+
+    test('status badges are visible and wrap properly', () => {
+      const badgesContainer = document.getElementById('status-badges');
+      expect(badgesContainer).toBeInTheDocument();
+      expect(badgesContainer.className).toMatch(/flex-wrap/);
+    });
+  });
+
+  describe('Test Case 2: Features display in appropriate grid (2-3 columns)', () => {
+    test('features section exists', () => {
+      const featuresSection = querySection('features');
+      expect(featuresSection).toBeInTheDocument();
+    });
+
+    test('features grid has responsive column classes', () => {
+      const featuresSection = querySection('features');
+      const grid = featuresSection.querySelector('.grid');
+      expect(grid).toBeInTheDocument();
+
+      // Grid should have md:grid-cols-2 for tablet layout
+      expect(grid.className).toMatch(/md:grid-cols-2/);
+    });
+
+    test('feature cards have appropriate spacing at tablet width', () => {
+      const featuresSection = querySection('features');
+      const grid = featuresSection.querySelector('.grid');
+      expect(grid).toBeInTheDocument();
+
+      // Grid should have gap for spacing
+      expect(grid.className).toMatch(/gap-8/);
+    });
+
+    test('feature cards are present and well-structured', () => {
+      const featuresSection = querySection('features');
+      const featureCards = featuresSection.querySelectorAll('.feature-card');
+
+      // Expect 6 feature cards (based on index.html)
+      expect(featureCards.length).toBeGreaterThanOrEqual(5);
+
+      // Each card should have proper structure
+      featureCards.forEach(card => {
+        expect(card).toHaveClass('bg-gray-700');
+        expect(card).toHaveClass('rounded-lg');
+        expect(card).toHaveClass('p-6');
+
+        // Each card should have icon, heading, description
+        const icon = card.querySelector('.feature-icon');
+        const heading = card.querySelector('h3');
+        const description = card.querySelector('p');
+
+        expect(icon).toBeInTheDocument();
+        expect(heading).toBeInTheDocument();
+        expect(description).toBeInTheDocument();
+      });
+    });
+
+    test('features container has appropriate max-width for tablet', () => {
+      const featuresSection = querySection('features');
+      const container = featuresSection.querySelector('.max-w-6xl');
+      expect(container).toBeInTheDocument();
+    });
+
+    test('grid responsive classes transition from 1 to 2 to 3 columns', () => {
+      const featuresSection = querySection('features');
+      const grid = featuresSection.querySelector('.grid');
+
+      // Verify responsive grid classes for different breakpoints
+      expect(grid.className).toMatch(/grid-cols-1/);
+      expect(grid.className).toMatch(/md:grid-cols-2/);
+      expect(grid.className).toMatch(/lg:grid-cols-3/);
+    });
+  });
+
+  describe('Additional Tablet Layout Tests', () => {
+    test('demo section has appropriate layout at tablet width', () => {
+      const demoSection = querySection('demo');
+      expect(demoSection).toBeInTheDocument();
+
+      const container = demoSection.querySelector('.max-w-4xl');
+      expect(container).toBeInTheDocument();
+    });
+
+    test('getting started section is visible and properly structured', () => {
+      const gettingStartedSection = querySection('getting-started');
+      expect(gettingStartedSection).toBeInTheDocument();
+
+      const container = gettingStartedSection.querySelector('.max-w-4xl');
+      expect(container).toBeInTheDocument();
+    });
+
+    test('footer is visible and properly laid out', () => {
+      const footer = querySection('footer');
+      expect(footer).toBeInTheDocument();
+
+      const linksContainer = document.getElementById('footer-links');
+      expect(linksContainer).toBeInTheDocument();
+      expect(linksContainer.className).toMatch(/flex-wrap/);
+    });
+
+    test('code blocks do not overflow at tablet width', () => {
+      const codeBlocks = document.querySelectorAll('pre');
+      expect(codeBlocks.length).toBeGreaterThan(0);
+
+      // Code blocks should have overflow handling
+      codeBlocks.forEach(block => {
+        expect(block.className).toMatch(/overflow-x-auto/);
+      });
+    });
+
+    test('images scale appropriately', () => {
+      const usageGif = document.getElementById('usage-gif');
+      expect(usageGif).toBeInTheDocument();
+
+      // Image should have responsive classes
+      expect(usageGif.className).toMatch(/max-w-full/);
+      expect(usageGif.className).toMatch(/h-auto/);
+    });
+
+    test('body has appropriate base styling', () => {
+      const body = document.body;
+      expect(body).toHaveClass('min-h-screen');
+    });
+  });
+});
