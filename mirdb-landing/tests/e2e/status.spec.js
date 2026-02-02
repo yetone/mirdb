@@ -9,7 +9,7 @@
  * - CircleCI badge integration
  */
 
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 test.describe('Status Section - Project Status and Roadmap', () => {
   test.beforeEach(async ({ page }) => {
