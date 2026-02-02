@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="arch-title arch-desc">
+  <title id="arch-title">MirDB LSM-Tree Architecture</title>
+  <desc id="arch-desc">Diagram showing MirDB's LSM-tree architecture with memtable, immutable memtables, and SSTable levels. Data flows from write requests through WAL to memtable, then to immutable memtables, and finally to SSTable levels through minor and major compaction.</desc>
+
+  <defs>
+    <!-- Gradient for active memtable -->
+    <linearGradient id="memtableGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#388E3C;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Gradient for immutable memtables -->
+    <linearGradient id="immutableGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1976D2;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Gradient for SSTables -->
+    <linearGradient id="sstableGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9800;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F57C00;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Gradient for WAL -->
+    <linearGradient id="walGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#9C27B0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7B1FA2;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Arrow marker -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+
+    <!-- Drop shadow filter -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="#fafafa"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600" text-anchor="middle" fill="#333">
+    LSM-Tree Architecture
+  </text>
+
+  <!-- Write Request Box -->
+  <g transform="translate(50, 60)">
+    <rect width="120" height="40" rx="8" fill="#E0E0E0" filter="url(#shadow)"/>
+    <text x="60" y="25" font-family="system-ui, sans-serif" font-size="13" text-anchor="middle" fill="#333">Write Request</text>
+  </g>
+
+  <!-- Arrow: Write Request to WAL -->
+  <line x1="110" y1="100" x2="110" y2="130" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- WAL Box -->
+  <g transform="translate(50, 140)">
+    <rect width="120" height="50" rx="8" fill="url(#walGrad)" filter="url(#shadow)"/>
+    <text x="60" y="22" font-family="system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="white">WAL</text>
+    <text x="60" y="38" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="rgba(255,255,255,0.9)">Write-Ahead Log</text>
+  </g>
+
+  <!-- Arrow: WAL to Memtable -->
+  <line x1="110" y1="190" x2="110" y2="220" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Memtable Box -->
+  <g transform="translate(50, 230)">
+    <rect width="120" height="60" rx="8" fill="url(#memtableGrad)" filter="url(#shadow)"/>
+    <text x="60" y="25" font-family="system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="white">Memtable</text>
+    <text x="60" y="42" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="rgba(255,255,255,0.9)">Active Skip List</text>
+    <text x="60" y="54" font-family="system-ui, sans-serif" font-size="9" text-anchor="middle" fill="rgba(255,255,255,0.8)">(In-Memory)</text>
+  </g>
+
+  <!-- Arrow: Memtable to Immutable Memtables -->
+  <line x1="110" y1="290" x2="110" y2="330" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="125" y="315" font-family="system-ui, sans-serif" font-size="9" fill="#666">when full</text>
+
+  <!-- Immutable Memtables Box -->
+  <g transform="translate(50, 340)">
+    <rect width="120" height="60" rx="8" fill="url(#immutableGrad)" filter="url(#shadow)"/>
+    <text x="60" y="22" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle" fill="white">Immutable</text>
+    <text x="60" y="36" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle" fill="white">Memtables</text>
+    <text x="60" y="52" font-family="system-ui, sans-serif" font-size="9" text-anchor="middle" fill="rgba(255,255,255,0.9)">(Queue for flush)</text>
+  </g>
+
+  <!-- Arrow: Immutable to Level 0 -->
+  <path d="M 170 370 L 260 370" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="215" y="360" font-family="system-ui, sans-serif" font-size="9" text-anchor="middle" fill="#666">minor</text>
+  <text x="215" y="385" font-family="system-ui, sans-serif" font-size="9" text-anchor="middle" fill="#666">compaction</text>
+
+  <!-- SSTable Levels Section -->
+  <g transform="translate(270, 80)">
+    <!-- Section background -->
+    <rect x="0" y="0" width="500" height="400" rx="12" fill="rgba(255,152,0,0.08)" stroke="rgba(255,152,0,0.3)" stroke-width="1"/>
+    <text x="250" y="25" font-family="system-ui, sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#E65100">SSTable Levels (Persistent Storage)</text>
+
+    <!-- Level 0 -->
+    <g transform="translate(20, 45)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#555">Level 0</text>
+      <text x="0" y="28" font-family="system-ui, sans-serif" font-size="9" fill="#888">(May overlap)</text>
+
+      <!-- Level 0 SSTables -->
+      <g transform="translate(80, 0)">
+        <rect width="70" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="35" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-0a</text>
+      </g>
+      <g transform="translate(160, 0)">
+        <rect width="70" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="35" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-0b</text>
+      </g>
+      <g transform="translate(240, 0)">
+        <rect width="70" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="35" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-0c</text>
+      </g>
+      <g transform="translate(320, 0)">
+        <rect width="70" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="35" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-0d</text>
+      </g>
+    </g>
+
+    <!-- Arrow: Level 0 to Level 1 -->
+    <g transform="translate(250, 100)">
+      <line x1="0" y1="0" x2="0" y2="30" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <text x="60" y="20" font-family="system-ui, sans-serif" font-size="9" fill="#666">major compaction</text>
+    </g>
+
+    <!-- Level 1 -->
+    <g transform="translate(20, 140)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#555">Level 1</text>
+      <text x="0" y="28" font-family="system-ui, sans-serif" font-size="9" fill="#888">(Sorted, non-overlapping)</text>
+
+      <!-- Level 1 SSTables - wider to show merging -->
+      <g transform="translate(80, 0)">
+        <rect width="90" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="45" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-1a</text>
+      </g>
+      <g transform="translate(180, 0)">
+        <rect width="90" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="45" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-1b</text>
+      </g>
+      <g transform="translate(280, 0)">
+        <rect width="90" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="45" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-1c</text>
+      </g>
+    </g>
+
+    <!-- Arrow: Level 1 to Level 2 -->
+    <g transform="translate(250, 195)">
+      <line x1="0" y1="0" x2="0" y2="30" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+
+    <!-- Level 2 -->
+    <g transform="translate(20, 235)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#555">Level 2</text>
+      <text x="0" y="28" font-family="system-ui, sans-serif" font-size="9" fill="#888">(10x larger)</text>
+
+      <!-- Level 2 SSTables - even wider -->
+      <g transform="translate(80, 0)">
+        <rect width="130" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="65" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-2a</text>
+      </g>
+      <g transform="translate(220, 0)">
+        <rect width="130" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="65" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-2b</text>
+      </g>
+    </g>
+
+    <!-- Arrow: Level 2 to Level N -->
+    <g transform="translate(250, 290)">
+      <line x1="0" y1="0" x2="0" y2="20" stroke="#666" stroke-width="2" stroke-dasharray="4,2"/>
+      <text x="0" y="35" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="#888">...</text>
+    </g>
+
+    <!-- Level N (max 7) -->
+    <g transform="translate(20, 330)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#555">Level N</text>
+      <text x="0" y="28" font-family="system-ui, sans-serif" font-size="9" fill="#888">(Up to Level 7)</text>
+
+      <!-- Level N SSTables - largest -->
+      <g transform="translate(80, 0)">
+        <rect width="180" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="90" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-Na</text>
+      </g>
+      <g transform="translate(270, 0)">
+        <rect width="180" height="35" rx="4" fill="url(#sstableGrad)" filter="url(#shadow)"/>
+        <text x="90" y="22" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="white">SST-Nb</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(50, 440)">
+    <rect x="0" y="0" width="700" height="50" rx="6" fill="white" stroke="#E0E0E0" stroke-width="1"/>
+    <text x="20" y="18" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#333">Legend:</text>
+
+    <rect x="20" y="28" width="16" height="12" rx="2" fill="url(#memtableGrad)"/>
+    <text x="42" y="38" font-family="system-ui, sans-serif" font-size="10" fill="#555">Memtable (RAM)</text>
+
+    <rect x="150" y="28" width="16" height="12" rx="2" fill="url(#immutableGrad)"/>
+    <text x="172" y="38" font-family="system-ui, sans-serif" font-size="10" fill="#555">Immutable (RAM)</text>
+
+    <rect x="300" y="28" width="16" height="12" rx="2" fill="url(#sstableGrad)"/>
+    <text x="322" y="38" font-family="system-ui, sans-serif" font-size="10" fill="#555">SSTable (Disk)</text>
+
+    <rect x="430" y="28" width="16" height="12" rx="2" fill="url(#walGrad)"/>
+    <text x="452" y="38" font-family="system-ui, sans-serif" font-size="10" fill="#555">WAL (Disk)</text>
+
+    <line x1="560" y1="34" x2="580" y2="34" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="590" y="38" font-family="system-ui, sans-serif" font-size="10" fill="#555">Data Flow</text>
+  </g>
+</svg>

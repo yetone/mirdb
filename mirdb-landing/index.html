@@ -261,7 +261,52 @@
         </section>
 
         <!-- Architecture section (Scenario 4) -->
-        <section id="architecture"></section>
+        <section id="architecture" class="architecture-section" aria-labelledby="architecture-heading">
+            <div class="architecture-container">
+                <h2 id="architecture-heading" class="architecture-title">Architecture</h2>
+                <p class="architecture-subtitle">
+                    MirDB uses an LSM-tree (Log-Structured Merge-tree) architecture optimized for write-heavy workloads
+                </p>
+
+                <div class="architecture-diagram-wrapper">
+                    <img
+                        src="assets/images/architecture.svg"
+                        alt="MirDB LSM-Tree Architecture diagram showing data flow from write requests through WAL (Write-Ahead Log) to memtable, then to immutable memtables, and finally to SSTable levels (Level 0 through Level N) through minor and major compaction processes"
+                        class="architecture-diagram"
+                        width="800"
+                        height="500"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="architecture-description">
+                    <h3 class="architecture-components-heading">Key Components</h3>
+                    <div class="architecture-components">
+                        <div class="architecture-component">
+                            <h4 class="component-title">Memtable</h4>
+                            <p class="component-description">
+                                Active in-memory skip list that receives all write operations.
+                                Provides O(log n) insertions and lookups with efficient memory management.
+                            </p>
+                        </div>
+                        <div class="architecture-component">
+                            <h4 class="component-title">Immutable Memtables</h4>
+                            <p class="component-description">
+                                When the active memtable reaches capacity (4MB), it becomes immutable and
+                                is queued for flushing to disk while a new memtable takes over writes.
+                            </p>
+                        </div>
+                        <div class="architecture-component">
+                            <h4 class="component-title">SSTable Levels</h4>
+                            <p class="component-description">
+                                Sorted String Tables organized in levels (0-7). Level 0 files may overlap;
+                                higher levels are sorted and non-overlapping for efficient reads.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Status/Roadmap section (Scenario 5) -->
         <section id="status" class="status-section" aria-labelledby="status-heading">

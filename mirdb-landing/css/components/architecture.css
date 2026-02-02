@@ -1,9 +1,178 @@
 /**
  * Architecture Section Styles
  * Owner: Scenario 4 - Architecture Overview Section
+ *
+ * Styles for:
+ * - Architecture diagram container
+ * - SVG diagram responsive sizing
+ * - Caption and label styling
  */
 
-/* Placeholder - to be implemented by Scenario 4 */
-#architecture {
+/* Section container */
+.architecture-section {
+  background-color: var(--color-surface);
   padding: var(--spacing-3xl) 0;
+}
+
+/* Container with max-width */
+.architecture-container {
+  width: 100%;
+  max-width: var(--container-max-width, 1200px);
+  margin: 0 auto;
+  padding: 0 var(--container-padding, 1rem);
+}
+
+/* Section title */
+.architecture-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+/* Section subtitle */
+.architecture-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0 0 var(--spacing-2xl) 0;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Diagram wrapper */
+.architecture-diagram-wrapper {
+  background-color: var(--color-background);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: var(--spacing-2xl);
+  overflow: hidden;
+}
+
+/* Diagram image */
+.architecture-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+/* Ensure SVG maintains aspect ratio */
+.architecture-diagram[src$=".svg"] {
+  min-height: 300px;
+}
+
+/* Description section */
+.architecture-description {
+  margin-top: var(--spacing-2xl);
+}
+
+/* Components heading */
+.architecture-components-heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  margin: 0 0 var(--spacing-xl) 0;
+}
+
+/* Components grid */
+.architecture-components {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+/* Individual component card */
+.architecture-component {
+  background-color: var(--color-background);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--color-border);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.architecture-component:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Component title */
+.component-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+/* Component description */
+.component-description {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Dark mode adjustments for SVG */
+@media (prefers-color-scheme: dark) {
+  .architecture-diagram-wrapper {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .architecture-component {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .architecture-component:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+[data-theme="dark"] .architecture-diagram-wrapper {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .architecture-component {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .architecture-component:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .architecture-title {
+    font-size: 1.75rem;
+  }
+
+  .architecture-subtitle {
+    font-size: 1rem;
+  }
+
+  .architecture-components-heading {
+    font-size: 1.25rem;
+  }
+
+  .architecture-components {
+    grid-template-columns: 1fr;
+  }
+
+  .architecture-diagram-wrapper {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .architecture-title {
+    font-size: 1.5rem;
+  }
+
+  .architecture-diagram[src$=".svg"] {
+    min-height: 200px;
+  }
 }
