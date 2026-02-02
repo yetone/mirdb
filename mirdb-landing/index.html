@@ -264,7 +264,86 @@
         <section id="architecture"></section>
 
         <!-- Status/Roadmap section (Scenario 5) -->
-        <section id="status"></section>
+        <section id="status" class="status-section" aria-labelledby="status-heading">
+            <div class="container">
+                <h2 id="status-heading" class="status-title">Project Status</h2>
+                <p class="status-subtitle">Current development progress and future roadmap</p>
+
+                <!-- Build Status Badge -->
+                <div class="status-badge-container">
+                    <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="CircleCI build status">
+                        <img src="https://circleci.com/gh/yetone/mirdb.svg?style=shield" alt="CircleCI Build Status" class="status-badge" width="120" height="20">
+                    </a>
+                </div>
+
+                <div class="status-grid">
+                    <!-- Implemented Features -->
+                    <div class="status-card status-card--implemented">
+                        <h3 class="status-card__title">
+                            <span class="status-icon status-icon--complete" aria-hidden="true">✓</span>
+                            Implemented Features
+                        </h3>
+                        <ul class="status-list" role="list">
+                            <li class="status-list__item status-list__item--complete">
+                                <span class="status-check" aria-label="Completed">✓</span>
+                                <span>Async Tokio-based Networking</span>
+                                <span class="status-badge-inline status-badge-inline--complete">Complete</span>
+                            </li>
+                            <li class="status-list__item status-list__item--complete">
+                                <span class="status-check" aria-label="Completed">✓</span>
+                                <span>Skip List Memtable</span>
+                                <span class="status-badge-inline status-badge-inline--complete">Complete</span>
+                            </li>
+                            <li class="status-list__item status-list__item--complete">
+                                <span class="status-check" aria-label="Completed">✓</span>
+                                <span>Minor Compaction</span>
+                                <span class="status-badge-inline status-badge-inline--complete">Complete</span>
+                            </li>
+                            <li class="status-list__item status-list__item--complete">
+                                <span class="status-check" aria-label="Completed">✓</span>
+                                <span>Major Compaction</span>
+                                <span class="status-badge-inline status-badge-inline--complete">Complete</span>
+                            </li>
+                            <li class="status-list__item status-list__item--complete">
+                                <span class="status-check" aria-label="Completed">✓</span>
+                                <span>Memcached Protocol Support</span>
+                                <span class="status-badge-inline status-badge-inline--complete">Complete</span>
+                            </li>
+                            <li class="status-list__item status-list__item--complete">
+                                <span class="status-check" aria-label="Completed">✓</span>
+                                <span>SSTable Persistence</span>
+                                <span class="status-badge-inline status-badge-inline--complete">Complete</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Roadmap -->
+                    <div class="status-card status-card--roadmap">
+                        <h3 class="status-card__title">
+                            <span class="status-icon status-icon--planned" aria-hidden="true">→</span>
+                            Roadmap
+                        </h3>
+                        <ul class="status-list" role="list">
+                            <li class="status-list__item status-list__item--planned" data-feature="raft-consensus">
+                                <span class="status-planned" aria-label="Planned">○</span>
+                                <span>Raft Consensus</span>
+                                <span class="status-badge-inline status-badge-inline--planned">Planned</span>
+                            </li>
+                            <li class="status-list__item status-list__item--planned">
+                                <span class="status-planned" aria-label="Planned">○</span>
+                                <span>Distributed Operation</span>
+                                <span class="status-badge-inline status-badge-inline--planned">Planned</span>
+                            </li>
+                            <li class="status-list__item status-list__item--planned">
+                                <span class="status-planned" aria-label="Planned">○</span>
+                                <span>Cluster Replication</span>
+                                <span class="status-badge-inline status-badge-inline--planned">Planned</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Technical specs section (Scenario 7) -->
         <section id="specifications"></section>

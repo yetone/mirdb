@@ -4,8 +4,239 @@
  * Co-owner: Scenario 7 - Technical Specifications
  */
 
-/* Placeholder - to be implemented by Scenario 5 and 7 */
-#status,
+/* ==========================================================================
+   Status Section (Scenario 5)
+   ========================================================================== */
+
+.status-section {
+  background-color: var(--color-surface);
+  padding: var(--spacing-3xl) 0;
+}
+
+.status-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.status-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Build Status Badge Container */
+.status-badge-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.status-badge {
+  border-radius: var(--radius-sm);
+  transition: opacity var(--transition-fast);
+}
+
+.status-badge:hover {
+  opacity: 0.8;
+}
+
+/* Status Grid Layout */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Status Cards */
+.status-card {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.status-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.status-card--implemented {
+  border-top: 4px solid #22c55e;
+}
+
+.status-card--roadmap {
+  border-top: 4px solid var(--color-primary);
+}
+
+.status-card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Status Icons */
+.status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.status-icon--complete {
+  background-color: #22c55e;
+  color: white;
+}
+
+.status-icon--planned {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Status List */
+.status-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.status-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.status-list__item:last-child {
+  border-bottom: none;
+}
+
+/* Status Check and Planned Icons */
+.status-check,
+.status-planned {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.status-check {
+  background-color: #22c55e;
+  color: white;
+}
+
+.status-planned {
+  background-color: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Inline Badges */
+.status-badge-inline {
+  margin-left: auto;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-badge-inline--complete {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.status-badge-inline--planned {
+  background-color: rgba(247, 76, 0, 0.15);
+  color: var(--color-primary);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .status-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .status-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  .status-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .status-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .status-title {
+    font-size: 1.5rem;
+  }
+
+  .status-subtitle {
+    font-size: 1rem;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .status-card {
+    padding: var(--spacing-lg);
+  }
+
+  .status-card__title {
+    font-size: 1.125rem;
+  }
+
+  .status-list__item {
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+
+  .status-badge-inline {
+    margin-left: 0;
+    margin-top: var(--spacing-xs);
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   Specifications Section (Scenario 7)
+   ========================================================================== */
+
+/* Placeholder for Scenario 7's specifications grid styles */
 #specifications {
   padding: var(--spacing-3xl) 0;
 }
