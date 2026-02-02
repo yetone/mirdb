@@ -1,12 +1,9 @@
 /**
  * Feature Showcase Styles
  * Owner: Scenario 2 - Feature Showcase Section
- *
- * Styles for:
- * - Feature grid/zigzag layout
- * - Feature cards
- * - Icons/illustrations
- * - Responsive adjustments for feature display
  */
 
 /* Placeholder - to be implemented by Scenario 2 */
+#features {
+  padding: var(--spacing-3xl) 0;
+}

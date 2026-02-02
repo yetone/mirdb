@@ -2,12 +2,10 @@
  * Status and Specifications Styles
  * Owner: Scenario 5 - Project Status
  * Co-owner: Scenario 7 - Technical Specifications
- *
- * Styles for:
- * - Status indicator badges
- * - Roadmap timeline
- * - Specifications grid
- * - Expandable sections
  */
 
 /* Placeholder - to be implemented by Scenario 5 and 7 */
+#status,
+#specifications {
+  padding: var(--spacing-3xl) 0;
+}

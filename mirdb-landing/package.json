@@ -2,18 +2,18 @@
   "name": "mirdb-landing",
   "version": "1.0.0",
   "description": "MirDB Product Landing Page",
+  "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "npm run test:unit && npm run test:e2e",
     "test:e2e": "playwright test",
-    "test:unit": "jest tests/unit",
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit tests/integration",
     "lint": "eslint js/",
-    "serve": "npx serve ."
+    "serve": "npx serve . -l 3000"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
-    "axe-core": "^4.8.0",
     "jest": "^29.0.0",
     "jest-environment-jsdom": "^29.0.0",
-    "serve": "^14.2.5"
+    "@playwright/test": "^1.40.0",
+    "axe-core": "^4.8.0"
   }
 }

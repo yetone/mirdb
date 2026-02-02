@@ -2,31 +2,28 @@
  * Shared Utility Functions
  * Owner: First Builder
  *
- * Common helper functions used across modules:
- * - DOM query helpers
- * - Event delegation utilities
- * - Browser feature detection
+ * Common helper functions used across modules.
  */
 
 /**
- * querySelector wrapper
+ * Query selector wrapper
  * @param {string} selector - CSS selector
- * @param {Element} context - Context element (default: document)
+ * @param {Element} context - Optional context element
  * @returns {Element|null}
  */
 export const $ = (selector, context = document) => context.querySelector(selector);
 
 /**
- * querySelectorAll wrapper
+ * Query selector all wrapper
  * @param {string} selector - CSS selector
- * @param {Element} context - Context element (default: document)
+ * @param {Element} context - Optional context element
  * @returns {NodeList}
  */
 export const $$ = (selector, context = document) => context.querySelectorAll(selector);
 
 /**
  * DOMContentLoaded wrapper
- * @param {Function} callback - Function to call when DOM is ready
+ * @param {Function} callback - Function to run when DOM is ready
  */
 export const onReady = (callback) => {
   if (document.readyState === 'loading') {
@@ -37,17 +34,9 @@ export const onReady = (callback) => {
 };
 
 /**
- * Check if reduced motion is preferred
+ * Check if browser supports Clipboard API
  * @returns {boolean}
  */
-export const prefersReducedMotion = () => {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-};
-
-/**
- * Check if dark mode is preferred
- * @returns {boolean}
- */
-export const prefersDarkMode = () => {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+export const supportsClipboard = () => {
+  return !!(navigator.clipboard && navigator.clipboard.writeText);
 };

@@ -10,34 +10,26 @@
  * - Wide: 1920px+
  */
 
-/* Mobile-first base styles are in component files */
-
-/* Tablet breakpoint */
-@media (min-width: 768px) {
+/* Tablet */
+@media (max-width: 1024px) {
   :root {
-    --container-padding: 1.5rem;
+    --spacing-2xl: 2.5rem;
+    --spacing-3xl: 3rem;
   }
 }
 
-/* Desktop breakpoint */
-@media (min-width: 1025px) {
+/* Mobile */
+@media (max-width: 767px) {
   :root {
-    --container-padding: 2rem;
+    --spacing-xl: 1.5rem;
+    --spacing-2xl: 2rem;
+    --spacing-3xl: 2.5rem;
   }
 }
 
-/* Wide screens */
-@media (min-width: 1920px) {
-  :root {
-    --container-max-width: 1400px;
-  }
-}
-
-/* Reduced motion preference */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

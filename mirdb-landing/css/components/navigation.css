@@ -2,14 +2,21 @@
  * Navigation and Footer Styles
  * Owner: Scenario 6 - Navigation and CTAs
  * Co-owner: Scenario 17 - Footer
- *
- * Styles for:
- * - Fixed header navigation
- * - Logo in header
- * - Navigation links
- * - Mobile hamburger menu
- * - Footer layout and links
- * - CTA button styles
  */
 
 /* Placeholder - to be implemented by Scenario 6 */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+}
+
+footer {
+  padding: var(--spacing-2xl) 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}

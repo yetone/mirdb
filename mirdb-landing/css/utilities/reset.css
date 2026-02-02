@@ -3,12 +3,9 @@
  * Owner: First Builder (Scenario 15 for vendor prefixes)
  *
  * Provides consistent baseline styles across browsers.
- * Includes box-sizing, margin resets, and basic accessibility defaults.
  */
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -22,34 +19,21 @@ html {
 }
 
 body {
-  min-height: 100vh;
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-img,
-picture,
-video,
-canvas,
-svg {
+img, picture, video, canvas, svg {
   display: block;
   max-width: 100%;
 }
 
-input,
-button,
-textarea,
-select {
+input, button, textarea, select {
   font: inherit;
 }
 
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
 }
 
@@ -58,25 +42,12 @@ a {
   text-decoration: none;
 }
 
-ul,
-ol {
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+ul, ol {
   list-style: none;
-}
-
-/* Accessibility: Focus visible styles */
-:focus-visible {
-  outline: 2px solid var(--color-primary, #f74c00);
-  outline-offset: 2px;
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }
