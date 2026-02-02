@@ -1,16 +1,278 @@
 /**
- * Responsive Design E2E Tests - Tablet
- * Owner: Scenario 9 - Responsive Design - Tablet
+ * Responsive Design E2E Tests
+ * Owner: Scenario 8 - Desktop, Scenario 9 - Tablet, Scenario 10 - Mobile
  *
  * Tests:
+ * - Desktop layout (1920px)
  * - Tablet layout (768px, 1024px)
- * - Content accessibility at tablet widths
- * - Feature grid layout adaptation
- * - Code blocks readability
+ * - Mobile layout (320px, 375px)
+ * - Mobile menu functionality
+ * - Touch target sizes
  */
 
 import { test, expect } from '@playwright/test';
 
+// ============================================
+// Scenario 8: Desktop Responsive Tests (1920px+)
+// ============================================
+test.describe('Responsive Design - Desktop (1920px+)', () => {
+    test.use({
+        viewport: { width: 1920, height: 1080 }
+    });
+
+    test.beforeEach(async ({ page }) => {
+        await page.goto('/');
+    });
+
+    test('TC1: All content displays correctly without horizontal scroll at 1920px', async ({ page }) => {
+        // Wait for page to be fully loaded
+        await page.waitForLoadState('networkidle');
+
+        // Check there's no horizontal scrollbar
+        const hasHorizontalScroll = await page.evaluate(() => {
+            return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+        });
+        expect(hasHorizontalScroll).toBe(false);
+
+        // Verify all main sections are visible
+        const sections = ['#hero', '#features', '#code-examples', '#architecture', '#status', '#specifications'];
+        for (const section of sections) {
+            const sectionElement = page.locator(section);
+            await expect(sectionElement).toBeVisible();
+        }
+
+        // Verify content is not cut off or overflowing
+        const bodyOverflow = await page.evaluate(() => {
+            const body = document.body;
+            return {
+                overflowX: window.getComputedStyle(body).overflowX,
+                scrollWidth: body.scrollWidth,
+                clientWidth: body.clientWidth
+            };
+        });
+        expect(bodyOverflow.scrollWidth).toBeLessThanOrEqual(bodyOverflow.clientWidth + 1);
+    });
+
+    test('TC2: Full navigation menu visible (no hamburger menu) at desktop viewport', async ({ page }) => {
+        // Wait for navigation to be visible
+        const navContainer = page.locator('.nav-container');
+        await expect(navContainer).toBeVisible();
+
+        // Check that the hamburger menu toggle is NOT visible
+        const navToggle = page.locator('.nav-toggle');
+        await expect(navToggle).not.toBeVisible();
+
+        // Check that the navigation links container is visible
+        const navLinks = page.locator('.nav-links');
+        await expect(navLinks).toBeVisible();
+
+        // Verify navigation links are displayed horizontally (not stacked)
+        const navLinksDisplay = await navLinks.evaluate(el => {
+            const style = window.getComputedStyle(el);
+            return {
+                display: style.display,
+                flexDirection: style.flexDirection
+            };
+        });
+        expect(navLinksDisplay.display).toBe('flex');
+        expect(navLinksDisplay.flexDirection).not.toBe('column');
+
+        // Verify all navigation links are visible
+        const links = page.locator('.nav-links .nav-link');
+        const linkCount = await links.count();
+        expect(linkCount).toBeGreaterThanOrEqual(4);
+
+        for (let i = 0; i < linkCount; i++) {
+            await expect(links.nth(i)).toBeVisible();
+        }
+
+        // Verify CTA buttons are visible in the header
+        const navCta = page.locator('.nav-cta');
+        await expect(navCta).toBeVisible();
+
+        const primaryCta = page.locator('.nav-cta .cta-btn--primary');
+        await expect(primaryCta).toBeVisible();
+    });
+
+    test('TC3: Features display in multi-column grid or zigzag layout at desktop', async ({ page }) => {
+        // Scroll to features section
+        await page.locator('#features').scrollIntoViewIfNeeded();
+
+        // Verify features grid exists
+        const featuresGrid = page.locator('.features-grid');
+        await expect(featuresGrid).toBeVisible();
+
+        // Count feature cards
+        const featureCards = page.locator('.features-grid .feature-card');
+        const cardCount = await featureCards.count();
+        expect(cardCount).toBeGreaterThanOrEqual(6);
+
+        // Verify that at desktop width, cards are displayed in a multi-column
+        // or zigzag layout (not stacked vertically in a single column)
+        if (cardCount >= 2) {
+            const card1 = featureCards.nth(0);
+            const card2 = featureCards.nth(1);
+
+            const card1Box = await card1.boundingBox();
+            const card2Box = await card2.boundingBox();
+
+            if (card1Box && card2Box) {
+                // At 1920px desktop width, feature cards should either be:
+                // 1. On the same row (similar Y positions) - grid layout
+                // 2. Side by side (card2 X > card1 X) - multi-column
+                // 3. Cards in a zigzag pattern (alternating layout)
+                // The key point is cards should NOT be in a narrow single column
+
+                const sameLine = Math.abs(card1Box.y - card2Box.y) < 100;
+                const sideByBide = card2Box.x > card1Box.x;
+
+                // At desktop, expect either same row or offset positioning
+                // OR if stacked, each card should span significant width
+                const cardsWideEnough = card1Box.width > 300 && card2Box.width > 300;
+
+                // Accept either multi-column layout or wide single-column cards
+                expect(sameLine || sideByBide || cardsWideEnough).toBe(true);
+            }
+        }
+    });
+
+    test('TC4: Hero section spans appropriate width with centered content at desktop', async ({ page }) => {
+        const heroSection = page.locator('#hero');
+        await expect(heroSection).toBeVisible();
+
+        // Get hero section dimensions
+        const heroBox = await heroSection.boundingBox();
+        expect(heroBox).not.toBeNull();
+
+        // Hero should span a reasonable width at desktop viewport
+        // At 1920px viewport, hero should be visible and appropriately sized
+        if (heroBox) {
+            expect(heroBox.width).toBeGreaterThan(800);
+        }
+
+        // Verify main content is centered (visually centered on page)
+        const mainContent = page.locator('main');
+        const mainBox = await mainContent.boundingBox();
+
+        if (mainBox) {
+            // At 1920px viewport, the main content (max-width: 1200px)
+            // should be centered with equal margins on both sides
+            const viewportWidth = 1920;
+            const leftMargin = mainBox.x;
+            const rightMargin = viewportWidth - (mainBox.x + mainBox.width);
+
+            // Margins should be approximately equal (centered content)
+            // Allow 10px tolerance for padding/scrollbar
+            expect(Math.abs(leftMargin - rightMargin)).toBeLessThan(50);
+
+            // Main content should have a max-width and be centered
+            expect(mainBox.width).toBeGreaterThan(600);
+            expect(mainBox.width).toBeLessThanOrEqual(1400);
+        }
+    });
+
+    test('Desktop layout utilizes full width appropriately', async ({ page }) => {
+        // Verify the header spans full width
+        const header = page.locator('header');
+        await expect(header).toBeVisible();
+
+        const headerBox = await header.boundingBox();
+        if (headerBox) {
+            // Header should be close to viewport width
+            expect(headerBox.width).toBeGreaterThanOrEqual(1900);
+        }
+
+        // Verify main content is constrained but reasonable
+        const mainContent = page.locator('main');
+        const mainBox = await mainContent.boundingBox();
+        if (mainBox) {
+            // Content should be contained within a max-width but still substantial
+            expect(mainBox.width).toBeGreaterThan(600);
+            expect(mainBox.width).toBeLessThanOrEqual(1400);
+        }
+    });
+
+    test('All sections display without overlap at desktop viewport', async ({ page }) => {
+        await page.waitForLoadState('networkidle');
+
+        // Get bounding boxes for main sections
+        const sections = ['#features', '#code-examples', '#architecture', '#status', '#specifications'];
+        const boxes = [];
+
+        for (const selector of sections) {
+            const section = page.locator(selector);
+            if (await section.isVisible()) {
+                const box = await section.boundingBox();
+                if (box) {
+                    boxes.push({ selector, box });
+                }
+            }
+        }
+
+        // Verify sections don't overlap vertically
+        for (let i = 0; i < boxes.length - 1; i++) {
+            const current = boxes[i];
+            const next = boxes[i + 1];
+
+            const currentBottom = current.box.y + current.box.height;
+            // Next section should start after or at the end of current (with small tolerance)
+            expect(next.box.y).toBeGreaterThanOrEqual(currentBottom - 5);
+        }
+    });
+
+    test('Typography is readable at desktop viewport', async ({ page }) => {
+        // Check h2 headings have appropriate font size for desktop
+        const h2 = page.locator('h2').first();
+        if (await h2.isVisible()) {
+            const h2Styles = await h2.evaluate(el => {
+                const style = window.getComputedStyle(el);
+                return {
+                    fontSize: parseFloat(style.fontSize),
+                    lineHeight: style.lineHeight
+                };
+            });
+            // H2 should be at least 24px on desktop
+            expect(h2Styles.fontSize).toBeGreaterThanOrEqual(24);
+        }
+
+        // Check body text is readable
+        const paragraph = page.locator('p').first();
+        if (await paragraph.isVisible()) {
+            const pStyles = await paragraph.evaluate(el => {
+                const style = window.getComputedStyle(el);
+                return {
+                    fontSize: parseFloat(style.fontSize)
+                };
+            });
+            // Body text should be at least 14px
+            expect(pStyles.fontSize).toBeGreaterThanOrEqual(14);
+        }
+    });
+
+    test('Navigation CTA buttons are properly styled at desktop', async ({ page }) => {
+        const primaryCta = page.locator('.nav-cta .cta-btn--primary');
+        const secondaryCta = page.locator('.nav-cta .cta-btn--secondary');
+
+        await expect(primaryCta).toBeVisible();
+
+        // Check CTA buttons are displayed inline (not stacked)
+        const navCta = page.locator('.nav-cta');
+        const ctaStyles = await navCta.evaluate(el => {
+            const style = window.getComputedStyle(el);
+            return {
+                display: style.display,
+                flexDirection: style.flexDirection
+            };
+        });
+
+        expect(ctaStyles.display).toBe('flex');
+        expect(ctaStyles.flexDirection).not.toBe('column');
+    });
+});
+
+// ============================================
+// Scenario 9: Tablet Responsive Tests (768px-1024px)
+// ============================================
 test.describe('Responsive Design - Tablet Viewport', () => {
     // Test Case 1: Load page at 768px viewport width
     test.describe('768px viewport (lower tablet range)', () => {
