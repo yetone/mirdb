@@ -1,0 +1,14 @@
+/**
+ * Architecture Section Styles
+ * Owner: Scenario 4 - Architecture Overview Section
+ *
+ * Styles for:
+ * - Architecture diagram container
+ * - SVG diagram responsive sizing
+ * - Caption and label styling
+ */
+
+/* Placeholder styles - to be implemented by Scenario 4 */
+#architecture {
+    padding: var(--spacing-3xl) 0;
+}

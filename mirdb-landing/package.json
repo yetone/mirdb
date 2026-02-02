@@ -1,0 +1,16 @@
+{
+  "name": "mirdb-landing",
+  "version": "1.0.0",
+  "description": "MirDB Product Landing Page",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:unit": "node --test tests/unit/*.test.js",
+    "lint": "eslint js/",
+    "serve": "npx serve . -p 8080"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "axe-core": "^4.8.0"
+  }
+}

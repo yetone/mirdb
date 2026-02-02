@@ -1,0 +1,131 @@
+/**
+ * Feature Showcase Styles
+ * Owner: Scenario 2 - Feature Showcase Section
+ *
+ * Styles for:
+ * - Feature grid/zigzag layout
+ * - Feature cards
+ * - Icons/illustrations
+ * - Responsive adjustments for feature display
+ */
+
+/* Features Section Container */
+.features-section {
+    background-color: var(--color-surface);
+    padding: var(--spacing-3xl) 0;
+}
+
+.features-container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+/* Section Header */
+.features-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.features-subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-3xl);
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+}
+
+/* Feature Card */
+.feature-card {
+    background-color: var(--color-surface-elevated);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Feature Icon */
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary-light);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.feature-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--color-primary);
+}
+
+/* Feature Title */
+.feature-card .feature-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.4;
+}
+
+/* Feature Description */
+.feature-description {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+/* Responsive: Tablet */
+@media (max-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+
+    .features-title {
+        font-size: 2rem;
+    }
+}
+
+/* Responsive: Mobile */
+@media (max-width: 767px) {
+    .features-section {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .features-title {
+        font-size: 1.75rem;
+    }
+
+    .features-subtitle {
+        font-size: 1rem;
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .feature-card {
+        padding: var(--spacing-lg);
+    }
+}

@@ -1,0 +1,96 @@
+/**
+ * CSS Custom Properties (Variables)
+ * Owner: Scenario 14 - Dark Mode Support
+ *
+ * Defines color scheme variables for light and dark modes.
+ * Other scenarios should use these variables for consistency.
+ *
+ * Expected variables:
+ * --color-primary: Primary accent color (Rust orange)
+ * --color-background: Page background
+ * --color-text: Primary text color
+ * --color-text-secondary: Secondary text color
+ * --color-surface: Card/surface backgrounds
+ * --color-border: Border colors
+ * --color-code-bg: Code block background
+ * --font-mono: Monospace font stack
+ * --font-sans: Sans-serif font stack
+ */
+
+:root {
+    /* Primary colors - Rust-inspired orange */
+    --color-primary: #d35400;
+    --color-primary-hover: #e67e22;
+    --color-primary-light: rgba(211, 84, 0, 0.1);
+
+    /* Background colors */
+    --color-background: #ffffff;
+    --color-surface: #f8f9fa;
+    --color-surface-elevated: #ffffff;
+
+    /* Text colors */
+    --color-text: #1a1a2e;
+    --color-text-secondary: #4a5568;
+    --color-text-muted: #718096;
+
+    /* Border colors */
+    --color-border: #e2e8f0;
+    --color-border-light: #edf2f7;
+
+    /* Code colors */
+    --color-code-bg: #1a1a2e;
+    --color-code-text: #e2e8f0;
+
+    /* Semantic colors */
+    --color-success: #38a169;
+    --color-warning: #dd6b20;
+    --color-error: #e53e3e;
+
+    /* Typography */
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+
+    /* Border radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+    --transition-slow: 350ms ease;
+
+    /* Container widths */
+    --container-max: 1200px;
+    --container-narrow: 800px;
+}
+
+/* Dark mode - placeholder for Scenario 14 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-background: #1a1a2e;
+        --color-surface: #252542;
+        --color-surface-elevated: #2d2d4a;
+        --color-text: #e2e8f0;
+        --color-text-secondary: #a0aec0;
+        --color-text-muted: #718096;
+        --color-border: #3d3d5c;
+        --color-border-light: #4a4a6a;
+        --color-code-bg: #0d0d1a;
+    }
+}

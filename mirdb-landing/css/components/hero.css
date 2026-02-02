@@ -1,0 +1,19 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Styles for:
+ * - Full-width hero container
+ * - Centered content layout
+ * - Logo display
+ * - Tagline typography
+ * - CTA buttons in hero
+ */
+
+/* Placeholder styles - to be implemented by Scenario 1 */
+#hero {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
