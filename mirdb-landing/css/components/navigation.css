@@ -236,9 +236,10 @@ header.header--scrolled {
 }
 
 /* ============================================
-   Footer
+   Footer (Scenario 17 - Footer and Attribution)
    ============================================ */
-footer {
+footer,
+.site-footer {
   padding: var(--spacing-2xl) var(--spacing-lg);
   background: var(--color-surface);
   border-top: 1px solid var(--color-border);
@@ -247,6 +248,9 @@ footer {
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.footer-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -255,6 +259,10 @@ footer {
 }
 
 .footer-links {
+  width: 100%;
+}
+
+.footer-links-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -264,21 +272,70 @@ footer {
   padding: 0;
 }
 
-.footer-links a {
+.footer-links-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
   color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 0.875rem;
-  transition: color var(--transition-fast);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 
-.footer-links a:hover,
-.footer-links a:focus {
+.footer-links-list a:hover,
+.footer-links-list a:focus {
   color: var(--color-primary);
+  background-color: rgba(247, 76, 0, 0.08);
+}
+
+.footer-links-list a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.footer-icon {
+  flex-shrink: 0;
+}
+
+.footer-attribution {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+  width: 100%;
+  max-width: 600px;
 }
 
 .footer-copyright {
   color: var(--color-text-secondary);
   font-size: 0.875rem;
+  margin: 0;
+}
+
+.footer-license {
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  margin: 0;
+}
+
+.footer-license a {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+
+.footer-license a:hover,
+.footer-license a:focus {
+  color: var(--color-primary);
+}
+
+.footer-license a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /* ============================================

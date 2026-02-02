@@ -9,8 +9,12 @@
  * - Required sections present
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('HTML Structure', () => {
   let htmlContent;
@@ -92,5 +96,14 @@ describe('HTML Structure', () => {
   test('Hero section contains tagline with key phrases', () => {
     expect(htmlContent).toMatch(/Persistent Key-Value Store/);
     expect(htmlContent).toMatch(/Memcached Protocol/);
+  });
+
+  // Footer tests (Scenario 17)
+  test('Footer element exists with semantic footer tag', () => {
+    expect(htmlContent).toMatch(/<footer[^>]*>/);
+  });
+
+  test('Footer has proper class structure', () => {
+    expect(htmlContent).toMatch(/<footer[^>]+class="[^"]*site-footer[^"]*"/);
   });
 });
