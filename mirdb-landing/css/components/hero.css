@@ -10,10 +10,92 @@
  * - CTA buttons in hero
  */
 
-/* Placeholder styles - to be implemented by Scenario 1 */
-#hero {
-    min-height: 60vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl) 0;
+  background: linear-gradient(
+    135deg,
+    var(--color-background) 0%,
+    var(--color-surface) 100%
+  );
+}
+
+.hero__content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero__logo {
+  width: 160px;
+  height: auto;
+  margin: 0 auto var(--spacing-xl);
+  border-radius: var(--radius-lg);
+}
+
+.hero__title {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+}
+
+.hero__tagline {
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.4;
+}
+
+.hero__tagline strong {
+  color: var(--color-primary);
+}
+
+.hero__description {
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-2xl);
+  line-height: 1.7;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+.hero__cta .btn {
+  font-size: 1rem;
+  padding: var(--spacing-md) var(--spacing-xl);
+}
+
+.hero__cta .btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .hero__logo {
+    width: 200px;
+  }
+
+  .hero__cta .btn {
+    padding: var(--spacing-md) var(--spacing-2xl);
+  }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+  .hero {
+    min-height: 80vh;
+  }
 }
