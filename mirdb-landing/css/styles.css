@@ -1,0 +1,51 @@
+/**
+ * Main Stylesheet
+ * Owner: First Builder
+ *
+ * Imports component stylesheets and defines global styles.
+ */
+
+@import url('./utilities/reset.css');
+@import url('./utilities/variables.css');
+@import url('./components/hero.css');
+@import url('./components/features.css');
+@import url('./components/code.css');
+@import url('./components/architecture.css');
+@import url('./components/specs.css');
+@import url('./components/navigation.css');
+@import url('./utilities/responsive.css');
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+section {
+  padding: var(--spacing-3xl) 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-text);
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-2xl);
+  max-width: 600px;
+}

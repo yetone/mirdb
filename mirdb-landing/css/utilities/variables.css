@@ -1,0 +1,117 @@
+/**
+ * CSS Custom Properties (Variables)
+ * Owner: Scenario 14 - Dark Mode Support
+ *
+ * Defines color scheme variables for light and dark modes.
+ * Other scenarios should use these variables for consistency.
+ */
+
+:root {
+  /* Primary colors - Rust branding */
+  --color-primary: #f74c00;
+  --color-primary-dark: #d94000;
+  --color-primary-light: #ff6a26;
+
+  /* Light mode colors (default) */
+  --color-background: #ffffff;
+  --color-surface: #f8f9fa;
+  --color-text: #1a1a2e;
+  --color-text-secondary: #4a4a68;
+  --color-border: #e1e4e8;
+
+  /* Code block colors - Catppuccin Mocha inspired (works in both modes) */
+  --color-code-bg: #1e1e2e;
+  --color-code-text: #cdd6f4;
+  --color-code-comment: #6c7086;
+  --color-code-keyword: #cba6f7;
+  --color-code-string: #a6e3a1;
+  --color-code-number: #fab387;
+  --color-code-function: #89b4fa;
+  --color-code-variable: #f5e0dc;
+  --color-code-operator: #89dceb;
+
+  /* Fonts */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, Monaco, monospace;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Shadows - Light mode */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-theme: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark mode - Manual toggle */
+[data-theme="dark"] {
+  --color-background: #1a1a2e;
+  --color-surface: #252542;
+  --color-text: #e1e4e8;
+  --color-text-secondary: #9ca3af;
+  --color-border: #3d3d5c;
+
+  /* Dark mode shadows - adjusted for dark background */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Dark mode - System preference (only when no manual override) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-background: #1a1a2e;
+    --color-surface: #252542;
+    --color-text: #e1e4e8;
+    --color-text-secondary: #9ca3af;
+    --color-border: #3d3d5c;
+
+    /* Dark mode shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Apply smooth transitions for theme changes */
+html {
+  transition: var(--transition-theme);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: var(--transition-theme);
+}
+
+/* Ensure elements that use CSS variables get smooth transitions */
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Disable transitions for elements that shouldn't animate (reduces motion preference) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}

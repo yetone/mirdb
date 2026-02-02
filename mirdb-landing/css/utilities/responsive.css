@@ -1,0 +1,285 @@
+/**
+ * Responsive Design and Media Queries
+ * Owner: Scenario 10 - Mobile Responsive Design
+ * Co-owner: Scenario 16 - Reduced Motion Support
+ *
+ * Breakpoints:
+ * - Mobile: 320px - 767px
+ * - Tablet: 768px - 1024px
+ * - Desktop: 1025px+
+ * - Wide: 1920px+
+ */
+
+/* ==========================================================================
+   Tablet Breakpoint (768px - 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  :root {
+    --spacing-2xl: 2.5rem;
+    --spacing-3xl: 3rem;
+  }
+}
+
+/* ==========================================================================
+   Mobile Breakpoint (320px - 767px)
+   ========================================================================== */
+@media (max-width: 767px) {
+  :root {
+    --spacing-xl: 1.5rem;
+    --spacing-2xl: 2rem;
+    --spacing-3xl: 2.5rem;
+  }
+
+  /* Prevent horizontal scrolling */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Main content adjustments */
+  main {
+    padding: 0 var(--spacing-md);
+  }
+
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  /* Typography scaling for mobile */
+  h2 {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* Feature cards - single column stacked layout */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-title {
+    font-size: 1.125rem;
+  }
+
+  .feature-description {
+    font-size: 0.9375rem;
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+
+  .features-title {
+    font-size: 1.75rem;
+  }
+
+  .features-subtitle {
+    font-size: 1rem;
+    padding: 0 var(--spacing-sm);
+  }
+
+  /* Ensure all buttons and links have minimum 44px touch target */
+  button,
+  a,
+  .nav-link,
+  .cta-btn,
+  .copy-btn,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Touch-friendly padding for interactive elements */
+  .nav-link {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .cta-btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    min-height: 48px;
+  }
+
+  /* Container adjustments */
+  .container,
+  .features-container,
+  .architecture-container,
+  .specifications-container {
+    padding: 0 var(--spacing-md);
+  }
+}
+
+/* ==========================================================================
+   Small Mobile Breakpoint (320px - 374px)
+   ========================================================================== */
+@media (max-width: 374px) {
+  :root {
+    --spacing-md: 0.875rem;
+    --spacing-lg: 1.25rem;
+    --spacing-xl: 1.25rem;
+    --spacing-2xl: 1.5rem;
+    --spacing-3xl: 2rem;
+  }
+
+  main {
+    padding: 0 var(--spacing-sm);
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.9375rem;
+  }
+
+  /* Feature cards on smallest screens */
+  .feature-card {
+    padding: var(--spacing-md);
+  }
+
+  .feature-title {
+    font-size: 1rem;
+  }
+
+  .feature-description {
+    font-size: 0.875rem;
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .features-title {
+    font-size: 1.5rem;
+  }
+
+  /* Code examples adjustments */
+  .code-block {
+    font-size: 0.75rem;
+    padding: var(--spacing-sm);
+  }
+
+  /* Ensure buttons remain touchable */
+  .cta-btn {
+    font-size: 0.875rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* ==========================================================================
+   Mobile-specific Layout Rules
+   ========================================================================== */
+
+/* Ensure images don't cause horizontal scroll */
+@media (max-width: 767px) {
+  img,
+  svg,
+  video,
+  canvas,
+  iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Architecture diagram responsive sizing */
+  .architecture-diagram-wrapper {
+    margin: 0 calc(-1 * var(--spacing-md));
+    border-radius: 0;
+  }
+
+  .architecture-diagram {
+    min-height: 200px;
+  }
+
+  /* Code blocks should scroll horizontally, not page */
+  .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .code-example {
+    margin: 0 calc(-1 * var(--spacing-md));
+    border-radius: 0;
+  }
+
+  /* Status section mobile adjustments */
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-list__item {
+    font-size: 0.875rem;
+  }
+
+  /* Specifications section mobile adjustments */
+  .specifications-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .spec-card {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .spec-value {
+    font-size: 1rem;
+    word-break: break-word;
+  }
+}
+
+/* ==========================================================================
+   Touch Target Accessibility
+   ========================================================================== */
+@media (max-width: 767px) {
+  /* Ensure all clickable elements meet 44x44px minimum */
+  .nav-toggle,
+  .copy-btn,
+  .theme-toggle,
+  .nav-link,
+  .cta-btn,
+  .status-badge-container a,
+  .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Skip link accessibility */
+  .skip-link:focus {
+    top: var(--spacing-sm);
+    left: var(--spacing-sm);
+    right: auto;
+    transform: none;
+    font-size: 0.875rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

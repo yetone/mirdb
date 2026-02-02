@@ -1,0 +1,279 @@
+/**
+ * CSS Reset / Normalize with Cross-Browser Compatibility
+ * Owner: First Builder (Scenario 15 for vendor prefixes)
+ *
+ * Provides consistent baseline styles across browsers.
+ * Includes vendor prefixes for Chrome, Firefox, Safari, and Edge.
+ *
+ * Browser Support:
+ * - Chrome (latest 2 versions)
+ * - Firefox (latest 2 versions)
+ * - Safari (latest 2 versions)
+ * - Edge (latest 2 versions)
+ */
+
+/* ==========================================================================
+   Box Sizing - Universal box model for all browsers
+   ========================================================================== */
+*, *::before, *::after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* ==========================================================================
+   Document - HTML & Body defaults
+   ========================================================================== */
+html {
+  /* Smooth scrolling with fallback */
+  scroll-behavior: smooth;
+  /* Prevent font size adjustment on orientation change in iOS */
+  -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+  /* Improve text rendering on high-DPI displays */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  line-height: 1.6;
+  /* Font smoothing for webkit and Firefox */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Text rendering optimization */
+  text-rendering: optimizeLegibility;
+}
+
+/* ==========================================================================
+   Media Elements - Images, videos, etc.
+   ========================================================================== */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  /* Prevent images from being distorted */
+  height: auto;
+}
+
+img {
+  /* Remove border on images inside links in IE */
+  border-style: none;
+  /* Prevent image dragging in all browsers */
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+/* ==========================================================================
+   Form Elements - Cross-browser form styling
+   ========================================================================== */
+input, button, textarea, select {
+  font: inherit;
+  /* Remove default appearance in webkit browsers */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea {
+  /* Restore appearance for text inputs */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+input[type="search"] {
+  /* Remove search decoration in Safari */
+  -webkit-appearance: textfield;
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+/* Fix placeholder text color across browsers */
+::-webkit-input-placeholder {
+  color: inherit;
+  opacity: 0.54;
+}
+
+::-moz-placeholder {
+  color: inherit;
+  opacity: 0.54;
+}
+
+:-ms-input-placeholder {
+  color: inherit;
+  opacity: 0.54;
+}
+
+::placeholder {
+  color: inherit;
+  opacity: 0.54;
+}
+
+/* ==========================================================================
+   Typography - Text and heading normalization
+   ========================================================================== */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  /* Hyphenation support */
+  -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+          hyphens: auto;
+}
+
+/* ==========================================================================
+   Links - Anchor element styling
+   ========================================================================== */
+a {
+  color: inherit;
+  text-decoration: none;
+  /* Remove tap highlight on touch devices */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ==========================================================================
+   Buttons - Button element normalization
+   ========================================================================== */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  /* Remove tap highlight on touch devices */
+  -webkit-tap-highlight-color: transparent;
+  /* Remove default appearance */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+/* ==========================================================================
+   Lists - List normalization
+   ========================================================================== */
+ul, ol {
+  list-style: none;
+}
+
+/* ==========================================================================
+   Selection - Text selection styling with vendor prefixes
+   ========================================================================== */
+::-moz-selection {
+  background-color: var(--color-primary, #f74c00);
+  color: white;
+}
+
+::selection {
+  background-color: var(--color-primary, #f74c00);
+  color: white;
+}
+
+/* ==========================================================================
+   Scrollbar Styling - Custom scrollbars for webkit browsers
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface, #f8f9fa);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border, #e1e4e8);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary, #4a4a68);
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border, #e1e4e8) var(--color-surface, #f8f9fa);
+}
+
+/* ==========================================================================
+   Focus Styles - Accessible focus indicators
+   ========================================================================== */
+:focus {
+  outline: 2px solid var(--color-primary, #f74c00);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary, #f74c00);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Flexbox Utilities - Cross-browser flexbox support
+   ========================================================================== */
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.flex-column {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.flex-center {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+/* ==========================================================================
+   Transform Utilities - Cross-browser transforms
+   ========================================================================== */
+.transform-gpu {
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
+/* ==========================================================================
+   Animation Support - Cross-browser animation properties
+   ========================================================================== */
+@-webkit-keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fadeIn {
+  -webkit-animation: fadeIn 0.3s ease-in-out;
+          animation: fadeIn 0.3s ease-in-out;
+}
