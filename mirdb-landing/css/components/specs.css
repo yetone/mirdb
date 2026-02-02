@@ -236,7 +236,169 @@
    Specifications Section (Scenario 7)
    ========================================================================== */
 
-/* Placeholder for Scenario 7's specifications grid styles */
-#specifications {
+.specifications-section {
+  background-color: var(--color-background);
   padding: var(--spacing-3xl) 0;
+}
+
+.specifications-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.specifications-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.specifications-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* Specifications Grid Layout */
+.specifications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Specification Card */
+.spec-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.spec-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Specification Icon */
+.spec-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background-color: rgba(247, 76, 0, 0.1);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+}
+
+.spec-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Specification Content */
+.spec-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.spec-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.spec-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  word-break: break-all;
+}
+
+/* Dark mode adjustments for specifications */
+[data-theme="dark"] .spec-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .spec-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .spec-icon {
+  background-color: rgba(247, 76, 0, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .spec-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  :root:not([data-theme="light"]) .spec-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  :root:not([data-theme="light"]) .spec-icon {
+    background-color: rgba(247, 76, 0, 0.2);
+  }
+}
+
+/* Responsive adjustments for specifications */
+@media (max-width: 767px) {
+  .specifications-title {
+    font-size: 1.5rem;
+  }
+
+  .specifications-subtitle {
+    font-size: 1rem;
+  }
+
+  .specifications-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .spec-card {
+    padding: var(--spacing-md);
+  }
+
+  .spec-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .spec-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .spec-value {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .specifications-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .specifications-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
