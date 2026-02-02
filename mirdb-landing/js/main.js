@@ -8,11 +8,12 @@
 import { onReady } from './utils/helpers.js';
 import { init as initClipboard } from './modules/clipboard.js';
 import { init as initNavigation } from './modules/navigation.js';
+import { init as initThemeToggle } from './modules/theme-toggle.js';
 
 // Initialize all modules when DOM is ready
 onReady(() => {
   initClipboard();
   initNavigation();
-  // Theme toggle - Scenario 14
+  initThemeToggle();
   // Lazy loading - Scenario 18
 });

@@ -363,6 +363,70 @@ footer {
 }
 
 /* ============================================
+   Theme Toggle Button (Scenario 14 - Dark Mode)
+   ============================================ */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: var(--spacing-sm);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus {
+  background-color: var(--color-surface);
+  border-color: var(--color-text-secondary);
+  color: var(--color-primary);
+}
+
+.theme-toggle:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--transition-fast);
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(15deg);
+}
+
+/* Icon visibility is controlled by JS */
+.theme-toggle .sun-icon,
+.theme-toggle .moon-icon {
+  display: block;
+}
+
+/* When in dark mode, show sun (to switch to light) */
+[data-theme="dark"] .theme-toggle .sun-icon {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle .moon-icon {
+  display: none;
+}
+
+/* When in light mode, show moon (to switch to dark) */
+[data-theme="light"] .theme-toggle .sun-icon {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .moon-icon {
+  display: block;
+}
+
+/* ============================================
    Reduced Motion
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
@@ -372,7 +436,9 @@ footer {
   .skip-link,
   header,
   .nav-links,
-  .nav-cta {
+  .nav-cta,
+  .theme-toggle,
+  .theme-toggle svg {
     transition: none;
   }
 }
