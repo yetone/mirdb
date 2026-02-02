@@ -10,4 +10,179 @@
  * - Scrollable code with line numbers
  */
 
-/* Placeholder - to be implemented by Scenario 3 */
+#code-examples {
+  padding: var(--spacing-3xl) 0;
+}
+
+.code-examples-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.code-example {
+  background: var(--color-code-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-language {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-code-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-code-text);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
+}
+
+.copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.copy-btn.copied {
+  background: rgba(166, 227, 161, 0.2);
+  color: var(--color-code-string);
+}
+
+.copy-btn .copy-icon,
+.copy-btn .check-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.copy-text {
+  min-width: 45px;
+  text-align: center;
+}
+
+.code-block {
+  padding: var(--spacing-lg);
+  margin: 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  background: var(--color-code-bg);
+  color: var(--color-code-text);
+  -webkit-overflow-scrolling: touch;
+}
+
+.code-block code {
+  font-family: inherit;
+  display: block;
+  white-space: pre;
+}
+
+/* Syntax highlighting classes */
+.code-keyword {
+  color: var(--color-code-keyword);
+  font-weight: 500;
+}
+
+.code-string {
+  color: var(--color-code-string);
+}
+
+.code-number {
+  color: var(--color-code-number);
+}
+
+.code-function {
+  color: var(--color-code-function);
+}
+
+.code-variable {
+  color: var(--color-code-variable);
+}
+
+.code-comment {
+  color: var(--color-code-comment);
+  font-style: italic;
+}
+
+.code-operator {
+  color: var(--color-code-operator);
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .code-block {
+    padding: var(--spacing-md);
+    font-size: 0.8rem;
+  }
+
+  .code-header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .code-language {
+    font-size: 0.75rem;
+  }
+
+  .copy-btn {
+    padding: var(--spacing-xs);
+  }
+
+  .copy-text {
+    display: none;
+  }
+}
+
+/* Accessibility - focus visible for keyboard navigation */
+.code-example:focus-within {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar for code blocks */
+.code-block::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

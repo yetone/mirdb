@@ -8,7 +8,7 @@
  * - Visual layout verification
  */
 
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 test.describe('Feature Showcase Section', () => {
     test.beforeEach(async ({ page }) => {
