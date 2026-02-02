@@ -1,0 +1,46 @@
+/**
+ * Responsive Design and Media Queries
+ * Owner: Scenario 10 - Mobile Responsive Design
+ * Co-owner: Scenario 16 - Reduced Motion Support
+ *
+ * Breakpoints:
+ * - Mobile: 320px - 767px
+ * - Tablet: 768px - 1024px
+ * - Desktop: 1025px+
+ * - Wide: 1920px+
+ */
+
+/* Mobile-first base styles are in component files */
+
+/* Tablet breakpoint */
+@media (min-width: 768px) {
+  :root {
+    --container-padding: 1.5rem;
+  }
+}
+
+/* Desktop breakpoint */
+@media (min-width: 1025px) {
+  :root {
+    --container-padding: 2rem;
+  }
+}
+
+/* Wide screens */
+@media (min-width: 1920px) {
+  :root {
+    --container-max-width: 1400px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

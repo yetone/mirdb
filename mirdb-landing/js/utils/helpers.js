@@ -6,55 +6,48 @@
  * - DOM query helpers
  * - Event delegation utilities
  * - Browser feature detection
- *
- * Expected exports:
- * - $(selector): querySelector wrapper
- * - $$(selector): querySelectorAll wrapper
- * - onReady(callback): DOMContentLoaded wrapper
  */
 
 /**
- * Query selector wrapper
+ * querySelector wrapper
  * @param {string} selector - CSS selector
  * @param {Element} context - Context element (default: document)
  * @returns {Element|null}
  */
-export function $(selector, context = document) {
-    return context.querySelector(selector);
-}
+export const $ = (selector, context = document) => context.querySelector(selector);
 
 /**
- * Query selector all wrapper
+ * querySelectorAll wrapper
  * @param {string} selector - CSS selector
  * @param {Element} context - Context element (default: document)
  * @returns {NodeList}
  */
-export function $$(selector, context = document) {
-    return context.querySelectorAll(selector);
-}
+export const $$ = (selector, context = document) => context.querySelectorAll(selector);
 
 /**
- * Execute callback when DOM is ready
- * @param {Function} callback - Function to execute
+ * DOMContentLoaded wrapper
+ * @param {Function} callback - Function to call when DOM is ready
  */
-export function onReady(callback) {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', callback);
-    } else {
-        callback();
-    }
-}
+export const onReady = (callback) => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', callback);
+  } else {
+    callback();
+  }
+};
 
 /**
- * Check if browser supports a feature
- * @param {string} feature - Feature name
+ * Check if reduced motion is preferred
  * @returns {boolean}
  */
-export function supports(feature) {
-    const features = {
-        clipboard: 'clipboard' in navigator,
-        intersectionObserver: 'IntersectionObserver' in window,
-        cssVariables: window.CSS && CSS.supports('color', 'var(--test)'),
-    };
-    return features[feature] ?? false;
-}
+export const prefersReducedMotion = () => {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+};
+
+/**
+ * Check if dark mode is preferred
+ * @returns {boolean}
+ */
+export const prefersDarkMode = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+};

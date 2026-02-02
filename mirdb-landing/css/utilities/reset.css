@@ -6,85 +6,77 @@
  * Includes box-sizing, margin resets, and basic accessibility defaults.
  */
 
-/* Box sizing rules */
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-/* Remove default margin and padding */
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-/* Prevent font size inflation */
 html {
-    -moz-text-size-adjust: none;
-    -webkit-text-size-adjust: none;
-    text-size-adjust: none;
+  scroll-behavior: smooth;
 }
 
-/* Remove list styles on ul, ol elements with a role of list */
-ul[role="list"],
-ol[role="list"] {
-    list-style: none;
-}
-
-/* Set core root defaults */
-html:focus-within {
-    scroll-behavior: smooth;
-}
-
-/* Set core body defaults */
 body {
-    min-height: 100vh;
-    line-height: 1.5;
-    font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
-    background-color: var(--color-background, #ffffff);
-    color: var(--color-text, #1a1a2e);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* A elements that don't have a class get default styles */
-a:not([class]) {
-    text-decoration-skip-ink: auto;
-}
-
-/* Make images easier to work with */
 img,
 picture,
+video,
+canvas,
 svg {
-    max-width: 100%;
-    display: block;
+  display: block;
+  max-width: 100%;
 }
 
-/* Inherit fonts for inputs and buttons */
 input,
 button,
 textarea,
 select {
-    font: inherit;
+  font: inherit;
 }
 
-/* Remove all animations and transitions for people that prefer not to see them */
-@media (prefers-reduced-motion: reduce) {
-    html:focus-within {
-        scroll-behavior: auto;
-    }
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
 }
 
-/* Focus visible styles for accessibility */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* Accessibility: Focus visible styles */
 :focus-visible {
-    outline: 2px solid var(--color-primary, #d35400);
-    outline-offset: 2px;
+  outline: 2px solid var(--color-primary, #f74c00);
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -10,8 +10,4 @@
  * - Expandable sections
  */
 
-/* Placeholder styles - to be implemented by Scenarios 5 and 7 */
-#status,
-#specifications {
-    padding: var(--spacing-3xl) 0;
-}
+/* Placeholder - to be implemented by Scenario 5 and 7 */

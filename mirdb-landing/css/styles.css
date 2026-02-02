@@ -12,6 +12,10 @@
  * 4. utilities/responsive.css (last for media query overrides)
  */
 
+/* Base imports - order matters */
+@import url('utilities/reset.css');
+@import url('utilities/variables.css');
+
 /* Component imports */
 @import url('components/hero.css');
 @import url('components/features.css');
@@ -20,90 +24,110 @@
 @import url('components/specs.css');
 @import url('components/navigation.css');
 
+/* Responsive overrides - must be last */
+@import url('utilities/responsive.css');
+
 /* Global styles */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Container utility */
 .container {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 0 var(--spacing-lg);
+  width: 100%;
+  max-width: var(--container-max-width, var(--container-max, 1200px));
+  margin: 0 auto;
+  padding: 0 var(--container-padding, var(--spacing-lg, 1.5rem));
 }
 
 .container--narrow {
-    max-width: var(--container-narrow);
+  max-width: var(--container-narrow, 800px);
 }
 
-/* Section spacing */
+/* Section base styles */
 section {
-    padding: var(--spacing-3xl) 0;
+  padding: var(--spacing-3xl) 0;
 }
 
 /* Typography utilities */
 .text-center {
-    text-align: center;
+  text-align: center;
 }
 
 .text-primary {
-    color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* Button base styles */
 .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    font-weight: 500;
-    text-decoration: none;
-    border-radius: var(--radius-md);
-    transition: all var(--transition-fast);
-    cursor: pointer;
-    border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary,
 .btn--primary {
-    background-color: var(--color-primary);
-    color: white;
+  background-color: var(--color-primary);
+  color: white;
 }
 
+.btn-primary:hover,
 .btn--primary:hover {
-    background-color: var(--color-primary-hover);
+  background-color: var(--color-primary-hover);
 }
 
+.btn-secondary,
 .btn--secondary {
-    background-color: transparent;
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
+  background-color: var(--color-surface, transparent);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
 }
 
+.btn-secondary:hover,
 .btn--secondary:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* Visually hidden utility for accessibility */
 .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Skip link */
 .skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--color-primary);
-    color: white;
-    z-index: 100;
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-primary);
+  color: white;
+  z-index: 100;
 }
 
 .skip-link:focus {
-    top: 0;
+  top: 0;
 }

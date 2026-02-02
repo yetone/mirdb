@@ -12,12 +12,4 @@
  * - CTA button styles
  */
 
-/* Placeholder styles - to be implemented by Scenario 6 */
-header {
-    padding: var(--spacing-md) 0;
-}
-
-footer {
-    padding: var(--spacing-2xl) 0;
-    background-color: var(--color-surface);
-}
+/* Placeholder - to be implemented by Scenario 6 */
