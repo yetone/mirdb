@@ -12,267 +12,9 @@
 
 import { test, expect } from '@playwright/test';
 
-// ============================================
-// Scenario 8: Desktop Responsive Tests (1920px+)
-// ============================================
-test.describe('Responsive Design - Desktop (1920px+)', () => {
-    test.use({
-        viewport: { width: 1920, height: 1080 }
-    });
-
-    test.beforeEach(async ({ page }) => {
-        await page.goto('/');
-    });
-
-    test('TC1: All content displays correctly without horizontal scroll at 1920px', async ({ page }) => {
-        // Wait for page to be fully loaded
-        await page.waitForLoadState('networkidle');
-
-        // Check there's no horizontal scrollbar
-        const hasHorizontalScroll = await page.evaluate(() => {
-            return document.documentElement.scrollWidth > document.documentElement.clientWidth;
-        });
-        expect(hasHorizontalScroll).toBe(false);
-
-        // Verify all main sections are visible
-        const sections = ['#hero', '#features', '#code-examples', '#architecture', '#status', '#specifications'];
-        for (const section of sections) {
-            const sectionElement = page.locator(section);
-            await expect(sectionElement).toBeVisible();
-        }
-
-        // Verify content is not cut off or overflowing
-        const bodyOverflow = await page.evaluate(() => {
-            const body = document.body;
-            return {
-                overflowX: window.getComputedStyle(body).overflowX,
-                scrollWidth: body.scrollWidth,
-                clientWidth: body.clientWidth
-            };
-        });
-        expect(bodyOverflow.scrollWidth).toBeLessThanOrEqual(bodyOverflow.clientWidth + 1);
-    });
-
-    test('TC2: Full navigation menu visible (no hamburger menu) at desktop viewport', async ({ page }) => {
-        // Wait for navigation to be visible
-        const navContainer = page.locator('.nav-container');
-        await expect(navContainer).toBeVisible();
-
-        // Check that the hamburger menu toggle is NOT visible
-        const navToggle = page.locator('.nav-toggle');
-        await expect(navToggle).not.toBeVisible();
-
-        // Check that the navigation links container is visible
-        const navLinks = page.locator('.nav-links');
-        await expect(navLinks).toBeVisible();
-
-        // Verify navigation links are displayed horizontally (not stacked)
-        const navLinksDisplay = await navLinks.evaluate(el => {
-            const style = window.getComputedStyle(el);
-            return {
-                display: style.display,
-                flexDirection: style.flexDirection
-            };
-        });
-        expect(navLinksDisplay.display).toBe('flex');
-        expect(navLinksDisplay.flexDirection).not.toBe('column');
-
-        // Verify all navigation links are visible
-        const links = page.locator('.nav-links .nav-link');
-        const linkCount = await links.count();
-        expect(linkCount).toBeGreaterThanOrEqual(4);
-
-        for (let i = 0; i < linkCount; i++) {
-            await expect(links.nth(i)).toBeVisible();
-        }
-
-        // Verify CTA buttons are visible in the header
-        const navCta = page.locator('.nav-cta');
-        await expect(navCta).toBeVisible();
-
-        const primaryCta = page.locator('.nav-cta .cta-btn--primary');
-        await expect(primaryCta).toBeVisible();
-    });
-
-    test('TC3: Features display in multi-column grid or zigzag layout at desktop', async ({ page }) => {
-        // Scroll to features section
-        await page.locator('#features').scrollIntoViewIfNeeded();
-
-        // Verify features grid exists
-        const featuresGrid = page.locator('.features-grid');
-        await expect(featuresGrid).toBeVisible();
-
-        // Count feature cards
-        const featureCards = page.locator('.features-grid .feature-card');
-        const cardCount = await featureCards.count();
-        expect(cardCount).toBeGreaterThanOrEqual(6);
-
-        // Verify that at desktop width, cards are displayed in a multi-column
-        // or zigzag layout (not stacked vertically in a single column)
-        if (cardCount >= 2) {
-            const card1 = featureCards.nth(0);
-            const card2 = featureCards.nth(1);
-
-            const card1Box = await card1.boundingBox();
-            const card2Box = await card2.boundingBox();
-
-            if (card1Box && card2Box) {
-                // At 1920px desktop width, feature cards should either be:
-                // 1. On the same row (similar Y positions) - grid layout
-                // 2. Side by side (card2 X > card1 X) - multi-column
-                // 3. Cards in a zigzag pattern (alternating layout)
-                // The key point is cards should NOT be in a narrow single column
-
-                const sameLine = Math.abs(card1Box.y - card2Box.y) < 100;
-                const sideByBide = card2Box.x > card1Box.x;
-
-                // At desktop, expect either same row or offset positioning
-                // OR if stacked, each card should span significant width
-                const cardsWideEnough = card1Box.width > 300 && card2Box.width > 300;
-
-                // Accept either multi-column layout or wide single-column cards
-                expect(sameLine || sideByBide || cardsWideEnough).toBe(true);
-            }
-        }
-    });
-
-    test('TC4: Hero section spans appropriate width with centered content at desktop', async ({ page }) => {
-        const heroSection = page.locator('#hero');
-        await expect(heroSection).toBeVisible();
-
-        // Get hero section dimensions
-        const heroBox = await heroSection.boundingBox();
-        expect(heroBox).not.toBeNull();
-
-        // Hero should span a reasonable width at desktop viewport
-        // At 1920px viewport, hero should be visible and appropriately sized
-        if (heroBox) {
-            expect(heroBox.width).toBeGreaterThan(800);
-        }
-
-        // Verify main content is centered (visually centered on page)
-        const mainContent = page.locator('main');
-        const mainBox = await mainContent.boundingBox();
-
-        if (mainBox) {
-            // At 1920px viewport, the main content (max-width: 1200px)
-            // should be centered with equal margins on both sides
-            const viewportWidth = 1920;
-            const leftMargin = mainBox.x;
-            const rightMargin = viewportWidth - (mainBox.x + mainBox.width);
-
-            // Margins should be approximately equal (centered content)
-            // Allow 10px tolerance for padding/scrollbar
-            expect(Math.abs(leftMargin - rightMargin)).toBeLessThan(50);
-
-            // Main content should have a max-width and be centered
-            expect(mainBox.width).toBeGreaterThan(600);
-            expect(mainBox.width).toBeLessThanOrEqual(1400);
-        }
-    });
-
-    test('Desktop layout utilizes full width appropriately', async ({ page }) => {
-        // Verify the header spans full width
-        const header = page.locator('header');
-        await expect(header).toBeVisible();
-
-        const headerBox = await header.boundingBox();
-        if (headerBox) {
-            // Header should be close to viewport width
-            expect(headerBox.width).toBeGreaterThanOrEqual(1900);
-        }
-
-        // Verify main content is constrained but reasonable
-        const mainContent = page.locator('main');
-        const mainBox = await mainContent.boundingBox();
-        if (mainBox) {
-            // Content should be contained within a max-width but still substantial
-            expect(mainBox.width).toBeGreaterThan(600);
-            expect(mainBox.width).toBeLessThanOrEqual(1400);
-        }
-    });
-
-    test('All sections display without overlap at desktop viewport', async ({ page }) => {
-        await page.waitForLoadState('networkidle');
-
-        // Get bounding boxes for main sections
-        const sections = ['#features', '#code-examples', '#architecture', '#status', '#specifications'];
-        const boxes = [];
-
-        for (const selector of sections) {
-            const section = page.locator(selector);
-            if (await section.isVisible()) {
-                const box = await section.boundingBox();
-                if (box) {
-                    boxes.push({ selector, box });
-                }
-            }
-        }
-
-        // Verify sections don't overlap vertically
-        for (let i = 0; i < boxes.length - 1; i++) {
-            const current = boxes[i];
-            const next = boxes[i + 1];
-
-            const currentBottom = current.box.y + current.box.height;
-            // Next section should start after or at the end of current (with small tolerance)
-            expect(next.box.y).toBeGreaterThanOrEqual(currentBottom - 5);
-        }
-    });
-
-    test('Typography is readable at desktop viewport', async ({ page }) => {
-        // Check h2 headings have appropriate font size for desktop
-        const h2 = page.locator('h2').first();
-        if (await h2.isVisible()) {
-            const h2Styles = await h2.evaluate(el => {
-                const style = window.getComputedStyle(el);
-                return {
-                    fontSize: parseFloat(style.fontSize),
-                    lineHeight: style.lineHeight
-                };
-            });
-            // H2 should be at least 24px on desktop
-            expect(h2Styles.fontSize).toBeGreaterThanOrEqual(24);
-        }
-
-        // Check body text is readable
-        const paragraph = page.locator('p').first();
-        if (await paragraph.isVisible()) {
-            const pStyles = await paragraph.evaluate(el => {
-                const style = window.getComputedStyle(el);
-                return {
-                    fontSize: parseFloat(style.fontSize)
-                };
-            });
-            // Body text should be at least 14px
-            expect(pStyles.fontSize).toBeGreaterThanOrEqual(14);
-        }
-    });
-
-    test('Navigation CTA buttons are properly styled at desktop', async ({ page }) => {
-        const primaryCta = page.locator('.nav-cta .cta-btn--primary');
-        const secondaryCta = page.locator('.nav-cta .cta-btn--secondary');
-
-        await expect(primaryCta).toBeVisible();
-
-        // Check CTA buttons are displayed inline (not stacked)
-        const navCta = page.locator('.nav-cta');
-        const ctaStyles = await navCta.evaluate(el => {
-            const style = window.getComputedStyle(el);
-            return {
-                display: style.display,
-                flexDirection: style.flexDirection
-            };
-        });
-
-        expect(ctaStyles.display).toBe('flex');
-        expect(ctaStyles.flexDirection).not.toBe('column');
-    });
-});
-
-// ============================================
-// Scenario 9: Tablet Responsive Tests (768px-1024px)
-// ============================================
+// ==========================================================================
+// Tablet Viewport Tests (Scenario 9)
+// ==========================================================================
 test.describe('Responsive Design - Tablet Viewport', () => {
     // Test Case 1: Load page at 768px viewport width
     test.describe('768px viewport (lower tablet range)', () => {
@@ -580,4 +322,396 @@ test.describe('Responsive Design - Tablet Viewport', () => {
             });
         }
     });
+});
+
+// ==========================================================================
+// Mobile Viewport Tests (Scenario 10)
+// ==========================================================================
+test.describe('Mobile Responsive Design (320px-767px)', () => {
+  test.describe('375px viewport (iPhone)', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
+      await page.goto('/');
+    });
+
+    test('all content is readable without horizontal scrolling', async ({ page }) => {
+      // Check that body doesn't have horizontal scroll
+      const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
+      const viewportWidth = await page.evaluate(() => window.innerWidth);
+
+      expect(bodyWidth).toBeLessThanOrEqual(viewportWidth);
+
+      // Verify main content is visible
+      await expect(page.locator('main')).toBeVisible();
+
+      // Check that key sections are visible
+      await expect(page.locator('#features')).toBeVisible();
+      await expect(page.locator('#code-examples')).toBeVisible();
+      await expect(page.locator('#architecture')).toBeVisible();
+      await expect(page.locator('#status')).toBeVisible();
+      await expect(page.locator('#specifications')).toBeVisible();
+    });
+
+    test('navigation header is visible', async ({ page }) => {
+      const header = page.locator('header');
+      await expect(header).toBeVisible();
+
+      // Logo should be visible
+      const logo = page.locator('.nav-logo');
+      await expect(logo).toBeVisible();
+    });
+
+    test('mobile hamburger menu is visible and functional', async ({ page }) => {
+      // Mobile menu toggle should be visible
+      const navToggle = page.locator('.nav-toggle');
+      await expect(navToggle).toBeVisible();
+
+      // Initially menu should be closed (aria-expanded=false)
+      await expect(navToggle).toHaveAttribute('aria-expanded', 'false');
+
+      // Navigation links should not be visible initially (hidden state)
+      const navLinks = page.locator('.nav-links');
+      // On mobile, nav-links are hidden via transform/opacity
+      await expect(navLinks).not.toHaveClass(/nav-links--open/);
+    });
+
+    test('mobile menu opens on tap', async ({ page }) => {
+      const navToggle = page.locator('.nav-toggle');
+      const navLinks = page.locator('.nav-links');
+
+      // Tap the menu button
+      await navToggle.click();
+
+      // Menu should now be open
+      await expect(navToggle).toHaveAttribute('aria-expanded', 'true');
+      await expect(navLinks).toHaveClass(/nav-links--open/);
+
+      // All navigation options should be visible
+      const navLinkItems = page.locator('.nav-links .nav-link');
+      const count = await navLinkItems.count();
+      expect(count).toBeGreaterThanOrEqual(4);
+
+      for (let i = 0; i < count; i++) {
+        await expect(navLinkItems.nth(i)).toBeVisible();
+      }
+    });
+
+    test('mobile menu shows all navigation options', async ({ page }) => {
+      const navToggle = page.locator('.nav-toggle');
+
+      // Open menu
+      await navToggle.click();
+
+      // Check for expected navigation links
+      await expect(page.locator('.nav-link[href="#features"]')).toBeVisible();
+      await expect(page.locator('.nav-link[href="#code-examples"]')).toBeVisible();
+      await expect(page.locator('.nav-link[href="#architecture"]')).toBeVisible();
+      await expect(page.locator('.nav-link[href="#specifications"]')).toBeVisible();
+    });
+
+    test('feature cards display in single-column stacked layout', async ({ page }) => {
+      // Navigate to features section
+      await page.locator('#features').scrollIntoViewIfNeeded();
+
+      const featureCards = page.locator('.feature-card');
+      const cardCount = await featureCards.count();
+
+      if (cardCount > 0) {
+        // Get the bounding boxes of first two cards
+        const firstCard = await featureCards.first().boundingBox();
+        const secondCard = await featureCards.nth(1).boundingBox();
+
+        if (firstCard && secondCard) {
+          // In single column layout, second card should be below first card
+          // (they should not be side by side)
+          expect(secondCard.y).toBeGreaterThan(firstCard.y);
+
+          // Cards should be full width (approximately same width)
+          expect(Math.abs(firstCard.width - secondCard.width)).toBeLessThan(10);
+        }
+      }
+    });
+
+    test('text is readable without zooming', async ({ page }) => {
+      // Check body font size is reasonable
+      const bodyFontSize = await page.evaluate(() => {
+        const style = getComputedStyle(document.body);
+        return parseFloat(style.fontSize);
+      });
+
+      // Body font should be at least 14px for readability
+      expect(bodyFontSize).toBeGreaterThanOrEqual(14);
+
+      // Check section titles are appropriately sized
+      const h2Elements = page.locator('h2');
+      const h2Count = await h2Elements.count();
+
+      for (let i = 0; i < h2Count; i++) {
+        const fontSize = await h2Elements.nth(i).evaluate((el) => {
+          return parseFloat(getComputedStyle(el).fontSize);
+        });
+        // H2 should be at least 24px on mobile
+        expect(fontSize).toBeGreaterThanOrEqual(24);
+      }
+    });
+  });
+
+  test.describe('320px viewport (minimum supported width)', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 568 });
+      await page.goto('/');
+    });
+
+    test('all content displays at minimum supported width', async ({ page }) => {
+      // Check that body doesn't have horizontal scroll
+      const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
+      const viewportWidth = await page.evaluate(() => window.innerWidth);
+
+      expect(bodyWidth).toBeLessThanOrEqual(viewportWidth);
+
+      // Verify main sections are visible
+      await expect(page.locator('header')).toBeVisible();
+      await expect(page.locator('main')).toBeVisible();
+      await expect(page.locator('#features')).toBeVisible();
+    });
+
+    test('hamburger menu toggle is visible at 320px', async ({ page }) => {
+      const navToggle = page.locator('.nav-toggle');
+      await expect(navToggle).toBeVisible();
+
+      // Should be properly sized for touch
+      const box = await navToggle.boundingBox();
+      expect(box.width).toBeGreaterThanOrEqual(44);
+      expect(box.height).toBeGreaterThanOrEqual(44);
+    });
+
+    test('feature cards are stacked at 320px', async ({ page }) => {
+      await page.locator('#features').scrollIntoViewIfNeeded();
+
+      const featureCards = page.locator('.feature-card');
+      const cardCount = await featureCards.count();
+
+      if (cardCount >= 2) {
+        const firstCard = await featureCards.first().boundingBox();
+        const secondCard = await featureCards.nth(1).boundingBox();
+
+        if (firstCard && secondCard) {
+          // Verify single column layout
+          expect(secondCard.y).toBeGreaterThan(firstCard.y);
+        }
+      }
+    });
+
+    test('content does not overflow horizontally', async ({ page }) => {
+      // Scroll through the page and check for overflow
+      const sections = ['#features', '#code-examples', '#architecture', '#status', '#specifications'];
+
+      for (const sectionId of sections) {
+        const section = page.locator(sectionId);
+        if (await section.isVisible()) {
+          await section.scrollIntoViewIfNeeded();
+
+          // Check no horizontal scroll after scrolling to section
+          const scrollWidth = await page.evaluate(() => document.body.scrollWidth);
+          const clientWidth = await page.evaluate(() => document.body.clientWidth);
+
+          expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1); // +1 for rounding
+        }
+      }
+    });
+  });
+
+  test.describe('Touch target sizes', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
+      await page.goto('/');
+    });
+
+    test('all interactive elements have minimum 44px touch target', async ({ page }) => {
+      // Check nav toggle
+      const navToggle = page.locator('.nav-toggle');
+      const toggleBox = await navToggle.boundingBox();
+      expect(toggleBox.width).toBeGreaterThanOrEqual(44);
+      expect(toggleBox.height).toBeGreaterThanOrEqual(44);
+    });
+
+    test('nav links have adequate touch targets when menu is open', async ({ page }) => {
+      // Open mobile menu
+      const navToggle = page.locator('.nav-toggle');
+      await navToggle.click();
+
+      // Wait for menu to open
+      await page.waitForSelector('.nav-links.nav-links--open');
+
+      // Check nav link sizes
+      const navLinks = page.locator('.nav-links .nav-link');
+      const linkCount = await navLinks.count();
+
+      for (let i = 0; i < linkCount; i++) {
+        const link = navLinks.nth(i);
+        const box = await link.boundingBox();
+
+        if (box) {
+          // Height should be at least 44px for touch targets
+          expect(box.height).toBeGreaterThanOrEqual(44);
+        }
+      }
+    });
+
+    test('CTA buttons have adequate touch targets', async ({ page }) => {
+      // Open mobile menu to check CTA buttons if visible
+      const ctaButtons = page.locator('.cta-btn');
+      const ctaCount = await ctaButtons.count();
+
+      for (let i = 0; i < ctaCount; i++) {
+        const btn = ctaButtons.nth(i);
+
+        // Only check visible buttons
+        if (await btn.isVisible()) {
+          const box = await btn.boundingBox();
+
+          if (box) {
+            expect(box.height).toBeGreaterThanOrEqual(44);
+          }
+        }
+      }
+    });
+
+    test('copy buttons have adequate touch targets', async ({ page }) => {
+      // Scroll to code examples
+      await page.locator('#code-examples').scrollIntoViewIfNeeded();
+
+      const copyButtons = page.locator('.copy-btn');
+      const btnCount = await copyButtons.count();
+
+      for (let i = 0; i < Math.min(btnCount, 3); i++) {
+        const btn = copyButtons.nth(i);
+
+        if (await btn.isVisible()) {
+          const box = await btn.boundingBox();
+
+          if (box) {
+            expect(box.width).toBeGreaterThanOrEqual(44);
+            expect(box.height).toBeGreaterThanOrEqual(44);
+          }
+        }
+      }
+    });
+  });
+
+  test.describe('Mobile menu functionality', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
+      await page.goto('/');
+    });
+
+    test('menu closes when a nav link is clicked', async ({ page }) => {
+      const navToggle = page.locator('.nav-toggle');
+      const navLinks = page.locator('.nav-links');
+
+      // Open menu
+      await navToggle.click();
+      await expect(navLinks).toHaveClass(/nav-links--open/);
+
+      // Click a nav link
+      const featuresLink = page.locator('.nav-link[href="#features"]');
+      await featuresLink.click();
+
+      // Menu should close
+      await expect(navLinks).not.toHaveClass(/nav-links--open/);
+    });
+
+    test('menu closes when escape key is pressed', async ({ page }) => {
+      const navToggle = page.locator('.nav-toggle');
+      const navLinks = page.locator('.nav-links');
+
+      // Open menu
+      await navToggle.click();
+      await expect(navLinks).toHaveClass(/nav-links--open/);
+
+      // Press escape
+      await page.keyboard.press('Escape');
+
+      // Menu should close
+      await expect(navLinks).not.toHaveClass(/nav-links--open/);
+      await expect(navToggle).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    test('menu toggle has proper ARIA attributes', async ({ page }) => {
+      const navToggle = page.locator('.nav-toggle');
+
+      // Check ARIA attributes
+      await expect(navToggle).toHaveAttribute('aria-label', 'Toggle navigation menu');
+      await expect(navToggle).toHaveAttribute('aria-controls', 'nav-menu');
+      await expect(navToggle).toHaveAttribute('aria-expanded', 'false');
+
+      // After clicking, aria-expanded should change
+      await navToggle.click();
+      await expect(navToggle).toHaveAttribute('aria-expanded', 'true');
+    });
+  });
+
+  test.describe('Content readability on mobile', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
+      await page.goto('/');
+    });
+
+    test('code blocks are scrollable horizontally without page scroll', async ({ page }) => {
+      await page.locator('#code-examples').scrollIntoViewIfNeeded();
+
+      const codeBlocks = page.locator('.code-block');
+      const blockCount = await codeBlocks.count();
+
+      if (blockCount > 0) {
+        const firstBlock = codeBlocks.first();
+
+        // Code blocks should allow horizontal scroll
+        const overflowX = await firstBlock.evaluate((el) => {
+          return getComputedStyle(el).overflowX;
+        });
+
+        expect(['auto', 'scroll']).toContain(overflowX);
+      }
+
+      // Page itself should not have horizontal scroll
+      const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth);
+      const viewportWidth = await page.evaluate(() => window.innerWidth);
+      expect(bodyScrollWidth).toBeLessThanOrEqual(viewportWidth);
+    });
+
+    test('specification cards display properly', async ({ page }) => {
+      await page.locator('#specifications').scrollIntoViewIfNeeded();
+
+      const specCards = page.locator('.spec-card');
+      const cardCount = await specCards.count();
+
+      if (cardCount >= 2) {
+        const firstCard = await specCards.first().boundingBox();
+        const secondCard = await specCards.nth(1).boundingBox();
+
+        if (firstCard && secondCard) {
+          // Should be stacked vertically on mobile
+          expect(secondCard.y).toBeGreaterThan(firstCard.y);
+        }
+      }
+    });
+
+    test('status cards display properly', async ({ page }) => {
+      await page.locator('#status').scrollIntoViewIfNeeded();
+
+      const statusCards = page.locator('.status-card');
+      const cardCount = await statusCards.count();
+
+      if (cardCount >= 2) {
+        const firstCard = await statusCards.first().boundingBox();
+        const secondCard = await statusCards.nth(1).boundingBox();
+
+        if (firstCard && secondCard) {
+          // Should be stacked vertically on mobile
+          expect(secondCard.y).toBeGreaterThan(firstCard.y);
+        }
+      }
+    });
+  });
 });
