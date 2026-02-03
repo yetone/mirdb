@@ -1,0 +1,80 @@
+---
+/**
+ * Hero section component.
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Features:
+ * - ASCII art logo or logo image
+ * - Tagline: "A Persistent Key-Value Store with Memcached Protocol"
+ * - Two CTA buttons: "Get Started" (anchor), "View on GitHub" (external)
+ * - Terminal-style aesthetic
+ * - Responsive design
+ */
+import { GITHUB_URL, TAGLINE } from '../utils/constants';
+---
+
+<section id="hero" class="min-h-[80vh] flex flex-col items-center justify-center px-4 py-16 bg-terminal-bg text-terminal-text">
+  <div class="max-w-4xl mx-auto text-center">
+    <!-- Logo -->
+    <div class="mb-8" data-testid="hero-logo">
+      <img
+        src="/mirdb/logo.gif"
+        alt="MirDB Logo"
+        class="mx-auto max-w-full h-auto"
+        width="400"
+        height="200"
+      />
+    </div>
+
+    <!-- Project Name -->
+    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+      MirDB
+    </h1>
+
+    <!-- Tagline -->
+    <p class="text-xl md:text-2xl text-terminal-green font-mono mb-8" data-testid="hero-tagline">
+      {TAGLINE}
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center" data-testid="hero-cta-buttons">
+      <a
+        href="#installation"
+        class="inline-flex items-center justify-center px-8 py-3 text-lg font-semibold text-terminal-bg bg-terminal-green rounded-lg hover:bg-green-400 transition-colors focus:outline-none focus:ring-2 focus:ring-terminal-green focus:ring-offset-2 focus:ring-offset-terminal-bg"
+        data-testid="get-started-button"
+      >
+        Get Started
+      </a>
+      <a
+        href={GITHUB_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center px-8 py-3 text-lg font-semibold text-white border-2 border-white rounded-lg hover:bg-white hover:text-terminal-bg transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-terminal-bg"
+        data-testid="github-button"
+      >
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+        </svg>
+        View on GitHub
+      </a>
+    </div>
+
+    <!-- Terminal-style decoration -->
+    <div class="mt-12 terminal max-w-2xl mx-auto text-left">
+      <div class="terminal-header">
+        <span class="terminal-dot terminal-dot-red"></span>
+        <span class="terminal-dot terminal-dot-yellow"></span>
+        <span class="terminal-dot terminal-dot-green"></span>
+        <span class="ml-2 text-sm text-gray-400">Terminal</span>
+      </div>
+      <div class="terminal-body text-sm">
+        <p><span class="text-terminal-green">$</span> telnet localhost 9000</p>
+        <p class="text-gray-400">Trying 127.0.0.1...</p>
+        <p class="text-gray-400">Connected to localhost.</p>
+        <p><span class="text-terminal-green">set</span> mykey 0 0 5</p>
+        <p>hello</p>
+        <p class="text-terminal-green">STORED</p>
+      </div>
+    </div>
+  </div>
+</section>

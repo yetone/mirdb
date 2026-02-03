@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "icon": "protocol",
+    "title": "Memcached Protocol",
+    "description": "Drop-in replacement for Memcached. Use your existing client libraries and tools without any code changes."
+  },
+  {
+    "id": 2,
+    "icon": "storage",
+    "title": "Persistent Storage",
+    "description": "Data survives restarts with LSM-tree architecture. Your key-value pairs are safely stored on disk."
+  },
+  {
+    "id": 3,
+    "icon": "performance",
+    "title": "High Performance",
+    "description": "In-memory memtable with skip-list data structure enables blazing fast writes and reads."
+  },
+  {
+    "id": 4,
+    "icon": "compaction",
+    "title": "Compaction",
+    "description": "Automatic minor and major compaction keeps storage optimized and reclaims space from deleted keys."
+  },
+  {
+    "id": 5,
+    "icon": "wal",
+    "title": "Write-Ahead Log",
+    "description": "Durability guarantee with WAL ensures no data loss even during unexpected crashes or power failures."
+  },
+  {
+    "id": 6,
+    "icon": "rust",
+    "title": "Rust Powered",
+    "description": "Built with Rust for memory safety and high performance without garbage collection overhead."
+  }
+]

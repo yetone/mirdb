@@ -1,0 +1,225 @@
+---
+/**
+ * Header navigation component.
+ * Owner: Scenario 16 - Navigation and Anchor Links
+ *
+ * Features:
+ * - Sticky header
+ * - Anchor links to sections (Features, Examples, Architecture, Installation)
+ * - Smooth scrolling (respects prefers-reduced-motion)
+ * - Mobile hamburger menu
+ * - GitHub link
+ * - Dark mode toggle integration
+ */
+import { GITHUB_URL } from '../utils/constants';
+
+const navLinks = [
+  { href: '#features', label: 'Features' },
+  { href: '#examples', label: 'Examples' },
+  { href: '#architecture', label: 'Architecture' },
+  { href: '#installation', label: 'Installation' },
+];
+---
+
+<header
+  class="sticky top-0 z-40 w-full bg-[var(--color-bg)]/95 backdrop-blur border-b border-[var(--color-border)]"
+  data-testid="navigation-header"
+>
+  <nav
+    class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between"
+    aria-label="Main navigation"
+  >
+    <!-- Logo/Home Link -->
+    <a
+      href="#hero"
+      class="text-xl font-bold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors"
+      data-testid="nav-logo"
+      aria-label="Go to top of page"
+    >
+      MirDB
+    </a>
+
+    <!-- Desktop Navigation -->
+    <div class="hidden md:flex items-center gap-6" data-testid="desktop-nav">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="nav-link text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors font-medium"
+          data-testid={`nav-link-${link.label.toLowerCase()}`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href={GITHUB_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+        data-testid="nav-github-link"
+        aria-label="View on GitHub"
+      >
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button
+      class="md:hidden p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav-menu"
+      data-testid="mobile-menu-button"
+      id="mobile-menu-button"
+    >
+      <svg class="w-6 h-6 menu-icon-open" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg class="w-6 h-6 menu-icon-close hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile Navigation Menu -->
+  <div
+    id="mobile-nav-menu"
+    class="hidden md:hidden border-t border-[var(--color-border)] bg-[var(--color-bg)]"
+    data-testid="mobile-nav-menu"
+  >
+    <div class="px-4 py-4 space-y-3">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="mobile-nav-link block py-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors font-medium"
+          data-testid={`mobile-nav-link-${link.label.toLowerCase()}`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href={GITHUB_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center gap-2 py-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors font-medium"
+        data-testid="mobile-nav-github-link"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  function initNavigation() {
+    const menuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-nav-menu');
+    const menuIconOpen = menuButton?.querySelector('.menu-icon-open');
+    const menuIconClose = menuButton?.querySelector('.menu-icon-close');
+
+    if (!menuButton || !mobileMenu || !menuIconOpen || !menuIconClose) return;
+
+    // Store references after null check (TypeScript knows these are valid now)
+    const btn = menuButton;
+    const menu = mobileMenu;
+    const iconOpen = menuIconOpen;
+    const iconClose = menuIconClose;
+
+    // Toggle mobile menu
+    function toggleMenu() {
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', (!isExpanded).toString());
+      menu.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
+    }
+
+    // Close menu when clicking a link
+    function closeMenu() {
+      btn.setAttribute('aria-expanded', 'false');
+      menu.classList.add('hidden');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+    }
+
+    btn.addEventListener('click', toggleMenu);
+
+    // Close menu when clicking mobile nav links
+    const mobileNavLinks = menu.querySelectorAll('a[href^="#"]');
+    mobileNavLinks.forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Handle navigation link clicks for URL hash update
+    const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          // Let browser handle the scroll (smooth scrolling via CSS)
+          // Update URL hash after a small delay to allow scroll to start
+          setTimeout(() => {
+            history.pushState(null, '', href);
+          }, 100);
+        }
+      });
+    });
+
+    // Handle direct URL hash on page load
+    function scrollToHashOnLoad() {
+      const hash = window.location.hash;
+      if (hash) {
+        const target = document.querySelector(hash);
+        if (target) {
+          // Use setTimeout to ensure DOM is fully ready
+          setTimeout(() => {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }
+      }
+    }
+
+    // Run on initial load
+    scrollToHashOnLoad();
+
+    // Close mobile menu on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+        btn.focus();
+      }
+    });
+
+    // Close mobile menu when window is resized to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        closeMenu();
+      }
+    });
+  }
+
+  // Initialize on page load
+  initNavigation();
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initNavigation);
+</script>
+
+<style>
+  /* Ensure sticky positioning accounts for viewport height */
+  header {
+    position: sticky;
+    top: 0;
+  }
+
+  /* Active link styling */
+  .nav-link:focus-visible,
+  .mobile-nav-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+</style>

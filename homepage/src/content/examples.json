@@ -1,0 +1,48 @@
+{
+  "basic": [
+    {
+      "title": "Storing and Retrieving Data",
+      "description": "Basic SET and GET operations using the Memcached protocol",
+      "code": "$ telnet localhost 12333\nTrying 127.0.0.1...\nConnected to localhost.\n\nset mykey 0 0 5\nhello\nSTORED\n\nget mykey\nVALUE mykey 0 5\nhello\nEND"
+    },
+    {
+      "title": "Delete Operation",
+      "description": "Remove a key from the store",
+      "code": "delete mykey\nDELETED\n\nget mykey\nEND"
+    }
+  ],
+  "advanced": [
+    {
+      "title": "Multiple Keys",
+      "description": "Store and retrieve multiple key-value pairs",
+      "code": "set user:1 0 0 4\njohn\nSTORED\n\nset user:2 0 0 4\njane\nSTORED\n\nget user:1 user:2\nVALUE user:1 0 4\njohn\nVALUE user:2 0 4\njane\nEND"
+    },
+    {
+      "title": "Conditional Operations",
+      "description": "Use ADD and REPLACE for conditional storage",
+      "code": "add newkey 0 0 5\nvalue\nSTORED\n\nadd newkey 0 0 6\nvalue2\nNOT_STORED\n\nreplace newkey 0 0 8\nreplaced\nSTORED"
+    },
+    {
+      "title": "Database Info",
+      "description": "Check database status and level information",
+      "code": "info\n=== MirDB Status ===\nLevel 0: 2 SSTables\nLevel 1: 1 SSTable\nMemtable: 1024 bytes\nTotal Keys: 15\nEND"
+    }
+  ],
+  "benchmark": [
+    {
+      "title": "Bulk Write Performance",
+      "description": "Example benchmark showing write throughput",
+      "code": "# Benchmark: 100,000 SET operations\n# Key size: 16 bytes, Value size: 100 bytes\n\nResults:\n  Operations: 100,000\n  Time: 2.34 seconds\n  Throughput: 42,735 ops/sec\n  Avg latency: 0.023 ms"
+    },
+    {
+      "title": "Read Performance",
+      "description": "Example benchmark showing read throughput",
+      "code": "# Benchmark: 100,000 GET operations\n# Key size: 16 bytes, Value size: 100 bytes\n\nResults:\n  Operations: 100,000\n  Time: 1.87 seconds\n  Throughput: 53,476 ops/sec\n  Avg latency: 0.019 ms"
+    },
+    {
+      "title": "Manual Compaction",
+      "description": "Trigger compaction to optimize storage",
+      "code": "major_compaction\nOK\n\ninfo\n=== MirDB Status ===\nLevel 0: 0 SSTables\nLevel 1: 1 SSTable (compacted)\nMemtable: 0 bytes\nTotal Keys: 15\nEND"
+    }
+  ]
+}

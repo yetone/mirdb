@@ -1,0 +1,94 @@
+---
+/**
+ * Base layout for all pages.
+ * Owner: First scenario builder
+ *
+ * Includes:
+ * - HTML document structure
+ * - Meta tags for SEO (title, description, Open Graph)
+ * - Tailwind CSS imports
+ * - Dark mode script initialization
+ * - Semantic HTML structure (header, main, footer)
+ */
+import '../styles/global.css';
+import { SITE_TITLE, SITE_DESCRIPTION, SOCIAL_IMAGE, CANONICAL_URL, GITHUB_URL } from '../utils/constants';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={CANONICAL_URL} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={SOCIAL_IMAGE} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={CANONICAL_URL} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={SOCIAL_IMAGE} />
+
+    <link rel="icon" type="image/x-icon" href="/mirdb/favicon.ico" />
+    <title>{title}</title>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "MirDB",
+      "description": description,
+      "url": CANONICAL_URL,
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Linux, macOS",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "yetone",
+        "url": "https://github.com/yetone"
+      },
+      "codeRepository": GITHUB_URL,
+      "programmingLanguage": "Rust",
+      "license": "https://opensource.org/licenses/MIT"
+    })} />
+
+    <!-- Dark mode initialization - prevent flash -->
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      })();
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <slot />
+  </body>
+</html>

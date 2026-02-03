@@ -1,0 +1,143 @@
+---
+/**
+ * Dark mode toggle button component.
+ * Owner: Scenario 11 - Dark Mode Toggle
+ *
+ * Features:
+ * - Toggle between light and dark mode
+ * - Persist preference in localStorage
+ * - Respect system preference (prefers-color-scheme)
+ * - Accessible button with proper labels
+ * - Instant color scheme change without flash
+ */
+---
+
+<button
+  id="dark-mode-toggle"
+  type="button"
+  aria-label="Toggle dark mode"
+  class="dark-mode-toggle p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+>
+  <!-- Sun icon (shown in dark mode) -->
+  <svg
+    id="sun-icon"
+    class="w-6 h-6 text-yellow-500 hidden dark:block"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+    ></path>
+  </svg>
+  <!-- Moon icon (shown in light mode) -->
+  <svg
+    id="moon-icon"
+    class="w-6 h-6 text-gray-700 dark:hidden"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+    ></path>
+  </svg>
+  <span class="sr-only">Toggle dark mode</span>
+</button>
+
+<script>
+  // Dark mode toggle functionality
+  const toggle = document.getElementById('dark-mode-toggle');
+
+  function getTheme(): 'light' | 'dark' {
+    // Check localStorage first
+    if (typeof localStorage !== 'undefined') {
+      const stored = localStorage.getItem('theme');
+      if (stored === 'dark' || stored === 'light') {
+        return stored;
+      }
+    }
+    // Fall back to system preference
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+
+  function setTheme(theme: 'light' | 'dark') {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+
+    // Update aria-label for accessibility
+    const toggle = document.getElementById('dark-mode-toggle');
+    if (toggle) {
+      toggle.setAttribute(
+        'aria-label',
+        theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+      );
+    }
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+  }
+
+  // Initialize theme (already done in BaseLayout, but update aria-label)
+  const currentTheme = getTheme();
+  if (toggle) {
+    toggle.setAttribute(
+      'aria-label',
+      currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+    );
+  }
+
+  // Add click handler
+  toggle?.addEventListener('click', toggleTheme);
+
+  // Listen for system preference changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    // Only update if no user preference is stored
+    if (!localStorage.getItem('theme')) {
+      setTheme(e.matches ? 'dark' : 'light');
+    }
+  });
+</script>
+
+<style>
+  .dark-mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

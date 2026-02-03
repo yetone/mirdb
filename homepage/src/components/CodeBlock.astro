@@ -1,0 +1,132 @@
+---
+/**
+ * Terminal-style code block component.
+ * Owner: Scenario 3 - Usage Examples Section
+ *
+ * Props:
+ * - code: string
+ * - language: string (for syntax highlighting)
+ * - title?: string (terminal title bar)
+ * - id: string (unique identifier for copy functionality)
+ *
+ * Features:
+ * - Syntax highlighting for Memcached commands
+ * - Terminal aesthetic with window controls
+ * - ARIA labels for accessibility
+ */
+import CopyButton from './CopyButton.astro';
+
+interface Props {
+  code: string;
+  language?: string;
+  title?: string;
+  id: string;
+}
+
+const { code, language = 'shell', title = 'Terminal', id } = Astro.props;
+
+// Apply syntax highlighting for Memcached protocol commands
+function highlightCode(code: string): string {
+  // Split into lines for processing
+  const lines = code.split('\n');
+
+  return lines.map(line => {
+    // Command prompt lines
+    if (line.startsWith('$')) {
+      return `<span class="token-command">${escapeHtml(line)}</span>`;
+    }
+
+    // Memcached commands (SET, GET, DELETE, etc.)
+    if (/^(set|get|gets|delete|add|replace|append|prepend|info|major_compaction)\s/i.test(line)) {
+      const parts = line.split(/\s+/);
+      const command = parts[0];
+      const rest = parts.slice(1).join(' ');
+      return `<span class="token-command">${escapeHtml(command)}</span> <span class="token-key">${escapeHtml(rest)}</span>`;
+    }
+
+    // Standalone commands
+    if (/^(info|major_compaction)$/i.test(line.trim())) {
+      return `<span class="token-command">${escapeHtml(line)}</span>`;
+    }
+
+    // Response codes (STORED, DELETED, END, etc.)
+    if (/^(STORED|NOT_STORED|DELETED|NOT_FOUND|END|OK|EXISTS|ERROR|CLIENT_ERROR|SERVER_ERROR)/i.test(line)) {
+      return `<span class="token-response">${escapeHtml(line)}</span>`;
+    }
+
+    // VALUE response line
+    if (/^VALUE\s/.test(line)) {
+      const parts = line.split(/\s+/);
+      return `<span class="token-response">${escapeHtml(parts[0])}</span> <span class="token-key">${escapeHtml(parts[1])}</span> <span class="token-number">${escapeHtml(parts.slice(2).join(' '))}</span>`;
+    }
+
+    // Comments (lines starting with #)
+    if (line.trim().startsWith('#')) {
+      return `<span class="token-comment">${escapeHtml(line)}</span>`;
+    }
+
+    // Connection messages
+    if (/^(Trying|Connected|Escape)/i.test(line)) {
+      return `<span class="token-comment">${escapeHtml(line)}</span>`;
+    }
+
+    // Numbers and benchmark results
+    if (/^\s*(Operations|Time|Throughput|Avg|Results|Level|Memtable|Total):/i.test(line)) {
+      const colonIndex = line.indexOf(':');
+      if (colonIndex > -1) {
+        const label = line.substring(0, colonIndex + 1);
+        const value = line.substring(colonIndex + 1);
+        return `<span class="token-key">${escapeHtml(label)}</span><span class="token-number">${escapeHtml(value)}</span>`;
+      }
+    }
+
+    // Status headers
+    if (/^===/.test(line)) {
+      return `<span class="token-response">${escapeHtml(line)}</span>`;
+    }
+
+    // Default - value data (typically user input values)
+    return `<span class="token-value">${escapeHtml(line)}</span>`;
+  }).join('\n');
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+const highlightedCode = highlightCode(code);
+---
+
+<div class="terminal-window relative" role="region" aria-label={`Code example: ${title}`}>
+  <div class="terminal-header">
+    <span class="terminal-dot terminal-dot-red" aria-hidden="true"></span>
+    <span class="terminal-dot terminal-dot-yellow" aria-hidden="true"></span>
+    <span class="terminal-dot terminal-dot-green" aria-hidden="true"></span>
+    <span class="terminal-title">{title}</span>
+  </div>
+  <div class="terminal-body relative">
+    <CopyButton targetId={id} />
+    <pre id={id} class="text-sm leading-relaxed" tabindex="0" aria-label={`Code block: ${title}`}><code set:html={highlightedCode}></code></pre>
+  </div>
+</div>
+
+<style>
+  .terminal-window {
+    margin: 1rem 0;
+  }
+
+  pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  pre:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+</style>

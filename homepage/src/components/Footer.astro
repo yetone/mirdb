@@ -1,0 +1,118 @@
+---
+/**
+ * Footer component.
+ * Owner: Scenario 6 - Footer and External Links
+ *
+ * Features:
+ * - GitHub repository link
+ * - License information
+ * - Author attribution (yetone)
+ * - CircleCI badge
+ * - Related resources links
+ * - All external links with rel="noopener noreferrer"
+ */
+import { GITHUB_URL, CIRCLECI_URL } from '../utils/constants';
+---
+
+<footer id="footer" class="py-12 px-4 bg-[var(--color-bg-secondary)] border-t border-[var(--color-border)]">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+      <!-- Project Info -->
+      <div data-testid="footer-project">
+        <h2 class="text-xl font-bold text-[var(--color-text)] mb-4">MirDB</h2>
+        <p class="text-[var(--color-text-secondary)] text-sm mb-4">
+          A Persistent Key-Value Store with Memcached Protocol
+        </p>
+        <!-- CircleCI Badge -->
+        <a
+          href={CIRCLECI_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block"
+          data-testid="circleci-badge-link"
+          aria-label="CircleCI build status"
+        >
+          <img
+            src="https://atompunk.yetone.fun/github/yetone/mirdb?v=2"
+            alt="CircleCI Build Status"
+            class="h-5"
+            data-testid="circleci-badge"
+          />
+        </a>
+      </div>
+
+      <!-- Resources -->
+      <div data-testid="footer-resources">
+        <h2 class="text-xl font-bold text-[var(--color-text)] mb-4">Resources</h2>
+        <ul class="space-y-2">
+          <li>
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors inline-flex items-center gap-2"
+              data-testid="github-link"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+              </svg>
+              GitHub Repository
+            </a>
+          </li>
+          <li>
+            <a
+              href={`${GITHUB_URL}/issues`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+              data-testid="issues-link"
+            >
+              Report Issues
+            </a>
+          </li>
+          <li>
+            <a
+              href={`${GITHUB_URL}#readme`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+              data-testid="docs-link"
+            >
+              Documentation
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- License & Attribution -->
+      <div data-testid="footer-legal">
+        <h2 class="text-xl font-bold text-[var(--color-text)] mb-4">Legal</h2>
+        <p class="text-[var(--color-text-secondary)] text-sm mb-2" data-testid="license-info">
+          Released under the <a
+            href={`${GITHUB_URL}/blob/master/LICENSE`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-primary)] underline hover:no-underline"
+            data-testid="license-link"
+          >MIT License</a>
+        </p>
+        <p class="text-[var(--color-text-secondary)] text-sm" data-testid="author-attribution">
+          Created by <a
+            href="https://github.com/yetone"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-primary)] underline hover:no-underline"
+            data-testid="author-link"
+          >yetone</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="mt-8 pt-8 border-t border-[var(--color-border)] text-center">
+      <p class="text-[var(--color-text-secondary)] text-sm" data-testid="copyright">
+        &copy; {new Date().getFullYear()} MirDB. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>
