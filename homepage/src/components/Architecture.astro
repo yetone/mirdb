@@ -45,7 +45,7 @@ const architectureDocUrl = `${GITHUB_URL}#architecture`;
 
         <div class="space-y-4">
           <div class="component-description bg-white dark:bg-gray-900 rounded-lg p-4 shadow">
-            <h4 class="font-semibold text-sky-600 dark:text-sky-400 mb-2">Memtable (Active)</h4>
+            <h4 class="font-semibold text-sky-700 dark:text-sky-400 mb-2">Memtable (Active)</h4>
             <p class="text-gray-600 dark:text-gray-400 text-sm">
               The active memtable is an in-memory data structure (skip list) that handles all incoming write operations.
               New key-value pairs are first written here for fast write performance. When it reaches the configured
@@ -54,7 +54,7 @@ const architectureDocUrl = `${GITHUB_URL}#architecture`;
           </div>
 
           <div class="component-description bg-white dark:bg-gray-900 rounded-lg p-4 shadow">
-            <h4 class="font-semibold text-sky-600 dark:text-sky-400 mb-2">Immutable Memtable</h4>
+            <h4 class="font-semibold text-sky-700 dark:text-sky-400 mb-2">Immutable Memtable</h4>
             <p class="text-gray-600 dark:text-gray-400 text-sm">
               Once a memtable is full, it transitions to an immutable state and joins a queue awaiting compaction.
               A new empty memtable is created to continue accepting writes. This allows writes to continue
@@ -63,7 +63,7 @@ const architectureDocUrl = `${GITHUB_URL}#architecture`;
           </div>
 
           <div class="component-description bg-white dark:bg-gray-900 rounded-lg p-4 shadow">
-            <h4 class="font-semibold text-sky-600 dark:text-sky-400 mb-2">SSTable (Sorted String Table)</h4>
+            <h4 class="font-semibold text-sky-700 dark:text-sky-400 mb-2">SSTable (Sorted String Table)</h4>
             <p class="text-gray-600 dark:text-gray-400 text-sm">
               SSTables are immutable, sorted files stored on disk. Data is organized into multiple levels:
               Level 0 contains recently flushed data (may overlap), while higher levels contain merged,
@@ -77,7 +77,7 @@ const architectureDocUrl = `${GITHUB_URL}#architecture`;
             href={architectureDocUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="architecture-doc-link inline-flex items-center text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 font-medium"
+            class="architecture-doc-link inline-flex items-center text-sky-700 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 font-medium"
           >
             View detailed architecture documentation
             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

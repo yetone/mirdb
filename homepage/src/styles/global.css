@@ -74,6 +74,11 @@ body {
   align-items: center;
 }
 
+/* Terminal title with accessible contrast (light text on dark bg) */
+.terminal-title {
+  color: #8b949e;
+}
+
 .terminal-dot {
   width: 12px;
   height: 12px;

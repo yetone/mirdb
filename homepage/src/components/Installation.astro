@@ -55,9 +55,9 @@ const quickStart = installation.quickStart;
       Get started with MirDB in seconds. Choose your preferred installation method.
     </p>
 
-    <!-- Platform Tab Navigation -->
-    <div class="install-tabs-container" role="tablist" aria-label="Installation methods">
-      <div class="flex justify-center gap-2 mb-8">
+    <!-- Platform Tab Navigation - tabs and panels as siblings for proper ARIA structure -->
+    <div class="install-tabs-container">
+      <div class="flex justify-center gap-2 mb-8" role="tablist" aria-label="Installation methods">
         {platforms.map((platform, index) => (
           <button
             role="tab"
@@ -79,7 +79,7 @@ const quickStart = installation.quickStart;
         ))}
       </div>
 
-      <!-- Tab Panels -->
+      <!-- Tab Panels - siblings of tablist, not children -->
       {platforms.map((platform, index) => (
         <div
           role="tabpanel"

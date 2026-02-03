@@ -28,9 +28,9 @@ const tabs = [
       MirDB uses the standard Memcached protocol. Connect with any Memcached client or telnet.
     </p>
 
-    <!-- Tab Navigation -->
-    <div class="tabs-container" role="tablist" aria-label="Example categories">
-      <div class="flex justify-center gap-2 mb-8">
+    <!-- Tab Navigation - tabs and panels as siblings for proper ARIA structure -->
+    <div class="tabs-container">
+      <div class="flex justify-center gap-2 mb-8" role="tablist" aria-label="Example categories">
         {tabs.map((tab, index) => (
           <button
             role="tab"
@@ -52,7 +52,7 @@ const tabs = [
         ))}
       </div>
 
-      <!-- Tab Panels -->
+      <!-- Tab Panels - siblings of tablist, not children -->
       {tabs.map((tab, tabIndex) => (
         <div
           role="tabpanel"
