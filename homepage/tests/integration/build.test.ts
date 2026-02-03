@@ -298,6 +298,189 @@ describe('Static Site Generation', () => {
     });
   });
 
+  /**
+   * External Link Validation tests.
+   * Owner: Scenario 18 - Error Handling - Broken Links
+   *
+   * Tests validate:
+   * - All external links have rel="noopener noreferrer" for security
+   * - All external links open in new tab (target="_blank")
+   * - No broken internal anchor links
+   * - GitHub repository links are properly formed
+   */
+  describe('External Link Validation (Scenario 18)', () => {
+    let htmlContent: string = '';
+    let externalLinks: string[] = [];
+    let allLinks: RegExpMatchArray | null;
+
+    beforeAll(() => {
+      if (!existsSync(distDir)) {
+        execSync('npm run build', { cwd: projectRoot });
+      }
+      htmlContent = readFileSync(join(distDir, 'index.html'), 'utf-8');
+      allLinks = htmlContent.match(/<a[^>]*>/gi);
+
+      // Extract external links (those with http/https that aren't internal)
+      if (allLinks) {
+        externalLinks = allLinks.filter(link =>
+          link.includes('href="http') || link.includes("href='http")
+        );
+      }
+    });
+
+    it('Test Case 1: GitHub repository link should be valid and properly formed', () => {
+      // Validate that the GitHub URL is correctly formatted
+      const githubPattern = /github\.com\/yetone\/mirdb/;
+      const hasValidGitHubLink = htmlContent.match(githubPattern);
+      expect(hasValidGitHubLink).toBeTruthy();
+
+      // Verify the full GitHub link structure
+      const fullGitHubLinks = htmlContent.match(/<a[^>]*github\.com\/yetone\/mirdb[^>]*>/gi);
+      expect(fullGitHubLinks).toBeTruthy();
+      expect(fullGitHubLinks!.length).toBeGreaterThan(0);
+    });
+
+    it('Test Case 2: CircleCI badge image should reference correct URL', () => {
+      // Check that CircleCI badge image exists
+      const circleCIBadge = htmlContent.match(/<img[^>]*atompunk\.yetone\.fun\/github\/yetone\/mirdb[^>]*>/gi);
+      expect(circleCIBadge).toBeTruthy();
+
+      // Check that the badge link points to CircleCI
+      const circleCILink = htmlContent.match(/<a[^>]*circleci\.com\/gh\/yetone\/mirdb[^>]*>/gi);
+      expect(circleCILink).toBeTruthy();
+    });
+
+    it('Test Case 3: All external links should have no 404 patterns (well-formed URLs)', () => {
+      // All external links should be properly formed URLs
+      if (externalLinks.length > 0) {
+        for (const link of externalLinks) {
+          // Extract href value
+          const hrefMatch = link.match(/href=["']([^"']+)["']/);
+          if (hrefMatch) {
+            const href = hrefMatch[1];
+            // Verify URLs are well-formed (not empty, not just protocol)
+            expect(href).not.toBe('');
+            expect(href).not.toBe('http://');
+            expect(href).not.toBe('https://');
+            // Should not contain obvious error patterns
+            expect(href).not.toContain('undefined');
+            expect(href).not.toContain('null');
+            expect(href).not.toContain('404');
+          }
+        }
+      }
+    });
+
+    it('Test Case 4: All external links should have rel="noopener noreferrer"', () => {
+      // Every external link must have security attributes
+      if (externalLinks.length > 0) {
+        for (const link of externalLinks) {
+          // Check for noopener
+          const hasNoopener = /rel=["'][^"']*noopener[^"']*["']/i.test(link);
+          expect(hasNoopener).toBe(true);
+
+          // Check for noreferrer
+          const hasNoreferrer = /rel=["'][^"']*noreferrer[^"']*["']/i.test(link);
+          expect(hasNoreferrer).toBe(true);
+        }
+      }
+    });
+
+    it('All external links should open in new tab (target="_blank")', () => {
+      if (externalLinks.length > 0) {
+        for (const link of externalLinks) {
+          const hasTargetBlank = /target=["']_blank["']/i.test(link);
+          expect(hasTargetBlank).toBe(true);
+        }
+      }
+    });
+
+    it('Internal anchor links should have corresponding section IDs', () => {
+      // Find all internal anchor links
+      const anchorLinks = htmlContent.match(/<a[^>]*href=["']#[^"']+["'][^>]*>/gi) || [];
+
+      for (const link of anchorLinks) {
+        const anchorMatch = link.match(/href=["']#([^"']+)["']/);
+        if (anchorMatch) {
+          const anchorId = anchorMatch[1];
+          // Check that the corresponding ID exists in the document
+          const idPattern = new RegExp(`id=["']${anchorId}["']`, 'i');
+          expect(htmlContent).toMatch(idPattern);
+        }
+      }
+    });
+
+    it('GitHub links should point to the correct repository', () => {
+      // All GitHub links should point to yetone/mirdb
+      const githubLinks = htmlContent.match(/<a[^>]*github\.com[^>]*>/gi) || [];
+
+      for (const link of githubLinks) {
+        const hrefMatch = link.match(/href=["']([^"']+)["']/);
+        if (hrefMatch) {
+          const href = hrefMatch[1];
+          // If it's a GitHub link to a repo, it should be yetone/mirdb
+          if (href.includes('github.com') && !href.includes('github.com/yetone')) {
+            // Only fail if it's a repo link (not user profile links for attribution)
+            if (!href.match(/github\.com\/[^\/]+$/)) {
+              // This is a repo link to the wrong repo
+              expect(href).toContain('github.com/yetone/mirdb');
+            }
+          }
+        }
+      }
+    });
+
+    it('License link should point to correct MIT license file', () => {
+      const licenseLink = htmlContent.match(/<a[^>]*LICENSE[^>]*>/gi);
+      expect(licenseLink).toBeTruthy();
+
+      // Verify it links to the correct repo
+      const licenseLinkContent = licenseLink![0];
+      expect(licenseLinkContent).toContain('github.com/yetone/mirdb');
+    });
+
+    it('Author attribution link should be valid', () => {
+      // Check for yetone author link
+      const authorLink = htmlContent.match(/<a[^>]*github\.com\/yetone[^\/][^>]*>/gi);
+      expect(authorLink).toBeTruthy();
+    });
+
+    it('No broken link indicators in HTML (empty hrefs, javascript:void)', () => {
+      // Check for common broken link patterns
+      const brokenPatterns = [
+        'href=""',
+        "href=''",
+        'href="#"',  // Generic placeholder anchors (unless intentional)
+        'href="javascript:void',
+        'href="javascript:;',
+      ];
+
+      for (const pattern of brokenPatterns) {
+        if (pattern === 'href="#"') {
+          // Allow href="#" only if it's for a skip link or intentional
+          continue;
+        }
+        expect(htmlContent).not.toContain(pattern);
+      }
+    });
+
+    it('External images should have valid src attributes', () => {
+      // Find all external image sources
+      const externalImages = htmlContent.match(/<img[^>]*src=["']https?:\/\/[^"']+["'][^>]*>/gi) || [];
+
+      for (const img of externalImages) {
+        const srcMatch = img.match(/src=["']([^"']+)["']/);
+        if (srcMatch) {
+          const src = srcMatch[1];
+          // Verify image URLs are well-formed
+          expect(src).not.toBe('');
+          expect(src).not.toContain('undefined');
+          expect(src).not.toContain('null');
+        }
+      }
+    });
+  });
+
   describe('Build Output Quality', () => {
     let totalSize: number = 0;
 
