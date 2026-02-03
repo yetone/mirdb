@@ -13,6 +13,7 @@
  * - Footer
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
 import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
 import UsageExamples from '../components/UsageExamples.astro';
@@ -23,6 +24,9 @@ import DarkModeToggle from '../components/DarkModeToggle.astro';
 ---
 
 <BaseLayout>
+  <!-- Navigation -->
+  <Navigation />
+
   <!-- Dark Mode Toggle - fixed position in top right -->
   <div class="fixed top-4 right-4 z-50" data-testid="dark-mode-toggle-container">
     <DarkModeToggle />
