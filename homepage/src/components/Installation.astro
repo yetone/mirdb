@@ -1,0 +1,239 @@
+---
+/**
+ * Installation and quick start section.
+ * Owner: Scenario 5 - Installation Section
+ *
+ * Features:
+ * - Tabbed interface for platforms (Cargo, Docker, Source)
+ * - Code blocks with copy functionality
+ * - Quick start commands
+ * - Link to full documentation
+ *
+ * Imports: CodeBlock, installation.json
+ */
+import CodeBlock from './CodeBlock.astro';
+import installation from '../content/installation.json';
+
+interface InstallStep {
+  command: string;
+  description: string;
+}
+
+interface SinglePlatform {
+  id: string;
+  label: string;
+  command: string;
+  description: string;
+  type: 'single';
+}
+
+interface MultiPlatform {
+  id: string;
+  label: string;
+  steps: InstallStep[];
+  description: string;
+  type: 'multi';
+}
+
+type Platform = SinglePlatform | MultiPlatform;
+
+const platforms: Platform[] = [
+  { ...installation.cargo, type: 'single' as const },
+  { ...installation.docker, type: 'single' as const },
+  { ...installation.source, type: 'multi' as const }
+];
+
+const quickStart = installation.quickStart;
+---
+
+<section id="installation" class="py-16" aria-labelledby="installation-heading">
+  <div class="max-w-4xl mx-auto px-4">
+    <h2 id="installation-heading" class="text-3xl font-bold text-center mb-4">
+      Installation
+    </h2>
+    <p class="text-center text-[var(--color-text-secondary)] mb-8">
+      Get started with MirDB in seconds. Choose your preferred installation method.
+    </p>
+
+    <!-- Platform Tab Navigation -->
+    <div class="install-tabs-container" role="tablist" aria-label="Installation methods">
+      <div class="flex justify-center gap-2 mb-8">
+        {platforms.map((platform, index) => (
+          <button
+            role="tab"
+            id={`install-tab-${platform.id}`}
+            aria-selected={index === 0 ? 'true' : 'false'}
+            aria-controls={`install-panel-${platform.id}`}
+            tabindex={index === 0 ? 0 : -1}
+            class:list={[
+              'install-tab-button px-6 py-2 rounded-lg font-medium transition-all duration-200',
+              'focus:outline-none focus:ring-2 focus:ring-terminal-blue focus:ring-offset-2 focus:ring-offset-[var(--color-bg)]',
+              index === 0
+                ? 'bg-terminal-blue text-white'
+                : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-terminal-blue/20'
+            ]}
+            data-install-tab={platform.id}
+          >
+            {platform.label}
+          </button>
+        ))}
+      </div>
+
+      <!-- Tab Panels -->
+      {platforms.map((platform, index) => (
+        <div
+          role="tabpanel"
+          id={`install-panel-${platform.id}`}
+          aria-labelledby={`install-tab-${platform.id}`}
+          class:list={[
+            'install-tab-panel',
+            index !== 0 && 'hidden'
+          ]}
+          data-install-panel={platform.id}
+          tabindex="0"
+        >
+          <p class="text-[var(--color-text-secondary)] mb-4">{platform.description}</p>
+
+          {platform.type === 'single' && (
+            <CodeBlock
+              code={(platform as SinglePlatform).command}
+              title={`Install via ${platform.label}`}
+              id={`install-code-${platform.id}`}
+            />
+          )}
+          {platform.type === 'multi' && (
+            <div class="space-y-4">
+              {(platform as MultiPlatform).steps.map((step: InstallStep, stepIndex: number) => (
+                <div class="install-step">
+                  <p class="text-sm text-[var(--color-text-secondary)] mb-2">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-terminal-blue text-white text-xs font-bold mr-2">
+                      {stepIndex + 1}
+                    </span>
+                    {step.description}
+                  </p>
+                  <CodeBlock
+                    code={step.command}
+                    title={`Step ${stepIndex + 1}`}
+                    id={`install-code-source-${stepIndex}`}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <!-- Quick Start Guide -->
+    <div class="mt-12 pt-8 border-t border-[var(--color-border)]">
+      <h3 class="text-xl font-semibold mb-4 text-center">{quickStart.title}</h3>
+      <p class="text-center text-[var(--color-text-secondary)] mb-4">{quickStart.description}</p>
+      <CodeBlock
+        code={quickStart.command}
+        title="Connect to MirDB"
+        id="install-code-quickstart"
+      />
+    </div>
+
+    <!-- Documentation Link -->
+    <div class="mt-8 text-center">
+      <a
+        href="https://github.com/yetone/mirdb#readme"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 text-[var(--color-primary)] hover:underline"
+      >
+        <span>View Full Documentation</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initInstallTabs() {
+    const tabButtons = document.querySelectorAll('.install-tab-button');
+    const tabPanels = document.querySelectorAll('.install-tab-panel');
+
+    function switchTab(targetTabId: string) {
+      // Update buttons
+      tabButtons.forEach((btn) => {
+        const isActive = btn.getAttribute('data-install-tab') === targetTabId;
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        btn.setAttribute('tabindex', isActive ? '0' : '-1');
+
+        // Update styling
+        if (isActive) {
+          btn.classList.remove('bg-[var(--color-bg-secondary)]', 'text-[var(--color-text-secondary)]', 'hover:bg-terminal-blue/20');
+          btn.classList.add('bg-terminal-blue', 'text-white');
+        } else {
+          btn.classList.remove('bg-terminal-blue', 'text-white');
+          btn.classList.add('bg-[var(--color-bg-secondary)]', 'text-[var(--color-text-secondary)]', 'hover:bg-terminal-blue/20');
+        }
+      });
+
+      // Update panels
+      tabPanels.forEach((panel) => {
+        const isActive = panel.getAttribute('data-install-panel') === targetTabId;
+        panel.classList.toggle('hidden', !isActive);
+      });
+    }
+
+    // Click handlers
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-install-tab');
+        if (tabId) switchTab(tabId);
+      });
+    });
+
+    // Keyboard navigation
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('keydown', (e: Event) => {
+        const keyboardEvent = e as KeyboardEvent;
+        const tabs = Array.from(tabButtons);
+        const currentIndex = tabs.indexOf(btn);
+
+        let newIndex = currentIndex;
+
+        switch (keyboardEvent.key) {
+          case 'ArrowLeft':
+            newIndex = currentIndex === 0 ? tabs.length - 1 : currentIndex - 1;
+            keyboardEvent.preventDefault();
+            break;
+          case 'ArrowRight':
+            newIndex = currentIndex === tabs.length - 1 ? 0 : currentIndex + 1;
+            keyboardEvent.preventDefault();
+            break;
+          case 'Home':
+            newIndex = 0;
+            keyboardEvent.preventDefault();
+            break;
+          case 'End':
+            newIndex = tabs.length - 1;
+            keyboardEvent.preventDefault();
+            break;
+          default:
+            return;
+        }
+
+        const newTab = tabs[newIndex] as HTMLElement;
+        const tabId = newTab.getAttribute('data-install-tab');
+        if (tabId) {
+          switchTab(tabId);
+          newTab.focus();
+        }
+      });
+    });
+  }
+
+  // Initialize on page load
+  initInstallTabs();
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initInstallTabs);
+</script>

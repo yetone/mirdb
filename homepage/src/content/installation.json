@@ -1,0 +1,42 @@
+{
+  "cargo": {
+    "id": "cargo",
+    "label": "Cargo",
+    "command": "cargo install mirdb",
+    "description": "Install MirDB directly from crates.io using Cargo, Rust's package manager."
+  },
+  "docker": {
+    "id": "docker",
+    "label": "Docker",
+    "command": "docker run -p 9000:9000 yetone/mirdb",
+    "description": "Run MirDB instantly using Docker with port 9000 exposed for connections."
+  },
+  "source": {
+    "id": "source",
+    "label": "From Source",
+    "steps": [
+      {
+        "command": "git clone https://github.com/yetone/mirdb.git",
+        "description": "Clone the repository"
+      },
+      {
+        "command": "cd mirdb",
+        "description": "Navigate to project directory"
+      },
+      {
+        "command": "cargo build --release",
+        "description": "Build the release binary"
+      },
+      {
+        "command": "./target/release/mirdb-server",
+        "description": "Run the server"
+      }
+    ],
+    "description": "Build MirDB from source for maximum customization and the latest features."
+  },
+  "quickStart": {
+    "title": "Quick Start",
+    "description": "After installation, connect to MirDB using any Memcached client or telnet:",
+    "command": "telnet localhost 9000"
+  }
+}
