@@ -81,6 +81,105 @@ describe('Accessibility Compliance', () => {
     });
   });
 
+  /**
+   * Test Case 1 (Scenario 17): Reduced Motion CSS Support
+   * Verifies prefers-reduced-motion media query rules
+   */
+  describe('Test Case 1: Reduced Motion CSS Rules (Scenario 17)', () => {
+    it('should disable smooth scrolling when reduced motion is preferred', () => {
+      // Verify scroll-behavior is set to auto in reduced motion media query
+      expect(globalCss).toContain('@media (prefers-reduced-motion: reduce)');
+      expect(globalCss).toContain('scroll-behavior: auto');
+    });
+
+    it('should disable all CSS animations when reduced motion is preferred', () => {
+      // Verify animation-duration is set to near-zero
+      expect(globalCss).toContain('animation-duration: 0.01ms');
+      // Verify animation-iteration-count is limited to 1
+      expect(globalCss).toContain('animation-iteration-count: 1');
+    });
+
+    it('should disable all CSS transitions when reduced motion is preferred', () => {
+      // Verify transition-duration is set to near-zero
+      expect(globalCss).toContain('transition-duration: 0.01ms');
+    });
+
+    it('should apply reduced motion rules to all elements', () => {
+      // Verify the universal selector is used for reduced motion
+      // Extract the content between the media query braces
+      const mediaStart = globalCss.indexOf('@media (prefers-reduced-motion: reduce)');
+      expect(mediaStart).toBeGreaterThan(-1);
+
+      // Find the matching closing brace by counting braces
+      const braceStart = globalCss.indexOf('{', mediaStart);
+      let braceCount = 1;
+      let braceEnd = braceStart + 1;
+      while (braceCount > 0 && braceEnd < globalCss.length) {
+        if (globalCss[braceEnd] === '{') braceCount++;
+        if (globalCss[braceEnd] === '}') braceCount--;
+        braceEnd++;
+      }
+      const reducedMotionContent = globalCss.substring(braceStart, braceEnd);
+
+      // Check that * selector is used to apply to all elements
+      expect(reducedMotionContent).toContain('*,');
+      expect(reducedMotionContent).toContain('*::before');
+      expect(reducedMotionContent).toContain('*::after');
+    });
+
+    it('should use !important to override inline styles for reduced motion', () => {
+      // Verify !important is used to ensure reduced motion takes precedence
+      expect(globalCss).toContain('animation-duration: 0.01ms !important');
+      expect(globalCss).toContain('transition-duration: 0.01ms !important');
+    });
+  });
+
+  /**
+   * Test Case 3 (Scenario 17): Interactive Elements With Reduced Motion
+   * Verifies components with transitions respect reduced motion
+   */
+  describe('Test Case 3: Interactive Elements Respect Reduced Motion (Scenario 17)', () => {
+    it('should have transition classes in components that will be disabled by reduced motion CSS', () => {
+      // Hero buttons use transition-colors
+      expect(heroComponent).toContain('transition-colors');
+
+      // Feature cards use transition-all
+      const featureCardComponent = readFileSync(join(componentsDir, 'FeatureCard.astro'), 'utf-8');
+      expect(featureCardComponent).toContain('transition-');
+    });
+
+    it('should have CSS rules that apply to all transition and animation properties', () => {
+      // The reduced motion CSS should cover all animation and transition properties
+      // Extract the content between the media query braces
+      const mediaStart = globalCss.indexOf('@media (prefers-reduced-motion: reduce)');
+      expect(mediaStart).toBeGreaterThan(-1);
+
+      // Find the matching closing brace by counting braces
+      const braceStart = globalCss.indexOf('{', mediaStart);
+      let braceCount = 1;
+      let braceEnd = braceStart + 1;
+      while (braceCount > 0 && braceEnd < globalCss.length) {
+        if (globalCss[braceEnd] === '{') braceCount++;
+        if (globalCss[braceEnd] === '}') braceCount--;
+        braceEnd++;
+      }
+      const reducedMotionContent = globalCss.substring(braceStart, braceEnd);
+
+      // These properties ensure all animations and transitions are effectively disabled
+      expect(reducedMotionContent).toContain('animation-duration');
+      expect(reducedMotionContent).toContain('transition-duration');
+    });
+
+    it('should have hover states that use instant changes with reduced motion', () => {
+      // With reduced motion, transition-duration: 0.01ms makes hover states instant
+      // Verify hover states exist in components (they will be instant due to CSS)
+      expect(heroComponent).toContain('hover:');
+
+      const featureCardComponent = readFileSync(join(componentsDir, 'FeatureCard.astro'), 'utf-8');
+      expect(featureCardComponent).toContain('hover:');
+    });
+  });
+
   describe('Test Case 3: Heading Hierarchy', () => {
     it('should have a single H1 heading (in Hero component)', () => {
       // Count H1 occurrences across all components
