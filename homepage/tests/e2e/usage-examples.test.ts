@@ -12,7 +12,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Usage Examples Section', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/mirdb/');
     // Wait for the examples section to be visible
     await page.waitForSelector('#examples');
   });
@@ -94,11 +94,14 @@ test.describe('Usage Examples Section', () => {
     });
 
     test('should have terminal header with window controls', async ({ page }) => {
-      const terminalHeader = page.locator('.terminal-header').first();
+      // Scope to the examples section to avoid conflicts with other sections
+      const examplesSection = page.locator('#examples');
+      const terminalHeader = examplesSection.locator('.terminal-header').first();
       await expect(terminalHeader).toBeVisible();
 
-      const dots = page.locator('.terminal-dot');
-      await expect(dots).toHaveCount(await page.locator('.terminal-window').count() * 3);
+      const terminalWindows = examplesSection.locator('.terminal-window');
+      const dots = examplesSection.locator('.terminal-dot');
+      await expect(dots).toHaveCount(await terminalWindows.count() * 3);
     });
 
     test('should display SET command examples', async ({ page }) => {
@@ -231,13 +234,15 @@ test.describe('Usage Examples Section', () => {
 
   test.describe('Accessibility', () => {
     test('should have proper ARIA roles', async ({ page }) => {
-      const tablist = page.locator('[role="tablist"]');
+      // Scope to the examples section to avoid conflicts with Installation section
+      const examplesSection = page.locator('#examples');
+      const tablist = examplesSection.locator('[role="tablist"]');
       await expect(tablist).toBeVisible();
 
-      const tabs = page.locator('[role="tab"]');
+      const tabs = examplesSection.locator('[role="tab"]');
       await expect(tabs).toHaveCount(3);
 
-      const tabpanels = page.locator('[role="tabpanel"]');
+      const tabpanels = examplesSection.locator('[role="tabpanel"]');
       await expect(tabpanels).toHaveCount(3);
     });
 

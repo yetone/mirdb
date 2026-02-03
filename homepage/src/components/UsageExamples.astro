@@ -121,7 +121,8 @@ const tabs = [
 
     // Keyboard navigation
     tabButtons.forEach((btn) => {
-      btn.addEventListener('keydown', (e) => {
+      btn.addEventListener('keydown', (event) => {
+        const e = event as KeyboardEvent;
         const tabs = Array.from(tabButtons);
         const currentIndex = tabs.indexOf(btn);
 

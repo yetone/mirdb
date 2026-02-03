@@ -9,8 +9,8 @@
  * - Keyboard navigation works
  */
 
-import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
-import { Window } from 'happy-dom';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { Window, Document as HappyDomDocument } from 'happy-dom';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -23,12 +23,12 @@ const examplesData = JSON.parse(readFileSync(examplesPath, 'utf-8'));
 
 describe('Tab Switching Integration', () => {
   let window: Window;
-  let document: Document;
+  let document: HappyDomDocument;
 
   beforeEach(() => {
     // Create a mock DOM with the tab structure
     window = new Window();
-    document = window.document;
+    document = window.document as unknown as HappyDomDocument;
     document.body.innerHTML = `
       <div role="tablist" aria-label="Example categories">
         <button role="tab" id="tab-basic" aria-selected="true" aria-controls="panel-basic" tabindex="0" class="tab-button" data-tab="basic">Basic</button>
@@ -107,7 +107,7 @@ describe('Tab Switching Integration', () => {
 
   describe('Switch Tab Logic', () => {
     // Simulate the switchTab function from the component
-    function switchTab(targetTabId: string, doc: Document) {
+    function switchTab(targetTabId: string, doc: HappyDomDocument) {
       const tabButtons = doc.querySelectorAll('.tab-button');
       const tabPanels = doc.querySelectorAll('.tab-panel');
 
