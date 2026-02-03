@@ -1,35 +1,31 @@
 {
   "name": "mirdb-homepage",
   "type": "module",
-  "version": "1.0.0",
-  "description": "MirDB Product Homepage - A static website built with Astro",
+  "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "vitest run",
-    "test:unit": "vitest run tests/unit",
-    "test:integration": "vitest run tests/integration",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
     "test:e2e": "playwright test",
-    "test:watch": "vitest",
-    "lint": "eslint .",
+    "lint": "eslint src --ext .ts,.astro",
     "format": "prettier --write ."
   },
   "dependencies": {
-    "astro": "^4.0.0"
+    "astro": "^4.16.18"
   },
   "devDependencies": {
-    "@astrojs/tailwind": "^5.0.0",
-    "@playwright/test": "^1.40.0",
-    "axe-playwright": "^1.2.0",
-    "cheerio": "^1.0.0-rc.12",
-    "happy-dom": "^12.10.3",
-    "jsdom": "^24.0.0",
-    "shiki": "^1.0.0",
-    "tailwindcss": "^3.4.0",
-    "typescript": "^5.0.0",
-    "vitest": "^1.0.0"
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/tailwind": "^5.1.4",
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^25.2.0",
+    "axe-playwright": "^2.0.3",
+    "happy-dom": "^15.11.7",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   }
 }

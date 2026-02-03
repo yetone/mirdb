@@ -13,7 +13,7 @@
 import '../styles/global.css';
 import { SITE_TITLE, SITE_DESCRIPTION, SOCIAL_IMAGE } from '../utils/constants';
 
-export interface Props {
+interface Props {
   title?: string;
   description?: string;
 }
@@ -29,27 +29,38 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Open Graph / Social Media -->
-    <meta property="og:type" content="website" />
+    <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={SOCIAL_IMAGE} />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:type" content="website" />
 
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={SOCIAL_IMAGE} />
+
+    <link rel="icon" type="image/x-icon" href="/mirdb/favicon.ico" />
     <title>{title}</title>
 
-    <!-- Dark mode initialization script to prevent flash -->
+    <!-- Dark mode initialization - prevent flash -->
     <script is:inline>
-      (function() {
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
         }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
       })();
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
     </script>
   </head>
-  <body class="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
+  <body class="min-h-screen flex flex-col">
     <slot />
   </body>
 </html>
