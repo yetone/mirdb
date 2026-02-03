@@ -11,7 +11,7 @@
  * - Semantic HTML structure (header, main, footer)
  */
 import '../styles/global.css';
-import { SITE_TITLE, SITE_DESCRIPTION, SOCIAL_IMAGE } from '../utils/constants';
+import { SITE_TITLE, SITE_DESCRIPTION, SOCIAL_IMAGE, CANONICAL_URL, GITHUB_URL } from '../utils/constants';
 
 interface Props {
   title?: string;
@@ -29,11 +29,15 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href={CANONICAL_URL} />
+
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={SOCIAL_IMAGE} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={CANONICAL_URL} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -43,6 +47,30 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 
     <link rel="icon" type="image/x-icon" href="/mirdb/favicon.ico" />
     <title>{title}</title>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "MirDB",
+      "description": description,
+      "url": CANONICAL_URL,
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Linux, macOS",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "yetone",
+        "url": "https://github.com/yetone"
+      },
+      "codeRepository": GITHUB_URL,
+      "programmingLanguage": "Rust",
+      "license": "https://opensource.org/licenses/MIT"
+    })} />
 
     <!-- Dark mode initialization - prevent flash -->
     <script is:inline>
