@@ -1,0 +1,32 @@
+---
+/**
+ * Main homepage assembling all section components.
+ * Owner: First scenario builder
+ *
+ * Imports and arranges:
+ * - Navigation
+ * - Hero
+ * - Features
+ * - UsageExamples
+ * - Architecture
+ * - Installation
+ * - Footer
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Features from '../components/Features.astro';
+---
+
+<BaseLayout>
+  <main>
+    <!-- Hero Section placeholder -->
+    <section id="hero" class="py-20 text-center">
+      <h1 class="text-4xl font-bold mb-4">MirDB</h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400">A Persistent Key-Value Store with Memcached Protocol</p>
+    </section>
+
+    <!-- Features Section -->
+    <Features />
+
+    <!-- Other sections will be added by their respective scenarios -->
+  </main>
+</BaseLayout>
