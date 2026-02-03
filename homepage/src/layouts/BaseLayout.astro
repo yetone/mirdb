@@ -11,7 +11,7 @@
  * - Semantic HTML structure (header, main, footer)
  */
 import '../styles/global.css';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../utils/constants';
+import { SITE_TITLE, SITE_DESCRIPTION, SOCIAL_IMAGE } from '../utils/constants';
 
 export interface Props {
   title?: string;
@@ -27,19 +27,29 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <title>{title}</title>
+    <meta property="og:image" content={SOCIAL_IMAGE} />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <title>{title}</title>
+
+    <!-- Dark mode initialization script to prevent flash -->
     <script is:inline>
-      if (localStorage.getItem('theme') === 'dark' ||
-          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      }
+      (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
     </script>
   </head>
-  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <body class="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
     <slot />
   </body>
 </html>

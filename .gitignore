@@ -1,2 +1,10 @@
 /target
 **/*.rs.bk
+.something/
+node_modules/
+dist/
+.astro/
+*.log
+.DS_Store
+playwright-report/
+test-results/

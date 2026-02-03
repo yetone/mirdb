@@ -14,19 +14,38 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Features from '../components/Features.astro';
+import UsageExamples from '../components/UsageExamples.astro';
 ---
 
 <BaseLayout>
-  <main>
+  <main class="max-w-6xl mx-auto px-4 py-8">
     <!-- Hero Section placeholder -->
-    <section id="hero" class="py-20 text-center">
+    <section id="hero" class="py-16 text-center">
       <h1 class="text-4xl font-bold mb-4">MirDB</h1>
-      <p class="text-xl text-gray-600 dark:text-gray-400">A Persistent Key-Value Store with Memcached Protocol</p>
+      <p class="text-xl text-[var(--color-text-secondary)]">A Persistent Key-Value Store with Memcached Protocol</p>
     </section>
 
     <!-- Features Section -->
     <Features />
 
-    <!-- Other sections will be added by their respective scenarios -->
+    <!-- Usage Examples section (Scenario 3) -->
+    <UsageExamples />
+
+    <!-- Placeholder for Architecture section (Scenario 4) -->
+    <section id="architecture" class="py-16">
+      <h2 class="text-2xl font-bold mb-8 text-center">Architecture</h2>
+      <p class="text-center text-[var(--color-text-secondary)]">Architecture section coming soon...</p>
+    </section>
+
+    <!-- Placeholder for Installation section (Scenario 5) -->
+    <section id="installation" class="py-16">
+      <h2 class="text-2xl font-bold mb-8 text-center">Installation</h2>
+      <p class="text-center text-[var(--color-text-secondary)]">Installation section coming soon...</p>
+    </section>
   </main>
+
+  <!-- Placeholder for Footer (Scenario 6) -->
+  <footer class="py-8 border-t border-[var(--color-border)]">
+    <p class="text-center text-[var(--color-text-secondary)]">Footer coming soon...</p>
+  </footer>
 </BaseLayout>

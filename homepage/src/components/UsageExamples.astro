@@ -1,0 +1,166 @@
+---
+/**
+ * Usage examples section with terminal-style code blocks.
+ * Owner: Scenario 3 - Usage Examples Section
+ *
+ * Features:
+ * - Tabbed interface (Basic, Advanced, Benchmark)
+ * - Terminal-style code blocks
+ * - Syntax highlighting via custom highlighter
+ * - Copy-to-clipboard functionality
+ */
+import CodeBlock from './CodeBlock.astro';
+import examples from '../content/examples.json';
+
+const tabs = [
+  { id: 'basic', label: 'Basic', examples: examples.basic },
+  { id: 'advanced', label: 'Advanced', examples: examples.advanced },
+  { id: 'benchmark', label: 'Benchmark', examples: examples.benchmark }
+];
+---
+
+<section id="examples" class="py-16" aria-labelledby="examples-heading">
+  <div class="max-w-4xl mx-auto">
+    <h2 id="examples-heading" class="text-3xl font-bold text-center mb-4">
+      Usage Examples
+    </h2>
+    <p class="text-center text-[var(--color-text-secondary)] mb-8">
+      MirDB uses the standard Memcached protocol. Connect with any Memcached client or telnet.
+    </p>
+
+    <!-- Tab Navigation -->
+    <div class="tabs-container" role="tablist" aria-label="Example categories">
+      <div class="flex justify-center gap-2 mb-8">
+        {tabs.map((tab, index) => (
+          <button
+            role="tab"
+            id={`tab-${tab.id}`}
+            aria-selected={index === 0 ? 'true' : 'false'}
+            aria-controls={`panel-${tab.id}`}
+            tabindex={index === 0 ? 0 : -1}
+            class:list={[
+              'tab-button px-6 py-2 rounded-lg font-medium transition-all duration-200',
+              'focus:outline-none focus:ring-2 focus:ring-terminal-blue focus:ring-offset-2 focus:ring-offset-[var(--color-bg)]',
+              index === 0
+                ? 'bg-terminal-blue text-white'
+                : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-terminal-blue/20'
+            ]}
+            data-tab={tab.id}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <!-- Tab Panels -->
+      {tabs.map((tab, tabIndex) => (
+        <div
+          role="tabpanel"
+          id={`panel-${tab.id}`}
+          aria-labelledby={`tab-${tab.id}`}
+          class:list={[
+            'tab-panel space-y-8',
+            tabIndex !== 0 && 'hidden'
+          ]}
+          data-panel={tab.id}
+          tabindex="0"
+        >
+          {tab.examples.map((example, exampleIndex) => (
+            <div class="example-item">
+              <h3 class="text-xl font-semibold mb-2">{example.title}</h3>
+              <p class="text-[var(--color-text-secondary)] mb-4">{example.description}</p>
+              <CodeBlock
+                code={example.code}
+                title={`${tab.label} - ${example.title}`}
+                id={`code-${tab.id}-${exampleIndex}`}
+              />
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  function initTabs() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    function switchTab(targetTabId: string) {
+      // Update buttons
+      tabButtons.forEach((btn) => {
+        const isActive = btn.getAttribute('data-tab') === targetTabId;
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        btn.setAttribute('tabindex', isActive ? '0' : '-1');
+
+        // Update styling
+        if (isActive) {
+          btn.classList.remove('bg-[var(--color-bg-secondary)]', 'text-[var(--color-text-secondary)]', 'hover:bg-terminal-blue/20');
+          btn.classList.add('bg-terminal-blue', 'text-white');
+        } else {
+          btn.classList.remove('bg-terminal-blue', 'text-white');
+          btn.classList.add('bg-[var(--color-bg-secondary)]', 'text-[var(--color-text-secondary)]', 'hover:bg-terminal-blue/20');
+        }
+      });
+
+      // Update panels
+      tabPanels.forEach((panel) => {
+        const isActive = panel.getAttribute('data-panel') === targetTabId;
+        panel.classList.toggle('hidden', !isActive);
+      });
+    }
+
+    // Click handlers
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-tab');
+        if (tabId) switchTab(tabId);
+      });
+    });
+
+    // Keyboard navigation
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('keydown', (e) => {
+        const tabs = Array.from(tabButtons);
+        const currentIndex = tabs.indexOf(btn);
+
+        let newIndex = currentIndex;
+
+        switch (e.key) {
+          case 'ArrowLeft':
+            newIndex = currentIndex === 0 ? tabs.length - 1 : currentIndex - 1;
+            e.preventDefault();
+            break;
+          case 'ArrowRight':
+            newIndex = currentIndex === tabs.length - 1 ? 0 : currentIndex + 1;
+            e.preventDefault();
+            break;
+          case 'Home':
+            newIndex = 0;
+            e.preventDefault();
+            break;
+          case 'End':
+            newIndex = tabs.length - 1;
+            e.preventDefault();
+            break;
+          default:
+            return;
+        }
+
+        const newTab = tabs[newIndex] as HTMLElement;
+        const tabId = newTab.getAttribute('data-tab');
+        if (tabId) {
+          switchTab(tabId);
+          newTab.focus();
+        }
+      });
+    });
+  }
+
+  // Initialize on page load
+  initTabs();
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initTabs);
+</script>

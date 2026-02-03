@@ -9,20 +9,30 @@
 
 :root {
   --color-bg: #ffffff;
-  --color-text: #1f2937;
-  --color-text-secondary: #6b7280;
-  --color-border: #e5e7eb;
+  --color-bg-secondary: #f6f8fa;
+  --color-text: #24292f;
+  --color-text-secondary: #57606a;
+  --color-border: #d0d7de;
   --color-card-bg: #f9fafb;
-  --color-accent: #0ea5e9;
+  --color-accent: #0969da;
+  --color-accent-hover: #0550ae;
+  --color-success: #1a7f37;
+  --color-warning: #9a6700;
+  --color-error: #cf222e;
 }
 
 .dark {
-  --color-bg: #111827;
-  --color-text: #f9fafb;
-  --color-text-secondary: #9ca3af;
-  --color-border: #374151;
+  --color-bg: #0d1117;
+  --color-bg-secondary: #161b22;
+  --color-text: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-border: #30363d;
   --color-card-bg: #1f2937;
-  --color-accent: #38bdf8;
+  --color-accent: #58a6ff;
+  --color-accent-hover: #79b8ff;
+  --color-success: #3fb950;
+  --color-warning: #d29922;
+  --color-error: #f85149;
 }
 
 html {
@@ -40,11 +50,94 @@ html {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
+
+/* Terminal code block styles */
+.terminal-window {
+  background-color: #0d1117;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.terminal-header {
+  background-color: #161b22;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-dot-red {
+  background-color: #f85149;
+}
+
+.terminal-dot-yellow {
+  background-color: #d29922;
+}
+
+.terminal-dot-green {
+  background-color: #3fb950;
+}
+
+.terminal-title {
+  color: #8b949e;
+  font-size: 0.875rem;
+  margin-left: auto;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+}
+
+.terminal-body {
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.terminal-body pre {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.terminal-body code {
+  color: #c9d1d9;
+}
+
+/* Syntax highlighting for terminal */
+.token-command {
+  color: #3fb950;
+}
+
+.token-key {
+  color: #58a6ff;
+}
+
+.token-value {
+  color: #d29922;
+}
+
+.token-response {
+  color: #bc8cff;
+}
+
+.token-comment {
+  color: #8b949e;
+}
+
+.token-number {
+  color: #f85149;
 }
