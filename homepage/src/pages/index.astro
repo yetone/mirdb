@@ -19,9 +19,14 @@ import UsageExamples from '../components/UsageExamples.astro';
 import Architecture from '../components/Architecture.astro';
 import Installation from '../components/Installation.astro';
 import Footer from '../components/Footer.astro';
+import DarkModeToggle from '../components/DarkModeToggle.astro';
 ---
 
 <BaseLayout>
+  <!-- Dark Mode Toggle - fixed position in top right -->
+  <div class="fixed top-4 right-4 z-50" data-testid="dark-mode-toggle-container">
+    <DarkModeToggle />
+  </div>
   <main>
     <Hero />
 

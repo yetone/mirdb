@@ -112,3 +112,49 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* Dark mode specific styles for better contrast (WCAG 4.5:1) */
+.dark body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.dark .terminal {
+  border: 1px solid var(--color-border);
+}
+
+/* Ensure dark mode toggle button has visible background */
+.dark .dark-mode-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* High contrast text in dark mode */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #f0f6fc;
+}
+
+/* Ensure cards and sections have proper backgrounds in dark mode */
+.dark section {
+  background-color: var(--color-bg);
+}
+
+.dark .bg-white {
+  background-color: var(--color-bg-secondary) !important;
+}
+
+.dark .text-gray-900 {
+  color: var(--color-text) !important;
+}
+
+.dark .text-gray-600 {
+  color: var(--color-text-secondary) !important;
+}
+
+.dark .border-gray-200 {
+  border-color: var(--color-border) !important;
+}
