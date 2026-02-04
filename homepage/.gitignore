@@ -18,3 +18,5 @@ Thumbs.db
 
 # Package lock files (optional - can be committed)
 # package-lock.json
+zola
+zola-*.tar.gz
