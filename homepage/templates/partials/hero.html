@@ -13,13 +13,15 @@
 -->
 <section id="hero" class="hero" aria-labelledby="hero-heading">
   <div class="hero__content">
-    <!-- Animated Logo -->
+    <!-- Animated Logo (optimized for LCP - Scenario 8 Performance) -->
     <img
       src="{{ get_url(path='images/logo.gif') }}"
       alt="MirDB - Animated database logo showing key-value storage visualization"
       class="hero__logo"
       width="200"
       height="120"
+      fetchpriority="high"
+      decoding="async"
     >
 
     <!-- Main Heading -->

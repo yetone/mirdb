@@ -7,13 +7,17 @@
     <meta name="keywords" content="Rust key-value store, persistent memcached, LSM-tree database">
     <title>{% block title %}{{ config.title }}{% endblock title %}</title>
 
+    <!-- Preconnect hints for performance (Scenario 8) -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+
     <!-- Open Graph -->
     <meta property="og:title" content="{{ config.title }}">
     <meta property="og:description" content="{{ config.description }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ config.base_url }}">
 
-    <!-- Tailwind CSS via CDN -->
+    <!-- Tailwind CSS via CDN (render-blocking but necessary for styling) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {

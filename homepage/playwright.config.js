@@ -64,7 +64,7 @@ module.exports = defineConfig({
   ],
 
   webServer: {
-    command: 'npx serve . -l 1111',
+    command: 'npx serve public -l 1111',
     url: 'http://localhost:1111',
     reuseExistingServer: true,
     timeout: 120 * 1000,
