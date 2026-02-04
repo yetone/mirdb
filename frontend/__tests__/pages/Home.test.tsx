@@ -1,24 +1,36 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom'
 import Home from '../../src/pages/Home'
 import { FEATURES } from '../../src/constants/features'
+import { ThemeProvider } from '../../src/contexts/ThemeContext'
 
 /**
  * Homepage Hero Section Tests
  * Scenario 1: Validates hero section, headline, subheadline, and features
+ * Updated: Wrapped with ThemeProvider (required for theme toggle - Scenario 5)
  */
 
 const renderHome = () => {
   return render(
     <BrowserRouter>
-      <Home />
+      <ThemeProvider>
+        <Home />
+      </ThemeProvider>
     </BrowserRouter>
   )
 }
 
 describe('Home Page', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  afterEach(() => {
+    localStorage.clear()
+  })
+
   describe('Hero Section', () => {
     /**
      * Test Case 2: Headline element exists with role='heading' and level 1
@@ -145,19 +157,20 @@ describe('Home Page', () => {
      */
     it('should navigate to /login when Login link is clicked', async () => {
       const user = userEvent.setup()
-      let currentPath = '/'
 
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/login"
-              element={
-                <div data-testid="login-page">Login Page</div>
-              }
-            />
-          </Routes>
+          <ThemeProvider>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/login"
+                element={
+                  <div data-testid="login-page">Login Page</div>
+                }
+              />
+            </Routes>
+          </ThemeProvider>
         </MemoryRouter>
       )
 
@@ -189,15 +202,17 @@ describe('Home Page', () => {
 
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/register"
-              element={
-                <div data-testid="register-page">Register Page</div>
-              }
-            />
-          </Routes>
+          <ThemeProvider>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/register"
+                element={
+                  <div data-testid="register-page">Register Page</div>
+                }
+              />
+            </Routes>
+          </ThemeProvider>
         </MemoryRouter>
       )
 

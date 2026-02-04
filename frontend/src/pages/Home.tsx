@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { FeatureCard } from '../components/FeatureCard'
 import { FEATURES } from '../constants/features'
+import { useTheme } from '../contexts/ThemeContext'
 
 /**
  * Homepage / Landing page component.
@@ -12,8 +13,11 @@ import { FEATURES } from '../constants/features'
  * REQ-2: Homepage shall include a prominent CTA button leading to registration
  * REQ-4: Display 3-5 key product features with icons and descriptions
  * REQ-5: Homepage shall include navigation links to Login and Register pages
+ * REQ-7: Homepage shall support dark mode and inherit the application's current theme
+ * REQ-10: Homepage shall support theme toggle button consistent with app-wide design
  */
 function Home() {
+  const { theme, toggleTheme } = useTheme()
   return (
     <div className="min-h-screen bg-base-100">
       {/* Skip to main content for accessibility */}
@@ -23,6 +27,52 @@ function Home() {
       >
         Skip to main content
       </a>
+
+      {/* Theme Toggle - REQ-10: Theme toggle button consistent with app-wide design */}
+      <header className="navbar bg-base-100/80 backdrop-blur-sm sticky top-0 z-40">
+        <div className="container mx-auto flex justify-end px-4">
+          <button
+            onClick={toggleTheme}
+            className="btn btn-ghost btn-circle transition-colors duration-200"
+            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+            data-testid="theme-toggle"
+          >
+            {theme === 'light' ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
+      </header>
 
       {/* Hero Section */}
       <main id="main-content" className="container mx-auto px-4 py-16">
