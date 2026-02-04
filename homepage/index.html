@@ -141,12 +141,10 @@
         <!-- Code Examples Section -->
         <section id="code-examples" class="code-examples" role="region" aria-labelledby="code-examples-title">
             <h2 id="code-examples-title" class="code-examples__title">Quick Start</h2>
+            <p class="architecture__description" style="margin-bottom: 1.5rem;">Connect with any memcached client and start storing data</p>
 
-            <div class="code-tabs" role="tablist" aria-label="Code examples">
-                <button role="tab" id="tab-start" aria-selected="true" aria-controls="panel-start" class="code-tabs__tab code-tabs__tab--active">
-                    Start Server
-                </button>
-                <button role="tab" id="tab-set" aria-selected="false" aria-controls="panel-set" class="code-tabs__tab" tabindex="-1">
+            <div class="code-tabs" role="tablist" aria-label="Code examples for memcached operations">
+                <button role="tab" id="tab-set" aria-selected="true" aria-controls="panel-set" class="code-tabs__tab code-tabs__tab--active" tabindex="0">
                     SET
                 </button>
                 <button role="tab" id="tab-get" aria-selected="false" aria-controls="panel-get" class="code-tabs__tab" tabindex="-1">
@@ -157,46 +155,88 @@
                 </button>
             </div>
 
-            <div id="panel-start" role="tabpanel" aria-labelledby="tab-start" class="code-panel code-panel--active">
-                <pre class="code-block"><code class="language-bash"># Start MirDB server
-$ mirdb-server -c mirdb.toml
+            <div id="panel-set" role="tabpanel" aria-labelledby="tab-set" class="code-panel code-panel--active">
+                <pre class="code-block"><code><span class="syntax-comment"># Connect to MirDB</span>
+<span class="syntax-prompt">$</span> <span class="syntax-command">telnet</span> <span class="syntax-value">localhost</span> <span class="syntax-number">12333</span>
 
-# Connect with any memcached client
-$ telnet localhost 12333</code></pre>
-                <button class="copy-btn" aria-label="Copy code to clipboard" data-code="mirdb-server -c mirdb.toml">
-                    Copy
-                </button>
-            </div>
+<span class="syntax-comment"># Store a value (persists across restarts)</span>
+<span class="syntax-keyword">SET</span> <span class="syntax-string">mykey</span> <span class="syntax-number">0 0 5</span>
+<span class="syntax-value">hello</span>
+<span class="syntax-output">STORED</span></code></pre>
+                <button class="copy-btn" aria-label="Copy code to clipboard" data-code="# Connect to MirDB
+$ telnet localhost 12333
 
-            <div id="panel-set" role="tabpanel" aria-labelledby="tab-set" class="code-panel" hidden>
-                <pre class="code-block"><code class="language-bash"># Store data (persists across restarts)
+# Store a value (persists across restarts)
 SET mykey 0 0 5
 hello
-STORED</code></pre>
-                <button class="copy-btn" aria-label="Copy code to clipboard" data-code="SET mykey 0 0 5">
+STORED">
                     Copy
                 </button>
             </div>
 
             <div id="panel-get" role="tabpanel" aria-labelledby="tab-get" class="code-panel" hidden>
-                <pre class="code-block"><code class="language-bash"># Retrieve data
+                <pre class="code-block"><code><span class="syntax-comment"># Retrieve stored data</span>
+<span class="syntax-keyword">GET</span> <span class="syntax-string">mykey</span>
+<span class="syntax-output">VALUE</span> <span class="syntax-string">mykey</span> <span class="syntax-number">0 5</span>
+<span class="syntax-value">hello</span>
+<span class="syntax-output">END</span></code></pre>
+                <button class="copy-btn" aria-label="Copy code to clipboard" data-code="# Retrieve stored data
 GET mykey
 VALUE mykey 0 5
 hello
-END</code></pre>
-                <button class="copy-btn" aria-label="Copy code to clipboard" data-code="GET mykey">
+END">
                     Copy
                 </button>
             </div>
 
             <div id="panel-delete" role="tabpanel" aria-labelledby="tab-delete" class="code-panel" hidden>
-                <pre class="code-block"><code class="language-bash"># Delete data
+                <pre class="code-block"><code><span class="syntax-comment"># Delete a key</span>
+<span class="syntax-keyword">DELETE</span> <span class="syntax-string">mykey</span>
+<span class="syntax-output">DELETED</span>
+
+<span class="syntax-comment"># Verify deletion</span>
+<span class="syntax-keyword">GET</span> <span class="syntax-string">mykey</span>
+<span class="syntax-output">END</span></code></pre>
+                <button class="copy-btn" aria-label="Copy code to clipboard" data-code="# Delete a key
 DELETE mykey
-DELETED</code></pre>
-                <button class="copy-btn" aria-label="Copy code to clipboard" data-code="DELETE mykey">
+DELETED
+
+# Verify deletion
+GET mykey
+END">
                     Copy
                 </button>
             </div>
+
+            <!-- No-JavaScript Fallback for Progressive Enhancement -->
+            <noscript>
+                <div class="noscript-code-examples" style="margin-top: 2rem;">
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">SET Command</h3>
+                    <pre class="code-block" style="margin-bottom: 1.5rem;"><code># Connect to MirDB
+$ telnet localhost 12333
+
+# Store a value (persists across restarts)
+SET mykey 0 0 5
+hello
+STORED</code></pre>
+
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">GET Command</h3>
+                    <pre class="code-block" style="margin-bottom: 1.5rem;"><code># Retrieve stored data
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">DELETE Command</h3>
+                    <pre class="code-block"><code># Delete a key
+DELETE mykey
+DELETED
+
+# Verify deletion
+GET mykey
+END</code></pre>
+                </div>
+            </noscript>
         </section>
 
         <!-- Architecture Section -->
