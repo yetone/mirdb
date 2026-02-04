@@ -2,52 +2,87 @@
  * Test Setup and Utilities
  * Owner: First builder (Shared)
  *
- * Expected exports:
- * - Test configuration
- * - Common test utilities
- * - Mock data
- * - Assertion helpers
+ * Common test utilities and configuration
  */
 
-const { chromium } = require('playwright');
+const { test, expect } = require('@playwright/test');
 
-// Test configuration
+/**
+ * Common test configuration
+ */
 const config = {
-  baseUrl: 'http://localhost:1111',
-  timeout: 30000,
-  viewports: {
+  baseUrl: 'http://localhost:8080',
+  viewport: {
     desktop: { width: 1920, height: 1080 },
     tablet: { width: 768, height: 1024 },
     mobile: { width: 375, height: 667 }
+  },
+  wcag: {
+    contrastRatioNormal: 4.5,
+    contrastRatioLarge: 3,
   }
 };
 
-// Common test utilities
-async function launchBrowser() {
-  return await chromium.launch({ headless: true });
+/**
+ * Navigate to the homepage
+ * @param {import('@playwright/test').Page} page
+ */
+async function goToHomepage(page) {
+  await page.goto('/');
+  await page.waitForLoadState('domcontentloaded');
 }
 
-async function createPage(browser, viewport = config.viewports.desktop) {
-  const context = await browser.newContext({ viewport });
-  return await context.newPage();
+/**
+ * Check if element has visible focus
+ * @param {import('@playwright/test').Locator} locator
+ * @returns {Promise<boolean>}
+ */
+async function hasFocusIndicator(locator) {
+  const outlineStyle = await locator.evaluate(el => {
+    const styles = window.getComputedStyle(el);
+    return {
+      outline: styles.outline,
+      outlineWidth: styles.outlineWidth,
+      outlineStyle: styles.outlineStyle,
+      boxShadow: styles.boxShadow
+    };
+  });
+
+  // Check if there's a visible outline or box-shadow
+  const hasOutline = outlineStyle.outlineStyle !== 'none' &&
+                     outlineStyle.outlineWidth !== '0px';
+  const hasBoxShadow = outlineStyle.boxShadow !== 'none';
+
+  return hasOutline || hasBoxShadow;
 }
 
-async function navigateToHome(page) {
-  await page.goto(config.baseUrl);
-  await page.waitForLoadState('networkidle');
+/**
+ * Press Tab key and return focused element
+ * @param {import('@playwright/test').Page} page
+ */
+async function pressTab(page) {
+  await page.keyboard.press('Tab');
+  return page.locator(':focus');
 }
 
-// Assertion helpers
-function assertElementVisible(element, message) {
-  if (!element) {
-    throw new Error(message || 'Element not found');
-  }
+/**
+ * Check element visibility
+ * @param {import('@playwright/test').Locator} locator
+ */
+async function isVisuallyVisible(locator) {
+  const boundingBox = await locator.boundingBox();
+  if (!boundingBox) return false;
+
+  // Check if element is within viewport and has dimensions
+  return boundingBox.width > 0 && boundingBox.height > 0;
 }
 
 module.exports = {
   config,
-  launchBrowser,
-  createPage,
-  navigateToHome,
-  assertElementVisible
+  goToHomepage,
+  hasFocusIndicator,
+  pressTab,
+  isVisuallyVisible,
+  test,
+  expect
 };

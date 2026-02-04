@@ -1,42 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="{{ config.description }}">
-  <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ config.description }}">
+    <meta name="keywords" content="Rust key-value store, persistent memcached, LSM-tree database">
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
 
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3B82F6',
-            secondary: '#10B981',
-            dark: '#1F2937',
-            light: '#F9FAFB'
-          }
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ config.title }}">
+    <meta property="og:description" content="{{ config.description }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ config.base_url }}">
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                        light: '#F9FAFB'
+                    }
+                }
+            }
         }
-      }
-    }
-  </script>
+    </script>
 
-  <!-- Custom Styles -->
-  <link rel="stylesheet" href="{{ get_url(path='css/styles.css') }}">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ get_url(path='css/styles.css') }}">
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen">
-  <!-- Skip to content link for accessibility -->
-  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded">
-    Skip to main content
-  </a>
+    {% include "partials/navigation.html" %}
 
-  <main id="main-content">
-    {% block content %}{% endblock content %}
-  </main>
+    <main id="main-content" role="main" tabindex="-1" aria-label="Main content">
+        {% block content %}{% endblock content %}
+    </main>
 
-  <!-- JavaScript -->
-  <script src="{{ get_url(path='js/main.js') }}"></script>
+    <!-- JavaScript -->
+    <script src="{{ get_url(path='js/main.js') }}" defer></script>
 </body>
 </html>
