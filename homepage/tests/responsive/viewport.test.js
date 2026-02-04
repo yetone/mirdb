@@ -46,8 +46,8 @@ test.describe('Desktop Viewport (1920x1080)', () => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
-    // Find CTA buttons in hero
-    const ctaContainer = page.locator('#hero .flex').first();
+    // Find CTA buttons in hero (using hero__cta class from actual HTML)
+    const ctaContainer = page.locator('#hero .hero__cta').first();
     await expect(ctaContainer).toBeVisible();
 
     const buttons = ctaContainer.locator('a');

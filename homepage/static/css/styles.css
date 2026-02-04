@@ -616,9 +616,14 @@ nav[role="navigation"] {
     color: #ffffff;
     text-decoration: none;
     font-weight: 500;
-    padding: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
     border-radius: 4px;
     transition: opacity var(--transition-fast);
+    /* Touch target: minimum 44px height for WCAG 2.1 AA (Scenario 6) */
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .footer__link:hover {
