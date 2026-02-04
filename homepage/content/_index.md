@@ -1,6 +1,7 @@
 +++
-title = "MirDB - Persistent Key-Value Store with Memcached Protocol"
-description = "MirDB is a high-performance persistent key-value store with memcached protocol compatibility. Built in Rust with LSM-tree architecture."
+title = "MirDB - Persistent Key-Value Store"
+description = "A Persistent Key-Value Store with Memcached Protocol"
+render = true
 +++
 
-<!-- Homepage content managed by Zola templates -->
+MirDB is a high-performance persistent key-value store with memcached protocol compatibility.

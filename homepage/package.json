@@ -1,23 +1,21 @@
 {
   "name": "mirdb-homepage",
   "version": "1.0.0",
-  "description": "MirDB Homepage - Static website for the MirDB persistent key-value store",
+  "description": "MirDB Homepage - A Persistent Key-Value Store with Memcached Protocol",
   "scripts": {
-    "test": "playwright test",
-    "test:seo": "playwright test tests/seo/",
-    "test:a11y": "playwright test tests/accessibility/",
-    "test:performance": "playwright test tests/performance/",
-    "test:responsive": "playwright test tests/responsive/",
-    "build": "zola build",
-    "serve": "zola serve"
+    "test": "npx playwright test",
+    "test:roadmap": "npx playwright test tests/roadmap/",
+    "test:a11y": "npx playwright test tests/accessibility/",
+    "test:lighthouse": "node tests/performance/lighthouse.test.js"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.42.0"
   },
   "keywords": [
     "mirdb",
-    "homepage",
-    "static-site"
+    "key-value-store",
+    "memcached",
+    "rust"
   ],
   "author": "MirDB Team",
   "license": "MIT"

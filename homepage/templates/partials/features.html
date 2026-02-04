@@ -8,30 +8,22 @@
   - 6 feature cards
   - Each card: icon, title, description
 -->
-<h2 id="features-heading">Features</h2>
-<div class="features__grid">
-    <div class="features__card">
-        <h3>Memcached Compatible</h3>
-        <p>Use existing memcached clients and libraries</p>
+<section id="features" class="py-16 px-4 bg-gray-800">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-2">Memcached Compatible</h3>
+        <p class="text-gray-400">Use existing memcached clients and libraries</p>
+      </div>
+      <div class="bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-2">Persistent Storage</h3>
+        <p class="text-gray-400">Data survives restarts with LSM-tree architecture</p>
+      </div>
+      <div class="bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-2">High Performance</h3>
+        <p class="text-gray-400">Async I/O with Tokio for concurrent connections</p>
+      </div>
     </div>
-    <div class="features__card">
-        <h3>Persistent Storage</h3>
-        <p>Data survives restarts with LSM-tree architecture</p>
-    </div>
-    <div class="features__card">
-        <h3>High Performance</h3>
-        <p>Async I/O with Tokio for concurrent connections</p>
-    </div>
-    <div class="features__card">
-        <h3>Efficient Compaction</h3>
-        <p>Automatic minor and major compaction strategies</p>
-    </div>
-    <div class="features__card">
-        <h3>Memory Safe</h3>
-        <p>Rust implementation eliminates memory safety vulnerabilities</p>
-    </div>
-    <div class="features__card">
-        <h3>Configurable</h3>
-        <p>TOML-based configuration for all storage parameters</p>
-    </div>
-</div>
+  </div>
+</section>

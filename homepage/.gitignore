@@ -4,15 +4,8 @@ node_modules/
 # Build output
 public/
 
-# Playwright
+# Test results
 test-results/
-playwright-report/
-playwright/.cache/
 
-# OS
+# System files
 .DS_Store
-
-# IDE
-.idea/
-.vscode/
-*.swp

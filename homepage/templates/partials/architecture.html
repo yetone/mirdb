@@ -10,13 +10,9 @@
   - Brief explanation of read path
   - Link to detailed documentation
 -->
-<h2 id="architecture-heading">Architecture</h2>
-<div class="architecture">
-    <p>MirDB uses an LSM-tree architecture for efficient write performance and durable storage.</p>
-    <h3>Key Components</h3>
-    <ul>
-        <li><strong>Memtable</strong>: In-memory skip list for fast writes</li>
-        <li><strong>SSTables</strong>: Sorted string tables on disk</li>
-        <li><strong>WAL</strong>: Write-ahead log for durability</li>
-    </ul>
-</div>
+<section id="architecture" class="py-16 px-4 bg-gray-800">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-12">Architecture</h2>
+    <p class="text-center text-gray-400">LSM-tree based storage engine with memtable, SSTables, and WAL</p>
+  </div>
+</section>
