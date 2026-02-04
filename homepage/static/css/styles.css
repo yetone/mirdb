@@ -772,6 +772,12 @@ nav[role="navigation"] {
     color: #ffffff;
 }
 
+.footer__license-info {
+    margin: 0 0 var(--space-sm) 0;
+    font-size: var(--font-size-sm);
+    opacity: 0.85;
+}
+
 .footer__copyright {
     margin: 0;
     font-size: var(--font-size-sm);

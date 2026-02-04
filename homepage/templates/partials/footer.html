@@ -7,33 +7,39 @@
   - License information
   - Copyright notice
 -->
-<footer role="contentinfo" class="footer" aria-label="Site footer">
+<footer role="contentinfo" class="footer" aria-label="Site footer" data-testid="footer">
     <div class="footer__content">
         <nav class="footer__links" aria-label="Footer links">
             <a href="{{ config.extra.github_repo }}"
                class="footer__link"
                target="_blank"
                rel="noopener noreferrer"
-               aria-label="MirDB GitHub repository (opens in new tab)">
+               aria-label="MirDB GitHub repository (opens in new tab)"
+               data-testid="github-link">
                 GitHub
             </a>
             <a href="{{ config.extra.github_repo }}/blob/master/LICENSE"
-               class="footer__link"
+               class="footer__link footer__link--license"
                target="_blank"
                rel="noopener noreferrer"
-               aria-label="View license on GitHub (opens in new tab)">
-                License
+               aria-label="View MIT license on GitHub (opens in new tab)"
+               data-testid="license-link">
+                MIT License
             </a>
             <a href="{{ config.extra.github_repo }}/issues"
                class="footer__link"
                target="_blank"
                rel="noopener noreferrer"
-               aria-label="Report issues on GitHub (opens in new tab)">
+               aria-label="Report issues on GitHub (opens in new tab)"
+               data-testid="issues-link">
                 Issues
             </a>
         </nav>
-        <p class="footer__copyright">
-            MirDB - A Persistent Key-Value Store with Memcached Protocol
+        <p class="footer__license-info" data-testid="license-info">
+            Released under the MIT License
+        </p>
+        <p class="footer__copyright" data-testid="copyright">
+            &copy; 2024 MirDB - A Persistent Key-Value Store with Memcached Protocol
         </p>
     </div>
 </footer>
