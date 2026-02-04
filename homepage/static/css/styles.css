@@ -488,6 +488,55 @@ nav[role="navigation"] {
     background-color: var(--color-primary);
 }
 
+/* Syntax Highlighting Colors */
+.syntax-comment {
+    color: #6b7280; /* Gray - comments */
+    font-style: italic;
+}
+
+.syntax-prompt {
+    color: #22c55e; /* Green - shell prompt */
+}
+
+.syntax-command {
+    color: #60a5fa; /* Light blue - commands like telnet */
+}
+
+.syntax-keyword {
+    color: #f472b6; /* Pink - memcached commands like SET, GET, DELETE */
+    font-weight: 600;
+}
+
+.syntax-string {
+    color: #fbbf24; /* Yellow - key names */
+}
+
+.syntax-value {
+    color: #34d399; /* Emerald - actual values like "hello" */
+}
+
+.syntax-number {
+    color: #c084fc; /* Purple - numbers */
+}
+
+.syntax-output {
+    color: #94a3b8; /* Slate - server responses like STORED, END */
+}
+
+.syntax-response {
+    color: #94a3b8; /* Alias for output */
+}
+
+/* Code panel wrapper for copy button positioning */
+.code-panel__wrapper {
+    position: relative;
+}
+
+/* Ensure hidden panels don't take up space */
+.code-panel[hidden] {
+    display: none !important;
+}
+
 /* ==========================================================================
    Architecture Section
    ========================================================================== */

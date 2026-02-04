@@ -2,20 +2,169 @@
   Code Examples Section Partial
   Owner: Scenario 3 - Code Examples
 
-  Expected content:
-  - Section heading
-  - Tabbed interface (SET, GET, DELETE, INFO)
+  Features:
+  - Tabbed interface for SET, GET, DELETE operations
   - Syntax-highlighted code blocks
-  - One-click copy button for each example
-  - Shell/command syntax highlighting
+  - One-click copy functionality
+  - Progressive enhancement (works without JavaScript)
+  - WCAG 2.1 AA accessible tabs with ARIA attributes
 -->
-<section id="code-examples" class="py-16 px-4">
+<section id="code-examples" class="code-examples py-16 px-4" aria-labelledby="code-examples-heading">
   <div class="max-w-4xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-12">Quick Start</h2>
-    <pre class="bg-gray-800 p-4 rounded-lg overflow-x-auto"><code># Connect and use MirDB
+    <h2 id="code-examples-heading" class="code-examples__title text-3xl font-bold text-center mb-8">Quick Start</h2>
+    <p class="text-center text-gray-400 mb-8">Connect with any memcached client and start storing data</p>
+
+    <!-- Tabbed Interface -->
+    <div class="code-tabs-container">
+      <!-- Tab List -->
+      <div role="tablist" aria-label="Code examples for memcached operations" class="code-tabs flex justify-center gap-1 mb-0">
+        <button
+          role="tab"
+          id="tab-set"
+          aria-selected="true"
+          aria-controls="panel-set"
+          tabindex="0"
+          class="code-tabs__tab code-tabs__tab--active px-6 py-3 font-medium rounded-t-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          SET
+        </button>
+        <button
+          role="tab"
+          id="tab-get"
+          aria-selected="false"
+          aria-controls="panel-get"
+          tabindex="-1"
+          class="code-tabs__tab px-6 py-3 font-medium rounded-t-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          GET
+        </button>
+        <button
+          role="tab"
+          id="tab-delete"
+          aria-selected="false"
+          aria-controls="panel-delete"
+          tabindex="-1"
+          class="code-tabs__tab px-6 py-3 font-medium rounded-t-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          DELETE
+        </button>
+      </div>
+
+      <!-- Tab Panels -->
+      <!-- SET Panel -->
+      <div
+        role="tabpanel"
+        id="panel-set"
+        aria-labelledby="tab-set"
+        class="code-panel code-panel--active"
+      >
+        <div class="code-panel__wrapper relative">
+          <pre class="code-block bg-gray-800 p-6 rounded-b-lg rounded-tr-lg overflow-x-auto text-sm"><code><span class="syntax-comment"># Connect to MirDB</span>
+<span class="syntax-prompt">$</span> <span class="syntax-command">telnet</span> <span class="syntax-value">localhost</span> <span class="syntax-number">12333</span>
+
+<span class="syntax-comment"># Store a value (persists across restarts)</span>
+<span class="syntax-keyword">SET</span> <span class="syntax-string">mykey</span> <span class="syntax-number">0 0 5</span>
+<span class="syntax-value">hello</span>
+<span class="syntax-output">STORED</span></code></pre>
+          <button
+            class="copy-btn"
+            aria-label="Copy code to clipboard"
+            data-code="# Connect to MirDB
 $ telnet localhost 12333
+
+# Store a value (persists across restarts)
+SET mykey 0 0 5
+hello
+STORED"
+          >Copy</button>
+        </div>
+      </div>
+
+      <!-- GET Panel -->
+      <div
+        role="tabpanel"
+        id="panel-get"
+        aria-labelledby="tab-get"
+        class="code-panel"
+        hidden
+      >
+        <div class="code-panel__wrapper relative">
+          <pre class="code-block bg-gray-800 p-6 rounded-b-lg rounded-tr-lg overflow-x-auto text-sm"><code><span class="syntax-comment"># Retrieve stored data</span>
+<span class="syntax-keyword">GET</span> <span class="syntax-string">mykey</span>
+<span class="syntax-output">VALUE</span> <span class="syntax-string">mykey</span> <span class="syntax-number">0 5</span>
+<span class="syntax-value">hello</span>
+<span class="syntax-output">END</span></code></pre>
+          <button
+            class="copy-btn"
+            aria-label="Copy code to clipboard"
+            data-code="# Retrieve stored data
+GET mykey
+VALUE mykey 0 5
+hello
+END"
+          >Copy</button>
+        </div>
+      </div>
+
+      <!-- DELETE Panel -->
+      <div
+        role="tabpanel"
+        id="panel-delete"
+        aria-labelledby="tab-delete"
+        class="code-panel"
+        hidden
+      >
+        <div class="code-panel__wrapper relative">
+          <pre class="code-block bg-gray-800 p-6 rounded-b-lg rounded-tr-lg overflow-x-auto text-sm"><code><span class="syntax-comment"># Delete a key</span>
+<span class="syntax-keyword">DELETE</span> <span class="syntax-string">mykey</span>
+<span class="syntax-output">DELETED</span>
+
+<span class="syntax-comment"># Verify deletion</span>
+<span class="syntax-keyword">GET</span> <span class="syntax-string">mykey</span>
+<span class="syntax-output">END</span></code></pre>
+          <button
+            class="copy-btn"
+            aria-label="Copy code to clipboard"
+            data-code="# Delete a key
+DELETE mykey
+DELETED
+
+# Verify deletion
+GET mykey
+END"
+          >Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No-JavaScript Fallback -->
+    <noscript>
+      <div class="noscript-code-examples mt-8">
+        <h3 class="text-xl font-semibold mb-4">SET Command</h3>
+        <pre class="code-block bg-gray-800 p-6 rounded-lg overflow-x-auto text-sm mb-6"><code># Connect to MirDB
+$ telnet localhost 12333
+
+# Store a value (persists across restarts)
 SET mykey 0 0 5
 hello
 STORED</code></pre>
+
+        <h3 class="text-xl font-semibold mb-4">GET Command</h3>
+        <pre class="code-block bg-gray-800 p-6 rounded-lg overflow-x-auto text-sm mb-6"><code># Retrieve stored data
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+
+        <h3 class="text-xl font-semibold mb-4">DELETE Command</h3>
+        <pre class="code-block bg-gray-800 p-6 rounded-lg overflow-x-auto text-sm"><code># Delete a key
+DELETE mykey
+DELETED
+
+# Verify deletion
+GET mykey
+END</code></pre>
+      </div>
+    </noscript>
   </div>
 </section>
