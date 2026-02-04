@@ -1,13 +1,17 @@
+import { Link } from 'react-router-dom'
 import { FeatureCard } from '../components/FeatureCard'
 import { FEATURES } from '../constants/features'
 
 /**
  * Homepage / Landing page component.
  * Owner: Scenario 1 - Homepage Hero Section (hero, subheadline, features)
+ * Owner: Scenario 4 - Navigation and CTAs (Login link, Get Started CTA)
  *
  * Displays the value proposition, URL shortening form, and feature highlights.
  * REQ-1: Clear, compelling headline summarizing value proposition
+ * REQ-2: Homepage shall include a prominent CTA button leading to registration
  * REQ-4: Display 3-5 key product features with icons and descriptions
+ * REQ-5: Homepage shall include navigation links to Login and Register pages
  */
 function Home() {
   return (
@@ -47,6 +51,29 @@ function Home() {
           <div className="max-w-2xl mx-auto mb-8" aria-label="URL shortening form area">
             {/* UrlShortenerForm will be added by Scenario 2 */}
           </div>
+
+          {/* Navigation and CTAs - Scenario 4 */}
+          {/* REQ-2: Prominent CTA button leading to registration */}
+          {/* REQ-5: Navigation links to Login and Register pages */}
+          <nav
+            className="flex flex-wrap justify-center items-center gap-4"
+            aria-label="Primary navigation"
+          >
+            <Link
+              to="/register"
+              className="btn btn-primary btn-lg font-semibold px-8"
+              data-testid="cta-get-started"
+            >
+              Get Started Free
+            </Link>
+            <Link
+              to="/login"
+              className="btn btn-outline btn-lg font-semibold"
+              data-testid="cta-login"
+            >
+              Login
+            </Link>
+          </nav>
         </section>
 
         {/* Features Section - REQ-4 */}

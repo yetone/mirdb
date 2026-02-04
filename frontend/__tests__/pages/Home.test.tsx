@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import userEvent from '@testing-library/user-event'
+import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom'
 import Home from '../../src/pages/Home'
 import { FEATURES } from '../../src/constants/features'
 
@@ -114,6 +115,137 @@ describe('Home Page', () => {
 
       const mainContent = document.getElementById('main-content')
       expect(mainContent).toBeInTheDocument()
+    })
+  })
+
+  /**
+   * Navigation and CTAs Tests
+   * Scenario 4: Validates navigation links and call-to-action buttons
+   * REQ-5: Homepage shall include navigation links to Login and Register pages
+   * REQ-2: Homepage shall include a prominent CTA button leading to registration
+   */
+  describe('Navigation and CTAs (Scenario 4)', () => {
+    /**
+     * Test Case 1: Login link exists with correct href
+     * Input: Render Home component and find Login link
+     * Expected: Link element with text 'Login' or 'Sign In' exists with href='/login'
+     */
+    it('should render Login link with href="/login"', () => {
+      renderHome()
+
+      const loginLink = screen.getByRole('link', { name: /login|sign in/i })
+      expect(loginLink).toBeInTheDocument()
+      expect(loginLink).toHaveAttribute('href', '/login')
+    })
+
+    /**
+     * Test Case 2: Click Login link navigates to /login
+     * Input: Click Login link in rendered Home component
+     * Expected: Router navigates to /login path
+     */
+    it('should navigate to /login when Login link is clicked', async () => {
+      const user = userEvent.setup()
+      let currentPath = '/'
+
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/login"
+              element={
+                <div data-testid="login-page">Login Page</div>
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      )
+
+      const loginLink = screen.getByRole('link', { name: /login|sign in/i })
+      await user.click(loginLink)
+
+      expect(screen.getByTestId('login-page')).toBeInTheDocument()
+    })
+
+    /**
+     * Test Case 3: Get Started button exists
+     * Input: Render Home component and find Get Started button
+     * Expected: Button with text containing 'Get Started' exists
+     */
+    it('should render Get Started button', () => {
+      renderHome()
+
+      const getStartedButton = screen.getByRole('link', { name: /get started/i })
+      expect(getStartedButton).toBeInTheDocument()
+    })
+
+    /**
+     * Test Case 4: Click Get Started button navigates to /register
+     * Input: Click Get Started button
+     * Expected: Router navigates to /register path
+     */
+    it('should navigate to /register when Get Started button is clicked', async () => {
+      const user = userEvent.setup()
+
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/register"
+              element={
+                <div data-testid="register-page">Register Page</div>
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      )
+
+      const getStartedButton = screen.getByRole('link', { name: /get started/i })
+      await user.click(getStartedButton)
+
+      expect(screen.getByTestId('register-page')).toBeInTheDocument()
+    })
+
+    /**
+     * Test Case 5: CTA button visibility - Get Started is prominently displayed
+     * Input: Check CTA button visibility
+     * Expected: Get Started CTA is prominently displayed (large, primary color)
+     */
+    it('should display Get Started CTA prominently with primary styling', () => {
+      renderHome()
+
+      const getStartedButton = screen.getByRole('link', { name: /get started/i })
+      expect(getStartedButton).toBeInTheDocument()
+      // Check for btn-primary class (DaisyUI primary button style)
+      expect(getStartedButton).toHaveClass('btn-primary')
+      // Check for larger size (btn-lg or text styling)
+      expect(getStartedButton).toHaveClass('btn-lg')
+    })
+
+    /**
+     * Test Case 6: Both CTAs visible on page load
+     * Input: Verify both CTAs are in viewport on page load
+     * Expected: Login and Get Started buttons visible without scrolling on desktop
+     */
+    it('should have both Login and Get Started buttons visible', () => {
+      renderHome()
+
+      const loginLink = screen.getByRole('link', { name: /login|sign in/i })
+      const getStartedButton = screen.getByRole('link', { name: /get started/i })
+
+      expect(loginLink).toBeInTheDocument()
+      expect(getStartedButton).toBeInTheDocument()
+      // Both should be in the same CTA section for visibility
+      expect(loginLink).toBeVisible()
+      expect(getStartedButton).toBeVisible()
+    })
+
+    it('should have Get Started CTA with href="/register"', () => {
+      renderHome()
+
+      const getStartedButton = screen.getByRole('link', { name: /get started/i })
+      expect(getStartedButton).toHaveAttribute('href', '/register')
     })
   })
 })
