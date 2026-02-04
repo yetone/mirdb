@@ -10,9 +10,133 @@
   - Brief explanation of read path
   - Link to detailed documentation
 -->
-<section id="architecture" class="py-16 px-4 bg-gray-800">
+<section id="architecture" class="architecture py-16 px-4 bg-gray-800" aria-labelledby="architecture-heading">
   <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-12">Architecture</h2>
-    <p class="text-center text-gray-400">LSM-tree based storage engine with memtable, SSTables, and WAL</p>
+    <h2 id="architecture-heading" class="architecture__heading text-3xl font-bold text-center mb-4">Architecture</h2>
+    <p class="architecture__intro text-center text-gray-400 mb-12">LSM-tree based storage engine with memtable, SSTables, and WAL</p>
+
+    <!-- SVG Diagram -->
+    <div class="architecture__diagram mb-12 flex justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-labelledby="arch-title arch-desc" class="architecture__svg w-full max-w-2xl h-auto" data-testid="architecture-svg">
+        <title id="arch-title">MirDB LSM-tree Architecture</title>
+        <desc id="arch-desc">Diagram showing the LSM-tree architecture with Write-Ahead Log, Memtable, and SSTable levels</desc>
+
+        <!-- Background -->
+        <rect width="600" height="400" fill="#1f2937"/>
+
+        <!-- Write Path Arrow -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/>
+          </marker>
+          <marker id="arrowhead-read" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/>
+          </marker>
+        </defs>
+
+        <!-- Client -->
+        <rect x="50" y="30" width="100" height="40" rx="5" fill="#3b82f6" data-component="client"/>
+        <text x="100" y="55" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Client</text>
+
+        <!-- Write Arrow -->
+        <line x1="100" y1="70" x2="100" y2="100" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <text x="115" y="90" fill="#9ca3af" font-size="12">Write</text>
+
+        <!-- WAL -->
+        <rect x="30" y="110" width="140" height="50" rx="5" fill="#f59e0b" data-component="wal"/>
+        <text x="100" y="140" text-anchor="middle" fill="white" font-size="14" font-weight="bold" data-label="wal">WAL</text>
+        <text x="100" y="155" text-anchor="middle" fill="white" font-size="10">(Write-Ahead Log)</text>
+
+        <!-- Arrow to Memtable -->
+        <line x1="100" y1="160" x2="100" y2="190" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+        <!-- Memtable -->
+        <rect x="30" y="200" width="140" height="60" rx="5" fill="#10b981" data-component="memtable"/>
+        <text x="100" y="230" text-anchor="middle" fill="white" font-size="14" font-weight="bold" data-label="memtable">Memtable</text>
+        <text x="100" y="250" text-anchor="middle" fill="white" font-size="10">(Skip List)</text>
+
+        <!-- Arrow to SSTable L0 -->
+        <line x1="170" y1="230" x2="220" y2="230" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <text x="195" y="220" fill="#9ca3af" font-size="10">Flush</text>
+
+        <!-- SSTable Levels -->
+        <!-- L0 -->
+        <rect x="230" y="110" width="150" height="50" rx="5" fill="#3b82f6" data-component="sstable-l0"/>
+        <text x="305" y="135" text-anchor="middle" fill="white" font-size="12" font-weight="bold" data-label="sstable">SSTable Level 0</text>
+        <text x="305" y="150" text-anchor="middle" fill="white" font-size="10">(Unsorted)</text>
+
+        <!-- L1 -->
+        <rect x="230" y="180" width="150" height="50" rx="5" fill="#2563eb" data-component="sstable-l1"/>
+        <text x="305" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="bold" data-label="sstable">SSTable Level 1</text>
+        <text x="305" y="220" text-anchor="middle" fill="white" font-size="10">(Sorted)</text>
+
+        <!-- L2 -->
+        <rect x="230" y="250" width="150" height="50" rx="5" fill="#1d4ed8" data-component="sstable-l2"/>
+        <text x="305" y="275" text-anchor="middle" fill="white" font-size="12" font-weight="bold" data-label="sstable">SSTable Level 2</text>
+        <text x="305" y="290" text-anchor="middle" fill="white" font-size="10">(Sorted)</text>
+
+        <!-- Compaction Arrows -->
+        <line x1="305" y1="160" x2="305" y2="175" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="305" y1="230" x2="305" y2="245" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <text x="330" y="170" fill="#9ca3af" font-size="9">Minor</text>
+        <text x="330" y="242" fill="#9ca3af" font-size="9">Major</text>
+
+        <!-- Read Path -->
+        <rect x="430" y="30" width="100" height="40" rx="5" fill="#8b5cf6" data-component="read"/>
+        <text x="480" y="55" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Read</text>
+
+        <!-- Read arrows -->
+        <line x1="430" y1="50" x2="170" y2="220" stroke="#a78bfa" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead-read)"/>
+        <line x1="430" y1="50" x2="230" y2="135" stroke="#a78bfa" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead-read)"/>
+
+        <!-- Legend -->
+        <rect x="430" y="320" width="150" height="70" rx="5" fill="#374151" stroke="#4b5563"/>
+        <text x="440" y="340" fill="#f9fafb" font-size="12" font-weight="bold">Legend</text>
+        <line x1="440" y1="355" x2="470" y2="355" stroke="#60a5fa" stroke-width="2"/>
+        <text x="480" y="360" fill="#9ca3af" font-size="10">Write Path</text>
+        <line x1="440" y1="375" x2="470" y2="375" stroke="#a78bfa" stroke-width="2" stroke-dasharray="5,5"/>
+        <text x="480" y="380" fill="#9ca3af" font-size="10">Read Path</text>
+      </svg>
+    </div>
+
+    <!-- Write/Read Path Explanations -->
+    <div class="architecture__explanations grid md:grid-cols-2 gap-8">
+      <!-- Write Path -->
+      <div class="architecture__write-path bg-gray-700 rounded-lg p-6" data-testid="write-path">
+        <h3 class="architecture__path-heading text-xl font-semibold mb-4 text-blue-400">
+          <span class="inline-block w-3 h-3 bg-blue-400 rounded-full mr-2" aria-hidden="true"></span>
+          Write Path
+        </h3>
+        <p class="architecture__path-description text-gray-300 leading-relaxed">
+          When data is written, it first goes to the <strong class="text-amber-400">Write-Ahead Log (WAL)</strong> for durability.
+          Then the data is inserted into the in-memory <strong class="text-emerald-400">Memtable</strong> (implemented as a skip list).
+          When the memtable reaches its size threshold, it is flushed to disk as an immutable <strong class="text-blue-400">SSTable</strong> at Level 0.
+          Background compaction merges and sorts SSTables across levels.
+        </p>
+      </div>
+
+      <!-- Read Path -->
+      <div class="architecture__read-path bg-gray-700 rounded-lg p-6" data-testid="read-path">
+        <h3 class="architecture__path-heading text-xl font-semibold mb-4 text-purple-400">
+          <span class="inline-block w-3 h-3 bg-purple-400 rounded-full mr-2" aria-hidden="true"></span>
+          Read Path
+        </h3>
+        <p class="architecture__path-description text-gray-300 leading-relaxed">
+          Reads first check the <strong class="text-emerald-400">Memtable</strong> for the most recent data.
+          If not found, the search continues through <strong class="text-blue-400">SSTables</strong> starting from Level 0 (newest data)
+          and proceeding to higher levels. Bloom filters and block indexes optimize lookups for efficient read performance.
+        </p>
+      </div>
+    </div>
+
+    <!-- Documentation Link -->
+    <div class="architecture__docs text-center mt-8">
+      <a href="https://github.com/yetone/mirdb#architecture"
+         class="text-blue-400 hover:text-blue-300 underline transition-colors"
+         target="_blank"
+         rel="noopener noreferrer">
+        Learn more about MirDB architecture →
+      </a>
+    </div>
   </div>
 </section>

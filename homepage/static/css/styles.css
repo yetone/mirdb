@@ -496,10 +496,15 @@ nav[role="navigation"] {
     text-align: center;
 }
 
+.architecture__heading {
+    margin-bottom: var(--space-md);
+}
+
 .architecture__title {
     margin-bottom: var(--space-md);
 }
 
+.architecture__intro,
 .architecture__description {
     max-width: 700px;
     margin: 0 auto var(--space-xl);
@@ -507,8 +512,14 @@ nav[role="navigation"] {
 }
 
 .architecture__diagram {
-    margin: 0 auto;
+    margin: 0 auto var(--space-2xl);
     max-width: 700px;
+}
+
+.architecture__svg {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
 }
 
 .architecture__img {
@@ -523,6 +534,87 @@ nav[role="navigation"] {
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
     font-style: italic;
+}
+
+/* Write/Read Path Explanations */
+.architecture__explanations {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    max-width: 900px;
+    margin: 0 auto var(--space-xl);
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    .architecture__explanations {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.architecture__write-path,
+.architecture__read-path {
+    background-color: var(--color-background-alt);
+    padding: var(--space-xl);
+    border-radius: 8px;
+}
+
+.architecture__path-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-md);
+}
+
+.architecture__path-heading--write {
+    color: var(--color-primary);
+}
+
+.architecture__path-heading--read {
+    color: #7c3aed; /* Purple for read path */
+}
+
+.architecture__path-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.architecture__path-heading--write .architecture__path-indicator {
+    background-color: var(--color-primary);
+}
+
+.architecture__path-heading--read .architecture__path-indicator {
+    background-color: #7c3aed;
+}
+
+.architecture__path-description {
+    color: var(--color-text);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.architecture__path-description strong {
+    color: var(--color-primary);
+}
+
+/* Documentation Link */
+.architecture__docs {
+    margin-top: var(--space-lg);
+}
+
+.architecture__docs-link {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.architecture__docs-link:hover {
+    color: var(--color-primary-light);
+    text-decoration: underline;
 }
 
 /* ==========================================================================
