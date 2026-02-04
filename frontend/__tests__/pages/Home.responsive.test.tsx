@@ -10,14 +10,17 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Home from '../../src/pages/Home';
+import { ThemeProvider } from '../../src/contexts/ThemeContext';
 
 /**
- * Helper to render Home component with router context
+ * Helper to render Home component with router and theme context
  */
 const renderHome = () => {
   return render(
     <BrowserRouter>
-      <Home />
+      <ThemeProvider>
+        <Home />
+      </ThemeProvider>
     </BrowserRouter>
   );
 };
@@ -44,10 +47,13 @@ describe('Responsive Design (Scenario 6)', () => {
   beforeEach(() => {
     // Reset viewport to desktop default
     setViewportWidth(1280);
+    // Clear localStorage for theme state
+    localStorage.clear();
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    localStorage.clear();
   });
 
   describe('Test Case 1: Mobile Viewport (375px)', () => {
