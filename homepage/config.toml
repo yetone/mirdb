@@ -18,10 +18,8 @@ highlight_theme = "base16-ocean-dark"
 github_url = "https://github.com/yetone/mirdb"
 github_repo = "https://github.com/yetone/mirdb"
 
-# Performance optimization settings
-[build]
-# Build to 'public' directory for optimized static hosting
-build_dir = "public"
+# Output directory for build
+output_dir = "public"
 
 [link_checker]
 skip_prefixes = ["https://github.com"]
