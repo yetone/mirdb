@@ -66,9 +66,9 @@ test.describe('Hero Section', () => {
     const getStartedBtn = page.locator('#hero a.btn--primary:has-text("Get Started")');
     await expect(getStartedBtn).toBeVisible();
 
-    // Verify it links to the code-examples section (getting started/installation section)
+    // Verify it links to the getting-started section (installation instructions)
     const href = await getStartedBtn.getAttribute('href');
-    expect(href).toBe('#code-examples');
+    expect(href).toBe('#getting-started');
 
     // Click and verify navigation
     await getStartedBtn.click();
@@ -76,11 +76,11 @@ test.describe('Hero Section', () => {
     // Wait for scroll and verify URL hash
     await page.waitForTimeout(500); // Wait for smooth scroll
     const currentUrl = page.url();
-    expect(currentUrl).toContain('#code-examples');
+    expect(currentUrl).toContain('#getting-started');
 
-    // Verify the code-examples section is in viewport
-    const codeExamplesSection = page.locator('#code-examples');
-    await expect(codeExamplesSection).toBeInViewport();
+    // Verify the getting-started section is in viewport
+    const gettingStartedSection = page.locator('#getting-started');
+    await expect(gettingStartedSection).toBeInViewport();
   });
 
   test('TC4: View on GitHub button opens github.com/yetone/mirdb in new tab', async ({ page, context }) => {

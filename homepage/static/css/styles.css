@@ -405,6 +405,118 @@ nav[role="navigation"] {
 }
 
 /* ==========================================================================
+   Getting Started Section
+   ========================================================================== */
+.getting-started {
+    background-color: var(--color-background);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.getting-started__title {
+    text-align: center;
+    margin-bottom: var(--space-sm);
+}
+
+.getting-started__intro {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2xl);
+}
+
+.getting-started__step {
+    margin-bottom: var(--space-2xl);
+}
+
+.getting-started__step-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-md);
+}
+
+.getting-started__step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.getting-started__step-description {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+}
+
+.getting-started__step-description code {
+    background-color: var(--color-background-alt);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 4px;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+}
+
+/* Documentation Links */
+.getting-started__docs {
+    margin-top: var(--space-2xl);
+    padding: var(--space-xl);
+    background-color: var(--color-background-alt);
+    border-radius: 8px;
+}
+
+.getting-started__docs-heading {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-sm);
+}
+
+.getting-started__docs-description {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+}
+
+.getting-started__docs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.getting-started__docs-list li {
+    margin-bottom: var(--space-sm);
+}
+
+.getting-started__docs-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.getting-started__docs-link:hover {
+    color: var(--color-primary-light);
+    text-decoration: underline;
+}
+
+.getting-started__external-icon {
+    flex-shrink: 0;
+}
+
+/* Syntax highlighting for flag */
+.syntax-flag {
+    color: #a78bfa; /* Light purple for flags like --release, -c */
+}
+
+/* ==========================================================================
    Code Examples Section
    ========================================================================== */
 .code-examples {
