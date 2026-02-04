@@ -1,0 +1,30 @@
+<!--
+  Code Examples Section Partial
+  Owner: Scenario 3 - Code Examples
+
+  Expected content:
+  - Section heading
+  - Tabbed interface (SET, GET, DELETE, INFO)
+  - Syntax-highlighted code blocks
+  - One-click copy button for each example
+  - Shell/command syntax highlighting
+-->
+<h2 id="code-examples-heading">Quick Start</h2>
+<div class="code-examples">
+    <pre><code class="language-bash"># Start MirDB server
+$ mirdb-server -c mirdb.toml
+
+# Connect with any memcached client
+$ telnet localhost 12333
+
+# Store data (persists across restarts)
+SET mykey 0 0 5
+hello
+STORED
+
+# Retrieve data
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+</div>

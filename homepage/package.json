@@ -1,0 +1,24 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - Static website for the MirDB persistent key-value store",
+  "scripts": {
+    "test": "playwright test",
+    "test:seo": "playwright test tests/seo/",
+    "test:a11y": "playwright test tests/accessibility/",
+    "test:performance": "playwright test tests/performance/",
+    "test:responsive": "playwright test tests/responsive/",
+    "build": "zola build",
+    "serve": "zola serve"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "keywords": [
+    "mirdb",
+    "homepage",
+    "static-site"
+  ],
+  "author": "MirDB Team",
+  "license": "MIT"
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+    <meta name="title" content="{% block meta_title %}{{ config.title }}{% endblock meta_title %}">
+    <meta name="description" content="{% block meta_description %}MirDB is a persistent key-value store with memcached protocol compatibility. Built in Rust for high performance.{% endblock meta_description %}">
+    <meta name="keywords" content="{% block meta_keywords %}Rust key-value store, persistent memcached, LSM-tree database, key-value database, memcached compatible, Rust database{% endblock meta_keywords %}">
+    <meta name="author" content="{{ config.extra.author | default(value='MirDB Team') }}">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ config.base_url | safe }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ config.base_url | safe }}">
+    <meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock og_title %}">
+    <meta property="og:description" content="{% block og_description %}MirDB is a persistent key-value store with memcached protocol compatibility. Built in Rust for high performance.{% endblock og_description %}">
+    <meta property="og:image" content="{{ config.base_url | safe }}/images/og-image.png">
+    <meta property="og:site_name" content="MirDB">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ config.base_url | safe }}">
+    <meta property="twitter:title" content="{% block twitter_title %}{{ config.title }}{% endblock twitter_title %}">
+    <meta property="twitter:description" content="{% block twitter_description %}MirDB is a persistent key-value store with memcached protocol compatibility. Built in Rust for high performance.{% endblock twitter_description %}">
+    <meta property="twitter:image" content="{{ config.base_url | safe }}/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "MirDB",
+        "applicationCategory": "DatabaseApplication",
+        "operatingSystem": "Linux, macOS, Windows",
+        "description": "MirDB is a high-performance persistent key-value store with memcached protocol compatibility. Built in Rust with LSM-tree architecture for efficient storage and retrieval.",
+        "url": "{{ config.base_url | safe }}",
+        "author": {
+            "@type": "Organization",
+            "name": "MirDB Team",
+            "url": "https://github.com/yetone"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "programmingLanguage": "Rust",
+        "softwareRequirements": "Rust 1.40+",
+        "codeRepository": "https://github.com/yetone/mirdb",
+        "license": "https://opensource.org/licenses/MIT",
+        "featureList": [
+            "Memcached Protocol Compatibility",
+            "Persistent Storage",
+            "LSM-Tree Architecture",
+            "Async I/O with Tokio",
+            "Minor and Major Compaction"
+        ]
+    }
+    </script>
+
+    {% block head_extra %}{% endblock head_extra %}
+</head>
+<body>
+    <!-- Skip to main content link for accessibility -->
+    {% include "partials/navigation.html" %}
+
+    <header role="banner">
+        {% block header %}
+        {% include "partials/hero.html" %}
+        {% endblock header %}
+    </header>
+
+    <main id="main-content" role="main">
+        {% block content %}
+        <section id="features" aria-labelledby="features-heading">
+            {% include "partials/features.html" %}
+        </section>
+
+        <section id="code-examples" aria-labelledby="code-examples-heading">
+            {% include "partials/code-examples.html" %}
+        </section>
+
+        <section id="architecture" aria-labelledby="architecture-heading">
+            {% include "partials/architecture.html" %}
+        </section>
+
+        <section id="roadmap" aria-labelledby="roadmap-heading">
+            {% include "partials/roadmap.html" %}
+        </section>
+        {% endblock content %}
+    </main>
+
+    <footer role="contentinfo">
+        {% include "partials/footer.html" %}
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/main.js" defer></script>
+
+    {% block scripts_extra %}{% endblock scripts_extra %}
+</body>
+</html>

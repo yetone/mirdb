@@ -1,0 +1,22 @@
+<!--
+  Architecture Section Partial
+  Owner: Scenario 4 - Architecture Section
+
+  Expected content:
+  - Section heading
+  - SVG diagram showing LSM-tree components
+  - Labels for: memtable, SSTables, WAL
+  - Brief explanation of write path
+  - Brief explanation of read path
+  - Link to detailed documentation
+-->
+<h2 id="architecture-heading">Architecture</h2>
+<div class="architecture">
+    <p>MirDB uses an LSM-tree architecture for efficient write performance and durable storage.</p>
+    <h3>Key Components</h3>
+    <ul>
+        <li><strong>Memtable</strong>: In-memory skip list for fast writes</li>
+        <li><strong>SSTables</strong>: Sorted string tables on disk</li>
+        <li><strong>WAL</strong>: Write-ahead log for durability</li>
+    </ul>
+</div>

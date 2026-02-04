@@ -1,0 +1,32 @@
+# Zola Configuration for MirDB Homepage
+# Site-wide configuration settings
+
+base_url = "https://yetone.github.io/mirdb"
+title = "MirDB - Persistent Key-Value Store"
+description = "MirDB is a high-performance persistent key-value store with memcached protocol compatibility. Built in Rust with LSM-tree architecture for efficient storage."
+
+# Disable search index for static homepage
+build_search_index = false
+
+# Production optimization
+minify_html = true
+
+# Compile Sass/SCSS files
+compile_sass = true
+
+# Generate feed
+generate_feed = false
+
+# Additional taxonomies
+taxonomies = []
+
+[markdown]
+highlight_code = true
+highlight_theme = "one-dark"
+
+[extra]
+# Site metadata for SEO
+author = "MirDB Team"
+keywords = ["Rust key-value store", "persistent memcached", "LSM-tree database", "key-value database", "memcached compatible"]
+og_image = "/images/og-image.png"
+github_url = "https://github.com/yetone/mirdb"
