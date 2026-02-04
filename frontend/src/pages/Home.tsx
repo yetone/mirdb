@@ -98,7 +98,7 @@ function Home() {
           </p>
 
           {/* Placeholder for URL shortening form (Scenario 2) */}
-          <div className="max-w-2xl mx-auto mb-8" aria-label="URL shortening form area">
+          <div className="max-w-2xl mx-auto mb-8" role="region" aria-label="URL shortening form area">
             {/* UrlShortenerForm will be added by Scenario 2 */}
           </div>
 
