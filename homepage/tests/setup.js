@@ -23,6 +23,43 @@ const config = {
   }
 };
 
+// Viewport configurations (Scenario 6 - Responsive Design)
+const VIEWPORTS = {
+  desktop: { width: 1920, height: 1080 },
+  desktopSmall: { width: 1366, height: 768 },
+  tablet: { width: 768, height: 1024 },
+  tabletLandscape: { width: 1024, height: 768 },
+  mobile: { width: 375, height: 667 },
+  mobileLarge: { width: 414, height: 896 },
+};
+
+// Minimum touch target size (WCAG 2.1 AA)
+const MIN_TOUCH_TARGET = 44;
+
+// Test selectors - Updated to match actual page structure
+const SELECTORS = {
+  hero: '#hero',
+  heroTitle: '#hero h1',
+  heroTagline: '#hero p',
+  heroCtaGroup: '#hero .flex',
+  heroLogo: '.hero__logo, #hero img',
+  featuresSection: '#features',
+  featuresGrid: '#features .grid',
+  featureCard: '#features .bg-gray-700',
+  codeExamples: '#code-examples',
+  codeBlock: '#code-examples pre',
+  tabs: '.tabs',
+  tab: '.tab, button[role="tab"]',
+  architecture: '#architecture',
+  roadmap: '#roadmap',
+  footer: '.footer, footer',
+  skipLink: 'a[href="#main-content"]',
+  mainContent: '#main-content',
+  btn: 'a[class*="bg-"], button[class*="bg-"]',
+  btnPrimary: '.bg-primary, .btn--primary',
+  btnSecondary: '.bg-gray-700, .btn--secondary',
+};
+
 /**
  * Navigate to the homepage
  * @param {import('@playwright/test').Page} page
@@ -84,5 +121,8 @@ module.exports = {
   pressTab,
   isVisuallyVisible,
   test,
-  expect
+  expect,
+  VIEWPORTS,
+  MIN_TOUCH_TARGET,
+  SELECTORS
 };

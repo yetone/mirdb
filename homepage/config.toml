@@ -16,3 +16,4 @@ highlight_theme = "base16-ocean-dark"
 
 [extra]
 github_url = "https://github.com/yetone/mirdb"
+github_repo = "https://github.com/yetone/mirdb"
