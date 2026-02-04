@@ -1,0 +1,56 @@
+<!--
+  Hero Section Partial
+  Owner: Scenario 1 - Hero Section
+
+  Expected content:
+  - Animated logo (logo.gif)
+  - Main heading: "MirDB"
+  - Tagline: "A Persistent Key-Value Store with Memcached Protocol"
+  - Brief description
+  - Primary CTA: "Get Started" button
+  - Secondary CTA: "View on GitHub" button
+  - Above-the-fold layout
+-->
+<section id="hero" class="hero" aria-labelledby="hero-heading">
+  <div class="hero__content">
+    <!-- Animated Logo (optimized for LCP - Scenario 8 Performance) -->
+    <img
+      src="{{ get_url(path='images/logo.gif') }}"
+      alt="MirDB - Animated database logo showing key-value storage visualization"
+      class="hero__logo"
+      width="200"
+      height="120"
+      fetchpriority="high"
+      decoding="async"
+    >
+
+    <!-- Main Heading -->
+    <h1 id="hero-heading" class="hero__title">MirDB</h1>
+
+    <!-- Tagline -->
+    <p class="hero__tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+
+    <!-- Description -->
+    <p class="hero__description">
+      Drop-in memcached replacement with durable storage.
+      Built in Rust for performance and reliability.
+    </p>
+
+    <!-- Call-to-Action Buttons -->
+    <div class="hero__cta">
+      <a href="#getting-started" class="btn btn--primary" data-testid="cta-get-started">
+        Get Started
+      </a>
+      <a
+        href="https://github.com/yetone/mirdb"
+        class="btn btn--secondary"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-testid="cta-github"
+        aria-label="View MirDB on GitHub (opens in new tab)"
+      >
+        View on GitHub
+      </a>
+    </div>
+  </div>
+</section>

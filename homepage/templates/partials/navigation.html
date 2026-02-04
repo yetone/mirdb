@@ -1,0 +1,35 @@
+<!--
+  Navigation/Skip Links Partial
+  Owner: Scenario 7 - Accessibility
+
+  Features:
+  - Skip-to-content link (visually hidden until focused)
+  - ARIA landmarks support
+  - Keyboard navigation support
+-->
+<a href="#main-content" class="skip-link" aria-label="Skip to main content">
+    Skip to main content
+</a>
+
+<header role="banner" aria-label="Site header">
+    <nav role="navigation" aria-label="Main navigation">
+        <a href="{{ config.base_url }}" class="nav-brand" aria-label="MirDB Home">
+            MirDB
+        </a>
+        <ul class="nav-links" role="list">
+            <li><a href="#features" class="nav-link">Features</a></li>
+            <li><a href="#code-examples" class="nav-link">Examples</a></li>
+            <li><a href="#architecture" class="nav-link">Architecture</a></li>
+            <li><a href="#roadmap" class="nav-link">Roadmap</a></li>
+            <li>
+                <a href="{{ config.extra.github_repo }}"
+                   class="nav-link nav-link--github"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="View MirDB on GitHub (opens in new tab)">
+                    GitHub
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>

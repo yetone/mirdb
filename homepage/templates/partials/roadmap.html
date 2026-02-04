@@ -1,0 +1,106 @@
+<!--
+  Roadmap Section Partial
+  Owner: Scenario 5 - Roadmap Section
+
+  Displays project status with implemented and planned features.
+  REQ-5: Homepage must display project status including implemented features and roadmap
+
+  Completed items (checked):
+  - tokio with memcached protocol
+  - memtable with skiplist
+  - minor compaction
+  - major compaction
+
+  Planned items (unchecked):
+  - raft consensus
+-->
+<section id="roadmap" class="py-16 px-4" aria-labelledby="roadmap-heading">
+  <div class="max-w-4xl mx-auto">
+    <h2 id="roadmap-heading" class="text-3xl font-bold text-center mb-4">Roadmap</h2>
+    <p class="text-center text-gray-400 mb-8">Track our progress as we build MirDB</p>
+
+    <!-- Progress indicator -->
+    <div class="mb-8" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="Project completion: 4 of 5 features implemented">
+      <div class="flex justify-between text-sm text-gray-400 mb-2">
+        <span>Progress</span>
+        <span>4 of 5 features completed</span>
+      </div>
+      <div class="w-full bg-gray-700 rounded-full h-3">
+        <div class="bg-green-500 h-3 rounded-full transition-all duration-500" style="width: 80%"></div>
+      </div>
+    </div>
+
+    <!-- Roadmap checklist -->
+    <ul class="roadmap-checklist space-y-4" role="list" aria-label="Feature checklist">
+      <!-- Completed: Tokio with memcached protocol -->
+      <li class="roadmap-item roadmap-item--completed flex items-center gap-4 p-4 bg-gray-800 rounded-lg border border-gray-700" data-status="completed">
+        <span class="roadmap-indicator flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <span class="roadmap-text flex-grow">
+          <span class="font-semibold text-white">Tokio with memcached protocol</span>
+          <span class="sr-only"> - Completed</span>
+        </span>
+        <span class="roadmap-badge text-xs px-2 py-1 rounded bg-green-900 text-green-300">Completed</span>
+      </li>
+
+      <!-- Completed: Memtable with skiplist -->
+      <li class="roadmap-item roadmap-item--completed flex items-center gap-4 p-4 bg-gray-800 rounded-lg border border-gray-700" data-status="completed">
+        <span class="roadmap-indicator flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <span class="roadmap-text flex-grow">
+          <span class="font-semibold text-white">Memtable with skiplist</span>
+          <span class="sr-only"> - Completed</span>
+        </span>
+        <span class="roadmap-badge text-xs px-2 py-1 rounded bg-green-900 text-green-300">Completed</span>
+      </li>
+
+      <!-- Completed: Minor compaction -->
+      <li class="roadmap-item roadmap-item--completed flex items-center gap-4 p-4 bg-gray-800 rounded-lg border border-gray-700" data-status="completed">
+        <span class="roadmap-indicator flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <span class="roadmap-text flex-grow">
+          <span class="font-semibold text-white">Minor compaction</span>
+          <span class="sr-only"> - Completed</span>
+        </span>
+        <span class="roadmap-badge text-xs px-2 py-1 rounded bg-green-900 text-green-300">Completed</span>
+      </li>
+
+      <!-- Completed: Major compaction -->
+      <li class="roadmap-item roadmap-item--completed flex items-center gap-4 p-4 bg-gray-800 rounded-lg border border-gray-700" data-status="completed">
+        <span class="roadmap-indicator flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <span class="roadmap-text flex-grow">
+          <span class="font-semibold text-white">Major compaction</span>
+          <span class="sr-only"> - Completed</span>
+        </span>
+        <span class="roadmap-badge text-xs px-2 py-1 rounded bg-green-900 text-green-300">Completed</span>
+      </li>
+
+      <!-- Planned: Raft consensus -->
+      <li class="roadmap-item roadmap-item--planned flex items-center gap-4 p-4 bg-gray-800 rounded-lg border border-gray-700" data-status="planned">
+        <span class="roadmap-indicator flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 border-gray-500 text-gray-500" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="10" cy="10" r="6" />
+          </svg>
+        </span>
+        <span class="roadmap-text flex-grow">
+          <span class="font-semibold text-gray-300">Raft consensus</span>
+          <span class="sr-only"> - Planned</span>
+        </span>
+        <span class="roadmap-badge text-xs px-2 py-1 rounded bg-gray-700 text-gray-400">Planned</span>
+      </li>
+    </ul>
+  </div>
+</section>

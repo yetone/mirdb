@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-labelledby="arch-title arch-desc">
+  <title id="arch-title">MirDB LSM-tree Architecture</title>
+  <desc id="arch-desc">Diagram showing the LSM-tree architecture with Write-Ahead Log, Memtable, and SSTable levels</desc>
+
+  <!-- Background -->
+  <rect width="600" height="400" fill="#f7fafc"/>
+
+  <!-- Write Path Arrow -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1a365d"/>
+    </marker>
+  </defs>
+
+  <!-- Client -->
+  <rect x="50" y="30" width="100" height="40" rx="5" fill="#2c5282"/>
+  <text x="100" y="55" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Client</text>
+
+  <!-- Write Arrow -->
+  <line x1="100" y1="70" x2="100" y2="100" stroke="#1a365d" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="115" y="90" fill="#4a5568" font-size="12">Write</text>
+
+  <!-- WAL -->
+  <rect x="30" y="110" width="140" height="50" rx="5" fill="#ed8936"/>
+  <text x="100" y="140" text-anchor="middle" fill="white" font-size="14" font-weight="bold">WAL</text>
+  <text x="100" y="155" text-anchor="middle" fill="white" font-size="10">(Write-Ahead Log)</text>
+
+  <!-- Arrow to Memtable -->
+  <line x1="100" y1="160" x2="100" y2="190" stroke="#1a365d" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Memtable -->
+  <rect x="30" y="200" width="140" height="60" rx="5" fill="#276749"/>
+  <text x="100" y="230" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Memtable</text>
+  <text x="100" y="250" text-anchor="middle" fill="white" font-size="10">(Skip List)</text>
+
+  <!-- Arrow to SSTable L0 -->
+  <line x1="170" y1="230" x2="220" y2="230" stroke="#1a365d" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="195" y="220" fill="#4a5568" font-size="10">Flush</text>
+
+  <!-- SSTable Levels -->
+  <!-- L0 -->
+  <rect x="230" y="110" width="150" height="50" rx="5" fill="#3182ce"/>
+  <text x="305" y="135" text-anchor="middle" fill="white" font-size="12" font-weight="bold">SSTable Level 0</text>
+  <text x="305" y="150" text-anchor="middle" fill="white" font-size="10">(Unsorted)</text>
+
+  <!-- L1 -->
+  <rect x="230" y="180" width="150" height="50" rx="5" fill="#2c5282"/>
+  <text x="305" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="bold">SSTable Level 1</text>
+  <text x="305" y="220" text-anchor="middle" fill="white" font-size="10">(Sorted)</text>
+
+  <!-- L2 -->
+  <rect x="230" y="250" width="150" height="50" rx="5" fill="#1a365d"/>
+  <text x="305" y="275" text-anchor="middle" fill="white" font-size="12" font-weight="bold">SSTable Level 2</text>
+  <text x="305" y="290" text-anchor="middle" fill="white" font-size="10">(Sorted)</text>
+
+  <!-- Compaction Arrows -->
+  <line x1="305" y1="160" x2="305" y2="175" stroke="#1a365d" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="305" y1="230" x2="305" y2="245" stroke="#1a365d" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="330" y="170" fill="#4a5568" font-size="9">Minor</text>
+  <text x="330" y="242" fill="#4a5568" font-size="9">Major</text>
+
+  <!-- Read Path -->
+  <rect x="430" y="30" width="100" height="40" rx="5" fill="#2c5282"/>
+  <text x="480" y="55" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Read</text>
+
+  <!-- Read arrows -->
+  <line x1="430" y1="50" x2="170" y2="220" stroke="#9f7aea" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  <line x1="430" y1="50" x2="230" y2="135" stroke="#9f7aea" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+
+  <!-- Legend -->
+  <rect x="430" y="320" width="150" height="70" rx="5" fill="white" stroke="#e2e8f0"/>
+  <text x="440" y="340" fill="#1a365d" font-size="12" font-weight="bold">Legend</text>
+  <line x1="440" y1="355" x2="470" y2="355" stroke="#1a365d" stroke-width="2"/>
+  <text x="480" y="360" fill="#4a5568" font-size="10">Write Path</text>
+  <line x1="440" y1="375" x2="470" y2="375" stroke="#9f7aea" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="480" y="380" fill="#4a5568" font-size="10">Read Path</text>
+</svg>

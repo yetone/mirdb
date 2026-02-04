@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ config.description }}">
+    <meta name="keywords" content="Rust key-value store, persistent memcached, LSM-tree database">
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+
+    <!-- Preconnect hints for performance (Scenario 8) -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ config.title }}">
+    <meta property="og:description" content="{{ config.description }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ config.base_url }}">
+
+    <!-- Tailwind CSS via CDN (render-blocking but necessary for styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                        light: '#F9FAFB'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ get_url(path='css/styles.css') }}">
+
+    <!-- Critical Responsive CSS (Scenario 6) -->
+    <style>
+        /* Prevent horizontal overflow */
+        html, body { overflow-x: hidden; max-width: 100vw; }
+
+        /* Touch-friendly minimum sizes (44px per WCAG 2.1 AA) */
+        .btn, button, [role="button"], a.cta, .tab, .footer__link {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hero section - full width */
+        .hero { width: 100%; min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem 1rem; }
+        .hero__logo { max-width: 200px; width: 100%; }
+        .hero__cta-group { display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 300px; }
+
+        /* Features grid - responsive columns */
+        .features-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+
+        /* Code blocks with horizontal scroll */
+        .code-block { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+        .code-examples { overflow-x: hidden; }
+
+        /* Tabs - touch friendly */
+        .tabs { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+        .tab { min-height: 44px; padding: 0.75rem 1rem; }
+
+        /* Footer - stacked on mobile */
+        .footer__links { display: flex; flex-direction: column; gap: 1rem; }
+
+        /* Responsive breakpoints */
+        @media (min-width: 640px) {
+            .hero__cta-group { flex-direction: row; width: auto; max-width: none; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+            .hero__logo { max-width: 300px; }
+            .footer__links { flex-direction: row; justify-content: center; gap: 2rem; }
+        }
+        @media (min-width: 1024px) {
+            .features-grid { grid-template-columns: repeat(3, 1fr); }
+            .hero__logo { max-width: 400px; }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen overflow-x-hidden">
+    {% include "partials/navigation.html" %}
+
+    <main id="main-content" role="main" tabindex="-1" aria-label="Main content">
+        {% block content %}{% endblock content %}
+    </main>
+
+    <!-- JavaScript -->
+    <script src="{{ get_url(path='js/main.js') }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A modern, responsive static website",
+  "scripts": {
+    "test": "playwright test",
+    "test:a11y": "playwright test tests/accessibility/",
+    "test:performance": "playwright test tests/performance/",
+    "test:lighthouse": "playwright test tests/performance/lighthouse.test.js",
+    "test:e2e": "playwright test",
+    "build": "echo 'Build with Zola: zola build'",
+    "serve": "npx serve public -l 8080"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.8.0",
+    "@playwright/test": "^1.40.0",
+    "lighthouse": "^13.0.1",
+    "serve": "^14.2.0"
+  }
+}

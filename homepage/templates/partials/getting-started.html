@@ -1,0 +1,196 @@
+<!--
+  Getting Started Section Partial
+  Owner: Scenario 12 - Getting Started Section and Documentation Links
+
+  Expected content:
+  - Installation commands for mirdb-server
+  - TOML configuration example
+  - Links to documentation
+  - Clear step-by-step instructions
+-->
+<section id="getting-started" class="getting-started py-16 px-4 bg-gray-800" aria-labelledby="getting-started-heading" data-testid="getting-started-section">
+  <div class="max-w-4xl mx-auto">
+    <h2 id="getting-started-heading" class="text-3xl font-bold text-center mb-4">Getting Started</h2>
+    <p class="text-center text-gray-400 mb-12">Get MirDB up and running in minutes</p>
+
+    <!-- Installation Steps -->
+    <div class="getting-started__steps space-y-8">
+      <!-- Step 1: Clone and Build -->
+      <div class="getting-started__step" data-testid="step-install">
+        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+          <span class="getting-started__step-number bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">1</span>
+          Clone and Build
+        </h3>
+        <div class="code-panel__wrapper relative">
+          <pre class="code-block bg-gray-900 p-6 rounded-lg overflow-x-auto text-sm"><code><span class="syntax-comment"># Clone the repository</span>
+<span class="syntax-prompt">$</span> <span class="syntax-command">git clone</span> <span class="syntax-value">https://github.com/yetone/mirdb.git</span>
+<span class="syntax-prompt">$</span> <span class="syntax-command">cd</span> <span class="syntax-value">mirdb</span>
+
+<span class="syntax-comment"># Build with Cargo</span>
+<span class="syntax-prompt">$</span> <span class="syntax-command">cargo build</span> <span class="syntax-flag">--release</span></code></pre>
+          <button
+            class="copy-btn"
+            aria-label="Copy installation commands to clipboard"
+            data-code="# Clone the repository
+$ git clone https://github.com/yetone/mirdb.git
+$ cd mirdb
+
+# Build with Cargo
+$ cargo build --release"
+          >Copy</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Configure -->
+      <div class="getting-started__step" data-testid="step-configure">
+        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+          <span class="getting-started__step-number bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">2</span>
+          Configure
+        </h3>
+        <p class="text-gray-400 mb-4">Create a TOML configuration file (e.g., <code class="text-blue-400">mirdb.toml</code>):</p>
+        <div class="code-panel__wrapper relative" data-testid="toml-config">
+          <pre class="code-block bg-gray-900 p-6 rounded-lg overflow-x-auto text-sm"><code><span class="syntax-comment"># MirDB Configuration File (mirdb.toml)</span>
+<span class="syntax-keyword">addr</span> = <span class="syntax-string">"0.0.0.0:12333"</span>
+
+<span class="syntax-keyword">max_level</span> = <span class="syntax-number">7</span>
+<span class="syntax-keyword">work_dir</span> = <span class="syntax-string">"/tmp/mirdb"</span>
+
+<span class="syntax-keyword">sst_max_size</span> = <span class="syntax-string">"100M"</span>
+<span class="syntax-keyword">mem_table_max_size</span> = <span class="syntax-string">"4M"</span>
+<span class="syntax-keyword">mem_table_max_height</span> = <span class="syntax-number">32</span>
+
+<span class="syntax-keyword">imm_mem_table_max_count</span> = <span class="syntax-number">16</span>
+
+<span class="syntax-keyword">block_size</span> = <span class="syntax-string">"4K"</span>
+<span class="syntax-keyword">block_restart_interval</span> = <span class="syntax-number">16</span>
+
+<span class="syntax-keyword">l0_compaction_trigger</span> = <span class="syntax-number">4</span>
+
+<span class="syntax-keyword">thread_sleep_ms</span> = <span class="syntax-number">500</span></code></pre>
+          <button
+            class="copy-btn"
+            aria-label="Copy configuration to clipboard"
+            data-code='# MirDB Configuration File (mirdb.toml)
+addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdb"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500'
+          >Copy</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Start the Server -->
+      <div class="getting-started__step" data-testid="step-start">
+        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+          <span class="getting-started__step-number bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">3</span>
+          Start the Server
+        </h3>
+        <div class="code-panel__wrapper relative" data-testid="server-start-command">
+          <pre class="code-block bg-gray-900 p-6 rounded-lg overflow-x-auto text-sm"><code><span class="syntax-comment"># Start MirDB server with your config file</span>
+<span class="syntax-prompt">$</span> <span class="syntax-command">mirdb-server</span> <span class="syntax-flag">-c</span> <span class="syntax-value">mirdb.toml</span>
+
+<span class="syntax-comment"># Or use the full path</span>
+<span class="syntax-prompt">$</span> <span class="syntax-command">./target/release/mirdb-server</span> <span class="syntax-flag">-c</span> <span class="syntax-value">mirdb.toml</span></code></pre>
+          <button
+            class="copy-btn"
+            aria-label="Copy server start command to clipboard"
+            data-code="# Start MirDB server with your config file
+$ mirdb-server -c mirdb.toml
+
+# Or use the full path
+$ ./target/release/mirdb-server -c mirdb.toml"
+          >Copy</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Connect -->
+      <div class="getting-started__step" data-testid="step-connect">
+        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+          <span class="getting-started__step-number bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">4</span>
+          Connect and Use
+        </h3>
+        <p class="text-gray-400 mb-4">Connect with any memcached client:</p>
+        <div class="code-panel__wrapper relative">
+          <pre class="code-block bg-gray-900 p-6 rounded-lg overflow-x-auto text-sm"><code><span class="syntax-comment"># Connect using telnet</span>
+<span class="syntax-prompt">$</span> <span class="syntax-command">telnet</span> <span class="syntax-value">localhost</span> <span class="syntax-number">12333</span>
+
+<span class="syntax-comment"># Or use any memcached client library</span></code></pre>
+          <button
+            class="copy-btn"
+            aria-label="Copy connect command to clipboard"
+            data-code="# Connect using telnet
+$ telnet localhost 12333
+
+# Or use any memcached client library"
+          >Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documentation Links -->
+    <div class="getting-started__docs mt-12 p-6 bg-gray-900 rounded-lg" data-testid="documentation-links">
+      <h3 class="text-xl font-semibold mb-4">Documentation</h3>
+      <p class="text-gray-400 mb-4">Learn more about MirDB features and configuration:</p>
+      <ul class="space-y-2">
+        <li>
+          <a
+            href="https://github.com/yetone/mirdb#readme"
+            class="text-blue-400 hover:text-blue-300 underline inline-flex items-center gap-1"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="docs-readme-link"
+            aria-label="View README documentation on GitHub (opens in new tab)"
+          >
+            README Documentation
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/yetone/mirdb/blob/master/etc/mirdb.toml"
+            class="text-blue-400 hover:text-blue-300 underline inline-flex items-center gap-1"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="docs-config-link"
+            aria-label="View example configuration file on GitHub (opens in new tab)"
+          >
+            Configuration Reference
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/yetone/mirdb/issues"
+            class="text-blue-400 hover:text-blue-300 underline inline-flex items-center gap-1"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="docs-issues-link"
+            aria-label="Report issues or ask questions on GitHub (opens in new tab)"
+          >
+            Report Issues / Ask Questions
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

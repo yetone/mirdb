@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+public/
+
+# Test artifacts
+test-results/
+playwright-report/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Package lock files (optional - can be committed)
+# package-lock.json
+zola
+zola-*.tar.gz
