@@ -12,7 +12,7 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Features Section', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto('/');
+        await page.goto('http://localhost:3000/');
     });
 
     test('should display at least 5 feature items', async ({ page }) => {
