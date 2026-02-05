@@ -373,6 +373,70 @@ body {
    CONFIGURATION SECTION STYLES - Owner: Scenario 5
    ============================================ */
 
+.configuration-section {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-background-alt);
+}
+
+.configuration-intro {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-size-lg);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    background-color: var(--color-background);
+}
+
+.config-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-base);
+}
+
+.config-table thead {
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+}
+
+.config-table th {
+    padding: var(--spacing-md) var(--spacing-lg);
+    text-align: left;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.config-table td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text);
+}
+
+.config-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.config-table tbody tr:hover {
+    background-color: var(--color-background-alt);
+}
+
+.config-table code {
+    background-color: var(--color-background-alt);
+    color: var(--color-primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+}
 
 /* ============================================
    FOOTER STYLES - Owner: Scenario 7
