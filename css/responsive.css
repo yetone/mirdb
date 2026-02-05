@@ -1,0 +1,27 @@
+/**
+ * MirDB Homepage - Responsive Styles
+ * Owner: Scenario 6 - Responsive Design
+ *
+ * Contains all media queries for mobile, tablet, and desktop breakpoints.
+ * Coordinates with other scenarios for responsive adjustments.
+ *
+ * Breakpoints:
+ * - Mobile: < 600px
+ * - Tablet: 600px - 1024px
+ * - Desktop: > 1024px
+ */
+
+/* Mobile styles (< 600px) */
+@media (max-width: 599px) {
+    /* Mobile-specific styles */
+}
+
+/* Tablet styles (600px - 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+    /* Tablet-specific styles */
+}
+
+/* Desktop styles (> 1024px) */
+@media (min-width: 1025px) {
+    /* Desktop-specific styles */
+}
