@@ -10,6 +10,104 @@
    HEADER/NAV STYLES - Owner: Scenario 4
    ============================================ */
 
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: var(--spacing-md) var(--container-padding);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: var(--font-size-xl);
+    transition: color var(--transition-fast);
+}
+
+.nav-brand:hover {
+    color: var(--color-primary);
+}
+
+.brand-name {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin: 0;
+}
+
+.nav-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.nav-links a:hover {
+    color: var(--color-primary);
+    background-color: var(--color-background-alt);
+}
+
+.nav-links a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.nav-link-github {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.github-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.nav-link-docs,
+.nav-link-github {
+    font-weight: 500;
+}
+
+/* Add padding to body to account for fixed header */
+body {
+    padding-top: 60px;
+}
+
 
 /* ============================================
    HERO SECTION STYLES - Owner: Scenario 1
