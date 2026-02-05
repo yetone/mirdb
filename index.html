@@ -21,6 +21,45 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- PROGRESSIVE ENHANCEMENT - Owner: Scenario 11 -->
+    <!-- Add js-enabled class immediately when JS is available -->
+    <script>document.documentElement.classList.add('js-enabled');</script>
+    <!-- Noscript fallback styles for when JS is disabled -->
+    <noscript>
+        <style>
+            /* Ensure mobile navigation is visible when JS is disabled */
+            @media (max-width: 599px) {
+                .nav-menu {
+                    position: static !important;
+                    transform: none !important;
+                    visibility: visible !important;
+                    width: 100%;
+                    max-width: none;
+                    height: auto;
+                    background-color: #f8fafc;
+                    box-shadow: none;
+                    padding: 1rem;
+                    margin-top: 0.5rem;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+                .nav-menu .nav-link {
+                    font-size: 0.875rem;
+                    padding: 0.5rem 1rem;
+                    border-bottom: none;
+                    display: inline-block;
+                    width: auto;
+                }
+                .nav-overlay {
+                    display: none !important;
+                }
+                .hamburger-btn {
+                    display: none !important;
+                }
+            }
+        </style>
+    </noscript>
 </head>
 <body>
     <!-- HEADER/NAV - Owner: Scenario 4 -->

@@ -252,3 +252,96 @@ button:focus-visible,
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
+
+/* ============================================
+   PROGRESSIVE ENHANCEMENT / NO-JS FALLBACK - Owner: Scenario 11
+   CSS-only solutions for when JavaScript is disabled
+   ============================================ */
+
+/*
+ * Mobile Navigation No-JS Fallback
+ * When JavaScript is disabled, the mobile navigation menu should be
+ * accessible without requiring the hamburger button toggle.
+ * This CSS-only solution shows the nav links below the header on mobile.
+ */
+@media (max-width: 599px) {
+    /* No-JS fallback: Show nav menu in a static, accessible position */
+    /* The JS will add classes to override this when it initializes */
+    .nav-menu:not(.js-initialized) {
+        /* Reset the off-screen positioning from responsive.css */
+        position: static;
+        transform: none;
+        visibility: visible;
+        width: 100%;
+        max-width: none;
+        height: auto;
+        background-color: var(--color-background-alt);
+        box-shadow: none;
+        padding: var(--spacing-md);
+        margin-top: var(--spacing-sm);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Hide hamburger button when JS is disabled since nav is always visible */
+    .hamburger-btn:not(.js-initialized) {
+        /* Still show hamburger but it won't function without JS */
+        /* Alternatively, could hide it: display: none; */
+    }
+
+    /* Adjust nav links for horizontal layout on mobile without JS */
+    .nav-menu:not(.js-initialized) .nav-link {
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-bottom: none;
+        display: inline-block;
+        width: auto;
+    }
+
+    /* Hide overlay since menu is always visible */
+    .nav-overlay:not(.js-initialized) {
+        display: none !important;
+    }
+}
+
+/*
+ * Alternative approach using noscript detection via html class
+ * JavaScript adds 'js-enabled' class to html element when it runs
+ */
+html:not(.js-enabled) .nav-menu {
+    /* Ensure navigation is accessible when JS is disabled */
+}
+
+@media (max-width: 599px) {
+    html:not(.js-enabled) .nav-menu {
+        position: static !important;
+        transform: none !important;
+        visibility: visible !important;
+        width: 100%;
+        max-width: none;
+        height: auto;
+        background-color: var(--color-background-alt);
+        box-shadow: none;
+        padding: var(--spacing-md);
+        margin-top: var(--spacing-sm);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    html:not(.js-enabled) .nav-menu .nav-link {
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-bottom: none;
+        display: inline-block;
+        width: auto;
+    }
+
+    html:not(.js-enabled) .nav-overlay {
+        display: none !important;
+    }
+
+    /* Hide hamburger button when JS is disabled */
+    html:not(.js-enabled) .hamburger-btn {
+        display: none;
+    }
+}
