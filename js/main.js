@@ -9,4 +9,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize modules here
     // Modules will be loaded by their respective scenarios
+    // import { initClipboard } from './clipboard.js';
+    // import { initNavigation } from './navigation.js';
 });

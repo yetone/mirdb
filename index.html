@@ -38,7 +38,37 @@
         </section>
 
         <!-- FEATURES SECTION - Owner: Scenario 2 -->
-        <section id="features"></section>
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2 class="section-title">Key Features</h2>
+                <div class="features-grid">
+                    <article class="feature-card">
+                        <h3 class="feature-title">Memcached Protocol Compatible</h3>
+                        <p class="feature-description">Drop-in replacement for Memcached with full protocol compatibility. Use your existing Memcached clients and libraries without any code changes.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">Persistent Storage</h3>
+                        <p class="feature-description">Unlike in-memory caches, MirDB persists all data to disk. Your data survives server restarts and system failures.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">LSM Tree Architecture</h3>
+                        <p class="feature-description">Built on a Log-Structured Merge (LSM) tree architecture optimized for write-heavy workloads with efficient compaction.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">Skip List Memtable</h3>
+                        <p class="feature-description">In-memory writes use a high-performance Skip list data structure for fast insertions and lookups before flushing to disk.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">ACID Durability via WAL</h3>
+                        <p class="feature-description">Write-Ahead Logging (WAL) ensures ACID durability. Every write is logged before acknowledgment, guaranteeing data integrity.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">Efficient Block Storage</h3>
+                        <p class="feature-description">Data is organized in configurable block sizes for optimal I/O performance, with support for compression and caching.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
 
         <!-- QUICKSTART SECTION - Owner: Scenario 3 -->
         <section id="quickstart"></section>
