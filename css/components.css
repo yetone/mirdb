@@ -147,6 +147,129 @@
    QUICKSTART SECTION STYLES - Owner: Scenario 3
    ============================================ */
 
+.quickstart-section {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-background);
+}
+
+.quickstart-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.quickstart-intro {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-size-lg);
+}
+
+.code-examples {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.code-block-wrapper {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: #0f172a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-label {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-code-text);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.copy-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.copy-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.copy-btn.copied {
+    background-color: var(--color-success);
+    color: white;
+}
+
+.copy-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.code-block {
+    margin: 0;
+    padding: var(--spacing-md);
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+    overflow-x: auto;
+    font-size: var(--font-size-sm);
+    line-height: 1.7;
+}
+
+.code-block code {
+    display: block;
+    white-space: pre;
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Syntax Highlighting Tokens */
+.token-comment {
+    color: #64748b;
+    font-style: italic;
+}
+
+.token-command {
+    color: #22d3ee;
+    font-weight: 600;
+}
+
+.token-key {
+    color: #a78bfa;
+}
+
+.token-number {
+    color: #fbbf24;
+}
+
+.token-value {
+    color: #4ade80;
+}
+
+.token-response {
+    color: #f472b6;
+    font-weight: 500;
+}
 
 /* ============================================
    CONFIGURATION SECTION STYLES - Owner: Scenario 5

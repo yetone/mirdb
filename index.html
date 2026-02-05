@@ -71,7 +71,65 @@
         </section>
 
         <!-- QUICKSTART SECTION - Owner: Scenario 3 -->
-        <section id="quickstart"></section>
+        <section id="quickstart" class="quickstart-section">
+            <div class="container">
+                <h2>Quick Start</h2>
+                <p class="quickstart-intro">Get started with MirDB in seconds using the Memcached protocol.</p>
+
+                <div class="code-examples">
+                    <!-- Start Server Example -->
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-label">Start the server</span>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="code-start">
+                                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block" id="code-start"><code class="language-bash"><span class="token-comment"># Start the server</span>
+<span class="token-command">mirdb-server</span></code></pre>
+                    </div>
+
+                    <!-- Set Command Example -->
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-label">Set a value (Memcached protocol)</span>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="code-set">
+                                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block" id="code-set"><code class="language-memcached"><span class="token-command">set</span> <span class="token-key">mykey</span> <span class="token-number">0</span> <span class="token-number">0</span> <span class="token-number">5</span>
+<span class="token-value">hello</span>
+<span class="token-response">STORED</span></code></pre>
+                    </div>
+
+                    <!-- Get Command Example -->
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-label">Get a value</span>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="code-get">
+                                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block" id="code-get"><code class="language-memcached"><span class="token-command">get</span> <span class="token-key">mykey</span>
+<span class="token-response">VALUE</span> <span class="token-key">mykey</span> <span class="token-number">0</span> <span class="token-number">5</span>
+<span class="token-value">hello</span>
+<span class="token-response">END</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- CONFIGURATION SECTION - Owner: Scenario 5 -->
         <section id="configuration"></section>
@@ -81,6 +139,7 @@
     <footer></footer>
 
     <!-- JavaScript - Progressive Enhancement -->
+    <script src="js/clipboard.js" defer></script>
     <script src="js/main.js" defer></script>
 </body>
 </html>

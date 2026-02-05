@@ -66,6 +66,7 @@
     /* Transitions */
     --transition-fast: 150ms ease;
     --transition-base: 200ms ease;
+    --transition-normal: 250ms ease;
     --transition-slow: 300ms ease;
 
     /* Container widths */
@@ -102,6 +103,7 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.2;
     font-weight: 700;
     color: var(--color-text);
+    margin-bottom: var(--spacing-md);
 }
 
 h1 { font-size: var(--font-size-5xl); }
@@ -205,7 +207,8 @@ table {
     margin-bottom: var(--spacing-2xl);
 }
 
-.sr-only {
+.sr-only,
+.visually-hidden {
     position: absolute;
     width: 1px;
     height: 1px;
