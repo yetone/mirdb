@@ -12,8 +12,8 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Quick Start Section', () => {
-    test.beforeEach(async ({ page }) => {
-        await page.goto('/');
+    test.beforeEach(async ({ page, baseURL }) => {
+        await page.goto(baseURL || 'http://localhost:3000');
     });
 
     test('TC1: Quick Start section is visible with correct heading', async ({ page }) => {
