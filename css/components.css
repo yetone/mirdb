@@ -1,0 +1,509 @@
+/**
+ * MirDB Homepage - Component Styles
+ * Multiple Owners - Organized by Section
+ *
+ * Each section should be clearly commented with owner.
+ * Do NOT modify other scenarios' sections.
+ */
+
+/* ============================================
+   HEADER/NAV STYLES - Owner: Scenario 4
+   Responsive hamburger menu added by Scenario 6
+   ============================================ */
+
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: var(--spacing-md) var(--container-padding);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: var(--font-size-xl);
+    transition: color var(--transition-fast);
+}
+
+.nav-brand:hover {
+    color: var(--color-primary);
+}
+
+.brand-name {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin: 0;
+}
+
+.nav-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.nav-links a:hover {
+    color: var(--color-primary);
+    background-color: var(--color-background-alt);
+}
+
+.nav-links a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.nav-link-github {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.github-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.nav-link-docs,
+.nav-link-github {
+    font-weight: 500;
+}
+
+/* Add padding to body to account for fixed header */
+body {
+    padding-top: 60px;
+}
+
+
+/* ============================================
+   HERO SECTION STYLES - Owner: Scenario 1
+   ============================================ */
+
+#hero {
+    padding: var(--spacing-4xl) 0;
+    text-align: center;
+    background: linear-gradient(180deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+}
+
+.hero-container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+.hero-title {
+    font-size: var(--font-size-5xl);
+    font-weight: 800;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+}
+
+.hero-tagline {
+    font-size: var(--font-size-2xl);
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+}
+
+.hero-description {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
+    max-width: 700px;
+    margin: 0 auto var(--spacing-2xl);
+    line-height: 1.7;
+}
+
+.hero-cta {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    border: 2px solid var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-text);
+    border: 2px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-text);
+    background-color: var(--color-background-alt);
+    color: var(--color-text);
+}
+
+.btn-icon {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* ============================================
+   FEATURES SECTION STYLES - Owner: Scenario 2
+   ============================================ */
+
+.features-section {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-background-alt);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.feature-card {
+    background-color: var(--color-background);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.feature-description {
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+
+/* ============================================
+   QUICKSTART SECTION STYLES - Owner: Scenario 3
+   ============================================ */
+
+.quickstart-section {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-background);
+}
+
+.quickstart-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.quickstart-intro {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-size-lg);
+}
+
+.code-examples {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.code-block-wrapper {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: #0f172a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-label {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-code-text);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.copy-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.copy-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.copy-btn.copied {
+    background-color: var(--color-success);
+    color: white;
+}
+
+.copy-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.code-block {
+    margin: 0;
+    padding: var(--spacing-md);
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+    overflow-x: auto;
+    font-size: var(--font-size-sm);
+    line-height: 1.7;
+}
+
+.code-block code {
+    display: block;
+    white-space: pre;
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Syntax Highlighting Tokens */
+.token-comment {
+    color: #64748b;
+    font-style: italic;
+}
+
+.token-command {
+    color: #22d3ee;
+    font-weight: 600;
+}
+
+.token-key {
+    color: #a78bfa;
+}
+
+.token-number {
+    color: #fbbf24;
+}
+
+.token-value {
+    color: #4ade80;
+}
+
+.token-response {
+    color: #f472b6;
+    font-weight: 500;
+}
+
+/* ============================================
+   CONFIGURATION SECTION STYLES - Owner: Scenario 5
+   ============================================ */
+
+.configuration-section {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-background-alt);
+}
+
+.configuration-intro {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-size-lg);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    background-color: var(--color-background);
+}
+
+.config-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-base);
+}
+
+.config-table thead {
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+}
+
+.config-table th {
+    padding: var(--spacing-md) var(--spacing-lg);
+    text-align: left;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.config-table td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text);
+}
+
+.config-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.config-table tbody tr:hover {
+    background-color: var(--color-background-alt);
+}
+
+.config-table code {
+    background-color: var(--color-background-alt);
+    color: var(--color-primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+}
+
+/* ============================================
+   FOOTER STYLES - Owner: Scenario 7
+   ============================================ */
+
+.site-footer {
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+    padding: var(--spacing-xl) 0;
+    margin-top: var(--spacing-3xl);
+}
+
+.footer-content {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+    text-align: center;
+}
+
+.footer-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer-version,
+.footer-license {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-divider {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer-link:hover {
+    color: var(--color-primary);
+}
+
+.footer-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+.footer-github-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.footer-copyright {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}

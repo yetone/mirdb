@@ -1,2 +1,11 @@
 /target
 **/*.rs.bk
+.something/
+
+# Node.js
+node_modules/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/

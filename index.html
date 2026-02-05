@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO META TAGS - Owner: Scenario 10 -->
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <meta name="description" content="MirDB is a high-performance, persistent key-value database with full Memcached protocol compatibility. Get the simplicity of Memcached with disk-based durability.">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+    <meta property="og:description" content="A high-performance, persistent key-value database with full Memcached protocol compatibility. Get the simplicity of Memcached with disk-based durability.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mirdb.io/">
+
+    <!-- Additional SEO Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="MirDB Project">
+    <link rel="canonical" href="https://mirdb.io/">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- PROGRESSIVE ENHANCEMENT - Owner: Scenario 11 -->
+    <!-- Add js-enabled class immediately when JS is available -->
+    <script>document.documentElement.classList.add('js-enabled');</script>
+    <!-- Noscript fallback styles for when JS is disabled -->
+    <noscript>
+        <style>
+            /* Ensure mobile navigation is visible when JS is disabled */
+            @media (max-width: 599px) {
+                .nav-menu {
+                    position: static !important;
+                    transform: none !important;
+                    visibility: visible !important;
+                    width: 100%;
+                    max-width: none;
+                    height: auto;
+                    background-color: #f8fafc;
+                    box-shadow: none;
+                    padding: 1rem;
+                    margin-top: 0.5rem;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+                .nav-menu .nav-link {
+                    font-size: 0.875rem;
+                    padding: 0.5rem 1rem;
+                    border-bottom: none;
+                    display: inline-block;
+                    width: auto;
+                }
+                .nav-overlay {
+                    display: none !important;
+                }
+                .hamburger-btn {
+                    display: none !important;
+                }
+            }
+        </style>
+    </noscript>
+</head>
+<body>
+    <!-- HEADER/NAV - Owner: Scenario 4 -->
+    <!-- Hamburger menu and responsive nav elements - Owner: Scenario 6 -->
+    <header class="site-header">
+        <nav class="nav-container" aria-label="Main navigation">
+            <a href="/" class="nav-brand">
+                <span class="brand-name">MirDB</span>
+            </a>
+            <button class="hamburger-btn" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            <ul class="nav-links nav-menu" id="nav-links">
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#quickstart" class="nav-link">Quick Start</a></li>
+                <li><a href="#configuration" class="nav-link">Configuration</a></li>
+                <li>
+                    <a href="https://github.com/mwangxx/mirdb#readme" class="nav-link nav-link-docs" target="_blank" rel="noopener noreferrer">
+                        Docs
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/mwangxx/mirdb" class="nav-link nav-link-github" target="_blank" rel="noopener noreferrer">
+                        <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        <span>GitHub</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="nav-overlay" aria-hidden="true"></div>
+    </header>
+
+    <main>
+        <!-- HERO SECTION - Owner: Scenario 1 -->
+        <section id="hero" aria-labelledby="hero-title">
+            <div class="hero-container">
+                <h1 id="hero-title" class="hero-title">MirDB</h1>
+                <p class="hero-tagline">Persistent Key-Value Store</p>
+                <p class="hero-description">
+                    A high-performance, disk-based key-value database with full
+                    <strong>Memcached protocol compatibility</strong>. Get the simplicity of
+                    Memcached with the durability of persistent storage.
+                </p>
+                <div class="hero-cta">
+                    <a href="#quickstart" class="btn btn-primary">Get Started</a>
+                    <a href="https://github.com/mwangxx/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        View on GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION - Owner: Scenario 2 -->
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2 class="section-title">Key Features</h2>
+                <div class="features-grid">
+                    <article class="feature-card">
+                        <h3 class="feature-title">Memcached Protocol Compatible</h3>
+                        <p class="feature-description">Drop-in replacement for Memcached with full protocol compatibility. Use your existing Memcached clients and libraries without any code changes.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">Persistent Storage</h3>
+                        <p class="feature-description">Unlike in-memory caches, MirDB persists all data to disk. Your data survives server restarts and system failures.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">LSM Tree Architecture</h3>
+                        <p class="feature-description">Built on a Log-Structured Merge (LSM) tree architecture optimized for write-heavy workloads with efficient compaction.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">Skip List Memtable</h3>
+                        <p class="feature-description">In-memory writes use a high-performance Skip list data structure for fast insertions and lookups before flushing to disk.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">ACID Durability via WAL</h3>
+                        <p class="feature-description">Write-Ahead Logging (WAL) ensures ACID durability. Every write is logged before acknowledgment, guaranteeing data integrity.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3 class="feature-title">Efficient Block Storage</h3>
+                        <p class="feature-description">Data is organized in configurable block sizes for optimal I/O performance, with support for compression and caching.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUICKSTART SECTION - Owner: Scenario 3 -->
+        <section id="quickstart" class="quickstart-section">
+            <div class="container">
+                <h2>Quick Start</h2>
+                <p class="quickstart-intro">Get started with MirDB in seconds using the Memcached protocol.</p>
+
+                <div class="code-examples">
+                    <!-- Start Server Example -->
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-label">Start the server</span>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="code-start">
+                                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block" id="code-start"><code class="language-bash"><span class="token-comment"># Start the server</span>
+<span class="token-command">mirdb-server</span></code></pre>
+                    </div>
+
+                    <!-- Set Command Example -->
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-label">Set a value (Memcached protocol)</span>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="code-set">
+                                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block" id="code-set"><code class="language-memcached"><span class="token-command">set</span> <span class="token-key">mykey</span> <span class="token-number">0</span> <span class="token-number">0</span> <span class="token-number">5</span>
+<span class="token-value">hello</span>
+<span class="token-response">STORED</span></code></pre>
+                    </div>
+
+                    <!-- Get Command Example -->
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-label">Get a value</span>
+                            <button class="copy-btn" aria-label="Copy code to clipboard" data-copy-target="code-get">
+                                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block" id="code-get"><code class="language-memcached"><span class="token-command">get</span> <span class="token-key">mykey</span>
+<span class="token-response">VALUE</span> <span class="token-key">mykey</span> <span class="token-number">0</span> <span class="token-number">5</span>
+<span class="token-value">hello</span>
+<span class="token-response">END</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONFIGURATION SECTION - Owner: Scenario 5 -->
+        <section id="configuration" class="configuration-section">
+            <div class="container">
+                <h2 class="section-title">Default Configuration</h2>
+                <p class="configuration-intro">MirDB comes with sensible defaults that work out of the box. Here are the key configuration settings:</p>
+                <div class="table-wrapper">
+                    <table class="config-table">
+                        <thead>
+                            <tr>
+                                <th>Setting</th>
+                                <th>Default Value</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Listen Address</td>
+                                <td><code>0.0.0.0:12333</code></td>
+                                <td>Server binding address and port</td>
+                            </tr>
+                            <tr>
+                                <td>Work Directory</td>
+                                <td><code>/tmp/mirdb</code></td>
+                                <td>Data storage location</td>
+                            </tr>
+                            <tr>
+                                <td>Max LSM Levels</td>
+                                <td><code>7</code></td>
+                                <td>Maximum depth of the LSM tree</td>
+                            </tr>
+                            <tr>
+                                <td>SSTable Max Size</td>
+                                <td><code>100 MB</code></td>
+                                <td>Compaction threshold for SSTables</td>
+                            </tr>
+                            <tr>
+                                <td>Memtable Max Size</td>
+                                <td><code>4 MB</code></td>
+                                <td>Threshold to flush memtable to disk</td>
+                            </tr>
+                            <tr>
+                                <td>Block Size</td>
+                                <td><code>4 KB</code></td>
+                                <td>I/O read and write unit size</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER - Owner: Scenario 7 -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <span class="footer-version">Version 1.0.0</span>
+                <span class="footer-divider">|</span>
+                <span class="footer-license">MIT License</span>
+                <span class="footer-divider">|</span>
+                <a href="https://github.com/mwangxx/mirdb" class="footer-link" target="_blank" rel="noopener noreferrer">
+                    <svg class="footer-github-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="16" height="16">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+            </div>
+            <p class="footer-copyright">&copy; 2024 MirDB Project</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript - Progressive Enhancement -->
+    <script src="js/navigation.js" defer></script>
+    <script src="js/clipboard.js" defer></script>
+    <script src="js/main.js" defer></script>
+</body>
+</html>

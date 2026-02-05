@@ -1,0 +1,359 @@
+/**
+ * MirDB Homepage - Responsive Styles
+ * Owner: Scenario 6 - Responsive Design
+ *
+ * Contains all media queries for mobile, tablet, and desktop breakpoints.
+ * Coordinates with other scenarios for responsive adjustments.
+ *
+ * Breakpoints:
+ * - Mobile: < 600px
+ * - Tablet: 600px - 1024px
+ * - Desktop: > 1024px
+ */
+
+/* ============================================
+   HAMBURGER MENU STYLES - Owner: Scenario 6
+   ============================================ */
+
+/* Hamburger button - Hidden on desktop by default */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 28px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.hamburger-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+.hamburger-line {
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-text);
+    border-radius: 2px;
+    transition: all var(--transition-base);
+    transform-origin: center;
+}
+
+/* Hamburger animation when menu is open */
+.hamburger-btn[aria-expanded="true"] .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 6px);
+}
+
+.hamburger-btn[aria-expanded="true"] .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hamburger-btn[aria-expanded="true"] .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -6px);
+}
+
+/* Mobile navigation menu styles */
+.nav-menu {
+    display: flex;
+    gap: var(--spacing-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+    padding: var(--spacing-sm) 0;
+    display: inline-block;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: var(--color-primary);
+}
+
+/* ============================================
+   MOBILE STYLES (< 600px)
+   ============================================ */
+@media (max-width: 599px) {
+    /* Base responsive adjustments */
+    html {
+        font-size: 16px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Container padding adjustment */
+    .container,
+    .hero-container {
+        padding: 0 var(--spacing-md);
+    }
+
+    /* Header/Navigation responsive */
+    .site-header {
+        padding: var(--spacing-md);
+    }
+
+    /* Show hamburger button on mobile */
+    .hamburger-btn {
+        display: flex;
+    }
+
+    /* Mobile navigation menu - hidden by default */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: var(--color-background);
+        flex-direction: column;
+        padding: calc(60px + var(--spacing-xl)) var(--spacing-xl) var(--spacing-xl);
+        box-shadow: var(--shadow-lg);
+        transition: transform var(--transition-slow), visibility var(--transition-slow);
+        z-index: 1000;
+        gap: var(--spacing-md);
+        transform: translateX(100%);
+        visibility: hidden;
+    }
+
+    .nav-menu.is-open {
+        transform: translateX(0);
+        visibility: visible;
+    }
+
+    .nav-link {
+        font-size: var(--font-size-lg);
+        padding: var(--spacing-md) 0;
+        border-bottom: 1px solid var(--color-border);
+        display: block;
+        width: 100%;
+    }
+
+    .nav-link:last-child {
+        border-bottom: none;
+    }
+
+    /* Overlay when menu is open */
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity var(--transition-slow);
+    }
+
+    .nav-overlay.is-visible {
+        display: block;
+        opacity: 1;
+    }
+
+    /* Hero Section Mobile */
+    #hero {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .hero-title {
+        font-size: var(--font-size-3xl);
+    }
+
+    .hero-tagline {
+        font-size: var(--font-size-lg);
+    }
+
+    .hero-description {
+        font-size: var(--font-size-base);
+        padding: 0 var(--spacing-sm);
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+    .hero-cta .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    /* Features Section Mobile - Single column */
+    .features-section {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .feature-card {
+        padding: var(--spacing-lg);
+    }
+
+    .feature-title {
+        font-size: var(--font-size-base);
+    }
+
+    /* Quick Start Section Mobile */
+    .quickstart-section {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .quickstart-section h2 {
+        font-size: var(--font-size-2xl);
+    }
+
+    .code-examples {
+        gap: var(--spacing-md);
+    }
+
+    /* Code blocks - Allow horizontal scroll within block, not page */
+    .code-block-wrapper {
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .code-block {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+    }
+
+    .code-block code {
+        min-width: max-content;
+    }
+
+    .code-header {
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+    }
+
+    .code-label {
+        font-size: var(--font-size-xs);
+    }
+
+    /* Configuration Section Mobile */
+    #configuration table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Section titles */
+    .section-title {
+        font-size: var(--font-size-2xl);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    /* Footer Mobile */
+    footer {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+}
+
+/* ============================================
+   TABLET STYLES (600px - 1024px)
+   ============================================ */
+@media (min-width: 600px) and (max-width: 1024px) {
+    /* Container adjustments */
+    .container,
+    .hero-container {
+        padding: 0 var(--spacing-xl);
+    }
+
+    /* Hero Section Tablet */
+    #hero {
+        padding: var(--spacing-3xl) 0;
+    }
+
+    .hero-title {
+        font-size: var(--font-size-4xl);
+    }
+
+    .hero-tagline {
+        font-size: var(--font-size-xl);
+    }
+
+    /* Features Grid - 2 columns on tablet */
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+
+    /* Navigation - may show full or hamburger depending on nav complexity */
+    .nav-menu {
+        gap: var(--spacing-md);
+    }
+
+    /* Code blocks */
+    .code-examples {
+        max-width: 100%;
+    }
+}
+
+/* ============================================
+   DESKTOP STYLES (> 1024px)
+   ============================================ */
+@media (min-width: 1025px) {
+    /* Hamburger hidden on desktop */
+    .hamburger-btn {
+        display: none;
+    }
+
+    /* Navigation always visible on desktop */
+    .nav-menu {
+        display: flex !important;
+        position: static;
+        width: auto;
+        height: auto;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+        flex-direction: row;
+    }
+
+    .nav-overlay {
+        display: none !important;
+    }
+
+    /* Features Grid - 3 columns on desktop */
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .hamburger-btn,
+    .nav-overlay {
+        display: none !important;
+    }
+
+    .nav-menu {
+        position: static !important;
+        right: auto !important;
+        width: auto !important;
+        height: auto !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+}
