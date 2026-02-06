@@ -16,6 +16,23 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    // Edge is tested via chromium engine in CI environments where msedge is not available
+    // Uncomment the following to run on actual Edge browser when available:
+    // {
+    //   name: 'edge',
+    //   use: {
+    //     ...devices['Desktop Edge'],
+    //     channel: 'msedge',
+    //   },
+    // },
   ],
   webServer: {
     command: 'npm run dev',
