@@ -1,0 +1,154 @@
+/**
+ * Social Proof Section Styles
+ * Owner: Scenario 4 - Social Proof Section
+ */
+
+.socialProof {
+  padding: var(--spacing-16) var(--spacing-4);
+  background-color: var(--color-gray-50);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
+  text-align: center;
+  margin-bottom: var(--spacing-12);
+}
+
+/* Statistics Section */
+.statistics {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-12);
+  margin-bottom: var(--spacing-16);
+  flex-wrap: wrap;
+}
+
+.statItem {
+  text-align: center;
+  padding: var(--spacing-6);
+}
+
+.statValue {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-2);
+}
+
+.statLabel {
+  font-size: var(--font-size-base);
+  color: var(--color-gray-600);
+}
+
+/* Testimonials Section */
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-8);
+  margin-bottom: var(--spacing-16);
+}
+
+.testimonialCard {
+  background-color: var(--color-white);
+  padding: var(--spacing-8);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.testimonialQuote {
+  font-size: var(--font-size-lg);
+  font-style: italic;
+  color: var(--color-gray-700);
+  line-height: var(--line-height-relaxed);
+  margin: 0 0 var(--spacing-6) 0;
+  padding: 0;
+  border-left: 4px solid var(--color-primary);
+  padding-left: var(--spacing-4);
+}
+
+.testimonialAttribution {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.testimonialAuthor {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-900);
+}
+
+.testimonialRole {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-500);
+}
+
+/* Trust Logos Section */
+.trustSection {
+  text-align: center;
+}
+
+.trustTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-500);
+  margin-bottom: var(--spacing-8);
+}
+
+.trustLogos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-10);
+  flex-wrap: wrap;
+}
+
+.companyLogo {
+  height: 40px;
+  width: auto;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+  filter: grayscale(100%);
+}
+
+.companyLogo:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .socialProof {
+    padding: var(--spacing-12) var(--spacing-4);
+  }
+
+  .sectionTitle {
+    font-size: var(--font-size-2xl);
+  }
+
+  .statistics {
+    gap: var(--spacing-6);
+  }
+
+  .statValue {
+    font-size: var(--font-size-3xl);
+  }
+
+  .testimonials {
+    grid-template-columns: 1fr;
+  }
+
+  .trustLogos {
+    gap: var(--spacing-6);
+  }
+
+  .companyLogo {
+    height: 32px;
+  }
+}

@@ -1,0 +1,102 @@
+/**
+ * Footer component styles.
+ * Owner: Scenario 5 - Footer Section
+ */
+
+.footer {
+  background-color: var(--color-gray-900);
+  color: var(--color-gray-300);
+  padding: var(--spacing-12) var(--spacing-4);
+  margin-top: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-6);
+}
+
+@media (min-width: 768px) {
+  .nav {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.legalLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-4);
+}
+
+@media (min-width: 768px) {
+  .legalLinks {
+    gap: var(--spacing-8);
+  }
+}
+
+.link {
+  color: var(--color-gray-300);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast);
+}
+
+.link:hover {
+  color: var(--color-white);
+}
+
+.link:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+.socialLinks {
+  display: flex;
+  gap: var(--spacing-4);
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-800);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.socialLink:hover {
+  color: var(--color-white);
+  background-color: var(--color-gray-700);
+}
+
+.socialLink:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.copyright {
+  text-align: center;
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--color-gray-800);
+}
+
+.copyright p {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-300);
+  margin: 0;
+}

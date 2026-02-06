@@ -1,0 +1,21 @@
+/**
+ * Home page styles.
+ * Owner: Scenario 10 - User Flow (page composition)
+ *
+ * Styles for the main homepage container and smooth scrolling behavior.
+ */
+
+.main {
+  scroll-behavior: smooth;
+  min-height: 100vh;
+}
+
+/* Focus visible outline when tabbing to main content */
+.main:focus {
+  outline: none;
+}
+
+.main:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
