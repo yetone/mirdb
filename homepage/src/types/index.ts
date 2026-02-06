@@ -37,3 +37,17 @@ export interface ButtonProps {
   className?: string;
   'aria-label'?: string;
 }
+
+export interface TrustedCompany {
+  name: string;
+  logo: string;
+}
+
+export interface UserStatistics {
+  userCount: string;
+  userLabel: string;
+  projectCount: string;
+  projectLabel: string;
+  uptimePercent: string;
+  uptimeLabel: string;
+}

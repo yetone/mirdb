@@ -42,7 +42,36 @@ export const TESTIMONIALS: Testimonial[] = [
     role: 'CTO',
     company: 'TechCorp',
   },
+  {
+    quote: 'The best development platform we have ever used. Our productivity increased by 40%.',
+    author: 'John Smith',
+    role: 'Engineering Lead',
+    company: 'DevStudio',
+  },
+  {
+    quote: 'Seamless integration and incredible support. A game-changer for our team.',
+    author: 'Sarah Chen',
+    role: 'Product Manager',
+    company: 'InnovateCo',
+  },
 ];
+
+export const TRUSTED_COMPANIES = [
+  { name: 'TechCorp', logo: '/images/logos/techcorp.svg' },
+  { name: 'DevStudio', logo: '/images/logos/devstudio.svg' },
+  { name: 'InnovateCo', logo: '/images/logos/innovateco.svg' },
+  { name: 'CloudSync', logo: '/images/logos/cloudsync.svg' },
+  { name: 'DataFlow', logo: '/images/logos/dataflow.svg' },
+];
+
+export const USER_STATISTICS = {
+  userCount: '10,000+',
+  userLabel: 'Happy Users',
+  projectCount: '50,000+',
+  projectLabel: 'Projects Built',
+  uptimePercent: '99.9%',
+  uptimeLabel: 'Uptime',
+};
 
 export const SOCIAL_LINKS: SocialLink[] = [
   { platform: 'Twitter', url: 'https://twitter.com', icon: 'twitter' },
