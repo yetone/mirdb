@@ -49,8 +49,8 @@ async function verifySectionsRender(page: Page) {
   const featuresGrid = page.getByTestId('features-grid')
   await expect(featuresGrid).toBeVisible()
 
-  // Footer
-  const footer = page.locator('footer')
+  // Footer - use role="contentinfo" to target the main page footer, not testimonial footers
+  const footer = page.getByRole('contentinfo')
   await expect(footer).toBeVisible()
 }
 
