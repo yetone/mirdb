@@ -1,13 +1,19 @@
 import { Routes, Route } from 'react-router-dom';
 import { Hero } from './components/Hero';
 import { Features } from './components/Features';
+import { Footer } from './components/Footer';
+import { Privacy } from './pages/Privacy';
+import { Terms } from './pages/Terms';
 
 function HomePage() {
   return (
-    <main id="main-content">
-      <Hero />
-      <Features />
-    </main>
+    <>
+      <main id="main-content">
+        <Hero />
+        <Features />
+      </main>
+      <Footer />
+    </>
   );
 }
 
@@ -25,6 +31,8 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
     </Routes>
   );
 }
