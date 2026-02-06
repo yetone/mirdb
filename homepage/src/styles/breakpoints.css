@@ -1,10 +1,14 @@
 /**
- * Responsive breakpoints utility classes.
- * Owner: Scenario 6 - Responsive Design (stub)
+ * Responsive breakpoint utilities.
+ * Owner: Scenario 6 - Responsive Design
  */
 
-/* Breakpoint values:
- * Mobile: < 768px
- * Tablet: 768px - 1024px
- * Desktop: > 1024px
- */
+/* Mobile: < 768px (default styles) */
+/* Tablet: 768px - 1023px */
+/* Desktop: >= 1024px */
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: var(--font-size-5xl);
+  }
+}

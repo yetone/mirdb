@@ -3,12 +3,25 @@
  * Owner: First builder (shared resource)
  */
 
-import '@testing-library/jest-dom'
-import { cleanup } from '@testing-library/react'
-import { afterEach } from 'vitest'
+import '@testing-library/jest-dom';
+import { ReactElement } from 'react';
+import { render, RenderOptions } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 
-afterEach(() => {
-  cleanup()
-})
+interface WrapperProps {
+  children: React.ReactNode;
+}
 
-export * from '@testing-library/react'
+function AllProviders({ children }: WrapperProps) {
+  return <BrowserRouter>{children}</BrowserRouter>;
+}
+
+function customRender(
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>
+) {
+  return render(ui, { wrapper: AllProviders, ...options });
+}
+
+export * from '@testing-library/react';
+export { customRender as render };
