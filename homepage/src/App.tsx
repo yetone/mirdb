@@ -8,7 +8,7 @@ import { Terms } from './pages/Terms';
 function HomePage() {
   return (
     <>
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <Hero />
         <Features />
       </main>

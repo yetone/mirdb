@@ -97,6 +97,6 @@
 
 .copyright p {
   font-size: var(--font-size-sm);
-  color: var(--color-gray-500);
+  color: var(--color-gray-300);
   margin: 0;
 }
