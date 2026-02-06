@@ -1,14 +1,235 @@
 /**
  * Responsive breakpoint utilities.
  * Owner: Scenario 6 - Responsive Design
+ *
+ * Breakpoint definitions (mobile-first approach):
+ * - Mobile: < 768px (default styles)
+ * - Tablet: 768px - 1024px
+ * - Desktop: >= 1025px
+ *
+ * These breakpoints align with NFR-5 requirements:
+ * - mobile (<768px)
+ * - tablet (768-1024px)
+ * - desktop (>1024px)
  */
 
-/* Mobile: < 768px (default styles) */
-/* Tablet: 768px - 1023px */
-/* Desktop: >= 1024px */
+/* ============================================
+   Mobile-First Base Styles (< 768px)
+   ============================================ */
+
+/* Typography scales for mobile */
+h1 {
+  font-size: var(--font-size-4xl);
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+}
+
+/* Ensure no horizontal overflow on mobile */
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Ensure images and media don't cause overflow */
+img,
+video,
+iframe,
+embed,
+object {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ============================================
+   Tablet Breakpoint (768px - 1024px)
+   ============================================ */
 
 @media (min-width: 768px) {
   h1 {
     font-size: var(--font-size-5xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-3xl);
+  }
+
+  h3 {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+/* ============================================
+   Desktop Breakpoint (>= 1025px)
+   ============================================ */
+
+@media (min-width: 1025px) {
+  /* Desktop-specific typography if needed */
+}
+
+/* ============================================
+   Touch Target Utilities
+   ============================================ */
+
+/* Minimum touch target size for accessibility (WCAG 2.1 AA) */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Apply touch target sizing to interactive elements on mobile */
+@media (max-width: 767px) {
+  button,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"],
+  a {
+    min-height: 44px;
+    /* Note: min-width handled by individual components for better UX */
+  }
+}
+
+/* ============================================
+   Container Width Utilities
+   ============================================ */
+
+/* Prevent content overflow */
+.responsive-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  .responsive-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* ============================================
+   Responsive Spacing Utilities
+   ============================================ */
+
+.responsive-padding {
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+}
+
+@media (min-width: 768px) {
+  .responsive-padding {
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
+  }
+}
+
+@media (min-width: 1025px) {
+  .responsive-padding {
+    padding-left: var(--spacing-8);
+    padding-right: var(--spacing-8);
+  }
+}
+
+/* ============================================
+   Responsive Hide/Show Utilities
+   ============================================ */
+
+/* Hide on mobile only */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: initial;
+  }
+}
+
+/* Show on mobile only */
+.show-mobile {
+  display: initial;
+}
+
+@media (min-width: 768px) {
+  .show-mobile {
+    display: none;
+  }
+}
+
+/* Hide on tablet and below */
+.hide-tablet-down {
+  display: none;
+}
+
+@media (min-width: 1025px) {
+  .hide-tablet-down {
+    display: initial;
+  }
+}
+
+/* ============================================
+   Responsive Flex Utilities
+   ============================================ */
+
+/* Stack on mobile, row on tablet+ */
+.flex-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+@media (min-width: 768px) {
+  .flex-responsive {
+    flex-direction: row;
+    gap: var(--spacing-6);
+  }
+}
+
+/* ============================================
+   Responsive Grid Utilities
+   ============================================ */
+
+/* 1 column on mobile, 2 on tablet, 3 on desktop */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-6);
+}
+
+@media (min-width: 768px) {
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .grid-responsive {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ============================================
+   Safe Area Insets (for modern mobile devices)
+   ============================================ */
+
+@supports (padding: env(safe-area-inset-left)) {
+  .safe-area-padding {
+    padding-left: max(var(--spacing-4), env(safe-area-inset-left));
+    padding-right: max(var(--spacing-4), env(safe-area-inset-right));
+    padding-bottom: max(var(--spacing-4), env(safe-area-inset-bottom));
   }
 }
