@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Vite
+.vite/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
