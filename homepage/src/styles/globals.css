@@ -3,6 +3,7 @@
  */
 
 @import './variables.css';
+@import './responsive.css';
 
 *,
 *::before,

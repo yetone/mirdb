@@ -7,6 +7,552 @@
  * - 320px minimum width support
  * - Tablet (768px) and desktop (1024px+) layouts
  * - Fluid typography and spacing
+ * - Touch-friendly tap targets (minimum 44x44px)
+ * - No horizontal scrolling at any viewport
  */
 
-/* Placeholder - Scenario 7 will implement */
+/* ==========================================================================
+   Base Mobile Styles (320px+)
+   Mobile-first approach: Default styles are for mobile
+   ========================================================================== */
+
+/* Minimum width to prevent layout breaking below 320px */
+html {
+  min-width: 320px;
+}
+
+/* Prevent horizontal overflow at document level */
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Ensure all sections have proper padding for mobile */
+section {
+  padding: var(--spacing-2xl) var(--spacing-md);
+  overflow-x: hidden;
+}
+
+/* Container adjustments for mobile */
+.container {
+  width: 100%;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+/* ==========================================================================
+   Touch Targets
+   Ensure all interactive elements meet minimum 44x44px tap target size
+   ========================================================================== */
+
+/* Buttons and links should have adequate touch targets */
+button,
+a,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+.header-nav-link,
+.hero-cta,
+.usage-docs-link {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Navigation links need padding for touch */
+.header-nav-link {
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Copy buttons need adequate size */
+.copy-button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: var(--spacing-sm);
+}
+
+/* ==========================================================================
+   Typography - Fluid Scaling
+   ========================================================================== */
+
+/* Mobile typography */
+h1, .hero-title {
+  font-size: clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl));
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+h2, .section-title,
+.features-title,
+.installation-title,
+.usage-title {
+  font-size: clamp(var(--font-size-xl), 6vw, var(--font-size-3xl));
+  line-height: 1.2;
+}
+
+h3, .feature-title {
+  font-size: clamp(var(--font-size-lg), 4vw, var(--font-size-xl));
+  line-height: 1.3;
+}
+
+/* Ensure body text is readable on mobile */
+p, .hero-tagline, .feature-description, .usage-description {
+  font-size: clamp(var(--font-size-base), 3.5vw, var(--font-size-lg));
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Header - Mobile Navigation
+   ========================================================================== */
+
+/* Mobile header layout */
+@media (max-width: 767px) {
+  .header-container {
+    flex-wrap: wrap;
+    padding: var(--spacing-sm) var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .header-brand {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Stack navigation on very small screens */
+  .header-nav {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .header-nav-list {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .header-nav-link {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .header-nav-link--github {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* ==========================================================================
+   Hero Section - Mobile
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .hero-container {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-lg);
+  }
+
+  .hero-logo-image {
+    max-width: 200px;
+    width: 60vw;
+  }
+
+  .hero-content {
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-sm);
+  }
+
+  .hero-cta {
+    width: 100%;
+    max-width: 280px;
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    justify-content: center;
+  }
+
+  .hero-actions {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Features Section - Responsive Grid
+   ========================================================================== */
+
+/* Mobile: Single column */
+@media (max-width: 767px) {
+  .features {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+  }
+
+  .feature-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .feature-description {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Tablet: Two columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+}
+
+/* Desktop: Auto-fit with minimum width */
+@media (min-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+  }
+}
+
+/* ==========================================================================
+   Installation Section - Code Blocks
+   ========================================================================== */
+
+/* Code blocks must be scrollable on mobile, not overflow */
+.code-block {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.code-block pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* Style horizontal scrollbar for code blocks */
+.code-block pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block pre::-webkit-scrollbar-track {
+  background: var(--color-background-secondary);
+  border-radius: 4px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+@media (max-width: 767px) {
+  .installation {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .installation-container {
+    padding: 0;
+  }
+
+  .installation-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .installation-description {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-sm);
+  }
+
+  .installation-step {
+    padding: var(--spacing-md);
+  }
+
+  .step-header {
+    flex-wrap: wrap;
+  }
+
+  .step-description {
+    margin-left: 0;
+    font-size: var(--font-size-sm);
+  }
+
+  /* Adjust code block for mobile */
+  .code-block pre {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-md);
+    padding-bottom: calc(var(--spacing-md) + 50px);
+  }
+
+  /* Position copy button for mobile */
+  .copy-button {
+    position: absolute;
+    bottom: var(--spacing-sm);
+    right: var(--spacing-sm);
+    top: auto;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Usage Section - GIF Display
+   ========================================================================== */
+
+/* Images scale appropriately without overflow */
+.usage-gif,
+.hero-logo-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .usage {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .usage-container {
+    padding: 0;
+  }
+
+  .usage-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .usage-description {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-sm);
+  }
+
+  /* Full-width demo on mobile */
+  .usage-demo {
+    margin-left: calc(-1 * var(--spacing-md));
+    margin-right: calc(-1 * var(--spacing-md));
+    border-radius: 0;
+  }
+
+  .usage-docs-link {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+    padding: var(--spacing-md);
+  }
+}
+
+/* ==========================================================================
+   Footer - Responsive Layout
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  footer {
+    padding: var(--spacing-xl) var(--spacing-md);
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   Tablet Breakpoint (768px - 1023px)
+   ========================================================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  section {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+
+  /* Hero tablet layout */
+  .hero {
+    min-height: 70vh;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .hero-container {
+    flex-direction: row;
+    text-align: left;
+    gap: var(--spacing-xl);
+  }
+
+  .hero-logo-image {
+    max-width: 280px;
+  }
+
+  .hero-content {
+    align-items: flex-start;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Installation tablet */
+  .installation-container {
+    max-width: 700px;
+  }
+
+  /* Usage tablet */
+  .usage-container {
+    max-width: 800px;
+  }
+}
+
+/* ==========================================================================
+   Desktop Breakpoint (1024px+)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  section {
+    padding: var(--spacing-3xl) var(--spacing-xl);
+  }
+
+  .container {
+    max-width: 1200px;
+    padding-left: var(--spacing-xl);
+    padding-right: var(--spacing-xl);
+  }
+
+  /* Hero desktop layout */
+  .hero {
+    min-height: 80vh;
+    padding: var(--spacing-3xl) var(--spacing-xl);
+  }
+
+  .hero-container {
+    flex-direction: row;
+    text-align: left;
+    gap: var(--spacing-2xl);
+  }
+
+  .hero-logo-image {
+    max-width: 400px;
+  }
+
+  .hero-content {
+    align-items: flex-start;
+  }
+
+  .hero-title {
+    font-size: 4rem;
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-xl);
+    max-width: 500px;
+  }
+
+  /* Installation desktop */
+  .installation-container {
+    max-width: 800px;
+  }
+
+  /* Usage desktop */
+  .usage-container {
+    max-width: 900px;
+  }
+}
+
+/* ==========================================================================
+   Large Desktop (1440px+)
+   ========================================================================== */
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  .hero-logo-image {
+    max-width: 450px;
+  }
+
+  .hero-title {
+    font-size: 4.5rem;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .header,
+  .hero-cta,
+  .copy-button,
+  .usage-docs-link {
+    display: none;
+  }
+
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  section {
+    page-break-inside: avoid;
+    padding: 1rem;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  .feature-card,
+  .installation-step,
+  .code-block {
+    border-width: 2px;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline-width: 3px;
+  }
+}
