@@ -12,16 +12,6 @@
  * - Alt text for accessibility
  */
 
-export interface BadgeProps {
-  src: string
-  alt: string
-  href?: string
-}
-
-export function Badge({ src, alt, href }: BadgeProps) {
-  const img = <img src={src} alt={alt} />
-  if (href) {
-    return <a href={href}>{img}</a>
-  }
-  return img
+export function Badge() {
+  return <span>Badge - To be implemented by Scenario 6</span>;
 }

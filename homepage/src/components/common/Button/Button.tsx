@@ -13,26 +13,6 @@
  * - Accessible (proper ARIA attributes)
  */
 
-export interface ButtonProps {
-  children: React.ReactNode
-  variant?: 'primary' | 'secondary'
-  href?: string
-  onClick?: () => void
-  className?: string
-}
-
-export function Button({ children, variant = 'primary', href, onClick, className }: ButtonProps) {
-  // Implementation by Scenario 5
-  if (href) {
-    return (
-      <a href={href} className={className}>
-        {children}
-      </a>
-    )
-  }
-  return (
-    <button onClick={onClick} className={className}>
-      {children}
-    </button>
-  )
+export function Button({ children }: { children: React.ReactNode }) {
+  return <button>{children}</button>;
 }

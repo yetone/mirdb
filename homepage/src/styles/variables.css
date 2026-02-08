@@ -7,25 +7,29 @@
   --color-primary: #3b82f6;
   --color-primary-hover: #2563eb;
   --color-secondary: #64748b;
-  --color-accent: #22c55e;
+  --color-accent: #10b981;
   --color-background: #0f172a;
-  --color-background-light: #1e293b;
-  --color-text: #f1f5f9;
+  --color-background-secondary: #1e293b;
+  --color-text: #f8fafc;
   --color-text-muted: #94a3b8;
   --color-border: #334155;
+  --color-code-bg: #1e293b;
+  --color-success: #22c55e;
 
   /* Typography */
-  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-family-mono: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Monaco, Consolas, monospace;
+
+  /* Font Sizes */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.125rem;
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
-  --font-size-3xl: 2rem;
-  --font-size-4xl: 2.5rem;
-  --font-size-xxl: 3rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -35,15 +39,19 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
-  --spacing-xxl: 4rem;
 
   /* Border Radius */
   --border-radius-sm: 0.25rem;
   --border-radius-md: 0.5rem;
-  --border-radius-lg: 1rem;
+  --border-radius-lg: 0.75rem;
+  --border-radius-full: 9999px;
 
-  /* Breakpoints (for reference in media queries) */
+  /* Breakpoints (for reference - use in media queries) */
   --breakpoint-mobile: 320px;
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1024px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
 }

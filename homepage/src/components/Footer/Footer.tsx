@@ -12,9 +12,5 @@
  */
 
 export function Footer() {
-  return (
-    <footer>
-      {/* Implementation by Scenario 6 */}
-    </footer>
-  )
+  return <footer>Footer - To be implemented by Scenario 6</footer>;
 }

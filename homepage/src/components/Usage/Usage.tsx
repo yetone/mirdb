@@ -12,10 +12,5 @@
  */
 
 export function Usage() {
-  return (
-    <section id="usage" aria-labelledby="usage-title">
-      <h2 id="usage-title">Usage</h2>
-      {/* Implementation by Scenario 4 */}
-    </section>
-  )
+  return <section>Usage - To be implemented by Scenario 4</section>;
 }
