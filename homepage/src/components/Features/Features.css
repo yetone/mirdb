@@ -1,4 +1,51 @@
-/**
- * Features Component Styles
- * Owner: Scenario 2 - Features Section Display
- */
+.features {
+  padding: var(--spacing-3xl) var(--spacing-lg);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.feature-card {
+  background-color: var(--color-background-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.feature-icon {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.feature-title {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.feature-description {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+}

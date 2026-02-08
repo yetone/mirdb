@@ -16,8 +16,9 @@ export interface NavigationLink {
 }
 
 export interface InstallationStep {
-  id: string;
-  title: string;
+  id: string | number;
+  label?: string;
+  title?: string;
   command: string;
   description?: string;
 }

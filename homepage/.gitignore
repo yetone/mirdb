@@ -7,6 +7,11 @@ dist/
 # Test results
 playwright-report/
 test-results/
+/blob-report/
+/playwright/.cache/
+
+# Vite
+.vite/
 
 # IDE
 .vscode/
