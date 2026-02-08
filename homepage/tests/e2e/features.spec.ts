@@ -13,9 +13,9 @@ test.describe('Features Section', () => {
 
     // Verify key features are present
     await expect(page.getByText('Key Features')).toBeVisible();
-    await expect(page.getByText('Memcached Protocol')).toBeVisible();
-    await expect(page.getByText('Data Persistence')).toBeVisible();
-    await expect(page.getByText('LSM Tree Architecture')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Memcached Protocol' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Data Persistence' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'LSM Tree Architecture' })).toBeVisible();
   });
 
   test('features section displays at least 3 feature cards', async ({ page }) => {
