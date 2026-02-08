@@ -20,3 +20,9 @@ export interface InstallationStep {
   label: string;
   command: string;
 }
+
+export interface CodeBlockProps {
+  code: string;
+  language?: string;
+  showCopyButton?: boolean;
+}

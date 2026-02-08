@@ -1,7 +1,12 @@
+/**
+ * Global styles and CSS reset
+ */
+
 @import './variables.css';
 
-/* CSS Reset */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -17,17 +22,33 @@ body {
   line-height: 1.6;
   color: var(--color-text);
   background-color: var(--color-background);
-  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--color-primary-dark);
+  color: var(--color-primary-hover);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 img {
@@ -36,48 +57,38 @@ img {
   display: block;
 }
 
-code {
+code,
+pre {
   font-family: var(--font-family-mono);
-  background-color: var(--color-background-light);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-sm);
-  font-size: var(--font-size-sm);
 }
 
 pre {
-  font-family: var(--font-family-mono);
-  background-color: var(--color-background-light);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-md);
   overflow-x: auto;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  line-height: 1.3;
+  line-height: 1.2;
   font-weight: 600;
 }
 
-h1 { font-size: var(--font-size-4xl); }
-h2 { font-size: var(--font-size-3xl); }
-h3 { font-size: var(--font-size-2xl); }
+section {
+  padding: var(--spacing-3xl) var(--spacing-lg);
+}
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--spacing-lg);
+  padding: 0 var(--spacing-md);
 }
 
-section {
-  padding: var(--spacing-3xl) 0;
-}
-
-.section-title {
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
