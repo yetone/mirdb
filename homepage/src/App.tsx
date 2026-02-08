@@ -3,6 +3,7 @@ import { Hero } from './components/Hero/Hero'
 import { Features } from './components/Features/Features'
 import { Installation } from './components/Installation/Installation'
 import { Usage } from './components/Usage/Usage'
+import { Footer } from './components/Footer/Footer'
 
 function App() {
   return (
@@ -15,8 +16,8 @@ function App() {
         </section>
         <Installation />
         <Usage />
-        {/* Footer component - Scenario 6 */}
       </main>
+      <Footer />
     </div>
   )
 }

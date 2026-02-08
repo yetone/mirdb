@@ -3,9 +3,9 @@
  */
 
 :root {
-  /* Colors */
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
+  /* Colors - Primary blue with WCAG AA compliant contrast (4.5:1+) */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
   --color-secondary: #64748b;
   --color-accent: #10b981;
   --color-background: #0f172a;
