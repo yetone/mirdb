@@ -5,6 +5,7 @@
 import { renderHero } from './components/Hero';
 import { renderFeatures } from './components/Features';
 import { renderQuickStart } from './components/QuickStart';
+import { renderProtocol } from './components/Protocol';
 
 function initApp(): void {
   const app = document.getElementById('app');
@@ -21,6 +22,10 @@ function initApp(): void {
   // Render QuickStart section (Scenario 3)
   const quickStart = renderQuickStart();
   app.appendChild(quickStart);
+
+  // Render Protocol section (Scenario 5)
+  const protocol = renderProtocol();
+  app.appendChild(protocol);
 }
 
 // Initialize when DOM is ready

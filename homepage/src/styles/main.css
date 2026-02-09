@@ -6,6 +6,7 @@
 @import './components/hero.css';
 @import './components/features.css';
 @import './components/quickstart.css';
+@import './components/protocol.css';
 
 /* Reset and base styles */
 *,
