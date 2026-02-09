@@ -9,6 +9,7 @@ import { renderQuickStart } from './components/QuickStart';
 import { renderProtocol } from './components/Protocol';
 import { renderConfiguration } from './components/Configuration';
 import { renderArchitecture } from './components/Architecture';
+import { renderFooter } from './components/Footer';
 
 function initApp(): void {
   const app = document.getElementById('app');
@@ -41,6 +42,10 @@ function initApp(): void {
   // Render Architecture section (Scenario 4)
   const architecture = renderArchitecture();
   app.appendChild(architecture);
+
+  // Render Footer section (Scenario 8)
+  const footer = renderFooter();
+  app.appendChild(footer);
 }
 
 // Initialize when DOM is ready

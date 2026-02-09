@@ -10,6 +10,7 @@
 @import './components/protocol.css';
 @import './components/configuration.css';
 @import './components/architecture.css';
+@import './components/footer.css';
 
 /* Reset and base styles */
 *,
