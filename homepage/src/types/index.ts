@@ -25,3 +25,9 @@ export interface ConfigOption {
 }
 
 export type Theme = 'light' | 'dark';
+
+export interface CodeBlock {
+  code: string;
+  language: string;
+  label?: string;
+}

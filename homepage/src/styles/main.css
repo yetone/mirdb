@@ -3,6 +3,8 @@
  */
 
 @import './variables.css';
+@import './components/features.css';
+@import './components/quickstart.css';
 
 /* Reset and base styles */
 *,
@@ -14,6 +16,9 @@
 }
 
 html {
+  font-family: var(--font-family);
+  font-size: 16px;
+  line-height: 1.6;
   scroll-behavior: smooth;
 }
 
@@ -23,6 +28,7 @@ body {
   line-height: var(--line-height-normal);
   color: var(--color-text);
   background-color: var(--color-background);
+  min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -30,12 +36,18 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+
 a {
   color: var(--color-primary);
   text-decoration: none;
 }
 
 a:hover {
+  color: var(--color-primary-dark);
   text-decoration: underline;
 }
 
@@ -44,8 +56,24 @@ button {
   cursor: pointer;
 }
 
-code, pre {
+code {
   font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-bg-secondary);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+}
+
+pre {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+pre code {
+  background: none;
+  padding: 0;
 }
 
 img {
@@ -72,5 +100,15 @@ section h2 {
   text-align: center;
 }
 
-/* Import component styles */
-@import './components/features.css';
+/* Utility Classes */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

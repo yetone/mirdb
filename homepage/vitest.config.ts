@@ -4,9 +4,12 @@ import { resolve } from 'path';
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'happy-dom',
+    environment: 'jsdom',
     include: ['tests/**/*.test.ts'],
     exclude: ['tests/e2e/**'],
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+    },
   },
   resolve: {
     alias: {
