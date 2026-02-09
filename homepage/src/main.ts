@@ -6,6 +6,7 @@ import { renderHero } from './components/Hero';
 import { renderFeatures } from './components/Features';
 import { renderQuickStart } from './components/QuickStart';
 import { renderProtocol } from './components/Protocol';
+import { renderConfiguration } from './components/Configuration';
 
 function initApp(): void {
   const app = document.getElementById('app');
@@ -26,6 +27,10 @@ function initApp(): void {
   // Render Protocol section (Scenario 5)
   const protocol = renderProtocol();
   app.appendChild(protocol);
+
+  // Render Configuration section (Scenario 6)
+  const configuration = renderConfiguration();
+  app.appendChild(configuration);
 }
 
 // Initialize when DOM is ready

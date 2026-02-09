@@ -1,0 +1,179 @@
+/**
+ * Configuration Section Styles.
+ * Owner: Scenario 6 - Configuration Reference
+ *
+ * Responsive table layout for configuration options with
+ * mobile-friendly stacking behavior.
+ */
+
+.configuration-section {
+  background-color: var(--color-surface);
+}
+
+.configuration-intro {
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: var(--font-size-lg);
+  max-width: 700px;
+  margin: 0 auto var(--spacing-8);
+  line-height: var(--line-height-relaxed);
+}
+
+.config-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.config-table thead {
+  background-color: var(--color-bg-secondary);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.config-table th {
+  padding: var(--spacing-4);
+  text-align: left;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+}
+
+.config-table td {
+  padding: var(--spacing-4);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.config-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.config-table tbody tr:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.config-name code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: transparent;
+  padding: 0;
+}
+
+.config-default code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary);
+  background-color: rgba(16, 185, 129, 0.1);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+}
+
+.config-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-light);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .configuration-intro {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-4);
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: var(--spacing-3);
+  }
+
+  .config-table th {
+    font-size: var(--font-size-xs);
+  }
+
+  .config-description {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Mobile: Stack layout for better readability */
+@media (max-width: 480px) {
+  .config-table-wrapper {
+    border: none;
+    background-color: transparent;
+    overflow-x: visible;
+  }
+
+  .config-table {
+    min-width: 0;
+  }
+
+  .config-table thead {
+    display: none;
+  }
+
+  .config-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .config-table tbody tr {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-4);
+  }
+
+  .config-table tbody tr:hover {
+    background-color: var(--color-background);
+    box-shadow: var(--shadow-md);
+  }
+
+  .config-table td {
+    padding: var(--spacing-2) 0;
+    border-bottom: none;
+  }
+
+  .config-name {
+    order: 1;
+  }
+
+  .config-name code {
+    font-size: var(--font-size-base);
+  }
+
+  .config-default {
+    order: 2;
+  }
+
+  .config-default::before {
+    content: 'Default: ';
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: var(--spacing-2);
+  }
+
+  .config-description {
+    order: 3;
+    padding-top: var(--spacing-2);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--spacing-2);
+  }
+}
