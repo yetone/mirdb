@@ -1,0 +1,189 @@
+/**
+ * Header Navigation Styles.
+ * Owner: Scenario 7 - Navigation and Header
+ *
+ * Styles for the header component including:
+ * - Logo
+ * - Desktop navigation
+ * - Mobile hamburger menu
+ * - Sticky positioning
+ */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-3) var(--spacing-4);
+}
+
+/* Logo */
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: var(--font-size-xl);
+}
+
+.header__logo:hover {
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+.header__logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.header__logo-text {
+  font-weight: 700;
+}
+
+/* Navigation */
+.header__nav {
+  display: flex;
+  align-items: center;
+}
+
+.header__nav-list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__nav-item {
+  margin: 0;
+}
+
+.header__nav-link {
+  display: block;
+  padding: var(--spacing-2) var(--spacing-3);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.header__nav-link:hover,
+.header__nav-link:focus {
+  color: var(--color-primary);
+  text-decoration: none;
+  background-color: var(--color-surface);
+}
+
+.header__nav-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Hamburger Menu Button */
+.header__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.header__hamburger-line {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-text);
+  border-radius: 2px;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+/* Hamburger active state (X icon) */
+.header__hamburger--active .header__hamburger-line:nth-child(1) {
+  transform: translateY(8.5px) rotate(45deg);
+}
+
+.header__hamburger--active .header__hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.header__hamburger--active .header__hamburger-line:nth-child(3) {
+  transform: translateY(-8.5px) rotate(-45deg);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .header__hamburger {
+    display: flex;
+  }
+
+  .header__nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-normal);
+  }
+
+  .header__nav--open {
+    max-height: 400px;
+  }
+
+  .header__nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--spacing-4);
+  }
+
+  .header__nav-link {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-base);
+    text-align: center;
+  }
+
+  .header__nav-link:hover,
+  .header__nav-link:focus {
+    background-color: var(--color-surface);
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .header__container {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .header__logo-img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .header__logo-text {
+    font-size: var(--font-size-lg);
+  }
+}

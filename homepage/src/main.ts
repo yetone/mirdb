@@ -2,6 +2,7 @@
  * Main application entry point.
  */
 
+import { renderHeader } from './components/Header';
 import { renderHero } from './components/Hero';
 import { renderFeatures } from './components/Features';
 import { renderQuickStart } from './components/QuickStart';
@@ -12,6 +13,10 @@ import { renderArchitecture } from './components/Architecture';
 function initApp(): void {
   const app = document.getElementById('app');
   if (!app) return;
+
+  // Render Header navigation (Scenario 7)
+  const header = renderHeader();
+  app.appendChild(header);
 
   // Render Hero section (Scenario 1)
   const hero = renderHero();
