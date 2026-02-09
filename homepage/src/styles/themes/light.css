@@ -8,12 +8,12 @@
 
 :root,
 [data-theme="light"] {
-  /* Primary colors */
-  --color-primary: #3b82f6;
-  --color-primary-dark: #2563eb;
-  --color-primary-light: #60a5fa;
-  --color-secondary: #10b981;
-  --color-accent: #f59e0b;
+  /* Primary colors - darker shades for WCAG AA contrast */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #3b82f6;
+  --color-secondary: #047857;
+  --color-accent: #d97706;
 
   /* Text colors */
   --color-text: #1f2937;

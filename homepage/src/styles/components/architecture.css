@@ -44,7 +44,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-2) var(--spacing-4);
-  background-color: var(--color-secondary);
+  background-color: #047857;
   color: white;
   font-weight: 600;
   font-size: var(--font-size-sm);

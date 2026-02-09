@@ -24,7 +24,7 @@
 }
 
 .quickstart-step h3 {
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   margin-bottom: var(--spacing-2);
   font-size: var(--font-size-xl);
 }
@@ -41,7 +41,7 @@
 
 .code-label {
   display: inline-block;
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-dark);
   color: white;
   font-size: var(--font-size-xs);
   font-weight: 600;
@@ -114,6 +114,7 @@
 .copy-button:focus {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5);
 }
 
 .copy-button.copied {
@@ -132,7 +133,7 @@
 
 /* Syntax Highlighting */
 .token.comment {
-  color: #6b7280;
+  color: #9ca3af;
   font-style: italic;
 }
 
@@ -181,4 +182,13 @@
   .copy-text {
     display: none;
   }
+}
+
+/* Dark mode adjustments for accessibility */
+[data-theme="dark"] .quickstart-step h3 {
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .code-label {
+  background-color: #1d4ed8;
 }

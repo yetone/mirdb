@@ -108,6 +108,16 @@
   cursor: pointer;
 }
 
+.header__hamburger:focus {
+  outline: none;
+}
+
+.header__hamburger:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 .header__hamburger-line {
   display: block;
   width: 100%;

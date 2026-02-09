@@ -61,7 +61,7 @@
 .mirdb-badge {
   display: inline-flex;
   align-items: center;
-  background-color: var(--color-secondary);
+  background-color: #047857;
   color: white;
   font-size: var(--font-size-xs);
   font-weight: 600;

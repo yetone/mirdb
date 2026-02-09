@@ -66,7 +66,7 @@
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   background-color: transparent;
   padding: 0;
 }
@@ -74,7 +74,7 @@
 .config-default code {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
-  color: var(--color-secondary);
+  color: #047857;
   background-color: rgba(16, 185, 129, 0.1);
   padding: var(--spacing-1) var(--spacing-2);
   border-radius: var(--radius-sm);
@@ -176,4 +176,14 @@
     border-top: 1px solid var(--color-border);
     margin-top: var(--spacing-2);
   }
+}
+
+/* Dark mode adjustments for accessibility */
+[data-theme="dark"] .config-name code {
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .config-default code {
+  color: #6ee7b7;
+  background-color: rgba(16, 185, 129, 0.15);
 }

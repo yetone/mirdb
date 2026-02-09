@@ -13,10 +13,11 @@
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.40.0",
     "@types/node": "^20.10.0",
     "@types/prismjs": "^1.26.3",
     "@vitest/browser": "^1.0.0",
-    "@playwright/test": "^1.40.0",
     "happy-dom": "^12.10.3",
     "jsdom": "^24.0.0",
     "playwright": "^1.40.0",

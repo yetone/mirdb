@@ -92,19 +92,19 @@
 }
 
 .hero-btn:focus {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-focus-ring, var(--color-primary));
   outline-offset: 2px;
 }
 
 .hero-btn-primary {
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-dark);
   color: white;
-  border-color: var(--color-primary);
+  border-color: var(--color-primary-dark);
 }
 
 .hero-btn-primary:hover {
-  background-color: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
   color: white;
 }
 
@@ -200,4 +200,14 @@
 
 [data-theme='dark'] .hero-btn-secondary:hover {
   color: var(--color-primary);
+}
+
+[data-theme='dark'] .hero-btn-primary {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+[data-theme='dark'] .hero-btn-primary:hover {
+  background-color: #1e40af;
+  border-color: #1e40af;
 }
