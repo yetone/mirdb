@@ -1,0 +1,336 @@
+/**
+ * Responsive Styles.
+ * Owner: Scenario 10 - Responsive Design
+ *
+ * Requirements: REQ-7
+ *
+ * Breakpoints:
+ * - Mobile: <= 480px
+ * - Tablet: 481px - 768px
+ * - Desktop: >= 769px
+ *
+ * This file provides global responsive adjustments that complement
+ * the component-specific responsive styles in their respective CSS files.
+ */
+
+/* ===========================================================
+   Global Responsive Utilities
+   =========================================================== */
+
+/* Container responsive padding */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--spacing-3);
+  }
+}
+
+/* Section responsive padding */
+@media (max-width: 768px) {
+  section {
+    padding: var(--spacing-12) 0;
+  }
+
+  section h2 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-6);
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: var(--spacing-8) 0;
+  }
+
+  section h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-4);
+    padding: 0 var(--spacing-2);
+  }
+}
+
+/* ===========================================================
+   Typography Responsive Adjustments
+   =========================================================== */
+
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
+  h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  h3 {
+    font-size: var(--font-size-xl);
+  }
+
+  h4 {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  h4 {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* ===========================================================
+   Code Block Responsive Styles
+   =========================================================== */
+
+/* Ensure code blocks are horizontally scrollable on mobile */
+pre,
+code {
+  max-width: 100%;
+}
+
+pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  pre {
+    padding: var(--spacing-3);
+    font-size: var(--font-size-xs);
+    border-radius: var(--radius-md);
+  }
+
+  code {
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  pre {
+    padding: var(--spacing-2);
+    margin-left: calc(-1 * var(--spacing-3));
+    margin-right: calc(-1 * var(--spacing-3));
+    border-radius: 0;
+  }
+}
+
+/* ===========================================================
+   Grid and Flex Responsive Utilities
+   =========================================================== */
+
+/* Mobile-first single column */
+@media (max-width: 480px) {
+  .grid-auto {
+    grid-template-columns: 1fr !important;
+  }
+
+  .flex-row-mobile-col {
+    flex-direction: column !important;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 481px) and (max-width: 768px) {
+  .grid-auto {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ===========================================================
+   Image Responsive Styles
+   =========================================================== */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 480px) {
+  img {
+    /* Prevent images from overflowing on very small screens */
+    max-width: calc(100vw - var(--spacing-6));
+  }
+}
+
+/* ===========================================================
+   Button Responsive Styles
+   =========================================================== */
+
+@media (max-width: 480px) {
+  button,
+  .btn,
+  [class*="btn-"] {
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ===========================================================
+   Visibility Utilities
+   =========================================================== */
+
+/* Hide on mobile */
+@media (max-width: 480px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Hide on tablet and below */
+@media (max-width: 768px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+/* Show only on mobile */
+@media (min-width: 481px) {
+  .show-mobile-only {
+    display: none !important;
+  }
+}
+
+/* Show only on desktop */
+@media (max-width: 768px) {
+  .show-desktop-only {
+    display: none !important;
+  }
+}
+
+/* ===========================================================
+   Touch Device Optimizations
+   =========================================================== */
+
+@media (max-width: 768px) {
+  /* Larger touch targets for mobile */
+  a,
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Remove hover effects that don't work well on touch */
+  .feature-card:hover,
+  .command-card:hover,
+  .arch-node:hover {
+    transform: none;
+  }
+}
+
+/* ===========================================================
+   Smooth Transitions Between Breakpoints
+   =========================================================== */
+
+/* Ensure smooth transitions when resizing */
+.container,
+section,
+.header,
+.hero-section,
+.features-section,
+.protocol-section,
+.configuration-section,
+.architecture-section,
+.quickstart-section,
+.footer-section {
+  transition: padding var(--transition-base);
+}
+
+/* Grid and flex containers */
+.features-grid,
+.commands-grid,
+.hero-container,
+.footer-top,
+.footer-bottom {
+  transition: gap var(--transition-base);
+}
+
+/* Typography smooth transitions */
+h1, h2, h3, h4, h5, h6, p {
+  transition: font-size var(--transition-base);
+}
+
+/* ===========================================================
+   Prevent Horizontal Scroll on Body
+   =========================================================== */
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Ensure all direct children of body don't overflow */
+body > * {
+  max-width: 100vw;
+}
+
+/* ===========================================================
+   Responsive Spacing Utilities
+   =========================================================== */
+
+@media (max-width: 768px) {
+  .mt-responsive {
+    margin-top: var(--spacing-6);
+  }
+
+  .mb-responsive {
+    margin-bottom: var(--spacing-6);
+  }
+
+  .py-responsive {
+    padding-top: var(--spacing-6);
+    padding-bottom: var(--spacing-6);
+  }
+
+  .px-responsive {
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .mt-responsive {
+    margin-top: var(--spacing-4);
+  }
+
+  .mb-responsive {
+    margin-bottom: var(--spacing-4);
+  }
+
+  .py-responsive {
+    padding-top: var(--spacing-4);
+    padding-bottom: var(--spacing-4);
+  }
+
+  .px-responsive {
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+  }
+}

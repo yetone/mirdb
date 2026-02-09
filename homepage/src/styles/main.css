@@ -13,6 +13,7 @@
 @import './components/configuration.css';
 @import './components/architecture.css';
 @import './components/footer.css';
+@import './responsive.css';
 
 /* Reset and base styles */
 *,
