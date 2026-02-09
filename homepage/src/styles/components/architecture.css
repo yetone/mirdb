@@ -1,0 +1,430 @@
+/**
+ * Architecture Section Styles.
+ * Owner: Scenario 4 - Architecture Visualization
+ *
+ * Styles for the LSM tree diagram visualization.
+ * Responsive and works in both light and dark themes.
+ */
+
+.architecture-section {
+  background-color: var(--color-surface);
+  padding: var(--spacing-16) 0;
+}
+
+.architecture-description {
+  text-align: center;
+  color: var(--color-text-light);
+  max-width: 700px;
+  margin: 0 auto var(--spacing-12);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Diagram Container */
+.arch-diagram {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-8);
+  background-color: var(--color-background);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+}
+
+/* Write Entry Point */
+.arch-write-path {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--spacing-4);
+}
+
+.arch-write-entry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2) var(--spacing-4);
+  background-color: var(--color-secondary);
+  color: white;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-2);
+}
+
+/* Section Labels */
+.arch-section-label {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-4);
+  padding: var(--spacing-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Memory Section */
+.arch-memory-section {
+  background-color: rgba(59, 130, 246, 0.05);
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+}
+
+/* Disk Section */
+.arch-disk-section {
+  background-color: rgba(245, 158, 11, 0.05);
+  border: 2px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+}
+
+/* Rows */
+.arch-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.arch-wal-memtable-row {
+  margin-bottom: var(--spacing-2);
+}
+
+.arch-immutable-row {
+  margin-top: var(--spacing-2);
+}
+
+/* SSTable Container */
+.arch-sstable-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* Diagram Nodes */
+.arch-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.arch-node:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.arch-label {
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  color: inherit;
+}
+
+.arch-sublabel {
+  font-size: var(--font-size-xs);
+  opacity: 0.8;
+  margin-top: var(--spacing-1);
+}
+
+/* WAL Node */
+.arch-wal {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: 2px solid #1d4ed8;
+}
+
+/* Memtable Node */
+.arch-memtable {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: 2px solid #047857;
+}
+
+/* Immutable Memtables Node */
+.arch-immutable {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: white;
+  border: 2px solid #4338ca;
+  min-width: 180px;
+}
+
+/* SSTable Nodes */
+.arch-sstable {
+  color: white;
+  min-width: 200px;
+}
+
+.arch-l0 {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border: 2px solid #b45309;
+}
+
+.arch-l1 {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  border: 2px solid #c2410c;
+  min-width: 250px;
+}
+
+.arch-l2 {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: 2px solid #b91c1c;
+  min-width: 300px;
+}
+
+/* Arrows */
+.arch-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-2) 0;
+}
+
+.arch-arrow-line {
+  width: 2px;
+  height: 20px;
+  background-color: var(--color-text-light);
+}
+
+.arch-arrow-head {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid var(--color-text-light);
+}
+
+.arch-arrow-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-1);
+  white-space: nowrap;
+}
+
+/* Horizontal arrows for WAL to Memtable */
+.arch-arrow-wal-memtable {
+  flex-direction: row;
+  padding: 0 var(--spacing-2);
+}
+
+.arch-arrow-wal-memtable .arch-arrow-line {
+  width: 30px;
+  height: 2px;
+}
+
+.arch-arrow-wal-memtable .arch-arrow-head {
+  border-left: 8px solid var(--color-text-light);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: none;
+}
+
+/* Flush to disk arrow */
+.arch-arrow-flush-disk {
+  padding: var(--spacing-4) 0;
+}
+
+.arch-arrow-flush-disk .arch-arrow-line {
+  height: 30px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-text-light) 0px,
+    var(--color-text-light) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+/* Legend */
+.arch-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-8);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.arch-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.arch-legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-sm);
+}
+
+.arch-legend-memory {
+  background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+}
+
+.arch-legend-disk {
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+}
+
+.arch-legend-arrow {
+  background-color: var(--color-text-light);
+  width: 24px;
+  height: 2px;
+  position: relative;
+}
+
+.arch-legend-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid var(--color-text-light);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}
+
+.arch-legend-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .arch-diagram {
+    padding: var(--spacing-4);
+  }
+
+  .arch-node {
+    min-width: 90px;
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .arch-label {
+    font-size: var(--font-size-sm);
+  }
+
+  .arch-sublabel {
+    font-size: 0.65rem;
+  }
+
+  .arch-immutable {
+    min-width: 140px;
+  }
+
+  .arch-l0 {
+    min-width: 150px;
+  }
+
+  .arch-l1 {
+    min-width: 180px;
+  }
+
+  .arch-l2 {
+    min-width: 220px;
+  }
+
+  .arch-wal-memtable-row {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .arch-arrow-wal-memtable {
+    flex-direction: column;
+    padding: var(--spacing-2) 0;
+  }
+
+  .arch-arrow-wal-memtable .arch-arrow-line {
+    width: 2px;
+    height: 20px;
+  }
+
+  .arch-arrow-wal-memtable .arch-arrow-head {
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--color-text-light);
+    border-bottom: none;
+  }
+
+  .arch-legend {
+    gap: var(--spacing-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .architecture-description {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-2);
+  }
+
+  .arch-diagram {
+    padding: var(--spacing-3);
+    border-radius: var(--radius-lg);
+  }
+
+  .arch-node {
+    min-width: 80px;
+    padding: var(--spacing-2);
+  }
+
+  .arch-label {
+    font-size: var(--font-size-xs);
+  }
+
+  .arch-l0,
+  .arch-l1,
+  .arch-l2 {
+    min-width: 100%;
+    max-width: 280px;
+  }
+
+  .arch-section-label {
+    font-size: var(--font-size-xs);
+  }
+
+  .arch-legend {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-3);
+  }
+}
+
+/* Dark mode support (when implemented) */
+[data-theme="dark"] .architecture-section {
+  background-color: #1f2937;
+}
+
+[data-theme="dark"] .arch-diagram {
+  background-color: #111827;
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .arch-memory-section {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+[data-theme="dark"] .arch-disk-section {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+[data-theme="dark"] .arch-section-label {
+  border-color: #374151;
+}
+
+[data-theme="dark"] .arch-legend {
+  border-color: #374151;
+}

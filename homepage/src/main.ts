@@ -7,6 +7,7 @@ import { renderFeatures } from './components/Features';
 import { renderQuickStart } from './components/QuickStart';
 import { renderProtocol } from './components/Protocol';
 import { renderConfiguration } from './components/Configuration';
+import { renderArchitecture } from './components/Architecture';
 
 function initApp(): void {
   const app = document.getElementById('app');
@@ -31,6 +32,10 @@ function initApp(): void {
   // Render Configuration section (Scenario 6)
   const configuration = renderConfiguration();
   app.appendChild(configuration);
+
+  // Render Architecture section (Scenario 4)
+  const architecture = renderArchitecture();
+  app.appendChild(architecture);
 }
 
 // Initialize when DOM is ready
