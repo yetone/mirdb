@@ -3,6 +3,7 @@
  */
 
 @import './variables.css';
+@import './components/hero.css';
 @import './components/features.css';
 @import './components/quickstart.css';
 
