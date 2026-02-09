@@ -3,6 +3,8 @@
  */
 
 @import './variables.css';
+@import './themes/light.css';
+@import './themes/dark.css';
 @import './components/header.css';
 @import './components/hero.css';
 @import './components/features.css';

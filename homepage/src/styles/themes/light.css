@@ -1,0 +1,65 @@
+/**
+ * Light Theme Styles.
+ * Owner: Scenario 9 - Dark Mode Support
+ *
+ * Uses CSS custom properties for easy theming.
+ * Applied when [data-theme="light"] or as default.
+ */
+
+:root,
+[data-theme="light"] {
+  /* Primary colors */
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-primary-light: #60a5fa;
+  --color-secondary: #10b981;
+  --color-accent: #f59e0b;
+
+  /* Text colors */
+  --color-text: #1f2937;
+  --color-text-light: #6b7280;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #9ca3af;
+  --color-text-inverse: #ffffff;
+
+  /* Background colors */
+  --color-background: #ffffff;
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-surface: #f9fafb;
+  --color-surface-elevated: #ffffff;
+
+  /* Code block colors */
+  --color-bg-code: #1e293b;
+  --color-text-code: #e2e8f0;
+
+  /* Border colors */
+  --color-border: #e5e7eb;
+  --color-border-light: #f3f4f6;
+
+  /* Shadow colors */
+  --shadow-color: rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Feature card colors */
+  --color-feature-bg: #f8fafc;
+  --color-feature-border: #e2e8f0;
+  --color-feature-icon: #3b82f6;
+
+  /* Code syntax highlighting - light theme */
+  --syntax-comment: #6a737d;
+  --syntax-keyword: #d73a49;
+  --syntax-string: #22863a;
+  --syntax-number: #005cc5;
+  --syntax-function: #6f42c1;
+  --syntax-operator: #d73a49;
+  --syntax-variable: #e36209;
+  --syntax-punctuation: #24292e;
+
+  /* Interactive states */
+  --color-hover: #f3f4f6;
+  --color-active: #e5e7eb;
+  --color-focus-ring: #3b82f6;
+}
