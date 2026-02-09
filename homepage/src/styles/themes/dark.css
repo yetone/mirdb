@@ -1,0 +1,64 @@
+/**
+ * Dark Theme Styles.
+ * Owner: Scenario 9 - Dark Mode Support
+ *
+ * Ensures all content remains readable with sufficient contrast.
+ * Applied when [data-theme="dark"].
+ */
+
+[data-theme="dark"] {
+  /* Primary colors - slightly brighter for dark mode */
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-primary-light: #93c5fd;
+  --color-secondary: #34d399;
+  --color-accent: #fbbf24;
+
+  /* Text colors - high contrast for readability */
+  --color-text: #f1f5f9;
+  --color-text-light: #cbd5e1;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-text-inverse: #0f172a;
+
+  /* Background colors */
+  --color-background: #0f172a;
+  --color-bg: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-surface: #1e293b;
+  --color-surface-elevated: #334155;
+
+  /* Code block colors - optimized for dark mode */
+  --color-bg-code: #0d1117;
+  --color-text-code: #e6edf3;
+
+  /* Border colors */
+  --color-border: #334155;
+  --color-border-light: #1e293b;
+
+  /* Shadow colors - more subtle in dark mode */
+  --shadow-color: rgb(0 0 0 / 0.3);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+
+  /* Feature card colors */
+  --color-feature-bg: #1e293b;
+  --color-feature-border: #334155;
+  --color-feature-icon: #60a5fa;
+
+  /* Code syntax highlighting - dark theme */
+  --syntax-comment: #8b949e;
+  --syntax-keyword: #ff7b72;
+  --syntax-string: #a5d6ff;
+  --syntax-number: #79c0ff;
+  --syntax-function: #d2a8ff;
+  --syntax-operator: #ff7b72;
+  --syntax-variable: #ffa657;
+  --syntax-punctuation: #c9d1d9;
+
+  /* Interactive states */
+  --color-hover: #334155;
+  --color-active: #475569;
+  --color-focus-ring: #60a5fa;
+}
