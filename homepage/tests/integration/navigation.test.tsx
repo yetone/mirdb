@@ -8,17 +8,38 @@
  * - Anchor link navigation
  */
 
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import App from '@/App';
 import { Header } from '@/components/layout/Header';
+import { ThemeProvider } from '@/context/ThemeContext';
 import { GITHUB_URL } from '@/utils/constants';
+
+// Helper to render App with required providers
+const renderApp = () => {
+  return render(
+    <ThemeProvider defaultTheme="light">
+      <App />
+    </ThemeProvider>
+  );
+};
 
 const getSiteHeader = () => {
   return screen.getByRole('banner', { name: /site header/i });
 };
 
 describe('Navigation Integration Tests', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    document.documentElement.removeAttribute('data-theme');
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+    document.documentElement.removeAttribute('data-theme');
+  });
+
   describe('Test Case 4: Sticky header on scroll', () => {
     beforeEach(() => {
       Object.defineProperty(window, 'scrollY', {
@@ -28,7 +49,7 @@ describe('Navigation Integration Tests', () => {
     });
 
     it('header remains visible when page is scrolled', () => {
-      render(<App />);
+      renderApp();
       const header = getSiteHeader();
 
       expect(header).toBeInTheDocument();
@@ -37,14 +58,14 @@ describe('Navigation Integration Tests', () => {
     });
 
     it('header maintains sticky position with high z-index', () => {
-      render(<App />);
+      renderApp();
       const header = getSiteHeader();
 
       expect(header).toHaveStyle({ zIndex: '1000' });
     });
 
     it('header stays at top of viewport', () => {
-      render(<App />);
+      renderApp();
       const header = getSiteHeader();
 
       expect(header).toHaveStyle({ top: '0' });
@@ -54,13 +75,13 @@ describe('Navigation Integration Tests', () => {
 
   describe('Navigation within full app context', () => {
     it('renders navigation within Layout', () => {
-      render(<App />);
+      renderApp();
       const nav = screen.getByRole('navigation');
       expect(nav).toBeInTheDocument();
     });
 
     it('logo is accessible within app', () => {
-      render(<App />);
+      renderApp();
       const logos = screen.getAllByText('MirDB');
       expect(logos.length).toBeGreaterThan(0);
       const navLogo = screen.getByRole('link', { name: /MirDB home/i });
@@ -68,7 +89,7 @@ describe('Navigation Integration Tests', () => {
     });
 
     it('all navigation sections are rendered on page', () => {
-      render(<App />);
+      renderApp();
 
       const heroSection = document.getElementById('hero');
       const featuresSection = document.getElementById('features');
@@ -82,7 +103,7 @@ describe('Navigation Integration Tests', () => {
     });
 
     it('navigation links point to existing sections', () => {
-      render(<App />);
+      renderApp();
 
       const featuresLink = screen.getByRole('link', { name: 'Features' });
       const usageLink = screen.getByRole('link', { name: 'Usage' });
@@ -96,7 +117,7 @@ describe('Navigation Integration Tests', () => {
 
   describe('GitHub link integration', () => {
     it('GitHub link is accessible from header', () => {
-      render(<App />);
+      renderApp();
       const header = getSiteHeader();
       const githubLinks = screen.getAllByRole('link', { name: /github/i });
       const headerGithubLink = githubLinks.find(link => header.contains(link));
@@ -106,7 +127,7 @@ describe('Navigation Integration Tests', () => {
     });
 
     it('GitHub link has correct URL', () => {
-      render(<App />);
+      renderApp();
       const header = getSiteHeader();
       const githubLinks = screen.getAllByRole('link', { name: /github/i });
       const headerGithubLink = githubLinks.find(link => header.contains(link));
@@ -116,7 +137,7 @@ describe('Navigation Integration Tests', () => {
     });
 
     it('GitHub link opens in new tab', () => {
-      render(<App />);
+      renderApp();
       const header = getSiteHeader();
       const githubLinks = screen.getAllByRole('link', { name: /github/i });
       const headerGithubLink = githubLinks.find(link => header.contains(link));
@@ -130,7 +151,7 @@ describe('Navigation Integration Tests', () => {
     it('clicking navigation link triggers smooth scroll', () => {
       const scrollIntoViewMock = vi.fn();
 
-      render(<App />);
+      renderApp();
 
       const featuresSection = document.getElementById('features');
       if (featuresSection) {
@@ -146,7 +167,7 @@ describe('Navigation Integration Tests', () => {
 
   describe('Header within Layout context', () => {
     it('header is a child of Layout', () => {
-      render(<App />);
+      renderApp();
       const header = getSiteHeader();
       const main = screen.getByRole('main');
 
@@ -154,7 +175,7 @@ describe('Navigation Integration Tests', () => {
     });
 
     it('header appears before main content', () => {
-      render(<App />);
+      renderApp();
       const header = getSiteHeader();
       const main = screen.getByRole('main');
 

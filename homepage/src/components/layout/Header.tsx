@@ -10,6 +10,7 @@
 
 import React from 'react';
 import { Navigation } from './Navigation';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 const headerStyles: React.CSSProperties = {
   position: 'sticky',
@@ -27,9 +28,17 @@ const headerContainerStyles: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: 'var(--spacing-md) 0',
+  padding: 'var(--spacing-md) var(--spacing-lg)',
   minHeight: '64px',
   position: 'relative',
+  maxWidth: 'var(--container-max-width)',
+  margin: '0 auto',
+  width: '100%',
+};
+
+const themeToggleContainerStyles: React.CSSProperties = {
+  marginLeft: 'auto',
+  paddingLeft: 'var(--spacing-md)',
 };
 
 export const Header: React.FC = () => {
@@ -37,7 +46,9 @@ export const Header: React.FC = () => {
     <header style={headerStyles} role="banner" aria-label="Site header">
       <div style={headerContainerStyles}>
         <Navigation />
-        {/* Theme toggle will be added by Scenario 6 */}
+        <div style={themeToggleContainerStyles}>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
