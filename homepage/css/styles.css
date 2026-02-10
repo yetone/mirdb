@@ -364,19 +364,194 @@ pre code {
 
 .resources h2 {
     text-align: center;
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+}
+
+.resources-intro {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-2xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.resource-card {
+    display: block;
+    background-color: var(--color-background);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+.resource-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-text);
+}
+
+.resource-icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.resource-card h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+}
+
+.resource-card p {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin-bottom: 0;
 }
 
 /* Footer */
 footer {
     background-color: var(--color-text);
     color: var(--color-surface);
-    padding: var(--spacing-xl) 0;
+    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--spacing-2xl);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.footer-brand {
+    max-width: 350px;
+}
+
+.footer-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-background);
+    display: block;
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer-brand p {
+    font-size: 0.875rem;
+    color: var(--color-border);
+    margin-bottom: 0;
+}
+
+.footer-nav h4,
+.footer-links h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-background);
+    margin-bottom: var(--spacing-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.footer-nav ul,
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-nav li,
+.footer-links li {
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer-nav a,
+.footer-links a {
+    color: var(--color-border);
+    font-size: 0.875rem;
+    transition: color 0.2s ease;
+}
+
+.footer-nav a:hover,
+.footer-links a:hover {
+    color: var(--color-background);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--color-secondary);
+    padding-top: var(--spacing-lg);
     text-align: center;
 }
 
-footer p {
+.footer-bottom p {
+    font-size: 0.875rem;
+    color: var(--color-border);
     margin-bottom: 0;
+}
+
+.footer-bottom a {
+    color: var(--color-border);
+    text-decoration: underline;
+}
+
+.footer-bottom a:hover {
+    color: var(--color-background);
+}
+
+/* Mobile menu button (hidden by default) */
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.mobile-menu-btn span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--color-text);
+    margin: 3px 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Active navigation state */
+nav a.active {
+    color: var(--color-primary);
+}
+
+/* Copy button for code blocks */
+.copy-btn {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+pre:hover .copy-btn {
+    opacity: 1;
+}
+
+.copy-btn:hover {
+    background-color: var(--color-border);
 }
 
 /* Accessibility Styles (Scenario 6) */
@@ -423,4 +598,41 @@ textarea:focus,
 nav a:focus {
     outline: 3px solid var(--color-primary);
     outline-offset: 2px;
+}
+
+/* Responsive footer */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-brand {
+        max-width: none;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    header nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--color-background);
+        flex-direction: column;
+        padding: var(--spacing-md);
+        border-top: 1px solid var(--color-border);
+        box-shadow: var(--shadow-md);
+    }
+
+    header nav.nav-open {
+        display: flex;
+    }
+
+    header nav a {
+        padding: var(--spacing-sm) 0;
+    }
 }

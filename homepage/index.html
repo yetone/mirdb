@@ -38,7 +38,7 @@
             <p class="description">Drop-in replacement for Memcached with built-in persistence using LSM Tree architecture.</p>
             <div class="cta-buttons">
                 <a href="#quickstart" class="btn btn-primary">Get Started</a>
-                <a href="https://github.com" class="btn btn-secondary">View on GitHub</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
             </div>
         </div>
     </section>
@@ -141,10 +141,32 @@ client.delete('user:1')</code></pre>
     <!-- END: Quick Start Section (Scenario 3) -->
 
     <!-- BEGIN: Resources Section (Scenario 4) -->
-    <section id="resources" class="resources">
+    <section id="resources" class="resources" role="region" aria-labelledby="resources-heading">
         <div class="container">
-            <h2>Resources</h2>
-            <p>Additional documentation and resources.</p>
+            <h2 id="resources-heading">Resources</h2>
+            <p class="resources-intro">Explore documentation and community resources to get the most out of MirDB.</p>
+            <div class="resources-grid">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="resource-card">
+                    <div class="resource-icon">📦</div>
+                    <h3>GitHub Repository</h3>
+                    <p>View source code, report issues, and contribute to MirDB.</p>
+                </a>
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer" class="resource-card">
+                    <div class="resource-icon">📖</div>
+                    <h3>Documentation</h3>
+                    <p>Learn about installation, configuration, and usage.</p>
+                </a>
+                <a href="https://github.com/memcached/memcached/blob/master/doc/protocol.txt" target="_blank" rel="noopener noreferrer" class="resource-card">
+                    <div class="resource-icon">🔧</div>
+                    <h3>Memcached Protocol</h3>
+                    <p>Reference documentation for the Memcached text protocol.</p>
+                </a>
+                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer" class="resource-card">
+                    <div class="resource-icon">⚖️</div>
+                    <h3>License</h3>
+                    <p>MirDB is open source software under the MIT License.</p>
+                </a>
+            </div>
         </div>
     </section>
     <!-- END: Resources Section (Scenario 4) -->
@@ -152,11 +174,36 @@ client.delete('user:1')</code></pre>
     <!-- END: Main Content (Scenario 6 - Accessibility) -->
 
     <!-- BEGIN: Footer (Scenario 4) -->
-    <footer>
+    <footer role="contentinfo">
         <div class="container">
-            <p>&copy; 2024 MirDB Project. MIT License.</p>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">MirDB</span>
+                    <p>A Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+                </div>
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#quickstart">Quick Start</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                    </ul>
+                </nav>
+                <div class="footer-links">
+                    <h4>External Links</h4>
+                    <ul>
+                        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                        <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright &copy; 2024 MirDB Project. Licensed under the <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
+            </div>
         </div>
     </footer>
     <!-- END: Footer (Scenario 4) -->
+    <script src="js/main.js"></script>
 </body>
 </html>
