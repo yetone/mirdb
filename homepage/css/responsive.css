@@ -1,0 +1,300 @@
+/**
+ * MirDB Homepage Responsive Styles
+ * Owner: Scenario 5 - Responsive Design
+ *
+ * This file contains responsive/mobile styles for the MirDB homepage.
+ *
+ * Expected contents:
+ * - Mobile viewport meta tag support
+ * - Breakpoints for tablet and mobile
+ * - Responsive navigation (hamburger menu if needed)
+ * - Flexible grid adjustments
+ * - Touch-friendly button sizes
+ *
+ * Requirements traced:
+ * - REQ-5: Support for desktop and mobile viewports
+ * - USR-5: Mobile device viewing
+ */
+
+/* ============================================
+   MOBILE-FIRST RESPONSIVE BREAKPOINTS
+
+   Breakpoints:
+   - Mobile small: 320px - 374px
+   - Mobile: 375px - 767px
+   - Tablet: 768px - 1023px
+   - Desktop: 1024px+
+   ============================================ */
+
+/* Ensure no horizontal overflow on any viewport */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+/* Touch-friendly minimum sizes (44px per WCAG guidelines) */
+.btn,
+nav a,
+a.btn,
+button {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================
+   MOBILE STYLES (up to 767px)
+   ============================================ */
+@media screen and (max-width: 767px) {
+    /* Typography adjustments for mobile */
+    body {
+        font-size: 16px; /* Maintain 16px base for readability */
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    /* Container padding for mobile */
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    /* Header - Stack logo and navigation */
+    header .container {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .logo {
+        justify-content: center;
+    }
+
+    .logo img {
+        height: 32px;
+    }
+
+    .logo h1 {
+        font-size: 1.25rem;
+    }
+
+    /* Navigation - Stack vertically on mobile */
+    nav {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-sm);
+        width: 100%;
+    }
+
+    nav a {
+        padding: var(--spacing-sm) var(--spacing-md);
+        width: 100%;
+        text-align: center;
+        border-radius: var(--border-radius);
+        background-color: var(--color-surface);
+    }
+
+    nav a:hover {
+        background-color: var(--color-border);
+    }
+
+    /* Hero section mobile styles */
+    .hero {
+        padding: var(--spacing-xl) 0;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero .tagline {
+        font-size: 1.125rem;
+    }
+
+    .hero .description {
+        font-size: 1rem;
+        padding: 0 var(--spacing-sm);
+    }
+
+    /* CTA buttons - Stack on mobile */
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    /* Features grid - Single column on mobile */
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .feature-card {
+        padding: var(--spacing-lg);
+    }
+
+    .feature-icon {
+        font-size: 2rem;
+    }
+
+    /* Section padding for mobile */
+    .features,
+    .quickstart,
+    .resources {
+        padding: var(--spacing-xl) 0;
+    }
+
+    /* Footer mobile */
+    footer {
+        padding: var(--spacing-lg) 0;
+    }
+}
+
+/* ============================================
+   SMALL MOBILE STYLES (320px - 374px)
+   ============================================ */
+@media screen and (max-width: 374px) {
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .hero .tagline {
+        font-size: 1rem;
+    }
+
+    .feature-card {
+        padding: var(--spacing-md);
+    }
+
+    .feature-card h3 {
+        font-size: 1.125rem;
+    }
+
+    .feature-card p {
+        font-size: 0.875rem;
+    }
+}
+
+/* ============================================
+   TABLET STYLES (768px - 1023px)
+   ============================================ */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    /* Typography adjustments for tablet */
+    h1 {
+        font-size: 2.25rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    /* Header - Keep horizontal but with adjusted spacing */
+    header .container {
+        flex-direction: row;
+    }
+
+    nav {
+        gap: var(--spacing-md);
+    }
+
+    /* Hero adjustments */
+    .hero {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero .tagline {
+        font-size: 1.25rem;
+    }
+
+    /* Features grid - 2 columns on tablet */
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+
+    /* Section padding for tablet */
+    .features,
+    .quickstart,
+    .resources {
+        padding: var(--spacing-2xl) 0;
+    }
+}
+
+/* ============================================
+   SMALL DESKTOP (1024px+)
+   ============================================ */
+@media screen and (min-width: 1024px) {
+    /* Full navigation display */
+    nav {
+        flex-direction: row;
+        gap: var(--spacing-lg);
+    }
+
+    /* Features grid - Ensure proper display */
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES FOR RESPONSIVE IMAGES
+   ============================================ */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Prevent text from overflowing */
+p, h1, h2, h3, h4, h5, h6, li, a {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Ensure code blocks don't cause horizontal scroll */
+pre, code {
+    max-width: 100%;
+    overflow-x: auto;
+    word-wrap: break-word;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    header,
+    footer,
+    .cta-buttons {
+        display: none;
+    }
+
+    body {
+        font-size: 12pt;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+}
