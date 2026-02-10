@@ -8,4 +8,6 @@ export { Layout } from './layout/Layout';
 // UI components
 export { Button } from './ui/Button';
 
-// Section components will be added by their respective scenarios
+// Section components
+export { Hero } from './sections/Hero';
+export { Features } from './sections/Features';

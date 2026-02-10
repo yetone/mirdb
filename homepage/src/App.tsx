@@ -1,10 +1,11 @@
 import { Layout } from './components/layout/Layout'
+import { Hero } from './components/sections/Hero'
 import { Features } from './components/sections/Features'
 
 function App() {
   return (
     <Layout>
-      {/* Hero section will be added by Scenario 1 */}
+      <Hero />
       <Features />
       {/* UsageExample section will be added by Scenario 3 */}
       {/* GettingStarted section will be added by Scenario 4 */}

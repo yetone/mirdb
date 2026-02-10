@@ -11,6 +11,10 @@ export const SITE_TITLE = 'MirDB';
 
 export const SITE_TAGLINE = 'A Persistent Key-Value Store with Memcached Protocol';
 
+export const SITE_DESCRIPTION = 'MirDB is a high-performance, persistent key-value store that speaks the Memcached protocol. Built with Rust and Tokio for maximum performance and reliability.';
+
+export const DOCS_URL = '#getting-started';
+
 export const NAVIGATION_LINKS = [
   { label: 'Features', href: '#features', isExternal: false },
   { label: 'Usage', href: '#usage', isExternal: false },
