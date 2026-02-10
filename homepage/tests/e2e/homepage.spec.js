@@ -127,7 +127,7 @@ test.describe('Homepage Core Structure and Hero Section', () => {
     const logoImg = logo.locator('img');
     await expect(logoImg).toBeVisible();
 
-    const logoText = logo.locator('h1');
+    const logoText = logo.locator('.logo-text');
     await expect(logoText).toContainText('MirDB');
   });
 
