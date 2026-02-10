@@ -11,3 +11,4 @@ export { Button } from './ui/Button';
 // Section components
 export { Hero } from './sections/Hero';
 export { Features } from './sections/Features';
+export { UsageExample } from './sections/UsageExample';
