@@ -114,9 +114,10 @@ header .container {
     width: auto;
 }
 
-.logo h1 {
+.logo-text {
     font-size: 1.5rem;
-    margin-bottom: 0;
+    font-weight: 600;
+    color: var(--color-text);
 }
 
 nav {
@@ -271,4 +272,50 @@ footer {
 
 footer p {
     margin-bottom: 0;
+}
+
+/* Accessibility Styles (Scenario 6) */
+
+/* Skip to main content link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--color-primary);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 1000;
+    text-decoration: none;
+    font-weight: 500;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--color-primary-dark);
+    outline-offset: 2px;
+}
+
+/* Focus styles for all interactive elements */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Ensure focus is visible on buttons */
+.btn:focus {
+    outline: 3px solid var(--color-primary-dark);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
+}
+
+/* Nav link focus */
+nav a:focus {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
 }

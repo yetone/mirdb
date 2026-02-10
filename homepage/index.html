@@ -7,12 +7,16 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <!-- BEGIN: Skip Navigation Link (Scenario 6 - Accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <!-- END: Skip Navigation Link (Scenario 6 - Accessibility) -->
+
     <!-- BEGIN: Header (Scenario 1) -->
     <header>
         <div class="container">
             <div class="logo">
                 <img src="../assets/logo.gif" alt="MirDB Logo">
-                <h1>MirDB</h1>
+                <span class="logo-text">MirDB</span>
             </div>
             <nav>
                 <a href="#features">Features</a>
@@ -23,6 +27,8 @@
     </header>
     <!-- END: Header (Scenario 1) -->
 
+    <!-- BEGIN: Main Content (Scenario 6 - Accessibility) -->
+    <main id="main-content" tabindex="-1">
     <!-- BEGIN: Hero Section (Scenario 1) -->
     <section id="hero" class="hero">
         <div class="container">
@@ -91,6 +97,8 @@
         </div>
     </section>
     <!-- END: Resources Section (Scenario 4) -->
+    </main>
+    <!-- END: Main Content (Scenario 6 - Accessibility) -->
 
     <!-- BEGIN: Footer (Scenario 4) -->
     <footer>
