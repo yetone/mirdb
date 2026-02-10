@@ -26,25 +26,25 @@ describe('Brand Consistency and Visual Design', () => {
 
   // Test Case 1: Check logo image source
   describe('Logo Usage (Test Case 1)', () => {
-    test('logo image src references assets/logo.gif or equivalent path', () => {
-      // Test Case 1: Check logo image source references assets/logo.gif or equivalent path
-      const logoImgMatch = htmlContent.match(/<img[^>]*src\s*=\s*["']([^"']*logo\.gif)["'][^>]*>/i);
+    test('logo image src references logo file', () => {
+      // Test Case 1: Check logo image source (accept .gif or .png for performance optimization)
+      const logoImgMatch = htmlContent.match(/<img[^>]*src\s*=\s*["']([^"']*logo\.(gif|png))["'][^>]*>/i);
       expect(logoImgMatch).toBeTruthy();
       const logoSrc = logoImgMatch[1];
-      // Should reference logo.gif from assets folder (may be ../assets/logo.gif or similar)
-      expect(logoSrc).toMatch(/logo\.gif$/i);
+      // Should reference logo.gif or logo.png
+      expect(logoSrc).toMatch(/logo\.(gif|png)$/i);
     });
 
     test('logo is in header section', () => {
       // Verify logo is within header for proper branding placement
       const headerMatch = htmlContent.match(/<header[^>]*>[\s\S]*?<\/header>/i);
       expect(headerMatch).toBeTruthy();
-      expect(headerMatch[0]).toMatch(/<img[^>]*logo\.gif/i);
+      expect(headerMatch[0]).toMatch(/<img[^>]*logo\.(gif|png)/i);
     });
 
     test('logo image has alt attribute for accessibility', () => {
       // Ensure logo has proper alt text for accessibility and branding
-      const logoImgMatch = htmlContent.match(/<img[^>]*src\s*=\s*["'][^"']*logo\.gif["'][^>]*>/i);
+      const logoImgMatch = htmlContent.match(/<img[^>]*src\s*=\s*["'][^"']*logo\.(gif|png)["'][^>]*>/i);
       expect(logoImgMatch).toBeTruthy();
       expect(logoImgMatch[0]).toMatch(/alt\s*=\s*["'][^"']+["']/i);
     });
