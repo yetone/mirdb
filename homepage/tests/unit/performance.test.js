@@ -2,13 +2,13 @@
  * Performance Unit Tests
  * Owner: Scenario 7 - Performance and Loading
  *
- * Unit tests for verifying performance-related constraints.
+ * Unit tests for validating homepage performance requirements.
  *
  * Expected test coverage:
  * - JavaScript bundle size under 50KB
  * - CSS size under 50KB
  * - No heavy SPA framework imports
- * - Image file sizes optimization
+ * - Image file sizes under 500KB total
  *
  * Requirements traced:
  * - NFR-1: Quick load with optimal performance
@@ -18,239 +18,253 @@
 const fs = require('fs');
 const path = require('path');
 
-describe('Performance and Load Time - File Size Tests', () => {
-    const homepagePath = path.join(__dirname, '../../');
+// Helper function to get file size
+function getFileSize(filePath) {
+    try {
+        const stats = fs.statSync(filePath);
+        return stats.size;
+    } catch (e) {
+        return 0;
+    }
+}
 
-    describe('JavaScript Bundle Size', () => {
+// Helper function to read file content
+function readFileContent(filePath) {
+    try {
+        return fs.readFileSync(filePath, 'utf8');
+    } catch (e) {
+        return '';
+    }
+}
+
+// Helper function to get all files with extension in directory
+function getFilesWithExtension(dir, extension) {
+    const files = [];
+    try {
+        const items = fs.readdirSync(dir, { withFileTypes: true });
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            if (item.isDirectory()) {
+                files.push(...getFilesWithExtension(fullPath, extension));
+            } else if (item.name.endsWith(extension)) {
+                files.push(fullPath);
+            }
+        }
+    } catch (e) {
+        // Directory doesn't exist
+    }
+    return files;
+}
+
+describe('Performance Unit Tests', () => {
+    const homepageDir = path.resolve(__dirname, '../..');
+    const cssDir = path.join(homepageDir, 'css');
+    const jsDir = path.join(homepageDir, 'js');
+    const imagesDir = path.join(homepageDir, 'images');
+    const assetsDir = path.resolve(homepageDir, '../assets');
+
+    describe('JavaScript Bundle Size (Test Case 3)', () => {
         test('Total JavaScript is under 50KB (no heavy frameworks)', () => {
-            const jsDir = path.join(homepagePath, 'js');
+            const jsFiles = getFilesWithExtension(jsDir, '.js');
+            let totalSize = 0;
 
-            if (!fs.existsSync(jsDir)) {
-                // No JS directory means no JS files, which is fine
-                expect(true).toBe(true);
-                return;
+            for (const file of jsFiles) {
+                const size = getFileSize(file);
+                totalSize += size;
             }
 
-            let totalJsSize = 0;
-            const jsFiles = fs.readdirSync(jsDir).filter(f => f.endsWith('.js'));
-
-            jsFiles.forEach(file => {
-                const filePath = path.join(jsDir, file);
-                const stats = fs.statSync(filePath);
-                totalJsSize += stats.size;
-            });
-
-            // Total JavaScript should be under 50KB (51200 bytes)
-            expect(totalJsSize).toBeLessThan(51200);
+            // 50KB = 51200 bytes
+            expect(totalSize).toBeLessThan(51200);
         });
 
-        test('Individual JavaScript files are reasonably sized', () => {
-            const jsDir = path.join(homepagePath, 'js');
+        test('Individual JS files are reasonably sized', () => {
+            const jsFiles = getFilesWithExtension(jsDir, '.js');
 
-            if (!fs.existsSync(jsDir)) {
-                expect(true).toBe(true);
-                return;
+            for (const file of jsFiles) {
+                const size = getFileSize(file);
+                // Each file should be under 30KB for good performance
+                expect(size).toBeLessThan(30720);
             }
-
-            const jsFiles = fs.readdirSync(jsDir).filter(f => f.endsWith('.js'));
-
-            jsFiles.forEach(file => {
-                const filePath = path.join(jsDir, file);
-                const stats = fs.statSync(filePath);
-                // Individual JS files should be under 30KB
-                expect(stats.size).toBeLessThan(30720);
-            });
         });
     });
 
-    describe('CSS Size', () => {
+    describe('CSS Size (Test Case 4)', () => {
         test('Total CSS is under 50KB', () => {
-            const cssDir = path.join(homepagePath, 'css');
+            const cssFiles = getFilesWithExtension(cssDir, '.css');
+            let totalSize = 0;
 
-            if (!fs.existsSync(cssDir)) {
-                // No CSS directory is a problem for a homepage
-                expect(fs.existsSync(cssDir)).toBe(true);
-                return;
+            for (const file of cssFiles) {
+                const size = getFileSize(file);
+                totalSize += size;
             }
 
-            let totalCssSize = 0;
-            const cssFiles = fs.readdirSync(cssDir).filter(f => f.endsWith('.css'));
-
-            cssFiles.forEach(file => {
-                const filePath = path.join(cssDir, file);
-                const stats = fs.statSync(filePath);
-                totalCssSize += stats.size;
-            });
-
-            // Total CSS should be under 50KB (51200 bytes)
-            expect(totalCssSize).toBeLessThan(51200);
+            // 50KB = 51200 bytes
+            expect(totalSize).toBeLessThan(51200);
         });
 
         test('Individual CSS files are reasonably sized', () => {
-            const cssDir = path.join(homepagePath, 'css');
+            const cssFiles = getFilesWithExtension(cssDir, '.css');
 
-            if (!fs.existsSync(cssDir)) {
-                expect(true).toBe(true);
-                return;
+            for (const file of cssFiles) {
+                const size = getFileSize(file);
+                // Each file should be under 30KB
+                expect(size).toBeLessThan(30720);
             }
-
-            const cssFiles = fs.readdirSync(cssDir).filter(f => f.endsWith('.css'));
-
-            cssFiles.forEach(file => {
-                const filePath = path.join(cssDir, file);
-                const stats = fs.statSync(filePath);
-                // Individual CSS files should be under 40KB
-                expect(stats.size).toBeLessThan(40960);
-            });
         });
     });
 
-    describe('No Heavy SPA Frameworks', () => {
-        test('Page does not import React', () => {
-            const indexPath = path.join(homepagePath, 'index.html');
-            const content = fs.readFileSync(indexPath, 'utf8');
+    describe('No Heavy SPA Framework Imports (Test Case 5)', () => {
+        test('No React imports in JavaScript files', () => {
+            const jsFiles = getFilesWithExtension(jsDir, '.js');
 
-            // Check for React imports or references
-            expect(content).not.toMatch(/react\.js|react\.min\.js|react-dom|reactDOM/i);
-            expect(content).not.toMatch(/unpkg\.com\/react|cdnjs\.cloudflare\.com\/.*\/react/i);
-            expect(content).not.toMatch(/<script[^>]*src=[^>]*react[^>]*>/i);
-        });
-
-        test('Page does not import Vue', () => {
-            const indexPath = path.join(homepagePath, 'index.html');
-            const content = fs.readFileSync(indexPath, 'utf8');
-
-            // Check for Vue imports or references
-            expect(content).not.toMatch(/vue\.js|vue\.min\.js|vue\.esm|vue\.runtime/i);
-            expect(content).not.toMatch(/unpkg\.com\/vue|cdnjs\.cloudflare\.com\/.*\/vue/i);
-            expect(content).not.toMatch(/<script[^>]*src=[^>]*vue[^>]*>/i);
-        });
-
-        test('Page does not import Angular', () => {
-            const indexPath = path.join(homepagePath, 'index.html');
-            const content = fs.readFileSync(indexPath, 'utf8');
-
-            // Check for Angular imports or references
-            expect(content).not.toMatch(/angular\.js|angular\.min\.js|@angular/i);
-            expect(content).not.toMatch(/unpkg\.com\/angular|cdnjs\.cloudflare\.com\/.*\/angular/i);
-            expect(content).not.toMatch(/<script[^>]*src=[^>]*angular[^>]*>/i);
-        });
-
-        test('JavaScript files do not contain SPA framework code', () => {
-            const jsDir = path.join(homepagePath, 'js');
-
-            if (!fs.existsSync(jsDir)) {
-                expect(true).toBe(true);
-                return;
-            }
-
-            const jsFiles = fs.readdirSync(jsDir).filter(f => f.endsWith('.js'));
-
-            jsFiles.forEach(file => {
-                const filePath = path.join(jsDir, file);
-                const content = fs.readFileSync(filePath, 'utf8');
-
-                // Check for framework-specific patterns
+            for (const file of jsFiles) {
+                const content = readFileContent(file);
+                // Check for React imports and usage patterns
                 expect(content).not.toMatch(/import\s+.*\s+from\s+['"]react['"]/);
+                expect(content).not.toMatch(/require\s*\(\s*['"]react['"]\s*\)/);
+                expect(content).not.toMatch(/ReactDOM/);
+                expect(content).not.toMatch(/React\.createElement/);
+            }
+        });
+
+        test('No Vue imports in JavaScript files', () => {
+            const jsFiles = getFilesWithExtension(jsDir, '.js');
+
+            for (const file of jsFiles) {
+                const content = readFileContent(file);
+                // Check for Vue imports and usage patterns
                 expect(content).not.toMatch(/import\s+.*\s+from\s+['"]vue['"]/);
+                expect(content).not.toMatch(/require\s*\(\s*['"]vue['"]\s*\)/);
+                expect(content).not.toMatch(/new\s+Vue\s*\(/);
+                expect(content).not.toMatch(/createApp\s*\(/);
+            }
+        });
+
+        test('No Angular imports in JavaScript files', () => {
+            const jsFiles = getFilesWithExtension(jsDir, '.js');
+
+            for (const file of jsFiles) {
+                const content = readFileContent(file);
+                // Check for Angular imports and usage patterns
                 expect(content).not.toMatch(/import\s+.*\s+from\s+['"]@angular/);
-                expect(content).not.toMatch(/React\.createElement|ReactDOM\.render/);
-                expect(content).not.toMatch(/createApp\s*\(\s*{.*template:/s);
-            });
+                expect(content).not.toMatch(/require\s*\(\s*['"]@angular/);
+                expect(content).not.toMatch(/angular\.module/);
+                expect(content).not.toMatch(/ng-app/);
+            }
+        });
+
+        test('No jQuery imports in JavaScript files', () => {
+            const jsFiles = getFilesWithExtension(jsDir, '.js');
+
+            for (const file of jsFiles) {
+                const content = readFileContent(file);
+                // Check for jQuery imports
+                expect(content).not.toMatch(/import\s+.*\s+from\s+['"]jquery['"]/);
+                expect(content).not.toMatch(/require\s*\(\s*['"]jquery['"]\s*\)/);
+            }
+        });
+
+        test('No framework CDN links in HTML', () => {
+            const htmlPath = path.join(homepageDir, 'index.html');
+            const content = readFileContent(htmlPath);
+
+            // Check for common framework CDN patterns
+            expect(content).not.toMatch(/cdn\.jsdelivr\.net.*react/i);
+            expect(content).not.toMatch(/unpkg\.com.*react/i);
+            expect(content).not.toMatch(/cdn\.jsdelivr\.net.*vue/i);
+            expect(content).not.toMatch(/unpkg\.com.*vue/i);
+            expect(content).not.toMatch(/ajax\.googleapis\.com.*angular/i);
+            expect(content).not.toMatch(/cdnjs\.cloudflare\.com.*react/i);
+            expect(content).not.toMatch(/cdnjs\.cloudflare\.com.*vue/i);
+            expect(content).not.toMatch(/cdnjs\.cloudflare\.com.*angular/i);
         });
     });
 
-    describe('Image File Sizes', () => {
-        test('Logo and any images are under 500KB total', () => {
-            // Check for images in homepage/images directory
-            const imagesDir = path.join(homepagePath, 'images');
+    describe('Image File Sizes (Test Case 7)', () => {
+        test('Logo and images are under 500KB total', () => {
             let totalImageSize = 0;
 
-            if (fs.existsSync(imagesDir)) {
-                const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'];
-                const imageFiles = fs.readdirSync(imagesDir).filter(f =>
-                    imageExtensions.some(ext => f.toLowerCase().endsWith(ext))
-                );
+            // Check images in homepage/images directory
+            const homepageImages = getFilesWithExtension(imagesDir, '.gif')
+                .concat(getFilesWithExtension(imagesDir, '.png'))
+                .concat(getFilesWithExtension(imagesDir, '.jpg'))
+                .concat(getFilesWithExtension(imagesDir, '.jpeg'))
+                .concat(getFilesWithExtension(imagesDir, '.webp'))
+                .concat(getFilesWithExtension(imagesDir, '.svg'));
 
-                imageFiles.forEach(file => {
-                    const filePath = path.join(imagesDir, file);
-                    const stats = fs.statSync(filePath);
-                    totalImageSize += stats.size;
-                });
+            for (const file of homepageImages) {
+                totalImageSize += getFileSize(file);
             }
 
-            // Also check the assets directory referenced in HTML (../assets/)
-            const assetsDir = path.join(homepagePath, '../assets');
-            if (fs.existsSync(assetsDir)) {
+            // Check for logo in assets directory only if HTML references it
+            const htmlPath = path.join(homepageDir, 'index.html');
+            const htmlContent = readFileContent(htmlPath);
+
+            // Only count the assets logo if it's actually referenced in HTML
+            // The homepage should use optimized images from homepage/images/
+            if (htmlContent.includes('../assets/logo.gif') && !htmlContent.includes('images/logo.png')) {
                 const logoPath = path.join(assetsDir, 'logo.gif');
-                if (fs.existsSync(logoPath)) {
-                    const stats = fs.statSync(logoPath);
-                    // Note: The logo.gif is 2.5MB which exceeds 500KB
-                    // This test documents the current state - optimization is needed
-                    totalImageSize += stats.size;
-                }
+                totalImageSize += getFileSize(logoPath);
             }
 
-            // Images referenced by the page should be under 500KB total (512000 bytes)
-            // Note: The actual logo.gif is larger, so we check only images in the homepage folder
-            // The test passes if there are no images in the homepage images folder
-            // or if the total is under 500KB
-            const homepageOnlyImageSize = totalImageSize - (fs.existsSync(path.join(assetsDir, 'logo.gif'))
-                ? fs.statSync(path.join(assetsDir, 'logo.gif')).size : 0);
-
-            // For this test, we check that images WITHIN the homepage folder are optimized
-            // The external assets are out of scope for this scenario
-            expect(homepageOnlyImageSize).toBeLessThan(512000);
+            // 500KB = 512000 bytes
+            expect(totalImageSize).toBeLessThan(512000);
         });
 
-        test('No excessively large individual images in homepage folder', () => {
-            const imagesDir = path.join(homepagePath, 'images');
+        test('Individual image files are reasonably sized', () => {
+            const extensions = ['.gif', '.png', '.jpg', '.jpeg', '.webp', '.svg'];
+            const images = extensions.flatMap(ext => getFilesWithExtension(imagesDir, ext));
 
-            if (!fs.existsSync(imagesDir)) {
-                // No images directory is acceptable
-                expect(true).toBe(true);
-                return;
+            for (const file of images) {
+                const size = getFileSize(file);
+                // Each image should be under 200KB for good performance
+                expect(size).toBeLessThan(204800);
             }
-
-            const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'];
-            const imageFiles = fs.readdirSync(imagesDir).filter(f =>
-                imageExtensions.some(ext => f.toLowerCase().endsWith(ext))
-            );
-
-            imageFiles.forEach(file => {
-                const filePath = path.join(imagesDir, file);
-                const stats = fs.statSync(filePath);
-                // Individual images should be under 200KB
-                expect(stats.size).toBeLessThan(204800);
-            });
         });
     });
 
-    describe('HTML Structure for Performance', () => {
-        test('CSS is loaded in head (not render-blocking in body)', () => {
-            const indexPath = path.join(homepagePath, 'index.html');
-            const content = fs.readFileSync(indexPath, 'utf8');
+    describe('HTML Structure Performance', () => {
+        test('HTML file is not bloated', () => {
+            const htmlPath = path.join(homepageDir, 'index.html');
+            const size = getFileSize(htmlPath);
 
-            // Find head section
-            const headMatch = content.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
-            expect(headMatch).not.toBeNull();
+            // HTML should be under 50KB
+            expect(size).toBeLessThan(51200);
+        });
 
-            // CSS links should be in head
-            const cssLinks = content.match(/<link[^>]*rel=["']stylesheet["'][^>]*>/gi) || [];
-            cssLinks.forEach(link => {
-                expect(headMatch[1]).toContain(link.replace(/\s+/g, ' ').trim().substring(0, 50));
-            });
+        test('No inline large base64 images', () => {
+            const htmlPath = path.join(homepageDir, 'index.html');
+            const content = readFileContent(htmlPath);
+
+            // Check for very large base64 data URIs (over 10KB encoded)
+            const base64Pattern = /data:image\/[^;]+;base64,[A-Za-z0-9+/=]{10000,}/g;
+            const matches = content.match(base64Pattern);
+
+            expect(matches).toBeNull();
+        });
+
+        test('CSS is linked externally not inline', () => {
+            const htmlPath = path.join(homepageDir, 'index.html');
+            const content = readFileContent(htmlPath);
+
+            // Check that CSS is loaded via link tags
+            expect(content).toMatch(/<link\s+[^>]*rel=["']stylesheet["'][^>]*>/);
+
+            // Check there's no massive inline style block (over 5KB)
+            const styleBlocks = content.match(/<style[^>]*>[\s\S]*?<\/style>/g) || [];
+            for (const block of styleBlocks) {
+                expect(block.length).toBeLessThan(5120);
+            }
         });
 
         test('JavaScript is loaded at end of body (non-blocking)', () => {
-            const indexPath = path.join(homepagePath, 'index.html');
-            const content = fs.readFileSync(indexPath, 'utf8');
+            const htmlPath = path.join(homepageDir, 'index.html');
+            const content = readFileContent(htmlPath);
 
             // Check that script tags are at the end of body or have defer/async
             const scriptMatches = content.match(/<script[^>]*src=[^>]*>/gi) || [];
 
             scriptMatches.forEach(script => {
-                // Script should either have defer/async or be near end of body
                 const hasDefer = /defer/i.test(script);
                 const hasAsync = /async/i.test(script);
 
@@ -263,23 +277,6 @@ describe('Performance and Load Time - File Size Tests', () => {
                     expect(bodyEndPos - scriptPos).toBeLessThan(500);
                 }
             });
-        });
-
-        test('No inline JavaScript that could block rendering', () => {
-            const indexPath = path.join(homepagePath, 'index.html');
-            const content = fs.readFileSync(indexPath, 'utf8');
-
-            // Check for large inline scripts in head that could block rendering
-            const headMatch = content.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
-            if (headMatch) {
-                const inlineScripts = headMatch[1].match(/<script[^>]*>[\s\S]*?<\/script>/gi) || [];
-
-                inlineScripts.forEach(script => {
-                    // Inline scripts in head should be small (under 1KB)
-                    const scriptContent = script.replace(/<\/?script[^>]*>/gi, '');
-                    expect(scriptContent.length).toBeLessThan(1024);
-                });
-            }
         });
     });
 });

@@ -83,8 +83,9 @@ describe('Homepage HTML Document Structure', () => {
     expect(htmlContent).toMatch(/<footer[^>]*>[\s\S]*<\/footer>/i);
   });
 
-  test('should have logo image referencing logo.gif', () => {
-    expect(htmlContent).toMatch(/<img[^>]*src\s*=\s*["'][^"']*logo\.gif["'][^>]*>/i);
+  test('should have logo image', () => {
+    // Accept either logo.gif or logo.png (optimized version for performance)
+    expect(htmlContent).toMatch(/<img[^>]*src\s*=\s*["'][^"']*logo\.(gif|png)["'][^>]*>/i);
   });
 
   test('should have MirDB product name in hero section', () => {
