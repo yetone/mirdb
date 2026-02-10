@@ -67,3 +67,87 @@ ol {
 #root {
   isolation: isolate;
 }
+
+/* Mobile Responsiveness - Scenario 7 */
+
+/* Mobile breakpoint: < 768px */
+@media (max-width: 767px) {
+  /* Hide desktop navigation, show hamburger menu */
+  .nav-links-desktop {
+    display: none !important;
+  }
+
+  .mobile-menu-button {
+    display: flex !important;
+  }
+
+  /* Features grid stacks vertically on mobile */
+  .features-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Adjust hero section for mobile */
+  .hero-buttons {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  /* Code blocks should be scrollable on mobile */
+  pre, code {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Container padding adjustment for mobile */
+  .container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+}
+
+/* Tablet breakpoint: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Show desktop navigation on tablet */
+  .nav-links-desktop {
+    display: flex !important;
+  }
+
+  .mobile-menu-button {
+    display: none !important;
+  }
+
+  /* Features grid adjusts for tablet - 2 columns */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Desktop breakpoint: >= 1024px */
+@media (min-width: 1024px) {
+  .nav-links-desktop {
+    display: flex !important;
+  }
+
+  .mobile-menu-button {
+    display: none !important;
+  }
+}
+
+/* Small mobile: <= 320px */
+@media (max-width: 320px) {
+  /* Ensure content remains readable on very small screens */
+  html {
+    font-size: 14px;
+  }
+
+  /* Reduce padding on very small screens */
+  .container {
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+  }
+}
