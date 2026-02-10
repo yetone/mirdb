@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- BEGIN: Skip Navigation Link (Scenario 6 - Accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <!-- END: Skip Navigation Link (Scenario 6 - Accessibility) -->
+
+    <!-- BEGIN: Header (Scenario 1) -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/logo.png" alt="MirDB Logo">
+                <span class="logo-text">MirDB</span>
+            </div>
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#quickstart">Quick Start</a>
+                <a href="#resources">Resources</a>
+            </nav>
+        </div>
+    </header>
+    <!-- END: Header (Scenario 1) -->
+
+    <!-- BEGIN: Main Content (Scenario 6 - Accessibility) -->
+    <main id="main-content" tabindex="-1">
+    <!-- BEGIN: Hero Section (Scenario 1) -->
+    <section id="hero" class="hero">
+        <div class="container">
+            <h1>MirDB</h1>
+            <p class="tagline">A Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+            <p class="description">Drop-in replacement for Memcached with built-in persistence using LSM Tree architecture.</p>
+            <div class="cta-buttons">
+                <a href="#quickstart" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
+            </div>
+        </div>
+    </section>
+    <!-- END: Hero Section (Scenario 1) -->
+
+    <!-- BEGIN: Features Section (Scenario 2) -->
+    <section id="features" class="features" role="region" aria-labelledby="features-heading">
+        <div class="container">
+            <h2 id="features-heading">Key Features</h2>
+            <div class="features-grid">
+                <!-- Feature 1: Memcached Protocol Compatibility -->
+                <div class="feature-card feature">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Memcached Protocol Compatible</h3>
+                    <p>Use your existing Memcached clients without modification. MirDB implements the standard Memcached text protocol, enabling seamless migration and drop-in replacement for your caching layer.</p>
+                </div>
+
+                <!-- Feature 2: Persistence & Durability -->
+                <div class="feature-card feature">
+                    <div class="feature-icon">💾</div>
+                    <h3>Persistent & Durable Storage</h3>
+                    <p>Unlike standard Memcached, MirDB persists your data to disk using SSTables (Sorted String Tables). Your data survives restarts and crashes with built-in durability guarantees.</p>
+                </div>
+
+                <!-- Feature 3: LSM Tree Architecture -->
+                <div class="feature-card feature">
+                    <div class="feature-icon">🌲</div>
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Built on a Log-Structured Merge (LSM) tree design with in-memory memtables and multi-level compaction. Optimized for write-heavy workloads while maintaining excellent read performance.</p>
+                </div>
+
+                <!-- Feature 4: High Performance -->
+                <div class="feature-card feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>High Performance</h3>
+                    <p>Powered by Rust and Tokio for async I/O. Features efficient skip-list memtables, background compaction threads, and optimized SSTable indexing for fast key lookups.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: Features Section (Scenario 2) -->
+
+    <!-- BEGIN: Architecture Overview Section (Scenario 8) -->
+    <section id="architecture" class="architecture" role="region" aria-labelledby="architecture-heading">
+        <div class="container">
+            <h2 id="architecture-heading">Architecture Overview</h2>
+            <p class="section-intro">MirDB uses a Log-Structured Merge (LSM) tree architecture to provide fast writes with durable persistence.</p>
+
+            <div class="architecture-content">
+                <div class="architecture-diagram">
+                    <div class="diagram-flow">
+                        <div class="diagram-component write-path">
+                            <div class="component-icon">✍️</div>
+                            <div class="component-label">Write Request</div>
+                        </div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-component memtable-box">
+                            <div class="component-icon">💾</div>
+                            <div class="component-label">Memtable</div>
+                            <div class="component-sublabel">(In-Memory)</div>
+                        </div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-component sstable-box">
+                            <div class="component-icon">📁</div>
+                            <div class="component-label">SSTables</div>
+                            <div class="component-sublabel">(On Disk)</div>
+                        </div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-component compaction-box">
+                            <div class="component-icon">🔄</div>
+                            <div class="component-label">Compaction</div>
+                            <div class="component-sublabel">(Background)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="architecture-details">
+                    <div class="architecture-card">
+                        <h3>LSM Tree Structure</h3>
+                        <p>MirDB implements a <strong>Log-Structured Merge (LSM) tree</strong>, an architecture optimized for write-heavy workloads. Unlike traditional B-trees, LSM trees buffer writes in memory before flushing to disk, enabling high write throughput while maintaining read efficiency through multi-level indexing.</p>
+                    </div>
+
+                    <div class="architecture-card">
+                        <h3>Memtables</h3>
+                        <p>Incoming writes are first stored in a <strong>memtable</strong> (memory table) — a fast, in-memory data structure implemented as a skip list. The memtable provides O(log n) operations for inserts and lookups. When the memtable reaches its size threshold, it becomes immutable and is flushed to disk as an SSTable.</p>
+                    </div>
+
+                    <div class="architecture-card">
+                        <h3>SSTables</h3>
+                        <p><strong>SSTables (Sorted String Tables)</strong> are immutable, sorted files stored on disk. Each SSTable contains key-value pairs in sorted order along with an index for efficient lookups. MirDB organizes SSTables into multiple levels, with newer data at lower levels and older, compacted data at higher levels.</p>
+                    </div>
+
+                    <div class="architecture-card">
+                        <h3>Compaction Strategy</h3>
+                        <p>Background <strong>compaction</strong> merges multiple SSTables to reclaim space from deleted entries and maintain read performance. MirDB uses a leveled compaction strategy that progressively merges files across levels, balancing write amplification with read efficiency to ensure consistent query performance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: Architecture Overview Section (Scenario 8) -->
+
+    <!-- BEGIN: Quick Start Section (Scenario 3) -->
+    <section id="quickstart" class="quickstart">
+        <div class="container">
+            <h2>Quick Start</h2>
+            <p class="section-intro">Get started with MirDB in minutes. Follow these simple steps to install and start using MirDB.</p>
+
+            <div class="quickstart-content">
+                <div class="installation-steps">
+                    <h3>Installation</h3>
+                    <ol class="steps-list">
+                        <li>
+                            <span class="step-title">Clone the repository</span>
+                            <pre><code>git clone https://github.com/mirdb/mirdb.git
+cd mirdb</code></pre>
+                        </li>
+                        <li>
+                            <span class="step-title">Build the project</span>
+                            <pre><code>cargo build --release</code></pre>
+                        </li>
+                        <li>
+                            <span class="step-title">Start the server</span>
+                            <pre><code>./target/release/mirdb --data-dir ./data</code></pre>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="code-example">
+                    <h3>Basic Usage</h3>
+                    <p>Connect using any Memcached client. Here's an example using Python:</p>
+                    <pre><code class="language-python"># Install pymemcache client
+# pip install pymemcache
+
+from pymemcache.client import base
+
+# Connect to MirDB (default port 11211)
+client = base.Client(('localhost', 11211))
+
+# Set a value
+client.set('user:1', 'Alice')
+
+# Get the value
+result = client.get('user:1')
+print(result)  # Output: b'Alice'
+
+# Set with expiration (60 seconds)
+client.set('session:abc', 'data', expire=60)
+
+# Delete a key
+client.delete('user:1')</code></pre>
+                </div>
+
+                <div class="quickstart-footer">
+                    <p>For more details, configuration options, and advanced usage, see the <a href="https://github.com/mirdb/mirdb#readme" target="_blank" rel="noopener noreferrer" class="docs-link">full documentation</a>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: Quick Start Section (Scenario 3) -->
+
+    <!-- BEGIN: Resources Section (Scenario 4) -->
+    <section id="resources" class="resources" role="region" aria-labelledby="resources-heading">
+        <div class="container">
+            <h2 id="resources-heading">Resources</h2>
+            <p class="resources-intro">Explore documentation and community resources to get the most out of MirDB.</p>
+            <div class="resources-grid">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="resource-card">
+                    <div class="resource-icon">📦</div>
+                    <h3>GitHub Repository</h3>
+                    <p>View source code, report issues, and contribute to MirDB.</p>
+                </a>
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer" class="resource-card">
+                    <div class="resource-icon">📖</div>
+                    <h3>Documentation</h3>
+                    <p>Learn about installation, configuration, and usage.</p>
+                </a>
+                <a href="https://github.com/memcached/memcached/blob/master/doc/protocol.txt" target="_blank" rel="noopener noreferrer" class="resource-card">
+                    <div class="resource-icon">🔧</div>
+                    <h3>Memcached Protocol</h3>
+                    <p>Reference documentation for the Memcached text protocol.</p>
+                </a>
+                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer" class="resource-card">
+                    <div class="resource-icon">⚖️</div>
+                    <h3>License</h3>
+                    <p>MirDB is open source software under the MIT License.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- END: Resources Section (Scenario 4) -->
+    </main>
+    <!-- END: Main Content (Scenario 6 - Accessibility) -->
+
+    <!-- BEGIN: Footer (Scenario 4) -->
+    <footer role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">MirDB</span>
+                    <p>A Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+                </div>
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#quickstart">Quick Start</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                    </ul>
+                </nav>
+                <div class="footer-links">
+                    <h4>External Links</h4>
+                    <ul>
+                        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                        <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+                        <li><a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright &copy; 2024 MirDB Project. Licensed under the <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- END: Footer (Scenario 4) -->
+    <script src="js/main.js"></script>
+</body>
+</html>
