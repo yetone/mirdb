@@ -11,6 +11,7 @@
 
 import React from 'react';
 import { Header } from './Header';
+import { Footer } from './Footer';
 import { SkipLink } from '../ui/SkipLink';
 
 interface LayoutProps {
@@ -39,7 +40,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <main id="main-content" style={mainStyles}>
         {children}
       </main>
-      {/* Footer will be added by Scenario 10 */}
+      <Footer />
     </div>
   );
 };

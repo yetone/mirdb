@@ -76,7 +76,8 @@ describe('Navigation Integration Tests', () => {
   describe('Navigation within full app context', () => {
     it('renders navigation within Layout', () => {
       renderApp();
-      const nav = screen.getByRole('navigation');
+      // Main navigation is the one with 'Main navigation' aria-label
+      const nav = screen.getByRole('navigation', { name: /main navigation/i });
       expect(nav).toBeInTheDocument();
     });
 

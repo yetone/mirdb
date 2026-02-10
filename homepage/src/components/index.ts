@@ -4,6 +4,7 @@
 
 // Layout components
 export { Layout } from './layout/Layout';
+export { Footer } from './layout/Footer';
 
 // UI components
 export { Button } from './ui/Button';

@@ -27,8 +27,9 @@ test.describe('Homepage Hero Section', () => {
     await expect(heading).toBeVisible();
     await expect(heading).toContainText('MirDB');
 
-    const tagline = page.getByText(
-      'A Persistent Key-Value Store with Memcached Protocol'
+    const tagline = heroSection.getByText(
+      'A Persistent Key-Value Store with Memcached Protocol',
+      { exact: true }
     );
     await expect(tagline).toBeVisible();
 
@@ -100,5 +101,100 @@ test.describe('Homepage Hero Section', () => {
     // Should have decorative background elements
     const count = await decorativeElements.count();
     expect(count).toBeGreaterThan(0);
+  });
+});
+
+/**
+ * Homepage E2E Tests - Footer Section
+ * Owner: Scenario 10 - Footer and Project Metadata
+ *
+ * Tests for footer section with:
+ * - CI badge navigation
+ * - GitHub links
+ * - Project metadata
+ */
+test.describe('Homepage Footer Section', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('Test Case 4: Click CI badge navigates to CircleCI build status page', async ({
+    page,
+  }) => {
+    // Scroll to footer to ensure it's visible
+    const footer = page.getByRole('contentinfo');
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeVisible();
+
+    // Find the CircleCI badge link
+    const ciBadgeLink = page.getByTestId('circleci-badge-link');
+    await expect(ciBadgeLink).toBeVisible();
+
+    // Verify the badge link has correct href
+    const href = await ciBadgeLink.getAttribute('href');
+    expect(href).toBe('https://circleci.com/gh/yetone/mirdb');
+
+    // Verify link opens in new tab (has target="_blank")
+    const target = await ciBadgeLink.getAttribute('target');
+    expect(target).toBe('_blank');
+
+    // Verify link has security attributes
+    const rel = await ciBadgeLink.getAttribute('rel');
+    expect(rel).toContain('noopener');
+    expect(rel).toContain('noreferrer');
+  });
+
+  test('Footer displays CircleCI badge', async ({ page }) => {
+    const footer = page.getByRole('contentinfo');
+    await footer.scrollIntoViewIfNeeded();
+
+    const badge = page.getByTestId('circleci-badge');
+    await expect(badge).toBeVisible();
+
+    const src = await badge.getAttribute('src');
+    expect(src).toBe('https://circleci.com/gh/yetone/mirdb.svg?style=svg');
+  });
+
+  test('Footer displays GitHub repository link', async ({ page }) => {
+    const footer = page.getByRole('contentinfo');
+    await footer.scrollIntoViewIfNeeded();
+
+    const githubLink = page.getByTestId('github-link');
+    await expect(githubLink).toBeVisible();
+
+    const href = await githubLink.getAttribute('href');
+    expect(href).toBe('https://github.com/yetone/mirdb');
+  });
+
+  test('Footer is visible at the bottom of the page', async ({ page }) => {
+    // Scroll to bottom of the page
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+    const footer = page.getByRole('contentinfo');
+    await expect(footer).toBeVisible();
+  });
+
+  test('Footer displays project metadata', async ({ page }) => {
+    const footer = page.getByRole('contentinfo');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Check for project name - use first() since MirDB appears multiple times
+    await expect(footer.getByText(/MirDB/).first()).toBeVisible();
+
+    // Check for project description - use first() since text may appear multiple times
+    await expect(footer.getByText(/Persistent Key-Value Store/).first()).toBeVisible();
+  });
+
+  test('Footer links have proper accessibility', async ({ page }) => {
+    const footer = page.getByRole('contentinfo');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Check that footer has navigation role
+    const nav = footer.getByRole('navigation', { name: /footer navigation/i });
+    await expect(nav).toBeVisible();
+
+    // Check that all links in footer navigation are accessible
+    const links = await nav.getByRole('link').all();
+    expect(links.length).toBeGreaterThan(0);
   });
 });
