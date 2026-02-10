@@ -12,6 +12,9 @@ export { Button } from './ui/Button';
 export { CodeBlock } from './ui/CodeBlock';
 export { Toast } from './ui/Toast';
 
+// UI components (Scenario 8 - Accessibility)
+export { SkipLink } from './ui/SkipLink';
+
 // Section components
 export { Hero } from './sections/Hero';
 export { Features } from './sections/Features';

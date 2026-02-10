@@ -11,6 +11,7 @@
 
 import React from 'react';
 import { Header } from './Header';
+import { SkipLink } from '../ui/SkipLink';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -33,7 +34,7 @@ const mainStyles: React.CSSProperties = {
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div style={layoutStyles}>
-      {/* Skip link will be added by Scenario 8 */}
+      <SkipLink targetId="main-content" />
       <Header />
       <main id="main-content" style={mainStyles}>
         {children}
