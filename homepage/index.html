@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- BEGIN: Header (Scenario 1) -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="../assets/logo.gif" alt="MirDB Logo">
+                <h1>MirDB</h1>
+            </div>
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#quickstart">Quick Start</a>
+                <a href="#resources">Resources</a>
+            </nav>
+        </div>
+    </header>
+    <!-- END: Header (Scenario 1) -->
+
+    <!-- BEGIN: Hero Section (Scenario 1) -->
+    <section id="hero" class="hero">
+        <div class="container">
+            <h1>MirDB</h1>
+            <p class="tagline">A Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+            <p class="description">Drop-in replacement for Memcached with built-in persistence using LSM Tree architecture.</p>
+            <div class="cta-buttons">
+                <a href="#quickstart" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com" class="btn btn-secondary">View on GitHub</a>
+            </div>
+        </div>
+    </section>
+    <!-- END: Hero Section (Scenario 1) -->
+
+    <!-- BEGIN: Features Section (Scenario 2) -->
+    <section id="features" class="features" role="region" aria-labelledby="features-heading">
+        <div class="container">
+            <h2 id="features-heading">Key Features</h2>
+            <div class="features-grid">
+                <!-- Feature 1: Memcached Protocol Compatibility -->
+                <div class="feature-card feature">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Memcached Protocol Compatible</h3>
+                    <p>Use your existing Memcached clients without modification. MirDB implements the standard Memcached text protocol, enabling seamless migration and drop-in replacement for your caching layer.</p>
+                </div>
+
+                <!-- Feature 2: Persistence & Durability -->
+                <div class="feature-card feature">
+                    <div class="feature-icon">💾</div>
+                    <h3>Persistent & Durable Storage</h3>
+                    <p>Unlike standard Memcached, MirDB persists your data to disk using SSTables (Sorted String Tables). Your data survives restarts and crashes with built-in durability guarantees.</p>
+                </div>
+
+                <!-- Feature 3: LSM Tree Architecture -->
+                <div class="feature-card feature">
+                    <div class="feature-icon">🌲</div>
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Built on a Log-Structured Merge (LSM) tree design with in-memory memtables and multi-level compaction. Optimized for write-heavy workloads while maintaining excellent read performance.</p>
+                </div>
+
+                <!-- Feature 4: High Performance -->
+                <div class="feature-card feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>High Performance</h3>
+                    <p>Powered by Rust and Tokio for async I/O. Features efficient skip-list memtables, background compaction threads, and optimized SSTable indexing for fast key lookups.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: Features Section (Scenario 2) -->
+
+    <!-- BEGIN: Quick Start Section (Scenario 3) -->
+    <section id="quickstart" class="quickstart">
+        <div class="container">
+            <h2>Quick Start</h2>
+            <p>Get started with MirDB in minutes.</p>
+        </div>
+    </section>
+    <!-- END: Quick Start Section (Scenario 3) -->
+
+    <!-- BEGIN: Resources Section (Scenario 4) -->
+    <section id="resources" class="resources">
+        <div class="container">
+            <h2>Resources</h2>
+            <p>Additional documentation and resources.</p>
+        </div>
+    </section>
+    <!-- END: Resources Section (Scenario 4) -->
+
+    <!-- BEGIN: Footer (Scenario 4) -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MirDB Project. MIT License.</p>
+        </div>
+    </footer>
+    <!-- END: Footer (Scenario 4) -->
+</body>
+</html>
