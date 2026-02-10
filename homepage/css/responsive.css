@@ -154,9 +154,32 @@ button {
 
     /* Section padding for mobile */
     .features,
+    .architecture,
     .quickstart,
     .resources {
         padding: var(--spacing-xl) 0;
+    }
+
+    /* Architecture section mobile */
+    .architecture-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .architecture-diagram {
+        order: 2; /* Show components first on mobile */
+    }
+
+    .architecture-components {
+        order: 1;
+    }
+
+    .diagram-code {
+        font-size: 0.7rem;
+    }
+
+    .component-card {
+        padding: var(--spacing-md);
     }
 
     /* Footer mobile */
@@ -237,9 +260,15 @@ button {
 
     /* Section padding for tablet */
     .features,
+    .architecture,
     .quickstart,
     .resources {
         padding: var(--spacing-2xl) 0;
+    }
+
+    /* Architecture section tablet */
+    .architecture-content {
+        grid-template-columns: 1fr;
     }
 }
 
