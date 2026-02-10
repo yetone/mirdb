@@ -10,6 +10,7 @@
  */
 
 import React from 'react';
+import { Header } from './Header';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -33,7 +34,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div style={layoutStyles}>
       {/* Skip link will be added by Scenario 8 */}
-      {/* Header will be added by Scenario 5 */}
+      <Header />
       <main id="main-content" style={mainStyles}>
         {children}
       </main>
