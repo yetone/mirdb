@@ -82,74 +82,65 @@
     </section>
     <!-- END: Features Section (Scenario 2) -->
 
-    <!-- BEGIN: Architecture Section (Scenario 8) -->
+    <!-- BEGIN: Architecture Overview Section (Scenario 8) -->
     <section id="architecture" class="architecture" role="region" aria-labelledby="architecture-heading">
         <div class="container">
             <h2 id="architecture-heading">Architecture Overview</h2>
-            <p class="section-intro">MirDB uses a Log-Structured Merge (LSM) Tree architecture to provide both high write throughput and durable persistence.</p>
+            <p class="section-intro">MirDB uses a Log-Structured Merge (LSM) tree architecture to provide fast writes with durable persistence.</p>
 
             <div class="architecture-content">
                 <div class="architecture-diagram">
-                    <figure>
-                        <div class="diagram-visual">
-                            <div class="diagram-layer write-path">
-                                <span class="layer-label">Write Path</span>
-                                <div class="diagram-flow">
-                                    <div class="diagram-node">Client Write</div>
-                                    <div class="diagram-arrow">→</div>
-                                    <div class="diagram-node highlight">Memtable</div>
-                                    <div class="diagram-arrow">→</div>
-                                    <div class="diagram-node">WAL</div>
-                                </div>
-                            </div>
-                            <div class="diagram-layer flush-path">
-                                <span class="layer-label">Flush</span>
-                                <div class="diagram-flow">
-                                    <div class="diagram-node highlight">Memtable</div>
-                                    <div class="diagram-arrow">↓</div>
-                                    <div class="diagram-node highlight">SSTable (L0)</div>
-                                </div>
-                            </div>
-                            <div class="diagram-layer compaction-path">
-                                <span class="layer-label">Compaction</span>
-                                <div class="diagram-flow">
-                                    <div class="diagram-node highlight">SSTable (L0)</div>
-                                    <div class="diagram-arrow">→</div>
-                                    <div class="diagram-node highlight">SSTable (L1)</div>
-                                    <div class="diagram-arrow">→</div>
-                                    <div class="diagram-node">SSTable (Ln)</div>
-                                </div>
-                            </div>
+                    <div class="diagram-flow">
+                        <div class="diagram-component write-path">
+                            <div class="component-icon">✍️</div>
+                            <div class="component-label">Write Request</div>
                         </div>
-                        <figcaption>LSM Tree data flow: writes go to memtable, then flush to SSTables with background compaction</figcaption>
-                    </figure>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-component memtable-box">
+                            <div class="component-icon">💾</div>
+                            <div class="component-label">Memtable</div>
+                            <div class="component-sublabel">(In-Memory)</div>
+                        </div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-component sstable-box">
+                            <div class="component-icon">📁</div>
+                            <div class="component-label">SSTables</div>
+                            <div class="component-sublabel">(On Disk)</div>
+                        </div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-component compaction-box">
+                            <div class="component-icon">🔄</div>
+                            <div class="component-label">Compaction</div>
+                            <div class="component-sublabel">(Background)</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="architecture-details">
                     <div class="architecture-card">
                         <h3>LSM Tree Structure</h3>
-                        <p>The Log-Structured Merge (LSM) Tree is a data structure optimized for write-heavy workloads. Instead of updating data in place, writes are buffered in memory and periodically flushed to disk in sorted batches, minimizing random I/O.</p>
+                        <p>MirDB implements a <strong>Log-Structured Merge (LSM) tree</strong>, an architecture optimized for write-heavy workloads. Unlike traditional B-trees, LSM trees buffer writes in memory before flushing to disk, enabling high write throughput while maintaining read efficiency through multi-level indexing.</p>
                     </div>
 
                     <div class="architecture-card">
                         <h3>Memtables</h3>
-                        <p>Incoming writes are first stored in an in-memory data structure called a memtable. MirDB uses a skip-list based memtable for efficient sorted inserts and lookups. When the memtable reaches a size threshold, it becomes immutable and is flushed to disk.</p>
+                        <p>Incoming writes are first stored in a <strong>memtable</strong> (memory table) — a fast, in-memory data structure implemented as a skip list. The memtable provides O(log n) operations for inserts and lookups. When the memtable reaches its size threshold, it becomes immutable and is flushed to disk as an SSTable.</p>
                     </div>
 
                     <div class="architecture-card">
-                        <h3>SSTables (Sorted String Tables)</h3>
-                        <p>When memtables are flushed to disk, they become SSTables—immutable, sorted files containing key-value pairs. SSTables include an index for fast key lookups and bloom filters to quickly determine if a key might exist in the file.</p>
+                        <h3>SSTables</h3>
+                        <p><strong>SSTables (Sorted String Tables)</strong> are immutable, sorted files stored on disk. Each SSTable contains key-value pairs in sorted order along with an index for efficient lookups. MirDB organizes SSTables into multiple levels, with newer data at lower levels and older, compacted data at higher levels.</p>
                     </div>
 
                     <div class="architecture-card">
                         <h3>Compaction Strategy</h3>
-                        <p>Over time, multiple SSTables accumulate at each level. MirDB runs background compaction to merge overlapping SSTables, remove deleted entries, and consolidate data into fewer, larger files. This keeps read performance optimal and reclaims disk space.</p>
+                        <p>Background <strong>compaction</strong> merges multiple SSTables to reclaim space from deleted entries and maintain read performance. MirDB uses a leveled compaction strategy that progressively merges files across levels, balancing write amplification with read efficiency to ensure consistent query performance.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- END: Architecture Section (Scenario 8) -->
+    <!-- END: Architecture Overview Section (Scenario 8) -->
 
     <!-- BEGIN: Quick Start Section (Scenario 3) -->
     <section id="quickstart" class="quickstart">
@@ -255,7 +246,6 @@ client.delete('user:1')</code></pre>
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="#features">Features</a></li>
-                        <li><a href="#architecture">Architecture</a></li>
                         <li><a href="#quickstart">Quick Start</a></li>
                         <li><a href="#resources">Resources</a></li>
                     </ul>

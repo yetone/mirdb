@@ -1,16 +1,15 @@
 /**
- * Architecture Section E2E Tests
+ * Architecture Overview Section E2E Tests
  * Owner: Scenario 8 - Architecture Overview Section
  *
  * End-to-end tests for the MirDB homepage architecture overview section.
  *
  * Expected test coverage:
- * - Architecture section is present with proper heading
- * - LSM Tree approach is explained
- * - Memtables are explained
- * - SSTables are explained
+ * - Architecture section is present with heading
+ * - LSM Tree explanation is present
+ * - Memtable explanation is present
+ * - SSTable explanation is present
  * - Compaction strategy is mentioned
- * - Optional diagram or visual representation
  *
  * Requirements traced:
  * - REQ-2: Homepage shall showcase key features and capabilities
@@ -25,110 +24,118 @@ test.describe('Architecture Overview Section', () => {
   });
 
   // Test Case 1: Check for architecture section presence
-  test('page contains an architecture section with heading or id', async ({ page }) => {
-    // Look for a section with id containing 'architecture' or a heading with 'Architecture'
-    const architectureSection = page.locator('#architecture, [id*="architecture"], section:has(h2:text-matches("Architecture", "i"))');
+  test('page contains a section with Architecture heading or id', async ({ page }) => {
+    // Look for section with id="architecture" or heading containing "Architecture"
+    const architectureSection = page.locator('#architecture, section:has(h2:text-is("Architecture")), section:has(h2:text("Architecture Overview"))');
     await expect(architectureSection.first()).toBeVisible();
 
-    // Verify there's a heading with "Architecture" in the section
-    const heading = page.locator('#architecture h2, [id*="architecture"] h2, h2:text-matches("Architecture", "i")');
-    await expect(heading.first()).toBeVisible();
+    // Verify it has a heading
+    const heading = architectureSection.first().locator('h2');
+    await expect(heading).toBeVisible();
+    const headingText = await heading.textContent();
+    expect(headingText.toLowerCase()).toContain('architecture');
   });
 
   // Test Case 2: Search for LSM Tree explanation
-  test('architecture section contains LSM Tree explanation', async ({ page }) => {
+  test('architecture section contains LSM or Log-Structured Merge text', async ({ page }) => {
     const architectureSection = page.locator('#architecture');
     await expect(architectureSection).toBeVisible();
 
     const sectionText = await architectureSection.textContent();
     const lowerText = sectionText.toLowerCase();
 
-    // Check for LSM or Log-Structured Merge text
-    const hasLSMExplanation =
-      lowerText.includes('lsm') ||
-      lowerText.includes('log-structured merge') ||
-      lowerText.includes('log structured merge');
-
-    expect(hasLSMExplanation).toBeTruthy();
+    // Check for LSM-related keywords
+    const hasLSM = lowerText.includes('lsm') || lowerText.includes('log-structured merge');
+    expect(hasLSM).toBeTruthy();
   });
 
   // Test Case 3: Search for memtable explanation
-  test('architecture section contains memtable explanation', async ({ page }) => {
+  test('architecture section contains memtable or memory table text', async ({ page }) => {
     const architectureSection = page.locator('#architecture');
     await expect(architectureSection).toBeVisible();
 
     const sectionText = await architectureSection.textContent();
     const lowerText = sectionText.toLowerCase();
 
-    // Check for memtable or memory table text
-    const hasMemtableExplanation =
-      lowerText.includes('memtable') ||
-      lowerText.includes('memory table') ||
-      lowerText.includes('mem table');
-
-    expect(hasMemtableExplanation).toBeTruthy();
+    // Check for memtable-related keywords
+    const hasMemtable = lowerText.includes('memtable') || lowerText.includes('memory table');
+    expect(hasMemtable).toBeTruthy();
   });
 
   // Test Case 4: Search for SSTable explanation
-  test('architecture section contains SSTable explanation', async ({ page }) => {
+  test('architecture section contains SSTable or Sorted String Table text', async ({ page }) => {
     const architectureSection = page.locator('#architecture');
     await expect(architectureSection).toBeVisible();
 
     const sectionText = await architectureSection.textContent();
     const lowerText = sectionText.toLowerCase();
 
-    // Check for SSTable or Sorted String Table text
-    const hasSSTableExplanation =
-      lowerText.includes('sstable') ||
-      lowerText.includes('sorted string table') ||
-      lowerText.includes('ss table');
-
-    expect(hasSSTableExplanation).toBeTruthy();
+    // Check for SSTable-related keywords
+    const hasSSTable = lowerText.includes('sstable') || lowerText.includes('sorted string table');
+    expect(hasSSTable).toBeTruthy();
   });
 
   // Test Case 5: Search for compaction explanation
-  test('architecture section contains compaction strategy explanation', async ({ page }) => {
+  test('architecture section contains compaction or merge strategy text', async ({ page }) => {
     const architectureSection = page.locator('#architecture');
     await expect(architectureSection).toBeVisible();
 
     const sectionText = await architectureSection.textContent();
     const lowerText = sectionText.toLowerCase();
 
-    // Check for compaction or merge strategy text
-    const hasCompactionExplanation =
-      lowerText.includes('compaction') ||
-      lowerText.includes('merge') ||
-      lowerText.includes('merging');
-
-    expect(hasCompactionExplanation).toBeTruthy();
+    // Check for compaction-related keywords
+    const hasCompaction = lowerText.includes('compaction') || lowerText.includes('merge');
+    expect(hasCompaction).toBeTruthy();
   });
 
-  // Test Case 6: Check for optional diagram or visual (non-blocking)
-  test('architecture section may contain a diagram or visual representation', async ({ page }) => {
+  // Test Case 6: Check for optional diagram or visual (manual test, but we can check for visual elements)
+  test('architecture section may contain diagram, flowchart, or visual representation', async ({ page }) => {
     const architectureSection = page.locator('#architecture');
     await expect(architectureSection).toBeVisible();
 
-    // Check for diagrams, images, SVGs, or visual elements
-    const visualElements = architectureSection.locator('img, svg, .diagram, .flowchart, .visual, figure, .architecture-diagram');
-    const count = await visualElements.count();
+    // Check for visual elements - this is optional per the test case
+    // We check for images, SVGs, or elements with diagram/visual class names
+    const visualElements = architectureSection.locator('img, svg, .diagram, .flowchart, .visual, .architecture-diagram, .architecture-visual');
+    const hasVisuals = await visualElements.count() > 0;
 
-    // This is an optional check - just verify the section exists even without visuals
-    // If visuals exist, that's a bonus
-    if (count > 0) {
-      await expect(visualElements.first()).toBeVisible();
+    // This is optional per the test case, so we just log whether visuals exist
+    // The test passes regardless as it's a "may contain" requirement
+    if (hasVisuals) {
+      const firstVisual = visualElements.first();
+      await expect(firstVisual).toBeVisible();
     }
-    // Always pass - visual is optional per test case requirements
+    // Test passes even without visuals as it's optional
     expect(true).toBeTruthy();
   });
 
-  // Additional test: Verify architecture section has adequate content
-  test('architecture section has substantial explanatory content', async ({ page }) => {
+  // Additional test: Architecture section is properly positioned in page flow
+  test('architecture section appears after features section', async ({ page }) => {
+    const featuresSection = page.locator('#features');
+    const architectureSection = page.locator('#architecture');
+
+    await expect(featuresSection).toBeVisible();
+    await expect(architectureSection).toBeVisible();
+
+    // Get bounding boxes to verify order
+    const featuresBbox = await featuresSection.boundingBox();
+    const architectureBbox = await architectureSection.boundingBox();
+
+    // Architecture should be below features (higher y value)
+    expect(architectureBbox.y).toBeGreaterThan(featuresBbox.y);
+  });
+
+  // Additional test: Architecture section has proper semantic structure
+  test('architecture section has proper semantic HTML structure', async ({ page }) => {
     const architectureSection = page.locator('#architecture');
     await expect(architectureSection).toBeVisible();
 
-    const sectionText = await architectureSection.textContent();
+    // Should have a heading
+    const heading = architectureSection.locator('h2');
+    await expect(heading).toBeVisible();
 
-    // Verify the section has meaningful content (at least 100 characters)
-    expect(sectionText.length).toBeGreaterThan(100);
+    // Should have descriptive content (paragraphs or text content)
+    const content = architectureSection.locator('p, .architecture-content, .architecture-description');
+    const contentCount = await content.count();
+    expect(contentCount).toBeGreaterThanOrEqual(1);
   });
 });

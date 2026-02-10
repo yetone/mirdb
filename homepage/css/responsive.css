@@ -154,32 +154,40 @@ button {
 
     /* Section padding for mobile */
     .features,
-    .architecture,
     .quickstart,
-    .resources {
+    .resources,
+    .architecture {
         padding: var(--spacing-xl) 0;
     }
 
-    /* Architecture section mobile */
-    .architecture-content {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-
+    /* Architecture section mobile styles */
     .architecture-diagram {
-        order: 2; /* Show components first on mobile */
-    }
-
-    .architecture-components {
-        order: 1;
-    }
-
-    .diagram-code {
-        font-size: 0.7rem;
-    }
-
-    .component-card {
         padding: var(--spacing-md);
+    }
+
+    .diagram-flow {
+        flex-direction: column;
+        min-width: auto;
+        gap: var(--spacing-sm);
+    }
+
+    .diagram-arrow {
+        transform: rotate(90deg);
+    }
+
+    .diagram-component {
+        width: 100%;
+        max-width: 200px;
+        padding: var(--spacing-md);
+    }
+
+    .architecture-details {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .architecture-card {
+        padding: var(--spacing-lg);
     }
 
     /* Footer mobile */
@@ -260,15 +268,16 @@ button {
 
     /* Section padding for tablet */
     .features,
-    .architecture,
     .quickstart,
-    .resources {
+    .resources,
+    .architecture {
         padding: var(--spacing-2xl) 0;
     }
 
-    /* Architecture section tablet */
-    .architecture-content {
-        grid-template-columns: 1fr;
+    /* Architecture section tablet styles */
+    .architecture-details {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
     }
 }
 
