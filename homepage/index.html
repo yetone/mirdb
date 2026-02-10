@@ -85,7 +85,57 @@
     <section id="quickstart" class="quickstart">
         <div class="container">
             <h2>Quick Start</h2>
-            <p>Get started with MirDB in minutes.</p>
+            <p class="section-intro">Get started with MirDB in minutes. Follow these simple steps to install and start using MirDB.</p>
+
+            <div class="quickstart-content">
+                <div class="installation-steps">
+                    <h3>Installation</h3>
+                    <ol class="steps-list">
+                        <li>
+                            <span class="step-title">Clone the repository</span>
+                            <pre><code>git clone https://github.com/mirdb/mirdb.git
+cd mirdb</code></pre>
+                        </li>
+                        <li>
+                            <span class="step-title">Build the project</span>
+                            <pre><code>cargo build --release</code></pre>
+                        </li>
+                        <li>
+                            <span class="step-title">Start the server</span>
+                            <pre><code>./target/release/mirdb --data-dir ./data</code></pre>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="code-example">
+                    <h3>Basic Usage</h3>
+                    <p>Connect using any Memcached client. Here's an example using Python:</p>
+                    <pre><code class="language-python"># Install pymemcache client
+# pip install pymemcache
+
+from pymemcache.client import base
+
+# Connect to MirDB (default port 11211)
+client = base.Client(('localhost', 11211))
+
+# Set a value
+client.set('user:1', 'Alice')
+
+# Get the value
+result = client.get('user:1')
+print(result)  # Output: b'Alice'
+
+# Set with expiration (60 seconds)
+client.set('session:abc', 'data', expire=60)
+
+# Delete a key
+client.delete('user:1')</code></pre>
+                </div>
+
+                <div class="quickstart-footer">
+                    <p>For more details, configuration options, and advanced usage, see the <a href="https://github.com/mirdb/mirdb#readme" class="docs-link">full documentation</a>.</p>
+                </div>
+            </div>
         </div>
     </section>
     <!-- END: Quick Start Section (Scenario 3) -->
