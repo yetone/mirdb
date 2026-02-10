@@ -16,6 +16,17 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    // MS Edge is Chromium-based - Chromium tests verify Edge compatibility
+    // To test with Edge specifically: npx playwright install msedge
+    // Then add: { name: 'msedge', use: { ...devices['Desktop Edge'], channel: 'msedge' } }
   ],
   webServer: {
     command: 'npm run dev',
