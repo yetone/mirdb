@@ -1,0 +1,8 @@
+# robots.txt for MirDB Homepage
+# https://github.com/yetone/mirdb
+
+User-agent: *
+Allow: /
+
+# Sitemap location (update when sitemap is generated)
+# Sitemap: https://mirdb.dev/sitemap.xml

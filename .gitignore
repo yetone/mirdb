@@ -1,2 +1,10 @@
 /target
 **/*.rs.bk
+.something/
+node_modules/
+
+# Homepage build artifacts
+homepage/.next/
+homepage/out/
+homepage/playwright-report/
+homepage/test-results/

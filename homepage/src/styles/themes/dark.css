@@ -1,0 +1,41 @@
+/**
+ * Dark Theme Styles
+ * Owner: Scenario 6 - Dark/Light Theme Toggle
+ *
+ * Additional dark-theme specific styles.
+ * Base dark theme variables are defined in variables.css [data-theme='dark']
+ */
+
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* Dark theme code block styling */
+[data-theme='dark'] pre,
+[data-theme='dark'] code {
+  background-color: var(--bg-tertiary);
+}
+
+/* Dark theme button hover states */
+[data-theme='dark'] .theme-toggle:hover {
+  background-color: var(--bg-tertiary);
+}
+
+/* Dark theme specific scrollbar styling */
+[data-theme='dark'] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
