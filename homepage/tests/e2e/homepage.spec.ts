@@ -32,9 +32,9 @@ test.describe('Homepage Hero Section', () => {
     );
     await expect(tagline).toBeVisible();
 
-    // Verify CTA buttons are visible
-    const githubButton = page.getByRole('link', { name: /github/i });
-    const docsButton = page.getByRole('link', { name: /get started/i });
+    // Verify CTA buttons are visible within the hero section
+    const githubButton = heroSection.getByRole('link', { name: /view on github/i });
+    const docsButton = heroSection.getByRole('link', { name: /get started/i });
     await expect(githubButton).toBeVisible();
     await expect(docsButton).toBeVisible();
   });
@@ -54,7 +54,8 @@ test.describe('Homepage Hero Section', () => {
   });
 
   test('CTA buttons have proper focus indicators', async ({ page }) => {
-    const githubButton = page.getByRole('link', { name: /github/i });
+    const heroSection = page.locator('#hero');
+    const githubButton = heroSection.getByRole('link', { name: /view on github/i });
 
     // Focus the button using keyboard
     await githubButton.focus();
@@ -74,17 +75,18 @@ test.describe('Homepage Hero Section', () => {
     await expect(heroSection).toBeVisible();
 
     // All content should still be visible
-    const heading = page.getByRole('heading', { level: 1 });
+    const heading = heroSection.getByRole('heading', { level: 1 });
     await expect(heading).toBeVisible();
 
-    const githubButton = page.getByRole('link', { name: /github/i });
-    const docsButton = page.getByRole('link', { name: /get started/i });
+    const githubButton = heroSection.getByRole('link', { name: /view on github/i });
+    const docsButton = heroSection.getByRole('link', { name: /get started/i });
     await expect(githubButton).toBeVisible();
     await expect(docsButton).toBeVisible();
   });
 
   test('GitHub link points to correct repository', async ({ page }) => {
-    const githubButton = page.getByRole('link', { name: /github/i });
+    const heroSection = page.locator('#hero');
+    const githubButton = heroSection.getByRole('link', { name: /view on github/i });
     const href = await githubButton.getAttribute('href');
     expect(href).toBe('https://github.com/yetone/mirdb');
   });
