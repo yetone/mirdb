@@ -11,9 +11,11 @@ export { ThemeToggle } from './ui/ThemeToggle'
 export { Hero } from './sections/Hero'
 export { Demo } from './sections/Demo'
 export { Features } from './sections/Features'
+export { QuickStart } from './sections/QuickStart'
 
 // UI Components - Feature
 export { FeatureCard } from './ui/FeatureCard'
+export { CodeBlock } from './ui/CodeBlock'
 
 // Layout Components
 export { Header } from './layout/Header'

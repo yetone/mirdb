@@ -1,0 +1,147 @@
+/**
+ * CodeBlock component styles.
+ * Owner: Scenario 5 - Quick Start Section
+ */
+
+.code-block {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.code-block__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-4);
+  background-color: var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.code-block__title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.code-block__language {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.code-block__container {
+  position: relative;
+}
+
+.code-block__pre {
+  margin: 0;
+  padding: var(--spacing-4);
+  overflow-x: auto;
+  background-color: #1a1a2e;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-text-muted) transparent;
+}
+
+[data-theme="light"] .code-block__pre {
+  background-color: #f6f8fa;
+}
+
+.code-block__code {
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: #e4e4e7;
+  white-space: pre;
+  display: block;
+}
+
+[data-theme="light"] .code-block__code {
+  color: #24292f;
+}
+
+/* Bash syntax highlighting */
+.code-block__code.language-bash {
+  color: #a5d6ff;
+}
+
+[data-theme="light"] .code-block__code.language-bash {
+  color: #0550ae;
+}
+
+.code-block__copy {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-2);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+[data-theme="light"] .code-block__copy {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.code-block__container:hover .code-block__copy,
+.code-block__copy:focus {
+  opacity: 1;
+}
+
+.code-block__copy:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-text);
+}
+
+[data-theme="light"] .code-block__copy:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.code-block__copy:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.code-block__copy--copied {
+  color: #22c55e;
+  opacity: 1;
+}
+
+.code-block__copy--copied:hover {
+  color: #22c55e;
+}
+
+.code-block__icon {
+  flex-shrink: 0;
+}
+
+.code-block__copy-text {
+  white-space: nowrap;
+}
+
+/* Accessibility: always visible for keyboard users */
+.code-block__copy:focus-visible {
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .code-block__copy {
+    opacity: 1;
+  }
+
+  .code-block__copy-text {
+    display: none;
+  }
+}
