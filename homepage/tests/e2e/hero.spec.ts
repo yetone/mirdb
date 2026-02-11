@@ -29,8 +29,9 @@ test.describe('Hero Section E2E', () => {
 
   // Test Case 6: Click secondary GitHub CTA opens new tab with GitHub URL
   test('clicking GitHub button has correct link attributes', async ({ page }) => {
-    // Find the GitHub link
-    const githubLink = page.getByRole('link', { name: /GitHub/i })
+    // Find the GitHub link in the hero section specifically
+    const heroSection = page.locator('.hero')
+    const githubLink = heroSection.getByRole('link', { name: /View on GitHub/i })
     await expect(githubLink).toBeVisible()
 
     // Verify the href points to GitHub repository
@@ -46,7 +47,8 @@ test.describe('Hero Section E2E', () => {
     const headline = page.getByRole('heading', { level: 1 })
     await expect(headline).toBeVisible()
     await expect(headline).toContainText('MirDB')
-    await expect(headline).toContainText('Persistent Key-Value Store')
+    // Use case-insensitive regex for persistent key-value store text
+    await expect(headline).toContainText(/persistent key-value store/i)
 
     // Check description mentions Memcached
     const description = page.locator('.hero__description')
@@ -54,8 +56,9 @@ test.describe('Hero Section E2E', () => {
   })
 
   test('hero section has both CTA buttons visible', async ({ page }) => {
-    const primaryButton = page.getByRole('button', { name: /Get Started/i })
-    const secondaryButton = page.getByRole('link', { name: /GitHub/i })
+    const heroSection = page.locator('.hero')
+    const primaryButton = heroSection.getByRole('button', { name: /Get Started/i })
+    const secondaryButton = heroSection.getByRole('link', { name: /View on GitHub/i })
 
     await expect(primaryButton).toBeVisible()
     await expect(secondaryButton).toBeVisible()

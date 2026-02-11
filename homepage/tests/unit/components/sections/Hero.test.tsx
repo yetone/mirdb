@@ -27,8 +27,9 @@ describe('Hero Component', () => {
     render(<Hero />)
 
     // The description text should mention Memcached and persistence/durable
-    const description = screen.getByText(/Memcached/i)
-    expect(description).toBeInTheDocument()
+    // Use queryAllByText since multiple elements may match
+    const memcachedElements = screen.queryAllByText(/Memcached/i)
+    expect(memcachedElements.length).toBeGreaterThan(0)
 
     // Check for persistence or durable - use queryAllByText since multiple elements may match
     const persistedElements = screen.queryAllByText(/persist/i)

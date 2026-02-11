@@ -2,13 +2,14 @@
  * Main application component with layout structure.
  */
 
-import { Hero } from './components'
+import { Header, Hero } from './components'
 import { Demo } from './components/sections/Demo'
 import './styles/globals.css'
 
 function App() {
   return (
     <div className="app">
+      <Header />
       <main>
         <Hero />
         <Demo />
