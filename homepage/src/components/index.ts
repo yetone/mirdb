@@ -4,6 +4,7 @@
 
 // UI Components
 export { Button } from './ui/Button'
+export { Badge } from './ui/Badge'
 export { ThemeToggle } from './ui/ThemeToggle'
 
 // Section Components
