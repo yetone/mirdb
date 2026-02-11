@@ -1,0 +1,34 @@
+/**
+ * Styles for Features component.
+ * Owner: Scenario 4 - Features Section
+ */
+
+.features {
+  background-color: var(--color-background);
+}
+
+.features__heading {
+  text-align: center;
+  margin-bottom: var(--spacing-12);
+  color: var(--color-text);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-6);
+}
+
+/* Tablet - 2 columns */
+@media (max-width: 992px) {
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile - 1 column */
+@media (max-width: 576px) {
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
+}

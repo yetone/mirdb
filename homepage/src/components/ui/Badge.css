@@ -1,0 +1,25 @@
+/**
+ * Styles for the Badge component.
+ * Owner: Scenario 6 - Build Status Badge
+ */
+
+.badge {
+  display: inline-block;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.badge:hover {
+  opacity: 0.8;
+}
+
+.badge:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.badge__image {
+  display: block;
+  height: auto;
+  max-height: 20px;
+}
