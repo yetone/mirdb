@@ -34,6 +34,10 @@ export const features: Feature[] = [
     name: 'Skip-list Memtable',
     description: 'Fast in-memory operations with probabilistic structure',
   },
+  {
+    name: 'Multi-level Compaction',
+    description: 'Optimized storage management with multi-level compaction strategy',
+  },
 ]
 
 export const navItems: NavItem[] = [

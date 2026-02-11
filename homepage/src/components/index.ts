@@ -9,6 +9,10 @@ export { ThemeToggle } from './ui/ThemeToggle'
 // Section Components
 export { Hero } from './sections/Hero'
 export { Demo } from './sections/Demo'
+export { Features } from './sections/Features'
+
+// UI Components - Feature
+export { FeatureCard } from './ui/FeatureCard'
 
 // Layout Components
 export { Header } from './layout/Header'

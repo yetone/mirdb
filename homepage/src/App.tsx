@@ -2,7 +2,7 @@
  * Main application component with layout structure.
  */
 
-import { Header, Hero } from './components'
+import { Header, Hero, Features } from './components'
 import { Demo } from './components/sections/Demo'
 import './styles/globals.css'
 
@@ -13,6 +13,7 @@ function App() {
       <main>
         <Hero />
         <Demo />
+        <Features />
         {/* Quick Start section placeholder for primary CTA target */}
         <section id="quick-start" style={{ minHeight: '100vh', padding: '4rem 0' }}>
           <div className="container">

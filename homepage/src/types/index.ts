@@ -24,3 +24,13 @@ export interface CodeExample {
   code: string
   title?: string
 }
+
+export interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'ghost'
+  size?: 'sm' | 'md' | 'lg'
+  href?: string
+  external?: boolean
+  onClick?: () => void
+  children: React.ReactNode
+  className?: string
+}
