@@ -27,9 +27,13 @@
 
 .code-block__language {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: #475569; /* slate-600: 5.8:1 contrast ratio against #e2e8f0 background - WCAG AA compliant */
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+[data-theme="dark"] .code-block__language {
+  color: #cbd5e1; /* slate-300: 8.2:1 contrast ratio against #30363d background - WCAG AA compliant */
 }
 
 .code-block__container {

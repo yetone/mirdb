@@ -32,7 +32,7 @@ export function MobileMenu({ items, isOpen, onClose }: MobileMenuProps) {
         aria-label="Mobile navigation menu"
         aria-hidden={!isOpen}
       >
-        <nav className="mobile-menu__nav">
+        <nav className="mobile-menu__nav" aria-label="Mobile navigation">
           <ul className="mobile-menu__list">
             {items.map((item) => (
               <li key={item.label} className="mobile-menu__item">
