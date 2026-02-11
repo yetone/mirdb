@@ -1,23 +1,63 @@
+/**
+ * ThemeToggle component styles.
+ * Owner: Scenario 10 - Dark Mode Theme
+ *
+ * Requirements:
+ * - REQ-12: Dark mode theme toggle
+ * - TC5: Visible focus states and hover effects
+ */
+
 .theme-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  padding: var(--spacing-sm);
+  padding: var(--spacing-sm, 0.375rem);
   background: transparent;
   border: none;
-  border-radius: var(--radius-md);
-  color: var(--color-foreground);
+  border-radius: var(--radius-md, 0.5rem);
+  color: var(--color-foreground, #1e293b);
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color var(--transition-base, 0.2s ease),
+              color var(--transition-base, 0.2s ease),
+              box-shadow var(--transition-base, 0.2s ease);
 }
 
 .theme-toggle:hover {
-  background-color: var(--color-surface);
+  background-color: var(--color-surface, #f8fafc);
+}
+
+/* Focus states - WCAG 2.1 AA compliant */
+.theme-toggle:focus {
+  outline: none;
+}
+
+.theme-toggle:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--color-focus-ring, #3b82f6);
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+/* Active state */
+.theme-toggle:active {
+  transform: scale(0.95);
 }
 
 .theme-toggle__icon {
   width: 20px;
   height: 20px;
+  transition: transform var(--transition-fast, 0.15s ease);
+}
+
+.theme-toggle:hover .theme-toggle__icon {
+  transform: rotate(15deg);
+}
+
+/* Dark mode specific styles */
+[data-theme="dark"] .theme-toggle {
+  color: var(--color-foreground, #f1f5f9);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background-color: var(--color-surface, #161b22);
 }

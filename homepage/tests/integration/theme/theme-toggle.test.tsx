@@ -1,6 +1,10 @@
 /**
  * Integration tests for theme toggle functionality
- * Scenario 1 - Header and Navigation
+ * Owner: Scenario 10 - Dark Mode Theme
+ *
+ * Test cases covered:
+ * - TC1: Toggle to dark mode - background color changes
+ * - TC4: Theme persists after reload (localStorage)
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
