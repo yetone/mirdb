@@ -2,7 +2,7 @@
  * Main application component with layout structure.
  */
 
-import { Header, Hero, Features, QuickStart, Badge } from './components'
+import { Header, Footer, Hero, Features, QuickStart, Badge } from './components'
 import { Demo } from './components/sections/Demo'
 import { CIRCLECI_BADGE_URL, CIRCLECI_BUILD_URL } from './config/content'
 import './styles/globals.css'
@@ -28,6 +28,7 @@ function App() {
         </section>
         <QuickStart />
       </main>
+      <Footer />
     </div>
   )
 }

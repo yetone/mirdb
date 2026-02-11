@@ -19,5 +19,6 @@ export { CodeBlock } from './ui/CodeBlock'
 
 // Layout Components
 export { Header } from './layout/Header'
+export { Footer } from './layout/Footer'
 export { Navigation } from './layout/Navigation'
 export { MobileMenu, HamburgerButton } from './layout/MobileMenu'
