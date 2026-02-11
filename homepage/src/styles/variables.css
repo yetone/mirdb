@@ -1,0 +1,48 @@
+:root {
+  /* Colors - Light Theme */
+  --color-background: #ffffff;
+  --color-foreground: #0d1117;
+  --color-primary: #de6b48;
+  --color-primary-hover: #c85a3a;
+  --color-secondary: #3b82f6;
+  --color-secondary-hover: #2563eb;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-surface: #f9fafb;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Fira Code', 'Monaco', monospace;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --color-background: #0d1117;
+  --color-foreground: #f0f6fc;
+  --color-primary: #de6b48;
+  --color-primary-hover: #e8805f;
+  --color-secondary: #58a6ff;
+  --color-secondary-hover: #79b8ff;
+  --color-muted: #8b949e;
+  --color-border: #30363d;
+  --color-surface: #161b22;
+}
