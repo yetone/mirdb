@@ -7,7 +7,7 @@
  * - NFR-6: External links with security attributes
  */
 
-import { footerLinks, GITHUB_URL } from '../../config/content'
+import { footerLinks } from '../../config/content'
 import './Footer.css'
 
 export function Footer() {
