@@ -41,8 +41,8 @@ export const features: Feature[] = [
 ]
 
 export const navItems: NavItem[] = [
-  { label: 'Documentation', href: `${GITHUB_URL}#readme` },
-  { label: 'Examples', href: `${GITHUB_URL}#usage` },
+  { label: 'Documentation', href: `${GITHUB_URL}#readme`, external: true },
+  { label: 'Examples', href: `${GITHUB_URL}#usage`, external: true },
   { label: 'GitHub', href: GITHUB_URL, external: true },
   { label: 'About', href: '#about' },
 ]
