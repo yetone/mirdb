@@ -3,6 +3,7 @@
  */
 
 import { Hero } from './components'
+import { Demo } from './components/sections/Demo'
 import './styles/globals.css'
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     <div className="app">
       <main>
         <Hero />
+        <Demo />
         {/* Quick Start section placeholder for primary CTA target */}
         <section id="quick-start" style={{ minHeight: '100vh', padding: '4rem 0' }}>
           <div className="container">

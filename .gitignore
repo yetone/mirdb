@@ -2,11 +2,8 @@
 **/*.rs.bk
 .something/
 
-# Node.js
-node_modules/
-dist/
-
-# Playwright
-test-results/
-playwright-report/
-playwright/.cache/
+# Homepage
+homepage/node_modules/
+homepage/dist/
+homepage/playwright-report/
+homepage/test-results/

@@ -1,29 +1,40 @@
+/**
+ * CSS Custom Properties for MirDB homepage.
+ * Theme colors and design tokens.
+ */
+
 :root {
-  /* Colors - Light Theme */
-  --color-background: #ffffff;
-  --color-foreground: #0d1117;
-  --color-primary: #de6b48;
-  --color-primary-hover: #c85a3a;
+  /* Colors - Light theme */
+  --color-primary: #b7410e;
+  --color-primary-hover: #8b3209;
   --color-secondary: #3b82f6;
-  --color-secondary-hover: #2563eb;
-  --color-muted: #6b7280;
-  --color-border: #e5e7eb;
-  --color-surface: #f9fafb;
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
 
   /* Typography */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Fira Code', 'Monaco', monospace;
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
 
   /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  --spacing-3xl: 4rem;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
 
-  /* Border Radius */
+  /* Border radius */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
@@ -35,14 +46,14 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
 
+/* Dark theme */
 [data-theme="dark"] {
+  --color-primary: #e07a52;
+  --color-primary-hover: #f59e6e;
+  --color-secondary: #60a5fa;
   --color-background: #0d1117;
-  --color-foreground: #f0f6fc;
-  --color-primary: #de6b48;
-  --color-primary-hover: #e8805f;
-  --color-secondary: #58a6ff;
-  --color-secondary-hover: #79b8ff;
-  --color-muted: #8b949e;
-  --color-border: #30363d;
   --color-surface: #161b22;
+  --color-text: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-border: #30363d;
 }

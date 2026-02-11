@@ -1,16 +1,20 @@
 /**
  * Content configuration for the MirDB homepage.
+ *
+ * This file contains all text content, feature descriptions,
+ * and navigation items for easy maintenance and updates.
  */
 
-import type { Feature, NavItem, CodeExample, HeroContent } from '../types'
+import type { Feature, NavItem, CodeExample } from '../types'
 
 export const GITHUB_URL = 'https://github.com/yetone/mirdb'
-export const CIRCLECI_BADGE_URL = 'https://circleci.com/gh/yetone/mirdb'
+export const CIRCLECI_BADGE_URL = 'https://circleci.com/gh/yetone/mirdb.svg?style=svg'
+export const CIRCLECI_BUILD_URL = 'https://circleci.com/gh/yetone/mirdb'
 
-export const heroContent: HeroContent = {
+export const heroContent = {
   title: 'MirDB',
-  subtitle: 'Persistent Key-Value Store',
-  description: 'Fast, durable, and Memcached-compatible key-value storage written in Rust. Drop-in replacement with disk persistence.',
+  subtitle: 'A persistent key-value store with Memcached protocol',
+  description: 'Fast, durable, and Memcached-compatible key-value storage written in Rust.',
 }
 
 export const features: Feature[] = [
@@ -28,17 +32,13 @@ export const features: Feature[] = [
   },
   {
     name: 'Skip-list Memtable',
-    description: 'Fast in-memory operations with probabilistic data structure',
-  },
-  {
-    name: 'Multi-level Compaction',
-    description: 'Optimized storage with automatic background compaction',
+    description: 'Fast in-memory operations with probabilistic structure',
   },
 ]
 
 export const navItems: NavItem[] = [
-  { label: 'Documentation', href: '#docs' },
-  { label: 'Examples', href: '#examples' },
+  { label: 'Documentation', href: `${GITHUB_URL}#readme` },
+  { label: 'Examples', href: `${GITHUB_URL}#usage` },
   { label: 'GitHub', href: GITHUB_URL, external: true },
   { label: 'About', href: '#about' },
 ]
@@ -51,13 +51,19 @@ export const quickStartCommands: CodeExample[] = [
   },
   {
     language: 'bash',
-    title: 'Start Server',
-    code: 'mirdb-server',
-  },
-  {
-    language: 'bash',
-    title: 'Connect with memcached client',
-    code: `echo "set mykey 0 0 5\\r\\nhello\\r\\n" | nc localhost 11211`,
+    title: 'Usage',
+    code: `# Start the server
+mirdb-server
+
+# Connect with telnet
+telnet localhost 11211
+
+# Set a value
+set mykey 0 0 5
+hello
+
+# Get the value
+get mykey`,
   },
 ]
 

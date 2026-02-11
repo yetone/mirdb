@@ -7,5 +7,6 @@ export { Button } from './ui/Button'
 
 // Section Components
 export { Hero } from './sections/Hero'
+export { Demo } from './sections/Demo'
 
 // Layout Components - to be added by other scenarios
