@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="hero">
+      <img src="assets/logo.gif" alt="MirDB Logo" class="logo">
+      <h1>MirDB</h1>
+      <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+      <div class="cta-buttons">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-primary">View on GitHub</a>
+        <a href="#quickstart" class="btn btn-secondary">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="features">
+      <h2>Features</h2>
+      <ul class="features-list">
+        <li>Memcached protocol compatibility</li>
+        <li>Persistent key-value storage</li>
+        <li>Skip-list based memtable</li>
+        <li>Minor and major compaction</li>
+        <li>Rust-based implementation</li>
+      </ul>
+    </section>
+
+    <section id="demo">
+      <h2>See It In Action</h2>
+      <div class="demo-container">
+        <img src="assets/usage.gif" alt="MirDB usage demonstration showing basic set and get commands in action" class="usage-gif">
+        <p class="demo-caption">Watch how easy it is to use MirDB with standard Memcached commands. The demonstration shows basic set and get operations.</p>
+      </div>
+    </section>
+
+    <section id="quickstart">
+      <h2>Quick Start</h2>
+      <div class="code-block">
+        <code>cargo install mirdb</code>
+        <button class="copy-btn" data-clipboard="cargo install mirdb">Copy</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a> |
+      MIT License |
+      Created by <a href="https://github.com/yetone" target="_blank" rel="noopener noreferrer">yetone</a>
+    </p>
+    <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer">
+      <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI Build Status">
+    </a>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

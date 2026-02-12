@@ -1,0 +1,15 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - Landing page for the MirDB persistent key-value store",
+  "scripts": {
+    "test": "npm run test:e2e",
+    "test:e2e": "npx playwright test",
+    "test:unit": "node --test tests/unit/"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "keywords": ["mirdb", "homepage", "landing-page"],
+  "license": "MIT"
+}
