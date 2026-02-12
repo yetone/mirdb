@@ -1,6 +1,17 @@
 /**
  * MirDB Homepage Styles
- * Basic styles for the homepage
+ * Owner: Scenario 6 - Responsive Design
+ *
+ * Includes:
+ * - CSS reset/normalize
+ * - Typography (fonts, colors)
+ * - Layout (header, main, footer)
+ * - Component styles (buttons, code blocks, features grid)
+ * - Media queries for responsive breakpoints:
+ *   - Mobile: max-width 480px
+ *   - Tablet: max-width 768px
+ *   - Desktop: min-width 769px
+ * - Accessibility (focus states)
  */
 
 /* Reset */
@@ -8,6 +19,12 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* Prevent horizontal overflow */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 /* Typography */
@@ -172,18 +189,22 @@ h2 {
 .code-block code {
   font-family: 'Monaco', 'Consolas', monospace;
   font-size: 0.9rem;
-  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
   display: block;
 }
 
 .copy-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1rem;
+  min-height: 44px;
   background: var(--secondary-color);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 .copy-btn:hover {
@@ -212,28 +233,124 @@ footer img {
   outline-offset: 2px;
 }
 
-/* Media Queries */
+/* Media Queries for Responsive Design */
+
+/* Desktop (min-width: 769px) - Default styles apply */
+@media (min-width: 769px) {
+  .features-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablet (max-width: 768px) */
 @media (max-width: 768px) {
   h1 {
     font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
   }
 
   .tagline {
     font-size: 1rem;
   }
 
+  .hero {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  main {
+    padding: 1.5rem;
+  }
+
   .code-block {
     flex-direction: column;
-    text-align: center;
+    align-items: stretch;
+  }
+
+  .code-block pre {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .copy-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .features-list {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-caption {
+    padding: 0 1rem;
   }
 }
 
+/* Mobile (max-width: 480px) */
 @media (max-width: 480px) {
   header {
     padding: 2rem 1rem;
   }
 
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  .tagline {
+    font-size: 0.9rem;
+    padding: 0 0.5rem;
+  }
+
   main {
     padding: 1rem;
+  }
+
+  section {
+    margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.875rem 1rem;
+    min-height: 44px;
+  }
+
+  .logo {
+    max-width: 150px;
+  }
+
+  .code-block {
+    padding: 0.75rem;
+  }
+
+  .code-block code {
+    font-size: 0.8rem;
+  }
+
+  #quickstart h3 {
+    font-size: 1.1rem;
+  }
+
+  footer {
+    padding: 1.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .features-list li {
+    padding: 0.75rem;
+    font-size: 0.9rem;
   }
 }
