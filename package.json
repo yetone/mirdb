@@ -3,12 +3,22 @@
   "version": "1.0.0",
   "description": "MirDB Homepage - Landing page for the MirDB persistent key-value store",
   "scripts": {
-    "test": "npm run test:e2e",
+    "test": "npm run test:unit && npm run test:e2e",
     "test:e2e": "npx playwright test",
-    "test:unit": "node --test tests/unit/"
+    "test:unit": "jest tests/unit --passWithNoTests"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.40.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^23.0.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testMatch": ["**/tests/unit/**/*.test.js"],
+    "moduleFileExtensions": ["js"],
+    "verbose": true,
+    "setupFiles": ["./jest.setup.js"]
   },
   "keywords": ["mirdb", "homepage", "landing-page"],
   "license": "MIT"
