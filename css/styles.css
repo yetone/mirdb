@@ -142,19 +142,38 @@ h2 {
 }
 
 /* Quick Start */
+#quickstart h3 {
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0.75rem;
+  color: var(--primary-color);
+}
+
+#quickstart h3:first-of-type {
+  margin-top: 0;
+}
+
 .code-block {
   background: var(--code-bg);
   padding: 1rem;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.code-block pre {
+  margin: 0;
+  overflow-x: auto;
+  flex: 1;
 }
 
 .code-block code {
   font-family: 'Monaco', 'Consolas', monospace;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  white-space: pre;
+  display: block;
 }
 
 .copy-btn {
