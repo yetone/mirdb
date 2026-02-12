@@ -1,0 +1,25 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "Homepage for MirDB - A Persistent Key-Value Store with Memcached Protocol",
+  "scripts": {
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "jest --config jest.config.js",
+    "test:e2e": "playwright test",
+    "serve": "npx serve ."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "jest": "^29.7.0",
+    "jsdom": "^22.1.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "keywords": [
+    "mirdb",
+    "key-value-store",
+    "memcached",
+    "homepage"
+  ],
+  "author": "yetone",
+  "license": "MIT"
+}
