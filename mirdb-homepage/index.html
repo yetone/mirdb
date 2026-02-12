@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <img src="../assets/logo.gif" alt="MirDB Logo" class="logo">
+            <h1>MirDB</h1>
+            <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-primary">View on GitHub</a>
+                <a href="#quickstart" class="btn btn-secondary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="features" class="features">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Memcached Protocol</h3>
+                    <p>Full compatibility with the Memcached protocol, allowing seamless integration with existing Memcached clients and tools.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Persistent Storage</h3>
+                    <p>Unlike traditional Memcached, MirDB provides persistent storage ensuring your data survives restarts and failures.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Skip-List Memtable</h3>
+                    <p>Efficient in-memory data structure using skip-list based memtable for fast reads and writes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Compaction</h3>
+                    <p>Automatic minor and major compaction to optimize storage space and maintain consistent read performance.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Built with Rust</h3>
+                    <p>Implemented in Rust for memory safety, high performance, and reliability without garbage collection overhead.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="demo" class="demo">
+            <h2>See It in Action</h2>
+            <div class="demo-content">
+                <img src="../assets/usage.gif" alt="MirDB usage demonstration showing commands in terminal" class="usage-gif">
+                <p class="demo-caption">Watch how easy it is to interact with MirDB using standard Memcached commands.</p>
+            </div>
+        </section>
+
+        <section id="quickstart" class="quickstart">
+            <h2>Quick Start</h2>
+            <div class="quickstart-content">
+                <h3>Installation</h3>
+                <div class="code-block">
+                    <pre><code>cargo install mirdb</code></pre>
+                    <button class="copy-btn" data-clipboard-text="cargo install mirdb" aria-label="Copy to clipboard">Copy</button>
+                </div>
+                <h3>Start the Server</h3>
+                <div class="code-block">
+                    <pre><code>mirdb-server</code></pre>
+                    <button class="copy-btn" data-clipboard-text="mirdb-server" aria-label="Copy to clipboard">Copy</button>
+                </div>
+                <h3>Basic Usage</h3>
+                <div class="code-block">
+                    <pre><code>telnet localhost 11211
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                    <button class="copy-btn" data-clipboard-text="telnet localhost 11211" aria-label="Copy to clipboard">Copy</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="github-link">
+                View on GitHub
+            </a>
+            <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer">
+                <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI Build Status" class="badge">
+            </a>
+            <p class="license">Released under the MIT License</p>
+            <p class="author">Created by <a href="https://github.com/yetone" target="_blank" rel="noopener noreferrer">yetone</a></p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
