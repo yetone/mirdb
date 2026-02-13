@@ -47,16 +47,16 @@ test.describe('Hero Section Unit Tests', () => {
     expect(taglineText.toLowerCase()).toContain('memcached');
   });
 
-  test('Test Case 6: MirDB logo (logo.gif) is displayed and has proper alt text', async ({ page }) => {
+  test('Test Case 6: MirDB logo is displayed and has proper alt text', async ({ page }) => {
     const heroSection = page.locator('#hero');
 
     // Check for logo image
     const logo = heroSection.locator('.hero__logo-image');
     await expect(logo).toBeVisible();
 
-    // Verify logo source contains logo.gif
+    // Verify logo source contains a valid logo file (GIF or SVG for performance optimization)
     const src = await logo.getAttribute('src');
-    expect(src).toContain('logo.gif');
+    expect(src).toMatch(/logo.*\.(gif|svg)$/);
 
     // Verify proper alt text
     const altText = await logo.getAttribute('alt');

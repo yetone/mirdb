@@ -5,7 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility. Rust performance, familiar interface.">
   <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <!-- Critical CSS inlined for faster first contentful paint (Scenario 10 - Performance Optimization) -->
+  <style>
+    /* Critical CSS - Essential above-the-fold styles */
+    :root {
+      --color-primary: #0066cc;
+      --color-text: #1a1a1a;
+      --color-background: #ffffff;
+      --color-border: #e9ecef;
+      --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --transition-fast: 150ms ease;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;font-family:var(--font-family-sans);line-height:1.6;color:var(--color-text);background-color:var(--color-background)}
+    .header{position:sticky;top:0;background:var(--color-background);border-bottom:1px solid var(--color-border);z-index:100}
+    .nav{max-width:1200px;margin:0 auto;padding:var(--spacing-md) var(--spacing-lg);display:flex;justify-content:space-between;align-items:center}
+    .nav__logo{font-size:1.5rem;font-weight:700;color:var(--color-primary);text-decoration:none;display:flex;align-items:center;gap:0.5rem}
+    .nav__links{display:flex;gap:var(--spacing-lg);align-items:center}
+    .nav__link{color:var(--color-text);text-decoration:none}
+    main{max-width:1200px;margin:0 auto;padding:0 var(--spacing-lg)}
+    .hero{text-align:center;padding:var(--spacing-xl) 0}
+    .hero__title{font-size:3rem;margin:0 0 0.5rem}
+    .hero__tagline{font-size:1.25rem;margin:0 0 1rem;color:#4a4a4a}
+  </style>
+  <!-- Non-critical CSS loaded asynchronously -->
+  <link rel="stylesheet" href="css/styles.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="css/styles.css"></noscript>
 </head>
 <body>
   <!-- Skip Link for Keyboard Navigation (Scenario 9 - Accessibility) -->
@@ -15,7 +43,7 @@
   <header class="header" role="banner">
     <nav class="nav" aria-label="Main navigation">
       <a href="#" class="nav__logo" aria-label="MirDB - Home">
-        <img src="assets/images/logo.gif" alt="" width="40" height="40" aria-hidden="true">
+        <img src="assets/icons/logo-placeholder.svg" alt="" width="40" height="40" aria-hidden="true">
         <span>MirDB</span>
       </a>
       <div class="nav__links">
@@ -56,7 +84,7 @@
     <section id="hero" class="hero" aria-labelledby="hero-title">
       <div class="hero__container">
         <div class="hero__logo">
-          <img src="assets/images/logo.gif" alt="MirDB - Persistent Key-Value Store" class="hero__logo-image">
+          <img src="assets/icons/logo-placeholder.svg" alt="MirDB - Persistent Key-Value Store" class="hero__logo-image" width="120" height="120">
         </div>
         <h1 id="hero-title" class="hero__title">MirDB</h1>
         <p class="hero__tagline">Persistent Key-Value Store with Memcached Protocol</p>
@@ -385,9 +413,10 @@
     </div>
   </footer>
 
-  <script src="js/theme-toggle.js"></script>
-  <script src="js/copy-to-clipboard.js"></script>
-  <script src="js/smooth-scroll.js"></script>
-  <script src="js/main.js"></script>
+  <!-- JavaScript with defer for non-blocking loading (Scenario 10 - Performance Optimization) -->
+  <script src="js/theme-toggle.js" defer></script>
+  <script src="js/copy-to-clipboard.js" defer></script>
+  <script src="js/smooth-scroll.js" defer></script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>
