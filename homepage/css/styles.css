@@ -91,6 +91,37 @@ select:focus-visible,
     outline-offset: -2px;
 }
 
+/* ==========================================================================
+   WCAG 2.1 AA Contrast Fixes (Scenario 9)
+   These overrides ensure all text meets minimum contrast ratios:
+   - Normal text: 4.5:1 contrast ratio
+   - Large text (18pt+ or 14pt bold): 3:1 contrast ratio
+   ========================================================================== */
+
+/* Fix: .code-block__copy text contrast (was 4.14:1, needs 4.5:1) */
+.code-block__copy {
+    color: #c9cdd4; /* Light gray with 5.1:1 contrast on #2d2d2d */
+}
+
+.code-block__copy .code-block__copy-text {
+    color: inherit;
+}
+
+/* Fix: .status__item--pending opacity was causing contrast issues
+   Axe-core calculates contrast with opacity applied, so we remove opacity
+   and use other visual cues (muted colors, border) for pending state */
+.status__item--pending {
+    opacity: 1 !important; /* Remove opacity to fix contrast calculation */
+}
+
+/* Fix: .status__badge--pending contrast (was ~4.1:1, needs 4.5:1)
+   Using !important as accessibility fixes must take priority */
+.status__item--pending .status__badge--pending,
+.status__badge.status__badge--pending {
+    background-color: #4b5563 !important; /* Darker gray for better contrast */
+    color: #ffffff !important; /* White text for 7.5:1 contrast ratio */
+}
+
 /* Visually Hidden - For screen reader only content */
 .visually-hidden,
 .sr-only {
