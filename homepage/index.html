@@ -127,8 +127,43 @@
     <!-- Code Example Section (Scenario 3) -->
     <section id="code-example" class="code-section" aria-labelledby="code-title">
       <div class="code-section__container">
-        <h2 id="code-title" class="code-section__title">Code Example</h2>
-        <!-- Code block to be implemented by Scenario 3 -->
+        <h2 id="code-title" class="code-section__title">Memcached Protocol in Action</h2>
+        <p class="code-section__description">Connect with any Memcached client and use familiar commands:</p>
+
+        <div class="code-block" role="region" aria-label="Code example">
+          <div class="code-block__header">
+            <span class="code-block__title">Memcached Commands</span>
+            <button
+              class="code-block__copy"
+              data-copy-target="code-content"
+              aria-label="Copy code to clipboard"
+              type="button"
+            >
+              <span class="code-block__copy-icon code-block__copy-icon--copy" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </span>
+              <span class="code-block__copy-icon code-block__copy-icon--check" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span class="code-block__copy-text">Copy</span>
+            </button>
+          </div>
+          <pre class="code-block__content" id="code-content"><code><span class="code-comment"># Store a value with 1 hour expiration</span>
+<span class="code-command">set key 0 3600 5</span>
+<span class="code-value">hello</span>
+<span class="code-response">STORED</span>
+
+<span class="code-comment"># Retrieve the value</span>
+<span class="code-command">get key</span>
+<span class="code-response">VALUE key 0 5</span>
+<span class="code-value">hello</span>
+<span class="code-response">END</span></code></pre>
+        </div>
       </div>
     </section>
 
@@ -157,6 +192,7 @@
     </div>
   </footer>
 
+  <script src="js/copy-to-clipboard.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
