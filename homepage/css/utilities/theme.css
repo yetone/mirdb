@@ -2,11 +2,24 @@
  * Theme Support - Light and Dark Mode
  * Owner: Scenario 6 - Theme Support
  *
- * Expected features:
- * - :root light theme variables
- * - [data-theme="dark"] dark theme variables
- * - @media (prefers-color-scheme: dark) system detection
- * - Smooth theme transition animations
+ * Placeholder file - will be implemented by Scenario 6
  */
 
-/* Theme stub - to be implemented by Scenario 6 */
+/* Dark theme placeholder */
+[data-theme="dark"] {
+    --color-text: #f0f0f0;
+    --color-text-secondary: #a0a0a0;
+    --color-background: #1a1a1a;
+    --color-surface: #2d2d2d;
+    --color-border: #404040;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --color-text: #f0f0f0;
+        --color-text-secondary: #a0a0a0;
+        --color-background: #1a1a1a;
+        --color-surface: #2d2d2d;
+        --color-border: #404040;
+    }
+}

@@ -9,7 +9,7 @@ module.exports = defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:8080',
+    baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
   },
   projects: [
@@ -19,9 +19,8 @@ module.exports = defineConfig({
     },
   ],
   webServer: {
-    command: 'npx http-server homepage -p 8080 -c-1',
-    url: 'http://localhost:8080',
+    command: 'npx serve homepage -l 3000',
+    url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 30000,
   },
 });

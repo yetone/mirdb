@@ -2,23 +2,75 @@
  * MirDB Homepage - Main Stylesheet
  *
  * This file imports all CSS modules.
- * First builder creates the import structure.
- *
- * Imports:
- * - utilities/reset.css
- * - utilities/variables.css
- * - utilities/theme.css (Scenario 6)
- * - utilities/responsive.css (Scenario 7)
- * - components/*.css (various scenarios)
  */
 
+/* Utilities */
 @import url('utilities/reset.css');
 @import url('utilities/variables.css');
 @import url('utilities/theme.css');
 @import url('utilities/responsive.css');
+
+/* Components */
 @import url('components/hero.css');
 @import url('components/features.css');
 @import url('components/code-block.css');
 @import url('components/quick-start.css');
 @import url('components/status.css');
 @import url('components/footer.css');
+
+/* Base styles */
+body {
+    font-family: var(--font-family-sans);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    z-index: 100;
+}
+
+.nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-md) var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav__logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.nav__links {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.nav__link {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.nav__link:hover {
+    color: var(--color-primary);
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+section {
+    padding: var(--spacing-xxl) 0;
+}

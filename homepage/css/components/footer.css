@@ -2,93 +2,34 @@
  * Footer Styles
  * Owner: Scenario 8 - Navigation and Footer
  *
- * Expected styles:
- * - .footer container styling
- * - .footer__links link group
- * - .footer__link individual link
- * - .footer__license license text
- * - .footer__social social icons (if applicable)
+ * Placeholder - will be implemented by Scenario 8
  */
 
-/* Footer stub - to be implemented by Scenario 8 */
 .footer {
-  padding: var(--spacing-xl) var(--container-padding);
-  border-top: 1px solid var(--color-border);
-  text-align: center;
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    text-align: center;
 }
 
-.footer__container {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--spacing-lg);
+.footer__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-lg);
 }
 
 .footer__license {
-  color: var(--color-text-light);
-  font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
 }
 
 .footer__link {
-  color: var(--color-primary);
-  font-size: var(--font-size-sm);
-  transition: color var(--transition-fast);
+    color: var(--color-primary);
+    text-decoration: none;
 }
 
 .footer__link:hover {
-  color: var(--color-primary-hover);
-}
-
-/* Header and Navigation - stub for Scenario 8 */
-.header {
-  position: sticky;
-  top: 0;
-  background-color: var(--color-background);
-  border-bottom: 1px solid var(--color-border);
-  z-index: 100;
-}
-
-.nav {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
-  padding: var(--spacing-md) var(--container-padding);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav__logo {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-weight: 600;
-  font-size: var(--font-size-lg);
-}
-
-.nav__logo img {
-  width: 40px;
-  height: 40px;
-}
-
-.nav__links {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-lg);
-}
-
-.nav__link {
-  color: var(--color-text-light);
-  font-size: var(--font-size-sm);
-  transition: color var(--transition-fast);
-}
-
-.nav__link:hover {
-  color: var(--color-primary);
-}
-
-.nav__link--github {
-  color: var(--color-text);
-  font-weight: 500;
+    text-decoration: underline;
 }

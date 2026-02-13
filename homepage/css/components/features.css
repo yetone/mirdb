@@ -2,27 +2,107 @@
  * Features Section Styles
  * Owner: Scenario 2 - Features Section Implementation
  *
- * Expected styles:
- * - .features section container
- * - .features__grid 3-4 column grid layout
- * - .feature-card individual feature styling
- * - .feature-card__icon icon container
- * - .feature-card__title feature name
- * - .feature-card__description feature text
+ * Styles for the features grid showcasing MirDB's key technical features:
+ * - Memcached Protocol compatibility
+ * - LSM Tree Storage Engine
+ * - Skip-List Memtables
+ * - Automatic Compaction
+ * - Crash Recovery
+ * - SSTable Format
  */
 
-/* Features stub - to be implemented by Scenario 2 */
+/* Section container */
 .features {
-  padding: var(--spacing-3xl) var(--container-padding);
+    background-color: var(--color-surface);
+    padding: var(--spacing-xxl) 0;
 }
 
 .features__container {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
 }
 
+/* Section header */
 .features__title {
-  font-size: var(--font-size-3xl);
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    text-align: center;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+.features__subtitle {
+    font-size: var(--font-size-lg);
+    text-align: center;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xxl);
+}
+
+/* Grid layout - 3 columns on desktop (1024px+) */
+.features__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+}
+
+/* Responsive: 2 columns on tablet */
+@media (max-width: 1023px) and (min-width: 640px) {
+    .features__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Responsive: 1 column on mobile */
+@media (max-width: 639px) {
+    .features__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Feature card styles */
+.feature-card {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Feature icon */
+.feature-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-primary);
+}
+
+.feature-card__icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* Feature title */
+.feature-card__title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Feature description */
+.feature-card__description {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
 }

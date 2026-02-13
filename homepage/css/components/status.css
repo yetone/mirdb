@@ -2,28 +2,15 @@
  * Status / Progress Section Styles
  * Owner: Scenario 5 - Status Section Implementation
  *
- * Expected styles:
- * - .status section container
- * - .status__list feature checklist
- * - .status__item individual feature
- * - .status__item--complete completed feature styling
- * - .status__item--pending pending feature styling
- * - .status__icon checkmark/pending icon
+ * Placeholder - will be implemented by Scenario 5
  */
 
-/* Status stub - to be implemented by Scenario 5 */
 .status {
-  padding: var(--spacing-3xl) var(--container-padding);
-  background-color: var(--color-background-alt);
-}
-
-.status__container {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
+    padding: var(--spacing-xxl) var(--spacing-lg);
 }
 
 .status__title {
-  font-size: var(--font-size-3xl);
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
+    font-size: var(--font-size-3xl);
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
 }

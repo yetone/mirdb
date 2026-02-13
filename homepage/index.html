@@ -50,9 +50,76 @@
     <!-- Features Section (Scenario 2) -->
     <section id="features" class="features" aria-labelledby="features-title">
       <div class="features__container">
-        <h2 id="features-title" class="features__title">Features</h2>
+        <h2 id="features-title" class="features__title">Key Features</h2>
+        <p class="features__subtitle">Built for performance, designed for simplicity</p>
         <div class="features__grid">
-          <!-- Feature cards to be implemented by Scenario 2 -->
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Memcached Protocol</h3>
+            <p class="feature-card__description">Drop-in compatibility with existing Memcached clients. Use your favorite libraries and tools without any changes.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18"/>
+                <path d="M7 16l4-8 4 4 4-10"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">LSM Tree Storage</h3>
+            <p class="feature-card__description">Log-Structured Merge-tree architecture optimized for high write throughput while maintaining efficient read operations.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 9h18"/>
+                <path d="M9 21V9"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Skip-List Memtable</h3>
+            <p class="feature-card__description">In-memory skip-list structure for fast key-value lookups and efficient ordered iteration during flush operations.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <path d="M3.29 7L12 12l8.71-5"/>
+                <path d="M12 22V12"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Automatic Compaction</h3>
+            <p class="feature-card__description">Background minor and major compaction processes to maintain optimal storage efficiency and read performance.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Crash Recovery</h3>
+            <p class="feature-card__description">Write-ahead logging (WAL) ensures data durability. Recover seamlessly from unexpected shutdowns without data loss.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4"/>
+                <path d="M12 8h.01"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">SSTable Format</h3>
+            <p class="feature-card__description">Sorted String Tables provide efficient on-disk storage with bloom filters for fast negative lookups.</p>
+          </article>
         </div>
       </div>
     </section>

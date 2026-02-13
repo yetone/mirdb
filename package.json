@@ -1,17 +1,27 @@
 {
-  "name": "mirdb-homepage",
+  "name": "workspace",
   "version": "1.0.0",
-  "description": "MirDB Homepage - A static website for the MirDB persistent key-value store",
-  "main": "homepage/index.html",
+  "description": "![logo](https://github.com/yetone/mirdb/raw/master/assets/logo.gif)",
+  "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:unit": "node --test homepage/tests/unit/*.test.js",
-    "test:e2e": "npx playwright test homepage/tests/e2e/*.test.js",
-    "serve": "npx http-server homepage -p 8080"
+    "test:features": "npx playwright test features"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yetone/mirdb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yetone/mirdb/issues"
+  },
+  "homepage": "https://github.com/yetone/mirdb#readme",
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
-  },
-  "keywords": ["mirdb", "homepage", "static-site"],
-  "license": "MIT"
+    "@playwright/test": "^1.58.2",
+    "playwright": "^1.58.2",
+    "serve": "^14.2.5"
+  }
 }
