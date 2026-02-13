@@ -12,6 +12,11 @@
 
 // Initialize all features when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize theme toggle (Scenario 6)
+  if (typeof initTheme === 'function') {
+    initTheme();
+  }
+
   // Initialize smooth scroll for anchor links
   initSmoothScroll();
 
