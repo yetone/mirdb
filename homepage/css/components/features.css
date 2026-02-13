@@ -1,0 +1,28 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 2 - Features Section Implementation
+ *
+ * Expected styles:
+ * - .features section container
+ * - .features__grid 3-4 column grid layout
+ * - .feature-card individual feature styling
+ * - .feature-card__icon icon container
+ * - .feature-card__title feature name
+ * - .feature-card__description feature text
+ */
+
+/* Features stub - to be implemented by Scenario 2 */
+.features {
+  padding: var(--spacing-3xl) var(--container-padding);
+}
+
+.features__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+.features__title {
+  font-size: var(--font-size-3xl);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}

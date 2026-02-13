@@ -1,0 +1,28 @@
+/**
+ * Quick Start Section Styles
+ * Owner: Scenario 4 - Quick Start Section
+ *
+ * Expected styles:
+ * - .quickstart section container
+ * - .quickstart__steps numbered list styling
+ * - .quickstart__step individual step
+ * - .quickstart__command terminal command display
+ * - .quickstart__copy copy button for commands
+ * - .quickstart__description step explanation
+ */
+
+/* Quick start stub - to be implemented by Scenario 4 */
+.quickstart {
+  padding: var(--spacing-3xl) var(--container-padding);
+}
+
+.quickstart__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+.quickstart__title {
+  font-size: var(--font-size-3xl);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}

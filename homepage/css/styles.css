@@ -1,0 +1,24 @@
+/**
+ * MirDB Homepage - Main Stylesheet
+ *
+ * This file imports all CSS modules.
+ * First builder creates the import structure.
+ *
+ * Imports:
+ * - utilities/reset.css
+ * - utilities/variables.css
+ * - utilities/theme.css (Scenario 6)
+ * - utilities/responsive.css (Scenario 7)
+ * - components/*.css (various scenarios)
+ */
+
+@import url('utilities/reset.css');
+@import url('utilities/variables.css');
+@import url('utilities/theme.css');
+@import url('utilities/responsive.css');
+@import url('components/hero.css');
+@import url('components/features.css');
+@import url('components/code-block.css');
+@import url('components/quick-start.css');
+@import url('components/status.css');
+@import url('components/footer.css');

@@ -1,0 +1,29 @@
+/**
+ * Code Block / Code Example Styles
+ * Owner: Scenario 3 - Code Example Section
+ *
+ * Expected styles:
+ * - .code-section section container
+ * - .code-block terminal-style container
+ * - .code-block__header filename/title bar
+ * - .code-block__content code display area
+ * - .code-block__copy copy button styling
+ * - Syntax highlighting classes
+ */
+
+/* Code block stub - to be implemented by Scenario 3 */
+.code-section {
+  padding: var(--spacing-3xl) var(--container-padding);
+  background-color: var(--color-background-alt);
+}
+
+.code-section__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+.code-section__title {
+  font-size: var(--font-size-3xl);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}

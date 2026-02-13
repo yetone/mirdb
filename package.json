@@ -1,0 +1,17 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A static website for the MirDB persistent key-value store",
+  "main": "homepage/index.html",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:unit": "node --test homepage/tests/unit/*.test.js",
+    "test:e2e": "npx playwright test homepage/tests/e2e/*.test.js",
+    "serve": "npx http-server homepage -p 8080"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "keywords": ["mirdb", "homepage", "static-site"],
+  "license": "MIT"
+}
