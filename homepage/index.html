@@ -8,11 +8,14 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <!-- Skip Link for Keyboard Navigation (Scenario 9 - Accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <!-- Header Navigation (Scenario 8) -->
-  <header class="header">
-    <nav class="nav">
-      <a href="#" class="nav__logo">
-        <img src="assets/images/logo.gif" alt="MirDB Logo" width="40" height="40">
+  <header class="header" role="banner">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#" class="nav__logo" aria-label="MirDB - Home">
+        <img src="assets/images/logo.gif" alt="" width="40" height="40" aria-hidden="true">
         <span>MirDB</span>
       </a>
       <div class="nav__links">
@@ -48,7 +51,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content" role="main">
     <!-- Hero Section (Scenario 1) -->
     <section id="hero" class="hero" aria-labelledby="hero-title">
       <div class="hero__container">
@@ -153,9 +156,9 @@
         <h2 id="code-title" class="code-section__title">Memcached Protocol in Action</h2>
         <p class="code-section__description">Connect with any Memcached client and use familiar commands:</p>
 
-        <div class="code-block" role="region" aria-label="Code example">
+        <div class="code-block" role="region" aria-label="Memcached protocol code example">
           <div class="code-block__header">
-            <span class="code-block__title">Memcached Commands</span>
+            <span class="code-block__title" id="code-block-title">Memcached Commands</span>
             <button
               class="code-block__copy"
               data-copy-target="code-content"
@@ -176,7 +179,7 @@
               <span class="code-block__copy-text">Copy</span>
             </button>
           </div>
-          <pre class="code-block__content" id="code-content"><code><span class="code-comment"># Store a value with 1 hour expiration</span>
+          <pre class="code-block__content" id="code-content" role="code" aria-labelledby="code-block-title" tabindex="0"><code><span class="code-comment"># Store a value with 1 hour expiration</span>
 <span class="code-command">set key 0 3600 5</span>
 <span class="code-value">hello</span>
 <span class="code-response">STORED</span>
@@ -214,7 +217,7 @@
             </div>
             <p class="quickstart__step-description">Download the MirDB source code from GitHub.</p>
             <div class="quickstart__command">
-              <pre class="quickstart__command-content" id="quickstart-cmd-1"><code>git clone https://github.com/yetone/mirdb.git</code></pre>
+              <pre class="quickstart__command-content" id="quickstart-cmd-1" role="code" aria-label="Clone command"><code>git clone https://github.com/yetone/mirdb.git</code></pre>
               <button
                 class="quickstart__copy code-block__copy"
                 data-copy-target="quickstart-cmd-1"
@@ -245,7 +248,7 @@
             </div>
             <p class="quickstart__step-description">Navigate to the project directory and start the server.</p>
             <div class="quickstart__command">
-              <pre class="quickstart__command-content" id="quickstart-cmd-2"><code>cd mirdb && cargo run</code></pre>
+              <pre class="quickstart__command-content" id="quickstart-cmd-2" role="code" aria-label="Build and run command"><code>cd mirdb && cargo run</code></pre>
               <button
                 class="quickstart__copy code-block__copy"
                 data-copy-target="quickstart-cmd-2"
@@ -276,7 +279,7 @@
             </div>
             <p class="quickstart__step-description">Use any Memcached client to connect to MirDB on the default port.</p>
             <div class="quickstart__command">
-              <pre class="quickstart__command-content" id="quickstart-cmd-3"><code>telnet localhost 11211</code></pre>
+              <pre class="quickstart__command-content" id="quickstart-cmd-3" role="code" aria-label="Connect command"><code>telnet localhost 11211</code></pre>
               <button
                 class="quickstart__copy code-block__copy"
                 data-copy-target="quickstart-cmd-3"

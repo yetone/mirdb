@@ -26,6 +26,85 @@ body {
     background-color: var(--color-background);
 }
 
+/* ==========================================================================
+   Accessibility Styles (Scenario 9)
+   ========================================================================== */
+
+/* Skip Link - Hidden until focused for keyboard navigation */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: var(--color-primary);
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: var(--border-radius-md);
+    z-index: 9999;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: var(--spacing-md);
+    outline: 3px solid var(--color-text);
+    outline-offset: 2px;
+}
+
+/* Global Focus Styles - Ensure all interactive elements have visible focus */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Remove focus outline on mouse click, keep for keyboard */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+[tabindex]:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Restore focus outline for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* High contrast focus for code blocks */
+.code-block__content:focus,
+.code-block__content:focus-visible {
+    outline: 2px solid #4da6ff;
+    outline-offset: -2px;
+}
+
+/* Visually Hidden - For screen reader only content */
+.visually-hidden,
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 .header {
     position: sticky;
     top: 0;

@@ -151,7 +151,7 @@
 
 /* Syntax highlighting */
 .code-comment {
-  color: #6a737d;
+  color: #8b949e; /* Updated for WCAG 2.1 AA compliance - 4.98:1 contrast on #1e1e1e */
   font-style: italic;
 }
 

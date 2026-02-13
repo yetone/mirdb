@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/yetone/mirdb#readme",
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.58.2",
     "playwright": "^1.58.2",
     "serve": "^14.2.5"
