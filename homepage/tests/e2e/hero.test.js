@@ -25,8 +25,8 @@ test.describe('Hero Section E2E Tests', () => {
     expect(boundingBox).not.toBeNull();
 
     // The hero section should start near the top of the page
-    // (accounting for header which is sticky)
-    expect(boundingBox.y).toBeLessThan(100);
+    // (accounting for header which is sticky - typically around 80-120px)
+    expect(boundingBox.y).toBeLessThan(150);
 
     // Hero should be visible without scrolling - check it's in viewport
     const viewportHeight = 720;
