@@ -1,0 +1,219 @@
+/**
+ * Code Block / Code Example Styles
+ * Owner: Scenario 3 - Code Example Section
+ *
+ * Expected styles:
+ * - .code-section section container
+ * - .code-block terminal-style container
+ * - .code-block__header filename/title bar
+ * - .code-block__content code display area
+ * - .code-block__copy copy button styling
+ * - Syntax highlighting classes
+ */
+
+/* Section container */
+.code-section {
+  padding: var(--spacing-3xl) var(--container-padding);
+  background-color: var(--color-background-alt);
+}
+
+.code-section__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+.code-section__title {
+  font-size: var(--font-size-3xl);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.code-section__description {
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-2xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Code block container */
+.code-block {
+  background-color: #1e1e1e;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Header bar */
+.code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: #2d2d2d;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+.code-block__title {
+  color: #9ca3af;
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-mono);
+}
+
+/* Copy button */
+.code-block__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid #4b5563;
+  border-radius: var(--border-radius-sm);
+  color: #9ca3af;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-family-sans);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.code-block__copy:hover {
+  background-color: #374151;
+  border-color: #6b7280;
+  color: #e5e7eb;
+}
+
+.code-block__copy:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.code-block__copy:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.code-block__copy:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Copy icon states */
+.code-block__copy-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.code-block__copy-icon--check {
+  display: none;
+  color: var(--color-accent);
+}
+
+.code-block__copy--copied .code-block__copy-icon--copy {
+  display: none;
+}
+
+.code-block__copy--copied .code-block__copy-icon--check {
+  display: flex;
+}
+
+.code-block__copy--copied {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.code-block__copy--copied .code-block__copy-text {
+  color: var(--color-accent);
+}
+
+/* Code content area */
+.code-block__content {
+  padding: var(--spacing-lg);
+  margin: 0;
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+  color: #e5e7eb;
+  background-color: #1e1e1e;
+  tab-size: 2;
+}
+
+.code-block__content code {
+  font-family: inherit;
+  background: none;
+}
+
+/* Syntax highlighting */
+.code-comment {
+  color: #8b949e; /* Updated for WCAG 2.1 AA compliance - 4.98:1 contrast on #1e1e1e */
+  font-style: italic;
+}
+
+.code-command {
+  color: #79c0ff;
+  font-weight: 500;
+}
+
+.code-value {
+  color: #a5d6ff;
+}
+
+.code-response {
+  color: #7ee787;
+}
+
+.code-keyword {
+  color: #ff7b72;
+}
+
+.code-string {
+  color: #a5d6ff;
+}
+
+.code-number {
+  color: #79c0ff;
+}
+
+/* Scrollbar styling for code block */
+.code-block__content::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block__content::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+.code-block__content::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+.code-block__content::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Accessibility - reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .code-block__copy {
+    transition: none;
+  }
+}
+
+/* Visually hidden for screen reader announcements */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

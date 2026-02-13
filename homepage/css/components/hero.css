@@ -1,0 +1,66 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Implementation
+ *
+ * Placeholder - will be implemented by Scenario 1
+ */
+
+.hero {
+    text-align: center;
+    padding: var(--spacing-xxl) var(--spacing-lg);
+}
+
+.hero__title {
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.hero__tagline {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.hero__subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-muted);
+    margin-bottom: var(--spacing-xl);
+}
+
+.hero__cta-group {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero__cta-primary,
+.hero__cta-secondary {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.hero__cta-primary {
+    background: var(--color-primary);
+    color: white;
+}
+
+.hero__cta-primary:hover {
+    background: var(--color-primary-dark);
+}
+
+.hero__cta-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+}
+
+.hero__cta-secondary:hover {
+    background: var(--color-primary);
+    color: white;
+}

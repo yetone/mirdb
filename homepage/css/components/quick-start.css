@@ -1,0 +1,212 @@
+/**
+ * Quick Start Section Styles
+ * Owner: Scenario 4 - Quick Start Section
+ *
+ * Styles for the quick start installation guide with:
+ * - .quickstart section container
+ * - .quickstart__steps numbered list styling
+ * - .quickstart__step individual step
+ * - .quickstart__command terminal command display
+ * - .quickstart__copy copy button for commands
+ * - .quickstart__description step explanation
+ */
+
+.quickstart {
+  padding: var(--spacing-xxl) var(--spacing-lg);
+  background-color: var(--color-surface);
+}
+
+.quickstart__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.quickstart__title {
+  font-size: var(--font-size-3xl);
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.quickstart__subtitle {
+  font-size: var(--font-size-lg);
+  text-align: center;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Prerequisites section */
+.quickstart__prerequisites {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.quickstart__prerequisites-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.quickstart__prerequisites-text {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.quickstart__prerequisites-text a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.quickstart__prerequisites-text a:hover {
+  color: var(--color-primary-dark);
+}
+
+/* Steps list */
+.quickstart__steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+/* Individual step */
+.quickstart__step {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  position: relative;
+}
+
+.quickstart__step-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.quickstart__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  border-radius: var(--border-radius-full);
+  flex-shrink: 0;
+}
+
+.quickstart__step-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.quickstart__step-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+  padding-left: calc(32px + var(--spacing-md));
+}
+
+/* Command block */
+.quickstart__command {
+  display: flex;
+  align-items: center;
+  background-color: #1e1e1e;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  margin-left: calc(32px + var(--spacing-md));
+}
+
+.quickstart__command-content {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin: 0;
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  color: #e5e7eb;
+  background-color: transparent;
+}
+
+.quickstart__command-content code {
+  font-family: inherit;
+  background: none;
+  color: inherit;
+}
+
+/* Copy button in quickstart */
+.quickstart__copy {
+  flex-shrink: 0;
+  margin-right: var(--spacing-sm);
+}
+
+/* Scrollbar styling for command block */
+.quickstart__command-content::-webkit-scrollbar {
+  height: 6px;
+}
+
+.quickstart__command-content::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+.quickstart__command-content::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 3px;
+}
+
+.quickstart__command-content::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .quickstart {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .quickstart__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .quickstart__step-description {
+    padding-left: 0;
+  }
+
+  .quickstart__command {
+    margin-left: 0;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .quickstart__command-content {
+    padding: var(--spacing-md);
+  }
+
+  .quickstart__copy {
+    margin: 0;
+    border-radius: 0;
+    border-top: 1px solid #3d3d3d;
+    justify-content: center;
+    padding: var(--spacing-sm);
+  }
+}
+
+/* Accessibility - reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .quickstart__prerequisites-text a,
+  .quickstart__copy {
+    transition: none;
+  }
+}
