@@ -194,7 +194,111 @@
     <section id="quickstart" class="quickstart" aria-labelledby="quickstart-title">
       <div class="quickstart__container">
         <h2 id="quickstart-title" class="quickstart__title">Quick Start</h2>
-        <!-- Quick start steps to be implemented by Scenario 4 -->
+        <p class="quickstart__subtitle">Get MirDB running in minutes</p>
+
+        <!-- Prerequisites -->
+        <div class="quickstart__prerequisites">
+          <h3 class="quickstart__prerequisites-title">Prerequisites</h3>
+          <p class="quickstart__prerequisites-text">
+            Make sure you have <a href="https://www.rust-lang.org/tools/install" target="_blank" rel="noopener noreferrer">Rust and Cargo installed</a> on your system.
+          </p>
+        </div>
+
+        <!-- Steps -->
+        <ol class="quickstart__steps">
+          <!-- Step 1: Clone -->
+          <li class="quickstart__step">
+            <div class="quickstart__step-header">
+              <span class="quickstart__step-number">1</span>
+              <h3 class="quickstart__step-title">Clone the Repository</h3>
+            </div>
+            <p class="quickstart__step-description">Download the MirDB source code from GitHub.</p>
+            <div class="quickstart__command">
+              <pre class="quickstart__command-content" id="quickstart-cmd-1"><code>git clone https://github.com/yetone/mirdb.git</code></pre>
+              <button
+                class="quickstart__copy code-block__copy"
+                data-copy-target="quickstart-cmd-1"
+                aria-label="Copy clone command to clipboard"
+                type="button"
+              >
+                <span class="code-block__copy-icon code-block__copy-icon--copy" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </span>
+                <span class="code-block__copy-icon code-block__copy-icon--check" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+          </li>
+
+          <!-- Step 2: Run -->
+          <li class="quickstart__step">
+            <div class="quickstart__step-header">
+              <span class="quickstart__step-number">2</span>
+              <h3 class="quickstart__step-title">Build and Run</h3>
+            </div>
+            <p class="quickstart__step-description">Navigate to the project directory and start the server.</p>
+            <div class="quickstart__command">
+              <pre class="quickstart__command-content" id="quickstart-cmd-2"><code>cd mirdb && cargo run</code></pre>
+              <button
+                class="quickstart__copy code-block__copy"
+                data-copy-target="quickstart-cmd-2"
+                aria-label="Copy run command to clipboard"
+                type="button"
+              >
+                <span class="code-block__copy-icon code-block__copy-icon--copy" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </span>
+                <span class="code-block__copy-icon code-block__copy-icon--check" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+          </li>
+
+          <!-- Step 3: Connect -->
+          <li class="quickstart__step">
+            <div class="quickstart__step-header">
+              <span class="quickstart__step-number">3</span>
+              <h3 class="quickstart__step-title">Connect with a Client</h3>
+            </div>
+            <p class="quickstart__step-description">Use any Memcached client to connect to MirDB on the default port.</p>
+            <div class="quickstart__command">
+              <pre class="quickstart__command-content" id="quickstart-cmd-3"><code>telnet localhost 11211</code></pre>
+              <button
+                class="quickstart__copy code-block__copy"
+                data-copy-target="quickstart-cmd-3"
+                aria-label="Copy connect command to clipboard"
+                type="button"
+              >
+                <span class="code-block__copy-icon code-block__copy-icon--copy" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </span>
+                <span class="code-block__copy-icon code-block__copy-icon--check" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+          </li>
+        </ol>
       </div>
     </section>
 
