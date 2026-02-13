@@ -179,7 +179,60 @@
     <section id="status" class="status" aria-labelledby="status-title">
       <div class="status__container">
         <h2 id="status-title" class="status__title">Project Status</h2>
-        <!-- Status checklist to be implemented by Scenario 5 -->
+        <p class="status__description">Track the progress of MirDB's development milestones</p>
+        <ul class="status__list" role="list" aria-label="Feature completion status">
+          <li class="status__item status__item--complete" data-status="complete">
+            <span class="status__icon" aria-hidden="true">
+              <svg class="status__icon-check" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span class="status__text">Tokio with Memcached protocol</span>
+            <span class="status__badge status__badge--complete">Complete</span>
+          </li>
+          <li class="status__item status__item--complete" data-status="complete">
+            <span class="status__icon" aria-hidden="true">
+              <svg class="status__icon-check" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span class="status__text">Memtable with skiplist</span>
+            <span class="status__badge status__badge--complete">Complete</span>
+          </li>
+          <li class="status__item status__item--complete" data-status="complete">
+            <span class="status__icon" aria-hidden="true">
+              <svg class="status__icon-check" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span class="status__text">Minor compaction</span>
+            <span class="status__badge status__badge--complete">Complete</span>
+          </li>
+          <li class="status__item status__item--complete" data-status="complete">
+            <span class="status__icon" aria-hidden="true">
+              <svg class="status__icon-check" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span class="status__text">Major compaction</span>
+            <span class="status__badge status__badge--complete">Complete</span>
+          </li>
+          <li class="status__item status__item--pending" data-status="pending">
+            <span class="status__icon" aria-hidden="true">
+              <svg class="status__icon-pending" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+            </span>
+            <span class="status__text">Raft consensus</span>
+            <span class="status__badge status__badge--pending">In Progress</span>
+          </li>
+        </ul>
+        <div class="status__progress">
+          <div class="status__progress-bar">
+            <div class="status__progress-fill" style="width: 80%;" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="80% complete"></div>
+          </div>
+          <p class="status__progress-text">4 of 5 milestones completed</p>
+        </div>
       </div>
     </section>
   </main>
