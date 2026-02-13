@@ -2,34 +2,81 @@
  * Footer Styles
  * Owner: Scenario 8 - Navigation and Footer
  *
- * Placeholder - will be implemented by Scenario 8
+ * Styles for the footer section containing project links and license information.
  */
 
 .footer {
     background-color: var(--color-surface);
     border-top: 1px solid var(--color-border);
     padding: var(--spacing-xl) var(--spacing-lg);
-    text-align: center;
+    margin-top: var(--spacing-xxl);
 }
 
-.footer__content {
+.footer__container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-md);
+    text-align: center;
 }
 
-.footer__license {
-    color: var(--color-text-secondary);
+.footer__links {
+    display: flex;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .footer__link {
     color: var(--color-primary);
     text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
 }
 
-.footer__link:hover {
+.footer__link:hover,
+.footer__link:focus {
+    color: var(--color-primary-dark);
     text-decoration: underline;
+}
+
+.footer__link:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--border-radius-sm);
+}
+
+.footer__link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.footer__license {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+.footer__copyright {
+    color: var(--color-muted);
+    font-size: var(--font-size-xs);
+    margin-top: var(--spacing-sm);
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .footer__container {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    .footer__license {
+        order: -1;
+    }
 }
