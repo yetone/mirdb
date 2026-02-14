@@ -6,6 +6,15 @@ html {
   scroll-behavior: smooth;
 }
 
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
 body {
   @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+  min-width: 320px;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

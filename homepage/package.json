@@ -2,6 +2,7 @@
   "name": "mirdb-homepage",
   "private": true,
   "version": "0.0.1",
+  "description": "MirDB Homepage - Persistent Key-Value Storage with Memcached Protocol",
   "type": "module",
   "scripts": {
     "dev": "vite",

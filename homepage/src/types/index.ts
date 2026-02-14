@@ -20,3 +20,8 @@ export interface NavLink {
   label: string;
   href: string;
 }
+
+export interface ThemeContextValue {
+  theme: Theme;
+  toggleTheme: () => void;
+}
