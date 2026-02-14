@@ -15,3 +15,4 @@ export { ThemeToggle } from './common/ThemeToggle';
 
 // Section components
 export { Hero } from './sections/Hero';
+export { Features } from './sections/Features';
