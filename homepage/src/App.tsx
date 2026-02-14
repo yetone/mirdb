@@ -4,6 +4,7 @@ import { Footer } from './components/layout/Footer';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Features } from './components/sections/Features';
+import { Roadmap } from './components/sections/Roadmap';
 import { ThemeToggle } from './components/common/ThemeToggle';
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
           <About />
 
           <Features />
+
+          <Roadmap />
         </main>
         <Footer />
       </div>
