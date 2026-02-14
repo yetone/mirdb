@@ -2,19 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  :root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  body {
+    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+    @apply transition-colors duration-200;
+    min-width: 320px;
+    min-height: 100vh;
+  }
 }
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-}
+@layer components {
+  .nav-link {
+    @apply px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600;
+    @apply dark:text-gray-300 dark:hover:text-primary-400;
+    @apply transition-colors duration-150;
+  }
 
-body {
-  @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100;
-  min-width: 320px;
-  min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  .btn-primary {
+    @apply inline-flex items-center px-4 py-2 text-sm font-medium;
+    @apply bg-primary-600 text-white rounded-lg;
+    @apply hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500;
+    @apply transition-colors duration-150;
+  }
+
+  .mobile-menu-btn {
+    @apply p-2 rounded-md text-gray-700 dark:text-gray-300;
+    @apply hover:bg-gray-100 dark:hover:bg-gray-800;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+  }
 }
