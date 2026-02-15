@@ -72,10 +72,11 @@ describe('Home Page', () => {
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 
-  it('renders placeholder for QuickShortenForm', () => {
+  it('renders QuickShortenForm component', () => {
     renderWithRouter('/');
 
-    // Check for placeholder text (Scenario 2 owns the actual form)
-    expect(screen.getByText(/Quick URL shortening form coming soon/i)).toBeInTheDocument();
+    // Check for QuickShortenForm component (integrated by Scenario 2)
+    expect(screen.getByLabelText(/URL to shorten/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Shorten URL/i })).toBeInTheDocument();
   });
 });
