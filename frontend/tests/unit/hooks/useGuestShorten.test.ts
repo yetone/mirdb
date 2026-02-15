@@ -110,7 +110,7 @@ describe('useGuestShorten hook', () => {
     const { result } = renderHook(() => useGuestShorten());
 
     // The hook throws an error, we need to catch it
-    let caughtError: Error | null = null;
+    let caughtError: Error | undefined;
     await act(async () => {
       try {
         await result.current.shortenUrl('https://example.com/path');
@@ -119,8 +119,8 @@ describe('useGuestShorten hook', () => {
       }
     });
 
-    expect(caughtError).not.toBeNull();
-    expect(caughtError?.message).toBe(errorMessage);
+    expect(caughtError).toBeDefined();
+    expect(caughtError!.message).toBe(errorMessage);
     expect(result.current.error).toBe(errorMessage);
     expect(result.current.result).toBeNull();
     expect(result.current.isLoading).toBe(false);

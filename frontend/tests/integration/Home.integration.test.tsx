@@ -6,7 +6,6 @@
  * Expected: User can enter URL, click shorten, see result, copy to clipboard, and form clears for another attempt
  */
 
-import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { QuickShortenForm } from '../../src/components/home/QuickShortenForm';
