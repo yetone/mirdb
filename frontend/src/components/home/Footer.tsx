@@ -38,7 +38,7 @@ export default function Footer({ brandName = 'LinkSnip' }: FooterProps) {
         </div>
       </nav>
       <aside>
-        <p className="text-sm text-base-content/60" data-testid="copyright">
+        <p className="text-sm text-base-content/70" data-testid="copyright">
           Copyright &copy; {currentYear} {brandName}. All rights reserved.
         </p>
       </aside>
