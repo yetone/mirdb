@@ -1,12 +1,14 @@
 /**
  * Navbar Component
  * Added for Scenario 3 - Navigation and Routing
+ * Updated for Scenario 4 - Theme Switching
  *
- * Navigation bar with brand logo and auth links.
+ * Navigation bar with brand logo, auth links, and theme toggle.
  */
 
 import { Link } from 'react-router-dom';
 import { Link2 } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   return (
@@ -18,7 +20,8 @@ export default function Navbar() {
         </Link>
       </div>
 
-      <div className="navbar-end flex items-center gap-4">
+      <div className="navbar-end flex items-center gap-2 lg:gap-4">
+        <ThemeToggle />
         <Link to="/login" className="btn btn-ghost" data-testid="login-link">
           Login
         </Link>

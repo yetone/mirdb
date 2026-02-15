@@ -7,6 +7,24 @@
 
 import { ReactNode } from 'react';
 
+/** Available theme options matching DaisyUI configuration */
+export type Theme = 'light' | 'dark' | 'cyberpunk' | 'synthwave' | 'forest';
+
+/** Available themes array for cycling through themes */
+export const AVAILABLE_THEMES: Theme[] = ['light', 'dark', 'cyberpunk', 'synthwave', 'forest'];
+
+/** Theme store state interface */
+export interface ThemeState {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
+}
+
+/** Props for ThemeToggle component */
+export interface ThemeToggleProps {
+  className?: string;
+}
+
 /** Feature item for the features section */
 export interface Feature {
   icon: ReactNode;
