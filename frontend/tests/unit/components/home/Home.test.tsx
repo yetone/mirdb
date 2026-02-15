@@ -15,7 +15,7 @@ describe('Home Page', () => {
   it('renders the homepage without errors at root path', () => {
     renderWithRouter('/');
 
-    expect(screen.getByTestId('homepage')).toBeInTheDocument();
+    expect(screen.getByTestId('home-page')).toBeInTheDocument();
   });
 
   it('renders the HeroSection component', () => {
@@ -57,7 +57,7 @@ describe('Home Page', () => {
   it('renders all sections in correct order within the homepage', () => {
     renderWithRouter('/');
 
-    const homepage = screen.getByTestId('homepage');
+    const homepage = screen.getByTestId('home-page');
     const main = homepage.querySelector('main');
 
     // Verify main content area exists

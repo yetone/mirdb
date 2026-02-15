@@ -14,6 +14,7 @@
  */
 
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 import HeroSection from '../components/home/HeroSection';
 import FeaturesSection from '../components/home/FeaturesSection';
 import HowItWorksSection from '../components/home/HowItWorksSection';
@@ -34,7 +35,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col" data-testid="homepage">
+    <div className="min-h-screen flex flex-col" data-testid="home-page">
+      <Navbar />
       <main className="flex-1">
         <HeroSection onGetStarted={handleGetStarted} onLearnMore={handleLearnMore} />
 

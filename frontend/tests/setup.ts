@@ -21,3 +21,6 @@ Object.defineProperty(window, 'isSecureContext', {
   value: true,
   writable: true,
 });
+
+// Mock scrollIntoView
+Element.prototype.scrollIntoView = () => {};
