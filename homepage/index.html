@@ -83,6 +83,9 @@
   </script>
 </head>
 <body>
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <!-- Scenario 6: Navigation -->
   <nav class="nav" aria-label="Main navigation">
     <div class="container nav__container">
@@ -97,10 +100,27 @@
         <li><a href="#code-examples">Examples</a></li>
         <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="nav__github">GitHub</a></li>
       </ul>
+      <!-- Mobile menu toggle -->
+      <button class="nav__mobile-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </nav>
 
-  <main>
+  <!-- Mobile menu overlay -->
+  <div id="mobile-menu" class="nav__mobile-menu" aria-hidden="true">
+    <ul class="nav__mobile-menu-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#getting-started">Get Started</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#code-examples">Examples</a></li>
+      <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+  </div>
+
+  <main id="main-content">
     <!-- Scenario 1: Hero -->
     <section id="hero" class="hero" aria-labelledby="hero-heading">
       <div class="container">
@@ -832,6 +852,7 @@ main().catch(console.error);</code></pre>
 
   <!-- Mermaid.js for architecture diagrams - deferred for performance -->
   <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="js/navigation.js"></script>
   <script defer src="js/copy-clipboard.js"></script>
   <script defer src="js/code-tabs.js"></script>
   <script defer src="js/diagrams.js"></script>
