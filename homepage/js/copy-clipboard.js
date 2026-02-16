@@ -12,8 +12,8 @@ function initCopyButtons() {
 
   copyButtons.forEach(function(button) {
     button.addEventListener('click', function() {
-      const targetId = button.getAttribute('data-copy-target');
-      const targetElement = document.getElementById(targetId);
+      const targetSelector = button.getAttribute('data-copy-target');
+      const targetElement = document.querySelector(targetSelector);
 
       if (targetElement) {
         const text = targetElement.textContent || targetElement.innerText;
@@ -72,12 +72,27 @@ function fallbackCopy(text, button) {
  * @param {boolean} success - Whether copy was successful
  */
 function showCopyFeedback(button, success) {
-  var originalText = button.textContent;
-  button.textContent = success ? 'Copied!' : 'Failed';
-  button.classList.add(success ? 'copy-success' : 'copy-error');
+  var copiedClass = button.getAttribute('data-copied-class') || 'getting-started__copy-btn--copied';
+  var feedbackDuration = 2000;
 
-  setTimeout(function() {
-    button.textContent = originalText;
-    button.classList.remove('copy-success', 'copy-error');
-  }, 2000);
+  if (success) {
+    button.classList.add(copiedClass);
+    button.setAttribute('aria-label', 'Copied!');
+
+    setTimeout(function() {
+      button.classList.remove(copiedClass);
+      button.setAttribute('aria-label', 'Copy to clipboard');
+    }, feedbackDuration);
+  } else {
+    button.style.backgroundColor = 'var(--color-error)';
+    button.setAttribute('aria-label', 'Copy failed');
+
+    setTimeout(function() {
+      button.style.backgroundColor = '';
+      button.setAttribute('aria-label', 'Copy to clipboard');
+    }, feedbackDuration);
+  }
 }
+
+// Auto-initialize on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', initCopyButtons);

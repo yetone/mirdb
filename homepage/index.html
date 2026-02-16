@@ -157,13 +157,230 @@
     </section>
 
     <!-- Scenario 3: Getting Started -->
-    <section id="getting-started" class="getting-started" aria-labelledby="getting-started-heading">
+    <section id="getting-started" class="getting-started" aria-labelledby="getting-started-title">
       <div class="container">
-        <div class="section-heading">
-          <h2 id="getting-started-heading">Getting Started</h2>
-          <p>Get MirDB up and running in minutes</p>
+        <header class="getting-started__header">
+          <h2 id="getting-started-title" class="getting-started__title">Getting Started</h2>
+          <p class="getting-started__subtitle">Get MirDB running in under 5 minutes with these simple steps.</p>
+        </header>
+
+        <div class="getting-started__steps">
+          <!-- Step 1: Installation -->
+          <article class="getting-started__step">
+            <header class="getting-started__step-header">
+              <span class="getting-started__step-number" aria-hidden="true">1</span>
+              <h3 class="getting-started__step-title">Install MirDB</h3>
+            </header>
+            <p class="getting-started__description">
+              Install the MirDB server using Cargo, Rust's package manager. Make sure you have
+              <a href="https://rustup.rs/" target="_blank" rel="noopener">Rust installed</a> first.
+            </p>
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <pre><code id="install-command" class="language-bash"><span class="token-prompt">$ </span><span class="token-command">cargo install mirdb-server</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#install-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Step 2: Start the Server -->
+          <article class="getting-started__step">
+            <header class="getting-started__step-header">
+              <span class="getting-started__step-number" aria-hidden="true">2</span>
+              <h3 class="getting-started__step-title">Start the Server</h3>
+            </header>
+            <p class="getting-started__description">
+              Run the MirDB server with default configuration. It will listen on port 12333 by default.
+            </p>
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <pre><code id="start-command" class="language-bash"><span class="token-prompt">$ </span><span class="token-command">mirdb-server</span>
+
+<span class="token-output">Listening on: 0.0.0.0:12333
+Data directory: /tmp/mirdb
+Memtable max size: 4MB
+SSTable max size: 100MB
+Server ready to accept connections...</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#start-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Step 3: Basic Usage -->
+          <article class="getting-started__step">
+            <header class="getting-started__step-header">
+              <span class="getting-started__step-number" aria-hidden="true">3</span>
+              <h3 class="getting-started__step-title">Basic Usage</h3>
+            </header>
+            <p class="getting-started__description">
+              Connect to MirDB using telnet or netcat and start using Memcached commands.
+              MirDB supports the standard Memcached text protocol.
+            </p>
+
+            <!-- Connect Command -->
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Connect</span>
+                </div>
+                <pre><code id="connect-command" class="language-bash"><span class="token-prompt">$ </span><span class="token-command">telnet localhost 12333</span>
+<span class="token-comment"># or use netcat:</span>
+<span class="token-prompt">$ </span><span class="token-command">nc localhost 12333</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#connect-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- SET Command -->
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Set a Key</span>
+                </div>
+                <pre><code id="set-command" class="language-bash"><span class="token-comment"># Format: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;\r\n&lt;value&gt;\r\n</span>
+<span class="token-command">set mykey 0 0 5</span>
+<span class="token-string">hello</span>
+<span class="token-output response">STORED</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#set-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- GET Command -->
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Get a Key</span>
+                </div>
+                <pre><code id="get-command" class="language-bash"><span class="token-command">get mykey</span>
+<span class="token-output response">VALUE mykey 0 5
+hello
+END</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#get-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- DELETE Command -->
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Delete a Key</span>
+                </div>
+                <pre><code id="delete-command" class="language-bash"><span class="token-command">delete mykey</span>
+<span class="token-output response">DELETED</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#delete-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Step 4: Configuration -->
+          <article class="getting-started__step">
+            <header class="getting-started__step-header">
+              <span class="getting-started__step-number" aria-hidden="true">4</span>
+              <h3 class="getting-started__step-title">Default Configuration</h3>
+            </header>
+            <p class="getting-started__description">
+              MirDB runs with sensible defaults. Here are the default configuration values:
+            </p>
+            <div class="getting-started__config">
+              <table class="getting-started__config-table">
+                <thead>
+                  <tr>
+                    <th>Setting</th>
+                    <th>Default Value</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>port</code></td>
+                    <td><code>12333</code></td>
+                    <td>Server listening port</td>
+                  </tr>
+                  <tr>
+                    <td><code>data_dir</code></td>
+                    <td><code>/tmp/mirdb</code></td>
+                    <td>Data storage directory</td>
+                  </tr>
+                  <tr>
+                    <td><code>memtable_size</code></td>
+                    <td><code>4MB</code></td>
+                    <td>Maximum memtable size before flush</td>
+                  </tr>
+                  <tr>
+                    <td><code>sstable_size</code></td>
+                    <td><code>100MB</code></td>
+                    <td>Maximum SSTable file size</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="getting-started__code-wrapper" style="margin-top: var(--spacing-lg);">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Custom Configuration</span>
+                </div>
+                <pre><code id="config-command" class="language-bash"><span class="token-comment"># Run with custom options</span>
+<span class="token-prompt">$ </span><span class="token-command">mirdb-server --port 11211 --data-dir /var/lib/mirdb</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#config-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </article>
         </div>
-        <!-- Content to be added by Scenario 3 -->
       </div>
     </section>
 

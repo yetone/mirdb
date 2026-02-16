@@ -2,5 +2,292 @@
  * Getting Started Section Styles
  * Owner: Scenario 3 - Getting Started Section
  *
- * Placeholder file - to be implemented by Scenario 3
+ * Styles for installation instructions, code blocks, and copy buttons.
  */
+
+.getting-started {
+  background-color: var(--color-surface);
+  padding: var(--spacing-3xl) 0;
+}
+
+.getting-started__header {
+  text-align: center;
+  margin-bottom: var(--spacing-3xl);
+}
+
+.getting-started__title {
+  font-size: var(--font-size-3xl);
+  color: var(--color-text-heading);
+  margin-bottom: var(--spacing-md);
+}
+
+.getting-started__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.getting-started__steps {
+  display: grid;
+  gap: var(--spacing-2xl);
+}
+
+.getting-started__step {
+  background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+}
+
+.getting-started__step-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.getting-started__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.getting-started__step-title {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-heading);
+  margin: 0;
+}
+
+.getting-started__description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.7;
+}
+
+/* Code block container */
+.getting-started__code-wrapper {
+  position: relative;
+  margin-bottom: var(--spacing-md);
+}
+
+.getting-started__code-wrapper:last-child {
+  margin-bottom: 0;
+}
+
+/* Code block styling */
+.getting-started__code {
+  position: relative;
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.getting-started__code pre {
+  margin: 0;
+  padding: var(--spacing-lg);
+  padding-right: calc(var(--spacing-lg) + 60px);
+  overflow-x: auto;
+  line-height: 1.6;
+  background: transparent;
+}
+
+.getting-started__code code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-code-text);
+  background: transparent;
+  padding: 0;
+  white-space: pre;
+}
+
+/* Code block header with language label */
+.getting-started__code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.getting-started__code-lang {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* Copy button */
+.getting-started__copy-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  z-index: 1;
+}
+
+.getting-started__copy-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-heading);
+  border-color: var(--color-primary);
+}
+
+.getting-started__copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.getting-started__copy-btn--copied {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: var(--color-text-heading);
+}
+
+.getting-started__copy-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Copy icon states */
+.getting-started__copy-btn .copy-icon {
+  display: block;
+}
+
+.getting-started__copy-btn .check-icon {
+  display: none;
+}
+
+.getting-started__copy-btn--copied .copy-icon {
+  display: none;
+}
+
+.getting-started__copy-btn--copied .check-icon {
+  display: block;
+}
+
+/* Syntax highlighting */
+.getting-started__code .token-keyword {
+  color: var(--color-code-keyword);
+}
+
+.getting-started__code .token-string {
+  color: var(--color-code-string);
+}
+
+.getting-started__code .token-comment {
+  color: var(--color-code-comment);
+  font-style: italic;
+}
+
+.getting-started__code .token-number {
+  color: var(--color-code-number);
+}
+
+.getting-started__code .token-function {
+  color: var(--color-code-function);
+}
+
+.getting-started__code .token-command {
+  color: var(--color-secondary);
+}
+
+.getting-started__code .token-output {
+  color: var(--color-text-muted);
+}
+
+.getting-started__code .token-prompt {
+  color: var(--color-primary);
+  user-select: none;
+}
+
+/* Configuration table */
+.getting-started__config {
+  margin-top: var(--spacing-lg);
+}
+
+.getting-started__config-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.getting-started__config-table th,
+.getting-started__config-table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.getting-started__config-table th {
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.05em;
+}
+
+.getting-started__config-table td {
+  color: var(--color-text);
+}
+
+.getting-started__config-table td code {
+  background-color: var(--color-code-bg);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}
+
+/* Response formatting in code blocks */
+.getting-started__code .response {
+  opacity: 0.8;
+}
+
+/* Mobile responsiveness for code blocks */
+@media (max-width: 767px) {
+  .getting-started__step {
+    padding: var(--spacing-lg);
+  }
+
+  .getting-started__code pre {
+    padding: var(--spacing-md);
+    padding-right: calc(var(--spacing-md) + 50px);
+    font-size: var(--font-size-xs);
+  }
+
+  .getting-started__copy-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .getting-started__copy-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .getting-started__config-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
