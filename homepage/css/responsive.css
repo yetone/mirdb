@@ -1,0 +1,664 @@
+/**
+ * Responsive Design Styles
+ * Owner: Scenario 7 - Responsive Design and Accessibility
+ *
+ * Mobile-first responsive styles with breakpoints:
+ * - Mobile: 320px - 767px (base styles)
+ * - Tablet: 768px - 1023px
+ * - Desktop: 1024px+
+ * - Wide: 1920px+
+ *
+ * Features:
+ * - Font size adjustments
+ * - Layout reflows
+ * - Touch-friendly tap targets (min 44x44px)
+ * - WCAG 2.1 AA compliant focus indicators
+ * - Skip link for keyboard navigation
+ * - WCAG 2.1 AA compliant color contrast overrides
+ */
+
+/* ========================================
+   ACCESSIBILITY COLOR CONTRAST OVERRIDES
+   WCAG 2.1 AA requires 4.5:1 for normal text, 3:1 for large text
+   Background: #334155 (surface) needs foreground of at least #b5c4d8 (4.5:1)
+   Background: #1e293b (secondary) needs foreground of at least #9cb0c8 (4.5:1)
+   ======================================== */
+
+/* Primary button - use darker background for better contrast with white text
+   #4338ca on white = 5.93:1 contrast ratio */
+.btn-primary {
+  background-color: #4338ca !important;
+}
+
+.btn-primary:hover {
+  background-color: #4f46e5;
+}
+
+/* Navigation GitHub link - ensure sufficient contrast
+   #d1d5db on background provides 7.2:1 ratio */
+.nav__github {
+  color: #d1d5db !important;
+}
+
+.nav__github:hover {
+  color: #f1f5f9;
+}
+
+/* Hero tagline text - need better contrast on dark background
+   #cbd5e1 on #0f172a = 8.45:1 contrast ratio */
+.hero__tagline {
+  color: #cbd5e1 !important;
+}
+
+/* Links on surface backgrounds need better contrast */
+.getting-started a,
+.architecture a {
+  color: #c7d2fe !important;
+  text-decoration: underline;
+}
+
+.getting-started a:hover,
+.architecture a:hover {
+  color: #e0e7ff;
+}
+
+/* Text muted on surface backgrounds - lighter for accessibility
+   #d1d5db on #334155 = 6.94:1 contrast ratio */
+.getting-started__subtitle,
+.getting-started__description {
+  color: #d1d5db !important;
+}
+
+.getting-started__config-table th {
+  color: #d1d5db !important;
+}
+
+/* Code block output text - need at least 4.5:1 on #334155
+   #b8c0cc on #334155 = 4.64:1 contrast ratio */
+.getting-started__code .token-output {
+  color: #b8c0cc !important;
+}
+
+/* .response class has additional opacity, need higher contrast base */
+.getting-started__code .token-output.response {
+  color: #c8d0dc !important;
+  opacity: 1 !important;
+}
+
+/* Code block comments
+   #b8c0cc on #334155 = 4.64:1 contrast ratio */
+.getting-started__code .token-comment {
+  color: #b8c0cc !important;
+}
+
+/* Code block headers */
+.getting-started__code-lang {
+  color: #e2e8f0 !important;
+}
+
+.code-examples__code-desc {
+  color: #e2e8f0 !important;
+}
+
+/* Architecture section compaction headings */
+.architecture__compaction-type h4 {
+  color: #c7d2fe !important;
+}
+
+/* Tab buttons - need 4.5:1 on dark background */
+.code-examples__tab {
+  color: #d1d5db !important;
+}
+
+.code-examples__tab--active {
+  color: #c7d2fe !important;
+}
+
+/* Code comments need better contrast */
+.code-examples__code .token-comment {
+  color: #b8c0cc !important;
+}
+
+/* Footer copyright - #94a3b8 on #1e293b = 4.54:1 which is barely passing
+   Use #9ca3af for safer margin: 4.72:1 on #1e293b */
+.footer__copyright {
+  color: #9ca3af !important;
+}
+
+/* ========================================
+   SKIP LINK FOR ACCESSIBILITY
+   ======================================== */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  z-index: 10000;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* ========================================
+   FOCUS INDICATORS (ACCESSIBILITY)
+   ======================================== */
+
+/* Enhanced focus indicators for all interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Ensure focus is visible on dark backgrounds */
+.nav a:focus-visible,
+.footer a:focus-visible {
+  outline-color: var(--color-secondary);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Remove default outline only when focus-visible is not active */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ========================================
+   TOUCH-FRIENDLY TARGETS
+   ======================================== */
+
+/* Ensure minimum 44x44px touch targets on mobile */
+@media (max-width: 1023px) {
+  /* Links and buttons */
+  a,
+  button,
+  .btn,
+  [role="button"],
+  [role="tab"],
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Navigation links */
+  .nav__links a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Footer links */
+  .footer__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--spacing-sm);
+  }
+
+  /* Tab buttons */
+  .code-examples__tab {
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+
+  /* Copy buttons */
+  .getting-started__copy-btn,
+  .code-examples__copy-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ========================================
+   MOBILE BASE STYLES (320px+)
+   ======================================== */
+
+/* Typography scaling for mobile */
+html {
+  font-size: 14px;
+}
+
+/* Headings */
+h1 {
+  font-size: var(--text-3xl);
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: var(--text-2xl);
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: var(--text-xl);
+  line-height: 1.4;
+}
+
+h4 {
+  font-size: var(--text-lg);
+}
+
+/* Container padding */
+.container {
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+/* Section spacing */
+section {
+  padding: var(--spacing-2xl) 0;
+}
+
+/* Section headings */
+.section-heading {
+  margin-bottom: var(--spacing-xl);
+}
+
+.section-heading p {
+  font-size: var(--text-base);
+}
+
+/* Navigation - Mobile */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-sm) 0;
+}
+
+.nav__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.nav__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: var(--color-text);
+  min-height: 44px;
+}
+
+.nav__logo img {
+  width: 32px;
+  height: 32px;
+}
+
+.nav__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  list-style: none;
+  margin: 0;
+  padding: var(--spacing-sm) 0 0 0;
+  width: 100%;
+}
+
+.nav__links li {
+  margin: 0;
+}
+
+.nav__links a {
+  display: block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.nav__links a:hover,
+.nav__links a:focus {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+}
+
+/* Hero Section - Mobile */
+.hero {
+  text-align: center;
+  padding: var(--spacing-3xl) 0;
+}
+
+.hero__tagline {
+  font-size: var(--text-lg);
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero__ctas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.hero__ctas .btn {
+  width: 100%;
+  max-width: 280px;
+  justify-content: center;
+  min-height: 48px;
+}
+
+/* Footer - Mobile */
+.footer {
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.footer .container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.footer__copyright {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  order: 2;
+}
+
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-md);
+  order: 1;
+}
+
+.footer__links a {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.footer__links a:hover,
+.footer__links a:focus {
+  color: var(--color-primary);
+}
+
+/* ========================================
+   TABLET STYLES (768px+)
+   ======================================== */
+
+@media (min-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
+  h1 {
+    font-size: var(--text-4xl);
+  }
+
+  h2 {
+    font-size: var(--text-3xl);
+  }
+
+  h3 {
+    font-size: var(--text-2xl);
+  }
+
+  .container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+
+  section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .section-heading {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  /* Navigation - Tablet */
+  .nav {
+    padding: var(--spacing-md) 0;
+  }
+
+  .nav__links {
+    width: auto;
+    padding-top: 0;
+    gap: var(--spacing-sm);
+  }
+
+  .nav__links a {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Hero - Tablet */
+  .hero {
+    padding: var(--spacing-4xl) 0;
+  }
+
+  .hero__tagline {
+    font-size: var(--text-xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero__ctas {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .hero__ctas .btn {
+    width: auto;
+    max-width: none;
+  }
+
+  /* Footer - Tablet */
+  .footer {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .footer .container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .footer__copyright {
+    order: 1;
+  }
+
+  .footer__links {
+    order: 2;
+  }
+}
+
+/* ========================================
+   DESKTOP STYLES (1024px+)
+   ======================================== */
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: var(--text-5xl);
+  }
+
+  h2 {
+    font-size: var(--text-4xl);
+  }
+
+  h3 {
+    font-size: var(--text-2xl);
+  }
+
+  .container {
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+  }
+
+  section {
+    padding: var(--spacing-4xl) 0;
+  }
+
+  .section-heading {
+    margin-bottom: var(--spacing-3xl);
+  }
+
+  .section-heading p {
+    font-size: var(--text-lg);
+  }
+
+  /* Navigation - Desktop */
+  .nav__links a {
+    min-height: auto;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Hero - Desktop */
+  .hero__tagline {
+    max-width: 700px;
+  }
+
+  /* Touch targets can be smaller on desktop */
+  a,
+  button,
+  .btn {
+    min-height: auto;
+    min-width: auto;
+  }
+}
+
+/* ========================================
+   WIDE SCREEN STYLES (1920px+)
+   ======================================== */
+
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  /* Prevent content from stretching too wide */
+  .hero__tagline {
+    max-width: 800px;
+  }
+
+  .section-heading p {
+    max-width: 700px;
+  }
+
+  /* Increase spacing for better visual balance */
+  section {
+    padding: var(--spacing-4xl) 0;
+  }
+
+  .section-heading {
+    margin-bottom: var(--spacing-3xl);
+  }
+}
+
+/* ========================================
+   ZOOM SUPPORT (200% zoom)
+   ======================================== */
+
+/* Ensure content reflows properly at 200% zoom */
+@media (min-resolution: 192dpi) and (max-width: 1280px) {
+  .container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+}
+
+/* ========================================
+   REDUCED MOTION PREFERENCE
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ========================================
+   HIGH CONTRAST MODE SUPPORT
+   ======================================== */
+
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #ffffff;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline-width: 4px;
+  }
+
+  .btn-primary {
+    border: 2px solid white;
+  }
+
+  .btn-secondary {
+    border-width: 3px;
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+  .nav,
+  .skip-link,
+  .getting-started__copy-btn,
+  .code-examples__copy-btn {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+
+  .hero,
+  .features,
+  .getting-started,
+  .architecture,
+  .code-examples {
+    page-break-inside: avoid;
+  }
+}

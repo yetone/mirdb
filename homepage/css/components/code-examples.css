@@ -1,0 +1,299 @@
+/**
+ * Code Examples Section Styles
+ * Owner: Scenario 5 - Code Examples Section
+ *
+ * Styles for language tabs, code panels, and copy functionality.
+ */
+
+.code-examples {
+  background-color: var(--color-background);
+  padding: var(--spacing-4xl) 0;
+}
+
+/* Tabs wrapper for mobile scrolling */
+.code-examples__tabs-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: var(--spacing-xl);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.code-examples__tabs-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.code-examples__tabs-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.code-examples__tabs-wrapper::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 3px;
+}
+
+/* Tab list container */
+.code-examples__tabs {
+  display: flex;
+  gap: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  min-width: max-content;
+}
+
+/* Individual tab button */
+.code-examples__tab {
+  position: relative;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.code-examples__tab:hover {
+  color: var(--color-text);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.code-examples__tab:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.code-examples__tab:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.code-examples__tab:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* Active tab state */
+.code-examples__tab--active {
+  color: var(--color-primary);
+}
+
+.code-examples__tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+}
+
+/* Tab panels container */
+.code-examples__panels {
+  position: relative;
+}
+
+/* Individual panel */
+.code-examples__panel {
+  display: none;
+  animation: fadeIn var(--transition-fast);
+}
+
+.code-examples__panel--active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Code block container */
+.code-examples__code {
+  position: relative;
+  background-color: var(--color-background-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+/* Code block header */
+.code-examples__code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.code-examples__code-lang {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.code-examples__code-desc {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* Code content */
+.code-examples__code pre {
+  margin: 0;
+  padding: var(--spacing-lg);
+  padding-right: calc(var(--spacing-lg) + 60px);
+  overflow-x: auto;
+  line-height: 1.6;
+  background: transparent;
+}
+
+.code-examples__code code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  background: transparent;
+  padding: 0;
+  white-space: pre;
+}
+
+/* Copy button */
+.code-examples__copy-btn {
+  position: absolute;
+  top: calc(var(--spacing-sm) + 38px);
+  right: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  z-index: 1;
+}
+
+.code-examples__copy-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  border-color: var(--color-primary);
+}
+
+.code-examples__copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.code-examples__copy-btn--copied {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: var(--color-text);
+}
+
+.code-examples__copy-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Copy icon states */
+.code-examples__copy-btn .copy-icon {
+  display: block;
+}
+
+.code-examples__copy-btn .check-icon {
+  display: none;
+}
+
+.code-examples__copy-btn--copied .copy-icon {
+  display: none;
+}
+
+.code-examples__copy-btn--copied .check-icon {
+  display: block;
+}
+
+/* Syntax highlighting tokens */
+.code-examples__code .token-keyword {
+  color: #c678dd;
+}
+
+.code-examples__code .token-string {
+  color: #98c379;
+}
+
+.code-examples__code .token-comment {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.code-examples__code .token-number {
+  color: #d19a66;
+}
+
+.code-examples__code .token-function {
+  color: #61afef;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .code-examples {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .code-examples__tabs {
+    gap: 0;
+  }
+
+  .code-examples__tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--text-sm);
+  }
+
+  .code-examples__code-header {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .code-examples__code pre {
+    padding: var(--spacing-md);
+    padding-right: calc(var(--spacing-md) + 50px);
+  }
+
+  .code-examples__code code {
+    font-size: var(--text-xs);
+  }
+
+  .code-examples__copy-btn {
+    top: calc(var(--spacing-sm) + 32px);
+    right: var(--spacing-sm);
+    width: 36px;
+    height: 36px;
+  }
+
+  .code-examples__copy-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Extra small screens - stack tabs if needed */
+@media (max-width: 479px) {
+  .code-examples__tabs-wrapper {
+    margin-left: calc(var(--spacing-md) * -1);
+    margin-right: calc(var(--spacing-md) * -1);
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+}

@@ -1,0 +1,101 @@
+/**
+ * Footer Styles
+ * Owner: Scenario 6 - Navigation and Footer
+ *
+ * Implements footer layout with links and copyright.
+ */
+
+.footer {
+  background-color: var(--color-background-secondary);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-2xl) 0;
+  margin-top: auto;
+}
+
+.footer .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+/* Footer links */
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-lg);
+}
+
+.footer__links a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: var(--spacing-sm);
+  transition: color var(--transition-fast);
+}
+
+.footer__links a:hover,
+.footer__links a:focus {
+  color: var(--color-primary);
+}
+
+/* External link indicator */
+.footer__links a[target="_blank"]::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: var(--spacing-xs);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: middle;
+  opacity: 0.7;
+}
+
+.footer__links a[target="_blank"]:hover::after {
+  opacity: 1;
+}
+
+/* Copyright text */
+.footer__copyright {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+/* Focus styles for accessibility */
+.footer__links a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+  .footer .container {
+    text-align: center;
+  }
+
+  .footer__links {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .footer__links a {
+    display: block;
+  }
+}
+
+/* Desktop layout with row alignment */
+@media (min-width: 768px) {
+  .footer .container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .footer__copyright {
+    order: -1;
+  }
+}

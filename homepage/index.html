@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol. Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture.">
+  <meta name="keywords" content="MirDB, key-value store, memcached, persistent storage, LSM tree, Rust, database">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="MirDB Team">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mirdb.io/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mirdb.io/">
+  <meta property="og:image" content="https://mirdb.io/assets/images/og-image.png">
+  <meta property="og:site_name" content="MirDB">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
+  <meta name="twitter:description" content="Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture.">
+  <meta name="twitter:image" content="https://mirdb.io/assets/images/og-image.png">
+
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+
+  <!-- Preconnect to external resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <!-- Critical CSS inline for faster first paint -->
+  <style>
+    :root{--color-primary:#6366f1;--color-primary-dark:#4f46e5;--color-secondary:#22c55e;--color-background:#0f172a;--color-surface:#1e293b;--color-text:#f8fafc;--color-text-muted:#94a3b8;--font-heading:'Inter',system-ui,sans-serif;--font-body:'Inter',system-ui,sans-serif;--font-mono:'Fira Code',monospace;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:1.5rem;--spacing-xl:2rem;--spacing-2xl:3rem;--spacing-3xl:4rem}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font-body);background-color:var(--color-background);color:var(--color-text);line-height:1.6}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 var(--spacing-lg)}.hero{min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:var(--spacing-3xl) 0}.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:700;line-height:1.2;margin-bottom:var(--spacing-lg)}.hero__tagline{font-size:clamp(1rem,2.5vw,1.25rem);color:var(--color-text-muted);max-width:700px;margin:0 auto var(--spacing-xl)}.btn{display:inline-flex;align-items:center;padding:var(--spacing-md) var(--spacing-xl);border-radius:0.5rem;font-weight:600;text-decoration:none;transition:all 0.2s}.btn-primary{background:var(--color-primary);color:white}.btn-secondary{background:transparent;border:2px solid var(--color-text-muted);color:var(--color-text)}.nav{position:sticky;top:0;z-index:100;background:rgba(15,23,42,0.95);backdrop-filter:blur(10px);padding:var(--spacing-md) 0}
+  </style>
+
+  <!-- Stylesheet loaded with media hint for non-blocking -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Google Fonts with display=swap for better performance -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "MirDB",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux, macOS, Windows",
+    "description": "A persistent key-value store with Memcached protocol. Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture.",
+    "url": "https://mirdb.io/",
+    "downloadUrl": "https://github.com/yetone/mirdb",
+    "softwareVersion": "1.0.0",
+    "author": {
+      "@type": "Organization",
+      "name": "MirDB Team",
+      "url": "https://github.com/yetone/mirdb"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Memcached protocol compatibility",
+      "Persistent storage with LSM tree architecture",
+      "High-performance Skip-list memtable",
+      "Write-Ahead Log for crash recovery",
+      "Minor and major compaction support"
+    ],
+    "programmingLanguage": "Rust",
+    "license": "https://opensource.org/licenses/MIT"
+  }
+  </script>
+</head>
+<body>
+  <!-- Skip link for keyboard navigation - Scenario 7: Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Scenario 6: Navigation -->
+  <header role="banner">
+    <nav class="nav" aria-label="Main navigation">
+    <div class="container nav__container">
+      <a href="#" class="nav__logo" aria-label="MirDB Home">
+        <img src="assets/images/logo.svg" alt="" aria-hidden="true" width="40" height="40">
+        <span>MirDB</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#getting-started">Get Started</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#code-examples">Examples</a></li>
+        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="nav__github">GitHub</a></li>
+      </ul>
+      <!-- Mobile menu toggle -->
+      <button class="nav__mobile-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+  </header>
+
+  <!-- Mobile menu overlay -->
+  <div id="mobile-menu" class="nav__mobile-menu" aria-hidden="true">
+    <ul class="nav__mobile-menu-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#getting-started">Get Started</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#code-examples">Examples</a></li>
+      <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+  </div>
+
+  <main id="main-content" role="main" tabindex="-1">
+    <!-- Scenario 1: Hero -->
+    <section id="hero" class="hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <h1 id="hero-heading">A Persistent Key-Value Store with Memcached Protocol</h1>
+        <p class="hero__tagline">Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture</p>
+        <div class="hero__ctas">
+          <a href="#getting-started" class="btn btn-primary hero__cta-primary">Get Started</a>
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary hero__cta-secondary">
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenario 2: Features -->
+    <section id="features" class="features" aria-labelledby="features-heading">
+      <div class="container">
+        <div class="section-heading">
+          <h2 id="features-heading">Key Features</h2>
+          <p>Built for performance, reliability, and seamless integration with existing infrastructure</p>
+        </div>
+
+        <div class="features__grid">
+          <!-- Feature 1: Memcached Protocol -->
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/>
+                <path d="M6 10h.01"/>
+                <path d="M10 10h.01"/>
+                <path d="M14 10h4"/>
+                <path d="M6 14h.01"/>
+                <path d="M10 14h.01"/>
+                <path d="M14 14h4"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Memcached Protocol</h3>
+            <p class="feature-card__description">Full compatibility with the standard memcached text protocol. Use your existing memcached clients without any code changes.</p>
+          </article>
+
+          <!-- Feature 2: Persistent Storage -->
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M3 5v14a9 3 0 0 0 18 0V5"/>
+                <path d="M3 12a9 3 0 0 0 18 0"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Persistent Storage</h3>
+            <p class="feature-card__description">Data survives restarts with LSM tree storage architecture. Your data is durably stored in SSTables on disk.</p>
+          </article>
+
+          <!-- Feature 3: High Performance -->
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">High Performance</h3>
+            <p class="feature-card__description">Skip-list memtable provides O(log n) operations for blazing fast reads and writes with efficient memory usage.</p>
+          </article>
+
+          <!-- Feature 4: Crash Recovery -->
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                <path d="M12 6v6l4 2"/>
+                <path d="M2 12h4"/>
+                <path d="M18 12h4"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Crash Recovery</h3>
+            <p class="feature-card__description">Write-Ahead Log (WAL) ensures data durability. Recover from unexpected shutdowns without data loss.</p>
+          </article>
+
+          <!-- Feature 5: Efficient Compaction -->
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="5" rx="1"/>
+                <rect x="4" y="11" width="16" height="5" rx="1"/>
+                <rect x="6" y="18" width="12" height="4" rx="1"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Efficient Compaction</h3>
+            <p class="feature-card__description">Minor and major compaction keeps your storage optimized. Automatic background processes maintain read performance.</p>
+          </article>
+
+          <!-- Feature 6: Distributed Ready -->
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="5" r="3"/>
+                <circle cx="5" cy="19" r="3"/>
+                <circle cx="19" cy="19" r="3"/>
+                <path d="M12 8v4"/>
+                <path d="M8.5 14.5l-2 2.5"/>
+                <path d="M15.5 14.5l2 2.5"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Distributed Ready</h3>
+            <p class="feature-card__description">Designed with distributed operation in mind. Raft consensus support planned for high availability deployments.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenario 3: Getting Started -->
+    <section id="getting-started" class="getting-started" aria-labelledby="getting-started-title">
+      <div class="container">
+        <header class="getting-started__header">
+          <h2 id="getting-started-title" class="getting-started__title">Getting Started</h2>
+          <p class="getting-started__subtitle">Get MirDB running in under 5 minutes with these simple steps.</p>
+        </header>
+
+        <div class="getting-started__steps">
+          <!-- Step 1: Installation -->
+          <article class="getting-started__step">
+            <header class="getting-started__step-header">
+              <span class="getting-started__step-number" aria-hidden="true">1</span>
+              <h3 class="getting-started__step-title">Install MirDB</h3>
+            </header>
+            <p class="getting-started__description">
+              Install the MirDB server using Cargo, Rust's package manager. Make sure you have
+              <a href="https://rustup.rs/" target="_blank" rel="noopener noreferrer">Rust installed</a> first.
+            </p>
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <pre><code id="install-command" class="language-bash"><span class="token-prompt">$ </span><span class="token-command">cargo install mirdb-server</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#install-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Step 2: Start the Server -->
+          <article class="getting-started__step">
+            <header class="getting-started__step-header">
+              <span class="getting-started__step-number" aria-hidden="true">2</span>
+              <h3 class="getting-started__step-title">Start the Server</h3>
+            </header>
+            <p class="getting-started__description">
+              Run the MirDB server with default configuration. It will listen on port 12333 by default.
+            </p>
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <pre><code id="start-command" class="language-bash"><span class="token-prompt">$ </span><span class="token-command">mirdb-server</span>
+
+<span class="token-output">Listening on: 0.0.0.0:12333
+Data directory: /tmp/mirdb
+Memtable max size: 4MB
+SSTable max size: 100MB
+Server ready to accept connections...</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#start-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Step 3: Basic Usage -->
+          <article class="getting-started__step">
+            <header class="getting-started__step-header">
+              <span class="getting-started__step-number" aria-hidden="true">3</span>
+              <h3 class="getting-started__step-title">Basic Usage</h3>
+            </header>
+            <p class="getting-started__description">
+              Connect to MirDB using telnet or netcat and start using Memcached commands.
+              MirDB supports the standard Memcached text protocol.
+            </p>
+
+            <!-- Connect Command -->
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Connect</span>
+                </div>
+                <pre><code id="connect-command" class="language-bash"><span class="token-prompt">$ </span><span class="token-command">telnet localhost 12333</span>
+<span class="token-comment"># or use netcat:</span>
+<span class="token-prompt">$ </span><span class="token-command">nc localhost 12333</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#connect-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- SET Command -->
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Set a Key</span>
+                </div>
+                <pre><code id="set-command" class="language-bash"><span class="token-comment"># Format: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;\r\n&lt;value&gt;\r\n</span>
+<span class="token-command">set mykey 0 0 5</span>
+<span class="token-string">hello</span>
+<span class="token-output response">STORED</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#set-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- GET Command -->
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Get a Key</span>
+                </div>
+                <pre><code id="get-command" class="language-bash"><span class="token-command">get mykey</span>
+<span class="token-output response">VALUE mykey 0 5
+hello
+END</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#get-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- DELETE Command -->
+            <div class="getting-started__code-wrapper">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Delete a Key</span>
+                </div>
+                <pre><code id="delete-command" class="language-bash"><span class="token-command">delete mykey</span>
+<span class="token-output response">DELETED</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#delete-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Step 4: Configuration -->
+          <article class="getting-started__step">
+            <header class="getting-started__step-header">
+              <span class="getting-started__step-number" aria-hidden="true">4</span>
+              <h3 class="getting-started__step-title">Default Configuration</h3>
+            </header>
+            <p class="getting-started__description">
+              MirDB runs with sensible defaults. Here are the default configuration values:
+            </p>
+            <div class="getting-started__config">
+              <table class="getting-started__config-table">
+                <thead>
+                  <tr>
+                    <th>Setting</th>
+                    <th>Default Value</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>port</code></td>
+                    <td><code>12333</code></td>
+                    <td>Server listening port</td>
+                  </tr>
+                  <tr>
+                    <td><code>data_dir</code></td>
+                    <td><code>/tmp/mirdb</code></td>
+                    <td>Data storage directory</td>
+                  </tr>
+                  <tr>
+                    <td><code>memtable_size</code></td>
+                    <td><code>4MB</code></td>
+                    <td>Maximum memtable size before flush</td>
+                  </tr>
+                  <tr>
+                    <td><code>sstable_size</code></td>
+                    <td><code>100MB</code></td>
+                    <td>Maximum SSTable file size</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="getting-started__code-wrapper" style="margin-top: var(--spacing-lg);">
+              <div class="getting-started__code">
+                <div class="getting-started__code-header">
+                  <span class="getting-started__code-lang">Custom Configuration</span>
+                </div>
+                <pre><code id="config-command" class="language-bash"><span class="token-comment"># Run with custom options</span>
+<span class="token-prompt">$ </span><span class="token-command">mirdb-server --port 11211 --data-dir /var/lib/mirdb</span></code></pre>
+                <button class="getting-started__copy-btn" data-copy-target="#config-command" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenario 4: Architecture -->
+    <section id="architecture" class="architecture" aria-labelledby="architecture-heading">
+      <div class="container">
+        <div class="section-heading">
+          <h2 id="architecture-heading">Architecture</h2>
+          <p>Understanding MirDB's LSM tree design</p>
+        </div>
+
+        <!-- LSM Tree Overview -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">LSM Tree Data Flow</h3>
+          <p class="architecture__description">
+            MirDB uses a Log-Structured Merge-tree (LSM tree) architecture for efficient writes and reads.
+            Data flows from memory to disk through multiple levels, optimizing for both performance and durability.
+          </p>
+          <div class="architecture__diagram" data-diagram="lsm-tree">
+            <pre class="mermaid" aria-label="LSM Tree Architecture Diagram">
+flowchart TB
+    subgraph Memory["Memory Layer"]
+        C[Client Request] --> M[Memtable<br/>Skip-list]
+        C --> W[Write-Ahead Log<br/>WAL]
+    end
+
+    subgraph Disk["Disk Storage"]
+        M -->|Flush| L0[Level 0<br/>SSTables]
+        L0 -->|Minor Compaction| L1[Level 1<br/>SSTables]
+        L1 -->|Major Compaction| L2[Level 2<br/>SSTables]
+        L2 -->|Major Compaction| LN[Level N<br/>SSTables]
+    end
+
+    W -.->|Recovery| M
+            </pre>
+            <noscript>
+              <p class="architecture__fallback">LSM Tree: Client Request → Memtable (Skip-list) + WAL → Level 0 SSTables → Level 1 → Level N</p>
+            </noscript>
+          </div>
+        </div>
+
+        <!-- Write Path -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">Write Path</h3>
+          <p class="architecture__description">
+            When a client sends a write request, the data is first written to the Write-Ahead Log (WAL) for durability,
+            then inserted into the in-memory Memtable. Once the Memtable reaches its size threshold (default 4MB),
+            it becomes immutable and is flushed to disk as a new SSTable in Level 0.
+          </p>
+          <div class="architecture__diagram" data-diagram="write-path">
+            <pre class="mermaid" aria-label="Write Path Diagram">
+sequenceDiagram
+    participant Client
+    participant WAL as Write-Ahead Log
+    participant MT as Memtable
+    participant SST as SSTable (L0)
+
+    Client->>WAL: 1. Write to WAL
+    WAL-->>Client: ACK
+    Client->>MT: 2. Insert into Memtable
+    Note over MT: Skip-list provides<br/>O(log n) insertion
+    MT->>SST: 3. Flush when full
+    Note over SST: Immutable sorted file
+            </pre>
+            <noscript>
+              <p class="architecture__fallback">Write Path: Client → WAL (durability) → Memtable (Skip-list) → SSTable flush when full</p>
+            </noscript>
+          </div>
+        </div>
+
+        <!-- Read Path -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">Read Path</h3>
+          <p class="architecture__description">
+            Reads check the Memtable first for the most recent data, then search through SSTables from Level 0 to Level N.
+            Bloom filters on each SSTable help skip files that don't contain the requested key,
+            significantly improving read performance.
+          </p>
+          <div class="architecture__diagram" data-diagram="read-path">
+            <pre class="mermaid" aria-label="Read Path Diagram">
+flowchart LR
+    subgraph Search["Read Order (newest to oldest)"]
+        direction LR
+        R[Read Request] --> MT[Memtable]
+        MT -->|Not Found| IMT[Immutable<br/>Memtable]
+        IMT -->|Not Found| L0[Level 0<br/>SSTables]
+        L0 -->|Not Found| L1[Level 1+<br/>SSTables]
+    end
+
+    subgraph Filter["Optimization"]
+        BF[Bloom Filter<br/>Skip non-matching<br/>SSTables]
+    end
+
+    L0 -.-> BF
+    L1 -.-> BF
+            </pre>
+            <noscript>
+              <p class="architecture__fallback">Read Path: Memtable → Immutable Memtable → Level 0 SSTables → Level N (with Bloom Filter optimization)</p>
+            </noscript>
+          </div>
+        </div>
+
+        <!-- Compaction Process -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">Compaction Process</h3>
+          <p class="architecture__description">
+            Compaction merges and reorganizes SSTables to maintain read performance and reclaim space from deleted keys.
+          </p>
+          <div class="architecture__compaction-grid">
+            <div class="architecture__compaction-type">
+              <h4>Minor Compaction</h4>
+              <p>Flushes the immutable Memtable to Level 0. Creates new SSTables without merging existing ones. Fast and triggered when Memtable is full.</p>
+            </div>
+            <div class="architecture__compaction-type">
+              <h4>Major Compaction</h4>
+              <p>Merges SSTables from Level N to Level N+1. Removes deleted keys and duplicate entries. Runs in background to optimize storage and read performance.</p>
+            </div>
+          </div>
+          <div class="architecture__diagram" data-diagram="compaction">
+            <pre class="mermaid" aria-label="Compaction Process Diagram">
+flowchart LR
+    subgraph Minor["Minor Compaction"]
+        MT[Memtable<br/>Full] -->|Flush| L0[New SSTable<br/>Level 0]
+    end
+
+    subgraph Major["Major Compaction"]
+        L0A[Level 0<br/>SSTables] -->|Merge| L1A[Level 1<br/>SSTable]
+        L1B[Level 1<br/>SSTables] -->|Merge| L2A[Level 2<br/>SSTable]
+    end
+            </pre>
+            <noscript>
+              <p class="architecture__fallback">Minor: Memtable → Level 0. Major: Level N SSTables merge → Level N+1 SSTable</p>
+            </noscript>
+          </div>
+        </div>
+
+        <!-- Component Overview -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">Core Components</h3>
+          <p class="architecture__description">
+            MirDB is organized into modular crates, each handling a specific part of the storage engine.
+          </p>
+          <div class="architecture__components">
+            <article class="architecture__component">
+              <h4 class="architecture__component-name">mirdb-server</h4>
+              <p class="architecture__component-desc">
+                The main server crate implementing the Memcached text protocol. Handles client connections,
+                command parsing, and orchestrates the storage engine operations.
+              </p>
+            </article>
+            <article class="architecture__component">
+              <h4 class="architecture__component-name">skip-list</h4>
+              <p class="architecture__component-desc">
+                High-performance concurrent skip-list implementation used for the Memtable.
+                Provides O(log n) insertion, deletion, and lookup operations with lock-free reads.
+              </p>
+            </article>
+            <article class="architecture__component">
+              <h4 class="architecture__component-name">sstable</h4>
+              <p class="architecture__component-desc">
+                SSTable (Sorted String Table) implementation for persistent storage.
+                Manages on-disk data format, block compression, bloom filters, and index structures.
+              </p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenario 5: Code Examples -->
+    <section id="code-examples" class="code-examples" aria-labelledby="code-examples-heading">
+      <div class="container">
+        <div class="section-heading">
+          <h2 id="code-examples-heading">Code Examples</h2>
+          <p>Connect to MirDB using your favorite language</p>
+        </div>
+
+        <!-- Language Tabs -->
+        <div class="code-examples__tabs-wrapper">
+          <div class="code-examples__tabs" role="tablist" aria-label="Programming language examples">
+            <button
+              class="code-examples__tab code-examples__tab--active"
+              role="tab"
+              id="tab-python"
+              aria-selected="true"
+              aria-controls="panel-python"
+              tabindex="0"
+            >
+              Python
+            </button>
+            <button
+              class="code-examples__tab"
+              role="tab"
+              id="tab-go"
+              aria-selected="false"
+              aria-controls="panel-go"
+              tabindex="-1"
+            >
+              Go
+            </button>
+            <button
+              class="code-examples__tab"
+              role="tab"
+              id="tab-nodejs"
+              aria-selected="false"
+              aria-controls="panel-nodejs"
+              tabindex="-1"
+            >
+              Node.js
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab Panels -->
+        <div class="code-examples__panels">
+          <!-- Python Panel -->
+          <div
+            class="code-examples__panel code-examples__panel--active"
+            role="tabpanel"
+            id="panel-python"
+            aria-labelledby="tab-python"
+            tabindex="0"
+          >
+            <div class="code-examples__code">
+              <div class="code-examples__code-header">
+                <span class="code-examples__code-lang">Python</span>
+                <span class="code-examples__code-desc">Using pymemcache</span>
+              </div>
+              <pre><code id="code-python" class="language-python"><span class="token-keyword">from</span> pymemcache.client.base <span class="token-keyword">import</span> Client
+
+<span class="token-comment"># Connect to MirDB server</span>
+client = Client((<span class="token-string">'localhost'</span>, <span class="token-number">12333</span>))
+
+<span class="token-comment"># Set a value</span>
+client.set(<span class="token-string">'user:1'</span>, <span class="token-string">'{"name": "Alice", "role": "admin"}'</span>)
+
+<span class="token-comment"># Get a value</span>
+result = client.get(<span class="token-string">'user:1'</span>)
+<span class="token-keyword">print</span>(result)  <span class="token-comment"># b'{"name": "Alice", "role": "admin"}'</span>
+
+<span class="token-comment"># Delete a value</span>
+client.delete(<span class="token-string">'user:1'</span>)
+
+<span class="token-comment"># Close the connection</span>
+client.close()</code></pre>
+              <button
+                class="code-examples__copy-btn"
+                data-copy-target="#code-python"
+                data-copied-class="code-examples__copy-btn--copied"
+                aria-label="Copy to clipboard"
+                title="Copy to clipboard"
+              >
+                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Go Panel -->
+          <div
+            class="code-examples__panel"
+            role="tabpanel"
+            id="panel-go"
+            aria-labelledby="tab-go"
+            tabindex="0"
+            hidden
+          >
+            <div class="code-examples__code">
+              <div class="code-examples__code-header">
+                <span class="code-examples__code-lang">Go</span>
+                <span class="code-examples__code-desc">Using gomemcache</span>
+              </div>
+              <pre><code id="code-go" class="language-go"><span class="token-keyword">package</span> main
+
+<span class="token-keyword">import</span> (
+    <span class="token-string">"fmt"</span>
+    <span class="token-string">"github.com/bradfitz/gomemcache/memcache"</span>
+)
+
+<span class="token-keyword">func</span> <span class="token-function">main</span>() {
+    <span class="token-comment">// Connect to MirDB server</span>
+    mc := memcache.New(<span class="token-string">"localhost:12333"</span>)
+
+    <span class="token-comment">// Set a value</span>
+    err := mc.Set(&memcache.Item{
+        Key:   <span class="token-string">"user:1"</span>,
+        Value: []<span class="token-keyword">byte</span>(<span class="token-string">`{"name": "Alice", "role": "admin"}`</span>),
+    })
+    <span class="token-keyword">if</span> err != <span class="token-keyword">nil</span> {
+        panic(err)
+    }
+
+    <span class="token-comment">// Get a value</span>
+    item, err := mc.Get(<span class="token-string">"user:1"</span>)
+    <span class="token-keyword">if</span> err != <span class="token-keyword">nil</span> {
+        panic(err)
+    }
+    fmt.Println(<span class="token-keyword">string</span>(item.Value))
+
+    <span class="token-comment">// Delete a value</span>
+    mc.Delete(<span class="token-string">"user:1"</span>)
+}</code></pre>
+              <button
+                class="code-examples__copy-btn"
+                data-copy-target="#code-go"
+                data-copied-class="code-examples__copy-btn--copied"
+                aria-label="Copy to clipboard"
+                title="Copy to clipboard"
+              >
+                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Node.js Panel -->
+          <div
+            class="code-examples__panel"
+            role="tabpanel"
+            id="panel-nodejs"
+            aria-labelledby="tab-nodejs"
+            tabindex="0"
+            hidden
+          >
+            <div class="code-examples__code">
+              <div class="code-examples__code-header">
+                <span class="code-examples__code-lang">Node.js</span>
+                <span class="code-examples__code-desc">Using memjs</span>
+              </div>
+              <pre><code id="code-nodejs" class="language-javascript"><span class="token-keyword">const</span> memjs = require(<span class="token-string">'memjs'</span>);
+
+<span class="token-comment">// Connect to MirDB server</span>
+<span class="token-keyword">const</span> client = memjs.Client.create(<span class="token-string">'localhost:12333'</span>);
+
+<span class="token-keyword">async</span> <span class="token-keyword">function</span> <span class="token-function">main</span>() {
+    <span class="token-comment">// Set a value</span>
+    <span class="token-keyword">await</span> client.set(<span class="token-string">'user:1'</span>, <span class="token-string">'{"name": "Alice", "role": "admin"}'</span>);
+
+    <span class="token-comment">// Get a value</span>
+    <span class="token-keyword">const</span> { value } = <span class="token-keyword">await</span> client.get(<span class="token-string">'user:1'</span>);
+    console.log(value.toString());  <span class="token-comment">// {"name": "Alice", "role": "admin"}</span>
+
+    <span class="token-comment">// Delete a value</span>
+    <span class="token-keyword">await</span> client.delete(<span class="token-string">'user:1'</span>);
+
+    <span class="token-comment">// Close the connection</span>
+    client.close();
+}
+
+main().catch(console.error);</code></pre>
+              <button
+                class="code-examples__copy-btn"
+                data-copy-target="#code-nodejs"
+                data-copied-class="code-examples__copy-btn--copied"
+                aria-label="Copy to clipboard"
+                title="Copy to clipboard"
+              >
+                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scenario 6: Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <p class="footer__copyright">&copy; 2024 MirDB. Open source under MIT License.</p>
+      <nav class="footer__links" aria-label="Footer navigation">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Mermaid.js for architecture diagrams - deferred for performance -->
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="js/navigation.js"></script>
+  <script defer src="js/copy-clipboard.js"></script>
+  <script defer src="js/code-tabs.js"></script>
+  <script defer src="js/diagrams.js"></script>
+  <script defer src="js/main.js"></script>
+</body>
+</html>
