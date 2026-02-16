@@ -391,7 +391,162 @@ END</span></code></pre>
           <h2 id="architecture-heading">Architecture</h2>
           <p>Understanding MirDB's LSM tree design</p>
         </div>
-        <!-- Content to be added by Scenario 4 -->
+
+        <!-- LSM Tree Overview -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">LSM Tree Data Flow</h3>
+          <p class="architecture__description">
+            MirDB uses a Log-Structured Merge-tree (LSM tree) architecture for efficient writes and reads.
+            Data flows from memory to disk through multiple levels, optimizing for both performance and durability.
+          </p>
+          <div class="architecture__diagram" data-diagram="lsm-tree">
+            <pre class="mermaid" aria-label="LSM Tree Architecture Diagram">
+flowchart TB
+    subgraph Memory["Memory Layer"]
+        C[Client Request] --> M[Memtable<br/>Skip-list]
+        C --> W[Write-Ahead Log<br/>WAL]
+    end
+
+    subgraph Disk["Disk Storage"]
+        M -->|Flush| L0[Level 0<br/>SSTables]
+        L0 -->|Minor Compaction| L1[Level 1<br/>SSTables]
+        L1 -->|Major Compaction| L2[Level 2<br/>SSTables]
+        L2 -->|Major Compaction| LN[Level N<br/>SSTables]
+    end
+
+    W -.->|Recovery| M
+            </pre>
+            <noscript>
+              <p class="architecture__fallback">LSM Tree: Client Request → Memtable (Skip-list) + WAL → Level 0 SSTables → Level 1 → Level N</p>
+            </noscript>
+          </div>
+        </div>
+
+        <!-- Write Path -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">Write Path</h3>
+          <p class="architecture__description">
+            When a client sends a write request, the data is first written to the Write-Ahead Log (WAL) for durability,
+            then inserted into the in-memory Memtable. Once the Memtable reaches its size threshold (default 4MB),
+            it becomes immutable and is flushed to disk as a new SSTable in Level 0.
+          </p>
+          <div class="architecture__diagram" data-diagram="write-path">
+            <pre class="mermaid" aria-label="Write Path Diagram">
+sequenceDiagram
+    participant Client
+    participant WAL as Write-Ahead Log
+    participant MT as Memtable
+    participant SST as SSTable (L0)
+
+    Client->>WAL: 1. Write to WAL
+    WAL-->>Client: ACK
+    Client->>MT: 2. Insert into Memtable
+    Note over MT: Skip-list provides<br/>O(log n) insertion
+    MT->>SST: 3. Flush when full
+    Note over SST: Immutable sorted file
+            </pre>
+            <noscript>
+              <p class="architecture__fallback">Write Path: Client → WAL (durability) → Memtable (Skip-list) → SSTable flush when full</p>
+            </noscript>
+          </div>
+        </div>
+
+        <!-- Read Path -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">Read Path</h3>
+          <p class="architecture__description">
+            Reads check the Memtable first for the most recent data, then search through SSTables from Level 0 to Level N.
+            Bloom filters on each SSTable help skip files that don't contain the requested key,
+            significantly improving read performance.
+          </p>
+          <div class="architecture__diagram" data-diagram="read-path">
+            <pre class="mermaid" aria-label="Read Path Diagram">
+flowchart LR
+    subgraph Search["Read Order (newest to oldest)"]
+        direction LR
+        R[Read Request] --> MT[Memtable]
+        MT -->|Not Found| IMT[Immutable<br/>Memtable]
+        IMT -->|Not Found| L0[Level 0<br/>SSTables]
+        L0 -->|Not Found| L1[Level 1+<br/>SSTables]
+    end
+
+    subgraph Filter["Optimization"]
+        BF[Bloom Filter<br/>Skip non-matching<br/>SSTables]
+    end
+
+    L0 -.-> BF
+    L1 -.-> BF
+            </pre>
+            <noscript>
+              <p class="architecture__fallback">Read Path: Memtable → Immutable Memtable → Level 0 SSTables → Level N (with Bloom Filter optimization)</p>
+            </noscript>
+          </div>
+        </div>
+
+        <!-- Compaction Process -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">Compaction Process</h3>
+          <p class="architecture__description">
+            Compaction merges and reorganizes SSTables to maintain read performance and reclaim space from deleted keys.
+          </p>
+          <div class="architecture__compaction-grid">
+            <div class="architecture__compaction-type">
+              <h4>Minor Compaction</h4>
+              <p>Flushes the immutable Memtable to Level 0. Creates new SSTables without merging existing ones. Fast and triggered when Memtable is full.</p>
+            </div>
+            <div class="architecture__compaction-type">
+              <h4>Major Compaction</h4>
+              <p>Merges SSTables from Level N to Level N+1. Removes deleted keys and duplicate entries. Runs in background to optimize storage and read performance.</p>
+            </div>
+          </div>
+          <div class="architecture__diagram" data-diagram="compaction">
+            <pre class="mermaid" aria-label="Compaction Process Diagram">
+flowchart LR
+    subgraph Minor["Minor Compaction"]
+        MT[Memtable<br/>Full] -->|Flush| L0[New SSTable<br/>Level 0]
+    end
+
+    subgraph Major["Major Compaction"]
+        L0A[Level 0<br/>SSTables] -->|Merge| L1A[Level 1<br/>SSTable]
+        L1B[Level 1<br/>SSTables] -->|Merge| L2A[Level 2<br/>SSTable]
+    end
+            </pre>
+            <noscript>
+              <p class="architecture__fallback">Minor: Memtable → Level 0. Major: Level N SSTables merge → Level N+1 SSTable</p>
+            </noscript>
+          </div>
+        </div>
+
+        <!-- Component Overview -->
+        <div class="architecture__subsection">
+          <h3 class="architecture__subtitle">Core Components</h3>
+          <p class="architecture__description">
+            MirDB is organized into modular crates, each handling a specific part of the storage engine.
+          </p>
+          <div class="architecture__components">
+            <article class="architecture__component">
+              <h4 class="architecture__component-name">mirdb-server</h4>
+              <p class="architecture__component-desc">
+                The main server crate implementing the Memcached text protocol. Handles client connections,
+                command parsing, and orchestrates the storage engine operations.
+              </p>
+            </article>
+            <article class="architecture__component">
+              <h4 class="architecture__component-name">skip-list</h4>
+              <p class="architecture__component-desc">
+                High-performance concurrent skip-list implementation used for the Memtable.
+                Provides O(log n) insertion, deletion, and lookup operations with lock-free reads.
+              </p>
+            </article>
+            <article class="architecture__component">
+              <h4 class="architecture__component-name">sstable</h4>
+              <p class="architecture__component-desc">
+                SSTable (Sorted String Table) implementation for persistent storage.
+                Manages on-disk data format, block compression, bloom filters, and index structures.
+              </p>
+            </article>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -419,7 +574,10 @@ END</span></code></pre>
     </div>
   </footer>
 
+  <!-- Mermaid.js for architecture diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script src="js/copy-clipboard.js"></script>
+  <script src="js/diagrams.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
