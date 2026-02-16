@@ -1,25 +1,6 @@
 /**
  * Responsive Design Styles
  * Owner: Scenario 7 - Responsive Design and Accessibility
+ *
+ * Placeholder file - to be implemented by Scenario 7
  */
-
-/* Stub file - to be implemented by Scenario 7 */
-
-/* Basic responsive utilities for all scenarios */
-@media (max-width: 767px) {
-  :root {
-    --container-padding: var(--spacing-md);
-  }
-}
-
-@media (min-width: 768px) {
-  :root {
-    --container-padding: var(--spacing-lg);
-  }
-}
-
-@media (min-width: 1024px) {
-  :root {
-    --container-padding: var(--spacing-xl);
-  }
-}

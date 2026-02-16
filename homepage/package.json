@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "MirDB Homepage - A persistent key-value store with Memcached protocol",
   "scripts": {
-    "dev": "npx serve . -p 3000",
+    "dev": "npx serve . -l 3000",
     "test": "jest",
     "test:e2e": "playwright test",
     "lint": "eslint js/",

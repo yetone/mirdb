@@ -4,10 +4,7 @@
 module.exports = {
   testEnvironment: 'jsdom',
   testMatch: ['**/tests/unit/**/*.test.js'],
-  collectCoverageFrom: [
-    'js/**/*.js',
-    '!js/vendor/**',
-  ],
+  coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
       branches: 80,
@@ -16,5 +13,5 @@ module.exports = {
       statements: 80,
     },
   },
-  verbose: true,
+  collectCoverageFrom: ['js/**/*.js'],
 };

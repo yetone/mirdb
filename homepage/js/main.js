@@ -1,31 +1,29 @@
 /**
  * Main JavaScript Entry Point
  *
- * Initializes all JavaScript modules for the MirDB homepage.
+ * Initializes all JavaScript modules for the MirDB Homepage.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Initialize smooth scroll for anchor links
-  initSmoothScroll();
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize navigation (if module exists)
+  if (typeof initNavigation === 'function') {
+    initNavigation();
+  }
+
+  // Initialize code tabs (if module exists)
+  if (typeof initCodeTabs === 'function') {
+    initCodeTabs();
+  }
+
+  // Initialize copy buttons (if module exists)
+  if (typeof initCopyButtons === 'function') {
+    initCopyButtons();
+  }
+
+  // Initialize diagrams (if module exists)
+  if (typeof initDiagrams === 'function') {
+    initDiagrams();
+  }
+
+  console.log('MirDB Homepage initialized');
 });
-
-/**
- * Initialize smooth scroll for anchor links
- */
-function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', (e) => {
-      const targetId = anchor.getAttribute('href');
-      if (targetId === '#') return;
-
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        e.preventDefault();
-        targetElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    });
-  });
-}

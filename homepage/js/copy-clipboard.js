@@ -8,15 +8,16 @@
  * Initialize all copy buttons on the page
  */
 function initCopyButtons() {
-  document.querySelectorAll('[data-copy-target]').forEach(button => {
-    button.addEventListener('click', async () => {
-      const targetSelector = button.getAttribute('data-copy-target');
-      const targetElement = document.querySelector(targetSelector);
+  const copyButtons = document.querySelectorAll('[data-copy-target]');
+
+  copyButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      const targetId = button.getAttribute('data-copy-target');
+      const targetElement = document.getElementById(targetId);
 
       if (targetElement) {
-        const text = targetElement.textContent || '';
-        const success = await copyToClipboard(text);
-        showCopyFeedback(button, success);
+        const text = targetElement.textContent || targetElement.innerText;
+        copyToClipboard(text, button);
       }
     });
   });
@@ -24,53 +25,59 @@ function initCopyButtons() {
 
 /**
  * Copy text to clipboard
- * @param {string} text - The text to copy
- * @returns {Promise<boolean>} - Whether the copy was successful
+ * @param {string} text - Text to copy
+ * @param {HTMLElement} button - Button element for feedback
  */
-async function copyToClipboard(text) {
-  try {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-
-    // Fallback for older browsers
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.position = 'fixed';
-    textArea.style.left = '-9999px';
-    document.body.appendChild(textArea);
-    textArea.select();
-
-    try {
-      document.execCommand('copy');
-      return true;
-    } finally {
-      document.body.removeChild(textArea);
-    }
-  } catch (error) {
-    console.error('Failed to copy text:', error);
-    return false;
+function copyToClipboard(text, button) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text)
+      .then(function() {
+        showCopyFeedback(button, true);
+      })
+      .catch(function() {
+        fallbackCopy(text, button);
+      });
+  } else {
+    fallbackCopy(text, button);
   }
 }
 
 /**
- * Show visual feedback after copy attempt
- * @param {HTMLElement} button - The copy button element
- * @param {boolean} success - Whether the copy was successful
+ * Fallback copy method for older browsers
+ * @param {string} text - Text to copy
+ * @param {HTMLElement} button - Button element for feedback
+ */
+function fallbackCopy(text, button) {
+  var textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-9999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    document.execCommand('copy');
+    showCopyFeedback(button, true);
+  } catch (err) {
+    showCopyFeedback(button, false);
+  }
+
+  document.body.removeChild(textArea);
+}
+
+/**
+ * Show visual feedback on copy
+ * @param {HTMLElement} button - Button element
+ * @param {boolean} success - Whether copy was successful
  */
 function showCopyFeedback(button, success) {
-  const originalText = button.textContent;
+  var originalText = button.textContent;
   button.textContent = success ? 'Copied!' : 'Failed';
   button.classList.add(success ? 'copy-success' : 'copy-error');
 
-  setTimeout(() => {
+  setTimeout(function() {
     button.textContent = originalText;
     button.classList.remove('copy-success', 'copy-error');
   }, 2000);
-}
-
-// Export for module usage
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { initCopyButtons, copyToClipboard, showCopyFeedback };
 }

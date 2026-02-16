@@ -14,10 +14,7 @@
 @import url('components/footer.css');
 @import url('responsive.css');
 
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
-/* Base Reset */
+/* CSS Reset */
 *,
 *::before,
 *::after {
@@ -26,6 +23,7 @@
   padding: 0;
 }
 
+/* Base styles */
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -33,10 +31,9 @@ html {
 
 body {
   font-family: var(--font-body);
-  font-size: var(--font-size-base);
-  line-height: 1.6;
-  color: var(--color-text);
   background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -46,18 +43,15 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   line-height: 1.2;
-  color: var(--color-text);
 }
 
-h1 { font-size: var(--font-size-5xl); }
-h2 { font-size: var(--font-size-4xl); }
-h3 { font-size: var(--font-size-3xl); }
-h4 { font-size: var(--font-size-2xl); }
-h5 { font-size: var(--font-size-xl); }
-h6 { font-size: var(--font-size-lg); }
+h1 { font-size: var(--text-5xl); }
+h2 { font-size: var(--text-4xl); }
+h3 { font-size: var(--text-2xl); }
+h4 { font-size: var(--text-xl); }
 
 p {
-  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
 }
 
 a {
@@ -70,39 +64,75 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
-/* Container */
-.container {
-  width: 100%;
-  max-width: var(--container-max-width);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
-}
-
-/* Code */
 code, pre {
   font-family: var(--font-mono);
 }
 
-pre {
-  background-color: var(--color-background-light);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  overflow-x: auto;
+/* Container */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
 }
 
-code {
-  background-color: var(--color-surface);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
+/* Section spacing */
+section {
+  padding: var(--spacing-4xl) 0;
 }
 
-pre code {
-  background: none;
-  padding: 0;
+/* Section headings */
+.section-heading {
+  text-align: center;
+  margin-bottom: var(--spacing-3xl);
 }
 
-/* Utility classes */
+.section-heading h2 {
+  margin-bottom: var(--spacing-md);
+}
+
+.section-heading p {
+  font-size: var(--text-lg);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Visually hidden (for accessibility) */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -119,60 +149,4 @@ pre code {
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-}
-
-/* Section styling */
-section {
-  padding: var(--spacing-4xl) 0;
-}
-
-.section-title {
-  text-align: center;
-  margin-bottom: var(--spacing-3xl);
-}
-
-/* Button base styles */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-family: var(--font-body);
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: var(--radius-lg);
-  border: none;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  min-height: 44px;
-  min-width: 44px;
-}
-
-.btn:focus-visible {
-  outline: 2px solid var(--color-primary-light);
-  outline-offset: 2px;
-}
-
-.btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: var(--color-primary-hover);
-  color: white;
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: var(--color-text);
-  border: 2px solid var(--color-border);
-}
-
-.btn-secondary:hover {
-  background-color: var(--color-surface);
-  border-color: var(--color-text-muted);
-  color: var(--color-text);
 }
