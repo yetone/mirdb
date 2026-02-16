@@ -5,27 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol. Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture.">
   <meta name="keywords" content="MirDB, key-value store, memcached, persistent storage, LSM tree, Rust, database">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="MirDB Team">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mirdb.io/">
 
   <!-- Open Graph -->
   <meta property="og:title" content="MirDB - Persistent Key-Value Store">
   <meta property="og:description" content="Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/images/og-image.png">
+  <meta property="og:url" content="https://mirdb.io/">
+  <meta property="og:image" content="https://mirdb.io/assets/images/og-image.png">
+  <meta property="og:site_name" content="MirDB">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
-  <meta name="twitter:description" content="Drop-in memcached replacement with durable storage.">
+  <meta name="twitter:description" content="Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture.">
+  <meta name="twitter:image" content="https://mirdb.io/assets/images/og-image.png">
 
   <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
 
+  <!-- Favicon and App Icons -->
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 
-  <!-- Google Fonts -->
+  <!-- Preconnect to external resources -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <!-- Critical CSS inline for faster first paint -->
+  <style>
+    :root{--color-primary:#6366f1;--color-primary-dark:#4f46e5;--color-secondary:#22c55e;--color-background:#0f172a;--color-surface:#1e293b;--color-text:#f8fafc;--color-text-muted:#94a3b8;--font-heading:'Inter',system-ui,sans-serif;--font-body:'Inter',system-ui,sans-serif;--font-mono:'Fira Code',monospace;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:1.5rem;--spacing-xl:2rem;--spacing-2xl:3rem;--spacing-3xl:4rem}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font-body);background-color:var(--color-background);color:var(--color-text);line-height:1.6}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 var(--spacing-lg)}.hero{min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:var(--spacing-3xl) 0}.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:700;line-height:1.2;margin-bottom:var(--spacing-lg)}.hero__tagline{font-size:clamp(1rem,2.5vw,1.25rem);color:var(--color-text-muted);max-width:700px;margin:0 auto var(--spacing-xl)}.btn{display:inline-flex;align-items:center;padding:var(--spacing-md) var(--spacing-xl);border-radius:0.5rem;font-weight:600;text-decoration:none;transition:all 0.2s}.btn-primary{background:var(--color-primary);color:white}.btn-secondary{background:transparent;border:2px solid var(--color-text-muted);color:var(--color-text)}.nav{position:sticky;top:0;z-index:100;background:rgba(15,23,42,0.95);backdrop-filter:blur(10px);padding:var(--spacing-md) 0}
+  </style>
+
+  <!-- Stylesheet loaded with media hint for non-blocking -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Google Fonts with display=swap for better performance -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "MirDB",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux, macOS, Windows",
+    "description": "A persistent key-value store with Memcached protocol. Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture.",
+    "url": "https://mirdb.io/",
+    "downloadUrl": "https://github.com/yetone/mirdb",
+    "softwareVersion": "1.0.0",
+    "author": {
+      "@type": "Organization",
+      "name": "MirDB Team",
+      "url": "https://github.com/yetone/mirdb"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Memcached protocol compatibility",
+      "Persistent storage with LSM tree architecture",
+      "High-performance Skip-list memtable",
+      "Write-Ahead Log for crash recovery",
+      "Minor and major compaction support"
+    ],
+    "programmingLanguage": "Rust",
+    "license": "https://opensource.org/licenses/MIT"
+  }
+  </script>
 </head>
 <body>
   <!-- Scenario 6: Navigation -->
@@ -40,7 +95,7 @@
         <li><a href="#getting-started">Get Started</a></li>
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#code-examples">Examples</a></li>
-        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" class="nav__github">GitHub</a></li>
+        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="nav__github">GitHub</a></li>
       </ul>
     </div>
   </nav>
@@ -53,7 +108,7 @@
         <p class="hero__tagline">Drop-in memcached replacement with durable storage, powered by Rust and LSM tree architecture</p>
         <div class="hero__ctas">
           <a href="#getting-started" class="btn btn-primary hero__cta-primary">Get Started</a>
-          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" class="btn btn-secondary hero__cta-secondary">
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-secondary hero__cta-secondary">
             View on GitHub
           </a>
         </div>
@@ -173,7 +228,7 @@
             </header>
             <p class="getting-started__description">
               Install the MirDB server using Cargo, Rust's package manager. Make sure you have
-              <a href="https://rustup.rs/" target="_blank" rel="noopener">Rust installed</a> first.
+              <a href="https://rustup.rs/" target="_blank" rel="noopener noreferrer">Rust installed</a> first.
             </p>
             <div class="getting-started__code-wrapper">
               <div class="getting-started__code">
@@ -768,18 +823,18 @@ main().catch(console.error);</code></pre>
     <div class="container">
       <p class="footer__copyright">&copy; 2024 MirDB. Open source under MIT License.</p>
       <nav class="footer__links" aria-label="Footer navigation">
-        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Documentation</a>
-        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener">License</a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
       </nav>
     </div>
   </footer>
 
-  <!-- Mermaid.js for architecture diagrams -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script src="js/copy-clipboard.js"></script>
-  <script src="js/code-tabs.js"></script>
-  <script src="js/diagrams.js"></script>
-  <script src="js/main.js"></script>
+  <!-- Mermaid.js for architecture diagrams - deferred for performance -->
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="js/copy-clipboard.js"></script>
+  <script defer src="js/code-tabs.js"></script>
+  <script defer src="js/diagrams.js"></script>
+  <script defer src="js/main.js"></script>
 </body>
 </html>
