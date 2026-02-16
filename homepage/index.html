@@ -557,7 +557,208 @@ flowchart LR
           <h2 id="code-examples-heading">Code Examples</h2>
           <p>Connect to MirDB using your favorite language</p>
         </div>
-        <!-- Content to be added by Scenario 5 -->
+
+        <!-- Language Tabs -->
+        <div class="code-examples__tabs-wrapper">
+          <div class="code-examples__tabs" role="tablist" aria-label="Programming language examples">
+            <button
+              class="code-examples__tab code-examples__tab--active"
+              role="tab"
+              id="tab-python"
+              aria-selected="true"
+              aria-controls="panel-python"
+              tabindex="0"
+            >
+              Python
+            </button>
+            <button
+              class="code-examples__tab"
+              role="tab"
+              id="tab-go"
+              aria-selected="false"
+              aria-controls="panel-go"
+              tabindex="-1"
+            >
+              Go
+            </button>
+            <button
+              class="code-examples__tab"
+              role="tab"
+              id="tab-nodejs"
+              aria-selected="false"
+              aria-controls="panel-nodejs"
+              tabindex="-1"
+            >
+              Node.js
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab Panels -->
+        <div class="code-examples__panels">
+          <!-- Python Panel -->
+          <div
+            class="code-examples__panel code-examples__panel--active"
+            role="tabpanel"
+            id="panel-python"
+            aria-labelledby="tab-python"
+            tabindex="0"
+          >
+            <div class="code-examples__code">
+              <div class="code-examples__code-header">
+                <span class="code-examples__code-lang">Python</span>
+                <span class="code-examples__code-desc">Using pymemcache</span>
+              </div>
+              <pre><code id="code-python" class="language-python"><span class="token-keyword">from</span> pymemcache.client.base <span class="token-keyword">import</span> Client
+
+<span class="token-comment"># Connect to MirDB server</span>
+client = Client((<span class="token-string">'localhost'</span>, <span class="token-number">12333</span>))
+
+<span class="token-comment"># Set a value</span>
+client.set(<span class="token-string">'user:1'</span>, <span class="token-string">'{"name": "Alice", "role": "admin"}'</span>)
+
+<span class="token-comment"># Get a value</span>
+result = client.get(<span class="token-string">'user:1'</span>)
+<span class="token-keyword">print</span>(result)  <span class="token-comment"># b'{"name": "Alice", "role": "admin"}'</span>
+
+<span class="token-comment"># Delete a value</span>
+client.delete(<span class="token-string">'user:1'</span>)
+
+<span class="token-comment"># Close the connection</span>
+client.close()</code></pre>
+              <button
+                class="code-examples__copy-btn"
+                data-copy-target="#code-python"
+                data-copied-class="code-examples__copy-btn--copied"
+                aria-label="Copy to clipboard"
+                title="Copy to clipboard"
+              >
+                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Go Panel -->
+          <div
+            class="code-examples__panel"
+            role="tabpanel"
+            id="panel-go"
+            aria-labelledby="tab-go"
+            tabindex="0"
+            hidden
+          >
+            <div class="code-examples__code">
+              <div class="code-examples__code-header">
+                <span class="code-examples__code-lang">Go</span>
+                <span class="code-examples__code-desc">Using gomemcache</span>
+              </div>
+              <pre><code id="code-go" class="language-go"><span class="token-keyword">package</span> main
+
+<span class="token-keyword">import</span> (
+    <span class="token-string">"fmt"</span>
+    <span class="token-string">"github.com/bradfitz/gomemcache/memcache"</span>
+)
+
+<span class="token-keyword">func</span> <span class="token-function">main</span>() {
+    <span class="token-comment">// Connect to MirDB server</span>
+    mc := memcache.New(<span class="token-string">"localhost:12333"</span>)
+
+    <span class="token-comment">// Set a value</span>
+    err := mc.Set(&memcache.Item{
+        Key:   <span class="token-string">"user:1"</span>,
+        Value: []<span class="token-keyword">byte</span>(<span class="token-string">`{"name": "Alice", "role": "admin"}`</span>),
+    })
+    <span class="token-keyword">if</span> err != <span class="token-keyword">nil</span> {
+        panic(err)
+    }
+
+    <span class="token-comment">// Get a value</span>
+    item, err := mc.Get(<span class="token-string">"user:1"</span>)
+    <span class="token-keyword">if</span> err != <span class="token-keyword">nil</span> {
+        panic(err)
+    }
+    fmt.Println(<span class="token-keyword">string</span>(item.Value))
+
+    <span class="token-comment">// Delete a value</span>
+    mc.Delete(<span class="token-string">"user:1"</span>)
+}</code></pre>
+              <button
+                class="code-examples__copy-btn"
+                data-copy-target="#code-go"
+                data-copied-class="code-examples__copy-btn--copied"
+                aria-label="Copy to clipboard"
+                title="Copy to clipboard"
+              >
+                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Node.js Panel -->
+          <div
+            class="code-examples__panel"
+            role="tabpanel"
+            id="panel-nodejs"
+            aria-labelledby="tab-nodejs"
+            tabindex="0"
+            hidden
+          >
+            <div class="code-examples__code">
+              <div class="code-examples__code-header">
+                <span class="code-examples__code-lang">Node.js</span>
+                <span class="code-examples__code-desc">Using memjs</span>
+              </div>
+              <pre><code id="code-nodejs" class="language-javascript"><span class="token-keyword">const</span> memjs = require(<span class="token-string">'memjs'</span>);
+
+<span class="token-comment">// Connect to MirDB server</span>
+<span class="token-keyword">const</span> client = memjs.Client.create(<span class="token-string">'localhost:12333'</span>);
+
+<span class="token-keyword">async</span> <span class="token-keyword">function</span> <span class="token-function">main</span>() {
+    <span class="token-comment">// Set a value</span>
+    <span class="token-keyword">await</span> client.set(<span class="token-string">'user:1'</span>, <span class="token-string">'{"name": "Alice", "role": "admin"}'</span>);
+
+    <span class="token-comment">// Get a value</span>
+    <span class="token-keyword">const</span> { value } = <span class="token-keyword">await</span> client.get(<span class="token-string">'user:1'</span>);
+    console.log(value.toString());  <span class="token-comment">// {"name": "Alice", "role": "admin"}</span>
+
+    <span class="token-comment">// Delete a value</span>
+    <span class="token-keyword">await</span> client.delete(<span class="token-string">'user:1'</span>);
+
+    <span class="token-comment">// Close the connection</span>
+    client.close();
+}
+
+main().catch(console.error);</code></pre>
+              <button
+                class="code-examples__copy-btn"
+                data-copy-target="#code-nodejs"
+                data-copied-class="code-examples__copy-btn--copied"
+                aria-label="Copy to clipboard"
+                title="Copy to clipboard"
+              >
+                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -577,6 +778,7 @@ flowchart LR
   <!-- Mermaid.js for architecture diagrams -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script src="js/copy-clipboard.js"></script>
+  <script src="js/code-tabs.js"></script>
   <script src="js/diagrams.js"></script>
   <script src="js/main.js"></script>
 </body>
