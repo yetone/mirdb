@@ -1,2 +1,8 @@
 /target
 **/*.rs.bk
+.something/
+node_modules/
+homepage/node_modules/
+homepage/package-lock.json
+homepage/test-results/
+homepage/playwright-report/

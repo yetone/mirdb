@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#60a5fa"/>
+    </linearGradient>
+  </defs>
+  <!-- Database icon -->
+  <ellipse cx="25" cy="15" rx="18" ry="6" fill="url(#logoGradient)"/>
+  <path d="M7 15v20c0 3.3 8.1 6 18 6s18-2.7 18-6V15" stroke="url(#logoGradient)" stroke-width="2" fill="none"/>
+  <ellipse cx="25" cy="25" rx="18" ry="6" stroke="url(#logoGradient)" stroke-width="2" fill="none"/>
+  <ellipse cx="25" cy="35" rx="18" ry="6" stroke="url(#logoGradient)" stroke-width="2" fill="none"/>
+  <!-- Text: MirDB -->
+  <text x="55" y="40" font-family="Inter, sans-serif" font-weight="700" font-size="32" fill="#f8fafc">
+    <tspan fill="url(#logoGradient)">Mir</tspan><tspan fill="#f8fafc">DB</tspan>
+  </text>
+</svg>

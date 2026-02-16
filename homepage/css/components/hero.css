@@ -1,0 +1,233 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Implementation
+ *
+ * Styles for the hero section including:
+ * - Main hero container with gradient background
+ * - Headline and tagline typography
+ * - Primary and secondary CTA buttons
+ * - Product logo display
+ * - Responsive layout for all viewports
+ */
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--spacing-3xl) 0;
+  background: linear-gradient(
+    135deg,
+    var(--color-background) 0%,
+    var(--color-background-light) 50%,
+    var(--color-background) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background decoration */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(59, 130, 246, 0.08) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero__logo {
+  width: 200px;
+  height: auto;
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero__headline {
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+.hero__tagline {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-2xl);
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.hero__cta-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Primary CTA - Get Started */
+.hero__cta-primary {
+  background-color: var(--color-primary);
+  color: white;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+  min-height: 48px;
+  min-width: 160px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__cta-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.hero__cta-primary:focus-visible {
+  outline: 3px solid var(--color-primary-light);
+  outline-offset: 3px;
+}
+
+.hero__cta-primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary CTA - View on GitHub */
+.hero__cta-secondary {
+  background-color: transparent;
+  color: var(--color-text);
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  min-height: 48px;
+  min-width: 160px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.hero__cta-secondary:hover {
+  background-color: var(--color-surface);
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+.hero__cta-secondary:focus-visible {
+  outline: 3px solid var(--color-primary-light);
+  outline-offset: 3px;
+}
+
+.hero__cta-secondary svg {
+  flex-shrink: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 767px) {
+  .hero {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .hero__logo {
+    width: 160px;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero__headline {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-xl);
+    padding: 0 var(--spacing-sm);
+  }
+
+  .hero__cta-container {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 var(--spacing-md);
+  }
+
+  .hero__cta-primary,
+  .hero__cta-secondary {
+    width: 100%;
+    max-width: 300px;
+    min-height: 48px;
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero__headline {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Ensure touch targets are accessible (min 44x44px) */
+@media (pointer: coarse) {
+  .hero__cta-primary,
+  .hero__cta-secondary {
+    min-height: 48px;
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .hero__cta-primary {
+    border: 2px solid white;
+  }
+
+  .hero__cta-secondary {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .hero__cta-primary,
+  .hero__cta-secondary {
+    transition: none;
+  }
+
+  .hero__cta-primary:hover {
+    transform: none;
+  }
+}

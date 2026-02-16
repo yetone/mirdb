@@ -1,0 +1,12 @@
+/**
+ * Getting Started Section Styles
+ * Owner: Scenario 3 - Getting Started Section
+ */
+
+/* Stub file - to be implemented by Scenario 3 */
+
+/* Placeholder section for smooth scroll target */
+.getting-started {
+  min-height: 200px;
+  padding: var(--spacing-4xl) 0;
+}
