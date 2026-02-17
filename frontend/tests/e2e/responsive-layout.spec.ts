@@ -589,5 +589,370 @@ test.describe('Tablet Responsive Layout', () => {
 
 // ============================================================================
 // SCENARIO 10: Desktop Layout Tests (1024px+)
-// Placeholder for Scenario 10 builder
 // ============================================================================
+
+/**
+ * Scenario 10: Desktop Layout
+ * Verifies that homepage displays correctly on desktop viewport sizes (1024px-1920px)
+ *
+ * Test Cases:
+ * 1. Render at 1024px viewport width - Full desktop layout displayed, features in multi-column grid
+ * 2. Render at 1920px viewport width - Layout scales appropriately, content centered with max-width
+ * 3. Verify navigation bar - Full navigation visible with all links displayed horizontally
+ */
+test.describe('Desktop Layout (1024px+)', () => {
+  /**
+   * Test Case 1: Full desktop layout at 1024px viewport
+   * Input: Render at 1024px viewport width
+   * Expected: Full desktop layout displayed, features in multi-column grid
+   */
+  test.describe('Desktop Layout at 1024px', () => {
+    test.use({
+      viewport: { width: 1024, height: 768 },
+    })
+
+    test.beforeEach(async ({ page }) => {
+      await page.goto('/')
+      await page.waitForLoadState('domcontentloaded')
+    })
+
+    test('full desktop layout is displayed at 1024px viewport', async ({ page }) => {
+      // Verify the page is rendered
+      await expect(page.locator('body')).toBeVisible()
+
+      // Verify hero section is visible
+      const heroSection = page.getByTestId('hero-section')
+      await expect(heroSection).toBeVisible()
+
+      // Verify features grid is visible
+      const featuresGrid = page.getByTestId('features-grid')
+      await expect(featuresGrid).toBeVisible()
+
+      // Verify URL demo section is visible
+      const urlDemoSection = page.getByTestId('url-demo-section')
+      await expect(urlDemoSection).toBeVisible()
+
+      // Verify footer is visible
+      const footer = page.getByTestId('footer')
+      await expect(footer).toBeVisible()
+    })
+
+    test('features are displayed in 4-column grid at 1024px', async ({ page }) => {
+      // At desktop (lg:1024px), the grid should be 4 columns: grid-cols-1 md:grid-cols-2 lg:grid-cols-4
+      const featuresGrid = page.getByTestId('features-grid')
+      await expect(featuresGrid).toBeVisible()
+
+      // Get all feature cards
+      const featureCards = page.locator('[data-testid^="feature-card-"]')
+      const cardCount = await featureCards.count()
+      expect(cardCount).toBeGreaterThanOrEqual(3) // At least 3 feature cards
+
+      // Verify cards are arranged in a 4-column grid layout
+      // At 1024px, all 4 cards should be on the same row
+      if (cardCount === 4) {
+        const firstCard = featureCards.nth(0)
+        const secondCard = featureCards.nth(1)
+        const thirdCard = featureCards.nth(2)
+        const fourthCard = featureCards.nth(3)
+
+        const firstBox = await firstCard.boundingBox()
+        const secondBox = await secondCard.boundingBox()
+        const thirdBox = await thirdCard.boundingBox()
+        const fourthBox = await fourthCard.boundingBox()
+
+        expect(firstBox).not.toBeNull()
+        expect(secondBox).not.toBeNull()
+        expect(thirdBox).not.toBeNull()
+        expect(fourthBox).not.toBeNull()
+
+        if (firstBox && secondBox && thirdBox && fourthBox) {
+          // All 4 cards should be on the same row (similar Y position within tolerance)
+          const yTolerance = 30
+          expect(Math.abs(firstBox.y - secondBox.y)).toBeLessThan(yTolerance)
+          expect(Math.abs(secondBox.y - thirdBox.y)).toBeLessThan(yTolerance)
+          expect(Math.abs(thirdBox.y - fourthBox.y)).toBeLessThan(yTolerance)
+
+          // Cards should be side by side (different X positions, increasing order)
+          expect(secondBox.x).toBeGreaterThan(firstBox.x)
+          expect(thirdBox.x).toBeGreaterThan(secondBox.x)
+          expect(fourthBox.x).toBeGreaterThan(thirdBox.x)
+        }
+      }
+    })
+
+    test('hero section displays properly at desktop viewport', async ({ page }) => {
+      const heroSection = page.getByTestId('hero-section')
+      await expect(heroSection).toBeVisible()
+
+      // Check heading is visible
+      const heading = page.locator('h1')
+      await expect(heading).toBeVisible()
+
+      // Check primary CTA button
+      const primaryCta = page.getByTestId('hero-primary-cta')
+      await expect(primaryCta).toBeVisible()
+
+      // Check login CTA button
+      const loginCta = page.getByTestId('hero-login-cta')
+      await expect(loginCta).toBeVisible()
+
+      // At desktop viewport, CTAs should be on the same row (flex container)
+      const primaryBox = await primaryCta.boundingBox()
+      const loginBox = await loginCta.boundingBox()
+
+      expect(primaryBox).not.toBeNull()
+      expect(loginBox).not.toBeNull()
+
+      if (primaryBox && loginBox) {
+        // CTAs should be side by side
+        const yDifference = Math.abs(primaryBox.y - loginBox.y)
+        expect(yDifference).toBeLessThan(20)
+        // Login CTA should be to the right of primary CTA
+        expect(loginBox.x).toBeGreaterThan(primaryBox.x)
+      }
+    })
+
+    test('no horizontal scroll at 1024px desktop viewport', async ({ page }) => {
+      const { viewportWidth, documentWidth } = await page.evaluate(() => {
+        return {
+          viewportWidth: window.innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+        }
+      })
+
+      // Document should not be wider than viewport (no horizontal scroll)
+      expect(documentWidth).toBeLessThanOrEqual(viewportWidth)
+    })
+  })
+
+  /**
+   * Test Case 2: Layout scales appropriately at 1920px viewport
+   * Input: Render at 1920px viewport width
+   * Expected: Layout scales appropriately, content centered with max-width
+   */
+  test.describe('Desktop Layout at 1920px', () => {
+    test.use({
+      viewport: { width: 1920, height: 1080 },
+    })
+
+    test.beforeEach(async ({ page }) => {
+      await page.goto('/')
+      await page.waitForLoadState('domcontentloaded')
+    })
+
+    test('layout scales appropriately at 1920px viewport', async ({ page }) => {
+      // Verify all major sections are visible
+      const heroSection = page.getByTestId('hero-section')
+      await expect(heroSection).toBeVisible()
+
+      const featuresGrid = page.getByTestId('features-grid')
+      await expect(featuresGrid).toBeVisible()
+
+      const urlDemoSection = page.getByTestId('url-demo-section')
+      await expect(urlDemoSection).toBeVisible()
+
+      const footer = page.getByTestId('footer')
+      await expect(footer).toBeVisible()
+    })
+
+    test('content is centered with max-width at 1920px viewport', async ({ page }) => {
+      // The features section uses container mx-auto which should center content
+      const featuresGrid = page.getByTestId('features-grid')
+      await expect(featuresGrid).toBeVisible()
+
+      const gridBox = await featuresGrid.boundingBox()
+      expect(gridBox).not.toBeNull()
+
+      if (gridBox) {
+        // Content should be centered (margins on both sides should be roughly equal)
+        const leftMargin = gridBox.x
+        const rightMargin = 1920 - (gridBox.x + gridBox.width)
+
+        // Allow for some tolerance, but margins should be roughly equal for centered content
+        const marginDifference = Math.abs(leftMargin - rightMargin)
+        expect(marginDifference).toBeLessThan(50)
+
+        // Grid should not stretch to full 1920px width (should have max-width)
+        expect(gridBox.width).toBeLessThan(1920 - 30) // At least 30px total margins
+      }
+    })
+
+    test('features remain in 4-column grid at 1920px', async ({ page }) => {
+      const featureCards = page.locator('[data-testid^="feature-card-"]')
+      const cardCount = await featureCards.count()
+      expect(cardCount).toBeGreaterThanOrEqual(3)
+
+      // Verify cards are still in 4-column layout
+      if (cardCount === 4) {
+        const firstCard = featureCards.nth(0)
+        const secondCard = featureCards.nth(1)
+        const thirdCard = featureCards.nth(2)
+        const fourthCard = featureCards.nth(3)
+
+        const firstBox = await firstCard.boundingBox()
+        const secondBox = await secondCard.boundingBox()
+        const thirdBox = await thirdCard.boundingBox()
+        const fourthBox = await fourthCard.boundingBox()
+
+        if (firstBox && secondBox && thirdBox && fourthBox) {
+          // All cards should be on the same row
+          const yTolerance = 30
+          expect(Math.abs(firstBox.y - secondBox.y)).toBeLessThan(yTolerance)
+          expect(Math.abs(secondBox.y - thirdBox.y)).toBeLessThan(yTolerance)
+          expect(Math.abs(thirdBox.y - fourthBox.y)).toBeLessThan(yTolerance)
+        }
+      }
+    })
+
+    test('hero content has readable width at 1920px', async ({ page }) => {
+      // Hero content should have a max-width to maintain readability
+      const heroContent = page.locator('[data-testid="hero-section"] .max-w-2xl')
+      await expect(heroContent).toBeVisible()
+
+      const contentBox = await heroContent.boundingBox()
+      expect(contentBox).not.toBeNull()
+
+      if (contentBox) {
+        // max-w-2xl is 42rem = 672px, should not be wider than this
+        expect(contentBox.width).toBeLessThanOrEqual(700) // Allow some tolerance
+      }
+    })
+
+    test('no horizontal scroll at 1920px viewport', async ({ page }) => {
+      const { viewportWidth, documentWidth } = await page.evaluate(() => {
+        return {
+          viewportWidth: window.innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+        }
+      })
+
+      expect(documentWidth).toBeLessThanOrEqual(viewportWidth)
+    })
+  })
+
+  /**
+   * Test Case 3: Full navigation visible with all links displayed horizontally
+   * Input: Verify navigation bar
+   * Expected: Full navigation visible with all links displayed horizontally
+   */
+  test.describe('Desktop Navigation Bar', () => {
+    test.use({
+      viewport: { width: 1024, height: 768 },
+    })
+
+    test.beforeEach(async ({ page }) => {
+      await page.goto('/')
+      await page.waitForLoadState('domcontentloaded')
+    })
+
+    test('full navigation is visible with horizontal links at desktop viewport', async ({ page }) => {
+      // The navbar uses lg:flex for center menu at 1024px+
+      const navbar = page.locator('nav.navbar')
+      await expect(navbar).toBeVisible()
+
+      // At desktop viewport (>= lg:1024px), the horizontal menu should be visible
+      const centerMenu = page.locator('.navbar-center.hidden.lg\\:flex')
+      await expect(centerMenu).toBeVisible()
+
+      // The mobile dropdown should be hidden at desktop viewport
+      const mobileDropdown = page.locator('.lg\\:hidden.dropdown')
+      await expect(mobileDropdown).toBeHidden()
+    })
+
+    test('all navigation links are displayed horizontally', async ({ page }) => {
+      // Get the horizontal navigation menu
+      const horizontalMenu = page.locator('.navbar-center.hidden.lg\\:flex ul')
+      await expect(horizontalMenu).toBeVisible()
+
+      // Check that navigation links are visible
+      const homeLink = horizontalMenu.getByRole('link', { name: /home/i })
+      const loginLink = horizontalMenu.getByRole('link', { name: /login/i })
+      const registerLink = horizontalMenu.getByRole('link', { name: /register/i })
+
+      await expect(homeLink).toBeVisible()
+      await expect(loginLink).toBeVisible()
+      await expect(registerLink).toBeVisible()
+
+      // Verify links are displayed horizontally (same Y position, increasing X)
+      const homeBox = await homeLink.boundingBox()
+      const loginBox = await loginLink.boundingBox()
+      const registerBox = await registerLink.boundingBox()
+
+      expect(homeBox).not.toBeNull()
+      expect(loginBox).not.toBeNull()
+      expect(registerBox).not.toBeNull()
+
+      if (homeBox && loginBox && registerBox) {
+        // All links should be on the same row (similar Y position)
+        const yTolerance = 10
+        expect(Math.abs(homeBox.y - loginBox.y)).toBeLessThan(yTolerance)
+        expect(Math.abs(loginBox.y - registerBox.y)).toBeLessThan(yTolerance)
+
+        // Links should be arranged horizontally (increasing X positions)
+        expect(loginBox.x).toBeGreaterThan(homeBox.x)
+        expect(registerBox.x).toBeGreaterThan(loginBox.x)
+      }
+    })
+
+    test('navigation links are clickable and navigate correctly', async ({ page }) => {
+      // Get the horizontal navigation menu
+      const horizontalMenu = page.locator('.navbar-center.hidden.lg\\:flex ul')
+
+      // Click on Login link
+      const loginLink = horizontalMenu.getByRole('link', { name: /login/i })
+      await loginLink.click()
+
+      // Verify navigation to login page
+      await expect(page).toHaveURL(/\/login/)
+
+      // Navigate back to homepage
+      await page.goto('/')
+      await page.waitForLoadState('domcontentloaded')
+
+      // Click on Register link
+      const registerLink = page.locator('.navbar-center.hidden.lg\\:flex ul').getByRole('link', { name: /register/i })
+      await registerLink.click()
+
+      // Verify navigation to register page
+      await expect(page).toHaveURL(/\/register/)
+    })
+
+    test('theme selector is visible and functional at desktop viewport', async ({ page }) => {
+      // Verify theme selector is visible
+      const themeSelector = page.locator('select[aria-label="Select theme"]')
+      await expect(themeSelector).toBeVisible()
+      await expect(themeSelector).toBeEnabled()
+
+      // Verify theme selector has options
+      const options = await themeSelector.locator('option').count()
+      expect(options).toBeGreaterThan(0)
+
+      // Test that theme can be changed
+      await themeSelector.selectOption({ index: 1 })
+
+      // Verify the selection was made (value changed)
+      const selectedValue = await themeSelector.inputValue()
+      expect(selectedValue).toBeTruthy()
+    })
+
+    test('brand/logo is visible and links to homepage', async ({ page }) => {
+      // Find the brand link
+      const brandLink = page.locator('.navbar-start a').first()
+      await expect(brandLink).toBeVisible()
+
+      // Verify it contains the brand name
+      const brandText = await brandLink.textContent()
+      expect(brandText).toContain('URLShort')
+
+      // Navigate away first
+      await page.goto('/login')
+      await page.waitForLoadState('domcontentloaded')
+
+      // Click the brand to navigate home
+      await page.locator('.navbar-start a').first().click()
+
+      // Should navigate back to homepage
+      await expect(page).toHaveURL('/')
+    })
+  })
+})
