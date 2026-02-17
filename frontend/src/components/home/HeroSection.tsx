@@ -19,7 +19,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ onRegisterClick, onLoginClick }: HeroSectionProps) {
   return (
-    <section className="hero min-h-[60vh] py-20">
+    <section className="hero min-h-[60vh] py-20" data-testid="hero-section">
       <div className="hero-content text-center">
         <div className="max-w-2xl">
           <h1 className="text-5xl font-bold mb-6">
@@ -30,10 +30,20 @@ export function HeroSection({ onRegisterClick, onLoginClick }: HeroSectionProps)
             Get detailed analytics and manage all your links in one place.
           </p>
           <div className="flex gap-4 justify-center">
-            <FuturisticButton variant="primary" onClick={onRegisterClick}>
+            <FuturisticButton
+              variant="primary"
+              onClick={onRegisterClick}
+              data-testid="hero-primary-cta"
+              aria-label="Get started with URL shortening - create a free account"
+            >
               Get Started Free
             </FuturisticButton>
-            <FuturisticButton variant="outline" onClick={onLoginClick}>
+            <FuturisticButton
+              variant="outline"
+              onClick={onLoginClick}
+              data-testid="hero-login-cta"
+              aria-label="Log in to your URL shortening account"
+            >
               Log In
             </FuturisticButton>
           </div>
