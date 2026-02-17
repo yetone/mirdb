@@ -25,7 +25,7 @@ export function HeroSection({ onRegisterClick, onLoginClick }: HeroSectionProps)
           <h1 className="text-5xl font-bold mb-6">
             Shorten URLs, Track Clicks, Grow Your Reach
           </h1>
-          <p className="text-xl mb-8 text-base-content/70">
+          <p className="text-xl mb-8 text-base-content">
             Transform long, unwieldy URLs into short, memorable links.
             Get detailed analytics and manage all your links in one place.
           </p>

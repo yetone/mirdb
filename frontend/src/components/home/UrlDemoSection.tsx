@@ -106,7 +106,7 @@ export function UrlDemoSection({ onRegisterPrompt }: UrlDemoSectionProps) {
         >
           Try It Now
         </h2>
-        <p className="text-center text-base-content/70 mb-8 max-w-xl mx-auto">
+        <p className="text-center text-base-content mb-8 max-w-xl mx-auto">
           Paste a long URL below and see how fast we can shorten it. No sign-up required!
         </p>
         <GlassMorphismCard className="max-w-2xl mx-auto">
@@ -150,7 +150,7 @@ export function UrlDemoSection({ onRegisterPrompt }: UrlDemoSectionProps) {
                 className="mt-4 p-4 bg-base-200 rounded-lg"
                 data-testid="result-container"
               >
-                <p className="text-sm text-base-content/70 mb-2">Your shortened URL:</p>
+                <p className="text-sm text-base-content mb-2">Your shortened URL:</p>
                 <p className="font-mono text-lg" data-testid="short-url">
                   {shortUrl}
                 </p>
@@ -195,7 +195,7 @@ export function UrlDemoSection({ onRegisterPrompt }: UrlDemoSectionProps) {
                 </button>
                 {showRegistrationPrompt && (
                   <p
-                    className="text-sm mt-4 text-base-content/60"
+                    className="text-sm mt-4 text-base-content"
                     data-testid="registration-prompt"
                   >
                     <button

@@ -18,7 +18,7 @@ export function Navbar() {
   const { theme, setTheme, availableThemes } = useTheme()
 
   return (
-    <nav className="navbar bg-base-100/80 backdrop-blur-md border-b border-base-content/10 sticky top-0 z-50">
+    <nav className="navbar bg-base-100/80 backdrop-blur-md border-b border-base-content/10 sticky top-0 z-50" aria-label="Main navigation">
       <div className="navbar-start">
         <Link to="/" className="btn btn-ghost text-xl font-bold">
           URLShort
@@ -48,8 +48,8 @@ export function Navbar() {
         </select>
 
         <div className="lg:hidden dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <label tabIndex={0} className="btn btn-ghost" aria-label="Open navigation menu">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h8m-8 6h16" />
             </svg>
           </label>

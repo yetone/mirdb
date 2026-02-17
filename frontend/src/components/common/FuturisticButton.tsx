@@ -59,7 +59,7 @@ export function FuturisticButton({
     outline: `
       border-2
       border-primary
-      text-primary
+      text-base-content
       hover:bg-primary
       hover:text-primary-content
       focus:ring-primary

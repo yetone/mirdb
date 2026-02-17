@@ -33,6 +33,7 @@ function LinkIcon() {
       stroke="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -54,6 +55,7 @@ function ChartIcon() {
       stroke="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -75,6 +77,7 @@ function ShieldIcon() {
       stroke="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -96,6 +99,7 @@ function CodeIcon() {
       stroke="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -160,7 +164,7 @@ export function FeaturesSection() {
               <h3 data-testid="feature-title" className="text-xl font-semibold mb-3">
                 {feature.title}
               </h3>
-              <p data-testid="feature-description" className="text-base-content/70">
+              <p data-testid="feature-description" className="text-base-content">
                 {feature.description}
               </p>
             </GlassMorphismCard>
