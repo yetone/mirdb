@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply min-h-screen bg-base-100 text-base-content;
+}
+
+/* Glassmorphism utility */
+.glass-effect {
+  @apply backdrop-blur-md bg-opacity-20;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
