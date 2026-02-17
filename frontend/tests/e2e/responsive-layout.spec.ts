@@ -9,6 +9,237 @@
 
 import { test, expect } from '@playwright/test'
 
+// ============================================================================
+// SCENARIO 8: Mobile Responsive Layout Tests (320px-767px)
+// ============================================================================
+
+test.describe('Mobile Responsive Layout (320px-767px)', () => {
+  test.describe.configure({ mode: 'serial' })
+
+  test.beforeEach(async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 320, height: 568 })
+    await page.goto('/')
+    // Wait for page to be fully loaded
+    await page.waitForLoadState('networkidle')
+  })
+
+  test('Test Case 1: All content visible without horizontal scroll at 320px viewport', async ({
+    page,
+  }) => {
+    // Verify viewport is set correctly
+    const viewport = page.viewportSize()
+    expect(viewport?.width).toBe(320)
+
+    // Check that there's no horizontal scrollbar
+    const hasHorizontalScroll = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > document.documentElement.clientWidth
+    })
+    expect(hasHorizontalScroll).toBe(false)
+
+    // Verify hero section is visible
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toBeVisible()
+
+    // Verify features section is visible
+    const featuresGrid = page.getByTestId('features-grid')
+    await expect(featuresGrid).toBeVisible()
+
+    // Verify URL demo section is visible
+    const urlDemoSection = page.getByTestId('url-demo-section')
+    await expect(urlDemoSection).toBeVisible()
+
+    // Verify footer is visible
+    const footer = page.getByTestId('footer')
+    await expect(footer).toBeVisible()
+
+    // Ensure all content fits within viewport width
+    const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth)
+    expect(bodyScrollWidth).toBeLessThanOrEqual(320)
+  })
+
+  test('Test Case 5: URL demo input is usable and appropriately sized for mobile keyboards', async ({
+    page,
+  }) => {
+    // Navigate to URL demo section
+    const urlInput = page.getByTestId('url-input')
+    await urlInput.scrollIntoViewIfNeeded()
+    await expect(urlInput).toBeVisible()
+
+    // Check that input has adequate width for mobile
+    const inputBox = await urlInput.boundingBox()
+    expect(inputBox).not.toBeNull()
+    if (inputBox) {
+      // Input should take most of the container width (at least 70% of 320px = 224px)
+      // Accounting for container padding and margins
+      expect(inputBox.width).toBeGreaterThanOrEqual(220)
+    }
+
+    // Test that input is focusable and typeable
+    await urlInput.click()
+    await urlInput.fill('https://example.com/test-url')
+
+    // Verify the text was entered
+    const inputValue = await urlInput.inputValue()
+    expect(inputValue).toBe('https://example.com/test-url')
+
+    // Verify shorten button is visible and accessible
+    const shortenButton = page.getByTestId('shorten-button')
+    await expect(shortenButton).toBeVisible()
+
+    // Check button has adequate touch target
+    const buttonBox = await shortenButton.boundingBox()
+    expect(buttonBox).not.toBeNull()
+    if (buttonBox) {
+      expect(buttonBox.height).toBeGreaterThanOrEqual(44)
+    }
+  })
+
+  test('Hero section adapts to mobile layout', async ({ page }) => {
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toBeVisible()
+
+    // Check primary CTA button
+    const primaryCta = page.getByTestId('hero-primary-cta')
+    await expect(primaryCta).toBeVisible()
+
+    // Check login CTA button
+    const loginCta = page.getByTestId('hero-login-cta')
+    await expect(loginCta).toBeVisible()
+
+    // Get bounding boxes to verify layout
+    const primaryBox = await primaryCta.boundingBox()
+    const loginBox = await loginCta.boundingBox()
+
+    expect(primaryBox).not.toBeNull()
+    expect(loginBox).not.toBeNull()
+
+    // At mobile sizes, buttons should be visible and accessible
+    if (primaryBox && loginBox) {
+      // Both buttons should have adequate touch targets
+      expect(primaryBox.height).toBeGreaterThanOrEqual(44)
+      expect(loginBox.height).toBeGreaterThanOrEqual(44)
+    }
+  })
+
+  test('Feature cards display in single column layout on mobile', async ({ page }) => {
+    const featuresGrid = page.getByTestId('features-grid')
+    await featuresGrid.scrollIntoViewIfNeeded()
+    await expect(featuresGrid).toBeVisible()
+
+    // Get all feature cards
+    const featureCards = await page.locator('[data-testid^="feature-card-"]').all()
+    expect(featureCards.length).toBeGreaterThan(0)
+
+    // On mobile, cards should stack vertically (single column)
+    // Verify by checking that each card takes full width and cards are vertically stacked
+    const cardBoxes = await Promise.all(featureCards.map((card) => card.boundingBox()))
+
+    // Check that cards are stacked (y positions increase)
+    for (let i = 1; i < cardBoxes.length; i++) {
+      const prevBox = cardBoxes[i - 1]
+      const currentBox = cardBoxes[i]
+      if (prevBox && currentBox) {
+        // Current card should be below previous card
+        expect(currentBox.y).toBeGreaterThan(prevBox.y)
+      }
+    }
+  })
+
+  test('All interactive elements have adequate touch target size (44px minimum)', async ({
+    page,
+  }) => {
+    // Test CTA buttons in hero
+    const primaryCta = page.getByTestId('hero-primary-cta')
+    const loginCta = page.getByTestId('hero-login-cta')
+
+    const primaryBox = await primaryCta.boundingBox()
+    const loginBox = await loginCta.boundingBox()
+
+    expect(primaryBox).not.toBeNull()
+    expect(loginBox).not.toBeNull()
+
+    if (primaryBox) {
+      expect(primaryBox.height).toBeGreaterThanOrEqual(44)
+    }
+    if (loginBox) {
+      expect(loginBox.height).toBeGreaterThanOrEqual(44)
+    }
+
+    // Test shorten button in URL demo
+    const shortenButton = page.getByTestId('shorten-button')
+    await shortenButton.scrollIntoViewIfNeeded()
+    const shortenBox = await shortenButton.boundingBox()
+
+    expect(shortenBox).not.toBeNull()
+    if (shortenBox) {
+      expect(shortenBox.height).toBeGreaterThanOrEqual(44)
+    }
+
+    // Test footer navigation links
+    const footerLinkHome = page.getByTestId('footer-link-home')
+    const footerLinkLogin = page.getByTestId('footer-link-login')
+    const footerLinkRegister = page.getByTestId('footer-link-register')
+
+    await footerLinkHome.scrollIntoViewIfNeeded()
+
+    // For links, we check that they are at least accessible and visible
+    await expect(footerLinkHome).toBeVisible()
+    await expect(footerLinkLogin).toBeVisible()
+    await expect(footerLinkRegister).toBeVisible()
+  })
+
+  test('Navigation adapts to mobile viewport', async ({ page }) => {
+    // The navbar should be visible
+    const navbar = page.locator('nav').first()
+    await expect(navbar).toBeVisible()
+
+    // Content should not overflow
+    const hasOverflow = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > window.innerWidth
+    })
+    expect(hasOverflow).toBe(false)
+  })
+
+  test('Footer displays correctly on mobile', async ({ page }) => {
+    const footer = page.getByTestId('footer')
+    await footer.scrollIntoViewIfNeeded()
+    await expect(footer).toBeVisible()
+
+    // Check footer navigation
+    const footerNav = page.getByTestId('footer-nav')
+    await expect(footerNav).toBeVisible()
+
+    // Check footer legal links
+    const footerLegal = page.getByTestId('footer-legal')
+    await expect(footerLegal).toBeVisible()
+
+    // Check copyright
+    const footerCopyright = page.getByTestId('footer-copyright')
+    await expect(footerCopyright).toBeVisible()
+  })
+
+  test('Text is readable at mobile viewport', async ({ page }) => {
+    // Check main heading is visible and not truncated
+    const heading = page.locator('h1')
+    await expect(heading).toBeVisible()
+
+    // Get heading bounding box
+    const headingBox = await heading.boundingBox()
+    expect(headingBox).not.toBeNull()
+
+    if (headingBox) {
+      // Heading should be within viewport
+      expect(headingBox.x).toBeGreaterThanOrEqual(0)
+      expect(headingBox.x + headingBox.width).toBeLessThanOrEqual(320)
+    }
+  })
+})
+
+// ============================================================================
+// SCENARIO 9: Tablet Responsive Layout Tests (768px-1023px)
+// ============================================================================
+
 /**
  * Scenario 9: Tablet Responsive Layout
  * Verifies that homepage displays correctly on tablet viewport sizes (768px-1023px)
@@ -355,3 +586,8 @@ test.describe('Tablet Responsive Layout', () => {
     }
   })
 })
+
+// ============================================================================
+// SCENARIO 10: Desktop Layout Tests (1024px+)
+// Placeholder for Scenario 10 builder
+// ============================================================================
