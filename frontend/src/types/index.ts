@@ -33,6 +33,29 @@ export interface ApiError {
   status_code?: number
 }
 
+/** Custom error class for API errors with status codes */
+export class ApiRequestError extends Error {
+  public readonly statusCode: number | undefined
+  public readonly isNetworkError: boolean
+
+  constructor(message: string, statusCode?: number, isNetworkError = false) {
+    super(message)
+    this.name = 'ApiRequestError'
+    this.statusCode = statusCode
+    this.isNetworkError = isNetworkError
+  }
+
+  /** Check if this is a rate limit error (429) */
+  isRateLimitError(): boolean {
+    return this.statusCode === 429
+  }
+
+  /** Check if this is a server error (5xx) */
+  isServerError(): boolean {
+    return this.statusCode !== undefined && this.statusCode >= 500 && this.statusCode < 600
+  }
+}
+
 /** Feature item for homepage display */
 export interface Feature {
   id: string

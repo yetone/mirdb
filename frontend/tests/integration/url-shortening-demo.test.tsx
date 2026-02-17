@@ -22,6 +22,7 @@ vi.mock('@/api', () => ({
 }))
 
 import { shortenUrl } from '@/api'
+import { ApiRequestError } from '@/types'
 
 const mockedShortenUrl = vi.mocked(shortenUrl)
 
@@ -376,5 +377,349 @@ describe('URL Shortening Demo Integration', () => {
     // Check copy button accessibility
     const copyButton = screen.getByTestId('copy-button')
     expect(copyButton).toHaveAttribute('aria-label')
+  })
+})
+
+/**
+ * Error Handling in URL Demo (Scenario 14)
+ *
+ * Tests graceful error handling when URL shortening API fails.
+ * Verifies user-friendly error messages for different failure scenarios:
+ * - Network errors
+ * - Server errors (500)
+ * - Rate limiting (429)
+ * - Loading state display
+ */
+describe('URL Shortening Demo - Error Handling (Scenario 14)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+
+    // Reset clipboard mock
+    const mockClipboard = {
+      writeText: vi.fn(() => Promise.resolve()),
+      readText: vi.fn(() => Promise.resolve('')),
+    }
+    Object.defineProperty(navigator, 'clipboard', {
+      value: mockClipboard,
+      writable: true,
+      configurable: true,
+    })
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  /**
+   * Test Case 1: Network error during URL shortening
+   * Input: Trigger network error during URL shortening
+   * Expected: User-friendly error message displayed, page remains functional
+   */
+  it('displays user-friendly error and remains functional when network error occurs', async () => {
+    const user = userEvent.setup()
+
+    // Simulate network error
+    mockedShortenUrl.mockRejectedValue(
+      new ApiRequestError('Network error occurred', undefined, true)
+    )
+
+    render(
+      <TestWrapper>
+        <UrlDemoSection />
+      </TestWrapper>
+    )
+
+    // Enter a valid URL
+    const input = screen.getByTestId('url-input')
+    await user.type(input, 'https://example.com/page')
+
+    // Click shorten button
+    await user.click(screen.getByTestId('shorten-button'))
+
+    // Wait for error message
+    await waitFor(() => {
+      expect(screen.getByTestId('url-error')).toBeInTheDocument()
+    })
+
+    // Verify error message mentions connection/network issues
+    const errorMessage = screen.getByTestId('url-error')
+    expect(errorMessage).toHaveTextContent(/connect|internet|network/i)
+
+    // Verify page remains functional - result should not appear
+    expect(screen.queryByTestId('result-container')).not.toBeInTheDocument()
+
+    // Page should still be interactive - can clear and try again
+    await user.clear(input)
+    expect(input).toHaveValue('')
+
+    // Error should clear when typing
+    await user.type(input, 'https://another-example.com')
+    expect(screen.queryByTestId('url-error')).not.toBeInTheDocument()
+  })
+
+  /**
+   * Test Case 2: 500 server error
+   * Input: Trigger 500 server error
+   * Expected: Error message suggests trying again later or registering
+   */
+  it('displays appropriate error message for 500 server error with retry/register suggestion', async () => {
+    const user = userEvent.setup()
+
+    // Simulate 500 server error
+    mockedShortenUrl.mockRejectedValue(
+      new ApiRequestError('Internal server error', 500, false)
+    )
+
+    render(
+      <TestWrapper>
+        <UrlDemoSection />
+      </TestWrapper>
+    )
+
+    // Enter a valid URL
+    const input = screen.getByTestId('url-input')
+    await user.type(input, 'https://example.com/long/path')
+
+    // Click shorten button
+    await user.click(screen.getByTestId('shorten-button'))
+
+    // Wait for error message
+    await waitFor(() => {
+      expect(screen.getByTestId('url-error')).toBeInTheDocument()
+    })
+
+    // Verify error message suggests trying again later or registering
+    const errorMessage = screen.getByTestId('url-error')
+    expect(errorMessage).toHaveTextContent(/try again.*later|account|experiencing issues/i)
+
+    // Verify result container is not shown
+    expect(screen.queryByTestId('result-container')).not.toBeInTheDocument()
+  })
+
+  /**
+   * Test Case 3: Rate limit error (429)
+   * Input: Trigger rate limit error (429)
+   * Expected: Message indicates rate limit and suggests registration for higher limits
+   */
+  it('displays rate limit message with registration suggestion for 429 error', async () => {
+    const user = userEvent.setup()
+
+    // Simulate 429 rate limit error
+    mockedShortenUrl.mockRejectedValue(
+      new ApiRequestError('Rate limit exceeded', 429, false)
+    )
+
+    render(
+      <TestWrapper>
+        <UrlDemoSection />
+      </TestWrapper>
+    )
+
+    // Enter a valid URL
+    const input = screen.getByTestId('url-input')
+    await user.type(input, 'https://example.com/resource')
+
+    // Click shorten button
+    await user.click(screen.getByTestId('shorten-button'))
+
+    // Wait for error message
+    await waitFor(() => {
+      expect(screen.getByTestId('url-error')).toBeInTheDocument()
+    })
+
+    // Verify error message mentions rate limit and suggests registration
+    const errorMessage = screen.getByTestId('url-error')
+    expect(errorMessage).toHaveTextContent(/rate limit/i)
+    expect(errorMessage).toHaveTextContent(/account|higher limits/i)
+
+    // Verify result container is not shown
+    expect(screen.queryByTestId('result-container')).not.toBeInTheDocument()
+  })
+
+  /**
+   * Test Case 4: Loading state during API call
+   * Input: Verify loading state during API call
+   * Expected: Loading indicator shown while waiting for response
+   */
+  it('shows loading indicator while waiting for API response', async () => {
+    const user = userEvent.setup()
+
+    // Create a promise that we can control
+    let resolvePromise: (value: { short_url: string; short_code: string }) => void
+    const controlledPromise = new Promise<{ short_url: string; short_code: string }>((resolve) => {
+      resolvePromise = resolve
+    })
+
+    mockedShortenUrl.mockReturnValue(controlledPromise)
+
+    render(
+      <TestWrapper>
+        <UrlDemoSection />
+      </TestWrapper>
+    )
+
+    // Enter a valid URL
+    const input = screen.getByTestId('url-input')
+    await user.type(input, 'https://example.com/test')
+
+    // Verify button is not in loading state initially
+    const shortenButton = screen.getByTestId('shorten-button')
+    expect(shortenButton).not.toBeDisabled()
+
+    // Click shorten button
+    await user.click(shortenButton)
+
+    // Verify loading state is shown
+    await waitFor(() => {
+      expect(shortenButton).toBeDisabled()
+    })
+    expect(shortenButton).toHaveTextContent(/loading/i)
+
+    // Resolve the promise
+    resolvePromise!({ short_url: 'https://urlshort.io/test123', short_code: 'test123' })
+
+    // Verify loading state is removed after completion
+    await waitFor(() => {
+      expect(shortenButton).not.toBeDisabled()
+    })
+
+    // Result should be displayed
+    expect(screen.getByTestId('result-container')).toBeInTheDocument()
+  })
+
+  /**
+   * Additional test: Recovery after error
+   * Verifies that users can successfully shorten after an error occurs
+   */
+  it('allows successful shortening after recovering from an error', async () => {
+    const user = userEvent.setup()
+
+    // First call fails with network error
+    mockedShortenUrl
+      .mockRejectedValueOnce(new ApiRequestError('Network error occurred', undefined, true))
+      // Second call succeeds
+      .mockResolvedValueOnce({ short_url: 'https://urlshort.io/success', short_code: 'success' })
+
+    render(
+      <TestWrapper>
+        <UrlDemoSection />
+      </TestWrapper>
+    )
+
+    const input = screen.getByTestId('url-input')
+    const shortenButton = screen.getByTestId('shorten-button')
+
+    // First attempt - should fail
+    await user.type(input, 'https://example.com/first')
+    await user.click(shortenButton)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('url-error')).toBeInTheDocument()
+    })
+
+    // Clear and try again
+    await user.clear(input)
+    await user.type(input, 'https://example.com/second')
+    await user.click(shortenButton)
+
+    // Should succeed this time
+    await waitFor(() => {
+      expect(screen.getByTestId('result-container')).toBeInTheDocument()
+    })
+
+    expect(screen.getByTestId('short-url')).toHaveTextContent('https://urlshort.io/success')
+    expect(screen.queryByTestId('url-error')).not.toBeInTheDocument()
+  })
+
+  /**
+   * Additional test: Generic API error handling
+   * Tests handling of unknown/generic API errors
+   */
+  it('handles generic API errors gracefully', async () => {
+    const user = userEvent.setup()
+
+    // Simulate a generic error (not ApiRequestError)
+    mockedShortenUrl.mockRejectedValue(new Error('Something went wrong'))
+
+    render(
+      <TestWrapper>
+        <UrlDemoSection />
+      </TestWrapper>
+    )
+
+    const input = screen.getByTestId('url-input')
+    await user.type(input, 'https://example.com/test')
+    await user.click(screen.getByTestId('shorten-button'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('url-error')).toBeInTheDocument()
+    })
+
+    // Should show generic error message
+    const errorMessage = screen.getByTestId('url-error')
+    expect(errorMessage).toHaveTextContent(/unable to shorten/i)
+  })
+
+  /**
+   * Additional test: Error message has proper accessibility attributes
+   */
+  it('error messages have proper accessibility attributes', async () => {
+    const user = userEvent.setup()
+
+    mockedShortenUrl.mockRejectedValue(
+      new ApiRequestError('Server error', 500, false)
+    )
+
+    render(
+      <TestWrapper>
+        <UrlDemoSection />
+      </TestWrapper>
+    )
+
+    const input = screen.getByTestId('url-input')
+    await user.type(input, 'https://example.com')
+    await user.click(screen.getByTestId('shorten-button'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('url-error')).toBeInTheDocument()
+    })
+
+    // Error should have role="alert" for screen readers
+    const errorMessage = screen.getByTestId('url-error')
+    expect(errorMessage).toHaveAttribute('role', 'alert')
+
+    // Input should be marked as invalid
+    expect(input).toHaveAttribute('aria-invalid', 'true')
+    expect(input).toHaveAttribute('aria-describedby', 'url-error')
+  })
+
+  /**
+   * Additional test: 502/503 server errors
+   * Tests handling of various server error codes
+   */
+  it('handles 502 Bad Gateway error appropriately', async () => {
+    const user = userEvent.setup()
+
+    mockedShortenUrl.mockRejectedValue(
+      new ApiRequestError('Bad Gateway', 502, false)
+    )
+
+    render(
+      <TestWrapper>
+        <UrlDemoSection />
+      </TestWrapper>
+    )
+
+    const input = screen.getByTestId('url-input')
+    await user.type(input, 'https://example.com')
+    await user.click(screen.getByTestId('shorten-button'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('url-error')).toBeInTheDocument()
+    })
+
+    // Should show server error message
+    const errorMessage = screen.getByTestId('url-error')
+    expect(errorMessage).toHaveTextContent(/experiencing issues|try again.*later/i)
   })
 })

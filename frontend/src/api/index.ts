@@ -35,10 +35,31 @@ api.interceptors.response.use(
 
 export default api
 
+import { ApiRequestError } from '../types'
+
 /** Shorten a URL (public endpoint) */
 export async function shortenUrl(originalUrl: string): Promise<{ short_url: string; short_code: string }> {
-  const response = await api.post('/shorten', { url: originalUrl })
-  return response.data
+  try {
+    const response = await api.post('/shorten', { url: originalUrl })
+    return response.data
+  } catch (error: unknown) {
+    // Check if it's an axios error
+    if (error && typeof error === 'object' && 'isAxiosError' in error) {
+      const axiosError = error as { response?: { status?: number; data?: { detail?: string } }; message?: string }
+      const statusCode = axiosError.response?.status
+      const message = axiosError.response?.data?.detail || axiosError.message || 'Unknown error'
+
+      // Network error (no response)
+      if (!axiosError.response) {
+        throw new ApiRequestError('Network error occurred', undefined, true)
+      }
+
+      throw new ApiRequestError(message, statusCode, false)
+    }
+
+    // Unknown error type
+    throw new ApiRequestError('An unexpected error occurred', undefined, false)
+  }
 }
 
 /** Get all URLs for the current user */

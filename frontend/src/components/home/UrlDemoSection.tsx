@@ -15,6 +15,7 @@ import { GlassMorphismCard } from '../common'
 import { isValidUrl, getUrlValidationError, sanitizeUrl } from '../../utils/validation'
 import { copyToClipboard } from '../../utils/clipboard'
 import { shortenUrl } from '../../api'
+import { ApiRequestError } from '../../types'
 
 interface UrlDemoSectionProps {
   onRegisterPrompt?: () => void
@@ -67,9 +68,22 @@ export function UrlDemoSection({ onRegisterPrompt }: UrlDemoSectionProps) {
       setShortUrl(result.short_url)
       setShowRegistrationPrompt(true)
     } catch (err) {
-      // Handle API errors gracefully
+      // Handle API errors gracefully with contextual messages
       console.error('Error shortening URL:', err)
-      setError('Unable to shorten URL. Please try again.')
+
+      if (err instanceof ApiRequestError) {
+        if (err.isNetworkError) {
+          setError('Unable to connect to the server. Please check your internet connection and try again.')
+        } else if (err.isRateLimitError()) {
+          setError('Rate limit exceeded. Create a free account for higher limits and full analytics!')
+        } else if (err.isServerError()) {
+          setError('Our servers are experiencing issues. Please try again later or create an account for priority support.')
+        } else {
+          setError(`Unable to shorten URL: ${err.message}`)
+        }
+      } else {
+        setError('Unable to shorten URL. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }
