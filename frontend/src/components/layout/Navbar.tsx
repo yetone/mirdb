@@ -12,41 +12,54 @@
 
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../contexts/AuthContext'
-import { ThemeToggle } from '../ThemeToggle'
+import { useTheme } from '../../contexts/ThemeContext'
 
 export function Navbar() {
-  const { isAuthenticated, logout } = useAuth()
+  const { theme, setTheme, availableThemes } = useTheme()
 
   return (
-    <header className="navbar bg-base-100/80 backdrop-blur-md sticky top-0 z-50 border-b border-base-content/10">
-      <div className="flex-1">
+    <nav className="navbar bg-base-100/80 backdrop-blur-md border-b border-base-content/10 sticky top-0 z-50">
+      <div className="navbar-start">
         <Link to="/" className="btn btn-ghost text-xl font-bold">
-          URL Shortener
+          URLShort
         </Link>
       </div>
-      <nav className="flex-none gap-2" aria-label="Main navigation">
-        <ThemeToggle />
-        {isAuthenticated ? (
-          <>
-            <Link to="/dashboard" className="btn btn-ghost">
-              Dashboard
-            </Link>
-            <button onClick={logout} className="btn btn-ghost">
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" className="btn btn-ghost">
-              Login
-            </Link>
-            <Link to="/register" className="btn btn-primary">
-              Get Started
-            </Link>
-          </>
-        )}
-      </nav>
-    </header>
+
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1">
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/login">Login</Link></li>
+          <li><Link to="/register">Register</Link></li>
+        </ul>
+      </div>
+
+      <div className="navbar-end gap-2">
+        <select
+          className="select select-bordered select-sm"
+          value={theme}
+          onChange={(e) => setTheme(e.target.value as typeof theme)}
+          aria-label="Select theme"
+        >
+          {availableThemes.map((t) => (
+            <option key={t} value={t}>
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </option>
+          ))}
+        </select>
+
+        <div className="lg:hidden dropdown dropdown-end">
+          <label tabIndex={0} className="btn btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h8m-8 6h16" />
+            </svg>
+          </label>
+          <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/login">Login</Link></li>
+            <li><Link to="/register">Register</Link></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   )
 }

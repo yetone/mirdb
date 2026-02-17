@@ -11,10 +11,9 @@
 
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HeroSection, FeaturesSection, UrlDemoSection } from '../components/home'
-import { Navbar } from '../components/layout/Navbar'
-import { Footer } from '../components/layout/Footer'
 import { BackgroundEffect } from '../components/common'
+import { Navbar, Footer } from '../components/layout'
+import { HeroSection, FeaturesSection, UrlDemoSection } from '../components/home'
 
 export function Home() {
   const navigate = useNavigate()
@@ -32,7 +31,10 @@ export function Home() {
       <BackgroundEffect />
       <Navbar />
       <main className="flex-1">
-        <HeroSection onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} />
+        <HeroSection
+          onRegisterClick={handleRegisterClick}
+          onLoginClick={handleLoginClick}
+        />
         <FeaturesSection />
         <UrlDemoSection onRegisterPrompt={handleRegisterClick} />
       </main>

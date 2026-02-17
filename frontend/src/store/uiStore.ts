@@ -1,7 +1,6 @@
 /**
  * Zustand UI state store.
- *
- * Manages UI-related state across the application.
+ * Owner: First builder (shared)
  */
 
 import { create } from 'zustand'

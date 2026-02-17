@@ -1,11 +1,16 @@
 /// <reference types="vite/client" />
 
 declare module '*.svg' {
-  const content: string
+  const content: React.FC<React.SVGProps<SVGSVGElement>>
   export default content
 }
 
 declare module '*.png' {
-  const content: string
-  export default content
+  const value: string
+  export default value
+}
+
+declare module '*.jpg' {
+  const value: string
+  export default value
 }

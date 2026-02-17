@@ -1,7 +1,6 @@
 /**
- * URL analytics page component.
- *
- * Stub implementation - full implementation by another scenario.
+ * URL Stats page component.
+ * Stub implementation for routing.
  */
 
 import React from 'react'
@@ -11,9 +10,9 @@ export function UrlStats() {
   const { shortCode } = useParams<{ shortCode: string }>()
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold">URL Statistics</h1>
-      <p className="text-base-content/70 mt-2">Stats for {shortCode} coming soon</p>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold">URL Stats: {shortCode}</h1>
+      <p>URL statistics would go here.</p>
     </div>
   )
 }

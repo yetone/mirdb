@@ -16,9 +16,10 @@ export interface User {
 /** URL shortening result */
 export interface ShortenedUrl {
   id: number
-  short_code: string
   original_url: string
-  click_count: number
+  short_code: string
+  short_url: string
+  clicks: number
   created_at: string
   user_id: number
 }
@@ -32,20 +33,16 @@ export interface ApiError {
   status_code?: number
 }
 
-/** Authentication response */
-export interface AuthResponse {
-  access_token: string
-  token_type: string
+/** Feature item for homepage display */
+export interface Feature {
+  id: string
+  icon: React.ReactNode
+  title: string
+  description: string
 }
 
-/** Login credentials */
-export interface LoginCredentials {
-  email: string
-  password: string
-}
-
-/** Registration data */
-export interface RegisterData {
-  email: string
-  password: string
+/** API response wrapper */
+export interface ApiResponse<T> {
+  data: T
+  message?: string
 }

@@ -1,19 +1,23 @@
 /**
- * Authentication context provider and hook.
+ * Auth context provider and hook.
+ * Owner: First builder (shared)
  *
- * Manages user authentication state.
+ * Manages authentication state:
+ * - User session
+ * - Login/logout
+ * - Token management
  */
 
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import type { User } from '../types'
-import { authApi } from '../api'
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { User } from '../types'
 
 interface AuthContextType {
   user: User | null
-  isLoading: boolean
   isAuthenticated: boolean
-  login: (token: string) => void
+  isLoading: boolean
+  login: (email: string, password: string) => Promise<void>
   logout: () => void
+  register: (email: string, password: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -27,23 +31,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    // Check for existing token on mount
     const token = localStorage.getItem('token')
     if (token) {
-      authApi
-        .getCurrentUser()
-        .then(setUser)
-        .catch(() => {
-          localStorage.removeItem('token')
-        })
-        .finally(() => setIsLoading(false))
+      // Validate token and get user info
+      // For now, just mark loading as complete
+      setIsLoading(false)
     } else {
       setIsLoading(false)
     }
   }, [])
 
-  const login = (token: string) => {
-    localStorage.setItem('token', token)
-    authApi.getCurrentUser().then(setUser)
+  const login = async (email: string, password: string) => {
+    // Implementation would call API
+    console.log('Login:', email, password)
+    throw new Error('Not implemented')
   }
 
   const logout = () => {
@@ -51,14 +53,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(null)
   }
 
+  const register = async (email: string, password: string) => {
+    // Implementation would call API
+    console.log('Register:', email, password)
+    throw new Error('Not implemented')
+  }
+
   return (
     <AuthContext.Provider
       value={{
         user,
-        isLoading,
         isAuthenticated: !!user,
+        isLoading,
         login,
         logout,
+        register,
       }}
     >
       {children}
@@ -66,7 +75,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   )
 }
 
-export function useAuth(): AuthContextType {
+export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider')

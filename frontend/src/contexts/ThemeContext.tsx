@@ -1,11 +1,15 @@
 /**
  * Theme context provider and hook.
+ * Owner: First builder (shared)
  *
- * Manages application theme state with persistence.
+ * Manages application theme state:
+ * - Current theme selection
+ * - Theme persistence (localStorage)
+ * - Available themes list
  */
 
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import type { Theme } from '../types'
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { Theme } from '../types'
 
 interface ThemeContextType {
   theme: Theme
@@ -23,8 +27,13 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(() => {
-    const stored = localStorage.getItem('theme') as Theme | null
-    return stored && availableThemes.includes(stored) ? stored : 'dark'
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('theme') as Theme
+      if (stored && availableThemes.includes(stored)) {
+        return stored
+      }
+    }
+    return 'dark'
   })
 
   useEffect(() => {
@@ -33,9 +42,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   }, [theme])
 
   const setTheme = (newTheme: Theme) => {
-    if (availableThemes.includes(newTheme)) {
-      setThemeState(newTheme)
-    }
+    setThemeState(newTheme)
   }
 
   return (
@@ -45,7 +52,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   )
 }
 
-export function useTheme(): ThemeContextType {
+export function useTheme() {
   const context = useContext(ThemeContext)
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider')

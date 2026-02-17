@@ -1,5 +1,6 @@
 /**
  * Layout component exports.
+ * Owner: First builder (shared)
  */
 
 export { Navbar } from './Navbar'

@@ -9,57 +9,77 @@
  * - Keyboard accessibility
  */
 
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { ReactNode, ButtonHTMLAttributes } from 'react'
 
-export interface FuturisticButtonProps {
+export interface FuturisticButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline'
   loading?: boolean
-  disabled?: boolean
-  onClick?: () => void
-  children: React.ReactNode
-  className?: string
-  type?: 'button' | 'submit' | 'reset'
-  'aria-label'?: string
-  'data-testid'?: string
+  children: ReactNode
 }
 
 export function FuturisticButton({
   variant = 'primary',
   loading = false,
-  disabled = false,
-  onClick,
+  disabled,
   children,
   className = '',
-  type = 'button',
-  'aria-label': ariaLabel,
-  'data-testid': testId,
+  ...props
 }: FuturisticButtonProps) {
-  const baseClasses = 'btn font-semibold transition-all duration-200 min-h-[44px] min-w-[44px]'
+  const baseStyles = `
+    relative
+    px-6 py-3
+    font-semibold
+    rounded-lg
+    transition-all
+    duration-300
+    transform
+    hover:scale-105
+    active:scale-95
+    disabled:opacity-50
+    disabled:cursor-not-allowed
+    disabled:transform-none
+    focus:outline-none
+    focus:ring-2
+    focus:ring-offset-2
+  `
 
-  const variantClasses = {
-    primary: 'btn-primary',
-    secondary: 'btn-secondary',
-    outline: 'btn-outline',
+  const variantStyles = {
+    primary: `
+      bg-primary
+      text-primary-content
+      hover:bg-primary-focus
+      focus:ring-primary
+    `,
+    secondary: `
+      bg-secondary
+      text-secondary-content
+      hover:bg-secondary-focus
+      focus:ring-secondary
+    `,
+    outline: `
+      border-2
+      border-primary
+      text-primary
+      hover:bg-primary
+      hover:text-primary-content
+      focus:ring-primary
+    `,
   }
 
   return (
-    <motion.button
-      type={type}
-      onClick={onClick}
+    <button
+      className={`${baseStyles} ${variantStyles[variant]} ${className}`}
       disabled={disabled || loading}
-      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
-      whileHover={{ scale: disabled ? 1 : 1.02 }}
-      whileTap={{ scale: disabled ? 1 : 0.98 }}
-      aria-label={ariaLabel}
-      aria-busy={loading}
-      data-testid={testId}
+      {...props}
     >
       {loading ? (
-        <span className="loading loading-spinner loading-sm" aria-hidden="true"></span>
+        <span className="flex items-center gap-2">
+          <span className="loading loading-spinner loading-sm" />
+          Loading...
+        </span>
       ) : (
         children
       )}
-    </motion.button>
+    </button>
   )
 }

@@ -10,61 +10,34 @@
  */
 
 import React from 'react'
-import { motion } from 'framer-motion'
 import { FuturisticButton } from '../common'
 
-export interface HeroSectionProps {
+interface HeroSectionProps {
   onRegisterClick?: () => void
   onLoginClick?: () => void
 }
 
 export function HeroSection({ onRegisterClick, onLoginClick }: HeroSectionProps) {
   return (
-    <section
-      className="hero min-h-[70vh] bg-base-100"
-      aria-labelledby="hero-headline"
-      data-testid="hero-section"
-    >
+    <section className="hero min-h-[60vh] py-20">
       <div className="hero-content text-center">
-        <motion.div
-          className="max-w-2xl"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1
-            id="hero-headline"
-            className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
-            data-testid="hero-headline"
-          >
-            Shorten Links, Amplify Your Reach
+        <div className="max-w-2xl">
+          <h1 className="text-5xl font-bold mb-6">
+            Shorten URLs, Track Clicks, Grow Your Reach
           </h1>
-          <p
-            className="py-6 text-lg md:text-xl text-base-content/80"
-            data-testid="hero-subheadline"
-          >
-            Transform long URLs into short, memorable links. Track clicks, analyze performance,
-            and share with confidence. Start free today.
+          <p className="text-xl mb-8 text-base-content/70">
+            Transform long, unwieldy URLs into short, memorable links.
+            Get detailed analytics and manage all your links in one place.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <FuturisticButton
-              variant="primary"
-              onClick={onRegisterClick}
-              className="btn-lg px-8"
-              aria-label="Get started with URL shortening"
-              data-testid="hero-primary-cta"
-            >
+          <div className="flex gap-4 justify-center">
+            <FuturisticButton variant="primary" onClick={onRegisterClick}>
               Get Started Free
             </FuturisticButton>
-            <button
-              onClick={onLoginClick}
-              className="btn btn-ghost btn-lg"
-              data-testid="hero-secondary-cta"
-            >
-              Already have an account? <span className="text-primary ml-1">Log in</span>
-            </button>
+            <FuturisticButton variant="outline" onClick={onLoginClick}>
+              Log In
+            </FuturisticButton>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

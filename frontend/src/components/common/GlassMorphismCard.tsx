@@ -8,19 +8,33 @@
  * - Flexible content container
  */
 
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 export interface GlassMorphismCardProps {
   className?: string
-  children: React.ReactNode
+  children: ReactNode
+  testId?: string
 }
 
-export function GlassMorphismCard({ className = '', children }: GlassMorphismCardProps) {
+export function GlassMorphismCard({ className = '', children, testId }: GlassMorphismCardProps) {
   return (
     <div
-      className={`card bg-base-200/50 backdrop-blur-md border border-base-content/10 shadow-xl ${className}`}
+      data-testid={testId}
+      className={`
+        backdrop-blur-md
+        bg-base-100/70
+        border border-base-content/10
+        rounded-2xl
+        shadow-xl
+        p-6
+        transition-all
+        duration-300
+        hover:shadow-2xl
+        hover:bg-base-100/80
+        ${className}
+      `}
     >
-      <div className="card-body">{children}</div>
+      {children}
     </div>
   )
 }

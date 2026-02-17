@@ -1,5 +1,6 @@
 /**
  * Home component exports.
+ * Owner: First builder (shared)
  */
 
 export { HeroSection } from './HeroSection'

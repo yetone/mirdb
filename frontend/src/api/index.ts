@@ -1,11 +1,9 @@
 /**
- * API client configuration and endpoints.
- *
- * Centralizes all API calls with JWT authentication handling.
+ * API client configuration.
+ * Owner: First builder (shared)
  */
 
 import axios from 'axios'
-import type { ShortenedUrl, AuthResponse, LoginCredentials, RegisterData } from '../types'
 
 const api = axios.create({
   baseURL: '/api',
@@ -23,7 +21,7 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Response interceptor for error handling
+// Response interceptor to handle errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -35,50 +33,22 @@ api.interceptors.response.use(
   }
 )
 
-/** Authentication endpoints */
-export const authApi = {
-  login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const formData = new URLSearchParams()
-    formData.append('username', credentials.email)
-    formData.append('password', credentials.password)
-    const { data } = await api.post<AuthResponse>('/token', formData, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    })
-    return data
-  },
-
-  register: async (userData: RegisterData): Promise<{ message: string }> => {
-    const { data } = await api.post('/register', userData)
-    return data
-  },
-
-  getCurrentUser: async () => {
-    const { data } = await api.get('/users/me')
-    return data
-  },
-}
-
-/** URL shortening endpoints */
-export const urlApi = {
-  shorten: async (originalUrl: string): Promise<ShortenedUrl> => {
-    const { data } = await api.post<ShortenedUrl>('/shorten', { url: originalUrl })
-    return data
-  },
-
-  shortenPublic: async (originalUrl: string): Promise<ShortenedUrl> => {
-    const { data } = await api.post<ShortenedUrl>('/shorten/public', { url: originalUrl })
-    return data
-  },
-
-  getMyUrls: async (): Promise<ShortenedUrl[]> => {
-    const { data } = await api.get<ShortenedUrl[]>('/urls')
-    return data
-  },
-
-  getUrlStats: async (shortCode: string) => {
-    const { data } = await api.get(`/stats/${shortCode}`)
-    return data
-  },
-}
-
 export default api
+
+/** Shorten a URL (public endpoint) */
+export async function shortenUrl(originalUrl: string): Promise<{ short_url: string; short_code: string }> {
+  const response = await api.post('/shorten', { url: originalUrl })
+  return response.data
+}
+
+/** Get all URLs for the current user */
+export async function getUserUrls() {
+  const response = await api.get('/urls')
+  return response.data
+}
+
+/** Get URL stats */
+export async function getUrlStats(shortCode: string) {
+  const response = await api.get(`/urls/${shortCode}/stats`)
+  return response.data
+}
