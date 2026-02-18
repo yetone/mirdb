@@ -24,6 +24,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Account for sticky header when scrolling to anchor targets */
+  scroll-padding-top: 80px;
 }
 
 body {
@@ -189,6 +191,43 @@ p {
   background-color: var(--color-primary);
   color: white;
   text-decoration: none;
+}
+
+/* Button Focus States (Scenario 12) */
+.btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn-primary:focus {
+  outline-color: var(--color-primary-dark);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
+}
+
+.btn-secondary:focus {
+  outline-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
+}
+
+/* Button Active/Pressed States (Scenario 12) */
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary:active {
+  background-color: var(--color-primary-dark);
+  transform: scale(0.98);
+}
+
+.btn-secondary:active {
+  background-color: var(--color-primary);
+  color: white;
+  transform: scale(0.98);
 }
 
 /* ==========================================================================
@@ -1397,5 +1436,37 @@ p {
 
   .footer-social {
     justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion (Scenario 12)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Disable smooth scroll when user prefers reduced motion */
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Disable all transitions and animations */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Keep focus indicators visible but without transitions */
+  .btn:focus,
+  .btn:focus-visible,
+  .nav-link:focus,
+  .nav-mobile-toggle:focus,
+  .faq-question:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    transition: none;
   }
 }
