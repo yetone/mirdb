@@ -1,0 +1,6 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="12" width="8" height="16" fill="#dc2626"/>
+  <rect x="12" y="8" width="8" height="24" fill="#dc2626"/>
+  <rect x="22" y="16" width="8" height="12" fill="#dc2626"/>
+  <text x="36" y="26" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Enterprise</text>
+</svg>

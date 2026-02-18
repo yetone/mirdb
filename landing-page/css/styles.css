@@ -694,7 +694,207 @@ p {
    Testimonials Styles (Scenario 5)
    ========================================================================== */
 
-/* Placeholder for testimonials styles */
+.testimonials {
+  background-color: var(--color-surface);
+}
+
+/* Customer Logos Section */
+.customer-logos {
+  text-align: center;
+  margin-bottom: var(--spacing-3xl);
+}
+
+.customer-logos-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-lg);
+}
+
+.logo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.customer-logo {
+  height: 40px;
+  width: auto;
+  opacity: 0.6;
+  filter: grayscale(100%);
+  transition: opacity var(--transition-base), filter var(--transition-base);
+}
+
+.customer-logo:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+/* Testimonials Grid */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-3xl);
+}
+
+/* Testimonial Card */
+.testimonial-card {
+  background-color: var(--color-background);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Testimonial Quote */
+.testimonial-quote {
+  flex: 1;
+  margin: 0 0 var(--spacing-lg) 0;
+  padding: 0;
+  border: none;
+  position: relative;
+}
+
+.testimonial-quote::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: -5px;
+  font-size: 4rem;
+  font-family: Georgia, serif;
+  color: var(--color-primary);
+  opacity: 0.2;
+  line-height: 1;
+}
+
+.testimonial-quote p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text);
+  font-style: italic;
+  margin: 0;
+  padding-left: var(--spacing-md);
+}
+
+/* Testimonial Attribution */
+.testimonial-attribution {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+}
+
+.testimonial-avatar {
+  flex-shrink: 0;
+}
+
+.testimonial-avatar img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+  font-style: normal;
+}
+
+.testimonial-author-name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+}
+
+.testimonial-author-role {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.testimonial-author-company {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Trust Indicators / Statistics */
+.trust-indicators {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-xl);
+  text-align: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.stat-number {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Testimonials responsive adjustments */
+@media (max-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .logo-grid {
+    gap: var(--spacing-lg);
+  }
+
+  .customer-logo {
+    height: 32px;
+  }
+
+  .trust-indicators {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonial-card {
+    padding: var(--spacing-lg);
+  }
+
+  .testimonial-avatar img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .stat-number {
+    font-size: var(--font-size-2xl);
+  }
+}
 
 /* ==========================================================================
    Pricing Styles (Scenario 6)
