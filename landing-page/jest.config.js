@@ -9,12 +9,12 @@ module.exports = {
   roots: ['<rootDir>/tests'],
   testMatch: [
     '**/unit/**/*.test.js',
-    '**/unit/**/*.spec.js'
+    '**/unit/**/*.spec.js',
+    '**/integration/**/*.test.js'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
-    '/tests/e2e/',
-    '/tests/integration/'
+    '/tests/e2e/'
   ],
   moduleFileExtensions: ['js', 'json'],
   collectCoverageFrom: [

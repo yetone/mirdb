@@ -30,8 +30,46 @@
        ========================================================================== -->
   <header class="header" role="banner">
     <nav class="nav container" role="navigation" aria-label="Main navigation">
-      <!-- Navigation content to be implemented by Scenario 2 -->
-      <a href="/" class="nav-logo">Product</a>
+      <!-- Logo -->
+      <a href="/" class="nav-logo" aria-label="Product Home">
+        <span class="nav-logo-text">Product</span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#benefits" class="nav-link">Benefits</a></li>
+        <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+        <li><a href="#faq" class="nav-link">FAQ</a></li>
+      </ul>
+
+      <!-- CTA Button -->
+      <a href="#hero" class="btn btn-primary nav-cta">Get Started</a>
+
+      <!-- Mobile Menu Button -->
+      <button
+        class="nav-mobile-toggle"
+        id="nav-mobile-toggle"
+        type="button"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-mobile-menu"
+      >
+        <span class="nav-mobile-toggle-icon" aria-hidden="true"></span>
+      </button>
+
+      <!-- Mobile Menu -->
+      <div class="nav-mobile-menu" id="nav-mobile-menu" aria-hidden="true">
+        <ul class="nav-mobile-links">
+          <li><a href="#features" class="nav-mobile-link">Features</a></li>
+          <li><a href="#benefits" class="nav-mobile-link">Benefits</a></li>
+          <li><a href="#testimonials" class="nav-mobile-link">Testimonials</a></li>
+          <li><a href="#pricing" class="nav-mobile-link">Pricing</a></li>
+          <li><a href="#faq" class="nav-mobile-link">FAQ</a></li>
+        </ul>
+        <a href="#hero" class="btn btn-primary nav-mobile-cta">Get Started</a>
+      </div>
     </nav>
   </header>
 
@@ -203,6 +241,7 @@
     </div>
   </footer>
 
+  <script src="js/navigation.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

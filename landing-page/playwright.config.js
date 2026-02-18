@@ -7,8 +7,8 @@
 const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
-  testDir: './tests',
-  testMatch: ['**/e2e/**/*.test.js', '**/integration/**/*.test.js'],
+  testDir: './tests/e2e',
+  testMatch: ['**/*.spec.js'],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
