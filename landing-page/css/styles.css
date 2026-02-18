@@ -906,7 +906,142 @@ p {
    FAQ Styles (Scenario 7)
    ========================================================================== */
 
-/* Placeholder for FAQ styles */
+.faq {
+  background-color: var(--color-surface);
+}
+
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.faq-item:last-child {
+  margin-bottom: 0;
+}
+
+.faq-item-heading {
+  margin: 0;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-lg);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+.faq-question:hover {
+  background-color: var(--color-surface);
+}
+
+.faq-question:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.faq-question:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.faq-question-text {
+  flex: 1;
+  padding-right: var(--spacing-md);
+}
+
+.faq-icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  transition: transform var(--transition-base);
+}
+
+.faq-icon::before,
+.faq-icon::after {
+  content: '';
+  position: absolute;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  transition: transform var(--transition-base);
+}
+
+.faq-icon::before {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.faq-icon::after {
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+/* Icon animation when expanded */
+.faq-question[aria-expanded="true"] .faq-icon::after {
+  transform: translateX(-50%) rotate(90deg);
+  opacity: 0;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-slow), padding var(--transition-slow);
+}
+
+.faq-answer--open {
+  max-height: 500px;
+}
+
+.faq-answer-content {
+  padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+.faq-answer-content p {
+  margin: 0;
+}
+
+.faq-answer-content p + p {
+  margin-top: var(--spacing-md);
+}
+
+/* Responsive FAQ adjustments */
+@media (max-width: 640px) {
+  .faq-question {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+  }
+
+  .faq-answer-content {
+    padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
+  }
+}
 
 /* ==========================================================================
    Footer Styles (Scenario 8)
