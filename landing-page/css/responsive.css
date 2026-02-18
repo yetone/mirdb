@@ -1,0 +1,446 @@
+/**
+ * Responsive Styles
+ * Owner: Scenario 9 - Responsive Design
+ *
+ * Contains all media queries for responsive layouts:
+ * - Mobile: < 768px
+ * - Tablet: 768px - 1024px
+ * - Desktop: > 1024px
+ *
+ * Breakpoints:
+ * --breakpoint-sm: 640px
+ * --breakpoint-md: 768px
+ * --breakpoint-lg: 1024px
+ * --breakpoint-xl: 1280px
+ */
+
+/* ==========================================================================
+   Global Responsive Defaults
+   ========================================================================== */
+
+/* Prevent horizontal overflow on all devices */
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Ensure all elements respect container boundaries */
+*,
+*::before,
+*::after {
+  max-width: 100%;
+}
+
+/* Reset max-width for elements that need full width */
+html,
+body,
+.container,
+.section {
+  max-width: none;
+}
+
+/* ==========================================================================
+   Touch Target Sizes (WCAG 2.1 AA - 44x44px minimum)
+   ========================================================================== */
+
+/* Ensure all interactive elements have minimum touch target size */
+.btn,
+.nav-link,
+.nav-mobile-link,
+.faq-question,
+button,
+a[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ==========================================================================
+   Mobile Styles (max-width: 640px)
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  /* Container adjustments */
+  .container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+
+  /* Section spacing */
+  .section {
+    padding-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .section-header {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .section-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .section-subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  /* Features Section - Single column on mobile */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .feature-title {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Benefits Section - Single column on mobile */
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .benefit-card {
+    padding: var(--spacing-lg);
+  }
+
+  .benefit-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* Testimonials Section */
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .testimonial-card {
+    padding: var(--spacing-lg);
+  }
+
+  .logo-grid {
+    gap: var(--spacing-md);
+  }
+
+  .customer-logo {
+    height: 28px;
+  }
+
+  .trust-indicators {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+
+  .stat-number {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Pricing Section - Single column on mobile */
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .pricing-card {
+    padding: var(--spacing-lg);
+  }
+
+  .pricing-amount {
+    font-size: var(--font-size-3xl);
+  }
+
+  .pricing-cta-section {
+    padding: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+
+  /* FAQ Section */
+  .faq-list {
+    max-width: 100%;
+  }
+
+  .faq-question {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+  }
+
+  .faq-answer-content {
+    padding: 0 var(--spacing-md) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Button sizing for mobile touch */
+  .btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    min-height: 48px;
+  }
+
+  .btn-lg {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  /* Mobile menu link sizing */
+  .nav-mobile-link {
+    padding: var(--spacing-md);
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Hero responsive adjustments */
+  .hero {
+    padding-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .hero__headline {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero__subheadline {
+    font-size: var(--font-size-base);
+  }
+
+  /* Footer */
+  .footer {
+    padding: var(--spacing-xl) 0;
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   Tablet Styles (min-width: 641px and max-width: 1023px)
+   ========================================================================== */
+
+@media (min-width: 641px) and (max-width: 1023px) {
+  /* Container adjustments */
+  .container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+
+  /* Features Section - 2 columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Benefits Section - 2 columns on tablet */
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Testimonials Section - 2 columns on tablet */
+  .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Pricing Section - adjust for tablet */
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+    max-width: 100%;
+  }
+
+  /* Third pricing card takes full width on tablet */
+  .pricing-card:nth-child(3) {
+    grid-column: 1 / -1;
+    max-width: 400px;
+    justify-self: center;
+  }
+
+  /* Trust indicators - 4 columns on tablet */
+  .trust-indicators {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Hero adjustments */
+  .hero__container {
+    text-align: center;
+  }
+
+  .hero__headline {
+    font-size: var(--font-size-3xl);
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+/* ==========================================================================
+   Small Tablet / Large Mobile (768px breakpoint)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Navigation mobile adaptations already in styles.css */
+
+  /* Reduce section padding */
+  .section {
+    padding-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  /* Logo grid wrapping */
+  .logo-grid {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Customer logos smaller */
+  .customer-logo {
+    height: 32px;
+  }
+}
+
+/* ==========================================================================
+   Desktop Styles (min-width: 1024px)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  /* Container max-width enforcement */
+  .container {
+    max-width: var(--container-max-width);
+  }
+
+  /* Features Section - 3 columns on desktop */
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  /* Benefits Section - 2 columns on desktop */
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  /* Testimonials Section - 3 columns on desktop */
+  .testimonials-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  /* Pricing Section - 3 columns on desktop */
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  .pricing-card:nth-child(3) {
+    grid-column: auto;
+    max-width: none;
+    justify-self: stretch;
+  }
+}
+
+/* ==========================================================================
+   Large Desktop (min-width: 1280px)
+   ========================================================================== */
+
+@media (min-width: 1280px) {
+  /* Increase container padding for large screens */
+  .container {
+    padding-left: var(--spacing-xl);
+    padding-right: var(--spacing-xl);
+  }
+
+  /* Larger section spacing */
+  .section {
+    padding-top: var(--spacing-3xl);
+    padding-bottom: var(--spacing-3xl);
+  }
+
+  /* Larger typography for hero */
+  .hero__headline {
+    font-size: var(--font-size-5xl);
+  }
+
+  .hero__subheadline {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  /* Hide navigation and interactive elements */
+  .header,
+  .nav-mobile-toggle,
+  .nav-mobile-menu,
+  .skip-link {
+    display: none !important;
+  }
+
+  /* Reset backgrounds for printing */
+  body,
+  .section,
+  .hero {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Ensure all content is visible */
+  .faq-answer {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Remove shadows and transforms */
+  * {
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion (Accessibility)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  .btn {
+    border: 2px solid currentColor;
+  }
+
+  .feature-card,
+  .benefit-card,
+  .testimonial-card,
+  .pricing-card,
+  .faq-item {
+    border: 2px solid currentColor;
+  }
+}

@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover our product - the solution you've been looking for. Explore features, benefits, and get started today.">
+  <meta name="keywords" content="product, solution, features, benefits">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://product.com/">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://product.com/">
+  <meta property="og:title" content="Product Landing Page">
+  <meta property="og:description" content="Discover our product - the solution you've been looking for.">
+  <meta property="og:image" content="https://product.com/images/og-image.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Product Landing Page">
+  <meta name="twitter:description" content="Discover our product - the solution you've been looking for.">
+
+  <title>Product Landing Page</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ==========================================================================
+       Navigation (Scenario 2)
+       ========================================================================== -->
+  <header class="header" role="banner">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <!-- Logo -->
+      <a href="/" class="nav-logo" aria-label="Product Home">
+        <span class="nav-logo-text">Product</span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#benefits" class="nav-link">Benefits</a></li>
+        <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+        <li><a href="#faq" class="nav-link">FAQ</a></li>
+      </ul>
+
+      <!-- CTA Button -->
+      <a href="#hero" class="btn btn-primary nav-cta">Get Started</a>
+
+      <!-- Mobile Menu Button -->
+      <button
+        class="nav-mobile-toggle"
+        id="nav-mobile-toggle"
+        type="button"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-mobile-menu"
+      >
+        <span class="nav-mobile-toggle-icon" aria-hidden="true"></span>
+      </button>
+
+      <!-- Mobile Menu -->
+      <div class="nav-mobile-menu" id="nav-mobile-menu" aria-hidden="true">
+        <ul class="nav-mobile-links">
+          <li><a href="#features" class="nav-mobile-link">Features</a></li>
+          <li><a href="#benefits" class="nav-mobile-link">Benefits</a></li>
+          <li><a href="#testimonials" class="nav-mobile-link">Testimonials</a></li>
+          <li><a href="#pricing" class="nav-mobile-link">Pricing</a></li>
+          <li><a href="#faq" class="nav-mobile-link">FAQ</a></li>
+        </ul>
+        <a href="#hero" class="btn btn-primary nav-mobile-cta">Get Started</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content" role="main">
+    <!-- ==========================================================================
+         Hero Section (Scenario 1)
+         ========================================================================== -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="container hero__container">
+        <div class="hero__content">
+          <h1 id="hero-title" class="hero__headline">
+            Transform Your <span class="hero__headline-highlight">Workflow</span> Today
+          </h1>
+          <p class="hero__subheadline">
+            Boost your productivity and streamline your processes with our powerful, intuitive solution. Join thousands of teams who have already transformed the way they work.
+          </p>
+          <div class="hero__cta-group">
+            <a href="#signup" class="btn btn-primary btn-lg" role="button" id="hero-cta-primary">
+              Get Started Free
+            </a>
+            <a href="#features" class="btn btn-secondary btn-lg" role="button">
+              Learn More
+            </a>
+          </div>
+        </div>
+        <div class="hero__image">
+          <div class="hero__image-placeholder" role="img" aria-label="Product illustration showing workflow automation">
+            <svg width="200" height="150" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="20" y="30" width="60" height="40" rx="4" fill="rgba(255,255,255,0.3)"/>
+              <rect x="90" y="50" width="60" height="40" rx="4" fill="rgba(255,255,255,0.5)"/>
+              <rect x="50" y="80" width="60" height="40" rx="4" fill="rgba(255,255,255,0.4)"/>
+              <circle cx="150" cy="40" r="15" fill="rgba(255,255,255,0.3)"/>
+              <path d="M80 50L110 70" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+              <path d="M110 90L80 100" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Features Section (Scenario 3)
+         ========================================================================== -->
+    <section id="features" class="features section" aria-labelledby="features-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="features-title" class="section-title">Powerful Features</h2>
+          <p class="section-subtitle">Everything you need to succeed, all in one place.</p>
+        </header>
+
+        <div class="features-grid">
+          <!-- Feature 1 -->
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="feature-title">Lightning Fast</h3>
+            <p class="feature-description">Experience blazing fast performance with our optimized infrastructure. Get results in milliseconds, not seconds.</p>
+          </article>
+
+          <!-- Feature 2 -->
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 class="feature-title">Secure by Design</h3>
+            <p class="feature-description">Your data is protected with enterprise-grade security. End-to-end encryption and compliance with industry standards.</p>
+          </article>
+
+          <!-- Feature 3 -->
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+              </svg>
+            </div>
+            <h3 class="feature-title">Easy Integration</h3>
+            <p class="feature-description">Seamlessly integrate with your existing tools and workflows. Connect in minutes with our comprehensive API.</p>
+          </article>
+
+          <!-- Feature 4 -->
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h3 class="feature-title">Powerful Analytics</h3>
+            <p class="feature-description">Gain insights with real-time analytics and customizable dashboards. Make data-driven decisions effortlessly.</p>
+          </article>
+
+          <!-- Feature 5 -->
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 class="feature-title">Team Collaboration</h3>
+            <p class="feature-description">Work together seamlessly with built-in collaboration tools. Share, comment, and iterate with your team in real-time.</p>
+          </article>
+
+          <!-- Feature 6 -->
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            <h3 class="feature-title">24/7 Support</h3>
+            <p class="feature-description">Get help when you need it with our dedicated support team. Available around the clock to assist you.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Benefits Section (Scenario 4)
+         ========================================================================== -->
+    <section id="benefits" class="benefits section" aria-labelledby="benefits-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="benefits-title" class="section-title">Why Choose Us</h2>
+          <p class="section-subtitle">Discover how our solution addresses your challenges and delivers real value.</p>
+        </header>
+
+        <div class="benefits-grid">
+          <!-- Benefit 1: Time Savings -->
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="benefit-title">Save Hours Every Week</h3>
+            <p class="benefit-description">
+              Stop wasting time on repetitive manual tasks. Our automation tools eliminate tedious work, giving you back hours each week to focus on what truly matters to your business growth and innovation.
+            </p>
+          </article>
+
+          <!-- Benefit 2: Reduced Complexity -->
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <h3 class="benefit-title">Simplify Complex Workflows</h3>
+            <p class="benefit-description">
+              Tired of juggling multiple tools and complicated processes? Our unified platform brings everything together in one intuitive interface, reducing errors and streamlining your entire workflow from start to finish.
+            </p>
+          </article>
+
+          <!-- Benefit 3: Better Decisions -->
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+            <h3 class="benefit-title">Make Smarter Decisions</h3>
+            <p class="benefit-description">
+              Stop guessing and start knowing. Our real-time analytics and insights provide the data you need to make informed decisions, identify opportunities, and stay ahead of the competition with confidence.
+            </p>
+          </article>
+
+          <!-- Benefit 4: Scale with Confidence -->
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <h3 class="benefit-title">Scale Without Limits</h3>
+            <p class="benefit-description">
+              Growth should not mean growing pains. Our infrastructure scales automatically with your business needs, handling increased demand seamlessly while maintaining performance and reliability every step of the way.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Testimonials Section (Scenario 5)
+         ========================================================================== -->
+    <section id="testimonials" class="testimonials section" aria-labelledby="testimonials-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="testimonials-title" class="section-title">What Our Customers Say</h2>
+          <p class="section-subtitle">Trusted by thousands of teams worldwide to transform their workflows.</p>
+        </header>
+
+        <!-- Customer Logos / Trust Indicators -->
+        <div class="customer-logos" aria-label="Trusted by leading companies">
+          <p class="customer-logos-label">Trusted by innovative teams at</p>
+          <div class="logo-grid">
+            <img src="images/testimonials/logo-techcorp.svg" alt="TechCorp company logo" class="customer-logo" width="120" height="40" loading="lazy">
+            <img src="images/testimonials/logo-innovate.svg" alt="Innovate Inc company logo" class="customer-logo" width="120" height="40" loading="lazy">
+            <img src="images/testimonials/logo-global.svg" alt="Global Solutions company logo" class="customer-logo" width="120" height="40" loading="lazy">
+            <img src="images/testimonials/logo-startup.svg" alt="StartupXYZ company logo" class="customer-logo" width="120" height="40" loading="lazy">
+            <img src="images/testimonials/logo-enterprise.svg" alt="Enterprise Co company logo" class="customer-logo" width="120" height="40" loading="lazy">
+          </div>
+        </div>
+
+        <!-- Testimonials Grid -->
+        <div class="testimonials-grid">
+          <!-- Testimonial 1 -->
+          <article class="testimonial-card testimonial">
+            <blockquote class="testimonial-quote" cite="https://example.com/testimonials/sarah">
+              <p>"This product has completely transformed how our team collaborates. We've seen a 40% increase in productivity since implementing it. The intuitive interface made adoption seamless across our entire organization."</p>
+            </blockquote>
+            <footer class="testimonial-attribution">
+              <div class="testimonial-avatar">
+                <img src="images/testimonials/avatar-sarah.svg" alt="Sarah Johnson, VP of Operations at TechCorp" width="64" height="64" loading="lazy">
+              </div>
+              <cite class="testimonial-author">
+                <span class="testimonial-author-name">Sarah Johnson</span>
+                <span class="testimonial-author-role">VP of Operations</span>
+                <span class="testimonial-author-company">TechCorp</span>
+              </cite>
+            </footer>
+          </article>
+
+          <!-- Testimonial 2 -->
+          <article class="testimonial-card testimonial">
+            <blockquote class="testimonial-quote" cite="https://example.com/testimonials/michael">
+              <p>"The best investment we've made for our business this year. The analytics alone have helped us make smarter decisions and stay ahead of competitors. Customer support is also exceptional."</p>
+            </blockquote>
+            <footer class="testimonial-attribution">
+              <div class="testimonial-avatar">
+                <img src="images/testimonials/avatar-michael.svg" alt="Michael Chen, CEO at Innovate Inc" width="64" height="64" loading="lazy">
+              </div>
+              <cite class="testimonial-author">
+                <span class="testimonial-author-name">Michael Chen</span>
+                <span class="testimonial-author-role">CEO</span>
+                <span class="testimonial-author-company">Innovate Inc</span>
+              </cite>
+            </footer>
+          </article>
+
+          <!-- Testimonial 3 -->
+          <article class="testimonial-card testimonial">
+            <blockquote class="testimonial-quote" cite="https://example.com/testimonials/emily">
+              <p>"We evaluated several solutions, and this one stood out for its ease of use and powerful features. Our onboarding time dropped from weeks to days, and our team couldn't be happier with the results."</p>
+            </blockquote>
+            <footer class="testimonial-attribution">
+              <div class="testimonial-avatar">
+                <img src="images/testimonials/avatar-emily.svg" alt="Emily Rodriguez, Director of Engineering at Global Solutions" width="64" height="64" loading="lazy">
+              </div>
+              <cite class="testimonial-author">
+                <span class="testimonial-author-name">Emily Rodriguez</span>
+                <span class="testimonial-author-role">Director of Engineering</span>
+                <span class="testimonial-author-company">Global Solutions</span>
+              </cite>
+            </footer>
+          </article>
+        </div>
+
+        <!-- Usage Statistics -->
+        <div class="trust-indicators" aria-label="Usage statistics">
+          <div class="stat-item">
+            <span class="stat-number">10,000+</span>
+            <span class="stat-label">Active Users</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">500+</span>
+            <span class="stat-label">Companies</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">99.9%</span>
+            <span class="stat-label">Uptime</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">4.9/5</span>
+            <span class="stat-label">Customer Rating</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Pricing Section (Scenario 6)
+         ========================================================================== -->
+    <section id="pricing" class="pricing section" aria-labelledby="pricing-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="pricing-title" class="section-title">Simple, Transparent Pricing</h2>
+          <p class="section-subtitle">Choose the plan that works best for you. No hidden fees, no surprises.</p>
+        </header>
+
+        <div class="pricing-grid">
+          <!-- Starter Plan -->
+          <article class="pricing-card">
+            <div class="pricing-card-header">
+              <h3 class="pricing-tier-name">Starter</h3>
+              <p class="pricing-tier-description">Perfect for individuals and small projects</p>
+            </div>
+            <div class="pricing-price">
+              <span class="pricing-currency">$</span>
+              <span class="pricing-amount">0</span>
+              <span class="pricing-period">/month</span>
+            </div>
+            <ul class="pricing-features">
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Up to 3 projects</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Basic analytics</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Community support</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>1 GB storage</span>
+              </li>
+            </ul>
+            <a href="#signup" class="btn btn-secondary pricing-cta">Get Started Free</a>
+          </article>
+
+          <!-- Professional Plan -->
+          <article class="pricing-card pricing-card-featured">
+            <div class="pricing-badge">Most Popular</div>
+            <div class="pricing-card-header">
+              <h3 class="pricing-tier-name">Professional</h3>
+              <p class="pricing-tier-description">Best for growing teams and businesses</p>
+            </div>
+            <div class="pricing-price">
+              <span class="pricing-currency">$</span>
+              <span class="pricing-amount">29</span>
+              <span class="pricing-period">/month</span>
+            </div>
+            <ul class="pricing-features">
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Unlimited projects</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Advanced analytics</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Priority email support</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>50 GB storage</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Team collaboration</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>API access</span>
+              </li>
+            </ul>
+            <a href="#signup" class="btn btn-primary pricing-cta" id="pricing-cta-primary">Start Free Trial</a>
+          </article>
+
+          <!-- Enterprise Plan -->
+          <article class="pricing-card">
+            <div class="pricing-card-header">
+              <h3 class="pricing-tier-name">Enterprise</h3>
+              <p class="pricing-tier-description">For large organizations with custom needs</p>
+            </div>
+            <div class="pricing-price">
+              <span class="pricing-amount pricing-amount-custom">Custom</span>
+            </div>
+            <ul class="pricing-features">
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Everything in Professional</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Unlimited storage</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Dedicated account manager</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>24/7 phone support</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Custom integrations</span>
+              </li>
+              <li class="pricing-feature">
+                <svg class="pricing-feature-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>SLA guarantee</span>
+              </li>
+            </ul>
+            <a href="#contact" class="btn btn-secondary pricing-cta">Contact Sales</a>
+          </article>
+        </div>
+
+        <!-- Pricing CTA Section -->
+        <div class="pricing-cta-section">
+          <p class="pricing-cta-text">Not sure which plan is right for you?</p>
+          <a href="#contact" class="btn btn-secondary pricing-contact-cta">Talk to our team</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FAQ Section (Scenario 7)
+         ========================================================================== -->
+    <section id="faq" class="faq section" aria-labelledby="faq-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="faq-title" class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Find answers to common questions about our product and services.</p>
+        </header>
+
+        <div class="faq-list">
+          <!-- FAQ Item 1 -->
+          <div class="faq-item">
+            <h3 class="faq-item-heading">
+              <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-answer-1"
+                id="faq-question-1"
+              >
+                <span class="faq-question-text">What is this product and how does it work?</span>
+                <span class="faq-icon" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div
+              class="faq-answer"
+              id="faq-answer-1"
+              role="region"
+              aria-labelledby="faq-question-1"
+            >
+              <div class="faq-answer-content">
+                <p>Our product is a comprehensive workflow automation platform designed to help teams streamline their processes and boost productivity. It works by connecting your existing tools and automating repetitive tasks, allowing you to focus on what matters most. Simply sign up, connect your tools, and create custom workflows using our intuitive drag-and-drop interface.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="faq-item">
+            <h3 class="faq-item-heading">
+              <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-answer-2"
+                id="faq-question-2"
+              >
+                <span class="faq-question-text">Is there a free trial available?</span>
+                <span class="faq-icon" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div
+              class="faq-answer"
+              id="faq-answer-2"
+              role="region"
+              aria-labelledby="faq-question-2"
+            >
+              <div class="faq-answer-content">
+                <p>Yes! We offer a 14-day free trial with full access to all features. No credit card is required to start your trial. This gives you plenty of time to explore the platform, create workflows, and see how it can benefit your team before making any commitment.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="faq-item">
+            <h3 class="faq-item-heading">
+              <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-answer-3"
+                id="faq-question-3"
+              >
+                <span class="faq-question-text">What integrations do you support?</span>
+                <span class="faq-icon" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div
+              class="faq-answer"
+              id="faq-answer-3"
+              role="region"
+              aria-labelledby="faq-question-3"
+            >
+              <div class="faq-answer-content">
+                <p>We support over 100 popular integrations including Slack, Microsoft Teams, Google Workspace, Salesforce, HubSpot, Jira, Trello, GitHub, and many more. Our API also allows you to build custom integrations with any service that has a REST API. New integrations are added regularly based on customer feedback.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="faq-item">
+            <h3 class="faq-item-heading">
+              <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-answer-4"
+                id="faq-question-4"
+              >
+                <span class="faq-question-text">How secure is my data?</span>
+                <span class="faq-icon" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div
+              class="faq-answer"
+              id="faq-answer-4"
+              role="region"
+              aria-labelledby="faq-question-4"
+            >
+              <div class="faq-answer-content">
+                <p>Security is our top priority. All data is encrypted both in transit (TLS 1.3) and at rest (AES-256). We are SOC 2 Type II certified and GDPR compliant. Our infrastructure is hosted on AWS with redundant backups across multiple regions. We also offer single sign-on (SSO) and two-factor authentication (2FA) for added account security.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="faq-item">
+            <h3 class="faq-item-heading">
+              <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-answer-5"
+                id="faq-question-5"
+              >
+                <span class="faq-question-text">Can I cancel my subscription at any time?</span>
+                <span class="faq-icon" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div
+              class="faq-answer"
+              id="faq-answer-5"
+              role="region"
+              aria-labelledby="faq-question-5"
+            >
+              <div class="faq-answer-content">
+                <p>Absolutely! You can cancel your subscription at any time with no cancellation fees. If you cancel, you'll retain access to all features until the end of your current billing period. We also offer prorated refunds for annual plans if you decide to cancel early. Your data can be exported at any time before or after cancellation.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 6 -->
+          <div class="faq-item">
+            <h3 class="faq-item-heading">
+              <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-answer-6"
+                id="faq-question-6"
+              >
+                <span class="faq-question-text">Do you offer customer support?</span>
+                <span class="faq-icon" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div
+              class="faq-answer"
+              id="faq-answer-6"
+              role="region"
+              aria-labelledby="faq-question-6"
+            >
+              <div class="faq-answer-content">
+                <p>Yes, we provide comprehensive customer support. All plans include access to our extensive documentation, video tutorials, and community forum. Paid plans also include email support with 24-hour response times. Our Business and Enterprise plans feature priority support with live chat and dedicated account managers for personalized assistance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       Footer (Scenario 8)
+       ========================================================================== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-content">
+        <!-- Footer Brand and Description -->
+        <div class="footer-brand">
+          <a href="/" class="footer-logo" aria-label="Product Home">
+            <span class="footer-logo-text">Product</span>
+          </a>
+          <p class="footer-description">
+            Empowering teams to work smarter and achieve more with our powerful workflow automation platform.
+          </p>
+        </div>
+
+        <!-- Footer Navigation Links -->
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <!-- Resources Column -->
+          <div class="footer-nav-column">
+            <h3 class="footer-nav-title">Resources</h3>
+            <ul class="footer-links">
+              <li><a href="/docs" class="footer-link">Documentation</a></li>
+              <li><a href="/guides" class="footer-link">Guides</a></li>
+              <li><a href="/api" class="footer-link">API Reference</a></li>
+              <li><a href="/blog" class="footer-link">Blog</a></li>
+            </ul>
+          </div>
+
+          <!-- Support Column -->
+          <div class="footer-nav-column">
+            <h3 class="footer-nav-title">Support</h3>
+            <ul class="footer-links">
+              <li><a href="/help" class="footer-link">Help Center</a></li>
+              <li><a href="/contact" class="footer-link">Contact Us</a></li>
+              <li><a href="mailto:support@product.com" class="footer-link">support@product.com</a></li>
+              <li><a href="/status" class="footer-link">System Status</a></li>
+            </ul>
+          </div>
+
+          <!-- Company Column -->
+          <div class="footer-nav-column">
+            <h3 class="footer-nav-title">Company</h3>
+            <ul class="footer-links">
+              <li><a href="/about" class="footer-link">About Us</a></li>
+              <li><a href="/careers" class="footer-link">Careers</a></li>
+              <li><a href="/press" class="footer-link">Press</a></li>
+              <li><a href="/partners" class="footer-link">Partners</a></li>
+            </ul>
+          </div>
+
+          <!-- Legal Column -->
+          <div class="footer-nav-column">
+            <h3 class="footer-nav-title">Legal</h3>
+            <ul class="footer-links">
+              <li><a href="/privacy" class="footer-link">Privacy Policy</a></li>
+              <li><a href="/terms" class="footer-link">Terms of Service</a></li>
+              <li><a href="/cookies" class="footer-link">Cookie Policy</a></li>
+              <li><a href="/security" class="footer-link">Security</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p class="footer-copyright">
+          &copy; 2024 Product. All rights reserved.
+        </p>
+        <div class="footer-social" aria-label="Social media links">
+          <a href="https://twitter.com/product" class="footer-social-link" aria-label="Follow us on Twitter" rel="noopener noreferrer" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a href="https://linkedin.com/company/product" class="footer-social-link" aria-label="Connect with us on LinkedIn" rel="noopener noreferrer" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/product" class="footer-social-link" aria-label="View our projects on GitHub" rel="noopener noreferrer" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/navigation.js"></script>
+  <script src="js/faq.js"></script>
+  <script src="js/smooth-scroll.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
