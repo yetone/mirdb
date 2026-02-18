@@ -10,7 +10,8 @@ module.exports = {
   testMatch: [
     '**/unit/**/*.test.js',
     '**/unit/**/*.spec.js',
-    '**/integration/navigation.test.js'
+    '**/integration/navigation.test.js',
+    '**/integration/responsive.test.js'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
