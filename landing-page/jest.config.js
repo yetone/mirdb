@@ -8,9 +8,13 @@ module.exports = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/tests'],
   testMatch: [
-    '**/__tests__/**/*.js',
-    '**/*.test.js',
-    '**/*.spec.js'
+    '**/unit/**/*.test.js',
+    '**/unit/**/*.spec.js'
+  ],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/tests/e2e/',
+    '/tests/integration/'
   ],
   moduleFileExtensions: ['js', 'json'],
   collectCoverageFrom: [

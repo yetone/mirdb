@@ -201,7 +201,141 @@ p {
    Hero Styles (Scenario 1)
    ========================================================================== */
 
-/* Placeholder for hero styles */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -25%;
+  width: 80%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3xl);
+  align-items: center;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  max-width: 600px;
+}
+
+.hero__headline {
+  font-size: clamp(var(--font-size-4xl), 5vw, var(--font-size-5xl));
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+.hero__headline-highlight {
+  color: var(--color-primary);
+}
+
+.hero__subheadline {
+  font-size: clamp(var(--font-size-base), 2vw, var(--font-size-lg));
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+  max-width: 500px;
+  margin-bottom: 0;
+}
+
+.hero__cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.btn-lg {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+}
+
+.hero__image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.hero__image img,
+.hero__image svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.hero__image-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary, #7c3aed) 100%);
+  border-radius: var(--border-radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: var(--font-size-lg);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Hero responsive styles */
+@media (max-width: 1024px) {
+  .hero__container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero__content {
+    max-width: 100%;
+    align-items: center;
+  }
+
+  .hero__subheadline {
+    max-width: 100%;
+  }
+
+  .hero__cta-group {
+    justify-content: center;
+  }
+
+  .hero__image {
+    order: -1;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: auto;
+    padding-top: var(--spacing-3xl);
+    padding-bottom: var(--spacing-3xl);
+  }
+
+  .hero__cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero__cta-group .btn {
+    width: 100%;
+  }
+}
 
 /* ==========================================================================
    Features Styles (Scenario 3)
