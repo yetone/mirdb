@@ -1,0 +1,29 @@
+{
+  "name": "product-landing-page",
+  "version": "1.0.0",
+  "description": "Product Landing Page - A modern, responsive landing page",
+  "main": "index.html",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "lint": "eslint js/",
+    "serve": "npx serve . -p 3000"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@testing-library/dom": "^9.3.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "eslint": "^8.50.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "keywords": [
+    "landing-page",
+    "responsive",
+    "accessible"
+  ],
+  "author": "",
+  "license": "MIT"
+}
