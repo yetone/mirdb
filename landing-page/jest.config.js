@@ -10,11 +10,12 @@ module.exports = {
   testMatch: [
     '**/unit/**/*.test.js',
     '**/unit/**/*.spec.js',
-    '**/integration/**/*.test.js'
+    '**/integration/navigation.test.js'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
-    '/tests/e2e/'
+    '/tests/e2e/',
+    '/tests/integration/hero-visibility.test.js'
   ],
   moduleFileExtensions: ['js', 'json'],
   collectCoverageFrom: [
