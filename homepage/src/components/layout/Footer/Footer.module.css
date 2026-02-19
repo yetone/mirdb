@@ -1,0 +1,197 @@
+/**
+ * Footer Component Styles
+ * Owner: Scenario 8 - Footer & External Links
+ */
+
+.footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-12) 0 var(--spacing-6);
+  margin-top: auto;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--spacing-8);
+  margin-bottom: var(--spacing-8);
+}
+
+/* Brand section */
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.brandName {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.description {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  max-width: 300px;
+  margin: 0;
+}
+
+/* Links section */
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.linksTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.link {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.link:hover {
+  color: var(--color-primary);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Badges section */
+.badges {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.badgesTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badgeLink {
+  display: inline-block;
+  border-radius: var(--border-radius-sm);
+  transition: opacity var(--transition-fast);
+}
+
+.badgeLink:hover {
+  opacity: 0.8;
+}
+
+.badgeLink:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.badgeImage {
+  display: block;
+  height: 20px;
+}
+
+/* Bottom bar */
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--color-border);
+  gap: var(--spacing-4);
+}
+
+.copyright {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.license {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.licenseLink {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.licenseLink:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.licenseLink:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Tablet - 768px and below */
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-6);
+  }
+
+  .brand {
+    grid-column: 1 / -1;
+  }
+
+  .description {
+    max-width: none;
+  }
+}
+
+/* Mobile - 480px and below */
+@media (max-width: 480px) {
+  .footer {
+    padding: var(--spacing-8) 0 var(--spacing-4);
+  }
+
+  .content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+    padding-top: var(--spacing-4);
+  }
+}

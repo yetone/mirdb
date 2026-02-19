@@ -1,0 +1,56 @@
+/**
+ * CopyButton styles
+ * Owner: Scenario 4 - Quick Start Section
+ */
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  color: var(--color-text-muted);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 32px;
+}
+
+.copyButton:hover {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+
+.copyButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.copyButton.copied {
+  color: #22c55e;
+  border-color: #22c55e;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.label {
+  white-space: nowrap;
+}
+
+/* Hide label on mobile, show only icon */
+@media (max-width: 480px) {
+  .label {
+    display: none;
+  }
+
+  .copyButton {
+    padding: var(--spacing-2);
+    min-width: 32px;
+    justify-content: center;
+  }
+}

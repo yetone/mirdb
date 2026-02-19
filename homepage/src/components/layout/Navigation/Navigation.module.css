@@ -1,0 +1,125 @@
+/**
+ * Navigation Component Styles
+ * Owner: Scenario 2 - Navigation & Header
+ */
+
+/* Desktop Navigation */
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+.navMobile {
+  display: none;
+}
+
+.navList {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  padding: var(--spacing-2) var(--spacing-1);
+  transition: color var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--color-primary);
+}
+
+.navLink:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+.externalIcon {
+  opacity: 0.6;
+}
+
+/* Mobile Menu Backdrop */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+  z-index: 998;
+}
+
+.backdropOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile Menu Drawer */
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 80vw;
+  background: var(--color-background);
+  transform: translateX(100%);
+  transition: transform var(--transition-slow);
+  z-index: 999;
+  padding: var(--spacing-16) var(--spacing-6);
+  box-shadow: var(--shadow-lg);
+}
+
+.mobileMenuOpen {
+  transform: translateX(0);
+}
+
+.mobileNavList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobileNavLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  text-decoration: none;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--border-radius-md);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  min-height: 44px;
+}
+
+.mobileNavLink:hover {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+}
+
+.mobileNavLink:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Responsive - Hide desktop nav on mobile */
+@media (max-width: 767px) {
+  .nav {
+    display: none;
+  }
+}
