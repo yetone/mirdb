@@ -8,6 +8,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Header } from './Header'
+import { ThemeProvider } from '@/context/ThemeContext'
 
 // Mock scrollIntoView
 Element.prototype.scrollIntoView = vi.fn()
@@ -18,13 +19,50 @@ Object.defineProperty(window, 'scrollTo', {
   writable: true,
 })
 
+// Mock localStorage
+const localStorageMock = (() => {
+  let store: Record<string, string> = {}
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    clear: vi.fn(() => {
+      store = {}
+    }),
+  }
+})()
+
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
+// Mock matchMedia
+Object.defineProperty(window, 'matchMedia', {
+  value: vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+})
+
+function renderWithTheme() {
+  return render(
+    <ThemeProvider defaultTheme="light">
+      <Header />
+    </ThemeProvider>
+  )
+}
+
 describe('Header', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    localStorageMock.clear()
   })
 
   it('renders header with logo', () => {
-    render(<Header />)
+    renderWithTheme()
 
     // Check logo image is present
     const logoImg = screen.getByRole('img', { hidden: true })
@@ -36,7 +74,7 @@ describe('Header', () => {
   })
 
   it('renders navigation links', () => {
-    render(<Header />)
+    renderWithTheme()
 
     // Check all nav links are present in the main navigation
     const mainNav = screen.getByRole('navigation', { name: 'Main navigation' })
@@ -46,16 +84,16 @@ describe('Header', () => {
     expect(mainNav.querySelector('a[href="https://github.com/yetone/mirdb"]')).toBeInTheDocument()
   })
 
-  it('renders theme toggle placeholder slot', () => {
-    render(<Header />)
+  it('renders theme toggle button', () => {
+    renderWithTheme()
 
-    // Check theme toggle slot exists for Scenario 6
-    const themeToggleSlot = screen.getByTestId('theme-toggle-slot')
-    expect(themeToggleSlot).toBeInTheDocument()
+    // Check theme toggle exists (implemented by Scenario 6)
+    const themeToggle = screen.getByTestId('theme-toggle')
+    expect(themeToggle).toBeInTheDocument()
   })
 
   it('renders hamburger button for mobile menu', () => {
-    render(<Header />)
+    renderWithTheme()
 
     const hamburgerButton = screen.getByTestId('hamburger-button')
     expect(hamburgerButton).toBeInTheDocument()
@@ -64,7 +102,7 @@ describe('Header', () => {
   })
 
   it('toggles mobile menu when hamburger button is clicked', () => {
-    render(<Header />)
+    renderWithTheme()
 
     const hamburgerButton = screen.getByTestId('hamburger-button')
 
@@ -83,21 +121,21 @@ describe('Header', () => {
   })
 
   it('has proper accessibility attributes on header', () => {
-    render(<Header />)
+    renderWithTheme()
 
     const header = screen.getByRole('banner')
     expect(header).toBeInTheDocument()
   })
 
   it('renders main navigation with correct aria-label', () => {
-    render(<Header />)
+    renderWithTheme()
 
     const mainNav = screen.getByRole('navigation', { name: 'Main navigation' })
     expect(mainNav).toBeInTheDocument()
   })
 
   it('logo click scrolls to top of page', () => {
-    render(<Header />)
+    renderWithTheme()
 
     const logoLink = screen.getByRole('link', { name: /go to top/i })
     fireEvent.click(logoLink)
@@ -106,7 +144,7 @@ describe('Header', () => {
   })
 
   it('GitHub link has external link attributes', () => {
-    render(<Header />)
+    renderWithTheme()
 
     const mainNav = screen.getByRole('navigation', { name: 'Main navigation' })
     const githubLink = mainNav.querySelector('a[href="https://github.com/yetone/mirdb"]')
@@ -115,7 +153,7 @@ describe('Header', () => {
   })
 
   it('internal nav links have correct href attributes', () => {
-    render(<Header />)
+    renderWithTheme()
 
     const mainNav = screen.getByRole('navigation', { name: 'Main navigation' })
     expect(mainNav.querySelector('a[href="#features"]')).toBeInTheDocument()

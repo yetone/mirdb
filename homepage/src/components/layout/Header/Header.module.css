@@ -69,11 +69,6 @@
   gap: var(--spacing-3);
 }
 
-/* Theme toggle placeholder */
-.themeTogglePlaceholder {
-  width: 40px;
-  height: 40px;
-}
 
 /* Hamburger button */
 .hamburger {
@@ -114,11 +109,6 @@
 @media (max-width: 767px) {
   .hamburger {
     display: flex;
-  }
-
-  .themeTogglePlaceholder {
-    /* Hide on mobile to save space */
-    display: none;
   }
 
   .logoText {

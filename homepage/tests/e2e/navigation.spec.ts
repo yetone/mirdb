@@ -47,9 +47,9 @@ test.describe('Navigation & Header', () => {
     const githubLink = page.locator('header nav').getByRole('menuitem', { name: /github/i })
     await expect(githubLink).toBeVisible()
 
-    // Check theme toggle slot exists
-    const themeToggleSlot = page.getByTestId('theme-toggle-slot')
-    await expect(themeToggleSlot).toBeAttached()
+    // Check theme toggle exists (implemented by Scenario 6)
+    const themeToggle = page.getByTestId('theme-toggle')
+    await expect(themeToggle).toBeAttached()
   })
 
   test("click 'Features' nav link scrolls to #features section smoothly", async ({ page }) => {

@@ -10,6 +10,7 @@
  */
 import { useState, useCallback, useRef } from 'react'
 import { Navigation, MobileMenu } from '../Navigation/Navigation'
+import { ThemeToggle } from '@/components/ui/ThemeToggle/ThemeToggle'
 import { siteConfig } from '@/data/config'
 import styles from './Header.module.css'
 
@@ -56,12 +57,8 @@ export function Header() {
 
         {/* Right side actions */}
         <div className={styles.actions}>
-          {/* Theme toggle placeholder - implemented by Scenario 6 */}
-          <div
-            className={styles.themeTogglePlaceholder}
-            data-testid="theme-toggle-slot"
-            aria-hidden="true"
-          />
+          {/* Theme toggle - implemented by Scenario 6 */}
+          <ThemeToggle />
 
           {/* Mobile hamburger button */}
           <button
