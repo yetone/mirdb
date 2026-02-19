@@ -15,6 +15,8 @@
   --color-text-muted: #64748b;
   --color-border: #e2e8f0;
   --color-accent: #f97316;
+  /* Focus color - high contrast for accessibility (3:1 ratio against white/light backgrounds) */
+  --color-focus: #1d4ed8;
 
   /* Typography */
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -82,4 +84,6 @@
   --color-text-muted: #94a3b8;
   --color-border: #334155;
   --color-accent: #fb923c;
+  /* Focus color - high contrast for accessibility (3:1 ratio against dark backgrounds) */
+  --color-focus: #60a5fa;
 }

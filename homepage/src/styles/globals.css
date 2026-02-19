@@ -59,10 +59,16 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
-/* Focus states for accessibility */
+/* Focus states for accessibility - WCAG 2.1 AA compliant */
+/* Focus outline must have at least 3:1 contrast ratio against adjacent colors */
 :focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
+}
+
+/* Ensure main content can receive focus for skip link */
+main:focus {
+  outline: none;
 }
 
 /* Code blocks */
