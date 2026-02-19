@@ -1,2 +1,9 @@
 /target
 **/*.rs.bk
+.something/
+node_modules/
+dist/
+*.log
+.vite/
+playwright-report/
+test-results/

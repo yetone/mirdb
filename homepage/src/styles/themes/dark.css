@@ -1,17 +1,15 @@
 /**
- * Dark theme styles
+ * Dark theme overrides
  */
-
 [data-theme="dark"] {
-  --color-bg: #0d1117;
-  --color-bg-secondary: #161b22;
-  --color-text: #f0f6fc;
-  --color-text-secondary: #8b949e;
-  --color-text-muted: #6e7681;
-  --color-primary: #58a6ff;
-  --color-primary-dark: #79b8ff;
-  --color-accent: #3fb950;
-  --color-border: #30363d;
-  --color-card-bg: #161b22;
-  --color-card-shadow: rgba(0, 0, 0, 0.3);
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-secondary: #94a3b8;
+  --color-secondary-hover: #cbd5e1;
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-text: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-accent: #fb923c;
 }
