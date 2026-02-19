@@ -1,0 +1,17 @@
+/**
+ * Dark theme styles
+ */
+
+[data-theme="dark"] {
+  --color-bg: #0d1117;
+  --color-bg-secondary: #161b22;
+  --color-text: #f0f6fc;
+  --color-text-secondary: #8b949e;
+  --color-text-muted: #6e7681;
+  --color-primary: #58a6ff;
+  --color-primary-dark: #79b8ff;
+  --color-accent: #3fb950;
+  --color-border: #30363d;
+  --color-card-bg: #161b22;
+  --color-card-shadow: rgba(0, 0, 0, 0.3);
+}

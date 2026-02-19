@@ -1,0 +1,17 @@
+/**
+ * Light theme styles (default)
+ */
+
+[data-theme="light"] {
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f8f9fa;
+  --color-text: #1a1a2e;
+  --color-text-secondary: #4a4a6a;
+  --color-text-muted: #6c757d;
+  --color-primary: #0066cc;
+  --color-primary-dark: #0052a3;
+  --color-accent: #00c853;
+  --color-border: #e9ecef;
+  --color-card-bg: #ffffff;
+  --color-card-shadow: rgba(0, 0, 0, 0.1);
+}
