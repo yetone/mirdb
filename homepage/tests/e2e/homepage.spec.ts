@@ -57,9 +57,6 @@ test.describe('Hero Section', () => {
     const getStartedButton = page.getByRole('button', { name: /get started/i })
     await expect(getStartedButton).toBeVisible()
 
-    // Get initial scroll position
-    const initialScrollY = await page.evaluate(() => window.scrollY)
-
     // Click Get Started button
     await getStartedButton.click()
 

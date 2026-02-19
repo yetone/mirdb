@@ -5,7 +5,6 @@
  * Displays a single feature with icon, title, and description.
  */
 
-import type { Feature } from '@/types'
 import { Icon } from '@/components/ui/Icon/Icon'
 import styles from './Features.module.css'
 
