@@ -11,6 +11,104 @@
 
 const { loadHTML, loadHTMLWithWindow } = require('./test-utils');
 
+// Features Section Tests - Scenario 2
+describe('Features Section Validation', () => {
+  let document;
+
+  beforeAll(async () => {
+    document = await loadHTML();
+  });
+
+  // Test Case 1: Features section exists
+  test('features section with id or class containing "features" exists', () => {
+    const featuresSection = document.getElementById('features') ||
+                           document.querySelector('.features') ||
+                           document.querySelector('[class*="features"]');
+    expect(featuresSection).not.toBeNull();
+  });
+
+  // Test Case 2: At least 4 feature items
+  test('at least 4 feature items are present', () => {
+    const featuresSection = document.getElementById('features');
+    expect(featuresSection).not.toBeNull();
+
+    const featureItems = featuresSection.querySelectorAll('.feature-card, .feature-item, [data-feature], article');
+    expect(featureItems.length).toBeGreaterThanOrEqual(4);
+  });
+
+  // Test Case 3: Memcached compatibility feature
+  test('feature mentioning Memcached protocol compatibility exists', () => {
+    const featuresSection = document.getElementById('features');
+    expect(featuresSection).not.toBeNull();
+
+    const textContent = featuresSection.textContent.toLowerCase();
+    expect(textContent).toMatch(/memcached/i);
+  });
+
+  // Test Case 4: Persistence feature
+  test('feature mentioning data persistence exists', () => {
+    const featuresSection = document.getElementById('features');
+    expect(featuresSection).not.toBeNull();
+
+    const textContent = featuresSection.textContent.toLowerCase();
+    const hasPersistence = textContent.includes('persistence') ||
+                          textContent.includes('persistent') ||
+                          textContent.includes('persists');
+    expect(hasPersistence).toBe(true);
+  });
+
+  // Test Case 5: LSM Tree feature
+  test('feature mentioning LSM tree architecture exists', () => {
+    const featuresSection = document.getElementById('features');
+    expect(featuresSection).not.toBeNull();
+
+    const textContent = featuresSection.textContent;
+    const hasLSM = textContent.includes('LSM') ||
+                   textContent.toLowerCase().includes('log-structured');
+    expect(hasLSM).toBe(true);
+  });
+
+  // Test Case 6: Rust implementation feature
+  test('feature mentioning Rust implementation exists', () => {
+    const featuresSection = document.getElementById('features');
+    expect(featuresSection).not.toBeNull();
+
+    const textContent = featuresSection.textContent;
+    expect(textContent).toMatch(/Rust/i);
+  });
+
+  // Test Case 7: Feature descriptions are 15 words or fewer
+  test('each feature description contains 15 words or fewer', () => {
+    const featuresSection = document.getElementById('features');
+    expect(featuresSection).not.toBeNull();
+
+    const featureItems = featuresSection.querySelectorAll('.feature-card, .feature-item, [data-feature], article');
+    expect(featureItems.length).toBeGreaterThan(0);
+
+    featureItems.forEach((item, index) => {
+      // Get description paragraph (excluding the heading)
+      const description = item.querySelector('p');
+      if (description) {
+        const words = description.textContent.trim().split(/\s+/).filter(w => w.length > 0);
+        expect(words.length).toBeLessThanOrEqual(15);
+      }
+    });
+  });
+
+  // Test Case 8: SSTable or compaction mentioned
+  test('features section mentions SSTables or compaction capabilities', () => {
+    const featuresSection = document.getElementById('features');
+    expect(featuresSection).not.toBeNull();
+
+    const textContent = featuresSection.textContent;
+    const hasSSTableOrCompaction = textContent.includes('SSTable') ||
+                                   textContent.toLowerCase().includes('sstable') ||
+                                   textContent.toLowerCase().includes('compaction');
+    expect(hasSSTableOrCompaction).toBe(true);
+  });
+});
+
+// Quick Start Section Tests - Scenario 3
 describe('Quick Start Section Validation', () => {
   let document;
 
