@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol Compatibility">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <style>
+        /* Base styles */
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-code: #0d1117;
+            --text-primary: #eaeaea;
+            --text-secondary: #a0a0a0;
+            --accent: #00d4ff;
+            --accent-hover: #00b8e6;
+            --success: #00ff88;
+            --border: #2a2a4a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--accent-hover);
+        }
+
+        /* Code block styles */
+        pre, code {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Courier New', monospace;
+        }
+
+        pre {
+            background-color: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        code {
+            background-color: var(--bg-code);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* Section styles */
+        section {
+            padding: 60px 0;
+        }
+
+        h1, h2, h3 {
+            color: var(--text-primary);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Hero Section - Scenario 1 */
+        #hero {
+            text-align: center;
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        }
+
+        #hero img.logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        #hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        #hero .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        #hero .subtext {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--accent);
+            color: var(--bg-primary);
+            font-weight: bold;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+            color: var(--bg-primary);
+        }
+
+        /* Features Section - Scenario 2 */
+        #features {
+            background-color: var(--bg-secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background-color: var(--bg-primary);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Quick Start Section - Scenario 3 */
+        #quick-start {
+            background-color: var(--bg-primary);
+        }
+
+        #quick-start .container {
+            max-width: 800px;
+        }
+
+        .quick-start-step {
+            margin-bottom: 30px;
+        }
+
+        .quick-start-step h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .quick-start-step p {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .command-comment {
+            color: #6a737d;
+        }
+
+        .command-keyword {
+            color: var(--accent);
+        }
+
+        .command-string {
+            color: var(--success);
+        }
+
+        /* Comparison Section - Scenario 4 */
+        #comparison {
+            background-color: var(--bg-secondary);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background-color: var(--bg-primary);
+            color: var(--accent);
+        }
+
+        .comparison-table td {
+            color: var(--text-secondary);
+        }
+
+        /* Project Status Section - Scenario 8 */
+        #project-status {
+            background-color: var(--bg-primary);
+        }
+
+        .status-list {
+            list-style: none;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .status-list li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-list .implemented::before {
+            content: '\2713';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .status-list .planned::before {
+            content: '\2022';
+            color: var(--text-secondary);
+        }
+
+        /* Footer - Scenario 5 */
+        footer {
+            background-color: var(--bg-secondary);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Design - Scenario 6 */
+        @media (max-width: 768px) {
+            #hero h1 {
+                font-size: 2.5rem;
+            }
+
+            #hero .tagline {
+                font-size: 1.2rem;
+            }
+
+            section {
+                padding: 40px 0;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            pre {
+                padding: 15px;
+                font-size: 0.85em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #hero h1 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation - Scenario 5 -->
+    <nav>
+        <div class="container">
+            <!-- Navigation content goes here -->
+        </div>
+    </nav>
+
+    <!-- Hero Section - Scenario 1 -->
+    <section id="hero" data-testid="hero-section">
+        <div class="container">
+            <img src="assets/logo.gif" alt="MirDB Logo" class="logo">
+            <h1>MirDB</h1>
+            <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+            <p class="subtext">Like memcached, but data doesn't disappear when you restart</p>
+            <a href="https://github.com/yetone/mirdb#readme" class="btn">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Features Section - Scenario 2 -->
+    <section id="features" data-testid="features-section">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Memcached Compatible</h3>
+                    <p>Drop-in replacement with full protocol support</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Data Persistence</h3>
+                    <p>SSTable storage ensures data survives restarts</p>
+                </div>
+                <div class="feature-card">
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Efficient writes with multi-level compaction</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Written in Rust</h3>
+                    <p>Memory safe and blazingly fast performance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section - Scenario 3 -->
+    <section id="quick-start" data-testid="quick-start-section">
+        <div class="container">
+            <h2>Quick Start</h2>
+
+            <div class="quick-start-step">
+                <h3>1. Start the MirDB Server</h3>
+                <p>Run the MirDB server using cargo:</p>
+                <pre><code><span class="command-comment"># Build and run the server</span>
+cargo run --release --bin mirdb-server
+
+<span class="command-comment"># Or with custom config</span>
+cargo run --release --bin mirdb-server -- -c etc/mirdb.toml</code></pre>
+                <p>The server listens on <code>0.0.0.0:12333</code> by default.</p>
+            </div>
+
+            <div class="quick-start-step">
+                <h3>2. Connect with a Memcached Client</h3>
+                <p>Use telnet or any memcached-compatible client:</p>
+                <pre><code>telnet localhost 12333</code></pre>
+            </div>
+
+            <div class="quick-start-step">
+                <h3>3. Set a Key-Value Pair</h3>
+                <p>Store data using the <code>set</code> command:</p>
+                <pre><code><span class="command-comment"># Format: set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;</span>
+<span class="command-keyword">set</span> <span class="command-string">mykey</span> 0 0 5
+hello
+<span class="command-comment"># Server responds: STORED</span></code></pre>
+                <p>This sets the key <code>mykey</code> with value <code>hello</code> (5 bytes), no expiration.</p>
+            </div>
+
+            <div class="quick-start-step">
+                <h3>4. Retrieve the Value</h3>
+                <p>Get the stored value using the <code>get</code> command:</p>
+                <pre><code><span class="command-comment"># Format: get &lt;key&gt;</span>
+<span class="command-keyword">get</span> <span class="command-string">mykey</span>
+<span class="command-comment"># Server responds:</span>
+<span class="command-comment"># VALUE mykey 0 5</span>
+<span class="command-comment"># hello</span>
+<span class="command-comment"># END</span></code></pre>
+            </div>
+
+            <div class="quick-start-step">
+                <h3>Data Persistence</h3>
+                <p>Unlike memcached, your data persists! Restart the server and your keys are still there.</p>
+                <pre><code><span class="command-comment"># Restart the server</span>
+<span class="command-comment"># Then connect again and retrieve your data</span>
+<span class="command-keyword">get</span> <span class="command-string">mykey</span>
+<span class="command-comment"># Value is still there: hello</span></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section - Scenario 4 -->
+    <section id="comparison" data-testid="comparison-section">
+        <div class="container">
+            <h2>MirDB vs Memcached</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>MirDB</th>
+                        <th>Memcached</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data Storage</td>
+                        <td>Persistent (SSTables)</td>
+                        <td>In-memory only</td>
+                    </tr>
+                    <tr>
+                        <td>Storage Engine</td>
+                        <td>LSM Tree</td>
+                        <td>Hash Table</td>
+                    </tr>
+                    <tr>
+                        <td>On Restart</td>
+                        <td>Data preserved</td>
+                        <td>Data lost</td>
+                    </tr>
+                    <tr>
+                        <td>Protocol</td>
+                        <td>Memcached compatible</td>
+                        <td>Memcached</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Project Status Section - Scenario 8 -->
+    <section id="project-status" data-testid="project-status-section">
+        <div class="container">
+            <h2>Project Status</h2>
+            <ul class="status-list">
+                <li class="implemented">Tokio-based async networking</li>
+                <li class="implemented">Memcached protocol support</li>
+                <li class="implemented">Skip list memtable</li>
+                <li class="implemented">SSTable persistence</li>
+                <li class="implemented">Minor compaction</li>
+                <li class="implemented">Major compaction</li>
+                <li class="planned">Raft distributed support (Coming Soon)</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer - Scenario 5 -->
+    <footer data-testid="footer">
+        <div class="container">
+            <p>MirDB - A Persistent Key-Value Store</p>
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb">GitHub Repository</a>
+                <a href="https://github.com/yetone/mirdb#readme">Documentation</a>
+                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE">MIT License</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

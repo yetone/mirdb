@@ -1,0 +1,18 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage Tests",
+  "scripts": {
+    "test": "jest",
+    "test:content": "jest tests/homepage/content.test.js",
+    "test:structure": "jest tests/homepage/structure.test.js",
+    "test:links": "jest tests/homepage/links.test.js",
+    "test:responsive": "jest tests/homepage/responsiveness.test.js",
+    "test:accessibility": "jest tests/homepage/accessibility.test.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "@testing-library/dom": "^9.3.4"
+  }
+}
