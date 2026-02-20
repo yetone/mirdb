@@ -252,6 +252,43 @@
             color: var(--text-secondary);
         }
 
+        /* Navigation - Scenario 5 */
+        nav {
+            background-color: var(--bg-secondary);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
         /* Footer - Scenario 5 */
         footer {
             background-color: var(--bg-secondary);
@@ -274,6 +311,16 @@
 
         /* Responsive Design - Scenario 6 */
         @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                justify-content: center;
+                gap: 15px;
+            }
+
             #hero h1 {
                 font-size: 2.5rem;
             }
@@ -313,9 +360,16 @@
 </head>
 <body>
     <!-- Navigation - Scenario 5 -->
-    <nav>
-        <div class="container">
-            <!-- Navigation content goes here -->
+    <nav aria-label="Main navigation">
+        <div class="container nav-container">
+            <a href="#hero" class="nav-logo">MirDB</a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#quick-start">Quick Start</a>
+                <a href="#comparison">Compare</a>
+                <a href="https://github.com/yetone/mirdb#installation" target="_blank" rel="noopener">Installation</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+            </div>
         </div>
     </nav>
 
@@ -326,7 +380,7 @@
             <h1>MirDB</h1>
             <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
             <p class="subtext">Like memcached, but data doesn't disappear when you restart</p>
-            <a href="https://github.com/yetone/mirdb#readme" class="btn">Get Started</a>
+            <a href="https://github.com/yetone/mirdb#readme" class="btn" target="_blank" rel="noopener">Get Started</a>
         </div>
     </section>
 
@@ -468,9 +522,9 @@ hello
         <div class="container">
             <p>MirDB - A Persistent Key-Value Store</p>
             <div class="footer-links">
-                <a href="https://github.com/yetone/mirdb">GitHub Repository</a>
-                <a href="https://github.com/yetone/mirdb#readme">Documentation</a>
-                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE">MIT License</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub Repository</a>
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener">Documentation</a>
+                <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener">MIT License</a>
             </div>
         </div>
     </footer>
