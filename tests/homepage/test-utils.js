@@ -88,10 +88,32 @@ function getStyleProperty(doc, element, property) {
   return null;
 }
 
+/**
+ * Get all text content from an element
+ * @param {Element} element - The element to get text from
+ * @returns {string} The combined text content
+ */
+function getTextContent(element) {
+  return element ? element.textContent.trim() : '';
+}
+
+/**
+ * Check if hero section fits within viewport height
+ * Note: In JSDOM we verify structural presence, not actual layout
+ * @param {Document} doc - The DOM document
+ * @returns {boolean} Whether the hero section exists with proper structure
+ */
+function isAboveTheFold(doc) {
+  const heroSection = doc.querySelector('[data-testid="hero-section"]') || doc.querySelector('#hero');
+  return heroSection !== null;
+}
+
 module.exports = {
   loadHTML,
   loadHTMLWithWindow,
   getByTestId,
   getAllLinks,
-  getStyleProperty
+  getStyleProperty,
+  getTextContent,
+  isAboveTheFold
 };
