@@ -336,3 +336,245 @@ describe('Quick Start Section Validation', () => {
     });
   });
 });
+
+// Comparison Section Tests - Scenario 4
+describe('Comparison Section Validation', () => {
+  let document;
+
+  beforeAll(async () => {
+    document = await loadHTML();
+  });
+
+  // Test Case 1: Comparison section or table exists
+  describe('Test Case 1: Comparison Section Exists', () => {
+    test('A section or table element for comparison exists', () => {
+      const comparisonSection = document.getElementById('comparison') ||
+                                document.querySelector('[data-testid="comparison-section"]');
+      expect(comparisonSection).not.toBeNull();
+    });
+
+    test('Comparison section has a table element', () => {
+      const comparisonSection = document.getElementById('comparison');
+      expect(comparisonSection).not.toBeNull();
+
+      const table = comparisonSection.querySelector('table');
+      expect(table).not.toBeNull();
+    });
+
+    test('Comparison table has header row', () => {
+      const comparisonSection = document.getElementById('comparison');
+      const table = comparisonSection.querySelector('table');
+      const headerRow = table.querySelector('thead tr') || table.querySelector('tr:first-child');
+      expect(headerRow).not.toBeNull();
+    });
+  });
+
+  // Test Case 2: MirDB is described as persistent
+  describe('Test Case 2: Persistence Comparison', () => {
+    test('MirDB is described as persistent in the comparison', () => {
+      const comparisonSection = document.getElementById('comparison');
+      expect(comparisonSection).not.toBeNull();
+
+      const tableContent = comparisonSection.querySelector('table').textContent;
+      const hasPersistent = tableContent.toLowerCase().includes('persistent');
+      expect(hasPersistent).toBe(true);
+    });
+
+    test('Persistence is shown in MirDB column', () => {
+      const comparisonSection = document.getElementById('comparison');
+      const table = comparisonSection.querySelector('table');
+      const rows = table.querySelectorAll('tbody tr');
+
+      let mirdbHasPersistence = false;
+      for (const row of rows) {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 2) {
+          // MirDB column (second column after feature name)
+          const mirdbCell = cells[1];
+          if (mirdbCell && mirdbCell.textContent.toLowerCase().includes('persistent')) {
+            mirdbHasPersistence = true;
+            break;
+          }
+        }
+      }
+
+      expect(mirdbHasPersistence).toBe(true);
+    });
+  });
+
+  // Test Case 3: Memcached is described as in-memory
+  describe('Test Case 3: In-Memory Storage', () => {
+    test('Memcached is described as in-memory in the comparison', () => {
+      const comparisonSection = document.getElementById('comparison');
+      expect(comparisonSection).not.toBeNull();
+
+      const tableContent = comparisonSection.querySelector('table').textContent.toLowerCase();
+      const hasInMemory = tableContent.includes('in-memory') || tableContent.includes('inmemory');
+      expect(hasInMemory).toBe(true);
+    });
+
+    test('In-memory is shown in Memcached column', () => {
+      const comparisonSection = document.getElementById('comparison');
+      const table = comparisonSection.querySelector('table');
+      const rows = table.querySelectorAll('tbody tr');
+
+      let memcachedHasInMemory = false;
+      for (const row of rows) {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 3) {
+          // Memcached column (third column)
+          const memcachedCell = cells[2];
+          if (memcachedCell) {
+            const cellText = memcachedCell.textContent.toLowerCase();
+            if (cellText.includes('in-memory') || cellText.includes('inmemory')) {
+              memcachedHasInMemory = true;
+              break;
+            }
+          }
+        }
+      }
+
+      expect(memcachedHasInMemory).toBe(true);
+    });
+  });
+
+  // Test Case 4: MirDB storage engine is listed as LSM Tree
+  describe('Test Case 4: LSM Tree Storage Engine', () => {
+    test('MirDB storage engine is listed as LSM Tree', () => {
+      const comparisonSection = document.getElementById('comparison');
+      expect(comparisonSection).not.toBeNull();
+
+      const tableContent = comparisonSection.querySelector('table').textContent;
+      const hasLSM = tableContent.includes('LSM');
+      expect(hasLSM).toBe(true);
+    });
+
+    test('LSM Tree is shown in MirDB column', () => {
+      const comparisonSection = document.getElementById('comparison');
+      const table = comparisonSection.querySelector('table');
+      const rows = table.querySelectorAll('tbody tr');
+
+      let mirdbHasLSM = false;
+      for (const row of rows) {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 2) {
+          // Check for storage engine row with LSM in MirDB column
+          const mirdbCell = cells[1];
+          if (mirdbCell && mirdbCell.textContent.includes('LSM')) {
+            mirdbHasLSM = true;
+            break;
+          }
+        }
+      }
+
+      expect(mirdbHasLSM).toBe(true);
+    });
+  });
+
+  // Test Case 5: Memcached storage is listed as Hash Table
+  describe('Test Case 5: Hash Table Storage', () => {
+    test('Memcached storage is listed as Hash Table', () => {
+      const comparisonSection = document.getElementById('comparison');
+      expect(comparisonSection).not.toBeNull();
+
+      const tableContent = comparisonSection.querySelector('table').textContent;
+      const hasHash = tableContent.toLowerCase().includes('hash');
+      expect(hasHash).toBe(true);
+    });
+
+    test('Hash Table is shown in Memcached column', () => {
+      const comparisonSection = document.getElementById('comparison');
+      const table = comparisonSection.querySelector('table');
+      const rows = table.querySelectorAll('tbody tr');
+
+      let memcachedHasHash = false;
+      for (const row of rows) {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 3) {
+          // Memcached column (third column)
+          const memcachedCell = cells[2];
+          if (memcachedCell && memcachedCell.textContent.toLowerCase().includes('hash')) {
+            memcachedHasHash = true;
+            break;
+          }
+        }
+      }
+
+      expect(memcachedHasHash).toBe(true);
+    });
+  });
+
+  // Test Case 6: MirDB data is described as preserved on restart
+  describe('Test Case 6: Data Preserved on Restart', () => {
+    test('MirDB data is described as preserved on restart', () => {
+      const comparisonSection = document.getElementById('comparison');
+      expect(comparisonSection).not.toBeNull();
+
+      const tableContent = comparisonSection.querySelector('table').textContent.toLowerCase();
+      const hasPreserved = tableContent.includes('preserved') || tableContent.includes('persists');
+      expect(hasPreserved).toBe(true);
+    });
+
+    test('Preserved is shown in MirDB restart behavior row', () => {
+      const comparisonSection = document.getElementById('comparison');
+      const table = comparisonSection.querySelector('table');
+      const rows = table.querySelectorAll('tbody tr');
+
+      let mirdbHasPreserved = false;
+      for (const row of rows) {
+        const cells = row.querySelectorAll('td');
+        // Look for restart-related row
+        const featureCell = cells[0];
+        if (featureCell && featureCell.textContent.toLowerCase().includes('restart')) {
+          const mirdbCell = cells[1];
+          if (mirdbCell) {
+            const cellText = mirdbCell.textContent.toLowerCase();
+            if (cellText.includes('preserved') || cellText.includes('persists')) {
+              mirdbHasPreserved = true;
+              break;
+            }
+          }
+        }
+      }
+
+      expect(mirdbHasPreserved).toBe(true);
+    });
+  });
+
+  // Test Case 7: Memcached data is described as lost on restart
+  describe('Test Case 7: Data Lost on Restart', () => {
+    test('Memcached data is described as lost on restart', () => {
+      const comparisonSection = document.getElementById('comparison');
+      expect(comparisonSection).not.toBeNull();
+
+      const tableContent = comparisonSection.querySelector('table').textContent.toLowerCase();
+      const hasLost = tableContent.includes('lost') || tableContent.includes('cleared');
+      expect(hasLost).toBe(true);
+    });
+
+    test('Lost is shown in Memcached restart behavior row', () => {
+      const comparisonSection = document.getElementById('comparison');
+      const table = comparisonSection.querySelector('table');
+      const rows = table.querySelectorAll('tbody tr');
+
+      let memcachedHasLost = false;
+      for (const row of rows) {
+        const cells = row.querySelectorAll('td');
+        // Look for restart-related row
+        const featureCell = cells[0];
+        if (featureCell && featureCell.textContent.toLowerCase().includes('restart')) {
+          const memcachedCell = cells[2];
+          if (memcachedCell) {
+            const cellText = memcachedCell.textContent.toLowerCase();
+            if (cellText.includes('lost') || cellText.includes('cleared')) {
+              memcachedHasLost = true;
+              break;
+            }
+          }
+        }
+      }
+
+      expect(memcachedHasLost).toBe(true);
+    });
+  });
+});
