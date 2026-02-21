@@ -446,6 +446,41 @@ h3 {
 /* ========================================
    11. Media Queries (Scenario 6)
    ======================================== */
+
+/* Mobile-first: Touch-friendly defaults for mobile devices */
+.nav-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.nav-links li {
+    display: flex;
+    align-items: center;
+}
+
+/* Ensure buttons meet touch target requirements */
+.btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Footer links touch targets */
+.footer-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.footer-links li {
+    display: flex;
+    align-items: center;
+}
+
 @media (min-width: 768px) {
     h1 {
         font-size: var(--font-size-5xl);
