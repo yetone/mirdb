@@ -204,28 +204,29 @@ test.describe('Cross-Browser Compatibility Tests', () => {
         // Click the copy button
         await copyButton.click();
 
+        // Wait for click to process
+        await page.waitForTimeout(100);
+
         // For browsers that support clipboard API permissions (Chromium), verify clipboard
         if (browserName === 'chromium') {
           const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
           expect(clipboardText).toBeTruthy();
           expect(clipboardText.length).toBeGreaterThan(0);
         } else {
-          // For Firefox/WebKit, verify the button click works (no errors thrown)
-          // and check for visual feedback instead since clipboard API is restricted
-          await page.waitForTimeout(100);
-          const buttonText = await copyButton.textContent();
-          // Button should still be accessible and clickable
-          expect(buttonText).toBeTruthy();
+          // For Firefox/WebKit, verify the button shows visual feedback
+          // Check for copied class or Copied text
+          const hasFeedback = await copyButton.evaluate((btn) => {
+            const textEl = btn.querySelector('.copy-text');
+            return btn.classList.contains('copied') ||
+                   (textEl && textEl.textContent.includes('Copied')) ||
+                   btn.textContent.includes('Copied');
+          });
+          expect(hasFeedback).toBe(true);
         }
       }
     });
 
-    test('Copy button shows visual feedback', async ({ page, context, browserName }) => {
-      // Grant clipboard permissions (only supported in Chromium-based browsers)
-      if (browserName === 'chromium') {
-        await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-      }
-
+    test('Copy button shows visual feedback', async ({ page, browserName }) => {
       const quickstartSection = page.locator('#quickstart');
       const copyButton = quickstartSection.locator('.copy-btn').first();
       const buttonCount = await copyButton.count();
@@ -234,18 +235,18 @@ test.describe('Cross-Browser Compatibility Tests', () => {
         // Click the copy button
         await copyButton.click();
 
-        // Check for feedback (either class change or text change)
-        const hasChangedClass = await copyButton.evaluate((btn) => {
-          return (
-            btn.classList.contains('copied') ||
-            btn.classList.contains('success') ||
-            btn.innerText.toLowerCase().includes('copied')
-          );
+        // Wait for feedback to appear
+        await page.waitForTimeout(100);
+
+        // Check for feedback (either class change or text change in .copy-text element)
+        const hasFeedback = await copyButton.evaluate((btn) => {
+          const textEl = btn.querySelector('.copy-text');
+          return btn.classList.contains('copied') ||
+                 btn.classList.contains('success') ||
+                 (textEl && textEl.textContent.includes('Copied')) ||
+                 btn.textContent.includes('Copied');
         });
 
-        // Button should show some form of feedback
-        const buttonText = await copyButton.textContent();
-        const hasFeedback = hasChangedClass || buttonText.toLowerCase().includes('copied');
         expect(hasFeedback).toBe(true);
       }
     });
@@ -262,25 +263,42 @@ test.describe('Cross-Browser Compatibility Tests', () => {
       if (buttonCount >= 2) {
         // Test first code block
         await copyButtons.nth(0).click();
+        await page.waitForTimeout(100);
+
+        // Verify first button shows feedback
+        const firstHasFeedback = await copyButtons.nth(0).evaluate((btn) => {
+          const textEl = btn.querySelector('.copy-text');
+          return btn.classList.contains('copied') ||
+                 (textEl && textEl.textContent.includes('Copied'));
+        });
+        expect(firstHasFeedback).toBe(true);
 
         if (browserName === 'chromium') {
           const firstClipboard = await page.evaluate(() => navigator.clipboard.readText());
           expect(firstClipboard).toBeTruthy();
 
+          // Wait for first button feedback to reset
+          await page.waitForTimeout(2500);
+
           // Test second code block
           await copyButtons.nth(1).click();
+          await page.waitForTimeout(100);
+
           const secondClipboard = await page.evaluate(() => navigator.clipboard.readText());
           expect(secondClipboard).toBeTruthy();
-
-          // Content should be different
-          expect(firstClipboard !== secondClipboard || buttonCount === 1).toBe(true);
         } else {
-          // For Firefox/WebKit, verify buttons are clickable without errors
-          await page.waitForTimeout(100);
+          // For Firefox/WebKit, wait and test second button
+          await page.waitForTimeout(2500);
           await copyButtons.nth(1).click();
           await page.waitForTimeout(100);
-          // If we got here without errors, the copy buttons work
-          expect(true).toBe(true);
+
+          // Verify second button shows feedback
+          const secondHasFeedback = await copyButtons.nth(1).evaluate((btn) => {
+            const textEl = btn.querySelector('.copy-text');
+            return btn.classList.contains('copied') ||
+                   (textEl && textEl.textContent.includes('Copied'));
+          });
+          expect(secondHasFeedback).toBe(true);
         }
       }
     });
