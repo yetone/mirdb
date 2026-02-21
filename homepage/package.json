@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "MirDB Homepage - A static, responsive landing page",
   "scripts": {
-    "test": "npm run test:e2e",
+    "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "jest tests/unit",
-    "test:e2e": "playwright test",
-    "test:a11y": "jest tests/unit/accessibility.test.js"
+    "test:e2e": "node ./node_modules/.bin/playwright test",
+    "test:a11y": "jest tests/unit/accessibility.test.js",
+    "test:perf:unit": "jest tests/unit/performance.test.js",
+    "test:perf:e2e": "node ./node_modules/.bin/playwright test tests/e2e/performance.spec.js",
+    "test:perf": "npm run test:perf:unit && npm run test:perf:e2e"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
