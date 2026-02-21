@@ -1,0 +1,217 @@
+/**
+ * Homepage-Specific Styles
+ * Owners:
+ *   - Scenario 1: Hero section styles
+ *   - Scenario 3: Features grid styles
+ *   - Scenario 6: Roadmap section styles
+ *
+ * Expected content:
+ * - Hero layout and styling
+ * - Features card grid
+ * - Roadmap checklist styling
+ * - CTA button styles
+ */
+
+/* ===== HERO SECTION - Scenario 1 ===== */
+.hero {
+  background-color: var(--hero-bg);
+  padding: 4rem 2rem;
+  text-align: center;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.hero-tagline {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.cta-button:hover {
+  background-color: var(--accent-hover);
+  text-decoration: none;
+}
+
+.cta-button:focus {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+}
+/* ===== END HERO SECTION ===== */
+
+/* ===== FEATURES SECTION - Scenario 3 ===== */
+.features {
+  padding: 4rem 2rem;
+  background-color: var(--bg-color);
+}
+
+.features-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background-color: var(--hero-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.feature-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+}
+
+.feature-card-description {
+  font-size: 1rem;
+  color: var(--text-color);
+  line-height: 1.6;
+  opacity: 0.85;
+}
+/* ===== END FEATURES SECTION ===== */
+
+/* ===== ROADMAP SECTION - Scenario 6 ===== */
+.roadmap {
+  padding: 4rem 2rem;
+  background-color: var(--hero-bg);
+}
+
+.roadmap-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.roadmap-intro {
+  font-size: 1.125rem;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 2.5rem;
+  opacity: 0.85;
+}
+
+.roadmap-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.roadmap-column {
+  background-color: var(--bg-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.roadmap-column-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-color);
+}
+
+.roadmap-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.roadmap-item {
+  padding: 0.75rem 0;
+  padding-left: 2rem;
+  position: relative;
+  font-size: 1rem;
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.roadmap-item:last-child {
+  border-bottom: none;
+}
+
+.roadmap-item::before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+}
+
+.roadmap-completed::before {
+  content: "✓";
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.roadmap-planned::before {
+  content: "○";
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.roadmap-completed {
+  opacity: 1;
+}
+
+.roadmap-planned {
+  opacity: 0.85;
+  font-style: italic;
+}
+/* ===== END ROADMAP SECTION ===== */

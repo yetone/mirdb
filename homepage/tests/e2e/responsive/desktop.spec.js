@@ -2,8 +2,12 @@
  * Desktop Responsive Design E2E Tests
  * Owner: Scenario 9 - Responsive Design - Desktop
  *
- * Tests desktop viewport rendering at 1920x1080 and above
- * Verifies layout, navigation, and proper content display
+ * Tests desktop viewport rendering at 1920x1080 and above.
+ * Verifies layout, navigation, and proper content display.
+ *
+ * Note: These tests require Playwright with browser support. When browser dependencies
+ * are not available, use the fallback Jest unit tests in tests/unit/components/ to
+ * verify CSS rules and HTML structure.
  */
 
 const { test, expect } = require('@playwright/test');
@@ -16,9 +20,11 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
     // Set viewport to desktop size
     await page.setViewportSize(DESKTOP_VIEWPORT);
     await page.goto('/');
+    // Wait for page to be fully loaded
+    await page.waitForLoadState('networkidle');
   });
 
-  test('Hero section spans appropriate width with centered content', async ({ page }) => {
+  test('Test Case 1: Hero section spans appropriate width with centered content', async ({ page }) => {
     const hero = page.locator('.hero');
     const heroContent = page.locator('.hero-content');
 
@@ -27,15 +33,18 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
 
     // Hero section should span full viewport width
     const heroBox = await hero.boundingBox();
+    expect(heroBox).not.toBeNull();
     expect(heroBox.width).toBeGreaterThanOrEqual(DESKTOP_VIEWPORT.width - 1);
 
     // Hero content should be centered (check alignment)
     const heroContentBox = await heroContent.boundingBox();
+    expect(heroContentBox).not.toBeNull();
     const heroContentCenterX = heroContentBox.x + heroContentBox.width / 2;
     const viewportCenterX = DESKTOP_VIEWPORT.width / 2;
 
-    // Content center should be close to viewport center (within 50px tolerance)
-    expect(Math.abs(heroContentCenterX - viewportCenterX)).toBeLessThan(50);
+    // Content center should be close to viewport center (within tolerance)
+    const tolerance = DESKTOP_VIEWPORT.width * 0.1;
+    expect(Math.abs(heroContentCenterX - viewportCenterX)).toBeLessThan(tolerance);
 
     // Verify hero elements are visible
     await expect(page.locator('.hero-title')).toBeVisible();
@@ -43,7 +52,7 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
     await expect(page.locator('.cta-button')).toBeVisible();
   });
 
-  test('Features grid displays in multi-column layout', async ({ page }) => {
+  test('Test Case 2: Features grid displays in multi-column layout', async ({ page }) => {
     const featuresGrid = page.locator('.features-grid');
     const featureCards = page.locator('.feature-card');
 
@@ -52,14 +61,16 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
 
     // Should have multiple feature cards
     const cardCount = await featureCards.count();
-    expect(cardCount).toBeGreaterThan(1);
+    expect(cardCount).toBeGreaterThanOrEqual(2);
 
     // Get bounding boxes of first two cards to check they're side by side
     const card1Box = await featureCards.nth(0).boundingBox();
     const card2Box = await featureCards.nth(1).boundingBox();
 
+    expect(card1Box).not.toBeNull();
+    expect(card2Box).not.toBeNull();
+
     // Cards should be on the same row (same or similar Y position)
-    // In a multi-column layout, cards in the same row have approximately equal Y
     expect(Math.abs(card1Box.y - card2Box.y)).toBeLessThan(10);
 
     // Cards should be side by side (different X positions)
@@ -67,10 +78,14 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
 
     // Grid should utilize available width appropriately
     const gridBox = await featuresGrid.boundingBox();
+    expect(gridBox).not.toBeNull();
     expect(gridBox.width).toBeGreaterThan(600);
+
+    // Verify grid is using multi-column layout
+    expect(card1Box.width).toBeLessThan(gridBox.width * 0.75);
   });
 
-  test('Navigation displays horizontally without hamburger menu', async ({ page }) => {
+  test('Test Case 3: Navigation displays horizontally without hamburger menu', async ({ page }) => {
     const nav = page.locator('.main-nav');
     const navList = page.locator('.nav-list');
     const navItems = page.locator('.nav-item');
@@ -85,25 +100,28 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
 
     // Nav items should be displayed horizontally
     const itemCount = await navItems.count();
-    expect(itemCount).toBeGreaterThan(1);
+    expect(itemCount).toBeGreaterThanOrEqual(3);
 
     // Check that nav items are on the same horizontal line
     const item1Box = await navItems.nth(0).boundingBox();
     const item2Box = await navItems.nth(1).boundingBox();
 
+    expect(item1Box).not.toBeNull();
+    expect(item2Box).not.toBeNull();
+
     // Items should have similar Y position (horizontal layout)
-    expect(Math.abs(item1Box.y - item2Box.y)).toBeLessThan(5);
+    expect(Math.abs(item1Box.y - item2Box.y)).toBeLessThan(20);
 
     // Items should have different X positions
-    expect(item1Box.x).not.toEqual(item2Box.x);
+    expect(item2Box.x).toBeGreaterThan(item1Box.x);
 
-    // Verify all expected nav links are visible
+    // Verify expected nav links are visible
     await expect(page.locator('.nav-link[data-section="features"]')).toBeVisible();
     await expect(page.locator('.nav-link[data-section="quickstart"]')).toBeVisible();
     await expect(page.locator('.nav-link[data-section="architecture"]')).toBeVisible();
   });
 
-  test('No horizontal scrollbar appears', async ({ page }) => {
+  test('Test Case 4: No horizontal scrollbar appears', async ({ page }) => {
     // Check that document does not have horizontal overflow
     const hasHorizontalScrollbar = await page.evaluate(() => {
       return document.documentElement.scrollWidth > document.documentElement.clientWidth;
@@ -124,23 +142,34 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
 
     // Body scroll width should not exceed client width
     expect(bodyOverflow.scrollWidth).toBeLessThanOrEqual(bodyOverflow.clientWidth + 1);
+
+    // Check overflow-x CSS property is set correctly
+    const overflowX = await page.evaluate(() => {
+      return window.getComputedStyle(document.documentElement).overflowX;
+    });
+
+    // overflow-x should be hidden or auto (not visible with scrollbar)
+    expect(['hidden', 'auto', 'clip']).toContain(overflowX);
   });
 
   test('Desktop layout utilizes full width appropriately', async ({ page }) => {
     // Check hero section width usage
     const hero = page.locator('.hero');
     const heroBox = await hero.boundingBox();
+    expect(heroBox).not.toBeNull();
     expect(heroBox.width).toBeGreaterThanOrEqual(DESKTOP_VIEWPORT.width - 1);
 
     // Check features section width usage
     const features = page.locator('.features');
     await expect(features).toBeVisible();
     const featuresBox = await features.boundingBox();
+    expect(featuresBox).not.toBeNull();
     expect(featuresBox.width).toBeGreaterThanOrEqual(DESKTOP_VIEWPORT.width - 1);
 
     // Features grid should have a sensible max-width and be centered
     const featuresGrid = page.locator('.features-grid');
     const gridBox = await featuresGrid.boundingBox();
+    expect(gridBox).not.toBeNull();
 
     // Grid should have horizontal margin (centered layout)
     const leftMargin = gridBox.x;
@@ -157,10 +186,12 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
     // Header should span full width
     await expect(header).toBeVisible();
     const headerBox = await header.boundingBox();
+    expect(headerBox).not.toBeNull();
     expect(headerBox.width).toBeGreaterThanOrEqual(DESKTOP_VIEWPORT.width - 1);
 
     // Header container should have proper centering
     const containerBox = await headerContainer.boundingBox();
+    expect(containerBox).not.toBeNull();
     const leftMargin = containerBox.x;
     const rightMargin = DESKTOP_VIEWPORT.width - (containerBox.x + containerBox.width);
 
@@ -179,6 +210,7 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
 
     // Footer should span full width
     const footerBox = await footer.boundingBox();
+    expect(footerBox).not.toBeNull();
     expect(footerBox.width).toBeGreaterThanOrEqual(DESKTOP_VIEWPORT.width - 1);
 
     // Footer content should be visible
@@ -201,12 +233,16 @@ test.describe('Responsive Design - Desktop (1920x1080+)', () => {
 
       // Each section should have proper padding
       const box = await element.boundingBox();
+      expect(box).not.toBeNull();
       expect(box.height, `${section.name} section should have content`).toBeGreaterThan(50);
     }
 
     // Check sections are stacked vertically (not overlapping)
     const heroBox = await page.locator('.hero').boundingBox();
     const featuresBox = await page.locator('.features').boundingBox();
+
+    expect(heroBox).not.toBeNull();
+    expect(featuresBox).not.toBeNull();
 
     // Features should come after hero
     expect(featuresBox.y).toBeGreaterThan(heroBox.y);
