@@ -5,14 +5,14 @@ const { defineConfig, devices } = require('@playwright/test');
  * @see https://playwright.dev/docs/test-configuration
  */
 module.exports = defineConfig({
-  testDir: './tests',
+  testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:1313/mirdb/',
+    baseURL: 'http://localhost:1315',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -25,9 +25,9 @@ module.exports = defineConfig({
   ],
 
   webServer: {
-    command: 'hugo server --port 1313 --buildDrafts --buildFuture',
-    url: 'http://localhost:1313/mirdb/',
-    reuseExistingServer: true,
+    command: 'hugo server --port 1315 --bind 0.0.0.0 --baseURL http://localhost:1315/',
+    url: 'http://localhost:1315/',
+    reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
 });
