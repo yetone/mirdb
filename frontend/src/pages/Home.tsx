@@ -7,7 +7,7 @@ import { FeaturesSection } from '../components/home/FeaturesSection';
 
 export function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" data-testid="home-page">
       <BackgroundEffect />
       <Navbar />
       <main className="flex-grow">
