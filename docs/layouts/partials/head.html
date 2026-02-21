@@ -21,7 +21,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <!-- Styles -->
-<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+{{ $css := resources.Get "css/main.css" | css.PostCSS }}
+{{ if hugo.IsProduction }}
+  {{ $css = $css | minify | fingerprint }}
+{{ end }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}">
 
 <!-- Preload critical assets -->
 <link rel="preload" href="/images/logo.gif" as="image">

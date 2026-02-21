@@ -22,8 +22,8 @@ module.exports = defineConfig({
   webServer: {
     command: `${process.env.HOME}/.local/bin/hugo server --bind 0.0.0.0 -p 1316`,
     url: 'http://localhost:1316/mirdb/',
-    reuseExistingServer: true,
-    timeout: 60000,
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
     stdout: 'pipe',
     stderr: 'pipe',
   },
