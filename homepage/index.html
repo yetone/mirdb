@@ -59,7 +59,41 @@
         <section id="status" class="status" aria-labelledby="status-heading">
             <div class="container">
                 <h2 id="status-heading">Project Status</h2>
-                <!-- Status content will be added by Scenario 4 -->
+                <p class="status-intro">Track our progress as we build MirDB into a robust, production-ready database.</p>
+
+                <div class="status-list" role="list" aria-label="Project roadmap items">
+                    <!-- Completed items -->
+                    <div class="status-item status-completed" role="listitem">
+                        <span class="status-icon" aria-hidden="true">✓</span>
+                        <span class="status-text">Tokio with memcached protocol</span>
+                        <span class="status-badge completed">Completed</span>
+                    </div>
+
+                    <div class="status-item status-completed" role="listitem">
+                        <span class="status-icon" aria-hidden="true">✓</span>
+                        <span class="status-text">Memtable with skiplist</span>
+                        <span class="status-badge completed">Completed</span>
+                    </div>
+
+                    <div class="status-item status-completed" role="listitem">
+                        <span class="status-icon" aria-hidden="true">✓</span>
+                        <span class="status-text">Minor compaction</span>
+                        <span class="status-badge completed">Completed</span>
+                    </div>
+
+                    <div class="status-item status-completed" role="listitem">
+                        <span class="status-icon" aria-hidden="true">✓</span>
+                        <span class="status-text">Major compaction</span>
+                        <span class="status-badge completed">Completed</span>
+                    </div>
+
+                    <!-- Planned items -->
+                    <div class="status-item status-pending" role="listitem">
+                        <span class="status-icon" aria-hidden="true">○</span>
+                        <span class="status-text">Raft consensus</span>
+                        <span class="status-badge pending">Planned</span>
+                    </div>
+                </div>
             </div>
         </section>
         <!-- END: Status Section -->

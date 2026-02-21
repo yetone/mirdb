@@ -202,7 +202,138 @@ test.describe('Quick Start Section', () => {
    Status Section Tests (Scenario 4)
    ======================================== */
 test.describe('Status Section', () => {
-    // Tests will be added by Scenario 4
+    test.beforeEach(async ({ page }) => {
+        await page.goto(homepageUrl);
+    });
+
+    test('TC1: Status section is present and visible', async ({ page }) => {
+        // Test Case 1: Section displaying project status/roadmap is present
+        const statusSection = page.locator('#status');
+        await expect(statusSection).toBeVisible();
+
+        const heading = statusSection.locator('h2');
+        await expect(heading).toBeVisible();
+        await expect(heading).toContainText('Project Status');
+    });
+
+    test('TC2: Tokio with memcached protocol is marked as completed', async ({ page }) => {
+        // Test Case 2: Item 'tokio with memcached protocol' is marked as completed
+        const statusSection = page.locator('#status');
+        const tokioItem = statusSection.locator('.status-item:has-text("Tokio with memcached protocol")');
+
+        await expect(tokioItem).toBeVisible();
+        await expect(tokioItem).toHaveClass(/status-completed/);
+
+        // Verify checkmark icon is present
+        const icon = tokioItem.locator('.status-icon');
+        await expect(icon).toContainText('✓');
+
+        // Verify completed badge
+        const badge = tokioItem.locator('.status-badge.completed');
+        await expect(badge).toBeVisible();
+    });
+
+    test('TC3: Memtable with skiplist is marked as completed', async ({ page }) => {
+        // Test Case 3: Item 'memtable with skiplist' is marked as completed
+        const statusSection = page.locator('#status');
+        const skiplistItem = statusSection.locator('.status-item:has-text("Memtable with skiplist")');
+
+        await expect(skiplistItem).toBeVisible();
+        await expect(skiplistItem).toHaveClass(/status-completed/);
+
+        const icon = skiplistItem.locator('.status-icon');
+        await expect(icon).toContainText('✓');
+    });
+
+    test('TC4: Minor compaction is marked as completed', async ({ page }) => {
+        // Test Case 4: Item 'minor compaction' is marked as completed
+        const statusSection = page.locator('#status');
+        const minorCompactionItem = statusSection.locator('.status-item:has-text("Minor compaction")');
+
+        await expect(minorCompactionItem).toBeVisible();
+        await expect(minorCompactionItem).toHaveClass(/status-completed/);
+
+        const icon = minorCompactionItem.locator('.status-icon');
+        await expect(icon).toContainText('✓');
+    });
+
+    test('TC5: Major compaction is marked as completed', async ({ page }) => {
+        // Test Case 5: Item 'major compaction' is marked as completed
+        const statusSection = page.locator('#status');
+        const majorCompactionItem = statusSection.locator('.status-item:has-text("Major compaction")');
+
+        await expect(majorCompactionItem).toBeVisible();
+        await expect(majorCompactionItem).toHaveClass(/status-completed/);
+
+        const icon = majorCompactionItem.locator('.status-icon');
+        await expect(icon).toContainText('✓');
+    });
+
+    test('TC6: Raft consensus is marked as planned/pending', async ({ page }) => {
+        // Test Case 6: Item 'raft' is marked as planned/pending
+        const statusSection = page.locator('#status');
+        const raftItem = statusSection.locator('.status-item:has-text("Raft consensus")');
+
+        await expect(raftItem).toBeVisible();
+        await expect(raftItem).toHaveClass(/status-pending/);
+
+        // Verify pending icon (different from checkmark)
+        const icon = raftItem.locator('.status-icon');
+        await expect(icon).toContainText('○');
+
+        // Verify planned badge
+        const badge = raftItem.locator('.status-badge.pending');
+        await expect(badge).toBeVisible();
+        await expect(badge).toContainText('Planned');
+    });
+
+    test('TC7: Visual distinction between completed and pending items', async ({ page }) => {
+        // Test Case 7: Completed items have different styling than pending items
+        const statusSection = page.locator('#status');
+
+        // Get a completed item
+        const completedItem = statusSection.locator('.status-completed').first();
+        await expect(completedItem).toBeVisible();
+
+        // Get the pending item
+        const pendingItem = statusSection.locator('.status-pending').first();
+        await expect(pendingItem).toBeVisible();
+
+        // Verify completed item has checkmark
+        const completedIcon = completedItem.locator('.status-icon');
+        await expect(completedIcon).toContainText('✓');
+
+        // Verify pending item has different icon
+        const pendingIcon = pendingItem.locator('.status-icon');
+        await expect(pendingIcon).toContainText('○');
+
+        // Verify badges have different classes/styles
+        const completedBadge = completedItem.locator('.status-badge.completed');
+        const pendingBadge = pendingItem.locator('.status-badge.pending');
+
+        await expect(completedBadge).toBeVisible();
+        await expect(pendingBadge).toBeVisible();
+
+        // Verify different background colors for badges
+        const completedBgColor = await completedBadge.evaluate((el) => {
+            return window.getComputedStyle(el).backgroundColor;
+        });
+        const pendingBgColor = await pendingBadge.evaluate((el) => {
+            return window.getComputedStyle(el).backgroundColor;
+        });
+
+        expect(completedBgColor).not.toBe(pendingBgColor);
+
+        // Verify icon colors are different
+        const completedIconColor = await completedIcon.evaluate((el) => {
+            return window.getComputedStyle(el).color;
+        });
+        const pendingIconColor = await pendingIcon.evaluate((el) => {
+            return window.getComputedStyle(el).color;
+        });
+
+        expect(completedIconColor).not.toBe(pendingIconColor);
+    });
 });
 
 /* ========================================
