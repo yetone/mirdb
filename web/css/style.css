@@ -1,0 +1,329 @@
+/**
+ * MirDB Homepage Styles
+ * Owner: Scenario 2 - Homepage Content Structure
+ * Extended by: Scenario 4 - Responsive Design
+ *
+ * Structure:
+ * - Base styles and CSS reset
+ * - Layout: header, main sections, footer
+ * - Components: feature cards, buttons, code blocks
+ * - Responsive breakpoints (added by Scenario 4)
+ */
+
+/* CSS Reset and Base Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary-color: #3498db;
+    --primary-dark: #2980b9;
+    --secondary-color: #2ecc71;
+    --text-color: #333;
+    --text-light: #666;
+    --bg-color: #fff;
+    --bg-light: #f8f9fa;
+    --bg-dark: #1a1a2e;
+    --border-color: #e0e0e0;
+    --code-bg: #2d3748;
+    --code-text: #e2e8f0;
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Header and Navigation */
+header {
+    background-color: var(--bg-dark);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.nav-logo:hover {
+    color: var(--primary-color);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: #ccc;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: #fff;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, var(--bg-dark) 0%, #16213e 100%);
+    color: #fff;
+    padding: 4rem 2rem;
+    text-align: center;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero-logo {
+    max-width: 300px;
+    margin-bottom: 1.5rem;
+}
+
+.ascii-art {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1.2;
+    color: var(--secondary-color);
+    margin: 1.5rem 0;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.tagline {
+    font-size: 1.5rem;
+    color: #ccc;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 1rem 2.5rem;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cta-button:hover {
+    background-color: var(--primary-dark);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Features Section */
+.features {
+    padding: 5rem 2rem;
+    background-color: var(--bg-light);
+}
+
+.features h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--text-color);
+}
+
+.feature-cards {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background-color: var(--bg-color);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+}
+
+.feature-card p {
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+/* Usage Demo Section */
+.usage-demo {
+    padding: 5rem 2rem;
+    background-color: var(--bg-color);
+}
+
+.usage-demo h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--text-color);
+}
+
+.demo-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.usage-gif {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.demo-container figcaption {
+    margin-top: 1.5rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* Quick Start Section */
+.quick-start {
+    padding: 5rem 2rem;
+    background-color: var(--bg-light);
+}
+
+.quick-start h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--text-color);
+}
+
+.quick-start-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quick-start-step {
+    margin-bottom: 2.5rem;
+}
+
+.quick-start-step h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1rem;
+}
+
+.quick-start-step ul {
+    margin-left: 1.5rem;
+    list-style: disc;
+}
+
+.quick-start-step li {
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+}
+
+.quick-start-step p {
+    margin-bottom: 1rem;
+    color: var(--text-light);
+}
+
+.quick-start-step pre {
+    background-color: var(--code-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin-top: 0.5rem;
+}
+
+.quick-start-step code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--code-text);
+    line-height: 1.6;
+}
+
+/* Footer */
+footer {
+    background-color: var(--bg-dark);
+    color: #ccc;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-content a {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.footer-content a:hover {
+    color: #fff;
+}
+
+.copyright {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #888;
+}
