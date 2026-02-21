@@ -109,7 +109,27 @@ END</span></code></pre>
 </section>
 <!-- ===== END QUICK START SECTION ===== -->
 
-<!-- Roadmap Section - Scenario 6 -->
+<!-- ===== ROADMAP SECTION - Scenario 6 ===== -->
 <section id="roadmap" class="roadmap">
-  <!-- Roadmap content will be added by Scenario 6 -->
+  <h2 class="roadmap-title">Feature Roadmap</h2>
+  <p class="roadmap-intro">Track our progress and see what's coming next for MirDB.</p>
+
+  <div class="roadmap-columns">
+    <div class="roadmap-column">
+      <h3 class="roadmap-column-title">Completed</h3>
+      <ul class="roadmap-list">
+        <li class="roadmap-item roadmap-completed">Tokio async networking</li>
+        <li class="roadmap-item roadmap-completed">Skip-list memtable</li>
+        <li class="roadmap-item roadmap-completed">Minor compaction</li>
+        <li class="roadmap-item roadmap-completed">Major compaction</li>
+      </ul>
+    </div>
+    <div class="roadmap-column">
+      <h3 class="roadmap-column-title">Planned</h3>
+      <ul class="roadmap-list">
+        <li class="roadmap-item roadmap-planned">Raft consensus</li>
+      </ul>
+    </div>
+  </div>
 </section>
+<!-- ===== END ROADMAP SECTION ===== -->
