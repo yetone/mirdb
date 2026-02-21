@@ -27,6 +27,22 @@ pub struct Config {
     pub l0_compaction_trigger: usize,
 
     pub thread_sleep_ms: usize,
+
+    // Web server configuration
+    #[serde(default)]
+    pub web_enabled: bool,
+    #[serde(default = "default_web_port")]
+    pub web_port: u16,
+    #[serde(default = "default_web_static_dir")]
+    pub web_static_dir: String,
+}
+
+fn default_web_port() -> u16 {
+    8080
+}
+
+fn default_web_static_dir() -> String {
+    "./web".to_string()
 }
 
 impl Config {
@@ -43,6 +59,37 @@ impl Config {
         opt.l0_compaction_trigger = self.l0_compaction_trigger;
         opt.thread_sleep_ms = self.thread_sleep_ms;
         Ok(opt)
+    }
+
+    pub fn validate_web_config(&self) -> MyResult<()> {
+        if !self.web_enabled {
+            return Ok(());
+        }
+
+        // Validate port range (1-65535, 0 is invalid)
+        if self.web_port == 0 {
+            return err(
+                StatusCode::ConfigError,
+                "web_port must be between 1 and 65535",
+            );
+        }
+
+        // Extract the port from the main addr
+        if let Some(port_str) = self.addr.split(':').last() {
+            if let Ok(memcached_port) = port_str.parse::<u16>() {
+                if self.web_port == memcached_port {
+                    return err(
+                        StatusCode::ConfigError,
+                        format!(
+                            "web_port {} conflicts with Memcached server port {}",
+                            self.web_port, memcached_port
+                        ),
+                    );
+                }
+            }
+        }
+
+        Ok(())
     }
 }
 
@@ -132,6 +179,123 @@ thread_sleep_ms = 500
         assert_eq!(16, opt.table_opt.block_restart_interval);
         assert_eq!(4, opt.l0_compaction_trigger);
         assert_eq!(500, opt.thread_sleep_ms);
+
+        // Verify default web config values
+        assert_eq!(false, config.web_enabled);
+        assert_eq!(8080, config.web_port);
+        assert_eq!("./web", config.web_static_dir);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_parse_with_web_config() -> MyResult<()> {
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdbs"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500
+
+web_enabled = true
+web_port = 9090
+web_static_dir = "/var/www/html"
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        assert_eq!(true, config.web_enabled);
+        assert_eq!(9090, config.web_port);
+        assert_eq!("/var/www/html", config.web_static_dir);
+
+        // Validate config is valid
+        config.validate_web_config()?;
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_web_port_conflict() {
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdbs"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500
+web_enabled = true
+web_port = 12333
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        let result = config.validate_web_config();
+        assert!(result.is_err());
+        let err_msg = result.unwrap_err().msg;
+        assert!(err_msg.contains("conflicts with Memcached server port"));
+    }
+
+    #[test]
+    fn test_invalid_web_port_zero() {
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdbs"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500
+web_enabled = true
+web_port = 0
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        let result = config.validate_web_config();
+        assert!(result.is_err());
+        let err_msg = result.unwrap_err().msg;
+        assert!(err_msg.contains("web_port must be between 1 and 65535"));
+    }
+
+    #[test]
+    fn test_web_disabled_skips_validation() -> MyResult<()> {
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdbs"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500
+web_enabled = false
+web_port = 0
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        // When web is disabled, validation should pass even with invalid port
+        config.validate_web_config()?;
 
         Ok(())
     }
