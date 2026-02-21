@@ -40,3 +40,104 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+/* ===== DESKTOP STYLES - Scenario 9 ===== */
+/* Desktop breakpoint: 1920x1080 and above */
+/* Ensure proper layout, full-width utilization, and horizontal navigation */
+
+/* Prevent horizontal scrollbar on all viewports */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Desktop-specific container constraints */
+@media (min-width: 1200px) {
+  /* Ensure sections span full width */
+  .hero,
+  .features,
+  .quickstart,
+  .roadmap {
+    width: 100%;
+  }
+
+  /* Hero section desktop optimizations */
+  .hero {
+    padding: 6rem 2rem;
+  }
+
+  .hero-content {
+    max-width: 900px;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+  }
+
+  .hero-tagline {
+    font-size: 1.75rem;
+  }
+
+  /* Features grid for larger screens */
+  .features-grid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1400px;
+    gap: 2.5rem;
+  }
+
+  /* Roadmap columns for larger screens */
+  .roadmap-columns {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1000px;
+    gap: 2.5rem;
+  }
+
+  /* Navigation - horizontal display on desktop */
+  .main-nav {
+    display: flex;
+  }
+
+  .nav-list {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  /* Hide mobile menu toggle on desktop */
+  .mobile-menu-toggle {
+    display: none;
+  }
+
+  /* Header container for large screens */
+  .header-container {
+    max-width: 1400px;
+    padding: 1rem 2rem;
+  }
+
+  /* Footer container for large screens */
+  .footer-container {
+    max-width: 1400px;
+    padding: 0 2rem;
+  }
+}
+
+/* Extra large desktop (1920px and above) */
+@media (min-width: 1920px) {
+  .hero-content {
+    max-width: 1000px;
+  }
+
+  .hero-title {
+    font-size: 4rem;
+  }
+
+  .features-grid {
+    max-width: 1600px;
+  }
+
+  .header-container,
+  .footer-container {
+    max-width: 1600px;
+  }
+}
+/* ===== END DESKTOP STYLES ===== */
