@@ -1,0 +1,46 @@
+# Hugo configuration for MirDB Homepage
+
+baseURL = "https://yetone.github.io/mirdb/"
+languageCode = "en-us"
+title = "MirDB - Persistent Key-Value Store with Memcached Protocol"
+# theme = "" # Not using a theme, using custom layouts
+
+[build]
+  writeStats = true
+
+[params]
+  description = "MirDB is a persistent key-value store with Memcached protocol support, built with Rust and featuring an LSM tree architecture."
+  author = "yetone"
+  github = "https://github.com/yetone/mirdb"
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    noClasses = false
+
+[minify]
+  disableCSS = false
+  disableHTML = false
+  disableJS = false
+  disableJSON = false
+  disableSVG = false
+  disableXML = false
+  minifyOutput = true
+
+  [minify.tdewolff]
+    [minify.tdewolff.html]
+      keepWhitespace = false
+      keepEndTags = true
+    [minify.tdewolff.css]
+      keepCSS2 = true
+      precision = 0
+    [minify.tdewolff.js]
+      keepVarNames = false
+
+# Production environment settings
+[environments]
+  [environments.production]
+    minify = true
+    params.environment = "production"

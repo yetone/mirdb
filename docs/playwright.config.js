@@ -1,0 +1,40 @@
+// @ts-check
+const { defineConfig, devices } = require('@playwright/test');
+
+module.exports = defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: [['list'], ['html', { open: 'never' }]],
+  timeout: 30000,
+  use: {
+    baseURL: 'http://localhost:1316/mirdb/',
+    trace: 'on-first-retry',
+  },
+  // Browser projects: Chromium (Chrome/Edge), Firefox, WebKit (Safari)
+  // Note: Edge uses Chromium engine, so chromium project effectively tests Edge compatibility
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+  ],
+  webServer: {
+    command: 'hugo server --bind 0.0.0.0 -p 1316 --baseURL http://localhost:1316/mirdb/',
+    url: 'http://localhost:1316/mirdb/',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+    stdout: 'pipe',
+    stderr: 'pipe',
+  },
+});

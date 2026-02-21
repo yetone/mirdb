@@ -1,0 +1,34 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - Persistent Key-Value Store with Memcached Protocol",
+  "scripts": {
+    "dev": "hugo server -D",
+    "build": "npm run css:build && hugo --minify --environment production",
+    "build:dev": "hugo --minify",
+    "test": "npx playwright test",
+    "test:e2e": "npx playwright test tests/e2e/",
+    "test:unit": "npx playwright test tests/unit/",
+    "test:integration": "npx playwright test tests/integration/",
+    "css:build": "NODE_ENV=production npx tailwindcss -i ./assets/css/main.css -o ./static/css/style.css --minify",
+    "serve": "npx serve public -l 3000"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "autoprefixer": "^10.4.24",
+    "cssnano": "^6.0.1",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^10.1.0",
+    "tailwindcss": "^3.4.19"
+  },
+  "keywords": [
+    "mirdb",
+    "key-value",
+    "memcached",
+    "rust"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@fullhuman/postcss-purgecss": "^8.0.0"
+  }
+}

@@ -1,0 +1,53 @@
+{{/*
+  Header partial for MirDB Homepage
+  Owner: Scenario 1 - Header and Navigation
+  Stub file - to be fully implemented by Scenario 1
+*/}}
+<header class="sticky top-0 z-40 bg-white dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border">
+  <nav class="container-custom" aria-label="Main navigation">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center space-x-2">
+        <img src="/images/logo.gif" alt="MirDB Logo" class="h-10 w-auto">
+        <span class="font-bold text-xl text-slate-900 dark:text-white">MirDB</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#features" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400 transition-colors">Features</a>
+        <a href="#architecture" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400 transition-colors">Architecture</a>
+        <a href="#getting-started" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400 transition-colors">Getting Started</a>
+        <a href="#status" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400 transition-colors">Status</a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400 transition-colors">GitHub</a>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" aria-label="Toggle dark mode" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-dark-surface transition-colors">
+          <svg id="sun-icon" class="w-5 h-5 text-slate-600 dark:text-slate-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <svg id="moon-icon" class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-dark-surface" aria-label="Open menu" aria-expanded="false">
+        <svg class="w-6 h-6 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4">
+      <div class="flex flex-col space-y-4">
+        <a href="#features" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400">Features</a>
+        <a href="#architecture" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400">Architecture</a>
+        <a href="#getting-started" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400">Getting Started</a>
+        <a href="#status" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400">Status</a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400">GitHub</a>
+      </div>
+    </div>
+  </nav>
+</header>

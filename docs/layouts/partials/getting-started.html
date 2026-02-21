@@ -1,0 +1,145 @@
+{{/*
+  Getting Started section partial for MirDB Homepage
+  Owner: Scenario 5 - Getting Started Section
+
+  Requirements (REQ-2, REQ-4, REQ-9):
+  - Installation instructions with code block
+  - Usage examples showing set/get operations
+  - Reference to usage.gif demonstration
+  - Default configuration values display
+*/}}
+<section id="getting-started" class="section bg-slate-50 dark:bg-dark-surface">
+  <div class="container-custom">
+    <h2 class="section-heading">Getting Started</h2>
+
+    <div class="max-w-4xl mx-auto space-y-12">
+      <!-- Installation Section -->
+      <div class="getting-started-step">
+        <h3 class="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary-600 text-white text-sm font-bold mr-3">1</span>
+          Installation
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 mb-4">
+          Clone the repository and build with Cargo:
+        </p>
+        <div class="code-block" data-lang="shell">
+          <pre><code class="language-shell">git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+          <button class="copy-btn" aria-label="Copy to clipboard" type="button">
+            <svg class="copy-icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <svg class="check-icon w-5 h-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Run Server Section -->
+      <div class="getting-started-step">
+        <h3 class="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary-600 text-white text-sm font-bold mr-3">2</span>
+          Run the Server
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 mb-4">
+          Start MirDB with default configuration:
+        </p>
+        <div class="code-block" data-lang="shell">
+          <pre><code class="language-shell">./target/release/mirdb</code></pre>
+          <button class="copy-btn" aria-label="Copy to clipboard" type="button">
+            <svg class="copy-icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <svg class="check-icon w-5 h-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Usage Examples Section -->
+      <div class="getting-started-step">
+        <h3 class="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary-600 text-white text-sm font-bold mr-3">3</span>
+          Basic Operations
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 mb-4">
+          Connect using any memcached client and perform set/get operations:
+        </p>
+        <div class="code-block" data-lang="shell">
+          <pre><code class="language-shell"># Connect using telnet or nc
+telnet localhost 12333
+
+# Set a key-value pair
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          <button class="copy-btn" aria-label="Copy to clipboard" type="button">
+            <svg class="copy-icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <svg class="check-icon w-5 h-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Usage Demo GIF -->
+      <div class="getting-started-demo text-center">
+        <h3 class="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-6">
+          See It in Action
+        </h3>
+        <div class="inline-block rounded-lg overflow-hidden shadow-xl border border-slate-200 dark:border-dark-border">
+          <img
+            src="/images/usage.gif"
+            alt="MirDB usage demonstration showing set and get operations in a terminal"
+            class="max-w-full h-auto"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      <!-- Default Configuration Section -->
+      <div class="getting-started-config">
+        <h3 class="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-6 text-center">
+          Default Configuration
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="config-card bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-dark-border">
+            <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">Port</div>
+            <div class="text-lg font-mono font-semibold text-primary-600 dark:text-primary-400">12333</div>
+          </div>
+          <div class="config-card bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-dark-border">
+            <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">Work Directory</div>
+            <div class="text-lg font-mono font-semibold text-primary-600 dark:text-primary-400">/tmp/mirdb</div>
+          </div>
+          <div class="config-card bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-dark-border">
+            <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">Max LSM Levels</div>
+            <div class="text-lg font-mono font-semibold text-primary-600 dark:text-primary-400">7</div>
+          </div>
+          <div class="config-card bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-dark-border">
+            <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">SSTable Max Size</div>
+            <div class="text-lg font-mono font-semibold text-primary-600 dark:text-primary-400">100MB</div>
+          </div>
+          <div class="config-card bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-dark-border">
+            <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">Memtable Max Size</div>
+            <div class="text-lg font-mono font-semibold text-primary-600 dark:text-primary-400">4MB</div>
+          </div>
+          <div class="config-card bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-dark-border">
+            <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">Block Size</div>
+            <div class="text-lg font-mono font-semibold text-primary-600 dark:text-primary-400">4KB</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
