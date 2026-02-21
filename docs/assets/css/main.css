@@ -103,6 +103,48 @@
     @apply bg-green-600;
   }
 
+  .code-block .copy-btn .copy-icon,
+  .code-block .copy-btn .check-icon {
+    @apply transition-opacity duration-200;
+  }
+
+  /* Syntax highlighting - Shell */
+  .code-block[data-lang="shell"] code .comment,
+  .code-block code .comment {
+    @apply text-slate-500;
+  }
+
+  .code-block[data-lang="shell"] code .keyword,
+  .code-block code .keyword {
+    @apply text-purple-400;
+  }
+
+  .code-block[data-lang="shell"] code .string,
+  .code-block code .string {
+    @apply text-green-400;
+  }
+
+  .code-block[data-lang="rust"] code .keyword {
+    @apply text-pink-400;
+  }
+
+  .code-block[data-lang="rust"] code .function {
+    @apply text-blue-400;
+  }
+
+  /* Getting started step styling */
+  .getting-started-step {
+    @apply bg-white dark:bg-slate-800 rounded-xl p-6 md:p-8;
+    @apply border border-slate-200 dark:border-dark-border;
+    @apply shadow-sm;
+  }
+
+  /* Config card hover effect */
+  .config-card {
+    @apply transition-all duration-200;
+    @apply hover:shadow-md hover:border-primary-300 dark:hover:border-primary-700;
+  }
+
   /* Feature card */
   .feature-card {
     @apply p-6 rounded-xl bg-white dark:bg-dark-surface;

@@ -62,9 +62,23 @@
             button.classList.add('copied');
             button.setAttribute('aria-label', 'Copied!');
 
+            // Toggle icons for visual feedback
+            const copyIcon = button.querySelector('.copy-icon');
+            const checkIcon = button.querySelector('.check-icon');
+            if (copyIcon && checkIcon) {
+              copyIcon.classList.add('hidden');
+              checkIcon.classList.remove('hidden');
+            }
+
             setTimeout(() => {
               button.classList.remove('copied');
               button.setAttribute('aria-label', 'Copy to clipboard');
+
+              // Restore icons
+              if (copyIcon && checkIcon) {
+                copyIcon.classList.remove('hidden');
+                checkIcon.classList.add('hidden');
+              }
             }, 2000);
           } catch (err) {
             console.error('Failed to copy:', err);
