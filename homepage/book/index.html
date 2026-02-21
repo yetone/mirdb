@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MirDB</title>
+    <title>Home - MirDB</title>
     <meta name="description" content="A Persistent Key-Value Store with Memcached Protocol">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/general.css">
@@ -36,7 +36,7 @@
                     <li class="nav-item">
                         <a href="https://github.com/yetone/mirdb" class="nav-link nav-link-external" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository (opens in new tab)">
                             GitHub
-                            <span class="external-icon" aria-hidden="true">&#8599;</span>
+                            <span class="external-icon" aria-hidden="true">↗</span>
                         </a>
                     </li>
                 </ul>
@@ -46,94 +46,191 @@
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
             </button>
+            <!-- ===== THEME TOGGLE - Scenario 15 ===== -->
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false" type="button">
+                <svg class="theme-icon theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <svg class="theme-icon theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+            <!-- ===== END THEME TOGGLE ===== -->
         </div>
     </header>
     <!-- ===== END NAVIGATION HEADER ===== -->
 
     <main id="content">
+        <!--
+MirDB Homepage Main Content
+Owners:
+  - Scenario 1: Hero section
+  - Scenario 3: Features section
+  - Scenario 4: Quick Start section
+  - Scenario 6: Roadmap section
+
+Expected sections (in order):
+1. Hero - Tagline, logo, Get Started CTA
+2. Features - Grid of core capabilities
+3. Quick Start - Installation and usage code
+4. Roadmap - Completed and planned features
+-->
 <!-- ===== HERO SECTION - Scenario 1 ===== -->
 <section id="hero" class="hero">
-  <div class="hero-content">
+  
+<div class="hero-content">
     <img src="images/logo.gif" alt="MirDB Logo" class="hero-logo" id="mirdb-logo">
-    <h1 class="hero-title">MirDB</h1>
-    <p class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+    
+<h1 class="hero-title">MirDB</h1>
+
+    
+<p class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+
     <a href="#quickstart" class="cta-button" id="get-started-btn">Get Started</a>
   </div>
+
 </section>
 <!-- ===== END HERO SECTION ===== -->
-
 <!-- ===== FEATURES SECTION - Scenario 3 ===== -->
 <section id="features" class="features">
-  <h2 class="features-title">Core Features</h2>
-  <div class="features-grid">
-    <div class="feature-card" id="feature-memcached">
-      <h3 class="feature-card-title">Memcached Protocol Support</h3>
-      <p class="feature-card-description">Full compatibility with the Memcached protocol allows seamless integration with existing clients and tools. Use any memcached client library to connect to MirDB.</p>
+  
+<h2 class="features-title">Core Features</h2>
+
+  
+<div class="features-grid">
+    
+<div class="feature-card" id="feature-memcached">
+      
+<h3 class="feature-card-title">Memcached Protocol Support</h3>
+
+      
+<p class="feature-card-description">Full compatibility with the Memcached protocol allows seamless integration with existing clients and tools. Use any memcached client library to connect to MirDB.</p>
+
     </div>
-    <div class="feature-card" id="feature-sstables">
-      <h3 class="feature-card-title">Durability with SSTables</h3>
-      <p class="feature-card-description">Data is persisted to disk using Sorted String Tables (SSTables), ensuring your data survives restarts and crashes with configurable durability guarantees.</p>
+
+    
+<div class="feature-card" id="feature-sstables">
+      
+<h3 class="feature-card-title">Durability with SSTables</h3>
+
+      
+<p class="feature-card-description">Data is persisted to disk using Sorted String Tables (SSTables), ensuring your data survives restarts and crashes with configurable durability guarantees.</p>
+
     </div>
-    <div class="feature-card" id="feature-lsm">
-      <h3 class="feature-card-title">LSM Tree Architecture</h3>
-      <p class="feature-card-description">Log-Structured Merge Tree architecture provides optimal write performance with efficient compaction strategies, including minor and major compaction support.</p>
+
+    
+<div class="feature-card" id="feature-lsm">
+      
+<h3 class="feature-card-title">LSM Tree Architecture</h3>
+
+      
+<p class="feature-card-description">Log-Structured Merge Tree architecture provides optimal write performance with efficient compaction strategies, including minor and major compaction support.</p>
+
     </div>
-    <div class="feature-card" id="feature-rust">
-      <h3 class="feature-card-title">High-Performance Rust Implementation</h3>
-      <p class="feature-card-description">Built with Rust for memory safety and performance. Leverages Tokio for async networking and provides zero-copy operations where possible.</p>
+
+    
+<div class="feature-card" id="feature-rust">
+      
+<h3 class="feature-card-title">High-Performance Rust Implementation</h3>
+
+      
+<p class="feature-card-description">Built with Rust for memory safety and performance. Leverages Tokio for async networking and provides zero-copy operations where possible.</p>
+
     </div>
+
   </div>
+
 </section>
 <!-- ===== END FEATURES SECTION ===== -->
-
 <!-- ===== QUICK START SECTION - Scenario 4 ===== -->
 <section id="quickstart" class="quickstart">
-  <h2>Quick Start</h2>
-  <p class="quickstart-intro">Get MirDB running in minutes. Install via Cargo and start storing key-value pairs using the familiar Memcached protocol.</p>
+  
+<h2>Quick Start</h2>
 
-  <div class="quickstart-step">
-    <h3>1. Install MirDB</h3>
-    <div class="code-block" data-language="bash">
+  
+<p class="quickstart-intro">Get MirDB running in minutes. Install via Cargo and start storing key-value pairs using the familiar Memcached protocol.</p>
+
+  
+<div class="quickstart-step">
+    
+<h3>1. Install MirDB</h3>
+
+    
+<div class="code-block" data-language="bash">
       <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard">
-        <span class="copy-icon">&#128203;</span>
+        <span class="copy-icon">📋</span>
         <span class="copy-text">Copy</span>
       </button>
-      <pre><code class="language-bash">cargo install mirdb</code></pre>
+      
+<pre><code class="language-bash">cargo install mirdb</code></pre>
+
     </div>
+
   </div>
 
-  <div class="quickstart-step">
-    <h3>2. Start the Server</h3>
-    <div class="code-block" data-language="bash">
+  
+<div class="quickstart-step">
+    
+<h3>2. Start the Server</h3>
+
+    
+<div class="code-block" data-language="bash">
       <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard">
-        <span class="copy-icon">&#128203;</span>
+        <span class="copy-icon">📋</span>
         <span class="copy-text">Copy</span>
       </button>
-      <pre><code class="language-bash">mirdb-server --addr 0.0.0.0:12333 --dir /tmp/mirdb</code></pre>
+      
+<pre><code class="language-bash">mirdb-server --addr 0.0.0.0:12333 --dir /tmp/mirdb</code></pre>
+
     </div>
+
   </div>
 
-  <div class="quickstart-step">
-    <h3>3. Connect and Use</h3>
-    <p>Connect using any Memcached client or telnet:</p>
-    <div class="code-block" data-language="bash">
+  
+<div class="quickstart-step">
+    
+<h3>3. Connect and Use</h3>
+
+    
+<p>Connect using any Memcached client or telnet:</p>
+
+    
+<div class="code-block" data-language="bash">
       <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard">
-        <span class="copy-icon">&#128203;</span>
+        <span class="copy-icon">📋</span>
         <span class="copy-text">Copy</span>
       </button>
-      <pre><code class="language-bash">telnet localhost 12333</code></pre>
+      
+<pre><code class="language-bash">telnet localhost 12333</code></pre>
+
     </div>
+
   </div>
 
-  <div class="quickstart-step">
-    <h3>4. Store and Retrieve Data</h3>
-    <p>Use standard Memcached protocol commands:</p>
-    <div class="code-block" data-language="text">
+  
+<div class="quickstart-step">
+    
+<h3>4. Store and Retrieve Data</h3>
+
+    
+<p>Use standard Memcached protocol commands:</p>
+
+    
+<div class="code-block" data-language="text">
       <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard">
-        <span class="copy-icon">&#128203;</span>
+        <span class="copy-icon">📋</span>
         <span class="copy-text">Copy</span>
       </button>
-      <pre><code class="language-memcached"><span class="token-comment"># Store a value</span>
+      
+<pre><code class="language-memcached"><span class="token-comment"># Store a value</span>
 <span class="token-command">set mykey 0 0 5</span>
 hello
 <span class="token-response">STORED</span>
@@ -142,35 +239,65 @@ hello
 <span class="token-response">VALUE mykey 0 5
 hello
 END</span></code></pre>
+
     </div>
+
   </div>
+
 </section>
 <!-- ===== END QUICK START SECTION ===== -->
-
 <!-- ===== ROADMAP SECTION - Scenario 6 ===== -->
 <section id="roadmap" class="roadmap">
-  <h2 class="roadmap-title">Feature Roadmap</h2>
-  <p class="roadmap-intro">Track our progress and see what's coming next for MirDB.</p>
+  
+<h2 class="roadmap-title">Feature Roadmap</h2>
 
-  <div class="roadmap-columns">
-    <div class="roadmap-column">
-      <h3 class="roadmap-column-title">Completed</h3>
-      <ul class="roadmap-list">
-        <li class="roadmap-item roadmap-completed">Tokio async networking</li>
-        <li class="roadmap-item roadmap-completed">Skip-list memtable</li>
-        <li class="roadmap-item roadmap-completed">Minor compaction</li>
-        <li class="roadmap-item roadmap-completed">Major compaction</li>
+  
+<p class="roadmap-intro">Track our progress and see what's coming next for MirDB.</p>
+
+  
+<div class="roadmap-columns">
+    
+<div class="roadmap-column">
+      
+<h3 class="roadmap-column-title">Completed</h3>
+
+      
+<ul class="roadmap-list">
+        
+<li class="roadmap-item roadmap-completed">Tokio async networking</li>
+
+        
+<li class="roadmap-item roadmap-completed">Skip-list memtable</li>
+
+        
+<li class="roadmap-item roadmap-completed">Minor compaction</li>
+
+        
+<li class="roadmap-item roadmap-completed">Major compaction</li>
+
       </ul>
+
     </div>
-    <div class="roadmap-column">
-      <h3 class="roadmap-column-title">Planned</h3>
-      <ul class="roadmap-list">
-        <li class="roadmap-item roadmap-planned">Raft consensus</li>
+
+    
+<div class="roadmap-column">
+      
+<h3 class="roadmap-column-title">Planned</h3>
+
+      
+<ul class="roadmap-list">
+        
+<li class="roadmap-item roadmap-planned">Raft consensus</li>
+
       </ul>
+
     </div>
+
   </div>
+
 </section>
 <!-- ===== END ROADMAP SECTION ===== -->
+
     </main>
 
     <!-- ===== FOOTER - Scenario 8 ===== -->
@@ -187,7 +314,7 @@ END</span></code></pre>
                 </div>
                 <div class="footer-info">
                     <p class="footer-text footer-license">Released under the <a href="https://opensource.org/licenses/MIT" class="footer-link footer-link-external" target="_blank" rel="noopener noreferrer" aria-label="MIT License (opens in new tab)">MIT License</a></p>
-                    <p class="footer-text footer-copyright">&copy; 2025 MirDB Contributors</p>
+                    <p class="footer-text footer-copyright">&copy;  MirDB Contributors</p>
                 </div>
             </div>
         </div>

@@ -63,7 +63,7 @@ function initSmoothScroll() {
 
 /**
  * Toggle mobile navigation menu visibility
- * Will be fully implemented by Scenario 11
+ * Implemented by Scenario 11
  */
 function toggleMobileMenu() {
   var nav = document.getElementById('main-nav');
@@ -71,14 +71,14 @@ function toggleMobileMenu() {
 
   if (nav && toggle) {
     var isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', !isExpanded);
+    toggle.setAttribute('aria-expanded', String(!isExpanded));
     nav.classList.toggle('is-open');
   }
 }
 
 /**
  * Close mobile menu when a nav item is selected
- * Will be fully implemented by Scenario 11
+ * Implemented by Scenario 11
  */
 function closeMobileMenuOnSelect() {
   var nav = document.getElementById('main-nav');
@@ -87,6 +87,41 @@ function closeMobileMenuOnSelect() {
   if (nav && toggle && nav.classList.contains('is-open')) {
     toggle.setAttribute('aria-expanded', 'false');
     nav.classList.remove('is-open');
+  }
+}
+
+/**
+ * Close mobile menu when clicking outside
+ * Implemented by Scenario 11
+ */
+function closeMobileMenuOnClickOutside(event) {
+  var nav = document.getElementById('main-nav');
+  var toggle = document.getElementById('mobile-menu-toggle');
+  var header = document.getElementById('site-header');
+
+  if (nav && toggle && nav.classList.contains('is-open')) {
+    // Check if click is outside the header area
+    if (header && !header.contains(event.target)) {
+      toggle.setAttribute('aria-expanded', 'false');
+      nav.classList.remove('is-open');
+    }
+  }
+}
+
+/**
+ * Close mobile menu when Escape key is pressed
+ * Implemented by Scenario 11
+ */
+function closeMobileMenuOnEscape(event) {
+  if (event.key === 'Escape' || event.keyCode === 27) {
+    var nav = document.getElementById('main-nav');
+    var toggle = document.getElementById('mobile-menu-toggle');
+
+    if (nav && toggle && nav.classList.contains('is-open')) {
+      toggle.setAttribute('aria-expanded', 'false');
+      nav.classList.remove('is-open');
+      toggle.focus();
+    }
   }
 }
 
@@ -107,6 +142,12 @@ document.addEventListener('DOMContentLoaded', function() {
   navLinks.forEach(function(link) {
     link.addEventListener('click', closeMobileMenuOnSelect);
   });
+
+  // Close mobile menu when clicking outside (Scenario 11)
+  document.addEventListener('click', closeMobileMenuOnClickOutside);
+
+  // Close mobile menu when Escape key is pressed (Scenario 11)
+  document.addEventListener('keydown', closeMobileMenuOnEscape);
 });
 
 // Export for testing (CommonJS)
@@ -114,6 +155,8 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     initSmoothScroll: initSmoothScroll,
     toggleMobileMenu: toggleMobileMenu,
-    closeMobileMenuOnSelect: closeMobileMenuOnSelect
+    closeMobileMenuOnSelect: closeMobileMenuOnSelect,
+    closeMobileMenuOnClickOutside: closeMobileMenuOnClickOutside,
+    closeMobileMenuOnEscape: closeMobileMenuOnEscape
   };
 }
