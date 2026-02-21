@@ -2,68 +2,120 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom CSS Variables */
+/* Custom CSS Variables for theming */
 :root {
-  --color-primary: #0ea5e9;
-  --color-primary-dark: #0284c7;
   --color-bg: #ffffff;
-  --color-bg-secondary: #f8fafc;
+  --color-surface: #f8fafc;
   --color-text: #0f172a;
-  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
   --color-border: #e2e8f0;
+  --color-primary: #0ea5e9;
+  --color-primary-hover: #0284c7;
 }
 
 .dark {
   --color-bg: #0f172a;
-  --color-bg-secondary: #1e293b;
+  --color-surface: #1e293b;
   --color-text: #e2e8f0;
-  --color-text-secondary: #94a3b8;
+  --color-text-muted: #94a3b8;
   --color-border: #334155;
+  --color-primary: #38bdf8;
+  --color-primary-hover: #7dd3fc;
 }
 
 /* Base styles */
-body {
-  @apply bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-200;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text;
+    @apply transition-colors duration-200;
+  }
+
+  /* Focus indicators for accessibility */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+    @apply dark:ring-offset-dark-bg;
+  }
+
+  /* Skip to content link */
+  .skip-to-content {
+    @apply absolute -top-10 left-0 bg-primary-600 text-white px-4 py-2 z-50;
+    @apply focus:top-0 transition-all;
+  }
 }
 
-/* Focus indicators for accessibility */
-a:focus,
-button:focus,
-input:focus {
-  @apply outline-none ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-dark-bg;
+/* Component styles */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold;
+    @apply transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 text-white;
+    @apply hover:bg-primary-700;
+    @apply focus:ring-primary-500;
+    @apply dark:bg-primary-500 dark:hover:bg-primary-400;
+  }
+
+  .btn-secondary {
+    @apply bg-slate-200 text-slate-900;
+    @apply hover:bg-slate-300;
+    @apply focus:ring-slate-400;
+    @apply dark:bg-dark-surface dark:text-dark-text dark:hover:bg-slate-700;
+  }
+
+  .section {
+    @apply py-16 md:py-24;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-heading {
+    @apply text-3xl md:text-4xl font-bold text-center mb-12;
+    @apply text-slate-900 dark:text-white;
+  }
+
+  /* Code block styles */
+  .code-block {
+    @apply relative bg-slate-900 rounded-lg overflow-hidden;
+  }
+
+  .code-block pre {
+    @apply p-4 overflow-x-auto text-sm font-mono text-slate-100;
+  }
+
+  .code-block .copy-btn {
+    @apply absolute top-2 right-2 p-2 rounded bg-slate-700 hover:bg-slate-600;
+    @apply text-slate-300 hover:text-white transition-colors;
+  }
+
+  .code-block .copy-btn.copied {
+    @apply bg-green-600;
+  }
+
+  /* Feature card */
+  .feature-card {
+    @apply p-6 rounded-xl bg-white dark:bg-dark-surface;
+    @apply border border-slate-200 dark:border-dark-border;
+    @apply transition-all duration-200;
+    @apply hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700;
+  }
 }
 
-/* Skip to main content link */
-.skip-link {
-  @apply absolute -top-10 left-4 bg-primary-600 text-white px-4 py-2 rounded z-50;
-  @apply focus:top-4 transition-all;
-}
-
-/* Code blocks */
-pre {
-  @apply bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto;
-}
-
-code {
-  @apply font-mono text-sm;
-}
-
-/* Feature cards */
-.feature-card {
-  @apply bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700;
-  @apply hover:shadow-xl transition-shadow duration-200;
-}
-
-.feature-icon {
-  @apply w-12 h-12 mb-4 text-primary-500;
-}
-
-/* Section styles */
-section {
-  @apply py-16 px-4 md:px-8;
-}
-
-/* Responsive container */
-.container-custom {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+/* Utility classes */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-600 to-primary-400;
+  }
 }

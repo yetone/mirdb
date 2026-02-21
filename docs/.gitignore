@@ -1,16 +1,12 @@
-# Dependencies
-node_modules/
-
-# Build outputs
+# Hugo
 public/
+resources/_gen/
 .hugo_build.lock
 hugo_stats.json
 
-# Test artifacts
+# Node
+node_modules/
+
+# Test results
 test-results/
 playwright-report/
-
-# Editor
-.DS_Store
-*.swp
-*.swo

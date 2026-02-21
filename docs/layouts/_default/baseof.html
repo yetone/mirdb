@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  {{- partial "head.html" . -}}
+  {{ partial "head.html" . }}
 </head>
 <body class="min-h-screen flex flex-col">
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <!-- Skip to main content link for accessibility -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
-  {{- partial "header.html" . -}}
+  {{ partial "header.html" . }}
 
   <main id="main-content" class="flex-grow">
-    {{- block "main" . }}{{- end }}
+    {{ block "main" . }}{{ end }}
   </main>
 
-  {{- partial "footer.html" . -}}
+  {{ partial "footer.html" . }}
 
-  {{- partial "scripts.html" . -}}
+  {{ partial "scripts.html" . }}
 </body>
 </html>

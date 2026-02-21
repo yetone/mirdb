@@ -7,7 +7,7 @@
   'use strict';
 
   // Theme Toggle
-  const initThemeToggle = () => {
+  const initTheme = () => {
     const themeToggle = document.getElementById('theme-toggle');
     const html = document.documentElement;
 
@@ -17,6 +17,8 @@
 
     if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
       html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
     }
 
     if (themeToggle) {
@@ -24,21 +26,42 @@
         html.classList.toggle('dark');
         const isDark = html.classList.contains('dark');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        updateThemeIcon(isDark);
       });
+
+      // Set initial icon
+      updateThemeIcon(html.classList.contains('dark'));
+    }
+  };
+
+  const updateThemeIcon = (isDark) => {
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    if (sunIcon && moonIcon) {
+      if (isDark) {
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      } else {
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      }
     }
   };
 
   // Copy to Clipboard
   const initCopyToClipboard = () => {
-    document.querySelectorAll('.copy-button').forEach(button => {
+    document.querySelectorAll('.copy-btn').forEach(button => {
       button.addEventListener('click', async () => {
-        const codeBlock = button.closest('.code-block-wrapper').querySelector('code');
-        if (codeBlock) {
+        const codeBlock = button.closest('.code-block');
+        const code = codeBlock.querySelector('code');
+
+        if (code) {
           try {
-            await navigator.clipboard.writeText(codeBlock.textContent);
+            await navigator.clipboard.writeText(code.textContent);
             button.classList.add('copied');
             button.setAttribute('aria-label', 'Copied!');
+
             setTimeout(() => {
               button.classList.remove('copied');
               button.setAttribute('aria-label', 'Copy to clipboard');
@@ -63,39 +86,46 @@
         mobileMenu.classList.toggle('hidden');
       });
 
-      // Close menu on Escape key
+      // Close on Escape
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-          menuButton.setAttribute('aria-expanded', 'false');
           mobileMenu.classList.add('hidden');
+          menuButton.setAttribute('aria-expanded', 'false');
           menuButton.focus();
         }
       });
 
-      // Close menu when clicking outside
+      // Close when clicking outside
       document.addEventListener('click', (e) => {
         if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
-          menuButton.setAttribute('aria-expanded', 'false');
           mobileMenu.classList.add('hidden');
+          menuButton.setAttribute('aria-expanded', 'false');
         }
       });
     }
   };
 
-  // Smooth Scroll for anchor links
+  // Smooth Scroll
   const initSmoothScroll = () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', (e) => {
-        const targetId = anchor.getAttribute('href');
-        if (targetId === '#') return;
+        const href = anchor.getAttribute('href');
+        if (href === '#') return;
 
-        const target = document.querySelector(targetId);
+        const target = document.querySelector(href);
         if (target) {
           e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Update focus for accessibility
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+
+          // Update URL without triggering scroll
+          history.pushState(null, null, href);
+
+          // Set focus for accessibility
           target.setAttribute('tabindex', '-1');
-          target.focus();
+          target.focus({ preventScroll: true });
         }
       });
     });
@@ -103,7 +133,7 @@
 
   // Initialize all features
   document.addEventListener('DOMContentLoaded', () => {
-    initThemeToggle();
+    initTheme();
     initCopyToClipboard();
     initMobileMenu();
     initSmoothScroll();

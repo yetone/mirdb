@@ -1,5 +1,5 @@
-{{/*
-  Scripts partial for MirDB Homepage
-  Owner: First scenario builder
-*/}}
-<script src="{{ "js/main.js" | relURL }}"></script>
+{{ $js := resources.Get "js/main.js" }}
+{{ if hugo.IsProduction }}
+  {{ $js = $js | minify | fingerprint }}
+{{ end }}
+<script src="{{ $js.RelPermalink }}" defer></script>

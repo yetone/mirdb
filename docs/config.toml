@@ -3,12 +3,22 @@
 baseURL = "https://yetone.github.io/mirdb/"
 languageCode = "en-us"
 title = "MirDB - Persistent Key-Value Store with Memcached Protocol"
-
-# Build configuration
-disableKinds = ["taxonomy", "term", "RSS", "sitemap"]
+# theme = "" # Not using a theme, using custom layouts
 
 [build]
   writeStats = true
+
+[params]
+  description = "MirDB is a persistent key-value store with Memcached protocol support, built with Rust and featuring an LSM tree architecture."
+  author = "yetone"
+  github = "https://github.com/yetone/mirdb"
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    noClasses = false
 
 [minify]
   disableCSS = false
@@ -18,8 +28,3 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap"]
   disableSVG = false
   disableXML = false
   minifyOutput = true
-
-[params]
-  description = "MirDB is a persistent key-value store with Memcached protocol support, using LSM tree architecture for high performance."
-  author = "MirDB Contributors"
-  githubUrl = "https://github.com/yetone/mirdb"

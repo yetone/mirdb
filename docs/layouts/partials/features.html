@@ -1,64 +1,24 @@
 {{/*
   Features section partial for MirDB Homepage
   Owner: Scenario 3 - Features Section
-
-  Requirements (REQ-3):
-  - h2 heading "Features"
-  - Grid of feature cards (3 cards)
-  - Each card: icon, title, description
-
-  Required features to showcase:
-  1. Memcached Protocol - Compatible with existing clients
-  2. Persistence - Data stored to disk using SSTables
-  3. LSM Tree Architecture - Log-Structured Merge-tree approach
-
-  Responsive behavior:
-  - Mobile (320px): Single column stack
-  - Tablet (768px): 2-column grid
-  - Desktop (1920px): 3-column grid
+  Stub file - to be fully implemented by Scenario 3
 */}}
-<section id="features" class="py-16 px-4 bg-gray-50 dark:bg-gray-900">
-  <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">Features</h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Memcached Protocol Feature -->
-      <div class="feature-card" data-testid="feature-card-memcached">
-        <div class="feature-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-blue-500">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
-          </svg>
-        </div>
-        <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Memcached Protocol</h3>
-        <p class="text-gray-600 dark:text-gray-300">
-          Full Memcached protocol compatibility allows you to use existing memcached clients. Drop-in replacement for your existing infrastructure.
-        </p>
+<section id="features" class="section bg-slate-50 dark:bg-dark-surface">
+  <div class="container-custom">
+    <h2 class="section-heading">Features</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Feature cards will be added by Scenario 3 -->
+      <div class="feature-card">
+        <h3 class="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Memcached Protocol</h3>
+        <p class="text-slate-600 dark:text-slate-400">Compatible with existing memcached clients</p>
       </div>
-
-      <!-- Persistence Feature -->
-      <div class="feature-card" data-testid="feature-card-persistence">
-        <div class="feature-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-blue-500">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-          </svg>
-        </div>
-        <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Persistence</h3>
-        <p class="text-gray-600 dark:text-gray-300">
-          Unlike traditional Memcached, MirDB persists data to disk using SSTables. Your data survives restarts and crashes.
-        </p>
+      <div class="feature-card">
+        <h3 class="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Persistence</h3>
+        <p class="text-slate-600 dark:text-slate-400">Data stored to disk using SSTables</p>
       </div>
-
-      <!-- LSM Tree Architecture Feature -->
-      <div class="feature-card" data-testid="feature-card-lsm">
-        <div class="feature-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-blue-500">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
-          </svg>
-        </div>
-        <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">LSM Tree Architecture</h3>
-        <p class="text-gray-600 dark:text-gray-300">
-          Built on Log-Structured Merge-tree architecture for optimal write performance. Automatic compaction keeps read performance fast.
-        </p>
+      <div class="feature-card">
+        <h3 class="text-xl font-semibold mb-2 text-slate-900 dark:text-white">LSM Tree Architecture</h3>
+        <p class="text-slate-600 dark:text-slate-400">Log-Structured Merge-tree approach for efficient writes</p>
       </div>
     </div>
   </div>
