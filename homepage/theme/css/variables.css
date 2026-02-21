@@ -34,6 +34,12 @@
  * - Code text (#e8e8e8 on #2d2d2d): 10.47:1 ✓ (exceeds 4.5:1)
  */
 
+/* ===== LIGHT MODE VARIABLES - Scenario 16 ===== */
+/**
+ * Light mode is the default theme for the MirDB homepage.
+ * Variables below define the complete light mode color scheme.
+ * All colors verified for WCAG 2.1 AA compliance by Scenario 14.
+ */
 :root {
   /* Light mode (default) - WCAG AA Compliant */
   --bg-color: #ffffff;
@@ -46,6 +52,7 @@
   --focus-color: #0055aa;
   --hero-bg: #f8f9fa;
 }
+/* ===== END LIGHT MODE VARIABLES ===== */
 
 /* ===== DARK MODE VARIABLES - Scenario 15 placeholder ===== */
 /* Dark mode styles will be added by Scenario 15 */
