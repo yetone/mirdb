@@ -72,5 +72,53 @@
 /* ===== END HERO SECTION ===== */
 
 /* ===== FEATURES SECTION - Scenario 3 ===== */
+.features {
+  padding: 4rem 2rem;
+  background-color: var(--bg-color);
+}
+
+.features-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background-color: var(--hero-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.feature-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+}
+
+.feature-card-description {
+  font-size: 1rem;
+  color: var(--text-color);
+  line-height: 1.6;
+  opacity: 0.85;
+}
+/* ===== END FEATURES SECTION ===== */
 
 /* ===== ROADMAP SECTION - Scenario 6 ===== */
