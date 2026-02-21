@@ -1,4 +1,4 @@
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ .Site.Title }}</title>
 <meta name="description" content="{{ .Site.Params.description }}">
@@ -7,28 +7,12 @@
 <meta property="og:title" content="{{ .Site.Title }}">
 <meta property="og:description" content="{{ .Site.Params.description }}">
 <meta property="og:type" content="website">
-<meta property="og:url" content="{{ .Permalink }}">
-
-<!-- Canonical URL -->
-<link rel="canonical" href="{{ .Permalink }}">
 
 <!-- Favicon -->
-<link rel="icon" href="{{ "favicon.ico" | relURL }}" type="image/x-icon">
+<link rel="icon" href="{{ "favicon.ico" | relURL }}">
 
-<!-- Preload critical assets -->
-<link rel="preload" href="{{ "css/main.css" | relURL }}" as="style">
-<link rel="preload" href="{{ "js/main.js" | relURL }}" as="script">
-
-<!-- Stylesheet -->
+<!-- Styles -->
 <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
 
-<!-- Theme initialization script (inline to prevent flash) -->
-<script>
-  (function() {
-    var stored = localStorage.getItem('mirdb-theme');
-    var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
-  })();
-</script>
+<!-- Preload critical assets -->
+<link rel="preconnect" href="https://fonts.googleapis.com">

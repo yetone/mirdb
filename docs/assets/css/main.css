@@ -4,240 +4,66 @@
 
 /* Custom CSS Variables */
 :root {
+  --color-primary: #0ea5e9;
+  --color-primary-dark: #0284c7;
   --color-bg: #ffffff;
   --color-bg-secondary: #f8fafc;
-  --color-text: #1e293b;
-  --color-text-secondary: #64748b;
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
   --color-border: #e2e8f0;
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-accent: #8b5cf6;
 }
 
 .dark {
   --color-bg: #0f172a;
   --color-bg-secondary: #1e293b;
-  --color-text: #f8fafc;
+  --color-text: #e2e8f0;
   --color-text-secondary: #94a3b8;
   --color-border: #334155;
-  --color-primary: #60a5fa;
-  --color-primary-hover: #93c5fd;
-  --color-accent: #a78bfa;
 }
 
 /* Base styles */
 body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Skip to main content link */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  padding: 8px 16px;
-  background-color: var(--color-primary);
-  color: white;
-  z-index: 100;
-  transition: top 0.2s ease;
-}
-
-.skip-link:focus {
-  top: 0;
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  @apply bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-200;
 }
 
 /* Focus indicators for accessibility */
 a:focus,
 button:focus,
-input:focus,
-select:focus,
-textarea:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+input:focus {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-dark-bg;
 }
 
-/* Custom focus ring for dark mode */
-.dark a:focus,
-.dark button:focus {
-  outline-color: var(--color-primary);
+/* Skip to main content link */
+.skip-link {
+  @apply absolute -top-10 left-4 bg-primary-600 text-white px-4 py-2 rounded z-50;
+  @apply focus:top-4 transition-all;
 }
 
-/* Header styles */
-.header-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  background-color: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  backdrop-filter: blur(8px);
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-.dark .header-fixed {
-  background-color: rgba(15, 23, 42, 0.9);
-  border-color: var(--color-border);
-}
-
-/* Navigation link hover */
-.nav-link {
-  color: var(--color-text-secondary);
-  transition: color 0.2s ease;
-}
-
-.nav-link:hover {
-  color: var(--color-primary);
-}
-
-/* Theme toggle button */
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background-color: transparent;
-  border: 1px solid var(--color-border);
-  cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.theme-toggle:hover {
-  background-color: var(--color-bg-secondary);
-  border-color: var(--color-primary);
-}
-
-.theme-toggle svg {
-  width: 20px;
-  height: 20px;
-  color: var(--color-text);
-}
-
-/* Mobile menu */
-.mobile-menu {
-  display: none;
-}
-
-.mobile-menu.open {
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .desktop-nav {
-    display: none;
-  }
-
-  .mobile-menu-btn {
-    display: flex;
-  }
-}
-
-@media (min-width: 769px) {
-  .mobile-menu-btn {
-    display: none;
-  }
-
-  .desktop-nav {
-    display: flex;
-  }
-}
-
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Code block styles */
+/* Code blocks */
 pre {
-  background-color: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 16px;
-  overflow-x: auto;
+  @apply bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto;
 }
 
 code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  @apply font-mono text-sm;
 }
 
-/* Copy button styles */
-.copy-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 4px 8px;
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: background-color 0.2s ease;
-}
-
-.copy-btn:hover {
-  background-color: var(--color-bg-secondary);
-}
-
-.copy-btn.copied {
-  background-color: #10b981;
-  color: white;
-  border-color: #10b981;
-}
-
-/* Card styles for features */
+/* Feature cards */
 .feature-card {
-  background-color: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 24px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  @apply bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700;
+  @apply hover:shadow-xl transition-shadow duration-200;
 }
 
-.feature-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+.feature-icon {
+  @apply w-12 h-12 mb-4 text-primary-500;
 }
 
-.dark .feature-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+/* Section styles */
+section {
+  @apply py-16 px-4 md:px-8;
 }
 
-/* Status badges */
-.badge-implemented {
-  background-color: #dcfce7;
-  color: #166534;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.dark .badge-implemented {
-  background-color: #166534;
-  color: #dcfce7;
-}
-
-.badge-planned {
-  background-color: #fef3c7;
-  color: #92400e;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.dark .badge-planned {
-  background-color: #92400e;
-  color: #fef3c7;
-}
-
-/* Main content padding for fixed header */
-main {
-  padding-top: 64px;
+/* Responsive container */
+.container-custom {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }

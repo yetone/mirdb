@@ -1,9 +1,11 @@
 {{/*
   Code block shortcode with copy functionality
   Owner: Scenario 5 - Getting Started Section
-  This is a stub file - will be implemented by Scenario 5
+  Usage: {{< code-block lang="shell" >}}cargo build{{< /code-block >}}
 */}}
 <div class="code-block-wrapper relative">
-  <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-  <pre><code class="language-{{ .Get "lang" | default "text" }}">{{ .Inner }}</code></pre>
+  <pre class="language-{{ .Get "lang" | default "text" }}"><code>{{ .Inner | safeHTML }}</code></pre>
+  <button class="copy-button absolute top-2 right-2 p-2 bg-gray-700 hover:bg-gray-600 rounded text-white text-sm" aria-label="Copy to clipboard">
+    Copy
+  </button>
 </div>

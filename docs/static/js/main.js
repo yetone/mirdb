@@ -7,173 +7,105 @@
   'use strict';
 
   // Theme Toggle
-  const THEME_KEY = 'mirdb-theme';
+  const initThemeToggle = () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
 
-  function getStoredTheme() {
-    return localStorage.getItem(THEME_KEY);
-  }
+    // Check for saved theme preference or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  function setStoredTheme(theme) {
-    localStorage.setItem(THEME_KEY, theme);
-  }
-
-  function getSystemTheme() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
-
-  function applyTheme(theme) {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+      html.classList.add('dark');
     }
-    updateThemeToggleIcon(theme);
-  }
 
-  function updateThemeToggleIcon(theme) {
-    const sunIcon = document.getElementById('sun-icon');
-    const moonIcon = document.getElementById('moon-icon');
-
-    if (sunIcon && moonIcon) {
-      if (theme === 'dark') {
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
-      } else {
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
-      }
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        const isDark = html.classList.contains('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      });
     }
-  }
-
-  function toggleTheme() {
-    const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    applyTheme(newTheme);
-    setStoredTheme(newTheme);
-  }
-
-  function initTheme() {
-    const storedTheme = getStoredTheme();
-    const theme = storedTheme || getSystemTheme();
-    applyTheme(theme);
-  }
+  };
 
   // Copy to Clipboard
-  function copyToClipboard(text, button) {
-    navigator.clipboard.writeText(text).then(function() {
-      const originalText = button.textContent;
-      button.textContent = 'Copied!';
-      button.classList.add('copied');
-
-      setTimeout(function() {
-        button.textContent = originalText;
-        button.classList.remove('copied');
-      }, 2000);
-    }).catch(function(err) {
-      console.error('Failed to copy text: ', err);
-    });
-  }
-
-  function initCopyButtons() {
-    document.querySelectorAll('.copy-btn').forEach(function(button) {
-      button.addEventListener('click', function() {
-        const codeBlock = this.closest('.code-block-wrapper').querySelector('code');
+  const initCopyToClipboard = () => {
+    document.querySelectorAll('.copy-button').forEach(button => {
+      button.addEventListener('click', async () => {
+        const codeBlock = button.closest('.code-block-wrapper').querySelector('code');
         if (codeBlock) {
-          copyToClipboard(codeBlock.textContent, this);
+          try {
+            await navigator.clipboard.writeText(codeBlock.textContent);
+            button.classList.add('copied');
+            button.setAttribute('aria-label', 'Copied!');
+            setTimeout(() => {
+              button.classList.remove('copied');
+              button.setAttribute('aria-label', 'Copy to clipboard');
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
         }
       });
     });
-  }
+  };
 
   // Mobile Menu
-  function initMobileMenu() {
-    const menuBtn = document.getElementById('mobile-menu-btn');
+  const initMobileMenu = () => {
+    const menuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    if (menuBtn && mobileMenu) {
-      menuBtn.addEventListener('click', function() {
-        const isOpen = mobileMenu.classList.contains('open');
-        mobileMenu.classList.toggle('open');
-        menuBtn.setAttribute('aria-expanded', !isOpen);
+    if (menuButton && mobileMenu) {
+      menuButton.addEventListener('click', () => {
+        const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+        menuButton.setAttribute('aria-expanded', !isExpanded);
+        mobileMenu.classList.toggle('hidden');
       });
 
       // Close menu on Escape key
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
-          mobileMenu.classList.remove('open');
-          menuBtn.setAttribute('aria-expanded', 'false');
-          menuBtn.focus();
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+          menuButton.setAttribute('aria-expanded', 'false');
+          mobileMenu.classList.add('hidden');
+          menuButton.focus();
         }
       });
 
       // Close menu when clicking outside
-      document.addEventListener('click', function(e) {
-        if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
-          mobileMenu.classList.remove('open');
-          menuBtn.setAttribute('aria-expanded', 'false');
+      document.addEventListener('click', (e) => {
+        if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+          menuButton.setAttribute('aria-expanded', 'false');
+          mobileMenu.classList.add('hidden');
         }
       });
-
-      // Close menu when clicking a link
-      mobileMenu.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          mobileMenu.classList.remove('open');
-          menuBtn.setAttribute('aria-expanded', 'false');
-        });
-      });
     }
-  }
+  };
 
   // Smooth Scroll for anchor links
-  function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-      anchor.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        if (href === '#') return;
+  const initSmoothScroll = () => {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const targetId = anchor.getAttribute('href');
+        if (targetId === '#') return;
 
-        const target = document.querySelector(href);
+        const target = document.querySelector(targetId);
         if (target) {
           e.preventDefault();
-          const headerOffset = 80;
-          const elementPosition = target.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           // Update focus for accessibility
           target.setAttribute('tabindex', '-1');
-          target.focus({ preventScroll: true });
+          target.focus();
         }
       });
     });
-  }
+  };
 
-  // Initialize everything on DOM ready
-  function init() {
-    initTheme();
-    initCopyButtons();
+  // Initialize all features
+  document.addEventListener('DOMContentLoaded', () => {
+    initThemeToggle();
+    initCopyToClipboard();
     initMobileMenu();
     initSmoothScroll();
-
-    // Theme toggle button event listeners (desktop and mobile)
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', toggleTheme);
-    }
-
-    const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
-    if (mobileThemeToggle) {
-      mobileThemeToggle.addEventListener('click', toggleTheme);
-    }
-  }
-
-  // Run when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  });
 })();

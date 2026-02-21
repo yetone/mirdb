@@ -3,16 +3,14 @@ node_modules/
 
 # Build outputs
 public/
-resources/
-
-# Test outputs
-test-results/
-playwright-report/
-
-# Hugo files
 .hugo_build.lock
 hugo_stats.json
 
-# OS files
+# Test artifacts
+test-results/
+playwright-report/
+
+# Editor
 .DS_Store
-Thumbs.db
+*.swp
+*.swo
