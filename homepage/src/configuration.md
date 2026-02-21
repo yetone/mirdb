@@ -23,47 +23,16 @@ If no configuration file is specified, MirDB uses default values for all paramet
 The following table lists all configurable parameters in MirDB:
 
 <div class="config-table-container">
-<table class="config-table" id="config-params-table">
-  <thead>
-    <tr>
-      <th class="param-name">Parameter</th>
-      <th class="param-default">Default Value</th>
-      <th class="param-description">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr id="param-listen_addr">
-      <td class="param-name"><code>listen_addr</code></td>
-      <td class="param-default"><code>0.0.0.0:12333</code></td>
-      <td class="param-description">Server listening address and port for client connections</td>
-    </tr>
-    <tr id="param-max_levels">
-      <td class="param-name"><code>max_levels</code></td>
-      <td class="param-default"><code>7</code></td>
-      <td class="param-description">Maximum number of LSM tree levels for organizing SSTables</td>
-    </tr>
-    <tr id="param-work_dir">
-      <td class="param-name"><code>work_dir</code></td>
-      <td class="param-default"><code>/tmp/mirdb</code></td>
-      <td class="param-description">Working directory for data storage, WAL files, and SSTables</td>
-    </tr>
-    <tr id="param-sstable_max_size">
-      <td class="param-name"><code>sstable_max_size</code></td>
-      <td class="param-default"><code>100MB</code></td>
-      <td class="param-description">Maximum size per SSTable file before splitting</td>
-    </tr>
-    <tr id="param-memtable_max_size">
-      <td class="param-name"><code>memtable_max_size</code></td>
-      <td class="param-default"><code>4MB</code></td>
-      <td class="param-description">Maximum memtable size before flushing to disk</td>
-    </tr>
-    <tr id="param-block_size">
-      <td class="param-name"><code>block_size</code></td>
-      <td class="param-default"><code>4KB</code></td>
-      <td class="param-description">SSTable data block size for read/write operations</td>
-    </tr>
-  </tbody>
-</table>
+
+| Parameter | Default Value | Description |
+|-----------|---------------|-------------|
+| listen_addr | 0.0.0.0:12333 | Server listening address and port for client connections |
+| max_levels | 7 | Maximum number of LSM tree levels for organizing SSTables |
+| work_dir | /tmp/mirdb | Working directory for data storage, WAL files, and SSTables |
+| sstable_max_size | 100MB | Maximum size per SSTable file before splitting |
+| memtable_max_size | 4MB | Maximum memtable size before flushing to disk |
+| block_size | 4KB | SSTable data block size for read/write operations |
+
 </div>
 
 </section>
