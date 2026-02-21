@@ -1,6 +1,272 @@
-/* MirDB Homepage Styles - Placeholder */
+/* MirDB Homepage Styles
+ * Owner: Scenario 2 - Homepage Content Structure
+ * Extended by: Scenario 4 - Responsive Design
+ */
+
+/* CSS Reset and Base */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     margin: 0;
     padding: 0;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fafafa;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Header and Navigation */
+header {
+    background: #1a1a2e;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links li a {
+    color: #e0e0e0;
+    transition: color 0.2s;
+}
+
+.nav-links li a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #fff;
+}
+
+.hero-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 1.5rem;
+}
+
+.ascii-art {
+    font-family: "SF Mono", Consolas, Monaco, "Andale Mono", monospace;
+    font-size: 1.1rem;
+    margin: 1rem auto;
+    color: #00d4ff;
+    background: transparent;
+    overflow: visible;
+    white-space: pre;
+    line-height: 1.2;
+}
+
+.tagline {
+    font-size: 1.25rem;
+    margin: 1.5rem 0;
+    color: #b0b0b0;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    background: #00d4ff;
+    color: #1a1a2e;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background 0.2s, transform 0.2s;
+    margin-top: 1rem;
+}
+
+.cta-button:hover {
+    background: #00b8e6;
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+/* Main Content */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Features Section */
+.features {
+    padding: 4rem 2rem;
+    background: #fff;
+}
+
+.features h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    color: #1a1a2e;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.feature-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: #1a1a2e;
+}
+
+.feature-card p {
+    color: #666;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Usage Demonstration Section */
+.usage-demo {
+    padding: 4rem 2rem;
+    background: #f0f4f8;
+}
+
+.usage-demo h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #1a1a2e;
+}
+
+.demo-container {
+    text-align: center;
+}
+
+.usage-gif {
+    max-width: 100%;
+    width: 700px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.demo-caption {
+    margin-top: 1rem;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Quick Start Section */
+.quick-start {
+    padding: 4rem 2rem;
+    background: #fff;
+}
+
+.quick-start h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #1a1a2e;
+}
+
+.quick-start h3 {
+    font-size: 1.25rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.quick-start p {
+    color: #555;
+    max-width: 700px;
+}
+
+.quick-start pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1.5rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: "SF Mono", Consolas, Monaco, "Andale Mono", monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-width: 700px;
+}
+
+.quick-start code {
+    font-family: inherit;
+}
+
+/* Footer */
+footer {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    padding: 2rem;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-content a {
+    color: #00d4ff;
+}
+
+.footer-content a:hover {
+    color: #fff;
+}
+
+.copyright {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #888;
 }

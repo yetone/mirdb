@@ -7,7 +7,129 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>MirDB</h1>
-    <p>A persistent key-value store with Memcached protocol</p>
+    <header>
+        <nav class="nav-container">
+            <span class="nav-brand">MirDB</span>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#usage">Demo</a></li>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+            <img src="/assets/logo.gif" alt="MirDB Logo - A persistent key-value store" class="hero-logo">
+            <pre class="ascii-art">
+  __  __ _     ___  ___
+ |  \/  (_)_ _|   \| _ )
+ | |\/| | | '_| |) | _ \
+ |_|  |_|_|_| |___/|___/
+            </pre>
+            <p class="tagline">A persistent key-value store with Memcached protocol</p>
+            <a href="#quick-start" class="cta-button">Get Started</a>
+        </section>
+
+        <section id="features" class="features">
+            <h2>Features</h2>
+            <div class="features-grid">
+                <article class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Memcached Protocol</h3>
+                    <p>Compatible with standard memcached text protocol. Use existing memcached clients to connect seamlessly.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3>Data Persistence</h3>
+                    <p>Data is persisted to disk using SSTables (Sorted String Tables). Your data survives restarts.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">🌳</div>
+                    <h3>LSM Tree Architecture</h3>
+                    <p>Uses Log-Structured Merge-tree approach with memtables, immutable memtables, and multi-level SSTable compaction.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">🦀</div>
+                    <h3>Rust Implementation</h3>
+                    <p>Built with Rust for memory safety, performance, and reliability. No garbage collection pauses.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="usage" class="usage-demo">
+            <h2>Usage Demonstration</h2>
+            <div class="demo-container">
+                <img src="/assets/usage.gif" alt="MirDB usage demonstration showing basic set and get operations with a memcached client" class="usage-gif">
+                <p class="demo-caption">Basic operations using standard memcached protocol - set, get, and delete commands.</p>
+            </div>
+        </section>
+
+        <section id="quick-start" class="quick-start">
+            <h2>Quick Start</h2>
+
+            <h3>Prerequisites</h3>
+            <p>Make sure you have Rust toolchain installed. If not, install it from <a href="https://rustup.rs" target="_blank" rel="noopener">rustup.rs</a>.</p>
+
+            <h3>Installation</h3>
+            <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release</code></pre>
+
+            <h3>Configuration</h3>
+            <p>Create a configuration file (e.g., <code>mirdb.toml</code>):</p>
+            <pre><code class="language-toml"># MirDB Configuration
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdb"
+sstable_max_size = 104857600  # 100MB
+memtable_max_size = 4194304   # 4MB
+block_size = 4096             # 4KB
+
+# Web server configuration
+web_enabled = true
+web_port = 8080
+web_static_dir = "./web"</code></pre>
+
+            <h3>Running the Server</h3>
+            <pre><code class="language-bash"># Start MirDB server
+./target/release/mirdb-server -c mirdb.toml</code></pre>
+
+            <h3>Basic Usage</h3>
+            <p>Connect using any memcached client or telnet:</p>
+            <pre><code class="language-bash"># Connect with telnet
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get a value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete a value
+delete mykey
+DELETED</code></pre>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">View on GitHub</a>
+            </p>
+            <p class="copyright">Copyright © 2024 MirDB. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
 </body>
 </html>
