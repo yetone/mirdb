@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached protocol">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- BEGIN: Navigation (Scenario 5) -->
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">MirDB</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#quickstart">Quick Start</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                <!-- BEGIN: Theme Toggle (Scenario 8) -->
+                <li>
+                    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle dark/light theme">
+                        <svg class="theme-toggle-icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <svg class="theme-toggle-icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                </li>
+                <!-- END: Theme Toggle -->
+            </ul>
+        </div>
+    </nav>
+    <!-- END: Navigation -->
+
+    <main id="main">
+        <!-- BEGIN: Hero Section (Scenario 1) -->
+        <header class="hero" role="banner">
+            <div class="hero-container">
+                <h1 class="hero-title">MirDB</h1>
+                <p class="hero-tagline">A Persistent Key-Value Store with Memcached protocol</p>
+                <p class="hero-description">
+                    High-performance, LSM-tree based storage engine with native Memcached protocol support.
+                    Built for speed and reliability.
+                </p>
+                <div class="hero-cta">
+                    <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                        View Repository
+                    </a>
+                    <a href="#quickstart" class="btn btn-secondary">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </header>
+        <!-- END: Hero Section -->
+
+        <!-- BEGIN: Features Section (Scenario 2) -->
+        <section id="features" class="features" aria-labelledby="features-heading">
+            <div class="container">
+                <h2 id="features-heading">Features</h2>
+                <!-- Features content will be added by Scenario 2 -->
+            </div>
+        </section>
+        <!-- END: Features Section -->
+
+        <!-- BEGIN: Status Section (Scenario 4) -->
+        <section id="status" class="status" aria-labelledby="status-heading">
+            <div class="container">
+                <h2 id="status-heading">Project Status</h2>
+                <p class="status-intro">Track our progress as we build MirDB into a robust, production-ready database.</p>
+
+                <div class="status-list" role="list" aria-label="Project roadmap items">
+                    <!-- Completed items -->
+                    <div class="status-item status-completed" role="listitem">
+                        <span class="status-icon" aria-hidden="true">✓</span>
+                        <span class="status-text">Tokio with memcached protocol</span>
+                        <span class="status-badge completed">Completed</span>
+                    </div>
+
+                    <div class="status-item status-completed" role="listitem">
+                        <span class="status-icon" aria-hidden="true">✓</span>
+                        <span class="status-text">Memtable with skiplist</span>
+                        <span class="status-badge completed">Completed</span>
+                    </div>
+
+                    <div class="status-item status-completed" role="listitem">
+                        <span class="status-icon" aria-hidden="true">✓</span>
+                        <span class="status-text">Minor compaction</span>
+                        <span class="status-badge completed">Completed</span>
+                    </div>
+
+                    <div class="status-item status-completed" role="listitem">
+                        <span class="status-icon" aria-hidden="true">✓</span>
+                        <span class="status-text">Major compaction</span>
+                        <span class="status-badge completed">Completed</span>
+                    </div>
+
+                    <!-- Planned items -->
+                    <div class="status-item status-pending" role="listitem">
+                        <span class="status-icon" aria-hidden="true">○</span>
+                        <span class="status-text">Raft consensus</span>
+                        <span class="status-badge pending">Planned</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END: Status Section -->
+
+        <!-- BEGIN: Quick Start Section (Scenario 3) -->
+        <section id="quickstart" class="quickstart" aria-labelledby="quickstart-heading">
+            <div class="container">
+                <h2 id="quickstart-heading">Quick Start</h2>
+                <p class="quickstart-intro">MirDB uses the standard memcached text protocol. Connect using telnet or any memcached client:</p>
+
+                <div class="code-example">
+                    <h3>Connect to MirDB</h3>
+                    <pre><code class="language-bash"># Connect using telnet
+telnet localhost 12333</code></pre>
+                </div>
+
+                <div class="code-example">
+                    <h3>Store and Retrieve Data</h3>
+                    <pre><code class="language-memcached"># Set a key-value pair
+# set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                </div>
+
+                <div class="code-example">
+                    <h3>Delete Data</h3>
+                    <pre><code class="language-memcached"># Delete a key
+delete mykey
+DELETED
+
+# Verify deletion
+get mykey
+END</code></pre>
+                </div>
+
+                <div class="code-example">
+                    <h3>Database Info</h3>
+                    <pre><code class="language-memcached"># Get database status (MirDB-specific)
+info</code></pre>
+                </div>
+            </div>
+        </section>
+        <!-- END: Quick Start Section -->
+    </main>
+
+    <!-- BEGIN: Footer (Scenario 5) -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <p>&copy; 2024 MirDB. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+                <li><a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- END: Footer -->
+
+    <script src="js/main.js" defer></script>
+</body>
+</html>
