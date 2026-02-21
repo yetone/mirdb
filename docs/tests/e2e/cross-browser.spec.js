@@ -312,6 +312,9 @@ test.describe('Cross-Browser Compatibility', () => {
     await page.reload();
     await page.waitForLoadState('networkidle');
 
+    // Ensure we're in light mode
+    await expect(html).not.toHaveClass(/dark/);
+
     // Get light mode background color
     const lightBgColor = await body.evaluate(el => {
       return window.getComputedStyle(el).backgroundColor;
@@ -321,13 +324,18 @@ test.describe('Cross-Browser Compatibility', () => {
     await themeToggle.click();
     await expect(html).toHaveClass(/dark/);
 
+    // Wait for transition to complete (200ms transition in CSS)
+    await page.waitForTimeout(250);
+
     // Get dark mode background color
     const darkBgColor = await body.evaluate(el => {
       return window.getComputedStyle(el).backgroundColor;
     });
 
-    // Background colors should be different
+    // Background colors should be different - dark mode should have dark background
+    // Dark bg is #0f172a which is rgb(15, 23, 42)
     expect(darkBgColor).not.toBe(lightBgColor);
+    expect(darkBgColor).not.toBe('rgb(255, 255, 255)');
   });
 
   test('External links have correct security attributes', async ({ page, browserName }) => {

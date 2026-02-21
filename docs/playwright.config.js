@@ -13,6 +13,8 @@ module.exports = defineConfig({
     baseURL: 'http://localhost:1316/mirdb/',
     trace: 'on-first-retry',
   },
+  // Browser projects: Chromium (Chrome/Edge), Firefox, WebKit (Safari)
+  // Note: Edge uses Chromium engine, so chromium project effectively tests Edge compatibility
   projects: [
     {
       name: 'chromium',
