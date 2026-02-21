@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -7,6 +7,15 @@
     <title>URL Shortener - Shorten Links, Track Insights</title>
   </head>
   <body>
+    <script>
+      // Immediately set theme to prevent flash of incorrect theme
+      (function() {
+        var savedTheme = localStorage.getItem('theme');
+        var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

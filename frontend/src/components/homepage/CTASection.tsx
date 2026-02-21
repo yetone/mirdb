@@ -33,12 +33,12 @@ function CTASection() {
         >
           Ready to Get Started?
         </h2>
-        <p className="text-lg text-primary-content/80 mb-8 max-w-2xl mx-auto">
+        <p className="text-lg text-primary-content mb-8 max-w-2xl mx-auto">
           Join thousands of users who trust us to shorten their links and track their analytics. Sign up for free today.
         </p>
         <button
           onClick={handleSignUp}
-          className="btn btn-secondary btn-lg"
+          className="btn bg-base-100 text-base-content hover:bg-base-200 btn-lg border-0"
           data-testid="cta-button"
         >
           Sign Up Free

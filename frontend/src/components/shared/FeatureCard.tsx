@@ -110,7 +110,7 @@ function FeatureCard({ icon, title, description, className = '' }: FeatureCardPr
         {title}
       </h3>
       <p
-        className="text-base-content/70 mt-2"
+        className="text-base-content/80 mt-2"
         data-testid="feature-card-description"
       >
         {description}

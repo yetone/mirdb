@@ -55,7 +55,7 @@ function HeroSection({ onGetStarted, onLearnMore }: HeroSectionProps) {
               {HERO_CONTENT.headline}
             </h1>
             <p
-              className="text-lg md:text-xl text-base-content/70 mb-8 max-w-2xl mx-auto lg:mx-0"
+              className="text-lg md:text-xl text-base-content/80 mb-8 max-w-2xl mx-auto lg:mx-0"
               data-testid="hero-subheadline"
             >
               {HERO_CONTENT.subheadline}
@@ -89,8 +89,8 @@ function HeroSection({ onGetStarted, onLearnMore }: HeroSectionProps) {
               <div className="space-y-4">
                 {/* URL Input Demo */}
                 <div className="bg-base-100 rounded-lg p-4">
-                  <label className="text-sm text-base-content/60 mb-2 block">Your long URL</label>
-                  <div className="flex items-center gap-2 text-base-content/40 text-sm md:text-base break-all">
+                  <label className="text-sm text-base-content/80 mb-2 block">Your long URL</label>
+                  <div className="flex items-center gap-2 text-base-content/80 text-sm md:text-base break-all">
                     <span className="truncate">https://example.com/very/long/path/to/your/content?with=params</span>
                   </div>
                 </div>
@@ -109,10 +109,10 @@ function HeroSection({ onGetStarted, onLearnMore }: HeroSectionProps) {
                 </div>
 
                 {/* Shortened URL Output */}
-                <div className="bg-primary/10 rounded-lg p-4 border-2 border-primary/20">
-                  <label className="text-sm text-primary mb-2 block">Shortened link</label>
+                <div className="bg-base-100 rounded-lg p-4 border-2 border-primary">
+                  <label className="text-sm text-base-content font-medium mb-2 block">Shortened link</label>
                   <div className="flex items-center justify-between">
-                    <span className="text-primary font-semibold text-lg">short.url/abc123</span>
+                    <span className="text-base-content font-semibold text-lg">short.url/abc123</span>
                     <button className="btn btn-primary btn-sm">Copy</button>
                   </div>
                 </div>
@@ -121,15 +121,15 @@ function HeroSection({ onGetStarted, onLearnMore }: HeroSectionProps) {
                 <div className="grid grid-cols-3 gap-2 mt-4">
                   <div className="text-center p-2 bg-base-100 rounded-lg">
                     <div className="text-xl font-bold text-primary">1.2K</div>
-                    <div className="text-xs text-base-content/60">Clicks</div>
+                    <div className="text-xs text-base-content/80">Clicks</div>
                   </div>
                   <div className="text-center p-2 bg-base-100 rounded-lg">
                     <div className="text-xl font-bold text-primary">15</div>
-                    <div className="text-xs text-base-content/60">Countries</div>
+                    <div className="text-xs text-base-content/80">Countries</div>
                   </div>
                   <div className="text-center p-2 bg-base-100 rounded-lg">
                     <div className="text-xl font-bold text-primary">89%</div>
-                    <div className="text-xs text-base-content/60">Mobile</div>
+                    <div className="text-xs text-base-content/80">Mobile</div>
                   </div>
                 </div>
               </div>

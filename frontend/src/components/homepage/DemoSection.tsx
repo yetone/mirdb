@@ -22,7 +22,7 @@ function DemoSection() {
           <h2 className="text-3xl md:text-4xl font-bold text-base-content mb-4">
             See How It Works
           </h2>
-          <p className="text-base-content/70 max-w-2xl mx-auto">
+          <p className="text-base-content/80 max-w-2xl mx-auto">
             Transform your long URLs into short, trackable links in seconds.
           </p>
         </div>
@@ -119,15 +119,15 @@ function DemoSection() {
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
                   <div className="text-lg md:text-xl font-bold text-primary">2.4K</div>
-                  <div className="text-xs text-base-content/60">Clicks</div>
+                  <div className="text-xs text-base-content/80">Clicks</div>
                 </div>
                 <div>
                   <div className="text-lg md:text-xl font-bold text-primary">12</div>
-                  <div className="text-xs text-base-content/60">Countries</div>
+                  <div className="text-xs text-base-content/80">Countries</div>
                 </div>
                 <div>
                   <div className="text-lg md:text-xl font-bold text-primary">67%</div>
-                  <div className="text-xs text-base-content/60">Mobile</div>
+                  <div className="text-xs text-base-content/80">Mobile</div>
                 </div>
               </div>
             </div>
@@ -135,7 +135,7 @@ function DemoSection() {
         </div>
 
         {/* Additional Context */}
-        <div className="text-center mt-8 text-base-content/60 text-sm">
+        <div className="text-center mt-8 text-base-content/80 text-sm">
           <p>Your links are ready to share instantly. No sign-up required to try!</p>
         </div>
       </div>

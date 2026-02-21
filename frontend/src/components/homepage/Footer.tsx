@@ -32,7 +32,7 @@ function Footer() {
               URL Shortener
             </h3>
             <p
-              className="text-base-content/60 max-w-xs"
+              className="text-base-content/80 max-w-xs"
               data-testid="footer-tagline"
             >
               Shorten links, track insights, and share your analytics with ease.
@@ -50,7 +50,7 @@ function Footer() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="text-base-content/70 hover:text-primary transition-colors"
+                  className="text-base-content/80 hover:text-primary transition-colors"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -60,7 +60,7 @@ function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-base-content/70 hover:text-primary transition-colors"
+                  className="text-base-content/80 hover:text-primary transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -72,7 +72,7 @@ function Footer() {
         {/* Copyright Section */}
         <div className="mt-8 pt-8 border-t border-base-300 text-center">
           <p
-            className="text-base-content/50 text-sm"
+            className="text-base-content/80 text-sm"
             data-testid="footer-copyright"
           >
             © {currentYear} URL Shortener. All rights reserved.
