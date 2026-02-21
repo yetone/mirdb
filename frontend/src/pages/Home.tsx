@@ -4,6 +4,7 @@ import { Footer } from '../components/layout/Footer';
 import { BackgroundEffect } from '../components/common/BackgroundEffect';
 import { HeroSection } from '../components/home/HeroSection';
 import { FeaturesSection } from '../components/home/FeaturesSection';
+import { FinalCTASection } from '../components/home/FinalCTASection';
 
 export function Home() {
   return (
@@ -13,6 +14,7 @@ export function Home() {
       <main className="flex-grow">
         <HeroSection />
         <FeaturesSection />
+        <FinalCTASection />
       </main>
       <Footer />
     </div>
