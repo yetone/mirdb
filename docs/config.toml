@@ -28,3 +28,19 @@ title = "MirDB - Persistent Key-Value Store with Memcached Protocol"
   disableSVG = false
   disableXML = false
   minifyOutput = true
+
+  [minify.tdewolff]
+    [minify.tdewolff.html]
+      keepWhitespace = false
+      keepEndTags = true
+    [minify.tdewolff.css]
+      keepCSS2 = true
+      precision = 0
+    [minify.tdewolff.js]
+      keepVarNames = false
+
+# Production environment settings
+[environments]
+  [environments.production]
+    minify = true
+    params.environment = "production"

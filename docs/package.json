@@ -4,11 +4,14 @@
   "description": "MirDB Homepage - Persistent Key-Value Store with Memcached Protocol",
   "scripts": {
     "dev": "hugo server -D",
-    "build": "hugo --minify",
+    "build": "npm run css:build && hugo --minify --environment production",
+    "build:dev": "hugo --minify",
     "test": "npx playwright test",
     "test:e2e": "npx playwright test tests/e2e/",
     "test:unit": "npx playwright test tests/unit/",
-    "css:build": "npx tailwindcss -i ./assets/css/main.css -o ./static/css/style.css --minify"
+    "test:integration": "npx playwright test tests/integration/",
+    "css:build": "NODE_ENV=production npx tailwindcss -i ./assets/css/main.css -o ./static/css/style.css --minify",
+    "serve": "npx serve public -l 3000"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
