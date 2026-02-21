@@ -5,8 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MirDB - A Persistent Key-Value Store</title>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Accessibility: Skip link styles */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: #fff;
+            padding: 8px 16px;
+            z-index: 1000;
+            text-decoration: none;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+        /* Accessibility: Visually hidden but screen reader accessible */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        /* Accessibility: Focus indicators */
+        a:focus,
+        button:focus,
+        .cta-button:focus {
+            outline: 3px solid #00d4ff;
+            outline-offset: 2px;
+        }
+        .nav-links li a:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+    </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
         <nav class="nav-container">
             <span class="nav-brand">MirDB</span>
@@ -19,10 +59,11 @@
         </nav>
     </header>
 
-    <main>
+    <main id="main-content">
         <section id="hero" class="hero">
             <img src="/assets/logo.gif" alt="MirDB Logo - A persistent key-value store" class="hero-logo">
-            <pre class="ascii-art">
+            <h1 class="visually-hidden">MirDB</h1>
+            <pre class="ascii-art" aria-hidden="true">
   __  __ _     ___  ___
  |  \/  (_)_ _|   \| _ )
  | |\/| | | '_| |) | _ \
@@ -36,22 +77,22 @@
             <h2>Features</h2>
             <div class="features-grid">
                 <article class="feature-card">
-                    <div class="feature-icon">🔌</div>
+                    <div class="feature-icon" aria-hidden="true">🔌</div>
                     <h3>Memcached Protocol</h3>
                     <p>Compatible with standard memcached text protocol. Use existing memcached clients to connect seamlessly.</p>
                 </article>
                 <article class="feature-card">
-                    <div class="feature-icon">💾</div>
+                    <div class="feature-icon" aria-hidden="true">💾</div>
                     <h3>Data Persistence</h3>
                     <p>Data is persisted to disk using SSTables (Sorted String Tables). Your data survives restarts.</p>
                 </article>
                 <article class="feature-card">
-                    <div class="feature-icon">🌳</div>
+                    <div class="feature-icon" aria-hidden="true">🌳</div>
                     <h3>LSM Tree Architecture</h3>
                     <p>Uses Log-Structured Merge-tree approach with memtables, immutable memtables, and multi-level SSTable compaction.</p>
                 </article>
                 <article class="feature-card">
-                    <div class="feature-icon">🦀</div>
+                    <div class="feature-icon" aria-hidden="true">🦀</div>
                     <h3>Rust Implementation</h3>
                     <p>Built with Rust for memory safety, performance, and reliability. No garbage collection pauses.</p>
                 </article>
