@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .glass-effect {
+    @apply bg-base-100/50 backdrop-blur-md border border-base-content/10;
+  }
+}
