@@ -12,7 +12,4 @@
  * - JS enhances UX but is not required
  */
 
-// Placeholder for theme support (Scenario 8)
-document.addEventListener('DOMContentLoaded', function() {
-  // Page is ready
-});
+// Placeholder for Scenario 8 implementation

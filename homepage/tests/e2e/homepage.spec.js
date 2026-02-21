@@ -13,141 +13,99 @@
  */
 
 const { test, expect } = require('@playwright/test');
+const path = require('path');
 
-// ============================================
-// Features Section Tests (Scenario 2)
-// ============================================
-test.describe('Features Section Display', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-  });
+const homepageUrl = 'file://' + path.resolve(__dirname, '../../index.html');
 
-  test('TC1: Features section with id="features" or role="region" is present', async ({ page }) => {
-    // Check for section with id='features'
-    const featuresSection = page.locator('section#features');
-    await expect(featuresSection).toBeVisible();
-
-    // Verify it has role="region" for accessibility
-    await expect(featuresSection).toHaveAttribute('role', 'region');
-  });
-
-  test('TC2: Memcached Protocol Compatible feature is displayed', async ({ page }) => {
-    const featuresSection = page.locator('section#features');
-
-    // Check for feature card with Memcached Protocol
-    const featureCard = featuresSection.locator('.feature-card', {
-      has: page.locator('h3', { hasText: /memcached protocol/i })
+/* ========================================
+   Hero Section Tests (Scenario 1)
+   ======================================== */
+test.describe('Hero Section', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.goto(homepageUrl);
     });
-    await expect(featureCard).toBeVisible();
 
-    // Verify it has a description about protocol compatibility
-    const description = featureCard.locator('p');
-    await expect(description).toContainText(/protocol|compatible|compatibility/i);
-  });
+    test('hero section is visible with h1 containing MirDB', async ({ page }) => {
+        // Check hero section exists and is visible
+        const hero = page.locator('.hero');
+        await expect(hero).toBeVisible();
 
-  test('TC3: Persistent Storage feature is displayed', async ({ page }) => {
-    const featuresSection = page.locator('section#features');
-
-    // Check for feature card with Persistent Storage
-    const featureCard = featuresSection.locator('.feature-card', {
-      has: page.locator('h3', { hasText: /persistent/i })
+        // Check h1 contains 'MirDB'
+        const h1 = page.locator('.hero h1');
+        await expect(h1).toBeVisible();
+        await expect(h1).toContainText('MirDB');
     });
-    await expect(featureCard).toBeVisible();
 
-    // Verify it has description about storage
-    const description = featureCard.locator('p');
-    await expect(description).toContainText(/storage|durable|persist/i);
-  });
+    test('tagline contains Persistent Key-Value Store and Memcached', async ({ page }) => {
+        const tagline = page.locator('.hero-tagline');
+        await expect(tagline).toBeVisible();
 
-  test('TC4: LSM Tree feature is displayed', async ({ page }) => {
-    const featuresSection = page.locator('section#features');
-
-    // Check for feature card mentioning LSM or Log-Structured Merge
-    const featureCard = featuresSection.locator('.feature-card', {
-      has: page.locator('h3', { hasText: /lsm|log-structured merge/i })
+        const taglineText = await tagline.textContent();
+        expect(taglineText).toContain('Persistent Key-Value Store');
+        expect(taglineText).toContain('Memcached');
     });
-    await expect(featureCard).toBeVisible();
 
-    // Verify content mentions tree architecture
-    const cardText = await featureCard.textContent();
-    expect(cardText.toLowerCase()).toMatch(/lsm|log-structured merge/i);
-  });
+    test('View Repository button links to GitHub and opens in new tab', async ({ page }) => {
+        const viewRepoBtn = page.locator('a.btn-primary:has-text("View Repository")');
+        await expect(viewRepoBtn).toBeVisible();
 
-  test('TC5: Skiplist Memtable feature is displayed', async ({ page }) => {
-    const featuresSection = page.locator('section#features');
+        // Check href is correct
+        const href = await viewRepoBtn.getAttribute('href');
+        expect(href).toBe('https://github.com/yetone/mirdb');
 
-    // Check for feature card mentioning Skiplist
-    const featureCard = featuresSection.locator('.feature-card', {
-      has: page.locator('h3', { hasText: /skiplist/i })
+        // Check opens in new tab
+        const target = await viewRepoBtn.getAttribute('target');
+        expect(target).toBe('_blank');
+
+        // Check has noopener noreferrer for security
+        const rel = await viewRepoBtn.getAttribute('rel');
+        expect(rel).toContain('noopener');
+        expect(rel).toContain('noreferrer');
     });
-    await expect(featureCard).toBeVisible();
 
-    // Verify content mentions memtable
-    const cardText = await featureCard.textContent();
-    expect(cardText.toLowerCase()).toContain('memtable');
-  });
+    test('Get Started button links to Quick Start section', async ({ page }) => {
+        const getStartedBtn = page.locator('a.btn-secondary:has-text("Get Started")');
+        await expect(getStartedBtn).toBeVisible();
 
-  test('TC6: Compaction feature is displayed', async ({ page }) => {
-    const featuresSection = page.locator('section#features');
-
-    // Check for feature card mentioning Compaction
-    const featureCard = featuresSection.locator('.feature-card', {
-      has: page.locator('h3', { hasText: /compaction/i })
+        // Check href points to quickstart section
+        const href = await getStartedBtn.getAttribute('href');
+        expect(href).toBe('#quickstart');
     });
-    await expect(featureCard).toBeVisible();
 
-    // Verify it describes minor and major compaction
-    const cardText = await featureCard.textContent();
-    expect(cardText.toLowerCase()).toMatch(/minor.*major|major.*minor|automatic/i);
-  });
+    test('hero section has semantic header element with role', async ({ page }) => {
+        // Check hero is a header element with banner role
+        const hero = page.locator('header.hero');
+        await expect(hero).toBeVisible();
 
-  test('TC7: Features are displayed in a grid or card layout', async ({ page }) => {
-    const featuresSection = page.locator('section#features');
-    await expect(featuresSection).toBeVisible();
-
-    // Verify features-grid container exists
-    const grid = featuresSection.locator('.features-grid');
-    await expect(grid).toBeVisible();
-
-    // Verify it uses CSS grid or flexbox (not plain list)
-    const displayStyle = await grid.evaluate(el => {
-      const computed = window.getComputedStyle(el);
-      return computed.display;
+        const role = await hero.getAttribute('role');
+        expect(role).toBe('banner');
     });
-    expect(['grid', 'flex']).toContain(displayStyle);
+});
 
-    // Verify at least 5 feature cards exist
-    const cards = grid.locator('.feature-card');
-    const cardCount = await cards.count();
-    expect(cardCount).toBeGreaterThanOrEqual(5);
-  });
+/* ========================================
+   Features Section Tests (Scenario 2)
+   ======================================== */
+test.describe('Features Section', () => {
+    // Tests will be added by Scenario 2
+});
 
-  test('Features section has h2 heading', async ({ page }) => {
-    const heading = page.locator('section#features h2');
-    await expect(heading).toBeVisible();
-    await expect(heading).toContainText(/features/i);
-  });
+/* ========================================
+   Quick Start Section Tests (Scenario 3)
+   ======================================== */
+test.describe('Quick Start Section', () => {
+    // Tests will be added by Scenario 3
+});
 
-  test('Each feature card has a title and description', async ({ page }) => {
-    const cards = page.locator('section#features .feature-card');
-    const cardCount = await cards.count();
+/* ========================================
+   Status Section Tests (Scenario 4)
+   ======================================== */
+test.describe('Status Section', () => {
+    // Tests will be added by Scenario 4
+});
 
-    // Verify each card has h3 (title) and p (description)
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const title = card.locator('h3');
-      const description = card.locator('p');
-
-      await expect(title).toBeVisible();
-      await expect(description).toBeVisible();
-
-      // Ensure title has text
-      const titleText = await title.textContent();
-      expect(titleText.trim().length).toBeGreaterThan(0);
-
-      // Ensure description has text
-      const descText = await description.textContent();
-      expect(descText.trim().length).toBeGreaterThan(0);
-    }
-  });
+/* ========================================
+   Theme Toggle Tests (Scenario 8)
+   ======================================== */
+test.describe('Theme Toggle', () => {
+    // Tests will be added by Scenario 8
 });

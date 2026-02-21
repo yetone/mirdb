@@ -24,368 +24,333 @@
    1. CSS Variables / Theme (Scenario 8)
    ======================================== */
 :root {
-  /* Colors */
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
-  --color-secondary: #64748b;
-  --color-background: #ffffff;
-  --color-surface: #f8fafc;
-  --color-text: #1e293b;
-  --color-text-muted: #64748b;
-  --color-border: #e2e8f0;
+    /* Colors */
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --color-secondary: #64748b;
+    --color-background: #ffffff;
+    --color-surface: #f8fafc;
+    --color-text: #1e293b;
+    --color-text-muted: #64748b;
+    --color-border: #e2e8f0;
 
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  --spacing-3xl: 4rem;
+    /* Typography */
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    --font-size-5xl: 3rem;
 
-  /* Typography */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 2rem;
-  --font-size-4xl: 2.5rem;
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
 
-  /* Layout */
-  --container-max-width: 1200px;
-  --border-radius: 0.5rem;
-  --border-radius-lg: 1rem;
+    /* Layout */
+    --max-width: 1200px;
+    --border-radius: 0.5rem;
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
 }
 
 /* ========================================
    2. Reset / Base styles
    ======================================== */
-*, *::before, *::after {
-  box-sizing: border-box;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-family);
-  font-size: var(--font-size-base);
-  line-height: 1.6;
-  color: var(--color-text);
-  background-color: var(--color-background);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
 }
 
 a {
-  color: var(--color-primary);
-  text-decoration: none;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
 }
 
 a:hover {
-  text-decoration: underline;
+    color: var(--color-primary-dark);
+}
+
+a:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 img {
-  max-width: 100%;
-  height: auto;
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
 ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    list-style: none;
 }
 
 /* ========================================
    3. Typography
    ======================================== */
 h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 var(--spacing-md);
-  line-height: 1.2;
-  font-weight: 600;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-text);
 }
 
 h1 {
-  font-size: var(--font-size-3xl);
+    font-size: var(--font-size-4xl);
 }
 
 h2 {
-  font-size: var(--font-size-2xl);
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-lg);
 }
 
 h3 {
-  font-size: var(--font-size-xl);
-}
-
-p {
-  margin: 0 0 var(--spacing-md);
+    font-size: var(--font-size-xl);
 }
 
 /* ========================================
    4. Navigation (Scenario 5)
    ======================================== */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: var(--color-primary);
-  color: white;
-  padding: var(--spacing-sm) var(--spacing-md);
-  z-index: 100;
+.nav {
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-md) 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-.skip-link:focus {
-  top: 0;
+.nav-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.navbar {
-  background-color: var(--color-background);
-  border-bottom: 1px solid var(--color-border);
-  padding: var(--spacing-md) 0;
-  position: sticky;
-  top: 0;
-  z-index: 50;
+.nav-logo {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text);
 }
 
-.navbar .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-size: var(--font-size-xl);
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-.logo:hover {
-  text-decoration: none;
-  color: var(--color-primary);
+.nav-logo:hover {
+    color: var(--color-primary);
 }
 
 .nav-links {
-  display: flex;
-  gap: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-lg);
 }
 
 .nav-links a {
-  color: var(--color-text-muted);
-  font-weight: 500;
+    color: var(--color-text-muted);
+    font-weight: 500;
 }
 
 .nav-links a:hover {
-  color: var(--color-primary);
-  text-decoration: none;
+    color: var(--color-primary);
+}
+
+/* Skip link for accessibility */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-primary);
+    color: white;
+    z-index: 1000;
+}
+
+.skip-link:focus {
+    top: 0;
 }
 
 /* ========================================
    5. Hero Section (Scenario 1)
    ======================================== */
 .hero {
-  background-color: var(--color-surface);
-  padding: var(--spacing-3xl) 0;
-  text-align: center;
+    background-color: var(--color-surface);
+    padding: var(--spacing-3xl) var(--spacing-md);
+    text-align: center;
 }
 
-.hero h1 {
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-md);
+.hero-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
 }
 
-.tagline {
-  font-size: var(--font-size-xl);
-  color: var(--color-text-muted);
-  margin-bottom: var(--spacing-sm);
+.hero-title {
+    font-size: var(--font-size-5xl);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+}
+
+.hero-tagline {
+    font-size: var(--font-size-xl);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+    font-weight: 500;
 }
 
 .hero-description {
-  font-size: var(--font-size-lg);
-  color: var(--color-text-muted);
-  max-width: 600px;
-  margin: 0 auto var(--spacing-xl);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl);
 }
 
-.cta-buttons {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: center;
-  flex-wrap: wrap;
+.hero-cta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: center;
 }
 
+/* Buttons */
 .btn {
-  display: inline-block;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--border-radius);
-  font-weight: 500;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: 2px solid transparent;
+    min-width: 160px;
 }
 
-.btn:hover {
-  text-decoration: none;
-  transform: translateY(-2px);
+.btn:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
-  color: white;
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-dark);
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    color: white;
 }
 
 .btn-secondary {
-  background-color: transparent;
-  border: 2px solid var(--color-primary);
-  color: var(--color-primary);
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-primary);
-  color: white;
+    background-color: var(--color-primary);
+    color: white;
 }
 
 /* ========================================
    6. Features Section (Scenario 2)
    ======================================== */
-.features-section {
-  padding: var(--spacing-3xl) 0;
-  background-color: var(--color-background);
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-lg);
-}
-
-.feature-card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-xl);
-  text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-}
-
-.feature-icon {
-  font-size: 2.5rem;
-  margin-bottom: var(--spacing-md);
-}
-
-.feature-card h3 {
-  color: var(--color-text);
-  margin-bottom: var(--spacing-sm);
-}
-
-.feature-card p {
-  color: var(--color-text-muted);
-  margin: 0;
-  font-size: var(--font-size-sm);
+.features {
+    padding: var(--spacing-3xl) var(--spacing-md);
 }
 
 /* ========================================
    7. Status Section (Scenario 4)
    ======================================== */
-.status-section {
-  padding: var(--spacing-3xl) 0;
-  background-color: var(--color-surface);
+.status {
+    background-color: var(--color-surface);
+    padding: var(--spacing-3xl) var(--spacing-md);
 }
 
 /* ========================================
    8. Quick Start Section (Scenario 3)
    ======================================== */
-.quickstart-section {
-  padding: var(--spacing-3xl) 0;
-  background-color: var(--color-background);
+.quickstart {
+    padding: var(--spacing-3xl) var(--spacing-md);
 }
 
 /* ========================================
    9. Footer (Scenario 5)
    ======================================== */
 .footer {
-  background-color: var(--color-text);
-  color: var(--color-surface);
-  padding: var(--spacing-xl) 0;
-  text-align: center;
+    background-color: var(--color-text);
+    color: white;
+    padding: var(--spacing-xl) var(--spacing-md);
+    text-align: center;
 }
 
-.footer p {
-  margin-bottom: var(--spacing-sm);
+.footer a {
+    color: white;
+}
+
+.footer a:hover {
+    color: var(--color-primary);
 }
 
 .footer-links {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-lg);
-}
-
-.footer-links a {
-  color: var(--color-surface);
-  opacity: 0.8;
-}
-
-.footer-links a:hover {
-  opacity: 1;
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-md);
 }
 
 /* ========================================
    10. Utilities
    ======================================== */
 .container {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
-  padding: 0 var(--spacing-md);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
 }
 
 /* ========================================
-   11. Media Queries
+   11. Media Queries (Scenario 6)
    ======================================== */
-
-/* Tablet (768px) */
 @media (min-width: 768px) {
-  h1 {
-    font-size: var(--font-size-4xl);
-  }
+    h1 {
+        font-size: var(--font-size-5xl);
+    }
 
-  h2 {
-    font-size: var(--font-size-3xl);
-  }
-
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .feature-card {
-    text-align: left;
-  }
-
-  .feature-icon {
-    text-align: left;
-  }
+    .hero-cta {
+        flex-direction: row;
+        justify-content: center;
+    }
 }
 
-/* Desktop (1024px) */
 @media (min-width: 1024px) {
-  .features-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+    .hero {
+        padding: var(--spacing-3xl) var(--spacing-xl);
+    }
 
-  .hero {
-    padding: var(--spacing-3xl) 0 calc(var(--spacing-3xl) * 1.5);
-  }
+    .hero-title {
+        font-size: 4rem;
+    }
 }
