@@ -487,3 +487,118 @@ html, body {
   }
 }
 /* ===== END MOBILE RESPONSIVE STYLES ===== */
+
+/* ===== KEYBOARD NAVIGATION & FOCUS STYLES - Scenario 12 ===== */
+/**
+ * Accessibility focus indicator styles for keyboard navigation
+ * Ensures all interactive elements have visible focus states
+ * WCAG 2.1 AA compliance requires visible focus indicators
+ */
+
+/* Default focus outline for all focusable elements */
+:focus {
+  outline: 2px solid var(--focus-color, #0066cc);
+  outline-offset: 2px;
+}
+
+/* Remove default focus for mouse users, keep for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Visible focus for keyboard navigation */
+:focus-visible {
+  outline: 3px solid var(--focus-color, #0066cc);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Skip navigation link styles */
+.skip-nav {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--focus-color, #0066cc);
+  color: #ffffff;
+  padding: 12px 24px;
+  z-index: 10000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 4px;
+  transition: top 0.2s ease-in-out;
+}
+
+.skip-nav:focus,
+.skip-nav:focus-visible {
+  top: 0;
+  outline: 3px solid #ffffff;
+  outline-offset: -3px;
+}
+
+/* Enhanced focus styles for buttons */
+button:focus-visible,
+.cta-button:focus-visible {
+  outline: 3px solid var(--focus-color, #0066cc);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(0, 102, 204, 0.2);
+}
+
+/* Enhanced focus styles for links */
+a:focus-visible {
+  outline: 3px solid var(--focus-color, #0066cc);
+  outline-offset: 3px;
+  border-radius: 3px;
+  text-decoration: underline;
+}
+
+/* Focus styles for navigation links */
+.nav-link:focus-visible {
+  outline: 3px solid var(--focus-color, #0066cc);
+  outline-offset: 4px;
+  border-radius: 4px;
+  background-color: rgba(0, 102, 204, 0.1);
+}
+
+/* Focus styles for copy buttons in code blocks */
+.copy-btn:focus-visible {
+  outline: 3px solid var(--focus-color, #0066cc);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+}
+
+/* Focus styles for mobile menu toggle */
+.mobile-menu-toggle:focus-visible {
+  outline: 3px solid var(--focus-color, #0066cc);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Focus styles for footer links */
+.footer-link:focus-visible {
+  outline: 3px solid var(--focus-color, #0066cc);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+/* Focus styles for header logo */
+.header-logo:focus-visible {
+  outline: 3px solid var(--focus-color, #0066cc);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* High contrast focus for CTA button */
+.cta-button:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--focus-color, #0066cc);
+}
+
+/* Ensure focus is visible on dark backgrounds */
+.hero .cta-button:focus-visible,
+.hero a:focus-visible {
+  outline-color: #ffffff;
+  box-shadow: 0 0 0 6px rgba(0, 102, 204, 0.5);
+}
+/* ===== END KEYBOARD NAVIGATION & FOCUS STYLES ===== */
