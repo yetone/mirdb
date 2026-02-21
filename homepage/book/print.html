@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - MirDB</title>
+    <title>MirDB</title>
     <meta name="description" content="A Persistent Key-Value Store with Memcached Protocol">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/general.css">
@@ -89,7 +89,7 @@ Expected sections (in order):
     <img src="images/logo.gif" alt="MirDB Logo" class="hero-logo" id="mirdb-logo">
     <h1 id="mirdb" class="hero-title"><a class="header" href="#mirdb">MirDB</a></h1>
     <p class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
-    <a href="#quickstart" class="cta-button" id="get-started-btn">Get Started</a>
+    <a href="index.html#quickstart" class="cta-button" id="get-started-btn">Get Started</a>
   </div>
 </section>
 <!-- ===== END HERO SECTION ===== -->
@@ -195,6 +195,165 @@ END</span></code></pre>
   </div>
 </section>
 <!-- ===== END ROADMAP SECTION ===== -->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="architecture-overview"><a class="header" href="#architecture-overview">Architecture Overview</a></h1>
+<p>MirDB implements an LSM Tree (Log-Structured Merge Tree) architecture, a design pattern optimized for write-heavy workloads while maintaining efficient read performance. This page explains the core components that make MirDB a reliable and performant persistent key-value store.</p>
+<section id="architecture-overview" class="architecture-section">
+<h2 id="how-mirdb-works"><a class="header" href="#how-mirdb-works">How MirDB Works</a></h2>
+<div class="architecture-diagram-container">
+  <img src="images/architecture.svg" alt="MirDB LSM Tree Architecture Diagram showing data flow from client through memtables, WAL, and SSTables with compaction" class="architecture-diagram" id="architecture-diagram">
+</div>
+<p>The diagram above illustrates the data flow in MirDB. When a write operation arrives, it follows a carefully designed path that balances performance with durability.</p>
+</section>
+<section id="memtables" class="architecture-component">
+<h2 id="memtables"><a class="header" href="#memtables">Memtables</a></h2>
+<p>A <strong>memtable</strong> is an in-memory data structure that serves as the first destination for all write operations. When you issue a <code>set</code> command to MirDB, the key-value pair is immediately written to the active memtable.</p>
+<p>Key characteristics of memtables in MirDB:</p>
+<ul>
+<li><strong>Fast writes</strong>: All writes go directly to memory, providing sub-millisecond latency</li>
+<li><strong>Sorted storage</strong>: Keys are maintained in sorted order for efficient range queries</li>
+<li><strong>Size-limited</strong>: When a memtable reaches <code>memtable_max_size</code> (default 4MB), it becomes immutable and a new active memtable is created</li>
+<li><strong>Flushing</strong>: Immutable memtables are asynchronously flushed to disk as SSTables</li>
+</ul>
+<p>The memtable acts as a write buffer, batching multiple operations before persisting them to disk. This amortizes the cost of disk I/O across many operations.</p>
+</section>
+<section id="skip-lists" class="architecture-component">
+<h2 id="skip-lists"><a class="header" href="#skip-lists">Skip Lists</a></h2>
+<p>MirDB implements memtables using a <strong>skip list</strong> data structure. A skip list is a probabilistic data structure that provides O(log n) search, insert, and delete operations.</p>
+<p>Why skip lists?</p>
+<ul>
+<li><strong>Lock-free reads</strong>: Multiple readers can traverse the skip list concurrently without blocking</li>
+<li><strong>Simple implementation</strong>: Compared to balanced trees, skip lists are easier to implement correctly</li>
+<li><strong>Cache-friendly</strong>: Sequential memory access patterns improve CPU cache utilization</li>
+<li><strong>Probabilistic balancing</strong>: No complex rebalancing operations required during insertions</li>
+</ul>
+<p>The skip list maintains multiple levels of linked lists. The bottom level contains all elements, while higher levels contain a subset of elements, creating "express lanes" for faster traversal.</p>
+<pre><code>Level 3: ─────────────────────────────────────────▶ [M]
+Level 2: ─────────▶ [D] ─────────────▶ [K] ──────▶ [M]
+Level 1: ──▶ [B] ──▶ [D] ──▶ [G] ──▶ [K] ──▶ [L] ▶ [M]
+Level 0: [A]─[B]─[C]─[D]─[E]─[F]─[G]─[H]─[I]─[J]─[K]─[L]─[M]
+</code></pre>
+</section>
+<section id="sstables" class="architecture-component">
+<h2 id="sstables"><a class="header" href="#sstables">SSTables</a></h2>
+<p><strong>Sorted String Tables (SSTables)</strong> are immutable, on-disk files that store key-value pairs in sorted order. When a memtable is flushed, it becomes an SSTable.</p>
+<p>SSTable structure in MirDB:</p>
+<ul>
+<li><strong>Data blocks</strong>: Key-value pairs grouped into 4KB blocks (configurable via <code>block_size</code>)</li>
+<li><strong>Index block</strong>: Sparse index pointing to data block locations</li>
+<li><strong>Bloom filter</strong>: Probabilistic structure for quick key existence checks</li>
+<li><strong>Maximum size</strong>: Configurable via <code>sstable_max_size</code> (default 100MB)</li>
+</ul>
+<p>Benefits of SSTables:</p>
+<ul>
+<li><strong>Immutability</strong>: Once written, SSTables never change, simplifying concurrency</li>
+<li><strong>Sequential writes</strong>: Data is written sequentially, maximizing disk throughput</li>
+<li><strong>Efficient reads</strong>: Sorted order enables binary search within blocks</li>
+<li><strong>Compression-friendly</strong>: Sorted, immutable data compresses well</li>
+</ul>
+</section>
+<section id="wal" class="architecture-component">
+<h2 id="write-ahead-log-wal"><a class="header" href="#write-ahead-log-wal">Write-Ahead Log (WAL)</a></h2>
+<p>The <strong>Write-Ahead Log (WAL)</strong> is MirDB's durability mechanism. Before any write is acknowledged to the client, it is first persisted to the WAL.</p>
+<p>WAL characteristics:</p>
+<ul>
+<li><strong>Sequential writes</strong>: All operations are appended to a single file</li>
+<li><strong>Durability guarantee</strong>: Data in WAL survives process crashes</li>
+<li><strong>Recovery</strong>: On startup, MirDB replays the WAL to restore memtable state</li>
+<li><strong>Truncation</strong>: WAL entries are removed after corresponding memtable flushes</li>
+</ul>
+<p>The WAL follows a simple principle: "write first, then execute." This ensures that no acknowledged write is ever lost, even in the event of sudden power loss or system crashes.</p>
+<pre><code>1. Client sends SET key value
+2. MirDB appends operation to WAL
+3. WAL write synced to disk (fsync)
+4. Operation applied to memtable
+5. Success returned to client
+</code></pre>
+</section>
+<section id="compaction" class="architecture-component">
+<h2 id="compaction"><a class="header" href="#compaction">Compaction</a></h2>
+<p><strong>Compaction</strong> is the background process that merges and reorganizes SSTables to maintain read performance and reclaim space from deleted or overwritten keys.</p>
+<p>MirDB supports two types of compaction:</p>
+<h3 id="minor-compaction"><a class="header" href="#minor-compaction">Minor Compaction</a></h3>
+<p>Minor compaction flushes an immutable memtable to a new SSTable at Level 0 of the LSM tree. This process:</p>
+<ul>
+<li>Creates a new SSTable from memtable contents</li>
+<li>Adds the SSTable to Level 0</li>
+<li>Clears the immutable memtable from memory</li>
+<li>Truncates corresponding WAL entries</li>
+</ul>
+<h3 id="major-compaction"><a class="header" href="#major-compaction">Major Compaction</a></h3>
+<p>Major compaction merges multiple SSTables across levels to reduce read amplification and reclaim space:</p>
+<ul>
+<li><strong>Leveled structure</strong>: MirDB organizes SSTables into levels (up to <code>max_levels</code>, default 7)</li>
+<li><strong>Size ratios</strong>: Each level can hold ~10x more data than the previous</li>
+<li><strong>Merge process</strong>: Overlapping SSTables are merged, keeping only the latest version of each key</li>
+<li><strong>Deletion handling</strong>: Tombstones (deletion markers) are propagated or removed</li>
+</ul>
+<p>Compaction is crucial for long-term performance:</p>
+<ul>
+<li><strong>Read performance</strong>: Fewer SSTables to search means faster reads</li>
+<li><strong>Space reclamation</strong>: Old versions and deleted keys are removed</li>
+<li><strong>Write amplification tradeoff</strong>: Rewriting data multiple times vs. query efficiency</li>
+</ul>
+</section>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-reference"><a class="header" href="#configuration-reference">Configuration Reference</a></h1>
+<p>MirDB can be configured using a TOML configuration file. This page documents all available configuration parameters, their default values, and descriptions to help you tune MirDB for your specific workload.</p>
+<section id="configuration" class="configuration-section">
+<h2 id="using-configuration-files"><a class="header" href="#using-configuration-files">Using Configuration Files</a></h2>
+<p>Start MirDB with a custom configuration file:</p>
+<pre><code class="language-bash">mirdb -c /path/to/config.toml
+</code></pre>
+<p>If no configuration file is specified, MirDB uses default values for all parameters.</p>
+</section>
+<section id="configuration-table" class="configuration-parameters">
+<h2 id="configuration-parameters"><a class="header" href="#configuration-parameters">Configuration Parameters</a></h2>
+<p>The following table lists all configurable parameters in MirDB:</p>
+<div class="config-table-container">
+<div class="table-wrapper"><table><thead><tr><th>Parameter</th><th>Default Value</th><th>Description</th></tr></thead><tbody>
+<tr><td>listen_addr</td><td>0.0.0.0:12333</td><td>Server listening address and port for client connections</td></tr>
+<tr><td>max_levels</td><td>7</td><td>Maximum number of LSM tree levels for organizing SSTables</td></tr>
+<tr><td>work_dir</td><td>/tmp/mirdb</td><td>Working directory for data storage, WAL files, and SSTables</td></tr>
+<tr><td>sstable_max_size</td><td>100MB</td><td>Maximum size per SSTable file before splitting</td></tr>
+<tr><td>memtable_max_size</td><td>4MB</td><td>Maximum memtable size before flushing to disk</td></tr>
+<tr><td>block_size</td><td>4KB</td><td>SSTable data block size for read/write operations</td></tr>
+</tbody></table>
+</div></div>
+</section>
+<section id="example-configuration" class="configuration-example">
+<h2 id="example-configuration"><a class="header" href="#example-configuration">Example Configuration</a></h2>
+<p>Here is a complete example configuration file:</p>
+<pre><code class="language-toml"># Network Configuration
+addr = "0.0.0.0:12333"
+
+# LSM Tree Configuration
+max_level = 7
+work_dir = "/var/lib/mirdb"
+
+# SSTable Settings
+sst_max_size = "100M"
+block_size = "4K"
+
+# Memtable Settings
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+
+# Compaction Settings
+l0_compaction_trigger = 4
+block_restart_interval = 16
+thread_sleep_ms = 500
+</code></pre>
+</section>
+<section id="size-units" class="configuration-units">
+<h2 id="size-units"><a class="header" href="#size-units">Size Units</a></h2>
+<p>Configuration supports the following size suffixes:</p>
+<ul>
+<li><strong>K</strong> - Kilobytes (1024 bytes)</li>
+<li><strong>M</strong> - Megabytes (1024 KB)</li>
+<li><strong>G</strong> - Gigabytes (1024 MB)</li>
+<li><strong>T</strong> - Terabytes (1024 GB)</li>
+</ul>
+</section>
 
     </main>
 

@@ -1,0 +1,301 @@
+/**
+ * Navigation and Chrome Styles
+ * Owners:
+ *   - Scenario 2: Header and navigation styles
+ *   - Scenario 8: Footer styles
+ *
+ * Expected content:
+ * - Header layout
+ * - Navigation link styles
+ * - Logo styling
+ * - Footer layout
+ * - External link styles
+ */
+
+/* ===== SKIP NAVIGATION - Scenario 2 ===== */
+.skip-nav {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--accent-color);
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 1000;
+  transition: top 0.2s ease;
+}
+
+.skip-nav:focus {
+  top: 0;
+}
+
+/* ===== HEADER STYLES - Scenario 2 ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-color);
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+  z-index: 100;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+}
+
+/* ===== LOGO STYLES - Scenario 2 ===== */
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.header-logo:hover {
+  text-decoration: none;
+}
+
+.header-logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.header-logo-text {
+  color: var(--text-color);
+}
+
+/* ===== NAVIGATION STYLES - Scenario 2 ===== */
+.main-nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 1.5rem;
+}
+
+.nav-item {
+  margin: 0;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.nav-link:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* External link indicator */
+.nav-link-external {
+  color: var(--text-color);
+}
+
+.external-icon {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* ===== MOBILE MENU TOGGLE - Scenario 2 ===== */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 28px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger-line {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: var(--text-color);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Mobile menu styles will be added by Scenario 11 */
+
+/* ===== THEME TOGGLE STYLES - Scenario 15 ===== */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  margin-left: 0.75rem;
+}
+
+.theme-toggle:hover {
+  background-color: var(--code-bg);
+  border-color: var(--accent-color);
+}
+
+.theme-toggle:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Mobile adjustments for theme toggle */
+@media (max-width: 767px) {
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    margin-left: 0.5rem;
+  }
+
+  .theme-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+/* ===== END THEME TOGGLE STYLES ===== */
+
+/* ===== FOOTER STYLES - Scenario 8 ===== */
+.site-footer {
+  background-color: var(--bg-color);
+  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+  padding: 2rem 0;
+  margin-top: 4rem;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.footer-link:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.footer-link-external {
+  color: var(--text-color);
+}
+
+.footer-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.footer-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-text {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+.footer-license {
+  font-size: 0.875rem;
+}
+
+.footer-license .footer-link {
+  font-size: 0.875rem;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  font-size: 0.8rem;
+}
+
+/* Responsive footer styles */
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .footer-info {
+    align-items: flex-end;
+  }
+}
