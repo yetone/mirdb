@@ -146,10 +146,18 @@
   };
 
   // Initialize all features
-  document.addEventListener('DOMContentLoaded', () => {
+  const init = () => {
     initTheme();
     initCopyToClipboard();
     initMobileMenu();
     initSmoothScroll();
-  });
+  };
+
+  // Handle both cases: DOMContentLoaded not fired yet, or already fired
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    // DOM is already ready, run immediately
+    init();
+  }
 })();

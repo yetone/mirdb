@@ -31,17 +31,33 @@
 
   // Copy to Clipboard
   const initCopyToClipboard = () => {
-    document.querySelectorAll('.copy-button').forEach(button => {
+    document.querySelectorAll('.copy-btn').forEach(button => {
       button.addEventListener('click', async () => {
-        const codeBlock = button.closest('.code-block-wrapper').querySelector('code');
-        if (codeBlock) {
+        const codeBlock = button.closest('.code-block');
+        const code = codeBlock.querySelector('code');
+        if (code) {
           try {
-            await navigator.clipboard.writeText(codeBlock.textContent);
+            await navigator.clipboard.writeText(code.textContent);
             button.classList.add('copied');
             button.setAttribute('aria-label', 'Copied!');
+
+            // Toggle icons for visual feedback
+            const copyIcon = button.querySelector('.copy-icon');
+            const checkIcon = button.querySelector('.check-icon');
+            if (copyIcon && checkIcon) {
+              copyIcon.classList.add('hidden');
+              checkIcon.classList.remove('hidden');
+            }
+
             setTimeout(() => {
               button.classList.remove('copied');
               button.setAttribute('aria-label', 'Copy to clipboard');
+
+              // Restore icons
+              if (copyIcon && checkIcon) {
+                copyIcon.classList.remove('hidden');
+                checkIcon.classList.add('hidden');
+              }
             }, 2000);
           } catch (err) {
             console.error('Failed to copy:', err);
@@ -102,10 +118,18 @@
   };
 
   // Initialize all features
-  document.addEventListener('DOMContentLoaded', () => {
+  const init = () => {
     initThemeToggle();
     initCopyToClipboard();
     initMobileMenu();
     initSmoothScroll();
-  });
+  };
+
+  // Handle both cases: DOMContentLoaded not fired yet, or already fired
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    // DOM is already ready, run immediately
+    init();
+  }
 })();
