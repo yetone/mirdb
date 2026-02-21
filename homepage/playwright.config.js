@@ -25,10 +25,32 @@ module.exports = defineConfig({
     actionTimeout: 10000,
   },
   projects: [
+    /* ===== CROSS-BROWSER COMPATIBILITY - Scenario 20 ===== */
+    /* Primary browsers - always tested */
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    /* Edge (Chromium-based) - runs when MS Edge is installed
+     * Edge uses the same Blink/V8 engine as Chrome, so Chromium tests
+     * provide equivalent coverage when Edge is unavailable.
+     * To install Edge for testing: npx playwright install msedge
+     */
+    ...(process.env.TEST_EDGE ? [{
+      name: 'edge',
+      use: {
+        ...devices['Desktop Edge'],
+        channel: 'msedge',
+      },
+    }] : []),
   ],
   webServer: {
     command: 'npx serve book -l 3000',
