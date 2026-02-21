@@ -1,0 +1,76 @@
+/**
+ * Homepage-Specific Styles
+ * Owners:
+ *   - Scenario 1: Hero section styles
+ *   - Scenario 3: Features grid styles
+ *   - Scenario 6: Roadmap section styles
+ *
+ * Expected content:
+ * - Hero layout and styling
+ * - Features card grid
+ * - Roadmap checklist styling
+ * - CTA button styles
+ */
+
+/* ===== HERO SECTION - Scenario 1 ===== */
+.hero {
+  background-color: var(--hero-bg);
+  padding: 4rem 2rem;
+  text-align: center;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.hero-tagline {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.cta-button:hover {
+  background-color: var(--accent-hover);
+  text-decoration: none;
+}
+
+.cta-button:focus {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+}
+/* ===== END HERO SECTION ===== */
+
+/* ===== FEATURES SECTION - Scenario 3 ===== */
+
+/* ===== ROADMAP SECTION - Scenario 6 ===== */

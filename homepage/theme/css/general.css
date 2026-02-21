@@ -1,0 +1,42 @@
+/**
+ * Base Styles and Responsive Breakpoints
+ * Owners:
+ *   - Scenario 9: Desktop styles (1920x1080+)
+ *   - Scenario 10: Tablet styles (768x1024)
+ *   - Scenario 11: Mobile styles (375x667+)
+ *   - Scenario 12: Focus states for keyboard navigation
+ *
+ * Expected content:
+ * - CSS reset/normalize
+ * - Typography base styles
+ * - Responsive breakpoints
+ * - Focus indicator styles
+ * - Skip navigation link styles
+ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

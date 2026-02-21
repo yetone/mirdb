@@ -1,0 +1,22 @@
+# mdBook configuration for MirDB Homepage
+# Owner: Scenario 19 - Static Site Deployment
+#
+# This file configures mdBook build settings:
+# - Book title and description
+# - Build output directory
+# - Theme configuration
+# - Preprocessors
+
+[book]
+title = "MirDB"
+description = "A Persistent Key-Value Store with Memcached Protocol"
+authors = ["MirDB Contributors"]
+language = "en"
+
+[build]
+build-dir = "book"
+
+[output.html]
+theme = "theme"
+default-theme = "light"
+preferred-dark-theme = "coal"

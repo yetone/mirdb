@@ -1,0 +1,29 @@
+/**
+ * CSS Custom Properties (Variables)
+ * Owners:
+ *   - Scenario 14: Color contrast compliance
+ *   - Scenario 15: Dark mode variables
+ *   - Scenario 16: Light mode variables
+ *
+ * Expected variables:
+ * - Background colors (light/dark)
+ * - Text colors (light/dark)
+ * - Accent/link colors
+ * - Code block colors
+ * - Focus indicator colors
+ *
+ * WCAG Requirements:
+ * - Normal text: 4.5:1 contrast ratio
+ * - Large text: 3:1 contrast ratio
+ */
+
+:root {
+  /* Light mode (default) */
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --accent-color: #0066cc;
+  --accent-hover: #004499;
+  --code-bg: #f4f4f4;
+  --focus-color: #0066cc;
+  --hero-bg: #f8f9fa;
+}
