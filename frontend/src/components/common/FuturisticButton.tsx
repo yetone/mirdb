@@ -21,7 +21,7 @@ export function FuturisticButton({
   'data-testid': dataTestId,
   ...props
 }: FuturisticButtonProps) {
-  const baseClasses = 'btn transition-transform duration-200 hover:scale-105 focus:ring-2 focus:ring-offset-2';
+  const baseClasses = 'btn min-h-[44px] transition-transform duration-200 hover:scale-105 focus:ring-2 focus:ring-offset-2';
   const variantClasses = variant === 'primary'
     ? 'btn-primary'
     : 'btn-outline';
