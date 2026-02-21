@@ -93,7 +93,109 @@ test.describe('Features Section', () => {
    Quick Start Section Tests (Scenario 3)
    ======================================== */
 test.describe('Quick Start Section', () => {
-    // Tests will be added by Scenario 3
+    test.beforeEach(async ({ page }) => {
+        await page.goto(homepageUrl);
+    });
+
+    test('should have Quick Start section with correct id or heading', async ({ page }) => {
+        // Test Case 1: Section with id='quickstart' or heading 'Quick Start' is present
+        const quickstartSection = page.locator('#quickstart');
+        await expect(quickstartSection).toBeVisible();
+
+        const heading = quickstartSection.locator('h2');
+        await expect(heading).toHaveText('Quick Start');
+    });
+
+    test('should have at least one code block element', async ({ page }) => {
+        // Test Case 2: At least one <pre><code> or similar code block element exists
+        const quickstartSection = page.locator('#quickstart');
+        const codeBlocks = quickstartSection.locator('pre code');
+
+        const count = await codeBlocks.count();
+        expect(count).toBeGreaterThanOrEqual(1);
+    });
+
+    test('should contain memcached command examples', async ({ page }) => {
+        // Test Case 3: Code block contains memcached commands like 'set', 'get', or 'telnet'
+        const quickstartSection = page.locator('#quickstart');
+        const codeBlocks = quickstartSection.locator('pre code');
+
+        // Get all code block text content
+        const codeTexts = await codeBlocks.allTextContents();
+        const combinedText = codeTexts.join(' ').toLowerCase();
+
+        // Check for memcached commands
+        const hasSet = combinedText.includes('set');
+        const hasGet = combinedText.includes('get');
+        const hasTelnet = combinedText.includes('telnet');
+
+        expect(hasSet || hasGet || hasTelnet).toBe(true);
+    });
+
+    test('should have code block with monospace font and distinguishable background', async ({ page }) => {
+        // Test Case 4: Code block has monospace font and distinguishable background
+        const quickstartSection = page.locator('#quickstart');
+        const codeBlock = quickstartSection.locator('pre').first();
+
+        await expect(codeBlock).toBeVisible();
+
+        // Check background color - should be dark (not white)
+        const bgColor = await codeBlock.evaluate((el) => {
+            return window.getComputedStyle(el).backgroundColor;
+        });
+
+        // Background should not be white (rgb(255, 255, 255))
+        expect(bgColor).not.toBe('rgb(255, 255, 255)');
+
+        // Check that code has monospace font
+        const codeElement = quickstartSection.locator('pre code').first();
+        const fontFamily = await codeElement.evaluate((el) => {
+            return window.getComputedStyle(el).fontFamily;
+        });
+
+        // Font family should include a monospace font
+        const hasMonospace = fontFamily.toLowerCase().includes('mono') ||
+                            fontFamily.toLowerCase().includes('courier') ||
+                            fontFamily.toLowerCase().includes('consolas');
+        expect(hasMonospace).toBe(true);
+    });
+
+    test('should have readable code with sufficient contrast', async ({ page }) => {
+        // Test Case 5: Code text has sufficient contrast and is legible
+        const quickstartSection = page.locator('#quickstart');
+        const codeElement = quickstartSection.locator('pre code').first();
+
+        await expect(codeElement).toBeVisible();
+
+        // Get text color and font size
+        const styles = await codeElement.evaluate((el) => {
+            const computed = window.getComputedStyle(el);
+            return {
+                color: computed.color,
+                fontSize: computed.fontSize
+            };
+        });
+
+        // Check that text is not too small (at least 12px)
+        const fontSize = parseFloat(styles.fontSize);
+        expect(fontSize).toBeGreaterThanOrEqual(12);
+
+        // Check that color is not transparent or zero opacity
+        expect(styles.color).not.toBe('transparent');
+        expect(styles.color).not.toBe('rgba(0, 0, 0, 0)');
+    });
+
+    test('should navigate to Quick Start section when clicking nav link', async ({ page }) => {
+        // Verify navigation works
+        await page.click('a[href="#quickstart"]');
+
+        // Wait for scroll to complete
+        await page.waitForTimeout(500);
+
+        // Check that quickstart section is in view
+        const quickstartSection = page.locator('#quickstart');
+        await expect(quickstartSection).toBeInViewport();
+    });
 });
 
 /* ========================================

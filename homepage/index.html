@@ -68,7 +68,45 @@
         <section id="quickstart" class="quickstart" aria-labelledby="quickstart-heading">
             <div class="container">
                 <h2 id="quickstart-heading">Quick Start</h2>
-                <!-- Quick Start content will be added by Scenario 3 -->
+                <p class="quickstart-intro">MirDB uses the standard memcached text protocol. Connect using telnet or any memcached client:</p>
+
+                <div class="code-example">
+                    <h3>Connect to MirDB</h3>
+                    <pre><code class="language-bash"># Connect using telnet
+telnet localhost 12333</code></pre>
+                </div>
+
+                <div class="code-example">
+                    <h3>Store and Retrieve Data</h3>
+                    <pre><code class="language-memcached"># Set a key-value pair
+# set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                </div>
+
+                <div class="code-example">
+                    <h3>Delete Data</h3>
+                    <pre><code class="language-memcached"># Delete a key
+delete mykey
+DELETED
+
+# Verify deletion
+get mykey
+END</code></pre>
+                </div>
+
+                <div class="code-example">
+                    <h3>Database Info</h3>
+                    <pre><code class="language-memcached"># Get database status (MirDB-specific)
+info</code></pre>
+                </div>
             </div>
         </section>
         <!-- END: Quick Start Section -->

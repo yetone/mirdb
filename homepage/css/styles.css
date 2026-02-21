@@ -297,6 +297,42 @@ h3 {
     padding: var(--spacing-3xl) var(--spacing-md);
 }
 
+.quickstart-intro {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl);
+    color: var(--color-text-muted);
+}
+
+.code-example {
+    margin-bottom: var(--spacing-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.code-example h3 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
+}
+
+.code-example pre {
+    background: #1e1e1e;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    overflow-x: auto;
+    margin: 0;
+}
+
+.code-example code {
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: #d4d4d4;
+    line-height: 1.5;
+    display: block;
+    white-space: pre;
+}
+
 /* ========================================
    9. Footer (Scenario 5)
    ======================================== */
