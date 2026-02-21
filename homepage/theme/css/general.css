@@ -155,3 +155,139 @@ html, body {
   }
 }
 /* ===== END DESKTOP RESPONSIVE STYLES ===== */
+
+/* ===== TABLET RESPONSIVE STYLES - Scenario 10 ===== */
+/* Tablet breakpoint for 768x1024 viewport (iPad portrait) */
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  /* Navigation adjustments for tablet */
+  .main-nav {
+    display: flex;
+  }
+
+  .nav-list {
+    display: flex;
+    flex-direction: row;
+    gap: 1.25rem;
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+  }
+
+  /* Header container for tablet */
+  .header-container {
+    padding: 0.75rem 1.5rem;
+  }
+
+  /* Hero section tablet adjustments */
+  .hero {
+    padding: 3rem 1.5rem;
+    min-height: 50vh;
+  }
+
+  .hero-content {
+    max-width: 680px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-tagline {
+    font-size: 1.25rem;
+  }
+
+  .hero-logo {
+    max-width: 160px;
+  }
+
+  /* Features grid: 2 columns for tablet */
+  .features {
+    padding: 3rem 1.5rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    padding: 1.25rem;
+  }
+
+  /* Roadmap columns: 2 columns side by side */
+  .roadmap {
+    padding: 3rem 1.5rem;
+  }
+
+  .roadmap-columns {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+    gap: 1.5rem;
+  }
+
+  /* Quick start section tablet adjustments */
+  .quickstart {
+    padding: 3rem 1.5rem;
+  }
+
+  .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Footer container for tablet */
+  .footer-container {
+    padding: 0 1.5rem;
+  }
+}
+
+/* Touch target minimum size enforcement for tablet */
+@media (max-width: 1199px) {
+  /* Ensure nav links meet 44x44 touch target */
+  .nav-link {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* CTA button touch target */
+  .cta-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.875rem 1.75rem;
+  }
+
+  /* Copy button touch target */
+  .copy-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Footer links touch target */
+  .footer-link {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Logo touch target */
+  .header-logo {
+    min-height: 44px;
+  }
+
+  /* Mobile menu toggle touch target (when visible) */
+  .mobile-menu-toggle {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px;
+  }
+}
+/* ===== END TABLET RESPONSIVE STYLES ===== */
