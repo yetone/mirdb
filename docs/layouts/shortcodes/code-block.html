@@ -1,0 +1,9 @@
+{{/*
+  Code block shortcode with copy functionality
+  Owner: Scenario 5 - Getting Started Section
+  This is a stub file - will be implemented by Scenario 5
+*/}}
+<div class="code-block-wrapper relative">
+  <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+  <pre><code class="language-{{ .Get "lang" | default "text" }}">{{ .Inner }}</code></pre>
+</div>
