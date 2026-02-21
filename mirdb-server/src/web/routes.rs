@@ -16,6 +16,7 @@ use super::assets::{get_cache_control, get_extension, get_mime_type, is_safe_pat
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum StatusCode {
     Ok = 200,
+    NotModified = 304,
     BadRequest = 400,
     NotFound = 404,
     InternalServerError = 500,
@@ -25,6 +26,7 @@ impl StatusCode {
     pub fn as_str(&self) -> &'static str {
         match self {
             StatusCode::Ok => "200 OK",
+            StatusCode::NotModified => "304 Not Modified",
             StatusCode::BadRequest => "400 Bad Request",
             StatusCode::NotFound => "404 Not Found",
             StatusCode::InternalServerError => "500 Internal Server Error",
@@ -38,6 +40,7 @@ pub struct HttpResponse {
     pub status: StatusCode,
     pub content_type: String,
     pub cache_control: Option<String>,
+    pub etag: Option<String>,
     pub body: Vec<u8>,
 }
 
@@ -48,6 +51,7 @@ impl HttpResponse {
             status,
             content_type: content_type.to_string(),
             cache_control: None,
+            etag: None,
             body,
         }
     }
@@ -56,6 +60,21 @@ impl HttpResponse {
     pub fn with_cache_control(mut self, cache_control: &str) -> Self {
         self.cache_control = Some(cache_control.to_string());
         self
+    }
+
+    /// Add ETag header
+    pub fn with_etag(mut self, etag: &str) -> Self {
+        self.etag = Some(etag.to_string());
+        self
+    }
+
+    /// Create a 304 Not Modified response
+    pub fn not_modified(etag: Option<&str>) -> Self {
+        let mut response = HttpResponse::new(StatusCode::NotModified, "", Vec::new());
+        if let Some(tag) = etag {
+            response.etag = Some(tag.to_string());
+        }
+        response
     }
 
     /// Create a 404 Not Found response
@@ -89,6 +108,10 @@ impl HttpResponse {
             response.push_str(&format!("Cache-Control: {}\r\n", cache_control));
         }
 
+        if let Some(ref etag) = self.etag {
+            response.push_str(&format!("ETag: \"{}\"\r\n", etag));
+        }
+
         response.push_str("\r\n");
 
         let mut bytes = response.into_bytes();
@@ -120,6 +143,39 @@ impl RouteConfig {
     }
 }
 
+/// Generate an ETag from file content using a simple hash
+fn generate_etag(content: &[u8]) -> String {
+    // Use a simple hash for ETag generation
+    // This is a basic implementation; in production, use a proper hash
+    let mut hash: u64 = 0;
+    for (i, &byte) in content.iter().enumerate() {
+        hash = hash.wrapping_add((byte as u64).wrapping_mul((i as u64).wrapping_add(1)));
+        hash = hash.wrapping_mul(31);
+    }
+    format!("{:016x}", hash)
+}
+
+/// HTTP request information for conditional requests
+#[derive(Debug, Default)]
+pub struct RequestInfo {
+    pub path: String,
+    pub if_none_match: Option<String>,
+}
+
+impl RequestInfo {
+    pub fn new(path: &str) -> Self {
+        RequestInfo {
+            path: path.to_string(),
+            if_none_match: None,
+        }
+    }
+
+    pub fn with_if_none_match(mut self, etag: Option<String>) -> Self {
+        self.if_none_match = etag;
+        self
+    }
+}
+
 /// Route handler for incoming HTTP requests
 pub struct Router {
     config: RouteConfig,
@@ -130,8 +186,14 @@ impl Router {
         Router { config }
     }
 
-    /// Handle an incoming request path
+    /// Handle an incoming request path (simple version without conditional request support)
     pub fn handle(&self, path: &str) -> HttpResponse {
+        self.handle_request(&RequestInfo::new(path))
+    }
+
+    /// Handle an incoming request with full request info (supports conditional requests)
+    pub fn handle_request(&self, request: &RequestInfo) -> HttpResponse {
+        let path = &request.path;
         // Security check for path traversal
         if !is_safe_path(path) {
             return HttpResponse::bad_request();
@@ -145,13 +207,26 @@ impl Router {
         };
 
         // Route to appropriate handler
-        match path {
+        let response = match path {
             "" | "index.html" => self.serve_homepage(),
             p if p.starts_with("assets/") => self.serve_asset(&p[7..]),
             p if p.starts_with("css/") => self.serve_web_file(p),
             p if p.starts_with("js/") => self.serve_web_file(p),
             _ => HttpResponse::not_found(),
+        };
+
+        // Check for conditional request (If-None-Match)
+        if let Some(ref client_etag) = request.if_none_match {
+            if let Some(ref server_etag) = response.etag {
+                // Strip quotes from client ETag for comparison
+                let client_etag_clean = client_etag.trim_matches('"');
+                if client_etag_clean == server_etag {
+                    return HttpResponse::not_modified(Some(server_etag));
+                }
+            }
         }
+
+        response
     }
 
     /// Serve the homepage (index.html)
@@ -196,8 +271,10 @@ impl Router {
             Ok(content) => {
                 let mime_type = get_mime_type(extension);
                 let cache_control = get_cache_control(extension);
+                let etag = generate_etag(&content);
                 HttpResponse::new(StatusCode::Ok, mime_type, content)
                     .with_cache_control(cache_control)
+                    .with_etag(&etag)
             }
             Err(_) => HttpResponse::internal_error(),
         }
@@ -369,5 +446,77 @@ mod tests {
         assert!(text.contains("Content-Length: 5"));
         assert!(text.contains("Cache-Control: public, max-age=3600"));
         assert!(text.ends_with("Hello"));
+    }
+
+    #[test]
+    fn test_etag_generation() {
+        let content1 = b"Hello World";
+        let content2 = b"Hello World";
+        let content3 = b"Different Content";
+
+        let etag1 = generate_etag(content1);
+        let etag2 = generate_etag(content2);
+        let etag3 = generate_etag(content3);
+
+        // Same content should produce same ETag
+        assert_eq!(etag1, etag2);
+        // Different content should produce different ETag
+        assert_ne!(etag1, etag3);
+        // ETag should be a valid hex string
+        assert_eq!(etag1.len(), 16);
+    }
+
+    #[test]
+    fn test_response_includes_etag() {
+        let (_temp_dir, config) = setup_test_dirs();
+        let router = Router::new(config);
+
+        let response = router.handle("/assets/logo.gif");
+        assert_eq!(response.status, StatusCode::Ok);
+        assert!(response.etag.is_some(), "Response should include ETag");
+    }
+
+    #[test]
+    fn test_conditional_request_returns_304() {
+        let (_temp_dir, config) = setup_test_dirs();
+        let router = Router::new(config);
+
+        // First request to get ETag
+        let response1 = router.handle("/assets/logo.gif");
+        assert_eq!(response1.status, StatusCode::Ok);
+        let etag = response1.etag.clone().expect("Should have ETag");
+
+        // Second request with If-None-Match
+        let request = RequestInfo::new("/assets/logo.gif")
+            .with_if_none_match(Some(format!("\"{}\"", etag)));
+        let response2 = router.handle_request(&request);
+
+        assert_eq!(response2.status, StatusCode::NotModified);
+        assert!(response2.body.is_empty(), "304 response should have empty body");
+    }
+
+    #[test]
+    fn test_conditional_request_returns_200_for_different_etag() {
+        let (_temp_dir, config) = setup_test_dirs();
+        let router = Router::new(config);
+
+        // Request with non-matching ETag
+        let request = RequestInfo::new("/assets/logo.gif")
+            .with_if_none_match(Some("\"different-etag\"".to_string()));
+        let response = router.handle_request(&request);
+
+        assert_eq!(response.status, StatusCode::Ok);
+        assert!(!response.body.is_empty(), "200 response should have body");
+    }
+
+    #[test]
+    fn test_etag_in_http_response_format() {
+        let response = HttpResponse::new(StatusCode::Ok, "text/plain", b"Hello".to_vec())
+            .with_etag("abc123");
+
+        let bytes = response.to_http_bytes();
+        let text = String::from_utf8_lossy(&bytes);
+
+        assert!(text.contains("ETag: \"abc123\""));
     }
 }
