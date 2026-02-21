@@ -163,8 +163,11 @@ describe('Home Page - Route Accessibility', () => {
         expect(screen.getByTestId('features-section')).toBeInTheDocument();
       });
 
-      const featuresHeading = screen.getByRole('heading', { level: 2 });
+      // Look for the features section heading within the features section
+      const featuresSection = screen.getByTestId('features-section');
+      const featuresHeading = featuresSection.querySelector('h2');
       expect(featuresHeading).toBeInTheDocument();
+      expect(featuresHeading?.textContent).toMatch(/features|powerful/i);
     });
   });
 });
