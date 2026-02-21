@@ -48,11 +48,66 @@ Expected sections (in order):
 </section>
 <!-- ===== END FEATURES SECTION ===== -->
 
-<!-- Quick Start Section - Scenario 4 -->
+<!-- ===== QUICK START SECTION - Scenario 4 ===== -->
 <section id="quickstart" class="quickstart">
   <h2>Quick Start</h2>
-  <!-- Quick start content will be added by Scenario 4 -->
+  <p class="quickstart-intro">Get MirDB running in minutes. Install via Cargo and start storing key-value pairs using the familiar Memcached protocol.</p>
+
+  <div class="quickstart-step">
+    <h3>1. Install MirDB</h3>
+    <div class="code-block" data-language="bash">
+      <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard">
+        <span class="copy-icon">📋</span>
+        <span class="copy-text">Copy</span>
+      </button>
+      <pre><code class="language-bash">cargo install mirdb</code></pre>
+    </div>
+  </div>
+
+  <div class="quickstart-step">
+    <h3>2. Start the Server</h3>
+    <div class="code-block" data-language="bash">
+      <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard">
+        <span class="copy-icon">📋</span>
+        <span class="copy-text">Copy</span>
+      </button>
+      <pre><code class="language-bash">mirdb-server --addr 0.0.0.0:12333 --dir /tmp/mirdb</code></pre>
+    </div>
+  </div>
+
+  <div class="quickstart-step">
+    <h3>3. Connect and Use</h3>
+    <p>Connect using any Memcached client or telnet:</p>
+    <div class="code-block" data-language="bash">
+      <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard">
+        <span class="copy-icon">📋</span>
+        <span class="copy-text">Copy</span>
+      </button>
+      <pre><code class="language-bash">telnet localhost 12333</code></pre>
+    </div>
+  </div>
+
+  <div class="quickstart-step">
+    <h3>4. Store and Retrieve Data</h3>
+    <p>Use standard Memcached protocol commands:</p>
+    <div class="code-block" data-language="text">
+      <button class="copy-btn" aria-label="Copy to clipboard" title="Copy to clipboard">
+        <span class="copy-icon">📋</span>
+        <span class="copy-text">Copy</span>
+      </button>
+      <pre><code class="language-memcached"><span class="token-comment"># Store a value</span>
+<span class="token-command">set mykey 0 0 5</span>
+hello
+<span class="token-response">STORED</span>
+<span class="token-comment"># Retrieve the value</span>
+<span class="token-command">get mykey</span>
+<span class="token-response">VALUE mykey 0 5
+hello
+END</span></code></pre>
+    </div>
+  </div>
 </section>
+<!-- ===== END QUICK START SECTION ===== -->
 
 <!-- Roadmap Section - Scenario 6 -->
 <section id="roadmap" class="roadmap">

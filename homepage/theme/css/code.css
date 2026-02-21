@@ -12,14 +12,17 @@
  * - Monospace font family
  */
 
+/* ===== BASE CODE STYLES - Scenario 4 ===== */
 pre, code {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+  font-size: 0.9em;
 }
 
 code {
   background-color: var(--code-bg);
   padding: 0.2em 0.4em;
   border-radius: 3px;
+  color: var(--text-color);
 }
 
 pre {
@@ -27,9 +30,142 @@ pre {
   padding: 1em;
   border-radius: 6px;
   overflow-x: auto;
+  margin: 0;
+  line-height: 1.5;
 }
 
 pre code {
   background: none;
   padding: 0;
+  font-size: 1em;
 }
+
+/* ===== CODE BLOCK CONTAINER - Scenario 4 ===== */
+.code-block {
+  position: relative;
+  margin: 1em 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.code-block pre {
+  padding-right: 4em;
+}
+
+/* ===== COPY BUTTON - Scenario 4 ===== */
+.copy-btn {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  padding: 0.4em 0.75em;
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.75em;
+  font-family: inherit;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+  z-index: 10;
+}
+
+.copy-btn:hover {
+  opacity: 1;
+  background-color: var(--accent-hover);
+}
+
+.copy-btn:focus {
+  opacity: 1;
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+.copy-btn:active {
+  transform: scale(0.98);
+}
+
+.copy-btn.copied {
+  background-color: #28a745;
+}
+
+.copy-btn.copy-failed {
+  background-color: #dc3545;
+}
+
+.copy-icon {
+  font-size: 1em;
+  line-height: 1;
+}
+
+.copy-text {
+  font-weight: 500;
+}
+
+/* ===== QUICK START SECTION STYLES - Scenario 4 ===== */
+.quickstart {
+  padding: 3em 1em;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.quickstart h2 {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.quickstart-intro {
+  text-align: center;
+  color: var(--text-color);
+  opacity: 0.9;
+  margin-bottom: 2em;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+.quickstart-step {
+  margin-bottom: 2em;
+}
+
+.quickstart-step h3 {
+  font-size: 1.25em;
+  margin-bottom: 0.75em;
+  color: var(--text-color);
+}
+
+.quickstart-step p {
+  margin-bottom: 0.75em;
+  color: var(--text-color);
+  opacity: 0.9;
+}
+
+/* ===== SYNTAX HIGHLIGHTING TOKENS - Scenario 4 Base ===== */
+/* Scenario 17 will add comprehensive syntax highlighting colors */
+.token-comment {
+  color: #6a737d;
+  font-style: italic;
+}
+
+.token-command {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.token-response {
+  color: #28a745;
+}
+
+/* Language-specific highlighting base */
+.language-bash .token-keyword {
+  color: var(--accent-color);
+}
+
+.language-bash .token-string {
+  color: #28a745;
+}
+/* ===== END CODE STYLES ===== */
