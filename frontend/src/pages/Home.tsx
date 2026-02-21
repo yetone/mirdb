@@ -7,6 +7,7 @@ import { HeroSection } from '../components/home/HeroSection';
 import { FeaturesSection } from '../components/home/FeaturesSection';
 import { UrlDemoSection } from '../components/home/UrlDemoSection';
 import { FinalCTASection } from '../components/home/FinalCTASection';
+import { TrustSection } from '../components/home/TrustSection';
 
 export function Home() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export function Home() {
         <HeroSection />
         <FeaturesSection />
         <UrlDemoSection onRegisterPrompt={handleRegisterPrompt} />
+        <TrustSection />
         <FinalCTASection />
       </main>
       <Footer />
