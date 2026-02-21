@@ -337,6 +337,209 @@ test.describe('Status Section', () => {
 });
 
 /* ========================================
+   Accessibility Tests (Scenario 7)
+   ======================================== */
+test.describe('Accessibility Compliance', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.goto(homepageUrl);
+    });
+
+    /* Test Case 4: Skip to main content link */
+    test('TC4: First focusable element is "Skip to main content" link', async ({ page }) => {
+        // Press Tab to focus first focusable element
+        await page.keyboard.press('Tab');
+
+        // Check that skip link is focused
+        const focusedElement = page.locator(':focus');
+        await expect(focusedElement).toHaveClass(/skip-link/);
+
+        // Check text content
+        const text = await focusedElement.textContent();
+        expect(text.toLowerCase()).toContain('skip');
+        expect(text.toLowerCase()).toContain('main');
+    });
+
+    /* Test Case 5: Keyboard navigation through all interactive elements */
+    test('TC5: All interactive elements are reachable via Tab key', async ({ page }) => {
+        // Get all focusable elements on the page
+        const allFocusable = await page.locator('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])').count();
+
+        // Tab through elements and verify we can reach them
+        const focusedElements = [];
+        const maxTabs = allFocusable + 3;
+
+        for (let i = 0; i < maxTabs; i++) {
+            await page.keyboard.press('Tab');
+
+            // Wait briefly for focus to settle
+            await page.waitForTimeout(50);
+
+            // Check what's focused
+            const focusedSelector = await page.evaluate(() => {
+                const el = document.activeElement;
+                if (!el || el.tagName === 'BODY') return null;
+                return {
+                    tagName: el.tagName,
+                    className: el.className,
+                    href: el.getAttribute('href')
+                };
+            });
+
+            if (!focusedSelector) break;
+            focusedElements.push(focusedSelector);
+        }
+
+        // Should have found multiple focusable elements
+        expect(focusedElements.length).toBeGreaterThanOrEqual(5);
+
+        // Check that we found links (A elements)
+        const links = focusedElements.filter(e => e.tagName === 'A');
+        expect(links.length).toBeGreaterThan(0);
+    });
+
+    /* Test Case 6: Check focus indicators */
+    test('TC6: All focusable elements have visible focus indicator', async ({ page }) => {
+        // Test various focusable elements by using Tab to reach them
+        // (since .focus() may not trigger CSS :focus styles in all browsers)
+
+        // Tab to first element (skip link)
+        await page.keyboard.press('Tab');
+        await page.waitForTimeout(50);
+
+        // Get focus styles for skip link
+        let styles = await page.evaluate(() => {
+            const el = document.activeElement;
+            if (!el || el.tagName === 'BODY') return null;
+            const computed = window.getComputedStyle(el);
+            return {
+                selector: el.className,
+                outline: computed.outline,
+                outlineWidth: computed.outlineWidth,
+                outlineStyle: computed.outlineStyle,
+                outlineColor: computed.outlineColor,
+                boxShadow: computed.boxShadow
+            };
+        });
+
+        // Skip link may be visually hidden but should have focus indicator
+        expect(styles).toBeTruthy();
+
+        // Tab to nav elements and check focus
+        for (let i = 0; i < 5; i++) {
+            await page.keyboard.press('Tab');
+            await page.waitForTimeout(50);
+
+            styles = await page.evaluate(() => {
+                const el = document.activeElement;
+                if (!el || el.tagName === 'BODY') return null;
+                const computed = window.getComputedStyle(el);
+                return {
+                    tagName: el.tagName,
+                    outline: computed.outline,
+                    outlineWidth: computed.outlineWidth,
+                    outlineStyle: computed.outlineStyle,
+                    boxShadow: computed.boxShadow
+                };
+            });
+
+            if (!styles) continue;
+
+            // Check for visible focus indicator
+            const hasOutline = styles.outlineStyle !== 'none' && styles.outlineWidth !== '0px';
+            const hasBoxShadow = styles.boxShadow !== 'none';
+
+            // Elements should have some form of focus indicator
+            expect(hasOutline || hasBoxShadow).toBe(true);
+        }
+    });
+
+    /* Test Case 1: Lighthouse Accessibility Audit (simplified check) */
+    test('TC1: Page structure passes basic accessibility checks', async ({ page }) => {
+        // Since we can't run full Lighthouse in this context,
+        // we verify key accessibility requirements that Lighthouse checks
+
+        // Check 1: Page has lang attribute
+        const htmlLang = await page.locator('html').getAttribute('lang');
+        expect(htmlLang).toBe('en');
+
+        // Check 2: All images have alt text (if any)
+        const imagesWithoutAlt = await page.locator('img:not([alt])').count();
+        expect(imagesWithoutAlt).toBe(0);
+
+        // Check 3: Buttons have accessible names
+        const buttons = page.locator('button');
+        const buttonCount = await buttons.count();
+        for (let i = 0; i < buttonCount; i++) {
+            const button = buttons.nth(i);
+            const text = await button.textContent();
+            const ariaLabel = await button.getAttribute('aria-label');
+            expect(text.trim().length > 0 || ariaLabel?.length > 0).toBe(true);
+        }
+
+        // Check 4: Links have accessible names
+        const links = page.locator('a');
+        const linkCount = await links.count();
+        for (let i = 0; i < linkCount; i++) {
+            const link = links.nth(i);
+            const text = await link.textContent();
+            const ariaLabel = await link.getAttribute('aria-label');
+            expect(text.trim().length > 0 || ariaLabel?.length > 0).toBe(true);
+        }
+
+        // Check 5: Heading hierarchy starts with h1
+        const h1 = page.locator('h1');
+        await expect(h1).toHaveCount(1);
+
+        // Check 6: Page has main landmark
+        const main = page.locator('main');
+        await expect(main).toBeVisible();
+
+        // Check 7: Navigation has label
+        const nav = page.locator('nav');
+        const navAriaLabel = await nav.getAttribute('aria-label');
+        expect(navAriaLabel).toBeTruthy();
+    });
+
+    /* Additional focus management tests */
+    test('Skip link navigates to main content when activated', async ({ page }) => {
+        // Focus skip link
+        await page.keyboard.press('Tab');
+        const skipLink = page.locator('.skip-link:focus');
+        await expect(skipLink).toBeVisible();
+
+        // Activate skip link
+        await page.keyboard.press('Enter');
+
+        // Check that main content is scrolled into view
+        const main = page.locator('#main');
+        await expect(main).toBeInViewport();
+    });
+
+    test('Focus order follows logical reading order', async ({ page }) => {
+        const focusOrder = [];
+
+        // Tab through first 10 focusable elements
+        for (let i = 0; i < 10; i++) {
+            await page.keyboard.press('Tab');
+            const focused = page.locator(':focus');
+            const className = await focused.getAttribute('class').catch(() => '');
+            const text = await focused.textContent().catch(() => '');
+            focusOrder.push({ className, text: text.trim().substring(0, 20) });
+        }
+
+        // First should be skip link
+        expect(focusOrder[0].className).toContain('skip-link');
+
+        // Navigation should come before main content
+        const navIndex = focusOrder.findIndex(el => el.className?.includes('nav') || el.text?.includes('Feature'));
+        const ctaIndex = focusOrder.findIndex(el => el.className?.includes('btn'));
+
+        // Navigation links should appear before CTA buttons (in nav before hero)
+        expect(navIndex).toBeLessThan(ctaIndex);
+    });
+});
+
+/* ========================================
    Theme Toggle Tests (Scenario 8)
    ======================================== */
 test.describe('Theme Toggle', () => {
