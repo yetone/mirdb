@@ -15,3 +15,8 @@ block_restart_interval = 16
 l0_compaction_trigger = 4
 
 thread_sleep_ms = 500
+
+# Web server configuration
+web_enabled = true
+web_port = 8080
+web_static_dir = "./web"

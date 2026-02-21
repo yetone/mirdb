@@ -109,6 +109,9 @@ fn main() -> MyResult<()> {
     let conf_path = matches.value_of("config").unwrap_or("default.conf");
     let conf = config::from_path(conf_path)?;
 
+    // Validate web configuration (port conflicts, invalid ports)
+    conf.validate_web_config()?;
+
     let addr = conf.addr.parse().unwrap();
     let opt = conf.to_options()?;
 
@@ -127,6 +130,15 @@ Welcome to MirDB!
 "#
         .trim_matches('\n')
     );
+
+    // Start web server in background if enabled
+    if conf.web_enabled {
+        let web_server = web::WebServer::new(web::WebServerConfig {
+            port: conf.web_port,
+            static_dir: conf.web_static_dir.clone(),
+        });
+        web_server.start_in_background();
+    }
 
     serve(addr, move || Ok(Server::new(store.clone())));
 

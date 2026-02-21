@@ -4,12 +4,15 @@
 //! the MirDB homepage and static assets.
 //!
 //! # Modules
+//! - `server`: HTTP server implementation using hyper/tokio
 //! - `assets`: Static asset serving utilities (MIME types, caching)
 //! - `routes`: Route handlers for HTTP endpoints
 
+pub mod server;
 pub mod assets;
 pub mod routes;
 
 // Re-export commonly used types
+pub use server::{WebServer, WebServerConfig};
 pub use assets::{get_cache_control, get_extension, get_mime_type, is_safe_path};
 pub use routes::{HttpResponse, RouteConfig, Router, StatusCode};
