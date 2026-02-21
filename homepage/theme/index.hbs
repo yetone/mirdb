@@ -23,9 +23,52 @@
     <link rel="stylesheet" href="css/code.css">
 </head>
 <body>
+    <!-- ===== SKIP NAVIGATION - Scenario 2 ===== -->
+    <a href="#content" class="skip-nav">Skip to content</a>
+
+    <!-- ===== NAVIGATION HEADER - Scenario 2 ===== -->
+    <header class="site-header" id="site-header">
+        <div class="header-container">
+            <a href="/" class="header-logo" aria-label="MirDB Home">
+                <img src="images/logo.gif" alt="MirDB Logo" class="header-logo-img" id="header-logo">
+                <span class="header-logo-text">MirDB</span>
+            </a>
+            <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#features" class="nav-link" data-section="features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#quickstart" class="nav-link" data-section="quickstart">Quick Start</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="architecture.html" class="nav-link" data-section="architecture">Architecture</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="https://github.com/yetone/mirdb" class="nav-link nav-link-external" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository (opens in new tab)">
+                            GitHub
+                            <span class="external-icon" aria-hidden="true">↗</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </header>
+    <!-- ===== END NAVIGATION HEADER ===== -->
+
     <main id="content">
         {{{ content }}}
     </main>
+
+    <!-- ===== FOOTER - Scenario 8 ===== -->
+    <!-- Footer will be added by Scenario 8 -->
+    <!-- ===== END FOOTER ===== -->
+
     <script src="js/theme.js"></script>
     <script src="js/clipboard.js"></script>
     <script src="js/navigation.js"></script>
