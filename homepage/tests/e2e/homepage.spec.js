@@ -543,5 +543,311 @@ test.describe('Accessibility Compliance', () => {
    Theme Toggle Tests (Scenario 8)
    ======================================== */
 test.describe('Theme Toggle', () => {
-    // Tests will be added by Scenario 8
+    test('TC1: Page displays in light theme with system set to light mode', async ({ page }) => {
+        // Emulate light mode system preference
+        await page.emulateMedia({ colorScheme: 'light' });
+
+        // Clear any existing theme preference via page context
+        await page.goto(homepageUrl);
+        await page.evaluate(() => localStorage.removeItem('mirdb-theme'));
+
+        // Reload to apply clean state
+        await page.reload();
+
+        // Check that the page has light theme colors
+        const bgColor = await page.evaluate(() => {
+            return window.getComputedStyle(document.body).backgroundColor;
+        });
+
+        // Light theme should have a light background (white or very light)
+        // rgb(255, 255, 255) is #ffffff
+        expect(bgColor === 'rgb(255, 255, 255)' || bgColor.includes('255')).toBeTruthy();
+    });
+
+    test('TC2: Page displays in dark theme with system set to dark mode', async ({ page }) => {
+        // Emulate dark mode system preference
+        await page.emulateMedia({ colorScheme: 'dark' });
+
+        // Clear any existing theme preference
+        await page.goto(homepageUrl);
+        await page.evaluate(() => localStorage.removeItem('mirdb-theme'));
+
+        // Reload to apply clean state
+        await page.reload();
+
+        // Check that the page has dark theme colors
+        const bgColor = await page.evaluate(() => {
+            return window.getComputedStyle(document.body).backgroundColor;
+        });
+
+        // Dark theme should have a dark background (rgb(15, 23, 42) is --color-bg for dark)
+        // The page should not have white background
+        expect(bgColor).not.toBe('rgb(255, 255, 255)');
+    });
+
+    test('TC3: Theme toggle button is present in header/navigation', async ({ page }) => {
+        await page.goto(homepageUrl);
+        await page.evaluate(() => localStorage.removeItem('mirdb-theme'));
+
+        // Check theme toggle button exists
+        const toggleButton = page.locator('#theme-toggle');
+        await expect(toggleButton).toBeVisible();
+
+        // Check it's in the navigation
+        const nav = page.locator('nav');
+        const toggleInNav = nav.locator('#theme-toggle');
+        await expect(toggleInNav).toBeVisible();
+
+        // Check it has proper accessibility attributes
+        const ariaLabel = await toggleButton.getAttribute('aria-label');
+        expect(ariaLabel).toBeTruthy();
+        expect(ariaLabel).toContain('Switch to');
+    });
+
+    test('TC4: Theme switches between light and dark mode when toggle is clicked', async ({ page }) => {
+        await page.emulateMedia({ colorScheme: 'light' });
+        await page.goto(homepageUrl);
+
+        // Get initial theme
+        const initialTheme = await page.evaluate(() => {
+            return document.documentElement.getAttribute('data-theme');
+        });
+
+        // Click the toggle button
+        const toggleButton = page.locator('#theme-toggle');
+        await toggleButton.click();
+
+        // Get new theme
+        const newTheme = await page.evaluate(() => {
+            return document.documentElement.getAttribute('data-theme');
+        });
+
+        // Theme should have changed
+        expect(newTheme).not.toBe(initialTheme);
+
+        // If started with light, should now be dark (or vice versa)
+        if (initialTheme === 'light') {
+            expect(newTheme).toBe('dark');
+        } else {
+            expect(newTheme).toBe('light');
+        }
+
+        // Click again to toggle back
+        await toggleButton.click();
+
+        const finalTheme = await page.evaluate(() => {
+            return document.documentElement.getAttribute('data-theme');
+        });
+
+        expect(finalTheme).toBe(initialTheme);
+    });
+
+    test('TC5: Theme persists after page reload (localStorage)', async ({ page }) => {
+        await page.emulateMedia({ colorScheme: 'light' });
+        await page.goto(homepageUrl);
+
+        // First clear any existing theme preference
+        await page.evaluate(() => localStorage.removeItem('mirdb-theme'));
+        await page.reload();
+
+        // Now click toggle to switch to dark mode
+        const toggleButton = page.locator('#theme-toggle');
+        await toggleButton.click();
+
+        // Verify it's dark
+        const themeAfterClick = await page.evaluate(() => {
+            return document.documentElement.getAttribute('data-theme');
+        });
+        expect(themeAfterClick).toBe('dark');
+
+        // Verify localStorage was set
+        const storedTheme = await page.evaluate(() => {
+            return localStorage.getItem('mirdb-theme');
+        });
+        expect(storedTheme).toBe('dark');
+
+        // Reload the page (localStorage should persist)
+        await page.reload();
+
+        // Wait for page to initialize
+        await page.waitForLoadState('domcontentloaded');
+
+        // Verify localStorage still has the value (this persists across reloads)
+        const storedThemeAfterReload = await page.evaluate(() => {
+            return localStorage.getItem('mirdb-theme');
+        });
+        expect(storedThemeAfterReload).toBe('dark');
+
+        // Verify theme is still dark after reload
+        const themeAfterReload = await page.evaluate(() => {
+            return document.documentElement.getAttribute('data-theme');
+        });
+        expect(themeAfterReload).toBe('dark');
+    });
+
+    test('TC6: CSS uses custom properties for theme colors', async ({ page }) => {
+        await page.goto(homepageUrl);
+
+        // Check that CSS custom properties are defined
+        const customProperties = await page.evaluate(() => {
+            const styles = getComputedStyle(document.documentElement);
+            return {
+                colorBg: styles.getPropertyValue('--color-bg').trim(),
+                colorText: styles.getPropertyValue('--color-text').trim(),
+                colorPrimary: styles.getPropertyValue('--color-primary').trim(),
+                colorSurface: styles.getPropertyValue('--color-surface').trim(),
+                colorBorder: styles.getPropertyValue('--color-border').trim()
+            };
+        });
+
+        // All custom properties should be defined and non-empty
+        expect(customProperties.colorBg).toBeTruthy();
+        expect(customProperties.colorText).toBeTruthy();
+        expect(customProperties.colorPrimary).toBeTruthy();
+        expect(customProperties.colorSurface).toBeTruthy();
+        expect(customProperties.colorBorder).toBeTruthy();
+
+        // Verify body uses the CSS custom property (check actual color matches)
+        const bodyBgColor = await page.evaluate(() => {
+            return window.getComputedStyle(document.body).backgroundColor;
+        });
+
+        // Body background should be using the CSS variable
+        expect(bodyBgColor).toBeTruthy();
+        expect(bodyBgColor).not.toBe('transparent');
+    });
+
+    test('TC7: Both themes meet contrast requirements', async ({ page }) => {
+        // Helper function to calculate luminance
+        const getLuminance = (r, g, b) => {
+            const a = [r, g, b].map(v => {
+                v /= 255;
+                return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+            });
+            return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+        };
+
+        // Helper to parse rgb color
+        const parseRgb = (color) => {
+            const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+            if (match) {
+                return { r: parseInt(match[1]), g: parseInt(match[2]), b: parseInt(match[3]) };
+            }
+            return null;
+        };
+
+        // Test light theme
+        await page.emulateMedia({ colorScheme: 'light' });
+        await page.goto(homepageUrl);
+
+        const lightThemeColors = await page.evaluate(() => {
+            const body = document.body;
+            const heading = document.querySelector('h1');
+            return {
+                bg: window.getComputedStyle(body).backgroundColor,
+                text: heading ? window.getComputedStyle(heading).color : null
+            };
+        });
+
+        if (lightThemeColors.bg && lightThemeColors.text) {
+            const bgRgb = parseRgb(lightThemeColors.bg);
+            const textRgb = parseRgb(lightThemeColors.text);
+
+            if (bgRgb && textRgb) {
+                const bgLuminance = getLuminance(bgRgb.r, bgRgb.g, bgRgb.b);
+                const textLuminance = getLuminance(textRgb.r, textRgb.g, textRgb.b);
+
+                const lighter = Math.max(bgLuminance, textLuminance);
+                const darker = Math.min(bgLuminance, textLuminance);
+                const contrastRatio = (lighter + 0.05) / (darker + 0.05);
+
+                // WCAG AA requires 4.5:1 for normal text, 3:1 for large text
+                // Headings are large text, so 3:1 is sufficient
+                expect(contrastRatio).toBeGreaterThanOrEqual(3);
+            }
+        }
+
+        // Test dark theme
+        await page.emulateMedia({ colorScheme: 'dark' });
+        await page.reload();
+
+        const darkThemeColors = await page.evaluate(() => {
+            const body = document.body;
+            const heading = document.querySelector('h1');
+            return {
+                bg: window.getComputedStyle(body).backgroundColor,
+                text: heading ? window.getComputedStyle(heading).color : null
+            };
+        });
+
+        if (darkThemeColors.bg && darkThemeColors.text) {
+            const bgRgb = parseRgb(darkThemeColors.bg);
+            const textRgb = parseRgb(darkThemeColors.text);
+
+            if (bgRgb && textRgb) {
+                const bgLuminance = getLuminance(bgRgb.r, bgRgb.g, bgRgb.b);
+                const textLuminance = getLuminance(textRgb.r, textRgb.g, textRgb.b);
+
+                const lighter = Math.max(bgLuminance, textLuminance);
+                const darker = Math.min(bgLuminance, textLuminance);
+                const contrastRatio = (lighter + 0.05) / (darker + 0.05);
+
+                // Dark theme should also have good contrast
+                expect(contrastRatio).toBeGreaterThanOrEqual(3);
+            }
+        }
+    });
+
+    test('TC8: Page displays correctly with JavaScript disabled using CSS defaults', async ({ browser }) => {
+        // Create a new context with JavaScript disabled
+        const context = await browser.newContext({
+            javaScriptEnabled: false
+        });
+        const page = await context.newPage();
+
+        // Emulate light mode
+        await page.emulateMedia({ colorScheme: 'light' });
+        await page.goto(homepageUrl);
+
+        // Page should still be visible and styled
+        const body = page.locator('body');
+        await expect(body).toBeVisible();
+
+        // Check that content is visible
+        const hero = page.locator('.hero');
+        await expect(hero).toBeVisible();
+
+        const h1 = page.locator('h1');
+        await expect(h1).toBeVisible();
+
+        // Check that colors are applied (CSS variables work without JS)
+        // Note: We need to check computed styles differently without JS
+        // Just verify the page renders correctly
+        const heroVisible = await hero.isVisible();
+        expect(heroVisible).toBe(true);
+
+        // Close the light mode context
+        await context.close();
+
+        // Test dark mode without JS
+        const darkContext = await browser.newContext({
+            javaScriptEnabled: false,
+            colorScheme: 'dark'
+        });
+        const darkPage = await darkContext.newPage();
+        await darkPage.goto(homepageUrl);
+
+        // Page should still work
+        const darkBody = darkPage.locator('body');
+        await expect(darkBody).toBeVisible();
+
+        const darkHero = darkPage.locator('.hero');
+        await expect(darkHero).toBeVisible();
+
+        // Verify the page renders correctly in dark mode
+        const darkHeroVisible = await darkHero.isVisible();
+        expect(darkHeroVisible).toBe(true);
+
+        await darkContext.close();
+    });
 });

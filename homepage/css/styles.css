@@ -24,15 +24,29 @@
    1. CSS Variables / Theme (Scenario 8)
    ======================================== */
 :root {
-    /* Colors */
+    /* Light theme colors (default) */
     --color-primary: #2563eb;
     --color-primary-dark: #1d4ed8;
     --color-secondary: #64748b;
-    --color-background: #ffffff;
+    --color-bg: #ffffff;
     --color-surface: #f8fafc;
     --color-text: #1e293b;
     --color-text-muted: #64748b;
     --color-border: #e2e8f0;
+
+    /* Legacy alias for backward compatibility */
+    --color-background: var(--color-bg);
+
+    /* Status colors - light theme */
+    --color-status-completed-bg: #dcfce7;
+    --color-status-completed-text: #166534;
+    --color-status-completed-icon: #16a34a;
+    --color-status-pending-bg: #fef3c7;
+    --color-status-pending-text: #92400e;
+
+    /* Code block colors - light theme */
+    --color-code-bg: #1e1e1e;
+    --color-code-text: #d4d4d4;
 
     /* Typography */
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -60,6 +74,165 @@
     /* Transitions */
     --transition-fast: 150ms ease;
     --transition-normal: 250ms ease;
+    --transition-theme: 300ms ease;
+
+    /* Color scheme indicator */
+    color-scheme: light dark;
+}
+
+/* Dark theme - applied via data-theme attribute or system preference */
+[data-theme="dark"],
+html:not([data-theme="light"]):has(body) @media (prefers-color-scheme: dark) {
+    --color-primary: #60a5fa;
+    --color-primary-dark: #3b82f6;
+    --color-secondary: #94a3b8;
+    --color-bg: #0f172a;
+    --color-surface: #1e293b;
+    --color-text: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-border: #334155;
+
+    /* Status colors - dark theme */
+    --color-status-completed-bg: #166534;
+    --color-status-completed-text: #bbf7d0;
+    --color-status-completed-icon: #4ade80;
+    --color-status-pending-bg: #92400e;
+    --color-status-pending-text: #fef3c7;
+
+    /* Code block colors - dark theme */
+    --color-code-bg: #0d1117;
+    --color-code-text: #e6edf3;
+}
+
+/* System preference detection (CSS-only fallback when JS is disabled) */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --color-primary: #60a5fa;
+        --color-primary-dark: #3b82f6;
+        --color-secondary: #94a3b8;
+        --color-bg: #0f172a;
+        --color-surface: #1e293b;
+        --color-text: #f1f5f9;
+        --color-text-muted: #94a3b8;
+        --color-border: #334155;
+
+        /* Status colors - dark theme */
+        --color-status-completed-bg: #166534;
+        --color-status-completed-text: #bbf7d0;
+        --color-status-completed-icon: #4ade80;
+        --color-status-pending-bg: #92400e;
+        --color-status-pending-text: #fef3c7;
+
+        /* Code block colors - dark theme */
+        --color-code-bg: #0d1117;
+        --color-code-text: #e6edf3;
+    }
+}
+
+/* Explicit dark theme when data-theme="dark" is set */
+[data-theme="dark"] {
+    --color-primary: #60a5fa;
+    --color-primary-dark: #3b82f6;
+    --color-secondary: #94a3b8;
+    --color-bg: #0f172a;
+    --color-surface: #1e293b;
+    --color-text: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-border: #334155;
+
+    /* Status colors - dark theme */
+    --color-status-completed-bg: #166534;
+    --color-status-completed-text: #bbf7d0;
+    --color-status-completed-icon: #4ade80;
+    --color-status-pending-bg: #92400e;
+    --color-status-pending-text: #fef3c7;
+
+    /* Code block colors - dark theme */
+    --color-code-bg: #0d1117;
+    --color-code-text: #e6edf3;
+}
+
+/* Theme toggle button styles */
+.theme-toggle {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    min-height: 44px;
+    min-width: 44px;
+    color: var(--color-text);
+    transition: background-color var(--transition-fast),
+                border-color var(--transition-fast),
+                color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    background-color: var(--color-surface);
+    border-color: var(--color-primary);
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.theme-toggle-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* Sun icon (shown in dark mode) */
+.icon-sun {
+    display: none;
+}
+
+/* Moon icon (shown in light mode) */
+.icon-moon {
+    display: block;
+}
+
+[data-theme="dark"] .icon-sun {
+    display: block;
+}
+
+[data-theme="dark"] .icon-moon {
+    display: none;
+}
+
+/* System preference when no explicit theme */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .icon-sun,
+    :root:not([data-theme="light"]) .icon-sun {
+        display: block;
+    }
+
+    :root:not([data-theme]) .icon-moon,
+    :root:not([data-theme="light"]) .icon-moon {
+        display: none;
+    }
+}
+
+/* Smooth theme transitions for all elements */
+body,
+.nav,
+.hero,
+.features,
+.status,
+.quickstart,
+.footer,
+.status-item,
+.btn,
+.code-example pre {
+    transition: background-color var(--transition-theme),
+                color var(--transition-theme),
+                border-color var(--transition-theme);
 }
 
 /* ========================================
@@ -82,7 +255,7 @@ body {
     font-size: var(--font-size-base);
     line-height: 1.6;
     color: var(--color-text);
-    background-color: var(--color-background);
+    background-color: var(--color-bg);
 }
 
 a {
@@ -136,7 +309,7 @@ h3 {
    4. Navigation (Scenario 5)
    ======================================== */
 .nav {
-    background-color: var(--color-background);
+    background-color: var(--color-bg);
     border-bottom: 1px solid var(--color-border);
     padding: var(--spacing-md) 0;
     position: sticky;
@@ -307,7 +480,7 @@ h3 {
     align-items: center;
     padding: var(--spacing-md);
     margin-bottom: var(--spacing-sm);
-    background-color: var(--color-background);
+    background-color: var(--color-bg);
     border-radius: var(--border-radius);
     border: 1px solid var(--color-border);
     transition: all var(--transition-fast);
@@ -325,7 +498,7 @@ h3 {
 }
 
 .status-completed .status-icon {
-    color: #16a34a;
+    color: var(--color-status-completed-icon);
 }
 
 .status-pending .status-icon {
@@ -357,13 +530,13 @@ h3 {
 }
 
 .status-badge.completed {
-    background-color: #dcfce7;
-    color: #166534;
+    background-color: var(--color-status-completed-bg);
+    color: var(--color-status-completed-text);
 }
 
 .status-badge.pending {
-    background-color: #fef3c7;
-    color: #92400e;
+    background-color: var(--color-status-pending-bg);
+    color: var(--color-status-pending-text);
 }
 
 /* ========================================
@@ -393,7 +566,7 @@ h3 {
 }
 
 .code-example pre {
-    background: #1e1e1e;
+    background: var(--color-code-bg);
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
     overflow-x: auto;
@@ -403,7 +576,7 @@ h3 {
 .code-example code {
     font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
     font-size: 0.875rem;
-    color: #d4d4d4;
+    color: var(--color-code-text);
     line-height: 1.5;
     display: block;
     white-space: pre;
