@@ -1,0 +1,20 @@
+{
+  "name": "mirdb-homepage-tests",
+  "description": "Test suite for MirDB Homepage",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "jest",
+    "test:e2e": "playwright test",
+    "test:unit": "jest --testPathPattern=unit",
+    "test:integration": "jest --testPathPattern=integration"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "jsdom": "^22.0.0",
+    "lighthouse": "^13.0.3",
+    "playwright-lighthouse": "^4.0.0",
+    "serve": "^14.2.5"
+  }
+}
