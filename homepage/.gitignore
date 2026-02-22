@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.svelte-kit/
+build/
+dist/
+.output
+.vercel
+.netlify
+.wrangler
+
+# Environment
+.env
+.env.*
+!.env.example
+!.env.test
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Test coverage and results
+coverage/
+/playwright-report
+/test-results

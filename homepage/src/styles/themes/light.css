@@ -1,0 +1,26 @@
+/**
+ * Light Theme
+ * Owner: Scenario 5 - Theme Toggle
+ *
+ * WCAG 2.1 AA Accessibility compliant color choices.
+ * All text colors meet minimum 4.5:1 contrast ratio.
+ */
+
+[data-theme='light'] {
+	/* Background colors */
+	--color-background: #ffffff;
+	--color-surface: #f8f9fa;
+	--color-bg-tertiary: #e9ecef;
+
+	/* Text colors (WCAG AA compliant - 4.5:1+ contrast) */
+	--color-text: #212529;
+	--color-text-secondary: #4a5568;
+	--color-text-muted: #4a5568;
+
+	/* Border colors */
+	--color-border: #dee2e6;
+
+	/* Code colors */
+	--color-code-bg: #f1f3f5;
+	--color-code-text: #212529;
+}

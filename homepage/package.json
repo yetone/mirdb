@@ -1,0 +1,39 @@
+{
+	"name": "mirdb-homepage",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"test": "vitest run",
+		"test:unit": "vitest run --reporter=verbose",
+		"test:integration": "vitest run tests/integration",
+		"test:watch": "vitest",
+		"test:e2e": "playwright test",
+		"test:all": "npm run test && npm run test:e2e"
+	},
+	"devDependencies": {
+		"@axe-core/playwright": "^4.11.1",
+		"@playwright/test": "^1.58.2",
+		"@sveltejs/adapter-auto": "^7.0.0",
+		"@sveltejs/adapter-static": "^3.0.10",
+		"@sveltejs/kit": "^2.50.2",
+		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"@testing-library/dom": "^10.4.1",
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/svelte": "^5.3.1",
+		"axe-playwright": "^2.2.2",
+		"jsdom": "^28.1.0",
+		"playwright": "^1.58.2",
+		"svelte": "^5.51.0",
+		"svelte-check": "^4.3.6",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.1",
+		"vitest": "^4.0.18"
+	}
+}
