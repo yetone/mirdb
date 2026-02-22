@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ASCII_LOGO, FEATURES, GITHUB_URL } from '$lib/utils/constants';
+	import QuickStart from '$lib/components/sections/QuickStart.svelte';
 </script>
 
 <!-- Hero Section -->
@@ -9,7 +10,7 @@
 		<h1>MirDB</h1>
 		<p class="tagline">A Persistent Key-Value Store with Memcached protocol</p>
 		<div class="cta-buttons">
-			<a href="#quick-start" class="btn btn-primary">Get Started</a>
+			<a href="#quickstart" class="btn btn-primary">Get Started</a>
 			<a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
 				View on GitHub
 			</a>
@@ -34,16 +35,7 @@
 </section>
 
 <!-- Quick Start Section -->
-<section id="quick-start" class="section quick-start">
-	<div class="container">
-		<h2>Quick Start</h2>
-		<p>Get MirDB up and running in seconds:</p>
-		<div class="code-block">
-			<pre><code>cargo install mirdb
-mirdb-server</code></pre>
-		</div>
-	</div>
-</section>
+<QuickStart />
 
 <!-- Docs Section -->
 <section id="docs" class="section docs">
@@ -148,26 +140,9 @@ mirdb-server</code></pre>
 		margin: 0;
 	}
 
-	.quick-start h2,
 	.docs h2 {
 		text-align: center;
 		margin-bottom: var(--spacing-xl);
-	}
-
-	.code-block {
-		background-color: var(--color-code-bg);
-		color: var(--color-code-text);
-		padding: var(--spacing-lg);
-		border-radius: var(--border-radius-md);
-		overflow-x: auto;
-	}
-
-	.code-block pre {
-		margin: 0;
-	}
-
-	.code-block code {
-		font-family: var(--font-family-mono);
 	}
 
 	.docs {

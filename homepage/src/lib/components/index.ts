@@ -9,6 +9,9 @@ export { default as Navigation } from './layout/Navigation.svelte';
 
 // Section components
 export { default as Features } from './sections/Features.svelte';
+export { default as QuickStart } from './sections/QuickStart.svelte';
 
 // UI components
 export { default as FeatureCard } from './ui/FeatureCard.svelte';
+export { default as CodeBlock } from './ui/CodeBlock.svelte';
+export { default as CopyButton } from './ui/CopyButton.svelte';
