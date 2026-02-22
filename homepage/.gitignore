@@ -5,11 +5,16 @@ node_modules/
 .svelte-kit/
 build/
 dist/
+.output
+.vercel
+.netlify
+.wrangler
 
 # Environment
 .env
 .env.*
 !.env.example
+!.env.test
 
 # IDE
 .vscode/
@@ -23,5 +28,11 @@ Thumbs.db
 *.log
 npm-debug.log*
 
-# Test coverage
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Test coverage and results
 coverage/
+/playwright-report
+/test-results

@@ -1,10 +1,7 @@
 /**
- * Global Styles
+ * Global styles for MirDB Homepage.
  */
-
 @import './variables.css';
-@import './themes/light.css';
-@import './themes/dark.css';
 
 *,
 *::before,
@@ -16,17 +13,41 @@
 
 html {
 	scroll-behavior: smooth;
+	scroll-padding-top: var(--header-height);
 }
 
 body {
-	font-family: var(--font-family-base);
+	margin: 0;
+	padding: 0;
+	font-family: var(--font-family);
 	font-size: var(--font-size-base);
 	line-height: 1.6;
-	background-color: var(--color-bg);
 	color: var(--color-text);
-	transition:
-		background-color var(--transition-base),
-		color var(--transition-base);
+	background-color: var(--color-background);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0 0 var(--spacing-md);
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+h1 {
+	font-size: var(--font-size-4xl);
+}
+
+h2 {
+	font-size: var(--font-size-3xl);
+}
+
+h3 {
+	font-size: var(--font-size-2xl);
+}
+
+p {
+	margin: 0 0 var(--spacing-md);
 }
 
 a {
@@ -36,7 +57,17 @@ a {
 }
 
 a:hover {
-	color: var(--color-primary-dark);
+	color: var(--color-primary-hover);
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+code {
+	font-family: var(--font-family-mono);
+	font-size: var(--font-size-sm);
 }
 
 button {
@@ -44,32 +75,65 @@ button {
 	cursor: pointer;
 }
 
-pre,
-code {
-	font-family: var(--font-family-mono);
-}
-
-/* Utility classes */
 .container {
-	max-width: 1200px;
+	max-width: var(--max-content-width);
 	margin: 0 auto;
 	padding: 0 var(--spacing-lg);
 }
 
-.sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border: 0;
+.section {
+	padding: var(--spacing-3xl) 0;
+}
+
+.section-title {
+	font-size: var(--font-size-3xl);
+	font-weight: 700;
+	text-align: center;
+	margin-bottom: var(--spacing-xl);
 }
 
 /* Focus styles for accessibility */
 :focus-visible {
 	outline: 2px solid var(--color-primary);
 	outline-offset: 2px;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+	position: absolute;
+	left: -9999px;
+	z-index: 999;
+	padding: var(--spacing-sm) var(--spacing-md);
+	background: var(--color-primary);
+	color: white;
+	text-decoration: none;
+}
+
+.skip-link:focus {
+	left: var(--spacing-md);
+	top: var(--spacing-md);
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+	h1 {
+		font-size: var(--font-size-3xl);
+	}
+
+	h2 {
+		font-size: var(--font-size-2xl);
+	}
+
+	h3 {
+		font-size: var(--font-size-xl);
+	}
+
+	.section {
+		padding: var(--spacing-2xl) 0;
+	}
+
+	.section-title {
+		font-size: var(--font-size-2xl);
+		margin-bottom: var(--spacing-lg);
+	}
 }

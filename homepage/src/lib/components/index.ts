@@ -2,10 +2,13 @@
  * Component exports for MirDB Homepage.
  */
 
-// Sections
-export { default as Hero } from './sections/Hero.svelte';
-export { default as About } from './sections/About.svelte';
+// Layout components
+export { default as Header } from './layout/Header.svelte';
+export { default as Footer } from './layout/Footer.svelte';
+export { default as Navigation } from './layout/Navigation.svelte';
+
+// Section components
 export { default as Features } from './sections/Features.svelte';
 
-// UI Components
+// UI components
 export { default as FeatureCard } from './ui/FeatureCard.svelte';
