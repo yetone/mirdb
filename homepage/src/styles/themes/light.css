@@ -1,0 +1,10 @@
+/**
+ * Light theme styles.
+ */
+:root[data-theme='light'] {
+	--color-background: #ffffff;
+	--color-surface: #f8f9fa;
+	--color-border: #e1e4e8;
+	--color-text: #24292e;
+	--color-text-muted: #586069;
+}

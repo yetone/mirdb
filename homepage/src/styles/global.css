@@ -1,0 +1,80 @@
+/**
+ * Global styles for MirDB Homepage.
+ */
+@import './variables.css';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: var(--font-family);
+	font-size: var(--font-size-base);
+	line-height: 1.6;
+	color: var(--color-text);
+	background-color: var(--color-background);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+a {
+	color: var(--color-primary);
+	text-decoration: none;
+	transition: color var(--transition-fast);
+}
+
+a:hover {
+	color: var(--color-primary-dark);
+}
+
+code {
+	font-family: var(--font-family-mono);
+	font-size: var(--font-size-sm);
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+button {
+	cursor: pointer;
+	font-family: inherit;
+}
+
+.container {
+	max-width: var(--container-max-width);
+	margin: 0 auto;
+	padding: 0 var(--spacing-4);
+}
+
+.section {
+	padding: var(--spacing-16) 0;
+}
+
+.section-title {
+	font-size: var(--font-size-3xl);
+	font-weight: 700;
+	text-align: center;
+	margin-bottom: var(--spacing-12);
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+	.section {
+		padding: var(--spacing-10) 0;
+	}
+
+	.section-title {
+		font-size: var(--font-size-2xl);
+		margin-bottom: var(--spacing-8);
+	}
+}

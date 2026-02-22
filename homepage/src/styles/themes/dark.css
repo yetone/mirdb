@@ -1,0 +1,10 @@
+/**
+ * Dark theme styles.
+ */
+:root[data-theme='dark'] {
+	--color-background: #0d1117;
+	--color-surface: #161b22;
+	--color-border: #30363d;
+	--color-text: #c9d1d9;
+	--color-text-muted: #8b949e;
+}
