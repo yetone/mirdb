@@ -1,6 +1,9 @@
 /**
  * Dark Theme
  * Owner: Scenario 5 - Theme Toggle
+ *
+ * WCAG 2.1 AA Accessibility compliant color choices.
+ * All text colors meet minimum 4.5:1 contrast ratio on dark backgrounds.
  */
 
 [data-theme='dark'] {
@@ -9,10 +12,10 @@
 	--color-surface: #16213e;
 	--color-bg-tertiary: #0f3460;
 
-	/* Text colors */
+	/* Text colors (WCAG AA compliant - 4.5:1+ contrast) */
 	--color-text: #eaeaea;
 	--color-text-secondary: #b8b8b8;
-	--color-text-muted: #6c757d;
+	--color-text-muted: #9ca3af;
 
 	/* Border colors */
 	--color-border: #343a40;
