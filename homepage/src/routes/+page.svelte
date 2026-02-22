@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ASCII_LOGO, FEATURES, GITHUB_URL } from '$lib/utils/constants';
 	import QuickStart from '$lib/components/sections/QuickStart.svelte';
+	import Roadmap from '$lib/components/sections/Roadmap.svelte';
 </script>
 
 <!-- Hero Section -->
@@ -36,6 +37,9 @@
 
 <!-- Quick Start Section -->
 <QuickStart />
+
+<!-- Roadmap Section -->
+<Roadmap />
 
 <!-- Docs Section -->
 <section id="docs" class="section docs">
