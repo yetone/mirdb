@@ -4,9 +4,10 @@
 	interface Props {
 		items: NavItem[];
 		mobile?: boolean;
+		onnavigate?: () => void;
 	}
 
-	let { items, mobile = false }: Props = $props();
+	let { items, mobile = false, onnavigate }: Props = $props();
 
 	function handleNavClick(event: MouseEvent, href: string) {
 		if (href.startsWith('#')) {
@@ -16,6 +17,17 @@
 				target.scrollIntoView({ behavior: 'smooth' });
 				window.history.pushState(null, '', href);
 			}
+		}
+		// Notify parent that navigation occurred (for closing mobile menu)
+		if (mobile && onnavigate) {
+			onnavigate();
+		}
+	}
+
+	function handleExternalClick() {
+		// Also close mobile menu when clicking external links
+		if (mobile && onnavigate) {
+			onnavigate();
 		}
 	}
 </script>
@@ -31,6 +43,7 @@
 						rel="noopener noreferrer"
 						class="nav-link"
 						aria-label="{item.label} (opens in new tab)"
+						onclick={handleExternalClick}
 					>
 						{item.label}
 					</a>
@@ -38,7 +51,7 @@
 					<a
 						href={item.href}
 						class="nav-link"
-						onclick={(e) => handleNavClick(e, item.href)}
+						onclick={(e: MouseEvent) => handleNavClick(e, item.href)}
 					>
 						{item.label}
 					</a>
@@ -103,6 +116,10 @@
 		width: 100%;
 		padding: var(--spacing-md);
 		text-align: center;
+		min-height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	@media (max-width: 768px) {

@@ -28,6 +28,7 @@ body {
 	background-color: var(--color-background);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -116,8 +117,12 @@ button {
 	top: var(--spacing-md);
 }
 
-/* Responsive utilities */
+/* Responsive utilities and touch target sizes for mobile */
 @media (max-width: 768px) {
+	html {
+		overflow-x: hidden;
+	}
+
 	h1 {
 		font-size: var(--font-size-3xl);
 	}
@@ -137,5 +142,42 @@ button {
 	.section-title {
 		font-size: var(--font-size-2xl);
 		margin-bottom: var(--spacing-lg);
+	}
+
+	.container {
+		padding: 0 var(--spacing-md);
+		max-width: 100%;
+	}
+
+	/* Touch target minimum size for accessibility (WCAG 2.1 Level AAA) */
+	a,
+	button,
+	[role="button"],
+	input,
+	select,
+	textarea {
+		min-height: 44px;
+	}
+
+	/* Ensure buttons have adequate touch targets on mobile */
+	.btn {
+		min-height: 44px;
+		min-width: 44px;
+		padding: var(--spacing-sm) var(--spacing-md);
+	}
+
+	/* Ensure inline links also meet touch target requirements */
+	p a,
+	.docs a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		padding: 0.25rem 0;
+	}
+
+	/* Prevent horizontal overflow */
+	pre,
+	code {
+		max-width: 100%;
 	}
 }

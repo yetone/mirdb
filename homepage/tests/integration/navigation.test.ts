@@ -15,8 +15,8 @@ describe('Navigation Integration Tests', () => {
 		originalPushState = window.history.pushState;
 		window.history.pushState = mockPushState;
 
-		// Create mock sections
-		['features', 'quick-start', 'docs'].forEach((id) => {
+		// Create mock sections (quickstart without hyphen to match actual section id)
+		['features', 'quickstart', 'docs'].forEach((id) => {
 			const section = document.createElement('section');
 			section.id = id;
 			section.scrollIntoView = mockScrollIntoView;
@@ -46,7 +46,7 @@ describe('Navigation Integration Tests', () => {
 		await fireEvent.click(quickStartLink);
 
 		expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
-		expect(mockPushState).toHaveBeenCalledWith(null, '', '#quick-start');
+		expect(mockPushState).toHaveBeenCalledWith(null, '', '#quickstart');
 	});
 
 	it('clicking Docs nav link scrolls to Docs section', async () => {

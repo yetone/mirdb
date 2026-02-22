@@ -44,7 +44,7 @@
 			aria-modal="true"
 			aria-label="Mobile navigation"
 		>
-			<Navigation items={NAV_ITEMS} mobile={true} />
+			<Navigation items={NAV_ITEMS} mobile={true} onnavigate={closeMobileMenu} />
 		</div>
 		<button
 			class="mobile-menu-overlay"
@@ -79,6 +79,8 @@
 		align-items: center;
 		text-decoration: none;
 		color: var(--color-text);
+		min-height: 44px;
+		min-width: 44px;
 	}
 
 	.logo-text {
@@ -93,6 +95,10 @@
 		background: none;
 		border: none;
 		cursor: pointer;
+		min-width: 44px;
+		min-height: 44px;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.hamburger-icon {
@@ -149,7 +155,7 @@
 
 	@media (max-width: 768px) {
 		.mobile-menu-toggle {
-			display: block;
+			display: flex;
 		}
 	}
 </style>

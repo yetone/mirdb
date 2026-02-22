@@ -8,7 +8,7 @@ export const GITHUB_URL = 'https://github.com/yetone/mirdb';
 
 export const NAV_ITEMS: NavItem[] = [
 	{ label: 'Features', href: '#features' },
-	{ label: 'Quick Start', href: '#quick-start' },
+	{ label: 'Quick Start', href: '#quickstart' },
 	{ label: 'Docs', href: '#docs' },
 	{ label: 'GitHub', href: GITHUB_URL, external: true }
 ];

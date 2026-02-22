@@ -80,11 +80,14 @@
 	.btn {
 		display: inline-flex;
 		align-items: center;
+		justify-content: center;
 		padding: var(--spacing-sm) var(--spacing-lg);
 		border-radius: var(--border-radius-md);
 		font-weight: 600;
 		text-decoration: none;
 		transition: all var(--transition-fast);
+		min-height: 44px;
+		min-width: 44px;
 	}
 
 	.btn-primary {
@@ -156,6 +159,25 @@
 	@media (max-width: 768px) {
 		.ascii-logo {
 			font-size: 0.6rem;
+			overflow-x: auto;
+		}
+
+		.tagline {
+			font-size: var(--font-size-lg);
+		}
+
+		.feature-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.cta-buttons {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.btn {
+			width: 100%;
+			max-width: 300px;
 		}
 	}
 </style>
