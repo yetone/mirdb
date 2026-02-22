@@ -1,7 +1,11 @@
 <script lang="ts">
 	import '../styles/global.css';
-	import '../styles/themes/light.css';
-	import '../styles/themes/dark.css';
+
+	let { children } = $props();
 </script>
 
-<slot />
+<svelte:head>
+	<title>MirDB - Persistent Key-Value Store</title>
+</svelte:head>
+
+{@render children()}

@@ -1,10 +1,18 @@
 /**
- * Light theme styles.
+ * Light Theme
  */
-:root[data-theme='light'] {
-	--color-background: #ffffff;
-	--color-surface: #f8f9fa;
-	--color-border: #e1e4e8;
-	--color-text: #24292e;
-	--color-text-muted: #586069;
+
+[data-theme='light'] {
+	--color-bg: #ffffff;
+	--color-bg-secondary: #f8f9fa;
+	--color-bg-tertiary: #e9ecef;
+
+	--color-text: #212529;
+	--color-text-secondary: #6c757d;
+	--color-text-muted: #adb5bd;
+
+	--color-border: #dee2e6;
+
+	--color-code-bg: #f1f3f5;
+	--color-code-text: #212529;
 }

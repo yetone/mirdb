@@ -1,7 +1,10 @@
 /**
- * Global styles for MirDB Homepage.
+ * Global Styles
  */
+
 @import './variables.css';
+@import './themes/light.css';
+@import './themes/dark.css';
 
 *,
 *::before,
@@ -16,13 +19,14 @@ html {
 }
 
 body {
-	font-family: var(--font-family);
+	font-family: var(--font-family-base);
 	font-size: var(--font-size-base);
 	line-height: 1.6;
+	background-color: var(--color-bg);
 	color: var(--color-text);
-	background-color: var(--color-background);
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	transition:
+		background-color var(--transition-base),
+		color var(--transition-base);
 }
 
 a {
@@ -35,46 +39,37 @@ a:hover {
 	color: var(--color-primary-dark);
 }
 
+button {
+	font-family: inherit;
+	cursor: pointer;
+}
+
+pre,
 code {
 	font-family: var(--font-family-mono);
-	font-size: var(--font-size-sm);
 }
 
-img {
-	max-width: 100%;
-	height: auto;
-}
-
-button {
-	cursor: pointer;
-	font-family: inherit;
-}
-
+/* Utility classes */
 .container {
-	max-width: var(--container-max-width);
+	max-width: 1200px;
 	margin: 0 auto;
-	padding: 0 var(--spacing-4);
+	padding: 0 var(--spacing-lg);
 }
 
-.section {
-	padding: var(--spacing-16) 0;
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
 }
 
-.section-title {
-	font-size: var(--font-size-3xl);
-	font-weight: 700;
-	text-align: center;
-	margin-bottom: var(--spacing-12);
-}
-
-/* Responsive breakpoints */
-@media (max-width: 768px) {
-	.section {
-		padding: var(--spacing-10) 0;
-	}
-
-	.section-title {
-		font-size: var(--font-size-2xl);
-		margin-bottom: var(--spacing-8);
-	}
+/* Focus styles for accessibility */
+:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
 }

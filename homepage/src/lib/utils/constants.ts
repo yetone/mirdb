@@ -1,9 +1,21 @@
 /**
  * Application constants.
  */
-import type { Feature, RoadmapItem, CodeExample } from '$lib/types';
+
+import type { Feature, RoadmapItem, CodeExample } from '$lib/types/index.js';
 
 export const GITHUB_URL = 'https://github.com/yetone/mirdb';
+
+export const ASCII_LOGO = `
+███╗   ███╗██╗██████╗ ██████╗ ██████╗
+████╗ ████║██║██╔══██╗██╔══██╗██╔══██╗
+██╔████╔██║██║██████╔╝██║  ██║██████╔╝
+██║╚██╔╝██║██║██╔══██╗██║  ██║██╔══██╗
+██║ ╚═╝ ██║██║██║  ██║██████╔╝██████╔╝
+╚═╝     ╚═╝╚═╝╚═╝  ╚═╝╚═════╝ ╚═════╝
+`.trim();
+
+export const TAGLINE = 'A Persistent Key-Value Store with Memcached protocol';
 
 export const FEATURES: Feature[] = [
 	{
@@ -17,7 +29,7 @@ export const FEATURES: Feature[] = [
 		description: 'Unlike memcached, MirDB persists data to disk using SSTables. Your data survives restarts and crashes.'
 	},
 	{
-		icon: '🌳',
+		icon: '🌲',
 		title: 'LSM-Tree Architecture',
 		description: 'Built on a Log-Structured Merge-tree for optimal write performance with efficient reads through leveled compaction.'
 	},
@@ -32,7 +44,7 @@ export const FEATURES: Feature[] = [
 		description: 'WAL ensures durability by writing operations to disk before acknowledging. Recover cleanly from any failure.'
 	},
 	{
-		icon: '🔄',
+		icon: '🗜️',
 		title: 'Compaction Support',
 		description: 'Both minor and major compaction strategies keep storage efficient and read performance optimal over time.'
 	}
@@ -49,25 +61,17 @@ export const ROADMAP_ITEMS: RoadmapItem[] = [
 export const INSTALLATION_CODE: CodeExample[] = [
 	{
 		language: 'bash',
-		code: 'cargo install mirdb',
-		description: 'Install MirDB'
+		code: 'git clone https://github.com/yetone/mirdb.git\ncd mirdb\ncargo build --release',
+		description: 'Clone and build MirDB'
 	},
 	{
 		language: 'bash',
-		code: 'mirdb-server',
-		description: 'Start the server'
+		code: './target/release/mirdb',
+		description: 'Run MirDB server'
 	},
 	{
 		language: 'bash',
-		code: `echo "set mykey 0 0 5\\r\\nvalue\\r\\n" | nc localhost 12333`,
-		description: 'Set a value'
+		code: 'telnet localhost 12333\nset foo 0 0 3\nbar\nget foo',
+		description: 'Connect and test'
 	}
 ];
-
-export const ASCII_LOGO = `
- __  __ _      ____  ____
-|  \\/  (_)_ __|  _ \\| __ )
-| |\\/| | | '__| | | |  _ \\
-| |  | | | |  | |_| | |_) |
-|_|  |_|_|_|  |____/|____/
-`;
