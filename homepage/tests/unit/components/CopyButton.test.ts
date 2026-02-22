@@ -65,18 +65,18 @@ describe('CopyButton', () => {
 		});
 	});
 
-	it('dispatches copied event on successful copy', async () => {
+	it('triggers copy on successful click and shows success indicator', async () => {
 		vi.mocked(copyToClipboard).mockResolvedValue(true);
 
-		const mockHandler = vi.fn();
-		const { component } = render(CopyButton, { props: { text: 'test code' } });
-		component.$on('copied', mockHandler);
+		render(CopyButton, { props: { text: 'test code' } });
 
 		const button = screen.getByTestId('copy-button');
 		await fireEvent.click(button);
 
+		// Verify the copy was successful by checking the UI state change
 		await waitFor(() => {
-			expect(mockHandler).toHaveBeenCalled();
+			expect(button).toHaveClass('copied');
+			expect(button).toHaveAttribute('aria-label', 'Copied!');
 		});
 	});
 
