@@ -1,18 +1,23 @@
 /**
  * Dark Theme
+ * Owner: Scenario 5 - Theme Toggle
  */
 
 [data-theme='dark'] {
-	--color-bg: #1a1a2e;
-	--color-bg-secondary: #16213e;
+	/* Background colors */
+	--color-background: #1a1a2e;
+	--color-surface: #16213e;
 	--color-bg-tertiary: #0f3460;
 
+	/* Text colors */
 	--color-text: #eaeaea;
 	--color-text-secondary: #b8b8b8;
 	--color-text-muted: #6c757d;
 
+	/* Border colors */
 	--color-border: #343a40;
 
+	/* Code colors */
 	--color-code-bg: #0d1117;
 	--color-code-text: #c9d1d9;
 }

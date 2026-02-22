@@ -2,6 +2,8 @@
  * Global styles for MirDB Homepage.
  */
 @import './variables.css';
+@import './themes/light.css';
+@import './themes/dark.css';
 
 *,
 *::before,

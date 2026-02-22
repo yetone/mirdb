@@ -1,18 +1,23 @@
 /**
  * Light Theme
+ * Owner: Scenario 5 - Theme Toggle
  */
 
 [data-theme='light'] {
-	--color-bg: #ffffff;
-	--color-bg-secondary: #f8f9fa;
+	/* Background colors */
+	--color-background: #ffffff;
+	--color-surface: #f8f9fa;
 	--color-bg-tertiary: #e9ecef;
 
+	/* Text colors */
 	--color-text: #212529;
 	--color-text-secondary: #6c757d;
 	--color-text-muted: #adb5bd;
 
+	/* Border colors */
 	--color-border: #dee2e6;
 
+	/* Code colors */
 	--color-code-bg: #f1f3f5;
 	--color-code-text: #212529;
 }
