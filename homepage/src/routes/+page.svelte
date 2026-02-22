@@ -12,7 +12,7 @@
 		<p class="tagline">A Persistent Key-Value Store with Memcached protocol</p>
 		<div class="cta-buttons">
 			<a href="#quickstart" class="btn btn-primary">Get Started</a>
-			<a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+			<a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary" aria-label="View MirDB on GitHub (opens in new tab)">
 				View on GitHub
 			</a>
 		</div>
@@ -45,7 +45,7 @@
 <section id="docs" class="section docs">
 	<div class="container">
 		<h2>Documentation</h2>
-		<p>Comprehensive documentation is available on our <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
+		<p>Comprehensive documentation is available on our <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository (opens in new tab)">GitHub repository</a>.</p>
 	</div>
 </section>
 

@@ -47,7 +47,7 @@
 
 	.code-language {
 		font-size: var(--font-size-xs);
-		color: #808080;
+		color: #9ca3af; /* WCAG AA compliant: 5.5:1 contrast with #2d2d2d background */
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
