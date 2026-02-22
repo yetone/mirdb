@@ -1,3 +1,7 @@
-# allow crawling everything by default
+# MirDB Homepage - robots.txt
+# Allow crawling everything by default
 User-agent: *
 Disallow:
+
+# Sitemap location
+Sitemap: https://mirdb.io/sitemap.xml
