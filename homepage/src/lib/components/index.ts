@@ -10,6 +10,7 @@ export { default as Navigation } from './layout/Navigation.svelte';
 // Section components
 export { default as Features } from './sections/Features.svelte';
 export { default as QuickStart } from './sections/QuickStart.svelte';
+export { default as UsageDemo } from './sections/UsageDemo.svelte';
 
 // UI components
 export { default as FeatureCard } from './ui/FeatureCard.svelte';

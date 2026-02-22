@@ -2,6 +2,7 @@
 	import { ASCII_LOGO, FEATURES, GITHUB_URL } from '$lib/utils/constants';
 	import QuickStart from '$lib/components/sections/QuickStart.svelte';
 	import Roadmap from '$lib/components/sections/Roadmap.svelte';
+	import UsageDemo from '$lib/components/sections/UsageDemo.svelte';
 </script>
 
 <!-- Hero Section -->
@@ -37,6 +38,9 @@
 
 <!-- Quick Start Section -->
 <QuickStart />
+
+<!-- Usage Demo Section -->
+<UsageDemo />
 
 <!-- Roadmap Section -->
 <Roadmap />
