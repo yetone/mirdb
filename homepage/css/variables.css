@@ -24,7 +24,7 @@
   --color-bg-tertiary: #f1f5f9;
   --color-text-primary: #0f172a;
   --color-text-secondary: #475569;
-  --color-text-muted: #64748b;
+  --color-text-muted: #5b6475;
   --color-border: #e2e8f0;
 
   /* Semantic Colors */
@@ -37,7 +37,7 @@
   --color-code-bg: #1e1e2e;
   --color-code-text: #cdd6f4;
   --color-code-border: #313244;
-  --color-code-comment: #6c7086;
+  --color-code-comment: #9399b2;
   --color-code-builtin: #cba6f7;
   --color-code-output: #a6e3a1;
   --color-code-btn-bg: rgba(49, 50, 68, 0.8);

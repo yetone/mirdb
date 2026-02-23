@@ -853,3 +853,122 @@ body {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
 }
+
+/* ====================
+   ACCESSIBILITY STYLES (Scenario 7)
+   ==================== */
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: #ffffff;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  box-shadow: var(--shadow-lg);
+  transition: top var(--transition-fast);
+}
+
+.skip-to-main:focus {
+  top: var(--spacing-4);
+  outline: 3px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+/* Main content focus styling when skip link is used */
+main:focus {
+  outline: none;
+}
+
+/* Global focus styles for all interactive elements */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Focus-visible for keyboard-only focus indicator */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Enhanced focus for hero CTA button */
+.hero__cta:focus,
+.hero__cta:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+  box-shadow: var(--shadow-lg), 0 0 0 6px var(--color-primary);
+}
+
+/* Enhanced focus for header navigation links */
+.header__nav-link:focus,
+.header__nav-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+/* Enhanced focus for copy buttons in code blocks */
+.quick-start__copy-btn:focus,
+.quick-start__copy-btn:focus-visible {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+/* Enhanced focus for resource links */
+.resources__link:focus,
+.resources__link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-color: var(--color-primary);
+}
+
+/* Enhanced focus for footer links */
+.footer__link:focus,
+.footer__link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Enhanced focus for badge links */
+.resources__badge:focus,
+.resources__badge:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Mobile menu toggle focus */
+.header__menu-toggle:focus,
+.header__menu-toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Ensure focus visible in dark mode */
+[data-theme="dark"] a:focus-visible,
+[data-theme="dark"] button:focus-visible {
+  outline-color: var(--color-primary-light);
+}
