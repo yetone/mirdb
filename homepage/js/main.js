@@ -10,16 +10,119 @@
  * - Copy to clipboard functionality (Scenario 4)
  */
 
-// Placeholder - to be implemented by Scenario 5 and 8
+// Main JavaScript Entry Point
 document.addEventListener('DOMContentLoaded', function() {
   // Theme initialization will be added by Scenario 8
-  // Navigation functionality will be added by Scenario 5
+
+  // ====================
+  // NAVIGATION (Scenario 5)
+  // ====================
+  initSmoothScroll();
+  initMobileMenu();
 
   // ====================
   // COPY TO CLIPBOARD (Scenario 4)
   // ====================
   initCopyButtons();
 });
+
+/**
+ * Initialize smooth scroll for navigation links
+ * Owner: Scenario 5 - Navigation and Resources
+ */
+function initSmoothScroll() {
+  // Get all navigation links that point to internal anchors
+  const navLinks = document.querySelectorAll('a[href^="#"]');
+
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+
+      // Skip if href is just "#" (go to top)
+      if (href === '#') {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+        return;
+      }
+
+      // Find the target element
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        e.preventDefault();
+
+        // Calculate offset for fixed header
+        const headerHeight = document.querySelector('.header').offsetHeight;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+
+        // Smooth scroll to target
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+
+        // Update URL hash without jumping
+        history.pushState(null, null, href);
+
+        // Close mobile menu if open
+        closeMobileMenu();
+      }
+    });
+  });
+}
+
+/**
+ * Initialize mobile menu toggle functionality
+ * Owner: Scenario 5 - Navigation and Resources
+ */
+function initMobileMenu() {
+  const menuToggle = document.querySelector('.header__menu-toggle');
+  const nav = document.querySelector('.header__nav');
+
+  if (!menuToggle || !nav) return;
+
+  menuToggle.addEventListener('click', function() {
+    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+    this.setAttribute('aria-expanded', !isExpanded);
+    nav.classList.toggle('header__nav--open');
+    document.body.classList.toggle('menu-open');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  // Close menu on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeMobileMenu();
+    }
+  });
+}
+
+/**
+ * Close the mobile menu
+ * Owner: Scenario 5 - Navigation and Resources
+ */
+function closeMobileMenu() {
+  const menuToggle = document.querySelector('.header__menu-toggle');
+  const nav = document.querySelector('.header__nav');
+
+  if (menuToggle) {
+    menuToggle.setAttribute('aria-expanded', 'false');
+  }
+  if (nav) {
+    nav.classList.remove('header__nav--open');
+  }
+  document.body.classList.remove('menu-open');
+}
 
 /**
  * Initialize copy to clipboard functionality for code blocks
