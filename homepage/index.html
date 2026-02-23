@@ -165,8 +165,70 @@
          ==================== -->
     <section id="tech-stack" class="tech-stack" aria-labelledby="tech-title">
       <div class="container">
-        <h2 id="tech-title" class="sr-only">Technology Stack</h2>
-        <!-- Tech stack content to be implemented by Scenario 3 -->
+        <h2 id="tech-title" class="tech-stack__title">Built With</h2>
+        <p class="tech-stack__subtitle">Powered by modern, battle-tested technologies</p>
+
+        <div class="tech-stack__grid">
+          <!-- Rust -->
+          <article class="tech-stack__item" aria-labelledby="tech-rust">
+            <div class="tech-stack__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="48" height="48">
+                <path fill="currentColor" d="M508.52 249.75a46.58 46.58 0 0 0-3.34-10.72l-12.25-4.38a194.59 194.59 0 0 0-6.22-15l6.97-11.25a46.28 46.28 0 0 0-2.22-11.06 46.6 46.6 0 0 0-5.31-9.88l-12.85 1.72a194.85 194.85 0 0 0-10.66-11.78l2.91-12.65a46.73 46.73 0 0 0-7.75-7.75l-12.65 2.91a194.85 194.85 0 0 0-11.78-10.66l1.72-12.85a46.28 46.28 0 0 0-20.94-7.53l-11.25 6.97a194.59 194.59 0 0 0-15-6.22l-4.38-12.25a46.28 46.28 0 0 0-10.72-3.34 46.73 46.73 0 0 0-11.28-.56l-7.44 10.63a196.57 196.57 0 0 0-16.16 0l-7.44-10.63a46.73 46.73 0 0 0-11.28.56 46.28 46.28 0 0 0-10.72 3.34l-4.38 12.25a194.59 194.59 0 0 0-15 6.22l-11.25-6.97a46.28 46.28 0 0 0-20.94 7.53l1.72 12.85a194.85 194.85 0 0 0-11.78 10.66l-12.65-2.91a46.73 46.73 0 0 0-7.75 7.75l2.91 12.65a194.85 194.85 0 0 0-10.66 11.78l-12.85-1.72a46.28 46.28 0 0 0-7.53 20.94l6.97 11.25a194.59 194.59 0 0 0-6.22 15l-12.25 4.38a46.28 46.28 0 0 0-3.34 10.72 46.73 46.73 0 0 0-.56 11.28l10.63 7.44a196.57 196.57 0 0 0 0 16.16l-10.63 7.44a46.73 46.73 0 0 0 .56 11.28 46.58 46.58 0 0 0 3.34 10.72l12.25 4.38a194.59 194.59 0 0 0 6.22 15l-6.97 11.25a46.28 46.28 0 0 0 7.53 20.94l12.85-1.72a194.85 194.85 0 0 0 10.66 11.78l-2.91 12.65a46.73 46.73 0 0 0 7.75 7.75l12.65-2.91a194.85 194.85 0 0 0 11.78 10.66l-1.72 12.85a46.28 46.28 0 0 0 20.94 7.53l11.25-6.97a194.59 194.59 0 0 0 15 6.22l4.38 12.25a46.28 46.28 0 0 0 10.72 3.34 46.73 46.73 0 0 0 11.28.56l7.44-10.63a196.57 196.57 0 0 0 16.16 0l7.44 10.63a46.73 46.73 0 0 0 11.28-.56 46.28 46.28 0 0 0 10.72-3.34l4.38-12.25a194.59 194.59 0 0 0 15-6.22l11.25 6.97a46.28 46.28 0 0 0 20.94-7.53l-1.72-12.85a194.85 194.85 0 0 0 11.78-10.66l12.65 2.91a46.73 46.73 0 0 0 7.75-7.75l-2.91-12.65a194.85 194.85 0 0 0 10.66-11.78l12.85 1.72a46.28 46.28 0 0 0 7.53-20.94l-6.97-11.25a194.59 194.59 0 0 0 6.22-15l12.25-4.38a46.58 46.58 0 0 0 3.34-10.72 46.73 46.73 0 0 0 .56-11.28l-10.63-7.44a196.57 196.57 0 0 0 0-16.16l10.63-7.44a46.73 46.73 0 0 0-.56-11.28zM256 357.25A101.25 101.25 0 1 1 357.25 256 101.37 101.37 0 0 1 256 357.25zm0-178.5a77.25 77.25 0 1 0 77.25 77.25A77.34 77.34 0 0 0 256 178.75zm51.75 68.19h-42.69v-42.69a9.06 9.06 0 0 0-18.12 0v51.75a9.06 9.06 0 0 0 9.06 9.06h51.75a9.06 9.06 0 1 0 0-18.12z"/>
+              </svg>
+            </div>
+            <h3 id="tech-rust" class="tech-stack__name">Rust</h3>
+            <p class="tech-stack__description">
+              Systems programming language providing memory safety, fearless concurrency, and zero-cost abstractions.
+            </p>
+          </article>
+
+          <!-- Tokio -->
+          <article class="tech-stack__item" aria-labelledby="tech-tokio">
+            <div class="tech-stack__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 6v6l4 2"></path>
+                <path d="M8 12h8"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </div>
+            <h3 id="tech-tokio" class="tech-stack__name">Tokio</h3>
+            <p class="tech-stack__description">
+              Asynchronous runtime for Rust enabling high-performance networking and concurrent I/O operations.
+            </p>
+          </article>
+
+          <!-- LSM-tree -->
+          <article class="tech-stack__item" aria-labelledby="tech-lsm">
+            <div class="tech-stack__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v18"></path>
+                <path d="M5 10l7-7 7 7"></path>
+                <path d="M5 14l7 7 7-7"></path>
+              </svg>
+            </div>
+            <h3 id="tech-lsm" class="tech-stack__name">LSM-tree</h3>
+            <p class="tech-stack__description">
+              Log-Structured Merge-tree storage engine optimized for write-intensive workloads with efficient compaction.
+            </p>
+          </article>
+
+          <!-- Memcached Protocol -->
+          <article class="tech-stack__item" aria-labelledby="tech-memcached">
+            <div class="tech-stack__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                <line x1="12" y1="6" x2="12" y2="10"></line>
+                <line x1="12" y1="14" x2="12" y2="14"></line>
+              </svg>
+            </div>
+            <h3 id="tech-memcached" class="tech-stack__name">Memcached Protocol</h3>
+            <p class="tech-stack__description">
+              Full compatibility with the Memcached text protocol for seamless integration with existing clients.
+            </p>
+          </article>
+        </div>
       </div>
     </section>
 
