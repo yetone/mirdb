@@ -1,0 +1,159 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Styles for the hero section including:
+ * - Logo display and sizing
+ * - Headline and tagline typography
+ * - Technology badges (Rust, Tokio)
+ * - Get Started CTA button
+ * - Layout and spacing
+ */
+
+.hero {
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+  padding: var(--spacing-3xl) 0;
+  text-align: center;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+/* Logo */
+.hero-logo {
+  width: 120px;
+  height: auto;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* Headline */
+.hero-headline {
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* Tagline */
+.hero-tagline {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+  margin: 0;
+  max-width: 600px;
+}
+
+/* Technology Stack Badges */
+.hero-tech-stack {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--spacing-sm);
+}
+
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.tech-badge--rust {
+  background-color: rgba(222, 165, 132, 0.15);
+  color: #b7410e;
+  border-color: var(--color-rust);
+}
+
+.tech-badge--tokio {
+  background-color: rgba(155, 77, 202, 0.15);
+  color: #7b2cbf;
+  border-color: var(--color-tokio);
+}
+
+.tech-icon {
+  flex-shrink: 0;
+}
+
+/* CTA Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+  min-width: 44px;
+  border: none;
+}
+
+.btn--primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn--primary:hover {
+  background-color: var(--color-primary-dark);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--primary:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+.hero-cta {
+  margin-top: var(--spacing-md);
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .hero-headline {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+  }
+
+  .hero-logo {
+    width: 80px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-headline {
+    font-size: var(--font-size-3xl);
+  }
+}

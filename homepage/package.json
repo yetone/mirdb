@@ -1,0 +1,28 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A static website for the MirDB key-value store",
+  "type": "module",
+  "scripts": {
+    "serve": "npx http-server . -p 8080 -c-1",
+    "test": "npm run test:e2e",
+    "test:unit": "vitest run tests/unit/",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "lint:html": "htmlhint index.html",
+    "lighthouse": "lighthouse http://localhost:8080 --output json --output-path ./lighthouse-report.json"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "http-server": "^14.1.1",
+    "htmlhint": "^1.1.4",
+    "vitest": "^1.0.0"
+  },
+  "keywords": [
+    "mirdb",
+    "key-value-store",
+    "memcached",
+    "homepage"
+  ],
+  "license": "MIT"
+}

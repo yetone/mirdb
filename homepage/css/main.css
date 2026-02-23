@@ -1,0 +1,101 @@
+/**
+ * Main Stylesheet
+ * Owner: First scenario builder
+ *
+ * Imports all component and utility stylesheets.
+ * Contains base/global styles that apply site-wide.
+ */
+
+@import 'reset.css';
+@import 'variables.css';
+
+/* Component styles */
+@import 'components/hero.css';
+@import 'components/quickstart.css';
+@import 'components/code-block.css';
+@import 'components/features.css';
+@import 'components/roadmap.css';
+@import 'components/configuration.css';
+@import 'components/footer.css';
+
+/* Base styles */
+body {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+main {
+  width: 100%;
+}
+
+.container {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+section {
+  padding: var(--spacing-3xl) 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+}
+
+a {
+  color: var(--color-secondary);
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+a:focus {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Responsive styles will be imported via media queries */
+@media (max-width: 767px) {
+  @import 'responsive/mobile.css';
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  @import 'responsive/tablet.css';
+}
+
+@media (min-width: 1024px) {
+  @import 'responsive/desktop.css';
+}
