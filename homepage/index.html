@@ -60,6 +60,9 @@
             <a href="#quick-start" class="header__nav-link">Quick Start</a>
           </li>
           <li class="header__nav-item">
+            <a href="#roadmap" class="header__nav-link">Roadmap</a>
+          </li>
+          <li class="header__nav-item">
             <a href="https://github.com/yetone/mirdb" class="header__nav-link header__nav-link--external" target="_blank" rel="noopener noreferrer">
               GitHub
               <svg class="header__external-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -446,6 +449,74 @@ delete mykey
                 <img src="https://img.shields.io/github/license/yetone/mirdb?style=flat-square" alt="License" loading="lazy">
               </a>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================
+         ROADMAP SECTION (Scenario 10)
+         ==================== -->
+    <section id="roadmap" class="roadmap" aria-labelledby="roadmap-title">
+      <div class="container">
+        <h2 id="roadmap-title" class="roadmap__title">Roadmap</h2>
+        <p class="roadmap__subtitle">Track our progress and see what's coming next</p>
+
+        <div class="roadmap__content">
+          <!-- Completed Features -->
+          <div class="roadmap__column">
+            <h3 class="roadmap__column-title roadmap__column-title--completed">
+              <svg class="roadmap__column-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              Completed
+            </h3>
+            <ul class="roadmap__list" aria-label="Completed features">
+              <li class="roadmap__item roadmap__item--completed">
+                <svg class="roadmap__item-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="roadmap__item-text">Tokio async runtime with Memcached protocol</span>
+              </li>
+              <li class="roadmap__item roadmap__item--completed">
+                <svg class="roadmap__item-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="roadmap__item-text">Memtable implementation with skip-list</span>
+              </li>
+              <li class="roadmap__item roadmap__item--completed">
+                <svg class="roadmap__item-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="roadmap__item-text">Minor compaction</span>
+              </li>
+              <li class="roadmap__item roadmap__item--completed">
+                <svg class="roadmap__item-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="roadmap__item-text">Major compaction</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="roadmap__column">
+            <h3 class="roadmap__column-title roadmap__column-title--planned">
+              <svg class="roadmap__column-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              Planned
+            </h3>
+            <ul class="roadmap__list" aria-label="Planned features">
+              <li class="roadmap__item roadmap__item--planned">
+                <svg class="roadmap__item-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+                <span class="roadmap__item-text">Raft consensus for distributed replication</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
