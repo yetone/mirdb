@@ -295,3 +295,128 @@ test.describe('Performance - Page Load', () => {
     }
   });
 });
+
+/**
+ * Lighthouse Score E2E Tests
+ * Owner: Scenario 15 - Performance - Lighthouse Score
+ *
+ * Tests that verify the homepage achieves Lighthouse score of 90+ in all categories:
+ * - Performance
+ * - Accessibility
+ * - Best Practices
+ * - SEO
+ */
+test.describe('Performance - Lighthouse Score', () => {
+  // Lighthouse tests need more time due to audit process
+  test.setTimeout(120000);
+
+  let lighthouseResult;
+
+  test.beforeAll(async ({ browser }) => {
+    // Import lighthouse dynamically
+    const lighthouse = (await import('lighthouse')).default;
+
+    // Create a new context and page to get the debug port
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    // Get CDP session to retrieve the browser's debug port
+    const client = await context.newCDPSession(page);
+
+    // Get browser's debug URL
+    const browserInfo = await client.send('Browser.getVersion');
+
+    // Close the page - we'll use lighthouse's own browser connection
+    await page.close();
+    await context.close();
+
+    // Run Lighthouse using direct connection to Chromium
+    // We need to use puppeteer connection since Playwright doesn't expose debug port directly
+    // Instead, run lighthouse in a way that uses its own Chromium instance
+    const { chromium } = await import('@playwright/test');
+
+    // Launch a fresh browser for Lighthouse
+    const browserForLighthouse = await chromium.launch({
+      args: ['--remote-debugging-port=9222']
+    });
+
+    // Give browser time to start
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Run Lighthouse against the local server
+    const config = {
+      extends: 'lighthouse:default',
+      settings: {
+        onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
+        formFactor: 'desktop',
+        throttling: {
+          // Light throttling for CI environments
+          rttMs: 40,
+          throughputKbps: 10240,
+          cpuSlowdownMultiplier: 1
+        },
+        screenEmulation: {
+          mobile: false,
+          width: 1350,
+          height: 940,
+          deviceScaleFactor: 1,
+          disabled: false
+        }
+      }
+    };
+
+    try {
+      lighthouseResult = await lighthouse(
+        'http://localhost:8080',
+        {
+          port: 9222,
+          output: 'json',
+          logLevel: 'error'
+        },
+        config
+      );
+    } finally {
+      await browserForLighthouse.close();
+    }
+  });
+
+  test('TC1: Lighthouse Performance score is 90 or higher', async () => {
+    expect(lighthouseResult).toBeDefined();
+    expect(lighthouseResult.lhr).toBeDefined();
+
+    const performanceScore = lighthouseResult.lhr.categories.performance.score * 100;
+    console.log(`Lighthouse Performance Score: ${performanceScore}`);
+
+    expect(performanceScore).toBeGreaterThanOrEqual(90);
+  });
+
+  test('TC2: Lighthouse Accessibility score is 90 or higher', async () => {
+    expect(lighthouseResult).toBeDefined();
+    expect(lighthouseResult.lhr).toBeDefined();
+
+    const accessibilityScore = lighthouseResult.lhr.categories.accessibility.score * 100;
+    console.log(`Lighthouse Accessibility Score: ${accessibilityScore}`);
+
+    expect(accessibilityScore).toBeGreaterThanOrEqual(90);
+  });
+
+  test('TC3: Lighthouse Best Practices score is 90 or higher', async () => {
+    expect(lighthouseResult).toBeDefined();
+    expect(lighthouseResult.lhr).toBeDefined();
+
+    const bestPracticesScore = lighthouseResult.lhr.categories['best-practices'].score * 100;
+    console.log(`Lighthouse Best Practices Score: ${bestPracticesScore}`);
+
+    expect(bestPracticesScore).toBeGreaterThanOrEqual(90);
+  });
+
+  test('TC4: Lighthouse SEO score is 90 or higher', async () => {
+    expect(lighthouseResult).toBeDefined();
+    expect(lighthouseResult.lhr).toBeDefined();
+
+    const seoScore = lighthouseResult.lhr.categories.seo.score * 100;
+    console.log(`Lighthouse SEO Score: ${seoScore}`);
+
+    expect(seoScore).toBeGreaterThanOrEqual(90);
+  });
+});
