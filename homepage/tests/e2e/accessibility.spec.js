@@ -389,3 +389,398 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     expect(copiedText).toBe('Copied!');
   });
 });
+
+/**
+ * Progressive Enhancement Tests
+ * Owner: Scenario 16 - Progressive Enhancement
+ *
+ * Tests to verify that core content renders and is functional
+ * without JavaScript execution. This ensures the site follows
+ * progressive enhancement principles.
+ */
+test.describe('Progressive Enhancement - No JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('TC1: Page loads and displays all text content without JavaScript', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify the page loaded successfully
+    await expect(page).toHaveTitle(/MirDB/);
+
+    // Verify main structural elements are present
+    await expect(page.locator('header')).toBeVisible();
+    await expect(page.locator('main')).toBeVisible();
+    await expect(page.locator('footer')).toBeVisible();
+
+    // Verify all sections are present and visible
+    await expect(page.locator('#hero')).toBeVisible();
+    await expect(page.locator('#quickstart')).toBeVisible();
+    await expect(page.locator('#features')).toBeVisible();
+    await expect(page.locator('#roadmap')).toBeVisible();
+    await expect(page.locator('#configuration')).toBeVisible();
+  });
+
+  test('TC2: Hero headline, tagline, and description are visible without JS', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify hero section content
+    const heroSection = page.locator('#hero');
+    await expect(heroSection).toBeVisible();
+
+    // Verify headline is visible and contains expected text
+    const headline = page.locator('.hero-headline');
+    await expect(headline).toBeVisible();
+    await expect(headline).toContainText('MirDB');
+    await expect(headline).toContainText('Persistent Key-Value Store');
+    await expect(headline).toContainText('Memcached Protocol');
+
+    // Verify tagline is visible
+    const tagline = page.locator('.hero-tagline');
+    await expect(tagline).toBeVisible();
+    await expect(tagline).toContainText('Simple, fast, and durable');
+    await expect(tagline).toContainText('Rust');
+
+    // Verify logo is visible
+    const logo = page.locator('.hero-logo');
+    await expect(logo).toBeVisible();
+
+    // Verify tech badges are visible
+    const techStack = page.locator('.hero-tech-stack');
+    await expect(techStack).toBeVisible();
+    await expect(page.locator('.tech-badge--rust')).toBeVisible();
+    await expect(page.locator('.tech-badge--tokio')).toBeVisible();
+
+    // Verify Get Started CTA is visible
+    const cta = page.locator('.hero-cta');
+    await expect(cta).toBeVisible();
+    await expect(cta).toContainText('Get Started');
+  });
+
+  test('TC3: Code blocks are readable without JS (syntax highlighting may be basic)', async ({ page }) => {
+    await page.goto('/');
+
+    // Navigate to quickstart section
+    const quickstartSection = page.locator('#quickstart');
+    await expect(quickstartSection).toBeVisible();
+
+    // Verify code blocks are present and visible
+    const codeBlocks = page.locator('.code-block');
+    const codeBlockCount = await codeBlocks.count();
+    expect(codeBlockCount).toBeGreaterThan(0);
+
+    // Verify each code block has readable content
+    for (let i = 0; i < codeBlockCount; i++) {
+      const codeBlock = codeBlocks.nth(i);
+      await expect(codeBlock).toBeVisible();
+
+      // Verify the code content is visible
+      const codeContent = codeBlock.locator('pre code');
+      await expect(codeContent).toBeVisible();
+
+      // Verify the code has actual text content
+      const textContent = await codeContent.textContent();
+      expect(textContent.length).toBeGreaterThan(0);
+    }
+
+    // Verify specific code examples are present
+    // Installation command
+    await expect(page.locator('code').filter({ hasText: 'cargo install mirdb' })).toBeVisible();
+
+    // Server start command (use .first() since there are multiple mirdb-server references)
+    await expect(page.locator('code').filter({ hasText: 'mirdb-server' }).first()).toBeVisible();
+
+    // Telnet connection command
+    await expect(page.locator('code').filter({ hasText: 'telnet localhost 11211' })).toBeVisible();
+
+    // Memcached operations (use .first() since there are multiple matches)
+    await expect(page.locator('code').filter({ hasText: 'set mykey' }).first()).toBeVisible();
+    await expect(page.locator('code').filter({ hasText: 'get mykey' }).first()).toBeVisible();
+  });
+
+  test('TC4: Features section displays all feature items without JS', async ({ page }) => {
+    await page.goto('/');
+
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Verify features title
+    const featuresTitle = page.locator('#features-title');
+    await expect(featuresTitle).toBeVisible();
+    await expect(featuresTitle).toContainText('Features');
+
+    // Verify all feature items are visible
+    const featureItems = page.locator('.features__item');
+    const featureCount = await featureItems.count();
+    expect(featureCount).toBeGreaterThanOrEqual(6);
+
+    // Verify specific features are listed
+    const expectedFeatures = [
+      'Tokio Async Runtime',
+      'Skip-List Memtable',
+      'Write-Ahead Log',
+      'Minor Compaction',
+      'Major Compaction',
+      'Memcached Protocol'
+    ];
+
+    for (const featureName of expectedFeatures) {
+      const featureTitle = page.locator('.features__item-title').filter({ hasText: featureName });
+      await expect(featureTitle).toBeVisible();
+    }
+
+    // Verify feature descriptions are visible
+    const featureDescriptions = page.locator('.features__item-description');
+    const descriptionCount = await featureDescriptions.count();
+    expect(descriptionCount).toBeGreaterThanOrEqual(6);
+
+    for (let i = 0; i < descriptionCount; i++) {
+      const description = featureDescriptions.nth(i);
+      await expect(description).toBeVisible();
+      const textContent = await description.textContent();
+      expect(textContent.length).toBeGreaterThan(0);
+    }
+  });
+
+  test('TC5: GitHub link works and navigates to GitHub repository without JS', async ({ page }) => {
+    await page.goto('/');
+
+    // Find GitHub link in navigation
+    const navGitHubLink = page.locator('.nav__links a[href*="github"]');
+    await expect(navGitHubLink).toBeVisible();
+
+    // Verify the link has correct href
+    const navHref = await navGitHubLink.getAttribute('href');
+    expect(navHref).toBe('https://github.com/yetone/mirdb');
+
+    // Verify link has proper attributes for external link
+    await expect(navGitHubLink).toHaveAttribute('target', '_blank');
+    await expect(navGitHubLink).toHaveAttribute('rel', 'noopener');
+
+    // Find GitHub link in footer
+    const footerGitHubLink = page.locator('[data-testid="github-link"]');
+    await expect(footerGitHubLink).toBeVisible();
+
+    // Verify footer link has correct href
+    const footerHref = await footerGitHubLink.getAttribute('href');
+    expect(footerHref).toBe('https://github.com/yetone/mirdb');
+
+    // Test that clicking the link would navigate (check href attribute)
+    // Note: Actual navigation to external sites is not tested in E2E tests
+    // We verify the link is properly configured for navigation
+    await expect(footerGitHubLink).toHaveAttribute('target', '_blank');
+    await expect(footerGitHubLink).toHaveAttribute('rel', 'noopener');
+  });
+
+  test('TC6: Copy buttons visible but code is still manually selectable without JS', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify copy buttons are present (they may not work without JS)
+    const copyButtons = page.locator('.code-block__copy');
+    const copyButtonCount = await copyButtons.count();
+    expect(copyButtonCount).toBeGreaterThan(0);
+
+    // Verify code blocks are still visible and selectable
+    const codeElements = page.locator('pre code');
+    const codeCount = await codeElements.count();
+    expect(codeCount).toBeGreaterThan(0);
+
+    for (let i = 0; i < codeCount; i++) {
+      const codeElement = codeElements.nth(i);
+      await expect(codeElement).toBeVisible();
+
+      // Verify the code element has text content that can be selected
+      const textContent = await codeElement.textContent();
+      expect(textContent.length).toBeGreaterThan(0);
+
+      // Verify the code element is not hidden or has display:none
+      const isHidden = await codeElement.evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return styles.display === 'none' || styles.visibility === 'hidden';
+      });
+      expect(isHidden).toBe(false);
+
+      // Verify user-select is not disabled on code elements
+      const userSelect = await codeElement.evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return styles.userSelect;
+      });
+      // user-select should not be 'none' - it should allow text selection
+      expect(userSelect).not.toBe('none');
+    }
+  });
+
+  test('Navigation links work without JavaScript', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify navigation is visible
+    const nav = page.locator('.nav');
+    await expect(nav).toBeVisible();
+
+    // Verify navigation links are present
+    const navLinks = page.locator('.nav__links a');
+    const linkCount = await navLinks.count();
+    expect(linkCount).toBeGreaterThan(0);
+
+    // Verify internal anchor links have proper href attributes
+    const quickstartLink = page.locator('.nav__links a[href="#quickstart"]');
+    await expect(quickstartLink).toBeVisible();
+    await expect(quickstartLink).toHaveAttribute('href', '#quickstart');
+
+    const featuresLink = page.locator('.nav__links a[href="#features"]');
+    await expect(featuresLink).toBeVisible();
+    await expect(featuresLink).toHaveAttribute('href', '#features');
+
+    const roadmapLink = page.locator('.nav__links a[href="#roadmap"]');
+    await expect(roadmapLink).toBeVisible();
+    await expect(roadmapLink).toHaveAttribute('href', '#roadmap');
+
+    const configLink = page.locator('.nav__links a[href="#configuration"]');
+    await expect(configLink).toBeVisible();
+    await expect(configLink).toHaveAttribute('href', '#configuration');
+  });
+
+  test('Internal anchor links navigate to correct sections without JS', async ({ page }) => {
+    // Navigate directly to a section via anchor
+    await page.goto('/#features');
+
+    // Verify we're at the features section (URL has hash)
+    const currentUrl = page.url();
+    expect(currentUrl).toContain('#features');
+
+    // The features section should be the target
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+  });
+
+  test('Roadmap section is visible without JavaScript', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify roadmap section is present and visible
+    const roadmapSection = page.locator('#roadmap');
+    await expect(roadmapSection).toBeVisible();
+
+    // Verify roadmap title
+    const roadmapTitle = page.locator('#roadmap-title');
+    await expect(roadmapTitle).toBeVisible();
+    await expect(roadmapTitle).toContainText('Roadmap');
+
+    // Verify roadmap items are visible
+    const roadmapItems = page.locator('.roadmap__item');
+    const itemCount = await roadmapItems.count();
+    expect(itemCount).toBeGreaterThan(0);
+
+    // Verify "Coming Soon" badges are visible
+    const comingSoonBadges = page.locator('.roadmap__badge');
+    const badgeCount = await comingSoonBadges.count();
+    expect(badgeCount).toBeGreaterThan(0);
+
+    // Verify specific roadmap items
+    await expect(page.locator('.roadmap__item-title').filter({ hasText: 'Raft Consensus' })).toBeVisible();
+  });
+
+  test('Configuration section is visible without JavaScript', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify configuration section is present and visible
+    const configSection = page.locator('#configuration');
+    await expect(configSection).toBeVisible();
+
+    // Verify configuration title
+    const configTitle = page.locator('#configuration-title');
+    await expect(configTitle).toBeVisible();
+    await expect(configTitle).toContainText('Configuration');
+
+    // Verify configuration options are visible
+    const configOptions = page.locator('.configuration__option');
+    const optionCount = await configOptions.count();
+    expect(optionCount).toBeGreaterThan(0);
+
+    // Verify specific configuration options
+    await expect(page.locator('.configuration__option-title').filter({ hasText: 'Port Configuration' })).toBeVisible();
+    await expect(page.locator('.configuration__option-title').filter({ hasText: 'Data Directory' })).toBeVisible();
+    await expect(page.locator('.configuration__option-title').filter({ hasText: 'WAL Settings' })).toBeVisible();
+  });
+
+  test('Footer content is visible without JavaScript', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify footer is visible
+    const footer = page.locator('footer');
+    await expect(footer).toBeVisible();
+
+    // Verify footer links are present
+    const footerLinks = page.locator('.footer__links');
+    await expect(footerLinks).toBeVisible();
+
+    // Verify GitHub link
+    const githubLink = page.locator('[data-testid="github-link"]');
+    await expect(githubLink).toBeVisible();
+    await expect(githubLink).toContainText('GitHub');
+
+    // Verify License link
+    const licenseLink = page.locator('[data-testid="license-link"]');
+    await expect(licenseLink).toBeVisible();
+    await expect(licenseLink).toContainText('License');
+
+    // Verify CircleCI badge is present (image may not load without JS)
+    const circleCIBadge = page.locator('[data-testid="circleci-badge"]');
+    await expect(circleCIBadge).toBeVisible();
+
+    // Verify license text
+    const licenseText = page.locator('.footer__license');
+    await expect(licenseText).toBeVisible();
+    await expect(licenseText).toContainText('MIT License');
+  });
+
+  test('Get Started CTA link works without JavaScript', async ({ page }) => {
+    await page.goto('/');
+
+    // Find the Get Started CTA
+    const ctaLink = page.locator('.hero-cta');
+    await expect(ctaLink).toBeVisible();
+
+    // Verify it has the correct href to quickstart section
+    await expect(ctaLink).toHaveAttribute('href', '#quickstart');
+
+    // Click the CTA link (navigation will work via browser native behavior)
+    await ctaLink.click();
+
+    // Verify URL has changed to include the anchor
+    const currentUrl = page.url();
+    expect(currentUrl).toContain('#quickstart');
+  });
+
+  test('All images have alt text for accessibility without JS', async ({ page }) => {
+    await page.goto('/');
+
+    // Find all images
+    const images = page.locator('img');
+    const imageCount = await images.count();
+
+    // Verify each image has alt text
+    for (let i = 0; i < imageCount; i++) {
+      const img = images.nth(i);
+      const altText = await img.getAttribute('alt');
+      expect(altText).not.toBeNull();
+      expect(altText.length).toBeGreaterThan(0);
+    }
+  });
+
+  test('Language labels on code blocks are visible without JS', async ({ page }) => {
+    await page.goto('/');
+
+    // Find all code block language labels
+    const languageLabels = page.locator('.code-block__language');
+    const labelCount = await languageLabels.count();
+    expect(labelCount).toBeGreaterThan(0);
+
+    // Verify each label is visible and has content
+    for (let i = 0; i < labelCount; i++) {
+      const label = languageLabels.nth(i);
+      await expect(label).toBeVisible();
+      const textContent = await label.textContent();
+      expect(textContent.length).toBeGreaterThan(0);
+    }
+  });
+});
