@@ -282,10 +282,81 @@ function stopTerminalAnimation() {
     animationState.isRunning = false;
 }
 
+// ============================================================================
+// Navigation and Smooth Scroll (Scenario 15)
+// ============================================================================
+
+/**
+ * Handle navigation anchor click with smooth scroll
+ * @param {Event} event - The click event
+ * @param {string} targetId - The target section ID (without #)
+ */
+function handleNavigation(event, targetId) {
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+        event.preventDefault();
+        targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+        // Update URL hash without triggering jump
+        history.pushState(null, '', '#' + targetId);
+        // Set focus to the target section for accessibility
+        targetElement.setAttribute('tabindex', '-1');
+        targetElement.focus({ preventScroll: true });
+    }
+}
+
+/**
+ * Initialize smooth scroll for all internal navigation links
+ * Sets up event listeners for anchor links pointing to page sections
+ */
+function initSmoothScroll() {
+    // Select all anchor links that point to internal sections
+    const navLinks = document.querySelectorAll('a[href^="#"]');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            const href = this.getAttribute('href');
+            // Skip if it's just "#" or empty
+            if (!href || href === '#') return;
+
+            const targetId = href.substring(1); // Remove the #
+            handleNavigation(event, targetId);
+        });
+    });
+}
+
+/**
+ * Handle initial page load with hash in URL
+ * Smoothly scrolls to section if hash is present
+ */
+function handleInitialHash() {
+    if (window.location.hash) {
+        const targetId = window.location.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            // Small delay to ensure page is fully loaded
+            setTimeout(() => {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 100);
+        }
+    }
+}
+
 // Initialize console when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('MirDB Console initialized');
 
     // Initialize terminal demo animation
     initTerminalAnimation();
+
+    // Initialize smooth scroll navigation (Scenario 15)
+    initSmoothScroll();
+
+    // Handle initial hash in URL
+    handleInitialHash();
 });
