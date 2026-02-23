@@ -1,3 +1,6 @@
+// @ts-check
+import { test, expect } from '@playwright/test';
+
 /**
  * Responsive Design E2E Tests
  * Owner: Scenarios 7, 8, 9 - Responsive Design
@@ -11,9 +14,10 @@
  * - Content max-width on large screens
  */
 
-const { test, expect } = require('@playwright/test');
+// ============================================================================
+// MOBILE VIEWPORT TESTS (Scenario 7 - 320px to 767px)
+// ============================================================================
 
-// Mobile viewport tests (Scenario 7)
 test.describe('Responsive Design - Mobile (320px-767px)', () => {
   test.describe('320px viewport (minimum mobile)', () => {
     test.use({ viewport: { width: 320, height: 568 } });
@@ -401,7 +405,177 @@ test.describe('Responsive Design - Mobile (320px-767px)', () => {
   });
 });
 
-// Desktop viewport tests (Scenario 9)
+// ============================================================================
+// TABLET VIEWPORT TESTS (Scenario 8 - 768px to 1023px)
+// ============================================================================
+
+test.describe('Tablet Responsive Design (768px - 1023px)', () => {
+  test.describe('768px viewport - tablet breakpoint start', () => {
+    test.use({ viewport: { width: 768, height: 1024 } });
+
+    test('page displays with tablet-appropriate layout at 768px', async ({ page }) => {
+      await page.goto('/');
+
+      // Page should load successfully
+      await expect(page).toHaveTitle(/MirDB/);
+
+      // Hero section should be visible
+      const hero = page.locator('.hero');
+      await expect(hero).toBeVisible();
+
+      // Hero headline should be readable
+      const headline = page.locator('.hero-headline');
+      await expect(headline).toBeVisible();
+      await expect(headline).toContainText('MirDB');
+
+      // No horizontal scroll at tablet size
+      const body = page.locator('body');
+      const bodyBox = await body.boundingBox();
+      const viewportWidth = 768;
+      expect(bodyBox.width).toBeLessThanOrEqual(viewportWidth);
+    });
+
+    test('all sections are visible and properly laid out at 768px', async ({ page }) => {
+      await page.goto('/');
+
+      // Check all main sections are visible
+      await expect(page.locator('#hero')).toBeVisible();
+      await expect(page.locator('#quickstart')).toBeVisible();
+      await expect(page.locator('#features')).toBeVisible();
+      await expect(page.locator('#roadmap')).toBeVisible();
+      await expect(page.locator('#configuration')).toBeVisible();
+      await expect(page.locator('.footer')).toBeVisible();
+    });
+
+    test('navigation is accessible at tablet size', async ({ page }) => {
+      await page.goto('/');
+
+      const nav = page.locator('nav');
+      await expect(nav).toBeVisible();
+
+      // Navigation links should be visible
+      const navLinks = page.locator('.nav__links a');
+      const linksCount = await navLinks.count();
+      expect(linksCount).toBeGreaterThan(0);
+
+      // Each link should be visible
+      for (let i = 0; i < linksCount; i++) {
+        await expect(navLinks.nth(i)).toBeVisible();
+      }
+    });
+
+    test('features section displays in appropriate grid at tablet size', async ({ page }) => {
+      await page.goto('/');
+
+      const featuresList = page.locator('.features__list');
+      await expect(featuresList).toBeVisible();
+
+      // Get computed styles to verify grid layout
+      const display = await featuresList.evaluate((el) => {
+        return window.getComputedStyle(el).display;
+      });
+      expect(display).toBe('grid');
+
+      // Check feature items are visible
+      const featureItems = page.locator('.features__item');
+      const itemCount = await featureItems.count();
+      expect(itemCount).toBeGreaterThan(0);
+    });
+
+    test('code blocks fit within tablet viewport', async ({ page }) => {
+      await page.goto('/');
+
+      const quickstartSection = page.locator('#quickstart');
+      await quickstartSection.scrollIntoViewIfNeeded();
+
+      const codeBlocks = page.locator('.code-block');
+      const blockCount = await codeBlocks.count();
+      expect(blockCount).toBeGreaterThan(0);
+
+      for (let i = 0; i < blockCount; i++) {
+        const block = codeBlocks.nth(i);
+        await block.scrollIntoViewIfNeeded();
+        const blockBox = await block.boundingBox();
+        expect(blockBox.width).toBeLessThanOrEqual(768);
+      }
+    });
+
+    test('footer displays correctly at 768px', async ({ page }) => {
+      await page.goto('/');
+
+      const footer = page.locator('.footer');
+      await footer.scrollIntoViewIfNeeded();
+      await expect(footer).toBeVisible();
+
+      // Footer should fit within viewport
+      const footerBox = await footer.boundingBox();
+      expect(footerBox.width).toBeLessThanOrEqual(768);
+
+      // Footer links should be visible
+      const footerLinks = page.locator('.footer__links a');
+      const linksCount = await footerLinks.count();
+      expect(linksCount).toBeGreaterThan(0);
+    });
+  });
+
+  test.describe('1023px viewport - tablet breakpoint end', () => {
+    test.use({ viewport: { width: 1023, height: 768 } });
+
+    test('page displays correctly at upper tablet boundary (1023px)', async ({ page }) => {
+      await page.goto('/');
+
+      // Page should load successfully
+      await expect(page).toHaveTitle(/MirDB/);
+
+      // Hero section should be visible
+      const hero = page.locator('.hero');
+      await expect(hero).toBeVisible();
+
+      // No horizontal scroll at upper tablet boundary
+      const hasHorizontalScroll = await page.evaluate(() => {
+        return document.body.scrollWidth > document.body.clientWidth;
+      });
+      expect(hasHorizontalScroll).toBe(false);
+    });
+
+    test('all sections visible at 1023px', async ({ page }) => {
+      await page.goto('/');
+
+      // Check all main sections are visible
+      await expect(page.locator('#hero')).toBeVisible();
+      await expect(page.locator('#quickstart')).toBeVisible();
+      await expect(page.locator('#features')).toBeVisible();
+      await expect(page.locator('#roadmap')).toBeVisible();
+      await expect(page.locator('#configuration')).toBeVisible();
+      await expect(page.locator('.footer')).toBeVisible();
+    });
+  });
+
+  test.describe('Tablet orientation tests', () => {
+    test('landscape tablet (1024x768) displays correctly', async ({ page }) => {
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await page.goto('/');
+
+      await expect(page).toHaveTitle(/MirDB/);
+      await expect(page.locator('.hero')).toBeVisible();
+      await expect(page.locator('#features')).toBeVisible();
+    });
+
+    test('portrait tablet (768x1024) displays correctly', async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 });
+      await page.goto('/');
+
+      await expect(page).toHaveTitle(/MirDB/);
+      await expect(page.locator('.hero')).toBeVisible();
+      await expect(page.locator('#features')).toBeVisible();
+    });
+  });
+});
+
+// ============================================================================
+// DESKTOP VIEWPORT TESTS (Scenario 9 - 1024px and above)
+// ============================================================================
+
 test.describe('Desktop Responsive Design (1024px+)', () => {
   test('page displays full desktop layout at 1024px viewport width', async ({ page }) => {
     await page.setViewportSize({ width: 1024, height: 768 });
