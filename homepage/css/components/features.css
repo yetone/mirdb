@@ -11,100 +11,30 @@
  */
 
 .features {
-  padding: var(--spacing-3xl) 0;
-  background-color: var(--color-background);
-}
-
-.features h2 {
-  text-align: center;
-  font-size: var(--font-size-3xl);
-  margin-bottom: var(--spacing-md);
-  color: var(--color-text);
-}
-
-.features-intro {
-  text-align: center;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--spacing-2xl);
-  max-width: var(--max-width-narrow);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-xl);
-}
-
-.feature-card {
   background-color: var(--color-background-alt);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-xl);
-  border: 1px solid var(--color-border);
-  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+  padding: var(--spacing-2xl) var(--spacing-md);
 }
 
-.feature-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+.features__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: var(--max-width-content);
+  margin: 0 auto;
 }
 
-.feature-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  background-color: var(--color-primary);
-  color: white;
+.features__item {
+  background-color: var(--color-surface);
+  padding: var(--spacing-lg);
   border-radius: var(--border-radius-md);
-  margin-bottom: var(--spacing-lg);
 }
 
-.feature-icon svg {
-  width: 28px;
-  height: 28px;
-}
-
-.feature-title {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
+.features__item-title {
+  font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-sm);
-  color: var(--color-text);
 }
 
-.feature-description {
+.features__item-description {
   color: var(--color-text-muted);
-  font-size: var(--font-size-base);
-  line-height: 1.6;
-}
-
-/* Responsive adjustments */
-@media (max-width: 767px) {
-  .features {
-    padding: var(--spacing-2xl) 0;
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
-  }
-
-  .feature-card {
-    padding: var(--spacing-lg);
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .features-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  margin-bottom: 0;
 }

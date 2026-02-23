@@ -7,57 +7,46 @@
 
 :root {
   /* Colors */
-  --color-primary: #d73a49;
-  --color-primary-dark: #cb2431;
-  --color-secondary: #0366d6;
-  --color-background: #ffffff;
-  --color-background-alt: #f6f8fa;
-  --color-text: #24292e;
-  --color-text-muted: #586069;
-  --color-text-light: #6a737d;
-  --color-border: #e1e4e8;
-  --color-code-bg: #f6f8fa;
-  --color-success: #28a745;
-  --color-warning: #ffd33d;
-
-  /* Rust/Tokio colors for tech badges */
-  --color-rust: #dea584;
-  --color-tokio: #9b4dca;
+  --color-primary: #e74c3c;
+  --color-primary-dark: #c0392b;
+  --color-secondary: #3498db;
+  --color-secondary-dark: #2980b9;
+  --color-background: #1a1a2e;
+  --color-background-alt: #16213e;
+  --color-surface: #0f3460;
+  --color-text: #eaeaea;
+  --color-text-muted: #a0a0a0;
+  --color-text-dark: #333333;
+  --color-code-bg: #0d1117;
+  --color-code-border: #30363d;
+  --color-success: #2ecc71;
+  --color-warning: #f39c12;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  --spacing-3xl: 4rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 4rem;
+  --spacing-2xl: 6rem;
 
   /* Typography */
-  --font-family-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-
+  --font-family-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-family-mono: 'Fira Code', 'SF Mono', Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 2rem;
-  --font-size-4xl: 2.5rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.6;
 
   /* Layout */
   --max-width-content: 1200px;
-  --max-width-narrow: 800px;
-
-  /* Borders */
   --border-radius-sm: 4px;
-  --border-radius-md: 6px;
-  --border-radius-lg: 8px;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
 
   /* Transitions */
   --transition-fast: 150ms ease;

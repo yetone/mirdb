@@ -9,3 +9,48 @@
  * - License information
  * - Social/project links
  */
+
+.footer {
+  background-color: var(--color-background-alt);
+  padding: var(--spacing-xl) var(--spacing-md);
+  text-align: center;
+  border-top: 1px solid var(--color-code-border);
+}
+
+.footer__content {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.footer__links {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer__link {
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.footer__link:hover {
+  color: var(--color-secondary);
+}
+
+.footer__badge {
+  display: inline-block;
+}
+
+.footer__badge img {
+  height: 20px;
+}
+
+.footer__license {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}

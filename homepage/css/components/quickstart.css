@@ -8,6 +8,62 @@
  * - Server start command display
  * - Client example display
  * - Step-by-step layout
- *
- * Note: Code block styling is in code-block.css
  */
+
+.quickstart {
+  padding: var(--spacing-2xl) var(--spacing-md);
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+}
+
+.quickstart__intro {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+.quickstart__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.quickstart__step {
+  background-color: var(--color-surface);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  border-left: 4px solid var(--color-primary);
+}
+
+.quickstart__step-title {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.quickstart__step-description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .quickstart {
+    padding: var(--spacing-xl) var(--spacing-sm);
+  }
+
+  .quickstart__step {
+    padding: var(--spacing-md);
+  }
+
+  .quickstart__step-title {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (min-width: 768px) {
+  .quickstart__steps {
+    gap: var(--spacing-lg);
+  }
+}

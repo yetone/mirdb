@@ -1,13 +1,18 @@
+// @ts-check
+const { defineConfig, devices } = require('@playwright/test');
+
 /**
  * Playwright Test Configuration
  * Owner: First scenario builder
  *
- * Configuration for E2E tests
+ * Configuration for E2E tests:
+ * - Browser projects (Chrome, Firefox, Safari, Edge)
+ * - Viewport configurations for responsive tests
+ * - Base URL configuration
+ * - Screenshot and trace settings
  */
 
-import { defineConfig, devices } from '@playwright/test';
-
-export default defineConfig({
+module.exports = defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -45,6 +50,6 @@ export default defineConfig({
     command: 'npx http-server . -p 8080 -c-1',
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    timeout: 120 * 1000,
   },
 });

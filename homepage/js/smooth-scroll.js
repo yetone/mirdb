@@ -8,42 +8,52 @@
  */
 
 /**
- * Initialize smooth scroll handlers for all anchor links
- */
-export function initSmoothScroll() {
-  const anchorLinks = document.querySelectorAll('a[href^="#"]');
-
-  anchorLinks.forEach(link => {
-    link.addEventListener('click', handleSmoothScroll);
-  });
-}
-
-/**
- * Handle smooth scroll to target element
- * @param {Event} event - Click event
+ * Handle smooth scrolling for anchor links
+ * @param {Event} event - The click event
  */
 function handleSmoothScroll(event) {
   const href = event.currentTarget.getAttribute('href');
 
-  // Skip if it's just "#"
-  if (href === '#') return;
+  if (!href || !href.startsWith('#')) return;
 
   const targetId = href.substring(1);
   const targetElement = document.getElementById(targetId);
 
   if (targetElement) {
     event.preventDefault();
-
     targetElement.scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     });
 
-    // Update URL hash without jumping
+    // Update URL without triggering navigation
     history.pushState(null, null, href);
 
-    // Set focus for accessibility
+    // Set focus to target for accessibility
     targetElement.setAttribute('tabindex', '-1');
-    targetElement.focus();
+    targetElement.focus({ preventScroll: true });
   }
+}
+
+/**
+ * Initialize smooth scrolling for all anchor links
+ */
+function initSmoothScroll() {
+  const anchorLinks = document.querySelectorAll('a[href^="#"]');
+
+  anchorLinks.forEach((link) => {
+    link.addEventListener('click', handleSmoothScroll);
+  });
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSmoothScroll);
+} else {
+  initSmoothScroll();
+}
+
+// Export for testing
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { initSmoothScroll };
 }

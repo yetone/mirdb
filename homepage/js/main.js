@@ -5,16 +5,19 @@
  * Initializes all JavaScript functionality:
  * - Smooth scrolling for navigation
  * - Copy-to-clipboard functionality
- * - Syntax highlighting (if using JS-based highlighting)
+ * - Syntax highlighting
  *
  * Note: Site must be fully functional without JavaScript
  * (progressive enhancement). This JS enhances the experience.
  */
 
-// Import and initialize modules
-import { initSmoothScroll } from './smooth-scroll.js';
+// All initialization is handled by individual modules
+// This file serves as the main entry point and can be used
+// for any global initialization or coordination between modules
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  initSmoothScroll();
-});
+(function() {
+  'use strict';
+
+  // Log successful initialization (helpful for debugging)
+  console.log('MirDB Homepage initialized');
+})();
