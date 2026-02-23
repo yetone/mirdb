@@ -1,0 +1,239 @@
+/**
+ * Main Stylesheet
+ * Owner: Scenario 1 (initial structure)
+ * Contributors: All scenarios add their section styles
+ *
+ * Section ownership:
+ * - Base/reset styles: Scenario 1
+ * - Header/nav styles: Scenario 5
+ * - Hero styles: Scenario 1
+ * - Features styles: Scenario 2
+ * - Tech stack styles: Scenario 3
+ * - Quick start styles: Scenario 4
+ * - Resources styles: Scenario 5
+ * - Footer styles: Scenario 5
+ */
+
+/* ====================
+   BASE / RESET STYLES (Scenario 1)
+   ==================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Utility Classes */
+.container {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 0 var(--spacing-6);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ====================
+   HERO SECTION STYLES (Scenario 1)
+   ==================== */
+
+.hero {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-16) var(--spacing-6);
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero__content {
+  max-width: var(--max-width-content);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero__logo {
+  width: 200px;
+  height: auto;
+  margin: 0 auto var(--spacing-8);
+}
+
+.hero__logo svg {
+  width: 100%;
+  height: auto;
+}
+
+.hero__title {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--spacing-4);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero__tagline {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-8);
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4) var(--spacing-8);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.hero__cta:hover {
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hero__cta:active {
+  transform: translateY(0);
+}
+
+.hero__cta-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--transition-fast);
+}
+
+.hero__cta:hover .hero__cta-icon {
+  transform: translateX(4px);
+}
+
+/* ====================
+   HEADER / NAV STYLES (Scenario 5)
+   ==================== */
+
+/* Placeholder for Scenario 5 */
+
+/* ====================
+   FEATURES STYLES (Scenario 2)
+   ==================== */
+
+/* Placeholder for Scenario 2 */
+.features {
+  padding: var(--spacing-20) var(--spacing-6);
+  background-color: var(--color-bg-secondary);
+}
+
+/* ====================
+   TECH STACK STYLES (Scenario 3)
+   ==================== */
+
+/* Placeholder for Scenario 3 */
+.tech-stack {
+  padding: var(--spacing-20) var(--spacing-6);
+}
+
+/* ====================
+   QUICK START STYLES (Scenario 4)
+   ==================== */
+
+/* Placeholder for Scenario 4 */
+.quick-start {
+  padding: var(--spacing-20) var(--spacing-6);
+  background-color: var(--color-bg-secondary);
+}
+
+/* ====================
+   RESOURCES STYLES (Scenario 5)
+   ==================== */
+
+/* Placeholder for Scenario 5 */
+.resources {
+  padding: var(--spacing-20) var(--spacing-6);
+}
+
+/* ====================
+   FOOTER STYLES (Scenario 5)
+   ==================== */
+
+/* Placeholder for Scenario 5 */
+.footer {
+  padding: var(--spacing-8) var(--spacing-6);
+  background-color: var(--color-bg-tertiary);
+  text-align: center;
+}
