@@ -12,7 +12,12 @@
 
 // Main JavaScript Entry Point
 document.addEventListener('DOMContentLoaded', function() {
-  // Theme initialization will be added by Scenario 8
+  // ====================
+  // THEME INITIALIZATION (Scenario 8)
+  // ====================
+  if (typeof MirDBTheme !== 'undefined' && MirDBTheme.init) {
+    MirDBTheme.init();
+  }
 
   // ====================
   // NAVIGATION (Scenario 5)
