@@ -173,7 +173,7 @@ test.describe('Quick Start Section', () => {
 
   test('Quick Start section is navigable from hero CTA', async ({ page }) => {
     // Check that clicking Get Started scrolls to Quick Start
-    const ctaButton = page.locator('.hero__cta');
+    const ctaButton = page.locator('.hero-cta');
     await expect(ctaButton).toBeVisible();
 
     await ctaButton.click();
