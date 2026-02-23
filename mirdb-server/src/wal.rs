@@ -254,7 +254,7 @@ impl WAL {
         if self.seg_count() == 0 {
             self.new_seg()?;
         }
-        if let Some(seg) = &mut self.segs.back_mut() {
+        if let Some(seg) = self.segs.back_mut() {
             return seg.append(key, value);
         }
         err(StatusCode::WALError, "cannot get the tail wal seg")
@@ -268,7 +268,7 @@ impl WAL {
     }
 
     pub fn consume_seg(&mut self) -> MyResult<()> {
-        if let Some(seg) = &mut self.segs.pop_front() {
+        if let Some(seg) = self.segs.pop_front() {
             seg.delete()?;
         }
         Ok(())

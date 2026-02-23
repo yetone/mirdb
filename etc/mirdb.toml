@@ -1,5 +1,12 @@
 addr = "0.0.0.0:12333"
 
+# HTTP Server Configuration
+# http_port: The port for the HTTP server (default: 8080, range: 1-65535)
+# http_bind_address: The address to bind the HTTP server to (default: "0.0.0.0")
+#
+# http_port = 8080
+# http_bind_address = "0.0.0.0"
+
 max_level = 7
 work_dir = "/tmp/mirdb"
 

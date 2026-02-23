@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-e2e-tests",
+  "version": "1.0.0",
+  "description": "MirDB Browser Compatibility E2E Tests - Scenario 10",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:chromium": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:webkit": "npx playwright test --project=webkit",
+    "test:all": "npx playwright test --project=chromium --project=firefox",
+    "test:report": "npx playwright show-report"
+  },
+  "keywords": ["mirdb", "e2e", "browser-compatibility", "playwright"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}

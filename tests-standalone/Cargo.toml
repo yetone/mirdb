@@ -1,0 +1,37 @@
+[package]
+name = "tests-standalone"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+
+[[test]]
+name = "homepage_content"
+path = "tests/homepage_content_test.rs"
+
+[[test]]
+name = "console_api"
+path = "tests/console_api_test.rs"
+
+[[test]]
+name = "terminal_animation"
+path = "tests/terminal_animation_test.rs"
+
+[[test]]
+name = "performance"
+path = "tests/performance_test.rs"
+
+[[test]]
+name = "accessibility"
+path = "tests/accessibility_test.rs"
+
+[[test]]
+name = "error_handling"
+path = "tests/error_handling_test.rs"
+
+[dependencies]
+mirdb = { path = "../mirdb-server" }
+
+[dev-dependencies]
+rand = "0.8"

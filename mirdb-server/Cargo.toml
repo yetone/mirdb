@@ -4,6 +4,14 @@ version = "0.1.0"
 authors = ["yetone <yetoneful@gmail.com>"]
 edition = "2018"
 
+[lib]
+name = "mirdb"
+path = "src/lib.rs"
+
+[[bin]]
+name = "mirdb"
+path = "src/main.rs"
+
 [dependencies]
 skip-list = { path = "../skip-list" }
 sstable = { path = "../sstable" }
