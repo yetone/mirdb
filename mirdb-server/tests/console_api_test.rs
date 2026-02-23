@@ -470,3 +470,234 @@ fn test_delete_set_delete_cycle() {
         "Final DELETE should return DELETED"
     );
 }
+
+// ============================================================================
+// GET Command Tests (Scenario 5)
+// ============================================================================
+
+/// Test 1: GET command on existing key returns VALUE
+#[test]
+fn test_get_existing_key_returns_value() {
+    let mut server = ConsoleApiTestServer::new();
+    server.start();
+
+    // First, set a key
+    let set_response = send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("set testkey 0 0 5\r\nhello"),
+    ).expect("Failed to send SET request");
+
+    assert!(
+        set_response.body.contains("STORED"),
+        "SET should return STORED, got: {}",
+        set_response.body
+    );
+
+    // Now GET the key
+    let get_response = send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("get testkey"),
+    ).expect("Failed to send GET request");
+
+    assert_eq!(get_response.status_code, 200, "GET should return 200");
+
+    // Verify response format: VALUE <key> <flags> <bytes>\r\n<data>\r\nEND\r\n
+    assert!(
+        get_response.body.contains("VALUE testkey 0 5"),
+        "GET response should contain VALUE testkey 0 5, got: {}",
+        get_response.body
+    );
+    assert!(
+        get_response.body.contains("hello"),
+        "GET response should contain 'hello', got: {}",
+        get_response.body
+    );
+    assert!(
+        get_response.body.contains("END"),
+        "GET response should end with END, got: {}",
+        get_response.body
+    );
+}
+
+/// Test 2: GET command on non-existent key returns END
+#[test]
+fn test_get_nonexistent_key_returns_end() {
+    let mut server = ConsoleApiTestServer::new();
+    server.start();
+
+    // GET a key that doesn't exist
+    let get_response = send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("get nonexistent_key"),
+    ).expect("Failed to send GET request");
+
+    assert_eq!(get_response.status_code, 200, "GET should return 200");
+
+    // Should return just "END\r\n" for missing keys
+    assert!(
+        get_response.body.contains("END"),
+        "GET response should contain END, got: {}",
+        get_response.body
+    );
+    assert!(
+        !get_response.body.contains("VALUE"),
+        "GET response should NOT contain VALUE for nonexistent key, got: {}",
+        get_response.body
+    );
+}
+
+/// Test 3: Multi-GET command returns all existing keys
+#[test]
+fn test_multi_get_all_existing_keys() {
+    let mut server = ConsoleApiTestServer::new();
+    server.start();
+
+    // Set multiple keys
+    send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("set key1 0 0 4\r\nval1"),
+    ).expect("Failed to send SET request");
+
+    send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("set key2 0 0 4\r\nval2"),
+    ).expect("Failed to send SET request");
+
+    send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("set key3 0 0 4\r\nval3"),
+    ).expect("Failed to send SET request");
+
+    // GET all keys at once
+    let get_response = send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("get key1 key2 key3"),
+    ).expect("Failed to send GET request");
+
+    assert_eq!(get_response.status_code, 200, "GET should return 200");
+
+    // Verify all values are returned
+    assert!(
+        get_response.body.contains("VALUE key1"),
+        "Multi-get should contain VALUE key1, got: {}",
+        get_response.body
+    );
+    assert!(
+        get_response.body.contains("VALUE key2"),
+        "Multi-get should contain VALUE key2, got: {}",
+        get_response.body
+    );
+    assert!(
+        get_response.body.contains("VALUE key3"),
+        "Multi-get should contain VALUE key3, got: {}",
+        get_response.body
+    );
+    assert!(
+        get_response.body.contains("val1"),
+        "Multi-get should contain val1, got: {}",
+        get_response.body
+    );
+    assert!(
+        get_response.body.contains("val2"),
+        "Multi-get should contain val2, got: {}",
+        get_response.body
+    );
+    assert!(
+        get_response.body.contains("val3"),
+        "Multi-get should contain val3, got: {}",
+        get_response.body
+    );
+    assert!(
+        get_response.body.contains("END"),
+        "Multi-get should end with END, got: {}",
+        get_response.body
+    );
+}
+
+/// Test 4: GET command with empty key returns error
+#[test]
+fn test_get_empty_key_returns_error() {
+    let mut server = ConsoleApiTestServer::new();
+    server.start();
+
+    // GET without a key
+    let get_response = send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("get"),
+    ).expect("Failed to send GET request");
+
+    assert_eq!(get_response.status_code, 200, "Should return 200");
+    assert!(
+        get_response.body.contains("CLIENT_ERROR") || get_response.body.contains("ERROR"),
+        "GET without key should return error, got: {}",
+        get_response.body
+    );
+}
+
+/// Test 5: GETS command works similarly to GET
+#[test]
+fn test_gets_command_returns_value() {
+    let mut server = ConsoleApiTestServer::new();
+    server.start();
+
+    // First, set a key
+    send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("set getskey 0 0 9\r\ngetsvalue"),
+    ).expect("Failed to send SET request");
+
+    // GETS the key
+    let gets_response = send_http_request(
+        "127.0.0.1",
+        server.http_port,
+        "POST",
+        "/api/console",
+        Some("gets getskey"),
+    ).expect("Failed to send GETS request");
+
+    assert_eq!(gets_response.status_code, 200, "GETS should return 200");
+
+    // Verify response format
+    assert!(
+        gets_response.body.contains("VALUE getskey"),
+        "GETS should return VALUE, got: {}",
+        gets_response.body
+    );
+    assert!(
+        gets_response.body.contains("getsvalue"),
+        "GETS should return the value, got: {}",
+        gets_response.body
+    );
+    assert!(
+        gets_response.body.contains("END"),
+        "GETS should end with END, got: {}",
+        gets_response.body
+    );
+}
