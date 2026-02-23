@@ -5,11 +5,15 @@
   "main": "index.html",
   "scripts": {
     "serve": "npx http-server . -p 8080 -c-1",
-    "test": "npm run test:e2e",
+    "test": "npm run test:unit && npm run test:integration && npm run test:e2e",
     "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=tests/unit",
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=tests/integration --forceExit",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "lighthouse": "lighthouse http://localhost:8080 --output html --output-path ./lighthouse-report.html"
+    "lighthouse": "lighthouse http://localhost:8080 --output html --output-path ./lighthouse-report.html",
+    "build": "echo 'Static site - no build required' && npm run validate",
+    "validate": "npm run test:unit && npm run test:integration",
+    "deploy:check": "npm run validate && echo 'Site is ready for deployment'"
   },
   "keywords": [
     "mirdb",
