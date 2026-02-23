@@ -81,7 +81,70 @@
     <section id="features" class="features" aria-labelledby="features-heading">
       <div class="container">
         <h2 id="features-heading">Features</h2>
-        <!-- Content to be implemented by Scenario 3 -->
+        <p class="features-intro">MirDB comes packed with powerful features for high-performance key-value storage.</p>
+
+        <div class="features-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32">
+                <path fill="currentColor" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Tokio Async Runtime</h3>
+            <p class="feature-description">Built on Tokio for high-performance asynchronous I/O. Handle thousands of concurrent connections efficiently with non-blocking operations.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32">
+                <path fill="currentColor" d="M3 3h18v2H3V3zm0 4h12v2H3V7zm0 4h18v2H3v-2zm0 4h12v2H3v-2zm0 4h18v2H3v-2z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Skip-List Memtable</h3>
+            <p class="feature-description">High-performance memtable using skip-list data structure. Provides fast O(log n) lookups and insertions with efficient in-memory storage.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32">
+                <path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Minor Compaction</h3>
+            <p class="feature-description">Automatic minor compaction flushes memtable data to disk as sorted string tables (SSTables), ensuring data persistence and memory efficiency.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32">
+                <path fill="currentColor" d="M19 9l-7 7-7-7h4V3h6v6h4z"/>
+                <path fill="currentColor" d="M5 21h14v-2H5v2z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Major Compaction</h3>
+            <p class="feature-description">Background major compaction merges SSTables to reduce storage overhead, improve read performance, and reclaim disk space from deleted entries.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32">
+                <path fill="currentColor" d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Write-Ahead Log</h3>
+            <p class="feature-description">Durable write-ahead logging ensures data safety. All writes are logged before acknowledgment, enabling crash recovery without data loss.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32">
+                <path fill="currentColor" d="M15 9H9v6h6V9zm-2 4h-2v-2h2v2zm8-2V9h-2V7c0-1.1-.9-2-2-2h-2V3h-2v2h-2V3H9v2H7c-1.1 0-2 .9-2 2v2H3v2h2v2H3v2h2v2c0 1.1.9 2 2 2h2v2h2v-2h2v2h2v-2h2c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Full compatibility with the Memcached text protocol. Use existing Memcached clients and tools without any code changes.</p>
+          </article>
+        </div>
       </div>
     </section>
 
