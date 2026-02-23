@@ -15,3 +15,4 @@ pub mod assets;
 
 // Re-export commonly used types
 pub use server::HttpServer;
+pub use handlers::get_homepage_html;

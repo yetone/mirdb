@@ -202,6 +202,11 @@ fn handle_logo() -> HttpResponse {
     HttpResponse::ok_binary("image/gif", assets::LOGO_GIF.to_vec())
 }
 
+/// Returns the homepage HTML content (for testing)
+pub fn get_homepage_html() -> &'static str {
+    assets::HOMEPAGE_HTML
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -226,5 +231,164 @@ mod tests {
         let response = HttpResponse::bad_request("Invalid input");
         assert_eq!(response.status_code, 400);
         assert_eq!(response.status_text, "Bad Request");
+    }
+
+    #[test]
+    fn test_homepage_contains_logo() {
+        let html = get_homepage_html();
+        assert!(html.contains("assets/logo.gif"), "Homepage should contain logo reference");
+    }
+
+    #[test]
+    fn test_homepage_contains_title() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("MirDB: A Persistent Key-Value Store with Memcached Protocol"),
+            "Homepage should contain the project title"
+        );
+    }
+
+    #[test]
+    fn test_homepage_contains_nav_features() {
+        let html = get_homepage_html();
+        assert!(html.contains("Features"), "Homepage should contain Features navigation link");
+    }
+
+    #[test]
+    fn test_homepage_contains_nav_documentation() {
+        let html = get_homepage_html();
+        assert!(html.contains("Documentation"), "Homepage should contain Documentation navigation link");
+    }
+
+    #[test]
+    fn test_homepage_contains_nav_github() {
+        let html = get_homepage_html();
+        assert!(html.contains("GitHub"), "Homepage should contain GitHub navigation link");
+    }
+
+    #[test]
+    fn test_homepage_contains_feature_memcached() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("Memcached Protocol"),
+            "Homepage should contain memcached protocol feature"
+        );
+    }
+
+    #[test]
+    fn test_homepage_contains_feature_skiplist() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("Skip-List Memtable") || html.contains("skip-list"),
+            "Homepage should contain skip-list memtable feature"
+        );
+    }
+
+    #[test]
+    fn test_homepage_contains_feature_compaction() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("Compaction") || html.contains("compaction"),
+            "Homepage should contain compaction feature"
+        );
+    }
+
+    #[test]
+    fn test_homepage_contains_feature_persistence() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("Persistence") || html.contains("persistent"),
+            "Homepage should contain persistence feature"
+        );
+    }
+
+    #[test]
+    fn test_homepage_contains_github_link() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("github.com"),
+            "Homepage should contain GitHub repository link"
+        );
+    }
+
+    #[test]
+    fn test_homepage_has_valid_doctype() {
+        let html = get_homepage_html();
+        assert!(
+            html.trim_start().starts_with("<!DOCTYPE html>"),
+            "Homepage should have valid HTML5 doctype"
+        );
+    }
+
+    #[test]
+    fn test_homepage_has_lang_attribute() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("<html lang="),
+            "Homepage should have lang attribute for accessibility"
+        );
+    }
+
+    #[test]
+    fn test_homepage_has_h1_heading() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("<h1>") && html.contains("</h1>"),
+            "Homepage should have an h1 heading"
+        );
+    }
+
+    #[test]
+    fn test_homepage_has_main_element() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("<main") && html.contains("</main>"),
+            "Homepage should have semantic main element"
+        );
+    }
+
+    #[test]
+    fn test_homepage_has_header_element() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("<header") && html.contains("</header>"),
+            "Homepage should have semantic header element"
+        );
+    }
+
+    #[test]
+    fn test_homepage_has_footer_element() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("<footer") && html.contains("</footer>"),
+            "Homepage should have semantic footer element"
+        );
+    }
+
+    #[test]
+    fn test_homepage_has_nav_element() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("<nav") && html.contains("</nav>"),
+            "Homepage should have semantic nav element"
+        );
+    }
+
+    #[test]
+    fn test_homepage_has_features_section() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("id=\"features\""),
+            "Homepage should have features section with id"
+        );
+    }
+
+    #[test]
+    fn test_homepage_heading_hierarchy() {
+        let html = get_homepage_html();
+        // Check that h1 exists and h2 elements follow
+        let h1_pos = html.find("<h1>").expect("h1 should exist");
+        let h2_pos = html.find("<h2").expect("h2 should exist");
+        assert!(h1_pos < h2_pos, "h1 should appear before h2 for proper heading hierarchy");
     }
 }

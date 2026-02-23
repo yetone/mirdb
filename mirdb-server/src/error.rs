@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use std::error::Error;
 use std::io::ErrorKind;
 
@@ -43,15 +44,15 @@ impl From<sstable::Status> for Status {
 
 impl From<bincode::Error> for Status {
     fn from(e: bincode::Error) -> Self {
-        Status::new(StatusCode::BincodeError, e.description())
+        Status::new(StatusCode::BincodeError, &e.to_string())
     }
 }
 
 impl From<::std::io::Error> for Status {
     fn from(e: ::std::io::Error) -> Self {
         match e.kind() {
-            ErrorKind::NotFound => Status::new(StatusCode::NotFound, e.description()),
-            _ => Status::new(StatusCode::IOError, e.description()),
+            ErrorKind::NotFound => Status::new(StatusCode::NotFound, &e.to_string()),
+            _ => Status::new(StatusCode::IOError, &e.to_string()),
         }
     }
 }
@@ -77,7 +78,7 @@ impl From<SnapError> for Status {
             SnapError::Checksum { .. } => StatusCode::ChecksumError,
             _ => StatusCode::SnapError,
         };
-        Status::new(code, e.description())
+        Status::new(code, &e.to_string())
     }
 }
 

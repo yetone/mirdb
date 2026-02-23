@@ -66,7 +66,7 @@ fn to_size_unit(x: &[u8]) -> usize {
         b"M" => MB,
         b"G" => GB,
         b"T" => TB,
-        _ => panic!(format!("unknown size unit {:?}", x)),
+        _ => panic!("unknown size unit {:?}", x),
     }
 }
 

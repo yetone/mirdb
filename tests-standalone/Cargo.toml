@@ -1,0 +1,11 @@
+[package]
+name = "tests-standalone"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+
+[[test]]
+name = "homepage_content"
+path = "tests/homepage_content_test.rs"

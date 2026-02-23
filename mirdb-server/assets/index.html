@@ -3,67 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with memcached protocol support">
     <title>MirDB - Persistent Key-Value Store</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <img src="/logo.gif" alt="MirDB Logo" class="logo">
-                <h1>MirDB</h1>
+    <!-- Skip navigation link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Section -->
+    <header role="banner">
+        <div class="header-container">
+            <div class="logo-title">
+                <img src="/assets/logo.gif" alt="MirDB Logo" class="logo">
+                <h1>MirDB: A Persistent Key-Value Store with Memcached Protocol</h1>
             </div>
-            <nav>
-                <a href="#features">Features</a>
-                <a href="#docs">Documentation</a>
-                <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+            <nav role="navigation" aria-label="Main navigation">
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#documentation">Documentation</a></li>
+                    <li><a href="https://github.com/nicksrandall/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h2>A Persistent Key-Value Store with Memcached Protocol</h2>
-                <p>Fast, reliable, and compatible with your existing memcached clients.</p>
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="hero" aria-labelledby="hero-heading">
+            <h2 id="hero-heading" class="visually-hidden">Introduction</h2>
+            <div class="hero-content">
+                <p class="value-proposition">A high-performance, persistent key-value store with native memcached protocol support.</p>
+                <a href="#demo" class="cta-button">Try It Now</a>
             </div>
-        </section>
-
-        <section id="features" class="features">
-            <div class="container">
-                <h2>Features</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h3>Memcached Protocol</h3>
-                        <p>Full compatibility with memcached text protocol.</p>
+            <div class="terminal-demo" aria-label="Terminal demo showing MirDB commands">
+                <!-- Terminal animation will be implemented by Scenario 7 -->
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span class="terminal-title">mirdb-demo</span>
                     </div>
-                    <div class="feature-card">
-                        <h3>Persistent Storage</h3>
-                        <p>Data survives restarts with write-ahead logging.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Skip-List Memtable</h3>
-                        <p>Fast in-memory operations with efficient indexing.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Compaction</h3>
-                        <p>Automatic minor and major compaction for performance.</p>
+                    <div class="terminal-body">
+                        <pre><code>$ telnet localhost 11211
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="docs" class="documentation">
-            <div class="container">
-                <h2>Documentation</h2>
-                <p>Get started with MirDB quickly.</p>
+        <!-- Features Section -->
+        <section id="features" class="features" aria-labelledby="features-heading">
+            <h2 id="features-heading">Features</h2>
+            <div class="features-grid">
+                <article class="feature-card">
+                    <h3>Memcached Protocol</h3>
+                    <p>Full compatibility with the memcached text protocol. Use existing memcached clients and tools seamlessly.</p>
+                </article>
+                <article class="feature-card">
+                    <h3>Skip-List Memtable</h3>
+                    <p>High-performance in-memory skip-list data structure for fast reads and writes with O(log n) complexity.</p>
+                </article>
+                <article class="feature-card">
+                    <h3>Compaction</h3>
+                    <p>Automatic minor and major compaction strategies to optimize storage and maintain read performance.</p>
+                </article>
+                <article class="feature-card">
+                    <h3>Persistence</h3>
+                    <p>Durable storage with write-ahead logging (WAL) and SSTable-based persistence for data safety.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Interactive Demo Section -->
+        <section id="demo" class="demo" aria-labelledby="demo-heading">
+            <h2 id="demo-heading">Interactive Demo</h2>
+            <p>Try MirDB commands directly in your browser:</p>
+            <div class="console-container">
+                <!-- Console interface will be implemented by Scenarios 4, 5, 6 -->
+                <div id="console-output" class="console-output" role="log" aria-live="polite"></div>
+                <div class="console-input-wrapper">
+                    <label for="console-input" class="visually-hidden">Enter memcached command</label>
+                    <input type="text" id="console-input" class="console-input" placeholder="Enter command (e.g., set key 0 0 5)" aria-describedby="console-help">
+                    <button type="button" id="console-submit" class="console-submit">Send</button>
+                </div>
+                <p id="console-help" class="console-help">Available commands: set, get, delete</p>
+            </div>
+        </section>
+
+        <!-- Documentation Section -->
+        <section id="documentation" class="documentation" aria-labelledby="docs-heading">
+            <h2 id="docs-heading">Documentation</h2>
+            <!-- Documentation content will be implemented by Scenario 8 -->
+            <div class="docs-content">
+                <h3>Quick Start</h3>
+                <p>Get started with MirDB in minutes.</p>
             </div>
         </section>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>MirDB - A persistent key-value store</p>
+    <!-- Footer Section -->
+    <footer role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="https://github.com/nicksrandall/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+            </div>
+            <div class="footer-info">
+                <p>MirDB is open source software.</p>
+                <p>Created by <a href="https://github.com/yetone">yetone</a></p>
+            </div>
         </div>
     </footer>
 

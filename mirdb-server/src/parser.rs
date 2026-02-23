@@ -38,7 +38,7 @@ fn to_getter_type(x: &[u8]) -> GetterType {
     match x {
         b"get" => GetterType::Get,
         b"gets" => GetterType::Gets,
-        _ => panic!(format!("unknown getter {:?}", x)),
+        _ => panic!("unknown getter {:?}", x),
     }
 }
 
@@ -49,7 +49,7 @@ fn to_setter_type(x: &[u8]) -> SetterType {
         b"replace" => SetterType::Replace,
         b"append" => SetterType::Append,
         b"prepend" => SetterType::Prepend,
-        _ => panic!(format!("unknown setter {:?}", x)),
+        _ => panic!("unknown setter {:?}", x),
     }
 }
 
