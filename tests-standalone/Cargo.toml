@@ -26,6 +26,10 @@ path = "tests/performance_test.rs"
 name = "accessibility"
 path = "tests/accessibility_test.rs"
 
+[[test]]
+name = "error_handling"
+path = "tests/error_handling_test.rs"
+
 [dependencies]
 mirdb = { path = "../mirdb-server" }
 
