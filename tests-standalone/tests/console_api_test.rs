@@ -339,3 +339,231 @@ fn test_multiple_set_commands_overwrite() {
         response2
     );
 }
+
+// ============================================================================
+// DELETE Command Tests (Scenario 6)
+// Tests for the DELETE command functionality in the console API
+// ============================================================================
+
+// Test Case: Delete an existing key - should return DELETED
+#[test]
+fn test_delete_existing_key_returns_deleted() {
+    let harness = TestHarness::new();
+
+    // First, set a key
+    let set_response = harness
+        .post_console("set testkey 0 0 5\r\nhello\r\n")
+        .expect("Failed to send SET request");
+    assert!(
+        set_response.contains("STORED"),
+        "SET should return STORED. Got: {}",
+        set_response
+    );
+
+    // Now delete the key
+    let delete_response = harness
+        .post_console("delete testkey")
+        .expect("Failed to send DELETE request");
+    assert!(
+        delete_response.contains("DELETED"),
+        "DELETE of existing key should return DELETED. Got: {}",
+        delete_response
+    );
+}
+
+// Test Case: Delete a nonexistent key - should return NOT_FOUND
+#[test]
+fn test_delete_nonexistent_key_returns_not_found() {
+    let harness = TestHarness::new();
+
+    // Try to delete a key that was never set
+    let delete_response = harness
+        .post_console("delete nonexistent_key")
+        .expect("Failed to send DELETE request");
+    assert!(
+        delete_response.contains("NOT_FOUND"),
+        "DELETE of nonexistent key should return NOT_FOUND. Got: {}",
+        delete_response
+    );
+}
+
+// Test Case: GET after DELETE should return END (key successfully removed)
+#[test]
+fn test_get_after_delete_returns_end() {
+    let harness = TestHarness::new();
+
+    // First, set a key
+    let set_response = harness
+        .post_console("set testkey 0 0 5\r\nhello\r\n")
+        .expect("Failed to send SET request");
+    assert!(
+        set_response.contains("STORED"),
+        "SET should return STORED. Got: {}",
+        set_response
+    );
+
+    // Verify the key exists with GET
+    let get_response1 = harness
+        .post_console("get testkey")
+        .expect("Failed to send GET request");
+    assert!(
+        get_response1.contains("VALUE") && get_response1.contains("hello"),
+        "GET should return VALUE with data before delete. Got: {}",
+        get_response1
+    );
+
+    // Delete the key
+    let delete_response = harness
+        .post_console("delete testkey")
+        .expect("Failed to send DELETE request");
+    assert!(
+        delete_response.contains("DELETED"),
+        "DELETE should return DELETED. Got: {}",
+        delete_response
+    );
+
+    // Verify the key is gone with GET - should return END only
+    let get_response2 = harness
+        .post_console("get testkey")
+        .expect("Failed to send GET request after delete");
+    assert!(
+        get_response2.contains("END") && !get_response2.contains("VALUE"),
+        "GET after DELETE should return END without VALUE. Got: {}",
+        get_response2
+    );
+}
+
+// Test Case: DELETE with noreply option
+#[test]
+fn test_delete_with_noreply() {
+    let harness = TestHarness::new();
+
+    // First, set a key
+    let set_response = harness
+        .post_console("set testkey_noreply 0 0 5\r\nhello\r\n")
+        .expect("Failed to send SET request");
+    assert!(
+        set_response.contains("STORED"),
+        "SET should return STORED. Got: {}",
+        set_response
+    );
+
+    // Delete with noreply option - should still return DELETED in console API
+    // (noreply affects TCP protocol but HTTP always returns a response)
+    let delete_response = harness
+        .post_console("delete testkey_noreply noreply")
+        .expect("Failed to send DELETE noreply request");
+    assert!(
+        delete_response.contains("DELETED"),
+        "DELETE with noreply should still return DELETED in HTTP API. Got: {}",
+        delete_response
+    );
+}
+
+// Test Case: DELETE with empty key should return error
+#[test]
+fn test_delete_empty_key_returns_error() {
+    let harness = TestHarness::new();
+
+    // Try to delete with no key specified
+    let delete_response = harness
+        .post_console("delete")
+        .expect("Failed to send DELETE request");
+    assert!(
+        delete_response.contains("CLIENT_ERROR") || delete_response.contains("ERROR"),
+        "DELETE without key should return error. Got: {}",
+        delete_response
+    );
+}
+
+// Test Case: Multiple deletes of the same key
+#[test]
+fn test_multiple_deletes_same_key() {
+    let harness = TestHarness::new();
+
+    // First, set a key
+    let set_response = harness
+        .post_console("set testkey_multi 0 0 5\r\nhello\r\n")
+        .expect("Failed to send SET request");
+    assert!(
+        set_response.contains("STORED"),
+        "SET should return STORED. Got: {}",
+        set_response
+    );
+
+    // First delete should succeed
+    let delete_response1 = harness
+        .post_console("delete testkey_multi")
+        .expect("Failed to send first DELETE request");
+    assert!(
+        delete_response1.contains("DELETED"),
+        "First DELETE should return DELETED. Got: {}",
+        delete_response1
+    );
+
+    // Second delete of same key should return NOT_FOUND
+    let delete_response2 = harness
+        .post_console("delete testkey_multi")
+        .expect("Failed to send second DELETE request");
+    assert!(
+        delete_response2.contains("NOT_FOUND"),
+        "Second DELETE of same key should return NOT_FOUND. Got: {}",
+        delete_response2
+    );
+}
+
+// Test Case: Delete-Set-Delete cycle
+#[test]
+fn test_delete_set_delete_cycle() {
+    let harness = TestHarness::new();
+
+    // First, set a key
+    let set_response1 = harness
+        .post_console("set cycle_key 0 0 6\r\nvalue1\r\n")
+        .expect("Failed to send first SET request");
+    assert!(
+        set_response1.contains("STORED"),
+        "First SET should return STORED. Got: {}",
+        set_response1
+    );
+
+    // Delete the key
+    let delete_response1 = harness
+        .post_console("delete cycle_key")
+        .expect("Failed to send first DELETE request");
+    assert!(
+        delete_response1.contains("DELETED"),
+        "First DELETE should return DELETED. Got: {}",
+        delete_response1
+    );
+
+    // Set the same key again with different value
+    let set_response2 = harness
+        .post_console("set cycle_key 0 0 6\r\nvalue2\r\n")
+        .expect("Failed to send second SET request");
+    assert!(
+        set_response2.contains("STORED"),
+        "Second SET should return STORED. Got: {}",
+        set_response2
+    );
+
+    // Verify the new value is there
+    let get_response = harness
+        .post_console("get cycle_key")
+        .expect("Failed to send GET request");
+    assert!(
+        get_response.contains("value2"),
+        "GET should return the new value. Got: {}",
+        get_response
+    );
+
+    // Delete again
+    let delete_response2 = harness
+        .post_console("delete cycle_key")
+        .expect("Failed to send second DELETE request");
+    assert!(
+        delete_response2.contains("DELETED"),
+        "Second DELETE should return DELETED. Got: {}",
+        delete_response2
+    );
+}
