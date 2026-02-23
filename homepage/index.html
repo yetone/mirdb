@@ -84,7 +84,7 @@
         <!-- Step 2: Start the Server -->
         <div class="quickstart__step">
           <h3 class="quickstart__step-title">2. Start the Server</h3>
-          <p class="quickstart__step-description">Start the MirDB server with a data directory:</p>
+          <p class="quickstart__step-description">Start the MirDB server with a configuration file:</p>
           <div class="code-block" data-language="bash">
             <div class="code-block__header">
               <span class="code-block__language">bash</span>
@@ -93,14 +93,14 @@
                 <span class="code-block__copy-text">Copy</span>
               </button>
             </div>
-            <pre><code class="language-bash">mirdb-server --data-dir ./data</code></pre>
+            <pre><code class="language-bash">mirdb -c mirdb.toml</code></pre>
           </div>
         </div>
 
         <!-- Step 3: Connect to the Server -->
         <div class="quickstart__step">
           <h3 class="quickstart__step-title">3. Connect to the Server</h3>
-          <p class="quickstart__step-description">Connect to MirDB using telnet on the default Memcached port:</p>
+          <p class="quickstart__step-description">Connect to MirDB using telnet (default port 12333):</p>
           <div class="code-block" data-language="bash">
             <div class="code-block__header">
               <span class="code-block__language">bash</span>
@@ -109,7 +109,7 @@
                 <span class="code-block__copy-text">Copy</span>
               </button>
             </div>
-            <pre><code class="language-bash">telnet localhost 11211</code></pre>
+            <pre><code class="language-bash">telnet localhost 12333</code></pre>
           </div>
         </div>
 
@@ -196,22 +196,32 @@ END</code></pre>
         <h2 id="configuration-title">Configuration</h2>
         <div class="configuration__options">
           <div class="configuration__option">
-            <h3 class="configuration__option-title">Port Configuration</h3>
-            <p class="configuration__option-description">Configure the server port (default: 11211):</p>
-            <div class="code-block" data-language="bash">
+            <h3 class="configuration__option-title">Configuration File</h3>
+            <p class="configuration__option-description">MirDB uses a TOML configuration file. Create a <code>mirdb.toml</code> file:</p>
+            <div class="code-block" data-language="toml">
               <div class="code-block__header">
-                <span class="code-block__language">bash</span>
+                <span class="code-block__language">toml</span>
                 <button class="code-block__copy" type="button" aria-label="Copy to clipboard" title="Copy to clipboard">
                   <span class="code-block__copy-icon" aria-hidden="true">📋</span>
                   <span class="code-block__copy-text">Copy</span>
                 </button>
               </div>
-              <pre><code class="language-bash">mirdb-server --port 11211</code></pre>
+              <pre><code class="language-toml"># Server address and port (default: 12333)
+addr = "0.0.0.0:12333"
+
+# Data directory for SST files
+work_dir = "/tmp/mirdb"
+
+# LSM-Tree configuration
+max_level = 7
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32</code></pre>
             </div>
           </div>
           <div class="configuration__option">
-            <h3 class="configuration__option-title">Data Directory</h3>
-            <p class="configuration__option-description">Specify where MirDB stores its data files:</p>
+            <h3 class="configuration__option-title">Starting with Custom Config</h3>
+            <p class="configuration__option-description">Run MirDB with your configuration file:</p>
             <div class="code-block" data-language="bash">
               <div class="code-block__header">
                 <span class="code-block__language">bash</span>
@@ -220,21 +230,29 @@ END</code></pre>
                   <span class="code-block__copy-text">Copy</span>
                 </button>
               </div>
-              <pre><code class="language-bash">mirdb-server --data-dir /var/lib/mirdb</code></pre>
+              <pre><code class="language-bash">mirdb -c /path/to/mirdb.toml</code></pre>
             </div>
           </div>
           <div class="configuration__option">
-            <h3 class="configuration__option-title">WAL Settings</h3>
-            <p class="configuration__option-description">Configure Write-Ahead Log for durability:</p>
-            <div class="code-block" data-language="bash">
+            <h3 class="configuration__option-title">Compaction Settings</h3>
+            <p class="configuration__option-description">Fine-tune compaction behavior for performance:</p>
+            <div class="code-block" data-language="toml">
               <div class="code-block__header">
-                <span class="code-block__language">bash</span>
+                <span class="code-block__language">toml</span>
                 <button class="code-block__copy" type="button" aria-label="Copy to clipboard" title="Copy to clipboard">
                   <span class="code-block__copy-icon" aria-hidden="true">📋</span>
                   <span class="code-block__copy-text">Copy</span>
                 </button>
               </div>
-              <pre><code class="language-bash">mirdb-server --data-dir ./data --wal-sync</code></pre>
+              <pre><code class="language-toml"># Number of immutable memtables before compaction
+imm_mem_table_max_count = 16
+
+# L0 files before triggering compaction
+l0_compaction_trigger = 4
+
+# Block settings
+block_size = "4K"
+block_restart_interval = 16</code></pre>
             </div>
           </div>
         </div>
