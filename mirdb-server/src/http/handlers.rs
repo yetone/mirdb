@@ -391,4 +391,140 @@ mod tests {
         let h2_pos = html.find("<h2").expect("h2 should exist");
         assert!(h1_pos < h2_pos, "h1 should appear before h2 for proper heading hierarchy");
     }
+
+    // === Documentation Section Tests (Scenario 8) ===
+
+    #[test]
+    fn test_documentation_section_contains_cargo_build_instructions() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("cargo build"),
+            "Documentation section should contain cargo build command"
+        );
+        assert!(
+            html.contains("cargo build --release"),
+            "Documentation section should contain 'cargo build --release' command"
+        );
+    }
+
+    #[test]
+    fn test_documentation_section_contains_config_file_instructions() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("etc/mirdb.toml"),
+            "Documentation section should contain configuration file path etc/mirdb.toml"
+        );
+    }
+
+    #[test]
+    fn test_documentation_section_contains_set_command_example() {
+        let html = get_homepage_html();
+        // Check for SET command in documentation section
+        assert!(
+            html.contains("SET Command") || html.contains("set mykey"),
+            "Documentation section should contain SET command example"
+        );
+        assert!(
+            html.contains("STORED"),
+            "Documentation section should contain STORED response"
+        );
+    }
+
+    #[test]
+    fn test_documentation_section_contains_get_command_example() {
+        let html = get_homepage_html();
+        // Check for GET command in documentation section
+        assert!(
+            html.contains("GET Command") || html.contains("get mykey"),
+            "Documentation section should contain GET command example"
+        );
+        assert!(
+            html.contains("VALUE mykey"),
+            "Documentation section should contain VALUE response"
+        );
+    }
+
+    #[test]
+    fn test_documentation_section_contains_delete_command_example() {
+        let html = get_homepage_html();
+        // Check for DELETE command in documentation section
+        assert!(
+            html.contains("DELETE Command") || html.contains("delete mykey"),
+            "Documentation section should contain DELETE command example"
+        );
+        assert!(
+            html.contains("DELETED"),
+            "Documentation section should contain DELETED response"
+        );
+    }
+
+    #[test]
+    fn test_documentation_section_contains_server_start_command() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("mirdb-server"),
+            "Documentation section should contain server start command"
+        );
+        assert!(
+            html.contains("--port") || html.contains("--http-port") || html.contains("http_port"),
+            "Documentation section should contain port configuration"
+        );
+    }
+
+    #[test]
+    fn test_documentation_section_has_installation_subsection() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("id=\"installation\""),
+            "Documentation section should have installation subsection"
+        );
+        assert!(
+            html.contains("Installation"),
+            "Documentation section should have Installation heading"
+        );
+    }
+
+    #[test]
+    fn test_documentation_section_has_configuration_subsection() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("id=\"configuration\""),
+            "Documentation section should have configuration subsection"
+        );
+        assert!(
+            html.contains("Configuration"),
+            "Documentation section should have Configuration heading"
+        );
+    }
+
+    #[test]
+    fn test_documentation_section_has_commands_subsection() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("id=\"commands\""),
+            "Documentation section should have commands subsection"
+        );
+        assert!(
+            html.contains("Command Examples"),
+            "Documentation section should have Command Examples heading"
+        );
+    }
+
+    #[test]
+    fn test_documentation_contains_clone_instructions() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("git clone"),
+            "Documentation section should contain git clone command"
+        );
+    }
+
+    #[test]
+    fn test_documentation_config_contains_listen_address() {
+        let html = get_homepage_html();
+        assert!(
+            html.contains("listen_address"),
+            "Documentation configuration section should contain listen_address setting"
+        );
+    }
 }

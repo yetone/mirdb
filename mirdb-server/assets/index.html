@@ -95,13 +95,122 @@
             </div>
         </section>
 
-        <!-- Documentation Section -->
+        <!-- Documentation Section - Scenario 8: Documentation Section Content -->
         <section id="documentation" class="documentation" aria-labelledby="docs-heading">
             <h2 id="docs-heading">Documentation</h2>
-            <!-- Documentation content will be implemented by Scenario 8 -->
+
             <div class="docs-content">
-                <h3>Quick Start</h3>
-                <p>Get started with MirDB in minutes.</p>
+                <!-- Installation Instructions -->
+                <div class="docs-subsection" id="installation">
+                    <h3>Installation</h3>
+                    <p>Build MirDB from source using Cargo:</p>
+                    <div class="code-block">
+                        <pre><code># Clone the repository
+git clone https://github.com/nicksrandall/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# The binary will be at target/release/mirdb-server</code></pre>
+                    </div>
+                </div>
+
+                <!-- Configuration Instructions -->
+                <div class="docs-subsection" id="configuration">
+                    <h3>Configuration</h3>
+                    <p>Create a configuration file at <code>etc/mirdb.toml</code>:</p>
+                    <div class="code-block">
+                        <pre><code># etc/mirdb.toml
+listen_address = "0.0.0.0:11211"    # Memcached protocol port
+http_port = 8080                     # HTTP server port
+work_dir = "/var/lib/mirdb"          # Data directory
+max_level = 7                        # Maximum SSTable levels
+sstable_max_size = 104857600         # SSTable max size (100MB)
+memtable_max_size = 4194304          # Memtable max size (4MB)
+block_size = 4096                    # Block size for SSTable</code></pre>
+                    </div>
+                </div>
+
+                <!-- Server Start Command -->
+                <div class="docs-subsection" id="running">
+                    <h3>Running the Server</h3>
+                    <p>Start MirDB with your configuration:</p>
+                    <div class="code-block">
+                        <pre><code># Start with default configuration
+./target/release/mirdb-server
+
+# Start with custom configuration file
+./target/release/mirdb-server --config etc/mirdb.toml
+
+# Start with custom port
+./target/release/mirdb-server --port 11211 --http-port 8080</code></pre>
+                    </div>
+                </div>
+
+                <!-- Command Examples -->
+                <div class="docs-subsection" id="commands">
+                    <h3>Command Examples</h3>
+                    <p>MirDB supports the memcached text protocol. Here are basic command examples:</p>
+
+                    <h4>SET Command</h4>
+                    <p>Store a value with a key:</p>
+                    <div class="code-block">
+                        <pre><code>set mykey 0 0 5
+hello
+STORED</code></pre>
+                    </div>
+                    <p>Format: <code>set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></p>
+
+                    <h4>GET Command</h4>
+                    <p>Retrieve a value by key:</p>
+                    <div class="code-block">
+                        <pre><code>get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                    </div>
+                    <p>Format: <code>get &lt;key&gt;</code></p>
+
+                    <h4>DELETE Command</h4>
+                    <p>Remove a key-value pair:</p>
+                    <div class="code-block">
+                        <pre><code>delete mykey
+DELETED</code></pre>
+                    </div>
+                    <p>Format: <code>delete &lt;key&gt;</code></p>
+                </div>
+
+                <!-- Quick Reference -->
+                <div class="docs-subsection" id="reference">
+                    <h3>Quick Reference</h3>
+                    <table class="command-reference">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>set</code></td>
+                                <td>Store a key-value pair</td>
+                                <td><code>set key 0 0 5</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>get</code></td>
+                                <td>Retrieve value by key</td>
+                                <td><code>get key</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>delete</code></td>
+                                <td>Remove a key-value pair</td>
+                                <td><code>delete key</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
