@@ -7,8 +7,10 @@
 
 use std::sync::Arc;
 
-use crate::request::{Request, SetterType};
-use crate::response::Response;
+use bytes::BytesMut;
+
+use crate::request::{GetterType, Request, SetterType};
+use crate::response::{BufferWriter, Response};
 use crate::slice::Slice;
 use crate::store::Store;
 use super::handlers::{HttpRequest, HttpResponse};
@@ -45,13 +47,21 @@ fn parse_and_execute_command(command: &str, store: &Arc<Store>) -> Result<String
         return Err("CLIENT_ERROR empty command\r\n".to_string());
     }
 
-    // Check if this is a SET command
-    if trimmed.starts_with("set ") || trimmed.starts_with("set\t") {
-        return execute_set_command(command, store);
-    }
+    // Get the command keyword (first word)
+    let cmd = trimmed.split_whitespace().next().unwrap_or("").to_lowercase();
 
-    // Placeholder for other commands (GET, DELETE to be implemented by scenarios 5, 6)
-    Err("ERROR unsupported command\r\n".to_string())
+    match cmd.as_str() {
+        "set" | "add" | "replace" | "append" | "prepend" => {
+            execute_set_command(command, store)
+        }
+        "get" | "gets" => {
+            execute_get_command(trimmed, store)
+        }
+        "delete" => {
+            execute_delete_command(trimmed, store)
+        }
+        _ => Err("ERROR unsupported command\r\n".to_string()),
+    }
 }
 
 /// Execute a SET command
@@ -60,9 +70,20 @@ fn execute_set_command(command: &str, store: &Arc<Store>) -> Result<String, Stri
     // Parse the SET command
     let parsed = parse_set_command(command)?;
 
+    // Determine setter type
+    let cmd = command.trim().split_whitespace().next().unwrap_or("set").to_lowercase();
+    let setter_type = match cmd.as_str() {
+        "set" => SetterType::Set,
+        "add" => SetterType::Add,
+        "replace" => SetterType::Replace,
+        "append" => SetterType::Append,
+        "prepend" => SetterType::Prepend,
+        _ => SetterType::Set,
+    };
+
     // Create the request
     let request = Request::Setter {
-        setter: SetterType::Set,
+        setter: setter_type,
         key: Slice::from(parsed.key.as_bytes().to_vec()),
         flags: parsed.flags,
         ttl: parsed.exptime,
@@ -79,6 +100,70 @@ fn execute_set_command(command: &str, store: &Arc<Store>) -> Result<String, Stri
         Ok(Response::ServerError(msg)) => Ok(format!("SERVER_ERROR {}\r\n", msg)),
         Ok(_) => Ok("ERROR\r\n".to_string()),
         Err(e) => Ok(format!("SERVER_ERROR {:?}\r\n", e)),
+    }
+}
+
+/// Execute a GET command (Scenario 5)
+/// Format: get <key> [<key> ...]
+fn execute_get_command(command: &str, store: &Arc<Store>) -> Result<String, String> {
+    let parts: Vec<&str> = command.split_whitespace().collect();
+
+    if parts.len() < 2 {
+        return Err("CLIENT_ERROR bad command line format\r\n".to_string());
+    }
+
+    let keys: Vec<Slice> = parts[1..].iter()
+        .map(|k| Slice::from(k.as_bytes().to_vec()))
+        .collect();
+
+    let getter_type = match parts[0].to_lowercase().as_str() {
+        "get" => GetterType::Get,
+        "gets" => GetterType::Gets,
+        _ => GetterType::Get,
+    };
+
+    let request = Request::Getter {
+        getter: getter_type,
+        keys,
+    };
+
+    execute_request(request, store)
+}
+
+/// Execute a DELETE command (Scenario 6)
+/// Format: delete <key> [noreply]
+fn execute_delete_command(command: &str, store: &Arc<Store>) -> Result<String, String> {
+    let parts: Vec<&str> = command.split_whitespace().collect();
+
+    if parts.len() < 2 {
+        return Err("CLIENT_ERROR bad command line format\r\n".to_string());
+    }
+
+    let key = parts[1];
+    let no_reply = parts.get(2).map(|s| s.to_lowercase() == "noreply").unwrap_or(false);
+
+    let request = Request::Deleter {
+        key: Slice::from(key.as_bytes().to_vec()),
+        no_reply,
+    };
+
+    execute_request(request, store)
+}
+
+/// Execute a parsed request against the store and return formatted response
+fn execute_request(request: Request, store: &Arc<Store>) -> Result<String, String> {
+    match store.apply(request) {
+        Ok(response) => {
+            let mut buffer = BytesMut::new();
+            let mut writer = BufferWriter::new(&mut buffer);
+
+            if let Err(e) = response.write(&mut writer) {
+                return Err(format!("SERVER_ERROR {}\r\n", e.msg));
+            }
+
+            Ok(String::from_utf8_lossy(&buffer).to_string())
+        }
+        Err(e) => Err(format!("SERVER_ERROR {}\r\n", e.msg)),
     }
 }
 
@@ -110,10 +195,6 @@ fn parse_set_command(command: &str) -> Result<ParsedSetCommand, String> {
 
     if header_parts.len() < 5 {
         return Err("CLIENT_ERROR invalid command format\r\n".to_string());
-    }
-
-    if header_parts[0] != "set" {
-        return Err("CLIENT_ERROR expected set command\r\n".to_string());
     }
 
     let key = header_parts[1].to_string();
@@ -297,5 +378,22 @@ mod tests {
         let result = parse_set_command(cmd);
         assert!(result.is_err());
         assert!(result.unwrap_err().contains("CLIENT_ERROR"));
+    }
+
+    #[test]
+    fn test_parse_delete_command() {
+        let parts: Vec<&str> = "delete testkey".split_whitespace().collect();
+        assert_eq!(parts.len(), 2);
+        assert_eq!(parts[0], "delete");
+        assert_eq!(parts[1], "testkey");
+    }
+
+    #[test]
+    fn test_parse_delete_with_noreply() {
+        let parts: Vec<&str> = "delete testkey noreply".split_whitespace().collect();
+        assert_eq!(parts.len(), 3);
+        assert_eq!(parts[0], "delete");
+        assert_eq!(parts[1], "testkey");
+        assert_eq!(parts[2], "noreply");
     }
 }
