@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB: A high-performance persistent key-value store with Memcached protocol compatibility, written in Rust.">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="Simple, fast, and durable key-value storage written in Rust with Memcached protocol support.">
+  <meta property="og:image" content="assets/og-image.png">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://yetone.github.io/mirdb/">
+
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+
+  <!-- Preconnect to CDN for faster resource loading -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+  <!-- Main styles - load first for FCP -->
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Prism.js for syntax highlighting - loaded asynchronously to not block rendering -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"></noscript>
+
+  <link rel="icon" href="assets/favicon.ico">
+</head>
+<body>
+  <header>
+    <nav class="nav" aria-label="Main navigation">
+      <div class="nav__container">
+        <a href="#" class="nav__logo" aria-label="MirDB Home">MirDB</a>
+        <ul class="nav__links">
+          <li><a href="#quickstart">Quick Start</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#configuration">Configuration</a></li>
+          <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="hero" class="hero" aria-labelledby="hero-headline">
+      <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo" width="150" height="150" fetchpriority="high" decoding="async">
+      <h1 id="hero-headline" class="hero-headline">MirDB: A Persistent Key-Value Store with Memcached Protocol</h1>
+      <p class="hero-tagline">Simple, fast, and durable key-value storage written in Rust</p>
+      <div class="hero-tech-stack" aria-label="Technology stack">
+        <span class="tech-badge tech-badge--rust" aria-label="Built with Rust">Rust</span>
+        <span class="tech-badge tech-badge--tokio" aria-label="Powered by Tokio">Tokio</span>
+        <span class="tech-badge tech-badge--lsm" aria-label="LSM-Tree storage">LSM-Tree</span>
+      </div>
+      <a href="#quickstart" class="hero-cta">Get Started</a>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quickstart" class="quickstart" aria-labelledby="quickstart-title">
+      <h2 id="quickstart-title">Quick Start</h2>
+      <p class="quickstart__intro">Get up and running with MirDB in minutes.</p>
+
+      <div class="quickstart__steps">
+        <!-- Step 1: Installation -->
+        <div class="quickstart__step">
+          <h3 class="quickstart__step-title">1. Install MirDB</h3>
+          <p class="quickstart__step-description">Install MirDB using Cargo, the Rust package manager:</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-block__header">
+              <span class="code-block__language">bash</span>
+              <button class="code-block__copy" type="button" aria-label="Copy to clipboard" title="Copy to clipboard">
+                <span class="code-block__copy-icon" aria-hidden="true">📋</span>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-bash">cargo install mirdb</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 2: Start the Server -->
+        <div class="quickstart__step">
+          <h3 class="quickstart__step-title">2. Start the Server</h3>
+          <p class="quickstart__step-description">Start the MirDB server with a configuration file:</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-block__header">
+              <span class="code-block__language">bash</span>
+              <button class="code-block__copy" type="button" aria-label="Copy to clipboard" title="Copy to clipboard">
+                <span class="code-block__copy-icon" aria-hidden="true">📋</span>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-bash">mirdb -c mirdb.toml</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 3: Connect to the Server -->
+        <div class="quickstart__step">
+          <h3 class="quickstart__step-title">3. Connect to the Server</h3>
+          <p class="quickstart__step-description">Connect to MirDB using telnet (default port 12333):</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-block__header">
+              <span class="code-block__language">bash</span>
+              <button class="code-block__copy" type="button" aria-label="Copy to clipboard" title="Copy to clipboard">
+                <span class="code-block__copy-icon" aria-hidden="true">📋</span>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-bash">telnet localhost 12333</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 4: Basic Operations -->
+        <div class="quickstart__step">
+          <h3 class="quickstart__step-title">4. Basic Operations</h3>
+          <p class="quickstart__step-description">Use standard Memcached protocol commands to set and get values:</p>
+          <div class="code-block" data-language="memcached">
+            <div class="code-block__header">
+              <span class="code-block__language">memcached</span>
+              <button class="code-block__copy" type="button" aria-label="Copy to clipboard" title="Copy to clipboard">
+                <span class="code-block__copy-icon" aria-hidden="true">📋</span>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-memcached"># Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features" aria-labelledby="features-title">
+      <h2 id="features-title">Features</h2>
+      <ul class="features__list">
+        <li class="features__item">
+          <h3 class="features__item-title">Tokio Async Runtime</h3>
+          <p class="features__item-description">Built on Tokio for high-performance asynchronous I/O operations.</p>
+        </li>
+        <li class="features__item">
+          <h3 class="features__item-title">Skip-List Memtable</h3>
+          <p class="features__item-description">Efficient in-memory data structure for fast reads and writes.</p>
+        </li>
+        <li class="features__item">
+          <h3 class="features__item-title">Write-Ahead Log</h3>
+          <p class="features__item-description">Ensures data durability with crash recovery support.</p>
+        </li>
+        <li class="features__item">
+          <h3 class="features__item-title">Minor Compaction</h3>
+          <p class="features__item-description">Automatic background compaction of memtables to SSTables.</p>
+        </li>
+        <li class="features__item">
+          <h3 class="features__item-title">Major Compaction</h3>
+          <p class="features__item-description">Merges SSTables to optimize storage and read performance.</p>
+        </li>
+        <li class="features__item">
+          <h3 class="features__item-title">Memcached Protocol</h3>
+          <p class="features__item-description">Compatible with standard Memcached clients and tools.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="roadmap" aria-labelledby="roadmap-title">
+      <h2 id="roadmap-title">Roadmap</h2>
+      <ul class="roadmap__list">
+        <li class="roadmap__item">
+          <span class="roadmap__item-title">Raft Consensus</span>
+          <span class="roadmap__badge">Coming Soon</span>
+        </li>
+        <li class="roadmap__item">
+          <span class="roadmap__item-title">Additional Protocol Support</span>
+          <span class="roadmap__badge">Coming Soon</span>
+        </li>
+        <li class="roadmap__item">
+          <span class="roadmap__item-title">Performance Benchmarks</span>
+          <span class="roadmap__badge">Coming Soon</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Configuration Section -->
+    <section id="configuration" class="configuration" aria-labelledby="configuration-title">
+      <div class="configuration__content">
+        <h2 id="configuration-title">Configuration</h2>
+        <div class="configuration__options">
+          <div class="configuration__option">
+            <h3 class="configuration__option-title">Configuration File</h3>
+            <p class="configuration__option-description">MirDB uses a TOML configuration file. Create a <code>mirdb.toml</code> file:</p>
+            <div class="code-block" data-language="toml">
+              <div class="code-block__header">
+                <span class="code-block__language">toml</span>
+                <button class="code-block__copy" type="button" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <span class="code-block__copy-icon" aria-hidden="true">📋</span>
+                  <span class="code-block__copy-text">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-toml"># Server address and port (default: 12333)
+addr = "0.0.0.0:12333"
+
+# Data directory for SST files
+work_dir = "/tmp/mirdb"
+
+# LSM-Tree configuration
+max_level = 7
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32</code></pre>
+            </div>
+          </div>
+          <div class="configuration__option">
+            <h3 class="configuration__option-title">Starting with Custom Config</h3>
+            <p class="configuration__option-description">Run MirDB with your configuration file:</p>
+            <div class="code-block" data-language="bash">
+              <div class="code-block__header">
+                <span class="code-block__language">bash</span>
+                <button class="code-block__copy" type="button" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <span class="code-block__copy-icon" aria-hidden="true">📋</span>
+                  <span class="code-block__copy-text">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-bash">mirdb -c /path/to/mirdb.toml</code></pre>
+            </div>
+          </div>
+          <div class="configuration__option">
+            <h3 class="configuration__option-title">Compaction Settings</h3>
+            <p class="configuration__option-description">Fine-tune compaction behavior for performance:</p>
+            <div class="code-block" data-language="toml">
+              <div class="code-block__header">
+                <span class="code-block__language">toml</span>
+                <button class="code-block__copy" type="button" aria-label="Copy to clipboard" title="Copy to clipboard">
+                  <span class="code-block__copy-icon" aria-hidden="true">📋</span>
+                  <span class="code-block__copy-text">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-toml"># Number of immutable memtables before compaction
+imm_mem_table_max_count = 16
+
+# L0 files before triggering compaction
+l0_compaction_trigger = 4
+
+# Block settings
+block_size = "4K"
+block_restart_interval = 16</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" data-testid="footer">
+    <div class="footer__content">
+      <div class="footer__links">
+        <a href="https://github.com/yetone/mirdb" class="footer__link" target="_blank" rel="noopener" data-testid="github-link">
+          GitHub Repository
+        </a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" class="footer__link" target="_blank" rel="noopener" data-testid="license-link">
+          License
+        </a>
+      </div>
+      <div class="footer__badge" data-testid="circleci-badge">
+        <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener" aria-label="CircleCI Build Status" data-testid="circleci-link">
+          <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI Build Status" data-testid="circleci-img">
+        </a>
+      </div>
+      <p class="footer__license">MirDB is open source software released under the MIT License.</p>
+    </div>
+  </footer>
+
+  <!-- Prism.js for syntax highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
+
+  <!-- Local scripts -->
+  <script src="js/copy-to-clipboard.js" defer></script>
+  <script src="js/smooth-scroll.js" defer></script>
+  <script src="js/syntax-highlight.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

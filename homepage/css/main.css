@@ -1,0 +1,75 @@
+/**
+ * Main Stylesheet
+ * Owner: First scenario builder
+ *
+ * Imports all component and utility stylesheets.
+ * Contains base/global styles that apply site-wide.
+ */
+
+/* All @import statements must be at the top of the file */
+@import 'reset.css';
+@import 'variables.css';
+
+/* Component styles */
+@import 'components/hero.css';
+@import 'components/quickstart.css';
+@import 'components/code-block.css';
+@import 'components/features.css';
+@import 'components/roadmap.css';
+@import 'components/configuration.css';
+@import 'components/footer.css';
+
+/* Responsive styles - each file contains its own media queries */
+@import 'responsive/mobile.css';
+@import 'responsive/tablet.css';
+@import 'responsive/desktop.css';
+
+/* Base styles */
+body {
+  font-family: var(--font-family-body);
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+main {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+section {
+  padding: var(--spacing-2xl) 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--line-height-tight);
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-md);
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+}
+
+a {
+  color: var(--color-secondary);
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-secondary-dark);
+}
+
+a:focus {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}

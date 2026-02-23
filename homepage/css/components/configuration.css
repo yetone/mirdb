@@ -1,0 +1,42 @@
+/**
+ * Configuration Section Styles
+ * Owner: Scenario 5 - Configuration Section
+ *
+ * Styles for the configuration section including:
+ * - Section heading
+ * - Configuration options list
+ * - Configuration examples (uses code-block.css)
+ * - Option descriptions and explanations
+ */
+
+.configuration {
+  background-color: var(--color-background-alt);
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+.configuration__content {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+}
+
+.configuration__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.configuration__option {
+  background-color: var(--color-surface);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+}
+
+.configuration__option-title {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+.configuration__option-description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}

@@ -1,0 +1,40 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 3 - Features Section
+ *
+ * Styles for the features section including:
+ * - Section heading
+ * - Feature list/grid layout
+ * - Individual feature items
+ * - Feature icons or bullets
+ * - Feature descriptions
+ */
+
+.features {
+  background-color: var(--color-background-alt);
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+.features__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+}
+
+.features__item {
+  background-color: var(--color-surface);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+}
+
+.features__item-title {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+.features__item-description {
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}

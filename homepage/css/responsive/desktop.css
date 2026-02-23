@@ -1,0 +1,183 @@
+/**
+ * Desktop Responsive Styles
+ * Owner: Scenario 9 - Responsive Design - Desktop
+ *
+ * Media query styles for desktop viewports (1024px+):
+ * - Full multi-column layouts
+ * - Maximum content width constraint
+ * - Desktop-optimized spacing
+ *
+ * Requirements:
+ * - Max-width to prevent overly long lines
+ * - Centered content layout
+ * - Full navigation display
+ */
+
+@media (min-width: 1024px) {
+  /* Navigation - full display on desktop */
+  .nav__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .nav__links {
+    display: flex;
+    gap: var(--spacing-lg);
+  }
+
+  .nav__links li {
+    list-style: none;
+  }
+
+  /* Hero section - desktop sizing */
+  .hero {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .hero-logo {
+    max-width: 200px;
+  }
+
+  .hero-headline {
+    font-size: var(--font-size-3xl);
+    max-width: 900px;
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-xl);
+    max-width: 700px;
+  }
+
+  /* Main content - constrained width for readability */
+  main {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Sections - larger padding on desktop */
+  section {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  /* Quick Start - optimized layout */
+  .quickstart {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .quickstart__steps {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Features - full grid on desktop */
+  .features {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .features__list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+  }
+
+  /* Roadmap - centered with max-width */
+  .roadmap {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .roadmap__list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Configuration - desktop layout */
+  .configuration {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .configuration__content {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+  }
+
+  .configuration__options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  /* Footer - horizontal layout on desktop */
+  .footer {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .footer__content {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-lg);
+  }
+
+  .footer__links {
+    display: flex;
+    gap: var(--spacing-lg);
+  }
+
+  /* Code blocks - comfortable width on desktop */
+  .code-block {
+    max-width: 100%;
+  }
+
+  pre {
+    max-width: 100%;
+  }
+}
+
+/* Large desktop screens (1440px+) - enhanced spacing */
+@media (min-width: 1440px) {
+  .hero {
+    padding: calc(var(--spacing-2xl) * 1.5) var(--spacing-xl);
+  }
+
+  .hero-headline {
+    max-width: 1000px;
+  }
+
+  section {
+    padding: calc(var(--spacing-2xl) * 1.25) var(--spacing-xl);
+  }
+}
+
+/* Extra large screens (1920px+) - max-width constraints */
+@media (min-width: 1920px) {
+  /* Ensure content doesn't stretch too wide on ultrawide monitors */
+  main {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+  }
+
+  .hero {
+    max-width: 100%;
+  }
+
+  .hero-headline {
+    max-width: 1100px;
+  }
+
+  .features__list {
+    max-width: var(--max-width-content);
+  }
+
+  .footer__content {
+    max-width: var(--max-width-content);
+  }
+}

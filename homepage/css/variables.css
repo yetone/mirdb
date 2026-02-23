@@ -1,0 +1,54 @@
+/**
+ * CSS Custom Properties (Variables)
+ * Owner: First scenario builder
+ *
+ * Define all color, spacing, typography, and animation variables here.
+ */
+
+:root {
+  /* Colors - WCAG 2.1 AA compliant (4.5:1 for normal text, 3:1 for large text) */
+  --color-primary: #c0392b;
+  --color-primary-dark: #a33025;
+  --color-secondary: #3498db;
+  --color-secondary-dark: #5dade2;
+  --color-background: #1a1a2e;
+  --color-background-alt: #16213e;
+  --color-surface: #0f3460;
+  --color-text: #eaeaea;
+  --color-text-muted: #a0a0a0;
+  --color-text-dark: #333333;
+  --color-code-bg: #0d1117;
+  --color-code-border: #30363d;
+  --color-success: #2ecc71;
+  --color-warning: #f39c12;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 4rem;
+  --spacing-2xl: 6rem;
+
+  /* Typography */
+  --font-family-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-family-mono: 'Fira Code', 'SF Mono', Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.6;
+
+  /* Layout */
+  --max-width-content: 1200px;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+}

@@ -1,0 +1,96 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Styles for the hero section including:
+ * - Logo display and sizing
+ * - Headline and tagline typography
+ * - Technology badges (Rust, Tokio)
+ * - Get Started CTA button
+ * - Layout and spacing
+ */
+
+.hero {
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-md);
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-logo {
+  max-width: 150px;
+  height: auto;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero-headline {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-md);
+  max-width: 800px;
+  line-height: 1.3;
+}
+
+.hero-tagline {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero-tech-stack {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tech-badge {
+  background-color: var(--color-surface);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.tech-badge--rust {
+  background-color: #dea584;
+  color: #000;
+}
+
+.tech-badge--tokio {
+  background-color: #1a1a2e;
+  color: #fff;
+}
+
+.tech-badge--lsm {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.hero-cta {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: white;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  transition: background-color var(--transition-fast);
+  min-width: 44px;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.hero-cta:hover {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+
+.hero-cta:focus {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
