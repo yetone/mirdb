@@ -27,6 +27,20 @@ pub struct Config {
     pub l0_compaction_trigger: usize,
 
     pub thread_sleep_ms: usize,
+
+    // HTTP server configuration
+    #[serde(default = "default_http_port")]
+    pub http_port: u16,
+    #[serde(default = "default_http_bind_address")]
+    pub http_bind_address: String,
+}
+
+fn default_http_port() -> u16 {
+    8080
+}
+
+fn default_http_bind_address() -> String {
+    "0.0.0.0".to_string()
 }
 
 impl Config {
