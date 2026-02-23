@@ -6,11 +6,11 @@
  */
 
 :root {
-  /* Colors */
-  --color-primary: #e74c3c;
-  --color-primary-dark: #c0392b;
+  /* Colors - WCAG 2.1 AA compliant (4.5:1 for normal text, 3:1 for large text) */
+  --color-primary: #c0392b;
+  --color-primary-dark: #a33025;
   --color-secondary: #3498db;
-  --color-secondary-dark: #2980b9;
+  --color-secondary-dark: #5dade2;
   --color-background: #1a1a2e;
   --color-background-alt: #16213e;
   --color-surface: #0f3460;
