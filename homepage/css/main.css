@@ -6,6 +6,7 @@
  * Contains base/global styles that apply site-wide.
  */
 
+/* All @import statements must be at the top of the file */
 @import 'reset.css';
 @import 'variables.css';
 
@@ -17,6 +18,11 @@
 @import 'components/roadmap.css';
 @import 'components/configuration.css';
 @import 'components/footer.css';
+
+/* Responsive styles - each file contains its own media queries */
+@import 'responsive/mobile.css';
+@import 'responsive/tablet.css';
+@import 'responsive/desktop.css';
 
 /* Base styles */
 body {
@@ -66,17 +72,4 @@ a:hover {
 a:focus {
   outline: 2px solid var(--color-secondary);
   outline-offset: 2px;
-}
-
-/* Responsive styles loaded via media queries */
-@media (max-width: 767px) {
-  @import 'responsive/mobile.css';
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  @import 'responsive/tablet.css';
-}
-
-@media (min-width: 1024px) {
-  @import 'responsive/desktop.css';
 }
