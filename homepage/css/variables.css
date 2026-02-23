@@ -33,6 +33,16 @@
   --color-error: #ef4444;
   --color-info: #3b82f6;
 
+  /* Code Block Colors (Scenario 4) */
+  --color-code-bg: #1e1e2e;
+  --color-code-text: #cdd6f4;
+  --color-code-border: #313244;
+  --color-code-comment: #6c7086;
+  --color-code-builtin: #cba6f7;
+  --color-code-output: #a6e3a1;
+  --color-code-btn-bg: rgba(49, 50, 68, 0.8);
+  --color-code-btn-hover: rgba(69, 71, 90, 0.9);
+
   /* Typography Scale */
   --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;

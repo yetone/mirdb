@@ -237,8 +237,92 @@
          ==================== -->
     <section id="quick-start" class="quick-start" aria-labelledby="quickstart-title">
       <div class="container">
-        <h2 id="quickstart-title" class="sr-only">Quick Start</h2>
-        <!-- Quick start content to be implemented by Scenario 4 -->
+        <h2 id="quickstart-title" class="quick-start__title">Quick Start</h2>
+        <p class="quick-start__subtitle">Get up and running with MirDB in minutes</p>
+
+        <div class="quick-start__grid">
+          <!-- Installation -->
+          <div class="quick-start__step">
+            <div class="quick-start__step-header">
+              <span class="quick-start__step-number">1</span>
+              <h3 class="quick-start__step-title">Clone & Build</h3>
+            </div>
+            <p class="quick-start__step-description">Clone the repository and build MirDB using Cargo.</p>
+            <div class="quick-start__code-container">
+              <pre class="quick-start__code"><code class="quick-start__code-block language-bash"><span class="token comment"># Clone the repository</span>
+git clone https://github.com/mirdb/mirdb.git
+<span class="token builtin">cd</span> mirdb
+
+<span class="token comment"># Build the project</span>
+cargo build --release</code></pre>
+              <button class="quick-start__copy-btn" data-copy aria-label="Copy installation commands to clipboard">
+                <svg class="quick-start__copy-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="quick-start__copy-text">Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Run the Server -->
+          <div class="quick-start__step">
+            <div class="quick-start__step-header">
+              <span class="quick-start__step-number">2</span>
+              <h3 class="quick-start__step-title">Start the Server</h3>
+            </div>
+            <p class="quick-start__step-description">Launch MirDB with the default configuration.</p>
+            <div class="quick-start__code-container">
+              <pre class="quick-start__code"><code class="quick-start__code-block language-bash"><span class="token comment"># Run MirDB server</span>
+cargo run --release
+
+<span class="token comment"># Server starts on port 11211 (Memcached default)</span>
+<span class="token comment"># Listening on 127.0.0.1:11211...</span></code></pre>
+              <button class="quick-start__copy-btn" data-copy aria-label="Copy run command to clipboard">
+                <svg class="quick-start__copy-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="quick-start__copy-text">Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Usage Example -->
+          <div class="quick-start__step quick-start__step--wide">
+            <div class="quick-start__step-header">
+              <span class="quick-start__step-number">3</span>
+              <h3 class="quick-start__step-title">Basic Operations</h3>
+            </div>
+            <p class="quick-start__step-description">Connect using any Memcached client and perform get/set operations.</p>
+            <div class="quick-start__code-container">
+              <pre class="quick-start__code"><code class="quick-start__code-block language-bash"><span class="token comment"># Connect using telnet or any Memcached client</span>
+telnet localhost 11211
+
+<span class="token comment"># Set a key-value pair (format: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;)</span>
+set mykey 0 0 5
+hello
+<span class="token output">STORED</span>
+
+<span class="token comment"># Get the value by key</span>
+get mykey
+<span class="token output">VALUE mykey 0 5
+hello
+END</span>
+
+<span class="token comment"># Delete a key</span>
+delete mykey
+<span class="token output">DELETED</span></code></pre>
+              <button class="quick-start__copy-btn" data-copy aria-label="Copy usage example to clipboard">
+                <svg class="quick-start__copy-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="quick-start__copy-text">Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
