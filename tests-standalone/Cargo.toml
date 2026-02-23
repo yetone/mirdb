@@ -18,6 +18,10 @@ path = "tests/console_api_test.rs"
 name = "terminal_animation"
 path = "tests/terminal_animation_test.rs"
 
+[[test]]
+name = "performance"
+path = "tests/performance_test.rs"
+
 [dependencies]
 mirdb = { path = "../mirdb-server" }
 
