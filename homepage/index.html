@@ -132,7 +132,44 @@
     <section id="features" class="features" aria-labelledby="features-title">
       <div class="container">
         <h2 id="features-title" class="section-title text-center">Features</h2>
-        <!-- Feature cards will be added by Scenario 3 -->
+        <p class="section-subtitle text-center">Everything you need for a high-performance persistent cache</p>
+        <div class="features-grid grid grid-4">
+          <!-- Memcached Protocol Feature -->
+          <article class="feature-card" data-feature="memcached">
+            <div class="feature-icon">
+              <img src="assets/images/icons/memcached.svg" alt="" aria-hidden="true" width="48" height="48">
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Drop-in replacement for memcached. Use existing clients and tools without any code changes.</p>
+          </article>
+
+          <!-- Persistence Feature -->
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon">
+              <img src="assets/images/icons/persistence.svg" alt="" aria-hidden="true" width="48" height="48">
+            </div>
+            <h3 class="feature-title">Persistence (SSTables)</h3>
+            <p class="feature-description">Durable storage with SSTable-based persistence. Your data survives restarts and crashes.</p>
+          </article>
+
+          <!-- LSM Tree Architecture Feature -->
+          <article class="feature-card" data-feature="lsm-tree">
+            <div class="feature-icon">
+              <img src="assets/images/icons/lsm-tree.svg" alt="" aria-hidden="true" width="48" height="48">
+            </div>
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">Log-structured merge tree design optimized for write-heavy workloads with efficient compaction.</p>
+          </article>
+
+          <!-- Rust Implementation Feature -->
+          <article class="feature-card" data-feature="rust">
+            <div class="feature-icon">
+              <img src="assets/images/icons/rust.svg" alt="" aria-hidden="true" width="48" height="48">
+            </div>
+            <h3 class="feature-title">Rust Implementation</h3>
+            <p class="feature-description">Built with Rust for memory safety, zero-cost abstractions, and blazing-fast performance.</p>
+          </article>
+        </div>
       </div>
     </section>
 
