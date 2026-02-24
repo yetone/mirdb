@@ -1,6 +1,7 @@
 //! Route handlers for HTTP requests.
 //!
 //! Owner: Scenario 1 - HTTP Server Setup
+//! Modified by: Scenario 5 - Asset Embedding (integration with assets module)
 //!
 //! Provides routing logic for the HTTP server:
 //! - GET / -> Returns index.html (embedded asset)

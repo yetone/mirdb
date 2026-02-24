@@ -24,6 +24,12 @@ pub const CONTENT_TYPE_JS: &str = "application/javascript; charset=utf-8";
 
 /// Get the asset content and content-type for a given path.
 ///
+/// This function maps URL paths to embedded assets and their corresponding
+/// MIME types. It supports the following routes:
+/// - `/` or `/index.html` -> HTML content
+/// - `/styles.css` -> CSS content
+/// - `/script.js` -> JavaScript content
+///
 /// # Arguments
 ///
 /// * `path` - The URL path to look up (e.g., "/", "/styles.css", "/script.js")
@@ -146,6 +152,7 @@ mod tests {
         assert!(get_asset("").is_none());
         assert!(get_asset("/styles").is_none());
         assert!(get_asset("/script").is_none());
+        assert!(get_asset("/some/nested/path").is_none());
     }
 
     #[test]
@@ -166,5 +173,33 @@ mod tests {
         assert!(!html.is_empty());
         assert!(!css.is_empty());
         assert!(!js.is_empty());
+    }
+
+    #[test]
+    fn test_assets_are_valid_utf8() {
+        // Since we use include_str!, UTF-8 validity is guaranteed at compile time.
+        // This test verifies that the content is non-empty and reasonable.
+        assert!(!INDEX_HTML.is_empty());
+        assert!(!STYLES_CSS.is_empty());
+        assert!(!SCRIPT_JS.is_empty());
+
+        // Verify we can iterate over characters (valid UTF-8)
+        assert!(INDEX_HTML.chars().count() > 0);
+        assert!(STYLES_CSS.chars().count() > 0);
+        assert!(SCRIPT_JS.chars().count() > 0);
+    }
+
+    #[test]
+    fn test_html_contains_expected_structure() {
+        assert!(INDEX_HTML.contains("<html"));
+        assert!(INDEX_HTML.contains("<head>"));
+        assert!(INDEX_HTML.contains("<body>"));
+        assert!(INDEX_HTML.contains("</html>"));
+    }
+
+    #[test]
+    fn test_html_references_css_and_js() {
+        assert!(INDEX_HTML.contains("styles.css"));
+        assert!(INDEX_HTML.contains("script.js"));
     }
 }
