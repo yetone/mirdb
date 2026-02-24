@@ -177,7 +177,66 @@
     <section id="quickstart" class="quickstart" aria-labelledby="quickstart-title">
       <div class="container">
         <h2 id="quickstart-title" class="section-title text-center">Quick Start</h2>
-        <!-- Quick start content will be added by Scenario 4 -->
+        <p class="section-subtitle text-center">Get up and running with MirDB in minutes</p>
+
+        <div class="quickstart-grid">
+          <!-- Installation -->
+          <div class="quickstart-step">
+            <h3 class="quickstart-step-title">
+              <span class="quickstart-step-number">1</span>
+              Install MirDB
+            </h3>
+            <div class="code-block" data-language="bash">
+              <div class="code-block-header">
+                <span class="code-block-lang">bash</span>
+                <button type="button" class="copy-btn" aria-label="Copy to clipboard" data-copy-target="install-code">
+                  <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                  </svg>
+                  <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span class="copy-btn-text">Copy</span>
+                </button>
+              </div>
+              <pre><code id="install-code" class="language-bash"><span class="token comment"># Install from cargo</span>
+<span class="token command">cargo</span> install mirdb</code></pre>
+            </div>
+          </div>
+
+          <!-- Usage Example -->
+          <div class="quickstart-step">
+            <h3 class="quickstart-step-title">
+              <span class="quickstart-step-number">2</span>
+              Start Using MirDB
+            </h3>
+            <div class="code-block" data-language="bash">
+              <div class="code-block-header">
+                <span class="code-block-lang">bash</span>
+                <button type="button" class="copy-btn" aria-label="Copy to clipboard" data-copy-target="usage-code">
+                  <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                  </svg>
+                  <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span class="copy-btn-text">Copy</span>
+                </button>
+              </div>
+              <pre><code id="usage-code" class="language-bash"><span class="token comment"># Start the server</span>
+<span class="token command">mirdb</span> --listen 0.0.0.0:12333
+
+<span class="token comment"># Set a value (using telnet or any memcached client)</span>
+<span class="token command">set</span> mykey 0 0 5
+hello
+
+<span class="token comment"># Get the value</span>
+<span class="token command">get</span> mykey</code></pre>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 

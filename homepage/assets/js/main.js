@@ -6,6 +6,7 @@
  */
 
 import { initMobileNav } from './mobile-nav.js';
+import { initCopyButtons } from './copy-clipboard.js';
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize mobile navigation (Scenario 2)
   initMobileNav();
+
+  // Initialize copy-to-clipboard buttons (Scenario 4)
+  initCopyButtons();
 });
 
 /**
