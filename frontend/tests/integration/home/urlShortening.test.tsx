@@ -265,3 +265,185 @@ describe('Anonymous URL Shortening', () => {
     })
   })
 })
+
+/**
+ * API Error Handling Tests
+ * Owner: Scenario 13 - API Error Handling
+ *
+ * Tests for graceful error handling when API fails.
+ * Verifies user-friendly error messages for different error types.
+ */
+describe('API Error Handling', () => {
+  const errorServer = setupServer()
+
+  beforeEach(() => {
+    errorServer.listen({ onUnhandledRequest: 'error' })
+    localStorage.clear()
+  })
+
+  afterEach(() => {
+    errorServer.resetHandlers()
+    errorServer.close()
+  })
+
+  /**
+   * Test Case 1: 500 Internal Server Error
+   * Input: Mock API returning 500 Internal Server Error
+   * Expected: User-friendly error message is displayed (not raw error)
+   */
+  it('should display user-friendly error message for 500 Internal Server Error', async () => {
+    const user = userEvent.setup()
+
+    errorServer.use(
+      http.post('/api/urls/anonymous', () => {
+        return HttpResponse.json(
+          { detail: 'Internal Server Error' },
+          { status: 500 }
+        )
+      })
+    )
+
+    renderWithProviders(<UrlShortenerForm />)
+
+    const input = screen.getByPlaceholderText(/paste your long url/i)
+    const submitButton = screen.getByRole('button', { name: /shorten/i })
+
+    await user.type(input, 'https://example.com/test-500')
+    await user.click(submitButton)
+
+    await waitFor(() => {
+      const alert = screen.getByRole('alert')
+      expect(alert).toBeInTheDocument()
+      // Should show user-friendly message, not raw "Internal Server Error"
+      expect(alert).toHaveTextContent(/something went wrong/i)
+      expect(alert).not.toHaveTextContent(/internal server error/i)
+    })
+  })
+
+  /**
+   * Test Case 2: Network timeout
+   * Input: Mock API network timeout
+   * Expected: Error message indicates connection problem
+   */
+  it('should display connection error message for network timeout', async () => {
+    const user = userEvent.setup()
+
+    errorServer.use(
+      http.post('/api/urls/anonymous', () => {
+        // Simulate network error by returning network error
+        return HttpResponse.error()
+      })
+    )
+
+    renderWithProviders(<UrlShortenerForm />)
+
+    const input = screen.getByPlaceholderText(/paste your long url/i)
+    const submitButton = screen.getByRole('button', { name: /shorten/i })
+
+    await user.type(input, 'https://example.com/test-timeout')
+    await user.click(submitButton)
+
+    await waitFor(() => {
+      const alert = screen.getByRole('alert')
+      expect(alert).toBeInTheDocument()
+      // Should indicate connection problem
+      expect(alert).toHaveTextContent(/unable to connect|connection|internet/i)
+    })
+  })
+
+  /**
+   * Test Case 3: 429 Too Many Requests
+   * Input: Mock API returning 429 Too Many Requests
+   * Expected: Rate limit error message is displayed
+   */
+  it('should display rate limit error message for 429 Too Many Requests', async () => {
+    const user = userEvent.setup()
+
+    errorServer.use(
+      http.post('/api/urls/anonymous', () => {
+        return HttpResponse.json(
+          { detail: 'Rate limit exceeded' },
+          { status: 429 }
+        )
+      })
+    )
+
+    renderWithProviders(<UrlShortenerForm />)
+
+    const input = screen.getByPlaceholderText(/paste your long url/i)
+    const submitButton = screen.getByRole('button', { name: /shorten/i })
+
+    await user.type(input, 'https://example.com/test-429')
+    await user.click(submitButton)
+
+    await waitFor(() => {
+      const alert = screen.getByRole('alert')
+      expect(alert).toBeInTheDocument()
+      // Should mention rate limiting or too many requests
+      expect(alert).toHaveTextContent(/too many requests|wait/i)
+    })
+  })
+
+  /**
+   * Test Case 4: Error recovery - clearing error on retry
+   * Input: After error, modify URL and resubmit
+   * Expected: Previous error clears and new request is made
+   */
+  it('should clear previous error when user modifies URL and resubmits', async () => {
+    const user = userEvent.setup()
+    let requestCount = 0
+
+    errorServer.use(
+      http.post('/api/urls/anonymous', async ({ request }) => {
+        requestCount++
+        const body = await request.json() as { original_url: string }
+
+        // First request fails, second succeeds
+        if (requestCount === 1) {
+          return HttpResponse.json(
+            { detail: 'Server error' },
+            { status: 500 }
+          )
+        }
+
+        return HttpResponse.json({
+          id: 1,
+          original_url: body.original_url,
+          short_code: 'success123',
+          created_at: '2024-01-01T00:00:00Z',
+          user_id: null,
+          click_count: 0,
+          share_token: 'token-123',
+        })
+      })
+    )
+
+    renderWithProviders(<UrlShortenerForm />)
+
+    const input = screen.getByPlaceholderText(/paste your long url/i)
+    const submitButton = screen.getByRole('button', { name: /shorten/i })
+
+    // First submission - should fail
+    await user.type(input, 'https://example.com/will-fail')
+    await user.click(submitButton)
+
+    // Wait for error to appear
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toBeInTheDocument()
+    })
+
+    // Modify URL and resubmit
+    await user.clear(input)
+    await user.type(input, 'https://example.com/will-succeed')
+    await user.click(submitButton)
+
+    // Error should clear and success result should appear
+    await waitFor(() => {
+      // Error should be gone
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      // Success result should be visible
+      expect(screen.getByTestId('shorten-result')).toBeInTheDocument()
+      expect(screen.getByText(/success123/)).toBeInTheDocument()
+    })
+  })
+})

@@ -18,6 +18,40 @@ import axios, { AxiosError } from 'axios'
 import { ShortenResult, UrlShortenerFormProps, CreateUrlResponse, ApiErrorResponse } from '@/types/home'
 
 /**
+ * Maps API errors to user-friendly error messages.
+ * Handles specific HTTP status codes and network errors.
+ */
+function getErrorMessage(error: AxiosError<ApiErrorResponse>): string {
+  // Network errors (no response) - timeout or connection issues
+  if (!error.response) {
+    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+      return 'Unable to connect. Please check your internet connection and try again.'
+    }
+    return 'Unable to connect. Please check your internet connection and try again.'
+  }
+
+  const status = error.response.status
+
+  // Rate limiting
+  if (status === 429) {
+    return 'Too many requests. Please wait a moment and try again.'
+  }
+
+  // Server errors (5xx)
+  if (status >= 500) {
+    return 'Something went wrong on our end. Please try again later.'
+  }
+
+  // Client errors with server-provided message
+  if (error.response.data?.detail) {
+    return error.response.data.detail
+  }
+
+  // Generic fallback
+  return 'Failed to shorten URL. Please try again.'
+}
+
+/**
  * Create anonymous short URL - explicitly without authentication
  */
 async function createAnonymousShortUrl(originalUrl: string): Promise<ShortenResult> {
@@ -74,7 +108,7 @@ export function UrlShortenerForm({ onSuccess, onError }: UrlShortenerFormProps) 
       onSuccess?.(shortenResult)
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>
-      const errorMessage = axiosError.response?.data?.detail || 'Failed to shorten URL. Please try again.'
+      const errorMessage = getErrorMessage(axiosError)
       setError(errorMessage)
       onError?.(new Error(errorMessage))
     } finally {
