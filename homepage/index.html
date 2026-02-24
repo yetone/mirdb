@@ -368,7 +368,75 @@ hello
     <section id="protocol" class="protocol" aria-labelledby="protocol-title">
       <div class="container">
         <h2 id="protocol-title" class="section-title text-center">Protocol Reference</h2>
-        <!-- Protocol content will be added by Scenario 6 -->
+        <p class="section-subtitle text-center">Full memcached protocol compatibility with additional MirDB-specific commands</p>
+
+        <div class="protocol-table-wrapper">
+          <table class="protocol-table" aria-label="Supported memcached commands">
+            <thead>
+              <tr>
+                <th scope="col">Command</th>
+                <th scope="col">Description</th>
+                <th scope="col">Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-command="set">
+                <td><code class="command-name">set</code></td>
+                <td>Store a key-value pair, overwriting if it exists</td>
+                <td><span class="command-type command-type-standard">Standard</span></td>
+              </tr>
+              <tr data-command="get">
+                <td><code class="command-name">get</code></td>
+                <td>Retrieve one or more keys from the database</td>
+                <td><span class="command-type command-type-standard">Standard</span></td>
+              </tr>
+              <tr data-command="delete">
+                <td><code class="command-name">delete</code></td>
+                <td>Remove a key and its associated value</td>
+                <td><span class="command-type command-type-standard">Standard</span></td>
+              </tr>
+              <tr data-command="add">
+                <td><code class="command-name">add</code></td>
+                <td>Store only if the key does not already exist</td>
+                <td><span class="command-type command-type-standard">Standard</span></td>
+              </tr>
+              <tr data-command="replace">
+                <td><code class="command-name">replace</code></td>
+                <td>Store only if the key already exists</td>
+                <td><span class="command-type command-type-standard">Standard</span></td>
+              </tr>
+              <tr data-command="append">
+                <td><code class="command-name">append</code></td>
+                <td>Append data to an existing value</td>
+                <td><span class="command-type command-type-standard">Standard</span></td>
+              </tr>
+              <tr data-command="prepend">
+                <td><code class="command-name">prepend</code></td>
+                <td>Prepend data to an existing value</td>
+                <td><span class="command-type command-type-standard">Standard</span></td>
+              </tr>
+              <tr data-command="gets">
+                <td><code class="command-name">gets</code></td>
+                <td>Retrieve keys with CAS (Check-And-Set) token for optimistic locking</td>
+                <td><span class="command-type command-type-standard">Standard</span></td>
+              </tr>
+              <tr data-command="info" class="mirdb-specific">
+                <td><code class="command-name mirdb-command">info</code></td>
+                <td>Display database status, statistics, and configuration</td>
+                <td><span class="command-type command-type-mirdb">MirDB</span></td>
+              </tr>
+              <tr data-command="major_compaction" class="mirdb-specific">
+                <td><code class="command-name mirdb-command">major_compaction</code></td>
+                <td>Trigger manual SSTable compaction across all levels</td>
+                <td><span class="command-type command-type-mirdb">MirDB</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="protocol-note">
+          <p><strong>Note:</strong> Commands marked as <span class="command-type command-type-mirdb">MirDB</span> are extensions specific to MirDB and are not part of the standard memcached protocol.</p>
+        </div>
       </div>
     </section>
 
