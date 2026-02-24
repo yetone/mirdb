@@ -8,6 +8,7 @@
 import { initMobileNav } from './mobile-nav.js';
 import { initCopyButtons } from './copy-clipboard.js';
 import { initThemeToggle, initTheme } from './theme-toggle.js';
+import { initSmoothScroll } from './smooth-scroll.js';
 
 // Initialize theme immediately to prevent flash of wrong theme
 // This runs before DOMContentLoaded to apply theme as early as possible
@@ -15,7 +16,7 @@ initTheme();
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize smooth scroll for anchor links
+  // Initialize smooth scroll for anchor links (Scenario 14)
   initSmoothScroll();
 
   // Initialize mobile navigation (Scenario 2)
@@ -27,34 +28,3 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize theme toggle buttons (Scenario 9)
   initThemeToggle();
 });
-
-/**
- * Initialize smooth scroll for anchor links
- * Basic implementation - Scenario 14 will enhance this
- */
-function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      const targetId = this.getAttribute('href');
-      if (targetId === '#') return;
-
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        e.preventDefault();
-        const headerOffset = 64; // header height
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-}
-
-// Export for testing
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { initSmoothScroll };
-}
