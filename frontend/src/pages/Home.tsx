@@ -16,10 +16,12 @@
 
 import { HeroSection } from '../components/home/HeroSection'
 import { FeaturesSection } from '../components/home/FeaturesSection'
+import { Navbar } from '../components/Navbar'
 
 export function Home() {
   return (
     <div className="min-h-screen bg-base-100">
+      <Navbar />
       <main>
         {/* Hero Section */}
         <HeroSection />
