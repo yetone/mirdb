@@ -5,6 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  *
  * E2E testing configuration for the URL Shortener frontend.
  * Includes mobile viewport testing for responsive design validation.
+ * Owner: Scenario 8 - Theme Support and Toggle (extended)
  */
 export default defineConfig({
   testDir: './tests/e2e',
@@ -21,6 +22,10 @@ export default defineConfig({
   },
 
   projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
     {
       name: 'Mobile Chrome',
       use: {

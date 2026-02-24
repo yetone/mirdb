@@ -21,7 +21,9 @@ import { Navbar } from '../components/Navbar'
 export function Home() {
   return (
     <div className="min-h-screen bg-base-100">
+      {/* Navigation Bar with Theme Toggle */}
       <Navbar />
+
       <main>
         {/* Hero Section */}
         <HeroSection />
