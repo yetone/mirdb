@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility, powered by Rust">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header class="site-header" id="header">
+        <div class="header-content">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true">
+                    <circle cx="16" cy="16" r="14" fill="currentColor" opacity="0.2"/>
+                    <path d="M8 12 L16 8 L24 12 L24 20 L16 24 L8 20 Z" fill="currentColor"/>
+                    <path d="M16 8 L16 24" stroke="var(--bg-primary)" stroke-width="1.5"/>
+                    <path d="M8 12 L24 20" stroke="var(--bg-primary)" stroke-width="1"/>
+                    <path d="M24 12 L8 20" stroke="var(--bg-primary)" stroke-width="1"/>
+                </svg>
+                <span class="logo-text">MirDB</span>
+            </div>
+            <nav class="main-nav" aria-label="Main navigation">
+                <ul class="nav-links">
+                    <li><a href="#quick-start">Quick Start</a></li>
+                    <li><a href="#commands">Commands</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+                <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <circle cx="12" cy="12" r="5" fill="currentColor"/>
+                    <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </g>
+                </svg>
+                <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="hero">
+            <div class="hero-content">
+                <h1>MirDB</h1>
+                <p class="tagline">A persistent key-value store — Memcached-compatible, Rust-powered</p>
+                <div class="hero-buttons">
+                    <a href="#quick-start" class="btn btn-primary">Quick Start</a>
+                    <a href="https://github.com/mirdb/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="what-is-mirdb" id="what-is-mirdb">
+            <div class="section-content">
+                <h2>What is MirDB?</h2>
+                <p>MirDB is a high-performance, persistent key-value store that speaks the <strong>Memcached protocol</strong>. Built entirely in <strong>Rust</strong>, it combines the familiarity of Memcached's text protocol with the durability of an LSM-Tree storage engine.</p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <h3>Drop-in Compatible</h3>
+                        <p>Use your existing Memcached clients and libraries. MirDB supports the standard text protocol including SET, GET, DELETE, and more.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Persistent Storage</h3>
+                        <p>Unlike in-memory caches, MirDB persists your data to disk using an LSM-Tree architecture. Your data survives restarts.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>High Performance</h3>
+                        <p>Built with Rust and Tokio for async I/O, MirDB delivers low-latency reads and high-throughput writes.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Simple Deployment</h3>
+                        <p>Single binary, zero external dependencies. Configure via TOML and run anywhere Rust compiles.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-start" id="quick-start">
+            <div class="section-content">
+                <h2>Quick Start</h2>
+                <div class="quick-start-steps">
+                    <div class="step">
+                        <h3>1. Install MirDB</h3>
+                        <div class="code-block">
+                            <pre><code>cargo install mirdb</code></pre>
+                            <button class="copy-btn" type="button" aria-label="Copy to clipboard" data-copy="cargo install mirdb">
+                                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <h3>2. Start the Server</h3>
+                        <div class="code-block">
+                            <pre><code>mirdb --config mirdb.toml</code></pre>
+                            <button class="copy-btn" type="button" aria-label="Copy to clipboard" data-copy="mirdb --config mirdb.toml">
+                                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <h3>3. Store a Value</h3>
+                        <div class="code-block">
+                            <pre><code>echo -e "set mykey 0 0 5\r\nhello\r" | nc localhost 12333</code></pre>
+                            <button class="copy-btn" type="button" aria-label="Copy to clipboard" data-copy='echo -e "set mykey 0 0 5\r\nhello\r" | nc localhost 12333'>
+                                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <h3>4. Retrieve the Value</h3>
+                        <div class="code-block">
+                            <pre><code>echo -e "get mykey\r" | nc localhost 12333</code></pre>
+                            <button class="copy-btn" type="button" aria-label="Copy to clipboard" data-copy='echo -e "get mykey\r" | nc localhost 12333'>
+                                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="commands" id="commands">
+            <div class="section-content">
+                <h2>Supported Commands</h2>
+                <p>MirDB implements the Memcached text protocol. The following commands are fully supported:</p>
+                <div class="commands-grid">
+                    <div class="command">
+                        <h3>SET</h3>
+                        <p>Store a key-value pair with optional expiration time and flags.</p>
+                        <code>set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;\r\n&lt;data&gt;\r\n</code>
+                    </div>
+                    <div class="command">
+                        <h3>GET</h3>
+                        <p>Retrieve one or more values by their keys.</p>
+                        <code>get &lt;key&gt;*\r\n</code>
+                    </div>
+                    <div class="command">
+                        <h3>ADD</h3>
+                        <p>Store a value only if the key does not already exist.</p>
+                        <code>add &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;\r\n&lt;data&gt;\r\n</code>
+                    </div>
+                    <div class="command">
+                        <h3>REPLACE</h3>
+                        <p>Store a value only if the key already exists.</p>
+                        <code>replace &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;\r\n&lt;data&gt;\r\n</code>
+                    </div>
+                    <div class="command">
+                        <h3>DELETE</h3>
+                        <p>Remove a key-value pair from the store.</p>
+                        <code>delete &lt;key&gt;\r\n</code>
+                    </div>
+                    <div class="command">
+                        <h3>APPEND</h3>
+                        <p>Append data to an existing key's value.</p>
+                        <code>append &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;\r\n&lt;data&gt;\r\n</code>
+                    </div>
+                    <div class="command">
+                        <h3>PREPEND</h3>
+                        <p>Prepend data to an existing key's value.</p>
+                        <code>prepend &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;\r\n&lt;data&gt;\r\n</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="architecture" id="architecture">
+            <div class="section-content">
+                <h2>Architecture</h2>
+                <p>MirDB uses a Log-Structured Merge Tree (LSM-Tree) storage engine, providing excellent write performance and data durability.</p>
+
+                <div class="architecture-diagram" aria-label="LSM-Tree Architecture Diagram">
+                    <div class="arch-component arch-wal">
+                        <h3>WAL</h3>
+                        <p>Write-Ahead Log</p>
+                    </div>
+                    <div class="arch-arrow">&#8594;</div>
+                    <div class="arch-component arch-memtable">
+                        <h3>MemTable</h3>
+                        <p>SkipList</p>
+                    </div>
+                    <div class="arch-arrow">&#8594;</div>
+                    <div class="arch-component arch-sstable">
+                        <h3>SSTable</h3>
+                        <p>Sorted String Table</p>
+                    </div>
+                </div>
+
+                <div class="architecture-details">
+                    <div class="arch-detail">
+                        <h3>Write-Ahead Log (WAL)</h3>
+                        <p>Every write is first appended to the WAL on disk, ensuring durability. In case of a crash, the WAL is replayed to recover uncommitted data.</p>
+                    </div>
+                    <div class="arch-detail">
+                        <h3>MemTable (SkipList)</h3>
+                        <p>Writes are buffered in an in-memory SkipList data structure, providing O(log n) insertions and lookups. When the MemTable reaches a threshold size, it's flushed to disk.</p>
+                    </div>
+                    <div class="arch-detail">
+                        <h3>SSTable (Sorted String Table)</h3>
+                        <p>Immutable, sorted files on disk. SSTables are organized in levels and periodically compacted to reclaim space and optimize reads.</p>
+                    </div>
+                    <div class="arch-detail">
+                        <h3>LSM-Tree Benefits</h3>
+                        <p>The LSM-Tree architecture optimizes for write-heavy workloads by batching writes and performing sequential I/O. Compaction runs in the background to maintain read performance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="live-stats" id="live-stats">
+            <div class="section-content">
+                <h2>Live Stats</h2>
+                <p>Real-time database statistics (simulated data for demonstration):</p>
+                <div class="stats-grid">
+                    <div class="stat">
+                        <span class="stat-value" id="stat-keys">1,234</span>
+                        <span class="stat-label">Keys Stored</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="stat-memory">45.2 MB</span>
+                        <span class="stat-label">Memory Used</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="stat-uptime">3d 12h</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="stat-ops">12.5k/s</span>
+                        <span class="stat-label">Operations</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://github.com/mirdb/mirdb/wiki" target="_blank" rel="noopener">Documentation</a>
+                <a href="https://github.com/mirdb/mirdb/issues" target="_blank" rel="noopener">Issues</a>
+            </div>
+            <p class="license">Released under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.</p>
+            <p class="copyright">&copy; 2024 MirDB Contributors</p>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+</body>
+</html>
