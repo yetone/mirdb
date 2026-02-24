@@ -444,7 +444,111 @@ hello
     <section id="status" class="status" aria-labelledby="status-title">
       <div class="container">
         <h2 id="status-title" class="section-title text-center">Project Status</h2>
-        <!-- Status content will be added by Scenario 7 -->
+        <p class="section-subtitle text-center">Track our progress and see what's coming next</p>
+
+        <div class="status-grid">
+          <!-- Implemented Features -->
+          <div class="status-column" data-status-type="implemented">
+            <div class="status-header">
+              <svg class="status-header-icon status-icon-implemented" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <h3 class="status-column-title" id="implemented-title">Implemented</h3>
+            </div>
+            <ul class="status-list" aria-labelledby="implemented-title">
+              <li class="status-item status-item-implemented" data-feature="memcached-protocol">
+                <span class="status-indicator status-indicator-implemented" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span class="status-item-text">Memcached Protocol Support</span>
+              </li>
+              <li class="status-item status-item-implemented" data-feature="sstable-persistence">
+                <span class="status-indicator status-indicator-implemented" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span class="status-item-text">SSTable Persistence</span>
+              </li>
+              <li class="status-item status-item-implemented" data-feature="lsm-tree">
+                <span class="status-indicator status-indicator-implemented" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span class="status-item-text">LSM Tree Storage Engine</span>
+              </li>
+              <li class="status-item status-item-implemented" data-feature="wal">
+                <span class="status-indicator status-indicator-implemented" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span class="status-item-text">Write-Ahead Logging (WAL)</span>
+              </li>
+              <li class="status-item status-item-implemented" data-feature="compaction">
+                <span class="status-indicator status-indicator-implemented" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span class="status-item-text">Background Compaction</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Roadmap / Planned Features -->
+          <div class="status-column" data-status-type="roadmap">
+            <div class="status-header">
+              <svg class="status-header-icon status-icon-roadmap" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <h3 class="status-column-title" id="roadmap-title">Roadmap</h3>
+            </div>
+            <ul class="status-list" aria-labelledby="roadmap-title">
+              <li class="status-item status-item-pending" data-feature="raft-consensus">
+                <span class="status-indicator status-indicator-pending" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                </span>
+                <span class="status-item-text">Raft Consensus</span>
+                <span class="status-badge status-badge-pending">Planned</span>
+              </li>
+              <li class="status-item status-item-pending" data-feature="cluster-mode">
+                <span class="status-indicator status-indicator-pending" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                </span>
+                <span class="status-item-text">Cluster Mode</span>
+                <span class="status-badge status-badge-pending">Planned</span>
+              </li>
+              <li class="status-item status-item-pending" data-feature="replication">
+                <span class="status-indicator status-indicator-pending" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                </span>
+                <span class="status-item-text">Data Replication</span>
+                <span class="status-badge status-badge-pending">Planned</span>
+              </li>
+              <li class="status-item status-item-pending" data-feature="ttl-support">
+                <span class="status-indicator status-indicator-pending" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                </span>
+                <span class="status-item-text">TTL Support</span>
+                <span class="status-badge status-badge-pending">Planned</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   </main>
