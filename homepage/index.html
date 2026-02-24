@@ -244,7 +244,123 @@ hello
     <section id="architecture" class="architecture" aria-labelledby="architecture-title">
       <div class="container">
         <h2 id="architecture-title" class="section-title text-center">Architecture</h2>
-        <!-- Architecture content will be added by Scenario 5 -->
+        <p class="section-subtitle architecture-subtitle text-center">LSM Tree (Log-Structured Merge Tree) storage engine for high-performance persistent storage</p>
+
+        <!-- LSM Tree Diagram -->
+        <div class="architecture-diagram lsm-diagram" data-diagram="lsm" role="img" aria-label="LSM Tree data flow diagram showing WAL, Memtable, and SSTable components">
+          <!-- Write Path -->
+          <div class="architecture-flow write-flow">
+            <h3 class="flow-title">Write Path</h3>
+            <div class="flow-components">
+              <div class="lsm-component" data-component="wal">
+                <div class="component-icon">
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                    <rect x="5" y="5" width="30" height="30" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <line x1="10" y1="12" x2="30" y2="12" stroke="currentColor" stroke-width="2"/>
+                    <line x1="10" y1="20" x2="30" y2="20" stroke="currentColor" stroke-width="2"/>
+                    <line x1="10" y1="28" x2="25" y2="28" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <span class="component-label">WAL</span>
+              </div>
+              <div class="flow-arrow" data-flow="write" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="lsm-component" data-component="memtable">
+                <div class="component-icon">
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                    <rect x="5" y="5" width="30" height="30" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <circle cx="15" cy="15" r="3" fill="currentColor"/>
+                    <circle cx="25" cy="20" r="3" fill="currentColor"/>
+                    <circle cx="15" cy="25" r="3" fill="currentColor"/>
+                    <line x1="15" y1="15" x2="25" y2="20" stroke="currentColor" stroke-width="1.5"/>
+                    <line x1="15" y1="25" x2="25" y2="20" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <span class="component-label">Memtable</span>
+              </div>
+              <div class="flow-arrow" data-flow="write" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="lsm-component" data-component="sstable">
+                <div class="component-icon">
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                    <rect x="5" y="8" width="30" height="8" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <rect x="5" y="18" width="30" height="6" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <rect x="5" y="26" width="30" height="6" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                  </svg>
+                </div>
+                <span class="component-label">SSTable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Read Path -->
+          <div class="architecture-flow read-flow">
+            <h3 class="flow-title">Read Path</h3>
+            <div class="flow-components flow-reverse">
+              <div class="lsm-component read-component" data-component="memtable">
+                <div class="component-icon">
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                    <rect x="5" y="5" width="30" height="30" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <circle cx="15" cy="15" r="3" fill="currentColor"/>
+                    <circle cx="25" cy="20" r="3" fill="currentColor"/>
+                    <circle cx="15" cy="25" r="3" fill="currentColor"/>
+                    <line x1="15" y1="15" x2="25" y2="20" stroke="currentColor" stroke-width="1.5"/>
+                    <line x1="15" y1="25" x2="25" y2="20" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <span class="component-label">Memtable</span>
+              </div>
+              <div class="flow-arrow read-arrow" data-flow="read" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="lsm-component read-component" data-component="sstable">
+                <div class="component-icon">
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                    <rect x="5" y="8" width="30" height="8" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <rect x="5" y="18" width="30" height="6" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <rect x="5" y="26" width="30" height="6" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                  </svg>
+                </div>
+                <span class="component-label">SSTable</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Component Explanations -->
+        <div class="architecture-components">
+          <article class="architecture-component component-explanation" data-component="wal">
+            <div class="component-header">
+              <div class="component-badge wal-badge">WAL</div>
+              <h3 class="component-title">Write-Ahead Log</h3>
+            </div>
+            <p class="component-description">All writes are first appended to the WAL (Write-Ahead Log) before updating the Memtable. This ensures durability - even if the system crashes, data can be recovered from the WAL on restart.</p>
+          </article>
+
+          <article class="architecture-component component-explanation" data-component="memtable">
+            <div class="component-header">
+              <div class="component-badge memtable-badge">Memtable</div>
+              <h3 class="component-title">Memtable</h3>
+            </div>
+            <p class="component-description">An in-memory data structure (skip list) that stores recent writes. When the Memtable reaches its size threshold, it becomes immutable and is flushed to disk as an SSTable.</p>
+          </article>
+
+          <article class="architecture-component component-explanation" data-component="sstable">
+            <div class="component-header">
+              <div class="component-badge sstable-badge">SSTable</div>
+              <h3 class="component-title">Sorted String Table</h3>
+            </div>
+            <p class="component-description">Immutable, sorted files on disk containing key-value pairs. SSTables are organized into levels (L0, L1, etc.) and periodically compacted to merge overlapping data and reclaim space.</p>
+          </article>
+        </div>
       </div>
     </section>
 

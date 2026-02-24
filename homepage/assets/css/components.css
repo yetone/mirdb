@@ -673,3 +673,278 @@ body {
     display: none;
   }
 }
+
+/* ============================================
+   ARCHITECTURE SECTION STYLES (Scenario 5)
+   ============================================ */
+
+.architecture {
+  background-color: var(--color-background-alt);
+}
+
+.architecture-subtitle {
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* LSM Tree Diagram Container */
+.architecture-diagram {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.lsm-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+/* Architecture Flow (Write/Read paths) */
+.architecture-flow {
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background-alt);
+}
+
+.write-flow {
+  border-left: 4px solid var(--color-primary);
+}
+
+.read-flow {
+  border-left: 4px solid #3498db;
+}
+
+.flow-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.write-flow .flow-title::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+}
+
+.read-flow .flow-title::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: #3498db;
+  border-radius: 50%;
+}
+
+/* Flow Components Layout */
+.flow-components {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.flow-reverse {
+  flex-direction: row;
+}
+
+/* LSM Component Boxes */
+.lsm-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--color-background);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  min-width: 100px;
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.lsm-component:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.lsm-component[data-component="wal"] {
+  border-color: #e74c3c;
+}
+
+.lsm-component[data-component="memtable"] {
+  border-color: #f39c12;
+}
+
+.lsm-component[data-component="sstable"] {
+  border-color: #27ae60;
+}
+
+.component-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  color: var(--color-text);
+}
+
+.lsm-component[data-component="wal"] .component-icon {
+  color: #e74c3c;
+}
+
+.lsm-component[data-component="memtable"] .component-icon {
+  color: #f39c12;
+}
+
+.lsm-component[data-component="sstable"] .component-icon {
+  color: #27ae60;
+}
+
+.component-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+/* Flow Arrows */
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+.flow-arrow svg {
+  width: 24px;
+  height: 24px;
+}
+
+.write-flow .flow-arrow {
+  color: var(--color-primary);
+}
+
+.read-flow .flow-arrow {
+  color: #3498db;
+}
+
+/* Component Explanations Grid */
+.architecture-components {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.architecture-component {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.architecture-component:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.component-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.component-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--border-radius-sm);
+  color: white;
+}
+
+.wal-badge {
+  background-color: #e74c3c;
+}
+
+.memtable-badge {
+  background-color: #f39c12;
+}
+
+.sstable-badge {
+  background-color: #27ae60;
+}
+
+.component-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-secondary);
+  margin: 0;
+}
+
+.component-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive Architecture styles */
+@media (max-width: 768px) {
+  .architecture-diagram {
+    padding: var(--spacing-md);
+  }
+
+  .architecture-flow {
+    padding: var(--spacing-md);
+  }
+
+  .flow-components {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .flow-arrow {
+    transform: rotate(90deg);
+  }
+
+  .lsm-component {
+    min-width: 80px;
+    padding: var(--spacing-sm);
+  }
+
+  .component-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .component-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .architecture-components {
+    grid-template-columns: 1fr;
+  }
+
+  .architecture-component {
+    padding: var(--spacing-md);
+  }
+
+  .component-title {
+    font-size: var(--font-size-base);
+  }
+}
