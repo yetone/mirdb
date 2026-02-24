@@ -133,6 +133,30 @@ body.dark-theme {
 }
 
 /* ============================================
+   Skip Link (Accessibility)
+   ============================================ */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--accent-color);
+    color: #ffffff;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 10000;
+    transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+    top: var(--spacing-sm);
+    outline: 2px solid var(--text-primary);
+    outline-offset: 2px;
+}
+
+/* ============================================
    Base Styles
    ============================================ */
 *,
@@ -215,9 +239,21 @@ a:hover {
 
 /* Focus visible for accessibility */
 a:focus-visible,
-button:focus-visible {
-    outline: 2px solid var(--accent-color);
+button:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--accent-color);
     outline-offset: 2px;
+}
+
+/* Ensure buttons have proper focus indicators */
+.btn:focus-visible {
+    outline: 3px solid var(--text-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px rgba(0, 102, 204, 0.3);
+}
+
+body.dark-theme .btn:focus-visible {
+    box-shadow: 0 0 0 6px rgba(88, 166, 255, 0.3);
 }
 
 strong {
@@ -273,6 +309,13 @@ code {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+}
+
+.logo:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 4px;
 }
 
 .logo-icon {
