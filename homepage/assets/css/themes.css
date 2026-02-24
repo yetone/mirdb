@@ -1,0 +1,24 @@
+/**
+ * Theme Styles for MirDB Homepage
+ * Owner: Scenario 9 - Dark Mode Theme Toggle
+ *
+ * Contents:
+ * - :root light theme variables
+ * - [data-theme="dark"] dark theme variables
+ * - Color scheme for both themes
+ * - Syntax highlighting colors for both themes
+ */
+
+/* Light theme (default) - defined in base.css :root */
+
+/* Dark theme */
+[data-theme="dark"] {
+  --color-primary: #e67e22;
+  --color-primary-dark: #d35400;
+  --color-secondary: #ecf0f1;
+  --color-text: #ecf0f1;
+  --color-text-muted: #bdc3c7;
+  --color-background: #1a1a2e;
+  --color-background-alt: #16213e;
+  --color-border: #2c3e50;
+}
