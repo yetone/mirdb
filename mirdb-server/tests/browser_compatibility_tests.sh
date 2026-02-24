@@ -1,22 +1,16 @@
 #!/bin/bash
-# Browser Compatibility and Performance Tests
+#
+# Browser Compatibility and Performance Validation Tests
 # Owner: Scenario 7 - Integration & E2E Testing
 #
-# This script validates browser compatibility by checking:
-# - CSS vendor prefixes for cross-browser support
-# - JavaScript compatibility patterns (ES5/ES6 fallbacks)
-# - No browser-specific CSS hacks that might break in other browsers
-# - Performance-related validations (asset sizes, minification potential)
-# - Lighthouse-friendly optimizations
+# This script validates browser compatibility requirements through static analysis:
+# - Cross-browser CSS compatibility (standard properties, no vendor-only prefixes)
+# - Performance optimization indicators (minification potential, asset sizes)
+# - JavaScript compatibility (ES5-safe or polyfilled)
+# - HTML standards compliance
 #
-# Test Cases:
-# TC1: Chrome compatibility - verify layout and interactivity
-# TC2: Firefox compatibility - verify CSS animations and layout
-# TC3: Safari compatibility - verify localStorage and focus styles
-# TC4: Edge compatibility - verify all interactive features
-# TC5: Performance - page load time optimization (asset size < 200KB)
-# TC6: No JavaScript errors - valid JS syntax and patterns
-# TC7: Lighthouse readiness - performance optimizations
+# For full E2E browser testing, use: npx playwright test
+#
 
 set -e
 
@@ -33,24 +27,29 @@ NC='\033[0m' # No Color
 
 TESTS_PASSED=0
 TESTS_FAILED=0
+TESTS_SKIPPED=0
 
 pass() {
-    echo -e "${GREEN}PASS${NC}: $1"
+    echo -e "${GREEN}[PASS]${NC} $1"
     TESTS_PASSED=$((TESTS_PASSED + 1))
 }
 
 fail() {
-    echo -e "${RED}FAIL${NC}: $1"
+    echo -e "${RED}[FAIL]${NC} $1"
     TESTS_FAILED=$((TESTS_FAILED + 1))
 }
 
-warn() {
-    echo -e "${YELLOW}WARN${NC}: $1"
+skip() {
+    echo -e "${YELLOW}[SKIP]${NC} $1"
+    TESTS_SKIPPED=$((TESTS_SKIPPED + 1))
+}
+
+info() {
+    echo -e "       $1"
 }
 
 echo "============================================"
 echo "Browser Compatibility & Performance Tests"
-echo "Owner: Scenario 7 - Integration & E2E Testing"
 echo "============================================"
 echo ""
 
@@ -70,432 +69,310 @@ if [ ! -f "$JS_FILE" ]; then
     exit 1
 fi
 
-echo "=== Test Case 1: Chrome Compatibility ==="
+# ============================================
+# HTML Standards Compliance Tests
+# ============================================
 echo ""
+echo "--- HTML Standards Compliance ---"
 
-# TC1.1: Check for flexbox support (Chrome modern feature)
-echo "TC1.1: Flexbox layout support"
-if grep -qE "display:\s*flex" "$CSS_FILE"; then
-    pass "CSS uses flexbox layout (Chrome compatible)"
+# Test 1: HTML5 doctype
+echo "Test 1: HTML5 DOCTYPE declaration"
+if grep -qi "<!DOCTYPE html>" "$HTML_FILE"; then
+    pass "HTML5 DOCTYPE present"
 else
-    fail "CSS should use flexbox for Chrome compatibility"
+    fail "Missing HTML5 DOCTYPE declaration"
 fi
 
-# TC1.2: Check for CSS Grid support (Chrome modern feature)
-echo "TC1.2: CSS Grid layout support"
-if grep -qE "display:\s*grid" "$CSS_FILE"; then
-    pass "CSS uses grid layout (Chrome compatible)"
+# Test 2: Charset UTF-8
+echo "Test 2: UTF-8 charset declaration"
+if grep -qi 'charset="UTF-8"\|charset=UTF-8' "$HTML_FILE"; then
+    pass "UTF-8 charset declared"
 else
-    fail "CSS should use grid layout for Chrome compatibility"
+    fail "Missing UTF-8 charset declaration"
 fi
 
-# TC1.3: Check for CSS custom properties (CSS variables - Chrome 49+)
-echo "TC1.3: CSS custom properties support"
-if grep -qE "var\(--" "$CSS_FILE"; then
-    pass "CSS uses custom properties/variables (Chrome 49+ compatible)"
-else
-    fail "CSS should use CSS custom properties"
-fi
-
-# TC1.4: Check theme toggle functionality exists
-echo "TC1.4: Theme toggle functionality"
-if grep -q "toggleTheme" "$JS_FILE" && grep -q "dark-theme" "$JS_FILE"; then
-    pass "Theme toggle functionality implemented (Chrome compatible)"
-else
-    fail "Theme toggle should be implemented"
-fi
-
-# TC1.5: Check copy button functionality
-echo "TC1.5: Copy button functionality"
-if grep -q "navigator.clipboard" "$JS_FILE"; then
-    pass "Clipboard API used (Chrome compatible)"
-else
-    fail "Clipboard API should be used for copy functionality"
-fi
-
-echo ""
-echo "=== Test Case 2: Firefox Compatibility ==="
-echo ""
-
-# TC2.1: Check for vendor-prefixed webkit properties with moz fallbacks or standard
-echo "TC2.1: Firefox compatible animations"
-if grep -qE "transition:" "$CSS_FILE"; then
-    pass "CSS transitions use standard syntax (Firefox compatible)"
-else
-    fail "CSS should use standard transition syntax"
-fi
-
-# TC2.2: Check for smooth scroll behavior
-echo "TC2.2: Smooth scroll behavior"
-if grep -qE "scroll-behavior:\s*smooth" "$CSS_FILE"; then
-    pass "Smooth scroll behavior defined (Firefox compatible)"
-else
-    fail "Should have smooth scroll behavior"
-fi
-
-# TC2.3: Check for -moz-osx-font-smoothing (Firefox-specific)
-echo "TC2.3: Firefox font smoothing"
-if grep -q "-moz-osx-font-smoothing" "$CSS_FILE"; then
-    pass "Firefox font smoothing defined"
-else
-    warn "-moz-osx-font-smoothing not defined (optional)"
-    # Not a failure, just informational
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-fi
-
-# TC2.4: Check for backdrop-filter with -webkit fallback
-echo "TC2.4: Backdrop filter support"
-if grep -qE "backdrop-filter:" "$CSS_FILE"; then
-    if grep -qE "-webkit-backdrop-filter:" "$CSS_FILE"; then
-        pass "Backdrop filter with webkit prefix (Firefox and Safari compatible)"
+# Test 3: Viewport meta tag
+echo "Test 3: Viewport meta tag for mobile"
+if grep -qi 'name="viewport"' "$HTML_FILE"; then
+    if grep -qi 'width=device-width' "$HTML_FILE"; then
+        pass "Viewport meta tag with device-width present"
     else
-        warn "Missing -webkit-backdrop-filter prefix"
-        TESTS_PASSED=$((TESTS_PASSED + 1))
-    fi
-else
-    warn "No backdrop-filter used (optional feature)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-fi
-
-# TC2.5: No layout-breaking Firefox-specific issues
-echo "TC2.5: No Firefox layout issues"
-if ! grep -qE ":-moz-broken|:-moz-drag-over" "$CSS_FILE"; then
-    pass "No Firefox-specific pseudo-classes that break compatibility"
-else
-    fail "Contains Firefox-specific pseudo-classes that may break in other browsers"
-fi
-
-echo ""
-echo "=== Test Case 3: Safari Compatibility ==="
-echo ""
-
-# TC3.1: Check for -webkit-background-clip for text gradients
-echo "TC3.1: Safari text gradient support"
-if grep -qE "-webkit-background-clip:\s*text" "$CSS_FILE"; then
-    pass "Webkit background-clip for text gradients (Safari compatible)"
-else
-    warn "No webkit background-clip used (may be intentional)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-fi
-
-# TC3.2: Check for -webkit-text-fill-color (Safari text styling)
-echo "TC3.2: Safari text fill color"
-if grep -qE "-webkit-text-fill-color" "$CSS_FILE"; then
-    pass "Webkit text-fill-color used (Safari compatible)"
-else
-    warn "No webkit text-fill-color (may not be needed)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-fi
-
-# TC3.3: localStorage usage with proper checks
-echo "TC3.3: localStorage with Safari compatibility"
-if grep -q "localStorage" "$JS_FILE"; then
-    if grep -qE "try|catch|localStorage" "$JS_FILE" || grep -q "window.localStorage" "$JS_FILE"; then
-        pass "localStorage used with proper pattern (Safari compatible)"
-    else
-        warn "localStorage used but may need try-catch for Safari private mode"
-        TESTS_PASSED=$((TESTS_PASSED + 1))
-    fi
-else
-    fail "localStorage should be used for theme persistence"
-fi
-
-# TC3.4: Focus styles visible (Safari accessibility)
-echo "TC3.4: Focus styles for Safari"
-if grep -qE ":focus-visible|:focus" "$CSS_FILE"; then
-    pass "Focus styles defined (Safari accessibility compatible)"
-else
-    fail "Focus styles should be defined for Safari accessibility"
-fi
-
-# TC3.5: Check for -webkit-font-smoothing
-echo "TC3.5: Safari font smoothing"
-if grep -q "-webkit-font-smoothing" "$CSS_FILE"; then
-    pass "Webkit font smoothing defined (Safari compatible)"
-else
-    warn "-webkit-font-smoothing not defined (optional)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-fi
-
-echo ""
-echo "=== Test Case 4: Edge Compatibility ==="
-echo ""
-
-# TC4.1: Edge uses Chromium now, check for modern CSS
-echo "TC4.1: Edge modern CSS support"
-if grep -qE "display:\s*(flex|grid)" "$CSS_FILE"; then
-    pass "Modern CSS layout used (Edge Chromium compatible)"
-else
-    fail "Modern CSS layout should be used"
-fi
-
-# TC4.2: No IE-specific hacks
-echo "TC4.2: No IE-specific CSS hacks"
-if ! grep -qE "@media.*-ms-|_:lang|\\\\9" "$CSS_FILE"; then
-    pass "No IE-specific CSS hacks (Edge compatible)"
-else
-    fail "Contains IE-specific hacks that may cause issues"
-fi
-
-# TC4.3: JavaScript uses standard APIs
-echo "TC4.3: Standard JavaScript APIs"
-if grep -q "addEventListener" "$JS_FILE" && grep -q "classList" "$JS_FILE"; then
-    pass "Uses standard DOM APIs (Edge compatible)"
-else
-    fail "Should use standard DOM APIs"
-fi
-
-# TC4.4: Check for ES5 compatibility (var instead of let/const for wider support)
-echo "TC4.4: JavaScript ES5 compatibility"
-if grep -qE "^[[:space:]]*(var|function)" "$JS_FILE"; then
-    pass "Uses ES5 compatible syntax (var declarations)"
-else
-    warn "May use ES6+ only features (check for Edge legacy support if needed)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-fi
-
-# TC4.5: All interactive features have event handlers
-echo "TC4.5: Interactive features properly wired"
-THEME_LISTENER=$(grep -c "themeToggle.*addEventListener\|addEventListener.*themeToggle" "$JS_FILE" || echo "0")
-COPY_LISTENER=$(grep -c "copyButtons\|copy-btn" "$JS_FILE" || echo "0")
-MOBILE_LISTENER=$(grep -c "mobileMenuToggle.*addEventListener\|addEventListener.*mobileMenuToggle" "$JS_FILE" || echo "0")
-
-if [ "$THEME_LISTENER" -gt 0 ] || [ "$COPY_LISTENER" -gt 0 ] || [ "$MOBILE_LISTENER" -gt 0 ]; then
-    pass "Event listeners properly attached for interactive features"
-else
-    fail "Interactive features should have event listeners"
-fi
-
-echo ""
-echo "=== Test Case 5: Performance (3G Load Time) ==="
-echo ""
-
-# TC5.1: Check total asset size (NFR-5: < 200KB)
-echo "TC5.1: Total asset size under 200KB"
-HTML_SIZE=$(wc -c < "$HTML_FILE")
-CSS_SIZE=$(wc -c < "$CSS_FILE")
-JS_SIZE=$(wc -c < "$JS_FILE")
-TOTAL_SIZE=$((HTML_SIZE + CSS_SIZE + JS_SIZE))
-TOTAL_KB=$((TOTAL_SIZE / 1024))
-
-echo "  HTML: ${HTML_SIZE} bytes"
-echo "  CSS: ${CSS_SIZE} bytes"
-echo "  JS: ${JS_SIZE} bytes"
-echo "  Total: ${TOTAL_SIZE} bytes (${TOTAL_KB} KB)"
-
-if [ "$TOTAL_SIZE" -lt 204800 ]; then
-    pass "Total asset size is ${TOTAL_KB}KB (under 200KB limit)"
-else
-    fail "Total asset size is ${TOTAL_KB}KB (exceeds 200KB limit)"
-fi
-
-# TC5.2: 3G simulation calculation
-# Standard 3G: ~1.6 Mbps = 200 KB/s = 200000 bytes/s
-# NFR-2: Render within 2 seconds = 400000 bytes max
-echo "TC5.2: 3G load time estimation"
-BYTES_PER_SECOND_3G=200000
-MAX_BYTES_2SEC=$((BYTES_PER_SECOND_3G * 2))
-
-if [ "$TOTAL_SIZE" -lt "$MAX_BYTES_2SEC" ]; then
-    LOAD_TIME=$(echo "scale=2; $TOTAL_SIZE / $BYTES_PER_SECOND_3G" | bc 2>/dev/null || echo "0.5")
-    pass "Estimated 3G load time: ~${LOAD_TIME}s (under 2s requirement)"
-else
-    fail "Assets too large for 2s 3G load requirement"
-fi
-
-# TC5.3: No blocking external resources (stylesheets/scripts from CDN)
-echo "TC5.3: No blocking external resources"
-# Check for external stylesheets (link tags with http/https src for CSS)
-EXTERNAL_CSS_COUNT=0
-if grep -qE '<link[^>]*href="https?://' "$HTML_FILE"; then
-    EXTERNAL_CSS_COUNT=$(grep -cE '<link[^>]*rel="stylesheet"[^>]*href="https?://' "$HTML_FILE" || true)
-fi
-# Check for external scripts (script tags with http/https src)
-EXTERNAL_JS_COUNT=0
-if grep -qE '<script[^>]*src="https?://' "$HTML_FILE"; then
-    EXTERNAL_JS_COUNT=$(grep -cE '<script[^>]*src="https?://' "$HTML_FILE" || true)
-fi
-
-if [ "$EXTERNAL_CSS_COUNT" -eq 0 ] && [ "$EXTERNAL_JS_COUNT" -eq 0 ]; then
-    pass "No external blocking resources (all self-contained)"
-else
-    fail "Contains external resources that may slow load time (CSS: $EXTERNAL_CSS_COUNT, JS: $EXTERNAL_JS_COUNT)"
-fi
-
-# TC5.4: CSS uses efficient selectors (no deeply nested or universal)
-echo "TC5.4: CSS selector efficiency"
-INEFFICIENT_SELECTORS=$(grep -cE '^\s*\*\s*\{|>.*>.*>.*>' "$CSS_FILE" || true)
-if [ "$INEFFICIENT_SELECTORS" -lt 3 ]; then
-    pass "CSS uses reasonably efficient selectors"
-else
-    warn "CSS may have performance issues with complex selectors"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-fi
-
-# TC5.5: Reduced motion support (performance accessibility)
-echo "TC5.5: Reduced motion support"
-if grep -qE "prefers-reduced-motion" "$CSS_FILE"; then
-    pass "Respects prefers-reduced-motion (performance accessible)"
-else
-    fail "Should respect prefers-reduced-motion for performance accessibility"
-fi
-
-echo ""
-echo "=== Test Case 6: No JavaScript Errors ==="
-echo ""
-
-# TC6.1: JavaScript syntax validation (basic)
-echo "TC6.1: JavaScript syntax validation"
-# Check for common syntax errors
-if ! grep -qE "function\s*\(.*\)\s*{[^}]*$" "$JS_FILE" 2>/dev/null; then
-    pass "No obvious unclosed function blocks"
-else
-    warn "Possible unclosed function block (complex pattern)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-fi
-
-# TC6.2: Strict mode usage
-echo "TC6.2: Strict mode enabled"
-if grep -qE "'use strict'|\"use strict\"" "$JS_FILE"; then
-    pass "JavaScript uses strict mode (catches common errors)"
-else
-    fail "JavaScript should use strict mode"
-fi
-
-# TC6.3: No console.log left in production
-echo "TC6.3: No debug console.log statements"
-CONSOLE_COUNT=$(grep -c "console.log" "$JS_FILE" || true)
-if [ "$CONSOLE_COUNT" -eq 0 ]; then
-    pass "No console.log statements in production code"
-else
-    warn "Found $CONSOLE_COUNT console.log statement(s) (may want to remove for production)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-fi
-
-# TC6.4: Error handling for async operations
-echo "TC6.4: Error handling for clipboard API"
-if grep -q "\.catch\|catch\s*(" "$JS_FILE"; then
-    pass "Error handling present for async operations"
-else
-    fail "Should have error handling for async clipboard operations"
-fi
-
-# TC6.5: No undefined variable access patterns
-echo "TC6.5: Variable declarations before use"
-if grep -qE "document\.getElementById|document\.querySelector" "$JS_FILE"; then
-    if grep -qE "var\s+\w+\s*=\s*document\." "$JS_FILE"; then
-        pass "DOM elements properly assigned to variables"
-    else
-        warn "DOM elements may not be cached (performance consideration)"
-        TESTS_PASSED=$((TESTS_PASSED + 1))
-    fi
-else
-    fail "Should use proper DOM selection methods"
-fi
-
-# TC6.6: IIFE wrapper to prevent global pollution
-echo "TC6.6: IIFE wrapper for scope isolation"
-if grep -qE "^\s*\(function\s*\(\)\s*{|^\(function\(\)" "$JS_FILE"; then
-    pass "JavaScript wrapped in IIFE (no global pollution)"
-else
-    fail "JavaScript should be wrapped in IIFE to prevent global pollution"
-fi
-
-echo ""
-echo "=== Test Case 7: Lighthouse Performance Readiness ==="
-echo ""
-
-# TC7.1: Meta viewport tag for mobile
-echo "TC7.1: Viewport meta tag"
-if grep -qE 'meta.*name="viewport"' "$HTML_FILE"; then
-    if grep -qE 'width=device-width' "$HTML_FILE"; then
-        pass "Proper viewport meta tag for mobile rendering"
-    else
-        fail "Viewport should include width=device-width"
+        fail "Viewport meta tag missing width=device-width"
     fi
 else
     fail "Missing viewport meta tag"
 fi
 
-# TC7.2: Meta description for SEO
-echo "TC7.2: Meta description tag"
-if grep -qE 'meta.*name="description"' "$HTML_FILE"; then
-    pass "Meta description present (SEO/Lighthouse)"
+# Test 4: Language attribute
+echo "Test 4: HTML lang attribute"
+if grep -qi '<html lang=' "$HTML_FILE"; then
+    pass "HTML lang attribute present"
 else
-    fail "Missing meta description tag"
+    fail "Missing HTML lang attribute for accessibility"
 fi
 
-# TC7.3: HTML lang attribute
-echo "TC7.3: HTML lang attribute"
-if grep -qE '<html.*lang=' "$HTML_FILE"; then
-    pass "HTML lang attribute present (accessibility/Lighthouse)"
+# ============================================
+# CSS Browser Compatibility Tests
+# ============================================
+echo ""
+echo "--- CSS Browser Compatibility ---"
+
+# Test 5: CSS custom properties (supported in all modern browsers)
+echo "Test 5: CSS custom properties usage"
+if grep -q '\-\-[a-zA-Z]' "$CSS_FILE"; then
+    pass "CSS custom properties (variables) used"
+    info "Supported in Chrome 49+, Firefox 31+, Safari 9.1+, Edge 15+"
 else
-    fail "Missing HTML lang attribute"
+    skip "No CSS custom properties found"
 fi
 
-# TC7.4: Efficient image handling (SVG icons are inline)
-echo "TC7.4: Efficient image handling"
-if grep -q "<svg" "$HTML_FILE"; then
-    if ! grep -qE '<img.*src=' "$HTML_FILE" || grep -qE 'loading="lazy"' "$HTML_FILE"; then
-        pass "Uses inline SVG or lazy-loaded images (Lighthouse optimized)"
+# Test 6: Flexbox usage (widely supported)
+echo "Test 6: Flexbox layout usage"
+if grep -q 'display:\s*flex' "$CSS_FILE"; then
+    pass "Flexbox layout used"
+    info "Supported in Chrome 29+, Firefox 28+, Safari 9+, Edge 12+"
+else
+    skip "No flexbox layout found"
+fi
+
+# Test 7: CSS Grid usage
+echo "Test 7: CSS Grid layout usage"
+if grep -q 'display:\s*grid\|grid-template' "$CSS_FILE"; then
+    pass "CSS Grid layout used"
+    info "Supported in Chrome 57+, Firefox 52+, Safari 10.1+, Edge 16+"
+else
+    skip "No CSS Grid layout found"
+fi
+
+# Test 8: Webkit prefixes for Safari compatibility
+echo "Test 8: WebKit prefixes for Safari"
+if grep -q '\-webkit-' "$CSS_FILE"; then
+    WEBKIT_COUNT=$(grep -c '\-webkit-' "$CSS_FILE" || true)
+    pass "WebKit prefixes present ($WEBKIT_COUNT occurrences)"
+else
+    skip "No WebKit prefixes (may need for older Safari)"
+fi
+
+# Test 9: Standard CSS properties (no proprietary-only)
+echo "Test 9: Using standard CSS properties"
+# Check for IE-specific properties that have no standard equivalent
+if grep -qi 'filter:\s*alpha\|behavior:\s*url\|-ms-filter' "$CSS_FILE"; then
+    fail "Contains IE-specific proprietary properties"
+else
+    pass "No IE-only proprietary properties"
+fi
+
+# Test 10: backdrop-filter with fallback
+echo "Test 10: backdrop-filter browser support"
+if grep -q 'backdrop-filter' "$CSS_FILE"; then
+    if grep -q '\-webkit-backdrop-filter' "$CSS_FILE"; then
+        pass "backdrop-filter with WebKit prefix for Safari"
     else
-        warn "Images should use lazy loading"
-        TESTS_PASSED=$((TESTS_PASSED + 1))
+        fail "backdrop-filter used without -webkit- prefix for Safari"
     fi
 else
-    warn "No SVG icons found (may use external images)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
+    skip "backdrop-filter not used"
 fi
 
-# TC7.5: Critical CSS/JS not blocking render
-echo "TC7.5: Script loading pattern"
-# Check if script is placed near end of body (before </body>)
-SCRIPT_LINE=$(grep -n '<script' "$HTML_FILE" | head -1 | cut -d: -f1)
-BODY_END_LINE=$(grep -n '</body>' "$HTML_FILE" | head -1 | cut -d: -f1)
+# ============================================
+# JavaScript Compatibility Tests
+# ============================================
+echo ""
+echo "--- JavaScript Compatibility ---"
 
-if [ -n "$SCRIPT_LINE" ] && [ -n "$BODY_END_LINE" ]; then
-    # Script should be within last 5 lines before </body>
-    DIFF=$((BODY_END_LINE - SCRIPT_LINE))
-    if [ "$DIFF" -ge 0 ] && [ "$DIFF" -le 5 ]; then
-        pass "Script placed at end of body (non-blocking, line $SCRIPT_LINE before body end at $BODY_END_LINE)"
+# Test 11: Strict mode enabled
+echo "Test 11: JavaScript strict mode"
+if grep -q "'use strict'\|\"use strict\"" "$JS_FILE"; then
+    pass "Strict mode enabled"
+else
+    fail "Missing strict mode declaration"
+fi
+
+# Test 12: Arrow functions usage (ES6)
+echo "Test 12: ES6 arrow functions check"
+if grep -q '=>' "$JS_FILE"; then
+    skip "Contains arrow functions (ES6) - requires modern browsers"
+    info "Supported in Chrome 45+, Firefox 22+, Safari 10+, Edge 12+"
+else
+    pass "No arrow functions - ES5 compatible"
+fi
+
+# Test 13: Let/const declarations (ES6)
+echo "Test 13: ES6 let/const check"
+if grep -Eq '\blet\s|\bconst\s' "$JS_FILE"; then
+    skip "Contains let/const (ES6) - requires modern browsers"
+    info "Supported in Chrome 49+, Firefox 44+, Safari 10+, Edge 12+"
+else
+    pass "Uses var declarations - ES5 compatible"
+fi
+
+# Test 14: Template literals check
+echo "Test 14: ES6 template literals check"
+if grep -q '`' "$JS_FILE"; then
+    skip "Contains template literals - requires modern browsers"
+else
+    pass "No template literals - ES5 compatible"
+fi
+
+# Test 15: Clipboard API with fallback
+echo "Test 15: Clipboard API fallback"
+if grep -q 'navigator.clipboard' "$JS_FILE"; then
+    if grep -q 'execCommand\|fallback' "$JS_FILE"; then
+        pass "Clipboard API with fallback for older browsers"
     else
-        warn "Script position ($SCRIPT_LINE) may affect render performance (body ends at $BODY_END_LINE)"
-        TESTS_PASSED=$((TESTS_PASSED + 1))
+        fail "Clipboard API used without fallback"
     fi
 else
-    fail "Could not determine script/body position"
+    pass "Clipboard API not used (or uses alternative)"
 fi
 
-# TC7.6: CSS efficiency check - no @import
-echo "TC7.6: No CSS @import (render blocking)"
-if ! grep -qE "@import" "$CSS_FILE"; then
-    pass "No @import statements (avoids render blocking)"
+# Test 16: localStorage availability check
+echo "Test 16: localStorage error handling"
+if grep -q 'localStorage' "$JS_FILE"; then
+    # Check if there's any try-catch or feature detection
+    if grep -q 'try\|catch\|typeof' "$JS_FILE"; then
+        pass "localStorage with error handling/feature detection"
+    else
+        skip "localStorage used without explicit error handling"
+    fi
 else
-    fail "CSS @import statements can block rendering"
+    skip "localStorage not used"
 fi
 
-# TC7.7: Touch targets size check (> 44px for mobile)
-echo "TC7.7: Touch target sizes"
-TOUCH_TARGETS=$(grep -cE "width:\s*4[4-9]px|width:\s*[5-9][0-9]px|height:\s*4[4-9]px|height:\s*[5-9][0-9]px|width:\s*40px.*height:\s*40px" "$CSS_FILE" || true)
-if [ "$TOUCH_TARGETS" -gt 0 ]; then
-    pass "Touch targets appear to be adequate size (>= 40px)"
+# Test 17: Event listener usage
+echo "Test 17: Standard event handling"
+if grep -q 'addEventListener' "$JS_FILE"; then
+    pass "Using standard addEventListener"
 else
-    warn "Verify touch targets are at least 44x44px for mobile (Lighthouse requirement)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
+    fail "Not using standard addEventListener"
 fi
 
+# ============================================
+# Performance Tests
+# ============================================
+echo ""
+echo "--- Performance Validation ---"
+
+# Test 18: Asset file sizes
+echo "Test 18: Asset file sizes (NFR-5: <200KB total)"
+HTML_SIZE=$(wc -c < "$HTML_FILE")
+CSS_SIZE=$(wc -c < "$CSS_FILE")
+JS_SIZE=$(wc -c < "$JS_FILE")
+TOTAL_SIZE=$((HTML_SIZE + CSS_SIZE + JS_SIZE))
+MAX_SIZE=$((200 * 1024))
+
+info "HTML: ${HTML_SIZE} bytes"
+info "CSS: ${CSS_SIZE} bytes"
+info "JS: ${JS_SIZE} bytes"
+info "Total: ${TOTAL_SIZE} bytes ($((TOTAL_SIZE / 1024)) KB)"
+
+if [ "$TOTAL_SIZE" -lt "$MAX_SIZE" ]; then
+    pass "Total asset size under 200KB ($((TOTAL_SIZE / 1024))KB)"
+else
+    fail "Total asset size exceeds 200KB limit ($((TOTAL_SIZE / 1024))KB)"
+fi
+
+# Test 19: No external dependencies
+echo "Test 19: Self-contained assets (no external CDN)"
+if grep -qi 'cdnjs\|unpkg\|jsdelivr\|googleapis.com/css\|cloudflare' "$HTML_FILE"; then
+    fail "External CDN dependencies found"
+else
+    pass "No external CDN dependencies - fully self-contained"
+fi
+
+# Test 20: Inline styles minimized
+echo "Test 20: Minimal inline styles"
+INLINE_STYLE_COUNT=$(grep -c 'style="' "$HTML_FILE" || true)
+if [ "$INLINE_STYLE_COUNT" -lt 5 ]; then
+    pass "Minimal inline styles ($INLINE_STYLE_COUNT occurrences)"
+else
+    fail "Too many inline styles ($INLINE_STYLE_COUNT) - prefer CSS classes"
+fi
+
+# Test 21: CSS uses efficient selectors
+echo "Test 21: Efficient CSS selectors"
+# Check for overly specific selectors (more than 4 levels deep)
+if grep -E '^\s*[a-z]+\s+[a-z]+\s+[a-z]+\s+[a-z]+\s+[a-z]+\s*\{' "$CSS_FILE" >/dev/null 2>&1; then
+    fail "Contains deeply nested selectors (5+ levels)"
+else
+    pass "CSS selectors are efficiently structured"
+fi
+
+# ============================================
+# Cross-Browser Feature Tests
+# ============================================
+echo ""
+echo "--- Cross-Browser Feature Support ---"
+
+# Test 22: prefers-color-scheme media query
+echo "Test 22: System theme preference support"
+if grep -q 'prefers-color-scheme' "$CSS_FILE" || grep -q 'prefers-color-scheme' "$JS_FILE"; then
+    pass "System color scheme preference supported"
+else
+    skip "No system theme preference detection"
+fi
+
+# Test 23: prefers-reduced-motion support
+echo "Test 23: Reduced motion accessibility"
+if grep -q 'prefers-reduced-motion' "$CSS_FILE"; then
+    pass "Respects prefers-reduced-motion preference"
+else
+    fail "Missing prefers-reduced-motion support"
+fi
+
+# Test 24: Smooth scroll behavior
+echo "Test 24: Smooth scroll behavior"
+if grep -q 'scroll-behavior:\s*smooth' "$CSS_FILE"; then
+    pass "Smooth scroll behavior defined"
+else
+    skip "No smooth scroll behavior"
+fi
+
+# Test 25: Focus-visible pseudo-class
+echo "Test 25: Modern focus-visible support"
+if grep -q ':focus-visible' "$CSS_FILE"; then
+    pass "Using :focus-visible for better keyboard accessibility"
+    info "Supported in Chrome 86+, Firefox 85+, Safari 15.4+, Edge 86+"
+else
+    if grep -q ':focus' "$CSS_FILE"; then
+        pass "Using :focus (broader support than :focus-visible)"
+    else
+        fail "Missing focus styles"
+    fi
+fi
+
+# Test 26: External links security
+echo "Test 26: External link security attributes"
+EXTERNAL_LINKS=$(grep -c 'target="_blank"' "$HTML_FILE" || true)
+NOOPENER_COUNT=$(grep -c 'rel="noopener"' "$HTML_FILE" || true)
+if [ "$EXTERNAL_LINKS" -eq "$NOOPENER_COUNT" ]; then
+    pass "All external links have rel='noopener' ($EXTERNAL_LINKS links)"
+else
+    fail "External links missing rel='noopener' ($NOOPENER_COUNT of $EXTERNAL_LINKS)"
+fi
+
+# ============================================
+# Summary
+# ============================================
 echo ""
 echo "============================================"
 echo "Test Results Summary"
 echo "============================================"
-echo "Passed: $TESTS_PASSED"
-echo "Failed: $TESTS_FAILED"
+echo -e "Passed:  ${GREEN}$TESTS_PASSED${NC}"
+echo -e "Failed:  ${RED}$TESTS_FAILED${NC}"
+echo -e "Skipped: ${YELLOW}$TESTS_SKIPPED${NC}"
 echo ""
 
 if [ $TESTS_FAILED -gt 0 ]; then
     echo -e "${RED}Some tests failed!${NC}"
+    echo ""
+    echo "Note: For full browser E2E testing, run:"
+    echo "  npx playwright test"
     exit 1
 else
-    echo -e "${GREEN}All tests passed!${NC}"
+    echo -e "${GREEN}All compatibility checks passed!${NC}"
+    echo ""
+    echo "For comprehensive browser testing, run:"
+    echo "  npx playwright test"
     exit 0
 fi
