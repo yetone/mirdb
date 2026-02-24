@@ -210,3 +210,237 @@ test.describe('Mobile Viewport at 767px (Edge case)', () => {
     expect(hasHamburger || hasDirectLinks).toBe(true)
   })
 })
+
+/**
+ * Tablet and Desktop Responsive Design E2E Tests
+ * Owner: Scenario 10 - Responsive Design - Tablet and Desktop
+ *
+ * Verifies homepage displays correctly on tablet (768px-1023px) and desktop (1024px+) viewports.
+ * Tests cover:
+ * - Tablet-optimized layout at 768px
+ * - Full desktop navigation bar (not hamburger) at 1024px+
+ * - Multi-column feature cards grid at desktop
+ * - Hero section with wider layout and centered content
+ */
+
+test.describe('Tablet Responsive Design (768px-1023px)', () => {
+  test.use({
+    viewport: { width: 768, height: 1024 },
+  })
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+    await page.waitForSelector('nav[aria-label="Main navigation"]')
+  })
+
+  test('TC1: Tablet-optimized layout is applied at 768px viewport', async ({ page }) => {
+    // Check that the page renders without horizontal scroll
+    const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth)
+    const viewportWidth = await page.evaluate(() => window.innerWidth)
+    expect(documentWidth).toBeLessThanOrEqual(viewportWidth)
+
+    // At 768px (md breakpoint), desktop navigation should be visible
+    // The navbar uses "hidden md:flex" for desktop nav, so at 768px it should show
+    const desktopNav = page.locator('.navbar-end.hidden.md\\:flex, .navbar-end:not(.md\\:hidden)')
+    const navIsVisible = await desktopNav.first().isVisible().catch(() => false)
+
+    // Hero section should be visible and properly laid out
+    const heroSection = page.locator('section[aria-label="Hero section"], .hero')
+    await expect(heroSection).toBeVisible()
+
+    // Features section should be visible
+    const featuresSection = page.locator('[data-testid="features-section"], section[aria-label="Features section"]')
+    await expect(featuresSection).toBeVisible()
+
+    // At tablet size, feature cards should display in 2-column grid (md:grid-cols-2)
+    const featureCards = page.locator('[data-testid="feature-card"]')
+    const cardCount = await featureCards.count()
+    expect(cardCount).toBeGreaterThanOrEqual(3)
+
+    // Get first and second card positions to verify grid layout
+    if (cardCount >= 2) {
+      const firstCard = await featureCards.nth(0).boundingBox()
+      const secondCard = await featureCards.nth(1).boundingBox()
+
+      if (firstCard && secondCard) {
+        // At 768px with md:grid-cols-2, cards should be side by side (same Y position)
+        // They should be in the same row
+        expect(Math.abs(firstCard.y - secondCard.y)).toBeLessThan(20)
+        // And horizontally separated
+        expect(secondCard.x).toBeGreaterThan(firstCard.x)
+      }
+    }
+  })
+
+  test('Tablet layout maintains proper spacing and readability', async ({ page }) => {
+    // Check hero section content is properly centered
+    const heroContent = page.locator('.hero-content')
+    await expect(heroContent).toBeVisible()
+
+    const heroBox = await heroContent.boundingBox()
+    const viewportWidth = 768
+
+    if (heroBox) {
+      // Hero content should be centered (roughly equal margins on both sides)
+      const leftMargin = heroBox.x
+      const rightMargin = viewportWidth - (heroBox.x + heroBox.width)
+      // Allow some variance for padding/margins
+      expect(Math.abs(leftMargin - rightMargin)).toBeLessThan(100)
+    }
+
+    // Check that heading is visible and readable
+    const heading = page.locator('h1')
+    await expect(heading).toBeVisible()
+
+    // Features section heading should use larger text at tablet size (md:text-4xl)
+    const featuresHeading = page.locator('[data-testid="features-section"] h2, section[aria-label="Features section"] h2')
+    await expect(featuresHeading).toBeVisible()
+  })
+})
+
+test.describe('Desktop Responsive Design (1024px+)', () => {
+  test.use({
+    viewport: { width: 1024, height: 768 },
+  })
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+    await page.waitForSelector('nav[aria-label="Main navigation"]')
+  })
+
+  test('TC2: Full desktop navigation bar is displayed (not hamburger) at 1024px', async ({ page }) => {
+    // The hamburger menu button should be hidden at desktop viewport
+    // It has class "md:hidden" which hides it at 768px and above
+    const hamburgerButton = page.locator('[data-testid="mobile-menu-button"]')
+    await expect(hamburgerButton).toBeHidden()
+
+    // Desktop navigation links should be visible (Login, Register)
+    // They use "hidden md:flex" so they should be visible at 1024px
+    const loginLink = page.locator('nav a[href="/login"]').first()
+    const registerLink = page.locator('nav a[href="/register"]').first()
+
+    // Check if direct nav links are visible
+    await expect(loginLink).toBeVisible()
+    await expect(registerLink).toBeVisible()
+
+    // Verify the links are in the navbar-end section (desktop layout)
+    const navbarEnd = page.locator('.navbar-end').first()
+    await expect(navbarEnd).toBeVisible()
+  })
+
+  test('TC3: Feature cards display in multi-column grid layout at desktop', async ({ page }) => {
+    // At desktop (lg:grid-cols-4), feature cards should display in a 4-column grid
+    const featuresSection = page.locator('[data-testid="features-section"], section[aria-label="Features section"]')
+    await expect(featuresSection).toBeVisible()
+
+    const featureCards = page.locator('[data-testid="feature-card"]')
+    const cardCount = await featureCards.count()
+
+    // We expect 4 feature cards based on FeaturesSection implementation
+    expect(cardCount).toBe(4)
+
+    // Get bounding boxes for all cards
+    const cardBoxes = []
+    for (let i = 0; i < cardCount; i++) {
+      const box = await featureCards.nth(i).boundingBox()
+      if (box) cardBoxes.push(box)
+    }
+
+    // At lg:grid-cols-4 (1024px), all 4 cards should be in the same row
+    if (cardBoxes.length === 4) {
+      // All cards should have approximately the same Y position (same row)
+      const firstCardY = cardBoxes[0].y
+      for (const box of cardBoxes) {
+        expect(Math.abs(box.y - firstCardY)).toBeLessThan(10)
+      }
+
+      // Cards should be horizontally distributed
+      // Card 2 should be to the right of card 1, etc.
+      for (let i = 1; i < cardBoxes.length; i++) {
+        expect(cardBoxes[i].x).toBeGreaterThan(cardBoxes[i - 1].x)
+      }
+    }
+  })
+
+  test('TC4: Hero section uses wider layout with centered content at desktop', async ({ page }) => {
+    // Hero section should be visible
+    const heroSection = page.locator('section[aria-label="Hero section"], .hero')
+    await expect(heroSection).toBeVisible()
+
+    // Hero content container should be centered
+    const heroContent = page.locator('.hero-content')
+    await expect(heroContent).toBeVisible()
+
+    // Check hero content box
+    const heroBox = await heroContent.boundingBox()
+    const viewportWidth = 1024
+
+    if (heroBox) {
+      // Content should be centered in the viewport
+      const leftMargin = heroBox.x
+      const rightMargin = viewportWidth - (heroBox.x + heroBox.width)
+      // Allow some variance for padding but should be roughly centered
+      expect(Math.abs(leftMargin - rightMargin)).toBeLessThan(100)
+    }
+
+    // Check that the form uses horizontal layout (flex-row) at desktop (sm:flex-row)
+    const form = page.locator('section[aria-label="Hero section"] form, .hero form')
+    await expect(form).toBeVisible()
+
+    // Get input and button to verify they are side by side
+    const urlInput = page.locator('input[aria-label="URL to shorten"]')
+    const submitButton = page.locator('button[aria-label="Shorten URL"]')
+
+    const inputBox = await urlInput.boundingBox()
+    const buttonBox = await submitButton.boundingBox()
+
+    if (inputBox && buttonBox) {
+      // At desktop with sm:flex-row, input and button should be on the same line
+      // Y positions should be approximately equal
+      expect(Math.abs(inputBox.y - buttonBox.y)).toBeLessThan(20)
+      // Button should be to the right of the input
+      expect(buttonBox.x).toBeGreaterThan(inputBox.x)
+    }
+
+    // Heading should use larger text at desktop (md:text-6xl)
+    const heading = page.locator('h1')
+    await expect(heading).toBeVisible()
+
+    // Tagline should be visible with proper styling
+    const tagline = page.locator('.hero-content p').first()
+    await expect(tagline).toBeVisible()
+  })
+})
+
+test.describe('Large Desktop Viewport (1280px+)', () => {
+  test.use({
+    viewport: { width: 1280, height: 800 },
+  })
+
+  test('Content remains centered and readable at large desktop', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForSelector('nav[aria-label="Main navigation"]')
+
+    // Check max-width constraints are applied (max-w-6xl = 72rem = 1152px)
+    const featuresContainer = page.locator('[data-testid="features-section"] > div, section[aria-label="Features section"] > div').first()
+    await expect(featuresContainer).toBeVisible()
+
+    const containerBox = await featuresContainer.boundingBox()
+    if (containerBox) {
+      // Container should not exceed max-width (approximately 1152px for max-w-6xl)
+      expect(containerBox.width).toBeLessThanOrEqual(1200)
+    }
+
+    // Hero content should also be constrained
+    const heroContent = page.locator('.hero-content')
+    const heroBox = await heroContent.boundingBox()
+    if (heroBox) {
+      // max-w-3xl = 48rem = 768px
+      expect(heroBox.width).toBeLessThanOrEqual(800)
+    }
+
+    // Navigation should still be visible
+    const loginLink = page.locator('nav a[href="/login"]').first()
+    await expect(loginLink).toBeVisible()
+  })
+})
