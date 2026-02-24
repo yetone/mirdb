@@ -5,10 +5,15 @@
  * Initializes all modules on page load.
  */
 
+import { initMobileNav } from './mobile-nav.js';
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize smooth scroll for anchor links
   initSmoothScroll();
+
+  // Initialize mobile navigation (Scenario 2)
+  initMobileNav();
 });
 
 /**
