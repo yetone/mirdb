@@ -118,24 +118,28 @@ test.describe('Quick Start Section', () => {
   });
 
   test('Quick Start section has step numbers', async ({ page }) => {
-    // Check for step numbers
+    // Check for step numbers (3 steps: Install, Use, Rust example)
     const stepNumbers = page.locator('.quickstart-step-number');
-    await expect(stepNumbers).toHaveCount(2);
+    await expect(stepNumbers).toHaveCount(3);
 
     // First step should be "1"
-    await expect(stepNumbers.first()).toHaveText('1');
+    await expect(stepNumbers.nth(0)).toHaveText('1');
     // Second step should be "2"
-    await expect(stepNumbers.last()).toHaveText('2');
+    await expect(stepNumbers.nth(1)).toHaveText('2');
+    // Third step should be "3"
+    await expect(stepNumbers.nth(2)).toHaveText('3');
   });
 
   test('Quick Start section has step titles', async ({ page }) => {
     const stepTitles = page.locator('.quickstart-step-title');
-    await expect(stepTitles).toHaveCount(2);
+    await expect(stepTitles).toHaveCount(3);
 
     // First step: Install
-    await expect(stepTitles.first()).toContainText('Install MirDB');
+    await expect(stepTitles.nth(0)).toContainText('Install MirDB');
     // Second step: Start Using
-    await expect(stepTitles.last()).toContainText('Start Using MirDB');
+    await expect(stepTitles.nth(1)).toContainText('Start Using MirDB');
+    // Third step: Use with Rust
+    await expect(stepTitles.nth(2)).toContainText('Use with Rust');
   });
 
   test('Both copy buttons are functional', async ({ page, context }) => {

@@ -633,25 +633,130 @@ body {
   text-align: center;
 }
 
-/* Syntax highlighting tokens */
-.code-block .token.comment {
+/* ============================================
+   SYNTAX HIGHLIGHTING STYLES (Scenario 15)
+   ============================================ */
+
+/* Base syntax highlighting tokens */
+.code-block .token {
+  transition: color var(--transition-fast);
+}
+
+/* Comments - for shell comments (#) and rust comments (//) */
+.code-block .token.comment,
+.code-block .token.prolog,
+.code-block .token.doctype,
+.code-block .token.cdata {
   color: var(--color-code-comment, #6a9955);
+  font-style: italic;
 }
 
-.code-block .token.command {
+/* Commands and function names */
+.code-block .token.command,
+.code-block .token.function,
+.code-block .token.builtin {
   color: var(--color-code-command, #dcdcaa);
+  font-weight: 500;
 }
 
-.code-block .token.string {
+/* Strings */
+.code-block .token.string,
+.code-block .token.char,
+.code-block .token.attr-value {
   color: var(--color-code-string, #ce9178);
 }
 
-.code-block .token.keyword {
+/* Keywords - Rust: fn, let, mut, pub, struct, impl, etc. */
+.code-block .token.keyword,
+.code-block .token.control-flow {
   color: var(--color-code-keyword, #569cd6);
+  font-weight: 600;
 }
 
-.code-block .token.number {
+/* Numbers and constants */
+.code-block .token.number,
+.code-block .token.constant,
+.code-block .token.boolean {
   color: var(--color-code-number, #b5cea8);
+}
+
+/* Operators and punctuation */
+.code-block .token.operator,
+.code-block .token.punctuation {
+  color: var(--color-code-operator, #d4d4d4);
+}
+
+/* Types - Rust: String, i32, Vec, etc. */
+.code-block .token.type,
+.code-block .token.class-name,
+.code-block .token.type-declaration {
+  color: var(--color-code-type, #4ec9b0);
+}
+
+/* Variables and parameters */
+.code-block .token.variable,
+.code-block .token.parameter {
+  color: var(--color-code-variable, #9cdcfe);
+}
+
+/* Macros - Rust: println!, vec!, etc. */
+.code-block .token.macro,
+.code-block .token.macro-name {
+  color: var(--color-code-macro, #c586c0);
+  font-weight: 500;
+}
+
+/* Attributes - Rust: #[derive], #[test], etc. */
+.code-block .token.attribute,
+.code-block .token.attr-name {
+  color: var(--color-code-attribute, #9cdcfe);
+}
+
+/* Lifetime annotations - Rust: 'a, 'static, etc. */
+.code-block .token.lifetime {
+  color: var(--color-code-lifetime, #ffd700);
+  font-style: italic;
+}
+
+/* Module and namespace */
+.code-block .token.module,
+.code-block .token.namespace {
+  color: var(--color-code-module, #4ec9b0);
+}
+
+/* Shell/Bash specific tokens */
+.code-block .token.shebang {
+  color: var(--color-code-comment, #6a9955);
+}
+
+.code-block .token.environment {
+  color: var(--color-code-variable, #9cdcfe);
+}
+
+.code-block .token.file-descriptor {
+  color: var(--color-code-number, #b5cea8);
+}
+
+/* Output/response text (for memcached examples) */
+.code-block .token.output,
+.code-block .token.response {
+  color: var(--color-code-text-muted, #888);
+  font-style: italic;
+}
+
+/* Selection highlighting */
+.code-block code::selection,
+.code-block code *::selection {
+  background-color: rgba(211, 84, 0, 0.3);
+}
+
+/* Line numbers (if implemented) */
+.code-block .line-number {
+  color: var(--color-code-text-muted, #888);
+  user-select: none;
+  padding-right: var(--spacing-md);
+  min-width: 2em;
+  text-align: right;
 }
 
 /* Responsive Quick Start styles */

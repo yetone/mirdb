@@ -38,7 +38,7 @@
   --font-family-sans: var(--font-family-base);
   --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
 
-  /* Code block colors (Scenario 4) - WCAG AA Compliant (Scenario 11)
+  /* Code block colors (Scenario 4 & 15) - WCAG AA Compliant (Scenario 11)
    * Muted text #a0a0a0 has 4.66:1 contrast ratio with #1e1e1e background */
   --color-code-bg: #1e1e1e;
   --color-code-text: #e0e0e0;
@@ -48,6 +48,14 @@
   --color-code-string: #ce9178;
   --color-code-keyword: #569cd6;
   --color-code-number: #b5cea8;
+  /* Additional syntax highlighting colors (Scenario 15) */
+  --color-code-operator: #d4d4d4;
+  --color-code-type: #4ec9b0;
+  --color-code-variable: #9cdcfe;
+  --color-code-macro: #c586c0;
+  --color-code-attribute: #9cdcfe;
+  --color-code-lifetime: #ffd700;
+  --color-code-module: #4ec9b0;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;

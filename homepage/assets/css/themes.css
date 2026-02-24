@@ -53,7 +53,7 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
 
-  /* Code block colors for dark mode (slightly adjusted for dark bg) */
+  /* Code block colors for dark mode (Scenario 15 - slightly adjusted for dark bg) */
   --color-code-bg: #0d1117;
   --color-code-text: #e6edf3;
   --color-code-text-muted: #7d8590;
@@ -62,6 +62,14 @@
   --color-code-string: #a5d6ff;
   --color-code-keyword: #ff7b72;
   --color-code-number: #79c0ff;
+  /* Additional syntax highlighting colors for dark mode (Scenario 15) */
+  --color-code-operator: #e6edf3;
+  --color-code-type: #7ee787;
+  --color-code-variable: #79c0ff;
+  --color-code-macro: #d2a8ff;
+  --color-code-attribute: #79c0ff;
+  --color-code-lifetime: #ffd700;
+  --color-code-module: #7ee787;
 }
 
 /* Smooth theme transitions */

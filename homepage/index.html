@@ -244,6 +244,42 @@ hello
 <span class="token command">get</span> mykey</code></pre>
             </div>
           </div>
+
+          <!-- Rust Client Example (Scenario 15) -->
+          <div class="quickstart-step">
+            <h3 class="quickstart-step-title">
+              <span class="quickstart-step-number">3</span>
+              Use with Rust
+            </h3>
+            <div class="code-block" data-language="rust">
+              <div class="code-block-header">
+                <span class="code-block-lang">rust</span>
+                <button type="button" class="copy-btn" aria-label="Copy to clipboard" data-copy-target="rust-code">
+                  <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                  </svg>
+                  <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span class="copy-btn-text">Copy</span>
+                </button>
+              </div>
+              <pre><code id="rust-code" class="language-rust"><span class="token keyword">use</span> memcache<span class="token punctuation">::</span>Client<span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Connect to MirDB server</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> <span class="token variable">client</span> <span class="token operator">=</span> Client<span class="token punctuation">::</span><span class="token function">connect</span><span class="token punctuation">(</span><span class="token string">"memcache://127.0.0.1:12333"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Store a value</span>
+    client<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"greeting"</span><span class="token punctuation">,</span> <span class="token string">"Hello, MirDB!"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Retrieve the value</span>
+    <span class="token keyword">let</span> <span class="token variable">result</span><span class="token punctuation">:</span> <span class="token type">Option</span><span class="token operator">&lt;</span><span class="token type">String</span><span class="token operator">></span> <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"greeting"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro">println!</span><span class="token punctuation">(</span><span class="token string">"Value: {:?}"</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+            </div>
+          </div>
         </div>
       </div>
     </section>
