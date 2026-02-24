@@ -17,14 +17,18 @@
 import { HeroSection } from '../components/home/HeroSection'
 import { FeaturesSection } from '../components/home/FeaturesSection'
 import { Navbar } from '../components/Navbar'
+import { BackgroundEffect } from '../components/BackgroundEffect'
 
 export function Home() {
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="min-h-screen bg-base-100 relative">
+      {/* Animated Background Effect */}
+      <BackgroundEffect />
+
       {/* Navigation Bar with Theme Toggle */}
       <Navbar />
 
-      <main>
+      <main className="relative z-10">
         {/* Hero Section */}
         <HeroSection />
 
