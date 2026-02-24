@@ -1,0 +1,16 @@
+{
+  "name": "mirdb-tests",
+  "version": "1.0.0",
+  "description": "E2E tests for MirDB homepage",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "playwright": "^1.58.2"
+  }
+}

@@ -11,9 +11,16 @@ use crate::error::StatusCode;
 use crate::options::{Options, GB, KB, MB, TB};
 use crate::parser_util::macros::{digit, space, usize_parser, IRResult};
 
+/// Default HTTP server address.
+fn default_http_addr() -> String {
+    "0.0.0.0:8080".to_string()
+}
+
 #[derive(Debug, Deserialize)]
 pub struct Config {
     pub addr: String,
+    #[serde(default = "default_http_addr")]
+    pub http_addr: String,
 
     pub max_level: usize,
     pub work_dir: String,

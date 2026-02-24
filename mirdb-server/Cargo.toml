@@ -4,12 +4,21 @@ version = "0.1.0"
 authors = ["yetone <yetoneful@gmail.com>"]
 edition = "2018"
 
+[lib]
+name = "mirdb"
+path = "src/lib.rs"
+
+[[bin]]
+name = "mirdb"
+path = "src/main.rs"
+
 [dependencies]
 skip-list = { path = "../skip-list" }
 sstable = { path = "../sstable" }
 bytes = "0.4"
 futures = "0.1.18"
 tokio = "0.1.18"
+hyper = "0.12"
 tokio-io = "0.1.12"
 tokio-proto = "0.1"
 tokio-service = "0.1"

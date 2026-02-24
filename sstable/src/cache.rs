@@ -33,7 +33,7 @@ impl<T> Cache<T> {
     }
 
     pub fn insert(&mut self, key: CacheKey, elem: T) {
-        self.inner.put(key, elem)
+        let _ = self.inner.put(key, elem);
     }
 
     pub fn get(&mut self, key: &CacheKey) -> Option<&T> {
