@@ -16,6 +16,7 @@
 
 import { HeroSection } from '../components/home/HeroSection'
 import { FeaturesSection } from '../components/home/FeaturesSection'
+import { Footer } from '../components/home/Footer'
 import { Navbar } from '../components/Navbar'
 import { BackgroundEffect } from '../components/BackgroundEffect'
 
@@ -35,16 +36,8 @@ export function Home() {
         {/* Features Section */}
         <FeaturesSection />
 
-        {/* Footer - Placeholder for Scenario 12 */}
-        <footer
-          className="py-8 px-4 bg-base-200"
-          aria-label="Footer"
-          data-testid="footer-section"
-        >
-          <div className="max-w-6xl mx-auto text-center text-base-content/70">
-            <p>&copy; {new Date().getFullYear()} URL Shortener. All rights reserved.</p>
-          </div>
-        </footer>
+        {/* Footer */}
+        <Footer />
       </main>
     </div>
   )
