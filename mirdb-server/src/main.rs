@@ -8,6 +8,7 @@ use std::net::SocketAddr;
 use std::net::{TcpListener, TcpStream};
 use std::rc::Rc;
 use std::sync::{Arc, RwLock};
+use std::thread;
 
 use clap::App;
 use clap::Arg;
@@ -53,6 +54,7 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+mod http;
 
 pub struct Server {
     store: Arc<Store>,
@@ -127,6 +129,23 @@ Welcome to MirDB!
         .trim_matches('\n')
     );
 
+    // Parse and start HTTP server in a separate thread
+    let http_addr: SocketAddr = conf.http_addr.parse().map_err(|e| {
+        crate::error::Status::new(
+            crate::error::StatusCode::ConfigError,
+            &format!("Invalid http_addr: {}", e),
+        )
+    })?;
+
+    println!("Memcached server listening on {}", addr);
+    println!("HTTP server listening on http://{}", http_addr);
+
+    // Spawn HTTP server in a separate thread
+    thread::spawn(move || {
+        http::server::start_http_server(http_addr);
+    });
+
+    // Run the Memcached server (blocking)
     serve(addr, move || Ok(Server::new(store.clone())));
 
     Ok(())
