@@ -15,6 +15,7 @@
  */
 
 import { HeroSection } from '../components/home/HeroSection'
+import { FeaturesSection } from '../components/home/FeaturesSection'
 
 export function Home() {
   return (
@@ -23,19 +24,8 @@ export function Home() {
         {/* Hero Section */}
         <HeroSection />
 
-        {/* Features Section - Placeholder for Scenario 6 */}
-        <section
-          className="py-16 px-4"
-          aria-label="Features section"
-          data-testid="features-section"
-        >
-          <div className="max-w-6xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-8">Features</h2>
-            <p className="text-base-content/70">
-              Powerful URL shortening with analytics tracking.
-            </p>
-          </div>
-        </section>
+        {/* Features Section */}
+        <FeaturesSection />
 
         {/* Footer - Placeholder for Scenario 12 */}
         <footer
