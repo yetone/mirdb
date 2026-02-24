@@ -18,7 +18,7 @@
  */
 
 import { useState } from 'react'
-import { HeroSectionProps } from '../../types/home'
+import type { HeroSectionProps } from '../../types/home'
 
 export function HeroSection({ onUrlShortened }: HeroSectionProps) {
   const [url, setUrl] = useState('')
