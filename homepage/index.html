@@ -554,10 +554,48 @@ hello
   </main>
 
   <!-- Footer (Scenario 8) -->
-  <footer class="footer">
-    <div class="container text-center">
-      <p>&copy; 2024 MirDB. Licensed under MIT.</p>
-      <p><a href="https://github.com/example/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+  <footer class="footer" id="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <!-- Footer Branding -->
+        <div class="footer-brand">
+          <a href="/" class="footer-logo" aria-label="MirDB Home">
+            <img src="assets/images/logo.svg" alt="" class="footer-logo-icon" width="28" height="28" aria-hidden="true">
+            <span class="footer-logo-text">MirDB</span>
+          </a>
+          <p class="footer-tagline">A persistent key-value store with memcached protocol compatibility.</p>
+        </div>
+
+        <!-- Footer Links -->
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-links-group">
+            <h4 class="footer-links-title">Resources</h4>
+            <ul class="footer-links">
+              <li><a href="https://mirdb.io/docs" class="footer-link" id="footer-docs-link">Documentation</a></li>
+              <li><a href="https://github.com/example/mirdb" target="_blank" rel="noopener noreferrer" class="footer-link" id="footer-github-link">GitHub</a></li>
+              <li><a href="https://github.com/example/mirdb/releases" target="_blank" rel="noopener noreferrer" class="footer-link" id="footer-releases-link">Releases</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-group">
+            <h4 class="footer-links-title">Community</h4>
+            <ul class="footer-links">
+              <li><a href="https://github.com/example/mirdb/discussions" target="_blank" rel="noopener noreferrer" class="footer-link" id="footer-discussions-link">Discussions</a></li>
+              <li><a href="https://github.com/example/mirdb/issues" target="_blank" rel="noopener noreferrer" class="footer-link" id="footer-issues-link">Report Issue</a></li>
+              <li><a href="https://github.com/example/mirdb/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="footer-link" id="footer-contributing-link">Contributing</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p class="footer-copyright">
+          &copy; 2024 MirDB. Licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer" class="footer-license-link" id="footer-mit-link">MIT License</a>.
+        </p>
+        <p class="footer-credits">
+          Built with <span aria-label="love">♥</span> using Rust.
+        </p>
+      </div>
     </div>
   </footer>
 
