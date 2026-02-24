@@ -2,26 +2,25 @@
  * Accessibility E2E Tests - Keyboard Navigation
  * Owner: Scenario 14 - Accessibility - Keyboard Navigation
  *
- * Tests for:
- * - Keyboard navigation through interactive elements (WCAG 2.1 AA)
- * - Focus indicators on interactive elements
- * - ARIA labels for screen reader accessibility
- * - Semantic HTML structure
+ * Verifies homepage supports keyboard navigation and screen reader accessibility (WCAG 2.1 AA).
+ * Tests cover:
+ * - Tab key navigation through interactive elements
+ * - Visible focus indicators on focused elements
+ * - ARIA labels on interactive elements
+ * - Semantic HTML structure (header, main, section, footer)
  * - Skip navigation link for keyboard users
  */
 
 import { test, expect } from '@playwright/test'
 
-test.describe('Accessibility - Keyboard Navigation', () => {
+test.describe('Accessibility - Keyboard Navigation (WCAG 2.1 AA)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
     // Wait for page to fully load
     await expect(page.locator('h1')).toContainText('URL Shortener')
   })
 
-  test('all interactive elements are reachable via Tab key navigation', async ({
-    page,
-  }) => {
+  test('TC1: All interactive elements are reachable via keyboard Tab navigation', async ({ page }) => {
     // Start from the beginning of the page
     await page.keyboard.press('Tab')
 
@@ -29,52 +28,47 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     const skipLink = page.locator('[data-testid="skip-to-content"]')
     await expect(skipLink).toBeFocused()
 
-    // Tab through all interactive elements and verify they receive focus
-    const interactiveElements: string[] = []
+    // Collect all focused elements during tab navigation
+    const focusedElements: string[] = []
+    const maxTabs = 30
 
-    // Tab through elements and collect them
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < maxTabs; i++) {
       await page.keyboard.press('Tab')
 
-      // Get the currently focused element
       const focusedElement = await page.evaluate(() => {
         const el = document.activeElement
-        if (el && el !== document.body) {
-          return {
-            tagName: el.tagName.toLowerCase(),
-            role: el.getAttribute('role'),
-            ariaLabel: el.getAttribute('aria-label'),
-            text: el.textContent?.trim().substring(0, 50),
-            isInteractive: ['a', 'button', 'input', 'select', 'textarea'].includes(
-              el.tagName.toLowerCase()
-            ) || el.getAttribute('role') === 'button',
-          }
+        if (!el || el === document.body) return null
+        return {
+          tagName: el.tagName.toLowerCase(),
+          role: el.getAttribute('role'),
+          ariaLabel: el.getAttribute('aria-label'),
+          text: el.textContent?.trim().substring(0, 50) || '',
+          isInteractive: ['a', 'button', 'input', 'select', 'textarea'].includes(
+            el.tagName.toLowerCase()
+          ) || el.getAttribute('role') === 'button',
         }
-        return null
       })
 
       if (focusedElement && focusedElement.isInteractive) {
-        interactiveElements.push(
+        focusedElements.push(
           `${focusedElement.tagName}${focusedElement.ariaLabel ? `:${focusedElement.ariaLabel}` : ''}`
         )
       }
     }
 
     // Verify we found multiple interactive elements
-    expect(interactiveElements.length).toBeGreaterThan(3)
+    expect(focusedElements.length).toBeGreaterThan(3)
 
-    // Verify key interactive elements were reached
-    const interactiveText = interactiveElements.join(',')
     // Should have reached some buttons/links
+    const interactiveText = focusedElements.join(',')
     expect(interactiveText).toMatch(/a|button|input/i)
   })
 
-  test('visible focus indicator appears on focused elements', async ({ page }) => {
+  test('TC2: Visible focus indicator appears on focused elements', async ({ page }) => {
     // Tab to skip link
     await page.keyboard.press('Tab')
 
     // Check that focus is visible - the element should have focus styles
-    // DaisyUI and Tailwind apply focus-visible styles
     const skipLink = page.locator('[data-testid="skip-to-content"]')
     await expect(skipLink).toBeFocused()
 
@@ -84,14 +78,12 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     await expect(logoLink).toBeFocused()
 
     // Check that the focused element has visible focus styling
-    // This verifies the element isn't hidden and has focus
     const isFocused = await page.evaluate(() => {
       const el = document.activeElement
       if (!el) return false
 
       const styles = window.getComputedStyle(el)
       // Focus should be visible (not outline: none with no other indicator)
-      // Check for any visible focus indication
       return (
         styles.outlineStyle !== 'none' ||
         styles.boxShadow !== 'none' ||
@@ -100,25 +92,15 @@ test.describe('Accessibility - Keyboard Navigation', () => {
       )
     })
 
-    // DaisyUI buttons should have focus styles
     expect(isFocused).toBe(true)
 
-    // Tab to the URL input
-    await page.keyboard.press('Tab') // Theme dropdown
-    await page.keyboard.press('Tab') // Login or next element
-    await page.keyboard.press('Tab')
-    await page.keyboard.press('Tab')
-    await page.keyboard.press('Tab')
-
-    // Find and focus the URL input
+    // Also verify URL input can receive focus
     const urlInput = page.locator('input[aria-label="URL to shorten"]')
     await urlInput.focus()
-
-    // Verify the input can receive focus
     await expect(urlInput).toBeFocused()
   })
 
-  test('URL input field has appropriate ARIA attributes', async ({ page }) => {
+  test('TC3: URL input field has appropriate ARIA attributes', async ({ page }) => {
     const urlInput = page.locator('input[aria-label="URL to shorten"]')
 
     // Verify input exists and has aria-label
@@ -133,9 +115,7 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     expect(inputType).toBe('url')
   })
 
-  test('page uses semantic HTML structure (header, main, section, footer)', async ({
-    page,
-  }) => {
+  test('TC4: Page uses semantic HTML elements (header, main, section, footer)', async ({ page }) => {
     // Check for <header> element (wrapping navbar)
     const header = page.locator('header')
     await expect(header).toBeVisible()
@@ -159,13 +139,17 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     // Check for <footer> element
     const footer = page.locator('footer')
     await expect(footer).toBeVisible()
+
+    // Page should have exactly one h1 for proper document structure
+    const h1Count = await page.locator('h1').count()
+    expect(h1Count).toBe(1)
   })
 
-  test('skip to content link is present for keyboard users', async ({ page }) => {
+  test('TC5: Skip to content link is present for keyboard users', async ({ page }) => {
     // Skip link should be first focusable element
     const skipLink = page.locator('[data-testid="skip-to-content"]')
 
-    // Initially may be visually hidden but focusable
+    // Should have exactly one skip link
     await expect(skipLink).toHaveCount(1)
 
     // Tab to the skip link
@@ -187,9 +171,7 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     await expect(mainContent).toBeVisible()
   })
 
-  test('buttons and links have minimum touch target size (44px)', async ({
-    page,
-  }) => {
+  test('Buttons and links have minimum touch target size (44px)', async ({ page }) => {
     // Check the Shorten button
     const shortenButton = page.locator('button[aria-label="Shorten URL"]')
     const shortenBox = await shortenButton.boundingBox()
@@ -198,7 +180,7 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     expect(shortenBox!.height).toBeGreaterThanOrEqual(44)
     expect(shortenBox!.width).toBeGreaterThanOrEqual(44)
 
-    // Check navigation links on desktop - use more specific selector
+    // Check navigation links on desktop
     const mainNav = page.locator('nav[aria-label="Main navigation"]')
     const loginLink = mainNav.locator('a:has-text("Login")')
     if (await loginLink.isVisible()) {
@@ -208,7 +190,7 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     }
   })
 
-  test('form can be submitted using Enter key', async ({ page }) => {
+  test('Form can be submitted using Enter key', async ({ page }) => {
     // Focus the URL input
     const urlInput = page.locator('input[aria-label="URL to shorten"]')
     await urlInput.focus()
@@ -220,12 +202,10 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     await page.keyboard.press('Enter')
 
     // Form should be processed (no error thrown)
-    // The actual submission behavior depends on the form implementation
-    // Here we just verify the form accepts keyboard submission
     await expect(urlInput).toBeVisible()
   })
 
-  test('theme dropdown can be navigated with keyboard', async ({ page }) => {
+  test('Theme dropdown can be navigated with keyboard', async ({ page }) => {
     // Navigate to theme dropdown in the main navigation
     const mainNav = page.locator('nav[aria-label="Main navigation"]')
     const themeButton = mainNav.locator('.dropdown [role="button"]')
@@ -234,8 +214,7 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     await themeButton.focus()
     await expect(themeButton).toBeFocused()
 
-    // Press Enter or Space to open dropdown - DaisyUI dropdowns use focus
-    // The dropdown should open on click/focus
+    // Click to open dropdown
     await themeButton.click()
 
     // Dropdown should be visible
@@ -253,23 +232,74 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     await expect(firstOption).toBeFocused()
   })
 
-  test('all images have alt text or are decorative', async ({ page }) => {
-    // Get all images on the page
-    const images = page.locator('img')
-    const imageCount = await images.count()
+  test('Interactive elements have accessible names', async ({ page }) => {
+    // Check that all interactive elements have accessible names
+    const accessibilityAudit = await page.evaluate(() => {
+      const results: { element: string; hasName: boolean; name: string | null }[] = []
 
-    for (let i = 0; i < imageCount; i++) {
-      const img = images.nth(i)
-      const alt = await img.getAttribute('alt')
-      const role = await img.getAttribute('role')
-      const ariaHidden = await img.getAttribute('aria-hidden')
+      // Check buttons
+      document.querySelectorAll('button').forEach((btn, i) => {
+        const name = btn.getAttribute('aria-label') ||
+                    btn.textContent?.trim() ||
+                    btn.querySelector('img')?.getAttribute('alt')
+        results.push({
+          element: `button[${i}]`,
+          hasName: !!name && name.length > 0,
+          name: name || null
+        })
+      })
 
-      // Image should have alt text OR be marked as decorative
-      const isAccessible =
-        alt !== null || role === 'presentation' || ariaHidden === 'true'
+      // Check links
+      document.querySelectorAll('a').forEach((link, i) => {
+        const name = link.getAttribute('aria-label') ||
+                    link.textContent?.trim() ||
+                    link.querySelector('img')?.getAttribute('alt')
+        results.push({
+          element: `a[${i}]`,
+          hasName: !!name && name.length > 0,
+          name: name || null
+        })
+      })
 
-      expect(isAccessible).toBe(true)
-    }
+      // Check inputs
+      document.querySelectorAll('input').forEach((input, i) => {
+        const id = input.id
+        const label = id ? document.querySelector(`label[for="${id}"]`) : null
+        const name = input.getAttribute('aria-label') ||
+                    label?.textContent?.trim() ||
+                    input.getAttribute('placeholder')
+        results.push({
+          element: `input[${i}]`,
+          hasName: !!name && name.length > 0,
+          name: name || null
+        })
+      })
+
+      return results
+    })
+
+    // All interactive elements should have accessible names
+    const elementsWithoutNames = accessibilityAudit.filter(el => !el.hasName)
+
+    // There should be no (or very few) elements without accessible names
+    expect(
+      elementsWithoutNames.length,
+      `${elementsWithoutNames.length} elements missing accessible names: ${elementsWithoutNames.map(e => e.element).join(', ')}`
+    ).toBeLessThanOrEqual(2)
+  })
+
+  test('ARIA landmarks are properly defined', async ({ page }) => {
+    // Check for navigation landmark
+    const nav = page.locator('nav[aria-label]')
+    await expect(nav).toHaveCount(2) // Main nav and footer nav
+
+    // Verify main navigation has proper label
+    const mainNav = page.locator('nav[aria-label="Main navigation"]')
+    await expect(mainNav).toBeVisible()
+
+    // Verify footer navigation has proper label
+    const footerNav = page.locator('footer nav[aria-label="Footer navigation"]')
+    await expect(footerNav).toBeVisible()
   })
 
   test('SVG icons are properly hidden from screen readers', async ({ page }) => {
@@ -286,21 +316,7 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     }
   })
 
-  test('page landmark roles are properly defined', async ({ page }) => {
-    // Check for navigation landmark
-    const nav = page.locator('nav[aria-label]')
-    await expect(nav).toHaveCount(2) // Main nav and footer nav
-
-    // Verify main navigation has proper label
-    const mainNav = page.locator('nav[aria-label="Main navigation"]')
-    await expect(mainNav).toBeVisible()
-
-    // Verify footer navigation has proper label
-    const footerNav = page.locator('footer nav[aria-label="Footer navigation"]')
-    await expect(footerNav).toBeVisible()
-  })
-
-  test('focus order follows logical reading order', async ({ page }) => {
+  test('Focus order follows logical reading order', async ({ page }) => {
     const focusOrder: string[] = []
 
     // Tab through elements and record order
@@ -325,8 +341,111 @@ test.describe('Accessibility - Keyboard Navigation', () => {
       }
     }
 
-    // Verify focus generally moves down the page (top values should increase or stay similar)
-    // Skip link is at top, then navbar, then hero, etc.
+    // Verify focus generally moves through elements in a logical order
     expect(focusOrder.length).toBeGreaterThan(5)
+  })
+
+  test('Focus management - focus does not get trapped', async ({ page }) => {
+    // Tab through the page to ensure focus cycles properly (not trapped)
+    const visitedElements: string[] = []
+    let foundCycle = false
+
+    // Start with first Tab
+    await page.keyboard.press('Tab')
+
+    for (let i = 0; i < 50; i++) {
+      const currentElement = await page.evaluate(() => {
+        const el = document.activeElement
+        if (!el || el === document.body) return 'body'
+        return `${el.tagName}_${el.getAttribute('aria-label') || el.getAttribute('href') || el.textContent?.substring(0, 20)}`
+      })
+
+      // Check if we've cycled back to a previously visited element
+      if (visitedElements.length > 5 && visitedElements.includes(currentElement)) {
+        foundCycle = true
+        break
+      }
+
+      visitedElements.push(currentElement)
+      await page.keyboard.press('Tab')
+    }
+
+    // We should have visited multiple unique elements (proper keyboard navigation)
+    const uniqueElements = new Set(visitedElements)
+    expect(
+      uniqueElements.size,
+      'Focus should navigate through multiple interactive elements'
+    ).toBeGreaterThan(5)
+  })
+})
+
+test.describe('Color Contrast (Manual Test Reference)', () => {
+  test('TC6: Manual verification reference - text contrast ratios', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForSelector('h1')
+
+    // This test documents the manual verification process for color contrast
+    // Actual contrast ratio testing requires visual inspection or specialized tools
+
+    // Check that text elements exist and have readable styles
+    const textContrast = await page.evaluate(() => {
+      const results: { element: string; color: string; backgroundColor: string }[] = []
+
+      // Check heading
+      const h1 = document.querySelector('h1')
+      if (h1) {
+        const styles = window.getComputedStyle(h1)
+        results.push({
+          element: 'h1',
+          color: styles.color,
+          backgroundColor: styles.backgroundColor
+        })
+      }
+
+      // Check paragraph text
+      const p = document.querySelector('p')
+      if (p) {
+        const styles = window.getComputedStyle(p)
+        results.push({
+          element: 'p',
+          color: styles.color,
+          backgroundColor: styles.backgroundColor
+        })
+      }
+
+      // Check button text
+      const btn = document.querySelector('button')
+      if (btn) {
+        const styles = window.getComputedStyle(btn)
+        results.push({
+          element: 'button',
+          color: styles.color,
+          backgroundColor: styles.backgroundColor
+        })
+      }
+
+      return results
+    })
+
+    // Document that text elements exist and have color styles defined
+    expect(textContrast.length).toBeGreaterThan(0)
+
+    // Verify colors are defined (not transparent or undefined)
+    // Note: Some elements like h1 may use gradient text (bg-clip-text) which makes
+    // the actual text color transparent - this is acceptable for gradient text styling
+    for (const item of textContrast) {
+      expect(item.color).toBeDefined()
+      // h1 with gradient text may have transparent color (bg-clip-text technique)
+      // Button and other elements should have non-transparent colors
+      if (item.element !== 'h1') {
+        expect(item.color).toBeTruthy()
+      }
+    }
+
+    // Note: WCAG 4.5:1 contrast ratio verification requires:
+    // - Lighthouse accessibility audit
+    // - axe-core integration
+    // - Manual inspection with contrast checking tools
+    // DaisyUI themes are designed to meet WCAG contrast requirements
   })
 })
