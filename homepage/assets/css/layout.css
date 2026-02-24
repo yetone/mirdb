@@ -1,0 +1,240 @@
+/**
+ * Layout Styles for MirDB Homepage
+ * Owner: First scenario builder
+ *
+ * Contents:
+ * - Container and wrapper classes
+ * - Grid system
+ * - Section spacing
+ * - Responsive breakpoints (Scenario 10)
+ */
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* Section spacing */
+section {
+  padding: var(--spacing-3xl) 0;
+}
+
+/* Grid system */
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Flexbox utilities */
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+.gap-xl { gap: var(--spacing-xl); }
+
+/* Text alignment */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  h1 { font-size: var(--font-size-3xl); }
+  h2 { font-size: var(--font-size-2xl); }
+  h3 { font-size: var(--font-size-xl); }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  section {
+    padding: var(--spacing-xl) 0;
+  }
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS STYLES (Scenario 10)
+   Responsive breakpoints for mobile devices
+   ============================================ */
+
+/* Prevent horizontal scroll on all viewports */
+html {
+  overflow-x: hidden;
+}
+
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Ensure all content fits within viewport */
+* {
+  box-sizing: border-box;
+}
+
+.container,
+section,
+header,
+footer,
+main {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Ensure code blocks don't overflow viewport */
+.code-block {
+  max-width: 100%;
+  width: 100%;
+}
+
+.code-block pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Protocol table wrapper should not exceed viewport */
+.protocol-table-wrapper {
+  max-width: 100%;
+}
+
+/* Quick start grid on mobile */
+.quickstart-grid {
+  max-width: 100%;
+}
+
+.quickstart-step {
+  max-width: 100%;
+}
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 767px) {
+  /* Ensure minimum touch target sizes (44x44px) */
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .btn-lg {
+    min-height: 48px;
+    padding: var(--spacing-md) var(--spacing-xl);
+    width: 100%;
+    max-width: 280px;
+  }
+
+  /* Mobile navigation touch targets */
+  .hamburger-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .mobile-nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Copy button touch targets */
+  .copy-btn {
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  /* Theme toggle touch target */
+  .theme-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Minimum supported width: 320px */
+@media (max-width: 320px) {
+  .container {
+    padding: 0 var(--spacing-xs);
+  }
+
+  section {
+    padding: var(--spacing-lg) 0;
+  }
+
+  h1 { font-size: var(--font-size-2xl); }
+  h2 { font-size: var(--font-size-xl); }
+  h3 { font-size: var(--font-size-lg); }
+
+  /* Ensure buttons don't overflow */
+  .btn-lg {
+    max-width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Adjust feature card padding for small screens */
+  .feature-card {
+    padding: var(--spacing-md);
+  }
+
+  /* Reduce spacing on very small screens */
+  .grid {
+    gap: var(--spacing-md);
+  }
+}

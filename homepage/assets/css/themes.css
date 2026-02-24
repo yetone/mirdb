@@ -1,0 +1,201 @@
+/**
+ * Theme Styles for MirDB Homepage
+ * Owner: Scenario 9 - Dark Mode Theme Toggle
+ *
+ * Contents:
+ * - :root light theme variables (inherits from base.css)
+ * - [data-theme="dark"] dark theme variables
+ * - Color scheme for both themes
+ * - Syntax highlighting colors for both themes
+ * - Theme transition animations
+ *
+ * WCAG AA Compliance:
+ * - Light mode: Text contrast ratio >= 4.5:1 against background
+ * - Dark mode: Text contrast ratio >= 4.5:1 against background
+ */
+
+/* Light theme is defined as default in base.css :root
+ * The following ensures proper color-scheme meta is respected */
+:root {
+  color-scheme: light dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Primary colors - adjusted for dark mode visibility */
+  --color-primary: #e67e22;
+  --color-primary-dark: #f39c12;
+
+  /* Secondary and text colors - WCAG AA compliant */
+  --color-secondary: #ecf0f1;
+  --color-text: #e0e0e0;
+  --color-text-muted: #b0b0b0;
+
+  /* Background colors */
+  --color-background: #1a1a2e;
+  --color-background-alt: #16213e;
+
+  /* Border color */
+  --color-border: #2c3e50;
+
+  /* Status colors - adjusted for dark backgrounds */
+  --color-success: #2ecc71;
+  --color-warning: #f39c12;
+
+  /* Shadow adjustments for dark mode */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+
+  /* Code block colors for dark mode (Scenario 15 - slightly adjusted for dark bg) */
+  --color-code-bg: #0d1117;
+  --color-code-text: #e6edf3;
+  --color-code-text-muted: #7d8590;
+  --color-code-comment: #8b949e;
+  --color-code-command: #ffa657;
+  --color-code-string: #a5d6ff;
+  --color-code-keyword: #ff7b72;
+  --color-code-number: #79c0ff;
+  /* Additional syntax highlighting colors for dark mode (Scenario 15) */
+  --color-code-operator: #e6edf3;
+  --color-code-type: #7ee787;
+  --color-code-variable: #79c0ff;
+  --color-code-macro: #d2a8ff;
+  --color-code-attribute: #79c0ff;
+  --color-code-lifetime: #ffd700;
+  --color-code-module: #7ee787;
+}
+
+/* Smooth theme transitions */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body,
+.header,
+.feature-card,
+.quickstart-step,
+.architecture-diagram,
+.architecture-component,
+.status-column,
+.footer,
+.mobile-nav,
+.btn,
+a,
+.protocol-table tbody tr {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Dark mode specific component adjustments */
+[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+}
+
+[data-theme="dark"] .hero-badge {
+  background-color: rgba(230, 126, 34, 0.2);
+}
+
+[data-theme="dark"] .btn-secondary {
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-background);
+}
+
+/* Feature icon backgrounds in dark mode */
+[data-theme="dark"] .feature-icon {
+  background-color: rgba(230, 126, 34, 0.15);
+}
+
+/* Protocol table in dark mode */
+[data-theme="dark"] .protocol-table thead {
+  background-color: var(--color-background-alt);
+}
+
+[data-theme="dark"] .protocol-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .command-name {
+  background-color: var(--color-background);
+}
+
+[data-theme="dark"] .mirdb-specific {
+  background-color: rgba(230, 126, 34, 0.1);
+}
+
+/* Status indicators in dark mode */
+[data-theme="dark"] .status-indicator-implemented {
+  background-color: rgba(46, 204, 113, 0.2);
+}
+
+[data-theme="dark"] .status-indicator-pending {
+  background-color: rgba(243, 156, 18, 0.2);
+}
+
+/* Protocol note in dark mode */
+[data-theme="dark"] .protocol-note {
+  background-color: var(--color-background);
+}
+
+/* Code block header in dark mode */
+[data-theme="dark"] .code-block-header {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Architecture flow backgrounds */
+[data-theme="dark"] .architecture-flow {
+  background-color: var(--color-background);
+}
+
+[data-theme="dark"] .lsm-component {
+  background-color: var(--color-background-alt);
+}
+
+/* Print styles - always use light theme */
+@media print {
+  :root,
+  [data-theme="dark"] {
+    --color-primary: #d35400;
+    --color-primary-dark: #b34700;
+    --color-secondary: #2c3e50;
+    --color-text: #333333;
+    --color-text-muted: #666666;
+    --color-background: #ffffff;
+    --color-background-alt: #f8f9fa;
+    --color-border: #e0e0e0;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  .header,
+  .feature-card,
+  .quickstart-step,
+  .architecture-diagram,
+  .architecture-component,
+  .status-column,
+  .footer,
+  .mobile-nav,
+  .btn,
+  a,
+  .protocol-table tbody tr {
+    transition: none;
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A Persistent Key-Value Store with Memcached Protocol",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.40.0",
+    "@vitest/browser": "^1.0.0",
+    "jsdom": "^23.0.0",
+    "lighthouse": "^13.0.3",
+    "playwright": "^1.40.0",
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "keywords": [
+    "mirdb",
+    "key-value",
+    "memcached",
+    "persistent"
+  ],
+  "license": "MIT"
+}
