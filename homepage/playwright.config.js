@@ -25,6 +25,12 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    // Edge uses Chromium engine - covered by chromium project
+    // Uncomment below when msedge is available in the environment
+    // {
+    //   name: 'edge',
+    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    // },
   ],
   webServer: {
     command: 'npm run dev',
