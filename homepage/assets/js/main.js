@@ -7,6 +7,11 @@
 
 import { initMobileNav } from './mobile-nav.js';
 import { initCopyButtons } from './copy-clipboard.js';
+import { initThemeToggle, initTheme } from './theme-toggle.js';
+
+// Initialize theme immediately to prevent flash of wrong theme
+// This runs before DOMContentLoaded to apply theme as early as possible
+initTheme();
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize copy-to-clipboard buttons (Scenario 4)
   initCopyButtons();
+
+  // Initialize theme toggle buttons (Scenario 9)
+  initThemeToggle();
 });
 
 /**
