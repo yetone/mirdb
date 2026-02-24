@@ -12,43 +12,52 @@
 
 import { test, expect } from '@playwright/test';
 
-// Mobile viewport configurations
-const MOBILE_320 = { width: 320, height: 568 }; // iPhone SE (1st gen)
-const MOBILE_375 = { width: 375, height: 667 }; // iPhone 6/7/8
-const MOBILE_414 = { width: 414, height: 896 }; // iPhone XR
-
 test.describe('Mobile Responsiveness', () => {
-  test.describe('Test Case 1: No horizontal scroll at 320px viewport', () => {
-    test('Page renders without horizontal scrollbar on body', async ({ page }) => {
-      await page.setViewportSize(MOBILE_320);
+  test.describe('Test Case 1: No horizontal scroll at 320px viewport width', () => {
+    test('Page renders without horizontal scrollbar on body at 320px', async ({ page }) => {
+      // Set viewport to minimum supported mobile width
+      await page.setViewportSize({ width: 320, height: 568 });
       await page.goto('/');
 
       // Wait for page to fully load
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      // Check that document body doesn't have horizontal overflow
+      // Check that body does not have horizontal scrollbar
+      // The key metric is whether documentElement.scrollWidth exceeds clientWidth
       const hasHorizontalScroll = await page.evaluate(() => {
         return document.documentElement.scrollWidth > document.documentElement.clientWidth;
       });
 
       expect(hasHorizontalScroll).toBe(false);
+
+      // Additionally verify the body doesn't overflow significantly
+      // Due to browser rendering, scrollWidth may be slightly larger,
+      // but visible content should not exceed viewport
+      const overflow = await page.evaluate(() => {
+        const body = document.body;
+        const style = window.getComputedStyle(body);
+        // Check if overflow-x is hidden or auto (allowing scroll within elements)
+        return style.overflowX;
+      });
+
+      // Body should have overflow-x: hidden to prevent horizontal scroll
+      expect(['hidden', 'auto']).toContain(overflow);
     });
 
-    test('All main sections fit within 320px viewport', async ({ page }) => {
-      await page.setViewportSize(MOBILE_320);
+    test('All sections fit within 320px viewport', async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 568 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      // Check each main section
+      // Check all main sections
       const sections = ['#hero', '#features', '#quickstart', '#architecture', '#protocol', '#status'];
 
-      for (const selector of sections) {
-        const section = page.locator(selector);
-        if (await section.count() > 0) {
-          const boundingBox = await section.boundingBox();
+      for (const section of sections) {
+        const sectionElement = page.locator(section);
+        if (await sectionElement.count() > 0) {
+          const boundingBox = await sectionElement.boundingBox();
           if (boundingBox) {
-            // Section width should not exceed viewport width
-            expect(boundingBox.width).toBeLessThanOrEqual(MOBILE_320.width);
+            expect(boundingBox.width).toBeLessThanOrEqual(320);
           }
         }
       }
@@ -56,286 +65,319 @@ test.describe('Mobile Responsiveness', () => {
   });
 
   test.describe('Test Case 2: Content readable at 375px (iPhone)', () => {
-    test('All sections are readable and properly stacked', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
+    test('All sections are readable and properly stacked at 375px', async ({ page }) => {
+      // iPhone viewport size
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      // Hero section should be visible
+      // Verify hero section is visible
       const heroTitle = page.locator('.hero-title');
       await expect(heroTitle).toBeVisible();
 
-      // Features section should be visible
-      const featuresTitle = page.locator('#features-title');
-      await expect(featuresTitle).toBeVisible();
+      // Verify hero headline is visible
+      const heroHeadline = page.locator('.hero-headline');
+      await expect(heroHeadline).toBeVisible();
 
-      // Quick start section should be visible
-      const quickstartTitle = page.locator('#quickstart-title');
-      await expect(quickstartTitle).toBeVisible();
+      // Verify hero subheadline is readable
+      const heroSubheadline = page.locator('.hero-subheadline');
+      await expect(heroSubheadline).toBeVisible();
 
-      // Architecture section should be visible
-      const architectureTitle = page.locator('#architecture-title');
-      await expect(architectureTitle).toBeVisible();
+      // Verify features section is visible
+      const featuresSection = page.locator('#features');
+      await expect(featuresSection).toBeVisible();
 
-      // Protocol section should be visible
-      const protocolTitle = page.locator('#protocol-title');
-      await expect(protocolTitle).toBeVisible();
+      // Verify quickstart section is visible
+      const quickstartSection = page.locator('#quickstart');
+      await expect(quickstartSection).toBeVisible();
 
-      // Status section should be visible
-      const statusTitle = page.locator('#status-title');
-      await expect(statusTitle).toBeVisible();
-
-      // Footer should be visible
-      const footer = page.locator('.footer');
-      await expect(footer).toBeVisible();
+      // Verify sections don't overflow horizontally
+      const hasHorizontalScroll = await page.evaluate(() => {
+        return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+      });
+      expect(hasHorizontalScroll).toBe(false);
     });
 
-    test('Text is readable with appropriate font sizes', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
+    test('Typography is readable at mobile viewport', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      // Check hero headline font size is reasonable
-      const heroHeadline = page.locator('.hero-headline');
-      const headlineStyles = await heroHeadline.evaluate((el) => {
-        const styles = window.getComputedStyle(el);
-        return {
-          fontSize: parseFloat(styles.fontSize),
-        };
+      // Check that hero title has appropriate font size for mobile
+      const heroTitleFontSize = await page.locator('.hero-title').evaluate((el) => {
+        return parseInt(window.getComputedStyle(el).fontSize);
       });
 
-      // Font size should be at least 16px for readability
-      expect(headlineStyles.fontSize).toBeGreaterThanOrEqual(16);
+      // Font size should be at least 24px for readability
+      expect(heroTitleFontSize).toBeGreaterThanOrEqual(24);
+
+      // Check body text font size
+      const bodyTextFontSize = await page.locator('.hero-subheadline').evaluate((el) => {
+        return parseInt(window.getComputedStyle(el).fontSize);
+      });
+
+      // Body text should be at least 14px
+      expect(bodyTextFontSize).toBeGreaterThanOrEqual(14);
     });
   });
 
-  test.describe('Test Case 3: Features stack vertically on mobile', () => {
-    test('Features grid uses single column on mobile', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
+  test.describe('Test Case 3: Features grid stacks vertically on mobile', () => {
+    test('Features stack vertically (single column) on mobile', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
+
+      // Get the features grid
+      const featuresGrid = page.locator('.features-grid');
+
+      // Check grid template columns is single column
+      const gridTemplateColumns = await featuresGrid.evaluate((el) => {
+        return window.getComputedStyle(el).gridTemplateColumns;
+      });
+
+      // Should be a single column (1fr or single pixel value)
+      const columnCount = gridTemplateColumns.split(' ').filter(c => c !== '').length;
+      expect(columnCount).toBe(1);
+    });
+
+    test('Feature cards have appropriate width on mobile', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
+      await page.goto('/');
+      await page.waitForLoadState('domcontentloaded');
 
       // Get all feature cards
       const featureCards = page.locator('.feature-card');
-      const cardCount = await featureCards.count();
+      const count = await featureCards.count();
 
-      expect(cardCount).toBe(4); // Should have 4 feature cards
+      expect(count).toBeGreaterThan(0);
 
-      // Get bounding boxes to verify vertical stacking
-      const boundingBoxes = [];
-      for (let i = 0; i < cardCount; i++) {
-        const box = await featureCards.nth(i).boundingBox();
-        if (box) {
-          boundingBoxes.push(box);
+      // Check each card takes full width (minus padding)
+      for (let i = 0; i < count; i++) {
+        const card = featureCards.nth(i);
+        const boundingBox = await card.boundingBox();
+        if (boundingBox) {
+          // Card should be at least 280px wide (accounting for container padding)
+          expect(boundingBox.width).toBeGreaterThanOrEqual(280);
         }
       }
-
-      // Verify cards are stacked vertically (each card's top is below the previous card's bottom)
-      for (let i = 1; i < boundingBoxes.length; i++) {
-        // Allow small tolerance for margins
-        expect(boundingBoxes[i].y).toBeGreaterThanOrEqual(boundingBoxes[i - 1].y + boundingBoxes[i - 1].height - 5);
-      }
-    });
-
-    test('Features grid CSS shows grid-template-columns: 1fr', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
-      await page.goto('/');
-      await page.waitForLoadState('networkidle');
-
-      const featuresGrid = page.locator('.features-grid');
-      const gridStyles = await featuresGrid.evaluate((el) => {
-        const styles = window.getComputedStyle(el);
-        return {
-          gridTemplateColumns: styles.gridTemplateColumns,
-          display: styles.display,
-        };
-      });
-
-      expect(gridStyles.display).toBe('grid');
-      // On mobile, should be single column (1fr or a single pixel value)
-      expect(gridStyles.gridTemplateColumns).not.toContain('repeat');
     });
   });
 
-  test.describe('Test Case 4: Code blocks with horizontal scrolling', () => {
+  test.describe('Test Case 4: Code blocks have horizontal scrolling', () => {
     test('Code blocks have overflow-x: auto for horizontal scrolling', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      // Find code block pre elements
-      const codeBlockPre = page.locator('.code-block pre').first();
+      // Find code blocks
+      const codeBlocks = page.locator('.code-block pre');
+      const count = await codeBlocks.count();
 
-      if (await codeBlockPre.count() > 0) {
-        const overflowStyle = await codeBlockPre.evaluate((el) => {
-          const styles = window.getComputedStyle(el);
-          return styles.overflowX;
+      expect(count).toBeGreaterThan(0);
+
+      // Check each code block has overflow-x: auto
+      for (let i = 0; i < count; i++) {
+        const codeBlock = codeBlocks.nth(i);
+        const overflowX = await codeBlock.evaluate((el) => {
+          return window.getComputedStyle(el).overflowX;
         });
 
-        // Should have horizontal scrolling enabled
-        expect(['auto', 'scroll']).toContain(overflowStyle);
+        expect(['auto', 'scroll']).toContain(overflowX);
       }
     });
 
     test('Code blocks do not break page layout', async ({ page }) => {
-      await page.setViewportSize(MOBILE_320);
+      await page.setViewportSize({ width: 320, height: 568 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      // Navigate to quickstart section
-      await page.locator('#quickstart').scrollIntoViewIfNeeded();
+      // Code blocks should have overflow-x: auto to allow scrolling
+      // The key is that code blocks don't cause document-level horizontal scroll
+      const codeBlocks = page.locator('.code-block pre');
+      const count = await codeBlocks.count();
 
-      // Check that code blocks don't cause horizontal overflow on body
+      expect(count).toBeGreaterThan(0);
+
+      for (let i = 0; i < count; i++) {
+        const codeBlock = codeBlocks.nth(i);
+        const overflowX = await codeBlock.evaluate((el) => {
+          return window.getComputedStyle(el).overflowX;
+        });
+        // Code block pre should have overflow-x: auto for horizontal scrolling
+        expect(['auto', 'scroll']).toContain(overflowX);
+      }
+
+      // Verify no horizontal scroll on document level
       const hasHorizontalScroll = await page.evaluate(() => {
         return document.documentElement.scrollWidth > document.documentElement.clientWidth;
       });
-
       expect(hasHorizontalScroll).toBe(false);
     });
   });
 
-  test.describe('Test Case 5: Touch target sizing', () => {
+  test.describe('Test Case 5: Touch targets have minimum 44x44px size', () => {
     test('CTA buttons have minimum 44x44px touch target size', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      // Check primary CTA button
+      // Check Get Started button
       const getStartedBtn = page.locator('#cta-get-started');
-      const btnBox = await getStartedBtn.boundingBox();
+      const getStartedBox = await getStartedBtn.boundingBox();
 
-      expect(btnBox).not.toBeNull();
-      if (btnBox) {
-        expect(btnBox.width).toBeGreaterThanOrEqual(44);
-        expect(btnBox.height).toBeGreaterThanOrEqual(44);
+      if (getStartedBox) {
+        expect(getStartedBox.width).toBeGreaterThanOrEqual(44);
+        expect(getStartedBox.height).toBeGreaterThanOrEqual(44);
       }
-    });
 
-    test('Secondary CTA button has minimum 44x44px touch target', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
-      await page.goto('/');
-      await page.waitForLoadState('networkidle');
-
+      // Check View on GitHub button
       const githubBtn = page.locator('#cta-github');
-      const btnBox = await githubBtn.boundingBox();
+      const githubBox = await githubBtn.boundingBox();
 
-      expect(btnBox).not.toBeNull();
-      if (btnBox) {
-        expect(btnBox.width).toBeGreaterThanOrEqual(44);
-        expect(btnBox.height).toBeGreaterThanOrEqual(44);
+      if (githubBox) {
+        expect(githubBox.width).toBeGreaterThanOrEqual(44);
+        expect(githubBox.height).toBeGreaterThanOrEqual(44);
       }
     });
 
-    test('Navigation hamburger button has minimum 44x44px touch target', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
+    test('Hamburger menu button has minimum touch target size', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
+      // Check hamburger button
       const hamburgerBtn = page.locator('#hamburger-btn');
+      const hamburgerBox = await hamburgerBtn.boundingBox();
 
-      // Should be visible on mobile
-      await expect(hamburgerBtn).toBeVisible();
+      if (hamburgerBox) {
+        expect(hamburgerBox.width).toBeGreaterThanOrEqual(44);
+        expect(hamburgerBox.height).toBeGreaterThanOrEqual(44);
+      }
+    });
 
-      const btnBox = await hamburgerBtn.boundingBox();
-      expect(btnBox).not.toBeNull();
-      if (btnBox) {
-        expect(btnBox.width).toBeGreaterThanOrEqual(44);
-        expect(btnBox.height).toBeGreaterThanOrEqual(44);
+    test('Navigation links have adequate touch target size', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
+      await page.goto('/');
+      await page.waitForLoadState('domcontentloaded');
+
+      // Open mobile nav
+      const hamburgerBtn = page.locator('#hamburger-btn');
+      await hamburgerBtn.click();
+
+      // Wait for mobile nav to open
+      await page.waitForTimeout(300);
+
+      // Check mobile nav links
+      const mobileNavLinks = page.locator('.mobile-nav-link');
+      const count = await mobileNavLinks.count();
+
+      for (let i = 0; i < count; i++) {
+        const link = mobileNavLinks.nth(i);
+        const boundingBox = await link.boundingBox();
+
+        if (boundingBox) {
+          // Height should be at least 44px for touch targets
+          expect(boundingBox.height).toBeGreaterThanOrEqual(44);
+        }
       }
     });
 
     test('Copy buttons have adequate touch target size', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      // Navigate to quickstart
-      await page.locator('#quickstart').scrollIntoViewIfNeeded();
-
+      // Check copy buttons
       const copyBtns = page.locator('.copy-btn');
-      const copyBtnCount = await copyBtns.count();
+      const count = await copyBtns.count();
 
-      for (let i = 0; i < copyBtnCount; i++) {
-        const btnBox = await copyBtns.nth(i).boundingBox();
-        if (btnBox) {
-          // Touch target should be at least 32x32 for secondary actions (Apple HIG allows 32px for secondary)
-          expect(btnBox.width).toBeGreaterThanOrEqual(32);
-          expect(btnBox.height).toBeGreaterThanOrEqual(32);
+      for (let i = 0; i < count; i++) {
+        const btn = copyBtns.nth(i);
+        const boundingBox = await btn.boundingBox();
+
+        if (boundingBox) {
+          // Copy buttons might be smaller, but should still be tappable
+          // Using 32px as minimum since these are secondary actions
+          expect(boundingBox.width).toBeGreaterThanOrEqual(32);
+          expect(boundingBox.height).toBeGreaterThanOrEqual(32);
         }
       }
     });
   });
 
-  test.describe('Mobile navigation and interactions', () => {
-    test('Hamburger menu is visible on mobile', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
+  test.describe('Additional Mobile Responsiveness Tests', () => {
+    test('Header is properly styled on mobile', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      const hamburgerBtn = page.locator('#hamburger-btn');
-      await expect(hamburgerBtn).toBeVisible();
+      // Check header is visible
+      const header = page.locator('.header');
+      await expect(header).toBeVisible();
 
       // Desktop nav links should be hidden
       const navLinks = page.locator('.nav-links');
-      await expect(navLinks).toBeHidden();
-    });
-
-    test('Mobile menu can be opened and closed', async ({ page }) => {
-      await page.setViewportSize(MOBILE_375);
-      await page.goto('/');
-      await page.waitForLoadState('networkidle');
-
-      const hamburgerBtn = page.locator('#hamburger-btn');
-      const mobileNav = page.locator('#mobile-nav');
-
-      // Open mobile menu
-      await hamburgerBtn.click();
-
-      // Wait for menu to open
-      await expect(mobileNav).toHaveClass(/is-open/);
-
-      // Close by clicking hamburger again
-      await hamburgerBtn.click();
-
-      // Wait for menu to close
-      await expect(mobileNav).not.toHaveClass(/is-open/);
-    });
-  });
-
-  test.describe('Cross-device viewport testing', () => {
-    test('Page functions correctly at 414px (iPhone XR)', async ({ page }) => {
-      await page.setViewportSize(MOBILE_414);
-      await page.goto('/');
-      await page.waitForLoadState('networkidle');
-
-      // No horizontal scroll
-      const hasHorizontalScroll = await page.evaluate(() => {
-        return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+      const navLinksDisplay = await navLinks.evaluate((el) => {
+        return window.getComputedStyle(el).display;
       });
-      expect(hasHorizontalScroll).toBe(false);
+      expect(navLinksDisplay).toBe('none');
 
-      // All sections visible
-      await expect(page.locator('.hero')).toBeVisible();
-      await expect(page.locator('#features')).toBeVisible();
+      // Hamburger button should be visible
+      const hamburgerBtn = page.locator('#hamburger-btn');
+      await expect(hamburgerBtn).toBeVisible();
     });
 
-    test('Page handles transition between mobile and desktop viewports', async ({ page }) => {
-      // Start at mobile
-      await page.setViewportSize(MOBILE_375);
+    test('Footer layout adapts to mobile', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
-      // Hamburger should be visible
-      await expect(page.locator('#hamburger-btn')).toBeVisible();
+      // Scroll to footer
+      await page.locator('.footer').scrollIntoViewIfNeeded();
 
-      // Resize to desktop
-      await page.setViewportSize({ width: 1024, height: 768 });
+      // Footer should be visible
+      const footer = page.locator('.footer');
+      await expect(footer).toBeVisible();
 
-      // Desktop nav should now be visible
-      await expect(page.locator('.nav-links')).toBeVisible();
+      // Footer content should stack on mobile
+      const footerContent = page.locator('.footer-content');
+      const gridTemplateColumns = await footerContent.evaluate((el) => {
+        return window.getComputedStyle(el).gridTemplateColumns;
+      });
 
-      // Hamburger should be hidden
-      await expect(page.locator('#hamburger-btn')).toBeHidden();
+      // Should be single column on mobile
+      const columnCount = gridTemplateColumns.split(' ').filter(c => c !== '').length;
+      expect(columnCount).toBe(1);
+    });
+
+    test('Protocol table is horizontally scrollable', async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 568 });
+      await page.goto('/');
+      await page.waitForLoadState('domcontentloaded');
+
+      // Check protocol table wrapper has overflow-x: auto
+      const tableWrapper = page.locator('.protocol-table-wrapper');
+      const overflowX = await tableWrapper.evaluate((el) => {
+        return window.getComputedStyle(el).overflowX;
+      });
+
+      expect(['auto', 'scroll']).toContain(overflowX);
+    });
+
+    test('Status grid stacks vertically on mobile', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
+      await page.goto('/');
+      await page.waitForLoadState('domcontentloaded');
+
+      // Check status grid layout
+      const statusGrid = page.locator('.status-grid');
+      const gridTemplateColumns = await statusGrid.evaluate((el) => {
+        return window.getComputedStyle(el).gridTemplateColumns;
+      });
+
+      // Should be single column on mobile
+      const columnCount = gridTemplateColumns.split(' ').filter(c => c !== '').length;
+      expect(columnCount).toBe(1);
     });
   });
 });

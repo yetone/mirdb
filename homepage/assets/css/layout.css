@@ -113,117 +113,128 @@ section {
 }
 
 /* ============================================
-   MOBILE RESPONSIVENESS (Scenario 10)
-   Viewport >= 320px support
+   MOBILE RESPONSIVENESS STYLES (Scenario 10)
+   Responsive breakpoints for mobile devices
    ============================================ */
 
-/* Prevent horizontal scrolling on body */
-html, body {
+/* Prevent horizontal scroll on all viewports */
+html {
   overflow-x: hidden;
+}
+
+body {
   max-width: 100vw;
+  overflow-x: hidden;
+  width: 100%;
 }
 
-/* Ensure all sections fit within viewport */
-section,
+/* Ensure all content fits within viewport */
+* {
+  box-sizing: border-box;
+}
+
 .container,
-main,
+section,
 header,
-footer {
+footer,
+main {
   max-width: 100%;
+  width: 100%;
 }
 
-/* Code blocks: horizontal scroll within container */
-pre,
+/* Ensure code blocks don't overflow viewport */
+.code-block {
+  max-width: 100%;
+  width: 100%;
+}
+
 .code-block pre {
+  max-width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+}
+
+/* Protocol table wrapper should not exceed viewport */
+.protocol-table-wrapper {
   max-width: 100%;
 }
 
-/* Touch-friendly button sizing (minimum 44x44px) */
-.btn,
-.btn-primary,
-.btn-secondary,
-.btn-lg {
-  min-width: 44px;
-  min-height: 44px;
+/* Quick start grid on mobile */
+.quickstart-grid {
+  max-width: 100%;
 }
 
-/* Copy button touch target for mobile */
-.copy-btn {
-  min-width: 32px;
-  min-height: 32px;
+.quickstart-step {
+  max-width: 100%;
 }
 
-/* Touch-friendly interactive elements */
-a,
-button,
-[role="button"],
-input,
-select,
-textarea {
-  touch-action: manipulation;
-}
-
-/* Mobile-specific breakpoint for minimum viewport (320px) */
-@media (max-width: 375px) {
-  :root {
-    --spacing-lg: 1rem;
-    --spacing-xl: 1.5rem;
-    --spacing-2xl: 2rem;
-    --spacing-3xl: 2.5rem;
+/* Mobile-first responsive adjustments */
+@media (max-width: 767px) {
+  /* Ensure minimum touch target sizes (44x44px) */
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-md) var(--spacing-lg);
   }
 
-  .container {
-    padding: 0 var(--spacing-sm);
+  .btn-lg {
+    min-height: 48px;
+    padding: var(--spacing-md) var(--spacing-xl);
     width: 100%;
+    max-width: 280px;
+  }
+
+  /* Mobile navigation touch targets */
+  .hamburger-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .mobile-nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Copy button touch targets */
+  .copy-btn {
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  /* Theme toggle touch target */
+  .theme-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Minimum supported width: 320px */
+@media (max-width: 320px) {
+  .container {
+    padding: 0 var(--spacing-xs);
+  }
+
+  section {
+    padding: var(--spacing-lg) 0;
   }
 
   h1 { font-size: var(--font-size-2xl); }
   h2 { font-size: var(--font-size-xl); }
   h3 { font-size: var(--font-size-lg); }
 
-  /* Ensure buttons are full width on small screens */
-  .hero-cta .btn {
-    width: 100%;
-    max-width: none;
+  /* Ensure buttons don't overflow */
+  .btn-lg {
+    max-width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 
-  /* Protocol table minimum sizing */
-  .protocol-table {
-    font-size: var(--font-size-xs);
+  /* Adjust feature card padding for small screens */
+  .feature-card {
+    padding: var(--spacing-md);
   }
 
-  .protocol-table th,
-  .protocol-table td {
-    padding: var(--spacing-xs) var(--spacing-sm);
-  }
-}
-
-/* Feature grid stacking on mobile */
-@media (max-width: 767px) {
-  .features-grid,
-  .grid-2,
-  .grid-3,
-  .grid-4 {
-    grid-template-columns: 1fr;
+  /* Reduce spacing on very small screens */
+  .grid {
     gap: var(--spacing-md);
-  }
-
-  /* Ensure proper stacking */
-  .quickstart-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .status-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .footer-content {
-    grid-template-columns: 1fr;
-  }
-
-  .architecture-components {
-    grid-template-columns: 1fr;
   }
 }
