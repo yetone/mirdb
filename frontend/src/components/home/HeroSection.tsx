@@ -50,24 +50,26 @@ export function HeroSection({ onUrlShortened }: HeroSectionProps) {
           </p>
 
           {/* URL Input Form */}
-          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-2xl mx-auto mt-8">
+          <form
+            onSubmit={(e) => { e.preventDefault(); handleShorten(); }}
+            className="flex flex-col sm:flex-row gap-3 w-full max-w-2xl mx-auto mt-8"
+          >
             <input
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="Paste your long URL here..."
-              className="input input-bordered input-lg flex-1 w-full"
+              className="input input-bordered input-lg flex-1 w-full min-h-[44px]"
               aria-label="URL to shorten"
             />
             <button
-              type="button"
-              onClick={handleShorten}
-              className="btn btn-primary btn-lg"
+              type="submit"
+              className="btn btn-primary btn-lg min-h-[44px] min-w-[120px]"
               aria-label="Shorten URL"
             >
               Shorten
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </section>
