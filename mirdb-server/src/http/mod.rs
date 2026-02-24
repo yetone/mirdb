@@ -5,6 +5,7 @@
 //!
 //! Owner: Scenario 1 - HTTP Server Setup
 
+pub mod assets;
 pub mod routes;
 pub mod server;
 
