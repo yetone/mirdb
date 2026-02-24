@@ -13,7 +13,7 @@
  * - Copy button integration
  */
 
-import React, { useState, FormEvent, useCallback } from 'react'
+import { useState, FormEvent, useCallback } from 'react'
 import axios, { AxiosError } from 'axios'
 import { ShortenResult, UrlShortenerFormProps, CreateUrlResponse, ApiErrorResponse } from '@/types/home'
 

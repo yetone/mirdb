@@ -4,7 +4,7 @@
  * Provides theme state and switching logic throughout the app.
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
 interface ThemeContextType {
   theme: string
