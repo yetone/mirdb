@@ -149,13 +149,77 @@ img {
   }
 }
 
-// Focus styles for accessibility
+// =====================================================
+// Accessibility Styles (Scenario 12)
+// WCAG 2.1 AA compliant focus indicators and utilities
+// =====================================================
+
+// Focus styles for accessibility - visible on all interactive elements
 :focus-visible {
+  outline: 3px solid $color-primary;
+  outline-offset: 3px;
+}
+
+// Fallback focus styles for browsers without :focus-visible support
+:focus:not(:focus-visible) {
   outline: 2px solid $color-primary;
   outline-offset: 2px;
 }
 
-// Screen reader only
+// Enhanced focus for links
+a:focus-visible {
+  outline: 3px solid $color-primary;
+  outline-offset: 3px;
+  border-radius: $border-radius-sm;
+  text-decoration: underline;
+}
+
+// Enhanced focus for buttons
+button:focus-visible,
+.btn:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid $color-primary;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba($color-primary, 0.25);
+}
+
+// Focus for form inputs
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid $color-primary;
+  outline-offset: 0;
+  border-color: $color-primary;
+}
+
+// Skip link - only visible on focus for keyboard users
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: $color-primary;
+  color: white;
+  padding: $spacing-sm $spacing-md;
+  z-index: 10000;
+  border-radius: $border-radius-md;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top $transition-fast;
+
+  &:focus {
+    top: $spacing-sm;
+    outline: 3px solid $color-secondary;
+    outline-offset: 2px;
+  }
+}
+
+// Ensure main content can receive focus for skip link
+main:focus {
+  outline: none;
+}
+
+// Screen reader only utility class
 .sr-only {
   position: absolute;
   width: 1px;
@@ -166,4 +230,96 @@ img {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+// Screen reader only but focusable (for skip links in older implementations)
+.sr-only-focusable {
+  &:focus,
+  &:active {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  :focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .btn {
+    border: 2px solid currentColor;
+  }
+}
+
+// Reduced motion preference - respect user settings
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// Mobile navigation toggle button (hamburger menu) accessibility styles
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &__bar {
+    width: 100%;
+    height: 3px;
+    background-color: $color-secondary;
+    border-radius: 2px;
+    transition: transform $transition-fast, opacity $transition-fast;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $color-primary;
+    outline-offset: 4px;
+    border-radius: $border-radius-sm;
+  }
+
+  &[aria-expanded="true"] {
+    .nav-toggle__bar:nth-child(1) {
+      transform: translateY(10.5px) rotate(45deg);
+    }
+    .nav-toggle__bar:nth-child(2) {
+      opacity: 0;
+    }
+    .nav-toggle__bar:nth-child(3) {
+      transform: translateY(-10.5px) rotate(-45deg);
+    }
+  }
+}
+
+// Minimum touch target size (44x44px per WCAG)
+@media (max-width: #{$breakpoint-tablet - 1}) {
+  .nav-toggle {
+    display: flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  a, button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
