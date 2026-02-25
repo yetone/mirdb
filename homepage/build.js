@@ -184,6 +184,43 @@ const minifiedOutput = minifyHtml(output);
 fs.writeFileSync(path.join(siteDir, 'index.html'), minifiedOutput);
 console.log('Built _site/index.html (minified)');
 
+// Build 404 page
+const fourOhFourPath = path.join(__dirname, '404.html');
+if (fs.existsSync(fourOhFourPath)) {
+  const fourOhFourContent = fs.readFileSync(fourOhFourPath, 'utf-8');
+  // Parse front matter
+  const fourOhFourFMMatch = fourOhFourContent.match(/^---\n([\s\S]*?)\n---/);
+  const fourOhFourFM = {};
+  if (fourOhFourFMMatch) {
+    const fmLines = fourOhFourFMMatch[1].split('\n');
+    for (const line of fmLines) {
+      const match = line.match(/^(\w+):\s*(.*)$/);
+      if (match) {
+        const [, key, value] = match;
+        fourOhFourFM[key] = value.replace(/^["']|["']$/g, '');
+      }
+    }
+  }
+  // Content after front matter
+  const fourOhFourPageContent = fourOhFourContent.replace(/^---[\s\S]*?---\n/, '');
+
+  // Build context for 404 page
+  const fourOhFourContext = {
+    site: context.site,
+    page: {
+      title: fourOhFourFM.title || 'Page Not Found',
+      description: fourOhFourFM.description || 'The requested page was not found',
+      url: '/404.html'
+    },
+    content: fourOhFourPageContent
+  };
+
+  // Process layout with 404 content
+  const fourOhFourOutput = processTemplate(layoutContent, fourOhFourContext);
+  fs.writeFileSync(path.join(siteDir, '404.html'), fourOhFourOutput);
+  console.log('Built _site/404.html');
+}
+
 // Copy assets
 const copyIfExists = (src, dest) => {
   if (fs.existsSync(src)) {
