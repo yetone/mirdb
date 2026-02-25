@@ -333,8 +333,8 @@ test.describe('Tablet Responsive Design (768px) - Scenario 10', () => {
     });
     expect(navLinksDisplay).toBe('flex');
 
-    // Verify at least 3 navigation links are visible
-    const links = navLinks.locator('.nav-link');
+    // Verify at least 3 navigation links are visible (using li > a pattern)
+    const links = navLinks.locator('li a');
     const linkCount = await links.count();
     expect(linkCount).toBeGreaterThanOrEqual(3);
   });
@@ -463,8 +463,8 @@ test.describe('Desktop Responsive Design (1280px) - Scenario 10', () => {
     });
     expect(navLinksDisplay).toBe('row');
 
-    // Verify all navigation links are visible
-    const links = navLinks.locator('.nav-link');
+    // Verify all navigation links are visible (using li > a pattern)
+    const links = navLinks.locator('li a');
     const linkCount = await links.count();
     expect(linkCount).toBeGreaterThanOrEqual(3);
 
