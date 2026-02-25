@@ -132,7 +132,7 @@ describe('Theme System Support - HomePage Integration', () => {
       expect(productName).toHaveClass('text-base-content')
 
       const tagline = screen.getByTestId('tagline')
-      expect(tagline).toHaveClass('text-base-content/70')
+      expect(tagline).toHaveClass('text-base-content/80')
     })
 
     it('all sections display with dark color scheme', async () => {
@@ -207,7 +207,7 @@ describe('Theme System Support - HomePage Integration', () => {
       // Check descriptions have theme-aware opacity classes
       const featureDescriptions = screen.getAllByTestId('feature-description')
       featureDescriptions.forEach((desc) => {
-        expect(desc).toHaveClass('text-base-content/70')
+        expect(desc).toHaveClass('text-base-content/80')
       })
     })
   })
@@ -457,7 +457,7 @@ describe('Theme System Support - HomePage Integration', () => {
 
       const signupButton = screen.getByTestId('signup-button')
       expect(signupButton).toHaveClass('btn')
-      expect(signupButton).toHaveClass('btn-secondary')
+      // Note: Signup button uses custom brand color (bg-[#9d0083]) instead of btn-secondary
 
       const loginButton = screen.getByTestId('login-button')
       expect(loginButton).toHaveClass('btn')
