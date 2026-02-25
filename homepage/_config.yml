@@ -1,4 +1,5 @@
 # Jekyll Configuration for MirDB Homepage
+# Performance optimized for NFR-1 (page load < 1s) and NFR-5 (static site)
 
 # SEO: Title under 60 characters (currently 6 characters)
 title: MirDB
@@ -17,6 +18,24 @@ sass:
   style: compressed
   sass_dir: _sass
 
+# Performance optimizations for NFR-1 (page load < 1s)
+# Enable HTML minification
+compress_html:
+  clippings: all
+  comments: []
+  endings: []
+  ignore:
+    envs: [development]
+  blanklines: false
+  profile: false
+  startings: []
+
+# Disable unnecessary processing for static site (NFR-5)
+strict_front_matter: true
+liquid:
+  strict_filters: true
+  strict_variables: false
+
 # Exclude from build
 exclude:
   - Gemfile
@@ -26,6 +45,14 @@ exclude:
   - package-lock.json
   - tests
   - README.md
+  - build.js
+  - playwright.config.js
+  - "*.spec.js"
+  - "*.test.js"
+
+# Include only necessary file types for static site
+keep_files:
+  - .nojekyll
 
 # Social/Open Graph metadata
 social:

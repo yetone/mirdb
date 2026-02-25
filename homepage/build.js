@@ -166,9 +166,23 @@ const imagesDir = path.join(assetsDir, 'images');
   }
 });
 
-// Write output
-fs.writeFileSync(path.join(siteDir, 'index.html'), output);
-console.log('Built _site/index.html');
+// Minify HTML for performance (NFR-1)
+const minifyHtml = (html) => {
+  return html
+    // Remove HTML comments (keep conditional comments)
+    .replace(/<!--(?!\[if)[\s\S]*?-->/g, '')
+    // Remove extra whitespace between tags
+    .replace(/>\s+</g, '><')
+    // Remove leading/trailing whitespace in text
+    .replace(/\s+/g, ' ')
+    // Preserve newlines in pre/code blocks by restoring them
+    .trim();
+};
+
+// Write output (minified for production)
+const minifiedOutput = minifyHtml(output);
+fs.writeFileSync(path.join(siteDir, 'index.html'), minifiedOutput);
+console.log('Built _site/index.html (minified)');
 
 // Copy assets
 const copyIfExists = (src, dest) => {
@@ -178,11 +192,42 @@ const copyIfExists = (src, dest) => {
   }
 };
 
-// Copy JS files
+// Minify JavaScript for performance (NFR-1)
+const minifyJs = (js) => {
+  return js
+    // Remove single-line comments (but not in strings)
+    .replace(/(?<!:)\/\/(?!\/)[^\n]*$/gm, '')
+    // Remove multi-line comments
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    // Remove extra whitespace
+    .replace(/\s+/g, ' ')
+    // Remove whitespace around operators
+    .replace(/\s*([{};,=+\-*/<>!&|])\s*/g, '$1')
+    // Restore necessary spaces
+    .replace(/\b(return|const|let|var|if|else|function|typeof|new)\b/g, ' $1 ')
+    .trim();
+};
+
+// Copy and optionally minify JS files
 const srcJsDir = path.join(__dirname, 'assets', 'js');
 if (fs.existsSync(srcJsDir)) {
   fs.readdirSync(srcJsDir).forEach(file => {
-    copyIfExists(path.join(srcJsDir, file), path.join(jsDir, file));
+    const srcPath = path.join(srcJsDir, file);
+    const destPath = path.join(jsDir, file);
+    if (file.endsWith('.js')) {
+      const jsContent = fs.readFileSync(srcPath, 'utf-8');
+      // Only minify if not already minified (check for .min.js or Prism)
+      if (file.includes('.min.') || file.includes('prism')) {
+        fs.copyFileSync(srcPath, destPath);
+        console.log(`Copied ${srcPath} to ${destPath}`);
+      } else {
+        const minifiedJs = minifyJs(jsContent);
+        fs.writeFileSync(destPath, minifiedJs);
+        console.log(`Minified and wrote ${destPath}`);
+      }
+    } else {
+      copyIfExists(srcPath, destPath);
+    }
   });
 }
 
