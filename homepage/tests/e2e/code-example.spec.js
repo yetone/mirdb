@@ -22,16 +22,16 @@ test.describe('Code Example Section', () => {
     const codeSection = page.locator('#code-example');
     await expect(codeSection).toBeVisible();
 
-    // Verify code blocks are present
-    const codeBlocks = page.locator('.code-block');
+    // Verify code blocks are present in the code-example section
+    const codeBlocks = codeSection.locator('.code-block');
     await expect(codeBlocks).toHaveCount(2); // Shell and Python blocks
 
-    // Verify code elements have language classes (Prism.js integration)
-    const shellCode = page.locator('code.language-bash');
-    await expect(shellCode).toBeVisible();
+    // Verify code elements have language classes within code-example section (Prism.js integration)
+    const shellCode = codeSection.locator('code.language-bash');
+    await expect(shellCode.first()).toBeVisible();
 
-    const pythonCode = page.locator('code.language-python');
-    await expect(pythonCode).toBeVisible();
+    const pythonCode = codeSection.locator('code.language-python');
+    await expect(pythonCode.first()).toBeVisible();
   });
 
   test('TC2: Code includes command to start MirDB server', async ({ page }) => {
