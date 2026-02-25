@@ -23,12 +23,33 @@ description: A persistent key-value store implementing the Memcached protocol. C
 <!-- END SECTION: hero -->
 
 <!-- BEGIN SECTION: what-is (Scenario 2) -->
-<section class="what-is section" id="what-is">
+<section id="what-is" class="what-is section" aria-labelledby="what-is-title">
   <div class="container">
-    <div class="section-header">
-      <h2>What is MirDB?</h2>
+    <h2 id="what-is-title" class="what-is__title">What is MirDB?</h2>
+    <div class="what-is__content">
+      <p class="what-is__intro">
+        MirDB is a <span class="what-is__highlight">persistent key-value store</span> that speaks the Memcached protocol.
+      </p>
+      <p class="what-is__description">
+        Unlike traditional Memcached which stores data only in memory, MirDB persists your data to disk using
+        <span class="what-is__highlight">SSTables (Sorted String Tables)</span>. This means your data survives
+        server restarts and crashes while still offering the familiar Memcached interface you already know.
+      </p>
+      <p class="what-is__description">
+        MirDB is built on a <span class="what-is__highlight">Log-Structured Merge-tree (LSM tree)</span> architecture,
+        the same proven technology used by databases like LevelDB, RocksDB, and Cassandra. This design optimizes
+        for write-heavy workloads while maintaining excellent read performance.
+      </p>
+      <div class="what-is__tech">
+        <h3 class="what-is__tech-title">Under the Hood</h3>
+        <ul class="what-is__tech-list">
+          <li><strong>SSTable Storage:</strong> Data is organized into immutable sorted files for efficient reads and disk usage</li>
+          <li><strong>LSM Tree Architecture:</strong> Multi-level structure with background compaction for sustained performance</li>
+          <li><strong>Write-Ahead Logging:</strong> Ensures durability with crash recovery capabilities</li>
+          <li><strong>Memcached Protocol:</strong> Drop-in compatible with existing Memcached clients</li>
+        </ul>
+      </div>
     </div>
-    <!-- Content to be added by Scenario 2 -->
   </div>
 </section>
 <!-- END SECTION: what-is -->

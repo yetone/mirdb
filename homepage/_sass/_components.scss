@@ -103,7 +103,82 @@
 // ============================================
 // SECTION: What is MirDB (Scenario 2)
 // ============================================
-// Placeholder for Scenario 2 styles
+.what-is {
+  background-color: $color-background-alt;
+  padding: $spacing-xxl 0;
+
+  .container {
+    max-width: 900px;
+  }
+}
+
+.what-is__title {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+  color: $color-secondary;
+}
+
+.what-is__content {
+  font-size: $font-size-lg;
+  line-height: 1.8;
+  color: $color-text;
+}
+
+.what-is__intro {
+  font-size: $font-size-xl;
+  font-weight: 500;
+  margin-bottom: $spacing-lg;
+  color: $color-secondary;
+}
+
+.what-is__description {
+  margin-bottom: $spacing-lg;
+}
+
+.what-is__tech {
+  background-color: $color-background;
+  border-radius: $border-radius-md;
+  padding: $spacing-lg;
+  margin-top: $spacing-lg;
+  border-left: 4px solid $color-primary;
+}
+
+.what-is__tech-title {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  margin-bottom: $spacing-md;
+  color: $color-secondary;
+}
+
+.what-is__tech-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    padding: $spacing-sm 0;
+    padding-left: $spacing-lg;
+    position: relative;
+    margin-bottom: $spacing-xs;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background-color: $color-primary;
+      border-radius: 50%;
+    }
+  }
+}
+
+.what-is__highlight {
+  font-weight: 600;
+  color: $color-primary;
+}
 
 // ============================================
 // SECTION: Features (Scenario 3)

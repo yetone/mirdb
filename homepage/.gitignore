@@ -1,5 +1,33 @@
+# Dependencies
 node_modules/
 package-lock.json
+
+# Jekyll build output
 _site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test output
 test-results/
 playwright-report/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Ruby
+Gemfile.lock
+.bundle/
+vendor/
