@@ -130,7 +130,7 @@ describe('URL Shortening Integration', () => {
       await userEvent.click(submitButton)
 
       await waitFor(() => {
-        expect(screen.getByRole('alert')).toHaveTextContent('Failed to shorten URL')
+        expect(screen.getByRole('alert')).toHaveTextContent(/unable to connect/i)
       })
     })
 
@@ -153,7 +153,279 @@ describe('URL Shortening Integration', () => {
       await userEvent.click(submitButton)
 
       await waitFor(() => {
-        expect(screen.getByRole('alert')).toHaveTextContent('Failed to shorten URL')
+        expect(screen.getByRole('alert')).toHaveTextContent(/something went wrong/i)
+      })
+    })
+  })
+
+  /**
+   * API Error Handling Tests
+   * Owner: Scenario 20 - API Error Handling
+   *
+   * Tests graceful handling when backend API is unavailable or returns errors.
+   * Verifies user-friendly error messages are displayed and page remains functional.
+   */
+  describe('API Error Handling (Scenario 20)', () => {
+    describe('Test Case 1: 500 Server Error', () => {
+      it('displays user-friendly error message when API returns 500 error', async () => {
+        // Mock API to return 500 error
+        server.use(
+          http.post('/api/urls/', () => {
+            return HttpResponse.json(
+              { detail: 'Internal server error' },
+              { status: 500 }
+            )
+          })
+        )
+
+        render(<UrlShortenForm />)
+
+        // Enter a valid URL
+        const input = screen.getByRole('textbox', { name: /url input/i })
+        await userEvent.type(input, 'https://example.com/test-500-error')
+
+        // Submit the form
+        const submitButton = screen.getByRole('button', { name: /shorten url/i })
+        await userEvent.click(submitButton)
+
+        // Verify user-friendly error message is displayed
+        await waitFor(() => {
+          const errorAlert = screen.getByRole('alert')
+          expect(errorAlert).toBeInTheDocument()
+          expect(errorAlert).toHaveTextContent('Something went wrong. Please try again.')
+        })
+
+        // Verify technical error details are NOT shown
+        expect(screen.queryByText(/500/)).not.toBeInTheDocument()
+        expect(screen.queryByText(/Internal server error/)).not.toBeInTheDocument()
+      })
+
+      it('does not crash the page on 500 error', async () => {
+        server.use(
+          http.post('/api/urls/', () => {
+            return HttpResponse.json(
+              { detail: 'Internal server error' },
+              { status: 500 }
+            )
+          })
+        )
+
+        render(<UrlShortenForm />)
+
+        const input = screen.getByRole('textbox', { name: /url input/i })
+        await userEvent.type(input, 'https://example.com/crash-test')
+
+        const submitButton = screen.getByRole('button', { name: /shorten url/i })
+        await userEvent.click(submitButton)
+
+        await waitFor(() => {
+          expect(screen.getByRole('alert')).toBeInTheDocument()
+        })
+
+        // Page elements should still be functional
+        expect(screen.getByRole('textbox', { name: /url input/i })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: /shorten url/i })).toBeInTheDocument()
+        expect(screen.getByRole('form')).toBeInTheDocument()
+      })
+    })
+
+    describe('Test Case 2: Network Error', () => {
+      it('displays connection error message when API is unreachable', async () => {
+        // Mock network failure
+        server.use(
+          http.post('/api/urls/', () => {
+            return HttpResponse.error()
+          })
+        )
+
+        render(<UrlShortenForm />)
+
+        const input = screen.getByRole('textbox', { name: /url input/i })
+        await userEvent.type(input, 'https://example.com/network-error-test')
+
+        const submitButton = screen.getByRole('button', { name: /shorten url/i })
+        await userEvent.click(submitButton)
+
+        // Verify error message indicates connection issue
+        await waitFor(() => {
+          const errorAlert = screen.getByRole('alert')
+          expect(errorAlert).toBeInTheDocument()
+          expect(errorAlert).toHaveTextContent(/unable to connect/i)
+        })
+      })
+
+      it('suggests checking internet connection on network failure', async () => {
+        server.use(
+          http.post('/api/urls/', () => {
+            return HttpResponse.error()
+          })
+        )
+
+        render(<UrlShortenForm />)
+
+        const input = screen.getByRole('textbox', { name: /url input/i })
+        await userEvent.type(input, 'https://example.com/connectivity-test')
+
+        const submitButton = screen.getByRole('button', { name: /shorten url/i })
+        await userEvent.click(submitButton)
+
+        await waitFor(() => {
+          const errorAlert = screen.getByRole('alert')
+          expect(errorAlert).toHaveTextContent(/internet connection/i)
+        })
+      })
+    })
+
+    describe('Test Case 3: Retry After Error', () => {
+      it('allows form resubmission after API error is resolved', async () => {
+        let requestCount = 0
+
+        // First request fails with 500, subsequent requests succeed
+        server.use(
+          http.post('/api/urls/', async ({ request }) => {
+            requestCount++
+            if (requestCount === 1) {
+              return HttpResponse.json(
+                { detail: 'Internal server error' },
+                { status: 500 }
+              )
+            }
+            const body = await request.json() as { original_url: string }
+            return HttpResponse.json({
+              id: 1,
+              original_url: body.original_url,
+              short_code: 'retry123',
+              created_at: new Date().toISOString(),
+              user_id: null,
+              click_count: 0,
+            }, { status: 201 })
+          })
+        )
+
+        render(<UrlShortenForm />)
+
+        const input = screen.getByRole('textbox', { name: /url input/i })
+        await userEvent.type(input, 'https://example.com/retry-test')
+
+        const submitButton = screen.getByRole('button', { name: /shorten url/i })
+
+        // First submission - should fail
+        await userEvent.click(submitButton)
+
+        await waitFor(() => {
+          expect(screen.getByRole('alert')).toHaveTextContent(/something went wrong/i)
+        })
+
+        // Clear and re-enter URL for retry
+        await userEvent.clear(input)
+        await userEvent.type(input, 'https://example.com/retry-success')
+
+        // Second submission - should succeed
+        await userEvent.click(submitButton)
+
+        // Wait for successful result
+        await waitFor(() => {
+          expect(screen.getByLabelText(/shortened url result/i)).toBeInTheDocument()
+        })
+
+        // Error should be cleared
+        expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+
+        // Verify the shortened URL is displayed
+        expect(screen.getByDisplayValue(/\/r\/retry123/)).toBeInTheDocument()
+      })
+
+      it('clears previous error when user starts typing new URL', async () => {
+        server.use(
+          http.post('/api/urls/', () => {
+            return HttpResponse.json(
+              { detail: 'Internal server error' },
+              { status: 500 }
+            )
+          })
+        )
+
+        render(<UrlShortenForm />)
+
+        const input = screen.getByRole('textbox', { name: /url input/i })
+        await userEvent.type(input, 'https://example.com/clear-error-test')
+
+        const submitButton = screen.getByRole('button', { name: /shorten url/i })
+        await userEvent.click(submitButton)
+
+        // Wait for error to appear
+        await waitFor(() => {
+          expect(screen.getByRole('alert')).toBeInTheDocument()
+        })
+
+        // Start typing new input - error should clear
+        await userEvent.type(input, '/new-path')
+
+        // Error should be cleared when user types
+        await waitFor(() => {
+          expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+        })
+      })
+
+      it('button remains enabled after error for retry', async () => {
+        server.use(
+          http.post('/api/urls/', () => {
+            return HttpResponse.json(
+              { detail: 'Internal server error' },
+              { status: 500 }
+            )
+          })
+        )
+
+        render(<UrlShortenForm />)
+
+        const input = screen.getByRole('textbox', { name: /url input/i })
+        await userEvent.type(input, 'https://example.com/button-state-test')
+
+        const submitButton = screen.getByRole('button', { name: /shorten url/i })
+        await userEvent.click(submitButton)
+
+        await waitFor(() => {
+          expect(screen.getByRole('alert')).toBeInTheDocument()
+        })
+
+        // Button should not be disabled after error
+        expect(submitButton).not.toBeDisabled()
+        expect(submitButton).toHaveTextContent('Shorten URL')
+      })
+    })
+
+    describe('Page Stability', () => {
+      it('maintains form functionality after multiple consecutive errors', async () => {
+        server.use(
+          http.post('/api/urls/', () => {
+            return HttpResponse.json(
+              { detail: 'Service unavailable' },
+              { status: 503 }
+            )
+          })
+        )
+
+        render(<UrlShortenForm />)
+
+        const input = screen.getByRole('textbox', { name: /url input/i })
+        const submitButton = screen.getByRole('button', { name: /shorten url/i })
+
+        // Submit multiple times
+        for (let i = 0; i < 3; i++) {
+          await userEvent.clear(input)
+          await userEvent.type(input, `https://example.com/test-${i}`)
+          await userEvent.click(submitButton)
+
+          await waitFor(() => {
+            expect(screen.getByRole('alert')).toBeInTheDocument()
+          })
+        }
+
+        // Form should still be functional
+        expect(input).toBeInTheDocument()
+        expect(input).not.toBeDisabled()
+        expect(submitButton).not.toBeDisabled()
       })
     })
   })

@@ -330,10 +330,10 @@ describe('UrlShortenForm', () => {
       const submitButton = screen.getByRole('button', { name: /shorten url/i })
       await userEvent.click(submitButton)
 
-      // Error message should be displayed gracefully
+      // Error message should be displayed gracefully (user-friendly message)
       await waitFor(() => {
         const errorMessage = screen.getByRole('alert')
-        expect(errorMessage).toHaveTextContent('Failed to shorten URL')
+        expect(errorMessage).toHaveTextContent('Something went wrong. Please try again.')
         expect(errorMessage).toBeVisible()
       })
     })

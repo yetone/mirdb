@@ -75,8 +75,22 @@ export function UrlShortenForm({ onSuccess }: UrlShortenFormProps) {
       }
       setResult(shortened)
       onSuccess?.(shortened)
-    } catch {
-      setError('Failed to shorten URL. Please try again.')
+    } catch (err) {
+      // Distinguish between network errors and server errors
+      if (err instanceof Error && err.message === 'Network Error') {
+        setError('Unable to connect. Please check your internet connection and try again.')
+      } else if (
+        typeof err === 'object' &&
+        err !== null &&
+        'response' in err &&
+        typeof (err as { response?: { status?: number } }).response?.status === 'number'
+      ) {
+        // Server returned an error response (4xx or 5xx)
+        setError('Something went wrong. Please try again.')
+      } else {
+        // Fallback for other errors (including network issues from MSW)
+        setError('Unable to connect. Please check your internet connection and try again.')
+      }
     } finally {
       setIsLoading(false)
     }
