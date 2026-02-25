@@ -131,12 +131,104 @@ description: A persistent key-value store implementing the Memcached protocol. C
 <!-- END SECTION: features -->
 
 <!-- BEGIN SECTION: why-mirdb (Scenario 6) -->
-<section class="comparison section" id="why-mirdb">
+<section class="comparison section" id="why-mirdb" aria-labelledby="why-mirdb-title">
   <div class="container">
     <div class="section-header">
-      <h2>Why MirDB?</h2>
+      <h2 id="why-mirdb-title">Why MirDB?</h2>
+      <p class="section-subtitle">See how MirDB compares to standard Memcached</p>
     </div>
-    <!-- Content to be added by Scenario 6 -->
+    <div class="comparison-table" role="table" aria-label="MirDB vs Memcached comparison">
+      <div class="comparison-header" role="row">
+        <div class="comparison-cell comparison-cell--feature" role="columnheader">Feature</div>
+        <div class="comparison-cell comparison-cell--mirdb" role="columnheader">
+          <span class="comparison-product">MirDB</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="columnheader">
+          <span class="comparison-product">Memcached</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="persistence">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Data Storage</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb comparison-cell--advantage" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Disk Persistence</span>
+          <span class="comparison-detail">Data survives restarts</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="cell">
+          <span class="comparison-icon comparison-icon--x" aria-hidden="true">✗</span>
+          <span class="comparison-value">In-Memory Only</span>
+          <span class="comparison-detail">Data lost on shutdown</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="crash-recovery">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Crash Behavior</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb comparison-cell--advantage" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Crash Recovery</span>
+          <span class="comparison-detail">Data durability guaranteed</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="cell">
+          <span class="comparison-icon comparison-icon--x" aria-hidden="true">✗</span>
+          <span class="comparison-value">Data Loss on Restart</span>
+          <span class="comparison-detail">No recovery possible</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="protocol">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Protocol</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Memcached Protocol</span>
+          <span class="comparison-detail">Drop-in compatible</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Memcached Protocol</span>
+          <span class="comparison-detail">Native implementation</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="architecture">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Architecture</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">LSM Tree + SSTables</span>
+          <span class="comparison-detail">Optimized for writes</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="cell">
+          <span class="comparison-icon comparison-icon--neutral" aria-hidden="true">-</span>
+          <span class="comparison-value">Hash Table</span>
+          <span class="comparison-detail">Simple but volatile</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="setup">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Setup</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb" role="cell">
+          <span class="comparison-icon comparison-icon--neutral" aria-hidden="true">-</span>
+          <span class="comparison-value">Rust Binary</span>
+          <span class="comparison-detail">Single executable</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached comparison-cell--advantage" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Simpler Setup</span>
+          <span class="comparison-detail">Widely available</span>
+        </div>
+      </div>
+    </div>
+    <div class="comparison-summary">
+      <p class="comparison-summary__text">
+        <strong>Bottom line:</strong> If you need your data to survive restarts and crashes,
+        choose MirDB. If you only need a volatile cache, standard Memcached is simpler.
+      </p>
+    </div>
   </div>
 </section>
 <!-- END SECTION: why-mirdb -->

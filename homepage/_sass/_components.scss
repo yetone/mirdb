@@ -401,7 +401,205 @@
 // ============================================
 // SECTION: Comparison / Why MirDB (Scenario 6)
 // ============================================
-// Placeholder for Scenario 6 styles
+
+.comparison {
+  background-color: $color-background;
+  padding: $spacing-xxl 0;
+}
+
+.comparison .section-header {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+}
+
+.comparison .section-subtitle {
+  color: $color-text-light;
+  font-size: $font-size-lg;
+  margin-top: $spacing-sm;
+}
+
+.comparison-table {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 1px;
+  background-color: $color-border;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-md;
+  max-width: 900px;
+  margin: 0 auto;
+
+  @media (max-width: $breakpoint-tablet - 1) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.comparison-header {
+  display: contents;
+}
+
+.comparison-row {
+  display: contents;
+}
+
+.comparison-cell {
+  background-color: $color-background;
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @media (max-width: $breakpoint-tablet - 1) {
+    padding: $spacing-md;
+  }
+}
+
+.comparison-cell--feature {
+  background-color: $color-background-alt;
+  font-weight: 600;
+}
+
+.comparison-header .comparison-cell {
+  background-color: $color-secondary;
+  color: $color-background;
+  font-weight: 600;
+  text-align: center;
+  padding: $spacing-md $spacing-lg;
+}
+
+.comparison-header .comparison-cell--feature {
+  background-color: darken($color-secondary, 5%);
+}
+
+.comparison-product {
+  font-size: $font-size-lg;
+}
+
+.comparison-feature-name {
+  font-size: $font-size-base;
+  color: $color-secondary;
+}
+
+.comparison-icon {
+  font-size: $font-size-xl;
+  margin-bottom: $spacing-xs;
+  display: block;
+}
+
+.comparison-icon--check {
+  color: #28a745;
+}
+
+.comparison-icon--x {
+  color: #dc3545;
+}
+
+.comparison-icon--neutral {
+  color: $color-text-light;
+}
+
+.comparison-value {
+  font-weight: 600;
+  font-size: $font-size-base;
+  color: $color-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.comparison-detail {
+  font-size: $font-size-sm;
+  color: $color-text-light;
+}
+
+.comparison-cell--advantage {
+  background-color: rgba(#28a745, 0.05);
+  border-left: 3px solid #28a745;
+}
+
+.comparison-cell--mirdb,
+.comparison-cell--memcached {
+  text-align: center;
+}
+
+// Mobile stacking for comparison table
+@media (max-width: $breakpoint-tablet - 1) {
+  .comparison-header {
+    display: none;
+  }
+
+  .comparison-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 2px solid $color-border;
+    margin-bottom: $spacing-md;
+    padding-bottom: $spacing-md;
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+  }
+
+  .comparison-cell--feature {
+    grid-column: 1 / -1;
+    background-color: $color-secondary;
+    color: $color-background;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-sm;
+    margin-bottom: $spacing-sm;
+  }
+
+  .comparison-feature-name {
+    color: $color-background;
+  }
+
+  .comparison-cell--mirdb,
+  .comparison-cell--memcached {
+    background-color: $color-background;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+    margin: 0 $spacing-xs;
+  }
+
+  .comparison-cell--mirdb::before {
+    content: "MirDB";
+    display: block;
+    font-size: $font-size-sm;
+    font-weight: 700;
+    color: $color-primary;
+    margin-bottom: $spacing-xs;
+  }
+
+  .comparison-cell--memcached::before {
+    content: "Memcached";
+    display: block;
+    font-size: $font-size-sm;
+    font-weight: 700;
+    color: $color-text-light;
+    margin-bottom: $spacing-xs;
+  }
+
+  .comparison-cell--advantage {
+    border-left: 3px solid #28a745;
+    border-radius: 0 $border-radius-sm $border-radius-sm 0;
+  }
+}
+
+.comparison-summary {
+  max-width: 700px;
+  margin: $spacing-xl auto 0;
+  text-align: center;
+  padding: $spacing-lg;
+  background-color: $color-background-alt;
+  border-radius: $border-radius-md;
+  border-left: 4px solid $color-primary;
+}
+
+.comparison-summary__text {
+  color: $color-text;
+  font-size: $font-size-lg;
+  line-height: $line-height-base;
+  margin: 0;
+}
 
 // ============================================
 // SECTION: Links (Scenario 7)
