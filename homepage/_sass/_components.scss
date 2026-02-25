@@ -1,0 +1,136 @@
+/**
+ * Component Styles
+ *
+ * Sections owned by scenarios:
+ * - .hero: Scenario 1
+ * - .what-is: Scenario 2
+ * - .features, .feature-card: Scenario 3
+ * - .code-example, .code-block: Scenario 4
+ * - .quickstart, .step: Scenario 5
+ * - .comparison: Scenario 6
+ * - .links: Scenario 7
+ * - .nav, .footer: Scenario 8
+ *
+ * Each scenario should add their styles within clearly marked comment blocks.
+ */
+
+// ============================================
+// SECTION: Hero (Scenario 1)
+// ============================================
+
+.hero {
+  background: linear-gradient(135deg, $color-secondary 0%, lighten($color-secondary, 10%) 100%);
+  color: $color-background;
+  padding: $spacing-xxl * 1.5 0;
+  text-align: center;
+}
+
+.hero__container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $container-padding;
+}
+
+.hero__tagline {
+  font-size: $font-size-hero;
+  font-weight: 700;
+  line-height: $line-height-heading;
+  margin-bottom: $spacing-md;
+  color: $color-background;
+
+  .highlight {
+    color: $color-primary;
+  }
+}
+
+.hero__description {
+  font-size: $font-size-lg;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 700px;
+  margin: 0 auto $spacing-xl;
+  line-height: $line-height-base;
+}
+
+.hero__cta {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-base;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: $border-radius-md;
+  transition: all $transition-normal;
+  cursor: pointer;
+  border: 2px solid transparent;
+  min-width: 160px;
+}
+
+.btn--primary {
+  background-color: $color-primary;
+  color: $color-background;
+  border-color: $color-primary;
+
+  &:hover {
+    background-color: $color-primary-dark;
+    border-color: $color-primary-dark;
+    color: $color-background;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+}
+
+.btn--secondary {
+  background-color: transparent;
+  color: $color-background;
+  border-color: $color-background;
+
+  &:hover {
+    background-color: $color-background;
+    color: $color-secondary;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+}
+
+// ============================================
+// SECTION: What is MirDB (Scenario 2)
+// ============================================
+// Placeholder for Scenario 2 styles
+
+// ============================================
+// SECTION: Features (Scenario 3)
+// ============================================
+// Placeholder for Scenario 3 styles
+
+// ============================================
+// SECTION: Code Example (Scenario 4)
+// ============================================
+// Placeholder for Scenario 4 styles
+
+// ============================================
+// SECTION: Quick Start (Scenario 5)
+// ============================================
+// Placeholder for Scenario 5 styles
+
+// ============================================
+// SECTION: Comparison / Why MirDB (Scenario 6)
+// ============================================
+// Placeholder for Scenario 6 styles
+
+// ============================================
+// SECTION: Links (Scenario 7)
+// ============================================
+// Placeholder for Scenario 7 styles
+
+// ============================================
+// SECTION: Navigation & Footer (Scenario 8)
+// ============================================
+// Placeholder for Scenario 8 styles

@@ -1,0 +1,23 @@
+---
+layout: default
+title: Page Not Found - MirDB
+permalink: /404.html
+---
+<!--
+  404 Error Page
+  Owner: Scenario 15 - Error Handling and Edge Cases
+
+  Expected elements:
+  - Clear "Page Not Found" message
+  - Link back to homepage
+  - Consistent styling with main site
+-->
+<section class="hero" style="min-height: 60vh;">
+  <div class="hero__container">
+    <h1 class="hero__tagline">404</h1>
+    <p class="hero__description">Page not found. The page you're looking for doesn't exist.</p>
+    <div class="hero__cta">
+      <a href="{{ '/' | relative_url }}" class="btn btn--primary">Back to Home</a>
+    </div>
+  </div>
+</section>
