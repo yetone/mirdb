@@ -4,19 +4,13 @@
  *
  * Displays the main hero section of the homepage with:
  * - Product name and tagline
- * - URL shortening input form
+ * - URL shortening input form (using UrlShortenForm from Scenario 2)
  * - Primary CTA (Shorten URL) and Secondary CTAs (Sign Up Free, Log In)
  */
 
-import { useState } from 'react'
+import { UrlShortenForm } from './UrlShortenForm'
 
 export default function HeroSection() {
-  const [url, setUrl] = useState('')
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-  }
-
   return (
     <section
       className="hero min-h-[80vh] bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10"
@@ -32,27 +26,10 @@ export default function HeroSection() {
           </p>
         </div>
 
-        {/* URL Shortening Form */}
-        <form onSubmit={handleSubmit} className="w-full max-w-xl">
-          <div className="join w-full">
-            <input
-              type="url"
-              placeholder="Enter your long URL here..."
-              className="input input-bordered join-item flex-1"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              aria-label="URL input"
-              data-testid="url-input"
-            />
-            <button
-              type="submit"
-              className="btn btn-primary join-item"
-              data-testid="shorten-url-button"
-            >
-              Shorten URL
-            </button>
-          </div>
-        </form>
+        {/* URL Shortening Form - Scenario 2 */}
+        <div className="w-full max-w-xl">
+          <UrlShortenForm />
+        </div>
 
         {/* CTA Buttons */}
         <div className="flex gap-4 flex-wrap justify-center">

@@ -6,6 +6,8 @@
  */
 
 import '@testing-library/jest-dom'
+import { afterAll, afterEach, beforeAll, vi } from 'vitest'
+import { server } from './mocks/server'
 
 // Mock window.matchMedia for responsive tests
 Object.defineProperty(window, 'matchMedia', {
@@ -23,10 +25,26 @@ Object.defineProperty(window, 'matchMedia', {
 })
 
 // Mock clipboard API
-Object.defineProperty(navigator, 'clipboard', {
-  value: {
-    writeText: () => Promise.resolve(),
-    readText: () => Promise.resolve(''),
+Object.assign(navigator, {
+  clipboard: {
+    writeText: vi.fn().mockResolvedValue(undefined),
+    readText: vi.fn().mockResolvedValue(''),
   },
-  writable: true,
 })
+
+// Mock localStorage
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+}
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
+// Setup MSW
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
+afterEach(() => {
+  server.resetHandlers()
+  vi.clearAllMocks()
+})
+afterAll(() => server.close())
