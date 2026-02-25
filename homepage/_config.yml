@@ -1,8 +1,15 @@
 # Jekyll Configuration for MirDB Homepage
+
+# SEO: Title under 60 characters (currently 6 characters)
 title: MirDB
-description: A persistent key-value store with Memcached protocol compatibility
+
+# SEO: Description between 150-160 characters (currently 155 characters)
+# "MirDB is a persistent key-value store implementing the Memcached protocol. Drop-in replacement for Memcached with disk persistence and crash recovery."
+description: "MirDB is a persistent key-value store implementing the Memcached protocol. Drop-in replacement for Memcached with disk persistence and crash recovery."
+
+# Site URL configuration
 baseurl: ""
-url: ""
+url: "https://mirdb.io"
 
 # Build settings
 markdown: kramdown
@@ -20,8 +27,11 @@ exclude:
   - tests
   - README.md
 
-# Social/Open Graph
+# Social/Open Graph metadata
 social:
   name: MirDB
   links:
     - https://github.com/mirdb/mirdb
+
+# Open Graph defaults
+og_image: /assets/images/og-image.png

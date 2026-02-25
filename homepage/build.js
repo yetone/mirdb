@@ -1,0 +1,223 @@
+#!/usr/bin/env node
+/**
+ * Simple Jekyll-like build script for testing purposes
+ * Compiles Jekyll templates without requiring Ruby
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+// Read config
+const configPath = path.join(__dirname, '_config.yml');
+const configContent = fs.readFileSync(configPath, 'utf-8');
+
+// Parse simple YAML config
+const parseSimpleYaml = (content) => {
+  const config = {};
+  const lines = content.split('\n');
+  let currentKey = null;
+
+  for (const line of lines) {
+    // Skip comments and empty lines
+    if (line.trim().startsWith('#') || line.trim() === '') continue;
+
+    // Handle simple key: value pairs
+    const match = line.match(/^(\w+):\s*(.*)$/);
+    if (match) {
+      const [, key, value] = match;
+      // Remove quotes if present
+      config[key] = value.replace(/^["']|["']$/g, '');
+    }
+  }
+  return config;
+};
+
+const config = parseSimpleYaml(configContent);
+
+// Read page front matter from index.html
+const indexPath = path.join(__dirname, 'index.html');
+const indexContent = fs.readFileSync(indexPath, 'utf-8');
+
+// Parse front matter
+const frontMatterMatch = indexContent.match(/^---\n([\s\S]*?)\n---/);
+const frontMatter = {};
+if (frontMatterMatch) {
+  const fmLines = frontMatterMatch[1].split('\n');
+  for (const line of fmLines) {
+    const match = line.match(/^(\w+):\s*(.*)$/);
+    if (match) {
+      const [, key, value] = match;
+      frontMatter[key] = value.replace(/^["']|["']$/g, '');
+    }
+  }
+}
+
+// Content after front matter
+const pageContent = indexContent.replace(/^---[\s\S]*?---\n/, '');
+
+// Read layout
+const layoutPath = path.join(__dirname, '_layouts', 'default.html');
+const layoutContent = fs.readFileSync(layoutPath, 'utf-8');
+
+// Read includes
+const readInclude = (name) => {
+  const includePath = path.join(__dirname, '_includes', name);
+  try {
+    return fs.readFileSync(includePath, 'utf-8');
+  } catch {
+    return '';
+  }
+};
+
+// Process Jekyll variables
+const processTemplate = (template, context) => {
+  let result = template;
+
+  // Process includes
+  result = result.replace(/\{%\s*include\s+(\S+)\s*%\}/g, (match, includeName) => {
+    return readInclude(includeName);
+  });
+
+  // Process Liquid filters and variables
+  result = result.replace(/\{\{\s*([^}]+)\s*\}\}/g, (match, expr) => {
+    // Handle page.title | default: site.title pattern
+    if (expr.includes('page.title | default: site.title')) {
+      return context.page.title || context.site.title;
+    }
+    if (expr.includes('page.description | default: site.description')) {
+      return context.page.description || context.site.description;
+    }
+    if (expr.includes('page.url | absolute_url')) {
+      return (context.site.url || '') + (context.page.url || '/');
+    }
+    // Handle site.* variables
+    if (expr.includes('site.title')) {
+      return context.site.title || '';
+    }
+    if (expr.includes('site.description')) {
+      return context.site.description || '';
+    }
+    if (expr.includes('site.url')) {
+      return context.site.url || '';
+    }
+    if (expr.includes('site.time | date:')) {
+      return new Date().getFullYear().toString();
+    }
+    // Handle relative_url filter
+    if (expr.includes('| relative_url')) {
+      const pathMatch = expr.match(/['"]([^'"]+)['"]/);
+      if (pathMatch) {
+        return pathMatch[1];
+      }
+    }
+    // Handle absolute_url filter
+    if (expr.includes('| absolute_url')) {
+      const pathMatch = expr.match(/['"]([^'"]+)['"]/);
+      if (pathMatch) {
+        return (context.site.url || '') + pathMatch[1];
+      }
+    }
+    // Handle content placeholder
+    if (expr.trim() === 'content') {
+      return context.content;
+    }
+
+    return match; // Return unchanged if not handled
+  });
+
+  return result;
+};
+
+// Build context
+const context = {
+  site: {
+    title: config.title || 'MirDB',
+    description: config.description || '',
+    url: config.url || 'https://mirdb.io',
+    baseurl: config.baseurl || '',
+    time: new Date()
+  },
+  page: {
+    title: frontMatter.title || config.title,
+    description: frontMatter.description || config.description,
+    url: '/'
+  },
+  content: pageContent
+};
+
+// Process layout with content
+let output = processTemplate(layoutContent, context);
+
+// Create _site directory
+const siteDir = path.join(__dirname, '_site');
+if (!fs.existsSync(siteDir)) {
+  fs.mkdirSync(siteDir, { recursive: true });
+}
+
+// Create assets directories
+const assetsDir = path.join(siteDir, 'assets');
+const cssDir = path.join(assetsDir, 'css');
+const jsDir = path.join(assetsDir, 'js');
+const imagesDir = path.join(assetsDir, 'images');
+
+[assetsDir, cssDir, jsDir, imagesDir].forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
+
+// Write output
+fs.writeFileSync(path.join(siteDir, 'index.html'), output);
+console.log('Built _site/index.html');
+
+// Copy assets
+const copyIfExists = (src, dest) => {
+  if (fs.existsSync(src)) {
+    fs.copyFileSync(src, dest);
+    console.log(`Copied ${src} to ${dest}`);
+  }
+};
+
+// Copy JS files
+const srcJsDir = path.join(__dirname, 'assets', 'js');
+if (fs.existsSync(srcJsDir)) {
+  fs.readdirSync(srcJsDir).forEach(file => {
+    copyIfExists(path.join(srcJsDir, file), path.join(jsDir, file));
+  });
+}
+
+// Copy images
+const srcImagesDir = path.join(__dirname, 'assets', 'images');
+if (fs.existsSync(srcImagesDir)) {
+  fs.readdirSync(srcImagesDir).forEach(file => {
+    copyIfExists(path.join(srcImagesDir, file), path.join(imagesDir, file));
+  });
+}
+
+// Build CSS from SCSS (simplified - just copy if sass is not available)
+const sass = require('sass');
+const mainScssPath = path.join(__dirname, 'assets', 'css', 'main.scss');
+const mainCssPath = path.join(cssDir, 'main.css');
+
+try {
+  // Read SCSS and strip Jekyll front matter
+  let scssContent = fs.readFileSync(mainScssPath, 'utf-8');
+  scssContent = scssContent.replace(/^---[\s\S]*?---\n/, '');
+
+  // Write temp file without front matter
+  const tempScssPath = path.join(__dirname, '_sass', 'main-entry.scss');
+  fs.writeFileSync(tempScssPath, scssContent);
+
+  const result = sass.compile(tempScssPath, {
+    loadPaths: [path.join(__dirname, '_sass')],
+    style: 'compressed'
+  });
+  fs.writeFileSync(mainCssPath, result.css);
+  console.log('Compiled CSS');
+} catch (err) {
+  console.error('SCSS compilation error:', err.message);
+  // Create empty CSS file as fallback
+  fs.writeFileSync(mainCssPath, '/* CSS placeholder */');
+}
+
+console.log('Build complete!');
