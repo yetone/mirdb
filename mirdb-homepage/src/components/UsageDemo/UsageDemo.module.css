@@ -1,0 +1,136 @@
+.usageDemo {
+  padding: var(--spacing-xl) var(--spacing-md);
+  background-color: var(--color-bg);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.subtitle {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.codeExamples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.codeBlock {
+  background-color: var(--color-code-bg, #1e1e2e);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.codeBlockTitle {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--color-rust-orange);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.codeBlockContent {
+  position: relative;
+}
+
+.codeBlockPre {
+  margin: 0;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.codeBlockCode {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+  white-space: pre;
+  display: block;
+}
+
+.copyButton {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: #e0e0e0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copyButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.copyButton:focus {
+  outline: 2px solid var(--color-rust-orange);
+  outline-offset: 2px;
+}
+
+.copyButtonText {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .copyButtonText {
+    display: inline;
+  }
+}
+
+.demoGif {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.usageGifImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
