@@ -8,13 +8,22 @@
   - Mobile hamburger menu toggle
   - Smooth scroll anchor links
 -->
-<header class="site-header">
+<header class="site-header" role="banner">
   <nav class="nav container flex-between" role="navigation" aria-label="Main navigation">
-    <a href="{{ '/' | relative_url }}" class="nav-logo">MirDB</a>
-    <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#quickstart">Quick Start</a></li>
-      <li><a href="https://github.com/penberg/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+    <a href="{{ '/' | relative_url }}" class="nav-logo" aria-label="MirDB Home">MirDB</a>
+
+    <!-- Mobile hamburger menu toggle -->
+    <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </button>
+
+    <ul class="nav-links" id="nav-menu">
+      <li><a href="#features" class="nav-link">Features</a></li>
+      <li><a href="#quickstart" class="nav-link">Quick Start</a></li>
+      <li><a href="https://docs.rs/mirdb" target="_blank" rel="noopener" class="nav-link">Docs</a></li>
+      <li><a href="https://github.com/penberg/mirdb" target="_blank" rel="noopener" class="nav-link nav-link--github">GitHub</a></li>
     </ul>
   </nav>
 </header>
