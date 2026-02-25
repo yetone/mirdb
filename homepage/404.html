@@ -1,0 +1,51 @@
+---
+layout: default
+permalink: /404.html
+title: Page Not Found - MirDB
+description: The page you're looking for doesn't exist.
+---
+<!--
+  404 Error Page
+  Owner: Scenario 15 - Error Handling and Edge Cases
+
+  Expected elements:
+  - Clear "Page Not Found" message
+  - Link back to homepage
+  - Consistent styling with main site
+-->
+<section class="error-page section" aria-labelledby="error-title">
+  <div class="container error-page__container">
+    <div class="error-page__icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <h1 id="error-title" class="error-page__title">404</h1>
+    <h2 class="error-page__subtitle">Page Not Found</h2>
+    <p class="error-page__description">
+      The page you're looking for doesn't exist or has been moved.
+    </p>
+    <div class="error-page__actions">
+      <a href="/" class="btn btn--primary error-page__btn">
+        <svg class="error-page__btn-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Back to Homepage
+      </a>
+      <a href="#features" class="btn btn--secondary error-page__btn">
+        View Features
+      </a>
+    </div>
+    <div class="error-page__links">
+      <p class="error-page__links-title">Or try one of these:</p>
+      <ul class="error-page__links-list">
+        <li><a href="/#quickstart">Quick Start Guide</a></li>
+        <li><a href="/#code-example">Code Examples</a></li>
+        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+      </ul>
+    </div>
+  </div>
+</section>

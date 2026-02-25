@@ -1,0 +1,64 @@
+# Jekyll Configuration for MirDB Homepage
+# Performance optimized for NFR-1 (page load < 1s) and NFR-5 (static site)
+
+# SEO: Title under 60 characters (currently 6 characters)
+title: MirDB
+
+# SEO: Description between 150-160 characters (currently 155 characters)
+# "MirDB is a persistent key-value store implementing the Memcached protocol. Drop-in replacement for Memcached with disk persistence and crash recovery."
+description: "MirDB is a persistent key-value store implementing the Memcached protocol. Drop-in replacement for Memcached with disk persistence and crash recovery."
+
+# Site URL configuration
+baseurl: ""
+url: "https://mirdb.io"
+
+# Build settings
+markdown: kramdown
+sass:
+  style: compressed
+  sass_dir: _sass
+
+# Performance optimizations for NFR-1 (page load < 1s)
+# Enable HTML minification
+compress_html:
+  clippings: all
+  comments: []
+  endings: []
+  ignore:
+    envs: [development]
+  blanklines: false
+  profile: false
+  startings: []
+
+# Disable unnecessary processing for static site (NFR-5)
+strict_front_matter: true
+liquid:
+  strict_filters: true
+  strict_variables: false
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - package.json
+  - package-lock.json
+  - tests
+  - README.md
+  - build.js
+  - playwright.config.js
+  - "*.spec.js"
+  - "*.test.js"
+
+# Include only necessary file types for static site
+keep_files:
+  - .nojekyll
+
+# Social/Open Graph metadata
+social:
+  name: MirDB
+  links:
+    - https://github.com/mirdb/mirdb
+
+# Open Graph defaults
+og_image: /assets/images/og-image.png

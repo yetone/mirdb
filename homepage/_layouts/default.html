@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include head.html %}
+</head>
+<body>
+  <!-- Skip to main content link for keyboard navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="site-wrapper">
+    <header class="site-header" role="banner">
+      <nav class="nav container flex-between" role="navigation" aria-label="Main navigation">
+        <a href="{{ '/' | relative_url }}" class="nav-logo" aria-label="MirDB - Home">MirDB</a>
+        <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu" type="button">
+          <span class="nav-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-toggle__bar" aria-hidden="true"></span>
+        </button>
+        <ul class="nav-links" id="nav-menu" role="menubar">
+          <li role="none"><a href="#features" role="menuitem">Features</a></li>
+          <li role="none"><a href="#quickstart" role="menuitem">Quick Start</a></li>
+          <li role="none"><a href="https://github.com/penberg/mirdb" target="_blank" rel="noopener noreferrer" role="menuitem" aria-label="GitHub repository (opens in new tab)">GitHub<span class="sr-only"> (opens in new tab)</span></a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content" role="main" tabindex="-1">
+      {{ content }}
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container text-center">
+        <p>&copy; {{ site.time | date: '%Y' }} MirDB. MIT License.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ '/assets/js/prism.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+</body>
+</html>

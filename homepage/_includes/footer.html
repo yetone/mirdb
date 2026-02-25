@@ -1,0 +1,46 @@
+<!--
+  Footer Include
+  Owner: Scenario 8 - Navigation and Footer
+  Contributing: Scenario 7 - Documentation and External Links
+
+  Expected elements:
+  - Copyright notice with dynamic year
+  - License information (MIT/Apache)
+  - Links to GitHub, docs.rs
+  - Social links if applicable
+-->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="footer-logo">MirDB</span>
+        <p class="footer-tagline">A persistent key-value store with Memcached protocol</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-section">
+          <h4 class="footer-section__title">Resources</h4>
+          <ul class="footer-section__list">
+            <li><a href="#features" class="footer-link">Features</a></li>
+            <li><a href="#quickstart" class="footer-link">Quick Start</a></li>
+            <li><a href="#code-example" class="footer-link">Examples</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4 class="footer-section__title">Project</h4>
+          <ul class="footer-section__list">
+            <li><a href="https://github.com/penberg/mirdb" target="_blank" rel="noopener noreferrer" class="footer-link" data-link="github">GitHub Repository</a></li>
+            <li><a href="https://docs.rs/mirdb" target="_blank" rel="noopener noreferrer" class="footer-link" data-link="docs">Documentation</a></li>
+            <li><a href="https://crates.io/crates/mirdb" target="_blank" rel="noopener noreferrer" class="footer-link" data-link="crates">Crates.io</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; {{ site.time | date: '%Y' }} MirDB Project. Licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener" class="footer-link--inline">MIT License</a>.</p>
+      <p class="footer-credits">Built with Rust. Powered by SSTables and LSM trees.</p>
+    </div>
+  </div>
+</footer>

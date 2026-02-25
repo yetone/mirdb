@@ -1,0 +1,429 @@
+---
+layout: default
+title: MirDB - Persistent Key-Value Store with Memcached Protocol
+description: MirDB is a persistent key-value store implementing the Memcached protocol. Drop-in replacement for Memcached with disk persistence and crash recovery.
+---
+
+<!-- BEGIN SECTION: hero (Scenario 1) -->
+<section class="hero" id="hero" aria-labelledby="hero-tagline">
+  <div class="hero__container">
+    <h1 class="hero__tagline" id="hero-tagline">
+      <span class="highlight">MirDB:</span> A Persistent Key-Value Store with Memcached Protocol
+    </h1>
+    <p class="hero__description">
+      Compatible with memcached clients, but with disk persistence for durability.
+      Drop-in replacement that stores your data safely to disk.
+    </p>
+    <div class="hero__cta">
+      <a href="#quickstart" class="btn btn--primary" role="button">Get Started</a>
+      <a href="#code-example" class="btn btn--secondary" role="button">View Code</a>
+    </div>
+  </div>
+</section>
+<!-- END SECTION: hero -->
+
+<!-- BEGIN SECTION: what-is (Scenario 2) -->
+<section id="what-is" class="what-is section" aria-labelledby="what-is-title">
+  <div class="container">
+    <h2 id="what-is-title" class="what-is__title">What is MirDB?</h2>
+    <div class="what-is__content">
+      <p class="what-is__intro">
+        MirDB is a <span class="what-is__highlight">persistent key-value store</span> that speaks the Memcached protocol.
+      </p>
+      <p class="what-is__description">
+        Unlike traditional Memcached which stores data only in memory, MirDB persists your data to disk using
+        <span class="what-is__highlight">SSTables (Sorted String Tables)</span>. This means your data survives
+        server restarts and crashes while still offering the familiar Memcached interface you already know.
+      </p>
+      <p class="what-is__description">
+        MirDB is built on a <span class="what-is__highlight">Log-Structured Merge-tree (LSM tree)</span> architecture,
+        the same proven technology used by databases like LevelDB, RocksDB, and Cassandra. This design optimizes
+        for write-heavy workloads while maintaining excellent read performance.
+      </p>
+      <div class="what-is__tech">
+        <h3 class="what-is__tech-title">Under the Hood</h3>
+        <ul class="what-is__tech-list">
+          <li><strong>SSTable Storage:</strong> Data is organized into immutable sorted files for efficient reads and disk usage</li>
+          <li><strong>LSM Tree Architecture:</strong> Multi-level structure with background compaction for sustained performance</li>
+          <li><strong>Write-Ahead Logging:</strong> Ensures durability with crash recovery capabilities</li>
+          <li><strong>Memcached Protocol:</strong> Drop-in compatible with existing Memcached clients</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- END SECTION: what-is -->
+
+<!-- BEGIN SECTION: features (Scenario 3) -->
+<section class="features section" id="features" aria-label="Features">
+  <div class="container">
+    <h2 class="section-title">Features</h2>
+    <div class="features-grid">
+      <article class="feature-card" data-feature="memcached-protocol">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Memcached Protocol</h3>
+        <p class="feature-description">Drop-in compatible with existing memcached clients. Use your favorite memcached libraries without any code changes.</p>
+      </article>
+
+      <article class="feature-card" data-feature="disk-persistence">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Disk Persistence</h3>
+        <p class="feature-description">Your data survives restarts and crashes. Persistent storage ensures durability without sacrificing performance.</p>
+      </article>
+
+      <article class="feature-card" data-feature="lsm-tree">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">LSM Tree Architecture</h3>
+        <p class="feature-description">Built on a Log-Structured Merge tree for optimal write performance and efficient storage utilization.</p>
+      </article>
+
+      <article class="feature-card" data-feature="compaction">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="17 11 12 6 7 11"/>
+            <polyline points="17 18 12 13 7 18"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Multi-Level Compaction</h3>
+        <p class="feature-description">Intelligent multi-level compaction strategy keeps storage efficient while maintaining fast read and write performance.</p>
+      </article>
+
+      <article class="feature-card" data-feature="async-io">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Async I/O</h3>
+        <p class="feature-description">Asynchronous I/O operations ensure high throughput and low latency even under heavy workloads.</p>
+      </article>
+
+      <article class="feature-card" data-feature="rust-powered">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Rust Powered</h3>
+        <p class="feature-description">Built with Rust for memory safety, zero-cost abstractions, and fearless concurrency.</p>
+      </article>
+    </div>
+  </div>
+</section>
+<!-- END SECTION: features -->
+
+<!-- BEGIN SECTION: why-mirdb (Scenario 6) -->
+<section class="comparison section" id="why-mirdb" aria-labelledby="why-mirdb-title">
+  <div class="container">
+    <div class="section-header">
+      <h2 id="why-mirdb-title">Why MirDB?</h2>
+      <p class="section-subtitle">See how MirDB compares to standard Memcached</p>
+    </div>
+    <div class="comparison-table" role="table" aria-label="MirDB vs Memcached comparison">
+      <div class="comparison-header" role="row">
+        <div class="comparison-cell comparison-cell--feature" role="columnheader">Feature</div>
+        <div class="comparison-cell comparison-cell--mirdb" role="columnheader">
+          <span class="comparison-product">MirDB</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="columnheader">
+          <span class="comparison-product">Memcached</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="persistence">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Data Storage</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb comparison-cell--advantage" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Disk Persistence</span>
+          <span class="comparison-detail">Data survives restarts</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="cell">
+          <span class="comparison-icon comparison-icon--x" aria-hidden="true">✗</span>
+          <span class="comparison-value">In-Memory Only</span>
+          <span class="comparison-detail">Data lost on shutdown</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="crash-recovery">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Crash Behavior</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb comparison-cell--advantage" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Crash Recovery</span>
+          <span class="comparison-detail">Data durability guaranteed</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="cell">
+          <span class="comparison-icon comparison-icon--x" aria-hidden="true">✗</span>
+          <span class="comparison-value">Data Loss on Restart</span>
+          <span class="comparison-detail">No recovery possible</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="protocol">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Protocol</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Memcached Protocol</span>
+          <span class="comparison-detail">Drop-in compatible</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Memcached Protocol</span>
+          <span class="comparison-detail">Native implementation</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="architecture">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Architecture</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">LSM Tree + SSTables</span>
+          <span class="comparison-detail">Optimized for writes</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached" role="cell">
+          <span class="comparison-icon comparison-icon--neutral" aria-hidden="true">-</span>
+          <span class="comparison-value">Hash Table</span>
+          <span class="comparison-detail">Simple but volatile</span>
+        </div>
+      </div>
+      <div class="comparison-row" role="row" data-comparison="setup">
+        <div class="comparison-cell comparison-cell--feature" role="rowheader">
+          <span class="comparison-feature-name">Setup</span>
+        </div>
+        <div class="comparison-cell comparison-cell--mirdb" role="cell">
+          <span class="comparison-icon comparison-icon--neutral" aria-hidden="true">-</span>
+          <span class="comparison-value">Rust Binary</span>
+          <span class="comparison-detail">Single executable</span>
+        </div>
+        <div class="comparison-cell comparison-cell--memcached comparison-cell--advantage" role="cell">
+          <span class="comparison-icon comparison-icon--check" aria-hidden="true">✓</span>
+          <span class="comparison-value">Simpler Setup</span>
+          <span class="comparison-detail">Widely available</span>
+        </div>
+      </div>
+    </div>
+    <div class="comparison-summary">
+      <p class="comparison-summary__text">
+        <strong>Bottom line:</strong> If you need your data to survive restarts and crashes,
+        choose MirDB. If you only need a volatile cache, standard Memcached is simpler.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- END SECTION: why-mirdb -->
+
+<!-- BEGIN SECTION: quickstart (Scenario 5) -->
+<section class="quickstart section" id="quickstart" aria-labelledby="quickstart-title">
+  <div class="container">
+    <div class="section-header">
+      <h2 id="quickstart-title">Quick Start</h2>
+      <p class="section-subtitle">Get up and running with MirDB in three simple steps</p>
+    </div>
+    <div class="steps">
+      <!-- Step 1: Install -->
+      <div class="step" data-step="1">
+        <div class="step__number" aria-hidden="true">1</div>
+        <div class="step__content">
+          <h3 class="step__title">Install MirDB</h3>
+          <p class="step__description">Build from source using Cargo, Rust's package manager:</p>
+          <div class="step__code">
+            <pre><code class="language-bash">cargo install mirdb-server</code></pre>
+          </div>
+          <p class="step__note">Or clone and build from the repository:</p>
+          <div class="step__code">
+            <pre><code class="language-bash">git clone https://github.com/penberg/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Start Server -->
+      <div class="step" data-step="2">
+        <div class="step__number" aria-hidden="true">2</div>
+        <div class="step__content">
+          <h3 class="step__title">Start the Server</h3>
+          <p class="step__description">Run MirDB with default configuration:</p>
+          <div class="step__code">
+            <pre><code class="language-bash">mirdb-server</code></pre>
+          </div>
+          <div class="step__config">
+            <p class="step__config-title">Default Configuration:</p>
+            <ul class="step__config-list">
+              <li><strong>Port:</strong> <code>12333</code></li>
+              <li><strong>Work Directory:</strong> <code>/tmp/mirdb</code></li>
+            </ul>
+          </div>
+          <p class="step__note">Or specify custom options:</p>
+          <div class="step__code">
+            <pre><code class="language-bash">mirdb-server --port 12333 --work-dir /tmp/mirdb</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Connect -->
+      <div class="step" data-step="3">
+        <div class="step__number" aria-hidden="true">3</div>
+        <div class="step__content">
+          <h3 class="step__title">Connect with a Client</h3>
+          <p class="step__description">Use any memcached-compatible client to connect. Here's an example using telnet:</p>
+          <div class="step__code">
+            <pre><code class="language-bash"># Connect to MirDB
+telnet localhost 12333
+
+# Or use memcat from libmemcached-tools
+memcat --servers=localhost:12333 mykey</code></pre>
+          </div>
+          <p class="step__note">MirDB is fully compatible with memcached clients in Python, Node.js, Ruby, and more.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- END SECTION: quickstart -->
+
+<!-- BEGIN SECTION: code-example (Scenario 4) -->
+<section class="code-example section" id="code-example" aria-labelledby="code-example-title">
+  <div class="container">
+    <div class="section-header">
+      <h2 id="code-example-title">Code Example</h2>
+      <p class="section-subtitle">Start the MirDB server and connect using any Memcached client</p>
+    </div>
+    <div class="code-example__content">
+      <!-- Shell example: Starting the server -->
+      <div class="code-block" data-language="bash">
+        <div class="code-block__header">
+          <span class="code-block__language">Shell</span>
+          <button class="code-block__copy" aria-label="Copy code to clipboard" type="button">
+            <svg class="code-block__copy-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="code-block__copy-text">Copy</span>
+          </button>
+        </div>
+        <pre class="code-block__pre"><code class="language-bash"># Start MirDB server on default port 12333
+./mirdb-server --port 12333 --work-dir /var/lib/mirdb
+
+# Or run from source with cargo
+cargo run --release -- --port 12333</code></pre>
+      </div>
+
+      <!-- Python example: Client connection -->
+      <div class="code-block" data-language="python">
+        <div class="code-block__header">
+          <span class="code-block__language">Python</span>
+          <button class="code-block__copy" aria-label="Copy code to clipboard" type="button">
+            <svg class="code-block__copy-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="code-block__copy-text">Copy</span>
+          </button>
+        </div>
+        <pre class="code-block__pre"><code class="language-python"># Connect using any Memcached client
+import pymemcache
+from pymemcache.client import base
+
+# Connect to MirDB (same as Memcached!)
+client = base.Client(('localhost', 12333))
+
+# Store a value - persisted to disk
+client.set('user:1', 'Alice')
+
+# Retrieve the value
+result = client.get('user:1')
+print(result)  # Output: b'Alice'</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- END SECTION: code-example -->
+
+<!-- BEGIN SECTION: links (Scenario 7) -->
+<section class="links section" id="links" aria-labelledby="links-title">
+  <div class="container">
+    <div class="section-header">
+      <h2 id="links-title">Resources</h2>
+      <p class="section-subtitle">Documentation, source code, and community links</p>
+    </div>
+    <div class="links-grid">
+      <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="link-card" data-link="github">
+        <div class="link-card__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </div>
+        <div class="link-card__content">
+          <h3 class="link-card__title">GitHub Repository</h3>
+          <p class="link-card__description">View source code, report issues, and contribute to MirDB</p>
+          <span class="link-card__url">github.com/yetone/mirdb</span>
+        </div>
+        <span class="link-card__arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="https://docs.rs/mirdb" target="_blank" rel="noopener noreferrer" class="link-card" data-link="docs">
+        <div class="link-card__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            <line x1="8" y1="6" x2="16" y2="6"/>
+            <line x1="8" y1="10" x2="16" y2="10"/>
+            <line x1="8" y1="14" x2="12" y2="14"/>
+          </svg>
+        </div>
+        <div class="link-card__content">
+          <h3 class="link-card__title">Rust Documentation</h3>
+          <p class="link-card__description">API reference and crate documentation on docs.rs</p>
+          <span class="link-card__url">docs.rs/mirdb</span>
+        </div>
+        <span class="link-card__arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer" class="link-card" data-link="guides">
+        <div class="link-card__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+        </div>
+        <div class="link-card__content">
+          <h3 class="link-card__title">Getting Started Guide</h3>
+          <p class="link-card__description">Installation instructions and quick start tutorials</p>
+          <span class="link-card__url">README documentation</span>
+        </div>
+        <span class="link-card__arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="links-license">
+      <p class="links-license__text">
+        <span class="links-license__icon" aria-hidden="true">⚖️</span>
+        MirDB is open source software released under the <strong>MIT License</strong>.
+        Free to use, modify, and distribute.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- END SECTION: links -->
