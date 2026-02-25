@@ -9,7 +9,7 @@
  * 4. Mobile: Single column stack
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen, within } from '../../../test-utils'
 import FeaturesSection from '../../../../src/components/homepage/FeaturesSection'
 
