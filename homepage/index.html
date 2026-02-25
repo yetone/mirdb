@@ -142,12 +142,71 @@ description: A persistent key-value store implementing the Memcached protocol. C
 <!-- END SECTION: why-mirdb -->
 
 <!-- BEGIN SECTION: quickstart (Scenario 5) -->
-<section class="quickstart section" id="quickstart">
+<section class="quickstart section" id="quickstart" aria-labelledby="quickstart-title">
   <div class="container">
     <div class="section-header">
-      <h2>Quick Start</h2>
+      <h2 id="quickstart-title">Quick Start</h2>
+      <p class="section-subtitle">Get up and running with MirDB in three simple steps</p>
     </div>
-    <!-- Content to be added by Scenario 5 -->
+    <div class="steps">
+      <!-- Step 1: Install -->
+      <div class="step" data-step="1">
+        <div class="step__number" aria-hidden="true">1</div>
+        <div class="step__content">
+          <h3 class="step__title">Install MirDB</h3>
+          <p class="step__description">Build from source using Cargo, Rust's package manager:</p>
+          <div class="step__code">
+            <pre><code class="language-bash">cargo install mirdb-server</code></pre>
+          </div>
+          <p class="step__note">Or clone and build from the repository:</p>
+          <div class="step__code">
+            <pre><code class="language-bash">git clone https://github.com/penberg/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Start Server -->
+      <div class="step" data-step="2">
+        <div class="step__number" aria-hidden="true">2</div>
+        <div class="step__content">
+          <h3 class="step__title">Start the Server</h3>
+          <p class="step__description">Run MirDB with default configuration:</p>
+          <div class="step__code">
+            <pre><code class="language-bash">mirdb-server</code></pre>
+          </div>
+          <div class="step__config">
+            <p class="step__config-title">Default Configuration:</p>
+            <ul class="step__config-list">
+              <li><strong>Port:</strong> <code>12333</code></li>
+              <li><strong>Work Directory:</strong> <code>/tmp/mirdb</code></li>
+            </ul>
+          </div>
+          <p class="step__note">Or specify custom options:</p>
+          <div class="step__code">
+            <pre><code class="language-bash">mirdb-server --port 12333 --work-dir /tmp/mirdb</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Connect -->
+      <div class="step" data-step="3">
+        <div class="step__number" aria-hidden="true">3</div>
+        <div class="step__content">
+          <h3 class="step__title">Connect with a Client</h3>
+          <p class="step__description">Use any memcached-compatible client to connect. Here's an example using telnet:</p>
+          <div class="step__code">
+            <pre><code class="language-bash"># Connect to MirDB
+telnet localhost 12333
+
+# Or use memcat from libmemcached-tools
+memcat --servers=localhost:12333 mykey</code></pre>
+          </div>
+          <p class="step__note">MirDB is fully compatible with memcached clients in Python, Node.js, Ruby, and more.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 <!-- END SECTION: quickstart -->

@@ -258,7 +258,145 @@
 // ============================================
 // SECTION: Quick Start (Scenario 5)
 // ============================================
-// Placeholder for Scenario 5 styles
+
+.quickstart {
+  background-color: $color-background;
+  padding: $spacing-xxl 0;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: $color-text-light;
+  font-size: $font-size-lg;
+  margin-top: $spacing-sm;
+  margin-bottom: $spacing-xl;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.step {
+  display: flex;
+  gap: $spacing-lg;
+  background-color: $color-background-alt;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  border-left: 4px solid $color-primary;
+  transition: transform $transition-normal, box-shadow $transition-normal;
+
+  &:hover {
+    transform: translateX(4px);
+    box-shadow: $shadow-md;
+  }
+
+  @media (max-width: $breakpoint-tablet - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.step__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background-color: $color-primary;
+  color: $color-background;
+  font-size: $font-size-xl;
+  font-weight: 700;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.step__content {
+  flex: 1;
+}
+
+.step__title {
+  font-size: $font-size-xl;
+  font-weight: 600;
+  color: $color-secondary;
+  margin-bottom: $spacing-sm;
+}
+
+.step__description {
+  color: $color-text;
+  margin-bottom: $spacing-sm;
+  line-height: $line-height-base;
+}
+
+.step__code {
+  background-color: $color-code-bg;
+  border-radius: $border-radius-md;
+  overflow-x: auto;
+  margin-bottom: $spacing-sm;
+
+  pre {
+    margin: 0;
+    padding: $spacing-md;
+  }
+
+  code {
+    font-family: $font-family-mono;
+    font-size: $font-size-sm;
+    color: #f8f8f2;
+    line-height: 1.5;
+    white-space: pre;
+    display: block;
+  }
+}
+
+.step__note {
+  font-size: $font-size-sm;
+  color: $color-text-light;
+  margin-bottom: $spacing-sm;
+  font-style: italic;
+}
+
+.step__config {
+  background-color: rgba($color-primary, 0.08);
+  border-radius: $border-radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-sm;
+}
+
+.step__config-title {
+  font-weight: 600;
+  color: $color-secondary;
+  margin-bottom: $spacing-xs;
+  font-size: $font-size-sm;
+}
+
+.step__config-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs 0;
+    font-size: $font-size-sm;
+    color: $color-text;
+
+    code {
+      font-family: $font-family-mono;
+      background-color: $color-code-bg;
+      color: #f8f8f2;
+      padding: 2px $spacing-xs;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-sm;
+    }
+  }
+}
 
 // ============================================
 // SECTION: Comparison / Why MirDB (Scenario 6)
