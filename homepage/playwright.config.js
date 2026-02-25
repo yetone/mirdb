@@ -24,7 +24,7 @@ module.exports = defineConfig({
   webServer: {
     command: 'npx http-server _site -p 4000',
     url: 'http://localhost:4000',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 120 * 1000,
   },
 });

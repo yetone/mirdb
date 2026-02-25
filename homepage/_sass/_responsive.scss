@@ -352,15 +352,391 @@
   }
 }
 
-// Tablet styles (768px - 1023px) - Scenario 10
+// ============================================
+// SECTION: Tablet styles (768px - 1023px) - Scenario 10
+// ============================================
 @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop - 1) {
+  // Container adjustments for tablet
+  .container {
+    max-width: 100%;
+    padding: 0 $spacing-lg;
+  }
+
+  // Typography adjustments for tablet
+  h1 {
+    font-size: $font-size-hero * 0.85;
+  }
+
+  h2 {
+    font-size: $font-size-xxl;
+  }
+
+  // Grid system - 2 columns on tablet
+  .grid-2,
   .grid-3,
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  // Navigation - show full nav links on tablet (no hamburger)
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-md $spacing-lg;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    gap: $spacing-md;
+
+    li {
+      width: auto;
+      border-bottom: none;
+    }
+  }
+
+  .nav-link {
+    display: inline-flex;
+    padding: $spacing-xs $spacing-sm;
+    min-height: auto;
+    text-align: left;
+  }
+
+  // Hero section tablet adjustments
+  .hero {
+    padding: $spacing-xxl 0;
+  }
+
+  .hero__container {
+    padding: 0 $spacing-lg;
+  }
+
+  .hero__tagline {
+    font-size: $font-size-xxl * 1.2;
+    line-height: $line-height-heading;
+  }
+
+  .hero__description {
+    font-size: $font-size-lg;
+    max-width: 600px;
+  }
+
+  .hero__cta {
+    flex-direction: row;
+    justify-content: center;
+    gap: $spacing-md;
+  }
+
+  .btn {
+    width: auto;
+    min-width: 140px;
+  }
+
+  // Features section tablet - 2 column grid
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-lg;
+  }
+
+  .feature-card {
+    padding: $spacing-lg;
+  }
+
+  // Steps layout tablet
+  .steps {
+    gap: $spacing-lg;
+  }
+
+  .step {
+    flex-direction: row;
+    padding: $spacing-lg;
+  }
+
+  .step__number {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+
+  // Comparison table tablet
+  .comparison-table {
+    grid-template-columns: 1.2fr 1fr 1fr;
+  }
+
+  .comparison-header {
+    display: contents;
+  }
+
+  .comparison-row {
+    display: contents;
+  }
+
+  .comparison-cell--feature {
+    grid-column: auto;
+    background-color: $color-background-alt;
+    color: $color-text;
+  }
+
+  .comparison-feature-name {
+    color: $color-secondary;
+  }
+
+  .comparison-cell--mirdb::before,
+  .comparison-cell--memcached::before {
+    display: none;
+  }
+
+  // Links section tablet - 2 columns with centered last item
+  .links-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .link-card {
+    padding: $spacing-lg;
+  }
+
+  // Footer tablet
+  .footer-content {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .footer-links {
+    flex-direction: row;
+    gap: $spacing-xl;
+  }
+
+  // Code blocks tablet
+  .code-block__header {
+    padding: $spacing-sm $spacing-md;
+  }
+
+  .code-block__pre {
+    padding: $spacing-md;
+  }
 }
 
-// Desktop styles (1024px+) - Scenario 10
+// ============================================
+// SECTION: Desktop styles (1024px+) - Scenario 10
+// ============================================
 @media (min-width: $breakpoint-desktop) {
-  // Full layouts as designed
+  // Container max-width for desktop
+  .container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding;
+  }
+
+  // Navigation - full desktop navigation
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: $spacing-md $container-padding;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    gap: $spacing-lg;
+
+    li {
+      width: auto;
+      border-bottom: none;
+    }
+  }
+
+  .nav-link {
+    display: inline-flex;
+    padding: $spacing-xs $spacing-sm;
+    min-height: auto;
+    text-align: left;
+  }
+
+  // Hero section full desktop layout
+  .hero {
+    padding: $spacing-xxl * 1.5 0;
+  }
+
+  .hero__container {
+    max-width: $container-max-width;
+    padding: 0 $container-padding;
+  }
+
+  .hero__tagline {
+    font-size: $font-size-hero;
+    line-height: $line-height-heading;
+  }
+
+  .hero__description {
+    font-size: $font-size-lg;
+    max-width: 700px;
+  }
+
+  .hero__cta {
+    flex-direction: row;
+    justify-content: center;
+    gap: $spacing-md;
+  }
+
+  .btn {
+    width: auto;
+    min-width: 160px;
+  }
+
+  // Features section desktop - 3 column grid
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-lg;
+    max-width: $container-max-width;
+  }
+
+  .feature-card {
+    padding: $spacing-lg;
+  }
+
+  // Steps layout desktop
+  .steps {
+    max-width: 800px;
+    gap: $spacing-xl;
+  }
+
+  .step {
+    flex-direction: row;
+    padding: $spacing-lg;
+  }
+
+  .step__number {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+
+  // Comparison table desktop - full 3 column layout
+  .comparison-table {
+    grid-template-columns: 1.2fr 1fr 1fr;
+    max-width: 900px;
+  }
+
+  .comparison-header {
+    display: contents;
+  }
+
+  .comparison-row {
+    display: contents;
+  }
+
+  .comparison-cell {
+    padding: $spacing-lg;
+  }
+
+  // Links section desktop - 3 columns
+  .links-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: $container-max-width;
+  }
+
+  .link-card {
+    padding: $spacing-lg;
+  }
+
+  // Footer desktop
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .footer-links {
+    flex-direction: row;
+    gap: $spacing-xxl;
+  }
+
+  // Code example section desktop
+  .code-example__content {
+    max-width: 800px;
+  }
+
+  .code-block__header {
+    padding: $spacing-sm $spacing-md;
+  }
+
+  .code-block__pre {
+    padding: $spacing-md $spacing-lg;
+  }
+
+  // What-is section desktop
+  .what-is .container {
+    max-width: 900px;
+  }
+
+  .what-is__intro {
+    font-size: $font-size-xl;
+  }
+
+  .what-is__content {
+    font-size: $font-size-lg;
+  }
+
+  // Section headers desktop
+  .section-header {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+  }
+
+  .section-subtitle {
+    font-size: $font-size-lg;
+  }
+}
+
+// ============================================
+// SECTION: Wide desktop styles (1280px+) - Scenario 10
+// ============================================
+@media (min-width: $breakpoint-wide) {
+  // Extra spacing for wide screens
+  .container {
+    max-width: $container-max-width;
+  }
+
+  .hero {
+    padding: $spacing-xxl * 2 0;
+  }
+
+  .hero__tagline {
+    font-size: $font-size-hero * 1.1;
+  }
+
+  // Features can stay 3 columns but with more gap
+  .features-grid {
+    gap: $spacing-xl;
+  }
+
+  .feature-card {
+    padding: $spacing-xl;
+  }
+
+  // Links grid with more spacing
+  .links-grid {
+    gap: $spacing-xl;
+  }
 }
