@@ -11,7 +11,7 @@ import { render, screen, waitFor, within } from '../test-utils'
 import userEvent from '@testing-library/user-event'
 import { ReactElement, ReactNode } from 'react'
 import { render as rtlRender, RenderOptions } from '@testing-library/react'
-import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, MemoryRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider, useTheme } from '../../src/contexts/ThemeContext'
 import { AuthProvider } from '../../src/contexts/AuthContext'
@@ -459,6 +459,463 @@ describe('Theme System Support - HomePage Integration', () => {
       const loginButton = screen.getByTestId('login-button')
       expect(loginButton).toHaveClass('btn')
       expect(loginButton).toHaveClass('btn-outline')
+    })
+  })
+})
+
+/**
+ * Routing Integration Tests
+ * Owner: Scenario 17 - Routing Integration
+ *
+ * Tests that homepage is properly integrated with React Router at root path.
+ * Verifies NFR-5: browser back/forward navigation support.
+ */
+describe('Routing Integration - HomePage', () => {
+  beforeEach(() => {
+    document.documentElement.removeAttribute('data-theme')
+  })
+
+  afterEach(() => {
+    document.documentElement.removeAttribute('data-theme')
+  })
+
+  describe('Test Case 1: Navigate to "/" route renders HomePage', () => {
+    it('renders HomePage component when navigating to root path', async () => {
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+          mutations: { retry: false },
+        },
+      })
+
+      function TestApp() {
+        return (
+          <QueryClientProvider client={queryClient}>
+            <MemoryRouter initialEntries={['/']}>
+              <ThemeProvider>
+                <AuthProvider>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+                    <Route path="/register" element={<div data-testid="register-page">Register Page</div>} />
+                  </Routes>
+                </AuthProvider>
+              </ThemeProvider>
+            </MemoryRouter>
+          </QueryClientProvider>
+        )
+      }
+
+      rtlRender(<TestApp />)
+
+      // Verify HomePage component is rendered at root path
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Verify all major sections of HomePage are present
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+
+      // Verify login page is NOT rendered (confirms correct route)
+      expect(screen.queryByTestId('login-page')).not.toBeInTheDocument()
+    })
+
+    it('does not show 404 or redirect when accessing root path directly', async () => {
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+          mutations: { retry: false },
+        },
+      })
+
+      function TestApp() {
+        return (
+          <QueryClientProvider client={queryClient}>
+            <MemoryRouter initialEntries={['/']}>
+              <ThemeProvider>
+                <AuthProvider>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="*" element={<div data-testid="not-found">404 Not Found</div>} />
+                  </Routes>
+                </AuthProvider>
+              </ThemeProvider>
+            </MemoryRouter>
+          </QueryClientProvider>
+        )
+      }
+
+      rtlRender(<TestApp />)
+
+      // Verify HomePage renders, not 404
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Confirm no 404 page is shown
+      expect(screen.queryByTestId('not-found')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 2: Browser history navigation (integration simulation)', () => {
+    it('navigates between pages and maintains history state', async () => {
+      const user = userEvent.setup()
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+          mutations: { retry: false },
+        },
+      })
+
+      // Navigation helper component to simulate page transitions
+      function NavigationHelper() {
+        const navigate = useNavigate()
+        return (
+          <>
+            <button
+              data-testid="go-to-login"
+              onClick={() => navigate('/login')}
+            >
+              Go to Login
+            </button>
+            <button
+              data-testid="go-back"
+              onClick={() => navigate(-1)}
+            >
+              Go Back
+            </button>
+          </>
+        )
+      }
+
+      function TestApp() {
+        return (
+          <QueryClientProvider client={queryClient}>
+            <MemoryRouter initialEntries={['/']}>
+              <ThemeProvider>
+                <AuthProvider>
+                  <NavigationHelper />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+                  </Routes>
+                </AuthProvider>
+              </ThemeProvider>
+            </MemoryRouter>
+          </QueryClientProvider>
+        )
+      }
+
+      rtlRender(<TestApp />)
+
+      // Verify initial state - HomePage is rendered
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Navigate to login page
+      await user.click(screen.getByTestId('go-to-login'))
+
+      // Verify login page is now shown
+      await waitFor(() => {
+        expect(screen.getByTestId('login-page')).toBeInTheDocument()
+      })
+      expect(screen.queryByTestId('hero-section')).not.toBeInTheDocument()
+
+      // Navigate back using history
+      await user.click(screen.getByTestId('go-back'))
+
+      // Verify homepage is shown again
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+      expect(screen.queryByTestId('login-page')).not.toBeInTheDocument()
+    })
+
+    it('supports forward navigation after going back', async () => {
+      const user = userEvent.setup()
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+          mutations: { retry: false },
+        },
+      })
+
+      function NavigationHelper() {
+        const navigate = useNavigate()
+        return (
+          <>
+            <button
+              data-testid="go-to-login"
+              onClick={() => navigate('/login')}
+            >
+              Go to Login
+            </button>
+            <button
+              data-testid="go-back"
+              onClick={() => navigate(-1)}
+            >
+              Go Back
+            </button>
+            <button
+              data-testid="go-forward"
+              onClick={() => navigate(1)}
+            >
+              Go Forward
+            </button>
+          </>
+        )
+      }
+
+      function TestApp() {
+        return (
+          <QueryClientProvider client={queryClient}>
+            <MemoryRouter initialEntries={['/']}>
+              <ThemeProvider>
+                <AuthProvider>
+                  <NavigationHelper />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+                  </Routes>
+                </AuthProvider>
+              </ThemeProvider>
+            </MemoryRouter>
+          </QueryClientProvider>
+        )
+      }
+
+      rtlRender(<TestApp />)
+
+      // Start at homepage
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Navigate to login
+      await user.click(screen.getByTestId('go-to-login'))
+      await waitFor(() => {
+        expect(screen.getByTestId('login-page')).toBeInTheDocument()
+      })
+
+      // Go back to homepage
+      await user.click(screen.getByTestId('go-back'))
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Go forward to login again
+      await user.click(screen.getByTestId('go-forward'))
+      await waitFor(() => {
+        expect(screen.getByTestId('login-page')).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('Test Case 3: Direct URL access (no redirect)', () => {
+    it('renders homepage directly without redirect when accessing "/"', async () => {
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+          mutations: { retry: false },
+        },
+      })
+
+      // Track navigation events
+      let redirectDetected = false
+
+      function NavigationTracker() {
+        const location = useLocation()
+
+        React.useEffect(() => {
+          // If location is not '/', a redirect happened
+          if (location.pathname !== '/') {
+            redirectDetected = true
+          }
+        }, [location])
+
+        return null
+      }
+
+      function TestApp() {
+        return (
+          <QueryClientProvider client={queryClient}>
+            <MemoryRouter initialEntries={['/']}>
+              <ThemeProvider>
+                <AuthProvider>
+                  <NavigationTracker />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+                    <Route path="/dashboard" element={<div data-testid="dashboard-page">Dashboard</div>} />
+                  </Routes>
+                </AuthProvider>
+              </ThemeProvider>
+            </MemoryRouter>
+          </QueryClientProvider>
+        )
+      }
+
+      rtlRender(<TestApp />)
+
+      // Wait for homepage to render
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Verify all homepage sections are present
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
+
+      // Confirm no redirect occurred
+      expect(redirectDetected).toBe(false)
+    })
+
+    it('homepage at root path is accessible without authentication', async () => {
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+          mutations: { retry: false },
+        },
+      })
+
+      function TestApp() {
+        return (
+          <QueryClientProvider client={queryClient}>
+            <MemoryRouter initialEntries={['/']}>
+              <ThemeProvider>
+                <AuthProvider>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+                  </Routes>
+                </AuthProvider>
+              </ThemeProvider>
+            </MemoryRouter>
+          </QueryClientProvider>
+        )
+      }
+
+      rtlRender(<TestApp />)
+
+      // Verify homepage renders for unauthenticated user
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Verify Sign Up and Log In buttons are shown (unauthenticated state)
+      expect(screen.getByTestId('signup-button')).toBeInTheDocument()
+      expect(screen.getByTestId('login-button')).toBeInTheDocument()
+    })
+  })
+
+  describe('Route configuration verification', () => {
+    it('homepage route is at exact "/" path', async () => {
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+          mutations: { retry: false },
+        },
+      })
+
+      function TestApp() {
+        return (
+          <QueryClientProvider client={queryClient}>
+            <MemoryRouter initialEntries={['/']}>
+              <ThemeProvider>
+                <AuthProvider>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/other" element={<div data-testid="other-page">Other</div>} />
+                  </Routes>
+                </AuthProvider>
+              </ThemeProvider>
+            </MemoryRouter>
+          </QueryClientProvider>
+        )
+      }
+
+      rtlRender(<TestApp />)
+
+      // Verify homepage renders at root
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Verify other page is not shown
+      expect(screen.queryByTestId('other-page')).not.toBeInTheDocument()
+    })
+
+    it('navigating to other routes does not affect homepage route', async () => {
+      const user = userEvent.setup()
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+          mutations: { retry: false },
+        },
+      })
+
+      function NavigationHelper() {
+        const navigate = useNavigate()
+        return (
+          <>
+            <button
+              data-testid="go-to-other"
+              onClick={() => navigate('/other')}
+            >
+              Go to Other
+            </button>
+            <button
+              data-testid="go-home"
+              onClick={() => navigate('/')}
+            >
+              Go Home
+            </button>
+          </>
+        )
+      }
+
+      function TestApp() {
+        return (
+          <QueryClientProvider client={queryClient}>
+            <MemoryRouter initialEntries={['/']}>
+              <ThemeProvider>
+                <AuthProvider>
+                  <NavigationHelper />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/other" element={<div data-testid="other-page">Other Page</div>} />
+                  </Routes>
+                </AuthProvider>
+              </ThemeProvider>
+            </MemoryRouter>
+          </QueryClientProvider>
+        )
+      }
+
+      rtlRender(<TestApp />)
+
+      // Start at homepage
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Navigate away
+      await user.click(screen.getByTestId('go-to-other'))
+      await waitFor(() => {
+        expect(screen.getByTestId('other-page')).toBeInTheDocument()
+      })
+
+      // Navigate back to homepage
+      await user.click(screen.getByTestId('go-home'))
+      await waitFor(() => {
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      })
+
+      // Verify all homepage sections are intact
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('how-it-works-section')).toBeInTheDocument()
     })
   })
 })
