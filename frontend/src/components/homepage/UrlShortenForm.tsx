@@ -44,7 +44,7 @@ export function UrlShortenForm({ onSuccess }: UrlShortenFormProps) {
 
   const validateUrl = (value: string): string | null => {
     if (!value.trim()) {
-      return 'Please enter a URL'
+      return 'URL is required'
     }
     if (!isValidUrl(value)) {
       return 'Please enter a valid URL'

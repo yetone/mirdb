@@ -1,16 +1,20 @@
 /**
  * Unit Tests for UrlShortenForm Component
  * Owner: Scenario 2 - URL Shortening Form Functionality
+ * Also: Scenario 14 - Form Validation Error Handling
  *
  * Tests:
  * - URL validation (empty, invalid format)
  * - Form submission
  * - Error display
  * - Copy to clipboard
+ * - Form validation error handling (Scenario 14)
  */
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '../../../test-utils'
 import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
+import { server } from '../../../mocks/server'
 import { UrlShortenForm } from '../../../../src/components/homepage/UrlShortenForm'
 
 describe('UrlShortenForm', () => {
@@ -21,7 +25,7 @@ describe('UrlShortenForm', () => {
       const submitButton = screen.getByRole('button', { name: /shorten url/i })
       await userEvent.click(submitButton)
 
-      expect(screen.getByRole('alert')).toHaveTextContent('Please enter a URL')
+      expect(screen.getByRole('alert')).toHaveTextContent('URL is required')
     })
 
     it('displays validation error for invalid URL format', async () => {
@@ -240,6 +244,143 @@ describe('UrlShortenForm', () => {
       await userEvent.click(submitButton)
 
       expect(input).toHaveAttribute('aria-invalid', 'true')
+    })
+  })
+
+  /**
+   * Form Validation Error Handling Tests
+   * Owner: Scenario 14 - Form Validation Error Handling
+   *
+   * Test cases:
+   * 1. Submit form with empty URL field -> "URL is required" displayed inline
+   * 2. Submit form with invalid URL format -> "Please enter a valid URL" displayed
+   * 3. Enter invalid URL then correct it -> Error clears when valid URL entered
+   * 4. API returns error during URL shortening -> Error from API displayed gracefully
+   */
+  describe('Form Validation Error Handling (Scenario 14)', () => {
+    it('displays "URL is required" error when submitting empty form', async () => {
+      render(<UrlShortenForm />)
+
+      // Submit form without entering a URL
+      const submitButton = screen.getByRole('button', { name: /shorten url/i })
+      await userEvent.click(submitButton)
+
+      // Error message should be displayed inline
+      const errorMessage = screen.getByRole('alert')
+      expect(errorMessage).toHaveTextContent('URL is required')
+      expect(errorMessage).toBeVisible()
+    })
+
+    it('displays "Please enter a valid URL" for invalid URL format', async () => {
+      render(<UrlShortenForm />)
+
+      // Enter an invalid URL
+      const input = screen.getByRole('textbox', { name: /url input/i })
+      await userEvent.type(input, 'invalid-url-format')
+
+      // Submit the form
+      const submitButton = screen.getByRole('button', { name: /shorten url/i })
+      await userEvent.click(submitButton)
+
+      // Error message should indicate invalid format
+      const errorMessage = screen.getByRole('alert')
+      expect(errorMessage).toHaveTextContent('Please enter a valid URL')
+      expect(errorMessage).toBeVisible()
+    })
+
+    it('clears error message when valid URL is entered after invalid input', async () => {
+      render(<UrlShortenForm />)
+
+      // First, enter an invalid URL and submit
+      const input = screen.getByRole('textbox', { name: /url input/i })
+      await userEvent.type(input, 'invalid')
+
+      const submitButton = screen.getByRole('button', { name: /shorten url/i })
+      await userEvent.click(submitButton)
+
+      // Verify error is shown
+      expect(screen.getByRole('alert')).toHaveTextContent('Please enter a valid URL')
+
+      // Clear input and enter a valid URL
+      await userEvent.clear(input)
+      await userEvent.type(input, 'https://example.com/valid-url')
+
+      // Error should be cleared
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    })
+
+    it('displays API error message gracefully when URL shortening fails', async () => {
+      // Mock API to return an error
+      server.use(
+        http.post('/api/urls/', () => {
+          return HttpResponse.json(
+            { detail: 'Service temporarily unavailable' },
+            { status: 503 }
+          )
+        })
+      )
+
+      render(<UrlShortenForm />)
+
+      // Enter a valid URL
+      const input = screen.getByRole('textbox', { name: /url input/i })
+      await userEvent.type(input, 'https://example.com/valid-url')
+
+      // Submit the form
+      const submitButton = screen.getByRole('button', { name: /shorten url/i })
+      await userEvent.click(submitButton)
+
+      // Error message should be displayed gracefully
+      await waitFor(() => {
+        const errorMessage = screen.getByRole('alert')
+        expect(errorMessage).toHaveTextContent('Failed to shorten URL')
+        expect(errorMessage).toBeVisible()
+      })
+    })
+
+    it('shows error near the input field for accessibility', async () => {
+      render(<UrlShortenForm />)
+
+      // Submit empty form
+      const submitButton = screen.getByRole('button', { name: /shorten url/i })
+      await userEvent.click(submitButton)
+
+      // Error should be associated with the input via aria-describedby
+      const input = screen.getByRole('textbox', { name: /url input/i })
+      const errorElement = screen.getByRole('alert')
+
+      expect(input).toHaveAttribute('aria-invalid', 'true')
+      expect(input).toHaveAttribute('aria-describedby', 'url-error')
+      expect(errorElement).toHaveAttribute('id', 'url-error')
+    })
+
+    it('applies error styling to input when validation fails', async () => {
+      render(<UrlShortenForm />)
+
+      // Submit empty form
+      const submitButton = screen.getByRole('button', { name: /shorten url/i })
+      await userEvent.click(submitButton)
+
+      // Input should have error class
+      const input = screen.getByRole('textbox', { name: /url input/i })
+      expect(input).toHaveClass('input-error')
+    })
+
+    it('removes error styling when user starts correcting input', async () => {
+      render(<UrlShortenForm />)
+
+      // Submit empty form to trigger error
+      const submitButton = screen.getByRole('button', { name: /shorten url/i })
+      await userEvent.click(submitButton)
+
+      const input = screen.getByRole('textbox', { name: /url input/i })
+      expect(input).toHaveClass('input-error')
+
+      // Start typing to correct the input
+      await userEvent.type(input, 'h')
+
+      // Error styling should be removed
+      expect(input).not.toHaveClass('input-error')
     })
   })
 })
