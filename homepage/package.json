@@ -12,6 +12,7 @@
     "@playwright/test": "^1.40.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "linkedom": "^0.18.12",
     "sass": "^1.97.3"
   }
 }
