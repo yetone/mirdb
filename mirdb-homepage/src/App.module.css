@@ -1,11 +1,15 @@
 .app {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .main {
+  flex: 1;
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--spacing-lg);
+  width: 100%;
 }
 
 .section {

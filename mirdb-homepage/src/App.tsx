@@ -3,6 +3,7 @@ import { Features } from './components/Features';
 import { ProjectStatus } from './components/ProjectStatus';
 import { TechHighlights } from './components/TechHighlights';
 import { ThemeToggle } from './components/ThemeToggle';
+import { Footer } from './components/Footer';
 import styles from './App.module.css';
 
 function App() {
@@ -19,11 +20,8 @@ function App() {
         </section>
         <ProjectStatus />
         <TechHighlights />
-        <section id="resources" className={styles.section}>
-          <h2>Resources</h2>
-          <p>Resources section placeholder.</p>
-        </section>
       </main>
+      <Footer />
     </div>
   );
 }
