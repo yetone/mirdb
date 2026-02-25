@@ -8,6 +8,7 @@
  * - Primary CTA (Shorten URL) and Secondary CTAs (Sign Up Free, Log In)
  */
 
+import { Link } from 'react-router-dom'
 import { UrlShortenForm } from './UrlShortenForm'
 
 export default function HeroSection() {
@@ -39,20 +40,20 @@ export default function HeroSection() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 flex-wrap justify-center mt-4">
-          <a
-            href="/register"
+          <Link
+            to="/register"
             className="btn btn-secondary btn-lg"
             data-testid="signup-button"
           >
             Sign Up Free
-          </a>
-          <a
-            href="/login"
+          </Link>
+          <Link
+            to="/login"
             className="btn btn-outline btn-lg"
             data-testid="login-button"
           >
             Log In
-          </a>
+          </Link>
         </div>
       </div>
     </section>
