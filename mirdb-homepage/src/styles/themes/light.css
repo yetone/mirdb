@@ -1,0 +1,10 @@
+:root,
+[data-theme='light'] {
+  --bg-color: var(--color-bg-light);
+  --bg-secondary: #f5f5f5;
+  --text-color: var(--color-text-light);
+  --text-secondary: #666666;
+  --border-color: #e0e0e0;
+  --card-bg: #ffffff;
+  --card-shadow: var(--shadow-md);
+}

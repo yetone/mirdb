@@ -1,0 +1,9 @@
+[data-theme='dark'] {
+  --bg-color: var(--color-bg-dark);
+  --bg-secondary: #16213e;
+  --text-color: var(--color-text-dark);
+  --text-secondary: #a0a0a0;
+  --border-color: #2d2d44;
+  --card-bg: #1e1e32;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
