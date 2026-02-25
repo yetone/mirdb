@@ -21,6 +21,6 @@ export default defineConfig({
     command: 'npx vite --port 5174',
     url: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:5174',
     reuseExistingServer: true,
-    timeout: 120000,
+    timeout: 180000,
   },
 })

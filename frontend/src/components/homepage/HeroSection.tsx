@@ -42,8 +42,9 @@ export default function HeroSection() {
         <div className="flex flex-col sm:flex-row gap-4 flex-wrap justify-center mt-4">
           <Link
             to="/register"
-            className="btn btn-primary btn-lg"
+            className="btn btn-lg bg-[#9d0083] hover:bg-[#800069] text-white border-[#9d0083]"
             data-testid="signup-button"
+            aria-label="Sign up for free account"
           >
             Sign Up Free
           </Link>

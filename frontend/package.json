@@ -31,6 +31,7 @@
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.17",
+    "axe-core": "^4.11.1",
     "daisyui": "^4.7.2",
     "jsdom": "^24.0.0",
     "msw": "^2.12.10",
