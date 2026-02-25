@@ -1,0 +1,280 @@
+/**
+ * Header Component Styles
+ * Owner: Scenario 4 - Navigation and Header
+ *
+ * Features:
+ * - Sticky positioning at top of viewport
+ * - Responsive layout with mobile hamburger menu
+ * - Smooth transitions for interactions
+ */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--color-bg-light);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+[data-theme='dark'] .header {
+  background-color: var(--color-bg-dark);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-lg);
+  gap: var(--spacing-lg);
+}
+
+/* Logo Styles */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  color: var(--color-text-light);
+  font-weight: 700;
+  font-size: 1.25rem;
+  font-family: var(--font-sans);
+  transition: color var(--transition-fast);
+}
+
+[data-theme='dark'] .logo {
+  color: var(--color-text-dark);
+}
+
+.logo:hover {
+  color: var(--color-rust-orange);
+}
+
+.logoImage {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+}
+
+.logoText {
+  font-weight: 700;
+}
+
+/* Navigation Styles */
+.nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.navList {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem {
+  margin: 0;
+}
+
+.navLink {
+  display: block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-decoration: none;
+  color: var(--color-text-light);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+[data-theme='dark'] .navLink {
+  color: var(--color-text-dark);
+}
+
+.navLink:hover,
+.navLink:focus {
+  color: var(--color-rust-orange);
+  outline: none;
+}
+
+.navLink:focus-visible {
+  outline: 2px solid var(--color-rust-orange);
+  outline-offset: 2px;
+}
+
+/* Actions Section */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.themeToggleSlot {
+  display: flex;
+  align-items: center;
+}
+
+.githubLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-light);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+[data-theme='dark'] .githubLink {
+  color: var(--color-text-dark);
+}
+
+.githubLink:hover,
+.githubLink:focus {
+  color: var(--color-rust-orange);
+  background-color: rgba(183, 65, 14, 0.1);
+}
+
+.githubLink:focus-visible {
+  outline: 2px solid var(--color-rust-orange);
+  outline-offset: 2px;
+}
+
+.githubIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Mobile Menu Button */
+.mobileMenuButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.mobileMenuButton:hover {
+  background-color: rgba(183, 65, 14, 0.1);
+}
+
+.mobileMenuButton:focus-visible {
+  outline: 2px solid var(--color-rust-orange);
+  outline-offset: 2px;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 20px;
+  height: 14px;
+}
+
+.hamburgerLine {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-text-light);
+  border-radius: 1px;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+[data-theme='dark'] .hamburgerLine {
+  background-color: var(--color-text-dark);
+}
+
+/* Hamburger Animation */
+.hamburgerOpen .hamburgerLine:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburgerOpen .hamburgerLine:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburgerOpen .hamburgerLine:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .mobileMenuButton {
+    display: flex;
+  }
+
+  .nav {
+    position: fixed;
+    top: 57px; /* Header height */
+    left: 0;
+    right: 0;
+    background-color: var(--color-bg-light);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height var(--transition-normal), opacity var(--transition-normal), visibility var(--transition-normal);
+  }
+
+  [data-theme='dark'] .nav {
+    background-color: var(--color-bg-dark);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .navOpen {
+    max-height: 300px;
+    opacity: 1;
+    visibility: visible;
+    padding: var(--spacing-md);
+  }
+
+  .navList {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .navLink {
+    padding: var(--spacing-md);
+    text-align: center;
+    border-radius: var(--radius-sm);
+  }
+
+  .navLink:hover {
+    background-color: rgba(183, 65, 14, 0.1);
+  }
+
+  .logoText {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .nav {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}

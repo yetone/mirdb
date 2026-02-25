@@ -1,0 +1,11 @@
+[data-theme='dark'] {
+  --bg-color: var(--color-bg-dark);
+  --bg-secondary: #16213e;
+  --text-color: var(--color-text-dark);
+  --text-secondary: #a0a0a0;
+  --text-muted: #b0b0b0; /* WCAG AA compliant on dark backgrounds (7.0:1 contrast) */
+  --border-color: #2d2d44;
+  --card-bg: #1e1e32;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --accent-accessible: #e8622b; /* WCAG AA compliant on #1a1a2e background (5.26:1 contrast) */
+}

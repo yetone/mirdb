@@ -1,0 +1,200 @@
+/**
+ * Footer Component Styles
+ * Owner: Scenario 8 - Footer and Resources
+ *
+ * Features:
+ * - Responsive layout for mobile/tablet/desktop
+ * - Dark/light theme support
+ * - Clear visual hierarchy
+ */
+
+.footer {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-dark);
+  padding: var(--spacing-xl) 0 var(--spacing-lg);
+  margin-top: auto;
+}
+
+[data-theme='light'] .footer {
+  background-color: #f5f5f5;
+  color: var(--color-text-light);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Links Section */
+.links {
+  flex: 1;
+  min-width: 200px;
+}
+
+.linksTitle {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-md);
+  color: var(--accent-accessible, var(--color-rust-orange));
+}
+
+.linksList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-dark);
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  transition: color var(--transition-fast);
+}
+
+[data-theme='light'] .link {
+  color: var(--color-text-light);
+}
+
+.link:hover,
+.link:focus {
+  color: var(--color-rust-orange);
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--color-rust-orange);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.externalIcon {
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* Info Section */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.license {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+}
+
+.licenseLabel {
+  opacity: 0.7;
+}
+
+.licenseLink {
+  color: var(--accent-accessible, var(--color-rust-orange));
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.licenseLink:hover,
+.licenseLink:focus {
+  text-decoration: underline;
+}
+
+.licenseLink:focus-visible {
+  outline: 2px solid var(--color-rust-orange);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Bottom Section */
+.bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+[data-theme='light'] .bottom {
+  border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+.copyright {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.tagline {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  margin: 0;
+  color: var(--text-muted, inherit);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .footer {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .content {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .links {
+    width: 100%;
+  }
+
+  .linksList {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+
+  .tagline {
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .content {
+    gap: var(--spacing-lg);
+  }
+}
