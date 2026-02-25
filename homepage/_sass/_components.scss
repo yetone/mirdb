@@ -108,7 +108,72 @@
 // ============================================
 // SECTION: Features (Scenario 3)
 // ============================================
-// Placeholder for Scenario 3 styles
+
+.features {
+  background-color: $color-background-alt;
+  padding: $spacing-xxl 0;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-lg;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $container-padding;
+
+  @media (max-width: $breakpoint-tablet - 1) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop - 1) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.feature-card {
+  background-color: $color-background;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  text-align: center;
+  box-shadow: $shadow-sm;
+  transition: transform $transition-normal, box-shadow $transition-normal;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba($color-primary, 0.1);
+  border-radius: 50%;
+  color: $color-primary;
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.feature-title {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: $color-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.feature-description {
+  font-size: $font-size-sm;
+  color: $color-text-light;
+  line-height: $line-height-base;
+}
 
 // ============================================
 // SECTION: Code Example (Scenario 4)

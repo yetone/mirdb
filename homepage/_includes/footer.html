@@ -2,10 +2,14 @@
   Footer Include
   Owner: Scenario 8 - Navigation and Footer
 
-  Basic structure provided. Full footer to be implemented by Scenario 8.
+  Expected elements:
+  - Copyright notice with dynamic year
+  - License information (MIT/Apache)
+  - Links to GitHub, docs.rs
+  - Social links if applicable
 -->
-<footer class="site-footer" role="contentinfo">
-  <div class="container">
-    <p>&copy; {{ 'now' | date: "%Y" }} MirDB. MIT License.</p>
+<footer class="site-footer">
+  <div class="container text-center">
+    <p>&copy; {{ site.time | date: '%Y' }} MirDB. MIT License.</p>
   </div>
 </footer>

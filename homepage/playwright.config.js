@@ -2,7 +2,7 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 /**
- * Playwright configuration for MirDB Homepage E2E tests
+ * Playwright configuration for MirDB homepage E2E tests.
  */
 module.exports = defineConfig({
   testDir: './tests/e2e',
@@ -14,7 +14,6 @@ module.exports = defineConfig({
   use: {
     baseURL: 'http://localhost:4000',
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
   },
   projects: [
     {
@@ -23,7 +22,7 @@ module.exports = defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run serve',
+    command: 'npx http-server _site -p 4000',
     url: 'http://localhost:4000',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,

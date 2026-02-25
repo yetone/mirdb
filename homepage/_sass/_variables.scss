@@ -1,29 +1,28 @@
 /**
  * SCSS Variables
- * Owner: First Builder
- *
  * Shared design tokens for the MirDB homepage.
  */
 
 // Colors - Rust-inspired palette
-$color-primary: #CE422B;       // Rust orange
-$color-primary-dark: #A83420;  // Darker rust
-$color-secondary: #1a1a1a;     // Near black
-$color-text: #333333;          // Dark gray for body text
-$color-text-light: #666666;    // Lighter text
-$color-background: #ffffff;    // White background
-$color-background-alt: #f8f9fa; // Light gray for sections
-$color-border: #e0e0e0;        // Border color
-$color-code-bg: #2d2d2d;       // Dark background for code blocks
+$color-primary: #CE422B;
+$color-primary-dark: #A8341F;
+$color-primary-light: #E85A43;
+$color-secondary: #1a1a1a;
+$color-text: #333333;
+$color-text-light: #666666;
+$color-background: #ffffff;
+$color-background-alt: #f8f9fa;
+$color-border: #e0e0e0;
+$color-code-bg: #2d2d2d;
 
-// Spacing
+// Spacing (8px grid)
 $spacing-unit: 8px;
-$spacing-xs: $spacing-unit * 1;   // 8px
-$spacing-sm: $spacing-unit * 2;   // 16px
-$spacing-md: $spacing-unit * 3;   // 24px
-$spacing-lg: $spacing-unit * 4;   // 32px
-$spacing-xl: $spacing-unit * 6;   // 48px
-$spacing-xxl: $spacing-unit * 8;  // 64px
+$spacing-xs: $spacing-unit;
+$spacing-sm: $spacing-unit * 2;
+$spacing-md: $spacing-unit * 3;
+$spacing-lg: $spacing-unit * 4;
+$spacing-xl: $spacing-unit * 6;
+$spacing-xxl: $spacing-unit * 8;
 
 // Breakpoints
 $breakpoint-mobile: 320px;
@@ -32,34 +31,34 @@ $breakpoint-desktop: 1024px;
 $breakpoint-wide: 1280px;
 
 // Typography
-$font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-$font-family-mono: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", "Droid Sans Mono", "Source Code Pro", monospace;
+$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+$font-family-mono: 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', Consolas, monospace;
 
 $font-size-base: 16px;
 $font-size-sm: 14px;
 $font-size-lg: 18px;
 $font-size-xl: 24px;
-$font-size-xxl: 32px;
+$font-size-xxl: 36px;
 $font-size-hero: 48px;
 
 $line-height-base: 1.6;
-$line-height-heading: 1.2;
+$line-height-tight: 1.3;
 
-// Container
-$container-max-width: 1200px;
-$container-padding: $spacing-md;
+// Shadows
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
 
 // Border radius
 $border-radius-sm: 4px;
 $border-radius-md: 8px;
 $border-radius-lg: 12px;
 
-// Shadows
-$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
-$shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
-
 // Transitions
-$transition-fast: 150ms ease;
-$transition-normal: 250ms ease;
-$transition-slow: 400ms ease;
+$transition-fast: 0.15s ease;
+$transition-base: 0.25s ease;
+$transition-slow: 0.4s ease;
+
+// Container
+$container-max-width: 1200px;
+$container-padding: $spacing-md;

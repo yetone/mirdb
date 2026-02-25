@@ -6,17 +6,40 @@
  * - Mobile: max-width: 767px
  * - Tablet: min-width: 768px and max-width: 1023px
  * - Desktop: min-width: 1024px
- *
- * Mobile-specific (Scenario 9):
- * - Hamburger menu
- * - Single column layouts
- * - Touch-friendly spacing
- *
- * Tablet/Desktop (Scenario 10):
- * - Multi-column grids
- * - Full navigation
- * - Expanded layouts
  */
 
-// Placeholder for responsive styles
-// To be implemented by Scenario 9 and 10
+@import 'variables';
+
+// Mobile styles (max-width: 767px) - Scenario 9
+@media (max-width: $breakpoint-tablet - 1) {
+  h1 {
+    font-size: $font-size-xxl;
+  }
+
+  h2 {
+    font-size: $font-size-xl;
+  }
+
+  .section {
+    padding: $spacing-xl 0;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Tablet styles (768px - 1023px) - Scenario 10
+@media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop - 1) {
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+// Desktop styles (1024px+) - Scenario 10
+@media (min-width: $breakpoint-desktop) {
+  // Full layouts as designed
+}

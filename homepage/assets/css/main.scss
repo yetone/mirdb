@@ -1,11 +1,9 @@
 ---
 # Main SCSS entry point
-# This front matter tells Jekyll to process this file
 ---
 
-// Import all partials
-@import "variables";
-@import "base";
-@import "layout";
-@import "components";
-@import "responsive";
+@import 'variables';
+@import 'base';
+@import 'layout';
+@import 'components';
+@import 'responsive';

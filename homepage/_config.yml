@@ -1,32 +1,14 @@
 # Jekyll Configuration for MirDB Homepage
-#
-# This file is created by the first scenario builder and
-# contains site-wide configuration for Jekyll.
-
-title: MirDB - Persistent Key-Value Store with Memcached Protocol
-description: A persistent key-value store implementing the Memcached protocol. Compatible with memcached clients, with disk persistence for durability.
+title: MirDB
+description: A persistent key-value store with Memcached protocol compatibility
 baseurl: ""
 url: ""
 
 # Build settings
 markdown: kramdown
 sass:
-  sass_dir: _sass
   style: compressed
-
-# Plugins
-plugins:
-  - jekyll-seo-tag
-
-# Social / Open Graph settings
-social:
-  name: MirDB
-  links:
-    - https://github.com/penberg/mirdb
-
-# Site metadata
-author: MirDB Team
-github_repo: https://github.com/penberg/mirdb
+  sass_dir: _sass
 
 # Exclude from build
 exclude:
@@ -37,3 +19,9 @@ exclude:
   - package-lock.json
   - tests
   - README.md
+
+# Social/Open Graph
+social:
+  name: MirDB
+  links:
+    - https://github.com/mirdb/mirdb

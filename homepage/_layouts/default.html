@@ -1,16 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  {% include head.html %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title | default: site.title }} - Persistent Key-Value Store</title>
+  <meta name="description" content="{{ site.description }}">
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 </head>
-<body class="site">
-  {% include header.html %}
+<body>
+  <div class="site-wrapper">
+    <header class="site-header">
+      <nav class="nav container flex-between" role="navigation" aria-label="Main navigation">
+        <a href="{{ '/' | relative_url }}" class="nav-logo">MirDB</a>
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#quickstart">Quick Start</a></li>
+          <li><a href="https://github.com/penberg/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </header>
 
-  <main class="site-content" role="main">
-    {{ content }}
-  </main>
+    <main id="main-content" role="main">
+      {{ content }}
+    </main>
 
-  {% include footer.html %}
-  {% include scripts.html %}
+    <footer class="site-footer">
+      <div class="container text-center">
+        <p>&copy; {{ site.time | date: '%Y' }} MirDB. MIT License.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>

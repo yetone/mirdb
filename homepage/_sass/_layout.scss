@@ -1,39 +1,22 @@
 /**
  * Layout Styles
- * Owner: First Builder
- *
- * Page layout structure for MirDB homepage.
+ * Page structure and grid layouts for MirDB homepage.
  */
 
+@import 'variables';
+
 // Main layout
-.site {
+.site-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-.site-content {
+main {
   flex: 1;
 }
 
-// Section layouts
-.section-header {
-  text-align: center;
-  margin-bottom: $spacing-xl;
-
-  h2 {
-    margin-bottom: $spacing-sm;
-  }
-
-  p {
-    color: $color-text-light;
-    font-size: $font-size-lg;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-}
-
-// Grid layouts
+// Grid system
 .grid {
   display: grid;
   gap: $spacing-lg;
@@ -51,33 +34,32 @@
   grid-template-columns: repeat(4, 1fr);
 }
 
-// Flex layouts
+// Flexbox utilities
 .flex {
   display: flex;
 }
 
 .flex-center {
-  justify-content: center;
+  display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .flex-between {
-  justify-content: space-between;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .flex-wrap {
   flex-wrap: wrap;
 }
 
-.gap-sm {
-  gap: $spacing-sm;
-}
+.gap-sm { gap: $spacing-sm; }
+.gap-md { gap: $spacing-md; }
+.gap-lg { gap: $spacing-lg; }
 
-.gap-md {
-  gap: $spacing-md;
-}
-
-.gap-lg {
-  gap: $spacing-lg;
-}
+// Text alignment
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }

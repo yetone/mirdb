@@ -2,13 +2,19 @@
   Header Include - Navigation
   Owner: Scenario 1 (hero), Scenario 8 (nav)
 
-  Basic structure provided. Full navigation to be implemented by Scenario 8.
+  Expected elements:
+  - Logo/brand link
+  - Navigation links (Features, Docs, GitHub)
+  - Mobile hamburger menu toggle
+  - Smooth scroll anchor links
 -->
-<header class="site-header" role="banner">
-  <nav class="nav container" role="navigation" aria-label="Main navigation">
-    <a href="{{ '/' | relative_url }}" class="nav__logo" aria-label="MirDB Home">
-      MirDB
-    </a>
-    <!-- Full navigation to be added by Scenario 8 -->
+<header class="site-header">
+  <nav class="nav container flex-between" role="navigation" aria-label="Main navigation">
+    <a href="{{ '/' | relative_url }}" class="nav-logo">MirDB</a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#quickstart">Quick Start</a></li>
+      <li><a href="https://github.com/penberg/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
   </nav>
 </header>

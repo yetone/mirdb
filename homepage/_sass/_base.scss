@@ -1,24 +1,19 @@
 /**
  * Base Styles
- * Owner: First Builder
- *
  * Reset and typography foundation for MirDB homepage.
  */
 
-// Box sizing
+@import 'variables';
+
+// Reset
 *,
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-// Reset margins and paddings
-html, body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, blockquote, dl, dd {
   margin: 0;
   padding: 0;
 }
 
-// HTML & Body
 html {
   font-size: $font-size-base;
   scroll-behavior: smooth;
@@ -36,22 +31,16 @@ body {
 
 // Typography
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: $line-height-heading;
+  font-weight: 600;
+  line-height: $line-height-tight;
   color: $color-secondary;
+  margin-bottom: $spacing-sm;
 }
 
-h1 {
-  font-size: $font-size-hero;
-}
-
-h2 {
-  font-size: $font-size-xxl;
-}
-
-h3 {
-  font-size: $font-size-xl;
-}
+h1 { font-size: $font-size-hero; }
+h2 { font-size: $font-size-xxl; }
+h3 { font-size: $font-size-xl; }
+h4 { font-size: $font-size-lg; }
 
 p {
   margin-bottom: $spacing-sm;
@@ -67,31 +56,17 @@ a {
   }
 }
 
-// Lists
-ul, ol {
-  list-style: none;
-}
-
-// Images
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
 // Code
-code, pre {
-  font-family: $font-family-mono;
-}
-
 code {
+  font-family: $font-family-mono;
+  font-size: 0.9em;
   background-color: $color-background-alt;
   padding: 2px 6px;
   border-radius: $border-radius-sm;
-  font-size: $font-size-sm;
 }
 
 pre {
+  font-family: $font-family-mono;
   background-color: $color-code-bg;
   color: #f8f8f2;
   padding: $spacing-md;
@@ -101,17 +76,75 @@ pre {
   code {
     background: none;
     padding: 0;
-    font-size: inherit;
   }
 }
 
+// Lists
+ul, ol {
+  margin-left: $spacing-lg;
+  margin-bottom: $spacing-sm;
+}
+
+// Images
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+// Container
+.container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $container-padding;
+}
+
+// Section
+.section {
+  padding: $spacing-xxl 0;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+}
+
 // Buttons
-button {
-  cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
+.btn {
+  display: inline-block;
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-base;
+  font-weight: 500;
+  text-align: center;
   border: none;
-  background: none;
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.btn-primary {
+  background-color: $color-primary;
+  color: white;
+
+  &:hover {
+    background-color: $color-primary-dark;
+    color: white;
+  }
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: $color-primary;
+  border: 2px solid $color-primary;
+
+  &:hover {
+    background-color: $color-primary;
+    color: white;
+  }
 }
 
 // Focus styles for accessibility
@@ -120,19 +153,7 @@ button {
   outline-offset: 2px;
 }
 
-// Container utility
-.container {
-  max-width: $container-max-width;
-  margin: 0 auto;
-  padding: 0 $container-padding;
-}
-
-// Section utility
-.section {
-  padding: $spacing-xxl 0;
-}
-
-// Screen reader only utility
+// Screen reader only
 .sr-only {
   position: absolute;
   width: 1px;

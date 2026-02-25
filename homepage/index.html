@@ -34,12 +34,77 @@ description: A persistent key-value store implementing the Memcached protocol. C
 <!-- END SECTION: what-is -->
 
 <!-- BEGIN SECTION: features (Scenario 3) -->
-<section class="features section" id="features">
+<section class="features section" id="features" aria-label="Features">
   <div class="container">
-    <div class="section-header">
-      <h2>Features</h2>
+    <h2 class="section-title">Features</h2>
+    <div class="features-grid">
+      <article class="feature-card" data-feature="memcached-protocol">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Memcached Protocol</h3>
+        <p class="feature-description">Drop-in compatible with existing memcached clients. Use your favorite memcached libraries without any code changes.</p>
+      </article>
+
+      <article class="feature-card" data-feature="disk-persistence">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Disk Persistence</h3>
+        <p class="feature-description">Your data survives restarts and crashes. Persistent storage ensures durability without sacrificing performance.</p>
+      </article>
+
+      <article class="feature-card" data-feature="lsm-tree">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">LSM Tree Architecture</h3>
+        <p class="feature-description">Built on a Log-Structured Merge tree for optimal write performance and efficient storage utilization.</p>
+      </article>
+
+      <article class="feature-card" data-feature="compaction">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="17 11 12 6 7 11"/>
+            <polyline points="17 18 12 13 7 18"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Multi-Level Compaction</h3>
+        <p class="feature-description">Intelligent multi-level compaction strategy keeps storage efficient while maintaining fast read and write performance.</p>
+      </article>
+
+      <article class="feature-card" data-feature="async-io">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Async I/O</h3>
+        <p class="feature-description">Asynchronous I/O operations ensure high throughput and low latency even under heavy workloads.</p>
+      </article>
+
+      <article class="feature-card" data-feature="rust-powered">
+        <div class="feature-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Rust Powered</h3>
+        <p class="feature-description">Built with Rust for memory safety, zero-cost abstractions, and fearless concurrency.</p>
+      </article>
     </div>
-    <!-- Content to be added by Scenario 3 -->
   </div>
 </section>
 <!-- END SECTION: features -->
