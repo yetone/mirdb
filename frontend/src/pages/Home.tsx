@@ -8,6 +8,7 @@
 
 import HeroSection from '../components/homepage/HeroSection'
 import FeaturesSection from '../components/homepage/FeaturesSection'
+import HowItWorksSection from '../components/homepage/HowItWorksSection'
 
 export default function Home() {
   return (
@@ -19,7 +20,8 @@ export default function Home() {
         {/* Features Section - Scenario 3 */}
         <FeaturesSection />
 
-        {/* How It Works Section - to be implemented by Scenario 4 */}
+        {/* How It Works Section - Scenario 4 */}
+        <HowItWorksSection />
 
         {/* Footer - to be implemented by Scenario 6 */}
       </main>
