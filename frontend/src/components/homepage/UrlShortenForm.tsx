@@ -151,7 +151,7 @@ export function UrlShortenForm({ onSuccess }: UrlShortenFormProps) {
 
       {result && (
         <div className="mt-4 p-4 bg-base-200 rounded-lg" role="region" aria-label="Shortened URL result">
-          <p className="text-sm text-base-content/70 mb-2">Your shortened URL:</p>
+          <p className="text-sm text-base-content/80 mb-2">Your shortened URL:</p>
           <div className="flex items-center gap-2">
             <input
               type="text"

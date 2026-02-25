@@ -32,7 +32,7 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
           {icon}
         </div>
         <h3 className="card-title" data-testid="feature-title">{title}</h3>
-        <p className="text-base-content/70" data-testid="feature-description">{description}</p>
+        <p className="text-base-content/80" data-testid="feature-description">{description}</p>
       </div>
     </div>
   )

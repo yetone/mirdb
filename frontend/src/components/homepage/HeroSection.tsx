@@ -26,7 +26,7 @@ export default function HeroSection() {
             URL Shortening Service
           </h1>
           <p
-            className="text-xl md:text-2xl text-base-content/70 mb-8"
+            className="text-xl md:text-2xl text-base-content/80 mb-8"
             data-testid="tagline"
           >
             Shorten Links. Track Insights. Share Smarter.
@@ -42,7 +42,7 @@ export default function HeroSection() {
         <div className="flex flex-col sm:flex-row gap-4 flex-wrap justify-center mt-4">
           <Link
             to="/register"
-            className="btn btn-secondary btn-lg"
+            className="btn btn-primary btn-lg"
             data-testid="signup-button"
           >
             Sign Up Free

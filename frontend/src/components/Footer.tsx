@@ -96,7 +96,7 @@ export default function Footer() {
           <p className="font-bold text-lg" data-testid="footer-product-name">
             URL Shortener
           </p>
-          <p className="text-base-content/70" data-testid="footer-copyright">
+          <p className="text-base-content/80" data-testid="footer-copyright">
             © {currentYear} URL Shortener. All rights reserved.
           </p>
         </div>

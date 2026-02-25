@@ -1,15 +1,12 @@
 /**
- * Accessibility E2E Tests - Keyboard Navigation
- * Owner: Scenario 11 (Accessibility - Keyboard Navigation)
+ * Accessibility E2E Tests
+ * Owner: Scenarios 11, 12, 13 (Accessibility - Keyboard Navigation, ARIA Labels, Color Contrast)
  *
- * Tests for keyboard accessibility on the homepage:
- * - Tab navigation through all interactive elements
- * - Visible focus indicators on all focusable elements
- * - Enter key activation on buttons and forms
- * - Logical tab order
+ * Tests for keyboard accessibility, ARIA labels, and color contrast on the homepage
  */
 
 import { test, expect, Page } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
 
 test.describe('Accessibility - Keyboard Navigation', () => {
   test.beforeEach(async ({ page }) => {
@@ -215,5 +212,200 @@ test.describe('Accessibility - Keyboard Navigation', () => {
 
     // Verify we're on the login page
     expect(page.url()).toContain('/login')
+  })
+})
+
+test.describe('Accessibility - Color Contrast', () => {
+  test.describe('Light Mode', () => {
+    test('hero section text contrast meets WCAG AA standards in light mode', async ({
+      page,
+    }) => {
+      // Navigate to homepage
+      await page.goto('/')
+
+      // Ensure light mode is active (DaisyUI default)
+      await page.evaluate(() => {
+        document.documentElement.setAttribute('data-theme', 'light')
+      })
+
+      // Wait for theme to apply
+      await page.waitForTimeout(100)
+
+      // Verify hero section is visible
+      const heroSection = page.getByTestId('hero-section')
+      await expect(heroSection).toBeVisible()
+
+      // Run axe accessibility scan focused on color contrast
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .include('[data-testid="hero-section"]')
+        .withRules(['color-contrast'])
+        .analyze()
+
+      // Log any violations for debugging
+      if (accessibilityScanResults.violations.length > 0) {
+        console.log(
+          'Light mode contrast violations:',
+          JSON.stringify(accessibilityScanResults.violations, null, 2)
+        )
+      }
+
+      // Assert no color contrast violations
+      expect(accessibilityScanResults.violations).toEqual([])
+    })
+
+    test('all page text contrast meets WCAG AA standards in light mode', async ({
+      page,
+    }) => {
+      await page.goto('/')
+
+      // Ensure light mode is active
+      await page.evaluate(() => {
+        document.documentElement.setAttribute('data-theme', 'light')
+      })
+
+      await page.waitForTimeout(100)
+
+      // Run axe accessibility scan on full page for color contrast
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withRules(['color-contrast'])
+        .analyze()
+
+      // Log any violations for debugging
+      if (accessibilityScanResults.violations.length > 0) {
+        console.log(
+          'Light mode full page contrast violations:',
+          JSON.stringify(accessibilityScanResults.violations, null, 2)
+        )
+      }
+
+      expect(accessibilityScanResults.violations).toEqual([])
+    })
+  })
+
+  test.describe('Dark Mode', () => {
+    test('hero section text contrast meets WCAG AA standards in dark mode', async ({
+      page,
+    }) => {
+      await page.goto('/')
+
+      // Switch to dark mode
+      await page.evaluate(() => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+      })
+
+      // Wait for theme to apply
+      await page.waitForTimeout(100)
+
+      // Verify hero section is visible
+      const heroSection = page.getByTestId('hero-section')
+      await expect(heroSection).toBeVisible()
+
+      // Run axe accessibility scan focused on color contrast
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .include('[data-testid="hero-section"]')
+        .withRules(['color-contrast'])
+        .analyze()
+
+      // Log any violations for debugging
+      if (accessibilityScanResults.violations.length > 0) {
+        console.log(
+          'Dark mode contrast violations:',
+          JSON.stringify(accessibilityScanResults.violations, null, 2)
+        )
+      }
+
+      // Assert no color contrast violations
+      expect(accessibilityScanResults.violations).toEqual([])
+    })
+
+    test('all page text contrast meets WCAG AA standards in dark mode', async ({
+      page,
+    }) => {
+      await page.goto('/')
+
+      // Switch to dark mode
+      await page.evaluate(() => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+      })
+
+      await page.waitForTimeout(100)
+
+      // Run axe accessibility scan on full page for color contrast
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withRules(['color-contrast'])
+        .analyze()
+
+      // Log any violations for debugging
+      if (accessibilityScanResults.violations.length > 0) {
+        console.log(
+          'Dark mode full page contrast violations:',
+          JSON.stringify(accessibilityScanResults.violations, null, 2)
+        )
+      }
+
+      expect(accessibilityScanResults.violations).toEqual([])
+    })
+  })
+
+  test.describe('CTA Button Contrast', () => {
+    test('CTA button text contrast meets WCAG AA standards', async ({
+      page,
+    }) => {
+      await page.goto('/')
+
+      // Test in light mode
+      await page.evaluate(() => {
+        document.documentElement.setAttribute('data-theme', 'light')
+      })
+      await page.waitForTimeout(100)
+
+      // Verify CTA buttons are visible
+      const shortenButton = page.getByTestId('shorten-url-button')
+      const signupButton = page.getByTestId('signup-button')
+      const loginButton = page.getByTestId('login-button')
+
+      await expect(shortenButton).toBeVisible()
+      await expect(signupButton).toBeVisible()
+      await expect(loginButton).toBeVisible()
+
+      // Run axe scan on buttons
+      const lightModeResults = await new AxeBuilder({ page })
+        .include('[data-testid="shorten-url-button"]')
+        .include('[data-testid="signup-button"]')
+        .include('[data-testid="login-button"]')
+        .withRules(['color-contrast'])
+        .analyze()
+
+      if (lightModeResults.violations.length > 0) {
+        console.log(
+          'Light mode button contrast violations:',
+          JSON.stringify(lightModeResults.violations, null, 2)
+        )
+      }
+
+      expect(lightModeResults.violations).toEqual([])
+
+      // Test in dark mode
+      await page.evaluate(() => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+      })
+      await page.waitForTimeout(100)
+
+      const darkModeResults = await new AxeBuilder({ page })
+        .include('[data-testid="shorten-url-button"]')
+        .include('[data-testid="signup-button"]')
+        .include('[data-testid="login-button"]')
+        .withRules(['color-contrast'])
+        .analyze()
+
+      if (darkModeResults.violations.length > 0) {
+        console.log(
+          'Dark mode button contrast violations:',
+          JSON.stringify(darkModeResults.violations, null, 2)
+        )
+      }
+
+      expect(darkModeResults.violations).toEqual([])
+    })
   })
 })

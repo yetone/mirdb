@@ -157,7 +157,7 @@ function StepCard({ number, title, description, icon, isLast }: StepCardProps) {
 
         {/* Step description */}
         <p
-          className="text-base-content/70 text-sm max-w-xs"
+          className="text-base-content/80 text-sm max-w-xs"
           data-testid="step-description"
         >
           {description}
