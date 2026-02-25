@@ -796,7 +796,198 @@
 // ============================================
 // SECTION: Links (Scenario 7)
 // ============================================
-// Placeholder for Scenario 7 styles
+
+.links {
+  background-color: $color-background-alt;
+  padding: $spacing-xxl 0;
+}
+
+.links .section-header {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-lg;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $container-padding;
+
+  @media (max-width: $breakpoint-tablet - 1) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop - 1) {
+    grid-template-columns: repeat(2, 1fr);
+
+    .link-card:last-child {
+      grid-column: 1 / -1;
+      max-width: 50%;
+      justify-self: center;
+    }
+  }
+}
+
+.link-card {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  background-color: $color-background;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: $shadow-sm;
+  border: 2px solid transparent;
+  transition: all $transition-normal;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+    border-color: $color-primary;
+  }
+
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.link-card__icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba($color-primary, 0.1);
+  border-radius: $border-radius-md;
+  color: $color-primary;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.link-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.link-card__title {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: $color-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.link-card__description {
+  font-size: $font-size-sm;
+  color: $color-text-light;
+  line-height: $line-height-base;
+  margin-bottom: $spacing-xs;
+}
+
+.link-card__url {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-family: $font-family-mono;
+}
+
+.link-card__arrow {
+  font-size: $font-size-xl;
+  color: $color-primary;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all $transition-normal;
+
+  .link-card:hover & {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.links-license {
+  max-width: 700px;
+  margin: $spacing-xl auto 0;
+  text-align: center;
+  padding: $spacing-lg;
+  background-color: $color-background;
+  border-radius: $border-radius-md;
+  border: 1px solid $color-border;
+}
+
+.links-license__text {
+  color: $color-text;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  margin: 0;
+
+  strong {
+    color: $color-secondary;
+  }
+}
+
+.links-license__icon {
+  margin-right: $spacing-xs;
+}
+
+// Footer link styles (Scenario 7 contribution)
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-lg 0;
+}
+
+.footer-links {
+  display: flex;
+  gap: $spacing-lg;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  color: $color-text-light;
+  text-decoration: none;
+  font-size: $font-size-sm;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-primary;
+  }
+
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.footer-link__icon {
+  width: 18px;
+  height: 18px;
+}
+
+.footer-copyright {
+  color: $color-text-light;
+  font-size: $font-size-sm;
+  text-align: center;
+  margin: 0;
+
+  a {
+    color: $color-primary;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
 
 // ============================================
 // SECTION: Navigation & Footer (Scenario 8)
