@@ -7,3 +7,9 @@
   margin: 0 auto;
   padding: var(--spacing-lg);
 }
+
+.section {
+  min-height: 400px;
+  padding: var(--spacing-xl) 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
