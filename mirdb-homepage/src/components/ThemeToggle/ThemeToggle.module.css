@@ -1,0 +1,33 @@
+.toggleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.toggleButton:hover {
+  background-color: var(--bg-secondary);
+}
+
+.toggleButton:focus-visible {
+  outline: 2px solid var(--color-rust-orange);
+  outline-offset: 2px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--transition-fast);
+}
+
+.toggleButton:hover .icon {
+  transform: scale(1.1);
+}

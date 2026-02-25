@@ -1,12 +1,13 @@
 import { Header } from './components/Header';
 import { Features } from './components/Features';
 import { ProjectStatus } from './components/ProjectStatus';
+import { ThemeToggle } from './components/ThemeToggle';
 import styles from './App.module.css';
 
 function App() {
   return (
     <div className={styles.app}>
-      <Header />
+      <Header themeToggle={<ThemeToggle />} />
       <main className={styles.main}>
         <section id="features">
           <Features />
