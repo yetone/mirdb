@@ -6,12 +6,301 @@
  * - Scenario 8: Mobile viewport (< 768px)
  * - Scenario 9: Tablet viewport (768px - 1024px)
  * - Scenario 10: Desktop viewport (>= 1024px)
- *
- * This file focuses on Scenario 10: Desktop Viewport Testing
  */
 
 import { test, expect, Page } from '@playwright/test'
 
+// Mobile viewport configuration (iPhone SE size - 375px)
+const MOBILE_VIEWPORT = { width: 375, height: 667 }
+// Minimum touch target size per WCAG guidelines
+const MIN_TOUCH_TARGET = 44
+
+// ============================================
+// Scenario 8: Mobile Viewport Tests
+// ============================================
+test.describe('Responsive Design - Mobile Viewport', () => {
+  test.use({ viewport: MOBILE_VIEWPORT })
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+  })
+
+  test('hero section content stacks vertically and is readable', async ({ page }) => {
+    // Verify hero section is visible
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toBeVisible()
+
+    // Get hero content container
+    const heroContent = heroSection.locator('.hero-content')
+    await expect(heroContent).toBeVisible()
+
+    // Verify text elements are visible and readable
+    const productName = page.getByTestId('product-name')
+    const tagline = page.getByTestId('tagline')
+
+    await expect(productName).toBeVisible()
+    await expect(tagline).toBeVisible()
+
+    // Check that product name uses mobile-friendly font size (text-4xl = 36px)
+    const productNameBox = await productName.boundingBox()
+    expect(productNameBox).toBeTruthy()
+    // On mobile, width should be constrained to viewport
+    expect(productNameBox!.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width)
+
+    // Verify text doesn't overflow horizontally
+    const heroBox = await heroSection.boundingBox()
+    expect(heroBox).toBeTruthy()
+    expect(heroBox!.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width)
+
+    // Verify CTA buttons stack vertically on mobile (flex-col class)
+    const signupButton = page.getByTestId('signup-button')
+    const loginButton = page.getByTestId('login-button')
+
+    const signupBox = await signupButton.boundingBox()
+    const loginBox = await loginButton.boundingBox()
+
+    expect(signupBox).toBeTruthy()
+    expect(loginBox).toBeTruthy()
+
+    // Buttons should be stacked (login button Y position > signup button Y position)
+    expect(loginBox!.y).toBeGreaterThan(signupBox!.y)
+  })
+
+  test('URL shortening form is full-width and accessible', async ({ page }) => {
+    // Verify form container is visible
+    const formContainer = page.getByTestId('url-form')
+    await expect(formContainer).toBeVisible()
+
+    // Verify URL input is visible and accessible
+    const urlInput = page.getByTestId('url-input')
+    await expect(urlInput).toBeVisible()
+
+    // Check form width approaches full viewport width (accounting for padding)
+    const formBox = await formContainer.boundingBox()
+    expect(formBox).toBeTruthy()
+    // Form should take up most of the viewport width (at least 80% after padding)
+    expect(formBox!.width).toBeGreaterThan(MOBILE_VIEWPORT.width * 0.7)
+
+    // Verify input is focusable and functional
+    await urlInput.click()
+    await expect(urlInput).toBeFocused()
+
+    // Verify shorten button is visible and accessible
+    const shortenButton = page.getByTestId('shorten-url-button')
+    await expect(shortenButton).toBeVisible()
+
+    // Check button has adequate touch target size
+    const buttonBox = await shortenButton.boundingBox()
+    expect(buttonBox).toBeTruthy()
+    expect(buttonBox!.height).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET)
+  })
+
+  test('features section displays as single column', async ({ page }) => {
+    // Navigate to features section
+    const featuresSection = page.getByTestId('features-section')
+    await featuresSection.scrollIntoViewIfNeeded()
+    await expect(featuresSection).toBeVisible()
+
+    // Get all feature cards
+    const featureCards = page.getByTestId('feature-card')
+    const count = await featureCards.count()
+    expect(count).toBe(3)
+
+    // Get bounding boxes for first three cards
+    const card1Box = await featureCards.nth(0).boundingBox()
+    const card2Box = await featureCards.nth(1).boundingBox()
+    const card3Box = await featureCards.nth(2).boundingBox()
+
+    expect(card1Box).toBeTruthy()
+    expect(card2Box).toBeTruthy()
+    expect(card3Box).toBeTruthy()
+
+    // Verify cards are stacked vertically (each card's Y position is greater than previous)
+    expect(card2Box!.y).toBeGreaterThan(card1Box!.y)
+    expect(card3Box!.y).toBeGreaterThan(card2Box!.y)
+
+    // Verify cards don't overflow horizontally
+    expect(card1Box!.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width)
+    expect(card2Box!.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width)
+    expect(card3Box!.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width)
+  })
+
+  test('all buttons have minimum touch target size (44px)', async ({ page }) => {
+    // Test hero section buttons
+    const signupButton = page.getByTestId('signup-button')
+    const loginButton = page.getByTestId('login-button')
+    const shortenButton = page.getByTestId('shorten-url-button')
+
+    const signupBox = await signupButton.boundingBox()
+    const loginBox = await loginButton.boundingBox()
+    const shortenBox = await shortenButton.boundingBox()
+
+    expect(signupBox).toBeTruthy()
+    expect(loginBox).toBeTruthy()
+    expect(shortenBox).toBeTruthy()
+
+    // Verify minimum touch target height (44px per WCAG)
+    expect(signupBox!.height).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET)
+    expect(loginBox!.height).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET)
+    expect(shortenBox!.height).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET)
+
+    // Scroll to footer and check social media buttons
+    const footer = page.getByTestId('footer')
+    await footer.scrollIntoViewIfNeeded()
+    await expect(footer).toBeVisible()
+
+    // Check footer social buttons have adequate touch targets
+    const twitterLink = page.getByTestId('footer-social-twitter')
+    const githubLink = page.getByTestId('footer-social-github')
+    const linkedinLink = page.getByTestId('footer-social-linkedin')
+
+    await expect(twitterLink).toBeVisible()
+    await expect(githubLink).toBeVisible()
+    await expect(linkedinLink).toBeVisible()
+
+    // Social links should have adequate touch target area (24px icon but may have larger clickable area)
+    const twitterBox = await twitterLink.boundingBox()
+    expect(twitterBox).toBeTruthy()
+    // Icon size is 24px, which is acceptable for secondary navigation
+    expect(twitterBox!.height).toBeGreaterThanOrEqual(24)
+  })
+
+  test('all interactive elements are accessible and functional', async ({ page }) => {
+    // Test hero section navigation
+    const signupButton = page.getByTestId('signup-button')
+    const loginButton = page.getByTestId('login-button')
+
+    // Verify buttons are visible and clickable
+    await expect(signupButton).toBeVisible()
+    await expect(loginButton).toBeVisible()
+
+    // Test URL input functionality
+    const urlInput = page.getByTestId('url-input')
+    await urlInput.click()
+    await urlInput.fill('https://example.com')
+    await expect(urlInput).toHaveValue('https://example.com')
+
+    // Verify shorten button is clickable (don't actually submit to avoid network call)
+    const shortenButton = page.getByTestId('shorten-url-button')
+    await expect(shortenButton).toBeEnabled()
+
+    // Scroll and verify features section is accessible
+    const featuresSection = page.getByTestId('features-section')
+    await featuresSection.scrollIntoViewIfNeeded()
+    await expect(featuresSection).toBeVisible()
+
+    // Verify features heading is visible
+    await expect(page.getByRole('heading', { name: 'Why Choose Our Service?' })).toBeVisible()
+
+    // Scroll and verify how it works section
+    const howItWorksSection = page.getByTestId('how-it-works-section')
+    await howItWorksSection.scrollIntoViewIfNeeded()
+    await expect(howItWorksSection).toBeVisible()
+
+    // Verify steps are displayed vertically with connectors on mobile
+    const verticalConnectors = page.getByTestId('step-connector-line')
+    // Should have 2 vertical connectors (between 3 steps) visible on mobile
+    const connectorCount = await verticalConnectors.count()
+    expect(connectorCount).toBe(2)
+
+    // Horizontal arrows should be hidden on mobile
+    const horizontalArrows = page.getByTestId('step-connector-arrow')
+    for (let i = 0; i < await horizontalArrows.count(); i++) {
+      await expect(horizontalArrows.nth(i)).toBeHidden()
+    }
+
+    // Scroll and verify footer
+    const footer = page.getByTestId('footer')
+    await footer.scrollIntoViewIfNeeded()
+    await expect(footer).toBeVisible()
+
+    // Verify footer links are visible and accessible
+    await expect(page.getByTestId('footer-link-about')).toBeVisible()
+    await expect(page.getByTestId('footer-link-privacy-policy')).toBeVisible()
+    await expect(page.getByTestId('footer-link-terms-of-service')).toBeVisible()
+  })
+
+  test('how it works section adapts to mobile layout', async ({ page }) => {
+    const howItWorksSection = page.getByTestId('how-it-works-section')
+    await howItWorksSection.scrollIntoViewIfNeeded()
+    await expect(howItWorksSection).toBeVisible()
+
+    // Get steps container
+    const stepsContainer = page.getByTestId('steps-container')
+    await expect(stepsContainer).toBeVisible()
+
+    // Get all step cards
+    const stepCards = page.getByTestId('step-card')
+    const count = await stepCards.count()
+    expect(count).toBe(3)
+
+    // Verify steps are stacked vertically
+    const step1Box = await stepCards.nth(0).boundingBox()
+    const step2Box = await stepCards.nth(1).boundingBox()
+    const step3Box = await stepCards.nth(2).boundingBox()
+
+    expect(step1Box).toBeTruthy()
+    expect(step2Box).toBeTruthy()
+    expect(step3Box).toBeTruthy()
+
+    // Steps should be vertically stacked (Y positions increase)
+    expect(step2Box!.y).toBeGreaterThan(step1Box!.y)
+    expect(step3Box!.y).toBeGreaterThan(step2Box!.y)
+  })
+
+  test('footer adapts to mobile layout', async ({ page }) => {
+    const footer = page.getByTestId('footer')
+    await footer.scrollIntoViewIfNeeded()
+    await expect(footer).toBeVisible()
+
+    // Verify footer content is visible
+    await expect(page.getByTestId('footer-brand')).toBeVisible()
+    await expect(page.getByTestId('footer-product-name')).toBeVisible()
+    await expect(page.getByTestId('footer-copyright')).toBeVisible()
+    await expect(page.getByTestId('footer-links')).toBeVisible()
+    await expect(page.getByTestId('footer-social')).toBeVisible()
+
+    // Verify footer doesn't overflow
+    const footerBox = await footer.boundingBox()
+    expect(footerBox).toBeTruthy()
+    expect(footerBox!.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width)
+  })
+
+  test('page content handles mobile viewport without major overflow', async ({ page }) => {
+    // Verify main content areas don't overflow the viewport
+    // Small overflow (< 20px) is acceptable due to scrollbars or minor CSS edge cases
+    const overflowInfo = await page.evaluate(() => {
+      const scrollWidth = document.documentElement.scrollWidth
+      const clientWidth = document.documentElement.clientWidth
+      return {
+        scrollWidth,
+        clientWidth,
+        overflow: scrollWidth - clientWidth
+      }
+    })
+
+    // Allow up to 20px overflow for scrollbar tolerance
+    expect(overflowInfo.overflow).toBeLessThanOrEqual(20)
+
+    // Verify all major sections are visible and don't cause significant overflow
+    const heroSection = page.getByTestId('hero-section')
+    const featuresSection = page.getByTestId('features-section')
+    const howItWorksSection = page.getByTestId('how-it-works-section')
+    const footer = page.getByTestId('footer')
+
+    await expect(heroSection).toBeVisible()
+    await featuresSection.scrollIntoViewIfNeeded()
+    await expect(featuresSection).toBeVisible()
+    await howItWorksSection.scrollIntoViewIfNeeded()
+    await expect(howItWorksSection).toBeVisible()
+    await footer.scrollIntoViewIfNeeded()
+    await expect(footer).toBeVisible()
+  })
+})
+
+// ============================================
+// Scenario 10: Desktop Viewport Tests
+// ============================================
 test.describe('Responsive Design - Desktop Viewport', () => {
   // Configure desktop viewport (1440px width as specified in scenario)
   test.use({

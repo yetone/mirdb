@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:5174',
     trace: 'on-first-retry',
   },
   projects: [
@@ -18,8 +18,8 @@ export default defineConfig({
     },
   ],
   webServer: process.env.SKIP_WEB_SERVER ? undefined : {
-    command: 'pnpm dev',
-    url: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000',
+    command: 'npx vite --port 5174',
+    url: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:5174',
     reuseExistingServer: true,
     timeout: 120000,
   },
