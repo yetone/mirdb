@@ -304,12 +304,59 @@ memcat --servers=localhost:12333 mykey</code></pre>
 <!-- END SECTION: quickstart -->
 
 <!-- BEGIN SECTION: code-example (Scenario 4) -->
-<section class="code-example section" id="code-example">
+<section class="code-example section" id="code-example" aria-labelledby="code-example-title">
   <div class="container">
     <div class="section-header">
-      <h2>Code Example</h2>
+      <h2 id="code-example-title">Code Example</h2>
+      <p class="section-subtitle">Start the MirDB server and connect using any Memcached client</p>
     </div>
-    <!-- Content to be added by Scenario 4 -->
+    <div class="code-example__content">
+      <!-- Shell example: Starting the server -->
+      <div class="code-block" data-language="bash">
+        <div class="code-block__header">
+          <span class="code-block__language">Shell</span>
+          <button class="code-block__copy" aria-label="Copy code to clipboard" type="button">
+            <svg class="code-block__copy-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="code-block__copy-text">Copy</span>
+          </button>
+        </div>
+        <pre class="code-block__pre"><code class="language-bash"># Start MirDB server on default port 12333
+./mirdb-server --port 12333 --work-dir /var/lib/mirdb
+
+# Or run from source with cargo
+cargo run --release -- --port 12333</code></pre>
+      </div>
+
+      <!-- Python example: Client connection -->
+      <div class="code-block" data-language="python">
+        <div class="code-block__header">
+          <span class="code-block__language">Python</span>
+          <button class="code-block__copy" aria-label="Copy code to clipboard" type="button">
+            <svg class="code-block__copy-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="code-block__copy-text">Copy</span>
+          </button>
+        </div>
+        <pre class="code-block__pre"><code class="language-python"># Connect using any Memcached client
+import pymemcache
+from pymemcache.client import base
+
+# Connect to MirDB (same as Memcached!)
+client = base.Client(('localhost', 12333))
+
+# Store a value - persisted to disk
+client.set('user:1', 'Alice')
+
+# Retrieve the value
+result = client.get('user:1')
+print(result)  # Output: b'Alice'</code></pre>
+      </div>
+    </div>
   </div>
 </section>
 <!-- END SECTION: code-example -->
