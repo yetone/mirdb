@@ -1,0 +1,79 @@
+.techHighlights {
+  padding: var(--spacing-xl) 0;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-color);
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xl);
+  font-size: 1.125rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .heading {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    padding: 0 var(--spacing-md);
+  }
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.icon {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-color);
+}
+
+.cardDescription {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  text-align: left;
+}

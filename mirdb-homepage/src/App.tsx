@@ -1,6 +1,7 @@
 import { Header } from './components/Header';
 import { Features } from './components/Features';
 import { ProjectStatus } from './components/ProjectStatus';
+import { TechHighlights } from './components/TechHighlights';
 import { ThemeToggle } from './components/ThemeToggle';
 import styles from './App.module.css';
 
@@ -17,10 +18,7 @@ function App() {
           <p>Usage demonstration section placeholder.</p>
         </section>
         <ProjectStatus />
-        <section id="architecture" className={styles.section}>
-          <h2>Architecture</h2>
-          <p>Technical architecture section placeholder.</p>
-        </section>
+        <TechHighlights />
         <section id="resources" className={styles.section}>
           <h2>Resources</h2>
           <p>Resources section placeholder.</p>
