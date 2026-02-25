@@ -9,6 +9,7 @@
 import HeroSection from '../components/homepage/HeroSection'
 import FeaturesSection from '../components/homepage/FeaturesSection'
 import HowItWorksSection from '../components/homepage/HowItWorksSection'
+import Footer from '../components/Footer'
 
 export default function Home() {
   return (
@@ -22,9 +23,10 @@ export default function Home() {
 
         {/* How It Works Section - Scenario 4 */}
         <HowItWorksSection />
-
-        {/* Footer - to be implemented by Scenario 6 */}
       </main>
+
+      {/* Footer - Scenario 6 */}
+      <Footer />
     </div>
   )
 }
