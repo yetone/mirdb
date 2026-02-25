@@ -17,7 +17,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  webServer: {
+  webServer: process.env.SKIP_WEB_SERVER ? undefined : {
     command: 'pnpm dev',
     url: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000',
     reuseExistingServer: true,
