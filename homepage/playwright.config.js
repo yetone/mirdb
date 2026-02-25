@@ -3,6 +3,7 @@ const { defineConfig, devices } = require('@playwright/test');
 
 /**
  * Playwright configuration for MirDB homepage E2E tests.
+ * Supports cross-browser testing per NFR-7: Chrome, Firefox, Safari, Edge
  */
 module.exports = defineConfig({
   testDir: './tests/e2e',
@@ -19,6 +20,14 @@ module.exports = defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
     },
   ],
   webServer: {
