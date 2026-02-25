@@ -47,7 +47,7 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 var(--spacing-md);
-  color: var(--color-rust-orange);
+  color: var(--accent-accessible, var(--color-rust-orange));
 }
 
 .linksList {
@@ -111,7 +111,7 @@
 }
 
 .licenseLink {
-  color: var(--color-rust-orange);
+  color: var(--accent-accessible, var(--color-rust-orange));
   text-decoration: none;
   font-weight: 500;
   transition: color var(--transition-fast);
@@ -154,7 +154,7 @@
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   margin: 0;
-  opacity: 0.6;
+  color: var(--text-muted, inherit);
 }
 
 /* Responsive Styles */

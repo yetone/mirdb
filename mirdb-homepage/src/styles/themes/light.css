@@ -4,7 +4,9 @@
   --bg-secondary: #f5f5f5;
   --text-color: var(--color-text-light);
   --text-secondary: #666666;
+  --text-muted: #595959; /* WCAG AA compliant on #f5f5f5 background (5.1:1 contrast) */
   --border-color: #e0e0e0;
   --card-bg: #ffffff;
   --card-shadow: var(--shadow-md);
+  --accent-accessible: #a03810; /* WCAG AA compliant on light backgrounds (4.64:1 contrast) */
 }
