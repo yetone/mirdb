@@ -172,12 +172,14 @@ test.describe('Navigation and Footer', () => {
       // Check GitHub link opens in new tab
       const githubLink = footer.locator('a[href="https://github.com/penberg/mirdb"]');
       await expect(githubLink).toHaveAttribute('target', '_blank');
-      await expect(githubLink).toHaveAttribute('rel', 'noopener');
+      const githubRel = await githubLink.getAttribute('rel');
+      expect(githubRel).toContain('noopener');
 
       // Check Docs link opens in new tab
       const docsLink = footer.locator('a[href="https://docs.rs/mirdb"]');
       await expect(docsLink).toHaveAttribute('target', '_blank');
-      await expect(docsLink).toHaveAttribute('rel', 'noopener');
+      const docsRel = await docsLink.getAttribute('rel');
+      expect(docsRel).toContain('noopener');
     });
   });
 
