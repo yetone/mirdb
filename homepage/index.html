@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Header with navigation (Scenario 5) -->
+    <header id="header">
+        <nav>
+            <a href="#" class="logo">MirDB</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#usage">Usage</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="https://github.com/mebusy/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero section (Scenario 1) -->
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <img src="assets/images/logo.gif" alt="MirDB Logo" class="hero-logo">
+                <h1>MirDB</h1>
+                <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+                <div class="hero-badges">
+                    <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build Status">
+                </div>
+                <div class="hero-cta">
+                    <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                    <a href="https://github.com/mebusy/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features section (Scenario 2) -->
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2 class="section-title">Features</h2>
+                <p class="section-subtitle">Powerful capabilities for persistent key-value storage</p>
+
+                <div class="features-grid">
+                    <div class="feature-card" data-feature="tokio">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Tokio with Memcached Protocol</h3>
+                        <p class="feature-description">High-performance async runtime with full Memcached protocol support. Connect with any Memcached client and enjoy blazing-fast operations.</p>
+                        <span class="feature-status feature-status-implemented">Implemented</span>
+                    </div>
+
+                    <div class="feature-card" data-feature="memtable">
+                        <div class="feature-icon">📊</div>
+                        <h3 class="feature-title">Memtable with Skip-List</h3>
+                        <p class="feature-description">Efficient in-memory data structure using skip-list for fast lookups, insertions, and range queries with O(log n) complexity.</p>
+                        <span class="feature-status feature-status-implemented">Implemented</span>
+                    </div>
+
+                    <div class="feature-card" data-feature="minor-compaction">
+                        <div class="feature-icon">🔄</div>
+                        <h3 class="feature-title">Minor Compaction</h3>
+                        <p class="feature-description">Automatic flushing of memtable to SSTable files when memory threshold is reached, ensuring data durability without blocking writes.</p>
+                        <span class="feature-status feature-status-implemented">Implemented</span>
+                    </div>
+
+                    <div class="feature-card" data-feature="major-compaction">
+                        <div class="feature-icon">🗜️</div>
+                        <h3 class="feature-title">Major Compaction</h3>
+                        <p class="feature-description">Background process that merges multiple SSTable files to reclaim space, remove deleted entries, and optimize read performance.</p>
+                        <span class="feature-status feature-status-implemented">Implemented</span>
+                    </div>
+                </div>
+
+                <div class="roadmap-section">
+                    <h3 class="roadmap-title">Roadmap</h3>
+                    <p class="roadmap-subtitle">Planned features for future releases</p>
+
+                    <div class="roadmap-grid">
+                        <div class="feature-card feature-card-planned" data-feature="raft">
+                            <div class="feature-icon">🔗</div>
+                            <h3 class="feature-title">Raft Consensus Protocol</h3>
+                            <p class="feature-description">Distributed consensus for high availability and fault tolerance. Replicate data across multiple nodes with automatic leader election.</p>
+                            <span class="feature-status feature-status-planned">Planned</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage section (Scenario 3) -->
+        <section id="usage" class="usage-section">
+            <div class="container">
+                <h2 class="section-title">Usage</h2>
+                <p class="section-subtitle">Code examples coming soon</p>
+            </div>
+        </section>
+
+        <!-- Getting Started section (Scenario 4) -->
+        <section id="getting-started" class="getting-started-section">
+            <div class="container">
+                <h2 class="section-title">Getting Started</h2>
+                <p class="section-subtitle">Installation instructions coming soon</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer (Scenario 5) -->
+    <footer id="footer">
+        <div class="container">
+            <p>&copy; 2024 MirDB. Open source under MIT License.</p>
+            <a href="https://github.com/mebusy/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

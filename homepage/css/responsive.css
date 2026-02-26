@@ -1,0 +1,40 @@
+/**
+ * Responsive Styles
+ * Owner: Scenario 6 - Responsive Design
+ *
+ * Contains media queries and responsive adjustments for:
+ * - Mobile devices (< 768px)
+ * - Tablet devices (768px - 1024px)
+ * - Desktop devices (> 1024px)
+ */
+
+/* Mobile styles */
+@media (max-width: 767px) {
+    header .nav-links {
+        display: none;
+    }
+
+    .hero-section h1 {
+        font-size: var(--font-size-3xl);
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .roadmap-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
