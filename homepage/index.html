@@ -132,9 +132,108 @@ telnet localhost 12333
     </section>
 
     <!-- Getting Started Section (Scenario 4) -->
-    <section id="getting-started" class="section getting-started" aria-labelledby="getting-started-title">
+    <section id="getting-started" class="section getting-started getting-started-section" aria-labelledby="getting-started-title">
       <div class="container">
-        <!-- Getting started content will be added by Scenario 4 -->
+        <h2 id="getting-started-title" class="section-title">Getting Started</h2>
+        <p class="section-description">Get MirDB up and running in just a few steps.</p>
+
+        <div class="getting-started-content">
+          <!-- Step 1: Prerequisites -->
+          <div class="getting-started-step" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3 class="step-title">Prerequisites</h3>
+              <p class="step-description">Ensure you have the following installed:</p>
+              <ul class="prerequisites-list">
+                <li><strong>Rust</strong> (1.56 or later) - <a href="https://rustup.rs/" target="_blank" rel="noopener noreferrer" class="doc-link">Install via rustup</a></li>
+                <li><strong>Cargo</strong> (included with Rust)</li>
+                <li><strong>Git</strong> (for cloning the repository)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Step 2: Installation -->
+          <div class="getting-started-step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3 class="step-title">Installation</h3>
+              <p class="step-description">Clone and build MirDB from source:</p>
+              <div class="code-block">
+                <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build in release mode
+cargo build --release</code></pre>
+              </div>
+              <p class="step-note">The compiled binary will be available at <code>target/release/mirdb</code></p>
+            </div>
+          </div>
+
+          <!-- Step 3: Configuration -->
+          <div class="getting-started-step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3 class="step-title">Configuration</h3>
+              <p class="step-description">MirDB works out of the box with sensible defaults:</p>
+              <ul class="config-list">
+                <li><strong>Listen address:</strong> <code>0.0.0.0:12333</code></li>
+                <li><strong>Data directory:</strong> <code>/tmp/mirdb</code></li>
+                <li><strong>Memtable size:</strong> 4MB</li>
+                <li><strong>SSTable max size:</strong> 100MB</li>
+              </ul>
+              <p class="step-note">For production use, consider configuring a persistent data directory.</p>
+            </div>
+          </div>
+
+          <!-- Step 4: Quick Start -->
+          <div class="getting-started-step" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3 class="step-title">Quick Start</h3>
+              <p class="step-description">Start the MirDB server and connect using any Memcached client:</p>
+              <div class="code-block">
+                <pre><code class="language-bash"># Start MirDB server
+./target/release/mirdb
+
+# In another terminal, connect using telnet or a Memcached client
+telnet localhost 12333
+
+# Try some commands
+set mykey 0 0 5
+hello
+STORED
+
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Documentation Links -->
+        <div class="getting-started-links">
+          <h3 class="links-title">Learn More</h3>
+          <div class="links-grid">
+            <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="resource-link doc-link" data-resource="github">
+              <span class="link-icon">📖</span>
+              <span class="link-text">Documentation</span>
+              <span class="link-description">Full documentation and API reference</span>
+            </a>
+            <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer" class="resource-link doc-link" data-resource="issues">
+              <span class="link-icon">💬</span>
+              <span class="link-text">Community</span>
+              <span class="link-description">Get help and report issues</span>
+            </a>
+            <a href="https://memcached.org/about" target="_blank" rel="noopener noreferrer" class="resource-link doc-link" data-resource="memcached">
+              <span class="link-icon">🔗</span>
+              <span class="link-text">Memcached Protocol</span>
+              <span class="link-description">Learn about the Memcached protocol</span>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
