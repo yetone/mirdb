@@ -1,0 +1,472 @@
+/**
+ * Responsive Styles
+ * Owner: Scenario 6 - Responsive Design
+ *
+ * Contains media queries and responsive adjustments for:
+ * - Mobile devices (< 768px)
+ * - Tablet devices (768px - 1024px)
+ * - Desktop devices (> 1024px)
+ *
+ * Design principles:
+ * - Mobile-first approach
+ * - No horizontal scrolling at any viewport
+ * - Minimum 16px body text for mobile readability
+ * - Minimum 44x44px touch targets for accessibility
+ * - Code blocks scroll internally, not the page
+ */
+
+/* ==========================================================================
+   Base Responsive Rules (All Viewports)
+   ========================================================================== */
+
+/* Prevent horizontal scroll on body */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Ensure all containers respect viewport width */
+.container,
+.hero-content,
+.section,
+.usage-example,
+.getting-started-step,
+.getting-started-content {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Responsive images - never overflow container */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Code blocks scroll horizontally within themselves */
+pre,
+.code-block,
+code {
+  max-width: 100%;
+}
+
+.code-block {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.code-block code {
+  display: block;
+  white-space: pre;
+  overflow-x: visible;
+}
+
+/* Ensure buttons and links meet touch target requirements (44x44px min) */
+.btn,
+a.btn,
+button,
+.resource-link,
+.hero-badge a,
+a[class*="link"] {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+/* ==========================================================================
+   Mobile Styles (< 768px)
+   ========================================================================== */
+@media screen and (max-width: 767px) {
+  /* Typography adjustments for mobile readability */
+  body {
+    font-size: var(--font-size-base); /* 16px minimum */
+    line-height: 1.6;
+  }
+
+  /* Reduce heading sizes proportionally on mobile */
+  h1, .hero-title {
+    font-size: var(--font-size-3xl); /* 30px */
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: var(--font-size-2xl); /* 24px */
+  }
+
+  h3 {
+    font-size: var(--font-size-xl); /* 20px */
+  }
+
+  /* Hero section mobile adjustments */
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .hero-content {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .hero-logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-sm);
+  }
+
+  .hero-badges {
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  /* Stack CTA buttons vertically on mobile */
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    min-height: var(--touch-target-min);
+  }
+
+  /* Container padding for mobile */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Section spacing on mobile */
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  /* Usage section mobile styles */
+  .usage-example {
+    padding: var(--spacing-md);
+  }
+
+  .usage h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .usage-intro {
+    font-size: var(--font-size-base);
+    padding: 0;
+  }
+
+  /* Code blocks on mobile - internal scroll only */
+  .code-block {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin: var(--spacing-md) 0;
+  }
+
+  .code-block code {
+    font-size: var(--font-size-sm); /* 14px - acceptable for code */
+    line-height: 1.5;
+  }
+
+  /* Getting started section mobile styles */
+  .getting-started-step {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+
+  .step-number {
+    width: 36px;
+    height: 36px;
+    font-size: var(--font-size-base);
+  }
+
+  .step-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .step-description,
+  .step-note {
+    font-size: var(--font-size-base);
+  }
+
+  /* Links grid mobile - single column */
+  .links-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .resource-link {
+    padding: var(--spacing-md);
+    min-height: var(--touch-target-min);
+  }
+
+  /* Lists on mobile */
+  .prerequisites-list li,
+  .config-list li {
+    font-size: var(--font-size-base);
+    padding: var(--spacing-sm) 0 var(--spacing-sm) var(--spacing-lg);
+  }
+
+  /* Navigation mobile styles (Scenario 5) */
+  .nav-mobile-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--spacing-lg);
+    background-color: var(--color-background);
+    border-top: 1px solid var(--color-border);
+    transform: translateX(100%);
+    transition: transform var(--transition-normal);
+    overflow-y: auto;
+  }
+
+  .nav-links-open {
+    transform: translateX(0);
+  }
+
+  .nav-links li {
+    width: 100%;
+  }
+
+  .nav-link {
+    display: flex;
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+  }
+
+  .nav-link:last-child {
+    border-bottom: none;
+  }
+
+  .nav-link-github {
+    margin-top: var(--spacing-md);
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  /* Prevent body scroll when mobile menu is open */
+  body.mobile-menu-open {
+    overflow: hidden;
+  }
+
+  /* Footer mobile styles (Scenario 5) */
+  .footer-content {
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+  }
+
+  .footer-brand {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .footer-nav {
+    flex-direction: column;
+    gap: var(--spacing-xl);
+  }
+
+  .footer-nav-group {
+    text-align: center;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   Tablet Styles (768px - 1023px)
+   ========================================================================== */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  /* Typography for tablet */
+  h1, .hero-title {
+    font-size: var(--font-size-4xl); /* 36px */
+  }
+
+  h2 {
+    font-size: var(--font-size-3xl); /* 30px */
+  }
+
+  /* Hero section tablet adjustments */
+  .hero {
+    min-height: 70vh;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .hero-logo {
+    width: 100px;
+    height: auto;
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  /* CTA buttons - horizontal on tablet */
+  .hero-cta {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .btn {
+    min-width: 160px;
+  }
+
+  /* Container padding for tablet */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Getting started step - horizontal layout */
+  .getting-started-step {
+    flex-direction: row;
+    gap: var(--spacing-lg);
+  }
+
+  /* Links grid tablet - 2 columns */
+  .links-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Code blocks tablet */
+  .code-block {
+    padding: var(--spacing-lg);
+  }
+
+  .code-block code {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ==========================================================================
+   Desktop Styles (1024px and up)
+   ========================================================================== */
+@media screen and (min-width: 1024px) {
+  /* Typography for desktop - full sizes */
+  h1, .hero-title {
+    font-size: var(--font-size-5xl); /* 48px */
+  }
+
+  h2 {
+    font-size: var(--font-size-3xl); /* 30px */
+  }
+
+  /* Hero section desktop */
+  .hero {
+    min-height: 80vh;
+    padding: var(--spacing-3xl) var(--spacing-xl);
+  }
+
+  .hero-logo {
+    width: 120px;
+    height: auto;
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Container max width and padding for desktop */
+  .container {
+    max-width: var(--container-xl);
+    padding: 0 var(--spacing-xl);
+  }
+
+  /* Section spacing desktop */
+  .section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  /* Usage section desktop */
+  .usage-example {
+    padding: var(--spacing-xl);
+  }
+
+  .usage-intro {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Code blocks desktop */
+  .code-block {
+    padding: var(--spacing-lg);
+  }
+
+  .code-block code {
+    font-size: var(--font-size-sm);
+    line-height: 1.75;
+  }
+
+  /* Getting started desktop */
+  .getting-started-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Links grid desktop - 3 columns */
+  .links-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 900px;
+  }
+}
+
+/* ==========================================================================
+   Large Desktop Styles (1280px and up)
+   ========================================================================== */
+@media screen and (min-width: 1280px) {
+  /* Increase container max width for large screens */
+  .container {
+    max-width: var(--container-xl);
+  }
+
+  /* Optimal reading width for content */
+  .hero-content {
+    max-width: 900px;
+  }
+
+  .usage-intro,
+  .getting-started-content {
+    max-width: 800px;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+@media print {
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-lg);
+  }
+
+  .btn {
+    display: none;
+  }
+
+  .code-block {
+    border: 1px solid #ccc;
+    background: #f5f5f5 !important;
+    color: #333 !important;
+  }
+}

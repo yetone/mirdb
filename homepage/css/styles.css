@@ -1,0 +1,885 @@
+/**
+ * MirDB Homepage - Main Stylesheet
+ * Owner: Shared across all scenarios
+ *
+ * This file contains the main styles for the homepage.
+ * Each scenario adds styles for their respective sections.
+ *
+ * Structure:
+ * - Base/Reset styles
+ * - Typography
+ * - Layout utilities
+ * - Component styles (per section)
+ */
+
+@import url('variables.css');
+
+/* ==========================================================================
+   Base/Reset Styles
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  min-height: 100vh;
+  padding-top: 64px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: var(--font-size-5xl);
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+}
+
+/* ==========================================================================
+   Layout Utilities
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.section {
+  padding: var(--spacing-3xl) 0;
+}
+
+/* ==========================================================================
+   Hero Section Styles (Scenario 1)
+   ========================================================================== */
+
+.hero {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-surface) 100%);
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-logo {
+  width: 120px;
+  height: auto;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.hero-title {
+  font-size: var(--font-size-5xl);
+  font-weight: 800;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-badges {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.hero-badge {
+  display: inline-block;
+}
+
+.hero-badge img {
+  height: 24px;
+  width: auto;
+}
+
+.hero-cta {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* ==========================================================================
+   Usage Section Styles (Scenario 3)
+   ========================================================================== */
+
+.usage {
+  background-color: var(--color-surface);
+}
+
+.usage h2 {
+  margin-bottom: var(--spacing-md);
+}
+
+.usage-intro {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  max-width: 800px;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.usage-examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+.usage-example {
+  background-color: var(--color-background);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.usage-example h3 {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+}
+
+.usage-description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.usage-description code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-surface);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+  color: var(--color-accent);
+}
+
+.usage .code-block {
+  background-color: #0d1117;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-md);
+  border: 1px solid var(--color-border);
+}
+
+.usage .code-block code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.75;
+  color: #c9d1d9;
+  background: transparent;
+  padding: 0;
+  display: block;
+  white-space: pre;
+}
+
+.usage-explanation {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+.usage-explanation code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  background-color: var(--color-surface);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+  color: var(--color-accent);
+  font-style: normal;
+}
+
+/* Syntax Highlighting Classes (Scenario 3) */
+.syntax-command {
+  color: #79c0ff;
+  font-weight: 600;
+}
+
+.syntax-response {
+  color: #3fb950;
+}
+
+.syntax-keyword {
+  color: #ff7b72;
+  font-weight: 600;
+}
+
+.syntax-string {
+  color: #a5d6ff;
+}
+
+.syntax-number {
+  color: #d2a8ff;
+}
+
+.syntax-comment {
+  color: #8b949e;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Getting Started Section Styles (Scenario 4)
+   ========================================================================== */
+
+.getting-started-section {
+  background-color: var(--color-background);
+}
+
+.getting-started-section .section-title {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.getting-started-section .section-description {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.getting-started-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.getting-started-step {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  color: white;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  border-radius: 50%;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-title {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.step-description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.prerequisites-list,
+.config-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.prerequisites-list li,
+.config-list li {
+  padding: var(--spacing-sm) 0;
+  padding-left: var(--spacing-lg);
+  position: relative;
+}
+
+.prerequisites-list li::before,
+.config-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+.prerequisites-list code,
+.config-list code,
+.step-note code {
+  background-color: var(--color-code-bg);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+}
+
+.step-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-top: var(--spacing-sm);
+}
+
+.getting-started-section .code-block {
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  margin: var(--spacing-md) 0;
+}
+
+.getting-started-section .code-block pre {
+  margin: 0;
+  padding: 0;
+}
+
+.getting-started-section .code-block code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-code-text);
+  line-height: 1.6;
+  white-space: pre;
+}
+
+/* Documentation Links */
+.getting-started-links {
+  margin-top: var(--spacing-2xl);
+  text-align: center;
+}
+
+.links-title {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.resource-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.resource-link:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.link-icon {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+.link-text {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.link-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ==========================================================================
+   Navigation and Header Styles (Scenario 5)
+   ========================================================================== */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-normal);
+}
+
+.header-scrolled {
+  background-color: rgba(15, 23, 42, 0.98);
+  border-bottom-color: var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: var(--font-size-xl);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.nav-brand:hover {
+  color: var(--color-accent);
+}
+
+.nav-brand-text {
+  letter-spacing: -0.02em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+}
+
+.nav-link-github {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.nav-link-github:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.nav-github-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Mobile menu toggle button */
+.nav-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: var(--spacing-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.nav-mobile-toggle:hover {
+  background-color: var(--color-surface);
+}
+
+.nav-mobile-toggle:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.nav-mobile-toggle-icon {
+  position: relative;
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+}
+
+.nav-mobile-toggle-icon::before,
+.nav-mobile-toggle-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+}
+
+.nav-mobile-toggle-icon::before {
+  top: -7px;
+}
+
+.nav-mobile-toggle-icon::after {
+  top: 7px;
+}
+
+/* Hamburger to X animation */
+.nav-mobile-toggle-open .nav-mobile-toggle-icon {
+  background-color: transparent;
+}
+
+.nav-mobile-toggle-open .nav-mobile-toggle-icon::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.nav-mobile-toggle-open .nav-mobile-toggle-icon::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* ==========================================================================
+   Footer Styles (Scenario 5)
+   ========================================================================== */
+
+.footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-3xl) 0 var(--spacing-xl);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-3xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.footer-brand {
+  max-width: 300px;
+}
+
+.footer-brand-text {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text);
+  display: block;
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-tagline {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+.footer-nav {
+  display: flex;
+  gap: var(--spacing-3xl);
+}
+
+.footer-nav-group {
+  min-width: 140px;
+}
+
+.footer-nav-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-md);
+}
+
+.footer-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-nav-list li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-link {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-link:hover {
+  color: var(--color-primary);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-copyright {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+.footer-social {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-muted);
+  background-color: var(--color-background);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.footer-social-link:hover {
+  color: var(--color-text);
+  background-color: var(--color-primary);
+}
+
+.footer-social-link svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* ==========================================================================
+   Accessibility Styles (Scenario 7)
+   ========================================================================== */
+
+/* Focus styles for keyboard navigation */
+:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Focus-visible for mouse users who don't need focus rings */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Enhanced focus for interactive elements */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+/* Navigation links focus */
+.nav-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  background-color: var(--color-surface);
+}
+
+/* Button focus states */
+.btn-primary:focus-visible {
+  outline-color: white;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.4);
+}
+
+.btn-secondary:focus-visible {
+  outline-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* Footer link focus */
+.footer-link:focus-visible,
+.footer-social-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Resource link focus */
+.resource-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-color: var(--color-primary);
+}
+
+/* Skip to main content link (screen reader accessible) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background-color: var(--color-primary);
+  color: white;
+  padding: var(--spacing-md) var(--spacing-lg);
+  z-index: 10000;
+  text-decoration: none;
+  font-weight: 600;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #ffffff;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  .btn:focus-visible {
+    outline-width: 3px;
+  }
+}

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached protocol. Fast, reliable, and easy to use.">
+  <meta name="keywords" content="MirDB, key-value store, Memcached, database, persistent storage, tokio">
+  <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Skip to main content link for keyboard users (Scenario 7) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header with navigation (Scenario 5) -->
+  <header class="header" role="banner">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="#hero" class="nav-brand" aria-label="MirDB Home">
+        <span class="nav-brand-text">MirDB</span>
+      </a>
+
+      <button
+        class="nav-mobile-toggle"
+        type="button"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-links"
+      >
+        <span class="nav-mobile-toggle-icon" aria-hidden="true"></span>
+      </button>
+
+      <ul id="nav-links" class="nav-links" role="menubar">
+        <li role="none">
+          <a href="#features" class="nav-link" role="menuitem" data-nav="features">Features</a>
+        </li>
+        <li role="none">
+          <a href="#usage" class="nav-link" role="menuitem" data-nav="usage">Usage</a>
+        </li>
+        <li role="none">
+          <a href="#getting-started" class="nav-link" role="menuitem" data-nav="getting-started">Getting Started</a>
+        </li>
+        <li role="none">
+          <a
+            href="https://github.com/yetone/mirdb"
+            class="nav-link nav-link-github"
+            role="menuitem"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-nav="github"
+            aria-label="View MirDB on GitHub (opens in new tab)"
+          >
+            <svg class="nav-github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            GitHub
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content" role="main">
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <img
+          src="assets/images/logo.gif"
+          alt="MirDB Logo"
+          class="hero-logo"
+          width="120"
+          height="120"
+        >
+        <h1 id="hero-title" class="hero-title">MirDB</h1>
+        <p class="hero-tagline">A Persistent Key-Value Store with Memcached protocol</p>
+
+        <div class="hero-badges" role="group" aria-label="Project status badges">
+          <a
+            href="https://circleci.com/gh/yetone/mirdb"
+            class="hero-badge"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="CircleCI build status"
+          >
+            <img
+              src="https://circleci.com/gh/yetone/mirdb.svg?style=shield"
+              alt="CircleCI Build Status"
+            >
+          </a>
+        </div>
+
+        <div class="hero-cta">
+          <a
+            href="https://github.com/yetone/mirdb"
+            class="btn btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View MirDB on GitHub"
+          >
+            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View on GitHub
+          </a>
+          <a
+            href="#getting-started"
+            class="btn btn-secondary"
+            aria-label="Jump to Getting Started section"
+          >
+            Get Started
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="section features" aria-labelledby="features-title">
+      <div class="container">
+        <!-- Features content will be added by Scenario 2 -->
+      </div>
+    </section>
+
+    <!-- Usage/Code Examples Section (Scenario 3) -->
+    <section id="usage" class="section usage" aria-labelledby="usage-title">
+      <div class="container">
+        <h2 id="usage-title">Usage</h2>
+        <p class="usage-intro">MirDB implements the Memcached text protocol, allowing you to use any Memcached client or connect directly via telnet.</p>
+
+        <div class="usage-examples">
+          <!-- SET operation -->
+          <div class="usage-example">
+            <h3>Store a Value (SET)</h3>
+            <p class="usage-description">The <code>set</code> command stores a key-value pair. The format is: <code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;</code> followed by the value on the next line.</p>
+            <pre class="code-block" data-language="memcached"><code>set mykey 0 0 5
+value
+STORED</code></pre>
+            <p class="usage-explanation">This stores the value "value" (5 bytes) under the key "mykey" with no flags (0) and no expiration (0). The server responds with <code>STORED</code> on success.</p>
+          </div>
+
+          <!-- GET operation -->
+          <div class="usage-example">
+            <h3>Retrieve a Value (GET)</h3>
+            <p class="usage-description">The <code>get</code> command retrieves one or more keys from the store.</p>
+            <pre class="code-block" data-language="memcached"><code>get mykey
+VALUE mykey 0 5
+value
+END</code></pre>
+            <p class="usage-explanation">This retrieves the value for "mykey". The response includes the key name, flags, byte count, the actual value, and <code>END</code> to indicate completion.</p>
+          </div>
+
+          <!-- DELETE operation -->
+          <div class="usage-example">
+            <h3>Delete a Value (DELETE)</h3>
+            <p class="usage-description">The <code>delete</code> command removes a key from the store.</p>
+            <pre class="code-block" data-language="memcached"><code>delete mykey
+DELETED</code></pre>
+            <p class="usage-explanation">This removes "mykey" from the store. The server responds with <code>DELETED</code> on success, or <code>NOT_FOUND</code> if the key doesn't exist.</p>
+          </div>
+
+          <!-- Connection example -->
+          <div class="usage-example">
+            <h3>Connecting to MirDB</h3>
+            <p class="usage-description">Connect using telnet or any Memcached-compatible client.</p>
+            <pre class="code-block" data-language="bash"><code># Connect via telnet
+telnet localhost 12333
+
+# Or use a Memcached client library
+# Python example:
+# import pymemcache
+# client = pymemcache.Client(('localhost', 12333))</code></pre>
+            <p class="usage-explanation">MirDB listens on port 12333 by default. Any Memcached client can connect and use the standard commands.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Getting Started Section (Scenario 4) -->
+    <section id="getting-started" class="section getting-started getting-started-section" aria-labelledby="getting-started-title">
+      <div class="container">
+        <h2 id="getting-started-title" class="section-title">Getting Started</h2>
+        <p class="section-description">Get MirDB up and running in just a few steps.</p>
+
+        <div class="getting-started-content">
+          <!-- Step 1: Prerequisites -->
+          <div class="getting-started-step" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3 class="step-title">Prerequisites</h3>
+              <p class="step-description">Ensure you have the following installed:</p>
+              <ul class="prerequisites-list">
+                <li><strong>Rust</strong> (1.56 or later) - <a href="https://rustup.rs/" target="_blank" rel="noopener noreferrer" class="doc-link">Install via rustup</a></li>
+                <li><strong>Cargo</strong> (included with Rust)</li>
+                <li><strong>Git</strong> (for cloning the repository)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Step 2: Installation -->
+          <div class="getting-started-step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3 class="step-title">Installation</h3>
+              <p class="step-description">Clone and build MirDB from source:</p>
+              <div class="code-block">
+                <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build in release mode
+cargo build --release</code></pre>
+              </div>
+              <p class="step-note">The compiled binary will be available at <code>target/release/mirdb</code></p>
+            </div>
+          </div>
+
+          <!-- Step 3: Configuration -->
+          <div class="getting-started-step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3 class="step-title">Configuration</h3>
+              <p class="step-description">MirDB works out of the box with sensible defaults:</p>
+              <ul class="config-list">
+                <li><strong>Listen address:</strong> <code>0.0.0.0:12333</code></li>
+                <li><strong>Data directory:</strong> <code>/tmp/mirdb</code></li>
+                <li><strong>Memtable size:</strong> 4MB</li>
+                <li><strong>SSTable max size:</strong> 100MB</li>
+              </ul>
+              <p class="step-note">For production use, consider configuring a persistent data directory.</p>
+            </div>
+          </div>
+
+          <!-- Step 4: Quick Start -->
+          <div class="getting-started-step" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3 class="step-title">Quick Start</h3>
+              <p class="step-description">Start the MirDB server and connect using any Memcached client:</p>
+              <div class="code-block">
+                <pre><code class="language-bash"># Start MirDB server
+./target/release/mirdb
+
+# In another terminal, connect using telnet or a Memcached client
+telnet localhost 12333
+
+# Try some commands
+set mykey 0 0 5
+hello
+STORED
+
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Documentation Links -->
+        <div class="getting-started-links">
+          <h3 class="links-title">Learn More</h3>
+          <div class="links-grid">
+            <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="resource-link doc-link" data-resource="github">
+              <span class="link-icon">📖</span>
+              <span class="link-text">Documentation</span>
+              <span class="link-description">Full documentation and API reference</span>
+            </a>
+            <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer" class="resource-link doc-link" data-resource="issues">
+              <span class="link-icon">💬</span>
+              <span class="link-text">Community</span>
+              <span class="link-description">Get help and report issues</span>
+            </a>
+            <a href="https://memcached.org/about" target="_blank" rel="noopener noreferrer" class="resource-link doc-link" data-resource="memcached">
+              <span class="link-icon">🔗</span>
+              <span class="link-text">Memcached Protocol</span>
+              <span class="link-description">Learn about the Memcached protocol</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap Section (Scenario 2) -->
+    <section id="roadmap" class="section roadmap" aria-labelledby="roadmap-title">
+      <div class="container">
+        <!-- Roadmap content will be added by Scenario 2 -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 5) -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-brand-text">MirDB</span>
+          <p class="footer-tagline">A Persistent Key-Value Store with Memcached protocol</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-nav-group">
+            <h3 class="footer-nav-title">Navigation</h3>
+            <ul class="footer-nav-list">
+              <li><a href="#features" class="footer-link nav-link" data-nav="features-footer">Features</a></li>
+              <li><a href="#usage" class="footer-link nav-link" data-nav="usage-footer">Usage</a></li>
+              <li><a href="#getting-started" class="footer-link nav-link" data-nav="getting-started-footer">Getting Started</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-nav-group">
+            <h3 class="footer-nav-title">Resources</h3>
+            <ul class="footer-nav-list">
+              <li>
+                <a
+                  href="https://github.com/yetone/mirdb"
+                  class="footer-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-nav="github-footer"
+                >
+                  GitHub Repository
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/yetone/mirdb/issues"
+                  class="footer-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Report Issues
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/yetone/mirdb#readme"
+                  class="footer-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Documentation
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copyright">
+          &copy; <span id="footer-year"></span> MirDB. Released under the MIT License.
+        </p>
+        <div class="footer-social">
+          <a
+            href="https://github.com/yetone/mirdb"
+            class="footer-social-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="MirDB on GitHub"
+            data-nav="github-social"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="24" height="24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/syntax-highlight.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
