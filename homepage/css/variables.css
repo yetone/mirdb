@@ -8,6 +8,8 @@
  * - Spacing scale
  * - Breakpoint values
  * - Animation timings
+ * - Touch target sizing
+ * - Container widths
  */
 
 :root {
@@ -29,15 +31,16 @@
   --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Consolas, 'Liberation Mono', Menlo, monospace;
 
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-  --font-size-5xl: 3rem;
+  /* Font sizes - mobile-first with minimum 16px for body text for readability */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px - minimum for mobile body text */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -48,11 +51,21 @@
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
 
-  /* Breakpoints (for reference in JS) */
+  /* Breakpoints (for reference in JS and documentation) */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
+
+  /* Container max widths for different breakpoints */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1200px;
+
+  /* Touch target sizes - WCAG minimum 44x44px */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 48px;
 
   /* Animation */
   --transition-fast: 150ms ease;
