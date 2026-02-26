@@ -36,6 +36,7 @@ body {
   color: var(--color-text);
   background-color: var(--color-background);
   min-height: 100vh;
+  padding-top: 64px;
 }
 
 img {
@@ -498,4 +499,283 @@ p {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   text-align: center;
+}
+
+/* ==========================================================================
+   Navigation and Header Styles (Scenario 5)
+   ========================================================================== */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-normal);
+}
+
+.header-scrolled {
+  background-color: rgba(15, 23, 42, 0.98);
+  border-bottom-color: var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: var(--font-size-xl);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.nav-brand:hover {
+  color: var(--color-accent);
+}
+
+.nav-brand-text {
+  letter-spacing: -0.02em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+}
+
+.nav-link-github {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.nav-link-github:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.nav-github-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Mobile menu toggle button */
+.nav-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: var(--spacing-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.nav-mobile-toggle:hover {
+  background-color: var(--color-surface);
+}
+
+.nav-mobile-toggle:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.nav-mobile-toggle-icon {
+  position: relative;
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+}
+
+.nav-mobile-toggle-icon::before,
+.nav-mobile-toggle-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+}
+
+.nav-mobile-toggle-icon::before {
+  top: -7px;
+}
+
+.nav-mobile-toggle-icon::after {
+  top: 7px;
+}
+
+/* Hamburger to X animation */
+.nav-mobile-toggle-open .nav-mobile-toggle-icon {
+  background-color: transparent;
+}
+
+.nav-mobile-toggle-open .nav-mobile-toggle-icon::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.nav-mobile-toggle-open .nav-mobile-toggle-icon::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* ==========================================================================
+   Footer Styles (Scenario 5)
+   ========================================================================== */
+
+.footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-3xl) 0 var(--spacing-xl);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-3xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.footer-brand {
+  max-width: 300px;
+}
+
+.footer-brand-text {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text);
+  display: block;
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-tagline {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+.footer-nav {
+  display: flex;
+  gap: var(--spacing-3xl);
+}
+
+.footer-nav-group {
+  min-width: 140px;
+}
+
+.footer-nav-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-md);
+}
+
+.footer-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-nav-list li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-link {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-link:hover {
+  color: var(--color-primary);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-copyright {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+.footer-social {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-muted);
+  background-color: var(--color-background);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.footer-social-link:hover {
+  color: var(--color-text);
+  background-color: var(--color-primary);
+}
+
+.footer-social-link svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
 }

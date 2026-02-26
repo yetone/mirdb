@@ -20,7 +20,17 @@
       window.SyntaxHighlight.highlightCode();
     }
 
-    // Module initialization will be added by other scenarios
+    // Initialize navigation (Scenario 5)
+    if (window.Navigation) {
+      window.Navigation.init();
+    }
+
+    // Set footer year dynamically
+    var footerYear = document.getElementById('footer-year');
+    if (footerYear) {
+      footerYear.textContent = new Date().getFullYear();
+    }
+
     console.log('MirDB Homepage initialized');
   }
 
