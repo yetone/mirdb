@@ -1,9 +1,8 @@
 module.exports = {
   testEnvironment: 'jsdom',
-  testMatch: ['**/tests/**/*.test.js'],
+  roots: ['<rootDir>/tests'],
+  testMatch: ['**/*.test.js'],
   setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
   moduleFileExtensions: ['js'],
-  verbose: true,
-  collectCoverage: false,
-  transform: {}
+  verbose: true
 };

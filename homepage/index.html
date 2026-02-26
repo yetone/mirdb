@@ -1,121 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/responsive.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached protocol. Fast, reliable, and easy to use.">
+  <meta name="keywords" content="MirDB, key-value store, Memcached, database, persistent storage, tokio">
+  <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <!-- Header with navigation (Scenario 5) -->
-    <header id="header">
-        <nav>
-            <a href="#" class="logo">MirDB</a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#usage">Usage</a></li>
-                <li><a href="#getting-started">Getting Started</a></li>
-                <li><a href="https://github.com/mebusy/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-            </ul>
-        </nav>
-    </header>
+  <!-- Header with navigation (Scenario 5) -->
+  <header class="header" role="banner">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <!-- Navigation will be added by Scenario 5 -->
+    </nav>
+  </header>
 
-    <main>
-        <!-- Hero section (Scenario 1) -->
-        <section id="hero" class="hero-section">
-            <div class="hero-content">
-                <img src="assets/images/logo.gif" alt="MirDB Logo" class="hero-logo">
-                <h1>MirDB</h1>
-                <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
-                <div class="hero-badges">
-                    <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build Status">
-                </div>
-                <div class="hero-cta">
-                    <a href="#getting-started" class="btn btn-primary">Get Started</a>
-                    <a href="https://github.com/mebusy/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-                </div>
-            </div>
-        </section>
+  <main role="main">
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <img
+          src="assets/images/logo.gif"
+          alt="MirDB Logo"
+          class="hero-logo"
+          width="120"
+          height="120"
+        >
+        <h1 id="hero-title" class="hero-title">MirDB</h1>
+        <p class="hero-tagline">A Persistent Key-Value Store with Memcached protocol</p>
 
-        <!-- Features section (Scenario 2) -->
-        <section id="features" class="features-section">
-            <div class="container">
-                <h2 class="section-title">Features</h2>
-                <p class="section-subtitle">Powerful capabilities for persistent key-value storage</p>
-
-                <div class="features-grid">
-                    <div class="feature-card" data-feature="tokio">
-                        <div class="feature-icon">⚡</div>
-                        <h3 class="feature-title">Tokio with Memcached Protocol</h3>
-                        <p class="feature-description">High-performance async runtime with full Memcached protocol support. Connect with any Memcached client and enjoy blazing-fast operations.</p>
-                        <span class="feature-status feature-status-implemented">Implemented</span>
-                    </div>
-
-                    <div class="feature-card" data-feature="memtable">
-                        <div class="feature-icon">📊</div>
-                        <h3 class="feature-title">Memtable with Skip-List</h3>
-                        <p class="feature-description">Efficient in-memory data structure using skip-list for fast lookups, insertions, and range queries with O(log n) complexity.</p>
-                        <span class="feature-status feature-status-implemented">Implemented</span>
-                    </div>
-
-                    <div class="feature-card" data-feature="minor-compaction">
-                        <div class="feature-icon">🔄</div>
-                        <h3 class="feature-title">Minor Compaction</h3>
-                        <p class="feature-description">Automatic flushing of memtable to SSTable files when memory threshold is reached, ensuring data durability without blocking writes.</p>
-                        <span class="feature-status feature-status-implemented">Implemented</span>
-                    </div>
-
-                    <div class="feature-card" data-feature="major-compaction">
-                        <div class="feature-icon">🗜️</div>
-                        <h3 class="feature-title">Major Compaction</h3>
-                        <p class="feature-description">Background process that merges multiple SSTable files to reclaim space, remove deleted entries, and optimize read performance.</p>
-                        <span class="feature-status feature-status-implemented">Implemented</span>
-                    </div>
-                </div>
-
-                <div class="roadmap-section">
-                    <h3 class="roadmap-title">Roadmap</h3>
-                    <p class="roadmap-subtitle">Planned features for future releases</p>
-
-                    <div class="roadmap-grid">
-                        <div class="feature-card feature-card-planned" data-feature="raft">
-                            <div class="feature-icon">🔗</div>
-                            <h3 class="feature-title">Raft Consensus Protocol</h3>
-                            <p class="feature-description">Distributed consensus for high availability and fault tolerance. Replicate data across multiple nodes with automatic leader election.</p>
-                            <span class="feature-status feature-status-planned">Planned</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Usage section (Scenario 3) -->
-        <section id="usage" class="usage-section">
-            <div class="container">
-                <h2 class="section-title">Usage</h2>
-                <p class="section-subtitle">Code examples coming soon</p>
-            </div>
-        </section>
-
-        <!-- Getting Started section (Scenario 4) -->
-        <section id="getting-started" class="getting-started-section">
-            <div class="container">
-                <h2 class="section-title">Getting Started</h2>
-                <p class="section-subtitle">Installation instructions coming soon</p>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer (Scenario 5) -->
-    <footer id="footer">
-        <div class="container">
-            <p>&copy; 2024 MirDB. Open source under MIT License.</p>
-            <a href="https://github.com/mebusy/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <div class="hero-badges" role="group" aria-label="Project status badges">
+          <a
+            href="https://circleci.com/gh/yetone/mirdb"
+            class="hero-badge"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="CircleCI build status"
+          >
+            <img
+              src="https://circleci.com/gh/yetone/mirdb.svg?style=shield"
+              alt="CircleCI Build Status"
+            >
+          </a>
         </div>
-    </footer>
 
-    <script src="js/main.js"></script>
+        <div class="hero-cta">
+          <a
+            href="https://github.com/yetone/mirdb"
+            class="btn btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View MirDB on GitHub"
+          >
+            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View on GitHub
+          </a>
+          <a
+            href="#getting-started"
+            class="btn btn-secondary"
+            aria-label="Jump to Getting Started section"
+          >
+            Get Started
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="section features" aria-labelledby="features-title">
+      <div class="container">
+        <!-- Features content will be added by Scenario 2 -->
+      </div>
+    </section>
+
+    <!-- Usage/Code Examples Section (Scenario 3) -->
+    <section id="usage" class="section usage" aria-labelledby="usage-title">
+      <div class="container">
+        <!-- Usage content will be added by Scenario 3 -->
+      </div>
+    </section>
+
+    <!-- Getting Started Section (Scenario 4) -->
+    <section id="getting-started" class="section getting-started" aria-labelledby="getting-started-title">
+      <div class="container">
+        <!-- Getting started content will be added by Scenario 4 -->
+      </div>
+    </section>
+
+    <!-- Roadmap Section (Scenario 2) -->
+    <section id="roadmap" class="section roadmap" aria-labelledby="roadmap-title">
+      <div class="container">
+        <!-- Roadmap content will be added by Scenario 2 -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 5) -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <!-- Footer content will be added by Scenario 5 -->
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
