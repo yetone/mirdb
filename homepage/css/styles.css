@@ -201,3 +201,120 @@ p {
   height: 20px;
   fill: currentColor;
 }
+
+/* ==========================================================================
+   Usage Section Styles (Scenario 3)
+   ========================================================================== */
+
+.usage {
+  background-color: var(--color-surface);
+}
+
+.usage h2 {
+  margin-bottom: var(--spacing-md);
+}
+
+.usage-intro {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  max-width: 800px;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.usage-examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+.usage-example {
+  background-color: var(--color-background);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.usage-example h3 {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+}
+
+.usage-description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.usage-description code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-surface);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+  color: var(--color-accent);
+}
+
+.code-block {
+  background-color: #0d1117;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-md);
+  border: 1px solid var(--color-border);
+}
+
+.code-block code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.75;
+  color: #c9d1d9;
+  background: transparent;
+  padding: 0;
+  display: block;
+  white-space: pre;
+}
+
+.usage-explanation {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+.usage-explanation code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  background-color: var(--color-surface);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+  color: var(--color-accent);
+  font-style: normal;
+}
+
+/* Syntax Highlighting Classes (Scenario 3) */
+.syntax-command {
+  color: #79c0ff;
+  font-weight: 600;
+}
+
+.syntax-response {
+  color: #3fb950;
+}
+
+.syntax-keyword {
+  color: #ff7b72;
+  font-weight: 600;
+}
+
+.syntax-string {
+  color: #a5d6ff;
+}
+
+.syntax-number {
+  color: #d2a8ff;
+}
+
+.syntax-comment {
+  color: #8b949e;
+  font-style: italic;
+}

@@ -15,6 +15,11 @@
    * Initialize all modules when DOM is ready
    */
   function init() {
+    // Initialize syntax highlighting (Scenario 3)
+    if (window.SyntaxHighlight) {
+      window.SyntaxHighlight.highlightCode();
+    }
+
     // Module initialization will be added by other scenarios
     console.log('MirDB Homepage initialized');
   }

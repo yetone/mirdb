@@ -80,7 +80,54 @@
     <!-- Usage/Code Examples Section (Scenario 3) -->
     <section id="usage" class="section usage" aria-labelledby="usage-title">
       <div class="container">
-        <!-- Usage content will be added by Scenario 3 -->
+        <h2 id="usage-title">Usage</h2>
+        <p class="usage-intro">MirDB implements the Memcached text protocol, allowing you to use any Memcached client or connect directly via telnet.</p>
+
+        <div class="usage-examples">
+          <!-- SET operation -->
+          <div class="usage-example">
+            <h3>Store a Value (SET)</h3>
+            <p class="usage-description">The <code>set</code> command stores a key-value pair. The format is: <code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;</code> followed by the value on the next line.</p>
+            <pre class="code-block" data-language="memcached"><code>set mykey 0 0 5
+value
+STORED</code></pre>
+            <p class="usage-explanation">This stores the value "value" (5 bytes) under the key "mykey" with no flags (0) and no expiration (0). The server responds with <code>STORED</code> on success.</p>
+          </div>
+
+          <!-- GET operation -->
+          <div class="usage-example">
+            <h3>Retrieve a Value (GET)</h3>
+            <p class="usage-description">The <code>get</code> command retrieves one or more keys from the store.</p>
+            <pre class="code-block" data-language="memcached"><code>get mykey
+VALUE mykey 0 5
+value
+END</code></pre>
+            <p class="usage-explanation">This retrieves the value for "mykey". The response includes the key name, flags, byte count, the actual value, and <code>END</code> to indicate completion.</p>
+          </div>
+
+          <!-- DELETE operation -->
+          <div class="usage-example">
+            <h3>Delete a Value (DELETE)</h3>
+            <p class="usage-description">The <code>delete</code> command removes a key from the store.</p>
+            <pre class="code-block" data-language="memcached"><code>delete mykey
+DELETED</code></pre>
+            <p class="usage-explanation">This removes "mykey" from the store. The server responds with <code>DELETED</code> on success, or <code>NOT_FOUND</code> if the key doesn't exist.</p>
+          </div>
+
+          <!-- Connection example -->
+          <div class="usage-example">
+            <h3>Connecting to MirDB</h3>
+            <p class="usage-description">Connect using telnet or any Memcached-compatible client.</p>
+            <pre class="code-block" data-language="bash"><code># Connect via telnet
+telnet localhost 12333
+
+# Or use a Memcached client library
+# Python example:
+# import pymemcache
+# client = pymemcache.Client(('localhost', 12333))</code></pre>
+            <p class="usage-explanation">MirDB listens on port 12333 by default. Any Memcached client can connect and use the standard commands.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -106,6 +153,7 @@
     </div>
   </footer>
 
+  <script src="js/syntax-highlight.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
