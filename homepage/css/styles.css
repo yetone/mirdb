@@ -729,13 +729,102 @@ a:hover {
 }
 
 /* ===== RESPONSIVE BREAKPOINTS (Scenario 8) ===== */
-@media (max-width: 768px) {
+
+/**
+ * Responsive Design Breakpoints:
+ * - Mobile: 320px - 480px
+ * - Mobile Landscape: 481px - 767px
+ * - Tablet: 768px - 1023px
+ * - Desktop: 1024px - 1919px
+ * - Large Desktop: 1920px+
+ * - Ultra-wide: 2560px+
+ *
+ * REQ-7: Responsive design functional 320px to 2560px
+ */
+
+/* Ultra-wide screens (2560px+) */
+@media (min-width: 2560px) {
+    .container {
+        max-width: var(--container-max);
+    }
+
+    .hero-content {
+        max-width: 900px;
+    }
+
+    .architecture-diagram-wrapper {
+        max-width: 1000px;
+    }
+}
+
+/* Large Desktop (1920px+) */
+@media (min-width: 1920px) {
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Desktop (1024px - 1919px) */
+@media (min-width: 1024px) and (max-width: 1919px) {
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+/* Tablet Portrait and Above (768px+) */
+@media (min-width: 769px) {
+    .nav-links {
+        display: flex;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .code-examples {
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
+}
+
+/* Tablet Portrait (768px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .hero h1 {
+        font-size: 3rem;
+    }
+
+    .hero-tagline {
+        font-size: 1.25rem;
+    }
+
+    .hero-description {
+        font-size: 1.125rem;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+}
+
+/* Mobile Landscape (481px - 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
     .hero h1 {
         font-size: 2.5rem;
     }
 
     .hero-tagline {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
     }
 
     .code-examples {
@@ -744,6 +833,219 @@ a:hover {
 
     .nav-links {
         display: none;
+    }
+}
+
+/* Mobile (320px - 480px) */
+@media (max-width: 480px) {
+    :root {
+        --spacing-md: 1rem;
+        --spacing-lg: 2rem;
+    }
+
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    /* Navigation */
+    .nav-links {
+        display: none;
+    }
+
+    .nav-container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .nav-logo {
+        font-size: 1.25rem;
+    }
+
+    /* Hero Section */
+    .hero {
+        min-height: 60vh;
+        padding: calc(var(--spacing-lg) + 60px) var(--spacing-sm) var(--spacing-lg);
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero-tagline {
+        font-size: 1rem;
+    }
+
+    .hero-description {
+        font-size: 0.9375rem;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .hero-cta .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Features Section */
+    .features {
+        padding: var(--spacing-md) 0;
+    }
+
+    .features h2 {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+
+    .feature-card {
+        padding: var(--spacing-sm);
+    }
+
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .feature-title {
+        font-size: 1.125rem;
+    }
+
+    .feature-description {
+        font-size: 0.9375rem;
+    }
+
+    /* Quick Start Section */
+    .quick-start {
+        padding: var(--spacing-md) 0;
+    }
+
+    .quick-start h2 {
+        font-size: 1.5rem;
+    }
+
+    .section-description {
+        font-size: 0.9375rem;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .code-examples {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+
+    .code-block pre {
+        padding: var(--spacing-xs);
+    }
+
+    .code-block code {
+        font-size: 0.75rem;
+    }
+
+    /* Architecture Section */
+    .architecture {
+        padding: var(--spacing-md) 0;
+    }
+
+    .architecture h2 {
+        font-size: 1.5rem;
+    }
+
+    .architecture-diagram-wrapper {
+        padding: var(--spacing-xs);
+        margin: 0 calc(-1 * var(--spacing-sm));
+        border-radius: 0;
+    }
+
+    /* Benchmarks Section */
+    .benchmarks {
+        padding: var(--spacing-md) 0;
+    }
+
+    .benchmarks h2 {
+        font-size: 1.5rem;
+    }
+
+    .benchmarks-table-wrapper {
+        margin: 0 calc(-1 * var(--spacing-sm));
+        border-radius: 0;
+    }
+
+    .benchmarks-table th,
+    .benchmarks-table td {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.75rem;
+    }
+
+    /* Footer */
+    .main-footer {
+        padding: var(--spacing-sm) 0;
+        font-size: 0.875rem;
+    }
+
+    /* Toast notifications */
+    .toast-container {
+        bottom: var(--spacing-sm);
+        right: var(--spacing-sm);
+        left: var(--spacing-sm);
+    }
+
+    .toast {
+        width: 100%;
+    }
+}
+
+/* Minimum touch target size for all interactive elements */
+@media (max-width: 768px) {
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .copy-btn {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .nav-links a {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    .skip-link {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Print styles */
+@media print {
+    .site-header,
+    .hero-cta,
+    .copy-btn,
+    .toast-container,
+    .skip-link {
+        display: none;
+    }
+
+    .hero {
+        min-height: auto;
+        padding: var(--spacing-md);
+    }
+
+    body {
+        font-size: 12pt;
     }
 }
 
