@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent Memcached-compatible key-value store with LSM tree architecture">
+  <title>MirDB - Persistent Memcached-Compatible Key-Value Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <!-- Skip Navigation Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- BEGIN SECTION: Navigation (Scenario 1) -->
+  <header class="site-header">
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <div class="nav-brand">
+        <a href="/">MirDB</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#benchmarks">Benchmarks</a></li>
+        <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+  <!-- END SECTION: Navigation -->
+
+  <main id="main-content">
+    <!-- BEGIN SECTION: Hero (Scenario 1) -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-content">
+        <h1 id="hero-heading">MirDB</h1>
+        <p class="hero-tagline">Persistent Memcached-Compatible Key-Value Store</p>
+        <p class="hero-description">The same simple API you know from Memcached, with durable storage through an LSM tree architecture.</p>
+        <div class="hero-ctas">
+          <a href="https://github.com/mirdb/mirdb" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Get Started on GitHub</a>
+          <a href="#quick-start" class="btn btn-secondary">View Quick Start</a>
+        </div>
+      </div>
+    </section>
+    <!-- END SECTION: Hero -->
+
+    <!-- BEGIN SECTION: Features (Scenario 2) -->
+    <section id="features" class="features" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 id="features-heading">Key Features</h2>
+        <p class="section-description">Everything you need for a reliable, high-performance key-value store.</p>
+        <div class="features-grid">
+          <article class="feature-card" tabindex="0">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Full compatibility with the Memcached protocol. Use your existing clients and tools without any code changes.</p>
+          </article>
+
+          <article class="feature-card" tabindex="0">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </div>
+            <h3 class="feature-title">LSM Tree Persistence</h3>
+            <p class="feature-description">Durable storage powered by Log-Structured Merge trees. Your data survives restarts and crashes with efficient write performance.</p>
+          </article>
+
+          <article class="feature-card" tabindex="0">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <h3 class="feature-title">TTL Support</h3>
+            <p class="feature-description">Set expiration times on your keys. Automatic cleanup of expired entries keeps your storage lean and efficient.</p>
+          </article>
+
+          <article class="feature-card" tabindex="0">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+              </svg>
+            </div>
+            <h3 class="feature-title">Fault Tolerance</h3>
+            <p class="feature-description">Write-Ahead Logging (WAL) ensures crash recovery. Your data is protected against unexpected failures and power outages.</p>
+          </article>
+
+          <article class="feature-card" tabindex="0">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+                <path d="M10 7h4"></path>
+                <path d="M7 10v4"></path>
+                <path d="M17 10v4"></path>
+                <path d="M10 17h4"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Automatic Compaction</h3>
+            <p class="feature-description">Background compaction optimizes storage by merging and cleaning up data files. Maintains performance over time.</p>
+          </article>
+
+          <article class="feature-card" tabindex="0">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">High Performance</h3>
+            <p class="feature-description">Optimized for speed with in-memory caching and efficient disk I/O. Sub-millisecond read latencies at scale.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- END SECTION: Features -->
+
+    <!-- BEGIN SECTION: Quick Start (Scenario 3) -->
+    <section id="quick-start" class="quick-start" aria-labelledby="quickstart-heading">
+      <div class="container">
+        <h2 id="quickstart-heading">Quick Start</h2>
+        <p class="section-description">Get up and running in minutes with your favorite language.</p>
+        <!-- Quick start code examples will be added by Scenario 3 -->
+      </div>
+    </section>
+    <!-- END SECTION: Quick Start -->
+
+    <!-- BEGIN SECTION: Architecture (Scenario 4) -->
+    <section id="architecture" class="architecture" aria-labelledby="architecture-heading">
+      <div class="container">
+        <h2 id="architecture-heading">Architecture</h2>
+        <p class="section-description">How MirDB organizes and persists your data.</p>
+        <!-- Architecture diagram will be added by Scenario 4 -->
+      </div>
+    </section>
+    <!-- END SECTION: Architecture -->
+
+    <!-- BEGIN SECTION: Benchmarks (Scenario 5) -->
+    <section id="benchmarks" class="benchmarks" aria-labelledby="benchmarks-heading">
+      <div class="container">
+        <h2 id="benchmarks-heading">Performance Benchmarks</h2>
+        <p class="section-description">See how MirDB compares to other key-value stores.</p>
+        <!-- Benchmark table will be added by Scenario 5 -->
+      </div>
+    </section>
+    <!-- END SECTION: Benchmarks -->
+  </main>
+
+  <!-- BEGIN SECTION: Footer (Scenario 7) -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2024 MirDB. Licensed under MIT.</p>
+      <nav aria-label="Footer navigation">
+        <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/mirdb/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+      </nav>
+    </div>
+  </footer>
+  <!-- END SECTION: Footer -->
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>

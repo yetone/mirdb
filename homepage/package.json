@@ -1,0 +1,13 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "Homepage for MirDB - Persistent Memcached-Compatible Key-Value Store",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:e2e": "npx playwright test",
+    "serve": "python3 -m http.server 8080"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.0"
+  }
+}
