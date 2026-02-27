@@ -10,11 +10,10 @@
  * - smooth-scroll.js (Scenario 1)
  */
 
-// Initialize modules when DOM is ready
+// Main initialization
 document.addEventListener('DOMContentLoaded', function() {
-  // Theme toggle will be initialized by Scenario 6
-  // Clipboard functionality will be initialized by Scenario 3
-  // Smooth scroll will be initialized by Scenario 1
-
-  console.log('MirDB Homepage loaded');
+    // Highlight code blocks with Prism.js if available
+    if (typeof Prism !== 'undefined') {
+        Prism.highlightAll();
+    }
 });
