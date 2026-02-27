@@ -10,6 +10,7 @@
     "serve": "python3 -m http.server 8080"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.40.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"

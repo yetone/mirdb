@@ -1068,3 +1068,68 @@ a:hover {
 .skip-link:focus {
     top: 0;
 }
+
+/* Ensure links in text are distinguishable (WCAG 2.1 AA - link-in-text-block) */
+.footer-copyright a,
+.benchmarks-note a,
+.section-description a {
+    text-decoration: underline;
+}
+
+.footer-copyright a:hover,
+.footer-copyright a:focus,
+.benchmarks-note a:hover,
+.benchmarks-note a:focus,
+.section-description a:hover,
+.section-description a:focus {
+    text-decoration: none;
+}
+
+/* Ensure scrollable regions are keyboard accessible (WCAG 2.1 AA) */
+.benchmarks-table-wrapper {
+    /* Already has overflow-x: auto from Scenario 5 */
+    /* Adding tabindex via HTML and focus styles here */
+}
+
+.benchmarks-table-wrapper:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Enhanced focus states for interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Ensure buttons have consistent focus appearance */
+.btn:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+}
+
+/* Theme toggle focus visibility */
+.theme-toggle:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+/* Dark mode accessibility overrides for WCAG 2.1 AA contrast compliance */
+/* Skip-link and primary button need darker background or black text in dark mode */
+[data-theme="dark"] .skip-link {
+    background: #0056b3; /* Darker blue for 4.5:1 contrast with white text */
+}
+
+[data-theme="dark"] .btn-primary {
+    background: #0056b3; /* Darker blue for 4.5:1 contrast with white text */
+}
+
+[data-theme="dark"] .btn-primary:hover {
+    background: #003d7a; /* Even darker on hover */
+}
