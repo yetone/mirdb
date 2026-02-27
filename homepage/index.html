@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent Memcached-compatible key-value store with LSM tree architecture">
+    <title>MirDB - Persistent Memcached-Compatible Key-Value Store</title>
+    <!-- Critical CSS inlined for performance (Scenario 9: Performance Optimization) -->
+    <style>
+        :root{--color-bg:#fff;--color-bg-secondary:#f5f5f5;--color-text:#1a1a2e;--color-text-secondary:#4a4a68;--color-primary:#0066cc;--color-primary-hover:#0052a3;--color-border:#e0e0e0;--font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;--container-max:1200px;--spacing-xs:0.5rem;--spacing-sm:1rem;--spacing-md:2rem;--spacing-lg:4rem;--transition-fast:150ms ease}[data-theme="dark"]{--color-bg:#1a1a2e;--color-bg-secondary:#2d2d44;--color-text:#f0f0f5;--color-text-secondary:#b0b0c0;--color-primary:#4da6ff;--color-primary-hover:#80c0ff;--color-border:#3d3d5c}*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;padding:0;font-family:var(--font-family);font-size:16px;line-height:1.6;color:var(--color-text);background-color:var(--color-bg)}.container{max-width:var(--container-max);margin:0 auto;padding:0 var(--spacing-md)}h1,h2{margin-top:0;line-height:1.2}a{color:var(--color-primary);text-decoration:none;transition:color var(--transition-fast)}a:hover{color:var(--color-primary-hover)}.skip-link{position:absolute;top:-40px;left:0;background:var(--color-primary);color:#fff;padding:8px 16px;z-index:101}.skip-link:focus{top:0}.site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--color-bg);border-bottom:1px solid var(--color-border)}.main-nav{padding:var(--spacing-sm) 0}.nav-container{max-width:var(--container-max);margin:0 auto;padding:0 var(--spacing-md);display:flex;justify-content:space-between;align-items:center}.nav-logo{font-size:1.5rem;font-weight:700;color:var(--color-text)}.nav-links{list-style:none;margin:0;padding:0;display:flex;gap:var(--spacing-md)}.nav-links a{color:var(--color-text-secondary)}.nav-links a:hover{color:var(--color-primary)}.hero{min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:calc(var(--spacing-lg) + 60px) var(--spacing-md) var(--spacing-lg);background:linear-gradient(135deg,var(--color-bg) 0%,var(--color-bg-secondary) 100%)}.hero-content{max-width:800px}.hero h1{font-size:4rem;margin-bottom:var(--spacing-sm);color:var(--color-text)}.hero-tagline{font-size:1.5rem;color:var(--color-primary);font-weight:600;margin-bottom:var(--spacing-sm)}.hero-description{font-size:1.25rem;color:var(--color-text-secondary);margin-bottom:var(--spacing-md)}.hero-cta{display:flex;gap:var(--spacing-sm);justify-content:center;flex-wrap:wrap}.btn{display:inline-block;padding:0.875rem 1.75rem;font-size:1rem;font-weight:600;border-radius:6px;transition:all var(--transition-fast);cursor:pointer;border:none}.btn-primary{background:var(--color-primary);color:#fff}.btn-primary:hover{background:var(--color-primary-hover);color:#fff}.btn-secondary{background:transparent;color:var(--color-primary);border:2px solid var(--color-primary)}.btn-secondary:hover{background:var(--color-primary);color:#fff}:focus-visible{outline:2px solid var(--color-primary);outline-offset:2px}@media(max-width:768px){.nav-links{display:none}.hero h1{font-size:2.5rem}.hero-tagline{font-size:1.125rem}.hero-description{font-size:1rem}}@media(max-width:480px){.hero{min-height:60vh}.hero h1{font-size:2rem}.hero-tagline{font-size:1rem}.hero-cta{flex-direction:column;gap:var(--spacing-xs)}.hero-cta .btn{width:100%;text-align:center}}
+    </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="vendor/prism/prism.min.css">
+    <!-- Inline script to prevent flash of wrong theme -->
+    <script>
+        (function() {
+            try {
+                var storedTheme = localStorage.getItem('mirdb-theme');
+                var theme = storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {}
+        })();
+    </script>
+</head>
+<body>
+    <!-- Skip Navigation Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- BEGIN SECTION: Navigation (Scenario 1) -->
+    <header class="site-header">
+        <nav class="main-nav" aria-label="Main navigation">
+            <div class="nav-container">
+                <a href="#" class="nav-logo">MirDB</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#benchmarks">Benchmarks</a></li>
+                <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- END SECTION: Navigation -->
+
+    <main id="main-content">
+        <!-- BEGIN SECTION: Hero (Scenario 1) -->
+        <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>MirDB</h1>
+            <p class="hero-tagline">Persistent Memcached-Compatible Key-Value Store</p>
+            <p class="hero-description">The speed of Memcached with the durability you need. Built on a proven LSM tree architecture.</p>
+            <div class="hero-cta">
+                <a href="https://github.com/mirdb/mirdb" class="btn btn-primary" target="_blank" rel="noopener">Get Started on GitHub</a>
+                <a href="#quick-start" class="btn btn-secondary">View Quick Start</a>
+            </div>
+        </div>
+    </section>
+    <!-- END SECTION: Hero -->
+
+    <!-- BEGIN SECTION: Features (Scenario 2) -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Features</h2>
+            <div class="features-grid">
+                <!-- Feature 1: Memcached Protocol Compatibility -->
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/>
+                            <path d="M16 24h16M24 16v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Memcached Protocol</h3>
+                    <p class="feature-description">Fully compatible with the Memcached protocol. Use your existing memcached clients without any code changes.</p>
+                </article>
+
+                <!-- Feature 2: Persistence (LSM Tree) -->
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M8 20h32M8 32h32M20 8v32" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Durable Persistence</h3>
+                    <p class="feature-description">Built on LSM tree architecture for durable storage. Your data persists across restarts and server failures.</p>
+                </article>
+
+                <!-- Feature 3: TTL Support -->
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 14v10l7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">TTL Support</h3>
+                    <p class="feature-description">Set expiration times on keys with full TTL support. Keys automatically expire when their time-to-live is reached.</p>
+                </article>
+
+                <!-- Feature 4: Fault Tolerance (WAL) -->
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 4l4 8h8l-6 6 2 10-8-5-8 5 2-10-6-6h8l4-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M12 36h24M16 42h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Fault Tolerance</h3>
+                    <p class="feature-description">Write-Ahead Log (WAL) ensures crash recovery. Recover seamlessly from unexpected shutdowns without data loss.</p>
+                </article>
+
+                <!-- Feature 5: Compaction -->
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="12" width="32" height="6" rx="1" stroke="currentColor" stroke-width="2"/>
+                            <rect x="12" y="22" width="24" height="6" rx="1" stroke="currentColor" stroke-width="2"/>
+                            <rect x="16" y="32" width="16" height="6" rx="1" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Compaction</h3>
+                    <p class="feature-description">Automatic background compaction merges and optimizes storage files, keeping your database lean and efficient.</p>
+                </article>
+
+                <!-- Feature 6: High Performance -->
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 4v8M24 36v8M4 24h8M36 24h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="24" cy="24" r="12" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 18v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">High Performance</h3>
+                    <p class="feature-description">Optimized for low-latency reads and writes. Get the speed of an in-memory cache with persistent storage.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+    <!-- END SECTION: Features -->
+
+    <!-- BEGIN SECTION: Quick Start (Scenario 3) -->
+    <section class="quick-start" id="quick-start">
+        <div class="container">
+            <h2>Quick Start</h2>
+            <p class="section-description">Get started with MirDB using your favorite Memcached client. MirDB is fully compatible with the Memcached protocol.</p>
+
+            <div class="code-examples">
+                <div class="code-block" data-language="python">
+                    <div class="code-header">
+                        <span class="code-language">Python</span>
+                        <button class="copy-btn" type="button" aria-label="Copy code to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 4V1.5C4 1.22386 4.22386 1 4.5 1H14.5C14.7761 1 15 1.22386 15 1.5V11.5C15 11.7761 14.7761 12 14.5 12H12" stroke="currentColor" stroke-width="1.5"/>
+                                <rect x="1" y="4" width="11" height="11" rx="0.5" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <pre><code class="language-python">from pymemcache.client.base import Client
+
+# Connect to MirDB on localhost:12333
+client = Client(('localhost', 12333))
+
+# Set a key-value pair
+client.set('greeting', 'Hello, MirDB!')
+
+# Retrieve the value
+result = client.get('greeting')
+print(result)  # b'Hello, MirDB!'</code></pre>
+                </div>
+
+                <div class="code-block" data-language="go">
+                    <div class="code-header">
+                        <span class="code-language">Go</span>
+                        <button class="copy-btn" type="button" aria-label="Copy code to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M4 4V1.5C4 1.22386 4.22386 1 4.5 1H14.5C14.7761 1 15 1.22386 15 1.5V11.5C15 11.7761 14.7761 12 14.5 12H12" stroke="currentColor" stroke-width="1.5"/>
+                                <rect x="1" y="4" width="11" height="11" rx="0.5" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <pre><code class="language-go">package main
+
+import (
+    "github.com/bradfitz/gomemcache/memcache"
+    "log"
+)
+
+func main() {
+    // Connect to MirDB on localhost:12333
+    mc := memcache.New("localhost:12333")
+
+    // Set a key-value pair
+    mc.Set(&memcache.Item{Key: "greeting", Value: []byte("Hello, MirDB!")})
+
+    // Retrieve the value
+    item, err := mc.Get("greeting")
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf("%s", item.Value)
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END SECTION: Quick Start -->
+
+    <!-- BEGIN SECTION: Architecture (Scenario 4) -->
+    <section class="architecture" id="architecture">
+        <div class="container">
+            <h2>Architecture</h2>
+            <p class="section-description">MirDB uses an LSM tree architecture for efficient writes with durable persistence. Data flows from memory to disk through a structured process.</p>
+
+            <div class="architecture-diagram-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" class="architecture-diagram" role="img" aria-label="LSM Tree Architecture: Shows write path from Client through Memtable and WAL to SSTables, read path from Client through Memtable and SSTables, and background compaction process">
+                    <title>MirDB LSM Tree Architecture Diagram</title>
+                    <desc>A visual diagram showing the LSM tree data flow in MirDB. Write operations go from Client to Memtable with WAL logging, then to SSTables. Read operations check Memtable first, then search through SSTable levels. Background compaction merges SSTables across levels.</desc>
+
+                    <defs>
+                        <!-- Arrow markers -->
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker" />
+                        </marker>
+                        <marker id="arrowhead-read" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker-read" />
+                        </marker>
+                        <marker id="arrowhead-compact" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker-compact" />
+                        </marker>
+                        <marker id="arrowhead-wal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker-wal" />
+                        </marker>
+                    </defs>
+
+                    <!-- Background -->
+                    <rect x="0" y="0" width="800" height="500" class="diagram-bg" rx="8" />
+
+                    <!-- Section Labels -->
+                    <text x="400" y="30" class="diagram-title" text-anchor="middle">LSM Tree Architecture</text>
+
+                    <!-- Legend -->
+                    <g transform="translate(600, 45)">
+                        <text x="0" y="0" class="diagram-text-secondary diagram-text-small">Legend:</text>
+                        <line x1="0" y1="15" x2="30" y2="15" class="arrow-write" style="marker-end: url(#arrowhead);" />
+                        <text x="35" y="19" class="diagram-text-secondary diagram-text-small">Write Path</text>
+                        <line x1="0" y1="35" x2="30" y2="35" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+                        <text x="35" y="39" class="diagram-text-secondary diagram-text-small">Read Path</text>
+                        <line x1="0" y1="55" x2="30" y2="55" class="arrow-compact" style="marker-end: url(#arrowhead-compact);" />
+                        <text x="35" y="59" class="diagram-text-secondary diagram-text-small">Compaction</text>
+                    </g>
+
+                    <!-- Client Box -->
+                    <g transform="translate(50, 180)">
+                        <rect x="0" y="0" width="100" height="60" rx="8" class="box-client" />
+                        <text x="50" y="35" class="diagram-text diagram-text-label" text-anchor="middle">Client</text>
+                    </g>
+
+                    <!-- WAL Box -->
+                    <g transform="translate(200, 100)">
+                        <rect x="0" y="0" width="100" height="50" rx="8" class="box-wal" />
+                        <text x="50" y="20" class="diagram-text diagram-text-label" text-anchor="middle">WAL</text>
+                        <text x="50" y="38" class="diagram-text-secondary diagram-text-small" text-anchor="middle">(Write-Ahead Log)</text>
+                    </g>
+
+                    <!-- Memtable Box -->
+                    <g transform="translate(200, 180)">
+                        <rect x="0" y="0" width="100" height="60" rx="8" class="box-memtable" />
+                        <text x="50" y="35" class="diagram-text diagram-text-label" text-anchor="middle">Memtable</text>
+                    </g>
+
+                    <!-- Immutable Memtable Box -->
+                    <g transform="translate(200, 280)">
+                        <rect x="0" y="0" width="100" height="60" rx="8" class="box-immutable-memtable" />
+                        <text x="50" y="25" class="diagram-text diagram-text-label" text-anchor="middle">Immutable</text>
+                        <text x="50" y="45" class="diagram-text diagram-text-label" text-anchor="middle">Memtable</text>
+                    </g>
+
+                    <!-- SSTable Level 0 -->
+                    <g transform="translate(380, 180)">
+                        <rect x="0" y="0" width="120" height="60" rx="8" class="box-sstable" />
+                        <text x="60" y="25" class="diagram-text diagram-text-label" text-anchor="middle">SSTable</text>
+                        <text x="60" y="45" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Level 0</text>
+                    </g>
+
+                    <!-- SSTable Level 1 -->
+                    <g transform="translate(380, 280)">
+                        <rect x="0" y="0" width="120" height="60" rx="8" class="box-sstable" />
+                        <text x="60" y="25" class="diagram-text diagram-text-label" text-anchor="middle">SSTable</text>
+                        <text x="60" y="45" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Level 1</text>
+                    </g>
+
+                    <!-- SSTable Level N -->
+                    <g transform="translate(380, 380)">
+                        <rect x="0" y="0" width="120" height="60" rx="8" class="box-sstable" />
+                        <text x="60" y="25" class="diagram-text diagram-text-label" text-anchor="middle">SSTable</text>
+                        <text x="60" y="45" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Level N</text>
+                    </g>
+
+                    <!-- Ellipsis between levels -->
+                    <text x="440" y="360" class="diagram-text-secondary" text-anchor="middle" font-size="24">...</text>
+
+                    <!-- Compaction Process Box -->
+                    <g transform="translate(580, 260)">
+                        <rect x="0" y="0" width="140" height="80" rx="8" class="box-compaction" />
+                        <text x="70" y="30" class="diagram-text diagram-text-label" text-anchor="middle">Compaction</text>
+                        <text x="70" y="50" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Minor &amp; Major</text>
+                        <text x="70" y="68" class="diagram-text-secondary diagram-text-small" text-anchor="middle">(Background)</text>
+                    </g>
+
+                    <!-- Write Path Arrows -->
+                    <!-- Client to Memtable -->
+                    <path d="M 150 210 L 195 210" class="arrow-write" style="marker-end: url(#arrowhead);" />
+
+                    <!-- Memtable to WAL (parallel write) -->
+                    <path d="M 165 195 L 165 125 L 195 125" class="arrow-wal" style="marker-end: url(#arrowhead-wal);" />
+
+                    <!-- Memtable to Immutable Memtable -->
+                    <path d="M 250 245 L 250 275" class="arrow-write" style="marker-end: url(#arrowhead);" />
+
+                    <!-- Immutable Memtable to SSTable L0 -->
+                    <path d="M 305 310 L 375 310 L 375 230" class="arrow-write" style="marker-end: url(#arrowhead);" />
+
+                    <!-- Read Path Arrows -->
+                    <!-- Client to Memtable (read) -->
+                    <path d="M 150 220 L 195 220" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+
+                    <!-- Memtable to SSTable L0 (read path) -->
+                    <path d="M 305 200 L 375 200" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+
+                    <!-- SSTable L0 to L1 (read path) -->
+                    <path d="M 440 245 L 440 275" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+
+                    <!-- SSTable L1 to LN (read path) -->
+                    <path d="M 440 345 L 440 375" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+
+                    <!-- Compaction Arrows -->
+                    <!-- SSTable L0 to Compaction -->
+                    <path d="M 505 210 L 575 280" class="arrow-compact" style="marker-end: url(#arrowhead-compact);" />
+
+                    <!-- SSTable L1 to Compaction -->
+                    <path d="M 505 310 L 575 300" class="arrow-compact" style="marker-end: url(#arrowhead-compact);" />
+
+                    <!-- Compaction to SSTable L1 (output) -->
+                    <path d="M 580 320 L 510 340 L 505 325" class="arrow-compact" style="marker-end: url(#arrowhead-compact);" />
+
+                    <!-- Flow Labels -->
+                    <text x="175" y="198" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Write</text>
+                    <text x="175" y="233" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Read</text>
+                    <text x="340" y="195" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Flush</text>
+                    <text x="340" y="305" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Flush</text>
+
+                    <!-- Data Flow Description -->
+                    <g transform="translate(50, 460)">
+                        <text x="0" y="0" class="diagram-text-secondary diagram-text-small">
+                            <tspan x="0" dy="0">Write: Client writes to Memtable (with WAL) which flushes to SSTables when full.</tspan>
+                        </text>
+                        <text x="0" y="18" class="diagram-text-secondary diagram-text-small">
+                            <tspan x="0" dy="0">Read: Client reads from Memtable first, then searches through SSTable levels.</tspan>
+                        </text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </section>
+    <!-- END SECTION: Architecture -->
+
+    <!-- BEGIN SECTION: Benchmarks (Scenario 5) -->
+    <section class="benchmarks" id="benchmarks">
+        <div class="container">
+            <h2>Performance Benchmarks</h2>
+            <p class="section-description">Performance comparison using memtier_benchmark with 100 concurrent connections. All tests run on identical hardware (8-core CPU, 32GB RAM, NVMe SSD).</p>
+
+            <div class="benchmarks-table-wrapper" tabindex="0" role="region" aria-label="Performance benchmarks data table">
+                <table class="benchmarks-table" aria-describedby="benchmarks-caption">
+                    <caption id="benchmarks-caption" class="visually-hidden">Performance comparison between MirDB, Memcached, and Redis showing operations per second and latency metrics</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Database</th>
+                            <th scope="col">Operations/sec</th>
+                            <th scope="col">Read Latency (p50)</th>
+                            <th scope="col">Read Latency (p95)</th>
+                            <th scope="col">Read Latency (p99)</th>
+                            <th scope="col">Write Latency (p50)</th>
+                            <th scope="col">Write Latency (p95)</th>
+                            <th scope="col">Write Latency (p99)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="benchmark-row-highlight">
+                            <th scope="row">MirDB</th>
+                            <td>185,000</td>
+                            <td>0.42ms</td>
+                            <td>0.89ms</td>
+                            <td>1.52ms</td>
+                            <td>0.51ms</td>
+                            <td>1.12ms</td>
+                            <td>2.31ms</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Memcached</th>
+                            <td>210,000</td>
+                            <td>0.38ms</td>
+                            <td>0.72ms</td>
+                            <td>1.21ms</td>
+                            <td>0.45ms</td>
+                            <td>0.95ms</td>
+                            <td>1.89ms</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Redis</th>
+                            <td>165,000</td>
+                            <td>0.48ms</td>
+                            <td>1.05ms</td>
+                            <td>1.95ms</td>
+                            <td>0.58ms</td>
+                            <td>1.35ms</td>
+                            <td>2.78ms</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="benchmarks-note">Note: MirDB provides comparable performance to Memcached while adding durable persistence. Higher ops/sec is better; lower latency is better.</p>
+        </div>
+    </section>
+    <!-- END SECTION: Benchmarks -->
+    </main>
+
+    <!-- BEGIN SECTION: Footer (Scenario 7) -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="footer-copyright">&copy; 2024 MirDB. Licensed under <a href="https://github.com/mirdb/mirdb/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
+                </div>
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+                        <li><a href="https://github.com/mirdb/mirdb/issues" target="_blank" rel="noopener noreferrer">Report Issues</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </footer>
+    <!-- END SECTION: Footer -->
+
+    <!-- Toast notification container -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Non-critical JS deferred for performance (Scenario 9: Performance Optimization) -->
+    <script src="vendor/prism/prism.min.js" defer></script>
+    <script src="vendor/prism/prism-python.min.js" defer></script>
+    <script src="vendor/prism/prism-go.min.js" defer></script>
+    <script src="js/smooth-scroll.js" defer></script>
+    <script src="js/clipboard.js" defer></script>
+    <script src="js/theme-toggle.js" defer></script>
+    <script src="js/main.js" defer></script>
+</body>
+</html>
