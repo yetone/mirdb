@@ -632,19 +632,62 @@ a:hover {
 
 /* ===== FOOTER (Scenario 7) ===== */
 .main-footer {
-    padding: var(--spacing-md) 0;
+    padding: var(--spacing-lg) 0 var(--spacing-md);
     background: var(--color-text);
     color: var(--color-bg);
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.footer-info {
     text-align: center;
+}
+
+.footer-copyright {
+    margin: 0;
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.footer-nav {
+    width: 100%;
+}
+
+.footer-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.footer-links li {
+    margin: 0;
 }
 
 .main-footer a {
     color: var(--color-bg);
     opacity: 0.8;
+    transition: opacity var(--transition-fast);
+    text-decoration: none;
 }
 
-.main-footer a:hover {
+.main-footer a:hover,
+.main-footer a:focus {
     opacity: 1;
+    text-decoration: underline;
+}
+
+.main-footer a:focus-visible {
+    outline: 2px solid var(--color-bg);
+    outline-offset: 2px;
 }
 
 /* ===== TOAST NOTIFICATIONS (Scenario 3) ===== */
