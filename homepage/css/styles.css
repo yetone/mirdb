@@ -355,7 +355,170 @@ a:hover {
 
 .architecture h2 {
     text-align: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.architecture .section-description {
+    text-align: center;
+    color: var(--color-text-secondary);
     margin-bottom: var(--spacing-lg);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.architecture-diagram-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--spacing-sm);
+    background: var(--color-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.architecture-diagram {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* SVG Theme Variables - Light Mode (Default) */
+.architecture-diagram .diagram-bg {
+    fill: var(--color-diagram-bg, #f8f9fa);
+}
+
+.architecture-diagram .diagram-title {
+    fill: var(--color-text);
+    font-family: var(--font-family);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.architecture-diagram .diagram-text {
+    fill: var(--color-text);
+    font-family: var(--font-family);
+}
+
+.architecture-diagram .diagram-text-secondary {
+    fill: var(--color-text-secondary);
+    font-family: var(--font-family);
+}
+
+.architecture-diagram .diagram-text-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.architecture-diagram .diagram-text-small {
+    font-size: 12px;
+}
+
+/* Box styles with CSS variables for theming */
+.architecture-diagram .box-client {
+    fill: var(--color-diagram-client-bg, #e3f2fd);
+    stroke: var(--color-primary);
+    stroke-width: 2;
+}
+
+.architecture-diagram .box-memtable {
+    fill: var(--color-diagram-memtable-bg, #e8f5e9);
+    stroke: var(--color-diagram-memtable-stroke, #4caf50);
+    stroke-width: 2;
+}
+
+.architecture-diagram .box-immutable-memtable {
+    fill: var(--color-diagram-memtable-bg, #e8f5e9);
+    stroke: var(--color-diagram-memtable-stroke, #4caf50);
+    stroke-width: 2;
+    opacity: 0.7;
+}
+
+.architecture-diagram .box-sstable {
+    fill: var(--color-diagram-sstable-bg, #fff3e0);
+    stroke: var(--color-diagram-sstable-stroke, #ff9800);
+    stroke-width: 2;
+}
+
+.architecture-diagram .box-wal {
+    fill: var(--color-diagram-wal-bg, #fce4ec);
+    stroke: var(--color-diagram-wal-stroke, #e91e63);
+    stroke-width: 2;
+}
+
+.architecture-diagram .box-compaction {
+    fill: var(--color-bg);
+    stroke: var(--color-border);
+    stroke-width: 2;
+    stroke-dasharray: 5, 5;
+}
+
+/* Arrow styles with CSS variables for theming */
+.architecture-diagram .arrow-write {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 2;
+}
+
+.architecture-diagram .arrow-read {
+    fill: none;
+    stroke: var(--color-diagram-arrow-read, #4caf50);
+    stroke-width: 2;
+}
+
+.architecture-diagram .arrow-compact {
+    fill: none;
+    stroke: var(--color-diagram-arrow-compact, #9c27b0);
+    stroke-width: 2;
+    stroke-dasharray: 5, 5;
+}
+
+.architecture-diagram .arrow-wal {
+    fill: none;
+    stroke: var(--color-diagram-wal-stroke, #e91e63);
+    stroke-width: 2;
+}
+
+/* Arrow marker fills */
+.architecture-diagram .arrow-marker {
+    fill: var(--color-primary);
+}
+
+.architecture-diagram .arrow-marker-read {
+    fill: var(--color-diagram-arrow-read, #4caf50);
+}
+
+.architecture-diagram .arrow-marker-compact {
+    fill: var(--color-diagram-arrow-compact, #9c27b0);
+}
+
+.architecture-diagram .arrow-marker-wal {
+    fill: var(--color-diagram-wal-stroke, #e91e63);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+    --color-diagram-bg: #2d2d3d;
+    --color-diagram-client-bg: #1a3a5c;
+    --color-diagram-memtable-bg: #1a3d25;
+    --color-diagram-memtable-stroke: #66bb6a;
+    --color-diagram-sstable-bg: #3d2f1a;
+    --color-diagram-sstable-stroke: #ffb74d;
+    --color-diagram-wal-bg: #3d1a2a;
+    --color-diagram-wal-stroke: #f48fb1;
+    --color-diagram-arrow-read: #66bb6a;
+    --color-diagram-arrow-compact: #ce93d8;
+}
+
+/* Responsive adjustments for architecture diagram */
+@media (max-width: 768px) {
+    .architecture-diagram-wrapper {
+        padding: var(--spacing-xs);
+        border-radius: 8px;
+    }
+
+    .architecture-diagram {
+        min-height: 300px;
+    }
 }
 
 /* ===== BENCHMARKS TABLE (Scenario 5) ===== */

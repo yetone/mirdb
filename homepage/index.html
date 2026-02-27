@@ -200,7 +200,157 @@ func main() {
     <section class="architecture" id="architecture">
         <div class="container">
             <h2>Architecture</h2>
-            <!-- Architecture diagram will be added by Scenario 4 -->
+            <p class="section-description">MirDB uses an LSM tree architecture for efficient writes with durable persistence. Data flows from memory to disk through a structured process.</p>
+
+            <div class="architecture-diagram-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" class="architecture-diagram" role="img" aria-label="LSM Tree Architecture: Shows write path from Client through Memtable and WAL to SSTables, read path from Client through Memtable and SSTables, and background compaction process">
+                    <title>MirDB LSM Tree Architecture Diagram</title>
+                    <desc>A visual diagram showing the LSM tree data flow in MirDB. Write operations go from Client to Memtable with WAL logging, then to SSTables. Read operations check Memtable first, then search through SSTable levels. Background compaction merges SSTables across levels.</desc>
+
+                    <defs>
+                        <!-- Arrow markers -->
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker" />
+                        </marker>
+                        <marker id="arrowhead-read" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker-read" />
+                        </marker>
+                        <marker id="arrowhead-compact" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker-compact" />
+                        </marker>
+                        <marker id="arrowhead-wal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker-wal" />
+                        </marker>
+                    </defs>
+
+                    <!-- Background -->
+                    <rect x="0" y="0" width="800" height="500" class="diagram-bg" rx="8" />
+
+                    <!-- Section Labels -->
+                    <text x="400" y="30" class="diagram-title" text-anchor="middle">LSM Tree Architecture</text>
+
+                    <!-- Legend -->
+                    <g transform="translate(600, 45)">
+                        <text x="0" y="0" class="diagram-text-secondary diagram-text-small">Legend:</text>
+                        <line x1="0" y1="15" x2="30" y2="15" class="arrow-write" style="marker-end: url(#arrowhead);" />
+                        <text x="35" y="19" class="diagram-text-secondary diagram-text-small">Write Path</text>
+                        <line x1="0" y1="35" x2="30" y2="35" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+                        <text x="35" y="39" class="diagram-text-secondary diagram-text-small">Read Path</text>
+                        <line x1="0" y1="55" x2="30" y2="55" class="arrow-compact" style="marker-end: url(#arrowhead-compact);" />
+                        <text x="35" y="59" class="diagram-text-secondary diagram-text-small">Compaction</text>
+                    </g>
+
+                    <!-- Client Box -->
+                    <g transform="translate(50, 180)">
+                        <rect x="0" y="0" width="100" height="60" rx="8" class="box-client" />
+                        <text x="50" y="35" class="diagram-text diagram-text-label" text-anchor="middle">Client</text>
+                    </g>
+
+                    <!-- WAL Box -->
+                    <g transform="translate(200, 100)">
+                        <rect x="0" y="0" width="100" height="50" rx="8" class="box-wal" />
+                        <text x="50" y="20" class="diagram-text diagram-text-label" text-anchor="middle">WAL</text>
+                        <text x="50" y="38" class="diagram-text-secondary diagram-text-small" text-anchor="middle">(Write-Ahead Log)</text>
+                    </g>
+
+                    <!-- Memtable Box -->
+                    <g transform="translate(200, 180)">
+                        <rect x="0" y="0" width="100" height="60" rx="8" class="box-memtable" />
+                        <text x="50" y="35" class="diagram-text diagram-text-label" text-anchor="middle">Memtable</text>
+                    </g>
+
+                    <!-- Immutable Memtable Box -->
+                    <g transform="translate(200, 280)">
+                        <rect x="0" y="0" width="100" height="60" rx="8" class="box-immutable-memtable" />
+                        <text x="50" y="25" class="diagram-text diagram-text-label" text-anchor="middle">Immutable</text>
+                        <text x="50" y="45" class="diagram-text diagram-text-label" text-anchor="middle">Memtable</text>
+                    </g>
+
+                    <!-- SSTable Level 0 -->
+                    <g transform="translate(380, 180)">
+                        <rect x="0" y="0" width="120" height="60" rx="8" class="box-sstable" />
+                        <text x="60" y="25" class="diagram-text diagram-text-label" text-anchor="middle">SSTable</text>
+                        <text x="60" y="45" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Level 0</text>
+                    </g>
+
+                    <!-- SSTable Level 1 -->
+                    <g transform="translate(380, 280)">
+                        <rect x="0" y="0" width="120" height="60" rx="8" class="box-sstable" />
+                        <text x="60" y="25" class="diagram-text diagram-text-label" text-anchor="middle">SSTable</text>
+                        <text x="60" y="45" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Level 1</text>
+                    </g>
+
+                    <!-- SSTable Level N -->
+                    <g transform="translate(380, 380)">
+                        <rect x="0" y="0" width="120" height="60" rx="8" class="box-sstable" />
+                        <text x="60" y="25" class="diagram-text diagram-text-label" text-anchor="middle">SSTable</text>
+                        <text x="60" y="45" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Level N</text>
+                    </g>
+
+                    <!-- Ellipsis between levels -->
+                    <text x="440" y="360" class="diagram-text-secondary" text-anchor="middle" font-size="24">...</text>
+
+                    <!-- Compaction Process Box -->
+                    <g transform="translate(580, 260)">
+                        <rect x="0" y="0" width="140" height="80" rx="8" class="box-compaction" />
+                        <text x="70" y="30" class="diagram-text diagram-text-label" text-anchor="middle">Compaction</text>
+                        <text x="70" y="50" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Minor &amp; Major</text>
+                        <text x="70" y="68" class="diagram-text-secondary diagram-text-small" text-anchor="middle">(Background)</text>
+                    </g>
+
+                    <!-- Write Path Arrows -->
+                    <!-- Client to Memtable -->
+                    <path d="M 150 210 L 195 210" class="arrow-write" style="marker-end: url(#arrowhead);" />
+
+                    <!-- Memtable to WAL (parallel write) -->
+                    <path d="M 165 195 L 165 125 L 195 125" class="arrow-wal" style="marker-end: url(#arrowhead-wal);" />
+
+                    <!-- Memtable to Immutable Memtable -->
+                    <path d="M 250 245 L 250 275" class="arrow-write" style="marker-end: url(#arrowhead);" />
+
+                    <!-- Immutable Memtable to SSTable L0 -->
+                    <path d="M 305 310 L 375 310 L 375 230" class="arrow-write" style="marker-end: url(#arrowhead);" />
+
+                    <!-- Read Path Arrows -->
+                    <!-- Client to Memtable (read) -->
+                    <path d="M 150 220 L 195 220" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+
+                    <!-- Memtable to SSTable L0 (read path) -->
+                    <path d="M 305 200 L 375 200" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+
+                    <!-- SSTable L0 to L1 (read path) -->
+                    <path d="M 440 245 L 440 275" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+
+                    <!-- SSTable L1 to LN (read path) -->
+                    <path d="M 440 345 L 440 375" class="arrow-read" style="marker-end: url(#arrowhead-read);" />
+
+                    <!-- Compaction Arrows -->
+                    <!-- SSTable L0 to Compaction -->
+                    <path d="M 505 210 L 575 280" class="arrow-compact" style="marker-end: url(#arrowhead-compact);" />
+
+                    <!-- SSTable L1 to Compaction -->
+                    <path d="M 505 310 L 575 300" class="arrow-compact" style="marker-end: url(#arrowhead-compact);" />
+
+                    <!-- Compaction to SSTable L1 (output) -->
+                    <path d="M 580 320 L 510 340 L 505 325" class="arrow-compact" style="marker-end: url(#arrowhead-compact);" />
+
+                    <!-- Flow Labels -->
+                    <text x="175" y="198" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Write</text>
+                    <text x="175" y="233" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Read</text>
+                    <text x="340" y="195" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Flush</text>
+                    <text x="340" y="305" class="diagram-text-secondary diagram-text-small" text-anchor="middle">Flush</text>
+
+                    <!-- Data Flow Description -->
+                    <g transform="translate(50, 460)">
+                        <text x="0" y="0" class="diagram-text-secondary diagram-text-small">
+                            <tspan x="0" dy="0">Write: Client writes to Memtable (with WAL) which flushes to SSTables when full.</tspan>
+                        </text>
+                        <text x="0" y="18" class="diagram-text-secondary diagram-text-small">
+                            <tspan x="0" dy="0">Read: Client reads from Memtable first, then searches through SSTable levels.</tspan>
+                        </text>
+                    </g>
+                </svg>
+            </div>
         </div>
     </section>
     <!-- END SECTION: Architecture -->
