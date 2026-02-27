@@ -1,0 +1,137 @@
+/**
+ * Theme Variables for Dark/Light Mode
+ * Owner: Scenario 6 - Theme Toggle & Accessibility
+ *
+ * Expected exports:
+ * - :root { ... } - Light theme variables (default)
+ * - [data-theme="dark"] { ... } - Dark theme variables
+ * - CSS custom properties for colors, backgrounds, borders
+ */
+
+/* ===== LIGHT THEME (Default) ===== */
+:root {
+    /* Primary colors */
+    --color-bg: #ffffff;
+    --color-bg-secondary: #f5f5f5;
+    --color-text: #1a1a2e;
+    --color-text-secondary: #4a4a68;
+    --color-primary: #0066cc;
+    --color-primary-hover: #0052a3;
+    --color-border: #e0e0e0;
+
+    /* Code block colors */
+    --color-code-bg: #282c34;
+    --color-code-text: #abb2bf;
+
+    /* Component-specific colors */
+    --color-card-bg: #ffffff;
+    --color-card-shadow: rgba(0, 0, 0, 0.05);
+    --color-card-shadow-hover: rgba(0, 0, 0, 0.1);
+
+    /* Footer colors */
+    --color-footer-bg: #1a1a2e;
+    --color-footer-text: #ffffff;
+
+    /* Toast colors */
+    --color-toast-bg: #1a1a2e;
+    --color-toast-text: #ffffff;
+    --color-toast-success: #10b981;
+}
+
+/* ===== DARK THEME ===== */
+[data-theme="dark"] {
+    /* Primary colors */
+    --color-bg: #1a1a2e;
+    --color-bg-secondary: #252542;
+    --color-text: #f0f0f5;
+    --color-text-secondary: #a0a0b8;
+    --color-primary: #4d9fff;
+    --color-primary-hover: #3385e6;
+    --color-border: #3a3a5c;
+
+    /* Code block colors */
+    --color-code-bg: #0d0d14;
+    --color-code-text: #c5c8d6;
+
+    /* Component-specific colors */
+    --color-card-bg: #252542;
+    --color-card-shadow: rgba(0, 0, 0, 0.2);
+    --color-card-shadow-hover: rgba(0, 0, 0, 0.3);
+
+    /* Footer colors */
+    --color-footer-bg: #0d0d14;
+    --color-footer-text: #f0f0f5;
+
+    /* Toast colors */
+    --color-toast-bg: #f0f0f5;
+    --color-toast-text: #1a1a2e;
+    --color-toast-success: #10b981;
+}
+
+/* ===== THEME TOGGLE BUTTON ===== */
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 101;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-bg);
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 200ms ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle:hover {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Sun icon (shown in dark mode) */
+.theme-toggle .icon-sun {
+    display: none;
+}
+
+/* Moon icon (shown in light mode) */
+.theme-toggle .icon-moon {
+    display: block;
+}
+
+/* Toggle icon visibility based on theme */
+[data-theme="dark"] .theme-toggle .icon-sun {
+    display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+    display: none;
+}
+
+/* ===== SMOOTH THEME TRANSITION ===== */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+    transition: background-color 300ms ease,
+                color 300ms ease,
+                border-color 300ms ease,
+                fill 300ms ease,
+                stroke 300ms ease !important;
+}

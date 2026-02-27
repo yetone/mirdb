@@ -6,7 +6,18 @@
     <meta name="description" content="MirDB - A persistent Memcached-compatible key-value store with LSM tree architecture">
     <title>MirDB - Persistent Memcached-Compatible Key-Value Store</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="vendor/prism/prism.min.css">
+    <!-- Inline script to prevent flash of wrong theme -->
+    <script>
+        (function() {
+            try {
+                var storedTheme = localStorage.getItem('mirdb-theme');
+                var theme = storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {}
+        })();
+    </script>
 </head>
 <body>
     <!-- Skip Navigation Link for Accessibility -->
@@ -434,6 +445,7 @@ func main() {
     <script src="vendor/prism/prism-go.min.js"></script>
     <script src="js/smooth-scroll.js"></script>
     <script src="js/clipboard.js"></script>
+    <script src="js/theme-toggle.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
