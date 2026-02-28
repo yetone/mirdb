@@ -70,6 +70,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "228047a76f468627ca71776ecdebd732a3423081fcf5125585bcd7c49886ce12"
 
 [[package]]
+name = "bitflags"
+version = "2.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "843867be96c8daad0d758b57df9392b6d8d271134fce549de6ce169ff98a92af"
+
+[[package]]
 name = "block-buffer"
 version = "0.10.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -126,7 +132,7 @@ checksum = "5067f5bb2d80ef5d68b4c87db81601f0b75bca627bc2ef76b141d7b846a3c6d9"
 dependencies = [
  "ansi_term",
  "atty",
- "bitflags",
+ "bitflags 1.0.4",
  "strsim",
  "textwrap",
  "unicode-width",
@@ -139,7 +145,7 @@ version = "0.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ddfc5b9aa5d4507acaf872de71051dfd0e309860e88966e1051e462a077aac4f"
 dependencies = [
- "bitflags",
+ "bitflags 1.0.4",
 ]
 
 [[package]]
@@ -181,7 +187,7 @@ dependencies = [
  "crossbeam-utils",
  "lazy_static",
  "memoffset",
- "scopeguard",
+ "scopeguard 0.3.3",
 ]
 
 [[package]]
@@ -269,6 +275,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
+name = "errno"
+version = "0.3.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
+dependencies = [
+ "libc",
+ "windows-sys 0.61.2",
+]
+
+[[package]]
 name = "fnv"
 version = "1.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -295,7 +311,7 @@ version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2e9763c69ebaae630ba35f74888db465e49e259ba1bc0eda7d06f4a067615d82"
 dependencies = [
- "bitflags",
+ "bitflags 1.0.4",
  "fuchsia-zircon-sys",
 ]
 
@@ -405,7 +421,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3bae29b6653b3412c2e71e9d486db9f9df5d701941d86683005efb9f2d28e3da"
 dependencies = [
  "byteorder",
- "scopeguard",
+ "scopeguard 0.3.3",
 ]
 
 [[package]]
@@ -617,7 +633,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "62ebf1391f6acad60e5c8b43706dde4582df75c06698ab44511d15016bc2442c"
 dependencies = [
  "owning_ref",
- "scopeguard",
+ "scopeguard 0.3.3",
+]
+
+[[package]]
+name = "lock_api"
+version = "0.4.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "224399e74b87b5f3557511d98dff8b14089b3dadafcab6bb93eab67d3aace965"
+dependencies = [
+ "scopeguard 1.2.0",
 ]
 
 [[package]]
@@ -756,6 +781,7 @@ dependencies = [
  "snap",
  "sstable",
  "tokio 0.1.19",
+ "tokio 1.49.0",
  "tokio-io",
  "tokio-proto",
  "tokio-service",
@@ -835,8 +861,18 @@ version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ab41b4aed082705d1056416ae4468b6ea99d52599ecf3169b00088d43113e337"
 dependencies = [
- "lock_api",
- "parking_lot_core",
+ "lock_api 0.1.5",
+ "parking_lot_core 0.4.0",
+]
+
+[[package]]
+name = "parking_lot"
+version = "0.12.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "93857453250e3077bd71ff98b6a65ea6621a19bb0f559a85248955ac12c45a1a"
+dependencies = [
+ "lock_api 0.4.14",
+ "parking_lot_core 0.9.12",
 ]
 
 [[package]]
@@ -850,6 +886,19 @@ dependencies = [
  "rustc_version",
  "smallvec 0.6.9",
  "winapi 0.3.7",
+]
+
+[[package]]
+name = "parking_lot_core"
+version = "0.9.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2621685985a2ebf1c516881c026032ac7deafcda1a2c9b7850dc81e3dfcb64c1"
+dependencies = [
+ "cfg-if 1.0.4",
+ "libc",
+ "redox_syscall 0.5.18",
+ "smallvec 1.15.1",
+ "windows-link",
 ]
 
 [[package]]
@@ -1092,12 +1141,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "12229c14a0f65c4f1cb046a3b52047cdd9da1f4b30f8a39c5063c8bae515e252"
 
 [[package]]
+name = "redox_syscall"
+version = "0.5.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ed2bf2547551a7053d6fdfafda3f938979645c44812fbfcda098faae3f1a362d"
+dependencies = [
+ "bitflags 2.11.0",
+]
+
+[[package]]
 name = "redox_termios"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7e891cfe48e9100a70a3b6eb652fef28920c117d366339687bd5576160db0f76"
 dependencies = [
- "redox_syscall",
+ "redox_syscall 0.1.54",
 ]
 
 [[package]]
@@ -1154,6 +1212,12 @@ name = "scopeguard"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "94258f53601af11e6a49f722422f6e3425c52b06245a5cf9bc09908b174f5e27"
+
+[[package]]
+name = "scopeguard"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
 name = "semver"
@@ -1234,6 +1298,16 @@ dependencies = [
  "cfg-if 1.0.4",
  "cpufeatures",
  "digest",
+]
+
+[[package]]
+name = "signal-hook-registry"
+version = "1.4.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c4db69cba1110affc0e9f7bcd48bbf87b3f4fc7c61fc9155afd4c469eb3d6c1b"
+dependencies = [
+ "errno",
+ "libc",
 ]
 
 [[package]]
@@ -1368,7 +1442,7 @@ checksum = "dde0593aeb8d47accea5392b39350015b5eccb12c0d98044d856983d89548dea"
 dependencies = [
  "libc",
  "numtoa",
- "redox_syscall",
+ "redox_syscall 0.1.54",
  "redox_termios",
 ]
 
@@ -1459,8 +1533,11 @@ dependencies = [
  "bytes 1.11.1",
  "libc",
  "mio 1.1.1",
+ "parking_lot 0.12.5",
  "pin-project-lite",
+ "signal-hook-registry",
  "socket2 0.6.2",
+ "tokio-macros",
  "windows-sys 0.61.2",
 ]
 
@@ -1537,6 +1614,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "tokio-macros"
+version = "2.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af407857209536a95c8e56f8231ef2c2e2aff839b22e07a1ffcbc617e9db9fa5"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "tokio-proto"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1566,7 +1654,7 @@ dependencies = [
  "log 0.4.29",
  "mio 0.6.16",
  "num_cpus",
- "parking_lot",
+ "parking_lot 0.7.1",
  "slab 0.4.12",
  "tokio-executor",
  "tokio-io",

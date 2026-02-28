@@ -14,12 +14,16 @@
 
 use std::sync::Arc;
 
+use crate::config::HomepageConfig;
+
 /// Version of MirDB
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Shared application state for the homepage HTTP handlers
 #[derive(Clone)]
 pub struct AppState {
+    /// Homepage configuration
+    pub config: HomepageConfig,
     /// Server running status
     pub running: bool,
     /// Work directory path
@@ -30,8 +34,9 @@ pub struct AppState {
 
 impl AppState {
     /// Create a new AppState with default values
-    pub fn new() -> Self {
+    pub fn new(config: HomepageConfig) -> Self {
         Self {
+            config,
             running: true,
             work_dir: String::from("/tmp/mirdb"),
             addr: String::from("0.0.0.0:12333"),
@@ -39,8 +44,9 @@ impl AppState {
     }
 
     /// Create AppState with custom configuration
-    pub fn with_config(work_dir: String, addr: String) -> Self {
+    pub fn with_config(config: HomepageConfig, work_dir: String, addr: String) -> Self {
         Self {
+            config,
             running: true,
             work_dir,
             addr,
@@ -60,6 +66,6 @@ impl AppState {
 
 impl Default for AppState {
     fn default() -> Self {
-        Self::new()
+        Self::new(HomepageConfig::default())
     }
 }

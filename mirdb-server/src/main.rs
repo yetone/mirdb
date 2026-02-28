@@ -13,7 +13,7 @@ use clap::App;
 use clap::Arg;
 use env_logger;
 use futures::{future, Future};
-use tokio::prelude::*;
+use tokio_old::prelude::*;
 use tokio_proto::TcpServer;
 use tokio_service::{NewService, Service};
 
@@ -38,6 +38,7 @@ mod response;
 mod parser_util;
 mod config;
 mod data_manager;
+mod homepage;
 mod manifest;
 mod memtable;
 mod memtable_list;

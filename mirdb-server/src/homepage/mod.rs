@@ -17,8 +17,10 @@
 
 pub mod handlers;
 pub mod routes;
+pub mod server;
 pub mod state;
 
 // Re-export main types
 pub use routes::routes;
+pub use server::{start_homepage_server, validate_port, HomepageServerHandle};
 pub use state::AppState;
