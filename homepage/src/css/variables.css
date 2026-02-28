@@ -97,6 +97,15 @@
   --container-xl: 1280px;
   --container-max-width: 1200px;
 
+  /* Breakpoints (for reference - used in responsive.css media queries) */
+  /* --breakpoint-mobile: 375px; */
+  /* --breakpoint-tablet: 768px; */
+  /* --breakpoint-desktop: 1024px; */
+  /* --breakpoint-large: 1920px; */
+
+  /* Touch Target Size (WCAG 2.5.5) */
+  --touch-target-min: 44px;
+
   /* Layout */
   --header-height: 64px;
 
