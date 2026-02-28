@@ -1,0 +1,98 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Styles for:
+ * - Hero container (full-width, centered)
+ * - Product name typography
+ * - Tagline styling
+ * - CTA button styles
+ */
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: var(--spacing-16) var(--spacing-6);
+  background-color: var(--color-surface);
+}
+
+.hero__content {
+  max-width: 800px;
+  text-align: center;
+}
+
+.hero__title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-4);
+}
+
+.hero__tagline {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-8);
+}
+
+.hero__actions {
+  display: flex;
+  gap: var(--spacing-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Button styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-target-min);
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.btn--primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn--primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.btn--primary:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.btn--secondary:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn--secondary:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .hero__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-lg);
+  }
+}

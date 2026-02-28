@@ -1,0 +1,341 @@
+/**
+ * Cross-Browser Compatibility Styles
+ * Owner: Scenario 13 - Cross-Browser Compatibility
+ *
+ * Purpose:
+ * - Vendor prefixes for CSS properties
+ * - Browser-specific fixes
+ * - Fallbacks for older browser versions
+ *
+ * Per NFR-5: Must render correctly across Chrome, Firefox, Safari, Edge (latest 2 versions)
+ */
+
+/* ===== FLEXBOX COMPATIBILITY ===== */
+
+.flex,
+.nav,
+.nav__menu,
+.footer__content,
+.footer__links,
+.hero,
+.hero__actions {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.flex-col,
+.nav__menu.is-open {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.flex-wrap {
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.items-center,
+.nav,
+.footer__content {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.justify-center,
+.hero,
+.hero__actions {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.justify-between,
+.nav,
+.footer__content {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+/* ===== GRID COMPATIBILITY ===== */
+
+.grid,
+.features__grid {
+  display: -ms-grid;
+  display: grid;
+}
+
+/* Fallback for browsers without grid support */
+@supports not (display: grid) {
+  .features__grid {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: calc(var(--spacing-8) / -2);
+  }
+
+  .feature-card {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 300px;
+    -ms-flex: 1 1 300px;
+    flex: 1 1 300px;
+    margin: calc(var(--spacing-8) / 2);
+  }
+}
+
+/* ===== TRANSFORM COMPATIBILITY ===== */
+
+.feature-card:hover {
+  -webkit-transform: translateY(-4px);
+  -ms-transform: translateY(-4px);
+  transform: translateY(-4px);
+}
+
+.nav__toggle[aria-expanded="true"] .nav__toggle-icon::before {
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.nav__toggle[aria-expanded="true"] .nav__toggle-icon::after {
+  -webkit-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+/* ===== TRANSITION COMPATIBILITY ===== */
+
+.btn,
+.nav__link,
+.footer__link,
+.feature-card,
+.nav__toggle-icon,
+.nav__toggle-icon::before,
+.nav__toggle-icon::after {
+  -webkit-transition: all var(--transition-fast);
+  -o-transition: all var(--transition-fast);
+  transition: all var(--transition-fast);
+}
+
+/* ===== BOX-SIZING COMPATIBILITY ===== */
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* ===== SCROLL BEHAVIOR COMPATIBILITY ===== */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== WEBKIT-SPECIFIC FIXES ===== */
+
+/* Safari flexbox gap fallback */
+@supports not (gap: 1rem) {
+  .nav__menu > * + * {
+    margin-left: var(--spacing-8);
+  }
+
+  .hero__actions > * + * {
+    margin-left: var(--spacing-4);
+  }
+
+  .footer__links > * + * {
+    margin-left: var(--spacing-6);
+  }
+}
+
+/* Safari text rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ===== FIREFOX-SPECIFIC FIXES ===== */
+
+/* Firefox button alignment fix */
+button {
+  -moz-appearance: none;
+}
+
+/* Firefox focus outline */
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Firefox scrollbar styling */
+@-moz-document url-prefix() {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) var(--color-surface);
+  }
+}
+
+/* ===== EDGE-SPECIFIC FIXES ===== */
+
+/* Edge smooth scrolling */
+@supports (-ms-ime-align: auto) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ===== CLAMP FALLBACK ===== */
+
+/* Fallback for browsers without clamp support */
+@supports not (font-size: clamp(1rem, 2vw, 3rem)) {
+  :root {
+    --font-size-responsive-base: 1rem;
+    --font-size-responsive-h1: 2.25rem;
+    --font-size-responsive-h2: 1.875rem;
+    --font-size-responsive-h3: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --font-size-responsive-h1: 2.5rem;
+      --font-size-responsive-h2: 2rem;
+      --font-size-responsive-h3: 1.75rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --font-size-responsive-h1: 3rem;
+      --font-size-responsive-h2: 2.25rem;
+      --font-size-responsive-h3: 1.875rem;
+    }
+  }
+}
+
+/* ===== CSS CUSTOM PROPERTIES FALLBACK ===== */
+
+/* Fallback colors for browsers without CSS custom properties */
+@supports not (color: var(--color-primary)) {
+  :root {
+    color: #1e293b;
+    background-color: #ffffff;
+  }
+
+  .btn--primary {
+    background-color: #1d4ed8;
+    color: #ffffff;
+  }
+
+  .btn--primary:hover {
+    background-color: #1e40af;
+  }
+
+  .header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .hero {
+    background-color: #f8fafc;
+  }
+
+  .feature-card {
+    background-color: #f8fafc;
+  }
+
+  .footer {
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+  }
+}
+
+/* ===== MIN/MAX WIDTH COMPATIBILITY ===== */
+
+/* min() fallback */
+@supports not (width: min(80%, 320px)) {
+  .nav__menu.is-open {
+    width: 80%;
+    max-width: 320px;
+  }
+}
+
+/* ===== SAFE AREA INSETS COMPATIBILITY ===== */
+
+/* Safe area fallback for notched devices */
+@supports (padding: max(0px, env(safe-area-inset-left))) {
+  .container {
+    padding-left: max(var(--spacing-4), env(safe-area-inset-left));
+    padding-right: max(var(--spacing-4), env(safe-area-inset-right));
+  }
+
+  .footer {
+    padding-bottom: max(var(--spacing-8), env(safe-area-inset-bottom));
+  }
+}
+
+/* ===== BACKDROP FILTER COMPATIBILITY ===== */
+
+/* For browsers that support backdrop-filter */
+@supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
+  .header {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+
+  [data-theme="dark"] .header {
+    background-color: rgba(15, 23, 42, 0.95);
+  }
+}
+
+/* ===== USER-SELECT COMPATIBILITY ===== */
+
+.nav__logo,
+.btn {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ===== APPEARANCE RESET ===== */
+
+button,
+input,
+select,
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  .header,
+  .nav__toggle {
+    position: static;
+  }
+
+  .skip-link {
+    display: none;
+  }
+}

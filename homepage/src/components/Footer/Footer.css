@@ -1,0 +1,68 @@
+/**
+ * Footer Styles
+ * Owner: Scenario 6 - Footer Section Display
+ *
+ * Styles for:
+ * - Footer layout
+ * - Link styling
+ * - Responsive adjustments
+ */
+
+.footer {
+  padding: var(--spacing-8) var(--spacing-6);
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+}
+
+.footer__copyright {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.footer__links {
+  display: flex;
+  gap: var(--spacing-6);
+}
+
+.footer__link {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer__link:hover {
+  color: var(--color-primary);
+}
+
+.footer__link--social {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.footer__icon {
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .footer__content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer__links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

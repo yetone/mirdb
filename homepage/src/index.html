@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB is a high-performance persistent key-value store for modern applications. Features SSTable storage, Memcached protocol, and automatic compaction.">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="./styles/variables.css">
+  <link rel="stylesheet" href="./styles/reset.css">
+  <link rel="stylesheet" href="./styles/typography.css">
+  <link rel="stylesheet" href="./styles/layout.css">
+  <link rel="stylesheet" href="./components/Header/Header.css">
+  <link rel="stylesheet" href="./components/Navigation/Navigation.css">
+  <link rel="stylesheet" href="./components/Hero/Hero.css">
+  <link rel="stylesheet" href="./components/Features/Features.css">
+  <link rel="stylesheet" href="./components/Footer/Footer.css">
+  <link rel="stylesheet" href="./components/ThemeToggle/ThemeToggle.css">
+  <link rel="stylesheet" href="./styles/utilities.css">
+</head>
+<body>
+  <!-- Skip to main content link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header with navigation -->
+  <header class="header" id="header" role="banner">
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav__logo" aria-label="MirDB - Go to homepage">
+        <span class="nav__logo-text">MirDB</span>
+      </a>
+
+      <!-- Desktop navigation -->
+      <ul class="nav__menu" id="nav-menu">
+        <li class="nav__item">
+          <a href="#home" class="nav__link">Home</a>
+        </li>
+        <li class="nav__item">
+          <a href="#features" class="nav__link">Features</a>
+        </li>
+        <li class="nav__item">
+          <a href="#about" class="nav__link">About</a>
+        </li>
+        <li class="nav__item">
+          <a href="#contact" class="nav__link">Contact</a>
+        </li>
+      </ul>
+
+      <!-- Theme toggle button -->
+      <button
+        type="button"
+        id="theme-toggle"
+        class="theme-toggle"
+        aria-label="Toggle dark mode"
+        aria-pressed="false"
+        data-testid="theme-toggle"
+      >
+        <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </span>
+        <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </span>
+        <span class="visually-hidden">Toggle dark mode</span>
+      </button>
+
+      <!-- Hamburger menu button for mobile -->
+      <button
+        class="nav__toggle"
+        id="nav-toggle"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+      >
+        <span class="nav__toggle-icon"></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main id="main-content" role="main">
+    <!-- Hero section -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero__content">
+        <h1 id="hero-title" class="hero__title">MirDB</h1>
+        <p class="hero__tagline">A high-performance persistent key-value store for modern applications</p>
+        <div class="hero__actions">
+          <a href="#features" class="btn btn--primary">Get Started</a>
+          <a href="#about" class="btn btn--secondary">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features section -->
+    <section class="features" id="features" aria-labelledby="features-title">
+      <h2 id="features-title" class="features__title">Features</h2>
+      <div class="features__grid">
+        <article class="feature-card" data-testid="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+              <path d="M24 4L4 14v20l20 10 20-10V14L24 4z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Persistent Storage</h3>
+          <p class="feature-card__description">Data survives restarts with our efficient disk-backed storage engine using SSTable format.</p>
+        </article>
+        <article class="feature-card" data-testid="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+              <circle cx="24" cy="24" r="16"/>
+              <circle cx="24" cy="24" r="8" fill="var(--color-surface)"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Memcached Protocol</h3>
+          <p class="feature-card__description">Drop-in replacement using the standard Memcached protocol for easy adoption.</p>
+        </article>
+        <article class="feature-card" data-testid="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+              <path d="M8 38h32M12 30h24M16 22h16M20 14h8"/>
+              <rect x="8" y="36" width="32" height="4" rx="1"/>
+              <rect x="12" y="28" width="24" height="4" rx="1"/>
+              <rect x="16" y="20" width="16" height="4" rx="1"/>
+              <rect x="20" y="12" width="8" height="4" rx="1"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Skip List Memtable</h3>
+          <p class="feature-card__description">Fast in-memory writes using skip list data structure for optimal performance.</p>
+        </article>
+        <article class="feature-card" data-testid="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+              <rect x="6" y="8" width="14" height="10" rx="2"/>
+              <rect x="22" y="8" width="10" height="10" rx="2"/>
+              <rect x="34" y="8" width="8" height="10" rx="2"/>
+              <rect x="10" y="30" width="28" height="10" rx="2"/>
+              <path d="M16 18v12M30 18v12" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Automatic Compaction</h3>
+          <p class="feature-card__description">Background compaction merges SSTables to optimize storage and read performance.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <h2>About MirDB</h2>
+      <p>MirDB is a high-performance, persistent key-value store designed for modern applications.</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <h2>Contact</h2>
+      <p>Get in touch with us for questions or support.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__content">
+      <p class="footer__copyright">&copy; 2026 MirDB. All rights reserved.</p>
+      <nav class="footer__links" aria-label="Footer navigation">
+        <a href="/privacy" class="footer__link">Privacy Policy</a>
+        <a href="/terms" class="footer__link">Terms of Service</a>
+        <a href="#contact" class="footer__link">Contact</a>
+        <a href="https://github.com/mirdb/mirdb" class="footer__link footer__link--social" aria-label="MirDB on GitHub">
+          <svg class="footer__icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+      </nav>
+    </div>
+  </footer>
+
+  <style>
+    /* Temporary styles for sections - will be refined by other scenarios */
+    main {
+      padding-top: 70px; /* Space for fixed header */
+    }
+
+    section {
+      min-height: 50vh;
+      padding: var(--spacing-16) var(--spacing-4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero__tagline {
+      margin-top: var(--spacing-4);
+      font-size: var(--font-size-xl);
+      color: var(--color-text-muted);
+    }
+
+    .hero__actions {
+      margin-top: var(--spacing-8);
+      display: flex;
+      gap: var(--spacing-4);
+    }
+
+    .btn {
+      padding: var(--spacing-3) var(--spacing-6);
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-weight-medium);
+      transition: all var(--transition-fast);
+    }
+
+    .btn--primary {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .btn--primary:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .btn--secondary {
+      border: 2px solid var(--color-border);
+      color: var(--color-text);
+    }
+
+    .btn--secondary:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .footer {
+      padding: var(--spacing-8);
+      text-align: center;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .footer__content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer__links {
+      margin-top: var(--spacing-4);
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-6);
+    }
+
+    .footer__link {
+      color: var(--color-text-muted);
+      transition: color var(--transition-fast);
+    }
+
+    .footer__link:hover {
+      color: var(--color-primary);
+    }
+
+    .about,
+    .contact {
+      background-color: var(--color-surface);
+    }
+  </style>
+
+  <script type="module" src="./components/Navigation/Navigation.js"></script>
+  <script type="module" src="./scripts/main.js"></script>
+  <script type="module" src="./components/ThemeToggle/ThemeToggle.js"></script>
+  <script type="module" src="./scripts/error-handler.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+/**
+ * Theme Toggle Styles
+ * Owner: Scenario 14 - Dark Mode Toggle
+ *
+ * Styles for:
+ * - Toggle switch appearance
+ * - Icon display
+ * - Animation/transition
+ */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
+  padding: var(--spacing-2);
+  background: transparent;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.theme-toggle__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+/* Sun icon - visible in light mode */
+.theme-toggle__icon--sun {
+  display: flex;
+}
+
+.theme-toggle__icon--moon {
+  display: none;
+}
+
+/* Dark mode: show moon, hide sun */
+[data-theme="dark"] .theme-toggle__icon--sun {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle__icon--moon {
+  display: flex;
+}
+
+/* Hover animation */
+.theme-toggle:hover .theme-toggle__icon {
+  transform: scale(1.1);
+}
+
+/* Active state */
+.theme-toggle:active .theme-toggle__icon {
+  transform: scale(0.95);
+}
+
+/* Visually hidden utility for screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

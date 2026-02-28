@@ -1,0 +1,51 @@
+/**
+ * Typography Styles
+ * Shared by: All scenarios
+ *
+ * Defines:
+ * - Heading styles
+ * - Body text styles
+ * - Link styles
+ */
+
+h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+h4 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}
+
+p {
+  color: var(--color-text-secondary);
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+@media (min-width: 1024px) {
+  h1 {
+    font-size: var(--font-size-5xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-4xl);
+  }
+}

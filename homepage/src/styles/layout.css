@@ -1,0 +1,387 @@
+/**
+ * Layout Utilities
+ * Owner: Scenario 7 - Responsive Design Full Range
+ *
+ * Styles for:
+ * - Container max-widths
+ * - Responsive breakpoints
+ * - Grid system utilities
+ * - Spacing utilities
+ * - Overflow prevention
+ */
+
+/* ===== RESPONSIVE CONTAINER ===== */
+
+/**
+ * Main container with responsive max-widths
+ * Ensures content is properly centered and contained at all viewport sizes
+ */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+}
+
+/* Narrow container for text-heavy content */
+.container--narrow {
+  max-width: 800px;
+}
+
+/* Wide container for full-width sections */
+.container--wide {
+  max-width: 1400px;
+}
+
+/* Full-width container (no max-width) */
+.container--fluid {
+  max-width: none;
+}
+
+/* ===== OVERFLOW PREVENTION ===== */
+
+/**
+ * Prevent horizontal scroll at all viewport sizes
+ * Applied to html and body to ensure no content overflows
+ */
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  min-width: 320px;
+}
+
+/**
+ * Ensure all images and media don't overflow their containers
+ */
+img,
+picture,
+video,
+canvas,
+svg,
+iframe,
+embed,
+object {
+  max-width: 100%;
+  height: auto;
+}
+
+/**
+ * Prevent long words from causing horizontal overflow
+ */
+.text-wrap {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* ===== RESPONSIVE TEXT ===== */
+
+/**
+ * Responsive font sizing that scales with viewport
+ * Minimum 14px body text per PRD requirements
+ */
+:root {
+  /* Base font size - minimum 14px, scales up on larger screens */
+  --font-size-responsive-base: clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
+
+  /* Responsive heading sizes */
+  --font-size-responsive-h1: clamp(1.75rem, 1.5rem + 1.5vw, 3rem);
+  --font-size-responsive-h2: clamp(1.5rem, 1.25rem + 1.25vw, 2.25rem);
+  --font-size-responsive-h3: clamp(1.25rem, 1.125rem + 0.75vw, 1.875rem);
+}
+
+/* ===== RESPONSIVE SPACING ===== */
+
+/**
+ * Section spacing that adapts to viewport size
+ */
+.section {
+  padding-top: var(--spacing-12);
+  padding-bottom: var(--spacing-12);
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+}
+
+/* ===== BREAKPOINT-SPECIFIC ADJUSTMENTS ===== */
+
+/**
+ * Mobile-first responsive adjustments
+ * Breakpoints: 320px (min), 480px, 768px, 1024px, 1440px, 1920px (max)
+ */
+
+/* Extra small devices (320px - 479px) */
+@media (max-width: 479px) {
+  .container {
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+  }
+
+  .section {
+    padding-top: var(--spacing-8);
+    padding-bottom: var(--spacing-8);
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+  }
+}
+
+/* Small devices (480px - 767px) */
+@media (min-width: 480px) {
+  .container {
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
+
+  .section {
+    padding-top: var(--spacing-10);
+    padding-bottom: var(--spacing-10);
+  }
+}
+
+/* Medium devices / Tablets (768px - 1023px) */
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
+  }
+
+  .section {
+    padding-top: var(--spacing-12);
+    padding-bottom: var(--spacing-12);
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
+  }
+}
+
+/* Large devices / Desktops (1024px - 1439px) */
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--spacing-8);
+    padding-right: var(--spacing-8);
+  }
+
+  .section {
+    padding-top: var(--spacing-16);
+    padding-bottom: var(--spacing-16);
+    padding-left: var(--spacing-8);
+    padding-right: var(--spacing-8);
+  }
+}
+
+/* Extra large devices (1440px - 1919px) */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1320px;
+  }
+
+  .section {
+    padding-top: var(--spacing-20);
+    padding-bottom: var(--spacing-20);
+  }
+}
+
+/* Maximum viewport (1920px+) */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1440px;
+  }
+
+  .section {
+    padding-top: var(--spacing-24);
+    padding-bottom: var(--spacing-24);
+  }
+}
+
+/* ===== LAYOUT UTILITIES ===== */
+
+/**
+ * Flexbox utilities for responsive layouts
+ */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+/**
+ * Grid utilities
+ */
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .xl\:grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ===== VISIBILITY UTILITIES ===== */
+
+/**
+ * Hide elements at specific breakpoints
+ */
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .hidden-desktop {
+    display: none !important;
+  }
+}
+
+/* ===== SPACING UTILITIES ===== */
+
+/**
+ * Responsive gap utilities for flex and grid containers
+ */
+.gap-4 {
+  gap: var(--spacing-4);
+}
+
+.gap-6 {
+  gap: var(--spacing-6);
+}
+
+.gap-8 {
+  gap: var(--spacing-8);
+}
+
+/* ===== WIDTH CONSTRAINTS ===== */
+
+/**
+ * Ensure content doesn't overflow at narrow viewports
+ */
+.w-full {
+  width: 100%;
+}
+
+.max-w-full {
+  max-width: 100%;
+}
+
+/* ===== CENTERED CONTENT ===== */
+
+/**
+ * Center content both horizontally and vertically
+ */
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-text {
+  text-align: center;
+}
+
+/* ===== MINIMUM VIEWPORT (320px) SPECIFIC STYLES ===== */
+
+/**
+ * Special handling for the minimum supported viewport
+ * Per NFR-4: must function at 320px minimum
+ */
+@media (max-width: 320px) {
+  html {
+    font-size: 14px; /* Ensure minimum readable font size */
+  }
+
+  .container {
+    padding-left: var(--spacing-2);
+    padding-right: var(--spacing-2);
+  }
+
+  /* Reduce padding on sections at minimum viewport */
+  .section {
+    padding-left: var(--spacing-2);
+    padding-right: var(--spacing-2);
+    padding-top: var(--spacing-6);
+    padding-bottom: var(--spacing-6);
+  }
+
+  /* Ensure buttons remain usable at minimum width */
+  .btn,
+  button {
+    min-width: 0;
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+  }
+}
+
+/* ===== MAXIMUM VIEWPORT (1920px) SPECIFIC STYLES ===== */
+
+/**
+ * Prevent excessive whitespace at large viewports
+ * Per NFR-4: must function at 1920px maximum
+ */
+@media (min-width: 1920px) {
+  body {
+    /* Center content on very wide screens */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Constrain main content area */
+  main {
+    width: 100%;
+    max-width: 1920px;
+  }
+}
+
+/* ===== SAFE AREA SUPPORT ===== */
+
+/**
+ * Support for devices with notches and safe areas
+ */
+@supports (padding: env(safe-area-inset-left)) {
+  .container {
+    padding-left: max(var(--spacing-4), env(safe-area-inset-left));
+    padding-right: max(var(--spacing-4), env(safe-area-inset-right));
+  }
+}
