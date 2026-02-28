@@ -45,6 +45,16 @@
   color: var(--color-primary);
 }
 
+.footer__link--social {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.footer__icon {
+  flex-shrink: 0;
+}
+
 @media (max-width: 640px) {
   .footer__content {
     flex-direction: column;
