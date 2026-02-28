@@ -3,6 +3,11 @@
  * Owner: Scenarios 6 & 7
  *
  * Purpose: Media queries for responsive design
+ *
+ * Breakpoints:
+ * - Desktop: >= 1024px (default)
+ * - Tablet: >= 768px and < 1024px
+ * - Mobile: >= 375px and < 768px
  */
 
 /* Tablet styles (768px - 1023px) */
@@ -27,6 +32,22 @@
     --font-size-3xl: 1.75rem;
     --font-size-2xl: 1.5rem;
     --font-size-xl: 1.25rem;
+  }
+
+  /* Prevent horizontal overflow */
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Ensure all content stays within viewport */
+  main,
+  header,
+  footer,
+  section {
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   section {
@@ -77,17 +98,45 @@
     display: flex;
   }
 
+  /* Code blocks: horizontal scroll within block, not page overflow */
   .code-block {
     font-size: var(--font-size-sm);
     overflow-x: auto;
+    max-width: 100%;
+    white-space: pre;
+    word-wrap: normal;
   }
 
   .code-block-wrapper {
     overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
   }
 
   .quickstart-content {
     gap: var(--spacing-lg);
+  }
+
+  /* Hero section adjustments */
+  .hero__logo {
+    width: 150px;
+    height: auto;
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-lg);
+    padding: 0 var(--spacing-sm);
+  }
+
+  /* Feature cards */
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  /* Usage GIF responsive */
+  .usage-gif {
+    max-width: 100%;
+    height: auto;
   }
 
   .footer-nav {
@@ -96,13 +145,32 @@
   }
 }
 
-/* Ensure tap targets are at least 44px */
+/* Ensure tap targets are at least 44px on mobile */
 @media (max-width: 767px) {
   button,
-  a,
   .cta-button,
-  .copy-button {
+  .copy-button,
+  .nav-toggle {
     min-height: 44px;
     min-width: 44px;
+  }
+
+  /* Navigation links should also meet tap target requirements */
+  .nav-menu a,
+  .footer-nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* CTA button specific styling for mobile */
+  .hero__cta {
+    min-height: 44px;
+    padding: var(--spacing-md) var(--spacing-xl);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
