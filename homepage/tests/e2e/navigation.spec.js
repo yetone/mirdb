@@ -157,7 +157,7 @@ test.describe('Navigation Menu Desktop', () => {
 
   test.describe('Accessibility', () => {
     test('should have proper navigation aria-label', async ({ page }) => {
-      const nav = page.locator('nav');
+      const nav = page.locator('header nav.nav');
       const ariaLabel = await nav.getAttribute('aria-label');
       expect(ariaLabel).toBeTruthy();
       expect(ariaLabel.toLowerCase()).toContain('navigation');
