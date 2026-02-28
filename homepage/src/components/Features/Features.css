@@ -25,8 +25,8 @@
 
 .features__grid {
   display: grid;
-  grid-template-columns: 1fr;
   gap: var(--spacing-8);
+  grid-template-columns: 1fr;
 }
 
 .feature-card {
@@ -61,29 +61,28 @@
   line-height: var(--line-height-normal, 1.5);
 }
 
-/* Tablet: 2 columns at 768px and above */
+/* Tablet: 768px and above - 2 column layout */
 @media (min-width: 768px) {
   .features__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Desktop: 3 columns at 1024px and above */
-@media (min-width: 1024px) {
+/* Desktop: 1200px and above - 3 column layout */
+@media (min-width: 1200px) {
   .features__grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* Minimum viewport support (320px) - ensure cards remain readable */
+/* Minimum viewport support (320px) */
 @media (max-width: 320px) {
   .features {
-    padding-left: var(--spacing-3);
-    padding-right: var(--spacing-3);
+    padding: var(--spacing-8) var(--spacing-4);
   }
 
   .feature-card {
-    padding: var(--spacing-4);
+    padding: var(--spacing-6);
   }
 
   .feature-card__title {

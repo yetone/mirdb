@@ -124,7 +124,7 @@ function parseCSS(cssText) {
  * Using mobile-first approach with min-width breakpoints
  */
 function getExpectedColumns(viewportWidth) {
-  if (viewportWidth >= 1024) {
+  if (viewportWidth >= 1200) {
     return 3;
   } else if (viewportWidth >= 768) {
     return 2;
@@ -214,9 +214,9 @@ describe('Features Section Responsive Grid', () => {
       expect(expectedColumns).toBe(3);
     });
 
-    it('should have media query for min-width: 1024px with 3 columns', () => {
+    it('should have media query for min-width: 1200px with 3 columns', () => {
       // Check that there's a media query for desktop breakpoint
-      expect(featuresCss).toMatch(/@media\s*\(\s*min-width:\s*1024px\s*\)/);
+      expect(featuresCss).toMatch(/@media\s*\(\s*min-width:\s*1200px\s*\)/);
       expect(featuresCss).toMatch(/repeat\(3,\s*1fr\)/);
     });
   });
@@ -295,7 +295,7 @@ describe('Features Section Responsive Grid', () => {
   });
 
   describe('Responsive Breakpoint Order', () => {
-    it('should follow correct breakpoint order: mobile (default) < tablet (768px) < desktop (1024px)', () => {
+    it('should follow correct breakpoint order: mobile (default) < tablet (768px) < desktop (1200px)', () => {
       const cssRules = parseCSS(featuresCss);
 
       // Base should be single column
@@ -306,7 +306,7 @@ describe('Features Section Responsive Grid', () => {
         q.condition.includes('768px')
       );
       const desktopRule = cssRules.mediaQueries.find((q) =>
-        q.condition.includes('1024px')
+        q.condition.includes('1200px')
       );
 
       expect(tabletRule).toBeDefined();
