@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol Support. Built with Rust and LSM tree architecture.">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <!-- Scenario 4: Header (Navigation and External Links) -->
+  <header class="header" role="banner">
+    <div class="container header-content">
+      <a href="/" class="header-logo" aria-label="MirDB Home">
+        <img src="images/logo.gif" alt="MirDB Logo" width="40" height="40">
+        <span>MirDB</span>
+      </a>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      <nav class="header-nav" role="navigation" aria-label="Main navigation">
+        <a href="#features">Features</a>
+        <a href="#status">Status</a>
+        <a href="#usage">Usage</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main role="main">
+    <!-- Scenario 1: Hero Section and Branding -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-content">
+          <img
+            src="images/logo.gif"
+            alt="MirDB Logo - A persistent key-value store"
+            class="hero-logo"
+            width="120"
+            height="120"
+          >
+          <h1 id="hero-title" class="hero-title">MirDB</h1>
+          <p class="hero-tagline">
+            A Persistent Key-Value Store with Memcached Protocol Support
+          </p>
+          <a href="#quickstart" class="hero-cta" role="button">
+            Get Started
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenario 2: Overview Section (Features and Status Display) -->
+    <section id="overview" aria-labelledby="overview-title">
+      <div class="container overview-content">
+        <h2 id="overview-title" class="section-title">What is MirDB?</h2>
+        <p>
+          MirDB is a high-performance persistent key-value store written in Rust.
+          It implements the Memcached protocol, allowing seamless integration with existing
+          Memcached clients while providing durable storage through LSM tree architecture
+          with SSTables for persistence.
+        </p>
+      </div>
+    </section>
+
+    <!-- Scenario 2: Features Section (Features and Status Display) -->
+    <section id="features" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="features-title" class="section-title">Key Features</h2>
+          <p class="section-description">Built with performance and reliability in mind</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🔌</div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">
+              Fully compatible with the Memcached protocol. Use your existing Memcached clients
+              without any code changes.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💾</div>
+            <h3 class="feature-title">Persistent Storage</h3>
+            <p class="feature-description">
+              Data is durably stored using SSTables (Sorted String Tables) ensuring your data
+              survives restarts and crashes.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌲</div>
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">
+              Log-Structured Merge tree architecture provides excellent write performance
+              and efficient storage utilization.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3 class="feature-title">Skip List Memtable</h3>
+            <p class="feature-description">
+              In-memory skip list data structure for fast reads and writes before data
+              is flushed to disk.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3 class="feature-title">Compaction</h3>
+            <p class="feature-description">
+              Automatic minor and major compaction processes merge SSTables to reclaim
+              space and improve read performance.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenario 2: Status Section (Features and Status Display) -->
+    <section id="status" aria-labelledby="status-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="status-title" class="section-title">Project Status</h2>
+          <p class="section-description">Current implementation progress and roadmap</p>
+        </div>
+        <div class="status-container">
+          <div class="status-group">
+            <h3 class="status-group-title implemented">
+              <span class="status-check implemented"></span>
+              Implemented
+            </h3>
+            <ul class="status-list">
+              <li class="status-item">
+                <span class="status-check implemented"></span>
+                <span>Tokio async runtime</span>
+              </li>
+              <li class="status-item">
+                <span class="status-check implemented"></span>
+                <span>Skip list memtable</span>
+              </li>
+              <li class="status-item">
+                <span class="status-check implemented"></span>
+                <span>Minor compaction</span>
+              </li>
+              <li class="status-item">
+                <span class="status-check implemented"></span>
+                <span>Major compaction</span>
+              </li>
+            </ul>
+          </div>
+          <div class="status-group">
+            <h3 class="status-group-title planned">
+              <span class="status-check planned"></span>
+              Planned
+            </h3>
+            <ul class="status-list">
+              <li class="status-item">
+                <span class="status-check planned"></span>
+                <span>Raft consensus</span>
+                <span class="status-badge coming-soon">Coming Soon</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenario 3: Usage Examples Section -->
+    <section id="usage" aria-labelledby="usage-title">
+      <div class="container">
+        <h2 id="usage-title" class="section-title">Usage</h2>
+        <p class="usage-intro">
+          MirDB uses the standard Memcached protocol. Connect with any Memcached client or use telnet to interact with the database.
+        </p>
+
+        <div class="usage-examples">
+          <!-- Set Command Example -->
+          <div class="code-example" data-example="set">
+            <div class="code-block-container">
+              <div class="code-block-header">
+                <span class="code-block-title">Set a Key-Value Pair</span>
+                <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-code="set mykey 0 0 5&#10;hello&#10;STORED">
+                  <svg class="copy-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/>
+                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+                  </svg>
+                  <svg class="check-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+              </div>
+              <div class="code-block">
+                <pre><code><span class="syntax-prompt">$ </span><span class="syntax-keyword">telnet</span> <span class="syntax-variable">localhost</span> <span class="syntax-number">12333</span>
+<span class="syntax-keyword">set</span> <span class="syntax-variable">mykey</span> <span class="syntax-number">0 0 5</span>
+<span class="syntax-string">hello</span>
+<span class="syntax-output">STORED</span></code></pre>
+              </div>
+            </div>
+            <div class="command-description">
+              <h4>set command</h4>
+              <p>Store a value with a key. Format: <code>set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></p>
+            </div>
+          </div>
+
+          <!-- Get Command Example -->
+          <div class="code-example" data-example="get">
+            <div class="code-block-container">
+              <div class="code-block-header">
+                <span class="code-block-title">Retrieve a Value</span>
+                <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-code="get mykey&#10;VALUE mykey 0 5&#10;hello&#10;END">
+                  <svg class="copy-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/>
+                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+                  </svg>
+                  <svg class="check-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+              </div>
+              <div class="code-block">
+                <pre><code><span class="syntax-keyword">get</span> <span class="syntax-variable">mykey</span>
+<span class="syntax-output">VALUE mykey 0 5</span>
+<span class="syntax-string">hello</span>
+<span class="syntax-output">END</span></code></pre>
+              </div>
+            </div>
+            <div class="command-description">
+              <h4>get command</h4>
+              <p>Retrieve a value by key. Returns the value along with metadata.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenario 5: Quick Start Section (Quick Start and Documentation) -->
+    <section id="quickstart" aria-labelledby="quickstart-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="quickstart-title" class="section-title">Quick Start</h2>
+          <p class="section-description">Get MirDB up and running in minutes</p>
+        </div>
+
+        <div class="quickstart-steps">
+          <!-- Step 1: Clone the repository -->
+          <div class="quickstart-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3 class="step-title">Clone the Repository</h3>
+              <p class="step-description">Start by cloning the MirDB repository from GitHub.</p>
+              <div class="code-block-container">
+                <div class="code-block-header">
+                  <span class="code-block-title">Terminal</span>
+                  <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-code="git clone https://github.com/yetone/mirdb.git&#10;cd mirdb">
+                    <svg class="copy-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/>
+                      <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+                    </svg>
+                    <svg class="check-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+                    </svg>
+                    <span class="copy-text">Copy</span>
+                  </button>
+                </div>
+                <div class="code-block">
+                  <pre><code><span class="syntax-prompt">$ </span><span class="syntax-keyword">git clone</span> <span class="syntax-string">https://github.com/yetone/mirdb.git</span>
+<span class="syntax-prompt">$ </span><span class="syntax-keyword">cd</span> <span class="syntax-variable">mirdb</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Build with Cargo -->
+          <div class="quickstart-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3 class="step-title">Build with Cargo</h3>
+              <p class="step-description">Use Rust's package manager to build MirDB in release mode.</p>
+              <div class="code-block-container">
+                <div class="code-block-header">
+                  <span class="code-block-title">Terminal</span>
+                  <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-code="cargo build --release">
+                    <svg class="copy-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/>
+                      <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+                    </svg>
+                    <svg class="check-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+                    </svg>
+                    <span class="copy-text">Copy</span>
+                  </button>
+                </div>
+                <div class="code-block">
+                  <pre><code><span class="syntax-prompt">$ </span><span class="syntax-keyword">cargo</span> <span class="syntax-variable">build</span> <span class="syntax-string">--release</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Run MirDB -->
+          <div class="quickstart-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3 class="step-title">Run MirDB</h3>
+              <p class="step-description">Start the MirDB server with Cargo.</p>
+              <div class="code-block-container">
+                <div class="code-block-header">
+                  <span class="code-block-title">Terminal</span>
+                  <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-code="cargo run --release">
+                    <svg class="copy-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/>
+                      <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+                    </svg>
+                    <svg class="check-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+                    </svg>
+                    <span class="copy-text">Copy</span>
+                  </button>
+                </div>
+                <div class="code-block">
+                  <pre><code><span class="syntax-prompt">$ </span><span class="syntax-keyword">cargo</span> <span class="syntax-variable">run</span> <span class="syntax-string">--release</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Default Configuration -->
+        <div class="quickstart-config">
+          <h3 class="config-title">Default Configuration</h3>
+          <p class="config-description">MirDB starts with the following default settings:</p>
+          <ul class="config-list">
+            <li class="config-item">
+              <span class="config-label">Port:</span>
+              <code class="config-value">12333</code>
+              <span class="config-note">Default Memcached-compatible port</span>
+            </li>
+            <li class="config-item">
+              <span class="config-label">Work Directory:</span>
+              <code class="config-value">/tmp/mirdb</code>
+              <span class="config-note">Data storage location</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenario 5: Tech Stack Section (Quick Start and Documentation) -->
+    <section id="tech-stack" aria-labelledby="tech-stack-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="tech-stack-title" class="section-title">Tech Stack</h2>
+          <p class="section-description">Built with modern, battle-tested technologies</p>
+        </div>
+
+        <div class="tech-stack-grid">
+          <!-- Rust -->
+          <div class="tech-card">
+            <div class="tech-icon">🦀</div>
+            <h3 class="tech-name">Rust</h3>
+            <p class="tech-description">
+              Systems programming language that provides memory safety,
+              concurrency, and performance without a garbage collector.
+            </p>
+          </div>
+
+          <!-- Tokio -->
+          <div class="tech-card">
+            <div class="tech-icon">⚡</div>
+            <h3 class="tech-name">Tokio</h3>
+            <p class="tech-description">
+              Asynchronous runtime for Rust, providing efficient async I/O,
+              timers, and multi-threaded task scheduling.
+            </p>
+          </div>
+
+          <!-- LSM Tree -->
+          <div class="tech-card">
+            <div class="tech-icon">🌲</div>
+            <h3 class="tech-name">LSM Tree</h3>
+            <p class="tech-description">
+              Log-Structured Merge tree architecture for optimized write
+              performance and efficient disk storage utilization.
+            </p>
+          </div>
+
+          <!-- SSTables -->
+          <div class="tech-card">
+            <div class="tech-icon">📁</div>
+            <h3 class="tech-name">SSTables</h3>
+            <p class="tech-description">
+              Sorted String Tables for persistent, immutable storage with
+              fast sequential reads and efficient compaction.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scenario 4: Footer (Navigation and External Links) -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Project</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+            <li><a href="https://github.com/yetone/mirdb/releases" target="_blank" rel="noopener noreferrer">Releases</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Community</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Report Issues</a></li>
+            <li><a href="https://github.com/yetone/mirdb/discussions" target="_blank" rel="noopener noreferrer">Discussions</a></li>
+            <li><a href="https://github.com/yetone/mirdb/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 MirDB. Released under the <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/clipboard.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
