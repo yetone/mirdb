@@ -13,8 +13,9 @@
 
 :root {
   /* Color Palette - Light Theme */
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
+  /* Primary colors adjusted for WCAG AA compliance (4.5:1 contrast with white text) */
+  --color-primary: #1d4ed8;
+  --color-primary-hover: #1e40af;
   --color-secondary: #64748b;
   --color-accent: #0ea5e9;
 
@@ -117,8 +118,9 @@
 
 /* Dark Theme */
 [data-theme="dark"] {
-  --color-primary: #3b82f6;
-  --color-primary-hover: #60a5fa;
+  /* Primary colors adjusted for WCAG AA compliance (4.5:1 contrast with white text) */
+  --color-primary: #1d4ed8;
+  --color-primary-hover: #1e40af;
   --color-secondary: #94a3b8;
   --color-accent: #38bdf8;
 
