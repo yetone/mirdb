@@ -25,6 +25,9 @@ const INDEX_HTML: &str = include_str!("../../assets/index.html");
 /// Embedded CSS content
 const STYLE_CSS: &str = include_str!("../../assets/css/style.css");
 
+/// Embedded JavaScript content for theme toggle (Scenario 6)
+const MAIN_JS: &str = include_str!("../../assets/js/main.js");
+
 /// Handle requests to the homepage root /
 pub async fn handle_index() -> Result<impl Reply, warp::Rejection> {
     Ok(Response::builder()
@@ -50,13 +53,9 @@ pub async fn handle_static(path: Tail) -> Result<impl Reply, warp::Rejection> {
     }
 }
 
-/// Get the main.js content (placeholder for Scenario 6)
+/// Get the main.js content (Scenario 6 - Theme Toggle)
 fn get_main_js() -> &'static str {
-    r#"// MirDB Homepage JavaScript - Scenario 6 will implement theme toggle
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('MirDB Homepage loaded');
-});
-"#
+    MAIN_JS
 }
 
 /// Handle requests to /api/status (Scenario 3 will implement)
