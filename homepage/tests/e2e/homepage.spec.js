@@ -228,9 +228,128 @@ test.describe('Project Status Section', () => {
   });
 });
 
-// Placeholder for Scenario 3: Code Example Tests
-test.describe.skip('Usage Examples Section', () => {
-  // To be implemented by Scenario 3
+/**
+ * Scenario 3: Usage Examples Section Tests
+ * Tests REQ-5, NFR-5, and Story 3
+ */
+test.describe('Usage Examples Section', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Section with id="usage" exists', async ({ page }) => {
+    const usageSection = page.locator('#usage');
+    await expect(usageSection).toBeVisible();
+  });
+
+  test('TC1 alt: Heading "Usage" exists', async ({ page }) => {
+    const usageHeading = page.locator('#usage .section-title');
+    await expect(usageHeading).toHaveText('Usage');
+  });
+
+  test('TC2: Pre or code element with example commands exists', async ({ page }) => {
+    const codeBlock = page.locator('#usage .code-block code');
+    await expect(codeBlock.first()).toBeVisible();
+  });
+
+  test('TC3: Code example contains "set" Memcached command', async ({ page }) => {
+    const codeContent = page.locator('#usage .code-block code');
+    await expect(codeContent.first()).toContainText('set');
+  });
+
+  test('TC4: Code example contains "get" Memcached command', async ({ page }) => {
+    const codeContent = page.locator('#usage .code-block code');
+    const allCodeBlocks = await codeContent.allTextContents();
+    const hasGetCommand = allCodeBlocks.some(text => text.includes('get'));
+    expect(hasGetCommand).toBe(true);
+  });
+
+  test('TC5: Code block has syntax highlighting classes', async ({ page }) => {
+    // Check for syntax highlighting classes
+    const syntaxKeyword = page.locator('#usage .syntax-keyword');
+    const syntaxString = page.locator('#usage .syntax-string');
+    const syntaxVariable = page.locator('#usage .syntax-variable');
+
+    // At least one of these highlighting classes should exist
+    const keywordCount = await syntaxKeyword.count();
+    const stringCount = await syntaxString.count();
+    const variableCount = await syntaxVariable.count();
+
+    expect(keywordCount + stringCount + variableCount).toBeGreaterThan(0);
+  });
+
+  test('TC6: Copy button exists near code block', async ({ page }) => {
+    const copyButton = page.locator('#usage .copy-btn');
+    await expect(copyButton.first()).toBeVisible();
+  });
+
+  test('TC6 alt: Copy button has "Copy" text or copy icon', async ({ page }) => {
+    const copyButton = page.locator('#usage .copy-btn').first();
+    const copyText = copyButton.locator('.copy-text');
+    const copyIcon = copyButton.locator('.copy-icon');
+
+    // Either copy text or copy icon should be present
+    const hasText = await copyText.count() > 0;
+    const hasIcon = await copyIcon.count() > 0;
+
+    expect(hasText || hasIcon).toBe(true);
+  });
+
+  test('TC7: Click copy button copies code to clipboard', async ({ page, context }) => {
+    // Grant clipboard permissions
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+
+    const copyButton = page.locator('#usage .copy-btn').first();
+    await copyButton.click();
+
+    // Check clipboard content
+    const clipboardContent = await page.evaluate(async () => {
+      return await navigator.clipboard.readText();
+    });
+
+    // Clipboard should contain some code (set command)
+    expect(clipboardContent).toContain('set');
+  });
+
+  test('TC8: Visual feedback appears after copying', async ({ page, context }) => {
+    // Grant clipboard permissions
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+
+    const copyButton = page.locator('#usage .copy-btn').first();
+    await copyButton.click();
+
+    // Check for visual feedback - either "copied" class or "Copied!" text
+    const hasCopiedClass = await copyButton.evaluate(btn => btn.classList.contains('copied'));
+    const copyText = copyButton.locator('.copy-text');
+    const textContent = await copyText.textContent();
+
+    // Either the button has the "copied" class or displays "Copied!" text
+    expect(hasCopiedClass || textContent === 'Copied!').toBe(true);
+  });
+
+  test('TC8 alt: Check icon appears after copying', async ({ page, context }) => {
+    // Grant clipboard permissions
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+
+    const copyButton = page.locator('#usage .copy-btn').first();
+    await copyButton.click();
+
+    // When button has "copied" class, check-icon should be visible
+    const hasCopiedClass = await copyButton.evaluate(btn => btn.classList.contains('copied'));
+
+    if (hasCopiedClass) {
+      // Verify CSS makes check-icon visible (via display property computed style)
+      const checkIconVisible = await copyButton.locator('.check-icon').evaluate(el => {
+        const style = window.getComputedStyle(el);
+        return style.display !== 'none';
+      });
+      expect(checkIconVisible).toBe(true);
+    } else {
+      // If no class, just verify feedback text changed
+      const copyText = await copyButton.locator('.copy-text').textContent();
+      expect(copyText).toBe('Copied!');
+    }
+  });
 });
 
 // Placeholder for Scenario 5: Quick Start Tests

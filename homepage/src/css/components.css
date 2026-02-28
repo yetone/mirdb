@@ -206,10 +206,193 @@
 }
 
 /* ============================================
-   SCENARIO 3: Code Blocks (placeholder)
+   SCENARIO 3: Code Block Styles
+   Owner: Usage Examples Section
    ============================================ */
 
-/* Code block styles will be added by Scenario 3 */
+/* Usage Section */
+#usage {
+  background-color: var(--color-bg-primary);
+}
+
+.usage-intro {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto var(--spacing-8);
+  color: var(--color-text-secondary);
+}
+
+/* Code Block Container */
+.code-block-container {
+  position: relative;
+  background-color: var(--color-bg-code);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-6);
+  overflow: hidden;
+}
+
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  background-color: var(--color-bg-tertiary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.code-block-title {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Copy Button */
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copy-btn:hover {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-text-muted);
+}
+
+.copy-btn:focus {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.copy-btn.copied {
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.copy-btn .copy-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.copy-btn .check-icon {
+  display: none;
+  width: 16px;
+  height: 16px;
+}
+
+.copy-btn.copied .copy-icon {
+  display: none;
+}
+
+.copy-btn.copied .check-icon {
+  display: inline;
+}
+
+/* Code Block Content */
+.code-block {
+  padding: var(--spacing-4);
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  white-space: pre;
+}
+
+.code-block code {
+  font-family: inherit;
+  color: var(--color-text-primary);
+}
+
+/* Syntax Highlighting Classes */
+.syntax-keyword {
+  color: var(--color-syntax-keyword);
+}
+
+.syntax-string {
+  color: var(--color-syntax-string);
+}
+
+.syntax-number {
+  color: var(--color-syntax-number);
+}
+
+.syntax-comment {
+  color: var(--color-syntax-comment);
+  font-style: italic;
+}
+
+.syntax-function {
+  color: var(--color-syntax-function);
+}
+
+.syntax-variable {
+  color: var(--color-syntax-variable);
+}
+
+.syntax-operator {
+  color: var(--color-syntax-operator);
+}
+
+/* Command prompt style */
+.syntax-prompt {
+  color: var(--color-success);
+  user-select: none;
+}
+
+.syntax-output {
+  color: var(--color-text-secondary);
+}
+
+/* Usage Examples Grid */
+.usage-examples {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-6);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Command Description */
+.command-description {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-4);
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-accent-primary);
+}
+
+.command-description h4 {
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-2);
+}
+
+.command-description p {
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.command-description code {
+  background-color: var(--color-bg-code);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}
 
 /* ============================================
    SCENARIO 5: Documentation (placeholder)

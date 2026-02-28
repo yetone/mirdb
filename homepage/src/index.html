@@ -172,8 +172,70 @@
     <!-- Scenario 3: Usage Examples Section -->
     <section id="usage" aria-labelledby="usage-title">
       <div class="container">
-        <h2 id="usage-title" class="section-title">Usage Examples</h2>
-        <!-- To be implemented by Scenario 3 -->
+        <h2 id="usage-title" class="section-title">Usage</h2>
+        <p class="usage-intro">
+          MirDB uses the standard Memcached protocol. Connect with any Memcached client or use telnet to interact with the database.
+        </p>
+
+        <div class="usage-examples">
+          <!-- Set Command Example -->
+          <div class="code-example" data-example="set">
+            <div class="code-block-container">
+              <div class="code-block-header">
+                <span class="code-block-title">Set a Key-Value Pair</span>
+                <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-code="set mykey 0 0 5&#10;hello&#10;STORED">
+                  <svg class="copy-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/>
+                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+                  </svg>
+                  <svg class="check-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+              </div>
+              <div class="code-block">
+                <pre><code><span class="syntax-prompt">$ </span><span class="syntax-keyword">telnet</span> <span class="syntax-variable">localhost</span> <span class="syntax-number">12333</span>
+<span class="syntax-keyword">set</span> <span class="syntax-variable">mykey</span> <span class="syntax-number">0 0 5</span>
+<span class="syntax-string">hello</span>
+<span class="syntax-output">STORED</span></code></pre>
+              </div>
+            </div>
+            <div class="command-description">
+              <h4>set command</h4>
+              <p>Store a value with a key. Format: <code>set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></p>
+            </div>
+          </div>
+
+          <!-- Get Command Example -->
+          <div class="code-example" data-example="get">
+            <div class="code-block-container">
+              <div class="code-block-header">
+                <span class="code-block-title">Retrieve a Value</span>
+                <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-code="get mykey&#10;VALUE mykey 0 5&#10;hello&#10;END">
+                  <svg class="copy-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/>
+                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+                  </svg>
+                  <svg class="check-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+              </div>
+              <div class="code-block">
+                <pre><code><span class="syntax-keyword">get</span> <span class="syntax-variable">mykey</span>
+<span class="syntax-output">VALUE mykey 0 5</span>
+<span class="syntax-string">hello</span>
+<span class="syntax-output">END</span></code></pre>
+              </div>
+            </div>
+            <div class="command-description">
+              <h4>get command</h4>
+              <p>Retrieve a value by key. Returns the value along with metadata.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -202,6 +264,7 @@
     </div>
   </footer>
 
+  <script src="js/clipboard.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

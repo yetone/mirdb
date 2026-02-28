@@ -10,6 +10,8 @@
  */
 
 // Placeholder - to be implemented by Scenario 4
-describe.skip('Navigation Functionality', () => {
-  // To be implemented by Scenario 4
+describe('Navigation Functionality', () => {
+  test.skip('placeholder - to be implemented by Scenario 4', () => {
+    // To be implemented by Scenario 4
+  });
 });
