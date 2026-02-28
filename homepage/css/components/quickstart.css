@@ -1,0 +1,207 @@
+/**
+ * Quick Start Section Styles
+ * Owner: Scenario 3 - Quick Start Code Examples
+ *
+ * Styles for:
+ * - Code block container
+ * - Syntax highlighting colors
+ * - Copy button positioning
+ * - Code scrolling behavior
+ *
+ * Requirements: REQ-3
+ */
+
+/* Quick Start Section Layout */
+.quickstart {
+  background-color: var(--color-gray-50);
+}
+
+.quickstart__title {
+  text-align: center;
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-900);
+}
+
+.quickstart__description {
+  text-align: center;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: var(--space-8);
+  color: var(--color-gray-600);
+  font-size: var(--text-lg);
+}
+
+/* Code Block Wrapper */
+.quickstart__code-wrapper {
+  position: relative;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: var(--space-8);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Code Header with Language and Copy Button */
+.quickstart__code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-gray-800);
+  border-bottom: 1px solid var(--color-gray-700);
+}
+
+.quickstart__code-lang {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Copy Button */
+.quickstart__copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background-color: transparent;
+  border: 1px solid var(--color-gray-600);
+  border-radius: var(--radius-md);
+  color: var(--color-gray-300);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quickstart__copy-btn:hover {
+  background-color: var(--color-gray-700);
+  border-color: var(--color-gray-500);
+  color: var(--color-white);
+}
+
+.quickstart__copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.quickstart__copy-btn:active {
+  transform: scale(0.98);
+}
+
+/* Copy button success state */
+.quickstart__copy-btn--success {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: var(--color-white);
+}
+
+.quickstart__copy-btn--success:hover {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.quickstart__copy-icon {
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.quickstart__copy-text {
+  white-space: nowrap;
+}
+
+/* Code Block */
+.quickstart__code-block {
+  margin: 0;
+  padding: var(--space-6);
+  background-color: var(--color-gray-900);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gray-600) var(--color-gray-800);
+}
+
+.quickstart__code-block::-webkit-scrollbar {
+  height: 8px;
+}
+
+.quickstart__code-block::-webkit-scrollbar-track {
+  background: var(--color-gray-800);
+}
+
+.quickstart__code-block::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-600);
+  border-radius: 4px;
+}
+
+.quickstart__code-block::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-gray-500);
+}
+
+.quickstart__code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--color-gray-100);
+  white-space: pre;
+  tab-size: 4;
+}
+
+/* Syntax Highlighting Tokens */
+.token-comment {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.token-keyword {
+  color: #c084fc;
+  font-weight: 500;
+}
+
+.token-string {
+  color: #34d399;
+}
+
+.token-number {
+  color: #f59e0b;
+}
+
+.token-function {
+  color: #60a5fa;
+}
+
+.token-operator {
+  color: #f472b6;
+}
+
+.token-variable {
+  color: #fb923c;
+}
+
+.token-class {
+  color: #fbbf24;
+}
+
+/* Note Section */
+.quickstart__note {
+  text-align: center;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--color-gray-600);
+  font-size: var(--text-base);
+}
+
+.quickstart__note code {
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-800);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}

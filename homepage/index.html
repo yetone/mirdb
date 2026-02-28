@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol support. Built with Rust for high performance and durability.">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A persistent key-value store with Memcached protocol support. Built with Rust.">
+  <meta property="og:image" content="https://mirdb.io/assets/images/og-image.png">
+  <meta property="og:url" content="https://mirdb.io/">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
+  <meta name="twitter:description" content="A persistent key-value store with Memcached protocol support. Built with Rust.">
+  <meta name="twitter:image" content="https://mirdb.io/assets/images/og-image.png">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mirdb.io/">
+
+  <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components/hero.css">
+  <link rel="stylesheet" href="css/components/features.css">
+  <link rel="stylesheet" href="css/components/quickstart.css">
+  <link rel="stylesheet" href="css/components/status.css">
+  <link rel="stylesheet" href="css/components/footer.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Skip to main content link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header / Navigation (Scenario 5) -->
+  <header class="header">
+    <nav class="nav container" aria-label="Main navigation">
+      <!-- Brand -->
+      <a href="/" class="nav__brand" aria-label="MirDB Home">
+        <img src="assets/images/logo.svg" alt="" class="nav__brand-logo" width="32" height="32" aria-hidden="true">
+        <span>Mir<span class="nav__brand-highlight">DB</span></span>
+      </a>
+
+      <!-- Mobile Menu Toggle -->
+      <button
+        type="button"
+        class="nav__mobile-toggle"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+      >
+        <svg class="nav__mobile-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- Navigation Menu -->
+      <div id="nav-menu" class="nav__menu" aria-hidden="true">
+        <a href="#features" class="nav__link">Features</a>
+        <a href="#quickstart" class="nav__link">Quick Start</a>
+        <a href="#status" class="nav__link">Status</a>
+        <a href="https://github.com/yetone/mirdb"
+           class="nav__link nav__link--github"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="View MirDB on GitHub">
+          <svg class="nav__github-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero__content">
+        <!-- Logo -->
+        <div class="hero__logo">
+          <img src="assets/images/logo.svg" alt="MirDB Logo" width="200" height="60">
+        </div>
+
+        <!-- Product Name -->
+        <h1 id="hero-title" class="hero__title">
+          Mir<span class="hero__title-highlight">DB</span>
+        </h1>
+
+        <!-- Value Proposition / Tagline -->
+        <p class="hero__tagline">
+          A Persistent Key-Value Store with Memcached Protocol
+        </p>
+
+        <!-- Call to Action Buttons -->
+        <div class="hero__actions">
+          <a href="#quickstart" class="hero__btn hero__btn--primary">
+            Get Started
+          </a>
+          <a href="https://github.com/yetone/mirdb"
+             class="hero__btn hero__btn--github"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="View MirDB on GitHub">
+            <svg class="hero__github-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+
+        <!-- Feature badges -->
+        <div class="hero__badges" aria-label="Key features">
+          <span class="hero__badge">
+            <svg class="hero__badge-icon" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            Memcached Compatible
+          </span>
+          <span class="hero__badge">
+            <svg class="hero__badge-icon" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            Persistent Storage
+          </span>
+          <span class="hero__badge">
+            <svg class="hero__badge-icon" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            Built with Rust
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="section features" aria-labelledby="features-heading">
+      <div class="container">
+        <header class="features__header">
+          <h2 id="features-heading" class="features__title">Key Features</h2>
+          <p class="features__description">
+            Built for performance, reliability, and ease of use. MirDB combines the simplicity of Memcached with the durability of disk-based storage.
+          </p>
+        </header>
+        <div class="features-grid">
+          <!-- Feature Card 1: Memcached Protocol -->
+          <article class="feature-card" aria-labelledby="feature-memcached">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3 id="feature-memcached" class="feature-card__title">Memcached Protocol</h3>
+            <p class="feature-card__description">
+              Drop-in compatible with existing memcached clients. Use your favorite libraries and tools without code changes.
+            </p>
+          </article>
+
+          <!-- Feature Card 2: Data Persistence -->
+          <article class="feature-card" aria-labelledby="feature-persistence">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <h3 id="feature-persistence" class="feature-card__title">Persistent Storage</h3>
+            <p class="feature-card__description">
+              Your data survives restarts. MirDB persists to disk using efficient SSTable format, ensuring durability without sacrificing speed.
+            </p>
+          </article>
+
+          <!-- Feature Card 3: LSM Tree Architecture -->
+          <article class="feature-card" aria-labelledby="feature-lsm">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="3" y1="15" x2="21" y2="15"/>
+                <line x1="9" y1="3" x2="9" y2="21"/>
+                <line x1="15" y1="3" x2="15" y2="21"/>
+              </svg>
+            </div>
+            <h3 id="feature-lsm" class="feature-card__title">LSM Tree Architecture</h3>
+            <p class="feature-card__description">
+              Built on Log-Structured Merge Tree with skip-list memtable, minor and major compaction for optimal write performance.
+            </p>
+          </article>
+
+          <!-- Feature Card 4: Async Tokio Networking -->
+          <article class="feature-card" aria-labelledby="feature-tokio">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <h3 id="feature-tokio" class="feature-card__title">Async Tokio Networking</h3>
+            <p class="feature-card__description">
+              High-performance async I/O powered by Tokio. Handle thousands of concurrent connections efficiently with Rust's safety guarantees.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start Section (Scenario 3) -->
+    <section id="quickstart" class="section quickstart" aria-labelledby="quickstart-title">
+      <div class="container">
+        <h2 id="quickstart-title" class="quickstart__title">Quick Start</h2>
+        <p class="quickstart__description">
+          MirDB is compatible with standard memcached clients. Here's how to get started with basic SET and GET operations:
+        </p>
+
+        <div class="quickstart__code-wrapper" role="region" aria-label="Code example">
+          <div class="quickstart__code-header">
+            <span class="quickstart__code-lang">Python</span>
+            <button
+              type="button"
+              class="quickstart__copy-btn"
+              aria-label="Copy code to clipboard"
+              data-copy-target="quickstart-code"
+            >
+              <svg class="quickstart__copy-icon" viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+              </svg>
+              <span class="quickstart__copy-text">Copy</span>
+            </button>
+          </div>
+          <pre class="quickstart__code-block"><code id="quickstart-code" class="quickstart__code"><span class="token-comment"># Connect to MirDB using pymemcache</span>
+<span class="token-keyword">from</span> pymemcache.client.base <span class="token-keyword">import</span> Client
+
+<span class="token-comment"># Create a client connection</span>
+client = Client((<span class="token-string">'localhost'</span>, <span class="token-number">11211</span>))
+
+<span class="token-comment"># SET a key-value pair</span>
+client.<span class="token-function">set</span>(<span class="token-string">'my_key'</span>, <span class="token-string">'Hello, MirDB!'</span>)
+
+<span class="token-comment"># GET the value back</span>
+value = client.<span class="token-function">get</span>(<span class="token-string">'my_key'</span>)
+<span class="token-keyword">print</span>(value)  <span class="token-comment"># Output: b'Hello, MirDB!'</span>
+
+<span class="token-comment"># SET with expiration (60 seconds)</span>
+client.<span class="token-function">set</span>(<span class="token-string">'temp_key'</span>, <span class="token-string">'temporary'</span>, expire=<span class="token-number">60</span>)
+
+<span class="token-comment"># GET multiple keys</span>
+client.<span class="token-function">set</span>(<span class="token-string">'key1'</span>, <span class="token-string">'value1'</span>)
+client.<span class="token-function">set</span>(<span class="token-string">'key2'</span>, <span class="token-string">'value2'</span>)
+values = client.get_many([<span class="token-string">'key1'</span>, <span class="token-string">'key2'</span>])</code></pre>
+        </div>
+
+        <p class="quickstart__note">
+          MirDB supports all standard memcached commands including <code>set</code>, <code>get</code>,
+          <code>delete</code>, <code>incr</code>, and <code>decr</code>. Data is automatically persisted
+          to disk using SSTables and LSM Tree architecture.
+        </p>
+      </div>
+    </section>
+
+    <!-- Project Status Section (Scenario 4) -->
+    <section id="status" class="section status" aria-labelledby="status-title">
+      <div class="container">
+        <header class="status__header">
+          <h2 id="status-title" class="status__title">Project Status</h2>
+          <p class="status__description">
+            Track our progress as we build and improve MirDB. See what's already implemented and what's coming next.
+          </p>
+        </header>
+
+        <div class="status__grid">
+          <!-- Completed Features -->
+          <div class="status__column">
+            <h3 class="status__column-title">
+              <svg class="status__column-icon status__column-icon--completed" viewBox="0 0 20 20" aria-hidden="true" width="24" height="24">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              Completed Features
+            </h3>
+            <ul class="status__list" aria-label="Completed features">
+              <li class="status__item status__item--completed" data-status="completed">
+                <svg class="status__icon status__icon--check" viewBox="0 0 20 20" aria-hidden="true" width="20" height="20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                <span class="status__item-text">Tokio async runtime</span>
+              </li>
+              <li class="status__item status__item--completed" data-status="completed">
+                <svg class="status__icon status__icon--check" viewBox="0 0 20 20" aria-hidden="true" width="20" height="20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                <span class="status__item-text">Skip-list memtable</span>
+              </li>
+              <li class="status__item status__item--completed" data-status="completed">
+                <svg class="status__icon status__icon--check" viewBox="0 0 20 20" aria-hidden="true" width="20" height="20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                <span class="status__item-text">Minor compaction</span>
+              </li>
+              <li class="status__item status__item--completed" data-status="completed">
+                <svg class="status__icon status__icon--check" viewBox="0 0 20 20" aria-hidden="true" width="20" height="20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                <span class="status__item-text">Major compaction</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="status__column">
+            <h3 class="status__column-title">
+              <svg class="status__column-icon status__column-icon--planned" viewBox="0 0 20 20" aria-hidden="true" width="24" height="24">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+              </svg>
+              Planned Features
+            </h3>
+            <ul class="status__list" aria-label="Planned features">
+              <li class="status__item status__item--planned" data-status="planned">
+                <svg class="status__icon status__icon--clock" viewBox="0 0 20 20" aria-hidden="true" width="20" height="20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                </svg>
+                <span class="status__item-text">Raft consensus</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Configuration Section (Scenario 6) -->
+    <section id="configuration" class="section configuration" aria-labelledby="configuration-title">
+      <div class="container">
+        <!-- Configuration content will be added by Scenario 6 -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 5) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__content">
+        <!-- Brand Section -->
+        <div class="footer__brand">
+          <span class="footer__brand-name">
+            Mir<span class="footer__brand-highlight">DB</span>
+          </span>
+          <p class="footer__brand-description">
+            A persistent key-value store with Memcached protocol support.
+            Built with Rust for high performance and durability.
+          </p>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="footer__section">
+          <h4 class="footer__heading">Resources</h4>
+          <nav class="footer__links" aria-label="Footer resources">
+            <a href="https://github.com/yetone/mirdb"
+               class="footer__link"
+               target="_blank"
+               rel="noopener noreferrer">
+              <svg class="footer__link-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+              Repository
+              <svg class="footer__external-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+              </svg>
+            </a>
+            <a href="https://github.com/yetone/mirdb#readme"
+               class="footer__link"
+               target="_blank"
+               rel="noopener noreferrer">
+              Documentation
+              <svg class="footer__external-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+              </svg>
+            </a>
+          </nav>
+        </div>
+
+        <!-- Project Section -->
+        <div class="footer__section">
+          <h4 class="footer__heading">Project</h4>
+          <nav class="footer__links" aria-label="Footer project links">
+            <a href="#features" class="footer__link">Features</a>
+            <a href="#quickstart" class="footer__link">Quick Start</a>
+            <a href="#status" class="footer__link">Status</a>
+          </nav>
+        </div>
+
+        <!-- Legal Section -->
+        <div class="footer__section">
+          <h4 class="footer__heading">Legal</h4>
+          <nav class="footer__links" aria-label="Footer legal links">
+            <a href="https://github.com/yetone/mirdb/blob/master/LICENSE"
+               class="footer__link"
+               target="_blank"
+               rel="noopener noreferrer">
+              License
+              <svg class="footer__external-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Bottom Section -->
+      <div class="footer__bottom">
+        <p class="footer__copyright">
+          © 2024 MirDB. Open source under MIT License.
+        </p>
+        <div class="footer__social">
+          <a href="https://github.com/yetone/mirdb"
+             class="footer__social-link"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="MirDB on GitHub">
+            <svg class="footer__social-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

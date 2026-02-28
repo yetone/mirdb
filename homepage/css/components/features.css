@@ -1,0 +1,119 @@
+/**
+ * Features Grid Styles
+ * Owner: Scenario 2 - Feature Grid Display
+ *
+ * Styles for:
+ * - 3-4 column feature card grid
+ * - Feature card layout (icon, title, description)
+ * - Card hover effects
+ * - Grid responsive behavior
+ *
+ * Requirements: REQ-2, NFR-1
+ */
+
+/* Features Section Container */
+.features {
+  background-color: var(--color-white);
+}
+
+/* Features Header */
+.features__header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.features__title {
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-4);
+}
+
+.features__description {
+  color: var(--color-gray-600);
+  font-size: var(--text-lg);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+}
+
+/* Features Grid Layout */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+}
+
+/* Feature Card */
+.feature-card {
+  padding: var(--space-8);
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-gray-200);
+  transition: all var(--transition-normal);
+  cursor: default;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-light);
+}
+
+/* Feature Card Icon */
+.feature-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--space-4);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  border-radius: var(--radius-lg);
+  color: var(--color-white);
+}
+
+.feature-card__icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Feature Card Title */
+.feature-card__title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-2);
+}
+
+/* Feature Card Description */
+.feature-card__description {
+  font-size: var(--text-base);
+  color: var(--color-gray-600);
+  line-height: var(--leading-relaxed);
+  margin-bottom: 0;
+}
+
+/* Responsive: 3 columns on large tablets */
+@media (max-width: 1200px) {
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Responsive: 2 columns on tablets */
+@media (max-width: 900px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Responsive: 1 column on mobile */
+@media (max-width: 600px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    padding: var(--space-6);
+  }
+}

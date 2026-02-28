@@ -1,0 +1,26 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB - A Persistent Key-Value Store Homepage",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit",
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/integration",
+    "test:e2e": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/e2e",
+    "serve": "npx http-server -p 8080 -c-1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "@testing-library/dom": "^9.3.4",
+    "@testing-library/jest-dom": "^6.4.2"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "moduleFileExtensions": ["js", "mjs"],
+    "transform": {},
+    "testMatch": ["**/tests/**/*.test.js"],
+    "setupFilesAfterEnv": ["./tests/setup.js"]
+  }
+}

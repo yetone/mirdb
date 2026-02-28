@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb"/>
+      <stop offset="100%" style="stop-color:#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <!-- Database icon -->
+  <g transform="translate(5, 5)">
+    <ellipse cx="25" cy="8" rx="20" ry="6" fill="url(#logoGradient)"/>
+    <path d="M5,8 v30 a20,6 0 0,0 40,0 v-30" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
+    <ellipse cx="25" cy="23" rx="20" ry="6" fill="none" stroke="url(#logoGradient)" stroke-width="2"/>
+    <ellipse cx="25" cy="38" rx="20" ry="6" fill="url(#logoGradient)"/>
+  </g>
+  <!-- Text -->
+  <text x="60" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="700" fill="#1e293b">
+    Mir<tspan fill="url(#logoGradient)">DB</tspan>
+  </text>
+</svg>

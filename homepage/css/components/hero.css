@@ -1,0 +1,218 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section & Value Proposition
+ *
+ * Styles for:
+ * - Full-width hero banner
+ * - Logo positioning and sizing
+ * - Product name and tagline typography
+ * - CTA button styling
+ * - GitHub link button
+ *
+ * Requirements: REQ-1, NFR-1
+ */
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: var(--space-16) var(--space-4);
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-white) 50%, var(--color-gray-50) 100%);
+  overflow: hidden;
+}
+
+/* Background decoration */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container-md);
+  margin: 0 auto;
+}
+
+/* Logo */
+.hero__logo {
+  display: inline-block;
+  width: 200px;
+  height: auto;
+  margin-bottom: var(--space-8);
+}
+
+.hero__logo img {
+  width: 100%;
+  height: auto;
+}
+
+/* Product Name */
+.hero__title {
+  font-size: var(--text-5xl);
+  font-weight: 800;
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-6);
+  letter-spacing: -0.02em;
+}
+
+.hero__title-highlight {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Tagline / Value Proposition */
+.hero__tagline {
+  font-size: var(--text-xl);
+  color: var(--color-gray-600);
+  max-width: 600px;
+  margin: 0 auto var(--space-10);
+  line-height: var(--leading-relaxed);
+}
+
+/* Call to Action Buttons */
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: center;
+  align-items: center;
+}
+
+.hero__btn {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.hero__btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.hero__btn--primary:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hero__btn--primary:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.hero__btn--github {
+  background-color: var(--color-gray-800);
+  color: var(--color-white);
+}
+
+.hero__btn--github:hover {
+  background-color: var(--color-gray-700);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hero__btn--github:focus {
+  outline: 2px solid var(--color-gray-800);
+  outline-offset: 2px;
+}
+
+/* GitHub icon */
+.hero__github-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Feature badges */
+.hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: center;
+  margin-top: var(--space-12);
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--color-gray-700);
+  box-shadow: var(--shadow-sm);
+}
+
+.hero__badge-icon {
+  width: 16px;
+  height: 16px;
+  fill: var(--color-success);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero {
+    min-height: 70vh;
+    padding: var(--space-12) var(--space-4);
+  }
+
+  .hero__logo {
+    width: 160px;
+  }
+
+  .hero__title {
+    font-size: var(--text-4xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--text-lg);
+  }
+
+  .hero__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero__btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__title {
+    font-size: var(--text-3xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--text-base);
+  }
+
+  .hero__badges {
+    flex-direction: column;
+    align-items: center;
+  }
+}

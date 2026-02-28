@@ -1,0 +1,617 @@
+/**
+ * Responsive Design Styles
+ * Owner: Scenario 7 - Responsive Design
+ *
+ * Media queries for:
+ * - Mobile (< 768px): Stacked layout, hamburger menu
+ * - Tablet (768px - 1024px): Adjusted grid
+ * - Desktop (> 1024px): Full layout
+ *
+ * Requirements: REQ-7, NFR-3
+ */
+
+/* ==========================================================================
+   Global Responsive Rules - Prevent Horizontal Scroll
+   ========================================================================== */
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Ensure all images and media respect container bounds */
+img,
+video,
+iframe,
+embed,
+object {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ==========================================================================
+   Mobile Styles (< 768px)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* Container adjustments */
+  .container {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  /* Section spacing */
+  .section {
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-10);
+  }
+
+  /* Typography scaling for mobile */
+  h1 {
+    font-size: var(--text-3xl);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+  }
+
+  h3 {
+    font-size: var(--text-xl);
+  }
+
+  /* Navigation - Mobile Menu */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) 0;
+  }
+
+  /* Show hamburger menu button on mobile */
+  .nav__mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--space-2);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    color: var(--color-gray-700);
+    transition: background-color var(--transition-fast);
+  }
+
+  .nav__mobile-toggle:hover {
+    background-color: var(--color-gray-100);
+  }
+
+  .nav__mobile-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .nav__mobile-toggle-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Hidden mobile menu by default */
+  .nav__menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-white);
+    border-top: 1px solid var(--color-gray-200);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-4);
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  /* Open mobile menu state */
+  .nav__menu--open {
+    display: flex;
+  }
+
+  .nav__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    min-height: 44px;
+    border-radius: var(--radius-md);
+    color: var(--color-gray-700);
+    font-weight: 500;
+    transition: background-color var(--transition-fast);
+  }
+
+  .nav__link:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+  }
+
+  .nav__link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+
+  .nav__link--github {
+    margin-top: var(--space-2);
+    background-color: var(--color-gray-100);
+  }
+
+  /* Hero section mobile adjustments */
+  .hero {
+    padding: var(--space-12) var(--space-4);
+    text-align: center;
+  }
+
+  .hero__content {
+    max-width: 100%;
+  }
+
+  .hero__logo img {
+    max-width: 150px;
+    margin: 0 auto;
+  }
+
+  .hero__title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero__tagline {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-6);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .hero__btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    padding: var(--space-3) var(--space-6);
+  }
+
+  .hero__badges {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+  }
+
+  .hero__badge {
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  /* Features grid - single column on mobile */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .feature-card {
+    padding: var(--space-6);
+  }
+
+  .feature-card__icon svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .feature-card__title {
+    font-size: var(--text-lg);
+  }
+
+  .feature-card__description {
+    font-size: var(--text-base);
+  }
+
+  /* Quick Start section mobile */
+  .quickstart__title {
+    font-size: var(--text-2xl);
+  }
+
+  .quickstart__description {
+    font-size: var(--text-base);
+  }
+
+  .quickstart__code-wrapper {
+    margin-left: calc(-1 * var(--space-4));
+    margin-right: calc(-1 * var(--space-4));
+    border-radius: 0;
+  }
+
+  .quickstart__code-block {
+    font-size: var(--text-sm);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .quickstart__copy-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--space-2);
+  }
+
+  /* Status section mobile */
+  .status__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .status__title {
+    font-size: var(--text-2xl);
+  }
+
+  .status__column-title {
+    font-size: var(--text-lg);
+  }
+
+  .status__item {
+    min-height: 44px;
+    padding: var(--space-3) 0;
+  }
+
+  /* Configuration section mobile */
+  .configuration__title {
+    font-size: var(--text-2xl);
+  }
+
+  .config__item {
+    padding: var(--space-4);
+  }
+
+  /* Footer mobile */
+  .footer__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    text-align: center;
+  }
+
+  .footer__links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .footer__link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2);
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: center;
+  }
+
+  .footer__social-link {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Tablet Styles (768px - 1023px)
+   ========================================================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Container adjustments */
+  .container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+
+  /* Section spacing */
+  .section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+
+  /* Navigation - Show desktop menu on tablet */
+  .nav__mobile-toggle {
+    display: none;
+  }
+
+  .nav__menu {
+    display: flex;
+    position: static;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    flex-direction: row;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  .nav__link {
+    padding: var(--space-2) var(--space-3);
+    min-height: 40px;
+  }
+
+  /* Hero section tablet */
+  .hero {
+    padding: var(--space-16) var(--space-6);
+  }
+
+  .hero__title {
+    font-size: var(--text-4xl);
+  }
+
+  .hero__actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .hero__btn {
+    width: auto;
+  }
+
+  .hero__badges {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  /* Features grid - 2 columns on tablet */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  /* Status grid - 2 columns on tablet */
+  .status__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+
+  /* Footer - 2 columns on tablet */
+  .footer__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+
+  .footer__brand {
+    grid-column: span 2;
+  }
+}
+
+/* ==========================================================================
+   Desktop Styles (1024px and above)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  /* Container adjustments */
+  .container {
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+
+  /* Navigation - Desktop styles */
+  .nav__mobile-toggle {
+    display: none;
+  }
+
+  .nav__menu {
+    display: flex;
+    position: static;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    flex-direction: row;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .nav__link {
+    padding: var(--space-2) var(--space-4);
+    min-height: 40px;
+    color: var(--color-gray-600);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .nav__link:hover {
+    color: var(--color-gray-900);
+    background-color: var(--color-gray-100);
+  }
+
+  .nav__link--github {
+    background-color: var(--color-gray-900);
+    color: var(--color-white);
+  }
+
+  .nav__link--github:hover {
+    background-color: var(--color-gray-800);
+    color: var(--color-white);
+  }
+
+  /* Hero section desktop */
+  .hero {
+    padding: var(--space-24) var(--space-8);
+  }
+
+  .hero__title {
+    font-size: var(--text-5xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--text-xl);
+  }
+
+  /* Features grid - 4 columns on desktop */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+
+  /* Status grid - 2 columns on desktop */
+  .status__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-12);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* Footer - 4 columns on desktop */
+  .footer__content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--space-8);
+  }
+}
+
+/* ==========================================================================
+   Large Desktop Styles (1280px and above)
+   ========================================================================== */
+
+@media (min-width: 1280px) {
+  /* Container max width */
+  .container {
+    max-width: var(--container-xl);
+  }
+
+  /* Hero section large desktop */
+  .hero__content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero__logo img {
+    max-width: 200px;
+  }
+}
+
+/* ==========================================================================
+   Touch Target Sizes (Mobile/Tablet)
+   Ensuring all interactive elements have minimum 44x44px touch targets
+   per WCAG 2.1 SC 2.5.5
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  /* Buttons */
+  button,
+  [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Links in navigation and footer */
+  .nav__link,
+  .footer__link,
+  .footer__social-link {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Hero buttons */
+  .hero__btn {
+    min-height: 44px;
+    padding: var(--space-3) var(--space-5);
+  }
+
+  /* Copy button */
+  .quickstart__copy-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Badge/chips */
+  .hero__badge {
+    min-height: 44px;
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  /* Hide navigation and interactive elements */
+  .nav__mobile-toggle,
+  .skip-link,
+  .quickstart__copy-btn {
+    display: none;
+  }
+
+  /* Ensure content is visible */
+  .nav__menu {
+    display: flex !important;
+    position: static;
+  }
+
+  /* Remove shadows and backgrounds */
+  * {
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  /* Ensure text is black for printing */
+  body {
+    color: #000;
+  }
+
+  /* Show links */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Preferences
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
