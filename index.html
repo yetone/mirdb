@@ -150,10 +150,36 @@ END</span></code></pre>
     </section>
 
     <!-- Status Section -->
-    <section id="status" aria-labelledby="status-title">
-      <!-- Status will be implemented by Scenario 5 -->
-      <div class="container">
-        <h2 id="status-title" class="visually-hidden">Project Status</h2>
+    <section id="status" class="status" aria-labelledby="status-title">
+      <h2 id="status-title" class="section-title">Project Status</h2>
+      <div class="status-content">
+        <!-- CI/CD Badge -->
+        <div class="status-badge">
+          <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="View build status on CircleCI">
+            <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI build status badge">
+          </a>
+        </div>
+
+        <!-- Feature Checklist -->
+        <ul class="feature-checklist" aria-label="Implementation status checklist">
+          <li class="feature-item completed">
+            <span class="checkmark" aria-hidden="true">✓</span>
+            <span class="feature-name">Tokio with Memcached Protocol</span>
+          </li>
+          <li class="feature-item completed">
+            <span class="checkmark" aria-hidden="true">✓</span>
+            <span class="feature-name">Memtable (in-memory storage)</span>
+          </li>
+          <li class="feature-item completed">
+            <span class="checkmark" aria-hidden="true">✓</span>
+            <span class="feature-name">Compaction</span>
+          </li>
+          <li class="feature-item coming-soon">
+            <span class="checkmark" aria-hidden="true">○</span>
+            <span class="feature-name">Raft Consensus</span>
+            <span class="badge">Coming Soon</span>
+          </li>
+        </ul>
       </div>
     </section>
   </main>
