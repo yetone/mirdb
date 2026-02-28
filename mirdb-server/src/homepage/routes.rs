@@ -9,17 +9,20 @@
 //!
 //! Owner: Scenario 2 - Homepage Static Content Rendering
 //! Co-owner: Scenario 9 - Static Asset Handling
+//! Co-owner: Scenario 11 - HTTP Connection Handling (error responses)
 //!
 //! Expected exports:
 //! - pub fn routes(state: Arc<AppState>) -> impl Filter
 //! - pub fn static_routes() -> impl Filter
 //! - pub fn api_routes(state: Arc<AppState>) -> impl Filter
+//! - pub fn routes_with_error_handling(state: Arc<AppState>) -> impl Filter (Scenario 11)
 
 use std::sync::Arc;
 use warp::Filter;
 
 use super::handlers;
 use super::metrics::MetricsCache;
+use super::server::handle_rejection;
 use super::state::AppState;
 
 /// Creates all routes for the homepage
@@ -38,6 +41,29 @@ pub fn routes_with_metrics(
     index_route()
         .or(static_routes())
         .or(api_routes(state, metrics_cache))
+}
+
+/// Creates all routes with proper error handling (Scenario 11)
+/// Returns appropriate HTTP status codes for various error conditions:
+/// - 400 Bad Request for malformed requests
+/// - 404 Not Found for unknown paths
+/// - 405 Method Not Allowed for unsupported HTTP methods
+/// - 414 URI Too Long for extremely long URLs
+/// - 500 Internal Server Error for unexpected errors
+pub fn routes_with_error_handling(
+    state: Arc<AppState>,
+) -> impl Filter<Extract = (impl warp::Reply,), Error = std::convert::Infallible> + Clone {
+    let metrics_cache = Arc::new(MetricsCache::default());
+    routes_with_metrics_and_error_handling(state, metrics_cache)
+}
+
+/// Creates all routes with custom metrics cache and error handling (Scenario 11)
+pub fn routes_with_metrics_and_error_handling(
+    state: Arc<AppState>,
+    metrics_cache: Arc<MetricsCache>,
+) -> impl Filter<Extract = (impl warp::Reply,), Error = std::convert::Infallible> + Clone {
+    routes_with_metrics(state, metrics_cache)
+        .recover(handle_rejection)
 }
 
 /// Route for serving the homepage HTML at /

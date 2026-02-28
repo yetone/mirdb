@@ -25,4 +25,6 @@ pub mod state;
 pub use metrics::{Metrics, MetricsCache, MetricsCounters, SSTableLevel, CACHE_DURATION};
 pub use routes::{routes, routes_with_metrics};
 pub use server::{start_homepage_server, validate_port, HomepageServer, HomepageServerConfig, HomepageServerHandle};
+// Re-export connection handling types (Scenario 11)
+pub use server::{handle_rejection, BadRequest, MethodNotAllowed, RequestTimeout, UriTooLong, MAX_URL_LENGTH};
 pub use state::AppState;

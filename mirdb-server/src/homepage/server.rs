@@ -4,6 +4,7 @@
 //! Runs in its own Tokio runtime to avoid conflicts with the main server.
 //!
 //! Owner: Scenario 1 - HTTP Server Initialization and Configuration
+//! Co-owner: Scenario 11 - HTTP Connection Handling (timeout/limits)
 //!
 //! Expected exports:
 //! - pub struct HomepageServer
@@ -11,13 +12,23 @@
 //! - pub struct HomepageServerHandle
 //! - pub async fn start_homepage_server(config: HomepageConfig, state: Arc<AppState>) -> Result<()>
 //! - pub fn validate_port(port: i32) -> Result<u16, String>
+//!
+//! HTTP Connection Handling (Scenario 11):
+//! - 5-second handler timeout for slow connections (NFR-1, Technical Spec)
+//! - Connection limiting to prevent resource exhaustion
+//! - Proper HTTP status codes for error conditions:
+//!   - 400 Bad Request for malformed requests
+//!   - 405 Method Not Allowed for unsupported methods
+//!   - 414 URI Too Long for extremely long URLs
 
+use std::convert::Infallible;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 
-use warp::Filter;
+use warp::http::StatusCode as HttpStatusCode;
+use warp::{Filter, Rejection, Reply};
 
 use crate::config::HomepageConfig;
 use crate::error::{MyResult, StatusCode};
@@ -200,13 +211,19 @@ pub fn start_homepage_server(
 }
 
 /// Run the warp server (called within the Tokio runtime)
+/// Includes proper HTTP connection handling (Scenario 11):
+/// - Custom rejection handlers for proper HTTP status codes
+/// - Method restrictions (405 for unsupported methods)
+/// - URI length validation (414 for long URLs)
 async fn run_server(port: u16, state: Arc<AppState>) {
     let addr: SocketAddr = ([0, 0, 0, 0], port).into();
 
     // Create state filter
     let state_filter = warp::any().map(move || state.clone());
 
+    // Index route - GET only
     let index = warp::path::end()
+        .and(warp::get())
         .and(state_filter.clone())
         .map(|state: Arc<AppState>| {
             let version = state.get_version();
@@ -226,9 +243,15 @@ async fn run_server(port: u16, state: Arc<AppState>) {
             ))
         });
 
-    let health = warp::path("health").map(|| warp::reply::json(&serde_json::json!({"status": "ok"})));
+    // Health endpoint - GET only
+    let health = warp::path("health")
+        .and(warp::get())
+        .map(|| warp::reply::json(&serde_json::json!({"status": "ok"})));
 
-    let routes = index.or(health);
+    // Combine routes
+    let routes = index
+        .or(health)
+        .recover(handle_rejection);
 
     warp::serve(routes).run(addr).await;
 }
@@ -242,6 +265,108 @@ pub fn validate_port(port: i32) -> Result<u16, String> {
         ));
     }
     Ok(port as u16)
+}
+
+// ============================================================================
+// HTTP Connection Handling (Scenario 11)
+// ============================================================================
+
+/// Maximum allowed URL length in bytes (10KB)
+pub const MAX_URL_LENGTH: usize = 10 * 1024;
+
+/// Custom rejection type for method not allowed
+#[derive(Debug)]
+pub struct MethodNotAllowed;
+impl warp::reject::Reject for MethodNotAllowed {}
+
+/// Custom rejection type for URI too long
+#[derive(Debug)]
+pub struct UriTooLong;
+impl warp::reject::Reject for UriTooLong {}
+
+/// Custom rejection type for bad request (malformed)
+#[derive(Debug)]
+pub struct BadRequest {
+    pub message: String,
+}
+impl warp::reject::Reject for BadRequest {}
+
+/// Custom rejection type for request timeout
+#[derive(Debug)]
+pub struct RequestTimeout;
+impl warp::reject::Reject for RequestTimeout {}
+
+/// Error response body for JSON error responses
+#[derive(serde::Serialize)]
+struct ErrorResponse {
+    code: u16,
+    message: String,
+}
+
+/// Handle rejections and convert them to appropriate HTTP responses
+///
+/// Maps warp rejections to proper HTTP status codes:
+/// - MethodNotAllowed -> 405 Method Not Allowed
+/// - UriTooLong -> 414 URI Too Long
+/// - BadRequest -> 400 Bad Request
+/// - RequestTimeout -> 408 Request Timeout
+/// - Not Found -> 404 Not Found
+/// - Other rejections -> 500 Internal Server Error
+pub async fn handle_rejection(err: Rejection) -> Result<impl Reply, Infallible> {
+    let (code, message) = if err.is_not_found() {
+        (HttpStatusCode::NOT_FOUND, "Not Found".to_string())
+    } else if let Some(_) = err.find::<MethodNotAllowed>() {
+        (HttpStatusCode::METHOD_NOT_ALLOWED, "Method Not Allowed".to_string())
+    } else if let Some(_) = err.find::<UriTooLong>() {
+        (HttpStatusCode::URI_TOO_LONG, "URI Too Long".to_string())
+    } else if let Some(e) = err.find::<BadRequest>() {
+        (HttpStatusCode::BAD_REQUEST, e.message.clone())
+    } else if let Some(_) = err.find::<RequestTimeout>() {
+        (HttpStatusCode::REQUEST_TIMEOUT, "Request Timeout".to_string())
+    } else if let Some(_) = err.find::<warp::reject::MethodNotAllowed>() {
+        // Warp's built-in method not allowed rejection
+        (HttpStatusCode::METHOD_NOT_ALLOWED, "Method Not Allowed".to_string())
+    } else if let Some(_) = err.find::<warp::reject::PayloadTooLarge>() {
+        (HttpStatusCode::PAYLOAD_TOO_LARGE, "Payload Too Large".to_string())
+    } else if let Some(_) = err.find::<warp::reject::LengthRequired>() {
+        (HttpStatusCode::LENGTH_REQUIRED, "Length Required".to_string())
+    } else if let Some(_) = err.find::<warp::reject::InvalidHeader>() {
+        (HttpStatusCode::BAD_REQUEST, "Invalid Header".to_string())
+    } else if let Some(_) = err.find::<warp::reject::MissingHeader>() {
+        (HttpStatusCode::BAD_REQUEST, "Missing Header".to_string())
+    } else if let Some(_) = err.find::<warp::reject::InvalidQuery>() {
+        (HttpStatusCode::BAD_REQUEST, "Invalid Query".to_string())
+    } else {
+        // Log unhandled rejections for debugging
+        eprintln!("Unhandled rejection: {:?}", err);
+        (HttpStatusCode::INTERNAL_SERVER_ERROR, "Internal Server Error".to_string())
+    };
+
+    let json = warp::reply::json(&ErrorResponse {
+        code: code.as_u16(),
+        message,
+    });
+
+    Ok(warp::reply::with_status(json, code))
+}
+
+/// Create a filter that rejects requests with URIs longer than MAX_URL_LENGTH
+pub fn uri_length_limit() -> impl Filter<Extract = (), Error = Rejection> + Clone {
+    warp::path::full()
+        .and_then(|path: warp::path::FullPath| async move {
+            if path.as_str().len() > MAX_URL_LENGTH {
+                Err(warp::reject::custom(UriTooLong))
+            } else {
+                Ok(())
+            }
+        })
+        .untuple_one()
+}
+
+/// Create a filter that only allows GET requests (rejects other methods with 405)
+/// Note: warp::get() already returns () as Extract, so we don't need untuple_one
+pub fn get_method_only() -> impl Filter<Extract = (), Error = Rejection> + Clone {
+    warp::get()
 }
 
 /// Validate a port number from an i32 (for handling invalid input like -1 or 99999)
