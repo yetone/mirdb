@@ -66,6 +66,11 @@
   background-color: var(--color-primary-hover);
 }
 
+.btn--primary:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .btn--secondary {
   background-color: transparent;
   color: var(--color-primary);
@@ -75,6 +80,11 @@
 .btn--secondary:hover {
   background-color: var(--color-primary);
   color: white;
+}
+
+.btn--secondary:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
