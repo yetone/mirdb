@@ -454,6 +454,17 @@ footer {
   color: #8b949e; /* Higher contrast than --color-text-muted */
 }
 
+/* Accessibility: Fix hero CTA button contrast for WCAG AA compliance (Scenario 7) */
+/* White on orange (#f97316) = 2.8:1 contrast, needs dark text for 4.5:1 */
+/* Using !important to override responsive.css which loads after main.css */
+.hero-cta {
+  color: #1a1a1a !important; /* Dark text on orange background = 5.2:1 contrast */
+}
+
+.hero-cta:hover {
+  color: #1a1a1a !important;
+}
+
 /* Mobile Navigation (Scenario 4) */
 @media (max-width: 768px) {
   .mobile-menu-toggle {
