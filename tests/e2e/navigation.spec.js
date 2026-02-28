@@ -267,3 +267,98 @@ test.describe('Navigation Menu Functionality', () => {
     expect(position).toBe('fixed');
   });
 });
+
+/**
+ * External Link Validation Tests
+ * Owner: Scenario 14 - External Link Validation
+ *
+ * Test cases:
+ * - GitHub repository link href is valid
+ * - CircleCI badge links to correct project
+ * - All external links have target=_blank
+ * - All external links with target=_blank have rel=noopener
+ * - Memcached protocol documentation link is valid
+ */
+test.describe('External Link Validation', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForPageLoad(page);
+  });
+
+  test('Test Case 1: GitHub repository link points to valid GitHub URL', async ({ page }) => {
+    // Find the GitHub link in navigation
+    const githubLink = page.locator('a[href*="github.com/yetone/mirdb"]').first();
+    await expect(githubLink).toBeVisible();
+
+    // Verify the href points to the correct GitHub repository
+    const href = await githubLink.getAttribute('href');
+    expect(href).toBe('https://github.com/yetone/mirdb');
+
+    // Verify it's a valid GitHub URL format
+    expect(href).toMatch(/^https:\/\/github\.com\/[\w-]+\/[\w-]+$/);
+  });
+
+  test('Test Case 2: CircleCI badge links to correct project URL', async ({ page }) => {
+    // Find the CircleCI badge link in status section
+    const circleciLink = page.locator('a[href*="circleci.com/gh/yetone/mirdb"]');
+    await expect(circleciLink).toBeVisible();
+
+    // Verify the href points to the correct CircleCI project
+    const href = await circleciLink.getAttribute('href');
+    expect(href).toBe('https://circleci.com/gh/yetone/mirdb');
+
+    // Verify the badge image is present within the link
+    const badgeImage = circleciLink.locator('img');
+    await expect(badgeImage).toBeVisible();
+    await expect(badgeImage).toHaveAttribute('alt', 'CircleCI build status badge');
+  });
+
+  test('Test Case 3: All external links have target=_blank attribute', async ({ page }) => {
+    // Get all external links (links that start with http:// or https://)
+    const externalLinks = page.locator('a[href^="http://"], a[href^="https://"]');
+    const count = await externalLinks.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    // Verify each external link has target="_blank"
+    for (let i = 0; i < count; i++) {
+      const link = externalLinks.nth(i);
+      const href = await link.getAttribute('href');
+      const target = await link.getAttribute('target');
+      expect(target, `External link ${href} should have target="_blank"`).toBe('_blank');
+    }
+  });
+
+  test('Test Case 4: All external links with target=_blank have rel=noopener', async ({ page }) => {
+    // Get all external links with target="_blank"
+    const externalLinks = page.locator('a[target="_blank"]');
+    const count = await externalLinks.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    // Verify each link has rel containing "noopener"
+    for (let i = 0; i < count; i++) {
+      const link = externalLinks.nth(i);
+      const href = await link.getAttribute('href');
+      const rel = await link.getAttribute('rel');
+
+      // rel should contain "noopener" to prevent tabnabbing security vulnerability
+      expect(rel, `External link ${href} should have rel containing "noopener"`).toContain('noopener');
+    }
+  });
+
+  test('Test Case 5: Memcached protocol documentation link points to valid URL', async ({ page }) => {
+    // Find the documentation link (pointing to memcached docs)
+    const docsLink = page.locator('a[href*="memcached"]').first();
+    await expect(docsLink).toBeVisible();
+
+    // Verify the href points to valid memcached documentation
+    const href = await docsLink.getAttribute('href');
+    expect(href).toMatch(/^https:\/\/github\.com\/memcached\/memcached/);
+
+    // Verify it has proper external link attributes
+    await expect(docsLink).toHaveAttribute('target', '_blank');
+    const rel = await docsLink.getAttribute('rel');
+    expect(rel).toContain('noopener');
+  });
+});
