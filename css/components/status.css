@@ -1,0 +1,100 @@
+/**
+ * MirDB Homepage - Status Section Styles
+ * Owner: Scenario 5 - Project Status Section
+ *
+ * Purpose: Styles for project status section
+ *
+ * Expected contents:
+ * - Feature checklist styling
+ * - Checkmark/pending indicators
+ * - CI badge positioning
+ * - "Coming Soon" badge styling
+ */
+
+.status {
+  background: var(--color-bg-primary);
+}
+
+.status-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* CI/CD Badge */
+.status-badge {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.status-badge a {
+  display: inline-block;
+  transition: opacity var(--transition-fast);
+}
+
+.status-badge a:hover,
+.status-badge a:focus {
+  opacity: 0.8;
+}
+
+.status-badge img {
+  height: 24px;
+  vertical-align: middle;
+}
+
+/* Feature Checklist */
+.feature-checklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+}
+
+.feature-item .checkmark {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.feature-item.completed .checkmark {
+  color: var(--color-success);
+}
+
+.feature-item.coming-soon .checkmark {
+  color: var(--color-text-muted);
+}
+
+.feature-item .feature-name {
+  flex: 1;
+  color: var(--color-text-primary);
+}
+
+.feature-item.coming-soon {
+  opacity: 0.8;
+}
+
+.feature-item.coming-soon .feature-name {
+  color: var(--color-text-secondary);
+}
+
+/* Coming Soon Badge */
+.badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-warning);
+  color: var(--color-bg-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border-radius: var(--border-radius);
+  margin-left: auto;
+}

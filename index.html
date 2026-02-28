@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components/hero.css">
+  <link rel="stylesheet" href="css/components/features.css">
+  <link rel="stylesheet" href="css/components/quickstart.css">
+  <link rel="stylesheet" href="css/components/status.css">
+  <link rel="stylesheet" href="css/components/navigation.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Skip Navigation Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header with Navigation -->
+  <header class="header">
+    <nav class="nav" aria-label="Main navigation">
+      <div class="nav-brand">
+        <a href="#hero">MirDB</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-menu" id="nav-menu" role="menubar">
+        <li role="none"><a href="#features" role="menuitem">Features</a></li>
+        <li role="none"><a href="#quickstart" role="menuitem">Quick Start</a></li>
+        <li role="none"><a href="#status" role="menuitem">Status</a></li>
+        <li role="none">
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="external-link" role="menuitem">
+            GitHub <span class="external-icon" aria-hidden="true">↗</span>
+          </a>
+        </li>
+        <li role="none">
+          <a href="https://github.com/memcached/memcached/wiki/Commands" target="_blank" rel="noopener noreferrer" class="external-link" role="menuitem">
+            Docs <span class="external-icon" aria-hidden="true">↗</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <img
+        src="assets/logo.gif"
+        alt="MirDB animated logo"
+        class="hero__logo"
+        width="200"
+        height="200"
+      >
+      <h1 id="hero-title" class="hero__title">MirDB</h1>
+      <p class="hero__tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+      <a href="#quickstart" class="hero__cta cta-button" role="button">Get Started</a>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features" aria-labelledby="features-title">
+      <h2 id="features-title" class="section-title">Features</h2>
+      <div class="features-grid">
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Memcached Protocol</h3>
+          <p class="feature-description">Drop-in replacement for memcached clients. Use your existing memcached-compatible libraries and tools with zero code changes.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Persistent Storage</h3>
+          <p class="feature-description">Your data survives restarts. Unlike traditional memcached, MirDB persists data to disk ensuring durability without sacrificing performance.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+              <polygon points="12,2 2,7 12,12 22,7 12,2"></polygon>
+              <polyline points="2,17 12,22 22,17"></polyline>
+              <polyline points="2,12 12,17 22,12"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">LSM Tree Architecture</h3>
+          <p class="feature-description">Built on Log-Structured Merge-tree for efficient write-heavy workloads. Optimized for high throughput with automatic compaction.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quickstart" class="quickstart" aria-labelledby="quickstart-title">
+      <h2 id="quickstart-title" class="section-title">Quick Start</h2>
+      <div class="quickstart-content">
+        <div class="quickstart-install">
+          <h3 class="quickstart-subtitle">Installation</h3>
+          <div class="code-block-wrapper">
+            <pre class="code-block"><code id="install-code">cargo install mirdb-server</code></pre>
+            <button class="copy-button" aria-label="Copy installation command to clipboard" data-target="install-code">
+              <span class="copy-icon" aria-hidden="true">📋</span>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="quickstart-usage">
+          <h3 class="quickstart-subtitle">Usage Example</h3>
+          <div class="code-block-wrapper">
+            <pre class="code-block"><code id="usage-code"><span class="code-comment"># Start the server</span>
+mirdb-server
+
+<span class="code-comment"># Connect with telnet or any memcached client</span>
+telnet localhost 12333
+
+<span class="code-comment"># Set a value</span>
+<span class="code-keyword">set</span> mykey <span class="code-number">0</span> <span class="code-number">0</span> <span class="code-number">5</span>
+hello
+<span class="code-response">STORED</span>
+
+<span class="code-comment"># Get the value</span>
+<span class="code-keyword">get</span> mykey
+<span class="code-response">VALUE mykey 0 5
+hello
+END</span></code></pre>
+            <button class="copy-button" aria-label="Copy usage example to clipboard" data-target="usage-code">
+              <span class="copy-icon" aria-hidden="true">📋</span>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="quickstart-demo">
+          <h3 class="quickstart-subtitle">Demo</h3>
+          <img src="assets/usage.gif" alt="MirDB usage demonstration showing set and get operations in terminal" class="usage-gif" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- Status Section -->
+    <section id="status" class="status" aria-labelledby="status-title">
+      <h2 id="status-title" class="section-title">Project Status</h2>
+      <div class="status-content">
+        <!-- CI/CD Badge -->
+        <div class="status-badge">
+          <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="View build status on CircleCI">
+            <img src="https://circleci.com/gh/yetone/mirdb.svg?style=svg" alt="CircleCI build status badge">
+          </a>
+        </div>
+
+        <!-- Feature Checklist -->
+        <ul class="feature-checklist" aria-label="Implementation status checklist">
+          <li class="feature-item completed">
+            <span class="checkmark" aria-hidden="true">✓</span>
+            <span class="feature-name">Tokio with Memcached Protocol</span>
+          </li>
+          <li class="feature-item completed">
+            <span class="checkmark" aria-hidden="true">✓</span>
+            <span class="feature-name">Memtable (in-memory storage)</span>
+          </li>
+          <li class="feature-item completed">
+            <span class="checkmark" aria-hidden="true">✓</span>
+            <span class="feature-name">Compaction</span>
+          </li>
+          <li class="feature-item coming-soon">
+            <span class="checkmark" aria-hidden="true">○</span>
+            <span class="feature-name">Raft Consensus</span>
+            <span class="badge">Coming Soon</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <!-- Footer content -->
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

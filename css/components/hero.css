@@ -1,0 +1,64 @@
+/**
+ * MirDB Homepage - Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Purpose: Styles for hero section
+ */
+
+.hero {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+  padding: var(--spacing-3xl) var(--spacing-xl);
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+}
+
+.hero-title {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+}
+
+.cta-button {
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  border-radius: var(--border-radius);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.cta-button:hover {
+  background: var(--color-accent-hover);
+  color: var(--color-bg-primary);
+  transform: translateY(-2px);
+}
+
+.cta-button:focus-visible {
+  outline: 2px solid var(--color-accent-hover);
+  outline-offset: 4px;
+}
