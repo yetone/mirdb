@@ -375,4 +375,261 @@ mod tests {
     fn test_cache_duration_constant() {
         assert_eq!(CACHE_DURATION, Duration::from_secs(1));
     }
+
+    // ============================================================================
+    // Scenario 10 - Metrics Caching Behavior Tests
+    // ============================================================================
+
+    /// Test Case 1: Verify that metrics are cached within 1 second
+    ///
+    /// Input: Request metrics, add 10 keys, immediately request metrics again
+    /// Expected: Second request may return cached value (same key count)
+    #[test]
+    fn test_scenario10_cache_returns_stale_value_within_cache_duration() {
+        let counters = Arc::new(MetricsCounters::new());
+        let cache = MetricsCache::new(counters.clone());
+
+        // Set initial key count
+        counters.set_total_keys(0);
+
+        // First request to populate cache
+        let initial_metrics = cache.get();
+        assert_eq!(initial_metrics.total_keys, 0, "Initial key count should be 0");
+
+        // Add 10 keys to simulate state change
+        counters.increment_keys(10);
+        assert_eq!(
+            counters.get_total_keys(),
+            10,
+            "Counter should show 10 keys after increment"
+        );
+
+        // Immediately request metrics again (within 1 second)
+        let cached_metrics = cache.get();
+
+        // The cached value should still show 0 keys because we're within cache duration
+        assert_eq!(
+            cached_metrics.total_keys, 0,
+            "Second request within cache duration should return cached value (0 keys)"
+        );
+    }
+
+    /// Test Case 2: Verify that cache expires after 1 second
+    ///
+    /// Input: Request metrics, add 10 keys, wait 1.5 seconds, request metrics
+    /// Expected: Response reflects updated key count after cache expiration
+    #[test]
+    fn test_scenario10_cache_updates_after_expiration() {
+        let counters = Arc::new(MetricsCounters::new());
+        let cache = MetricsCache::new(counters.clone());
+
+        // Set initial key count
+        counters.set_total_keys(0);
+
+        // First request to populate cache
+        let initial_metrics = cache.get();
+        assert_eq!(initial_metrics.total_keys, 0, "Initial key count should be 0");
+
+        // Add 10 keys to simulate state change
+        counters.increment_keys(10);
+
+        // Wait for cache to expire (1.5 seconds > 1 second cache duration)
+        thread::sleep(Duration::from_millis(1500));
+
+        // Request metrics after cache expiration
+        let updated_metrics = cache.get();
+
+        // Now we should see the updated value
+        assert_eq!(
+            updated_metrics.total_keys, 10,
+            "After cache expiration, metrics should reflect updated key count (10)"
+        );
+    }
+
+    /// Test Case 3: Verify minimal read lock contention with rapid requests
+    ///
+    /// Input: Make 100 rapid metrics requests within 1 second
+    /// Expected: All requests return same cached value, minimal read lock contention
+    #[test]
+    fn test_scenario10_rapid_requests_return_same_cached_value() {
+        let counters = Arc::new(MetricsCounters::new());
+        let cache = Arc::new(MetricsCache::new(counters.clone()));
+
+        // Set initial values
+        counters.set_total_keys(42);
+        counters.increment_connections();
+        counters.set_memtable_size(1024);
+
+        // First request to populate cache
+        let initial_metrics = cache.get();
+        let initial_key_count = initial_metrics.total_keys;
+
+        // Make 100 rapid requests
+        let mut all_same = true;
+        let mut request_count = 0;
+
+        for _ in 0..100 {
+            let metrics = cache.get();
+            request_count += 1;
+
+            // All should return the same cached value
+            if metrics.total_keys != initial_key_count {
+                all_same = false;
+                break;
+            }
+        }
+
+        assert_eq!(request_count, 100, "Should have made 100 requests");
+        assert!(
+            all_same,
+            "All 100 rapid requests should return the same cached value"
+        );
+    }
+
+    /// Additional test: Verify concurrent access to cache is thread-safe
+    #[test]
+    fn test_scenario10_concurrent_cache_access() {
+        let counters = Arc::new(MetricsCounters::new());
+        let cache = Arc::new(MetricsCache::new(counters.clone()));
+
+        // Set initial values
+        counters.set_total_keys(100);
+
+        // Populate cache
+        let _ = cache.get();
+
+        // Spawn multiple threads to read from cache concurrently
+        let mut handles = vec![];
+
+        for _ in 0..10 {
+            let cache_clone = cache.clone();
+            let handle = thread::spawn(move || {
+                let mut results = vec![];
+                for _ in 0..10 {
+                    let metrics = cache_clone.get();
+                    results.push(metrics.total_keys);
+                }
+                results
+            });
+            handles.push(handle);
+        }
+
+        // Collect all results
+        let mut all_results = vec![];
+        for handle in handles {
+            all_results.extend(handle.join().unwrap());
+        }
+
+        // All results should be 100 (the cached value)
+        assert_eq!(all_results.len(), 100);
+        assert!(
+            all_results.iter().all(|&v| v == 100),
+            "All concurrent reads should return the same cached value"
+        );
+    }
+
+    /// Test: Verify force refresh bypasses cache
+    #[test]
+    fn test_scenario10_force_refresh_bypasses_cache() {
+        let counters = Arc::new(MetricsCounters::new());
+        let cache = MetricsCache::new(counters.clone());
+
+        // Set initial values and populate cache
+        counters.set_total_keys(25);
+        let initial = cache.get();
+        assert_eq!(initial.total_keys, 25);
+
+        // Update counters
+        counters.set_total_keys(75);
+
+        // Normal get should return cached value
+        let cached = cache.get();
+        assert_eq!(cached.total_keys, 25, "Normal get should return cached value");
+
+        // Force refresh should return fresh value
+        let refreshed = cache.refresh();
+        assert_eq!(
+            refreshed.total_keys, 75,
+            "Force refresh should bypass cache and return fresh value"
+        );
+
+        // Subsequent get should return the new cached value
+        let subsequent = cache.get();
+        assert_eq!(
+            subsequent.total_keys, 75,
+            "After refresh, cache should contain new value"
+        );
+    }
+
+    /// Test: Verify all metric fields are properly cached
+    #[test]
+    fn test_scenario10_all_metrics_fields_are_cached() {
+        let counters = Arc::new(MetricsCounters::new());
+        let cache = MetricsCache::new(counters.clone());
+
+        // Set initial values
+        counters.set_total_keys(100);
+        counters.increment_connections();
+        counters.increment_connections();
+        counters.set_memtable_size(4096);
+
+        // Populate cache
+        let initial = cache.get();
+        assert_eq!(initial.total_keys, 100);
+        assert_eq!(initial.active_connections, 2);
+        assert_eq!(initial.memtable_size, 4096);
+
+        // Modify all counters
+        counters.set_total_keys(500);
+        counters.increment_connections();
+        counters.set_memtable_size(8192);
+
+        // Cache should return old values for all fields
+        let cached = cache.get();
+        assert_eq!(
+            cached.total_keys, 100,
+            "total_keys should be cached"
+        );
+        assert_eq!(
+            cached.active_connections, 2,
+            "active_connections should be cached"
+        );
+        assert_eq!(
+            cached.memtable_size, 4096,
+            "memtable_size should be cached"
+        );
+    }
+
+    /// Test: Verify rapid state changes followed by cache expiration
+    #[test]
+    fn test_scenario10_rapid_state_changes_then_cache_expiration() {
+        let counters = Arc::new(MetricsCounters::new());
+        let cache = MetricsCache::new(counters.clone());
+
+        // Initial state
+        counters.set_total_keys(0);
+        let _ = cache.get();
+
+        // Rapid state changes
+        for i in 1..=10 {
+            counters.increment_keys(1);
+            let metrics = cache.get();
+            // All within cache window, should return 0
+            assert_eq!(
+                metrics.total_keys, 0,
+                "Iteration {}: Should return cached value (0) during rapid changes",
+                i
+            );
+        }
+
+        // Wait for cache to expire
+        thread::sleep(Duration::from_millis(1100));
+
+        // Now should see the final value
+        let final_metrics = cache.get();
+        assert_eq!(
+            final_metrics.total_keys, 10,
+            "After cache expiration, should show final accumulated value"
+        );
+    }
 }
