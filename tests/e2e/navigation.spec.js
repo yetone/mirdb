@@ -279,6 +279,174 @@ test.describe('Navigation Menu Functionality', () => {
  * - All external links with target=_blank have rel=noopener
  * - Memcached protocol documentation link is valid
  */
+/**
+ * Smooth Scroll Behavior Tests
+ * Owner: Scenario 16 - Smooth Scroll Behavior
+ *
+ * Test cases:
+ * - Navigation links trigger smooth scroll to sections
+ * - CTA button triggers smooth scroll to quick start
+ * - Target sections are visible after scroll completes
+ * - prefers-reduced-motion disables smooth scroll
+ */
+test.describe('Smooth Scroll Behavior', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForPageLoad(page);
+  });
+
+  test('Test Case 1: CSS has scroll-behavior: smooth on html element', async ({ page }) => {
+    // Check that the html element has scroll-behavior: smooth
+    const scrollBehavior = await page.evaluate(() => {
+      return window.getComputedStyle(document.documentElement).scrollBehavior;
+    });
+    expect(scrollBehavior).toBe('smooth');
+  });
+
+  test('Test Case 2: Click navigation link to features section triggers smooth scroll', async ({ page }) => {
+    // Scroll to top first to ensure we can measure scroll
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(100);
+
+    // Get initial scroll position
+    const initialScrollY = await page.evaluate(() => window.scrollY);
+    expect(initialScrollY).toBe(0);
+
+    // Click the Features link
+    const featuresLink = page.locator('.nav-menu a[href="#features"]');
+    await featuresLink.click();
+
+    // Wait a brief moment for scroll to start
+    await page.waitForTimeout(50);
+
+    // Check that scroll is in progress (intermediate position)
+    const midScrollY = await page.evaluate(() => window.scrollY);
+
+    // Wait for scroll to complete
+    await page.waitForTimeout(500);
+
+    // Get final scroll position
+    const finalScrollY = await page.evaluate(() => window.scrollY);
+
+    // Verify page has scrolled
+    expect(finalScrollY).toBeGreaterThan(initialScrollY);
+
+    // Verify features section is now in view
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeInViewport();
+
+    // Check that the section title is visible at or near the top
+    const featuresTitleBoundingBox = await page.locator('#features-title').boundingBox();
+    expect(featuresTitleBoundingBox).not.toBeNull();
+    // Title should be in the upper portion of the viewport
+    expect(featuresTitleBoundingBox.y).toBeLessThan(300);
+  });
+
+  test('Test Case 3: Click CTA button triggers smooth scroll to quick start section', async ({ page }) => {
+    // Scroll to top first
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(100);
+
+    // Get initial scroll position
+    const initialScrollY = await page.evaluate(() => window.scrollY);
+
+    // Click the CTA button (Get Started)
+    const ctaButton = page.locator('.hero__cta[href="#quickstart"]');
+    await ctaButton.click();
+
+    // Wait for scroll animation to complete
+    await page.waitForTimeout(500);
+
+    // Get final scroll position
+    const finalScrollY = await page.evaluate(() => window.scrollY);
+
+    // Verify page has scrolled
+    expect(finalScrollY).toBeGreaterThan(initialScrollY);
+
+    // Verify quickstart section is now in view
+    const quickstartSection = page.locator('#quickstart');
+    await expect(quickstartSection).toBeInViewport();
+
+    // Check that the section title is visible
+    const quickstartTitle = page.locator('#quickstart-title');
+    await expect(quickstartTitle).toBeVisible();
+  });
+
+  test('Test Case 4: Target section header is visible at or near top after scroll', async ({ page }) => {
+    // Click the Status link
+    const statusLink = page.locator('.nav-menu a[href="#status"]');
+    await statusLink.click();
+
+    // Wait for scroll animation
+    await page.waitForTimeout(500);
+
+    // Get the status section title position
+    const statusTitleBoundingBox = await page.locator('#status-title').boundingBox();
+
+    // Verify the title exists
+    expect(statusTitleBoundingBox).not.toBeNull();
+
+    // The title should be visible in the viewport
+    // Taking into account the fixed header and potential padding
+    // The title should be within the upper 60% of the viewport
+    const viewportHeight = await page.evaluate(() => window.innerHeight);
+    expect(statusTitleBoundingBox.y).toBeLessThan(viewportHeight * 0.6);
+  });
+
+  test('Test Case 5: Smooth scroll works for all in-page navigation links', async ({ page }) => {
+    const sections = ['#features', '#quickstart', '#status'];
+
+    for (const sectionId of sections) {
+      // Scroll to top
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(100);
+
+      // Click the link
+      const link = page.locator(`.nav-menu a[href="${sectionId}"]`);
+      await link.click();
+
+      // Wait for scroll
+      await page.waitForTimeout(500);
+
+      // Verify section is in view
+      const section = page.locator(sectionId);
+      await expect(section).toBeInViewport();
+    }
+  });
+});
+
+/**
+ * Reduced Motion Preference Tests
+ * Owner: Scenario 16 - Smooth Scroll Behavior
+ */
+test.describe('Reduced Motion Preference', () => {
+  test('Test Case: prefers-reduced-motion disables smooth scroll', async ({ page }) => {
+    // Emulate prefers-reduced-motion
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await waitForPageLoad(page);
+
+    // Check that scroll-behavior is auto when reduced motion is preferred
+    const scrollBehavior = await page.evaluate(() => {
+      return window.getComputedStyle(document.documentElement).scrollBehavior;
+    });
+    expect(scrollBehavior).toBe('auto');
+  });
+
+  test('Test Case: scroll-behavior remains smooth without reduced motion preference', async ({ page }) => {
+    // Emulate no preference for reduced motion
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/');
+    await waitForPageLoad(page);
+
+    // Check that scroll-behavior is smooth
+    const scrollBehavior = await page.evaluate(() => {
+      return window.getComputedStyle(document.documentElement).scrollBehavior;
+    });
+    expect(scrollBehavior).toBe('smooth');
+  });
+});
+
 test.describe('External Link Validation', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');

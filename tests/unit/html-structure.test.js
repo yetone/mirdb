@@ -220,6 +220,36 @@ describe('HTML Structure Tests', () => {
     });
   });
 
+  describe('CSS Scroll Behavior - Scenario 16', () => {
+    let cssContent;
+
+    beforeAll(() => {
+      const cssPath = path.join(__dirname, '../../css/styles.css');
+      cssContent = fs.readFileSync(cssPath, 'utf-8');
+    });
+
+    test('should have scroll-behavior: smooth on html element', () => {
+      // Check that the CSS contains scroll-behavior: smooth for html
+      // This regex looks for html { ... scroll-behavior: smooth ... }
+      expect(cssContent).toMatch(/html\s*\{[^}]*scroll-behavior:\s*smooth/);
+    });
+
+    test('should respect prefers-reduced-motion media query', () => {
+      // Check that the CSS contains a prefers-reduced-motion media query
+      expect(cssContent).toMatch(/@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)/);
+    });
+
+    test('should set scroll-behavior to auto when reduced motion is preferred', () => {
+      // Check that within the reduced motion media query, scroll-behavior is set to auto
+      const reducedMotionMatch = cssContent.match(/@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)\s*\{([^}]*\{[^}]*\}[^}]*)*\}/);
+      expect(reducedMotionMatch).not.toBeNull();
+
+      // Check that the matched block contains scroll-behavior: auto
+      const reducedMotionBlock = reducedMotionMatch[0];
+      expect(reducedMotionBlock).toMatch(/scroll-behavior:\s*auto/);
+    });
+  });
+
   describe('Accessibility Basics', () => {
     test('html element should have lang attribute', () => {
       const html = document.documentElement;
