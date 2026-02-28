@@ -215,14 +215,27 @@ pub fn start_homepage_server(
 /// - Custom rejection handlers for proper HTTP status codes
 /// - Method restrictions (405 for unsupported methods)
 /// - URI length validation (414 for long URLs)
+/// - Request timeout handling
 async fn run_server(port: u16, state: Arc<AppState>) {
     let addr: SocketAddr = ([0, 0, 0, 0], port).into();
 
     // Create state filter
     let state_filter = warp::any().map(move || state.clone());
 
-    // Index route - GET only
-    let index = warp::path::end()
+    // URI length filter - reject requests with URLs > MAX_URL_LENGTH (10KB)
+    let uri_length_filter = warp::path::full()
+        .and_then(|path: warp::path::FullPath| async move {
+            if path.as_str().len() > MAX_URL_LENGTH {
+                Err(warp::reject::custom(UriTooLong))
+            } else {
+                Ok(())
+            }
+        })
+        .untuple_one();
+
+    // Index route - GET only, with URI length validation
+    let index = uri_length_filter.clone()
+        .and(warp::path::end())
         .and(warp::get())
         .and(state_filter.clone())
         .map(|state: Arc<AppState>| {
@@ -243,12 +256,13 @@ async fn run_server(port: u16, state: Arc<AppState>) {
             ))
         });
 
-    // Health endpoint - GET only
-    let health = warp::path("health")
+    // Health endpoint - GET only, with URI length validation
+    let health = uri_length_filter
+        .and(warp::path("health"))
         .and(warp::get())
         .map(|| warp::reply::json(&serde_json::json!({"status": "ok"})));
 
-    // Combine routes
+    // Combine routes with proper rejection handling
     let routes = index
         .or(health)
         .recover(handle_rejection);
