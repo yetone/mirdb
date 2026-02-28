@@ -2,12 +2,16 @@
  * MirDB Homepage JavaScript
  *
  * Owner: Scenario 6 - Theme Toggle Functionality
+ * Co-owner: Scenario 12 - Browser Compatibility
  *
  * Expected functions:
  * - initTheme() - Initialize theme from localStorage or system preference
  * - toggleTheme() - Switch between dark and light mode
  * - saveThemePreference(theme) - Persist to localStorage
  * - refreshMetrics() - Fetch and update metrics display (Scenario 5 may add)
+ *
+ * Browser Support: Chrome 80+, Firefox 75+, Safari 13+, Edge 80+
+ * Note: Uses ES5 syntax for maximum browser compatibility
  */
 
 (function() {
@@ -137,19 +141,34 @@
         }
 
         // Listen for system theme changes
+        // Use addListener for Safari < 14 compatibility
         if (window.matchMedia) {
             var darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
             // Only update if user hasn't set a preference
-            darkModeMediaQuery.addEventListener('change', function(e) {
+            var handleSystemThemeChange = function(e) {
                 if (!getStoredTheme()) {
                     applyTheme(e.matches ? THEME_DARK : THEME_LIGHT);
                 }
-            });
+            };
+
+            // Use addEventListener if available, otherwise use deprecated addListener
+            // Safari < 14 does not support addEventListener on MediaQueryList
+            if (darkModeMediaQuery.addEventListener) {
+                darkModeMediaQuery.addEventListener('change', handleSystemThemeChange);
+            } else if (darkModeMediaQuery.addListener) {
+                darkModeMediaQuery.addListener(handleSystemThemeChange);
+            }
         }
     }
 
     // Initialize on DOM ready
-    document.addEventListener('DOMContentLoaded', initTheme);
+    // Use DOMContentLoaded with fallback for older browsers
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTheme);
+    } else {
+        // DOM already loaded
+        initTheme();
+    }
 
     // Expose functions globally for testing
     window.MirDBTheme = {
@@ -161,4 +180,66 @@
         THEME_DARK: THEME_DARK,
         THEME_LIGHT: THEME_LIGHT
     };
+
+    /**
+     * Smooth scroll polyfill for Safari < 15.4
+     * Enhances anchor links with smooth scrolling behavior
+     */
+    function initSmoothScrollPolyfill() {
+        // Check if native smooth scroll is not supported
+        if (!('scrollBehavior' in document.documentElement.style)) {
+            // Find all anchor links that point to same-page sections
+            var anchorLinks = document.querySelectorAll('a[href^="#"]');
+            for (var i = 0; i < anchorLinks.length; i++) {
+                anchorLinks[i].addEventListener('click', function(e) {
+                    var targetId = this.getAttribute('href');
+                    if (targetId && targetId.length > 1) {
+                        var targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            e.preventDefault();
+                            smoothScrollTo(targetElement);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Smooth scroll to element using requestAnimationFrame
+     * @param {Element} target - Target element to scroll to
+     */
+    function smoothScrollTo(target) {
+        var targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+        var startPosition = window.pageYOffset;
+        var distance = targetPosition - startPosition;
+        var duration = 500;
+        var startTime = null;
+
+        function animation(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            var timeElapsed = currentTime - startTime;
+            var progress = Math.min(timeElapsed / duration, 1);
+            // Ease-in-out cubic
+            var easeProgress = progress < 0.5
+                ? 4 * progress * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+            window.scrollTo(0, startPosition + distance * easeProgress);
+            if (timeElapsed < duration) {
+                requestAnimationFrame(animation);
+            }
+        }
+
+        requestAnimationFrame(animation);
+    }
+
+    // Initialize smooth scroll polyfill
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSmoothScrollPolyfill);
+    } else {
+        initSmoothScrollPolyfill();
+    }
+
+    // Expose polyfill for testing
+    window.MirDBTheme.smoothScrollTo = smoothScrollTo;
 })();

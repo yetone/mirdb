@@ -4,12 +4,16 @@
  * Owner: Scenario 2 - Homepage Static Content Rendering (base styles)
  * Co-owner: Scenario 6 - Theme Toggle Functionality (CSS variables for themes)
  * Co-owner: Scenario 7 - Responsive Layout (media queries)
+ * Co-owner: Scenario 12 - Browser Compatibility (vendor prefixes, fallbacks)
  *
  * Structure:
  * 1. CSS Variables (light/dark themes) - Scenario 6
  * 2. Base styles - Scenario 2
  * 3. Component styles - Scenario 2
  * 4. Media queries for responsive - Scenario 7
+ * 5. Browser compatibility enhancements - Scenario 12
+ *
+ * Browser Support: Chrome 80+, Firefox 75+, Safari 13+, Edge 80+
  */
 
 /* =========================================
@@ -45,7 +49,7 @@
     --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Smooth theme transition */
+/* Smooth theme transition - with vendor prefixes for Safari compatibility */
 body,
 .header,
 .hero,
@@ -57,6 +61,9 @@ body,
 .quick-start,
 .footer,
 .theme-toggle {
+    -webkit-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    -moz-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    -o-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -66,10 +73,13 @@ body,
 * {
     margin: 0;
     padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
 html {
+    /* scroll-behavior: smooth is not supported in Safari < 15.4, use JS fallback */
     scroll-behavior: smooth;
 }
 
@@ -83,6 +93,9 @@ body {
 a {
     color: var(--color-primary);
     text-decoration: none;
+    -webkit-transition: color 0.2s ease;
+    -moz-transition: color 0.2s ease;
+    -o-transition: color 0.2s ease;
     transition: color 0.2s ease;
 }
 
@@ -126,13 +139,33 @@ h3 {
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem 2rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -moz-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 
 .logo {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     gap: 0.5rem;
 }
@@ -144,7 +177,15 @@ h3 {
 }
 
 .nav {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     gap: 1.5rem;
 }
@@ -161,12 +202,21 @@ h3 {
 .theme-toggle {
     background: none;
     border: 1px solid var(--color-border);
+    -webkit-border-radius: var(--radius);
+    -moz-border-radius: var(--radius);
     border-radius: var(--radius);
     padding: 0.5rem;
     cursor: pointer;
     font-size: 1.25rem;
     line-height: 1;
+    -webkit-transition: background-color 0.2s ease;
+    -moz-transition: background-color 0.2s ease;
+    -o-transition: background-color 0.2s ease;
     transition: background-color 0.2s ease;
+    /* Fix for Safari button appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .theme-toggle:hover {
@@ -195,10 +245,24 @@ h3 {
     margin-top: 1.5rem;
     font-size: 0.875rem;
     color: var(--color-text-secondary);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     gap: 1.5rem;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
 }
 
@@ -207,7 +271,15 @@ h3 {
 }
 
 .server-status {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     gap: 0.5rem;
 }
@@ -215,17 +287,23 @@ h3 {
 .status-indicator {
     width: 10px;
     height: 10px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
     border-radius: 50%;
     background-color: #6b7280;
 }
 
 .status-indicator.status-running {
     background-color: #22c55e;
+    -webkit-box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    -moz-box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
     box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
 }
 
 .status-indicator.status-stopped {
     background-color: #ef4444;
+    -webkit-box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    -moz-box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
     box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
@@ -237,7 +315,9 @@ h3 {
 }
 
 .features-grid {
+    display: -ms-grid;
     display: grid;
+    -ms-grid-columns: 1fr;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
@@ -245,14 +325,27 @@ h3 {
 .feature-card {
     background-color: var(--color-bg);
     border: 1px solid var(--color-border);
+    -webkit-border-radius: var(--radius);
+    -moz-border-radius: var(--radius);
     border-radius: var(--radius);
     padding: 2rem;
+    -webkit-box-shadow: var(--shadow);
+    -moz-box-shadow: var(--shadow);
     box-shadow: var(--shadow);
+    -webkit-transition: -webkit-transform 0.2s ease, box-shadow 0.2s ease;
+    -moz-transition: -moz-transform 0.2s ease, box-shadow 0.2s ease;
+    -o-transition: -o-transform 0.2s ease, box-shadow 0.2s ease;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .feature-card:hover {
+    -webkit-transform: translateY(-4px);
+    -moz-transform: translateY(-4px);
+    -ms-transform: translateY(-4px);
+    -o-transform: translateY(-4px);
     transform: translateY(-4px);
+    -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -274,7 +367,9 @@ h3 {
 .metrics-grid {
     max-width: 1200px;
     margin: 0 auto;
+    display: -ms-grid;
     display: grid;
+    -ms-grid-columns: 1fr;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
 }
@@ -289,12 +384,16 @@ h3 {
 .config-panel {
     background-color: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
+    -webkit-border-radius: var(--radius);
+    -moz-border-radius: var(--radius);
     border-radius: var(--radius);
     padding: 2rem;
 }
 
 .config-grid {
+    display: -ms-grid;
     display: grid;
+    -ms-grid-columns: 1fr;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
 }
@@ -302,15 +401,32 @@ h3 {
 .config-item {
     background-color: var(--color-bg);
     border: 1px solid var(--color-border);
+    -webkit-border-radius: var(--radius);
+    -moz-border-radius: var(--radius);
     border-radius: var(--radius);
     padding: 1.25rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -moz-box-orient: vertical;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
     gap: 0.5rem;
+    -webkit-transition: box-shadow 0.2s ease;
+    -moz-transition: box-shadow 0.2s ease;
+    -o-transition: box-shadow 0.2s ease;
     transition: box-shadow 0.2s ease;
 }
 
 .config-item:hover {
+    -webkit-box-shadow: var(--shadow);
+    -moz-box-shadow: var(--shadow);
     box-shadow: var(--shadow);
 }
 
@@ -362,10 +478,12 @@ h3 {
 pre {
     background-color: var(--color-code-bg);
     color: var(--color-code-text);
+    -webkit-border-radius: var(--radius);
+    -moz-border-radius: var(--radius);
     border-radius: var(--radius);
     padding: 1.5rem;
     overflow-x: auto;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace;
     font-size: 0.875rem;
     line-height: 1.5;
 }
@@ -388,10 +506,20 @@ code {
 }
 
 .footer-links {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     gap: 2rem;
     margin-bottom: 1rem;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
 }
 
@@ -511,7 +639,13 @@ code {
 
     .nav {
         gap: 0.75rem;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
         flex-wrap: wrap;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -moz-box-pack: center;
+        -ms-flex-pack: center;
         justify-content: center;
     }
 
@@ -521,8 +655,20 @@ code {
         /* Touch-friendly tap target */
         min-height: 44px;
         min-width: 44px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
         display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -moz-box-align: center;
+        -ms-flex-align: center;
         align-items: center;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -moz-box-pack: center;
+        -ms-flex-pack: center;
         justify-content: center;
     }
 
@@ -557,6 +703,12 @@ code {
     }
 
     .version-info {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -moz-box-orient: vertical;
+        -moz-box-direction: normal;
+        -ms-flex-direction: column;
         flex-direction: column;
         gap: 0.75rem;
     }
@@ -628,15 +780,33 @@ code {
     }
 
     .footer-links {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -moz-box-orient: vertical;
+        -moz-box-direction: normal;
+        -ms-flex-direction: column;
         flex-direction: column;
         gap: 1rem;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -moz-box-align: center;
+        -ms-flex-align: center;
         align-items: center;
     }
 
     .footer-links a {
         /* Touch-friendly tap target */
         min-height: 44px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
         display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -moz-box-align: center;
+        -ms-flex-align: center;
         align-items: center;
         padding: 0.5rem 1rem;
     }
@@ -714,6 +884,9 @@ code {
     button,
     .theme-toggle {
         -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
         user-select: none;
     }
 }
@@ -743,4 +916,124 @@ pre {
     max-width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================
+   5. Browser Compatibility Enhancements - Scenario 12
+   ========================================= */
+
+/* Safari-specific fixes */
+@supports (-webkit-touch-callout: none) {
+    /* Safari viewport height fix for mobile */
+    body {
+        min-height: -webkit-fill-available;
+    }
+
+    /* Safari flexbox gap fallback */
+    .nav > * + * {
+        margin-left: 1.5rem;
+    }
+
+    .version-info > * + * {
+        margin-left: 1.5rem;
+    }
+}
+
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+    /* Firefox smooth scrolling fix */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Firefox focus outline */
+    button:focus-visible,
+    a:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+}
+
+/* Edge/IE legacy grid fallback */
+@supports not (display: grid) {
+    .features-grid,
+    .metrics-grid,
+    .config-grid {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+
+    .features-grid > *,
+    .metrics-grid > *,
+    .config-grid > * {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 1 300px;
+        -moz-box-flex: 1;
+        -ms-flex: 1 1 300px;
+        flex: 1 1 300px;
+        margin: 0.5rem;
+    }
+}
+
+/* Print styles for all browsers */
+@media print {
+    .theme-toggle,
+    .nav {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    a {
+        color: black !important;
+        text-decoration: underline !important;
+    }
+
+    pre {
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --color-border: #000000;
+        --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    :root[data-theme="dark"] {
+        --color-border: #ffffff;
+    }
+
+    .feature-card,
+    .config-item {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        -webkit-animation-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        -webkit-animation-iteration-count: 1 !important;
+        animation-iteration-count: 1 !important;
+        -webkit-transition-duration: 0.01ms !important;
+        -moz-transition-duration: 0.01ms !important;
+        -o-transition-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

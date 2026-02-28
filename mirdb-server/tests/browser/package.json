@@ -1,0 +1,18 @@
+{
+  "name": "mirdb-browser-tests",
+  "version": "1.0.0",
+  "description": "Browser compatibility tests for MirDB homepage",
+  "scripts": {
+    "server": "node test-server.js",
+    "test": "npx playwright test",
+    "test:chrome": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:safari": "npx playwright test --project=webkit",
+    "test:edge": "npx playwright test --project=edge",
+    "test:all": "npx playwright test",
+    "install:browsers": "npx playwright install"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}
