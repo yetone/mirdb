@@ -68,11 +68,24 @@ pub async fn handle_status(state: Arc<AppState>) -> Result<impl Reply, warp::Rej
     Ok(warp::reply::json(&status))
 }
 
-/// Handle requests to /api/config (Scenario 4 will implement)
+/// Handle requests to /api/config
+/// Returns configuration values including work_dir, port, and limits (REQ-3)
 pub async fn handle_config(state: Arc<AppState>) -> Result<impl Reply, warp::Rejection> {
+    // Extract port from addr (format: "host:port")
+    let port = state.addr.split(':').last().unwrap_or("12333");
+
     let config = serde_json::json!({
         "work_dir": state.work_dir,
-        "addr": state.addr
+        "addr": state.addr,
+        "port": port,
+        "memtable_size_limit": state.memtable_size_limit,
+        "memtable_size_limit_formatted": super::state::format_bytes(state.memtable_size_limit),
+        "sst_max_size": state.sst_max_size,
+        "sst_max_size_formatted": super::state::format_bytes(state.sst_max_size),
+        "block_size": state.block_size,
+        "block_size_formatted": super::state::format_bytes(state.block_size),
+        "homepage_port": state.config.port,
+        "homepage_enabled": state.config.enabled
     });
     Ok(warp::reply::json(&config))
 }

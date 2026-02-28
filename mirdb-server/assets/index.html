@@ -65,11 +65,36 @@
         </div>
     </section>
 
-    <!-- Scenario 4: Configuration Section (populated by Scenario 4) -->
+    <!-- Scenario 4: Configuration Section -->
     <section id="config" class="config">
         <h2>Configuration</h2>
         <div id="config-panel" class="config-panel">
-            <!-- Configuration populated dynamically by Scenario 4 -->
+            <div class="config-grid">
+                <div class="config-item">
+                    <span class="config-label">Work Directory</span>
+                    <span id="config-work-dir" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Listen Address</span>
+                    <span id="config-addr" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Memtable Size Limit</span>
+                    <span id="config-memtable-limit" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">SSTable Max Size</span>
+                    <span id="config-sst-size" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Block Size</span>
+                    <span id="config-block-size" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Homepage Port</span>
+                    <span id="config-homepage-port" class="config-value">Loading...</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -167,6 +192,65 @@ print(value)  # Output: Hello, MirDB!</code></pre>
         }
 
         document.addEventListener('DOMContentLoaded', fetchStatus);
+    })();
+    </script>
+
+    <!-- Scenario 4: JavaScript for configuration display -->
+    <script>
+    (function() {
+        function fetchConfig() {
+            fetch('/api/config')
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    // Update work directory
+                    var workDirEl = document.getElementById('config-work-dir');
+                    if (workDirEl && data.work_dir) {
+                        workDirEl.textContent = data.work_dir;
+                    }
+
+                    // Update listen address
+                    var addrEl = document.getElementById('config-addr');
+                    if (addrEl && data.addr) {
+                        addrEl.textContent = data.addr;
+                    }
+
+                    // Update memtable size limit
+                    var memtableLimitEl = document.getElementById('config-memtable-limit');
+                    if (memtableLimitEl && data.memtable_size_limit_formatted) {
+                        memtableLimitEl.textContent = data.memtable_size_limit_formatted;
+                    }
+
+                    // Update SSTable max size
+                    var sstSizeEl = document.getElementById('config-sst-size');
+                    if (sstSizeEl && data.sst_max_size_formatted) {
+                        sstSizeEl.textContent = data.sst_max_size_formatted;
+                    }
+
+                    // Update block size
+                    var blockSizeEl = document.getElementById('config-block-size');
+                    if (blockSizeEl && data.block_size_formatted) {
+                        blockSizeEl.textContent = data.block_size_formatted;
+                    }
+
+                    // Update homepage port
+                    var homepagePortEl = document.getElementById('config-homepage-port');
+                    if (homepagePortEl && data.homepage_port) {
+                        homepagePortEl.textContent = data.homepage_port;
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Failed to fetch config:', err);
+                    var configPanel = document.getElementById('config-panel');
+                    if (configPanel) {
+                        var configValues = configPanel.querySelectorAll('.config-value');
+                        for (var i = 0; i < configValues.length; i++) {
+                            configValues[i].textContent = 'Error loading';
+                        }
+                    }
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchConfig);
     })();
     </script>
 

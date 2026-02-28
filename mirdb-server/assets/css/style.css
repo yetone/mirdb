@@ -279,7 +279,7 @@ h3 {
     gap: 1.5rem;
 }
 
-/* Config Section */
+/* Config Section - Scenario 4 */
 .config {
     padding: 4rem 2rem;
     max-width: 1200px;
@@ -291,6 +291,40 @@ h3 {
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
     padding: 2rem;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.config-item {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.config-item:hover {
+    box-shadow: var(--shadow);
+}
+
+.config-label {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.config-value {
+    font-size: 1.125rem;
+    color: var(--color-text);
+    font-weight: 600;
+    word-break: break-all;
 }
 
 /* Quick Start Section */
