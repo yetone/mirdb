@@ -25,7 +25,7 @@
 
 .features__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--spacing-8);
 }
 
@@ -35,6 +35,9 @@
   border-radius: var(--radius-lg);
   text-align: center;
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .feature-card:hover {
@@ -55,16 +58,39 @@
 
 .feature-card__description {
   color: var(--color-text-muted);
+  line-height: var(--line-height-normal, 1.5);
 }
 
-@media (max-width: 1024px) {
+/* Tablet: 2 columns at 768px and above */
+@media (min-width: 768px) {
   .features__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 640px) {
+/* Desktop: 3 columns at 1024px and above */
+@media (min-width: 1024px) {
   .features__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Minimum viewport support (320px) - ensure cards remain readable */
+@media (max-width: 320px) {
+  .features {
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+  }
+
+  .feature-card {
+    padding: var(--spacing-4);
+  }
+
+  .feature-card__title {
+    font-size: var(--font-size-lg);
+  }
+
+  .feature-card__description {
+    font-size: var(--font-size-sm);
   }
 }
