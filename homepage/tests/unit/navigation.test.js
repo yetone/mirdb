@@ -4,9 +4,10 @@
  *
  * Tests for:
  * - GitHub link in header/hero section
- * - Footer links (Repository, Documentation, License)
- * - External link security attributes (target="_blank", rel="noopener")
  * - GitHub icon/button visibility
+ * - Footer element with links section
+ * - Repository, Documentation, and License links in footer
+ * - External link attributes (target="_blank", rel="noopener")
  *
  * Requirements: REQ-5
  * @jest-environment jsdom
@@ -31,25 +32,25 @@ describe('Navigation & External Links', () => {
    * Input: Query for GitHub link in hero/header section
    * Expected: Link element with href containing 'github.com/yetone/mirdb' exists in hero or header
    */
-  describe('Test Case 1: GitHub Link in Hero/Header', () => {
-    test('GitHub link exists in hero or header section', () => {
-      const hero = document.getElementById('hero');
+  describe('Test Case 1: GitHub Link in Hero/Header Section', () => {
+    test('GitHub link exists in header navigation', () => {
       const header = document.querySelector('header');
-
-      const heroGithubLink = hero?.querySelector('a[href*="github.com/yetone/mirdb"]');
-      const headerGithubLink = header?.querySelector('a[href*="github.com/yetone/mirdb"]');
-
-      const hasGithubLink = heroGithubLink !== null || headerGithubLink !== null;
-      expect(hasGithubLink).toBe(true);
+      const githubLink = header.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLink).not.toBeNull();
+      expect(githubLink).toBeInTheDocument();
     });
 
-    test('GitHub link href contains github.com/yetone/mirdb', () => {
-      const allLinks = document.querySelectorAll('a[href*="github.com"]');
-      const mirdbLink = Array.from(allLinks).find(link =>
-        link.getAttribute('href').includes('yetone/mirdb')
-      );
-      expect(mirdbLink).not.toBeNull();
-      expect(mirdbLink.getAttribute('href')).toContain('github.com/yetone/mirdb');
+    test('GitHub link exists in hero section', () => {
+      const hero = document.getElementById('hero');
+      const githubLink = hero.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLink).not.toBeNull();
+      expect(githubLink).toBeInTheDocument();
+    });
+
+    test('GitHub link href contains correct repository path', () => {
+      const header = document.querySelector('header');
+      const githubLink = header.querySelector('a[href*="github.com"]');
+      expect(githubLink.getAttribute('href')).toContain('github.com/yetone/mirdb');
     });
   });
 
@@ -59,48 +60,62 @@ describe('Navigation & External Links', () => {
    * Expected: GitHub icon or 'GitHub' text is visible and clickable
    */
   describe('Test Case 2: GitHub Icon/Button Visibility', () => {
-    test('GitHub button is visible and has GitHub text or icon', () => {
-      const githubLinks = document.querySelectorAll('a[href*="github.com"]');
-      expect(githubLinks.length).toBeGreaterThan(0);
-
-      const hasGithubContent = Array.from(githubLinks).some(link => {
-        const hasGithubText = link.textContent.toLowerCase().includes('github');
-        const hasGithubIcon = link.querySelector('svg') !== null;
-        return hasGithubText || hasGithubIcon;
-      });
-      expect(hasGithubContent).toBe(true);
+    test('GitHub button in header has GitHub icon', () => {
+      const header = document.querySelector('header');
+      const githubLink = header.querySelector('a[href*="github.com"]');
+      const icon = githubLink.querySelector('svg');
+      expect(icon).not.toBeNull();
+      expect(icon.classList.contains('nav__github-icon')).toBe(true);
     });
 
-    test('GitHub button/link is clickable (is an anchor element)', () => {
-      const githubLink = document.querySelector('a[href*="github.com/yetone/mirdb"]');
-      expect(githubLink).not.toBeNull();
-      expect(githubLink.tagName.toLowerCase()).toBe('a');
+    test('GitHub button in header contains "GitHub" text', () => {
+      const header = document.querySelector('header');
+      const githubLink = header.querySelector('a[href*="github.com"]');
+      expect(githubLink.textContent).toContain('GitHub');
+    });
+
+    test('GitHub button in hero has GitHub icon', () => {
+      const hero = document.getElementById('hero');
+      const githubLink = hero.querySelector('a[href*="github.com"]');
+      const icon = githubLink.querySelector('svg');
+      expect(icon).not.toBeNull();
+    });
+
+    test('GitHub icon is decorative (aria-hidden)', () => {
+      const header = document.querySelector('header');
+      const githubLink = header.querySelector('a[href*="github.com"]');
+      const icon = githubLink.querySelector('svg');
+      expect(icon.getAttribute('aria-hidden')).toBe('true');
     });
   });
 
   /**
-   * Test Case 3: Footer element existence
+   * Test Case 3: Footer element exists with links section
    * Input: Query for footer element
    * Expected: Footer element exists with links section
    */
-  describe('Test Case 3: Footer Element', () => {
+  describe('Test Case 3: Footer Element Existence', () => {
     test('footer element exists', () => {
       const footer = document.querySelector('footer');
       expect(footer).not.toBeNull();
       expect(footer).toBeInTheDocument();
     });
 
-    test('footer has class "footer"', () => {
+    test('footer has footer class', () => {
       const footer = document.querySelector('footer');
       expect(footer.classList.contains('footer')).toBe(true);
     });
 
-    test('footer contains a links section', () => {
+    test('footer contains links section', () => {
       const footer = document.querySelector('footer');
-      const hasLinks = footer.querySelector('a') !== null ||
-                       footer.querySelector('.footer__links') !== null ||
-                       footer.querySelector('[class*="link"]') !== null;
-      expect(hasLinks).toBe(true);
+      const linksSection = footer.querySelector('.footer__links');
+      expect(linksSection).not.toBeNull();
+    });
+
+    test('footer has proper structure with content area', () => {
+      const footer = document.querySelector('footer');
+      const content = footer.querySelector('.footer__content');
+      expect(content).not.toBeNull();
     });
   });
 
@@ -110,28 +125,30 @@ describe('Navigation & External Links', () => {
    * Expected: Link with text 'Repository' or 'GitHub' exists in footer pointing to github.com
    */
   describe('Test Case 4: Repository Link in Footer', () => {
-    test('footer contains Repository or GitHub link', () => {
+    test('Repository link exists in footer', () => {
       const footer = document.querySelector('footer');
       const links = footer.querySelectorAll('a');
-
-      const hasRepoLink = Array.from(links).some(link => {
-        const text = link.textContent.toLowerCase();
-        return text.includes('repository') || text.includes('github');
-      });
-      expect(hasRepoLink).toBe(true);
+      const repoLink = Array.from(links).find(link =>
+        link.textContent.toLowerCase().includes('repository') ||
+        link.textContent.toLowerCase().includes('github')
+      );
+      expect(repoLink).not.toBeNull();
     });
 
     test('Repository link points to github.com', () => {
       const footer = document.querySelector('footer');
       const links = footer.querySelectorAll('a');
-
-      const repoLink = Array.from(links).find(link => {
-        const text = link.textContent.toLowerCase();
-        return text.includes('repository') || text.includes('github');
-      });
-
+      const repoLink = Array.from(links).find(link =>
+        link.textContent.toLowerCase().includes('repository')
+      );
       expect(repoLink).not.toBeNull();
       expect(repoLink.getAttribute('href')).toContain('github.com');
+    });
+
+    test('Repository link points to correct MirDB repository', () => {
+      const footer = document.querySelector('footer');
+      const repoLink = footer.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(repoLink).not.toBeNull();
     });
   });
 
@@ -141,15 +158,23 @@ describe('Navigation & External Links', () => {
    * Expected: Link with text containing 'Doc' or 'Documentation' exists in footer
    */
   describe('Test Case 5: Documentation Link in Footer', () => {
-    test('footer contains Documentation link', () => {
+    test('Documentation link exists in footer', () => {
       const footer = document.querySelector('footer');
       const links = footer.querySelectorAll('a');
+      const docLink = Array.from(links).find(link =>
+        link.textContent.toLowerCase().includes('doc')
+      );
+      expect(docLink).not.toBeNull();
+    });
 
-      const hasDocsLink = Array.from(links).some(link => {
-        const text = link.textContent.toLowerCase();
-        return text.includes('doc') || text.includes('documentation');
-      });
-      expect(hasDocsLink).toBe(true);
+    test('Documentation link has valid href', () => {
+      const footer = document.querySelector('footer');
+      const links = footer.querySelectorAll('a');
+      const docLink = Array.from(links).find(link =>
+        link.textContent.toLowerCase().includes('documentation')
+      );
+      expect(docLink).not.toBeNull();
+      expect(docLink.getAttribute('href')).toBeTruthy();
     });
   });
 
@@ -159,123 +184,214 @@ describe('Navigation & External Links', () => {
    * Expected: Link with text 'License' exists in footer
    */
   describe('Test Case 6: License Link in Footer', () => {
-    test('footer contains License link', () => {
+    test('License link exists in footer', () => {
       const footer = document.querySelector('footer');
       const links = footer.querySelectorAll('a');
+      const licenseLink = Array.from(links).find(link =>
+        link.textContent.toLowerCase().includes('license')
+      );
+      expect(licenseLink).not.toBeNull();
+    });
 
-      const hasLicenseLink = Array.from(links).some(link => {
-        const text = link.textContent.toLowerCase();
-        return text.includes('license');
-      });
-      expect(hasLicenseLink).toBe(true);
+    test('License link points to LICENSE file on GitHub', () => {
+      const footer = document.querySelector('footer');
+      const links = footer.querySelectorAll('a');
+      const licenseLink = Array.from(links).find(link =>
+        link.textContent.toLowerCase().includes('license')
+      );
+      expect(licenseLink).not.toBeNull();
+      expect(licenseLink.getAttribute('href')).toContain('LICENSE');
     });
   });
 
   /**
-   * Test Case 7: GitHub link href value
+   * Test Case 7: GitHub link href value verification
    * Input: Verify GitHub link href value
    * Expected: Link href equals 'https://github.com/yetone/mirdb' or includes this URL
    */
-  describe('Test Case 7: GitHub Link URL Verification', () => {
-    test('GitHub link href equals or includes https://github.com/yetone/mirdb', () => {
-      const githubLinks = document.querySelectorAll('a[href*="github.com/yetone/mirdb"]');
-      expect(githubLinks.length).toBeGreaterThan(0);
-
-      const correctUrl = Array.from(githubLinks).some(link => {
-        const href = link.getAttribute('href');
-        return href === 'https://github.com/yetone/mirdb' ||
-               href.includes('github.com/yetone/mirdb');
-      });
-      expect(correctUrl).toBe(true);
+  describe('Test Case 7: GitHub Link Href Verification', () => {
+    test('GitHub link in header has exact repository URL', () => {
+      const header = document.querySelector('header');
+      const githubLink = header.querySelector('a[href*="github.com"]');
+      expect(githubLink.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
     });
 
-    test('primary GitHub link has exact URL', () => {
-      const heroGithubBtn = document.querySelector('.hero__btn--github');
-      if (heroGithubBtn) {
-        expect(heroGithubBtn.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
-      } else {
-        const anyGithubLink = document.querySelector('a[href*="github.com/yetone/mirdb"]');
-        expect(anyGithubLink).not.toBeNull();
-      }
+    test('GitHub link in hero has exact repository URL', () => {
+      const hero = document.getElementById('hero');
+      const githubLink = hero.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLink.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
+    });
+
+    test('Footer repository link has exact URL', () => {
+      const footer = document.querySelector('footer');
+      const repoLink = footer.querySelector('a[href="https://github.com/yetone/mirdb"]');
+      expect(repoLink).not.toBeNull();
     });
   });
 
   /**
-   * Test Case 8: External links have security attributes
+   * Test Case 8: External links security attributes
    * Input: Check external links have target='_blank' or rel='noopener'
    * Expected: External links include target='_blank' and rel='noopener' for security
    */
-  describe('Test Case 8: External Link Security', () => {
-    test('external links have target="_blank"', () => {
-      const externalLinks = document.querySelectorAll('a[href^="http"]');
-
+  describe('Test Case 8: External Link Security Attributes', () => {
+    test('external links in header have target="_blank"', () => {
+      const header = document.querySelector('header');
+      const externalLinks = header.querySelectorAll('a[href^="http"]');
       externalLinks.forEach(link => {
-        // External links should open in new tab
         expect(link.getAttribute('target')).toBe('_blank');
       });
     });
 
-    test('external links have rel="noopener" or rel="noopener noreferrer"', () => {
-      const externalLinks = document.querySelectorAll('a[href^="http"]');
-
+    test('external links in header have rel="noopener"', () => {
+      const header = document.querySelector('header');
+      const externalLinks = header.querySelectorAll('a[href^="http"]');
       externalLinks.forEach(link => {
-        const rel = link.getAttribute('rel');
-        expect(rel).toBeTruthy();
-        expect(rel).toContain('noopener');
+        expect(link.getAttribute('rel')).toContain('noopener');
       });
     });
 
-    test('GitHub link specifically has proper security attributes', () => {
-      const githubLink = document.querySelector('a[href*="github.com/yetone/mirdb"]');
-      expect(githubLink).not.toBeNull();
-      expect(githubLink.getAttribute('target')).toBe('_blank');
-      expect(githubLink.getAttribute('rel')).toContain('noopener');
+    test('external links in footer have target="_blank"', () => {
+      const footer = document.querySelector('footer');
+      const externalLinks = footer.querySelectorAll('a[href^="http"]');
+      externalLinks.forEach(link => {
+        expect(link.getAttribute('target')).toBe('_blank');
+      });
+    });
+
+    test('external links in footer have rel="noopener"', () => {
+      const footer = document.querySelector('footer');
+      const externalLinks = footer.querySelectorAll('a[href^="http"]');
+      externalLinks.forEach(link => {
+        expect(link.getAttribute('rel')).toContain('noopener');
+      });
+    });
+
+    test('external links have rel="noreferrer" for additional security', () => {
+      const allExternalLinks = document.querySelectorAll('a[href^="http"]');
+      allExternalLinks.forEach(link => {
+        expect(link.getAttribute('rel')).toContain('noreferrer');
+      });
     });
   });
 
   /**
-   * Additional tests for navigation functionality
+   * Test Case 9: GitHub link navigation (E2E simulation)
+   * Input: Test clicking GitHub link
+   * Expected: Link navigates to correct GitHub repository page
+   * Note: In unit tests, we verify the link attributes rather than actual navigation
    */
-  describe('Navigation Structure & Accessibility', () => {
-    test('header element exists', () => {
+  describe('Test Case 9: GitHub Link Navigation (E2E)', () => {
+    test('GitHub link is clickable (has valid href)', () => {
       const header = document.querySelector('header');
-      expect(header).not.toBeNull();
-      expect(header).toBeInTheDocument();
+      const githubLink = header.querySelector('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLink).not.toBeNull();
+      expect(githubLink.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
     });
 
+    test('GitHub link in hero is clickable', () => {
+      const hero = document.getElementById('hero');
+      const githubLink = hero.querySelector('.hero__btn--github');
+      expect(githubLink).not.toBeNull();
+      expect(githubLink.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
+    });
+
+    test('all GitHub links point to the same repository', () => {
+      const githubLinks = document.querySelectorAll('a[href*="github.com/yetone/mirdb"]');
+      expect(githubLinks.length).toBeGreaterThanOrEqual(2); // At least header and hero
+      githubLinks.forEach(link => {
+        expect(link.getAttribute('href')).toContain('github.com/yetone/mirdb');
+      });
+    });
+
+    test('footer social GitHub link is correct', () => {
+      const footer = document.querySelector('footer');
+      const socialLink = footer.querySelector('.footer__social-link[href*="github.com"]');
+      expect(socialLink).not.toBeNull();
+      expect(socialLink.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
+    });
+  });
+
+  /**
+   * Additional Navigation Tests
+   */
+  describe('Navigation Structure', () => {
     test('header contains nav element', () => {
       const header = document.querySelector('header');
       const nav = header.querySelector('nav');
       expect(nav).not.toBeNull();
     });
 
-    test('nav has aria-label for accessibility', () => {
+    test('nav has proper aria-label', () => {
       const nav = document.querySelector('nav');
-      expect(nav.getAttribute('aria-label')).toBeTruthy();
+      expect(nav.getAttribute('aria-label')).toBe('Main navigation');
     });
 
-    test('footer has role or semantic meaning', () => {
-      const footer = document.querySelector('footer');
-      expect(footer.tagName.toLowerCase()).toBe('footer');
+    test('nav contains brand/logo link', () => {
+      const nav = document.querySelector('nav');
+      const brandLink = nav.querySelector('.nav__brand');
+      expect(brandLink).not.toBeNull();
+    });
+
+    test('nav contains internal section links', () => {
+      const nav = document.querySelector('nav');
+      const featuresLink = nav.querySelector('a[href="#features"]');
+      const quickstartLink = nav.querySelector('a[href="#quickstart"]');
+      const statusLink = nav.querySelector('a[href="#status"]');
+      expect(featuresLink).not.toBeNull();
+      expect(quickstartLink).not.toBeNull();
+      expect(statusLink).not.toBeNull();
+    });
+
+    test('mobile menu toggle button exists', () => {
+      const toggleBtn = document.querySelector('.nav__mobile-toggle');
+      expect(toggleBtn).not.toBeNull();
+      expect(toggleBtn.getAttribute('type')).toBe('button');
+    });
+
+    test('mobile menu toggle has accessibility attributes', () => {
+      const toggleBtn = document.querySelector('.nav__mobile-toggle');
+      expect(toggleBtn.getAttribute('aria-label')).toBeTruthy();
+      expect(toggleBtn.getAttribute('aria-expanded')).toBe('false');
+      expect(toggleBtn.getAttribute('aria-controls')).toBe('nav-menu');
     });
   });
 
   /**
-   * External link indicator tests
+   * Footer Structure Tests
    */
-  describe('External Link Indicators', () => {
-    test('external links have visual indicator (icon or text)', () => {
+  describe('Footer Structure', () => {
+    test('footer has brand section', () => {
       const footer = document.querySelector('footer');
-      const externalLinks = footer?.querySelectorAll('a[href^="http"]') || [];
+      const brand = footer.querySelector('.footer__brand');
+      expect(brand).not.toBeNull();
+    });
 
-      // Check that external links are identifiable
+    test('footer has section headings', () => {
+      const footer = document.querySelector('footer');
+      const headings = footer.querySelectorAll('.footer__heading');
+      expect(headings.length).toBeGreaterThanOrEqual(2);
+    });
+
+    test('footer has copyright text', () => {
+      const footer = document.querySelector('footer');
+      const copyright = footer.querySelector('.footer__copyright');
+      expect(copyright).not.toBeNull();
+      expect(copyright.textContent).toContain('MirDB');
+    });
+
+    test('footer has social links section', () => {
+      const footer = document.querySelector('footer');
+      const social = footer.querySelector('.footer__social');
+      expect(social).not.toBeNull();
+    });
+
+    test('external links in footer have visual indicator', () => {
+      const footer = document.querySelector('footer');
+      const externalLinks = footer.querySelectorAll('.footer__links a[href^="http"]');
       externalLinks.forEach(link => {
-        const hasIcon = link.querySelector('svg') !== null;
-        const hasExternalIndicator = link.classList.contains('external') ||
-                                     link.querySelector('[class*="external"]') !== null ||
-                                     hasIcon ||
-                                     link.getAttribute('target') === '_blank';
-        expect(hasExternalIndicator).toBe(true);
+        const icon = link.querySelector('.footer__external-icon');
+        expect(icon).not.toBeNull();
       });
     });
   });

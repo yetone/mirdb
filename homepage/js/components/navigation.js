@@ -10,155 +10,110 @@
  * Requirements: REQ-5, REQ-7
  */
 
-/** @type {HTMLElement|null} */
-let mobileMenuBtn = null;
-/** @type {HTMLElement|null} */
-let navLinks = null;
-/** @type {boolean} */
-let isMenuOpen = false;
+let mobileMenuOpen = false;
+let mobileMenuButton = null;
+let mobileMenu = null;
 
 /**
  * Initialize navigation handlers
- * Sets up mobile menu toggle, smooth scrolling for internal links,
- * and external link handling
+ * Sets up mobile menu toggle and keyboard navigation
  */
 export function initNavigation() {
-  mobileMenuBtn = document.querySelector('.nav__menu-btn');
-  navLinks = document.querySelector('.nav__links');
+  mobileMenuButton = document.querySelector('.nav__mobile-toggle');
+  mobileMenu = document.querySelector('.nav__menu');
 
-  if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-  }
+  if (mobileMenuButton && mobileMenu) {
+    mobileMenuButton.addEventListener('click', toggleMobileMenu);
 
-  // Set up smooth scroll for internal anchor links
-  setupSmoothScroll();
-
-  // Set up external link handling
-  setupExternalLinks();
-
-  // Close menu on escape key
-  document.addEventListener('keydown', handleKeyDown);
-
-  // Close menu when clicking outside
-  document.addEventListener('click', handleOutsideClick);
-}
-
-/**
- * Toggle mobile menu open/closed state
- */
-export function toggleMobileMenu() {
-  isMenuOpen = !isMenuOpen;
-
-  if (mobileMenuBtn && navLinks) {
-    mobileMenuBtn.setAttribute('aria-expanded', String(isMenuOpen));
-    navLinks.classList.toggle('nav__links--open', isMenuOpen);
-
-    // Update button label
-    mobileMenuBtn.setAttribute(
-      'aria-label',
-      isMenuOpen ? 'Close menu' : 'Open menu'
-    );
-  }
-}
-
-/**
- * Close mobile menu
- */
-export function closeMobileMenu() {
-  isMenuOpen = false;
-
-  if (mobileMenuBtn && navLinks) {
-    mobileMenuBtn.setAttribute('aria-expanded', 'false');
-    navLinks.classList.remove('nav__links--open');
-    mobileMenuBtn.setAttribute('aria-label', 'Open menu');
-  }
-}
-
-/**
- * Set up smooth scrolling for internal anchor links
- */
-function setupSmoothScroll() {
-  const internalLinks = document.querySelectorAll('a[href^="#"]');
-
-  internalLinks.forEach(link => {
-    link.addEventListener('click', (event) => {
-      const href = link.getAttribute('href');
-      if (href && href.length > 1) {
-        const target = document.querySelector(href);
-        if (target) {
-          event.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          closeMobileMenu();
-
-          // Update focus for accessibility
-          target.setAttribute('tabindex', '-1');
-          target.focus();
-        }
+    // Close menu when clicking outside
+    document.addEventListener('click', (event) => {
+      if (mobileMenuOpen &&
+          !mobileMenu.contains(event.target) &&
+          !mobileMenuButton.contains(event.target)) {
+        closeMobileMenu();
       }
     });
-  });
+
+    // Close menu on Escape key
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && mobileMenuOpen) {
+        closeMobileMenu();
+        mobileMenuButton.focus();
+      }
+    });
+  }
+
+  // Set up external link indicators
+  setupExternalLinks();
 }
 
 /**
- * Set up external link handling
- * Ensures external links have proper security attributes
+ * Toggle mobile menu open/close state
+ */
+export function toggleMobileMenu() {
+  if (mobileMenuOpen) {
+    closeMobileMenu();
+  } else {
+    openMobileMenu();
+  }
+}
+
+/**
+ * Open the mobile menu
+ */
+function openMobileMenu() {
+  mobileMenuOpen = true;
+  if (mobileMenu) {
+    mobileMenu.classList.add('nav__menu--open');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+  }
+  if (mobileMenuButton) {
+    mobileMenuButton.setAttribute('aria-expanded', 'true');
+  }
+}
+
+/**
+ * Close the mobile menu
+ */
+export function closeMobileMenu() {
+  mobileMenuOpen = false;
+  if (mobileMenu) {
+    mobileMenu.classList.remove('nav__menu--open');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+  }
+  if (mobileMenuButton) {
+    mobileMenuButton.setAttribute('aria-expanded', 'false');
+  }
+}
+
+/**
+ * Setup external links with proper attributes
+ * Ensures all external links have target="_blank" and rel="noopener noreferrer"
  */
 function setupExternalLinks() {
-  const externalLinks = document.querySelectorAll('a[href^="http"]');
+  const externalLinks = document.querySelectorAll('a[href^="http"]:not([href*="' + window.location.hostname + '"])');
 
   externalLinks.forEach(link => {
-    // Ensure external links open in new tab with proper security
+    // Ensure external links open in new tab safely
     if (!link.hasAttribute('target')) {
       link.setAttribute('target', '_blank');
     }
-    if (!link.hasAttribute('rel')) {
-      link.setAttribute('rel', 'noopener noreferrer');
-    } else {
-      const rel = link.getAttribute('rel') || '';
-      if (!rel.includes('noopener')) {
-        link.setAttribute('rel', `${rel} noopener`.trim());
-      }
+
+    // Add security attributes
+    const rel = link.getAttribute('rel') || '';
+    if (!rel.includes('noopener')) {
+      link.setAttribute('rel', (rel + ' noopener').trim());
+    }
+    if (!rel.includes('noreferrer') && !link.getAttribute('rel').includes('noreferrer')) {
+      link.setAttribute('rel', (link.getAttribute('rel') + ' noreferrer').trim());
     }
   });
 }
 
 /**
- * Handle keyboard navigation
- * @param {KeyboardEvent} event
+ * Check if mobile menu is currently open
+ * @returns {boolean} Whether the mobile menu is open
  */
-function handleKeyDown(event) {
-  if (event.key === 'Escape' && isMenuOpen) {
-    closeMobileMenu();
-    mobileMenuBtn?.focus();
-  }
-}
-
-/**
- * Handle clicks outside the navigation menu
- * @param {MouseEvent} event
- */
-function handleOutsideClick(event) {
-  if (!isMenuOpen) return;
-
-  const target = event.target;
-  const nav = document.querySelector('.nav');
-
-  if (nav && !nav.contains(target)) {
-    closeMobileMenu();
-  }
-}
-
-/**
- * Check if a link is external
- * @param {string} href - The link href
- * @returns {boolean} True if the link is external
- */
-export function isExternalLink(href) {
-  if (!href) return false;
-  try {
-    const url = new URL(href, window.location.origin);
-    return url.origin !== window.location.origin;
-  } catch {
-    return false;
-  }
+export function isMobileMenuOpen() {
+  return mobileMenuOpen;
 }

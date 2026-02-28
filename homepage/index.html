@@ -37,31 +37,41 @@
   <!-- Header / Navigation (Scenario 5) -->
   <header class="header">
     <nav class="nav container" aria-label="Main navigation">
-      <a href="/" class="nav__logo" aria-label="MirDB Home">
-        <span class="nav__logo-text">Mir<span class="nav__logo-highlight">DB</span></span>
+      <!-- Brand -->
+      <a href="/" class="nav__brand" aria-label="MirDB Home">
+        <img src="assets/images/logo.svg" alt="" class="nav__brand-logo" width="32" height="32" aria-hidden="true">
+        <span>Mir<span class="nav__brand-highlight">DB</span></span>
       </a>
-      <ul class="nav__links">
-        <li><a href="#features" class="nav__link">Features</a></li>
-        <li><a href="#quickstart" class="nav__link">Quick Start</a></li>
-        <li><a href="#status" class="nav__link">Status</a></li>
-        <li>
-          <a href="https://github.com/yetone/mirdb"
-             class="nav__link nav__link--github"
-             target="_blank"
-             rel="noopener noreferrer"
-             aria-label="View MirDB on GitHub">
-            <svg class="nav__github-icon" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
-              <path fill="currentColor" d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-            </svg>
-            GitHub
-          </a>
-        </li>
-      </ul>
-      <button class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-        <svg class="nav__menu-icon" viewBox="0 0 24 24" aria-hidden="true" width="24" height="24">
-          <path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+
+      <!-- Mobile Menu Toggle -->
+      <button
+        type="button"
+        class="nav__mobile-toggle"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+      >
+        <svg class="nav__mobile-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
+
+      <!-- Navigation Menu -->
+      <div id="nav-menu" class="nav__menu" aria-hidden="true">
+        <a href="#features" class="nav__link">Features</a>
+        <a href="#quickstart" class="nav__link">Quick Start</a>
+        <a href="#status" class="nav__link">Status</a>
+        <a href="https://github.com/yetone/mirdb"
+           class="nav__link nav__link--github"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="View MirDB on GitHub">
+          <svg class="nav__github-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
     </nav>
   </header>
 
@@ -322,140 +332,100 @@ values = client.get_many([<span class="token-string">'key1'</span>, <span class=
     <!-- Configuration Section (Scenario 6) -->
     <section id="configuration" class="section configuration" aria-labelledby="configuration-title">
       <div class="container">
-        <header class="configuration__header">
-          <h2 id="configuration-title" class="configuration__title">Configuration Reference</h2>
-          <p class="configuration__description">
-            MirDB is designed to work out of the box with sensible defaults. Below are the key configuration options and their default values.
-          </p>
-        </header>
-
-        <div class="config__list">
-          <!-- Listen Address -->
-          <div class="config__item" data-config="listen-address">
-            <div class="config__name">Listen Address</div>
-            <div class="config__default"><code>127.0.0.1:11211</code></div>
-            <div class="config__description">
-              The network address and port MirDB listens on for incoming Memcached protocol connections.
-            </div>
-          </div>
-
-          <!-- Work Directory -->
-          <div class="config__item" data-config="work-directory">
-            <div class="config__name">Work Directory</div>
-            <div class="config__default"><code>./data</code></div>
-            <div class="config__description">
-              The directory path where MirDB stores SSTable files and other persistent data.
-            </div>
-          </div>
-
-          <!-- SSTable Size -->
-          <div class="config__item" data-config="sstable-size">
-            <div class="config__name">SSTable Size Limit</div>
-            <div class="config__default"><code>64 MB</code></div>
-            <div class="config__description">
-              Maximum size of each SSTable file. When exceeded, a new SSTable is created and compaction may be triggered.
-            </div>
-          </div>
-
-          <!-- Memtable Size -->
-          <div class="config__item" data-config="memtable-size">
-            <div class="config__name">Memtable Size Limit</div>
-            <div class="config__default"><code>4 MB</code></div>
-            <div class="config__description">
-              Maximum size of the in-memory skip-list memtable before flushing to disk as an SSTable.
-            </div>
-          </div>
-        </div>
+        <!-- Configuration content will be added by Scenario 6 -->
       </div>
     </section>
   </main>
 
   <!-- Footer (Scenario 5) -->
-  <footer class="footer" role="contentinfo">
-    <div class="container footer__container">
-      <div class="footer__brand">
-        <span class="footer__logo">Mir<span class="footer__logo-highlight">DB</span></span>
-        <p class="footer__description">
-          A persistent key-value store with Memcached protocol support, built with Rust.
-        </p>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__content">
+        <!-- Brand Section -->
+        <div class="footer__brand">
+          <span class="footer__brand-name">
+            Mir<span class="footer__brand-highlight">DB</span>
+          </span>
+          <p class="footer__brand-description">
+            A persistent key-value store with Memcached protocol support.
+            Built with Rust for high performance and durability.
+          </p>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="footer__section">
+          <h4 class="footer__heading">Resources</h4>
+          <nav class="footer__links" aria-label="Footer resources">
+            <a href="https://github.com/yetone/mirdb"
+               class="footer__link"
+               target="_blank"
+               rel="noopener noreferrer">
+              <svg class="footer__link-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+              Repository
+              <svg class="footer__external-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+              </svg>
+            </a>
+            <a href="https://github.com/yetone/mirdb#readme"
+               class="footer__link"
+               target="_blank"
+               rel="noopener noreferrer">
+              Documentation
+              <svg class="footer__external-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+              </svg>
+            </a>
+          </nav>
+        </div>
+
+        <!-- Project Section -->
+        <div class="footer__section">
+          <h4 class="footer__heading">Project</h4>
+          <nav class="footer__links" aria-label="Footer project links">
+            <a href="#features" class="footer__link">Features</a>
+            <a href="#quickstart" class="footer__link">Quick Start</a>
+            <a href="#status" class="footer__link">Status</a>
+          </nav>
+        </div>
+
+        <!-- Legal Section -->
+        <div class="footer__section">
+          <h4 class="footer__heading">Legal</h4>
+          <nav class="footer__links" aria-label="Footer legal links">
+            <a href="https://github.com/yetone/mirdb/blob/master/LICENSE"
+               class="footer__link"
+               target="_blank"
+               rel="noopener noreferrer">
+              License
+              <svg class="footer__external-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+              </svg>
+            </a>
+          </nav>
+        </div>
       </div>
 
-      <nav class="footer__nav" aria-label="Footer navigation">
-        <div class="footer__links">
-          <h3 class="footer__links-title">Resources</h3>
-          <ul class="footer__links-list">
-            <li>
-              <a href="https://github.com/yetone/mirdb"
-                 class="footer__link"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                <svg class="footer__link-icon" viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
-                  <path fill="currentColor" d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-                </svg>
-                Repository
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/yetone/mirdb#readme"
-                 class="footer__link"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                <svg class="footer__link-icon" viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
-                  <path fill="currentColor" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zM9 13h6v2H9v-2zm0 4h6v2H9v-2zm0-8h2v2H9V9z"/>
-                </svg>
-                Documentation
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/yetone/mirdb/blob/master/LICENSE"
-                 class="footer__link"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                <svg class="footer__link-icon" viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
-                  <path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
-                </svg>
-                License
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="footer__links">
-          <h3 class="footer__links-title">Project</h3>
-          <ul class="footer__links-list">
-            <li>
-              <a href="https://github.com/yetone/mirdb/issues"
-                 class="footer__link"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                <svg class="footer__link-icon" viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
-                  <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                Issues
-              </a>
-            </li>
-            <li>
-              <a href="https://circleci.com/gh/yetone/mirdb"
-                 class="footer__link"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                <svg class="footer__link-icon" viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
-                  <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                </svg>
-                CI Status
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
+      <!-- Bottom Section -->
       <div class="footer__bottom">
         <p class="footer__copyright">
-          &copy; 2024 MirDB. Open source under the MIT License.
+          © 2024 MirDB. Open source under MIT License.
         </p>
-        <p class="footer__credits">
-          Built with Rust and Tokio for high-performance async I/O.
-        </p>
+        <div class="footer__social">
+          <a href="https://github.com/yetone/mirdb"
+             class="footer__social-link"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="MirDB on GitHub">
+            <svg class="footer__social-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </footer>
