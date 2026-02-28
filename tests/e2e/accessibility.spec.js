@@ -277,3 +277,228 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     await expect(mainContent).toBeInViewport();
   });
 });
+
+/**
+ * Accessibility E2E Tests - Alt Text and ARIA
+ * Owner: Scenario 10 - Accessibility - Alt Text and ARIA
+ *
+ * Test cases:
+ * - Logo image has descriptive alt text
+ * - Usage GIF has descriptive alt text
+ * - Copy buttons have aria-label
+ * - Decorative icons have aria-hidden
+ * - No critical ARIA or alt text violations
+ */
+test.describe('Accessibility - Alt Text and ARIA', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForPageLoad(page);
+  });
+
+  test('logo image has descriptive alt text for MirDB branding', async ({ page }) => {
+    // Locate the logo image in the hero section
+    const logoImg = page.locator('.hero__logo');
+
+    // Verify the image exists
+    await expect(logoImg).toBeVisible();
+
+    // Verify alt attribute exists and is not empty
+    const altText = await logoImg.getAttribute('alt');
+    expect(altText).toBeTruthy();
+    expect(altText.length).toBeGreaterThan(0);
+
+    // Verify alt text describes MirDB branding
+    expect(altText.toLowerCase()).toContain('mirdb');
+    expect(altText.toLowerCase()).toContain('logo');
+
+    // Verify the src points to logo.gif
+    const src = await logoImg.getAttribute('src');
+    expect(src).toContain('logo.gif');
+  });
+
+  test('usage GIF has descriptive alt text for demonstration', async ({ page }) => {
+    // Scroll to quickstart section where usage GIF is
+    await page.locator('#quickstart').scrollIntoViewIfNeeded();
+
+    // Locate the usage GIF
+    const usageGif = page.locator('.usage-gif');
+
+    // Verify the image exists
+    await expect(usageGif).toBeVisible();
+
+    // Verify alt attribute exists and is not empty
+    const altText = await usageGif.getAttribute('alt');
+    expect(altText).toBeTruthy();
+    expect(altText.length).toBeGreaterThan(0);
+
+    // Verify alt text describes usage demonstration
+    const altLower = altText.toLowerCase();
+    expect(altLower).toMatch(/usage|demo|demonstration|terminal|operations/);
+
+    // Verify the src points to usage.gif
+    const src = await usageGif.getAttribute('src');
+    expect(src).toContain('usage.gif');
+  });
+
+  test('copy buttons have aria-label describing the action', async ({ page }) => {
+    // Get all copy buttons on the page
+    const copyButtons = page.locator('.copy-button');
+    const count = await copyButtons.count();
+
+    // There should be at least one copy button
+    expect(count).toBeGreaterThan(0);
+
+    // Check each copy button has an aria-label
+    for (let i = 0; i < count; i++) {
+      const button = copyButtons.nth(i);
+      const ariaLabel = await button.getAttribute('aria-label');
+
+      // Verify aria-label exists
+      expect(ariaLabel, `Copy button ${i + 1} should have aria-label`).toBeTruthy();
+
+      // Verify aria-label describes clipboard action
+      const labelLower = ariaLabel.toLowerCase();
+      expect(labelLower).toMatch(/copy.*clipboard|clipboard.*copy/);
+    }
+  });
+
+  test('external link icons are marked aria-hidden true', async ({ page }) => {
+    // Get all external link icons (decorative icons)
+    const externalIcons = page.locator('.external-icon');
+    const count = await externalIcons.count();
+
+    // There should be at least one external icon (GitHub and Docs links)
+    expect(count).toBeGreaterThan(0);
+
+    // Check each icon has aria-hidden="true"
+    for (let i = 0; i < count; i++) {
+      const icon = externalIcons.nth(i);
+      const ariaHidden = await icon.getAttribute('aria-hidden');
+
+      // Verify aria-hidden is "true"
+      expect(ariaHidden, `External icon ${i + 1} should have aria-hidden="true"`).toBe('true');
+    }
+  });
+
+  test('no critical ARIA or alt text violations in accessibility audit', async ({ page }) => {
+    // Check all images have alt text (not empty string)
+    const allImages = page.locator('img');
+    const imageCount = await allImages.count();
+
+    for (let i = 0; i < imageCount; i++) {
+      const img = allImages.nth(i);
+      const alt = await img.getAttribute('alt');
+      const src = await img.getAttribute('src');
+
+      // Every image must have alt attribute (can be empty for decorative)
+      expect(alt !== null, `Image ${src} should have alt attribute`).toBe(true);
+
+      // Non-decorative images should have meaningful alt text
+      // CircleCI badge can have simple alt text
+      if (!src.includes('circleci')) {
+        expect(alt.length, `Image ${src} should have non-empty alt text`).toBeGreaterThan(0);
+      }
+    }
+
+    // Check buttons have accessible names (aria-label, aria-labelledby, or visible text)
+    const allButtons = page.locator('button');
+    const buttonCount = await allButtons.count();
+
+    for (let i = 0; i < buttonCount; i++) {
+      const button = allButtons.nth(i);
+      const ariaLabel = await button.getAttribute('aria-label');
+      const ariaLabelledby = await button.getAttribute('aria-labelledby');
+      const innerText = await button.innerText();
+
+      // Button must have accessible name
+      const hasAccessibleName = !!(ariaLabel || ariaLabelledby || innerText.trim().length > 0);
+      expect(hasAccessibleName, `Button ${i + 1} must have accessible name`).toBe(true);
+    }
+
+    // Check decorative elements are hidden from assistive technology
+    const decorativeIcons = page.locator('.feature-icon, .copy-icon, .checkmark');
+    const decorativeCount = await decorativeIcons.count();
+
+    for (let i = 0; i < decorativeCount; i++) {
+      const icon = decorativeIcons.nth(i);
+      const ariaHidden = await icon.getAttribute('aria-hidden');
+
+      // Decorative icons should be hidden from AT
+      expect(ariaHidden, `Decorative icon ${i + 1} should have aria-hidden`).toBe('true');
+    }
+
+    // Check navigation has aria-label
+    const nav = page.locator('nav');
+    const navAriaLabel = await nav.getAttribute('aria-label');
+    expect(navAriaLabel, 'Navigation should have aria-label').toBeTruthy();
+
+    // Check sections have aria-labelledby
+    const sections = page.locator('section[aria-labelledby]');
+    const sectionCount = await sections.count();
+    expect(sectionCount, 'Sections should use aria-labelledby').toBeGreaterThan(0);
+  });
+
+  test('feature icons in features section have aria-hidden', async ({ page }) => {
+    // Scroll to features section
+    await page.locator('#features').scrollIntoViewIfNeeded();
+
+    // Check feature icons (SVG icons) are hidden from AT
+    const featureIcons = page.locator('.feature-icon');
+    const count = await featureIcons.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    for (let i = 0; i < count; i++) {
+      const icon = featureIcons.nth(i);
+      const ariaHidden = await icon.getAttribute('aria-hidden');
+      expect(ariaHidden, `Feature icon ${i + 1} should be aria-hidden`).toBe('true');
+    }
+  });
+
+  test('copy button icons are decorative and aria-hidden', async ({ page }) => {
+    // Check copy icons within buttons are hidden
+    const copyIcons = page.locator('.copy-icon');
+    const count = await copyIcons.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    for (let i = 0; i < count; i++) {
+      const icon = copyIcons.nth(i);
+      const ariaHidden = await icon.getAttribute('aria-hidden');
+      expect(ariaHidden, `Copy icon ${i + 1} should be aria-hidden`).toBe('true');
+    }
+  });
+
+  test('status checkmarks are decorative and aria-hidden', async ({ page }) => {
+    // Scroll to status section
+    await page.locator('#status').scrollIntoViewIfNeeded();
+
+    // Check checkmark icons are hidden from AT
+    const checkmarks = page.locator('.checkmark');
+    const count = await checkmarks.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    for (let i = 0; i < count; i++) {
+      const checkmark = checkmarks.nth(i);
+      const ariaHidden = await checkmark.getAttribute('aria-hidden');
+      expect(ariaHidden, `Checkmark ${i + 1} should be aria-hidden`).toBe('true');
+    }
+  });
+
+  test('CircleCI badge has alt text', async ({ page }) => {
+    // Scroll to status section
+    await page.locator('#status').scrollIntoViewIfNeeded();
+
+    // Find the CircleCI badge image
+    const badge = page.locator('.status-badge img');
+
+    // Verify badge exists
+    await expect(badge).toBeVisible();
+
+    // Verify it has alt text
+    const altText = await badge.getAttribute('alt');
+    expect(altText).toBeTruthy();
+    expect(altText.toLowerCase()).toMatch(/circleci|build|status|badge/);
+  });
+});
