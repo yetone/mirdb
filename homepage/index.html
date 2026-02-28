@@ -111,7 +111,53 @@
     <!-- Quick Start Section (Scenario 3) -->
     <section id="quickstart" class="section quickstart" aria-labelledby="quickstart-title">
       <div class="container">
-        <!-- Quick start content will be added by Scenario 3 -->
+        <h2 id="quickstart-title" class="quickstart__title">Quick Start</h2>
+        <p class="quickstart__description">
+          MirDB is compatible with standard memcached clients. Here's how to get started with basic SET and GET operations:
+        </p>
+
+        <div class="quickstart__code-wrapper" role="region" aria-label="Code example">
+          <div class="quickstart__code-header">
+            <span class="quickstart__code-lang">Python</span>
+            <button
+              type="button"
+              class="quickstart__copy-btn"
+              aria-label="Copy code to clipboard"
+              data-copy-target="quickstart-code"
+            >
+              <svg class="quickstart__copy-icon" viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+              </svg>
+              <span class="quickstart__copy-text">Copy</span>
+            </button>
+          </div>
+          <pre class="quickstart__code-block"><code id="quickstart-code" class="quickstart__code"><span class="token-comment"># Connect to MirDB using pymemcache</span>
+<span class="token-keyword">from</span> pymemcache.client.base <span class="token-keyword">import</span> Client
+
+<span class="token-comment"># Create a client connection</span>
+client = Client((<span class="token-string">'localhost'</span>, <span class="token-number">11211</span>))
+
+<span class="token-comment"># SET a key-value pair</span>
+client.<span class="token-function">set</span>(<span class="token-string">'my_key'</span>, <span class="token-string">'Hello, MirDB!'</span>)
+
+<span class="token-comment"># GET the value back</span>
+value = client.<span class="token-function">get</span>(<span class="token-string">'my_key'</span>)
+<span class="token-keyword">print</span>(value)  <span class="token-comment"># Output: b'Hello, MirDB!'</span>
+
+<span class="token-comment"># SET with expiration (60 seconds)</span>
+client.<span class="token-function">set</span>(<span class="token-string">'temp_key'</span>, <span class="token-string">'temporary'</span>, expire=<span class="token-number">60</span>)
+
+<span class="token-comment"># GET multiple keys</span>
+client.<span class="token-function">set</span>(<span class="token-string">'key1'</span>, <span class="token-string">'value1'</span>)
+client.<span class="token-function">set</span>(<span class="token-string">'key2'</span>, <span class="token-string">'value2'</span>)
+values = client.get_many([<span class="token-string">'key1'</span>, <span class="token-string">'key2'</span>])</code></pre>
+        </div>
+
+        <p class="quickstart__note">
+          MirDB supports all standard memcached commands including <code>set</code>, <code>get</code>,
+          <code>delete</code>, <code>incr</code>, and <code>decr</code>. Data is automatically persisted
+          to disk using SSTables and LSM Tree architecture.
+        </p>
       </div>
     </section>
 

@@ -12,7 +12,12 @@
  * - accessibility.js (Scenario 8)
  */
 
+import { initClipboard } from './components/clipboard.js';
+
 // Initialize the homepage when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize clipboard functionality (Scenario 3)
+  initClipboard();
+
   console.log('MirDB Homepage initialized');
 });
