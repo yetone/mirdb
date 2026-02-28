@@ -2,12 +2,217 @@
  * Component-specific styles
  * Shared by: Scenario 2 (features), Scenario 3 (code blocks), Scenario 5 (docs)
  *
- * Expected styles:
- * - Feature grid layout
- * - Status badges
- * - Code block styling with syntax highlighting
- * - Copy button styling
- * - Documentation section styles
+ * Feature grid layout, status badges, code block styling,
+ * copy button styling, documentation section styles
  */
 
-/* Placeholder - to be implemented by Scenarios 2, 3, and 5 */
+/* ============================================
+   SCENARIO 2: Features and Status Display
+   ============================================ */
+
+/* Section Header Styles */
+.section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-12);
+}
+
+.section-description {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Overview Content */
+.overview-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.overview-content p {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Features Section */
+#features {
+  background-color: var(--color-bg-primary);
+}
+
+/* Features Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-8);
+}
+
+/* Feature Card */
+.feature-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  transition: all var(--transition-normal);
+}
+
+.feature-card:hover {
+  border-color: var(--color-accent-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-tertiary);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-4);
+  font-size: var(--font-size-2xl);
+}
+
+.feature-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-2);
+}
+
+.feature-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: 0;
+}
+
+/* Status Section */
+#status {
+  background-color: var(--color-bg-secondary);
+}
+
+.status-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-8);
+}
+
+/* Status Group */
+.status-group {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+}
+
+.status-group-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-4);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.status-group-title.implemented {
+  color: var(--color-success);
+}
+
+.status-group-title.planned {
+  color: var(--color-planned);
+}
+
+/* Status List */
+.status-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Status Indicators */
+.status-check {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.status-check.implemented {
+  background-color: rgba(63, 185, 80, 0.15);
+  color: var(--color-success);
+}
+
+.status-check.planned {
+  background-color: rgba(163, 113, 247, 0.15);
+  color: var(--color-planned);
+}
+
+/* Check Icon (Unicode checkmark) */
+.status-check.implemented::before {
+  content: "✓";
+  font-weight: var(--font-weight-bold);
+}
+
+/* Planned Icon (clock/future) */
+.status-check.planned::before {
+  content: "◐";
+  font-weight: var(--font-weight-bold);
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-badge.implemented {
+  background-color: rgba(63, 185, 80, 0.15);
+  color: var(--color-success);
+}
+
+.status-badge.planned {
+  background-color: rgba(163, 113, 247, 0.15);
+  color: var(--color-planned);
+}
+
+.status-badge.coming-soon {
+  background-color: rgba(210, 153, 34, 0.15);
+  color: var(--color-warning);
+}
+
+/* ============================================
+   SCENARIO 3: Code Blocks (placeholder)
+   ============================================ */
+
+/* Code block styles will be added by Scenario 3 */
+
+/* ============================================
+   SCENARIO 5: Documentation (placeholder)
+   ============================================ */
+
+/* Documentation section styles will be added by Scenario 5 */

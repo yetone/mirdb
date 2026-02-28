@@ -8,4 +8,4 @@
  * - showCopyFeedback(button: Element, success: boolean): void - Visual feedback
  */
 
-// Placeholder - to be implemented by Scenario 3
+// Clipboard functionality will be implemented by Scenario 3

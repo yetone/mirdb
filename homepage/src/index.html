@@ -21,6 +21,7 @@
       <nav class="header-nav" role="navigation" aria-label="Main navigation">
         <!-- Navigation links to be implemented by Scenario 4 -->
         <a href="#features">Features</a>
+        <a href="#status">Status</a>
         <a href="#usage">Usage</a>
         <a href="#quickstart">Quick Start</a>
         <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -56,25 +57,115 @@
 
     <!-- Scenario 2: Overview Section (Features and Status Display) -->
     <section id="overview" aria-labelledby="overview-title">
-      <div class="container">
-        <h2 id="overview-title" class="section-title">Overview</h2>
-        <!-- To be implemented by Scenario 2 -->
+      <div class="container overview-content">
+        <h2 id="overview-title" class="section-title">What is MirDB?</h2>
+        <p>
+          MirDB is a high-performance persistent key-value store written in Rust.
+          It implements the Memcached protocol, allowing seamless integration with existing
+          Memcached clients while providing durable storage through LSM tree architecture
+          with SSTables for persistence.
+        </p>
       </div>
     </section>
 
     <!-- Scenario 2: Features Section (Features and Status Display) -->
     <section id="features" aria-labelledby="features-title">
       <div class="container">
-        <h2 id="features-title" class="section-title">Features</h2>
-        <!-- To be implemented by Scenario 2 -->
+        <div class="section-header">
+          <h2 id="features-title" class="section-title">Key Features</h2>
+          <p class="section-description">Built with performance and reliability in mind</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🔌</div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">
+              Fully compatible with the Memcached protocol. Use your existing Memcached clients
+              without any code changes.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💾</div>
+            <h3 class="feature-title">Persistent Storage</h3>
+            <p class="feature-description">
+              Data is durably stored using SSTables (Sorted String Tables) ensuring your data
+              survives restarts and crashes.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌲</div>
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">
+              Log-Structured Merge tree architecture provides excellent write performance
+              and efficient storage utilization.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3 class="feature-title">Skip List Memtable</h3>
+            <p class="feature-description">
+              In-memory skip list data structure for fast reads and writes before data
+              is flushed to disk.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3 class="feature-title">Compaction</h3>
+            <p class="feature-description">
+              Automatic minor and major compaction processes merge SSTables to reclaim
+              space and improve read performance.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- Scenario 2: Status Section (Features and Status Display) -->
     <section id="status" aria-labelledby="status-title">
       <div class="container">
-        <h2 id="status-title" class="section-title">Project Status</h2>
-        <!-- To be implemented by Scenario 2 -->
+        <div class="section-header">
+          <h2 id="status-title" class="section-title">Project Status</h2>
+          <p class="section-description">Current implementation progress and roadmap</p>
+        </div>
+        <div class="status-container">
+          <div class="status-group">
+            <h3 class="status-group-title implemented">
+              <span class="status-check implemented"></span>
+              Implemented
+            </h3>
+            <ul class="status-list">
+              <li class="status-item">
+                <span class="status-check implemented"></span>
+                <span>Tokio async runtime</span>
+              </li>
+              <li class="status-item">
+                <span class="status-check implemented"></span>
+                <span>Skip list memtable</span>
+              </li>
+              <li class="status-item">
+                <span class="status-check implemented"></span>
+                <span>Minor compaction</span>
+              </li>
+              <li class="status-item">
+                <span class="status-check implemented"></span>
+                <span>Major compaction</span>
+              </li>
+            </ul>
+          </div>
+          <div class="status-group">
+            <h3 class="status-group-title planned">
+              <span class="status-check planned"></span>
+              Planned
+            </h3>
+            <ul class="status-list">
+              <li class="status-item">
+                <span class="status-check planned"></span>
+                <span>Raft consensus</span>
+                <span class="status-badge coming-soon">Coming Soon</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 

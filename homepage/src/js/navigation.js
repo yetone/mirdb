@@ -9,4 +9,4 @@
  * - initExternalLinks(): void - Setup external link attributes
  */
 
-// Placeholder - to be implemented by Scenario 4
+// Navigation functionality will be implemented by Scenario 4

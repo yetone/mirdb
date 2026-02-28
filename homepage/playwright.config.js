@@ -3,7 +3,6 @@ const { defineConfig, devices } = require('@playwright/test');
 
 /**
  * Playwright E2E Test Configuration for MirDB Homepage
- * @see https://playwright.dev/docs/test-configuration
  */
 module.exports = defineConfig({
   testDir: './tests/e2e',
@@ -13,7 +12,7 @@ module.exports = defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:8080',
+    baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
   },
   projects: [
@@ -23,9 +22,9 @@ module.exports = defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run serve',
-    url: 'http://localhost:8080',
+    command: 'npx serve src -p 3000',
+    url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    timeout: 120 * 1000,
   },
 });
