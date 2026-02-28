@@ -13,8 +13,10 @@
  */
 
 /* =========================================
-   1. CSS Variables - Scenario 6 will extend
+   1. CSS Variables - Scenario 6 Theme Support
    ========================================= */
+
+/* Light theme (default) */
 :root {
     --color-bg: #ffffff;
     --color-bg-secondary: #f5f5f5;
@@ -27,6 +29,35 @@
     --color-code-text: #d4d4d4;
     --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     --radius: 8px;
+}
+
+/* Dark theme - activated by data-theme="dark" on html element */
+:root[data-theme="dark"] {
+    --color-bg: #1a1a2e;
+    --color-bg-secondary: #16213e;
+    --color-text: #e8e8e8;
+    --color-text-secondary: #a0a0a0;
+    --color-primary: #4f8cff;
+    --color-primary-hover: #6ba3ff;
+    --color-border: #2d2d44;
+    --color-code-bg: #0f0f1a;
+    --color-code-text: #e0e0e0;
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth theme transition */
+body,
+.header,
+.hero,
+.features,
+.feature-card,
+.metrics,
+.config,
+.config-panel,
+.quick-start,
+.footer,
+.theme-toggle {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* =========================================

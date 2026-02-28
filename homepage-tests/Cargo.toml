@@ -8,3 +8,7 @@ edition = "2021"
 [[test]]
 name = "homepage_content"
 path = "tests/homepage_content.rs"
+
+[[test]]
+name = "theme_toggle"
+path = "tests/theme_toggle.rs"
