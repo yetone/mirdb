@@ -174,7 +174,7 @@ macro_rules! chain {
         chain!(@inner $i, $mac!($($args)*))
     );
     (@inner $i:expr, $e:ident >> $($rest:tt)*) => (
-        chain!(@inner $i, call!($e) >> $($rest)*);
+        chain!(@inner $i, call!($e) >> $($rest)*)
     );
     (@inner $i:expr, $mac:ident!($($args:tt)*) >> $($rest:tt)*) => ({
         use $crate::parser_util::macros::IRResult;
@@ -187,7 +187,7 @@ macro_rules! chain {
         }
     });
     (@inner $i:expr, $field:ident : $e:ident >> $($rest:tt)*) => (
-        chain!(@inner $i, $field: call!($e) >> $($rest)*);
+        chain!(@inner $i, $field: call!($e) >> $($rest)*)
     );
     (@inner $i:expr, $field:ident : $mac:ident!($($args:tt)*) >> $($rest:tt)*) => ({
         use $crate::parser_util::macros::IRResult;
@@ -251,6 +251,7 @@ macro_rules! gen_parser {
         gen_parser!($name<&[u8], $ot>, $mac!($($args)*));
     };
     ($name:ident<$it:ty, $ot:ty>, $mac:ident!($($args:tt)*)) => {
+        #[allow(mismatched_lifetime_syntaxes)]
         pub fn $name(i: $it) -> IRResult<$ot> {
             $mac!(i, $($args)*)
         }

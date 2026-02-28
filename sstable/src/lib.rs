@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+#![allow(dead_code, bare_trait_objects)]
 
 #[macro_use]
 mod error;

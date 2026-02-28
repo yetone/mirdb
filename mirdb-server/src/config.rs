@@ -1,6 +1,7 @@
 use std::fs::OpenOptions;
 use std::io::Read;
 use std::path::Path;
+use std::path::PathBuf;
 
 use serde::Deserialize;
 use toml;
@@ -10,6 +11,69 @@ use crate::error::MyResult;
 use crate::error::StatusCode;
 use crate::options::{Options, GB, KB, MB, TB};
 use crate::parser_util::macros::{digit, space, usize_parser, IRResult};
+
+/// Homepage HTTP server configuration
+///
+/// NFR-5: enable/disable flag
+/// REQ-1: configurable port
+#[derive(Debug, Clone, Deserialize)]
+pub struct HomepageConfig {
+    /// Whether the homepage server is enabled
+    #[serde(default = "default_homepage_enabled")]
+    pub enabled: bool,
+    /// Port for the homepage HTTP server
+    #[serde(default = "default_homepage_port")]
+    pub port: u16,
+    /// Optional filesystem asset override path
+    #[serde(default)]
+    pub assets_path: Option<PathBuf>,
+    /// HTTP request timeout in seconds
+    #[serde(default = "default_timeout_secs")]
+    pub timeout_secs: u64,
+    /// Maximum concurrent connections
+    #[serde(default = "default_max_connections")]
+    pub max_connections: usize,
+}
+
+fn default_homepage_enabled() -> bool {
+    false
+}
+
+fn default_homepage_port() -> u16 {
+    8080
+}
+
+fn default_timeout_secs() -> u64 {
+    5
+}
+
+fn default_max_connections() -> usize {
+    100
+}
+
+impl Default for HomepageConfig {
+    fn default() -> Self {
+        HomepageConfig {
+            enabled: default_homepage_enabled(),
+            port: default_homepage_port(),
+            assets_path: None,
+            timeout_secs: default_timeout_secs(),
+            max_connections: default_max_connections(),
+        }
+    }
+}
+
+impl HomepageConfig {
+    /// Validates the homepage configuration
+    pub fn validate(&self) -> MyResult<()> {
+        if self.port == 0 {
+            return err(StatusCode::ConfigError, "homepage port cannot be 0");
+        }
+        // Port validation: valid range is 1-65535
+        // Since u16 max is 65535, we just check for 0 above
+        Ok(())
+    }
+}
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -27,6 +91,10 @@ pub struct Config {
     pub l0_compaction_trigger: usize,
 
     pub thread_sleep_ms: usize,
+
+    /// Homepage HTTP server configuration (optional)
+    #[serde(default)]
+    pub homepage: HomepageConfig,
 }
 
 impl Config {
@@ -52,7 +120,7 @@ fn to_size_unit(x: &[u8]) -> usize {
         b"M" => MB,
         b"G" => GB,
         b"T" => TB,
-        _ => panic!(format!("unknown size unit {:?}", x)),
+        _ => panic!("unknown size unit {:?}", x),
     }
 }
 
@@ -133,6 +201,134 @@ thread_sleep_ms = 500
         assert_eq!(4, opt.l0_compaction_trigger);
         assert_eq!(500, opt.thread_sleep_ms);
 
+        Ok(())
+    }
+
+    #[test]
+    fn test_homepage_config_defaults() {
+        let homepage = HomepageConfig::default();
+        assert_eq!(false, homepage.enabled);
+        assert_eq!(8080, homepage.port);
+        assert_eq!(5, homepage.timeout_secs);
+        assert_eq!(100, homepage.max_connections);
+    }
+
+    #[test]
+    fn test_homepage_config_enabled() -> MyResult<()> {
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdbs"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500
+
+[homepage]
+enabled = true
+port = 8080
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        assert_eq!(true, config.homepage.enabled);
+        assert_eq!(8080, config.homepage.port);
+        config.homepage.validate()?;
+        Ok(())
+    }
+
+    #[test]
+    fn test_homepage_config_custom_port() -> MyResult<()> {
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdbs"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500
+
+[homepage]
+enabled = true
+port = 9000
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        assert_eq!(true, config.homepage.enabled);
+        assert_eq!(9000, config.homepage.port);
+        config.homepage.validate()?;
+        Ok(())
+    }
+
+    #[test]
+    fn test_homepage_config_disabled() -> MyResult<()> {
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdbs"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500
+
+[homepage]
+enabled = false
+port = 8080
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        assert_eq!(false, config.homepage.enabled);
+        Ok(())
+    }
+
+    #[test]
+    fn test_homepage_config_invalid_port_zero() {
+        let homepage = HomepageConfig {
+            enabled: true,
+            port: 0,
+            assets_path: None,
+            timeout_secs: 5,
+            max_connections: 100,
+        };
+        let result = homepage.validate();
+        assert!(result.is_err());
+        if let Err(status) = result {
+            assert!(status.msg.contains("port"));
+        }
+    }
+
+    #[test]
+    fn test_homepage_config_without_section() -> MyResult<()> {
+        // When homepage section is missing, should use defaults
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdbs"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        // Should default to disabled
+        assert_eq!(false, config.homepage.enabled);
+        assert_eq!(8080, config.homepage.port);
         Ok(())
     }
 }

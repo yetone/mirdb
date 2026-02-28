@@ -1,4 +1,5 @@
 #![allow(unused_imports, unused_macros, dead_code)]
+#![allow(bare_trait_objects, ellipsis_inclusive_range_patterns, deprecated)]
 
 use std::cell::RefCell;
 use std::error::Error;
@@ -13,7 +14,7 @@ use clap::App;
 use clap::Arg;
 use env_logger;
 use futures::{future, Future};
-use tokio::prelude::*;
+use tokio_old::prelude::*;
 use tokio_proto::TcpServer;
 use tokio_service::{NewService, Service};
 
@@ -38,6 +39,7 @@ mod response;
 mod parser_util;
 mod config;
 mod data_manager;
+mod homepage;
 mod manifest;
 mod memtable;
 mod memtable_list;
@@ -68,7 +70,7 @@ impl Service for Server {
     type Request = Request;
     type Response = Response;
     type Error = io::Error;
-    type Future = Box<Future<Item = Response, Error = io::Error>>;
+    type Future = Box<dyn Future<Item = Response, Error = io::Error>>;
 
     fn call(&self, req: Self::Request) -> Self::Future {
         Box::new(future::done(match self.store.apply(req) {

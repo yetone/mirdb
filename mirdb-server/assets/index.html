@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Scenario 2: Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-text">MirDB</span>
+            </div>
+            <nav class="nav">
+                <a href="#features">Features</a>
+                <a href="#quick-start">Quick Start</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank">GitHub</a>
+                <!-- Scenario 6: Theme toggle button placeholder -->
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon">&#9790;</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Scenario 3: Hero Section with status and version info -->
+    <section class="hero">
+        <h1>MirDB</h1>
+        <p class="tagline">A persistent key-value store with Memcached protocol compatibility</p>
+        <div id="version-info" class="version-info">
+            <span id="server-version" class="server-version">Version: Loading...</span>
+            <span id="server-status" class="server-status">
+                <span class="status-indicator" id="status-indicator"></span>
+                <span id="status-text">Status: Checking...</span>
+            </span>
+        </div>
+    </section>
+
+    <!-- Scenario 2: Features Section -->
+    <section id="features" class="features">
+        <h2>Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Memcached Protocol</h3>
+                <p>Full compatibility with the Memcached protocol. Use your existing Memcached clients and tools without any modifications. Supports GET, SET, DELETE, and other standard commands.</p>
+            </div>
+            <div class="feature-card">
+                <h3>LSM Tree Architecture</h3>
+                <p>Built on a Log-Structured Merge-tree (LSM tree) architecture for high write throughput. Efficient compaction strategies ensure optimal read performance over time.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Persistent Storage</h3>
+                <p>Data is persisted to disk using SSTables with write-ahead logging (WAL) for durability. Your data survives restarts and system failures.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scenario 5: Metrics Section -->
+    <section id="metrics" class="metrics">
+        <h2>Server Metrics</h2>
+        <div id="metrics-grid" class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="metric-connections">--</div>
+                <div class="metric-label">Active Connections</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="metric-keys">--</div>
+                <div class="metric-label">Total Keys</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="metric-memtable">--</div>
+                <div class="metric-label">Memtable Size</div>
+            </div>
+        </div>
+        <!-- SSTable Levels Section -->
+        <div id="sstable-levels" class="sstable-levels">
+            <h3>SSTable Levels</h3>
+            <div id="sstable-grid" class="sstable-grid">
+                <!-- SSTable level information populated dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Scenario 4: Configuration Section -->
+    <section id="config" class="config">
+        <h2>Configuration</h2>
+        <div id="config-panel" class="config-panel">
+            <div class="config-grid">
+                <div class="config-item">
+                    <span class="config-label">Work Directory</span>
+                    <span id="config-work-dir" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Listen Address</span>
+                    <span id="config-addr" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Memtable Size Limit</span>
+                    <span id="config-memtable-limit" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">SSTable Max Size</span>
+                    <span id="config-sst-size" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Block Size</span>
+                    <span id="config-block-size" class="config-value">Loading...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Homepage Port</span>
+                    <span id="config-homepage-port" class="config-value">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scenario 2: Quick Start Section -->
+    <section id="quick-start" class="quick-start">
+        <h2>Quick Start</h2>
+        <p>Connect to MirDB using any Memcached-compatible client. Here are some examples:</p>
+
+        <div class="code-examples">
+            <h3>Using telnet</h3>
+            <pre><code># Connect to MirDB
+telnet localhost 12333
+
+# Set a key
+set mykey 0 0 5
+hello
+STORED
+
+# Get a key
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete a key
+delete mykey
+DELETED</code></pre>
+
+            <h3>Using memcached CLI</h3>
+            <pre><code># Install memcached client (Ubuntu/Debian)
+sudo apt-get install libmemcached-tools
+
+# Set a value
+echo "set testkey 0 0 11" | nc localhost 12333
+hello world
+
+# Get a value
+echo "get testkey" | nc localhost 12333</code></pre>
+
+            <h3>Using Python</h3>
+            <pre><code>import memcache
+
+# Connect to MirDB
+client = memcache.Client(['localhost:12333'])
+
+# Set a value
+client.set('mykey', 'Hello, MirDB!')
+
+# Get a value
+value = client.get('mykey')
+print(value)  # Output: Hello, MirDB!</code></pre>
+        </div>
+    </section>
+
+    <!-- Scenario 2: Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb" target="_blank">GitHub Repository</a>
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank">Documentation</a>
+                <a href="https://github.com/yetone/mirdb/issues" target="_blank">Report Issues</a>
+            </div>
+            <p class="copyright">MirDB - A Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+        </div>
+    </footer>
+
+    <!-- Scenario 3: JavaScript for status and version display -->
+    <script>
+    (function() {
+        function fetchStatus() {
+            fetch('/api/status')
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    var versionEl = document.getElementById('server-version');
+                    var statusTextEl = document.getElementById('status-text');
+                    var indicatorEl = document.getElementById('status-indicator');
+
+                    if (versionEl && data.version) {
+                        versionEl.textContent = 'Version: ' + data.version;
+                    }
+
+                    if (statusTextEl && indicatorEl) {
+                        var isRunning = data.running === true || data.status === 'running';
+                        statusTextEl.textContent = 'Status: ' + (isRunning ? 'Running' : 'Stopped');
+                        indicatorEl.className = 'status-indicator ' + (isRunning ? 'status-running' : 'status-stopped');
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Failed to fetch status:', err);
+                    var statusTextEl = document.getElementById('status-text');
+                    if (statusTextEl) {
+                        statusTextEl.textContent = 'Status: Unknown';
+                    }
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchStatus);
+    })();
+    </script>
+
+    <!-- Scenario 4: JavaScript for configuration display -->
+    <script>
+    (function() {
+        function fetchConfig() {
+            fetch('/api/config')
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    // Update work directory
+                    var workDirEl = document.getElementById('config-work-dir');
+                    if (workDirEl && data.work_dir) {
+                        workDirEl.textContent = data.work_dir;
+                    }
+
+                    // Update listen address
+                    var addrEl = document.getElementById('config-addr');
+                    if (addrEl && data.addr) {
+                        addrEl.textContent = data.addr;
+                    }
+
+                    // Update memtable size limit
+                    var memtableLimitEl = document.getElementById('config-memtable-limit');
+                    if (memtableLimitEl && data.memtable_size_limit_formatted) {
+                        memtableLimitEl.textContent = data.memtable_size_limit_formatted;
+                    }
+
+                    // Update SSTable max size
+                    var sstSizeEl = document.getElementById('config-sst-size');
+                    if (sstSizeEl && data.sst_max_size_formatted) {
+                        sstSizeEl.textContent = data.sst_max_size_formatted;
+                    }
+
+                    // Update block size
+                    var blockSizeEl = document.getElementById('config-block-size');
+                    if (blockSizeEl && data.block_size_formatted) {
+                        blockSizeEl.textContent = data.block_size_formatted;
+                    }
+
+                    // Update homepage port
+                    var homepagePortEl = document.getElementById('config-homepage-port');
+                    if (homepagePortEl && data.homepage_port) {
+                        homepagePortEl.textContent = data.homepage_port;
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Failed to fetch config:', err);
+                    var configPanel = document.getElementById('config-panel');
+                    if (configPanel) {
+                        var configValues = configPanel.querySelectorAll('.config-value');
+                        for (var i = 0; i < configValues.length; i++) {
+                            configValues[i].textContent = 'Error loading';
+                        }
+                    }
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchConfig);
+    })();
+    </script>
+
+    <!-- Scenario 5: JavaScript for metrics display -->
+    <script>
+    (function() {
+        // Format bytes to human-readable string
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            var k = 1024;
+            var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            var i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Format large numbers with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // Update metrics display
+        function updateMetricsDisplay(data) {
+            var connectionsEl = document.getElementById('metric-connections');
+            var keysEl = document.getElementById('metric-keys');
+            var memtableEl = document.getElementById('metric-memtable');
+
+            if (connectionsEl) {
+                connectionsEl.textContent = formatNumber(data.active_connections || 0);
+            }
+            if (keysEl) {
+                keysEl.textContent = formatNumber(data.total_keys || 0);
+            }
+            if (memtableEl) {
+                memtableEl.textContent = formatBytes(data.memtable_size || 0);
+            }
+
+            // Update SSTable levels if present
+            var sstableGrid = document.getElementById('sstable-grid');
+            if (sstableGrid && data.sstable_levels && data.sstable_levels.length > 0) {
+                var html = '';
+                for (var i = 0; i < data.sstable_levels.length; i++) {
+                    var level = data.sstable_levels[i];
+                    html += '<div class="sstable-card">' +
+                        '<div class="sstable-level">Level ' + level.level + '</div>' +
+                        '<div class="sstable-info">Files: ' + level.file_count + '</div>' +
+                        '<div class="sstable-info">Size: ' + formatBytes(level.total_size) + '</div>' +
+                        '</div>';
+                }
+                sstableGrid.innerHTML = html;
+            } else if (sstableGrid) {
+                sstableGrid.innerHTML = '<div class="sstable-empty">No SSTable levels available</div>';
+            }
+        }
+
+        // Fetch metrics from API
+        function fetchMetrics() {
+            fetch('/api/metrics')
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    updateMetricsDisplay(data);
+                })
+                .catch(function(err) {
+                    console.error('Failed to fetch metrics:', err);
+                    var connectionsEl = document.getElementById('metric-connections');
+                    var keysEl = document.getElementById('metric-keys');
+                    var memtableEl = document.getElementById('metric-memtable');
+                    if (connectionsEl) connectionsEl.textContent = 'Error';
+                    if (keysEl) keysEl.textContent = 'Error';
+                    if (memtableEl) memtableEl.textContent = 'Error';
+                });
+        }
+
+        // Initial fetch and set up auto-refresh
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchMetrics();
+            // Refresh metrics every 5 seconds
+            setInterval(fetchMetrics, 5000);
+        });
+
+        // Expose refresh function globally for manual refresh
+        window.refreshMetrics = fetchMetrics;
+    })();
+    </script>
+
+    <!-- Scenario 6: JavaScript for theme toggle -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
