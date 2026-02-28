@@ -48,7 +48,20 @@ pub fn index_route() -> impl Filter<Extract = impl warp::Reply, Error = warp::Re
 }
 
 /// Routes for serving static assets at /static/*
+///
+/// Scenario 9 - Static Asset Handling:
+/// Serves CSS, JavaScript, and image assets with correct MIME types.
+/// Supports gzip compression when Accept-Encoding: gzip header is present.
 pub fn static_routes() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+    warp::path("static")
+        .and(warp::get())
+        .and(warp::path::tail())
+        .and(warp::header::optional::<String>("accept-encoding"))
+        .and_then(handlers::handle_static_with_compression)
+}
+
+/// Routes for serving static assets without compression (for backwards compatibility)
+pub fn static_routes_no_compression() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
     warp::path("static")
         .and(warp::get())
         .and(warp::path::tail())
