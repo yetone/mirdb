@@ -1,21 +1,61 @@
 /**
  * Test Setup Utilities
- * Shared by: All test scenarios
+ * Shared by: All scenarios
  *
- * Purpose:
- * - Setup JSDOM environment
- * - Load common test utilities
- * - Configure global test helpers
+ * Provides:
+ * - DOM setup helpers
+ * - Viewport simulation
+ * - Common test utilities
  */
 
-// Helper to set viewport size for responsive tests
-export function setViewportWidth(width) {
-  Object.defineProperty(window, 'innerWidth', {
+import { JSDOM } from 'jsdom';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+/**
+ * Load the index.html file and create a JSDOM instance
+ */
+export function loadDocument() {
+  const htmlPath = resolve(process.cwd(), 'src/index.html');
+  const html = readFileSync(htmlPath, 'utf-8');
+  const dom = new JSDOM(html, {
+    url: 'http://localhost:3000',
+    runScripts: 'dangerously',
+    resources: 'usable',
+  });
+  return dom;
+}
+
+/**
+ * Get the document from a JSDOM instance
+ */
+export function getDocument(dom) {
+  return dom.window.document;
+}
+
+/**
+ * Simulate viewport width for testing
+ */
+export function setViewportWidth(dom, width) {
+  Object.defineProperty(dom.window, 'innerWidth', {
     writable: true,
     configurable: true,
     value: width,
   });
-  window.dispatchEvent(new Event('resize'));
+  dom.window.dispatchEvent(new dom.window.Event('resize'));
+}
+
+/**
+ * Wait for DOM to be ready
+ */
+export function waitForDOMReady(dom) {
+  return new Promise((resolve) => {
+    if (dom.window.document.readyState === 'complete') {
+      resolve();
+    } else {
+      dom.window.document.addEventListener('DOMContentLoaded', resolve);
+    }
+  });
 }
 
 // Helper to load HTML content into the DOM

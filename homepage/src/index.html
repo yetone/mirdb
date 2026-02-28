@@ -7,6 +7,8 @@
   <title>MirDB - Persistent Key-Value Store</title>
   <link rel="stylesheet" href="./styles/variables.css">
   <link rel="stylesheet" href="./styles/reset.css">
+  <link rel="stylesheet" href="./styles/typography.css">
+  <link rel="stylesheet" href="./components/Header/Header.css">
   <link rel="stylesheet" href="./components/Navigation/Navigation.css">
   <link rel="stylesheet" href="./components/Hero/Hero.css">
   <link rel="stylesheet" href="./components/Features/Features.css">
@@ -17,9 +19,9 @@
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Header with navigation -->
-  <header class="header" role="banner">
+  <header class="header" id="header" role="banner">
     <nav class="nav" role="navigation" aria-label="Main navigation">
-      <a href="/" class="nav__logo" aria-label="MirDB home">
+      <a href="/" class="nav__logo" aria-label="MirDB - Go to homepage">
         <span class="nav__logo-text">MirDB</span>
       </a>
 
@@ -99,6 +101,18 @@
         </article>
       </div>
     </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <h2>About MirDB</h2>
+      <p>MirDB is a high-performance, persistent key-value store designed for modern applications.</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <h2>Contact</h2>
+      <p>Get in touch with us for questions or support.</p>
+    </section>
   </main>
 
   <!-- Footer -->
@@ -112,6 +126,93 @@
       </nav>
     </div>
   </footer>
+
+  <style>
+    /* Temporary styles for sections - will be refined by other scenarios */
+    main {
+      padding-top: 70px; /* Space for fixed header */
+    }
+
+    section {
+      min-height: 50vh;
+      padding: var(--spacing-16) var(--spacing-4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero__tagline {
+      margin-top: var(--spacing-4);
+      font-size: var(--font-size-xl);
+      color: var(--color-text-muted);
+    }
+
+    .hero__actions {
+      margin-top: var(--spacing-8);
+      display: flex;
+      gap: var(--spacing-4);
+    }
+
+    .btn {
+      padding: var(--spacing-3) var(--spacing-6);
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-weight-medium);
+      transition: all var(--transition-fast);
+    }
+
+    .btn--primary {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .btn--primary:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .btn--secondary {
+      border: 2px solid var(--color-border);
+      color: var(--color-text);
+    }
+
+    .btn--secondary:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .footer {
+      padding: var(--spacing-8);
+      text-align: center;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .footer__content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer__links {
+      margin-top: var(--spacing-4);
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-6);
+    }
+
+    .footer__link {
+      color: var(--color-text-muted);
+      transition: color var(--transition-fast);
+    }
+
+    .footer__link:hover {
+      color: var(--color-primary);
+    }
+
+    .about,
+    .contact {
+      background-color: var(--color-surface);
+    }
+  </style>
 
   <script type="module" src="./components/Navigation/Navigation.js"></script>
   <script type="module" src="./scripts/main.js"></script>

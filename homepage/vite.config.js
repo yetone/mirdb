@@ -10,4 +10,9 @@ export default defineConfig({
     port: 3000,
     open: true,
   },
+  test: {
+    environment: 'jsdom',
+    include: ['../tests/unit/**/*.test.js', '../tests/integration/**/*.test.js'],
+    globals: true,
+  },
 });

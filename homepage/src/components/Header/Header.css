@@ -1,0 +1,25 @@
+/**
+ * Header Styles
+ * Owner: Scenario 2 - Navigation Menu Desktop
+ *
+ * Styles for:
+ * - Fixed/sticky header positioning
+ * - Header container styling
+ * - Header background and shadow
+ */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-fixed);
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal);
+}
+
+.header--scrolled {
+  box-shadow: var(--shadow-md);
+}

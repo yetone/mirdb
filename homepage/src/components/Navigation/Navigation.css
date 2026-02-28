@@ -13,8 +13,10 @@
 
 /* Header container */
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: var(--z-header);
   background-color: var(--color-background);
   border-bottom: 1px solid var(--color-border);
@@ -28,6 +30,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--spacing-4) var(--spacing-6);
+  height: 70px;
 }
 
 /* Logo */
@@ -38,6 +41,7 @@
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
   text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
 .nav__logo:hover {
@@ -57,6 +61,7 @@
 }
 
 .nav__link {
+  position: relative;
   display: flex;
   align-items: center;
   min-height: var(--touch-target-min);
@@ -77,6 +82,30 @@
 .nav__link:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
+}
+
+.nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--spacing-3);
+  right: var(--spacing-3);
+  width: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: width var(--transition-fast);
+}
+
+.nav__link:hover::after {
+  width: calc(100% - var(--spacing-6));
+}
+
+.nav__link--active {
+  color: var(--color-primary);
+}
+
+.nav__link--active::after {
+  width: calc(100% - var(--spacing-6));
 }
 
 /* Hamburger toggle button - hidden on desktop */
@@ -167,7 +196,7 @@
 }
 
 /* ===== MOBILE STYLES ===== */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* Show hamburger toggle */
   .nav__toggle {
     display: flex;
@@ -175,6 +204,7 @@
 
   /* Mobile navigation menu - hidden by default */
   .nav__menu {
+    display: none;
     position: fixed;
     top: 0;
     right: -100%;
@@ -192,7 +222,9 @@
   }
 
   /* Mobile menu - open state */
-  .nav__menu.is-open {
+  .nav__menu.is-open,
+  .nav__menu--open {
+    display: flex;
     right: 0;
   }
 
@@ -216,8 +248,26 @@
   }
 }
 
+/* Desktop - ensure menu is always visible */
+@media (min-width: 768px) {
+  .nav__menu {
+    display: flex !important;
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    flex-direction: row;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .nav__toggle {
+    display: none !important;
+  }
+}
+
 /* Tablet/smaller desktop breakpoint */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1024px) {
   .nav__menu {
     gap: var(--spacing-4);
   }
