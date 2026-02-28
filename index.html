@@ -11,14 +11,37 @@
   <link rel="stylesheet" href="css/components/quickstart.css">
   <link rel="stylesheet" href="css/components/status.css">
   <link rel="stylesheet" href="css/components/navigation.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
   <!-- Skip Navigation Link for Accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Header with Navigation -->
-  <header>
-    <!-- Navigation will be implemented by Scenario 4 -->
+  <header class="header">
+    <nav class="nav" aria-label="Main navigation">
+      <div class="nav-brand">
+        <a href="#hero">MirDB</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-menu" id="nav-menu" role="menubar">
+        <li role="none"><a href="#features" role="menuitem">Features</a></li>
+        <li role="none"><a href="#quickstart" role="menuitem">Quick Start</a></li>
+        <li role="none"><a href="#status" role="menuitem">Status</a></li>
+        <li role="none">
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="external-link" role="menuitem">
+            GitHub <span class="external-icon" aria-hidden="true">↗</span>
+          </a>
+        </li>
+        <li role="none">
+          <a href="https://github.com/memcached/memcached/wiki/Commands" target="_blank" rel="noopener noreferrer" class="external-link" role="menuitem">
+            Docs <span class="external-icon" aria-hidden="true">↗</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </header>
 
   <!-- Main Content -->

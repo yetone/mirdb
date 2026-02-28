@@ -119,6 +119,24 @@
   transform: translateY(-8px) rotate(-45deg);
 }
 
+/* Focus styles for accessibility */
+.nav-menu a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--border-radius);
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.nav-brand a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--border-radius);
+}
+
 /* Account for fixed header */
 main {
   padding-top: 60px;
