@@ -95,6 +95,7 @@ ol {
   transition: top var(--transition-fast);
 }
 
-.skip-link:focus {
+.skip-link:focus,
+.skip-link:focus-visible {
   top: 0;
 }
