@@ -298,7 +298,50 @@ values = client.get_many([<span class="token-string">'key1'</span>, <span class=
     <!-- Configuration Section (Scenario 6) -->
     <section id="configuration" class="section configuration" aria-labelledby="configuration-title">
       <div class="container">
-        <!-- Configuration content will be added by Scenario 6 -->
+        <header class="configuration__header">
+          <h2 id="configuration-title" class="configuration__title">Configuration Reference</h2>
+          <p class="configuration__description">
+            MirDB is designed to work out of the box with sensible defaults. Below are the key configuration options and their default values.
+          </p>
+        </header>
+
+        <div class="config__list">
+          <!-- Listen Address -->
+          <div class="config__item" data-config="listen-address">
+            <div class="config__name">Listen Address</div>
+            <div class="config__default"><code>127.0.0.1:11211</code></div>
+            <div class="config__description">
+              The network address and port MirDB listens on for incoming Memcached protocol connections.
+            </div>
+          </div>
+
+          <!-- Work Directory -->
+          <div class="config__item" data-config="work-directory">
+            <div class="config__name">Work Directory</div>
+            <div class="config__default"><code>./data</code></div>
+            <div class="config__description">
+              The directory path where MirDB stores SSTable files and other persistent data.
+            </div>
+          </div>
+
+          <!-- SSTable Size -->
+          <div class="config__item" data-config="sstable-size">
+            <div class="config__name">SSTable Size Limit</div>
+            <div class="config__default"><code>64 MB</code></div>
+            <div class="config__description">
+              Maximum size of each SSTable file. When exceeded, a new SSTable is created and compaction may be triggered.
+            </div>
+          </div>
+
+          <!-- Memtable Size -->
+          <div class="config__item" data-config="memtable-size">
+            <div class="config__name">Memtable Size Limit</div>
+            <div class="config__default"><code>4 MB</code></div>
+            <div class="config__description">
+              Maximum size of the in-memory skip-list memtable before flushing to disk as an SSTable.
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
