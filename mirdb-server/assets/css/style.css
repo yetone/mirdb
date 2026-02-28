@@ -164,6 +164,38 @@ h3 {
     margin-top: 1.5rem;
     font-size: 0.875rem;
     color: var(--color-text-secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.server-version {
+    font-weight: 500;
+}
+
+.server-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #6b7280;
+}
+
+.status-indicator.status-running {
+    background-color: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+.status-indicator.status-stopped {
+    background-color: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
 /* Features Section */

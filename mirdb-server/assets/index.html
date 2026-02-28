@@ -25,12 +25,16 @@
         </div>
     </header>
 
-    <!-- Scenario 3: Hero Section (version info added by Scenario 3) -->
+    <!-- Scenario 3: Hero Section with status and version info -->
     <section class="hero">
         <h1>MirDB</h1>
         <p class="tagline">A persistent key-value store with Memcached protocol compatibility</p>
         <div id="version-info" class="version-info">
-            <!-- Version info populated by Scenario 3 -->
+            <span id="server-version" class="server-version">Version: Loading...</span>
+            <span id="server-status" class="server-status">
+                <span class="status-indicator" id="status-indicator"></span>
+                <span id="status-text">Status: Checking...</span>
+            </span>
         </div>
     </section>
 
@@ -131,6 +135,40 @@ print(value)  # Output: Hello, MirDB!</code></pre>
             <p class="copyright">MirDB - A Persistent Key-Value Store with Memcached Protocol Compatibility</p>
         </div>
     </footer>
+
+    <!-- Scenario 3: JavaScript for status and version display -->
+    <script>
+    (function() {
+        function fetchStatus() {
+            fetch('/api/status')
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    var versionEl = document.getElementById('server-version');
+                    var statusTextEl = document.getElementById('status-text');
+                    var indicatorEl = document.getElementById('status-indicator');
+
+                    if (versionEl && data.version) {
+                        versionEl.textContent = 'Version: ' + data.version;
+                    }
+
+                    if (statusTextEl && indicatorEl) {
+                        var isRunning = data.running === true || data.status === 'running';
+                        statusTextEl.textContent = 'Status: ' + (isRunning ? 'Running' : 'Stopped');
+                        indicatorEl.className = 'status-indicator ' + (isRunning ? 'status-running' : 'status-stopped');
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Failed to fetch status:', err);
+                    var statusTextEl = document.getElementById('status-text');
+                    if (statusTextEl) {
+                        statusTextEl.textContent = 'Status: Unknown';
+                    }
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchStatus);
+    })();
+    </script>
 
     <!-- Scenario 6: JavaScript for theme toggle -->
     <script src="/static/js/main.js"></script>

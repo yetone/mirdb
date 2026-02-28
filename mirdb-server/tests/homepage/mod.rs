@@ -9,5 +9,7 @@
 //! - mod routes_tests;
 //! - mod metrics_tests;
 //! - mod config_tests;
+//! - mod status_tests;
 
 pub mod routes_tests;
+pub mod status_tests;
