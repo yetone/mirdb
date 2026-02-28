@@ -1,6 +1,7 @@
 use std::fs::OpenOptions;
 use std::io::Read;
 use std::path::Path;
+use std::path::PathBuf;
 
 use serde::Deserialize;
 use toml;
@@ -12,6 +13,9 @@ use crate::options::{Options, GB, KB, MB, TB};
 use crate::parser_util::macros::{digit, space, usize_parser, IRResult};
 
 /// Homepage HTTP server configuration
+///
+/// NFR-5: enable/disable flag
+/// REQ-1: configurable port
 #[derive(Debug, Clone, Deserialize)]
 pub struct HomepageConfig {
     /// Whether the homepage server is enabled
@@ -20,6 +24,9 @@ pub struct HomepageConfig {
     /// Port for the homepage HTTP server
     #[serde(default = "default_homepage_port")]
     pub port: u16,
+    /// Optional filesystem asset override path
+    #[serde(default)]
+    pub assets_path: Option<PathBuf>,
     /// HTTP request timeout in seconds
     #[serde(default = "default_timeout_secs")]
     pub timeout_secs: u64,
@@ -49,6 +56,7 @@ impl Default for HomepageConfig {
         HomepageConfig {
             enabled: default_homepage_enabled(),
             port: default_homepage_port(),
+            assets_path: None,
             timeout_secs: default_timeout_secs(),
             max_connections: default_max_connections(),
         }
@@ -84,7 +92,7 @@ pub struct Config {
 
     pub thread_sleep_ms: usize,
 
-    /// Homepage server configuration (optional)
+    /// Homepage HTTP server configuration (optional)
     #[serde(default)]
     pub homepage: HomepageConfig,
 }
@@ -112,7 +120,7 @@ fn to_size_unit(x: &[u8]) -> usize {
         b"M" => MB,
         b"G" => GB,
         b"T" => TB,
-        _ => panic!(format!("unknown size unit {:?}", x)),
+        _ => panic!("unknown size unit {:?}", x),
     }
 }
 
@@ -289,6 +297,7 @@ port = 8080
         let homepage = HomepageConfig {
             enabled: true,
             port: 0,
+            assets_path: None,
             timeout_secs: 5,
             max_connections: 100,
         };

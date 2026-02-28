@@ -251,6 +251,7 @@ macro_rules! gen_parser {
         gen_parser!($name<&[u8], $ot>, $mac!($($args)*));
     };
     ($name:ident<$it:ty, $ot:ty>, $mac:ident!($($args:tt)*)) => {
+        #[allow(mismatched_lifetime_syntaxes)]
         pub fn $name(i: $it) -> IRResult<$ot> {
             $mac!(i, $($args)*)
         }

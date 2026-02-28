@@ -1,4 +1,5 @@
 #![allow(unused_imports, unused_macros, dead_code)]
+#![allow(bare_trait_objects, ellipsis_inclusive_range_patterns, deprecated)]
 
 use std::cell::RefCell;
 use std::error::Error;
@@ -54,6 +55,7 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+mod homepage;
 
 pub struct Server {
     store: Arc<Store>,
@@ -69,7 +71,7 @@ impl Service for Server {
     type Request = Request;
     type Response = Response;
     type Error = io::Error;
-    type Future = Box<Future<Item = Response, Error = io::Error>>;
+    type Future = Box<dyn Future<Item = Response, Error = io::Error>>;
 
     fn call(&self, req: Self::Request) -> Self::Future {
         Box::new(future::done(match self.store.apply(req) {

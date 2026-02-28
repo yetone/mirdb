@@ -22,5 +22,5 @@ pub mod state;
 
 // Re-export main types
 pub use routes::routes;
-pub use server::{start_homepage_server, validate_port, HomepageServerHandle};
+pub use server::{start_homepage_server, validate_port, HomepageServer, HomepageServerConfig, HomepageServerHandle};
 pub use state::AppState;

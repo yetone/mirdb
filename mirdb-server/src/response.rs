@@ -72,7 +72,7 @@ impl<'a> Writer for BufferWriter<'a> {
 }
 
 impl Response {
-    pub fn write(&self, writer: &mut Writer) -> MyResult<()> {
+    pub fn write(&self, writer: &mut dyn Writer) -> MyResult<()> {
         match self {
             Response::Stored => {
                 writer.write(b"STORED\r\n")?;

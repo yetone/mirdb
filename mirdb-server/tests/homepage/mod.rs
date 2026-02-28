@@ -11,5 +11,7 @@
 //! - mod config_tests;
 //! - mod status_tests;
 
+pub mod config_tests;
 pub mod routes_tests;
+pub mod server_tests;
 pub mod status_tests;
