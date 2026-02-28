@@ -10,12 +10,18 @@
     "build": "cp -r src/* dist/"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.40.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "serve": "^14.2.0"
   },
-  "keywords": ["mirdb", "key-value", "memcached", "database"],
+  "keywords": [
+    "mirdb",
+    "key-value",
+    "memcached",
+    "database"
+  ],
   "author": "MirDB Team",
   "license": "MIT"
 }

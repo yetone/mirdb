@@ -414,7 +414,7 @@ footer {
   font-size: var(--font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-text-muted);
+  color: #8b949e; /* Accessibility: Higher contrast than --color-text-muted (Scenario 7) */
   margin-bottom: var(--spacing-4);
 }
 
@@ -439,8 +439,19 @@ footer {
   padding-top: var(--spacing-8);
   border-top: 1px solid var(--color-border);
   text-align: center;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+}
+
+/* Accessibility: Underline links within text blocks for distinguishability (Scenario 7) */
+.footer-bottom a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Accessibility: Improve config-note contrast for WCAG AA compliance (Scenario 7) */
+.config-item .config-note {
+  color: #8b949e; /* Higher contrast than --color-text-muted */
 }
 
 /* Mobile Navigation (Scenario 4) */
