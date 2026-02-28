@@ -13,13 +13,17 @@
 <body>
   <!-- Scenario 4: Header (Navigation and External Links) -->
   <header class="header" role="banner">
-    <div class="container">
+    <div class="container header-content">
       <a href="/" class="header-logo" aria-label="MirDB Home">
         <img src="images/logo.gif" alt="MirDB Logo" width="40" height="40">
         <span>MirDB</span>
       </a>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
       <nav class="header-nav" role="navigation" aria-label="Main navigation">
-        <!-- Navigation links to be implemented by Scenario 4 -->
         <a href="#features">Features</a>
         <a href="#status">Status</a>
         <a href="#usage">Usage</a>
@@ -259,12 +263,38 @@
   <!-- Scenario 4: Footer (Navigation and External Links) -->
   <footer class="footer" role="contentinfo">
     <div class="container">
-      <!-- To be implemented by Scenario 4 -->
-      <p>&copy; 2024 MirDB. MIT License.</p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+            <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            <li><a href="https://github.com/yetone/mirdb/releases" target="_blank" rel="noopener noreferrer">Releases</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Community</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a></li>
+            <li><a href="https://github.com/yetone/mirdb/discussions" target="_blank" rel="noopener noreferrer">Discussions</a></li>
+            <li><a href="https://github.com/yetone/mirdb/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 MirDB. Released under the MIT License.</p>
+      </div>
     </div>
   </footer>
 
-  <script src="js/clipboard.js"></script>
+<script src="js/clipboard.js"></script>
+  <script src="js/navigation.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
