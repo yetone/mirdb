@@ -804,3 +804,346 @@ test.describe('Accessibility - Alt Text and ARIA', () => {
     expect(altText.toLowerCase()).toMatch(/circleci|build|status|badge/);
   });
 });
+
+/**
+ * Accessibility - Hover and Focus States Tests
+ * Owner: Scenario 18 - Hover and Focus States
+ *
+ * Test cases:
+ * - CTA button shows visible hover state (color change, shadow, etc.)
+ * - Navigation links show visible hover state (underline, color change, etc.)
+ * - CTA button shows distinct focus outline/ring
+ * - Copy button shows hover state indicating interactivity
+ * - Focus and hover states are distinguishable or combined appropriately
+ */
+test.describe('Accessibility - Hover and Focus States', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForPageLoad(page);
+  });
+
+  test('CTA button shows visible hover state with color change', async ({ page }) => {
+    const ctaButton = page.locator('.hero__cta');
+    await expect(ctaButton).toBeVisible();
+
+    // Get initial styles before hover
+    const initialStyles = await ctaButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        transform: styles.transform,
+        color: styles.color,
+      };
+    });
+
+    // Hover over the CTA button
+    await ctaButton.hover();
+
+    // Wait for transition to complete
+    await page.waitForTimeout(200);
+
+    // Get styles after hover
+    const hoverStyles = await ctaButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        transform: styles.transform,
+        color: styles.color,
+      };
+    });
+
+    // Verify at least one visual change occurred (background color or transform)
+    const hasBackgroundChange = initialStyles.backgroundColor !== hoverStyles.backgroundColor;
+    const hasTransformChange = initialStyles.transform !== hoverStyles.transform;
+
+    expect(
+      hasBackgroundChange || hasTransformChange,
+      `CTA button should show visible hover state change. Initial: bg=${initialStyles.backgroundColor}, transform=${initialStyles.transform}. Hover: bg=${hoverStyles.backgroundColor}, transform=${hoverStyles.transform}`
+    ).toBe(true);
+  });
+
+  test('navigation links show visible hover state with color change', async ({ page }) => {
+    // Test each navigation link for hover state
+    const navLinks = page.locator('.nav-menu a');
+    const count = await navLinks.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    // Test the first navigation link (internal link)
+    const firstLink = navLinks.first();
+
+    // Get initial color
+    const initialColor = await firstLink.evaluate((el) => {
+      return window.getComputedStyle(el).color;
+    });
+
+    // Hover over the link
+    await firstLink.hover();
+
+    // Wait for transition
+    await page.waitForTimeout(200);
+
+    // Get hover color
+    const hoverColor = await firstLink.evaluate((el) => {
+      return window.getComputedStyle(el).color;
+    });
+
+    // Verify color changed on hover
+    expect(
+      initialColor !== hoverColor,
+      `Navigation link should change color on hover. Initial: ${initialColor}, Hover: ${hoverColor}`
+    ).toBe(true);
+  });
+
+  test('CTA button shows distinct focus outline/ring when focused', async ({ page }) => {
+    const ctaButton = page.locator('.hero__cta');
+
+    // Focus the button via keyboard simulation
+    await ctaButton.focus();
+
+    // Get focus styles
+    const focusStyles = await ctaButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        outline: styles.outline,
+        outlineStyle: styles.outlineStyle,
+        outlineWidth: styles.outlineWidth,
+        outlineColor: styles.outlineColor,
+        outlineOffset: styles.outlineOffset,
+      };
+    });
+
+    // Verify focus indicator is visible
+    const hasOutline = focusStyles.outlineStyle !== 'none' && focusStyles.outlineWidth !== '0px';
+
+    expect(
+      hasOutline,
+      `CTA button should have visible focus outline. Got: style=${focusStyles.outlineStyle}, width=${focusStyles.outlineWidth}, color=${focusStyles.outlineColor}`
+    ).toBe(true);
+
+    // Verify outline offset provides visual separation
+    const outlineOffset = parseInt(focusStyles.outlineOffset, 10);
+    expect(
+      outlineOffset >= 0,
+      `CTA button focus outline should have positive offset. Got: ${focusStyles.outlineOffset}`
+    ).toBe(true);
+  });
+
+  test('copy button shows hover state indicating interactivity', async ({ page }) => {
+    // Scroll to quickstart section to make copy button visible
+    await page.locator('#quickstart').scrollIntoViewIfNeeded();
+
+    const copyButton = page.locator('.copy-button').first();
+    await expect(copyButton).toBeVisible();
+
+    // Get initial styles
+    const initialStyles = await copyButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        color: styles.color,
+        borderColor: styles.borderColor,
+        cursor: styles.cursor,
+      };
+    });
+
+    // Verify cursor indicates interactivity
+    expect(initialStyles.cursor).toBe('pointer');
+
+    // Hover over the copy button
+    await copyButton.hover();
+
+    // Wait for transition
+    await page.waitForTimeout(200);
+
+    // Get hover styles
+    const hoverStyles = await copyButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        color: styles.color,
+        borderColor: styles.borderColor,
+      };
+    });
+
+    // Verify at least one visual change occurred
+    const hasBackgroundChange = initialStyles.backgroundColor !== hoverStyles.backgroundColor;
+    const hasColorChange = initialStyles.color !== hoverStyles.color;
+    const hasBorderChange = initialStyles.borderColor !== hoverStyles.borderColor;
+
+    expect(
+      hasBackgroundChange || hasColorChange || hasBorderChange,
+      `Copy button should show visible hover state. Initial: bg=${initialStyles.backgroundColor}, color=${initialStyles.color}. Hover: bg=${hoverStyles.backgroundColor}, color=${hoverStyles.color}`
+    ).toBe(true);
+  });
+
+  test('focus and hover states are distinguishable or combined appropriately', async ({ page }) => {
+    const ctaButton = page.locator('.hero__cta');
+    await expect(ctaButton).toBeVisible();
+
+    // Get initial/normal state
+    const normalStyles = await ctaButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        outline: styles.outline,
+        outlineStyle: styles.outlineStyle,
+        outlineWidth: styles.outlineWidth,
+      };
+    });
+
+    // Get hover state
+    await ctaButton.hover();
+    await page.waitForTimeout(200);
+
+    const hoverStyles = await ctaButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        outline: styles.outline,
+        outlineStyle: styles.outlineStyle,
+        outlineWidth: styles.outlineWidth,
+      };
+    });
+
+    // Move mouse away and focus the button
+    await page.mouse.move(0, 0);
+    await ctaButton.focus();
+
+    const focusStyles = await ctaButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        outline: styles.outline,
+        outlineStyle: styles.outlineStyle,
+        outlineWidth: styles.outlineWidth,
+      };
+    });
+
+    // Verify that focus state has an outline (distinct from hover)
+    const focusHasOutline =
+      focusStyles.outlineStyle !== 'none' && focusStyles.outlineWidth !== '0px';
+
+    // Hover primarily changes background, focus primarily adds outline
+    // They should either be distinguishable or combined appropriately
+    const hoverChangesBackground = normalStyles.backgroundColor !== hoverStyles.backgroundColor;
+    const focusAddsOutline =
+      (normalStyles.outlineStyle === 'none' || normalStyles.outlineWidth === '0px') &&
+      focusHasOutline;
+
+    // Either focus adds distinct outline, or the states are combined appropriately
+    expect(
+      focusAddsOutline || focusHasOutline,
+      `Focus state should be distinguishable via outline. Normal outline: ${normalStyles.outlineStyle}/${normalStyles.outlineWidth}. Focus outline: ${focusStyles.outlineStyle}/${focusStyles.outlineWidth}`
+    ).toBe(true);
+
+    // Additionally verify that when both hover and focus are active, the state is visible
+    await ctaButton.hover();
+    await page.waitForTimeout(100);
+
+    const combinedStyles = await ctaButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        outlineStyle: styles.outlineStyle,
+        outlineWidth: styles.outlineWidth,
+      };
+    });
+
+    // Combined state should maintain focus outline
+    const combinedHasOutline =
+      combinedStyles.outlineStyle !== 'none' && combinedStyles.outlineWidth !== '0px';
+    expect(
+      combinedHasOutline,
+      `Combined hover+focus state should maintain focus outline. Got: ${combinedStyles.outlineStyle}/${combinedStyles.outlineWidth}`
+    ).toBe(true);
+  });
+
+  test('navigation brand link shows hover state', async ({ page }) => {
+    const brandLink = page.locator('.nav-brand a');
+
+    // Get initial color
+    const initialColor = await brandLink.evaluate((el) => {
+      return window.getComputedStyle(el).color;
+    });
+
+    // Hover over the brand link
+    await brandLink.hover();
+    await page.waitForTimeout(200);
+
+    // Get hover color
+    const hoverColor = await brandLink.evaluate((el) => {
+      return window.getComputedStyle(el).color;
+    });
+
+    // Verify color change on hover
+    expect(
+      initialColor !== hoverColor,
+      `Navigation brand link should change color on hover. Initial: ${initialColor}, Hover: ${hoverColor}`
+    ).toBe(true);
+  });
+
+  test('all navigation links have hover state', async ({ page }) => {
+    const navLinks = page.locator('.nav-menu a');
+    const count = await navLinks.count();
+
+    // Test each navigation link
+    for (let i = 0; i < count; i++) {
+      const link = navLinks.nth(i);
+
+      // Get initial color
+      const initialColor = await link.evaluate((el) => {
+        return window.getComputedStyle(el).color;
+      });
+
+      // Hover
+      await link.hover();
+      await page.waitForTimeout(150);
+
+      // Get hover color
+      const hoverColor = await link.evaluate((el) => {
+        return window.getComputedStyle(el).color;
+      });
+
+      // Verify hover state change
+      expect(
+        initialColor !== hoverColor,
+        `Navigation link ${i + 1} should show hover state. Initial: ${initialColor}, Hover: ${hoverColor}`
+      ).toBe(true);
+    }
+  });
+
+  test('all copy buttons have focus state', async ({ page }) => {
+    // Scroll to quickstart section
+    await page.locator('#quickstart').scrollIntoViewIfNeeded();
+
+    const copyButtons = page.locator('.copy-button');
+    const count = await copyButtons.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    for (let i = 0; i < count; i++) {
+      const button = copyButtons.nth(i);
+      await button.scrollIntoViewIfNeeded();
+
+      // Focus the button
+      await button.focus();
+
+      // Get focus styles
+      const focusStyles = await button.evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return {
+          outlineStyle: styles.outlineStyle,
+          outlineWidth: styles.outlineWidth,
+        };
+      });
+
+      // Verify focus outline
+      const hasOutline = focusStyles.outlineStyle !== 'none' && focusStyles.outlineWidth !== '0px';
+      expect(
+        hasOutline,
+        `Copy button ${i + 1} should have visible focus outline. Got: style=${focusStyles.outlineStyle}, width=${focusStyles.outlineWidth}`
+      ).toBe(true);
+    }
+  });
+});
