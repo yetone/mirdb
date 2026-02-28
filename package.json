@@ -1,0 +1,16 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - Static website",
+  "scripts": {
+    "test": "playwright test",
+    "test:unit": "jest tests/unit",
+    "test:e2e": "playwright test tests/e2e",
+    "serve": "npx serve ."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "jest": "^29.7.0",
+    "jsdom": "^22.1.0"
+  }
+}
