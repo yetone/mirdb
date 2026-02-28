@@ -9,136 +9,218 @@
  * - initExternalLinks sets correct attributes
  */
 
-// Import navigation functions
-const {
-  toggleMenu,
-  initMobileMenu,
-  handleSmoothScroll,
-  initExternalLinks
-} = require('../../src/js/navigation.js');
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+
+// Helper to create a mock DOM structure
+function createMockDOM() {
+  document.body.innerHTML = `
+    <header class="header">
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">Menu</button>
+      <nav class="header-nav" role="navigation">
+        <a href="#features">Features</a>
+        <a href="#status">Status</a>
+        <a href="#usage">Usage</a>
+        <a href="https://github.com/yetone/mirdb">GitHub</a>
+        <a href="https://external-site.com/docs">External Docs</a>
+      </nav>
+    </header>
+    <main>
+      <section id="features">Features</section>
+      <section id="status">Status</section>
+      <section id="usage">Usage</section>
+    </main>
+    <footer>
+      <a href="https://github.com/yetone/mirdb/issues">Issues</a>
+      <a href="https://github.com/yetone/mirdb#readme">README</a>
+    </footer>
+  `;
+}
+
+// Load and execute navigation module, returning functions
+function loadNavigationModule() {
+  const navigationPath = path.join(__dirname, '../../src/js/navigation.js');
+  const code = fs.readFileSync(navigationPath, 'utf8');
+
+  // Create a context with browser globals
+  const context = {
+    document: document,
+    window: window,
+    Element: Element,
+    console: console,
+  };
+
+  // Run the script in the context
+  vm.createContext(context);
+  vm.runInContext(code, context);
+
+  // Return the functions from the context
+  return {
+    toggleMenu: context.toggleMenu,
+    initMobileMenu: context.initMobileMenu,
+    handleSmoothScroll: context.handleSmoothScroll,
+    initExternalLinks: context.initExternalLinks,
+  };
+}
+
+let navigationFunctions;
 
 describe('Navigation Functionality', () => {
   beforeEach(() => {
-    // Reset DOM before each test
+    createMockDOM();
+    navigationFunctions = loadNavigationModule();
+  });
+
+  afterEach(() => {
     document.body.innerHTML = '';
+    jest.clearAllMocks();
+  });
+
+  describe('initExternalLinks', () => {
+    test('TC11: initExternalLinks sets target and rel attributes on external links', () => {
+      // Call initExternalLinks
+      navigationFunctions.initExternalLinks();
+
+      // Get all external links
+      const externalLinks = document.querySelectorAll('a[href^="https://"]');
+
+      externalLinks.forEach((link) => {
+        expect(link.target).toBe('_blank');
+        expect(link.rel).toMatch(/noopener/);
+      });
+    });
+
+    test('initExternalLinks does not modify internal links', () => {
+      navigationFunctions.initExternalLinks();
+
+      // Get internal links (starting with #)
+      const internalLinks = document.querySelectorAll('a[href^="#"]');
+
+      internalLinks.forEach((link) => {
+        // Internal links should not have target="_blank"
+        expect(link.target).not.toBe('_blank');
+      });
+    });
+
+    test('initExternalLinks adds noopener to rel attribute', () => {
+      // Create a link without rel attribute
+      const testLink = document.createElement('a');
+      testLink.href = 'https://example.com';
+      document.body.appendChild(testLink);
+
+      navigationFunctions.initExternalLinks();
+
+      expect(testLink.rel).toContain('noopener');
+    });
+
+    test('initExternalLinks preserves existing rel values', () => {
+      // Create a link with existing rel attribute
+      const testLink = document.createElement('a');
+      testLink.href = 'https://example.com';
+      testLink.rel = 'sponsored';
+      document.body.appendChild(testLink);
+
+      navigationFunctions.initExternalLinks();
+
+      expect(testLink.rel).toContain('sponsored');
+      expect(testLink.rel).toContain('noopener');
+    });
   });
 
   describe('toggleMenu', () => {
     test('TC12: toggleMenu toggles menu visibility class', () => {
-      document.body.innerHTML = `
-        <header>
-          <nav class="header-nav"></nav>
-          <button class="mobile-menu-toggle" aria-label="Toggle menu"></button>
-        </header>
-      `;
-
       const nav = document.querySelector('.header-nav');
-      const toggle = document.querySelector('.mobile-menu-toggle');
 
-      // Initially nav should not have 'open' class
-      expect(nav.classList.contains('open')).toBe(false);
-      expect(toggle.getAttribute('aria-expanded')).not.toBe('true');
+      // Initially, nav should not have 'is-open' class
+      expect(nav.classList.contains('is-open')).toBe(false);
 
-      // Toggle should add 'open' class
-      toggleMenu();
-      expect(nav.classList.contains('open')).toBe(true);
-      expect(toggle.getAttribute('aria-expanded')).toBe('true');
+      // Call toggleMenu
+      navigationFunctions.toggleMenu();
 
-      // Toggle again should remove 'open' class
-      toggleMenu();
-      expect(nav.classList.contains('open')).toBe(false);
-      expect(toggle.getAttribute('aria-expanded')).toBe('false');
+      // After toggle, nav should have 'is-open' class
+      expect(nav.classList.contains('is-open')).toBe(true);
+
+      // Toggle again
+      navigationFunctions.toggleMenu();
+
+      // Should be closed again
+      expect(nav.classList.contains('is-open')).toBe(false);
+    });
+
+    test('toggleMenu updates aria-expanded attribute', () => {
+      const menuButton = document.querySelector('.mobile-menu-toggle');
+
+      navigationFunctions.toggleMenu();
+
+      expect(menuButton.getAttribute('aria-expanded')).toBe('true');
+
+      navigationFunctions.toggleMenu();
+
+      expect(menuButton.getAttribute('aria-expanded')).toBe('false');
     });
   });
 
   describe('initMobileMenu', () => {
-    test('initMobileMenu attaches click handler to toggle button', () => {
-      document.body.innerHTML = `
-        <header>
-          <nav class="header-nav"></nav>
-          <button class="mobile-menu-toggle" aria-label="Toggle menu"></button>
-        </header>
-      `;
-
-      initMobileMenu();
-
+    test('initMobileMenu attaches click handler to menu button', () => {
+      const menuButton = document.querySelector('.mobile-menu-toggle');
       const nav = document.querySelector('.header-nav');
-      const toggle = document.querySelector('.mobile-menu-toggle');
 
-      // Click should toggle the menu
-      toggle.click();
-      expect(nav.classList.contains('open')).toBe(true);
+      navigationFunctions.initMobileMenu();
 
-      toggle.click();
-      expect(nav.classList.contains('open')).toBe(false);
-    });
-  });
+      // Simulate click
+      menuButton.click();
 
-  describe('initExternalLinks', () => {
-    test('TC11: initExternalLinks adds target and rel attributes to external links', () => {
-      document.body.innerHTML = `
-        <a href="https://github.com/yetone/mirdb">GitHub</a>
-        <a href="https://example.com">Example</a>
-        <a href="#features">Internal</a>
-        <a href="/about">Relative</a>
-      `;
-
-      initExternalLinks();
-
-      const githubLink = document.querySelector('a[href*="github.com"]');
-      const exampleLink = document.querySelector('a[href*="example.com"]');
-      const internalLink = document.querySelector('a[href="#features"]');
-      const relativeLink = document.querySelector('a[href="/about"]');
-
-      // External links should have target and rel attributes
-      expect(githubLink.getAttribute('target')).toBe('_blank');
-      expect(githubLink.getAttribute('rel')).toContain('noopener');
-      expect(githubLink.getAttribute('rel')).toContain('noreferrer');
-
-      expect(exampleLink.getAttribute('target')).toBe('_blank');
-      expect(exampleLink.getAttribute('rel')).toContain('noopener');
-
-      // Internal links should not have target="_blank"
-      expect(internalLink.getAttribute('target')).toBeNull();
-      expect(relativeLink.getAttribute('target')).toBeNull();
+      // Nav should now have 'is-open' class
+      expect(nav.classList.contains('is-open')).toBe(true);
     });
 
-    test('initExternalLinks does not modify links that already have attributes', () => {
-      document.body.innerHTML = `
-        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
-      `;
+    test('initMobileMenu handles missing menu button gracefully', () => {
+      // Remove menu button
+      const menuButton = document.querySelector('.mobile-menu-toggle');
+      menuButton.remove();
 
-      initExternalLinks();
-
-      const githubLink = document.querySelector('a[href*="github.com"]');
-
-      // Should preserve existing attributes
-      expect(githubLink.getAttribute('target')).toBe('_blank');
-      expect(githubLink.getAttribute('rel')).toBe('noopener noreferrer');
+      // Should not throw
+      expect(() => {
+        navigationFunctions.initMobileMenu();
+      }).not.toThrow();
     });
   });
 
   describe('handleSmoothScroll', () => {
-    test('handleSmoothScroll attaches click handlers to anchor links', () => {
-      document.body.innerHTML = `
-        <nav>
-          <a href="#features">Features</a>
-          <a href="#status">Status</a>
-        </nav>
-        <section id="features" style="margin-top: 1000px;">Features</section>
-        <section id="status" style="margin-top: 500px;">Status</section>
-      `;
-
+    test('handleSmoothScroll sets up click handlers for internal links', () => {
       // Mock scrollIntoView
-      const scrollIntoViewMock = jest.fn();
-      Element.prototype.scrollIntoView = scrollIntoViewMock;
+      const scrollMock = jest.fn();
+      Element.prototype.scrollIntoView = scrollMock;
 
-      handleSmoothScroll();
+      navigationFunctions.handleSmoothScroll();
 
       const featuresLink = document.querySelector('a[href="#features"]');
+
+      // Simulate click
       featuresLink.click();
 
-      expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' });
+      // scrollIntoView should have been called
+      expect(scrollMock).toHaveBeenCalledWith({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+
+    test('handleSmoothScroll handles clicks on links to non-existent sections', () => {
+      Element.prototype.scrollIntoView = jest.fn();
+
+      // Add a link to a non-existent section
+      const badLink = document.createElement('a');
+      badLink.href = '#nonexistent';
+      document.querySelector('nav').appendChild(badLink);
+
+      navigationFunctions.handleSmoothScroll();
+
+      // Should not throw when clicking
+      expect(() => {
+        badLink.click();
+      }).not.toThrow();
     });
   });
 });

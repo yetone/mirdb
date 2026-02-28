@@ -11,56 +11,57 @@
 
 /**
  * Toggle mobile menu visibility
- * Adds/removes 'open' class on nav and updates aria-expanded on toggle button
+ * Toggles the 'is-open' class on the navigation and updates aria-expanded
  */
 function toggleMenu() {
   const nav = document.querySelector('.header-nav');
-  const toggle = document.querySelector('.mobile-menu-toggle');
+  const menuButton = document.querySelector('.mobile-menu-toggle');
 
-  if (!nav || !toggle) return;
+  if (!nav || !menuButton) return;
 
-  const isOpen = nav.classList.toggle('open');
-  toggle.setAttribute('aria-expanded', String(isOpen));
+  const isOpen = nav.classList.toggle('is-open');
+  menuButton.setAttribute('aria-expanded', isOpen.toString());
 }
 
 /**
- * Initialize mobile menu toggle button
- * Attaches click event handler to toggle button
+ * Initialize mobile menu toggle functionality
+ * Attaches click handler to the mobile menu button
  */
 function initMobileMenu() {
-  const toggle = document.querySelector('.mobile-menu-toggle');
+  const menuButton = document.querySelector('.mobile-menu-toggle');
 
-  if (!toggle) return;
+  if (!menuButton) return;
 
-  toggle.addEventListener('click', toggleMenu);
+  menuButton.addEventListener('click', toggleMenu);
 }
 
 /**
- * Setup smooth scrolling for anchor links
- * Prevents default jump and scrolls smoothly to target section
+ * Handle smooth scrolling for internal anchor links
+ * Sets up click handlers for all links starting with #
  */
 function handleSmoothScroll() {
-  const anchorLinks = document.querySelectorAll('a[href^="#"]');
+  const internalLinks = document.querySelectorAll('a[href^="#"]');
 
-  anchorLinks.forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      const href = this.getAttribute('href');
+  internalLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href');
 
-      // Skip if href is just "#" or empty
-      if (!href || href === '#') return;
+      // Skip if just "#"
+      if (targetId === '#') return;
 
-      const target = document.querySelector(href);
+      const targetElement = document.querySelector(targetId);
 
-      if (target) {
+      if (targetElement) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
 
         // Close mobile menu if open
         const nav = document.querySelector('.header-nav');
-        const toggle = document.querySelector('.mobile-menu-toggle');
-        if (nav && nav.classList.contains('open')) {
-          nav.classList.remove('open');
-          if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        if (nav && nav.classList.contains('is-open')) {
+          toggleMenu();
         }
       }
     });
@@ -68,38 +69,26 @@ function handleSmoothScroll() {
 }
 
 /**
- * Initialize external link attributes for security
+ * Initialize external links with proper security attributes
  * Adds target="_blank" and rel="noopener noreferrer" to external links
  */
 function initExternalLinks() {
-  const links = document.querySelectorAll('a[href^="http"]');
+  // Select all links that start with http:// or https://
+  const externalLinks = document.querySelectorAll('a[href^="http://"], a[href^="https://"]');
 
-  links.forEach(function(link) {
-    const href = link.getAttribute('href');
+  externalLinks.forEach((link) => {
+    // Set target to open in new tab
+    link.target = '_blank';
 
-    // Skip same-origin links
-    if (!href) return;
+    // Get existing rel attribute
+    const existingRel = link.getAttribute('rel') || '';
 
-    try {
-      const url = new URL(href, window.location.origin);
-      if (url.origin !== window.location.origin) {
-        // External link - add security attributes
-        if (!link.hasAttribute('target')) {
-          link.setAttribute('target', '_blank');
-        }
-        if (!link.hasAttribute('rel')) {
-          link.setAttribute('rel', 'noopener noreferrer');
-        } else {
-          // Ensure rel contains noopener
-          const rel = link.getAttribute('rel');
-          if (!rel.includes('noopener')) {
-            link.setAttribute('rel', rel + ' noopener noreferrer');
-          }
-        }
-      }
-    } catch (e) {
-      // Invalid URL, skip
-    }
+    // Add noopener and noreferrer if not present
+    const relValues = new Set(existingRel.split(' ').filter(Boolean));
+    relValues.add('noopener');
+    relValues.add('noreferrer');
+
+    link.rel = Array.from(relValues).join(' ');
   });
 }
 

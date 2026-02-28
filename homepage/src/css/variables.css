@@ -95,6 +95,13 @@
   --container-md: 768px;
   --container-lg: 1024px;
   --container-xl: 1280px;
+  --container-max-width: 1200px;
+
+  /* Layout */
+  --header-height: 64px;
+
+  /* Font Family Alias */
+  --font-family: var(--font-family-base);
 
   /* Z-Index Scale */
   --z-dropdown: 100;

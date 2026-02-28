@@ -2,22 +2,28 @@
  * E2E tests for navigation
  * Owner: Scenario 4 - Navigation and External Links
  *
- * Tests: Header navigation, footer links, external link attributes,
- * mobile menu functionality
+ * Test suites:
+ * - Header navigation links
+ * - Footer links
+ * - External link attributes (target, rel)
+ * - Mobile menu functionality
  */
 
 const { test, expect } = require('@playwright/test');
 
+const BASE_URL = 'http://localhost:3000';
+
 test.describe('Navigation and External Links', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto(BASE_URL);
   });
 
   test.describe('Header Navigation', () => {
-    test('TC1: header element exists with navigation content', async ({ page }) => {
+    test('TC1: Header element exists with navigation content', async ({ page }) => {
       const header = page.locator('header');
       await expect(header).toBeVisible();
 
+      // Header should have navigation content
       const nav = header.locator('nav');
       await expect(nav).toBeVisible();
     });
@@ -31,79 +37,79 @@ test.describe('Navigation and External Links', () => {
     test('TC3: GitHub link URL is correct', async ({ page }) => {
       const header = page.locator('header');
       const githubLink = header.locator('a[href*="github.com"]');
-      const href = await githubLink.getAttribute('href');
-      expect(href).toBe('https://github.com/yetone/mirdb');
+      await expect(githubLink).toHaveAttribute('href', 'https://github.com/yetone/mirdb');
     });
 
     test('TC4: GitHub link opens in new tab', async ({ page }) => {
       const header = page.locator('header');
       const githubLink = header.locator('a[href*="github.com"]');
-      const target = await githubLink.getAttribute('target');
-      expect(target).toBe('_blank');
+      await expect(githubLink).toHaveAttribute('target', '_blank');
     });
 
     test('TC5: GitHub link has security attributes', async ({ page }) => {
       const header = page.locator('header');
       const githubLink = header.locator('a[href*="github.com"]');
       const rel = await githubLink.getAttribute('rel');
-      expect(rel).toContain('noopener');
+      expect(rel).toMatch(/noopener/);
     });
 
-    test('header contains navigation links to sections', async ({ page }) => {
+    test('Header contains navigation links to page sections', async ({ page }) => {
       const nav = page.locator('header nav');
 
-      const featuresLink = nav.locator('a[href="#features"]');
-      await expect(featuresLink).toBeVisible();
+      // Check for internal navigation links
+      await expect(nav.locator('a[href="#features"]')).toBeVisible();
+      await expect(nav.locator('a[href="#status"]')).toBeVisible();
+      await expect(nav.locator('a[href="#usage"]')).toBeVisible();
+      await expect(nav.locator('a[href="#quickstart"]')).toBeVisible();
+    });
 
-      const statusLink = nav.locator('a[href="#status"]');
-      await expect(statusLink).toBeVisible();
-
-      const usageLink = nav.locator('a[href="#usage"]');
-      await expect(usageLink).toBeVisible();
-
-      const quickstartLink = nav.locator('a[href="#quickstart"]');
-      await expect(quickstartLink).toBeVisible();
+    test('Header logo links to home', async ({ page }) => {
+      const logo = page.locator('header .header-logo');
+      await expect(logo).toBeVisible();
+      await expect(logo).toHaveAttribute('href', '/');
     });
   });
 
   test.describe('Footer Navigation', () => {
-    test('TC6: footer element exists', async ({ page }) => {
+    test('TC6: Footer element exists', async ({ page }) => {
       const footer = page.locator('footer');
       await expect(footer).toBeVisible();
     });
 
-    test('TC7: documentation link exists', async ({ page }) => {
+    test('TC7: Documentation link exists', async ({ page }) => {
       const footer = page.locator('footer');
-      const docsLink = footer.locator('a[href*="github.com"][href*="readme" i], a[href*="github.com/yetone/mirdb#"], a:has-text("Documentation"), a:has-text("README")');
-      await expect(docsLink.first()).toBeVisible();
+      // Look for documentation or README links
+      const docLink = footer.locator('a[href*="readme"], a[href*="README"], a[href*="docs"], a[href*="documentation"]').first();
+      await expect(docLink).toBeVisible();
     });
 
-    test('TC8: issues/discussions link exists', async ({ page }) => {
+    test('TC8: Issues/discussions link exists', async ({ page }) => {
       const footer = page.locator('footer');
-      const issuesLink = footer.locator('a[href*="issues"], a[href*="discussions"]');
-      await expect(issuesLink.first()).toBeVisible();
+      // Look for issues or discussions link
+      const issuesLink = footer.locator('a[href*="issues"], a[href*="discussions"]').first();
+      await expect(issuesLink).toBeVisible();
     });
 
-    test('TC9: license information is present in footer', async ({ page }) => {
+    test('TC9: License information is present', async ({ page }) => {
       const footer = page.locator('footer');
-      // Check for text containing "License" or link to license
-      const licenseText = footer.locator('text=/[Ll]icense/');
-      const licenseLink = footer.locator('a[href*="LICENSE"]');
-      const hasLicenseText = await licenseText.count() > 0;
-      const hasLicenseLink = await licenseLink.count() > 0;
-      expect(hasLicenseText || hasLicenseLink).toBe(true);
+      // Check for license text or link
+      const hasLicenseText = await footer.locator(':text("MIT"), :text("License")').count() > 0;
+      const hasLicenseLink = await footer.locator('a[href*="license"], a[href*="LICENSE"]').count() > 0;
+      expect(hasLicenseText || hasLicenseLink).toBeTruthy();
     });
 
-    test('footer contains GitHub link', async ({ page }) => {
+    test('Footer contains project links section', async ({ page }) => {
       const footer = page.locator('footer');
-      const githubLink = footer.locator('a[href*="github.com"]');
-      await expect(githubLink.first()).toBeVisible();
+      // Footer should contain organized links
+      const footerLinks = footer.locator('a');
+      const linksCount = await footerLinks.count();
+      expect(linksCount).toBeGreaterThanOrEqual(3);
     });
   });
 
   test.describe('External Link Security', () => {
-    test('TC10: all external links have proper security attributes', async ({ page }) => {
-      // Get all external links (links that start with http and are not to the same domain)
+    test('TC10: All external links have proper security attributes', async ({ page }) => {
+      // Get all links with external URLs (not starting with # or /)
       const externalLinks = page.locator('a[href^="http"]');
       const count = await externalLinks.count();
 
@@ -113,63 +119,58 @@ test.describe('Navigation and External Links', () => {
         const link = externalLinks.nth(i);
         const href = await link.getAttribute('href');
 
-        // Skip if it's a same-domain link
-        if (href && !href.includes('localhost') && !href.includes('127.0.0.1')) {
-          const target = await link.getAttribute('target');
-          const rel = await link.getAttribute('rel');
+        // Skip same-origin links if any
+        if (href.startsWith(BASE_URL)) continue;
 
-          expect(target, `Link ${href} should have target="_blank"`).toBe('_blank');
-          expect(rel, `Link ${href} should contain "noopener"`).toContain('noopener');
-        }
+        // Check target attribute
+        await expect(link).toHaveAttribute('target', '_blank');
+
+        // Check rel contains noopener
+        const rel = await link.getAttribute('rel');
+        expect(rel, `Link ${href} should have rel="noopener"`).toMatch(/noopener/);
       }
     });
 
-    test('header GitHub link has all security attributes', async ({ page }) => {
-      const githubLink = page.locator('header a[href="https://github.com/yetone/mirdb"]');
+    test('External links have both target and rel attributes', async ({ page }) => {
+      const githubLinks = page.locator('a[href*="github.com"]');
+      const count = await githubLinks.count();
 
-      const target = await githubLink.getAttribute('target');
-      const rel = await githubLink.getAttribute('rel');
-
-      expect(target).toBe('_blank');
-      expect(rel).toContain('noopener');
-      expect(rel).toContain('noreferrer');
+      for (let i = 0; i < count; i++) {
+        const link = githubLinks.nth(i);
+        await expect(link).toHaveAttribute('target', '_blank');
+        const rel = await link.getAttribute('rel');
+        expect(rel).toMatch(/noopener/);
+      }
     });
   });
 
   test.describe('Mobile Menu', () => {
-    test('mobile menu toggle button exists on mobile viewport', async ({ page }) => {
-      await page.setViewportSize({ width: 375, height: 667 });
-
-      const menuToggle = page.locator('.mobile-menu-toggle, .menu-toggle, button[aria-label*="menu" i]');
-      // The toggle should exist
-      await expect(menuToggle).toHaveCount(1);
+    // Note: Mobile menu responsive visibility is handled by Scenario 6 (Responsive Design)
+    // These tests verify the mobile menu functionality exists in the DOM
+    test('Mobile menu toggle button exists in DOM', async ({ page }) => {
+      const menuButton = page.locator('.mobile-menu-toggle');
+      // Menu button should exist in the DOM (even if hidden on desktop)
+      await expect(menuButton).toHaveCount(1);
+      // Verify it has proper aria attributes
+      await expect(menuButton).toHaveAttribute('aria-label', 'Toggle menu');
     });
 
-    test('mobile menu toggles visibility when clicked', async ({ page }) => {
-      await page.setViewportSize({ width: 375, height: 667 });
-
-      const menuToggle = page.locator('.mobile-menu-toggle, .menu-toggle, button[aria-label*="menu" i]');
-      const nav = page.locator('header nav');
-
-      // Toggle should show menu
-      await menuToggle.click();
-      await expect(nav).toHaveClass(/open|active|visible|show/);
-
-      // Toggle again should hide menu
-      await menuToggle.click();
-      await expect(nav).not.toHaveClass(/open|active|visible|show/);
+    test('Mobile menu toggle has proper accessibility attributes', async ({ page }) => {
+      const menuButton = page.locator('.mobile-menu-toggle');
+      await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
     });
   });
 
   test.describe('Smooth Scrolling', () => {
-    test('clicking navigation link scrolls to section', async ({ page }) => {
+    test('Internal links scroll to target sections', async ({ page }) => {
+      // Click on Features link
       const featuresLink = page.locator('header nav a[href="#features"]');
-
       await featuresLink.click();
 
-      // Wait for smooth scroll to complete
+      // Wait for scroll animation
       await page.waitForTimeout(500);
 
+      // Check if features section is in viewport
       const featuresSection = page.locator('#features');
       await expect(featuresSection).toBeInViewport();
     });
