@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A high-performance persistent key-value store for modern applications">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="./styles/variables.css">
+  <link rel="stylesheet" href="./styles/reset.css">
+  <link rel="stylesheet" href="./components/Navigation/Navigation.css">
+  <link rel="stylesheet" href="./components/Hero/Hero.css">
+  <link rel="stylesheet" href="./components/Features/Features.css">
+  <link rel="stylesheet" href="./components/Footer/Footer.css">
+</head>
+<body>
+  <!-- Skip to main content link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header with navigation -->
+  <header class="header" role="banner">
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav__logo" aria-label="MirDB home">
+        <span class="nav__logo-text">MirDB</span>
+      </a>
+
+      <!-- Desktop navigation -->
+      <ul class="nav__menu" id="nav-menu">
+        <li class="nav__item">
+          <a href="#home" class="nav__link">Home</a>
+        </li>
+        <li class="nav__item">
+          <a href="#features" class="nav__link">Features</a>
+        </li>
+        <li class="nav__item">
+          <a href="#about" class="nav__link">About</a>
+        </li>
+        <li class="nav__item">
+          <a href="#contact" class="nav__link">Contact</a>
+        </li>
+      </ul>
+
+      <!-- Hamburger menu button for mobile -->
+      <button
+        class="nav__toggle"
+        id="nav-toggle"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+      >
+        <span class="nav__toggle-icon"></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main id="main-content" role="main">
+    <!-- Hero section -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero__content">
+        <h1 id="hero-title" class="hero__title">MirDB</h1>
+        <p class="hero__tagline">A high-performance persistent key-value store for modern applications</p>
+        <div class="hero__actions">
+          <a href="#features" class="btn btn--primary">Get Started</a>
+          <a href="#about" class="btn btn--secondary">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features section -->
+    <section class="features" id="features" aria-labelledby="features-title">
+      <h2 id="features-title" class="features__title">Features</h2>
+      <div class="features__grid">
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+              <path d="M24 4L4 14v20l20 10 20-10V14L24 4z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Persistent Storage</h3>
+          <p class="feature-card__description">Data survives restarts with our efficient disk-backed storage engine.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+              <circle cx="24" cy="24" r="20"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">High Performance</h3>
+          <p class="feature-card__description">Optimized for speed with sub-millisecond response times.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+              <rect x="8" y="8" width="32" height="32" rx="4"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Simple API</h3>
+          <p class="feature-card__description">Easy-to-use API that integrates seamlessly with your applications.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__content">
+      <p class="footer__copyright">&copy; 2026 MirDB. All rights reserved.</p>
+      <nav class="footer__links" aria-label="Footer navigation">
+        <a href="/privacy" class="footer__link">Privacy Policy</a>
+        <a href="/terms" class="footer__link">Terms of Service</a>
+        <a href="#contact" class="footer__link">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script type="module" src="./components/Navigation/Navigation.js"></script>
+  <script type="module" src="./scripts/main.js"></script>
+</body>
+</html>

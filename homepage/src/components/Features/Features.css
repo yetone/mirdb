@@ -1,0 +1,70 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 4 - Features Section Display
+ * Extended by: Scenario 5 - Features Section Responsive Grid
+ *
+ * Styles for:
+ * - Feature card layout
+ * - Card hover effects
+ * - Responsive grid (1/2/3 columns)
+ * - Icon styling
+ */
+
+.features {
+  padding: var(--spacing-16) var(--spacing-6);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features__title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  margin-bottom: var(--spacing-12);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-8);
+}
+
+.feature-card {
+  padding: var(--spacing-8);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-card__icon {
+  margin-bottom: var(--spacing-4);
+  color: var(--color-primary);
+}
+
+.feature-card__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-2);
+}
+
+.feature-card__description {
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 1024px) {
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
+}

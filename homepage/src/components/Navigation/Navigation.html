@@ -1,0 +1,43 @@
+<!--
+  Navigation Component
+  Owner: Scenario 2 - Navigation Menu Desktop
+  Extended by: Scenario 3 - Mobile Navigation Responsive
+
+  Structure:
+  - Logo/brand link
+  - Navigation links (Home, Features, About, Contact)
+  - Hamburger menu button (mobile)
+-->
+
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="/" class="nav__logo" aria-label="MirDB home">
+    <span class="nav__logo-text">MirDB</span>
+  </a>
+
+  <!-- Desktop navigation -->
+  <ul class="nav__menu" id="nav-menu">
+    <li class="nav__item">
+      <a href="#home" class="nav__link">Home</a>
+    </li>
+    <li class="nav__item">
+      <a href="#features" class="nav__link">Features</a>
+    </li>
+    <li class="nav__item">
+      <a href="#about" class="nav__link">About</a>
+    </li>
+    <li class="nav__item">
+      <a href="#contact" class="nav__link">Contact</a>
+    </li>
+  </ul>
+
+  <!-- Hamburger menu button for mobile -->
+  <button
+    class="nav__toggle"
+    id="nav-toggle"
+    aria-label="Toggle navigation menu"
+    aria-expanded="false"
+    aria-controls="nav-menu"
+  >
+    <span class="nav__toggle-icon"></span>
+  </button>
+</nav>
