@@ -2,48 +2,52 @@
  * Theme Toggle Component JavaScript
  * Owner: Scenario 14 - Dark Mode Toggle
  *
- * Functions:
- * - initThemeToggle(): Initialize the toggle button event listener
- * - updateToggleState(): Update button aria-pressed attribute
+ * Initializes the theme toggle button and delegates theme management to theme.js
  */
 
-import { toggleTheme, getCurrentTheme } from '../../scripts/theme.js';
+import { initTheme, toggleTheme, getCurrentTheme } from '../../scripts/theme.js';
 
 /**
  * Initialize the theme toggle button
  */
 export function initThemeToggle() {
-  const toggleButton = document.getElementById('theme-toggle');
+  const toggle = document.getElementById('theme-toggle');
+  if (!toggle) return;
 
-  if (!toggleButton) {
-    return;
-  }
+  // Update button state based on current theme
+  updateToggleState(toggle);
 
-  // Set initial aria-pressed state
-  updateToggleState(toggleButton);
-
-  // Add click event listener
-  toggleButton.addEventListener('click', () => {
+  // Add click handler
+  toggle.addEventListener('click', () => {
     toggleTheme();
-    updateToggleState(toggleButton);
+    updateToggleState(toggle);
+  });
+
+  // Listen for theme changes (e.g., from system preference)
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    updateToggleState(toggle);
   });
 }
 
 /**
- * Update toggle button aria-pressed attribute based on current theme
- * @param {HTMLButtonElement} toggleButton - The theme toggle button element
+ * Update the toggle button aria-pressed state
+ * @param {HTMLElement} toggle - The toggle button element
  */
-function updateToggleState(toggleButton) {
+function updateToggleState(toggle) {
   const isDark = getCurrentTheme() === 'dark';
-  toggleButton.setAttribute('aria-pressed', isDark.toString());
-  toggleButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+  toggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+  toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
 }
 
 // Auto-initialize when DOM is ready
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initThemeToggle);
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initThemeToggle();
+    });
   } else {
+    initTheme();
     initThemeToggle();
   }
 }

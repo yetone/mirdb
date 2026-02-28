@@ -14,7 +14,6 @@
   <link rel="stylesheet" href="./components/Hero/Hero.css">
   <link rel="stylesheet" href="./components/Features/Features.css">
   <link rel="stylesheet" href="./components/Footer/Footer.css">
-  <link rel="stylesheet" href="./styles/cross-browser.css">
   <link rel="stylesheet" href="./components/ThemeToggle/ThemeToggle.css">
 </head>
 <body>
@@ -46,9 +45,9 @@
 
       <!-- Theme toggle button -->
       <button
-        class="theme-toggle"
-        id="theme-toggle"
         type="button"
+        id="theme-toggle"
+        class="theme-toggle"
         aria-label="Toggle dark mode"
         aria-pressed="false"
         data-testid="theme-toggle"
@@ -271,9 +270,8 @@
     }
   </style>
 
-  <script type="module" src="./scripts/theme.js"></script>
-  <script type="module" src="./components/ThemeToggle/ThemeToggle.js"></script>
   <script type="module" src="./components/Navigation/Navigation.js"></script>
   <script type="module" src="./scripts/main.js"></script>
+  <script type="module" src="./components/ThemeToggle/ThemeToggle.js"></script>
 </body>
 </html>

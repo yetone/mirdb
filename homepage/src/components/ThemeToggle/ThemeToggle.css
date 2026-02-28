@@ -17,24 +17,15 @@
   padding: var(--spacing-2);
   background: transparent;
   border: 2px solid var(--color-border);
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  border-radius: var(--radius-lg);
   color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
 .theme-toggle:hover {
-  border-color: var(--color-primary);
-  background-color: var(--color-surface-hover);
-}
-
-.theme-toggle:focus {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-.theme-toggle:focus:not(:focus-visible) {
-  outline: none;
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
 }
 
 .theme-toggle:focus-visible {
@@ -49,35 +40,35 @@
   transition: opacity var(--transition-fast), transform var(--transition-fast);
 }
 
-.theme-toggle__icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-/* Light mode: show sun, hide moon */
+/* Sun icon - visible in light mode */
 .theme-toggle__icon--sun {
-  opacity: 1;
-  transform: scale(1);
+  display: flex;
 }
 
 .theme-toggle__icon--moon {
-  position: absolute;
-  opacity: 0;
-  transform: scale(0.5);
+  display: none;
 }
 
-/* Dark mode: hide sun, show moon */
+/* Dark mode: show moon, hide sun */
 [data-theme="dark"] .theme-toggle__icon--sun {
-  opacity: 0;
-  transform: scale(0.5);
+  display: none;
 }
 
 [data-theme="dark"] .theme-toggle__icon--moon {
-  opacity: 1;
-  transform: scale(1);
+  display: flex;
 }
 
-/* Visually hidden text for screen readers */
+/* Hover animation */
+.theme-toggle:hover .theme-toggle__icon {
+  transform: scale(1.1);
+}
+
+/* Active state */
+.theme-toggle:active .theme-toggle__icon {
+  transform: scale(0.95);
+}
+
+/* Visually hidden utility for screen readers */
 .visually-hidden {
   position: absolute;
   width: 1px;

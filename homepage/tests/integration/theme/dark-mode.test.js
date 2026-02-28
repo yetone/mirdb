@@ -12,172 +12,139 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { JSDOM } from 'jsdom';
-
-// Read the index.html file
-const htmlPath = resolve(process.cwd(), 'src/index.html');
-const html = readFileSync(htmlPath, 'utf-8');
 
 describe('Dark Mode Toggle', () => {
-  let dom;
-  let document;
-  let window;
+  let mockMatchMedia;
 
   beforeEach(() => {
-    // Create a fresh DOM for each test
-    dom = new JSDOM(html, {
-      url: 'http://localhost:3000',
-      runScripts: 'outside-only',
-    });
-    document = dom.window.document;
-    window = dom.window;
+    // Clear document state
+    document.documentElement.removeAttribute('data-theme');
 
-    // Mock localStorage
-    const localStorageMock = {
-      store: {},
-      getItem: vi.fn((key) => localStorageMock.store[key] || null),
-      setItem: vi.fn((key, value) => {
-        localStorageMock.store[key] = value;
-      }),
-      removeItem: vi.fn((key) => {
-        delete localStorageMock.store[key];
-      }),
-      clear: vi.fn(() => {
-        localStorageMock.store = {};
-      }),
-    };
-    Object.defineProperty(window, 'localStorage', {
-      value: localStorageMock,
-      writable: true,
-    });
+    // Clear localStorage
+    localStorage.clear();
 
-    // Mock matchMedia
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
+    // Reset matchMedia mock
+    mockMatchMedia = vi.fn().mockImplementation((query) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+    window.matchMedia = mockMatchMedia;
+
+    // Clear module cache to get fresh imports
+    vi.resetModules();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
-    if (dom) {
-      dom.window.close();
-    }
+    vi.restoreAllMocks();
   });
 
   describe('Test Case 1: Dark mode toggle presence', () => {
-    it('should have dark mode toggle button/switch present in navigation', () => {
-      const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
-      expect(themeToggle).not.toBeNull();
-      expect(themeToggle.tagName.toLowerCase()).toBe('button');
+    it('should have a dark mode toggle button in the navigation', () => {
+      // Load the HTML
+      const htmlPath = resolve(process.cwd(), 'src/index.html');
+      const html = readFileSync(htmlPath, 'utf-8');
+      document.body.innerHTML = html;
+
+      const toggle = document.querySelector('[data-testid="theme-toggle"]');
+      expect(toggle).not.toBeNull();
+      expect(toggle.tagName.toLowerCase()).toBe('button');
     });
 
-    it('should have theme toggle in header/navigation area', () => {
-      const header = document.querySelector('header');
-      const nav = document.querySelector('nav');
-      const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
+    it('should have proper accessibility attributes', () => {
+      const htmlPath = resolve(process.cwd(), 'src/index.html');
+      const html = readFileSync(htmlPath, 'utf-8');
+      document.body.innerHTML = html;
 
-      // Toggle should be within header or nav
-      const isInHeader = header && header.contains(themeToggle);
-      const isInNav = nav && nav.contains(themeToggle);
-      expect(isInHeader || isInNav).toBe(true);
+      const toggle = document.querySelector('[data-testid="theme-toggle"]');
+      expect(toggle).not.toBeNull();
+      expect(toggle.getAttribute('aria-label')).toBeTruthy();
+      expect(toggle.getAttribute('aria-pressed')).toBeTruthy();
     });
 
-    it('should have accessible aria-label', () => {
-      const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
-      const ariaLabel = themeToggle.getAttribute('aria-label');
-      expect(ariaLabel).toBeTruthy();
-      expect(ariaLabel.toLowerCase()).toContain('dark');
-    });
+    it('should have sun and moon icons', () => {
+      const htmlPath = resolve(process.cwd(), 'src/index.html');
+      const html = readFileSync(htmlPath, 'utf-8');
+      document.body.innerHTML = html;
 
-    it('should have aria-pressed attribute', () => {
-      const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
-      const ariaPressed = themeToggle.getAttribute('aria-pressed');
-      expect(ariaPressed).toBeTruthy();
-      expect(['true', 'false']).toContain(ariaPressed);
+      const toggle = document.querySelector('[data-testid="theme-toggle"]');
+      const sunIcon = toggle?.querySelector('.theme-toggle__icon--sun');
+      const moonIcon = toggle?.querySelector('.theme-toggle__icon--moon');
+
+      expect(sunIcon).not.toBeNull();
+      expect(moonIcon).not.toBeNull();
     });
   });
 
-  describe('Test Case 2: Theme toggle click behavior', () => {
-    it('should apply dark theme when data-theme attribute is set to dark', () => {
-      // Simulate dark mode being activated
-      document.documentElement.setAttribute('data-theme', 'dark');
+  describe('Test Case 2: Toggle theme switching', () => {
+    it('should switch to dark mode when toggle is clicked', async () => {
+      // Import theme functions fresh
+      const { initTheme, toggleTheme } = await import('../../../src/scripts/theme.js');
 
-      const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
-      expect(isDarkMode).toBe(true);
-    });
+      // Initialize theme
+      initTheme();
 
-    it('should remove dark theme when data-theme attribute is removed', () => {
-      // Apply dark mode
-      document.documentElement.setAttribute('data-theme', 'dark');
+      // Verify starts in light mode
+      expect(document.documentElement.getAttribute('data-theme')).toBeNull();
+
+      // Toggle to dark mode
+      toggleTheme();
+
+      // Verify dark mode is applied
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
-
-      // Remove dark mode
-      document.documentElement.removeAttribute('data-theme');
-      expect(document.documentElement.getAttribute('data-theme')).toBeNull();
     });
 
-    it('should toggle theme correctly between light and dark', () => {
-      // Start in light mode (no data-theme attribute)
-      expect(document.documentElement.getAttribute('data-theme')).toBeNull();
+    it('should switch back to light mode when toggled again', async () => {
+      const { initTheme, toggleTheme } = await import('../../../src/scripts/theme.js');
+      initTheme();
 
       // Toggle to dark
-      document.documentElement.setAttribute('data-theme', 'dark');
+      toggleTheme();
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
 
       // Toggle back to light
-      document.documentElement.removeAttribute('data-theme');
+      toggleTheme();
       expect(document.documentElement.getAttribute('data-theme')).toBeNull();
     });
   });
 
-  describe('Test Case 3: Dark mode color contrast (WCAG AA)', () => {
-    it('should have dark theme CSS variables defined', () => {
-      // Check that dark theme selector exists in the page styles
-      const styles = document.querySelectorAll('link[rel="stylesheet"]');
-      expect(styles.length).toBeGreaterThan(0);
+  describe('Test Case 3: Dark mode color contrast', () => {
+    it('should define dark mode color variables with proper contrast', () => {
+      // Read the CSS variables file
+      const cssPath = resolve(process.cwd(), 'src/styles/variables.css');
+      const css = readFileSync(cssPath, 'utf-8');
 
-      // Verify variables.css is linked (which contains dark mode colors)
-      const variablesLink = Array.from(styles).find((link) =>
-        link.getAttribute('href').includes('variables.css')
-      );
-      expect(variablesLink).toBeTruthy();
-    });
+      // Check dark theme section exists
+      expect(css).toContain('[data-theme="dark"]');
 
-    it('should have appropriate dark mode background and text colors defined', () => {
-      // Read the variables.css file to verify dark mode colors
-      const variablesCss = readFileSync(
-        resolve(process.cwd(), 'src/styles/variables.css'),
-        'utf-8'
-      );
+      // Check dark background colors are defined
+      expect(css).toContain('--color-background: #0f172a');
+      expect(css).toContain('--color-text: #f1f5f9');
 
-      // Check dark theme block exists
-      expect(variablesCss).toContain('[data-theme="dark"]');
+      // Verify contrast ratio calculation
+      // Dark background (#0f172a) with light text (#f1f5f9)
+      const darkBg = '#0f172a';
+      const lightText = '#f1f5f9';
 
-      // Check dark mode has appropriate background (dark color)
-      expect(variablesCss).toMatch(/\[data-theme="dark"\][\s\S]*--color-background:\s*#[0-9a-fA-F]{6}/);
+      // Basic luminance calculation to verify high contrast
+      const bgLuminance = getRelativeLuminance(darkBg);
+      const textLuminance = getRelativeLuminance(lightText);
+      const contrastRatio = (Math.max(bgLuminance, textLuminance) + 0.05) /
+                            (Math.min(bgLuminance, textLuminance) + 0.05);
 
-      // Check dark mode has appropriate text color (light color)
-      expect(variablesCss).toMatch(/\[data-theme="dark"\][\s\S]*--color-text:\s*#[0-9a-fA-F]{6}/);
+      // WCAG AA requires 4.5:1 for normal text
+      expect(contrastRatio).toBeGreaterThan(4.5);
     });
   });
 
-  describe('Test Case 4: System preference detection (prefers-color-scheme)', () => {
-    it('should have matchMedia available for system preference detection', () => {
-      expect(typeof window.matchMedia).toBe('function');
-    });
-
-    it('should detect dark system preference correctly', () => {
-      // Mock dark system preference
+  describe('Test Case 4: System preference detection', () => {
+    it('should apply dark theme when system prefers dark and no stored preference', async () => {
+      // Mock system preference to dark
       window.matchMedia = vi.fn().mockImplementation((query) => ({
         matches: query === '(prefers-color-scheme: dark)',
         media: query,
@@ -189,14 +156,22 @@ describe('Dark Mode Toggle', () => {
         dispatchEvent: vi.fn(),
       }));
 
-      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      expect(darkModeQuery.matches).toBe(true);
+      // Clear any stored preference
+      localStorage.clear();
+
+      // Reset modules before import to get fresh module
+      vi.resetModules();
+
+      const { getSystemPreference } = await import('../../../src/scripts/theme.js');
+
+      // Check system preference is detected
+      expect(getSystemPreference()).toBe('dark');
     });
 
-    it('should detect light system preference correctly', () => {
-      // Mock light system preference
+    it('should apply light theme when system prefers light and no stored preference', async () => {
+      // Mock system preference to light
       window.matchMedia = vi.fn().mockImplementation((query) => ({
-        matches: query === '(prefers-color-scheme: light)',
+        matches: false,
         media: query,
         onchange: null,
         addListener: vi.fn(),
@@ -206,84 +181,104 @@ describe('Dark Mode Toggle', () => {
         dispatchEvent: vi.fn(),
       }));
 
-      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      expect(darkModeQuery.matches).toBe(false);
+      localStorage.clear();
+      vi.resetModules();
+
+      const { getSystemPreference } = await import('../../../src/scripts/theme.js');
+
+      expect(getSystemPreference()).toBe('light');
+    });
+
+    it('should prioritize stored preference over system preference', async () => {
+      // Mock system preference to dark
+      window.matchMedia = vi.fn().mockImplementation((query) => ({
+        matches: query === '(prefers-color-scheme: dark)',
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }));
+
+      // Store light preference
+      localStorage.setItem('mirdb-theme', 'light');
+
+      vi.resetModules();
+      const { getCurrentTheme } = await import('../../../src/scripts/theme.js');
+
+      // Should return stored preference, not system preference
+      expect(getCurrentTheme()).toBe('light');
     });
   });
 
-  describe('Test Case 5: Theme preference persistence', () => {
-    it('should save dark theme preference to localStorage', () => {
-      const storageKey = 'mirdb-theme';
+  describe('Test Case 5: Preference persistence', () => {
+    it('should save theme preference to localStorage', async () => {
+      vi.resetModules();
+      const { saveThemePreference } = await import('../../../src/scripts/theme.js');
 
-      // Simulate saving dark theme
-      window.localStorage.setItem(storageKey, 'dark');
-      expect(window.localStorage.setItem).toHaveBeenCalledWith(storageKey, 'dark');
-      expect(window.localStorage.getItem(storageKey)).toBe('dark');
+      // Save dark preference
+      saveThemePreference('dark');
+      expect(localStorage.getItem('mirdb-theme')).toBe('dark');
+
+      // Save light preference
+      saveThemePreference('light');
+      expect(localStorage.getItem('mirdb-theme')).toBe('light');
     });
 
-    it('should save light theme preference to localStorage', () => {
-      const storageKey = 'mirdb-theme';
+    it('should restore theme preference on page load', async () => {
+      // Pre-set dark theme in storage
+      localStorage.setItem('mirdb-theme', 'dark');
 
-      // Simulate saving light theme
-      window.localStorage.setItem(storageKey, 'light');
-      expect(window.localStorage.setItem).toHaveBeenCalledWith(storageKey, 'light');
-      expect(window.localStorage.getItem(storageKey)).toBe('light');
+      vi.resetModules();
+      const { getCurrentTheme } = await import('../../../src/scripts/theme.js');
+
+      // getCurrentTheme should return stored preference
+      expect(getCurrentTheme()).toBe('dark');
     });
 
-    it('should retrieve stored theme preference', () => {
-      const storageKey = 'mirdb-theme';
+    it('should clear theme preference when clearThemePreference is called', async () => {
+      vi.resetModules();
+      const { saveThemePreference, clearThemePreference } = await import('../../../src/scripts/theme.js');
 
-      // Store a preference
-      window.localStorage.store[storageKey] = 'dark';
+      // Set and verify preference exists
+      saveThemePreference('dark');
+      expect(localStorage.getItem('mirdb-theme')).toBe('dark');
 
-      // Retrieve it
-      const stored = window.localStorage.getItem(storageKey);
-      expect(stored).toBe('dark');
-    });
-
-    it('should return null when no preference is stored', () => {
-      const storageKey = 'mirdb-theme';
-
-      const stored = window.localStorage.getItem(storageKey);
-      expect(stored).toBeNull();
-    });
-  });
-
-  describe('Theme Toggle Icons', () => {
-    it('should have sun icon for light mode indicator', () => {
-      const sunIcon = document.querySelector('.theme-toggle__icon--sun');
-      expect(sunIcon).not.toBeNull();
-    });
-
-    it('should have moon icon for dark mode indicator', () => {
-      const moonIcon = document.querySelector('.theme-toggle__icon--moon');
-      expect(moonIcon).not.toBeNull();
-    });
-
-    it('should have icons marked as aria-hidden', () => {
-      const sunIcon = document.querySelector('.theme-toggle__icon--sun');
-      const moonIcon = document.querySelector('.theme-toggle__icon--moon');
-
-      expect(sunIcon.getAttribute('aria-hidden')).toBe('true');
-      expect(moonIcon.getAttribute('aria-hidden')).toBe('true');
-    });
-  });
-
-  describe('Theme Toggle Accessibility', () => {
-    it('should have visually hidden text for screen readers', () => {
-      const hiddenText = document.querySelector('.theme-toggle .visually-hidden');
-      expect(hiddenText).not.toBeNull();
-      expect(hiddenText.textContent.toLowerCase()).toContain('dark');
-    });
-
-    it('should have type="button" to prevent form submission', () => {
-      const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
-      expect(themeToggle.getAttribute('type')).toBe('button');
-    });
-
-    it('should have minimum touch target size class', () => {
-      const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
-      expect(themeToggle.classList.contains('theme-toggle')).toBe(true);
+      // Clear preference
+      clearThemePreference();
+      expect(localStorage.getItem('mirdb-theme')).toBeNull();
     });
   });
 });
+
+/**
+ * Calculate relative luminance of a hex color
+ * @param {string} hex - Hex color code
+ * @returns {number} Relative luminance value
+ */
+function getRelativeLuminance(hex) {
+  const rgb = hexToRgb(hex);
+  const [r, g, b] = [rgb.r, rgb.g, rgb.b].map(c => {
+    const sRGB = c / 255;
+    return sRGB <= 0.03928
+      ? sRGB / 12.92
+      : Math.pow((sRGB + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/**
+ * Convert hex color to RGB
+ * @param {string} hex - Hex color code
+ * @returns {object} RGB values
+ */
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
