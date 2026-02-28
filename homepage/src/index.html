@@ -72,32 +72,50 @@
     <section class="features" id="features" aria-labelledby="features-title">
       <h2 id="features-title" class="features__title">Features</h2>
       <div class="features__grid">
-        <article class="feature-card">
+        <article class="feature-card" data-testid="feature-card">
           <div class="feature-card__icon" aria-hidden="true">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
               <path d="M24 4L4 14v20l20 10 20-10V14L24 4z"/>
             </svg>
           </div>
           <h3 class="feature-card__title">Persistent Storage</h3>
-          <p class="feature-card__description">Data survives restarts with our efficient disk-backed storage engine.</p>
+          <p class="feature-card__description">Data survives restarts with our efficient disk-backed storage engine using SSTable format.</p>
         </article>
-        <article class="feature-card">
+        <article class="feature-card" data-testid="feature-card">
           <div class="feature-card__icon" aria-hidden="true">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
-              <circle cx="24" cy="24" r="20"/>
+              <circle cx="24" cy="24" r="16"/>
+              <circle cx="24" cy="24" r="8" fill="var(--color-surface)"/>
             </svg>
           </div>
-          <h3 class="feature-card__title">High Performance</h3>
-          <p class="feature-card__description">Optimized for speed with sub-millisecond response times.</p>
+          <h3 class="feature-card__title">Memcached Protocol</h3>
+          <p class="feature-card__description">Drop-in replacement using the standard Memcached protocol for easy adoption.</p>
         </article>
-        <article class="feature-card">
+        <article class="feature-card" data-testid="feature-card">
           <div class="feature-card__icon" aria-hidden="true">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
-              <rect x="8" y="8" width="32" height="32" rx="4"/>
+              <path d="M8 38h32M12 30h24M16 22h16M20 14h8"/>
+              <rect x="8" y="36" width="32" height="4" rx="1"/>
+              <rect x="12" y="28" width="24" height="4" rx="1"/>
+              <rect x="16" y="20" width="16" height="4" rx="1"/>
+              <rect x="20" y="12" width="8" height="4" rx="1"/>
             </svg>
           </div>
-          <h3 class="feature-card__title">Simple API</h3>
-          <p class="feature-card__description">Easy-to-use API that integrates seamlessly with your applications.</p>
+          <h3 class="feature-card__title">Skip List Memtable</h3>
+          <p class="feature-card__description">Fast in-memory writes using skip list data structure for optimal performance.</p>
+        </article>
+        <article class="feature-card" data-testid="feature-card">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+              <rect x="6" y="8" width="14" height="10" rx="2"/>
+              <rect x="22" y="8" width="10" height="10" rx="2"/>
+              <rect x="34" y="8" width="8" height="10" rx="2"/>
+              <rect x="10" y="30" width="28" height="10" rx="2"/>
+              <path d="M16 18v12M30 18v12" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Automatic Compaction</h3>
+          <p class="feature-card__description">Background compaction merges SSTables to optimize storage and read performance.</p>
         </article>
       </div>
     </section>
