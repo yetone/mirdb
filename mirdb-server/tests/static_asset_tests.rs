@@ -440,3 +440,384 @@ mod cache_control_tests {
         );
     }
 }
+
+// ============================================================================
+// HTTP Integration Tests using warp::test
+// ============================================================================
+
+#[cfg(test)]
+mod http_integration_tests {
+    use std::sync::Arc;
+
+    /// Test Case 1: GET /static/style.css returns CSS with correct Content-Type
+    #[tokio::test]
+    async fn test_css_returns_correct_content_type() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/css/style.css")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200, "CSS request should return HTTP 200");
+
+        let content_type = response.headers().get("content-type")
+            .expect("Response should have Content-Type header");
+        assert!(
+            content_type.to_str().unwrap().starts_with("text/css"),
+            "Content-Type should be text/css, got {:?}",
+            content_type
+        );
+    }
+
+    /// Test Case 1 (alt path): GET /static/style.css also works
+    #[tokio::test]
+    async fn test_css_alt_path_returns_correct_content_type() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/style.css")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200, "CSS request should return HTTP 200");
+
+        let content_type = response.headers().get("content-type")
+            .expect("Response should have Content-Type header");
+        assert!(
+            content_type.to_str().unwrap().starts_with("text/css"),
+            "Content-Type should be text/css"
+        );
+    }
+
+    /// Test Case 2: GET /static/main.js returns JS with correct Content-Type
+    #[tokio::test]
+    async fn test_javascript_returns_correct_content_type() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/js/main.js")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200, "JavaScript request should return HTTP 200");
+
+        let content_type = response.headers().get("content-type")
+            .expect("Response should have Content-Type header");
+        assert!(
+            content_type.to_str().unwrap().starts_with("application/javascript"),
+            "Content-Type should be application/javascript, got {:?}",
+            content_type
+        );
+    }
+
+    /// Test Case 2 (alt path): GET /static/main.js also works
+    #[tokio::test]
+    async fn test_javascript_alt_path_returns_correct_content_type() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/main.js")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200, "JavaScript request should return HTTP 200");
+
+        let content_type = response.headers().get("content-type")
+            .expect("Response should have Content-Type header");
+        assert!(
+            content_type.to_str().unwrap().starts_with("application/javascript"),
+            "Content-Type should be application/javascript"
+        );
+    }
+
+    /// Test Case 3: Request non-existent static asset returns HTTP 404
+    #[tokio::test]
+    async fn test_nonexistent_asset_returns_404() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/nonexistent.css")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(
+            response.status(),
+            404,
+            "Non-existent asset should return HTTP 404"
+        );
+    }
+
+    /// Test Case 3 (variant): Request unknown JS file returns 404
+    #[tokio::test]
+    async fn test_nonexistent_js_returns_404() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/unknown.js")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 404);
+    }
+
+    /// Test Case 4: Request assets with Accept-Encoding: gzip header
+    #[tokio::test]
+    async fn test_gzip_compression_for_css() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/css/style.css")
+            .header("Accept-Encoding", "gzip, deflate")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200, "Request should succeed");
+
+        let content_encoding = response.headers().get("content-encoding");
+        assert!(
+            content_encoding.is_some(),
+            "Response should include Content-Encoding header when gzip is requested"
+        );
+        assert_eq!(
+            content_encoding.unwrap().to_str().unwrap(),
+            "gzip",
+            "Content-Encoding should be gzip"
+        );
+
+        // Verify Vary header is set
+        let vary = response.headers().get("vary");
+        assert!(
+            vary.is_some(),
+            "Response should include Vary header"
+        );
+        assert!(
+            vary.unwrap().to_str().unwrap().contains("Accept-Encoding"),
+            "Vary header should include Accept-Encoding"
+        );
+    }
+
+    /// Test Case 4 (JS): Request JS with Accept-Encoding: gzip header
+    #[tokio::test]
+    async fn test_gzip_compression_for_javascript() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/js/main.js")
+            .header("Accept-Encoding", "gzip")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200);
+
+        let content_encoding = response.headers().get("content-encoding");
+        assert!(
+            content_encoding.is_some(),
+            "JavaScript response should include Content-Encoding: gzip"
+        );
+        assert_eq!(
+            content_encoding.unwrap().to_str().unwrap(),
+            "gzip"
+        );
+    }
+
+    /// Test Case 4 (SVG): Request SVG with Accept-Encoding: gzip header
+    #[tokio::test]
+    async fn test_gzip_compression_for_svg() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/images/logo.svg")
+            .header("Accept-Encoding", "gzip")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200);
+
+        let content_encoding = response.headers().get("content-encoding");
+        assert!(
+            content_encoding.is_some(),
+            "SVG response should include Content-Encoding: gzip"
+        );
+        assert_eq!(
+            content_encoding.unwrap().to_str().unwrap(),
+            "gzip"
+        );
+    }
+
+    /// Test that SVG images are served with correct MIME type
+    #[tokio::test]
+    async fn test_svg_returns_correct_content_type() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/images/logo.svg")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200, "SVG request should return HTTP 200");
+
+        let content_type = response.headers().get("content-type")
+            .expect("Response should have Content-Type header");
+        assert_eq!(
+            content_type.to_str().unwrap(),
+            "image/svg+xml",
+            "Content-Type should be image/svg+xml"
+        );
+    }
+
+    /// Test that requests without gzip support don't get compressed content
+    #[tokio::test]
+    async fn test_no_compression_without_accept_encoding() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/css/style.css")
+            .reply(&filter)  // No Accept-Encoding header
+            .await;
+
+        assert_eq!(response.status(), 200);
+
+        // Should NOT have Content-Encoding: gzip when not requested
+        let content_encoding = response.headers().get("content-encoding");
+        assert!(
+            content_encoding.is_none(),
+            "Response should NOT include Content-Encoding when gzip is not requested"
+        );
+    }
+
+    /// Test that compressed content can be decompressed
+    #[tokio::test]
+    async fn test_gzip_content_is_valid() {
+        use mirdb::homepage::{routes, AppState};
+        use std::io::Read;
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/css/style.css")
+            .header("Accept-Encoding", "gzip")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200);
+
+        // Get the compressed body
+        let compressed_body = response.body().to_vec();
+
+        // Decompress and verify it's valid CSS
+        let mut decoder = flate2::read::GzDecoder::new(&compressed_body[..]);
+        let mut decompressed = String::new();
+        decoder.read_to_string(&mut decompressed)
+            .expect("Should be able to decompress gzip content");
+
+        // Verify it looks like valid CSS
+        assert!(
+            decompressed.contains(":root"),
+            "Decompressed CSS should contain :root"
+        );
+        assert!(
+            decompressed.contains(".header"),
+            "Decompressed CSS should contain .header class"
+        );
+    }
+
+    /// Test that Cache-Control headers are present
+    #[tokio::test]
+    async fn test_cache_control_headers_present() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/css/style.css")
+            .reply(&filter)
+            .await;
+
+        assert_eq!(response.status(), 200);
+
+        let cache_control = response.headers().get("cache-control")
+            .expect("Response should have Cache-Control header");
+        let cache_str = cache_control.to_str().unwrap();
+
+        assert!(
+            cache_str.contains("public"),
+            "Cache-Control should include 'public'"
+        );
+        assert!(
+            cache_str.contains("max-age"),
+            "Cache-Control should include 'max-age'"
+        );
+    }
+
+    /// Test path traversal attempts are blocked
+    #[tokio::test]
+    async fn test_path_traversal_blocked() {
+        use mirdb::homepage::{routes, AppState};
+
+        let state = Arc::new(AppState::default());
+        let filter = routes(state);
+
+        // Try path traversal attack
+        let response = warp::test::request()
+            .method("GET")
+            .path("/static/../../../etc/passwd")
+            .reply(&filter)
+            .await;
+
+        // Should return 404, not the file contents
+        assert_eq!(
+            response.status(),
+            404,
+            "Path traversal attempts should return 404"
+        );
+    }
+}
