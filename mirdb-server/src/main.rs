@@ -55,7 +55,6 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
-mod homepage;
 
 pub struct Server {
     store: Arc<Store>,
