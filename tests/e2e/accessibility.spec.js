@@ -13,7 +13,15 @@
  */
 
 const { test, expect } = require('@playwright/test');
-const { waitForPageLoad, VIEWPORTS } = require('./test-utils');
+const {
+  waitForPageLoad,
+  VIEWPORTS,
+  measureContrastRatio,
+  calculateContrastRatio,
+  getEffectiveBackgroundColor,
+  WCAG_AA_NORMAL_TEXT,
+  WCAG_AA_LARGE_TEXT,
+} = require('./test-utils');
 
 test.describe('Accessibility - Keyboard Navigation', () => {
   test.beforeEach(async ({ page }) => {
@@ -275,6 +283,300 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     // Main content should be in viewport
     const mainContent = page.locator('#main-content');
     await expect(mainContent).toBeInViewport();
+  });
+});
+
+/**
+ * Accessibility - Color Contrast Tests
+ * Owner: Scenario 9 - Accessibility - Color Contrast
+ *
+ * Test cases:
+ * - Body text meets 4.5:1 contrast ratio (WCAG AA)
+ * - Heading text meets contrast requirements (3:1 for large text)
+ * - CTA button text contrast is at least 4.5:1
+ * - Code block text has sufficient contrast
+ * - Focus indicators have sufficient contrast
+ */
+test.describe('Accessibility - Color Contrast', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForPageLoad(page);
+  });
+
+  test('body text meets WCAG AA contrast ratio of 4.5:1', async ({ page }) => {
+    // Test body text in different sections
+    const bodyTextSelectors = [
+      '.hero__tagline',
+      '.feature-description',
+    ];
+
+    for (const selector of bodyTextSelectors) {
+      const element = page.locator(selector).first();
+      const isVisible = await element.isVisible();
+
+      if (isVisible) {
+        const { ratio, foreground, background } = await measureContrastRatio(page, element);
+
+        expect(
+          ratio,
+          `${selector} should have contrast ratio >= ${WCAG_AA_NORMAL_TEXT}:1, got ${ratio.toFixed(2)}:1 (fg: ${foreground}, bg: ${background})`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT);
+      }
+    }
+  });
+
+  test('heading text meets WCAG AA contrast ratio for large text (3:1)', async ({ page }) => {
+    // Test headings - large text can use 3:1 ratio per WCAG AA
+    const headingSelectors = [
+      'h1',
+      'h2',
+      'h3',
+    ];
+
+    for (const selector of headingSelectors) {
+      const elements = page.locator(selector);
+      const count = await elements.count();
+
+      for (let i = 0; i < count; i++) {
+        const element = elements.nth(i);
+        const isVisible = await element.isVisible();
+
+        if (isVisible) {
+          const { ratio, foreground, background } = await measureContrastRatio(page, element);
+
+          expect(
+            ratio,
+            `${selector}[${i}] should have contrast ratio >= ${WCAG_AA_LARGE_TEXT}:1 for large text, got ${ratio.toFixed(2)}:1 (fg: ${foreground}, bg: ${background})`
+          ).toBeGreaterThanOrEqual(WCAG_AA_LARGE_TEXT);
+        }
+      }
+    }
+  });
+
+  test('CTA button text meets WCAG AA contrast ratio of 4.5:1', async ({ page }) => {
+    // Test CTA button
+    const ctaButton = page.locator('.hero__cta');
+    await expect(ctaButton).toBeVisible();
+
+    const { ratio, foreground, background } = await measureContrastRatio(page, ctaButton);
+
+    expect(
+      ratio,
+      `CTA button should have contrast ratio >= ${WCAG_AA_NORMAL_TEXT}:1, got ${ratio.toFixed(2)}:1 (fg: ${foreground}, bg: ${background})`
+    ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT);
+  });
+
+  test('code block text has sufficient contrast', async ({ page }) => {
+    // Scroll to quickstart section
+    await page.locator('#quickstart').scrollIntoViewIfNeeded();
+
+    // Test main code block text
+    const codeBlock = page.locator('.code-block').first();
+    await expect(codeBlock).toBeVisible();
+
+    const { ratio, foreground, background } = await measureContrastRatio(page, codeBlock);
+
+    expect(
+      ratio,
+      `Code block should have contrast ratio >= ${WCAG_AA_NORMAL_TEXT}:1, got ${ratio.toFixed(2)}:1 (fg: ${foreground}, bg: ${background})`
+    ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT);
+
+    // Test syntax highlighting elements
+    const syntaxElements = [
+      { selector: '.code-comment', description: 'code comment' },
+      { selector: '.code-keyword', description: 'code keyword' },
+      { selector: '.code-number', description: 'code number' },
+      { selector: '.code-response', description: 'code response' },
+    ];
+
+    for (const { selector, description } of syntaxElements) {
+      const element = page.locator(selector).first();
+      const isVisible = await element.isVisible().catch(() => false);
+
+      if (isVisible) {
+        const result = await measureContrastRatio(page, element);
+
+        expect(
+          result.ratio,
+          `${description} should have contrast ratio >= ${WCAG_AA_NORMAL_TEXT}:1, got ${result.ratio.toFixed(2)}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT);
+      }
+    }
+  });
+
+  test('focus indicators have sufficient contrast against all backgrounds', async ({ page }) => {
+    // Test focus indicator visibility on various elements
+    // Note: Skip-link has its own solid background, so we check outline against page background
+    const elementsToTest = [
+      { selector: '.nav-menu a', background: 'navigation' },
+      { selector: '.hero__cta', background: 'hero section' },
+      { selector: '.copy-button', background: 'code block' },
+    ];
+
+    for (const { selector, background } of elementsToTest) {
+      const element = page.locator(selector).first();
+      const isVisible = await element.isVisible().catch(() => false);
+
+      if (isVisible) {
+        // Ensure element is in view first
+        await element.scrollIntoViewIfNeeded();
+
+        // Focus the element
+        await element.focus();
+
+        // Get focus outline styles
+        const focusStyles = await element.evaluate((el) => {
+          const styles = window.getComputedStyle(el);
+          return {
+            outlineStyle: styles.outlineStyle,
+            outlineWidth: styles.outlineWidth,
+            outlineColor: styles.outlineColor,
+            outlineOffset: styles.outlineOffset,
+          };
+        });
+
+        // Verify focus indicator is visible
+        const hasVisibleOutline =
+          focusStyles.outlineStyle !== 'none' &&
+          focusStyles.outlineWidth !== '0px';
+
+        expect(
+          hasVisibleOutline,
+          `${selector} should have visible focus indicator on ${background}`
+        ).toBe(true);
+
+        // If outline is visible, check contrast of outline color against background
+        // We need to get the background of the area behind the element (parent or page)
+        if (hasVisibleOutline && focusStyles.outlineColor !== 'rgba(0, 0, 0, 0)') {
+          const bgColor = await element.evaluate((el) => {
+            // Get background color from parent element or page
+            let parent = el.parentElement;
+            while (parent) {
+              const style = window.getComputedStyle(parent);
+              const bg = style.backgroundColor;
+              if (bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+                return bg;
+              }
+              parent = parent.parentElement;
+            }
+            return 'rgb(13, 17, 23)'; // Default dark theme background
+          });
+          const outlineRatio = calculateContrastRatio(focusStyles.outlineColor, bgColor);
+
+          // Focus indicators should have at least 3:1 contrast per WCAG 2.1 Success Criterion 1.4.11
+          expect(
+            outlineRatio,
+            `${selector} focus outline should have contrast ratio >= 3:1 against ${background}, got ${outlineRatio.toFixed(2)}:1`
+          ).toBeGreaterThanOrEqual(3.0);
+        }
+      }
+    }
+
+    // Skip link has its own solid background (accent blue) with dark text
+    // We verify its text/background contrast separately since it's a special element
+    // that provides its own background color
+    const skipLink = page.locator('.skip-link');
+
+    // Get the skip-link's own background and text colors directly
+    const skipLinkColors = await skipLink.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return {
+        color: style.color,
+        backgroundColor: style.backgroundColor,
+      };
+    });
+
+    // Calculate contrast between skip-link's text and its own background
+    const skipLinkRatio = calculateContrastRatio(
+      skipLinkColors.color,
+      skipLinkColors.backgroundColor
+    );
+
+    expect(
+      skipLinkRatio,
+      `Skip link text should have good contrast against its own background (${skipLinkColors.color} vs ${skipLinkColors.backgroundColor})`
+    ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT);
+  });
+
+  test('navigation link text has sufficient contrast', async ({ page }) => {
+    // Test navigation links
+    const navLinks = page.locator('.nav-menu a');
+    const count = await navLinks.count();
+
+    for (let i = 0; i < count; i++) {
+      const link = navLinks.nth(i);
+      const { ratio, foreground, background } = await measureContrastRatio(page, link);
+
+      expect(
+        ratio,
+        `Navigation link ${i} should have contrast ratio >= ${WCAG_AA_NORMAL_TEXT}:1, got ${ratio.toFixed(2)}:1`
+      ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT);
+    }
+  });
+
+  test('feature card text has sufficient contrast', async ({ page }) => {
+    // Scroll to features section
+    await page.locator('#features').scrollIntoViewIfNeeded();
+
+    // Test feature titles
+    const featureTitles = page.locator('.feature-title');
+    const titleCount = await featureTitles.count();
+
+    for (let i = 0; i < titleCount; i++) {
+      const title = featureTitles.nth(i);
+      const { ratio } = await measureContrastRatio(page, title);
+
+      expect(
+        ratio,
+        `Feature title ${i} should have contrast ratio >= ${WCAG_AA_LARGE_TEXT}:1, got ${ratio.toFixed(2)}:1`
+      ).toBeGreaterThanOrEqual(WCAG_AA_LARGE_TEXT);
+    }
+
+    // Test feature descriptions
+    const featureDescriptions = page.locator('.feature-description');
+    const descCount = await featureDescriptions.count();
+
+    for (let i = 0; i < descCount; i++) {
+      const desc = featureDescriptions.nth(i);
+      const { ratio } = await measureContrastRatio(page, desc);
+
+      expect(
+        ratio,
+        `Feature description ${i} should have contrast ratio >= ${WCAG_AA_NORMAL_TEXT}:1, got ${ratio.toFixed(2)}:1`
+      ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT);
+    }
+  });
+
+  test('status section text has sufficient contrast', async ({ page }) => {
+    // Scroll to status section
+    await page.locator('#status').scrollIntoViewIfNeeded();
+
+    // Test feature checklist items
+    const featureNames = page.locator('.feature-name');
+    const count = await featureNames.count();
+
+    for (let i = 0; i < count; i++) {
+      const name = featureNames.nth(i);
+      const { ratio } = await measureContrastRatio(page, name);
+
+      expect(
+        ratio,
+        `Status feature name ${i} should have contrast ratio >= ${WCAG_AA_NORMAL_TEXT}:1, got ${ratio.toFixed(2)}:1`
+      ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT);
+    }
+
+    // Test badge if visible
+    const badge = page.locator('.badge');
+    const badgeVisible = await badge.isVisible().catch(() => false);
+
+    if (badgeVisible) {
+      const { ratio } = await measureContrastRatio(page, badge);
+
+      expect(
+        ratio,
+        `Status badge should have contrast ratio >= ${WCAG_AA_NORMAL_TEXT}:1, got ${ratio.toFixed(2)}:1`
+      ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT);
+    }
   });
 });
 
