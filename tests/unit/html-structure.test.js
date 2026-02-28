@@ -35,14 +35,35 @@ describe('HTML Structure Tests', () => {
       expect(header).not.toBeNull();
     });
 
+    test('header should contain navigation element', () => {
+      const header = document.querySelector('header');
+      expect(header).not.toBeNull();
+      const nav = header.querySelector('nav');
+      expect(nav).not.toBeNull();
+    });
+
     test('should have a semantic main element', () => {
       const main = document.querySelector('main');
       expect(main).not.toBeNull();
     });
 
+    test('main element should contain primary content sections', () => {
+      const main = document.querySelector('main');
+      expect(main).not.toBeNull();
+      // Main should have sections for content
+      const sections = main.querySelectorAll('section');
+      expect(sections.length).toBeGreaterThan(0);
+    });
+
     test('should have exactly one h1 element', () => {
       const h1Elements = document.querySelectorAll('h1');
       expect(h1Elements.length).toBe(1);
+    });
+
+    test('h1 element should contain MirDB branding', () => {
+      const h1 = document.querySelector('h1');
+      expect(h1).not.toBeNull();
+      expect(h1.textContent.toLowerCase()).toContain('mirdb');
     });
 
     test('should have proper heading hierarchy', () => {
@@ -68,6 +89,16 @@ describe('HTML Structure Tests', () => {
       const title = document.querySelector('title');
       expect(title).not.toBeNull();
       expect(title.textContent.toLowerCase()).toContain('mirdb');
+    });
+
+    test('page title should be descriptive', () => {
+      const title = document.querySelector('title');
+      expect(title).not.toBeNull();
+      // Title should be more than just "MirDB" - should be descriptive
+      expect(title.textContent.length).toBeGreaterThan(5);
+      // Should describe what MirDB is
+      const titleText = title.textContent.toLowerCase();
+      expect(titleText).toMatch(/(persistent|key-value|store|database)/i);
     });
   });
 
