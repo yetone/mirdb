@@ -7,4 +7,568 @@
  * grid adjustments per viewport
  */
 
-/* Responsive styles will be implemented by Scenario 6 */
+/* ============================================
+   CSS Variables for Breakpoints
+   ============================================ */
+:root {
+  --breakpoint-mobile: 375px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-large: 1920px;
+
+  /* Touch target minimum size (WCAG 2.5.5) */
+  --touch-target-min: 44px;
+}
+
+/* ============================================
+   Base Responsive Utilities
+   ============================================ */
+
+/* Ensure no horizontal scroll on any viewport */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Container responsive padding */
+.container {
+  width: 100%;
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+}
+
+/* ============================================
+   DESKTOP STYLES (1024px and up)
+   Default styles - no media query needed for base desktop
+   ============================================ */
+
+/* Large Desktop (1920px+) */
+@media (min-width: 1920px) {
+  .container {
+    padding-left: var(--spacing-8);
+    padding-right: var(--spacing-8);
+  }
+
+  .hero-title {
+    font-size: calc(var(--font-size-5xl) * 1.2);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+/* Desktop (1024px to 1919px) */
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
+  }
+
+  /* Navigation - full display */
+  .mobile-menu-toggle {
+    display: none;
+  }
+
+  .header-nav {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    background: transparent;
+    padding: 0;
+    gap: var(--spacing-6);
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    border-bottom: none;
+  }
+
+  /* Features grid - 3 columns on desktop */
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Tech stack grid - 4 columns */
+  .tech-stack-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Status container - side by side */
+  .status-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Footer - horizontal layout */
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+/* ============================================
+   TABLET STYLES (768px to 1023px)
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
+  }
+
+  /* Navigation - collapsed on tablet */
+  .mobile-menu-toggle {
+    display: flex;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+
+  .header-nav {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: rgba(13, 17, 23, 0.98);
+    padding: var(--spacing-6);
+    gap: var(--spacing-4);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header-nav.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .header-nav a {
+    padding: var(--spacing-3) var(--spacing-4);
+    text-align: center;
+    font-size: var(--font-size-lg);
+    min-height: var(--touch-target-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hero section adjustments */
+  .hero-title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* Features grid - 2 columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-4);
+  }
+
+  /* Tech stack grid - 2 columns */
+  .tech-stack-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-4);
+  }
+
+  /* Status container - side by side or stacked based on content */
+  .status-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-6);
+  }
+
+  /* Quick start steps */
+  .quickstart-step {
+    padding: var(--spacing-5);
+  }
+
+  /* Footer - 3 column grid */
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-6);
+    text-align: center;
+  }
+
+  .footer-section {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   MOBILE STYLES (up to 767px)
+   ============================================ */
+@media (max-width: 767px) {
+  /* Container - tighter padding on mobile */
+  .container {
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
+
+  /* Section padding reduced */
+  section {
+    padding: var(--spacing-10) 0;
+  }
+
+  /* Navigation - hamburger menu */
+  .mobile-menu-toggle {
+    display: flex;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+
+  .header-nav {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: rgba(13, 17, 23, 0.98);
+    padding: var(--spacing-6);
+    gap: var(--spacing-4);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header-nav.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .header-nav a {
+    padding: var(--spacing-3) var(--spacing-4);
+    text-align: center;
+    font-size: var(--font-size-lg);
+    min-height: var(--touch-target-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hero section - mobile optimized */
+  #hero {
+    min-height: calc(100vh - var(--header-height));
+    padding-top: var(--spacing-8);
+    padding-bottom: var(--spacing-8);
+  }
+
+  .hero-logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: var(--spacing-6);
+  }
+
+  .hero-title {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-6);
+    padding: 0 var(--spacing-2);
+  }
+
+  .hero-cta {
+    padding: var(--spacing-3) var(--spacing-5);
+    font-size: var(--font-size-base);
+    min-height: var(--touch-target-min);
+  }
+
+  /* Section headers */
+  .section-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .section-description {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-2);
+  }
+
+  /* Features grid - single column on mobile */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+
+  .feature-card {
+    padding: var(--spacing-5);
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    font-size: var(--font-size-xl);
+  }
+
+  /* Status container - single column */
+  .status-container {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+
+  .status-group {
+    padding: var(--spacing-5);
+  }
+
+  .status-item {
+    min-height: var(--touch-target-min);
+  }
+
+  /* Tech stack grid - single column */
+  .tech-stack-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+
+  .tech-card {
+    padding: var(--spacing-5);
+  }
+
+  .tech-icon {
+    width: 56px;
+    height: 56px;
+    font-size: var(--font-size-2xl);
+  }
+
+  /* Quick start section */
+  .quickstart-steps {
+    gap: var(--spacing-4);
+  }
+
+  .quickstart-step {
+    flex-direction: column;
+    padding: var(--spacing-5);
+  }
+
+  .step-number {
+    width: 36px;
+    height: 36px;
+    font-size: var(--font-size-base);
+    align-self: flex-start;
+  }
+
+  .step-title {
+    font-size: var(--font-size-base);
+  }
+
+  /* Configuration section */
+  .quickstart-config {
+    padding: var(--spacing-5);
+  }
+
+  .config-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+    min-height: var(--touch-target-min);
+  }
+
+  .config-note {
+    margin-left: 0;
+    margin-top: var(--spacing-1);
+  }
+
+  /* Footer - stacked layout */
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-8);
+  }
+
+  .footer-section {
+    width: 100%;
+  }
+
+  .footer-links {
+    align-items: center;
+  }
+
+  .footer-links a {
+    min-height: var(--touch-target-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-bottom {
+    padding-top: var(--spacing-6);
+    margin-top: var(--spacing-6);
+  }
+}
+
+/* ============================================
+   SMALL MOBILE STYLES (375px and below)
+   ============================================ */
+@media (max-width: 375px) {
+  .container {
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+  }
+
+  .hero-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-sm);
+  }
+
+  .section-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .hero-logo {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* ============================================
+   CODE BLOCK RESPONSIVE STYLES
+   ============================================ */
+
+/* Code blocks should be horizontally scrollable on mobile */
+.code-block {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.code-block pre {
+  min-width: 0;
+  white-space: pre;
+}
+
+.code-block-container {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Mobile code block adjustments */
+@media (max-width: 767px) {
+  .code-block {
+    padding: var(--spacing-3);
+    font-size: var(--font-size-xs);
+  }
+
+  .code-block-header {
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .code-block-title {
+    font-size: var(--font-size-xs);
+  }
+
+  .copy-btn {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+    padding: var(--spacing-2);
+  }
+
+  .copy-btn .copy-text {
+    display: none;
+  }
+
+  /* Usage examples layout */
+  .usage-examples {
+    gap: var(--spacing-8);
+  }
+
+  .command-description {
+    padding: var(--spacing-3);
+  }
+
+  .command-description h4 {
+    font-size: var(--font-size-sm);
+  }
+
+  .command-description p {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* ============================================
+   TOUCH TARGET ACCESSIBILITY
+   Ensure all interactive elements meet minimum touch target size
+   ============================================ */
+
+/* Buttons and interactive elements */
+button,
+.btn,
+[role="button"] {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+/* Links in navigation and footer */
+@media (max-width: 1023px) {
+  .header-nav a,
+  .footer-links a {
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Hero CTA button */
+.hero-cta {
+  min-height: var(--touch-target-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-6);
+  background-color: var(--color-accent-primary);
+  color: white;
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.hero-cta:hover {
+  background-color: var(--color-accent-hover);
+  color: white;
+}
+
+.hero-cta svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .mobile-menu-toggle,
+  .header-nav {
+    display: none;
+  }
+
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-8) 0;
+  }
+
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

@@ -465,7 +465,7 @@ footer {
     border-bottom: 1px solid var(--color-border);
   }
 
-  .header-nav.open {
+  .header-nav.is-open {
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
