@@ -395,7 +395,184 @@
 }
 
 /* ============================================
-   SCENARIO 5: Documentation (placeholder)
+   SCENARIO 5: Quick Start and Documentation
+   Owner: Scenario 5 - Quick Start and Documentation
    ============================================ */
 
-/* Documentation section styles will be added by Scenario 5 */
+/* Quick Start Section */
+#quickstart {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Quick Start Steps Container */
+.quickstart-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  max-width: 800px;
+  margin: 0 auto var(--spacing-8);
+}
+
+/* Individual Quick Start Step */
+.quickstart-step {
+  display: flex;
+  gap: var(--spacing-4);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+}
+
+/* Step Number Circle */
+.step-number {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-accent-primary);
+  color: var(--color-bg-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-full);
+}
+
+/* Step Content */
+.step-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.step-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-2);
+}
+
+.step-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-4);
+}
+
+/* Quick Start Code Blocks (inherit from Scenario 3 styles) */
+.quickstart-step .code-block-container {
+  margin-bottom: 0;
+}
+
+/* Default Configuration Section */
+.quickstart-config {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+}
+
+.config-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-2);
+}
+
+.config-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-4);
+}
+
+.config-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.config-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.config-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.config-value {
+  background-color: var(--color-bg-code);
+  color: var(--color-accent-primary);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+}
+
+.config-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+
+/* Tech Stack Section */
+#tech-stack {
+  background-color: var(--color-bg-primary);
+}
+
+/* Tech Stack Grid */
+.tech-stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-8);
+}
+
+/* Tech Card */
+.tech-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  text-align: center;
+  transition: all var(--transition-normal);
+}
+
+.tech-card:hover {
+  border-color: var(--color-accent-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.tech-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-tertiary);
+  border-radius: var(--radius-lg);
+  margin: 0 auto var(--spacing-4);
+  font-size: var(--font-size-3xl);
+}
+
+.tech-name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-2);
+}
+
+.tech-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: 0;
+}

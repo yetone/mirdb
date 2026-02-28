@@ -352,9 +352,143 @@ test.describe('Usage Examples Section', () => {
   });
 });
 
-// Placeholder for Scenario 5: Quick Start Tests
-test.describe.skip('Quick Start and Documentation', () => {
-  // To be implemented by Scenario 5
+/**
+ * Scenario 5: Quick Start and Documentation Tests
+ * Tests REQ-7, REQ-8, REQ-9, and Story 5
+ */
+test.describe('Quick Start and Documentation', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  // Test Case 1: Check for quick start section
+  test('TC1: Section with id="quickstart" exists', async ({ page }) => {
+    const quickstartSection = page.locator('#quickstart');
+    await expect(quickstartSection).toBeVisible();
+  });
+
+  test('TC1 alt: Quick Start heading exists', async ({ page }) => {
+    const quickstartHeading = page.locator('#quickstart .section-title');
+    await expect(quickstartHeading).toHaveText('Quick Start');
+  });
+
+  // Test Case 2: Check for cargo/rust installation command
+  test('TC2: Code block contains cargo command for building/running', async ({ page }) => {
+    const quickstartSection = page.locator('#quickstart');
+    const codeBlocks = quickstartSection.locator('.code-block code');
+
+    // Get all code block text content
+    const allCodeContent = await codeBlocks.allTextContents();
+    const combinedContent = allCodeContent.join(' ');
+
+    // Check for cargo command
+    expect(combinedContent).toContain('cargo');
+  });
+
+  // Test Case 3: Check for git clone command
+  test('TC3: Code block contains git clone with repository URL', async ({ page }) => {
+    const quickstartSection = page.locator('#quickstart');
+    const codeBlocks = quickstartSection.locator('.code-block code');
+
+    // Get all code block text content
+    const allCodeContent = await codeBlocks.allTextContents();
+    const combinedContent = allCodeContent.join(' ');
+
+    // Check for git clone command
+    expect(combinedContent).toContain('git clone');
+    // Check for repository URL
+    expect(combinedContent).toMatch(/github\.com.*mirdb/i);
+  });
+
+  // Test Case 4: Check for default port mention
+  test('TC4: Text mentions port 12333 as default', async ({ page }) => {
+    const quickstartSection = page.locator('#quickstart');
+
+    // Check for port 12333 mention
+    const portMention = quickstartSection.getByText('12333');
+    await expect(portMention).toBeVisible();
+  });
+
+  // Test Case 5: Check for work directory mention
+  test('TC5: Text mentions /tmp/mirdb or work directory configuration', async ({ page }) => {
+    const quickstartSection = page.locator('#quickstart');
+
+    // Check for work directory mention
+    const workDirMention = quickstartSection.getByText('/tmp/mirdb');
+    await expect(workDirMention).toBeVisible();
+  });
+
+  // Test Case 6: Check for tech stack section
+  test('TC6: Section displaying technologies used exists', async ({ page }) => {
+    const techStackSection = page.locator('#tech-stack');
+    await expect(techStackSection).toBeVisible();
+
+    // Check for Tech Stack heading
+    const techStackHeading = techStackSection.locator('.section-title');
+    await expect(techStackHeading).toHaveText('Tech Stack');
+  });
+
+  // Test Case 7: Check for Rust mention in tech stack
+  test('TC7: Rust is listed as a technology', async ({ page }) => {
+    const techStackSection = page.locator('#tech-stack');
+
+    // Check for Rust mention in tech stack
+    const rustMention = techStackSection.getByText('Rust', { exact: false });
+    await expect(rustMention.first()).toBeVisible();
+  });
+
+  // Test Case 8: Check for Tokio mention in tech stack
+  test('TC8: Tokio is listed as a technology', async ({ page }) => {
+    const techStackSection = page.locator('#tech-stack');
+
+    // Check for Tokio mention in tech stack
+    const tokioMention = techStackSection.getByText('Tokio', { exact: false });
+    await expect(tokioMention.first()).toBeVisible();
+  });
+
+  // Test Case 9: Check for LSM tree mention in tech stack
+  test('TC9: LSM tree or Log-Structured Merge is mentioned', async ({ page }) => {
+    const techStackSection = page.locator('#tech-stack');
+
+    // Check for LSM tree mention
+    const lsmMention = techStackSection.getByText(/LSM|Log-Structured Merge/i);
+    await expect(lsmMention.first()).toBeVisible();
+  });
+
+  // Test Case 10: Verify quick start code blocks are copyable
+  test('TC10: Copy button exists for quick start code blocks', async ({ page }) => {
+    const quickstartSection = page.locator('#quickstart');
+
+    // Check for copy buttons
+    const copyButtons = quickstartSection.locator('.copy-btn');
+    const buttonCount = await copyButtons.count();
+
+    // Should have at least one copy button
+    expect(buttonCount).toBeGreaterThan(0);
+
+    // Verify the first copy button is visible
+    await expect(copyButtons.first()).toBeVisible();
+  });
+
+  // Additional test: Verify copy functionality works in quick start section
+  test('TC10 alt: Copy button in quick start section is functional', async ({ page, context }) => {
+    // Grant clipboard permissions
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+
+    const quickstartSection = page.locator('#quickstart');
+    const copyButton = quickstartSection.locator('.copy-btn').first();
+
+    // Click the copy button
+    await copyButton.click();
+
+    // Check clipboard content contains git clone or cargo
+    const clipboardContent = await page.evaluate(async () => {
+      return await navigator.clipboard.readText();
+    });
+
+    // Clipboard should contain either git clone or cargo command
+    expect(clipboardContent).toMatch(/git clone|cargo/);
+  });
 });
 
 // Placeholder for Scenario 8: Performance Tests
