@@ -1,12 +1,6 @@
 /target
 **/*.rs.bk
 .something/
-
-# Node.js
 node_modules/
-npm-debug.log*
-
-# Playwright
-test-results/
 playwright-report/
-playwright/.cache/
+test-results/

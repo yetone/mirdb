@@ -3,7 +3,106 @@
  * Owner: Scenarios 6 & 7
  *
  * Purpose: Media queries for responsive design
- * (Stub file - to be implemented by Scenarios 6 & 7)
  */
 
-/* Responsive styles will be added by Scenarios 6 & 7 */
+/* Tablet styles (768px - 1023px) */
+@media (max-width: 1023px) {
+  :root {
+    --font-size-3xl: 2rem;
+    --font-size-2xl: 1.75rem;
+  }
+
+  section {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile styles (375px - 767px) */
+@media (max-width: 767px) {
+  :root {
+    --font-size-3xl: 1.75rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-xl: 1.25rem;
+  }
+
+  section {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--color-bg-secondary);
+    flex-direction: column;
+    padding: var(--spacing-md);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform var(--transition-base), opacity var(--transition-base), visibility var(--transition-base);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav-menu.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-menu li {
+    width: 100%;
+    text-align: center;
+    padding: var(--spacing-sm) 0;
+  }
+
+  .nav-menu a {
+    display: block;
+    padding: var(--spacing-sm);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .code-block {
+    font-size: var(--font-size-sm);
+    overflow-x: auto;
+  }
+
+  .code-block-wrapper {
+    overflow-x: auto;
+  }
+
+  .quickstart-content {
+    gap: var(--spacing-lg);
+  }
+
+  .footer-nav {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}
+
+/* Ensure tap targets are at least 44px */
+@media (max-width: 767px) {
+  button,
+  a,
+  .cta-button,
+  .copy-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

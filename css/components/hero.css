@@ -8,72 +8,57 @@
 .hero {
   min-height: 80vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: var(--spacing-3xl) var(--spacing-md);
   background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+  padding: var(--spacing-3xl) var(--spacing-xl);
 }
 
-.hero__logo {
-  width: 200px;
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-logo {
+  width: 150px;
   height: auto;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
   border-radius: var(--border-radius-lg);
 }
 
-.hero__title {
+.hero-title {
   font-size: var(--font-size-3xl);
-  font-weight: 700;
   margin-bottom: var(--spacing-md);
-  color: var(--color-text-primary);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.hero__tagline {
+.hero-tagline {
   font-size: var(--font-size-lg);
   color: var(--color-text-secondary);
-  max-width: 600px;
   margin-bottom: var(--spacing-xl);
-  line-height: var(--line-height-base);
 }
 
-.hero__cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.cta-button {
+  display: inline-block;
   padding: var(--spacing-md) var(--spacing-xl);
-  font-size: var(--font-size-lg);
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
   font-weight: 600;
-  color: var(--color-bg-primary);
-  background-color: var(--color-accent);
+  font-size: var(--font-size-base);
   border-radius: var(--border-radius);
-  text-decoration: none;
-  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
-  min-height: 48px;
-  min-width: 160px;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 
-.hero__cta:hover {
-  background-color: var(--color-accent-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
-  text-decoration: none;
+.cta-button:hover {
+  background: var(--color-accent-hover);
   color: var(--color-bg-primary);
+  transform: translateY(-2px);
 }
 
-.hero__cta:focus {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-  background-color: var(--color-accent-focus);
-}
-
-.hero__cta:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-  background-color: var(--color-accent-focus);
-}
-
-.hero__cta:active {
-  transform: translateY(0);
+.cta-button:focus-visible {
+  outline: 2px solid var(--color-accent-hover);
+  outline-offset: 4px;
 }

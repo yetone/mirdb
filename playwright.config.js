@@ -1,10 +1,12 @@
-// @ts-check
-const { defineConfig, devices } = require('@playwright/test');
-
 /**
  * Playwright Configuration
+ * Owner: First Builder
+ *
  * Purpose: Configure Playwright for e2e testing
  */
+
+const { defineConfig, devices } = require('@playwright/test');
+
 module.exports = defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
@@ -17,7 +19,6 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
-
   projects: [
     {
       name: 'chromium',
@@ -32,15 +33,14 @@ module.exports = defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
     {
-      name: 'Mobile Chrome',
+      name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
     },
     {
-      name: 'Mobile Safari',
+      name: 'mobile-safari',
       use: { ...devices['iPhone 12'] },
     },
   ],
-
   webServer: {
     command: 'npx serve . -l 3000',
     url: 'http://localhost:3000',

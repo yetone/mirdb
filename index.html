@@ -6,6 +6,11 @@
   <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
   <title>MirDB - Persistent Key-Value Store</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components/hero.css">
+  <link rel="stylesheet" href="css/components/features.css">
+  <link rel="stylesheet" href="css/components/quickstart.css">
+  <link rel="stylesheet" href="css/components/status.css">
+  <link rel="stylesheet" href="css/components/navigation.css">
 </head>
 <body>
   <!-- Skip Navigation Link for Accessibility -->
@@ -29,7 +34,7 @@
       >
       <h1 id="hero-title" class="hero__title">MirDB</h1>
       <p class="hero__tagline">A Persistent Key-Value Store with Memcached Protocol</p>
-      <a href="#quickstart" class="hero__cta" role="button">Get Started</a>
+      <a href="#quickstart" class="hero__cta cta-button" role="button">Get Started</a>
     </section>
 
     <!-- Features Section -->
@@ -41,11 +46,50 @@
     </section>
 
     <!-- Quick Start Section -->
-    <section id="quickstart" aria-labelledby="quickstart-title">
-      <!-- Quick Start will be implemented by Scenario 3 -->
-      <div class="container">
-        <h2 id="quickstart-title">Quick Start</h2>
-        <!-- Content to be added by Scenario 3 -->
+    <section id="quickstart" class="quickstart" aria-labelledby="quickstart-title">
+      <h2 id="quickstart-title" class="section-title">Quick Start</h2>
+      <div class="quickstart-content">
+        <div class="quickstart-install">
+          <h3 class="quickstart-subtitle">Installation</h3>
+          <div class="code-block-wrapper">
+            <pre class="code-block"><code id="install-code">cargo install mirdb-server</code></pre>
+            <button class="copy-button" aria-label="Copy installation command to clipboard" data-target="install-code">
+              <span class="copy-icon" aria-hidden="true">📋</span>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="quickstart-usage">
+          <h3 class="quickstart-subtitle">Usage Example</h3>
+          <div class="code-block-wrapper">
+            <pre class="code-block"><code id="usage-code"><span class="code-comment"># Start the server</span>
+mirdb-server
+
+<span class="code-comment"># Connect with telnet or any memcached client</span>
+telnet localhost 12333
+
+<span class="code-comment"># Set a value</span>
+<span class="code-keyword">set</span> mykey <span class="code-number">0</span> <span class="code-number">0</span> <span class="code-number">5</span>
+hello
+<span class="code-response">STORED</span>
+
+<span class="code-comment"># Get the value</span>
+<span class="code-keyword">get</span> mykey
+<span class="code-response">VALUE mykey 0 5
+hello
+END</span></code></pre>
+            <button class="copy-button" aria-label="Copy usage example to clipboard" data-target="usage-code">
+              <span class="copy-icon" aria-hidden="true">📋</span>
+              <span class="copy-text">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="quickstart-demo">
+          <h3 class="quickstart-subtitle">Demo</h3>
+          <img src="assets/usage.gif" alt="MirDB usage demonstration showing set and get operations in terminal" class="usage-gif" loading="lazy">
+        </div>
       </div>
     </section>
 

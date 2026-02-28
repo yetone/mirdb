@@ -1,5 +1,7 @@
 /**
  * MirDB Homepage - Base Styles
+ * Owner: First Builder
+ *
  * Purpose: CSS custom properties, reset, and base styles
  */
 
@@ -13,45 +15,48 @@
   --color-text-secondary: #8b949e;
   --color-text-muted: #6e7681;
   --color-accent: #58a6ff;
-  --color-accent-hover: #79b8ff;
-  --color-accent-focus: #388bfd;
-  --color-border: #30363d;
+  --color-accent-hover: #79c0ff;
   --color-success: #3fb950;
   --color-warning: #d29922;
+  --color-border: #30363d;
+
+  /* Code Syntax Colors - WCAG AA compliant */
+  --color-code-bg: #161b22;
+  --color-code-text: #e6edf3;
+  --color-code-comment: #8b949e;
+  --color-code-keyword: #ff7b72;
+  --color-code-number: #79c0ff;
+  --color-code-response: #7ee787;
 
   /* Typography */
-  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
   --font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   --font-size-base: 16px;
-  --font-size-sm: 14px;
-  --font-size-lg: 18px;
-  --font-size-xl: 24px;
-  --font-size-2xl: 32px;
-  --font-size-3xl: 48px;
-  --line-height-base: 1.5;
+  --font-size-sm: 0.875rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 2.5rem;
+  --line-height-base: 1.6;
   --line-height-tight: 1.25;
 
   /* Spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 48px;
-  --spacing-3xl: 64px;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
 
   /* Layout */
   --max-width: 1200px;
   --border-radius: 6px;
   --border-radius-lg: 12px;
 
-  /* Focus */
-  --focus-outline: 2px solid var(--color-accent);
-  --focus-outline-offset: 2px;
-
   /* Transitions */
   --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
+  --transition-base: 250ms ease;
 }
 
 /* CSS Reset */
@@ -64,38 +69,49 @@
 }
 
 html {
-  font-size: var(--font-size-base);
   scroll-behavior: smooth;
+  font-size: var(--font-size-base);
 }
 
 body {
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family);
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
   color: var(--color-text-primary);
   background-color: var(--color-bg-primary);
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography */
+/* Skip Navigation Link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  z-index: 1000;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+}
+
+/* Base Typography */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
   line-height: var(--line-height-tight);
+  font-weight: 600;
   color: var(--color-text-primary);
 }
 
-h1 {
-  font-size: var(--font-size-3xl);
-}
-
-h2 {
-  font-size: var(--font-size-2xl);
-}
-
-h3 {
-  font-size: var(--font-size-xl);
-}
+h1 { font-size: var(--font-size-3xl); }
+h2 { font-size: var(--font-size-2xl); }
+h3 { font-size: var(--font-size-xl); }
 
 p {
   margin-bottom: var(--spacing-md);
@@ -107,108 +123,55 @@ a {
   transition: color var(--transition-fast);
 }
 
-a:hover {
+a:hover,
+a:focus {
   color: var(--color-accent-hover);
-  text-decoration: underline;
 }
 
 /* Focus States */
-a:focus,
-button:focus,
-input:focus,
-textarea:focus,
-select:focus,
-[tabindex]:focus {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
-a:focus:not(:focus-visible),
-button:focus:not(:focus-visible) {
-  outline: none;
+/* Section Styles */
+section {
+  padding: var(--spacing-3xl) var(--spacing-xl);
 }
 
-a:focus-visible,
-button:focus-visible,
-[tabindex]:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+.section-title {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  font-size: var(--font-size-2xl);
 }
 
-/* Images */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* Lists */
-ul, ol {
-  list-style-position: inside;
-}
-
-/* Code */
-code, pre {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-}
-
-pre {
+/* Footer */
+.footer {
   background-color: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-md);
-  overflow-x: auto;
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-xl);
+  text-align: center;
 }
 
-code {
-  background-color: var(--color-bg-tertiary);
-  padding: 2px 6px;
-  border-radius: 3px;
-}
-
-pre code {
-  background: none;
-  padding: 0;
-}
-
-/* Buttons */
-button {
-  font-family: inherit;
-  font-size: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-}
-
-/* Skip Navigation Link (Accessibility) */
-.skip-link {
-  position: absolute;
-  top: -100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--color-accent);
-  color: var(--color-bg-primary);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius);
-  z-index: 1000;
-  font-weight: 600;
-}
-
-.skip-link:focus {
-  top: var(--spacing-md);
-}
-
-/* Container */
-.container {
+.footer-content {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-md);
 }
 
-/* Section */
-section {
-  padding: var(--spacing-3xl) 0;
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.footer-nav a {
+  color: var(--color-text-secondary);
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus {
+  color: var(--color-accent);
 }
 
 /* Utility Classes */
@@ -224,10 +187,9 @@ section {
   border: 0;
 }
 
-/* Import Component Styles */
-@import url('./components/hero.css');
-@import url('./components/navigation.css');
-@import url('./components/features.css');
-@import url('./components/quickstart.css');
-@import url('./components/status.css');
-@import url('./responsive.css');
+/* Import component styles */
+@import url('components/hero.css');
+@import url('components/features.css');
+@import url('components/quickstart.css');
+@import url('components/status.css');
+@import url('components/navigation.css');

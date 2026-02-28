@@ -8,67 +8,40 @@
 const VIEWPORTS = {
   mobile: { width: 375, height: 667 },
   tablet: { width: 768, height: 1024 },
-  desktop: { width: 1280, height: 800 },
+  desktop: { width: 1024, height: 768 },
 };
 
-/**
- * Wait for page to fully load
- * @param {import('@playwright/test').Page} page
- */
 async function waitForPageLoad(page) {
   await page.waitForLoadState('domcontentloaded');
   await page.waitForLoadState('networkidle');
 }
 
-/**
- * Get computed CSS styles for an element
- * @param {import('@playwright/test').Page} page
- * @param {string} selector
- * @returns {Promise<CSSStyleDeclaration>}
- */
-async function getComputedStyles(page, selector) {
-  return await page.evaluate((sel) => {
-    const element = document.querySelector(sel);
-    if (!element) return null;
-    return window.getComputedStyle(element);
-  }, selector);
-}
-
-/**
- * Check if element has visible focus indicator
- * @param {import('@playwright/test').Page} page
- * @param {string} selector
- * @returns {Promise<boolean>}
- */
-async function hasVisibleFocusIndicator(page, selector) {
-  const element = page.locator(selector);
-  await element.focus();
-
-  const styles = await page.evaluate((sel) => {
-    const el = document.querySelector(sel);
-    if (!el) return null;
+async function checkContrast(page, element) {
+  const styles = await element.evaluate((el) => {
     const computed = window.getComputedStyle(el);
     return {
-      outline: computed.outline,
-      outlineWidth: computed.outlineWidth,
-      outlineStyle: computed.outlineStyle,
-      outlineColor: computed.outlineColor,
-      boxShadow: computed.boxShadow,
+      color: computed.color,
+      backgroundColor: computed.backgroundColor,
     };
-  }, selector);
+  });
+  return styles;
+}
 
-  if (!styles) return false;
-
-  // Check for visible outline or box-shadow
-  const hasOutline = styles.outlineWidth !== '0px' && styles.outlineStyle !== 'none';
-  const hasBoxShadow = styles.boxShadow !== 'none';
-
-  return hasOutline || hasBoxShadow;
+async function getComputedStyles(page, selector) {
+  return await page.locator(selector).evaluate((el) => {
+    const computed = window.getComputedStyle(el);
+    return {
+      color: computed.color,
+      backgroundColor: computed.backgroundColor,
+      fontSize: computed.fontSize,
+      fontWeight: computed.fontWeight,
+    };
+  });
 }
 
 module.exports = {
   VIEWPORTS,
   waitForPageLoad,
+  checkContrast,
   getComputedStyles,
-  hasVisibleFocusIndicator,
 };
