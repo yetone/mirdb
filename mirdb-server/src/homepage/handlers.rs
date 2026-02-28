@@ -17,6 +17,7 @@ use warp::http::Response;
 use warp::path::Tail;
 use warp::Reply;
 
+use super::metrics::MetricsCache;
 use super::state::AppState;
 
 /// Embedded HTML content for the homepage
@@ -89,12 +90,17 @@ pub async fn handle_config(state: Arc<AppState>) -> Result<impl Reply, warp::Rej
     Ok(warp::reply::json(&config))
 }
 
-/// Handle requests to /api/metrics (Scenario 5 will implement)
-pub async fn handle_metrics(_state: Arc<AppState>) -> Result<impl Reply, warp::Rejection> {
-    let metrics = serde_json::json!({
-        "active_connections": 0,
-        "total_keys": 0,
-        "memtable_size": 0
-    });
+/// Handle requests to /api/metrics
+///
+/// REQ-4: Must display basic metrics: number of active connections,
+/// total keys stored, memtable size
+///
+/// Returns JSON response with current server metrics including:
+/// - active_connections: Number of active memcached client connections
+/// - total_keys: Total number of keys stored in the database
+/// - memtable_size: Current memtable size in bytes
+/// - sstable_levels: SSTable level information (as per appendix specification)
+pub async fn handle_metrics(metrics_cache: Arc<MetricsCache>) -> Result<impl Reply, warp::Rejection> {
+    let metrics = metrics_cache.get();
     Ok(warp::reply::json(&metrics))
 }

@@ -57,11 +57,29 @@
         </div>
     </section>
 
-    <!-- Scenario 5: Metrics Section (populated by Scenario 5) -->
+    <!-- Scenario 5: Metrics Section -->
     <section id="metrics" class="metrics">
         <h2>Server Metrics</h2>
         <div id="metrics-grid" class="metrics-grid">
-            <!-- Metrics populated dynamically by Scenario 5 -->
+            <div class="metric-card">
+                <div class="metric-value" id="metric-connections">--</div>
+                <div class="metric-label">Active Connections</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="metric-keys">--</div>
+                <div class="metric-label">Total Keys</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="metric-memtable">--</div>
+                <div class="metric-label">Memtable Size</div>
+            </div>
+        </div>
+        <!-- SSTable Levels Section -->
+        <div id="sstable-levels" class="sstable-levels">
+            <h3>SSTable Levels</h3>
+            <div id="sstable-grid" class="sstable-grid">
+                <!-- SSTable level information populated dynamically -->
+            </div>
         </div>
     </section>
 
@@ -251,6 +269,87 @@ print(value)  # Output: Hello, MirDB!</code></pre>
         }
 
         document.addEventListener('DOMContentLoaded', fetchConfig);
+    })();
+    </script>
+
+    <!-- Scenario 5: JavaScript for metrics display -->
+    <script>
+    (function() {
+        // Format bytes to human-readable string
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            var k = 1024;
+            var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            var i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Format large numbers with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // Update metrics display
+        function updateMetricsDisplay(data) {
+            var connectionsEl = document.getElementById('metric-connections');
+            var keysEl = document.getElementById('metric-keys');
+            var memtableEl = document.getElementById('metric-memtable');
+
+            if (connectionsEl) {
+                connectionsEl.textContent = formatNumber(data.active_connections || 0);
+            }
+            if (keysEl) {
+                keysEl.textContent = formatNumber(data.total_keys || 0);
+            }
+            if (memtableEl) {
+                memtableEl.textContent = formatBytes(data.memtable_size || 0);
+            }
+
+            // Update SSTable levels if present
+            var sstableGrid = document.getElementById('sstable-grid');
+            if (sstableGrid && data.sstable_levels && data.sstable_levels.length > 0) {
+                var html = '';
+                for (var i = 0; i < data.sstable_levels.length; i++) {
+                    var level = data.sstable_levels[i];
+                    html += '<div class="sstable-card">' +
+                        '<div class="sstable-level">Level ' + level.level + '</div>' +
+                        '<div class="sstable-info">Files: ' + level.file_count + '</div>' +
+                        '<div class="sstable-info">Size: ' + formatBytes(level.total_size) + '</div>' +
+                        '</div>';
+                }
+                sstableGrid.innerHTML = html;
+            } else if (sstableGrid) {
+                sstableGrid.innerHTML = '<div class="sstable-empty">No SSTable levels available</div>';
+            }
+        }
+
+        // Fetch metrics from API
+        function fetchMetrics() {
+            fetch('/api/metrics')
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    updateMetricsDisplay(data);
+                })
+                .catch(function(err) {
+                    console.error('Failed to fetch metrics:', err);
+                    var connectionsEl = document.getElementById('metric-connections');
+                    var keysEl = document.getElementById('metric-keys');
+                    var memtableEl = document.getElementById('metric-memtable');
+                    if (connectionsEl) connectionsEl.textContent = 'Error';
+                    if (keysEl) keysEl.textContent = 'Error';
+                    if (memtableEl) memtableEl.textContent = 'Error';
+                });
+        }
+
+        // Initial fetch and set up auto-refresh
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchMetrics();
+            // Refresh metrics every 5 seconds
+            setInterval(fetchMetrics, 5000);
+        });
+
+        // Expose refresh function globally for manual refresh
+        window.refreshMetrics = fetchMetrics;
     })();
     </script>
 
