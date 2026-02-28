@@ -38,10 +38,43 @@
     </section>
 
     <!-- Features Section -->
-    <section id="features" aria-labelledby="features-title">
-      <!-- Features will be implemented by Scenario 2 -->
-      <div class="container">
-        <h2 id="features-title" class="visually-hidden">Features</h2>
+    <section id="features" class="features" aria-labelledby="features-title">
+      <h2 id="features-title" class="section-title">Features</h2>
+      <div class="features-grid">
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Memcached Protocol</h3>
+          <p class="feature-description">Drop-in replacement for memcached clients. Use your existing memcached-compatible libraries and tools with zero code changes.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Persistent Storage</h3>
+          <p class="feature-description">Your data survives restarts. Unlike traditional memcached, MirDB persists data to disk ensuring durability without sacrificing performance.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+              <polygon points="12,2 2,7 12,12 22,7 12,2"></polygon>
+              <polyline points="2,17 12,22 22,17"></polyline>
+              <polyline points="2,12 12,17 22,12"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">LSM Tree Architecture</h3>
+          <p class="feature-description">Built on Log-Structured Merge-tree for efficient write-heavy workloads. Optimized for high throughput with automatic compaction.</p>
+        </article>
       </div>
     </section>
 
