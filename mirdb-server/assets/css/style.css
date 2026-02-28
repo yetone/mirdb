@@ -1,0 +1,316 @@
+/**
+ * MirDB Homepage Stylesheet
+ *
+ * Owner: Scenario 2 - Homepage Static Content Rendering (base styles)
+ * Co-owner: Scenario 6 - Theme Toggle Functionality (CSS variables for themes)
+ * Co-owner: Scenario 7 - Responsive Layout (media queries)
+ *
+ * Structure:
+ * 1. CSS Variables (light/dark themes) - Scenario 6
+ * 2. Base styles - Scenario 2
+ * 3. Component styles - Scenario 2
+ * 4. Media queries for responsive - Scenario 7
+ */
+
+/* =========================================
+   1. CSS Variables - Scenario 6 will extend
+   ========================================= */
+:root {
+    --color-bg: #ffffff;
+    --color-bg-secondary: #f5f5f5;
+    --color-text: #333333;
+    --color-text-secondary: #666666;
+    --color-primary: #2563eb;
+    --color-primary-hover: #1d4ed8;
+    --color-border: #e5e5e5;
+    --color-code-bg: #1e1e1e;
+    --color-code-text: #d4d4d4;
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --radius: 8px;
+}
+
+/* =========================================
+   2. Base Styles - Scenario 2
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-primary-hover);
+}
+
+h1, h2, h3 {
+    line-height: 1.3;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+}
+
+/* =========================================
+   3. Component Styles - Scenario 2
+   ========================================= */
+
+/* Header */
+.header {
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-text);
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav a {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.nav a:hover {
+    color: var(--color-primary);
+}
+
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: background-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--color-bg-secondary);
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: var(--color-bg-secondary);
+}
+
+.hero h1 {
+    color: var(--color-primary);
+}
+
+.tagline {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.version-info {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+/* Features Section */
+.features {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card h3 {
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+    color: var(--color-text-secondary);
+}
+
+/* Metrics Section */
+.metrics {
+    padding: 4rem 2rem;
+    background-color: var(--color-bg-secondary);
+}
+
+.metrics-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Config Section */
+.config {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.config-panel {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 2rem;
+}
+
+/* Quick Start Section */
+.quick-start {
+    padding: 4rem 2rem;
+    background-color: var(--color-bg-secondary);
+}
+
+.quick-start h2 {
+    text-align: center;
+}
+
+.quick-start > p {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: var(--color-text-secondary);
+}
+
+.code-examples {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.code-examples h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+}
+
+.code-examples h3:first-child {
+    margin-top: 0;
+}
+
+pre {
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    overflow-x: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+code {
+    font-family: inherit;
+}
+
+/* Footer */
+.footer {
+    background-color: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    padding: 2rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: var(--color-text-secondary);
+}
+
+.footer-links a:hover {
+    color: var(--color-primary);
+}
+
+.copyright {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+/* =========================================
+   4. Media Queries - Scenario 7 will extend
+   ========================================= */

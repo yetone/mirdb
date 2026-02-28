@@ -1,0 +1,10 @@
+[package]
+name = "homepage-tests"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[[test]]
+name = "homepage_content"
+path = "tests/homepage_content.rs"

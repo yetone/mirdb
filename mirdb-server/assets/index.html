@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Scenario 2: Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-text">MirDB</span>
+            </div>
+            <nav class="nav">
+                <a href="#features">Features</a>
+                <a href="#quick-start">Quick Start</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank">GitHub</a>
+                <!-- Scenario 6: Theme toggle button placeholder -->
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon">&#9790;</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Scenario 3: Hero Section (version info added by Scenario 3) -->
+    <section class="hero">
+        <h1>MirDB</h1>
+        <p class="tagline">A persistent key-value store with Memcached protocol compatibility</p>
+        <div id="version-info" class="version-info">
+            <!-- Version info populated by Scenario 3 -->
+        </div>
+    </section>
+
+    <!-- Scenario 2: Features Section -->
+    <section id="features" class="features">
+        <h2>Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Memcached Protocol</h3>
+                <p>Full compatibility with the Memcached protocol. Use your existing Memcached clients and tools without any modifications. Supports GET, SET, DELETE, and other standard commands.</p>
+            </div>
+            <div class="feature-card">
+                <h3>LSM Tree Architecture</h3>
+                <p>Built on a Log-Structured Merge-tree (LSM tree) architecture for high write throughput. Efficient compaction strategies ensure optimal read performance over time.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Persistent Storage</h3>
+                <p>Data is persisted to disk using SSTables with write-ahead logging (WAL) for durability. Your data survives restarts and system failures.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scenario 5: Metrics Section (populated by Scenario 5) -->
+    <section id="metrics" class="metrics">
+        <h2>Server Metrics</h2>
+        <div id="metrics-grid" class="metrics-grid">
+            <!-- Metrics populated dynamically by Scenario 5 -->
+        </div>
+    </section>
+
+    <!-- Scenario 4: Configuration Section (populated by Scenario 4) -->
+    <section id="config" class="config">
+        <h2>Configuration</h2>
+        <div id="config-panel" class="config-panel">
+            <!-- Configuration populated dynamically by Scenario 4 -->
+        </div>
+    </section>
+
+    <!-- Scenario 2: Quick Start Section -->
+    <section id="quick-start" class="quick-start">
+        <h2>Quick Start</h2>
+        <p>Connect to MirDB using any Memcached-compatible client. Here are some examples:</p>
+
+        <div class="code-examples">
+            <h3>Using telnet</h3>
+            <pre><code># Connect to MirDB
+telnet localhost 12333
+
+# Set a key
+set mykey 0 0 5
+hello
+STORED
+
+# Get a key
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete a key
+delete mykey
+DELETED</code></pre>
+
+            <h3>Using memcached CLI</h3>
+            <pre><code># Install memcached client (Ubuntu/Debian)
+sudo apt-get install libmemcached-tools
+
+# Set a value
+echo "set testkey 0 0 11" | nc localhost 12333
+hello world
+
+# Get a value
+echo "get testkey" | nc localhost 12333</code></pre>
+
+            <h3>Using Python</h3>
+            <pre><code>import memcache
+
+# Connect to MirDB
+client = memcache.Client(['localhost:12333'])
+
+# Set a value
+client.set('mykey', 'Hello, MirDB!')
+
+# Get a value
+value = client.get('mykey')
+print(value)  # Output: Hello, MirDB!</code></pre>
+        </div>
+    </section>
+
+    <!-- Scenario 2: Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/yetone/mirdb" target="_blank">GitHub Repository</a>
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank">Documentation</a>
+                <a href="https://github.com/yetone/mirdb/issues" target="_blank">Report Issues</a>
+            </div>
+            <p class="copyright">MirDB - A Persistent Key-Value Store with Memcached Protocol Compatibility</p>
+        </div>
+    </footer>
+
+    <!-- Scenario 6: JavaScript for theme toggle -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
