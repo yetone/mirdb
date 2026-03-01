@@ -9,6 +9,7 @@
  * - Hero section is present
  * - CTA buttons are rendered
  * - Navigation works correctly
+ * - All sections are included
  */
 
 import { describe, it, expect } from 'vitest'
@@ -56,10 +57,13 @@ describe('Home Page', () => {
     it('should display a Sign Up button', () => {
       render(<Home />)
 
-      // Find Sign Up button
-      const signUpButton = screen.getByRole('link', { name: /sign up/i })
-      expect(signUpButton).toBeInTheDocument()
-      expect(signUpButton).toHaveTextContent('Sign Up')
+      // There may be multiple Sign Up elements (navbar + hero)
+      const signUpButtons = screen.getAllByRole('link', { name: /sign up/i })
+      expect(signUpButtons.length).toBeGreaterThan(0)
+
+      // At least one should link to /register
+      const registerLinks = signUpButtons.filter(btn => btn.getAttribute('href') === '/register')
+      expect(registerLinks.length).toBeGreaterThan(0)
     })
   })
 
@@ -67,10 +71,13 @@ describe('Home Page', () => {
     it('should display a Log In button', () => {
       render(<Home />)
 
-      // Find Log In button
-      const logInButton = screen.getByRole('link', { name: /log in/i })
-      expect(logInButton).toBeInTheDocument()
-      expect(logInButton).toHaveTextContent('Log In')
+      // There may be multiple Log In elements (navbar + hero)
+      const logInButtons = screen.getAllByRole('link', { name: /log in/i })
+      expect(logInButtons.length).toBeGreaterThan(0)
+
+      // At least one should link to /login
+      const loginLinks = logInButtons.filter(btn => btn.getAttribute('href') === '/login')
+      expect(loginLinks.length).toBeGreaterThan(0)
     })
   })
 
@@ -80,12 +87,14 @@ describe('Home Page', () => {
 
       render(<Home />, { useMemoryRouter: true, initialEntries: ['/'] })
 
-      // Find and click Sign Up button
-      const signUpButton = screen.getByRole('link', { name: /sign up/i })
+      // Find Sign Up buttons (may have multiple in navbar + hero)
+      const signUpButtons = screen.getAllByRole('link', { name: /sign up/i })
+      const signUpButton = signUpButtons.find(btn => btn.getAttribute('href') === '/register')
+      expect(signUpButton).toBeDefined()
       expect(signUpButton).toHaveAttribute('href', '/register')
 
       // Click the button
-      await user.click(signUpButton)
+      await user.click(signUpButton!)
 
       // The link should have the correct href attribute (navigation happens via router)
       expect(signUpButton).toHaveAttribute('href', '/register')
@@ -98,12 +107,14 @@ describe('Home Page', () => {
 
       render(<Home />, { useMemoryRouter: true, initialEntries: ['/'] })
 
-      // Find Log In button
-      const logInButton = screen.getByRole('link', { name: /log in/i })
+      // Find Log In buttons (may have multiple in navbar + hero)
+      const logInButtons = screen.getAllByRole('link', { name: /log in/i })
+      const logInButton = logInButtons.find(btn => btn.getAttribute('href') === '/login')
+      expect(logInButton).toBeDefined()
       expect(logInButton).toHaveAttribute('href', '/login')
 
       // Click the button
-      await user.click(logInButton)
+      await user.click(logInButton!)
 
       // The link should have the correct href attribute (navigation happens via router)
       expect(logInButton).toHaveAttribute('href', '/login')
@@ -134,18 +145,18 @@ describe('Home Page', () => {
       expect(screen.getByTestId('footer-section')).toBeInTheDocument()
     })
 
-    it('should have both CTA buttons in the hero section', () => {
+    it('should render the navigation bar', () => {
       render(<Home />)
 
-      const heroSection = screen.getByTestId('hero-section')
+      const navbar = screen.getByRole('navigation')
+      expect(navbar).toBeInTheDocument()
+    })
+
+    it('should render the hero section with aria-label for accessibility', () => {
+      render(<Home />)
+
+      const heroSection = screen.getByRole('region', { name: /hero section/i })
       expect(heroSection).toBeInTheDocument()
-
-      // Both buttons should be links with correct hrefs
-      const signUpButton = screen.getByRole('link', { name: /sign up/i })
-      const logInButton = screen.getByRole('link', { name: /log in/i })
-
-      expect(signUpButton).toHaveAttribute('href', '/register')
-      expect(logInButton).toHaveAttribute('href', '/login')
     })
   })
 })

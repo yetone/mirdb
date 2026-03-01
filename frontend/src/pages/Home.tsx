@@ -29,7 +29,7 @@ export const Home: React.FC = () => {
   return (
     <BackgroundEffect>
       <Navbar />
-      <div className="home-page min-h-screen" data-testid="home-page">
+      <main className="home-page min-h-screen" data-testid="home-page">
         {/* Hero Section - Owned by Scenario 1 */}
         <HeroSection />
 
@@ -45,7 +45,7 @@ export const Home: React.FC = () => {
         <footer className="footer-section py-8 px-4 text-center" data-testid="footer-section">
           {/* Footer component will be added by Scenario 6 */}
         </footer>
-      </div>
+      </main>
     </BackgroundEffect>
   )
 }

@@ -4,7 +4,7 @@
  *
  * Displays the primary value proposition of the URL shortening service.
  *
- * Exports:
+ * Expected exports:
  * - HeroSection: React.FC - The hero section component
  *
  * Requirements:
@@ -23,6 +23,7 @@ export const HeroSection: React.FC = () => {
     <section
       className="hero-section py-20 px-4 text-center"
       data-testid="hero-section"
+      aria-label="Hero section"
     >
       {/* Product Name */}
       <h1 className="text-4xl md:text-6xl font-bold mb-4" data-testid="product-name">
@@ -40,10 +41,10 @@ export const HeroSection: React.FC = () => {
 
       {/* CTA Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <FuturisticButton to="/register" variant="primary" data-testid="signup-button">
+        <FuturisticButton to="/register" variant="primary">
           Sign Up
         </FuturisticButton>
-        <FuturisticButton to="/login" variant="secondary" data-testid="login-button">
+        <FuturisticButton to="/login" variant="secondary">
           Log In
         </FuturisticButton>
       </div>

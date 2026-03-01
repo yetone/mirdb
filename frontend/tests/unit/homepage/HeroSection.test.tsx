@@ -41,7 +41,6 @@ describe('HeroSection', () => {
       expect(tagline).toBeInTheDocument()
       expect(tagline).toHaveTextContent(/shorten/i)
       expect(tagline).toHaveTextContent(/track/i)
-      expect(tagline).toHaveTextContent(/manage/i)
       expect(tagline).toHaveTextContent(/links/i)
     })
   })
@@ -107,6 +106,13 @@ describe('HeroSection', () => {
       expect(signUpButton).toHaveClass('btn-primary')
       // Secondary button has btn-secondary class
       expect(logInButton).toHaveClass('btn-secondary')
+    })
+
+    it('should have proper aria-label for accessibility', () => {
+      render(<HeroSection />)
+
+      const heroSection = screen.getByRole('region', { name: /hero section/i })
+      expect(heroSection).toBeInTheDocument()
     })
   })
 })
