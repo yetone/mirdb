@@ -37,11 +37,11 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* Copyright */}
-      <aside data-testid="footer-copyright">
-        <p className="text-base-content/70">
+      <div data-testid="footer-copyright">
+        <p className="text-base-content/80">
           Copyright &copy; {currentYear} URL Shortener. All rights reserved.
         </p>
-      </aside>
+      </div>
     </footer>
   )
 }
