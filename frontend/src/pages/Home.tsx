@@ -1,5 +1,5 @@
 import React from 'react'
-import { FeaturesSection, HeroSection } from '../components/homepage'
+import { FeaturesSection, Footer, HeroSection } from '../components/homepage'
 import Navbar from '../components/Navbar'
 import BackgroundEffect from '../components/BackgroundEffect'
 
@@ -41,10 +41,10 @@ export const Home: React.FC = () => {
           {/* UrlPreview component will be added by Scenario 9 */}
         </section>
 
-        {/* Footer - Owned by Scenario 6 (stub) */}
-        <footer className="footer-section py-8 px-4 text-center" data-testid="footer-section">
-          {/* Footer component will be added by Scenario 6 */}
-        </footer>
+        {/* Footer - Owned by Scenario 6 */}
+        <section data-testid="footer-section">
+          <Footer />
+        </section>
       </main>
     </BackgroundEffect>
   )
