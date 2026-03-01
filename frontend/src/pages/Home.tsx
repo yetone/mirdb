@@ -1,5 +1,7 @@
 import React from 'react'
 import { FeaturesSection } from '../components/homepage'
+import Navbar from '../components/Navbar'
+import BackgroundEffect from '../components/BackgroundEffect'
 
 /**
  * Homepage / Landing Page
@@ -25,30 +27,34 @@ import { FeaturesSection } from '../components/homepage'
  */
 export const Home: React.FC = () => {
   return (
-    <div className="home-page min-h-screen" data-testid="home-page">
-      {/* Hero Section - Owned by Scenario 1 */}
-      <section className="hero-section py-20 px-4 text-center" data-testid="hero-section">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          URL Shortening Service
-        </h1>
-        <p className="text-xl text-base-content/70 mb-8">
-          Shorten, track, and manage your links with ease
-        </p>
-      </section>
+    <BackgroundEffect>
+      <Navbar />
+      <div className="home-page min-h-screen" data-testid="home-page">
+        {/* Hero Section - Owned by Scenario 1 */}
+        <section className="hero-section py-20 px-4 text-center" data-testid="hero-section">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            <span className="text-primary">URL</span>{' '}
+            <span className="text-secondary">Shortener</span>
+          </h1>
+          <p className="text-xl text-base-content/70 mb-8">
+            Transform long URLs into short, memorable links. Track clicks, analyze performance, and manage your links with ease.
+          </p>
+        </section>
 
-      {/* Features Section - Owned by Scenario 2 */}
-      <FeaturesSection />
+        {/* Features Section - Owned by Scenario 2 */}
+        <FeaturesSection />
 
-      {/* URL Preview Section - Owned by Scenario 9 (stub) */}
-      <section className="url-preview-section py-16 px-4" data-testid="url-preview-section">
-        {/* UrlPreview component will be added by Scenario 9 */}
-      </section>
+        {/* URL Preview Section - Owned by Scenario 9 (stub) */}
+        <section className="url-preview-section py-16 px-4" data-testid="url-preview-section">
+          {/* UrlPreview component will be added by Scenario 9 */}
+        </section>
 
-      {/* Footer - Owned by Scenario 6 (stub) */}
-      <footer className="footer-section py-8 px-4 text-center" data-testid="footer-section">
-        {/* Footer component will be added by Scenario 6 */}
-      </footer>
-    </div>
+        {/* Footer - Owned by Scenario 6 (stub) */}
+        <footer className="footer-section py-8 px-4 text-center" data-testid="footer-section">
+          {/* Footer component will be added by Scenario 6 */}
+        </footer>
+      </div>
+    </BackgroundEffect>
   )
 }
 

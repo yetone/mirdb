@@ -3,6 +3,13 @@
  *
  * This file is created by the first scenario builder.
  * Export all homepage-specific components from this file.
+ *
+ * Expected exports:
+ * - HeroSection
+ * - FeaturesSection
+ * - FeatureCard
+ * - UrlPreview
+ * - Footer
  */
 
 export { FeatureCard } from './FeatureCard'

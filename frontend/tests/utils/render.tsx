@@ -1,22 +1,48 @@
-import React from 'react'
+import { ReactElement } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, MemoryRouter } from 'react-router-dom'
+import { ThemeProvider } from '../../src/contexts/ThemeContext'
+import { AuthProvider } from '../../src/contexts/AuthContext'
 
-// Provider wrapper for tests
-const AllProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  initialEntries?: string[]
+  useMemoryRouter?: boolean
+}
+
+function AllTheProviders({ children, useMemoryRouter = false, initialEntries = ['/'] }: {
+  children: React.ReactNode
+  useMemoryRouter?: boolean
+  initialEntries?: string[]
+}) {
+  const Router = useMemoryRouter ? MemoryRouter : BrowserRouter
+  const routerProps = useMemoryRouter ? { initialEntries } : {}
+
   return (
-    <BrowserRouter>
-      {children}
-    </BrowserRouter>
+    <Router {...routerProps}>
+      <ThemeProvider>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </ThemeProvider>
+    </Router>
   )
 }
 
-// Custom render function with providers
-const customRender = (
-  ui: React.ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>
-) => render(ui, { wrapper: AllProviders, ...options })
+export function renderWithProviders(
+  ui: ReactElement,
+  options: CustomRenderOptions = {}
+) {
+  const { initialEntries, useMemoryRouter = false, ...renderOptions } = options
 
-// Re-export everything from testing-library
+  return render(ui, {
+    wrapper: ({ children }) => (
+      <AllTheProviders useMemoryRouter={useMemoryRouter} initialEntries={initialEntries}>
+        {children}
+      </AllTheProviders>
+    ),
+    ...renderOptions,
+  })
+}
+
 export * from '@testing-library/react'
-export { customRender as render }
+export { renderWithProviders as render }
