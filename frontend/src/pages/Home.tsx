@@ -1,5 +1,5 @@
 import React from 'react'
-import { FeaturesSection } from '../components/homepage'
+import { FeaturesSection, HeroSection } from '../components/homepage'
 import Navbar from '../components/Navbar'
 import BackgroundEffect from '../components/BackgroundEffect'
 
@@ -29,17 +29,9 @@ export const Home: React.FC = () => {
   return (
     <BackgroundEffect>
       <Navbar />
-      <div className="home-page min-h-screen" data-testid="home-page">
+      <main className="home-page min-h-screen" data-testid="home-page">
         {/* Hero Section - Owned by Scenario 1 */}
-        <section className="hero-section py-20 px-4 text-center" data-testid="hero-section">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            <span className="text-primary">URL</span>{' '}
-            <span className="text-secondary">Shortener</span>
-          </h1>
-          <p className="text-xl text-base-content/70 mb-8">
-            Shorten, track, and manage your links with ease. Create memorable URLs in seconds.
-          </p>
-        </section>
+        <HeroSection />
 
         {/* Features Section - Owned by Scenario 2 */}
         <FeaturesSection />
@@ -53,7 +45,7 @@ export const Home: React.FC = () => {
         <footer className="footer-section py-8 px-4 text-center" data-testid="footer-section">
           {/* Footer component will be added by Scenario 6 */}
         </footer>
-      </div>
+      </main>
     </BackgroundEffect>
   )
 }
