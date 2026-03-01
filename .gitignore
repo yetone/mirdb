@@ -1,2 +1,5 @@
 /target
 **/*.rs.bk
+.something/
+.pnpm-store/
+node_modules/
