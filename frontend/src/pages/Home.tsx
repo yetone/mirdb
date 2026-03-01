@@ -37,7 +37,7 @@ export const Home: React.FC = () => {
             <span className="text-secondary">Shortener</span>
           </h1>
           <p className="text-xl text-base-content/70 mb-8">
-            Transform long URLs into short, memorable links. Track clicks, analyze performance, and manage your links with ease.
+            Shorten, track, and manage your links with ease. Create memorable URLs in seconds.
           </p>
         </section>
 
