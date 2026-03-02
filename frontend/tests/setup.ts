@@ -40,13 +40,14 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-// Mock clipboard
+// Mock clipboard - configurable to allow testing-library/user-event to override
 Object.defineProperty(navigator, 'clipboard', {
   value: {
     writeText: vi.fn().mockResolvedValue(undefined),
     readText: vi.fn().mockResolvedValue(''),
   },
   writable: true,
+  configurable: true,
 });
 
 // Mock ResizeObserver

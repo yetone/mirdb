@@ -1,20 +1,31 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { HeroSection } from './components/home';
+import { HomeNavbar } from './components/layout';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
 
 function Home() {
   return (
-    <main id="main-content">
-      <HeroSection />
-    </main>
+    <div className="min-h-screen">
+      <HomeNavbar />
+      <main id="main-content">
+        <HeroSection />
+      </main>
+    </div>
   );
 }
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
+      <ThemeProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
