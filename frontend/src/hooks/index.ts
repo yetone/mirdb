@@ -5,4 +5,4 @@
  */
 export { useUrlShortener } from './useUrlShortener';
 export { useCopyToClipboard } from './useCopyToClipboard';
-// export { useReducedMotion } from './useReducedMotion';
+export { useReducedMotion } from './useReducedMotion';
