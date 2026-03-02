@@ -5,3 +5,4 @@
  */
 export { HomeNavbar } from './HomeNavbar';
 export { HomeFooter } from './HomeFooter';
+export { MobileMenu } from './MobileMenu';
