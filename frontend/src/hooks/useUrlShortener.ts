@@ -22,6 +22,26 @@ interface UseUrlShortenerReturn {
 
 const URL_REGEX = /^(https?:\/\/)?([a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
 
+/**
+ * Map HTTP status codes to user-friendly error messages
+ */
+function getErrorMessage(status: number, errorData: { detail?: string }): string {
+  switch (status) {
+    case 400:
+      // Validation error - show the API's error message
+      return errorData.detail || 'Invalid URL format';
+    case 429:
+      return 'Too many requests. Please wait a moment.';
+    case 500:
+    case 502:
+    case 503:
+    case 504:
+      return 'Something went wrong. Please try again.';
+    default:
+      return errorData.detail || `HTTP error ${status}`;
+  }
+}
+
 function isValidUrl(url: string): boolean {
   if (!url || url.trim() === '') {
     return false;
@@ -83,7 +103,10 @@ export function useUrlShortener(): UseUrlShortenerReturn {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || `HTTP error ${response.status}`);
+
+        // Map status codes to user-friendly error messages
+        const errorMessage = getErrorMessage(response.status, errorData);
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -98,7 +121,23 @@ export function useUrlShortener(): UseUrlShortenerReturn {
       setResult(shortenedResult);
       return shortenedResult;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to shorten URL';
+      let errorMessage: string;
+
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        // Network error (fetch failed)
+        errorMessage = 'Unable to connect. Please check your internet connection.';
+      } else if (err instanceof Error) {
+        // Check for network-related errors
+        const message = err.message.toLowerCase();
+        if (message.includes('network') || message.includes('failed to fetch') || message.includes('net::')) {
+          errorMessage = 'Unable to connect. Please check your internet connection.';
+        } else {
+          errorMessage = err.message;
+        }
+      } else {
+        errorMessage = 'Failed to shorten URL';
+      }
+
       setError(errorMessage);
       return null;
     } finally {

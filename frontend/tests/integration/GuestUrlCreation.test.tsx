@@ -296,7 +296,8 @@ describe('Guest URL Creation Flow - Integration', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('error-message')).toBeInTheDocument();
-      expect(screen.getByText('Internal server error')).toBeInTheDocument();
+      // User-friendly error message for 500 errors
+      expect(screen.getByText('Something went wrong. Please try again.')).toBeInTheDocument();
     });
 
     // Verify no success result is shown
@@ -319,7 +320,8 @@ describe('Guest URL Creation Flow - Integration', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('error-message')).toBeInTheDocument();
-      expect(screen.getByText('Network error')).toBeInTheDocument();
+      // User-friendly error message for network errors
+      expect(screen.getByText('Unable to connect. Please check your internet connection.')).toBeInTheDocument();
     });
   });
 
@@ -352,6 +354,344 @@ describe('Guest URL Creation Flow - Integration', () => {
           guest: true,
         }),
       }));
+    });
+  });
+});
+
+/**
+ * API Error Handling Tests
+ * Owner: Scenario 17 - API Error Handling
+ *
+ * Tests the graceful handling of API errors:
+ * - Network errors (offline)
+ * - Server errors (500)
+ * - Rate limiting (429)
+ * - Validation errors (400)
+ * - Form recovery after errors
+ */
+describe('API Error Handling - Integration', () => {
+  const mockFetch = vi.fn();
+  const originalFetch = global.fetch;
+
+  beforeEach(() => {
+    global.fetch = mockFetch;
+    mockFetch.mockReset();
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+  });
+
+  /**
+   * Test Case 1: Network offline error
+   * Input: Submit URL when network is offline
+   * Expected: User-friendly error message displayed: 'Unable to connect. Please check your internet connection.'
+   */
+  it('should display user-friendly error message when network is offline', async () => {
+    const user = userEvent.setup();
+
+    // Simulate network failure (fetch throws TypeError)
+    mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    await user.type(input, 'https://example.com');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toBeInTheDocument();
+      expect(screen.getByText('Unable to connect. Please check your internet connection.')).toBeInTheDocument();
+    });
+
+    // Verify no success result is shown
+    expect(screen.queryByTestId('success-result')).not.toBeInTheDocument();
+  });
+
+  /**
+   * Test Case 2: API 500 error
+   * Input: Submit URL when API returns 500
+   * Expected: User-friendly error message displayed: 'Something went wrong. Please try again.'
+   */
+  it('should display user-friendly error message when API returns 500', async () => {
+    const user = userEvent.setup();
+
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      json: () => Promise.resolve({ detail: 'Internal server error' }),
+    });
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    await user.type(input, 'https://example.com');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toBeInTheDocument();
+      expect(screen.getByText('Something went wrong. Please try again.')).toBeInTheDocument();
+    });
+
+    // Verify no success result is shown
+    expect(screen.queryByTestId('success-result')).not.toBeInTheDocument();
+  });
+
+  /**
+   * Test Case 3: API 429 rate limiting error
+   * Input: Submit URL when API returns 429
+   * Expected: User-friendly error message displayed: 'Too many requests. Please wait a moment.'
+   */
+  it('should display user-friendly error message when API returns 429 (rate limited)', async () => {
+    const user = userEvent.setup();
+
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 429,
+      json: () => Promise.resolve({ detail: 'Rate limit exceeded' }),
+    });
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    await user.type(input, 'https://example.com');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toBeInTheDocument();
+      expect(screen.getByText('Too many requests. Please wait a moment.')).toBeInTheDocument();
+    });
+
+    // Verify no success result is shown
+    expect(screen.queryByTestId('success-result')).not.toBeInTheDocument();
+  });
+
+  /**
+   * Test Case 4: API 400 validation error
+   * Input: Submit URL when API returns 400 with validation error
+   * Expected: API validation error message is displayed to user
+   */
+  it('should display API validation error message when API returns 400', async () => {
+    const user = userEvent.setup();
+
+    const validationErrorMessage = 'URL is not allowed or contains invalid characters';
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 400,
+      json: () => Promise.resolve({ detail: validationErrorMessage }),
+    });
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    await user.type(input, 'https://example.com');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toBeInTheDocument();
+      expect(screen.getByText(validationErrorMessage)).toBeInTheDocument();
+    });
+
+    // Verify no success result is shown
+    expect(screen.queryByTestId('success-result')).not.toBeInTheDocument();
+  });
+
+  /**
+   * Test Case 5: Form remains interactive after error
+   * Input: Error occurs during URL creation
+   * Expected: Form remains interactive, user can retry submission
+   */
+  it('should keep form interactive after error, allowing user to retry', async () => {
+    const user = userEvent.setup();
+
+    // First call fails
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      json: () => Promise.resolve({ detail: 'Server error' }),
+    });
+
+    // Second call succeeds
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({
+        short_code: 'retry123',
+        original_url: 'https://example.com',
+      }),
+    });
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    const submitButton = screen.getByTestId('shorten-button');
+
+    // First attempt - fails
+    await user.type(input, 'https://example.com');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toBeInTheDocument();
+      expect(screen.getByText('Something went wrong. Please try again.')).toBeInTheDocument();
+    });
+
+    // Verify form is still interactive
+    expect(input).not.toBeDisabled();
+    expect(submitButton).not.toBeDisabled();
+
+    // Retry submission (user can immediately retry)
+    await user.click(submitButton);
+
+    // Second attempt should succeed
+    await waitFor(() => {
+      expect(screen.getByTestId('success-result')).toBeInTheDocument();
+      expect(screen.getByTestId('short-url')).toHaveTextContent(/retry123/);
+    });
+
+    // Error message should be cleared
+    expect(screen.queryByTestId('error-message')).not.toBeInTheDocument();
+  });
+
+  /**
+   * Additional test: Other server errors (502, 503, 504)
+   */
+  it('should display user-friendly error message for other server errors (502)', async () => {
+    const user = userEvent.setup();
+
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 502,
+      json: () => Promise.resolve({ detail: 'Bad gateway' }),
+    });
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    await user.type(input, 'https://example.com');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toBeInTheDocument();
+      expect(screen.getByText('Something went wrong. Please try again.')).toBeInTheDocument();
+    });
+  });
+
+  /**
+   * Additional test: Network error with different error message
+   */
+  it('should handle network errors with various error messages', async () => {
+    const user = userEvent.setup();
+
+    // Simulate network error with different message format
+    mockFetch.mockRejectedValueOnce(new Error('Network request failed'));
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    await user.type(input, 'https://example.com');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toBeInTheDocument();
+      expect(screen.getByText('Unable to connect. Please check your internet connection.')).toBeInTheDocument();
+    });
+  });
+
+  /**
+   * Additional test: Error message role and accessibility
+   */
+  it('should display error message with proper role for accessibility', async () => {
+    const user = userEvent.setup();
+
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      json: () => Promise.resolve({ detail: 'Server error' }),
+    });
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    await user.type(input, 'https://example.com');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      const errorMessage = screen.getByTestId('error-message');
+      expect(errorMessage).toBeInTheDocument();
+      expect(errorMessage).toHaveAttribute('role', 'alert');
+    });
+  });
+
+  /**
+   * Additional test: 400 error without detail falls back to default message
+   */
+  it('should display default validation error when API returns 400 without detail', async () => {
+    const user = userEvent.setup();
+
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 400,
+      json: () => Promise.resolve({}),
+    });
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    await user.type(input, 'https://example.com');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toBeInTheDocument();
+      expect(screen.getByText('Invalid URL format')).toBeInTheDocument();
+    });
+  });
+
+  /**
+   * Additional test: User can clear input and retry after error
+   */
+  it('should allow user to clear input and try different URL after error', async () => {
+    const user = userEvent.setup();
+
+    // First call fails
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      json: () => Promise.resolve({ detail: 'Server error' }),
+    });
+
+    // Second call succeeds
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({
+        short_code: 'newurl123',
+        original_url: 'https://different-example.com',
+      }),
+    });
+
+    render(<UrlShortenForm />);
+
+    const input = screen.getByTestId('url-input');
+    const submitButton = screen.getByTestId('shorten-button');
+
+    // First attempt - fails
+    await user.type(input, 'https://example.com');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toBeInTheDocument();
+    });
+
+    // Clear input and enter different URL
+    await user.clear(input);
+    await user.type(input, 'https://different-example.com');
+
+    // Submit again
+    await user.click(submitButton);
+
+    // Second attempt should succeed
+    await waitFor(() => {
+      expect(screen.getByTestId('success-result')).toBeInTheDocument();
+      expect(screen.getByTestId('short-url')).toHaveTextContent(/newurl123/);
     });
   });
 });
