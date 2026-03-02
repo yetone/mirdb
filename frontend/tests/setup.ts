@@ -69,3 +69,6 @@ class IntersectionObserverMock {
   disconnect = vi.fn();
 }
 Object.defineProperty(window, 'IntersectionObserver', { value: IntersectionObserverMock });
+
+// Mock scrollIntoView for jsdom
+Element.prototype.scrollIntoView = vi.fn();
