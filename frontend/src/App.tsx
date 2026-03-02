@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { HeroSection, HowItWorksSection, CTASection } from './components/home';
+import { HeroSection, HowItWorksSection, FeaturesSection, CTASection } from './components/home';
 import { HomeNavbar, HomeFooter } from './components/layout';
 import { SkipLink } from './components/ui';
 import { Login } from './pages/Login';
@@ -14,6 +14,7 @@ function Home() {
       <main id="main-content">
         <HeroSection />
         <HowItWorksSection />
+        <FeaturesSection />
         <CTASection />
       </main>
       <HomeFooter />
