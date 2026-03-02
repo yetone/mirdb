@@ -13,13 +13,16 @@ import { render, screen, fireEvent, within, waitFor } from '@testing-library/rea
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '../../src/contexts/ThemeContext';
+import { AuthProvider } from '../../src/contexts/AuthContext';
 import { HomeNavbar } from '../../src/components/layout/HomeNavbar';
 
 function renderWithProviders(ui: React.ReactElement) {
   return render(
     <BrowserRouter>
       <ThemeProvider>
-        {ui}
+        <AuthProvider>
+          {ui}
+        </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>
   );
@@ -29,11 +32,13 @@ function renderWithRoutes() {
   return render(
     <MemoryRouter initialEntries={['/']}>
       <ThemeProvider>
-        <Routes>
-          <Route path="/" element={<HomeNavbar />} />
-          <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
-          <Route path="/register" element={<div data-testid="register-page">Register Page</div>} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<HomeNavbar />} />
+            <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+            <Route path="/register" element={<div data-testid="register-page">Register Page</div>} />
+          </Routes>
+        </AuthProvider>
       </ThemeProvider>
     </MemoryRouter>
   );

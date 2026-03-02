@@ -13,13 +13,16 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '../../../../src/contexts/ThemeContext';
+import { AuthProvider } from '../../../../src/contexts/AuthContext';
 import { HomeNavbar } from '../../../../src/components/layout/HomeNavbar';
 
 function renderWithProviders(ui: React.ReactElement) {
   return render(
     <BrowserRouter>
       <ThemeProvider>
-        {ui}
+        <AuthProvider>
+          {ui}
+        </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>
   );

@@ -12,6 +12,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '../../../src/contexts/ThemeContext';
+import { AuthProvider } from '../../../src/contexts/AuthContext';
 import { Home } from '../../../src/pages/Home';
 
 /**
@@ -22,9 +23,11 @@ function renderWithRouter(initialPath = '/') {
   return render(
     <MemoryRouter initialEntries={[initialPath]}>
       <ThemeProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </AuthProvider>
       </ThemeProvider>
     </MemoryRouter>
   );

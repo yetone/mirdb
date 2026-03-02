@@ -16,6 +16,7 @@ import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider, useTheme } from '../../src/contexts/ThemeContext';
+import { AuthProvider } from '../../src/contexts/AuthContext';
 import { ThemeToggle } from '../../src/components/ThemeToggle';
 import { HomeNavbar } from '../../src/components/layout/HomeNavbar';
 import React from 'react';
@@ -80,13 +81,15 @@ function renderHomepageWithTheme(initialTheme = 'light') {
   return render(
     <MemoryRouter>
       <ThemeProvider>
-        <div className="min-h-screen" data-testid="homepage">
-          <HomeNavbar />
-          <main id="main-content">
-            <div data-testid="main-content-area">Main Content</div>
-          </main>
-        </div>
-        <ThemeDisplay />
+        <AuthProvider>
+          <div className="min-h-screen" data-testid="homepage">
+            <HomeNavbar />
+            <main id="main-content">
+              <div data-testid="main-content-area">Main Content</div>
+            </main>
+          </div>
+          <ThemeDisplay />
+        </AuthProvider>
       </ThemeProvider>
     </MemoryRouter>
   );
@@ -275,13 +278,15 @@ describe('Theme Switching Functionality', () => {
         render(
           <MemoryRouter>
             <ThemeProvider>
-              <div className="min-h-screen" data-testid="homepage">
-                <HomeNavbar />
-                <main id="main-content">
-                  <div data-testid="main-content-area">Main Content</div>
-                </main>
-              </div>
-              <ThemeDisplay />
+              <AuthProvider>
+                <div className="min-h-screen" data-testid="homepage">
+                  <HomeNavbar />
+                  <main id="main-content">
+                    <div data-testid="main-content-area">Main Content</div>
+                  </main>
+                </div>
+                <ThemeDisplay />
+              </AuthProvider>
             </ThemeProvider>
           </MemoryRouter>
         );
@@ -303,8 +308,10 @@ describe('Theme Switching Functionality', () => {
       render(
         <MemoryRouter>
           <ThemeProvider>
-            <HomeNavbar />
-            <ThemeDisplay />
+            <AuthProvider>
+              <HomeNavbar />
+              <ThemeDisplay />
+            </AuthProvider>
           </ThemeProvider>
         </MemoryRouter>
       );
@@ -536,7 +543,9 @@ describe('Theme Switching Functionality', () => {
         const { unmount } = render(
           <MemoryRouter>
             <ThemeProvider>
-              <HomeNavbar />
+              <AuthProvider>
+                <HomeNavbar />
+              </AuthProvider>
             </ThemeProvider>
           </MemoryRouter>
         );
