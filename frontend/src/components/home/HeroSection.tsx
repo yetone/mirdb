@@ -12,9 +12,37 @@
  *
  * Requirements: REQ-1, REQ-3, REQ-4
  * Min height: 600px
+ *
+ * Animation: Uses Framer Motion for entrance animations (fade + slide)
+ * Duration: 0.5s with ease-out easing per PRD visual design guidelines
  */
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Link as LinkIcon, Scissors, BarChart3 } from 'lucide-react';
+
+// Animation variants for hero content entrance animation
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  },
+};
 
 export function HeroSection() {
   return (
@@ -24,22 +52,32 @@ export function HeroSection() {
       aria-labelledby="hero-headline"
       data-testid="hero-section"
     >
-      <div className="max-w-4xl mx-auto text-center">
+      <motion.div
+        className="max-w-4xl mx-auto text-center"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        data-testid="hero-content"
+      >
         {/* Headline */}
-        <h1
+        <motion.h1
           id="hero-headline"
           className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+          variants={itemVariants}
         >
           Shorten Links. Track Clicks. Grow Your Impact.
-        </h1>
+        </motion.h1>
 
         {/* Subheadline - using /80 opacity for WCAG AA contrast compliance */}
-        <p className="text-lg md:text-xl text-base-content/80 mb-8 max-w-2xl mx-auto">
+        <motion.p
+          className="text-lg md:text-xl text-base-content/80 mb-8 max-w-2xl mx-auto"
+          variants={itemVariants}
+        >
           Free URL shortener with powerful analytics. No account required for basic use.
-        </p>
+        </motion.p>
 
         {/* URL Shortening Form Placeholder - will be implemented by Scenario 2 */}
-        <div className="mb-8 max-w-xl mx-auto">
+        <motion.div className="mb-8 max-w-xl mx-auto" variants={itemVariants}>
           <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="url"
@@ -55,10 +93,13 @@ export function HeroSection() {
               Shorten
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+          variants={itemVariants}
+        >
           <Link
             to="/register"
             className="btn btn-primary btn-lg"
@@ -73,12 +114,13 @@ export function HeroSection() {
           >
             Try as Guest
           </button>
-        </div>
+        </motion.div>
 
         {/* Visual Element - Animated Icon Transformation */}
-        <div
+        <motion.div
           className="flex items-center justify-center gap-4 text-base-content/50"
           aria-hidden="true"
+          variants={itemVariants}
         >
           <div className="flex items-center gap-2">
             <LinkIcon className="w-8 h-8" />
@@ -89,8 +131,8 @@ export function HeroSection() {
             <span className="text-sm font-semibold text-primary">Short Link</span>
             <BarChart3 className="w-8 h-8 text-primary" />
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
