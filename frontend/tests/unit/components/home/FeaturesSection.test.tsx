@@ -153,3 +153,74 @@ describe('FeaturesSection', () => {
     expect(heading).toHaveAttribute('id', 'features-heading');
   });
 });
+
+/**
+ * Tablet Responsive Design Tests
+ * Owner: Scenario 10 - Tablet Responsive Design
+ *
+ * Tests that FeaturesSection has appropriate responsive classes
+ * for tablet viewport layouts (768px-1024px).
+ */
+describe('FeaturesSection - Tablet Responsive Design', () => {
+  it('has responsive grid classes for tablet viewport (2-column at md breakpoint)', () => {
+    render(<FeaturesSection />);
+
+    // Verify the grid container has responsive classes for tablet
+    const grid = screen.getByTestId('features-grid');
+    expect(grid).toBeInTheDocument();
+
+    // Check for responsive grid classes
+    // At tablet (md breakpoint), should use 2-column grid: grid-cols-1 md:grid-cols-2
+    expect(grid).toHaveClass('grid');
+    expect(grid).toHaveClass('grid-cols-1'); // Mobile: single column
+    expect(grid).toHaveClass('md:grid-cols-2'); // Tablet: 2 columns
+  });
+
+  it('renders all three feature cards that will display in tablet grid layout', () => {
+    render(<FeaturesSection />);
+
+    // Verify three cards are rendered for the tablet grid
+    const cards = screen.getAllByTestId('feature-card');
+    expect(cards).toHaveLength(3);
+
+    // Each card should be present and ready for tablet layout
+    cards.forEach((card) => {
+      expect(card).toBeInTheDocument();
+    });
+  });
+
+  it('feature cards have responsive width styling for tablet viewport', () => {
+    render(<FeaturesSection />);
+
+    const cards = screen.getAllByTestId('feature-card');
+
+    // Each card should have appropriate styling for responsive layout
+    // Cards should not have fixed widths that would break tablet layout
+    cards.forEach((card) => {
+      // Cards should not have inline fixed width styles
+      const style = card.getAttribute('style');
+      if (style) {
+        expect(style).not.toMatch(/width:\s*\d+px/);
+      }
+    });
+  });
+
+  it('grid container has appropriate gap spacing for tablet', () => {
+    render(<FeaturesSection />);
+
+    const grid = screen.getByTestId('features-grid');
+
+    // Verify grid has gap class for spacing between cards
+    expect(grid).toHaveClass('gap-6');
+  });
+
+  it('section has responsive padding for tablet viewport', () => {
+    render(<FeaturesSection />);
+
+    const section = screen.getByTestId('features-section');
+
+    // Verify section has padding classes
+    expect(section).toHaveClass('px-4');
+    expect(section).toHaveClass('py-16');
+  });
+});
