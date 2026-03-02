@@ -5,6 +5,8 @@ import { defineConfig, devices } from '@playwright/test';
  *
  * Configured for testing the URL Shortener Homepage
  * including mobile responsiveness, accessibility, and performance.
+ *
+ * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
   testDir: './tests/e2e',

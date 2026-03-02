@@ -8,10 +8,10 @@ import { Register } from './pages/Register';
 
 function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <SkipLink targetId="main-content" />
       <HomeNavbar />
-      <main id="main-content">
+      <main id="main-content" className="flex-1">
         <HeroSection />
         <HowItWorksSection />
         <FeaturesSection />
