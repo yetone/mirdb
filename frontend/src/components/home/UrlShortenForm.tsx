@@ -100,7 +100,7 @@ export function UrlShortenForm() {
         >
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-base-content/70 mb-1">Your shortened URL:</p>
+              <p className="text-sm text-base-content/80 mb-1">Your shortened URL:</p>
               <a
                 href={result.shortUrl}
                 target="_blank"
@@ -124,8 +124,9 @@ export function UrlShortenForm() {
               </button>
             </div>
           </div>
+          {/* Guest mode hint - using /80 opacity for WCAG AA contrast compliance */}
           {result.isGuest && (
-            <p className="mt-2 text-xs text-base-content/50 text-center">
+            <p className="mt-2 text-xs text-base-content/80 text-center">
               Create an account to save your links permanently
             </p>
           )}

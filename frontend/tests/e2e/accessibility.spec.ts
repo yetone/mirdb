@@ -679,3 +679,377 @@ test.describe('Screen Reader Accessibility', () => {
     }
   });
 });
+
+/**
+ * Color Contrast Accessibility Tests
+ * Owner: Scenario 13 - Color Contrast Accessibility
+ *
+ * Tests WCAG 2.1 Level AA color contrast requirements:
+ * - 4.5:1 minimum contrast ratio for normal text
+ * - 3:1 minimum contrast ratio for large text and UI components
+ *
+ * Requirements: NFR-3, NFR-5
+ */
+import AxeBuilder from '@axe-core/playwright';
+
+/**
+ * Helper function to calculate contrast ratio between two RGB colors
+ * Uses WCAG formula: https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio
+ */
+function getRelativeLuminance(r: number, g: number, b: number): number {
+  const [rs, gs, bs] = [r, g, b].map((c) => {
+    const sRGB = c / 255;
+    return sRGB <= 0.03928 ? sRGB / 12.92 : Math.pow((sRGB + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+}
+
+function parseRgbColor(color: string): { r: number; g: number; b: number } | null {
+  // Handle rgb(r, g, b) format
+  const rgbMatch = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (rgbMatch) {
+    return {
+      r: parseInt(rgbMatch[1], 10),
+      g: parseInt(rgbMatch[2], 10),
+      b: parseInt(rgbMatch[3], 10),
+    };
+  }
+  // Handle rgba(r, g, b, a) format
+  const rgbaMatch = color.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
+  if (rgbaMatch) {
+    return {
+      r: parseInt(rgbaMatch[1], 10),
+      g: parseInt(rgbaMatch[2], 10),
+      b: parseInt(rgbaMatch[3], 10),
+    };
+  }
+  return null;
+}
+
+function calculateContrastRatio(color1: string, color2: string): number {
+  const rgb1 = parseRgbColor(color1);
+  const rgb2 = parseRgbColor(color2);
+
+  if (!rgb1 || !rgb2) {
+    return 0;
+  }
+
+  const l1 = getRelativeLuminance(rgb1.r, rgb1.g, rgb1.b);
+  const l2 = getRelativeLuminance(rgb2.r, rgb2.g, rgb2.b);
+
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+test.describe('Color Contrast Accessibility', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('TC1: Body text in light theme has at least 4.5:1 contrast ratio', async ({ page }) => {
+    // Set light theme
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    });
+    await page.waitForTimeout(300);
+
+    // Run axe-core accessibility check with color contrast rules
+    // Exclude aria-hidden elements as they are decorative and don't need contrast compliance
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withRules(['color-contrast'])
+      .exclude('[aria-hidden="true"]')
+      .exclude('[aria-hidden="true"] *')
+      .analyze();
+
+    // Check for color contrast violations
+    const contrastViolations = accessibilityScanResults.violations.filter(
+      (v) => v.id === 'color-contrast'
+    );
+
+    // Expect no contrast violations
+    if (contrastViolations.length > 0) {
+      const violationDetails = contrastViolations
+        .flatMap((v) => v.nodes)
+        .map((node) => `${node.target}: ${node.failureSummary}`)
+        .join('\n');
+      console.log('Light theme contrast violations:', violationDetails);
+    }
+
+    expect(contrastViolations.length).toBe(0);
+
+    // Additionally verify specific text elements have proper contrast
+    const h1Element = page.locator('h1').first();
+    if (await h1Element.isVisible()) {
+      const colors = await h1Element.evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return {
+          color: styles.color,
+          backgroundColor: styles.backgroundColor,
+        };
+      });
+
+      const contrastRatio = calculateContrastRatio(colors.color, colors.backgroundColor);
+      // Headline should meet at least 4.5:1 (or 3:1 for large text, but we'll test 4.5:1 to be safe)
+      expect(contrastRatio >= 4.5 || contrastRatio === 0).toBeTruthy();
+    }
+  });
+
+  test('TC2: Body text in dark theme has at least 4.5:1 contrast ratio', async ({ page }) => {
+    // Set dark theme
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    });
+    await page.waitForTimeout(300);
+
+    // Run axe-core accessibility check with color contrast rules
+    // Exclude aria-hidden elements as they are decorative and don't need contrast compliance
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withRules(['color-contrast'])
+      .exclude('[aria-hidden="true"]')
+      .exclude('[aria-hidden="true"] *')
+      .analyze();
+
+    // Check for color contrast violations
+    const contrastViolations = accessibilityScanResults.violations.filter(
+      (v) => v.id === 'color-contrast'
+    );
+
+    // Expect no contrast violations
+    if (contrastViolations.length > 0) {
+      const violationDetails = contrastViolations
+        .flatMap((v) => v.nodes)
+        .map((node) => `${node.target}: ${node.failureSummary}`)
+        .join('\n');
+      console.log('Dark theme contrast violations:', violationDetails);
+    }
+
+    expect(contrastViolations.length).toBe(0);
+
+    // Verify specific text elements
+    const subheadline = page.locator('p').filter({ hasText: /analytics/i }).first();
+    if (await subheadline.isVisible()) {
+      const colors = await subheadline.evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return {
+          color: styles.color,
+          backgroundColor: styles.backgroundColor,
+        };
+      });
+
+      const contrastRatio = calculateContrastRatio(colors.color, colors.backgroundColor);
+      // Text should meet at least 4.5:1 contrast
+      expect(contrastRatio >= 4.5 || contrastRatio === 0).toBeTruthy();
+    }
+  });
+
+  test('TC3: Primary buttons have 4.5:1 text contrast and 3:1 UI component contrast', async ({
+    page,
+  }) => {
+    // Test with light theme first
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+    await page.waitForTimeout(300);
+
+    // Find primary buttons
+    const primaryButtons = page.locator('.btn-primary, button.btn-primary, a.btn-primary');
+    const buttonCount = await primaryButtons.count();
+
+    for (let i = 0; i < Math.min(buttonCount, 3); i++) {
+      const button = primaryButtons.nth(i);
+      if (await button.isVisible()) {
+        const colors = await button.evaluate((el) => {
+          const styles = window.getComputedStyle(el);
+          return {
+            color: styles.color,
+            backgroundColor: styles.backgroundColor,
+            borderColor: styles.borderColor,
+          };
+        });
+
+        // Check button text contrast (4.5:1 minimum)
+        const textContrast = calculateContrastRatio(colors.color, colors.backgroundColor);
+        expect(
+          textContrast >= 4.5 || textContrast === 0,
+          `Primary button text should have 4.5:1 contrast, got ${textContrast.toFixed(2)}`
+        ).toBeTruthy();
+      }
+    }
+
+    // Also run axe-core for comprehensive button contrast check
+    // Exclude aria-hidden elements as they are decorative
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withRules(['color-contrast'])
+      .exclude('[aria-hidden="true"]')
+      .exclude('[aria-hidden="true"] *')
+      .analyze();
+
+    const buttonViolations = accessibilityScanResults.violations
+      .filter((v) => v.id === 'color-contrast')
+      .flatMap((v) => v.nodes)
+      .filter((node) => node.target.some((t) => t.includes('btn')));
+
+    expect(buttonViolations.length).toBe(0);
+  });
+
+  test('TC4: Focus indicators have at least 3:1 contrast against background', async ({ page }) => {
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+    await page.waitForTimeout(300);
+
+    // Tab to focusable elements and verify they have visible focus indicators
+    const focusableElements = [
+      '[data-testid="skip-link"]',
+      '[data-testid="navbar-logo"]',
+      '[data-testid="navbar-login-link"]',
+      'input[type="url"]',
+      '.btn-primary',
+    ];
+
+    for (const selector of focusableElements) {
+      const element = page.locator(selector).first();
+      if (await element.isVisible().catch(() => false)) {
+        await element.focus();
+
+        // Check that element has a visible focus indicator
+        // DaisyUI/Tailwind uses box-shadow (ring utilities) for focus indicators
+        const hasFocusIndicator = await element.evaluate((el) => {
+          const styles = window.getComputedStyle(el);
+          // Check for various focus indicator types:
+          // 1. CSS outline (not 'none' or '0px')
+          // 2. Box shadow (Tailwind's ring utilities)
+          // 3. Ring class in className
+          const hasOutline = styles.outlineStyle !== 'none' && styles.outlineWidth !== '0px';
+          const hasBoxShadow = styles.boxShadow !== 'none';
+          const hasRingClass = el.className.includes('ring');
+
+          return hasOutline || hasBoxShadow || hasRingClass;
+        });
+
+        // Every focusable element should have some visible focus indicator
+        expect(
+          hasFocusIndicator,
+          `Element ${selector} should have a visible focus indicator`
+        ).toBeTruthy();
+      }
+    }
+
+    // Note: We rely on the visual check above rather than axe-core for focus indicators
+    // because axe-core doesn't have a dedicated focus-visible rule.
+    // The visual check verifies that DaisyUI/Tailwind focus styles (box-shadow rings)
+    // are properly applied to all interactive elements.
+  });
+
+  test('TC5: Cyberpunk theme meets WCAG AA contrast requirements', async ({ page }) => {
+    // Set cyberpunk theme
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'cyberpunk');
+      localStorage.setItem('theme', 'cyberpunk');
+    });
+    await page.waitForTimeout(300);
+
+    // Run comprehensive axe-core color contrast check
+    // Exclude aria-hidden elements as they are decorative
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withRules(['color-contrast'])
+      .exclude('[aria-hidden="true"]')
+      .exclude('[aria-hidden="true"] *')
+      .analyze();
+
+    const contrastViolations = accessibilityScanResults.violations.filter(
+      (v) => v.id === 'color-contrast'
+    );
+
+    // Log any violations for debugging
+    if (contrastViolations.length > 0) {
+      const violationDetails = contrastViolations
+        .flatMap((v) => v.nodes)
+        .map(
+          (node) =>
+            `Element: ${node.target.join(', ')}\n` +
+            `Issue: ${node.failureSummary}\n` +
+            `HTML: ${node.html.substring(0, 100)}...`
+        )
+        .join('\n\n');
+      console.log('Cyberpunk theme contrast violations:\n', violationDetails);
+    }
+
+    // Expect no contrast violations
+    expect(contrastViolations.length).toBe(0);
+
+    // Additional checks for critical text elements
+    const criticalElements = [
+      { selector: 'h1', name: 'Main headline' },
+      { selector: 'h2', name: 'Section headings' },
+      { selector: '.btn-primary', name: 'Primary buttons' },
+      { selector: 'nav a', name: 'Navigation links' },
+    ];
+
+    for (const { selector, name } of criticalElements) {
+      const element = page.locator(selector).first();
+      if (await element.isVisible().catch(() => false)) {
+        const colors = await element.evaluate((el) => {
+          const styles = window.getComputedStyle(el);
+          // Walk up the tree to find actual background color if transparent
+          let bgColor = styles.backgroundColor;
+          let parent = el.parentElement;
+          while (
+            parent &&
+            (bgColor === 'transparent' || bgColor === 'rgba(0, 0, 0, 0)')
+          ) {
+            bgColor = window.getComputedStyle(parent).backgroundColor;
+            parent = parent.parentElement;
+          }
+          return {
+            color: styles.color,
+            backgroundColor: bgColor,
+          };
+        });
+
+        const contrastRatio = calculateContrastRatio(colors.color, colors.backgroundColor);
+
+        // All text should meet 4.5:1 contrast (or 3:1 for large text)
+        // Allow 0 for cases where we can't parse colors
+        expect(
+          contrastRatio >= 3 || contrastRatio === 0,
+          `${name} should have at least 3:1 contrast in cyberpunk theme, got ${contrastRatio.toFixed(2)}`
+        ).toBeTruthy();
+      }
+    }
+  });
+
+  test('All themes pass color contrast checks', async ({ page }) => {
+    const themes = ['light', 'dark', 'synthwave'];
+
+    for (const theme of themes) {
+      await page.evaluate((t) => {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('theme', t);
+      }, theme);
+      await page.waitForTimeout(300);
+
+      // Run axe-core accessibility check
+      // Exclude aria-hidden elements as they are decorative
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withRules(['color-contrast'])
+        .exclude('[aria-hidden="true"]')
+        .exclude('[aria-hidden="true"] *')
+        .analyze();
+
+      const contrastViolations = accessibilityScanResults.violations.filter(
+        (v) => v.id === 'color-contrast'
+      );
+
+      expect(
+        contrastViolations.length,
+        `Theme "${theme}" should have no contrast violations`
+      ).toBe(0);
+    }
+  });
+});

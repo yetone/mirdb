@@ -125,7 +125,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         {/* Theme toggle section */}
         <div className="p-4 border-t border-base-200" data-testid="mobile-menu-theme-section">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-base-content/70">Theme</span>
+            <span className="text-sm text-base-content/80">Theme</span>
             <ThemeToggle />
           </div>
         </div>

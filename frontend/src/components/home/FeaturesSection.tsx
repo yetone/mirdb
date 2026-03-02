@@ -75,7 +75,8 @@ export function FeaturesSection({ className = '' }: FeaturesSectionProps) {
           >
             Powerful Analytics at Your Fingertips
           </h2>
-          <p className="mt-4 text-lg text-base-content/70 max-w-2xl mx-auto">
+          {/* Using /80 opacity for WCAG AA contrast compliance */}
+          <p className="mt-4 text-lg text-base-content/80 max-w-2xl mx-auto">
             Get detailed insights into your link performance with our comprehensive analytics suite.
           </p>
         </motion.div>

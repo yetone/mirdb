@@ -79,9 +79,9 @@ export function FeatureCard({
           {title}
         </h3>
 
-        {/* Description */}
+        {/* Description - using /80 opacity for WCAG AA contrast compliance */}
         <p
-          className="text-sm text-base-content/70 mt-2"
+          className="text-sm text-base-content/80 mt-2"
           data-testid="feature-card-description"
         >
           {description}
