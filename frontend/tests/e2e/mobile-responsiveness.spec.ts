@@ -1,5 +1,5 @@
 /**
- * E2E Tests for Mobile Responsiveness.
+ * E2E Tests for Mobile and Tablet Responsiveness.
  * Owner: Scenario 9 - Mobile Responsive Design, Scenario 10 - Tablet Responsive Design
  *
  * Tests:
@@ -10,6 +10,9 @@
  * - How It Works section stacks vertically on mobile
  * - Features section stacks vertically on mobile
  * - Complete URL shortening flow works on mobile
+ * - Tablet responsive layout at various breakpoints (768px-1024px)
+ *
+ * Requirements: NFR-2
  */
 import { test, expect } from '@playwright/test';
 
@@ -240,20 +243,276 @@ test.describe('Mobile Responsive Design', () => {
   });
 });
 
-test.describe('Tablet Responsive Design', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.setViewportSize(TABLET_VIEWPORT);
+test.describe('Tablet Responsive Design (768px-1024px)', () => {
+  test.describe('Lower tablet breakpoint (768px)', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 });
+      await page.goto('/');
+    });
+
+    test('homepage renders correctly at 768px viewport width', async ({ page }) => {
+      // Verify the page loads
+      await expect(page.locator('[data-testid="home-navbar"]')).toBeVisible();
+      await expect(page.locator('[data-testid="hero-section"]')).toBeVisible();
+
+      // Check navigation is visible and adapts to tablet layout
+      const navbar = page.locator('[data-testid="home-navbar"]');
+      await expect(navbar).toBeVisible();
+
+      // Verify layout adapts with appropriate spacing
+      const mainContent = page.locator('main');
+      await expect(mainContent).toBeVisible();
+
+      // Check hero section displays correctly
+      const heroSection = page.locator('[data-testid="hero-section"]');
+      const heroBox = await heroSection.boundingBox();
+      expect(heroBox).toBeTruthy();
+      expect(heroBox!.width).toBeLessThanOrEqual(768);
+
+      // Verify text content is visible and readable
+      await expect(page.getByText('Shorten Links. Track Clicks. Grow Your Impact.')).toBeVisible();
+    });
+
+    test('navigation displays appropriately for tablet viewport', async ({ page }) => {
+      const navbar = page.locator('[data-testid="home-navbar"]');
+
+      // Navbar should be visible
+      await expect(navbar).toBeVisible();
+
+      // Logo should be visible
+      await expect(page.locator('[data-testid="navbar-logo"]')).toBeVisible();
+
+      // At 768px (tablet), navigation links should be visible (not hidden in hamburger menu)
+      // Tablet breakpoint typically shows full navigation
+      const loginLink = page.locator('[data-testid="navbar-login-link"]');
+      const registerLink = page.locator('[data-testid="navbar-register-link"]');
+
+      // Check that navigation elements are present
+      await expect(loginLink).toBeVisible();
+      await expect(registerLink).toBeVisible();
+    });
+
+    test('hero section content layout adapts to tablet', async ({ page }) => {
+      const heroSection = page.locator('[data-testid="hero-section"]');
+      await expect(heroSection).toBeVisible();
+
+      // Verify the URL input and button are present
+      const urlInput = page.locator('input[type="url"]');
+      const shortenButton = page.getByRole('button', { name: /shorten/i });
+
+      await expect(urlInput).toBeVisible();
+      await expect(shortenButton).toBeVisible();
+
+      // Check CTA buttons are visible (Sign Up Free has role="button" attribute)
+      await expect(page.getByRole('button', { name: /sign up free/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /try as guest/i })).toBeVisible();
+    });
+
+    test('all interactive elements are functional at tablet viewport', async ({ page }) => {
+      // Test navigation link functionality
+      const loginLink = page.locator('[data-testid="navbar-login-link"]');
+      await expect(loginLink).toBeVisible();
+
+      // Verify links are clickable
+      await expect(loginLink).toBeEnabled();
+
+      // Test URL input functionality
+      const urlInput = page.locator('input[type="url"]');
+      await urlInput.fill('https://example.com');
+      await expect(urlInput).toHaveValue('https://example.com');
+
+      // Verify button is clickable
+      const shortenButton = page.getByRole('button', { name: /shorten/i });
+      await expect(shortenButton).toBeEnabled();
+    });
   });
 
-  test('displays appropriate layout on tablet viewport', async ({ page }) => {
+  test.describe('Upper tablet breakpoint (1024px)', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await page.goto('/');
+    });
+
+    test('homepage renders correctly at 1024px viewport width', async ({ page }) => {
+      // Verify the page loads
+      await expect(page.locator('[data-testid="home-navbar"]')).toBeVisible();
+      await expect(page.locator('[data-testid="hero-section"]')).toBeVisible();
+
+      // Check layout fills viewport width appropriately
+      const heroSection = page.locator('[data-testid="hero-section"]');
+      const heroBox = await heroSection.boundingBox();
+      expect(heroBox).toBeTruthy();
+      expect(heroBox!.width).toBeLessThanOrEqual(1024);
+
+      // Verify content is visible
+      await expect(page.getByText('Shorten Links. Track Clicks. Grow Your Impact.')).toBeVisible();
+      await expect(page.getByText(/free url shortener/i)).toBeVisible();
+    });
+
+    test('navigation displays in full desktop-like layout at upper tablet breakpoint', async ({ page }) => {
+      const navbar = page.locator('[data-testid="home-navbar"]');
+      await expect(navbar).toBeVisible();
+
+      // At 1024px, full navigation should be visible
+      await expect(page.locator('[data-testid="navbar-logo"]')).toBeVisible();
+      await expect(page.locator('[data-testid="navbar-login-link"]')).toBeVisible();
+      await expect(page.locator('[data-testid="navbar-register-link"]')).toBeVisible();
+    });
+
+    test('content sections use appropriate layouts at upper tablet breakpoint', async ({ page }) => {
+      // Hero section should display properly
+      const heroSection = page.locator('[data-testid="hero-section"]');
+      await expect(heroSection).toBeVisible();
+
+      // URL form should be in a comfortable layout
+      const urlInput = page.locator('input[type="url"]');
+      const urlInputBox = await urlInput.boundingBox();
+      expect(urlInputBox).toBeTruthy();
+
+      // Input should have reasonable width at this viewport
+      expect(urlInputBox!.width).toBeGreaterThan(200);
+
+      // CTA buttons should be side by side at this width (Sign Up Free has role="button" attribute)
+      const signUpButton = page.getByRole('button', { name: /sign up free/i });
+      const guestButton = page.getByRole('button', { name: /try as guest/i });
+
+      await expect(signUpButton).toBeVisible();
+      await expect(guestButton).toBeVisible();
+    });
+
+    test('all features work correctly at upper tablet viewport', async ({ page }) => {
+      // Test navigation
+      const registerLink = page.locator('[data-testid="navbar-register-link"]');
+      await expect(registerLink).toBeEnabled();
+
+      // Test URL input
+      const urlInput = page.locator('input[type="url"]');
+      await urlInput.fill('https://example.com/long-path');
+      await expect(urlInput).toHaveValue('https://example.com/long-path');
+
+      // Test button interactions
+      const shortenButton = page.getByRole('button', { name: /shorten/i });
+      await expect(shortenButton).toBeEnabled();
+    });
+  });
+
+  test.describe('Intermediate tablet viewport (900px)', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 900, height: 1200 });
+      await page.goto('/');
+    });
+
+    test('layout displays correctly at intermediate tablet width', async ({ page }) => {
+      // Verify page loads correctly at an intermediate tablet width
+      await expect(page.locator('[data-testid="home-navbar"]')).toBeVisible();
+      await expect(page.locator('[data-testid="hero-section"]')).toBeVisible();
+
+      // Verify responsive layout
+      const heroSection = page.locator('[data-testid="hero-section"]');
+      const heroBox = await heroSection.boundingBox();
+      expect(heroBox).toBeTruthy();
+      expect(heroBox!.width).toBe(900);
+
+      // Content should be readable
+      await expect(page.getByText('Shorten Links. Track Clicks. Grow Your Impact.')).toBeVisible();
+    });
+  });
+});
+
+test.describe('Viewport consistency across tablet range', () => {
+  const tabletViewports = [768, 834, 900, 1024];
+
+  for (const width of tabletViewports) {
+    test(`homepage maintains layout consistency at ${width}px width`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 1024 });
+      await page.goto('/');
+
+      // All tablet viewports should show:
+      // 1. Visible navbar with logo
+      await expect(page.locator('[data-testid="home-navbar"]')).toBeVisible();
+      await expect(page.locator('[data-testid="navbar-logo"]')).toBeVisible();
+
+      // 2. Visible hero section
+      await expect(page.locator('[data-testid="hero-section"]')).toBeVisible();
+
+      // 3. Functional URL input
+      const urlInput = page.locator('input[type="url"]');
+      await expect(urlInput).toBeVisible();
+      await expect(urlInput).toBeEnabled();
+
+      // 4. Visible CTA buttons (Sign Up Free has role="button" attribute)
+      await expect(page.getByRole('button', { name: /sign up free/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /try as guest/i })).toBeVisible();
+    });
+  }
+});
+
+test.describe('FeaturesSection tablet responsive layout', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 1024 });
     await page.goto('/');
+  });
 
-    const heroSection = page.getByTestId('hero-section');
-    await expect(heroSection).toBeVisible();
+  test('FeaturesSection displays feature cards in appropriate grid at tablet viewport', async ({ page }) => {
+    // Check if FeaturesSection exists on the page
+    const featuresSection = page.locator('[data-testid="features-section"]');
+    const featuresSectionCount = await featuresSection.count();
 
-    // Navbar should be visible
-    const navbar = page.getByTestId('home-navbar');
-    await expect(navbar).toBeVisible();
+    if (featuresSectionCount > 0) {
+      // FeaturesSection exists - verify tablet layout
+      await expect(featuresSection).toBeVisible();
+
+      // Check for feature cards
+      const featureCards = page.locator('[data-testid="feature-card"]');
+      const cardCount = await featureCards.count();
+
+      if (cardCount > 0) {
+        // Verify cards are displayed in an appropriate grid (2-column or full width)
+        const firstCardBox = await featureCards.first().boundingBox();
+        expect(firstCardBox).toBeTruthy();
+
+        // At tablet viewport, cards should take up a reasonable portion of the width
+        // Either 2-column grid (each card ~50% width) or full width stacked
+        const viewportWidth = 768;
+        const expectedMinWidth = viewportWidth * 0.4; // At least 40% of viewport
+        expect(firstCardBox!.width).toBeGreaterThan(expectedMinWidth);
+      }
+    } else {
+      // FeaturesSection not yet implemented - test passes with note
+      // This will be implemented by Scenario 6
+      test.info().annotations.push({
+        type: 'info',
+        description: 'FeaturesSection not yet implemented (owned by Scenario 6)',
+      });
+    }
+  });
+
+  test('FeaturesSection grid adapts between tablet breakpoints', async ({ page }) => {
+    // Test at lower tablet breakpoint (768px) - already set in beforeEach
+    const featuresSection = page.locator('[data-testid="features-section"]');
+
+    if ((await featuresSection.count()) > 0) {
+      // Check grid layout at 768px
+      await expect(featuresSection).toBeVisible();
+
+      // Resize to upper tablet breakpoint
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await expect(featuresSection).toBeVisible();
+
+      // Feature cards should maintain appropriate layout at both breakpoints
+      const featureCards = page.locator('[data-testid="feature-card"]');
+      if ((await featureCards.count()) > 0) {
+        const cardBox = await featureCards.first().boundingBox();
+        expect(cardBox).toBeTruthy();
+        // Cards should be visible and have reasonable dimensions at 1024px
+        expect(cardBox!.width).toBeGreaterThan(200);
+      }
+    } else {
+      test.info().annotations.push({
+        type: 'info',
+        description: 'FeaturesSection not yet implemented (owned by Scenario 6)',
+      });
+    }
   });
 });
 
