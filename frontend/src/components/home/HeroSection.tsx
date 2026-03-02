@@ -33,8 +33,8 @@ export function HeroSection() {
           Shorten Links. Track Clicks. Grow Your Impact.
         </h1>
 
-        {/* Subheadline */}
-        <p className="text-lg md:text-xl text-base-content/70 mb-8 max-w-2xl mx-auto">
+        {/* Subheadline - using /80 opacity for WCAG AA contrast compliance */}
+        <p className="text-lg md:text-xl text-base-content/80 mb-8 max-w-2xl mx-auto">
           Free URL shortener with powerful analytics. No account required for basic use.
         </p>
 

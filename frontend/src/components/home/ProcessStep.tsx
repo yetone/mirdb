@@ -53,10 +53,10 @@ export function ProcessStep({
         {title}
       </h3>
 
-      {/* Description */}
+      {/* Description - using /80 opacity for WCAG AA contrast compliance */}
       {description && (
         <p
-          className="step-description text-sm text-base-content/70 max-w-[200px]"
+          className="step-description text-sm text-base-content/80 max-w-[200px]"
           data-testid={`step-${stepNumber}-description`}
         >
           {description}

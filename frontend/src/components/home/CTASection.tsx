@@ -37,8 +37,8 @@ export function CTASection() {
           Create Free Account
         </Link>
 
-        {/* Secondary Text */}
-        <p className="text-base-content/70 text-lg">
+        {/* Secondary Text - using /80 opacity for WCAG AA contrast compliance */}
+        <p className="text-base-content/80 text-lg">
           Start tracking clicks in 30 seconds
         </p>
       </div>
