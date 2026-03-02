@@ -1,0 +1,35 @@
+/**
+ * Homepage-specific styles.
+ *
+ * Additional styles for homepage sections that cannot be
+ * achieved with Tailwind utility classes alone.
+ */
+
+.hero-section {
+  min-height: 600px;
+}
+
+.hero-gradient-light {
+  background: linear-gradient(to bottom, white, #f3f4f6);
+}
+
+.hero-gradient-dark {
+  background: linear-gradient(to bottom, #111827, black);
+}
+
+/* Focus styles for accessibility */
+.btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
