@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { HeroSection, CTASection } from './components/home';
-import { HomeNavbar } from './components/layout';
+import { HeroSection, HowItWorksSection, CTASection } from './components/home';
+import { HomeNavbar, HomeFooter } from './components/layout';
 import { SkipLink } from './components/ui';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
@@ -13,8 +13,10 @@ function Home() {
       <HomeNavbar />
       <main id="main-content">
         <HeroSection />
+        <HowItWorksSection />
         <CTASection />
       </main>
+      <HomeFooter />
     </div>
   );
 }
