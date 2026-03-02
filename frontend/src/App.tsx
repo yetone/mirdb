@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { HeroSection } from './components/home';
+import { HeroSection, CTASection } from './components/home';
 import { HomeNavbar } from './components/layout';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
@@ -11,6 +11,7 @@ function Home() {
       <HomeNavbar />
       <main id="main-content">
         <HeroSection />
+        <CTASection />
       </main>
     </div>
   );
