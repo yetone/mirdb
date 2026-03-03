@@ -11,6 +11,7 @@ import { BackgroundEffect } from '../components/BackgroundEffect';
 import { HeroSection } from '../components/HeroSection';
 import GuestShortener from '../components/GuestShortener';
 import { FeaturesSection } from '../components/FeatureCard';
+import { Footer } from '../components/Footer';
 
 export function Home() {
   return (
@@ -24,6 +25,7 @@ export function Home() {
         </section>
         <FeaturesSection />
       </main>
+      <Footer />
     </div>
   );
 }
