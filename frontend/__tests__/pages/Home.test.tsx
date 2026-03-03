@@ -728,3 +728,315 @@ describe('Home Page - Theme Integration (Scenario 8)', () => {
     });
   });
 });
+
+/**
+ * Scenario 15: Component Integration
+ * Tests verifying homepage correctly uses existing UI components
+ */
+describe('Home Page - Component Integration (Scenario 15)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  /**
+   * Test Case 1: Navbar component is rendered at top of page
+   */
+  describe('Test Case 1: Navbar Integration', () => {
+    it('renders Navbar component at the top of the page', () => {
+      renderWithProviders(<Home />);
+
+      // Navbar should be present with expected structure
+      const navbar = document.querySelector('.navbar');
+      expect(navbar).toBeInTheDocument();
+      expect(navbar).toHaveClass('fixed', 'top-0');
+    });
+
+    it('Navbar contains the logo/brand link', () => {
+      renderWithProviders(<Home />);
+
+      const brandLink = screen.getByRole('link', { name: /URLShortener/i });
+      expect(brandLink).toBeInTheDocument();
+      expect(brandLink).toHaveAttribute('href', '/');
+    });
+
+    it('Navbar contains navigation elements', () => {
+      renderWithProviders(<Home />);
+
+      // Get navbar element first
+      const navbar = document.querySelector('.navbar');
+      expect(navbar).toBeInTheDocument();
+
+      // Navbar should contain Sign In and Get Started links for unauthenticated users
+      // Use within navbar to avoid matching HeroSection links
+      const navbarLinks = navbar!.querySelectorAll('a');
+      const signInLink = Array.from(navbarLinks).find(link => link.textContent?.includes('Sign In'));
+      const getStartedLink = Array.from(navbarLinks).find(link => link.textContent?.includes('Get Started'));
+
+      expect(signInLink).toBeDefined();
+      expect(getStartedLink).toBeDefined();
+    });
+
+    it('Navbar is positioned before main content in DOM order', () => {
+      renderWithProviders(<Home />);
+
+      const homePage = screen.getByTestId('home-page');
+      const navbar = document.querySelector('.navbar');
+      const main = homePage.querySelector('main');
+
+      // Navbar should appear before main in the DOM
+      expect(navbar).toBeInTheDocument();
+      expect(main).toBeInTheDocument();
+
+      // Both should be direct children
+      expect(homePage.contains(navbar)).toBe(true);
+      expect(homePage.contains(main)).toBe(true);
+    });
+  });
+
+  /**
+   * Test Case 2: BackgroundEffect component is rendered for visual appeal
+   */
+  describe('Test Case 2: BackgroundEffect Integration', () => {
+    it('renders BackgroundEffect component', () => {
+      renderWithProviders(<Home />);
+
+      // BackgroundEffect renders a canvas element
+      const canvas = document.querySelector('canvas');
+      expect(canvas).toBeInTheDocument();
+    });
+
+    it('BackgroundEffect canvas has aria-hidden for accessibility', () => {
+      renderWithProviders(<Home />);
+
+      const canvas = document.querySelector('canvas');
+      expect(canvas).toHaveAttribute('aria-hidden', 'true');
+    });
+
+    it('BackgroundEffect has correct visual positioning classes', () => {
+      renderWithProviders(<Home />);
+
+      const canvas = document.querySelector('canvas');
+      expect(canvas).toHaveClass('fixed', 'inset-0', '-z-10', 'pointer-events-none');
+    });
+
+    it('BackgroundEffect does not block user interactions', () => {
+      renderWithProviders(<Home />);
+
+      const canvas = document.querySelector('canvas');
+      expect(canvas).toHaveClass('pointer-events-none');
+
+      // Verify clickable elements are still accessible
+      const getStartedButton = screen.getByTestId('get-started-button');
+      expect(getStartedButton).toBeVisible();
+    });
+  });
+
+  /**
+   * Test Case 3: Shorten button uses FuturisticButton component
+   */
+  describe('Test Case 3: FuturisticButton Usage', () => {
+    it('Hero section Get Started button uses FuturisticButton styling', () => {
+      renderWithProviders(<Home />);
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+
+      // FuturisticButton has specific class patterns
+      expect(getStartedButton).toHaveClass('btn');
+      expect(getStartedButton).toHaveClass('btn-primary');
+      expect(getStartedButton).toHaveClass('min-h-[44px]'); // WCAG touch target
+    });
+
+    it('Hero section Sign In button uses FuturisticButton styling', () => {
+      renderWithProviders(<Home />);
+
+      const signInButton = screen.getByTestId('sign-in-button');
+
+      expect(signInButton).toHaveClass('btn');
+      expect(signInButton).toHaveClass('btn-outline');
+      expect(signInButton).toHaveClass('min-h-[44px]');
+    });
+
+    it('FuturisticButton elements have transition classes for hover effects', () => {
+      renderWithProviders(<Home />);
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const signInButton = screen.getByTestId('sign-in-button');
+
+      // FuturisticButton adds transition-all for animations
+      expect(getStartedButton).toHaveClass('transition-all');
+      expect(signInButton).toHaveClass('transition-all');
+    });
+
+    it('GuestShortener Shorten button uses FuturisticButton component', () => {
+      renderWithProviders(<Home />);
+
+      // The Shorten button in GuestShortener section - use exact aria-label to avoid matching "Get started with URL Shortener"
+      const shortenButton = screen.getByRole('button', { name: 'Shorten URL' });
+
+      expect(shortenButton).toHaveClass('btn');
+      expect(shortenButton).toHaveClass('btn-primary');
+      expect(shortenButton).toHaveClass('min-h-[44px]');
+    });
+  });
+
+  /**
+   * Test Case 4: Feature cards use GlassMorphismCard component
+   */
+  describe('Test Case 4: GlassMorphismCard Usage', () => {
+    it('renders feature cards using GlassMorphismCard structure', () => {
+      renderWithProviders(<Home />);
+
+      // Features section should be present
+      const featuresSection = screen.getByTestId('features-section');
+      expect(featuresSection).toBeInTheDocument();
+    });
+
+    it('each feature card has GlassMorphismCard styling', () => {
+      renderWithProviders(<Home />);
+
+      const featureCards = screen.getAllByTestId('feature-card');
+
+      // Should have at least 3 feature cards
+      expect(featureCards.length).toBeGreaterThanOrEqual(3);
+
+      featureCards.forEach((card) => {
+        // GlassMorphismCard wraps content with specific classes
+        const glassCard = card.querySelector('.card');
+        expect(glassCard).toBeInTheDocument();
+        expect(glassCard).toHaveClass('backdrop-blur-md');
+        expect(glassCard).toHaveClass('rounded-xl');
+        expect(glassCard).toHaveClass('shadow-xl');
+      });
+    });
+
+    it('feature cards have hover effect classes from GlassMorphismCard', () => {
+      renderWithProviders(<Home />);
+
+      const featureCards = screen.getAllByTestId('feature-card');
+
+      featureCards.forEach((card) => {
+        const glassCard = card.querySelector('.card');
+        // GlassMorphismCard with hover=true adds transition classes
+        expect(glassCard).toHaveClass('transition-all');
+      });
+    });
+
+    it('GuestShortener widget uses GlassMorphismCard', () => {
+      renderWithProviders(<Home />);
+
+      const guestShortenerSection = screen.getByTestId('guest-shortener-section');
+
+      // GuestShortener wraps content in GlassMorphismCard
+      const glassCard = guestShortenerSection.querySelector('.card');
+      expect(glassCard).toBeInTheDocument();
+      expect(glassCard).toHaveClass('backdrop-blur-md');
+    });
+  });
+
+  /**
+   * Test Case 5: ThemeToggle is accessible via Navbar
+   */
+  describe('Test Case 5: ThemeToggle Accessibility via Navbar', () => {
+    it('ThemeToggle is rendered within Navbar', () => {
+      renderWithProviders(<Home />);
+
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+      const navbar = document.querySelector('.navbar');
+
+      expect(themeToggle).toBeInTheDocument();
+      expect(navbar).toContainElement(themeToggle);
+    });
+
+    it('ThemeToggle is accessible with keyboard', () => {
+      renderWithProviders(<Home />);
+
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+
+      // Should have tabIndex for keyboard accessibility
+      expect(themeToggle).toHaveAttribute('tabIndex', '0');
+    });
+
+    it('ThemeToggle has proper WCAG touch target size', () => {
+      renderWithProviders(<Home />);
+
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+
+      // Min touch target size for WCAG compliance
+      expect(themeToggle).toHaveClass('min-h-[44px]');
+      expect(themeToggle).toHaveClass('min-w-[44px]');
+    });
+
+    it('ThemeToggle is visible and interactable', () => {
+      renderWithProviders(<Home />);
+
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+
+      expect(themeToggle).toBeVisible();
+      expect(themeToggle).not.toBeDisabled();
+    });
+
+    it('ThemeToggle dropdown shows theme options when activated', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Home />);
+
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+      await user.click(themeToggle);
+
+      // Verify theme options are displayed in dropdown
+      const lightOption = screen.getByRole('button', { name: /set light theme/i });
+      const darkOption = screen.getByRole('button', { name: /set dark theme/i });
+
+      expect(lightOption).toBeInTheDocument();
+      expect(darkOption).toBeInTheDocument();
+    });
+  });
+
+  /**
+   * Integration verification - all components work together
+   */
+  describe('Component Integration - Cross-cutting', () => {
+    it('all required UI components are rendered together', () => {
+      renderWithProviders(<Home />);
+
+      // Verify all required components are present
+      const navbar = document.querySelector('.navbar');
+      const canvas = document.querySelector('canvas');
+      const heroSection = screen.getByTestId('hero-section');
+      const featuresSection = screen.getByTestId('features-section');
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+
+      expect(navbar).toBeInTheDocument();
+      expect(canvas).toBeInTheDocument();
+      expect(heroSection).toBeInTheDocument();
+      expect(featuresSection).toBeInTheDocument();
+      expect(themeToggle).toBeInTheDocument();
+    });
+
+    it('components maintain proper z-index layering', () => {
+      renderWithProviders(<Home />);
+
+      const navbar = document.querySelector('.navbar');
+      const canvas = document.querySelector('canvas');
+
+      // Navbar should be above content (z-50)
+      expect(navbar).toHaveClass('z-50');
+
+      // BackgroundEffect should be behind content (-z-10)
+      expect(canvas).toHaveClass('-z-10');
+    });
+
+    it('FuturisticButton and GlassMorphismCard coexist in GuestShortener', () => {
+      renderWithProviders(<Home />);
+
+      const guestShortenerSection = screen.getByTestId('guest-shortener-section');
+
+      // Should have both GlassMorphismCard wrapper and FuturisticButton inside
+      const glassCard = guestShortenerSection.querySelector('.card.backdrop-blur-md');
+      const shortenButton = screen.getByRole('button', { name: 'Shorten URL' });
+
+      expect(glassCard).toBeInTheDocument();
+      expect(shortenButton).toBeInTheDocument();
+      expect(shortenButton).toHaveClass('btn', 'btn-primary');
+    });
+  });
+});
