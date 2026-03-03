@@ -9,6 +9,7 @@
 import { Navbar } from '../components/Navbar';
 import { BackgroundEffect } from '../components/BackgroundEffect';
 import { HeroSection } from '../components/HeroSection';
+import { FeaturesSection } from '../components/FeatureCard';
 
 export function Home() {
   return (
@@ -17,6 +18,7 @@ export function Home() {
       <Navbar />
       <main className="pt-16">
         <HeroSection />
+        <FeaturesSection />
       </main>
     </div>
   );
