@@ -1,13 +1,21 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
+/* DaisyUI themes */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --rounded-box: 1rem;
+  --rounded-btn: 0.5rem;
+  --animation-btn: 0.25s;
+  --animation-input: 0.2s;
+  --btn-focus-scale: 0.95;
 }
 
+/* Custom styles */
 body {
   margin: 0;
-  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
   min-height: 100vh;
 }

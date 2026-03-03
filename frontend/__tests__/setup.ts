@@ -1,36 +1,22 @@
 /**
  * Test Setup Configuration
- * Created by the first scenario builder.
  *
- * Sets up the testing environment with mock providers and global test utilities.
+ * This file is created by the first scenario builder and
+ * should set up the testing environment.
+ *
+ * Expected setup:
+ * - Mock providers (ThemeContext, AuthContext)
+ * - Testing library configuration
+ * - Global test utilities
+ * - Mock implementations for API
  */
-import '@testing-library/jest-dom';
-import { afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom'
+import { vi } from 'vitest'
 
-// Cleanup after each test
-afterEach(() => {
-  cleanup();
-});
-
-// Mock localStorage
-const localStorageMock = {
-  getItem: vi.fn(() => null),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-  length: 0,
-  key: vi.fn(() => null),
-};
-
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
-});
-
-// Mock matchMedia
+// Mock window.matchMedia for theme tests
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation((query) => ({
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -40,4 +26,14 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
-});
+})
+
+// Mock clipboard API - configurable allows userEvent to override
+Object.defineProperty(navigator, 'clipboard', {
+  value: {
+    writeText: vi.fn().mockResolvedValue(undefined),
+    readText: vi.fn().mockResolvedValue(''),
+  },
+  writable: true,
+  configurable: true,
+})

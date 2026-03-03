@@ -1,0 +1,279 @@
+/**
+ * Guest URL Shortener Widget
+ * Owner: Scenario 5 - Guest URL Shortening Success Flow
+ *
+ * Allows unauthenticated users to shorten URLs directly on homepage.
+ *
+ * States:
+ * - idle: Input field ready for URL
+ * - loading: API call in progress
+ * - success: Short URL created, display result
+ * - error: Validation or API error
+ *
+ * Requirements:
+ * - URL input field with placeholder
+ * - Shorten button (FuturisticButton)
+ * - Loading state during API call
+ * - Success state with short URL and copy button
+ * - View Analytics link after success
+ * - "Create account" prompt after success
+ * - Error state with user-friendly messages
+ */
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import FuturisticButton from './FuturisticButton'
+import GlassMorphismCard from './GlassMorphismCard'
+import { shortenUrl, ShortenUrlResponse } from '../api'
+import type { ShortenerState } from '../types/home.types'
+
+const GuestShortener: React.FC = () => {
+  const [url, setUrl] = useState('')
+  const [state, setState] = useState<ShortenerState>('idle')
+  const [result, setResult] = useState<ShortenUrlResponse | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  const getShortUrl = (shortCode: string): string => {
+    const baseUrl = window.location.origin
+    return `${baseUrl}/r/${shortCode}`
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!url.trim()) {
+      setError('Please enter a URL')
+      setState('error')
+      return
+    }
+
+    setState('loading')
+    setError(null)
+
+    try {
+      const response = await shortenUrl(url)
+      setResult(response)
+      setState('success')
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to shorten URL'
+      setError(errorMessage)
+      setState('error')
+    }
+  }
+
+  const handleCopy = async () => {
+    if (!result) return
+
+    const shortUrl = getShortUrl(result.short_code)
+    try {
+      await navigator.clipboard.writeText(shortUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea')
+      textArea.value = shortUrl
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
+  const handleReset = () => {
+    setUrl('')
+    setState('idle')
+    setResult(null)
+    setError(null)
+    setCopied(false)
+  }
+
+  return (
+    <GlassMorphismCard className="w-full max-w-2xl mx-auto">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold mb-2">Try It Now</h2>
+        <p className="text-base-content/70">
+          Shorten your first URL - no account required
+        </p>
+      </div>
+
+      {state === 'success' && result ? (
+        <div className="space-y-4">
+          {/* Success state */}
+          <div
+            className="alert alert-success"
+            role="status"
+            aria-live="polite"
+            data-testid="success-message"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>Your short URL is ready!</span>
+          </div>
+
+          {/* Short URL display with copy button */}
+          <div className="flex items-center gap-2 bg-base-200 p-4 rounded-lg">
+            <code
+              className="flex-1 text-primary font-mono text-lg break-all"
+              data-testid="short-url"
+            >
+              {getShortUrl(result.short_code)}
+            </code>
+            <button
+              onClick={handleCopy}
+              className="btn btn-ghost btn-sm"
+              aria-label="Copy short URL to clipboard"
+              data-testid="copy-button"
+            >
+              {copied ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-success"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                  <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                </svg>
+              )}
+            </button>
+          </div>
+
+          {/* View Analytics link */}
+          <div className="flex flex-col sm:flex-row gap-2 justify-center">
+            <Link
+              to={`/stats/${result.short_code}`}
+              className="btn btn-outline btn-sm"
+              data-testid="view-analytics-link"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 mr-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+              </svg>
+              View Analytics
+            </Link>
+            <button
+              onClick={handleReset}
+              className="btn btn-ghost btn-sm"
+            >
+              Shorten Another URL
+            </button>
+          </div>
+
+          {/* Account prompt */}
+          <div
+            className="divider"
+            role="separator"
+          />
+          <div
+            className="text-center"
+            data-testid="account-prompt"
+          >
+            <p className="text-base-content/70 mb-2">
+              Want to track all your URLs and access advanced analytics?
+            </p>
+            <Link
+              to="/register"
+              className="btn btn-primary btn-sm"
+            >
+              Create Free Account
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Error state */}
+          {state === 'error' && error && (
+            <div
+              className="alert alert-error"
+              role="alert"
+              aria-live="assertive"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current shrink-0 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* URL Input */}
+          <div className="form-control">
+            <label htmlFor="url-input" className="label sr-only">
+              <span className="label-text">URL to shorten</span>
+            </label>
+            <input
+              id="url-input"
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="Enter your long URL here..."
+              className="input input-bordered input-lg w-full"
+              disabled={state === 'loading'}
+              aria-describedby={error ? 'url-error' : undefined}
+              data-testid="url-input"
+            />
+          </div>
+
+          {/* Shorten Button */}
+          <FuturisticButton
+            type="submit"
+            variant="primary"
+            loading={state === 'loading'}
+            disabled={state === 'loading'}
+            className="w-full btn-lg"
+            aria-label={state === 'loading' ? 'Shortening URL...' : 'Shorten URL'}
+          >
+            {state === 'loading' ? 'Shortening...' : 'Shorten'}
+          </FuturisticButton>
+        </form>
+      )}
+    </GlassMorphismCard>
+  )
+}
+
+export default GuestShortener
