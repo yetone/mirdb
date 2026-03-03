@@ -482,6 +482,232 @@ describe('GuestShortener', () => {
   })
 
   /**
+   * Scenario 13: View Analytics Navigation
+   * Owner: Scenario 13 - View Analytics Navigation
+   *
+   * Test cases:
+   * 1. Click View Analytics after successful shortening → User is navigated to /stats/:shortCode route
+   * 2. View Analytics link → Link contains correct shortCode from generated URL
+   * 3. Guest user clicks View Analytics → Analytics page handles unauthenticated access appropriately
+   */
+  describe('Scenario 13: View Analytics Navigation', () => {
+    /**
+     * Test Case 1: Click View Analytics after successful shortening
+     * Type: Integration
+     * Expected: User is navigated to /stats/:shortCode route
+     */
+    describe('Test Case 1: Navigation to analytics page', () => {
+      it('should navigate to /stats/:shortCode when View Analytics is clicked', async () => {
+        const shortCode = 'nav123'
+        mockedShortenUrl.mockResolvedValue({
+          id: 1,
+          original_url: 'https://example.com/navigation-test',
+          short_code: shortCode,
+          created_at: new Date().toISOString(),
+          user_id: null,
+          click_count: 0,
+        })
+
+        const user = userEvent.setup()
+        renderWithRouter(<GuestShortener />)
+
+        // Step 1: Complete guest URL shortening
+        await user.type(screen.getByTestId('url-input'), 'https://example.com/navigation-test')
+        await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+        // Wait for success state
+        await waitFor(() => {
+          expect(screen.getByTestId('success-message')).toBeInTheDocument()
+        })
+
+        // Step 2: Click View Analytics
+        const analyticsLink = screen.getByTestId('view-analytics-link')
+        expect(analyticsLink).toBeInTheDocument()
+
+        // Step 3: Verify the link points to correct route
+        expect(analyticsLink).toHaveAttribute('href', `/stats/${shortCode}`)
+      })
+
+      it('should render View Analytics as a React Router Link for SPA navigation', async () => {
+        mockedShortenUrl.mockResolvedValue({
+          id: 1,
+          original_url: 'https://example.com/test',
+          short_code: 'routerlink123',
+          created_at: new Date().toISOString(),
+          user_id: null,
+          click_count: 0,
+        })
+
+        const user = userEvent.setup()
+        renderWithRouter(<GuestShortener />)
+
+        await user.type(screen.getByTestId('url-input'), 'https://example.com/test')
+        await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+        await waitFor(() => {
+          const analyticsLink = screen.getByTestId('view-analytics-link')
+          // The link should be rendered as a proper anchor element for SPA navigation
+          expect(analyticsLink.tagName.toLowerCase()).toBe('a')
+          expect(analyticsLink).toHaveAttribute('href', '/stats/routerlink123')
+        })
+      })
+    })
+
+    /**
+     * Test Case 2: View Analytics link contains correct shortCode
+     * Type: Unit
+     * Expected: Link contains correct shortCode from generated URL
+     */
+    describe('Test Case 2: ShortCode in analytics link', () => {
+      it('should include correct shortCode from API response in link href', async () => {
+        const testShortCode = 'abc123xyz'
+        mockedShortenUrl.mockResolvedValue({
+          id: 42,
+          original_url: 'https://example.com/long-url-to-shorten',
+          short_code: testShortCode,
+          created_at: new Date().toISOString(),
+          user_id: null,
+          click_count: 0,
+        })
+
+        const user = userEvent.setup()
+        renderWithRouter(<GuestShortener />)
+
+        await user.type(screen.getByTestId('url-input'), 'https://example.com/long-url-to-shorten')
+        await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+        await waitFor(() => {
+          const link = screen.getByTestId('view-analytics-link')
+          const href = link.getAttribute('href')
+
+          // Verify the shortCode is correctly embedded in the URL
+          expect(href).toBe(`/stats/${testShortCode}`)
+          expect(href).toContain(testShortCode)
+        })
+      })
+
+      it('should correctly handle different shortCode formats', async () => {
+        const testCases = [
+          { shortCode: 'simple', expected: '/stats/simple' },
+          { shortCode: 'UPPERCASE', expected: '/stats/UPPERCASE' },
+          { shortCode: 'mix123ABC', expected: '/stats/mix123ABC' },
+        ]
+
+        for (const testCase of testCases) {
+          vi.clearAllMocks()
+
+          mockedShortenUrl.mockResolvedValue({
+            id: 1,
+            original_url: 'https://example.com/test',
+            short_code: testCase.shortCode,
+            created_at: new Date().toISOString(),
+            user_id: null,
+            click_count: 0,
+          })
+
+          const user = userEvent.setup()
+          const { unmount } = renderWithRouter(<GuestShortener />)
+
+          await user.type(screen.getByTestId('url-input'), 'https://example.com/test')
+          await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+          await waitFor(() => {
+            const link = screen.getByTestId('view-analytics-link')
+            expect(link.getAttribute('href')).toBe(testCase.expected)
+          })
+
+          unmount()
+        }
+      })
+    })
+
+    /**
+     * Test Case 3: Guest user clicks View Analytics
+     * Type: Integration
+     * Expected: Analytics page handles unauthenticated access appropriately
+     */
+    describe('Test Case 3: Guest access to analytics', () => {
+      it('should display View Analytics link for unauthenticated guest users', async () => {
+        // This test verifies that guest users (unauthenticated) can see the analytics link
+        mockedShortenUrl.mockResolvedValue({
+          id: 1,
+          original_url: 'https://example.com/guest-test',
+          short_code: 'guestcode123',
+          created_at: new Date().toISOString(),
+          user_id: null, // null user_id indicates guest/unauthenticated
+          click_count: 0,
+        })
+
+        const user = userEvent.setup()
+        renderWithRouter(<GuestShortener />)
+
+        await user.type(screen.getByTestId('url-input'), 'https://example.com/guest-test')
+        await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+        await waitFor(() => {
+          // Guest user should see the View Analytics link
+          const analyticsLink = screen.getByTestId('view-analytics-link')
+          expect(analyticsLink).toBeInTheDocument()
+          expect(analyticsLink).toHaveAttribute('href', '/stats/guestcode123')
+        })
+      })
+
+      it('should render View Analytics link that allows navigation without authentication', async () => {
+        mockedShortenUrl.mockResolvedValue({
+          id: 1,
+          original_url: 'https://example.com/unauth-access',
+          short_code: 'unauthlink',
+          created_at: new Date().toISOString(),
+          user_id: null,
+          click_count: 0,
+        })
+
+        const user = userEvent.setup()
+        renderWithRouter(<GuestShortener />)
+
+        await user.type(screen.getByTestId('url-input'), 'https://example.com/unauth-access')
+        await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+        await waitFor(() => {
+          const analyticsLink = screen.getByTestId('view-analytics-link')
+
+          // The link should be accessible and clickable
+          expect(analyticsLink).toBeInTheDocument()
+          expect(analyticsLink).not.toHaveAttribute('disabled')
+          expect(analyticsLink).toBeEnabled()
+
+          // Link should point to public analytics route
+          expect(analyticsLink.getAttribute('href')).toBe('/stats/unauthlink')
+        })
+      })
+
+      it('should show registration prompt alongside View Analytics for guest users', async () => {
+        mockedShortenUrl.mockResolvedValue({
+          id: 1,
+          original_url: 'https://example.com/test',
+          short_code: 'prompttest',
+          created_at: new Date().toISOString(),
+          user_id: null,
+          click_count: 0,
+        })
+
+        const user = userEvent.setup()
+        renderWithRouter(<GuestShortener />)
+
+        await user.type(screen.getByTestId('url-input'), 'https://example.com/test')
+        await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+        await waitFor(() => {
+          // Both View Analytics and registration prompt should be visible
+          expect(screen.getByTestId('view-analytics-link')).toBeInTheDocument()
+          expect(screen.getByTestId('account-prompt')).toBeInTheDocument()
+          expect(screen.getByRole('link', { name: /create free account/i })).toBeInTheDocument()
+        })
+      })
+    })
+  })
+
+  /**
    * Additional edge case tests
    */
   describe('Edge Cases', () => {
