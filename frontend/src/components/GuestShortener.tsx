@@ -304,7 +304,7 @@ const GuestShortener: React.FC = () => {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="Enter your long URL here..."
-              className="input input-bordered input-lg w-full"
+              className="input input-bordered input-lg w-full min-h-[44px] touch-manipulation"
               disabled={state === 'loading'}
               aria-describedby={error ? 'url-error' : undefined}
               data-testid="url-input"

@@ -13,26 +13,26 @@ export function Navbar() {
         </Link>
       </div>
 
-      <div className="navbar-end gap-2">
+      <div className="navbar-end gap-1 sm:gap-2">
         <ThemeToggle />
         {isAuthenticated ? (
           <>
             <span className="text-sm hidden sm:inline-block">
               Hello, {user?.username}
             </span>
-            <Link to="/dashboard" className="btn btn-ghost btn-sm">
+            <Link to="/dashboard" className="btn btn-ghost btn-sm min-h-[44px] min-w-[44px] touch-manipulation">
               Dashboard
             </Link>
-            <button onClick={logout} className="btn btn-outline btn-sm">
+            <button onClick={logout} className="btn btn-outline btn-sm min-h-[44px] min-w-[44px] touch-manipulation">
               Logout
             </button>
           </>
         ) : (
           <>
-            <Link to="/login" className="btn btn-ghost btn-sm">
+            <Link to="/login" className="btn btn-ghost btn-sm min-h-[44px] min-w-[44px] touch-manipulation">
               Sign In
             </Link>
-            <Link to="/register" className="btn btn-primary btn-sm">
+            <Link to="/register" className="btn btn-primary btn-sm min-h-[44px] min-w-[44px] touch-manipulation">
               Get Started
             </Link>
           </>

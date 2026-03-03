@@ -6,7 +6,7 @@ export function ThemeToggle() {
 
   return (
     <div className="dropdown dropdown-end">
-      <label tabIndex={0} className="btn btn-ghost btn-circle" aria-label="Toggle theme">
+      <label tabIndex={0} className="btn btn-ghost btn-circle min-h-[44px] min-w-[44px] touch-manipulation" aria-label="Toggle theme">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5"

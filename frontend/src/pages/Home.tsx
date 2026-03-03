@@ -9,15 +9,19 @@
 import { Navbar } from '../components/Navbar';
 import { BackgroundEffect } from '../components/BackgroundEffect';
 import { HeroSection } from '../components/HeroSection';
+import GuestShortener from '../components/GuestShortener';
 import { FeaturesSection } from '../components/FeatureCard';
 
 export function Home() {
   return (
-    <div className="min-h-screen bg-base-100" data-testid="home-page">
+    <div className="min-h-screen bg-base-100 overflow-x-hidden" data-testid="home-page">
       <BackgroundEffect />
       <Navbar />
       <main className="pt-16">
         <HeroSection />
+        <section className="py-12 px-4" data-testid="guest-shortener-section">
+          <GuestShortener />
+        </section>
         <FeaturesSection />
       </main>
     </div>

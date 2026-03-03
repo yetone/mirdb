@@ -19,7 +19,7 @@ export function FuturisticButton({
   ...props
 }: FuturisticButtonProps) {
   const showLoading = isLoading || loading;
-  const baseClasses = 'btn relative overflow-hidden transition-all duration-300';
+  const baseClasses = 'btn relative overflow-hidden transition-all duration-300 min-h-[44px] touch-manipulation';
 
   const variantClasses = {
     primary: 'btn-primary hover:brightness-110',
