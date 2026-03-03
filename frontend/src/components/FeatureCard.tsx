@@ -50,7 +50,7 @@ export const FEATURES: Feature[] = [
 export function FeatureCard({ icon, title, description }: FeatureCardProps) {
   return (
     <div data-testid="feature-card">
-      <GlassMorphismCard className="transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-primary">
+      <GlassMorphismCard>
         <div className="flex flex-col items-center text-center">
           <span className="text-4xl mb-4" role="img" aria-label={title} data-testid="feature-icon">
             {icon}
