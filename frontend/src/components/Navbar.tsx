@@ -29,10 +29,10 @@ export function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/login" className="btn btn-ghost btn-sm min-h-[44px] min-w-[44px] touch-manipulation">
+            <Link to="/login" className="btn btn-ghost btn-sm min-h-[44px] min-w-[44px] touch-manipulation font-semibold">
               Sign In
             </Link>
-            <Link to="/register" className="btn btn-primary btn-sm min-h-[44px] min-w-[44px] touch-manipulation">
+            <Link to="/register" className="btn btn-primary btn-sm min-h-[44px] min-w-[44px] touch-manipulation font-bold text-white">
               Get Started
             </Link>
           </>

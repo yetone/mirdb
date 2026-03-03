@@ -81,7 +81,7 @@ export function HeroSection({
         </div>
 
         {/* Additional Value Proposition */}
-        <p className="mt-8 text-sm text-base-content/60">
+        <p className="mt-8 text-sm text-base-content">
           No credit card required. Start shortening URLs in seconds.
         </p>
       </div>

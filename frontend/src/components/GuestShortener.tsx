@@ -118,7 +118,7 @@ const GuestShortener: React.FC = () => {
     <GlassMorphismCard className="w-full max-w-2xl mx-auto">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold mb-2">Try It Now</h2>
-        <p className="text-base-content/70">
+        <p className="text-base-content">
           Shorten your first URL - no account required
         </p>
       </div>

@@ -14,10 +14,10 @@ export function GlassMorphismCard({
   return (
     <div
       className={`
-        card bg-base-100/80 backdrop-blur-md
+        card bg-base-100 backdrop-blur-md
         border border-base-300
         rounded-xl shadow-xl
-        p-6
+        p-6 text-base-content
         ${hover ? 'transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-primary' : ''}
         ${className}
       `}

@@ -22,10 +22,10 @@ export function FuturisticButton({
   const baseClasses = 'btn relative overflow-hidden transition-all duration-300 min-h-[44px] touch-manipulation';
 
   const variantClasses = {
-    primary: 'btn-primary hover:brightness-110',
-    secondary: 'btn-secondary hover:brightness-110',
+    primary: 'btn-primary hover:brightness-110 font-bold text-white',
+    secondary: 'btn-secondary hover:brightness-110 font-bold text-white',
     ghost: 'btn-ghost',
-    outline: 'btn-outline',
+    outline: 'btn-outline font-semibold',
   };
 
   const sizeClasses = {

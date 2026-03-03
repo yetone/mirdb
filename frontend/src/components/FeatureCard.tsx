@@ -58,7 +58,7 @@ export function FeatureCard({ icon, title, description }: FeatureCardProps) {
           <h3 className="text-xl font-bold mb-2" data-testid="feature-title">
             {title}
           </h3>
-          <p className="text-base-content/70" data-testid="feature-description">
+          <p className="text-base-content" data-testid="feature-description">
             {description}
           </p>
         </div>
