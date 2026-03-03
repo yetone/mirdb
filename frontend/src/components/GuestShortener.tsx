@@ -21,10 +21,12 @@
  */
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import FuturisticButton from './FuturisticButton'
-import GlassMorphismCard from './GlassMorphismCard'
-import { shortenUrl, ShortenUrlResponse } from '../api'
-import type { ShortenerState } from '../types/home.types'
+import { FuturisticButton } from './FuturisticButton'
+import { GlassMorphismCard } from './GlassMorphismCard'
+import { shortenUrl } from '../api'
+import type { ShortenUrlResponse } from '../api'
+
+type ShortenerState = 'idle' | 'loading' | 'success' | 'error'
 
 const GuestShortener: React.FC = () => {
   const [url, setUrl] = useState('')

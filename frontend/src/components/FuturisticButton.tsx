@@ -5,6 +5,7 @@ interface FuturisticButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> 
   variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  loading?: boolean; // Alias for isLoading
 }
 
 export function FuturisticButton({
@@ -12,10 +13,12 @@ export function FuturisticButton({
   variant = 'primary',
   size = 'md',
   isLoading = false,
+  loading,
   className = '',
   disabled,
   ...props
 }: FuturisticButtonProps) {
+  const showLoading = isLoading || loading;
   const baseClasses = 'btn relative overflow-hidden transition-all duration-300';
 
   const variantClasses = {
@@ -34,10 +37,10 @@ export function FuturisticButton({
   return (
     <button
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
-      disabled={disabled || isLoading}
+      disabled={disabled || showLoading}
       {...props}
     >
-      {isLoading ? (
+      {showLoading ? (
         <>
           <span className="loading loading-spinner loading-sm"></span>
           <span className="ml-2">Loading...</span>

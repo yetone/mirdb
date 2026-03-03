@@ -6,7 +6,6 @@
  * It renders the hero section with navigation buttons and integrates
  * with existing components like Navbar, BackgroundEffect, and ThemeToggle.
  */
-import React from 'react';
 import { Navbar } from '../components/Navbar';
 import { BackgroundEffect } from '../components/BackgroundEffect';
 import { HeroSection } from '../components/HeroSection';
