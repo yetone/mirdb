@@ -26,6 +26,7 @@ import { GlassMorphismCard } from './GlassMorphismCard'
 import { shortenUrl } from '../api'
 import type { ShortenUrlResponse } from '../api'
 import { validateUrl, parseApiError, type ApiErrorCode } from '../utils/validation'
+import { useCopyToClipboard } from '../utils/clipboard'
 
 type ShortenerState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -36,7 +37,22 @@ const GuestShortener: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [errorCode, setErrorCode] = useState<ApiErrorCode | null>(null)
   const [isRetryable, setIsRetryable] = useState(false)
-  const [copied, setCopied] = useState(false)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [toastType, setToastType] = useState<'success' | 'error'>('success')
+
+  const { copy, copied, error: copyError, reset: resetCopy } = useCopyToClipboard({
+    resetDelay: 2000,
+    onSuccess: () => {
+      setToastMessage('URL copied to clipboard!')
+      setToastType('success')
+      setTimeout(() => setToastMessage(null), 2000)
+    },
+    onError: (err) => {
+      setToastMessage(err || 'Failed to copy URL')
+      setToastType('error')
+      setTimeout(() => setToastMessage(null), 3000)
+    }
+  })
 
   const getShortUrl = (shortCode: string): string => {
     const baseUrl = window.location.origin
@@ -84,21 +100,7 @@ const GuestShortener: React.FC = () => {
     if (!result) return
 
     const shortUrl = getShortUrl(result.short_code)
-    try {
-      await navigator.clipboard.writeText(shortUrl)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea')
-      textArea.value = shortUrl
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textArea)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    }
+    await copy(shortUrl)
   }
 
   const handleReset = () => {
@@ -108,7 +110,8 @@ const GuestShortener: React.FC = () => {
     setError(null)
     setErrorCode(null)
     setIsRetryable(false)
-    setCopied(false)
+    resetCopy()
+    setToastMessage(null)
   }
 
   return (
@@ -320,6 +323,51 @@ const GuestShortener: React.FC = () => {
             {state === 'loading' ? 'Shortening...' : 'Shorten'}
           </FuturisticButton>
         </form>
+      )}
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div
+          className="toast toast-top toast-center"
+          role="alert"
+          aria-live="polite"
+          data-testid="copy-toast"
+        >
+          <div className={`alert ${toastType === 'success' ? 'alert-success' : 'alert-error'}`}>
+            {toastType === 'success' ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current shrink-0 h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current shrink-0 h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            )}
+            <span data-testid="toast-message">{toastMessage}</span>
+          </div>
+        </div>
       )}
     </GlassMorphismCard>
   )

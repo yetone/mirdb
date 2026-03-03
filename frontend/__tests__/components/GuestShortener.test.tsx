@@ -387,6 +387,101 @@ describe('GuestShortener', () => {
   })
 
   /**
+   * Scenario 7 - Test Case 2: Toast notification confirms successful copy
+   * Type: Integration
+   * Owner: Scenario 7 - Copy Short URL Functionality
+   */
+  describe('Scenario 7 TC2: Toast notification on copy', () => {
+    it('should display toast notification when copy button is clicked', async () => {
+      mockedShortenUrl.mockResolvedValue({
+        id: 1,
+        original_url: 'https://example.com/test',
+        short_code: 'toast123',
+        created_at: new Date().toISOString(),
+        user_id: null,
+        click_count: 0,
+      })
+
+      const user = userEvent.setup()
+      renderWithRouter(<GuestShortener />)
+
+      await user.type(screen.getByTestId('url-input'), 'https://example.com/test')
+      await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+      await waitFor(() => {
+        expect(screen.getByTestId('copy-button')).toBeInTheDocument()
+      })
+
+      await user.click(screen.getByTestId('copy-button'))
+
+      // Verify toast notification appears
+      await waitFor(() => {
+        const toast = screen.getByTestId('copy-toast')
+        expect(toast).toBeInTheDocument()
+      })
+    })
+
+    it('should display success message in toast after copy', async () => {
+      mockedShortenUrl.mockResolvedValue({
+        id: 1,
+        original_url: 'https://example.com/test',
+        short_code: 'toastmsg123',
+        created_at: new Date().toISOString(),
+        user_id: null,
+        click_count: 0,
+      })
+
+      const user = userEvent.setup()
+      renderWithRouter(<GuestShortener />)
+
+      await user.type(screen.getByTestId('url-input'), 'https://example.com/test')
+      await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+      await waitFor(() => {
+        expect(screen.getByTestId('copy-button')).toBeInTheDocument()
+      })
+
+      await user.click(screen.getByTestId('copy-button'))
+
+      // Verify toast message content
+      await waitFor(() => {
+        const toastMessage = screen.getByTestId('toast-message')
+        expect(toastMessage).toHaveTextContent(/copied to clipboard/i)
+      })
+    })
+
+    it('should have success alert styling in toast', async () => {
+      mockedShortenUrl.mockResolvedValue({
+        id: 1,
+        original_url: 'https://example.com/test',
+        short_code: 'toaststyle123',
+        created_at: new Date().toISOString(),
+        user_id: null,
+        click_count: 0,
+      })
+
+      const user = userEvent.setup()
+      renderWithRouter(<GuestShortener />)
+
+      await user.type(screen.getByTestId('url-input'), 'https://example.com/test')
+      await user.click(screen.getByRole('button', { name: /shorten/i }))
+
+      await waitFor(() => {
+        expect(screen.getByTestId('copy-button')).toBeInTheDocument()
+      })
+
+      await user.click(screen.getByTestId('copy-button'))
+
+      // Verify toast has success styling
+      await waitFor(() => {
+        const toast = screen.getByTestId('copy-toast')
+        const alertDiv = toast.querySelector('.alert-success')
+        expect(alertDiv).toBeInTheDocument()
+      })
+    })
+  })
+
+  /**
    * Additional edge case tests
    */
   describe('Edge Cases', () => {
