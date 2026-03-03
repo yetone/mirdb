@@ -25,3 +25,9 @@ export interface HeroSectionProps {
   serviceName?: string;
   tagline?: string;
 }
+
+export interface FeatureCardProps {
+  icon: string;
+  title: string;
+  description: string;
+}

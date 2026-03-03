@@ -9,7 +9,7 @@
  * - Hover effects on desktop
  * - Responsive layout (single column mobile, grid desktop)
  */
-import GlassMorphismCard from './GlassMorphismCard'
+import { GlassMorphismCard } from './GlassMorphismCard'
 import type { Feature, FeatureCardProps } from '../types/home.types'
 
 /**
