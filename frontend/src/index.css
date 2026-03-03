@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+html, body, #root {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Accessibility: Ensure primary buttons have WCAG 2.1 AA compliant contrast (4.5:1) with white text */
+.btn-primary {
+  background-color: oklch(from oklch(0.65 0.25 263) calc(l - 0.1) c h) !important;
+  color: white !important;
+}
+
+.btn-primary:hover {
+  background-color: oklch(from oklch(0.65 0.25 263) calc(l - 0.15) c h) !important;
+}
+
+/* Accessibility: Ensure outline buttons have proper contrast */
+.btn-outline {
+  color: oklch(0.75 0.15 263) !important;
+  border-color: oklch(0.75 0.15 263) !important;
+}
+
+.btn-outline:hover {
+  background-color: oklch(0.75 0.15 263) !important;
+  color: white !important;
+  border-color: oklch(0.75 0.15 263) !important;
+}
+
+/* Accessibility: Ensure ghost buttons have proper contrast */
+.btn-ghost {
+  color: oklch(0.85 0.05 240) !important;
+}
+
+.btn-ghost:hover {
+  background-color: oklch(0.3 0.02 240) !important;
+}
+
+/* Accessibility: Ensure text has proper contrast inside cards */
+.card .text-base-content {
+  color: oklch(0.85 0.02 240) !important;
+}
+
+/* Accessibility: Ensure inputs have proper contrast */
+.input {
+  background-color: var(--fallback-b1, oklch(var(--b1)/1)) !important;
+  color: var(--fallback-bc, oklch(var(--bc)/1)) !important;
+}
+
+.input::placeholder {
+  color: oklch(0.6 0.02 240) !important;
+  opacity: 1 !important;
+}
+
+.input-bordered {
+  border-color: oklch(0.6 0.02 240) !important;
+}
+
+/* Fallback for browsers without oklch support */
+@supports not (color: oklch(0.5 0.1 0)) {
+  .btn-primary {
+    background-color: #5c6bc0 !important;
+    color: white !important;
+  }
+
+  .btn-primary:hover {
+    background-color: #4a5ab8 !important;
+  }
+
+  .btn-outline {
+    color: #a0a8c0 !important;
+    border-color: #a0a8c0 !important;
+  }
+
+  .btn-outline:hover {
+    background-color: #a0a8c0 !important;
+    color: white !important;
+  }
+
+  .input::placeholder {
+    color: #8890a0 !important;
+    opacity: 1 !important;
+  }
+}
