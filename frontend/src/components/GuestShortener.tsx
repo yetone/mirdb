@@ -40,7 +40,7 @@ const GuestShortener: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [toastType, setToastType] = useState<'success' | 'error'>('success')
 
-  const { copy, copied, error: copyError, reset: resetCopy } = useCopyToClipboard({
+  const { copy, copied, reset: resetCopy } = useCopyToClipboard({
     resetDelay: 2000,
     onSuccess: () => {
       setToastMessage('URL copied to clipboard!')

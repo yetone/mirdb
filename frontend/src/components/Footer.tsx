@@ -29,7 +29,7 @@ export function Footer() {
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div
-            className="text-base-content/70 text-sm"
+            className="text-base-content/80 text-sm"
             data-testid="footer-copyright"
           >
             &copy; {currentYear} URL Shortener. All rights reserved.
@@ -43,7 +43,7 @@ export function Footer() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-base-content/70 hover:text-primary text-sm transition-colors duration-200"
+                className="text-base-content/80 hover:text-primary text-sm transition-colors duration-200"
                 data-testid={`footer-link-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 {link.label}
