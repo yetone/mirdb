@@ -25,6 +25,7 @@ import { FuturisticButton } from './FuturisticButton'
 import { GlassMorphismCard } from './GlassMorphismCard'
 import { shortenUrl } from '../api'
 import type { ShortenUrlResponse } from '../api'
+import { validateUrl, parseApiError, type ApiErrorCode } from '../utils/validation'
 
 type ShortenerState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -33,6 +34,8 @@ const GuestShortener: React.FC = () => {
   const [state, setState] = useState<ShortenerState>('idle')
   const [result, setResult] = useState<ShortenUrlResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [errorCode, setErrorCode] = useState<ApiErrorCode | null>(null)
+  const [isRetryable, setIsRetryable] = useState(false)
   const [copied, setCopied] = useState(false)
 
   const getShortUrl = (shortCode: string): string => {
@@ -43,24 +46,38 @@ const GuestShortener: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!url.trim()) {
-      setError('Please enter a URL')
+    // Client-side validation
+    const validation = validateUrl(url)
+    if (!validation.valid) {
+      setError(validation.error || 'Please enter a valid URL')
+      setErrorCode('VALIDATION_ERROR')
+      setIsRetryable(false)
       setState('error')
       return
     }
 
     setState('loading')
     setError(null)
+    setErrorCode(null)
+    setIsRetryable(false)
 
     try {
       const response = await shortenUrl(url)
       setResult(response)
       setState('success')
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to shorten URL'
-      setError(errorMessage)
+      const apiError = parseApiError(err)
+      setError(apiError.message)
+      setErrorCode(apiError.code)
+      setIsRetryable(apiError.retryable)
       setState('error')
     }
+  }
+
+  const handleRetry = () => {
+    // Re-trigger the submission with the same URL
+    const fakeEvent = { preventDefault: () => {} } as React.FormEvent
+    handleSubmit(fakeEvent)
   }
 
   const handleCopy = async () => {
@@ -89,6 +106,8 @@ const GuestShortener: React.FC = () => {
     setState('idle')
     setResult(null)
     setError(null)
+    setErrorCode(null)
+    setIsRetryable(false)
     setCopied(false)
   }
 
@@ -224,6 +243,8 @@ const GuestShortener: React.FC = () => {
               className="alert alert-error"
               role="alert"
               aria-live="assertive"
+              data-testid="error-message"
+              data-error-code={errorCode}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -239,7 +260,33 @@ const GuestShortener: React.FC = () => {
                   d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <span>{error}</span>
+              <div className="flex-1">
+                <span data-testid="error-text">{error}</span>
+              </div>
+              {isRetryable && (
+                <button
+                  type="button"
+                  onClick={handleRetry}
+                  className="btn btn-sm btn-ghost"
+                  data-testid="retry-button"
+                  aria-label="Retry shortening URL"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Retry
+                </button>
+              )}
             </div>
           )}
 
