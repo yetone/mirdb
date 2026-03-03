@@ -26,11 +26,10 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
 describe('Navigation to Registration - Scenario 2', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset localStorage theme
-    window.localStorage.getItem = vi.fn((key) => {
-      if (key === 'app-theme') return 'dark';
-      return null;
-    });
+    // Clear localStorage and reset to dark theme
+    localStorage.clear();
+    localStorage.setItem('theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
   });
 
   describe('Test Case 1: Get Started button navigates to /register', () => {
@@ -102,11 +101,8 @@ describe('Navigation to Registration - Scenario 2', () => {
     it('should preserve cyberpunk theme when navigating to /register', async () => {
       const user = userEvent.setup();
 
-      // Mock localStorage to return cyberpunk theme
-      window.localStorage.getItem = vi.fn((key) => {
-        if (key === 'app-theme') return 'cyberpunk';
-        return null;
-      });
+      // Set theme in localStorage before rendering
+      localStorage.setItem('theme', 'cyberpunk');
 
       render(
         <MemoryRouter initialEntries={['/']}>
@@ -137,10 +133,8 @@ describe('Navigation to Registration - Scenario 2', () => {
     });
 
     it('should maintain theme context across navigation', () => {
-      window.localStorage.getItem = vi.fn((key) => {
-        if (key === 'app-theme') return 'synthwave';
-        return null;
-      });
+      // Set theme in localStorage before rendering
+      localStorage.setItem('theme', 'synthwave');
 
       render(
         <TestWrapper>
@@ -224,11 +218,10 @@ describe('Navigation to Registration - Scenario 2', () => {
 describe('Navigation to Login - Scenario 3', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset localStorage theme
-    window.localStorage.getItem = vi.fn((key) => {
-      if (key === 'app-theme') return 'dark';
-      return null;
-    });
+    // Clear localStorage and reset to dark theme
+    localStorage.clear();
+    localStorage.setItem('theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
   });
 
   describe('Test Case 1: Click Sign In button navigates to /login', () => {
@@ -331,10 +324,8 @@ describe('Navigation to Login - Scenario 3', () => {
     it('should preserve cyberpunk theme when navigating to /login', async () => {
       const user = userEvent.setup();
 
-      window.localStorage.getItem = vi.fn((key) => {
-        if (key === 'app-theme') return 'cyberpunk';
-        return null;
-      });
+      // Set theme in localStorage before rendering
+      localStorage.setItem('theme', 'cyberpunk');
 
       render(
         <MemoryRouter initialEntries={['/']}>
@@ -363,10 +354,8 @@ describe('Navigation to Login - Scenario 3', () => {
     it('should preserve synthwave theme when navigating to /login', async () => {
       const user = userEvent.setup();
 
-      window.localStorage.getItem = vi.fn((key) => {
-        if (key === 'app-theme') return 'synthwave';
-        return null;
-      });
+      // Set theme in localStorage before rendering
+      localStorage.setItem('theme', 'synthwave');
 
       render(
         <MemoryRouter initialEntries={['/']}>
