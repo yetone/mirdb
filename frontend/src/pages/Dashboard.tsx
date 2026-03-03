@@ -1,22 +1,15 @@
 /**
- * Dashboard Page Component
- * Placeholder for existing dashboard functionality
+ * Dashboard Page (Stub)
+ * This page is owned by another scenario.
  */
-import React from 'react';
-import { Navbar } from '../components/Navbar';
-import { BackgroundEffect } from '../components/BackgroundEffect';
 
 export function Dashboard() {
   return (
-    <div className="min-h-screen bg-base-100" data-testid="dashboard-page">
-      <BackgroundEffect />
-      <Navbar />
-      <main className="pt-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-          <p className="text-base-content/70">Your shortened URLs will appear here.</p>
-        </div>
-      </main>
+    <div className="min-h-screen flex items-center justify-center bg-base-200">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+        <p className="text-base-content/60">Dashboard page - coming soon</p>
+      </div>
     </div>
   );
 }

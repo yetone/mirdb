@@ -1,29 +1,40 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Navbar() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
 
   return (
-    <div className="navbar bg-base-100/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-sm">
-      <div className="flex-1">
+    <div className="navbar bg-base-100/50 backdrop-blur-lg fixed top-0 z-50 border-b border-base-300">
+      <div className="navbar-start">
         <Link to="/" className="btn btn-ghost text-xl font-bold">
-          URL Shortener
+          <span className="text-primary">URL</span>Shortener
         </Link>
       </div>
-      <div className="flex-none gap-2">
+
+      <div className="navbar-end gap-2">
         <ThemeToggle />
         {isAuthenticated ? (
           <>
-            <Link to="/dashboard" className="btn btn-ghost">Dashboard</Link>
-            <button onClick={logout} className="btn btn-ghost">Logout</button>
+            <span className="text-sm hidden sm:inline-block">
+              Hello, {user?.username}
+            </span>
+            <Link to="/dashboard" className="btn btn-ghost btn-sm">
+              Dashboard
+            </Link>
+            <button onClick={logout} className="btn btn-outline btn-sm">
+              Logout
+            </button>
           </>
         ) : (
           <>
-            <Link to="/login" className="btn btn-ghost">Sign In</Link>
-            <Link to="/register" className="btn btn-primary">Get Started</Link>
+            <Link to="/login" className="btn btn-ghost btn-sm">
+              Sign In
+            </Link>
+            <Link to="/register" className="btn btn-primary btn-sm">
+              Get Started
+            </Link>
           </>
         )}
       </div>

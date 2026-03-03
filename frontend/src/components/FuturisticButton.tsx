@@ -1,44 +1,28 @@
-/**
- * FuturisticButton Component
- * Styled button component with futuristic appearance.
- * This is an existing component used by multiple scenarios.
- */
-import React from 'react';
-import { Link } from 'react-router-dom';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
-interface FuturisticButtonProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-  to?: string;
-  variant?: 'primary' | 'secondary' | 'ghost';
+interface FuturisticButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
-  disabled?: boolean;
-  loading?: boolean;
-  className?: string;
-  type?: 'button' | 'submit' | 'reset';
-  'data-testid'?: string;
-  'aria-label'?: string;
+  isLoading?: boolean;
 }
 
 export function FuturisticButton({
   children,
-  onClick,
-  to,
   variant = 'primary',
   size = 'md',
-  disabled = false,
-  loading = false,
+  isLoading = false,
   className = '',
-  type = 'button',
-  'data-testid': testId,
-  'aria-label': ariaLabel,
+  disabled,
+  ...props
 }: FuturisticButtonProps) {
-  const baseClasses = 'btn relative overflow-hidden transition-all duration-300 font-semibold';
+  const baseClasses = 'btn relative overflow-hidden transition-all duration-300';
 
   const variantClasses = {
-    primary: 'btn-primary',
-    secondary: 'btn-secondary btn-outline',
+    primary: 'btn-primary hover:brightness-110',
+    secondary: 'btn-secondary hover:brightness-110',
     ghost: 'btn-ghost',
+    outline: 'btn-outline',
   };
 
   const sizeClasses = {
@@ -47,32 +31,20 @@ export function FuturisticButton({
     lg: 'btn-lg',
   };
 
-  const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
-
-  if (to) {
-    return (
-      <Link to={to} className={classes} data-testid={testId} aria-label={ariaLabel}>
-        {loading ? <span className="loading loading-spinner loading-sm"></span> : children}
-      </Link>
-    );
-  }
-
   return (
     <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled || loading}
-      className={classes}
-      data-testid={testId}
-      aria-label={ariaLabel}
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      disabled={disabled || isLoading}
+      {...props}
     >
-      {loading ? (
-        <span className="loading loading-spinner loading-sm" aria-hidden="true" />
+      {isLoading ? (
+        <>
+          <span className="loading loading-spinner loading-sm"></span>
+          <span className="ml-2">Loading...</span>
+        </>
       ) : (
         children
       )}
     </button>
   );
 }
-
-export default FuturisticButton;

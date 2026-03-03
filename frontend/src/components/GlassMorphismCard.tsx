@@ -1,28 +1,28 @@
-/**
- * GlassMorphismCard Component
- * Glass-like card component with blur effect.
- * This is an existing component used by multiple scenarios.
- */
-import React from 'react'
+import type { ReactNode } from 'react';
 
 interface GlassMorphismCardProps {
-  children: React.ReactNode
-  className?: string
+  children: ReactNode;
+  className?: string;
+  hover?: boolean;
 }
 
-const GlassMorphismCard: React.FC<GlassMorphismCardProps> = ({
+export function GlassMorphismCard({
   children,
   className = '',
-}) => {
+  hover = true,
+}: GlassMorphismCardProps) {
   return (
     <div
-      className={`card bg-base-100/80 backdrop-blur-md border border-base-300 shadow-xl ${className}`}
+      className={`
+        bg-base-100/50 backdrop-blur-md
+        border border-base-300
+        rounded-xl shadow-lg
+        p-6
+        ${hover ? 'transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:border-primary/30' : ''}
+        ${className}
+      `}
     >
-      <div className="card-body">
-        {children}
-      </div>
+      {children}
     </div>
-  )
+  );
 }
-
-export default GlassMorphismCard

@@ -9,6 +9,12 @@ export default {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["light", "dark", "cyberpunk", "synthwave", "retro", "forest"],
+    themes: ["light", "dark", "cyberpunk", "synthwave", "retro", "halloween"],
+    darkTheme: "dark",
+    base: true,
+    styled: true,
+    utils: true,
+    logs: false,
   },
 }
+

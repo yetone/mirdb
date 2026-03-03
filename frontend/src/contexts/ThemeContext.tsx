@@ -1,43 +1,52 @@
-/**
- * ThemeContext
- * Manages theme preferences for the application.
- * This is an existing context used by multiple scenarios.
- */
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 
-type Theme = 'light' | 'dark' | 'cyberpunk' | 'synthwave' | 'retro' | 'valentine'
+export type Theme = 'light' | 'dark' | 'cyberpunk' | 'synthwave' | 'retro' | 'halloween';
 
 interface ThemeContextType {
-  theme: Theme
-  setTheme: (theme: Theme) => void
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  themes: Theme[];
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem('theme')
-    return (saved as Theme) || 'dark'
-  })
+const THEMES: Theme[] = ['light', 'dark', 'cyberpunk', 'synthwave', 'retro', 'halloween'];
+const STORAGE_KEY = 'app-theme';
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
+      if (stored && THEMES.includes(stored)) {
+        return stored;
+      }
+    }
+    return 'dark';
+  });
 
   useEffect(() => {
-    localStorage.setItem('theme', theme)
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(STORAGE_KEY, theme);
+  }, [theme]);
+
+  const setTheme = (newTheme: Theme) => {
+    if (THEMES.includes(newTheme)) {
+      setThemeState(newTheme);
+    }
+  };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, themes: THEMES }}>
       {children}
     </ThemeContext.Provider>
-  )
+  );
 }
 
-export const useTheme = (): ThemeContextType => {
-  const context = useContext(ThemeContext)
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider')
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider');
   }
-  return context
+  return context;
 }
-
-export default ThemeContext
