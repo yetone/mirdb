@@ -1,8 +1,9 @@
 /**
  * Homepage Integration Tests
  * Owner: Scenario 2 - Navigation to Registration
+ * Owner: Scenario 3 - Navigation to Login
  *
- * Tests the navigation functionality from homepage to registration page.
+ * Tests the navigation functionality from homepage to registration and login pages.
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
@@ -211,6 +212,235 @@ describe('Navigation to Registration - Scenario 2', () => {
 
       expect(screen.getByTestId('get-started-button')).toBeInTheDocument();
       expect(screen.getByTestId('sign-in-button')).toBeInTheDocument();
+    });
+  });
+});
+
+/**
+ * Scenario 3 - Navigation to Login Tests
+ *
+ * Verifies that clicking the Sign In button navigates users to the login page.
+ */
+describe('Navigation to Login - Scenario 3', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Reset localStorage theme
+    window.localStorage.getItem = vi.fn((key) => {
+      if (key === 'app-theme') return 'dark';
+      return null;
+    });
+  });
+
+  describe('Test Case 1: Click Sign In button navigates to /login', () => {
+    it('should render Sign In button in hero section as a link to /login', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      );
+
+      const signInButton = screen.getByTestId('sign-in-button');
+      expect(signInButton).toBeInTheDocument();
+      expect(signInButton).toHaveAttribute('href', '/login');
+    });
+
+    it('should navigate to login page when clicking Sign In button', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <ThemeProvider>
+            <AuthProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+              </Routes>
+            </AuthProvider>
+          </ThemeProvider>
+        </MemoryRouter>
+      );
+
+      const signInButton = screen.getByTestId('sign-in-button');
+      await user.click(signInButton);
+
+      // After clicking, we should be on the login page
+      expect(screen.getByTestId('login-page')).toBeInTheDocument();
+    });
+
+    it('should have clickable Sign In button that triggers navigation', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <ThemeProvider>
+            <AuthProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<div data-testid="login-page">Login</div>} />
+              </Routes>
+            </AuthProvider>
+          </ThemeProvider>
+        </MemoryRouter>
+      );
+
+      // Verify homepage is displayed first
+      expect(screen.getByTestId('home-page')).toBeInTheDocument();
+
+      // Click the Sign In button
+      const signInButton = screen.getByTestId('sign-in-button');
+      await user.click(signInButton);
+
+      // Verify navigation to login page
+      expect(screen.getByTestId('login-page')).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: Navigation preserves theme selection', () => {
+    it('should preserve dark theme when navigating to /login', async () => {
+      const user = userEvent.setup();
+
+      window.localStorage.getItem = vi.fn((key) => {
+        if (key === 'app-theme') return 'dark';
+        return null;
+      });
+
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <ThemeProvider>
+            <AuthProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+              </Routes>
+            </AuthProvider>
+          </ThemeProvider>
+        </MemoryRouter>
+      );
+
+      // Verify theme is applied initially
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
+      // Navigate to login
+      const signInButton = screen.getByTestId('sign-in-button');
+      await user.click(signInButton);
+
+      // Theme should still be dark after navigation
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    it('should preserve cyberpunk theme when navigating to /login', async () => {
+      const user = userEvent.setup();
+
+      window.localStorage.getItem = vi.fn((key) => {
+        if (key === 'app-theme') return 'cyberpunk';
+        return null;
+      });
+
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <ThemeProvider>
+            <AuthProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+              </Routes>
+            </AuthProvider>
+          </ThemeProvider>
+        </MemoryRouter>
+      );
+
+      // Verify theme is applied initially
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+
+      // Navigate to login
+      const signInButton = screen.getByTestId('sign-in-button');
+      await user.click(signInButton);
+
+      // Theme should still be cyberpunk after navigation
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+    });
+
+    it('should preserve synthwave theme when navigating to /login', async () => {
+      const user = userEvent.setup();
+
+      window.localStorage.getItem = vi.fn((key) => {
+        if (key === 'app-theme') return 'synthwave';
+        return null;
+      });
+
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <ThemeProvider>
+            <AuthProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+              </Routes>
+            </AuthProvider>
+          </ThemeProvider>
+        </MemoryRouter>
+      );
+
+      // Verify theme is applied initially
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave');
+
+      // Navigate to login
+      const signInButton = screen.getByTestId('sign-in-button');
+      await user.click(signInButton);
+
+      // Theme should still be synthwave after navigation
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave');
+    });
+  });
+
+  describe('Test Case 3: Sign In button has correct href pointing to /login', () => {
+    it('should have href attribute pointing to /login', () => {
+      render(
+        <TestWrapper>
+          <HeroSection />
+        </TestWrapper>
+      );
+
+      const signInButton = screen.getByTestId('sign-in-button');
+      expect(signInButton.tagName.toLowerCase()).toBe('a');
+      expect(signInButton).toHaveAttribute('href', '/login');
+    });
+
+    it('should render Sign In button as a Link component (anchor tag)', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      );
+
+      const signInButton = screen.getByTestId('sign-in-button');
+      expect(signInButton.tagName.toLowerCase()).toBe('a');
+    });
+
+    it('should have accessible text content for Sign In in hero section', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      );
+
+      const heroSection = screen.getByTestId('hero-section');
+      const signInButton = within(heroSection).getByRole('link', { name: /sign in/i });
+      expect(signInButton).toBeInTheDocument();
+      expect(signInButton).toHaveAttribute('href', '/login');
+    });
+
+    it('should render Sign In button as secondary variant', () => {
+      render(
+        <TestWrapper>
+          <Home />
+        </TestWrapper>
+      );
+
+      const signInButton = screen.getByTestId('sign-in-button');
+      // Secondary variant has btn-secondary and btn-outline classes
+      expect(signInButton).toHaveClass('btn-secondary');
+      expect(signInButton).toHaveClass('btn-outline');
     });
   });
 });
