@@ -2,6 +2,7 @@
  * Home Page Tests
  * Owner: Scenario 1 - Homepage Hero Section Rendering
  * Extended by: Scenario 2 - Navigation to Registration
+ * Contributor: Scenario 3 - Navigation to Login
  *
  * Integration tests for the Home page component.
  */
@@ -9,10 +10,11 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ThemeProvider } from '../../src/contexts/ThemeContext';
 import { AuthProvider } from '../../src/contexts/AuthContext';
 import { Home } from '../../src/pages/Home';
+import { Login } from '../../src/pages/Login';
 
 // Helper to render with all required providers
 const renderWithProviders = (ui: React.ReactElement) => {
@@ -223,5 +225,121 @@ describe('Navigation to Registration (Scenario 2)', () => {
       const getStartedButton = screen.getByTestId('get-started-button');
       expect(getStartedButton).toHaveTextContent('Get Started');
     });
+  });
+});
+
+/**
+ * Scenario 3: Navigation to Login
+ * Tests for Sign In button navigation functionality
+ */
+describe('Home Page - Navigation to Login (Scenario 3)', () => {
+  // Helper to render with routing context for navigation testing
+  const renderWithRouting = (initialEntries = ['/']) => {
+    return render(
+      <ThemeProvider>
+        <AuthProvider>
+          <MemoryRouter initialEntries={initialEntries}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </MemoryRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    );
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  /**
+   * Test Case 1: Click Sign In button navigates to /login route
+   * Integration test verifying navigation behavior
+   */
+  it('navigates to /login route when Sign In button is clicked', async () => {
+    const user = userEvent.setup();
+    renderWithRouting();
+
+    // Verify we're on the home page
+    const homePage = screen.getByTestId('home-page');
+    expect(homePage).toBeInTheDocument();
+
+    // Find and click the Sign In button
+    const signInButton = screen.getByTestId('sign-in-button');
+    expect(signInButton).toBeInTheDocument();
+
+    await user.click(signInButton);
+
+    // Verify navigation to login page - home page should no longer be visible
+    expect(screen.queryByTestId('home-page')).not.toBeInTheDocument();
+
+    // Login page heading should be visible
+    const loginHeading = screen.getByRole('heading', { name: /sign in/i });
+    expect(loginHeading).toBeInTheDocument();
+  });
+
+  /**
+   * Test Case 2: Navigation preserves current theme selection
+   * Integration test verifying theme persistence during navigation
+   */
+  it('preserves theme selection when navigating to login page', async () => {
+    const user = userEvent.setup();
+
+    // Set up localStorage to simulate dark theme
+    const mockLocalStorage = {
+      getItem: vi.fn((key) => key === 'app-theme' ? 'dark' : null),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clear: vi.fn(),
+    };
+    Object.defineProperty(window, 'localStorage', {
+      value: mockLocalStorage,
+      writable: true,
+    });
+
+    renderWithRouting();
+
+    // Verify theme is applied to document element
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
+    // Navigate to login
+    const signInButton = screen.getByTestId('sign-in-button');
+    await user.click(signInButton);
+
+    // Verify theme is still applied after navigation
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(mockLocalStorage.setItem).toHaveBeenCalledWith('app-theme', 'dark');
+  });
+
+  /**
+   * Test Case 3: Sign In button has correct href attribute pointing to /login
+   * Unit test verifying button configuration
+   */
+  it('Sign In link has correct href attribute pointing to /login', () => {
+    renderWithProviders(<Home />);
+
+    const signInLink = screen.getByTestId('sign-in-link');
+    expect(signInLink).toBeInTheDocument();
+    expect(signInLink).toHaveAttribute('href', '/login');
+  });
+
+  it('Sign In button is visible in the hero section', () => {
+    renderWithProviders(<Home />);
+
+    const heroSection = screen.getByTestId('hero-section');
+    const signInButton = screen.getByTestId('sign-in-button');
+
+    expect(heroSection).toContainElement(screen.getByTestId('sign-in-link'));
+    expect(signInButton).toBeVisible();
+  });
+
+  it('Sign In button has appropriate accessibility attributes', () => {
+    renderWithProviders(<Home />);
+
+    const signInButton = screen.getByTestId('sign-in-button');
+
+    expect(signInButton).toHaveAttribute('aria-label', 'Sign in to your account');
+    expect(signInButton).toHaveTextContent('Sign In');
   });
 });
