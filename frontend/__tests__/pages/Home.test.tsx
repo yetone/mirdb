@@ -343,3 +343,388 @@ describe('Home Page - Navigation to Login (Scenario 3)', () => {
     expect(signInButton).toHaveTextContent('Sign In');
   });
 });
+
+/**
+ * Scenario 8: Theme Integration
+ * Tests for verifying homepage correctly integrates with theme system
+ * and displays properly in all themes.
+ */
+describe('Home Page - Theme Integration (Scenario 8)', () => {
+  // Helper to render with specific theme
+  const renderWithTheme = (theme: string) => {
+    // Mock localStorage to return the specific theme
+    vi.mocked(window.localStorage.getItem).mockReturnValue(theme);
+
+    return render(
+      <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Home />
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    );
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Reset document theme attribute
+    document.documentElement.removeAttribute('data-theme');
+  });
+
+  /**
+   * Test Case 1: Render Home with light theme
+   * Expected: All text and UI elements maintain proper contrast
+   */
+  describe('Test Case 1: Light Theme Rendering', () => {
+    it('renders homepage with light theme applied correctly', () => {
+      renderWithTheme('light');
+
+      // Verify theme is applied to document
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    });
+
+    it('home page element uses base-100 background for light theme', () => {
+      renderWithTheme('light');
+
+      const homePage = screen.getByTestId('home-page');
+      expect(homePage).toHaveClass('bg-base-100');
+    });
+
+    it('hero section elements are visible with light theme', () => {
+      renderWithTheme('light');
+
+      const headline = screen.getByTestId('hero-headline');
+      const tagline = screen.getByTestId('hero-tagline');
+
+      expect(headline).toBeVisible();
+      expect(tagline).toBeVisible();
+    });
+
+    it('CTA buttons are visible and styled in light theme', () => {
+      renderWithTheme('light');
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const signInButton = screen.getByTestId('sign-in-button');
+
+      expect(getStartedButton).toBeVisible();
+      expect(signInButton).toBeVisible();
+    });
+  });
+
+  /**
+   * Test Case 2: Render Home with dark theme
+   * Expected: All text and UI elements maintain proper contrast
+   */
+  describe('Test Case 2: Dark Theme Rendering', () => {
+    it('renders homepage with dark theme applied correctly', () => {
+      renderWithTheme('dark');
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    it('home page maintains structure with dark theme', () => {
+      renderWithTheme('dark');
+
+      const homePage = screen.getByTestId('home-page');
+      expect(homePage).toBeInTheDocument();
+      expect(homePage).toHaveClass('bg-base-100');
+    });
+
+    it('hero section elements maintain visibility in dark theme', () => {
+      renderWithTheme('dark');
+
+      const headline = screen.getByTestId('hero-headline');
+      const tagline = screen.getByTestId('hero-tagline');
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const signInButton = screen.getByTestId('sign-in-button');
+
+      expect(headline).toBeVisible();
+      expect(tagline).toBeVisible();
+      expect(getStartedButton).toBeVisible();
+      expect(signInButton).toBeVisible();
+    });
+
+    it('localStorage persists dark theme selection', () => {
+      renderWithTheme('dark');
+
+      expect(window.localStorage.setItem).toHaveBeenCalledWith('app-theme', 'dark');
+    });
+  });
+
+  /**
+   * Test Case 3: Render Home with cyberpunk theme
+   * Expected: Theme-specific styling is applied correctly
+   */
+  describe('Test Case 3: Cyberpunk Theme Rendering', () => {
+    it('renders homepage with cyberpunk theme applied correctly', () => {
+      renderWithTheme('cyberpunk');
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+    });
+
+    it('cyberpunk theme is properly persisted', () => {
+      renderWithTheme('cyberpunk');
+
+      expect(window.localStorage.setItem).toHaveBeenCalledWith('app-theme', 'cyberpunk');
+    });
+
+    it('all major elements render correctly with cyberpunk theme', () => {
+      renderWithTheme('cyberpunk');
+
+      // Verify page structure
+      const homePage = screen.getByTestId('home-page');
+      const heroSection = screen.getByTestId('hero-section');
+
+      expect(homePage).toBeInTheDocument();
+      expect(heroSection).toBeInTheDocument();
+
+      // Verify text content is visible
+      expect(screen.getByTestId('hero-headline')).toBeVisible();
+      expect(screen.getByTestId('hero-tagline')).toBeVisible();
+    });
+
+    it('CTA buttons are functional in cyberpunk theme', () => {
+      renderWithTheme('cyberpunk');
+
+      const getStartedButton = screen.getByTestId('get-started-button');
+      const signInButton = screen.getByTestId('sign-in-button');
+
+      expect(getStartedButton).toBeVisible();
+      expect(signInButton).toBeVisible();
+      expect(getStartedButton).toHaveTextContent('Get Started');
+      expect(signInButton).toHaveTextContent('Sign In');
+    });
+  });
+
+  /**
+   * Test Case 4: Render Home with synthwave theme
+   * Expected: Theme-specific styling is applied correctly
+   */
+  describe('Test Case 4: Synthwave Theme Rendering', () => {
+    it('renders homepage with synthwave theme applied correctly', () => {
+      renderWithTheme('synthwave');
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave');
+    });
+
+    it('synthwave theme is properly persisted', () => {
+      renderWithTheme('synthwave');
+
+      expect(window.localStorage.setItem).toHaveBeenCalledWith('app-theme', 'synthwave');
+    });
+
+    it('all major elements render correctly with synthwave theme', () => {
+      renderWithTheme('synthwave');
+
+      // Verify page structure
+      const homePage = screen.getByTestId('home-page');
+      const heroSection = screen.getByTestId('hero-section');
+
+      expect(homePage).toBeInTheDocument();
+      expect(heroSection).toBeInTheDocument();
+      expect(screen.getByTestId('hero-headline')).toBeVisible();
+      expect(screen.getByTestId('hero-tagline')).toBeVisible();
+    });
+
+    it('navbar is visible and styled in synthwave theme', () => {
+      renderWithTheme('synthwave');
+
+      const navbarLink = screen.getByRole('link', { name: /URLShortener/i });
+      expect(navbarLink).toBeVisible();
+    });
+  });
+
+  /**
+   * Test Case 5: ThemeToggle component is present
+   * Expected: ThemeToggle is rendered and functional on homepage
+   */
+  describe('Test Case 5: ThemeToggle Component Presence', () => {
+    it('ThemeToggle is rendered on the homepage', () => {
+      renderWithTheme('dark');
+
+      // ThemeToggle uses a label element with aria-label "Toggle theme"
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+      expect(themeToggle).toBeInTheDocument();
+    });
+
+    it('ThemeToggle is visible and accessible', () => {
+      renderWithTheme('dark');
+
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+      expect(themeToggle).toBeVisible();
+    });
+
+    it('ThemeToggle shows dropdown with theme options when clicked', async () => {
+      const user = userEvent.setup();
+      renderWithTheme('dark');
+
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+      await user.click(themeToggle);
+
+      // Check that theme options are visible - these are actual buttons in the dropdown
+      expect(screen.getByRole('button', { name: /set light theme/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /set dark theme/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /set cyberpunk theme/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /set synthwave theme/i })).toBeInTheDocument();
+    });
+
+    it('ThemeToggle changes theme when option is selected', async () => {
+      const user = userEvent.setup();
+      renderWithTheme('dark');
+
+      // Verify initial theme
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
+      // Click toggle to show dropdown
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+      await user.click(themeToggle);
+
+      // Select cyberpunk theme
+      const cyberpunkOption = screen.getByRole('button', { name: /set cyberpunk theme/i });
+      await user.click(cyberpunkOption);
+
+      // Verify theme changed
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+      expect(window.localStorage.setItem).toHaveBeenCalledWith('app-theme', 'cyberpunk');
+    });
+
+    it('ThemeToggle is located in the navbar', () => {
+      renderWithTheme('dark');
+
+      const themeToggle = screen.getByLabelText(/toggle theme/i);
+
+      // ThemeToggle should be inside the navbar area
+      expect(themeToggle.closest('.navbar')).toBeInTheDocument();
+    });
+  });
+
+  /**
+   * Test Case 6: BackgroundEffect component
+   * Expected: BackgroundEffect displays appropriately for each theme
+   */
+  describe('Test Case 6: BackgroundEffect Component', () => {
+    it('BackgroundEffect canvas is rendered on the page', () => {
+      renderWithTheme('dark');
+
+      // BackgroundEffect uses a canvas with aria-hidden="true"
+      const canvas = document.querySelector('canvas[aria-hidden="true"]');
+      expect(canvas).toBeInTheDocument();
+    });
+
+    it('BackgroundEffect canvas has correct positioning classes', () => {
+      renderWithTheme('dark');
+
+      const canvas = document.querySelector('canvas');
+      expect(canvas).toHaveClass('fixed', 'inset-0', '-z-10', 'pointer-events-none');
+    });
+
+    it('BackgroundEffect is rendered with light theme', () => {
+      renderWithTheme('light');
+
+      const canvas = document.querySelector('canvas[aria-hidden="true"]');
+      expect(canvas).toBeInTheDocument();
+    });
+
+    it('BackgroundEffect is rendered with cyberpunk theme', () => {
+      renderWithTheme('cyberpunk');
+
+      const canvas = document.querySelector('canvas[aria-hidden="true"]');
+      expect(canvas).toBeInTheDocument();
+    });
+
+    it('BackgroundEffect is rendered with synthwave theme', () => {
+      renderWithTheme('synthwave');
+
+      const canvas = document.querySelector('canvas[aria-hidden="true"]');
+      expect(canvas).toBeInTheDocument();
+    });
+
+    it('BackgroundEffect canvas context methods are called for rendering', () => {
+      renderWithTheme('dark');
+
+      // The mock should have been called during initialization
+      expect(HTMLCanvasElement.prototype.getContext).toHaveBeenCalledWith('2d');
+    });
+
+    it('BackgroundEffect does not interfere with page interactivity', () => {
+      renderWithTheme('dark');
+
+      const canvas = document.querySelector('canvas');
+      expect(canvas).toHaveClass('pointer-events-none');
+
+      // Verify buttons are still clickable
+      const getStartedButton = screen.getByTestId('get-started-button');
+      expect(getStartedButton).toBeVisible();
+    });
+  });
+
+  /**
+   * Additional theme integration tests
+   */
+  describe('Theme Integration - Cross-cutting concerns', () => {
+    it('theme persists across page interactions', async () => {
+      const user = userEvent.setup();
+      renderWithTheme('cyberpunk');
+
+      // Initial theme check
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+
+      // Interact with page elements
+      const getStartedButton = screen.getByTestId('get-started-button');
+      await user.hover(getStartedButton);
+
+      // Theme should remain unchanged
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+    });
+
+    it('all supported themes can be applied without errors', () => {
+      const themes = ['light', 'dark', 'cyberpunk', 'synthwave', 'retro', 'halloween'];
+
+      themes.forEach((theme) => {
+        // Clear previous render
+        document.documentElement.removeAttribute('data-theme');
+
+        const { unmount } = renderWithTheme(theme);
+
+        expect(document.documentElement.getAttribute('data-theme')).toBe(theme);
+
+        unmount();
+      });
+    });
+
+    it('theme is loaded from localStorage on initial render', () => {
+      vi.mocked(window.localStorage.getItem).mockReturnValue('synthwave');
+
+      render(
+        <ThemeProvider>
+          <AuthProvider>
+            <BrowserRouter>
+              <Home />
+            </BrowserRouter>
+          </AuthProvider>
+        </ThemeProvider>
+      );
+
+      expect(window.localStorage.getItem).toHaveBeenCalledWith('app-theme');
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave');
+    });
+
+    it('default theme is applied when no theme is stored', () => {
+      vi.mocked(window.localStorage.getItem).mockReturnValue(null);
+
+      render(
+        <ThemeProvider>
+          <AuthProvider>
+            <BrowserRouter>
+              <Home />
+            </BrowserRouter>
+          </AuthProvider>
+        </ThemeProvider>
+      );
+
+      // Default theme is 'dark' as per ThemeContext
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+  });
+});
