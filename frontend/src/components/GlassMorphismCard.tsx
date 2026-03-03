@@ -26,3 +26,5 @@ export function GlassMorphismCard({
     </div>
   );
 }
+
+export default GlassMorphismCard;
