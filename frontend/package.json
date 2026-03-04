@@ -16,6 +16,7 @@
     "@tailwindcss/vite": "^4.2.1",
     "daisyui": "^5.5.19",
     "framer-motion": "^12.34.5",
+    "lucide-react": "^0.576.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.1",

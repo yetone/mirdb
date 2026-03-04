@@ -1,3 +1,10 @@
+/**
+ * GlassMorphism Card Component
+ *
+ * A card component with translucent, blurred background (glassmorphism effect).
+ * Used for feature cards and other content containers.
+ */
+
 import { motion, type HTMLMotionProps } from 'framer-motion'
 import { forwardRef } from 'react'
 
@@ -12,7 +19,7 @@ export const GlassMorphismCard = forwardRef<
   return (
     <motion.div
       ref={ref}
-      className={`card bg-base-100/80 backdrop-blur-md shadow-xl border border-base-300/50 ${className}`}
+      className={`backdrop-blur-md bg-base-100/70 border border-base-content/10 rounded-2xl p-6 shadow-xl ${className}`}
       {...props}
     >
       {children}
@@ -21,3 +28,5 @@ export const GlassMorphismCard = forwardRef<
 })
 
 GlassMorphismCard.displayName = 'GlassMorphismCard'
+
+export default GlassMorphismCard

@@ -8,7 +8,7 @@
  */
 
 export { HeroSection } from './HeroSection'
+export { FeaturesSection } from './FeaturesSection'
 // Export other components as they are implemented
-// export { FeaturesSection } from './FeaturesSection'
 // export { FAQSection } from './FAQSection'
 // export { CTAFooter } from './CTAFooter'
