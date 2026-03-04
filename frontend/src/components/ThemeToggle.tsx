@@ -10,7 +10,7 @@
  */
 import { motion } from 'framer-motion'
 import { Sun, Moon, Palette } from 'lucide-react'
-import { useTheme, Theme } from '../contexts/ThemeContext'
+import { useSafeTheme, Theme } from '../contexts/ThemeContext'
 
 export interface ThemeToggleProps {
   showLabel?: boolean
@@ -32,7 +32,7 @@ const themeLabels: Record<Theme, string> = {
 }
 
 export function ThemeToggle({ showLabel = false, className = '' }: ThemeToggleProps) {
-  const { theme, setTheme, availableThemes } = useTheme()
+  const { theme, setTheme, availableThemes } = useSafeTheme()
 
   return (
     <div

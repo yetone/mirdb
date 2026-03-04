@@ -86,4 +86,24 @@ export function useTheme(): ThemeContextValue {
   return context
 }
 
+/**
+ * Safe version of useTheme that returns fallback values when used outside ThemeProvider.
+ * Used for graceful degradation (NFR-4).
+ *
+ * @returns ThemeContextValue with fallback defaults when context is missing
+ */
+export function useSafeTheme(): ThemeContextValue {
+  const context = useContext(ThemeContext)
+  if (!context) {
+    // Return fallback values for graceful degradation
+    return {
+      theme: 'dark' as Theme,
+      setTheme: () => {},
+      toggleTheme: () => {},
+      availableThemes: AVAILABLE_THEMES,
+    }
+  }
+  return context
+}
+
 export { ThemeContext }

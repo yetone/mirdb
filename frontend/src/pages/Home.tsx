@@ -27,7 +27,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { HeroSection, CTAFooter, FeaturesSection, FAQSection } from '../components/home'
 import { Navbar } from '../components/Navbar'
 import { BackgroundEffect } from '../components/BackgroundEffect'
-import { useTheme } from '../contexts/ThemeContext'
+import { useSafeTheme } from '../contexts/ThemeContext'
 import type { HomePageProps } from '../types/home'
 
 // Theme transition animation variants
@@ -44,7 +44,7 @@ const themeTransitionVariants = {
 }
 
 export function Home({ showFeatures = true, showFAQ = true }: HomePageProps) {
-  const { theme } = useTheme()
+  const { theme } = useSafeTheme()
 
   return (
     <>
