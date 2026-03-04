@@ -38,8 +38,10 @@ export function Home({ showFeatures = true, showFAQ = true }: HomePageProps) {
 
   return (
     <>
-      {/* Navigation Bar */}
-      <Navbar />
+      {/* Site Header with Navigation */}
+      <header data-testid="site-header" role="banner">
+        <Navbar />
+      </header>
 
       <AnimatePresence mode="wait">
         <motion.main
@@ -75,6 +77,17 @@ export function Home({ showFeatures = true, showFAQ = true }: HomePageProps) {
           <CTAFooter />
         </motion.main>
       </AnimatePresence>
+
+      {/* Site Footer with copyright and links */}
+      <footer
+        className="bg-base-200 py-8 px-4 sm:px-6 lg:px-8"
+        data-testid="site-footer"
+        role="contentinfo"
+      >
+        <div className="max-w-6xl mx-auto text-center text-base-content/60">
+          <p>&copy; {new Date().getFullYear()} URL Shortener. All rights reserved.</p>
+        </div>
+      </footer>
     </>
   )
 }
