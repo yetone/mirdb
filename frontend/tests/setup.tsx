@@ -5,8 +5,12 @@
  */
 import React from 'react'
 import '@testing-library/jest-dom'
-import { afterEach, vi } from 'vitest'
+import { afterEach, vi, expect } from 'vitest'
 import { cleanup } from '@testing-library/react'
+import * as axeMatchers from 'vitest-axe/matchers'
+
+// Extend expect with axe-core matchers
+expect.extend(axeMatchers)
 
 // Cleanup after each test
 afterEach(() => {
