@@ -13,32 +13,64 @@ afterEach(() => {
   cleanup()
 })
 
+// Helper function to filter framer-motion specific props
+const filterMotionProps = (props: Record<string, unknown>) => {
+  const {
+    initial, animate, variants, whileHover, whileTap, whileInView,
+    viewport, transition, exit, onAnimationComplete,
+    ...rest
+  } = props
+  return rest
+}
+
 // Mock Framer Motion to render immediately without animations
 vi.mock('framer-motion', async () => {
   const actual = await vi.importActual('framer-motion')
   return {
     ...actual,
     motion: {
-      div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { initial, animate, variants, whileHover, whileTap, ...rest } = props as Record<string, unknown>
-        return <div {...rest}>{children}</div>
-      },
-      h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { initial, animate, variants, whileHover, whileTap, ...rest } = props as Record<string, unknown>
-        return <h1 {...rest}>{children}</h1>
-      },
-      p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { initial, animate, variants, whileHover, whileTap, ...rest } = props as Record<string, unknown>
-        return <p {...rest}>{children}</p>
-      },
-      button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { initial, animate, variants, whileHover, whileTap, ...rest } = props as Record<string, unknown>
-        return <button {...rest}>{children}</button>
-      },
+      div: React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+        ({ children, ...props }, ref) => {
+          const rest = filterMotionProps(props as Record<string, unknown>)
+          return <div ref={ref} {...rest}>{children}</div>
+        }
+      ),
+      nav: React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
+        ({ children, ...props }, ref) => {
+          const rest = filterMotionProps(props as Record<string, unknown>)
+          return <nav ref={ref} {...rest}>{children}</nav>
+        }
+      ),
+      section: React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
+        ({ children, ...props }, ref) => {
+          const rest = filterMotionProps(props as Record<string, unknown>)
+          return <section ref={ref} {...rest}>{children}</section>
+        }
+      ),
+      h1: React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+        ({ children, ...props }, ref) => {
+          const rest = filterMotionProps(props as Record<string, unknown>)
+          return <h1 ref={ref} {...rest}>{children}</h1>
+        }
+      ),
+      h2: React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+        ({ children, ...props }, ref) => {
+          const rest = filterMotionProps(props as Record<string, unknown>)
+          return <h2 ref={ref} {...rest}>{children}</h2>
+        }
+      ),
+      p: React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+        ({ children, ...props }, ref) => {
+          const rest = filterMotionProps(props as Record<string, unknown>)
+          return <p ref={ref} {...rest}>{children}</p>
+        }
+      ),
+      button: React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
+        ({ children, ...props }, ref) => {
+          const rest = filterMotionProps(props as Record<string, unknown>)
+          return <button ref={ref} {...rest}>{children}</button>
+        }
+      ),
     },
   }
 })

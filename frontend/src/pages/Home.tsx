@@ -12,26 +12,38 @@
  * - NFR-1: WCAG 2.1 AA accessibility
  * - NFR-5: SEO optimization
  */
-import { HeroSection } from '../components/home'
+import { HeroSection, CTAFooter } from '../components/home'
+import { Navbar } from '../components/Navbar'
 import type { HomePageProps } from '../types/home'
 
 export function Home({ showFeatures = true, showFAQ = true }: HomePageProps) {
   return (
-    <main
-      className="min-h-screen bg-base-100"
-      data-testid="home-page"
-      role="main"
-      aria-label="Homepage"
-    >
-      {/* Hero Section - First viewport content */}
-      <HeroSection />
+    <>
+      {/* Navigation Bar */}
+      <Navbar />
 
-      {/* Future sections will be added by other scenarios:
-        * - FeaturesSection (Scenario 3)
-        * - FAQSection (Scenario 4)
-        * - CTAFooter (Scenario 2)
-        */}
-    </main>
+      <main
+        className="min-h-screen bg-base-100 pt-16"
+        data-testid="home-page"
+        role="main"
+        aria-label="Homepage"
+      >
+        {/* Hero Section - First viewport content */}
+        <HeroSection />
+
+        {/* Placeholder sections for anchor navigation */}
+        <section id="features-section" data-testid="features-section" className="py-20">
+          {/* FeaturesSection (Scenario 3) will replace this placeholder */}
+        </section>
+
+        <section id="faq-section" data-testid="faq-section" className="py-20">
+          {/* FAQSection (Scenario 4) will replace this placeholder */}
+        </section>
+
+        {/* CTA Footer Section */}
+        <CTAFooter />
+      </main>
+    </>
   )
 }
 
