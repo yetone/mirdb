@@ -1,58 +1,53 @@
-import { motion, type HTMLMotionProps } from 'framer-motion'
-import { forwardRef } from 'react'
+/**
+ * FuturisticButton Component
+ *
+ * A styled button component with futuristic visual styling.
+ * Used for CTAs throughout the application.
+ */
+import { motion } from 'framer-motion'
+import { ComponentPropsWithoutRef, forwardRef } from 'react'
 
-export interface FuturisticButtonProps
-  extends Omit<HTMLMotionProps<'button'>, 'children'> {
-  children: React.ReactNode
-  variant?: 'primary' | 'secondary' | 'ghost'
+export interface FuturisticButtonProps extends ComponentPropsWithoutRef<'button'> {
+  variant?: 'primary' | 'secondary' | 'outline'
   size?: 'sm' | 'md' | 'lg'
-  isLoading?: boolean
+  href?: string
 }
 
-export const FuturisticButton = forwardRef<
-  HTMLButtonElement,
-  FuturisticButtonProps
->(
-  (
-    {
-      children,
-      variant = 'primary',
-      size = 'md',
-      isLoading = false,
-      className = '',
-      disabled,
-      ...props
-    },
-    ref
-  ) => {
-    const baseClasses = 'btn font-semibold transition-all duration-300'
+export const FuturisticButton = forwardRef<HTMLButtonElement, FuturisticButtonProps>(
+  ({ children, variant = 'primary', size = 'md', className = '', href, onClick, ...props }, ref) => {
+    const baseStyles = 'btn font-bold tracking-wider transition-all duration-300 ease-out'
 
-    const variantClasses = {
-      primary: 'btn-primary text-primary-content',
-      secondary: 'btn-secondary text-secondary-content',
-      ghost: 'btn-ghost',
+    const variantStyles = {
+      primary: 'btn-primary bg-gradient-to-r from-primary to-secondary text-primary-content hover:shadow-lg hover:shadow-primary/50',
+      secondary: 'btn-secondary',
+      outline: 'btn-outline border-2 hover:border-primary hover:bg-primary/10',
     }
 
-    const sizeClasses = {
-      sm: 'btn-sm',
-      md: 'btn-md',
-      lg: 'btn-lg text-lg px-8',
+    const sizeStyles = {
+      sm: 'btn-sm text-sm px-4 py-2',
+      md: 'btn-md text-base px-6 py-3',
+      lg: 'btn-lg text-lg px-8 py-4',
+    }
+
+    const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`
+
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (href) {
+        window.location.href = href
+      }
+      onClick?.(e)
     }
 
     return (
       <motion.button
         ref={ref}
-        className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
-        disabled={disabled || isLoading}
+        className={combinedClassName}
+        onClick={handleClick}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         {...props}
       >
-        {isLoading ? (
-          <span className="loading loading-spinner loading-sm"></span>
-        ) : (
-          children
-        )}
+        {children}
       </motion.button>
     )
   }

@@ -11,69 +11,85 @@
  * - Primary CTA using FuturisticButton
  * - Fade-in animation on load (0.5-1s)
  */
-
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { FuturisticButton } from '../FuturisticButton'
 import type { HeroSectionProps } from '../../types/home'
 
-const defaultHeadline = 'Shorten URLs, Track Clicks, Understand Your Audience'
-const defaultSubheading =
-  'Create memorable short links from long URLs and get detailed analytics on who\'s clicking and where they\'re coming from.'
-const defaultCtaText = 'Get Started Free'
-const defaultCtaLink = '/register'
+const fadeInVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: 'easeOut',
+    },
+  },
+}
 
-export const HeroSection: React.FC<HeroSectionProps> = ({
-  headline = defaultHeadline,
-  subheading = defaultSubheading,
-  ctaText = defaultCtaText,
-  ctaLink = defaultCtaLink,
-}) => {
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1,
+    },
+  },
+}
+
+export function HeroSection({
+  headline = 'Shorten URLs, Track Clicks, Understand Your Audience',
+  subheading = 'Create memorable short links from long URLs and get detailed analytics on who\'s clicking and where they\'re coming from.',
+  ctaText = 'Get Started Free',
+  ctaLink = '/register',
+}: HeroSectionProps) {
   return (
     <section
-      className="hero min-h-[80vh] flex items-center justify-center"
+      className="hero-section w-full px-4 sm:px-6 lg:px-8"
       data-testid="hero-section"
-      aria-label="Hero section"
+      aria-labelledby="hero-headline"
     >
       <motion.div
-        className="hero-content text-center max-w-4xl px-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
       >
-        <div className="flex flex-col items-center gap-6">
-          <h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-base-content"
-            data-testid="hero-headline"
-          >
-            {headline}
-          </h1>
+        {/* Headline */}
+        <motion.h1
+          id="hero-headline"
+          className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+          variants={fadeInVariants}
+          data-testid="hero-headline"
+        >
+          <span className="gradient-text">{headline}</span>
+        </motion.h1>
 
-          <p
-            className="text-lg md:text-xl text-base-content/70 max-w-2xl"
-            data-testid="hero-subheading"
-          >
-            {subheading}
-          </p>
+        {/* Subheading */}
+        <motion.p
+          className="text-lg sm:text-xl lg:text-2xl text-base-content/70 mb-10 max-w-2xl"
+          variants={fadeInVariants}
+          data-testid="hero-subheading"
+        >
+          {subheading}
+        </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
+        {/* Primary CTA Button */}
+        <motion.div variants={fadeInVariants}>
+          <FuturisticButton
+            variant="primary"
+            size="lg"
+            href={ctaLink}
+            data-testid="hero-cta"
+            aria-label={ctaText}
           >
-            <Link to={ctaLink}>
-              <FuturisticButton
-                variant="primary"
-                size="lg"
-                data-testid="hero-cta-button"
-                aria-label={ctaText}
-              >
-                {ctaText}
-              </FuturisticButton>
-            </Link>
-          </motion.div>
-        </div>
+            {ctaText}
+          </FuturisticButton>
+        </motion.div>
       </motion.div>
     </section>
   )
 }
+
+export default HeroSection

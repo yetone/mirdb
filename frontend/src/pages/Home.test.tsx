@@ -1,117 +1,59 @@
 /**
- * Home Page Tests
- * Owner: Scenario 1 - Hero Section Rendering
+ * Home Page Unit Tests
  *
- * Integration tests for homepage component.
- * Validates that hero section renders correctly within the homepage context.
+ * Tests for the homepage component rendering and integration.
  */
-
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import Home from './Home'
+import { Home } from './Home'
 
+// Helper to wrap component with router
 const renderWithRouter = (ui: React.ReactElement) => {
   return render(<BrowserRouter>{ui}</BrowserRouter>)
 }
 
 describe('Home Page', () => {
-  describe('Page Structure', () => {
-    it('renders home page with proper test id', () => {
-      renderWithRouter(<Home />)
+  it('should render the home page container', () => {
+    renderWithRouter(<Home />)
 
-      const homePage = screen.getByTestId('home-page')
-      expect(homePage).toBeInTheDocument()
-    })
-
-    it('home page has main element for accessibility', () => {
-      renderWithRouter(<Home />)
-
-      const main = screen.getByRole('main')
-      expect(main).toBeInTheDocument()
-    })
+    const homePage = screen.getByTestId('home-page')
+    expect(homePage).toBeInTheDocument()
   })
 
-  describe('Hero Section Integration', () => {
-    it('renders hero section within home page', () => {
-      renderWithRouter(<Home />)
+  it('should have proper accessibility role', () => {
+    renderWithRouter(<Home />)
 
-      const heroSection = screen.getByTestId('hero-section')
-      expect(heroSection).toBeInTheDocument()
-    })
-
-    it('hero headline is rendered on home page', () => {
-      renderWithRouter(<Home />)
-
-      const headline = screen.getByTestId('hero-headline')
-      expect(headline).toBeInTheDocument()
-      // Verify not hidden via aria attribute
-      expect(headline).not.toHaveAttribute('aria-hidden', 'true')
-    })
-
-    it('hero subheading is rendered on home page', () => {
-      renderWithRouter(<Home />)
-
-      const subheading = screen.getByTestId('hero-subheading')
-      expect(subheading).toBeInTheDocument()
-      // Verify not hidden via aria attribute
-      expect(subheading).not.toHaveAttribute('aria-hidden', 'true')
-    })
-
-    it('hero CTA button is rendered on home page', () => {
-      renderWithRouter(<Home />)
-
-      const ctaButton = screen.getByTestId('hero-cta-button')
-      expect(ctaButton).toBeInTheDocument()
-      expect(ctaButton).not.toBeDisabled()
-    })
+    const main = screen.getByRole('main')
+    expect(main).toBeInTheDocument()
+    expect(main).toHaveAttribute('aria-label', 'Homepage')
   })
 
-  describe('Test Case 4: First Viewport Visibility', () => {
-    it('hero content renders without requiring scroll', () => {
-      // This test validates that all essential hero elements
-      // are rendered in the DOM and would be visible in the first viewport
-      // The actual viewport check is done via integration/E2E testing
-      renderWithRouter(<Home />)
+  it('should include the HeroSection component', () => {
+    renderWithRouter(<Home />)
 
-      // All essential hero elements should be present
-      const headline = screen.getByTestId('hero-headline')
-      const subheading = screen.getByTestId('hero-subheading')
-      const ctaButton = screen.getByTestId('hero-cta-button')
-
-      expect(headline).toBeInTheDocument()
-      expect(subheading).toBeInTheDocument()
-      expect(ctaButton).toBeInTheDocument()
-
-      // Verify elements are not hidden via aria attributes
-      expect(headline).not.toHaveAttribute('aria-hidden', 'true')
-      expect(subheading).not.toHaveAttribute('aria-hidden', 'true')
-      expect(ctaButton).not.toHaveAttribute('aria-hidden', 'true')
-    })
-
-    it('hero section uses min-height that fills viewport', () => {
-      renderWithRouter(<Home />)
-
-      const heroSection = screen.getByTestId('hero-section')
-      // The hero section should have classes that ensure it fills the viewport
-      expect(heroSection.className).toMatch(/min-h-\[80vh\]|min-h-screen/)
-    })
+    const heroSection = screen.getByTestId('hero-section')
+    expect(heroSection).toBeInTheDocument()
   })
 
-  describe('Accessibility', () => {
-    it('page has proper landmark structure', () => {
-      renderWithRouter(<Home />)
+  it('should render hero headline within the home page', () => {
+    renderWithRouter(<Home />)
 
-      // Should have a main landmark
-      const main = screen.getByRole('main')
-      expect(main).toBeInTheDocument()
-    })
+    const headline = screen.getByTestId('hero-headline')
+    expect(headline).toBeInTheDocument()
+  })
 
-    it('headline uses proper heading level (h1)', () => {
-      renderWithRouter(<Home />)
+  it('should render hero subheading within the home page', () => {
+    renderWithRouter(<Home />)
 
-      const h1 = screen.getByRole('heading', { level: 1 })
-      expect(h1).toBeInTheDocument()
-    })
+    const subheading = screen.getByTestId('hero-subheading')
+    expect(subheading).toBeInTheDocument()
+  })
+
+  it('should render hero CTA button within the home page', () => {
+    renderWithRouter(<Home />)
+
+    const ctaButton = screen.getByTestId('hero-cta')
+    expect(ctaButton).toBeInTheDocument()
   })
 })

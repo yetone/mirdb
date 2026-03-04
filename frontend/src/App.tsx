@@ -1,15 +1,18 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
+import { Home } from './pages/Home'
+import './index.css'
 
 function App() {
   return (
     <BrowserRouter>
-      <div data-theme="light" className="min-h-screen">
+      <div data-theme="dark" className="min-h-screen">
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* Placeholder routes for other pages */}
-          <Route path="/register" element={<div>Register Page</div>} />
-          <Route path="/login" element={<div>Login Page</div>} />
+          {/* Future routes will be added:
+            * /login - Login page
+            * /register - Registration page
+            * /dashboard - User dashboard
+            */}
         </Routes>
       </div>
     </BrowserRouter>

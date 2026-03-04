@@ -1,26 +1,39 @@
 @import "tailwindcss";
-@plugin "daisyui";
 
-/* DaisyUI theme configuration */
-@theme {
-  --color-primary: oklch(65.69% 0.196 275.75);
-  --color-secondary: oklch(74.8% 0.26 342.55);
-  --color-accent: oklch(74.51% 0.167 183.61);
-}
-
-/* Base styles */
-html,
-body,
-#root {
-  min-height: 100vh;
+/* Reset and base styles */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  min-height: 100vh;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Hero Section - ensure it fits in first viewport */
+.hero-section {
+  min-height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(to right, var(--color-primary, #6366f1), var(--color-secondary, #8b5cf6), var(--color-accent, #ec4899));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

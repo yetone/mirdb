@@ -4,6 +4,13 @@
  * Type definitions for homepage components and data structures.
  */
 
+export interface HeroSectionProps {
+  headline?: string
+  subheading?: string
+  ctaText?: string
+  ctaLink?: string
+}
+
 export interface Feature {
   id: number
   title: string
@@ -17,23 +24,7 @@ export interface FAQItem {
   answer: string
 }
 
-export interface HeroSectionProps {
-  headline?: string
-  subheading?: string
-  ctaText?: string
-  ctaLink?: string
-}
-
-export interface FeaturesSectionProps {
-  features?: Feature[]
-}
-
-export interface FAQSectionProps {
-  items?: FAQItem[]
-}
-
-export interface CTAFooterProps {
-  ctaText?: string
-  ctaLink?: string
-  showLogin?: boolean
+export interface HomePageProps {
+  showFeatures?: boolean
+  showFAQ?: boolean
 }
