@@ -8,13 +8,44 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { Home } from '../../src/pages/Home'
+import { ThemeProvider } from '../../src/contexts/ThemeContext'
 
-// Helper to wrap component with router
+// Mock localStorage
+const localStorageMock = (() => {
+  let store: Record<string, string> = {}
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key]
+    }),
+    clear: vi.fn(() => {
+      store = {}
+    }),
+  }
+})()
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+})
+
+// Helper to wrap component with router and theme provider
 const renderWithRouter = (ui: React.ReactElement) => {
-  return render(<BrowserRouter>{ui}</BrowserRouter>)
+  return render(
+    <ThemeProvider defaultTheme="dark">
+      <BrowserRouter>{ui}</BrowserRouter>
+    </ThemeProvider>
+  )
 }
 
 describe('Homepage Integration Tests', () => {
+  beforeEach(() => {
+    localStorageMock.clear()
+    vi.clearAllMocks()
+  })
+
   describe('Test Case 4: Hero Section Viewport Visibility', () => {
     beforeEach(() => {
       // Set viewport size to standard 1024x768

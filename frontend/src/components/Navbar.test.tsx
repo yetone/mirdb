@@ -11,9 +11,44 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { Navbar } from './Navbar'
+import { ThemeProvider } from '../contexts/ThemeContext'
+
+// Mock localStorage
+const localStorageMock = (() => {
+  let store: Record<string, string> = {}
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key]
+    }),
+    clear: vi.fn(() => {
+      store = {}
+    }),
+  }
+})()
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+})
+
+// Helper to wrap component with providers
+const renderWithProviders = (
+  ui: React.ReactElement,
+  { initialEntries = ['/'] } = {}
+) => {
+  return render(
+    <ThemeProvider defaultTheme="dark">
+      <MemoryRouter initialEntries={initialEntries}>{ui}</MemoryRouter>
+    </ThemeProvider>
+  )
+}
 
 describe('Navbar', () => {
   beforeEach(() => {
+    localStorageMock.clear()
     vi.clearAllMocks()
   })
 
@@ -26,11 +61,7 @@ describe('Navbar', () => {
    * Expected: Navigation contains links for Features, FAQ, Login, and Register/Get Started
    */
   it('should contain navigation links for Features, FAQ, Login, and Register/Get Started', () => {
-    render(
-      <MemoryRouter>
-        <Navbar />
-      </MemoryRouter>
-    )
+    renderWithProviders(<Navbar />)
 
     // Check navbar is rendered
     expect(screen.getByTestId('navbar')).toBeInTheDocument()
@@ -58,12 +89,14 @@ describe('Navbar', () => {
    */
   it('should navigate to /login when Login link is clicked', () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<Navbar />} />
-          <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
-        </Routes>
-      </MemoryRouter>
+      <ThemeProvider defaultTheme="dark">
+        <MemoryRouter initialEntries={['/']}>
+          <Routes>
+            <Route path="/" element={<Navbar />} />
+            <Route path="/login" element={<div data-testid="login-page">Login Page</div>} />
+          </Routes>
+        </MemoryRouter>
+      </ThemeProvider>
     )
 
     const loginLink = screen.getByTestId('nav-login')
@@ -79,12 +112,14 @@ describe('Navbar', () => {
    */
   it('should navigate to /register when Get Started button is clicked', () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<Navbar />} />
-          <Route path="/register" element={<div data-testid="register-page">Register Page</div>} />
-        </Routes>
-      </MemoryRouter>
+      <ThemeProvider defaultTheme="dark">
+        <MemoryRouter initialEntries={['/']}>
+          <Routes>
+            <Route path="/" element={<Navbar />} />
+            <Route path="/register" element={<div data-testid="register-page">Register Page</div>} />
+          </Routes>
+        </MemoryRouter>
+      </ThemeProvider>
     )
 
     const registerButton = screen.getByTestId('nav-register')
@@ -103,11 +138,7 @@ describe('Navbar', () => {
     const mockElement = { scrollIntoView: scrollIntoViewMock }
     vi.spyOn(document, 'getElementById').mockReturnValue(mockElement as unknown as HTMLElement)
 
-    render(
-      <MemoryRouter>
-        <Navbar />
-      </MemoryRouter>
-    )
+    renderWithProviders(<Navbar />)
 
     const featuresLink = screen.getByTestId('nav-features')
     fireEvent.click(featuresLink)
@@ -126,11 +157,7 @@ describe('Navbar', () => {
     const mockElement = { scrollIntoView: scrollIntoViewMock }
     vi.spyOn(document, 'getElementById').mockReturnValue(mockElement as unknown as HTMLElement)
 
-    render(
-      <MemoryRouter>
-        <Navbar />
-      </MemoryRouter>
-    )
+    renderWithProviders(<Navbar />)
 
     const faqLink = screen.getByTestId('nav-faq')
     fireEvent.click(faqLink)
@@ -140,11 +167,7 @@ describe('Navbar', () => {
   })
 
   it('should render the logo with link to homepage', () => {
-    render(
-      <MemoryRouter>
-        <Navbar />
-      </MemoryRouter>
-    )
+    renderWithProviders(<Navbar />)
 
     const logo = screen.getByTestId('navbar-logo')
     expect(logo).toBeInTheDocument()
@@ -153,11 +176,7 @@ describe('Navbar', () => {
   })
 
   it('should have proper accessibility attributes', () => {
-    render(
-      <MemoryRouter>
-        <Navbar />
-      </MemoryRouter>
-    )
+    renderWithProviders(<Navbar />)
 
     const navbar = screen.getByTestId('navbar')
     expect(navbar).toHaveAttribute('role', 'navigation')
@@ -165,22 +184,14 @@ describe('Navbar', () => {
   })
 
   it('should hide auth buttons when showAuthButtons is false', () => {
-    render(
-      <MemoryRouter>
-        <Navbar showAuthButtons={false} />
-      </MemoryRouter>
-    )
+    renderWithProviders(<Navbar showAuthButtons={false} />)
 
     expect(screen.queryByTestId('nav-login')).not.toBeInTheDocument()
     expect(screen.queryByTestId('nav-register')).not.toBeInTheDocument()
   })
 
   it('should render mobile menu toggle', () => {
-    render(
-      <MemoryRouter>
-        <Navbar />
-      </MemoryRouter>
-    )
+    renderWithProviders(<Navbar />)
 
     expect(screen.getByTestId('mobile-menu-toggle')).toBeInTheDocument()
   })

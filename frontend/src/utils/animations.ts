@@ -50,3 +50,32 @@ export const featureCardVariants: Variants = {
     }
   })
 }
+
+/**
+ * Theme transition variants for smooth theme changes
+ * Used for homepage and other theme-aware components
+ */
+export const themeTransition: Variants = {
+  initial: { opacity: 0.9 },
+  animate: {
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+      ease: 'easeOut'
+    }
+  },
+  exit: { opacity: 0.9 }
+}
+
+/**
+ * Background color transition for theme changes
+ * Applied to main containers that need smooth color transitions
+ */
+export const backgroundTransition = {
+  transition: {
+    backgroundColor: {
+      duration: 0.3,
+      ease: 'easeInOut'
+    }
+  }
+}

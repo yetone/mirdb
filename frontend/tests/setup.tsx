@@ -28,6 +28,7 @@ vi.mock('framer-motion', async () => {
   const actual = await vi.importActual('framer-motion')
   return {
     ...actual,
+    AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
     motion: {
       div: React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
         ({ children, ...props }, ref) => {
@@ -45,6 +46,12 @@ vi.mock('framer-motion', async () => {
         ({ children, ...props }, ref) => {
           const rest = filterMotionProps(props as Record<string, unknown>)
           return <section ref={ref} {...rest}>{children}</section>
+        }
+      ),
+      main: React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
+        ({ children, ...props }, ref) => {
+          const rest = filterMotionProps(props as Record<string, unknown>)
+          return <main ref={ref} {...rest}>{children}</main>
         }
       ),
       h1: React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
@@ -69,6 +76,12 @@ vi.mock('framer-motion', async () => {
         ({ children, ...props }, ref) => {
           const rest = filterMotionProps(props as Record<string, unknown>)
           return <button ref={ref} {...rest}>{children}</button>
+        }
+      ),
+      span: React.forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
+        ({ children, ...props }, ref) => {
+          const rest = filterMotionProps(props as Record<string, unknown>)
+          return <span ref={ref} {...rest}>{children}</span>
         }
       ),
     },

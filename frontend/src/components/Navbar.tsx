@@ -13,6 +13,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FuturisticButton } from './FuturisticButton'
+import { ThemeToggle } from './ThemeToggle'
 
 export interface NavbarProps {
   showAuthButtons?: boolean
@@ -98,6 +99,7 @@ export function Navbar({ showAuthButtons = true }: NavbarProps) {
             </FuturisticButton>
           </>
         )}
+        <ThemeToggle data-testid="navbar-theme-toggle" />
       </div>
 
       {/* Mobile Navigation - Dropdown */}
@@ -160,6 +162,9 @@ export function Navbar({ showAuthButtons = true }: NavbarProps) {
                 </li>
               </>
             )}
+            <li role="menuitem">
+              <ThemeToggle showLabel data-testid="mobile-theme-toggle" />
+            </li>
           </ul>
         </div>
       </div>

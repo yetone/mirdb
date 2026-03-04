@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Home } from './pages/Home'
+import { ThemeProvider } from './contexts/ThemeContext'
 import './index.css'
 
 /**
@@ -28,18 +29,20 @@ function Register() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <div data-theme="dark" className="min-h-screen">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          {/* Future routes will be added:
-            * /dashboard - User dashboard
-            */}
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <ThemeProvider defaultTheme="dark">
+      <BrowserRouter>
+        <div data-theme="dark" className="min-h-screen transition-colors duration-300">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            {/* Future routes will be added:
+              * /dashboard - User dashboard
+              */}
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 
