@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* DaisyUI theme configuration */
+@theme {
+  --color-primary: oklch(65.69% 0.196 275.75);
+  --color-secondary: oklch(74.8% 0.26 342.55);
+  --color-accent: oklch(74.51% 0.167 183.61);
+}
+
+/* Base styles */
+html,
+body,
+#root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
