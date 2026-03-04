@@ -3,6 +3,7 @@
  * Owner: Scenario 1 - Hero Section Rendering
  * Modified by: Scenario 5 - Theme Adaptation
  * Modified by: Scenario 6 - Responsive Design
+ * Modified by: Scenario 11 - Component Integration
  *
  * Main landing page for the URL Shortener service.
  * Integrates all homepage sections and existing components.
@@ -13,10 +14,19 @@
  * - REQ-8: Responsive design
  * - NFR-1: WCAG 2.1 AA accessibility
  * - NFR-5: SEO optimization
+ *
+ * Integrated Components:
+ * - Navbar (with ThemeToggle)
+ * - BackgroundEffect
+ * - HeroSection (with FuturisticButton)
+ * - FeaturesSection (with GlassMorphismCard)
+ * - FAQSection
+ * - CTAFooter
  */
 import { motion, AnimatePresence } from 'framer-motion'
 import { HeroSection, CTAFooter, FeaturesSection, FAQSection } from '../components/home'
 import { Navbar } from '../components/Navbar'
+import { BackgroundEffect } from '../components/BackgroundEffect'
 import { useTheme } from '../contexts/ThemeContext'
 import type { HomePageProps } from '../types/home'
 
@@ -38,6 +48,9 @@ export function Home({ showFeatures = true, showFAQ = true }: HomePageProps) {
 
   return (
     <>
+      {/* Background visual effects */}
+      <BackgroundEffect variant="default" />
+
       {/* Site Header with Navigation */}
       <header data-testid="site-header" role="banner">
         <Navbar />
