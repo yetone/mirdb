@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom component styles */
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200;
+  }
+
+  .section-container {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Code block styling */
+pre, code {
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+}

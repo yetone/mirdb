@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A high-performance persistent key-value store with Memcached protocol support">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Theme detection script -->
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- Content will be included here -->
+    <!--
+  Homepage Template for MirDB
+  Includes all section partials in order
+-->
+
+<!-- Header partial placeholder -->
+<!-- Header Partial - Navigation and Branding (Scenario 1) -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+    <nav class="section-container flex items-center justify-between h-16">
+        <a href="#" class="flex items-center space-x-2">
+            <img src="images/logo.gif" alt="MirDB Logo" class="h-8 w-auto">
+            <span class="font-bold text-xl">MirDB</span>
+        </a>
+        <div class="hidden md:flex items-center space-x-8">
+            <a href="#features" class="hover:text-primary-600 transition-colors">Features</a>
+            <a href="#quickstart" class="hover:text-primary-600 transition-colors">Quick Start</a>
+            <a href="#configuration" class="hover:text-primary-600 transition-colors">Configuration</a>
+            <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" class="hover:text-primary-600 transition-colors">GitHub</a>
+        </div>
+    </nav>
+</header>
+
+
+<!-- Main content -->
+<main>
+    <!-- Hero Section -->
+    <!-- Hero Section Partial -->
+<!-- Owner: Scenario 2 - Hero Section and Value Proposition -->
+<section id="hero" class="min-h-screen flex items-center justify-center pt-16" data-testid="hero-section">
+    <div class="section-container text-center py-20">
+        <!-- Centered logo -->
+        <div class="mb-8">
+            <img
+                src="images/logo.gif"
+                alt="MirDB Logo"
+                class="mx-auto h-32 w-auto"
+                data-testid="hero-logo"
+            >
+        </div>
+
+        <!-- Main headline -->
+        <h1
+            class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white"
+            data-testid="hero-headline"
+        >
+            MirDB: A Persistent Key-Value Store with Memcached Protocol
+        </h1>
+
+        <!-- Subheadline explaining core value proposition -->
+        <p
+            class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-10 max-w-3xl mx-auto"
+            data-testid="hero-subheadline"
+        >
+            High-performance data persistence powered by LSM Tree architecture and SSTables.
+            Drop-in replacement for Memcached with built-in durability.
+        </p>
+
+        <!-- Get Started CTA button -->
+        <a
+            href="#quickstart"
+            class="btn-primary inline-block text-lg"
+            data-testid="hero-cta-button"
+        >
+            Get Started
+        </a>
+    </div>
+</section>
+
+
+    <!-- Features Section -->
+    <!-- Features Section Partial (Scenario 3) -->
+<section id="features" class="py-20 bg-gray-50 dark:bg-gray-800">
+    <div class="section-container">
+        <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Feature cards will be added by Scenario 3 -->
+        </div>
+    </div>
+</section>
+
+
+    <!-- Quick Start Section -->
+    <!-- Quick Start Section Partial (Scenario 4) -->
+<section id="quickstart" class="py-20">
+    <div class="section-container">
+        <h2 class="text-3xl font-bold text-center mb-12">Quick Start</h2>
+        <!-- Installation instructions will be added by Scenario 4 -->
+    </div>
+</section>
+
+
+    <!-- Configuration Section -->
+    <!-- Configuration Section Partial (Scenario 5) -->
+<section id="configuration" class="py-20 bg-gray-50 dark:bg-gray-800">
+    <div class="section-container">
+        <h2 class="text-3xl font-bold text-center mb-12">Configuration</h2>
+        <!-- Configuration content will be added by Scenario 5 -->
+    </div>
+</section>
+
+
+    <!-- Status Section -->
+    <!-- Project Status Section Partial (Scenario 6) -->
+<section id="status" class="py-20">
+    <div class="section-container">
+        <h2 class="text-3xl font-bold text-center mb-12">Project Status</h2>
+        <!-- Status content will be added by Scenario 6 -->
+    </div>
+</section>
+
+</main>
+
+<!-- Footer partial -->
+<!-- Footer Partial (Scenario 7) -->
+<footer class="bg-gray-100 dark:bg-gray-800 py-8 border-t border-gray-200 dark:border-gray-700">
+    <div class="section-container text-center">
+        <p class="text-gray-600 dark:text-gray-400">
+            <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" class="hover:text-primary-600">GitHub</a>
+            &middot;
+            <a href="https://github.com/yetone/mirdb/blob/main/LICENSE" target="_blank" rel="noopener" class="hover:text-primary-600">MIT License</a>
+        </p>
+    </div>
+</footer>
+
+
+</body>
+</html>
