@@ -1,0 +1,19 @@
+# MirDB Homepage - Zola Configuration
+#
+# This file configures the static site generator for the MirDB homepage.
+# Owner: Scenario 12 - Static Site Structure
+#
+# Expected configuration:
+# - base_url: Site URL for deployment
+# - title: "MirDB - Persistent Key-Value Store"
+# - description: Site description for SEO
+# - theme settings and build options
+
+base_url = "https://mirdb.io"
+title = "MirDB - Persistent Key-Value Store"
+description = "A high-performance persistent key-value store with Memcached protocol support, built with Rust"
+compile_sass = true
+minify_html = false
+
+[extra]
+github_repo = "https://github.com/yetone/mirdb"

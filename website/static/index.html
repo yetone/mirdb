@@ -5,142 +5,201 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MirDB - A high-performance persistent key-value store with Memcached protocol support">
     <title>MirDB - Persistent Key-Value Store</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <!-- Theme detection script -->
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    }
+                }
+            }
         }
     </script>
-</head>
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
-    <!-- Content will be included here -->
-    <!--
-  Homepage Template for MirDB
-  Includes all section partials in order
--->
 
-<!-- Header partial placeholder -->
-<!-- Header Partial - Navigation and Branding (Scenario 1) -->
-<header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-    <nav class="section-container flex items-center justify-between h-16">
-        <a href="#" class="flex items-center space-x-2">
-            <img src="images/logo.gif" alt="MirDB Logo" class="h-8 w-auto">
-            <span class="font-bold text-xl">MirDB</span>
-        </a>
-        <div class="hidden md:flex items-center space-x-8">
-            <a href="#features" class="hover:text-primary-600 transition-colors">Features</a>
-            <a href="#quickstart" class="hover:text-primary-600 transition-colors">Quick Start</a>
-            <a href="#configuration" class="hover:text-primary-600 transition-colors">Configuration</a>
-            <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" class="hover:text-primary-600 transition-colors">GitHub</a>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --text-primary: #1f2937;
+            --bg-card: #f9fafb;
+            --border-color: #e5e7eb;
+        }
+        .dark {
+            --bg-primary: #111827;
+            --text-primary: #f9fafb;
+            --bg-card: #1f2937;
+            --border-color: #374151;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<!-- Header -->
+<header class="bg-white dark:bg-gray-900 shadow-sm">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex justify-between items-center">
+            <a href="#" class="flex items-center">
+                <img src="images/logo.gif" alt="MirDB Logo" class="h-8 w-auto">
+                <span class="ml-2 text-xl font-bold text-gray-900 dark:text-white">MirDB</span>
+            </a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#features" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Features</a>
+                <a href="#quickstart" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Quick Start</a>
+            </div>
         </div>
     </nav>
 </header>
 
-
-<!-- Main content -->
 <main>
-    <!-- Hero Section -->
-    <!-- Hero Section Partial -->
-<!-- Owner: Scenario 2 - Hero Section and Value Proposition -->
-<section id="hero" class="min-h-screen flex items-center justify-center pt-16" data-testid="hero-section">
-    <div class="section-container text-center py-20">
-        <!-- Centered logo -->
-        <div class="mb-8">
-            <img
-                src="images/logo.gif"
-                alt="MirDB Logo"
-                class="mx-auto h-32 w-auto"
-                data-testid="hero-logo"
-            >
-        </div>
 
-        <!-- Main headline -->
-        <h1
-            class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white"
-            data-testid="hero-headline"
-        >
+<!-- Hero Section -->
+<section id="hero" class="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto text-center">
+        <img src="images/logo.gif" alt="MirDB Logo" class="mx-auto h-24 w-auto mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white sm:text-5xl">
             MirDB: A Persistent Key-Value Store with Memcached Protocol
         </h1>
-
-        <!-- Subheadline explaining core value proposition -->
-        <p
-            class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-10 max-w-3xl mx-auto"
-            data-testid="hero-subheadline"
-        >
-            High-performance data persistence powered by LSM Tree architecture and SSTables.
-            Drop-in replacement for Memcached with built-in durability.
+        <p class="mt-6 text-xl text-gray-600 dark:text-gray-300">
+            High-performance storage with the familiarity of Memcached
         </p>
-
-        <!-- Get Started CTA button -->
-        <a
-            href="#quickstart"
-            class="btn-primary inline-block text-lg"
-            data-testid="hero-cta-button"
-        >
+        <a href="#quickstart" class="mt-8 inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700">
             Get Started
         </a>
     </div>
 </section>
 
+<!-- Features Section -->
+<section id="features" class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto">
+        <!-- Section Heading -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+                Features
+            </h2>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                Powerful capabilities for high-performance data storage
+            </p>
+        </div>
 
-    <!-- Features Section -->
-    <!-- Features Section Partial (Scenario 3) -->
-<section id="features" class="py-20 bg-gray-50 dark:bg-gray-800">
-    <div class="section-container">
-        <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Feature cards will be added by Scenario 3 -->
+        <!-- Feature Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="feature-cards-grid">
+            <!-- Feature Card 1: Memcached Protocol -->
+            <div class="feature-card bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-shadow" data-testid="feature-card">
+                <div class="feature-icon text-4xl mb-4" aria-hidden="true">
+                    <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    Memcached Protocol
+                </h3>
+                <p class="feature-description text-gray-600 dark:text-gray-300">
+                    Full compatibility with the standard Memcached text protocol. Use existing clients and tools seamlessly with GET, SET, DELETE, and more commands.
+                </p>
+            </div>
+
+            <!-- Feature Card 2: Data Persistence (SSTables) -->
+            <div class="feature-card bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-shadow" data-testid="feature-card">
+                <div class="feature-icon text-4xl mb-4" aria-hidden="true">
+                    <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    SSTables Persistence
+                </h3>
+                <p class="feature-description text-gray-600 dark:text-gray-300">
+                    Unlike vanilla Memcached, MirDB persists your data to disk using SSTables (Sorted String Tables) with compression and caching support.
+                </p>
+            </div>
+
+            <!-- Feature Card 3: LSM Tree Architecture -->
+            <div class="feature-card bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-shadow" data-testid="feature-card">
+                <div class="feature-icon text-4xl mb-4" aria-hidden="true">
+                    <svg class="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    LSM Tree Architecture
+                </h3>
+                <p class="feature-description text-gray-600 dark:text-gray-300">
+                    Built on a Log-Structured Merge-tree design with memtables, immutable memtables, and multi-level compaction for optimal write performance.
+                </p>
+            </div>
+
+            <!-- Feature Card 4: Async/Tokio Performance -->
+            <div class="feature-card bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-shadow" data-testid="feature-card">
+                <div class="feature-icon text-4xl mb-4" aria-hidden="true">
+                    <svg class="w-12 h-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    Async Performance
+                </h3>
+                <p class="feature-description text-gray-600 dark:text-gray-300">
+                    Powered by Tokio async runtime for high-performance, non-blocking I/O. Handle thousands of concurrent connections efficiently with Rust's safety guarantees.
+                </p>
+            </div>
         </div>
     </div>
 </section>
 
-
-    <!-- Quick Start Section -->
-    <!-- Quick Start Section Partial (Scenario 4) -->
-<section id="quickstart" class="py-20">
-    <div class="section-container">
-        <h2 class="text-3xl font-bold text-center mb-12">Quick Start</h2>
-        <!-- Installation instructions will be added by Scenario 4 -->
+<!-- Quick Start Section -->
+<section id="quickstart" class="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Quick Start</h2>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code>cargo install mirdb</code></pre>
     </div>
 </section>
 
-
-    <!-- Configuration Section -->
-    <!-- Configuration Section Partial (Scenario 5) -->
-<section id="configuration" class="py-20 bg-gray-50 dark:bg-gray-800">
-    <div class="section-container">
-        <h2 class="text-3xl font-bold text-center mb-12">Configuration</h2>
-        <!-- Configuration content will be added by Scenario 5 -->
+<!-- Configuration Section -->
+<section id="configuration" class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Configuration</h2>
+        <p class="text-gray-600 dark:text-gray-300 text-center">Configure MirDB using mirdb.toml</p>
     </div>
 </section>
 
-
-    <!-- Status Section -->
-    <!-- Project Status Section Partial (Scenario 6) -->
-<section id="status" class="py-20">
-    <div class="section-container">
-        <h2 class="text-3xl font-bold text-center mb-12">Project Status</h2>
-        <!-- Status content will be added by Scenario 6 -->
+<!-- Project Status Section -->
+<section id="status" class="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Project Status</h2>
+        <p class="text-gray-600 dark:text-gray-300 text-center">MirDB is under active development</p>
     </div>
 </section>
 
 </main>
 
-<!-- Footer partial -->
-<!-- Footer Partial (Scenario 7) -->
-<footer class="bg-gray-100 dark:bg-gray-800 py-8 border-t border-gray-200 dark:border-gray-700">
-    <div class="section-container text-center">
-        <p class="text-gray-600 dark:text-gray-400">
-            <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" class="hover:text-primary-600">GitHub</a>
-            &middot;
-            <a href="https://github.com/yetone/mirdb/blob/main/LICENSE" target="_blank" rel="noopener" class="hover:text-primary-600">MIT License</a>
-        </p>
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <a href="https://github.com/yetone/mirdb" class="text-gray-300 hover:text-white">GitHub</a>
+        <span class="mx-2">|</span>
+        <span class="text-gray-400">MIT License</span>
     </div>
 </footer>
 
-
+<!-- Theme detection script -->
+<script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+</script>
 </body>
 </html>

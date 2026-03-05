@@ -3,9 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MirDB - A high-performance persistent key-value store with Memcached protocol support">
-    <title>MirDB - Persistent Key-Value Store</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <meta name="description" content="{{ config.description | default(value='MirDB - Persistent Key-Value Store') }}">
+    <title>{% block title %}{{ config.title | default(value='MirDB') }}{% endblock %}</title>
+
+    <!-- Tailwind CSS via CDN for development -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom styles -->
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --text-primary: #1f2937;
+            --bg-card: #f9fafb;
+            --border-color: #e5e7eb;
+        }
+        .dark {
+            --bg-primary: #111827;
+            --text-primary: #f9fafb;
+            --bg-card: #1f2937;
+            --border-color: #374151;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    {% block header %}{% endblock %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block footer %}{% endblock %}
+
     <!-- Theme detection script -->
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -14,9 +62,5 @@
             document.documentElement.classList.remove('dark');
         }
     </script>
-</head>
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
-    <!-- Content will be included here -->
-    {{CONTENT}}
 </body>
 </html>

@@ -3,18 +3,12 @@
   "version": "1.0.0",
   "description": "MirDB Homepage static site",
   "scripts": {
-    "build:css": "npx tailwindcss -i ./sass/main.scss -o ./static/css/styles.css",
-    "watch:css": "npx tailwindcss -i ./sass/main.scss -o ./static/css/styles.css --watch",
-    "build": "npm run build:css && node build.js",
-    "serve": "npx serve static -p 8080",
+    "start": "npx serve static -l 8080",
     "test": "npx playwright test",
-    "test:e2e": "npx playwright test tests/e2e/"
+    "test:headed": "npx playwright test --headed"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.1",
-    "postcss": "^8.4.35",
-    "autoprefixer": "^10.4.17",
-    "@playwright/test": "^1.42.1",
-    "serve": "^14.2.1"
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.2.0"
   }
 }
