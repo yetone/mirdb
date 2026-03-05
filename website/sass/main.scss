@@ -207,3 +207,61 @@ pre, code {
 html.theme-transition-disabled * {
   transition: none !important;
 }
+
+/* =====================================================
+   Accessibility Styles (Scenario 10)
+   WCAG AA Compliance - Focus indicators and skip link
+   ===================================================== */
+
+/* Skip Link - visually hidden but accessible to keyboard users */
+@layer components {
+  .skip-link {
+    @apply absolute left-0 bg-blue-500 text-white px-4 py-2 font-semibold z-50;
+    top: -40px;
+    transition: top 0.2s ease;
+    border-radius: 0 0 4px 0;
+  }
+
+  .skip-link:focus {
+    @apply outline-2 outline-offset-2 outline-blue-700;
+    top: 0;
+  }
+}
+
+/* Focus Styles for all interactive elements - WCAG 2.4.7 Focus Visible */
+@layer base {
+  /* High-visibility focus indicator for all interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue-500;
+  }
+
+  /* Enhanced focus for dark mode */
+  .dark a:focus-visible,
+  .dark button:focus-visible,
+  .dark input:focus-visible,
+  .dark select:focus-visible,
+  .dark textarea:focus-visible,
+  .dark [tabindex]:not([tabindex="-1"]):focus-visible {
+    @apply outline-blue-400;
+  }
+}
+
+/* Navigation link focus styles */
+@layer components {
+  .nav-link:focus-visible {
+    @apply outline-2 outline-offset-4 outline-blue-500 rounded;
+  }
+}
+
+/* Ensure all images have proper alt text styles (for missing alt detection) */
+@layer utilities {
+  img:not([alt]) {
+    /* Highlight images missing alt text in development */
+    outline: 3px solid red;
+  }
+}

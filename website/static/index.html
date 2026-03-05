@@ -56,15 +56,67 @@
             transition-duration: 0.15s;
             transition-timing-function: ease-in-out;
         }
+
+        /* =====================================================
+           Accessibility Styles (Scenario 10)
+           WCAG AA Compliance
+           ===================================================== */
+
+        /* Skip Link for keyboard users */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #3B82F6;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 100;
+            transition: top 0.2s ease;
+            border-radius: 0 0 4px 0;
+        }
+        .skip-link:focus {
+            top: 0;
+            outline: 2px solid #1D4ED8;
+            outline-offset: 2px;
+        }
+
+        /* Focus Styles for all interactive elements */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible,
+        [tabindex]:not([tabindex="-1"]):focus-visible {
+            outline: 2px solid #3B82F6;
+            outline-offset: 2px;
+        }
+
+        /* Enhanced focus for navigation links */
+        .nav-link:focus-visible {
+            outline: 2px solid #3B82F6;
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        /* High contrast focus for dark backgrounds */
+        .dark a:focus-visible,
+        .dark button:focus-visible {
+            outline-color: #60A5FA;
+        }
     </style>
 </head>
 <body class="min-h-screen">
+
+<!-- Accessibility: Skip Link for keyboard users -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- Header Partial - Navigation and Branding (Scenario 1) -->
 <header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16" aria-label="Main navigation">
         <a href="/" class="flex items-center space-x-2">
-            <img src="images/logo.gif" alt="MirDB" class="h-10 w-auto" id="logo">
+            <img src="images/logo.gif" alt="MirDB - Persistent Key-Value Store" class="h-10 w-auto" id="logo">
             <span class="font-bold text-xl text-gray-900 dark:text-white hidden sm:block">MirDB</span>
         </a>
         <!-- Desktop Navigation -->
@@ -126,12 +178,12 @@
 <!-- Spacer for fixed header -->
 <div class="h-16"></div>
 
-<main>
+<main id="main-content">
 
 <!-- Hero Section -->
 <section id="hero" class="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
     <div class="max-w-4xl mx-auto text-center">
-        <img src="images/logo.gif" alt="MirDB Logo" class="mx-auto h-24 w-auto mb-8">
+        <img src="images/logo.gif" alt="MirDB - High-performance persistent key-value store logo" class="mx-auto h-24 w-auto mb-8">
         <h1 class="text-4xl font-bold text-gray-900 dark:text-white sm:text-5xl">
             MirDB: A Persistent Key-Value Store with Memcached Protocol
         </h1>
