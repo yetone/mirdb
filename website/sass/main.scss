@@ -1,0 +1,267 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme CSS Variables (Scenario 9) */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --border-color: #e5e7eb;
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+}
+
+.dark {
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --border-color: #374151;
+  --card-bg: #1f2937;
+  --card-border: #374151;
+  --accent-color: #60a5fa;
+  --accent-hover: #93c5fd;
+}
+
+/* Apply theme variables to base elements */
+@layer base {
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200;
+  }
+
+  .section-container {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Theme toggle button styles (Scenario 9) */
+  .theme-toggle-btn {
+    @apply p-2 rounded-lg transition-colors duration-200;
+    @apply text-gray-700 dark:text-gray-200;
+    @apply hover:bg-gray-100 dark:hover:bg-gray-800;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+  }
+
+  /* Navigation link styles with theme support */
+  .nav-link {
+    @apply text-gray-700 dark:text-gray-200;
+    @apply hover:text-primary-600 dark:hover:text-primary-400;
+    @apply transition-colors duration-200;
+  }
+}
+
+/* Code block styling */
+pre, code {
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+}
+
+/* =====================================================
+   Responsive Design Utilities (Scenario 8)
+   Breakpoints: xs(320px), sm(480px), md(768px), lg(1024px), xl(1280px), 2xl(1920px)
+   ===================================================== */
+
+/* Mobile-first base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-width: 320px;
+    overflow-x: hidden;
+  }
+}
+
+/* Mobile menu styles */
+@layer components {
+  .mobile-menu-button {
+    @apply p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500;
+  }
+
+  .mobile-menu {
+    @apply md:hidden;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+
+  .mobile-menu.open {
+    max-height: 300px;
+  }
+
+  .mobile-menu-link {
+    @apply block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800;
+  }
+}
+
+/* Responsive container utilities */
+@layer utilities {
+  .container-responsive {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @screen sm {
+    .container-responsive {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @screen lg {
+    .container-responsive {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1280px;
+    }
+  }
+
+  @screen 2xl {
+    .container-responsive {
+      max-width: 1536px;
+    }
+  }
+}
+
+/* Feature cards responsive grid */
+@layer components {
+  .feature-grid {
+    @apply grid gap-6;
+    grid-template-columns: 1fr;
+  }
+
+  @screen md {
+    .feature-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @screen lg {
+    .feature-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+@layer utilities {
+  .no-horizontal-scroll {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+
+/* Typography responsive adjustments */
+@layer utilities {
+  .text-responsive {
+    @apply text-base;
+  }
+
+  @screen md {
+    .text-responsive {
+      @apply text-lg;
+    }
+  }
+
+  .heading-responsive {
+    @apply text-2xl;
+  }
+
+  @screen sm {
+    .heading-responsive {
+      @apply text-3xl;
+    }
+  }
+
+  @screen md {
+    .heading-responsive {
+      @apply text-4xl;
+    }
+  }
+}
+
+/* Smooth theme transitions (Scenario 9) */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+
+/* Disable transitions on page load to prevent flash */
+html.theme-transition-disabled * {
+  transition: none !important;
+}
+
+/* =====================================================
+   Accessibility Styles (Scenario 10)
+   WCAG AA Compliance - Focus indicators and skip link
+   ===================================================== */
+
+/* Skip Link - visually hidden but accessible to keyboard users */
+@layer components {
+  .skip-link {
+    @apply absolute left-0 bg-blue-500 text-white px-4 py-2 font-semibold z-50;
+    top: -40px;
+    transition: top 0.2s ease;
+    border-radius: 0 0 4px 0;
+  }
+
+  .skip-link:focus {
+    @apply outline-2 outline-offset-2 outline-blue-700;
+    top: 0;
+  }
+}
+
+/* Focus Styles for all interactive elements - WCAG 2.4.7 Focus Visible */
+@layer base {
+  /* High-visibility focus indicator for all interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue-500;
+  }
+
+  /* Enhanced focus for dark mode */
+  .dark a:focus-visible,
+  .dark button:focus-visible,
+  .dark input:focus-visible,
+  .dark select:focus-visible,
+  .dark textarea:focus-visible,
+  .dark [tabindex]:not([tabindex="-1"]):focus-visible {
+    @apply outline-blue-400;
+  }
+}
+
+/* Navigation link focus styles */
+@layer components {
+  .nav-link:focus-visible {
+    @apply outline-2 outline-offset-4 outline-blue-500 rounded;
+  }
+}
+
+/* Ensure all images have proper alt text styles (for missing alt detection) */
+@layer utilities {
+  img:not([alt]) {
+    /* Highlight images missing alt text in development */
+    outline: 3px solid red;
+  }
+}
