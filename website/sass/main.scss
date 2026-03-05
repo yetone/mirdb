@@ -17,3 +17,132 @@
 pre, code {
   font-family: 'Fira Code', 'JetBrains Mono', monospace;
 }
+
+/* =====================================================
+   Responsive Design Utilities (Scenario 8)
+   Breakpoints: xs(320px), sm(480px), md(768px), lg(1024px), xl(1280px), 2xl(1920px)
+   ===================================================== */
+
+/* Mobile-first base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-width: 320px;
+    overflow-x: hidden;
+  }
+}
+
+/* Mobile menu styles */
+@layer components {
+  .mobile-menu-button {
+    @apply p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500;
+  }
+
+  .mobile-menu {
+    @apply md:hidden;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+
+  .mobile-menu.open {
+    max-height: 300px;
+  }
+
+  .mobile-menu-link {
+    @apply block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800;
+  }
+}
+
+/* Responsive container utilities */
+@layer utilities {
+  .container-responsive {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @screen sm {
+    .container-responsive {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @screen lg {
+    .container-responsive {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1280px;
+    }
+  }
+
+  @screen 2xl {
+    .container-responsive {
+      max-width: 1536px;
+    }
+  }
+}
+
+/* Feature cards responsive grid */
+@layer components {
+  .feature-grid {
+    @apply grid gap-6;
+    grid-template-columns: 1fr;
+  }
+
+  @screen md {
+    .feature-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @screen lg {
+    .feature-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+@layer utilities {
+  .no-horizontal-scroll {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+
+/* Typography responsive adjustments */
+@layer utilities {
+  .text-responsive {
+    @apply text-base;
+  }
+
+  @screen md {
+    .text-responsive {
+      @apply text-lg;
+    }
+  }
+
+  .heading-responsive {
+    @apply text-2xl;
+  }
+
+  @screen sm {
+    .heading-responsive {
+      @apply text-3xl;
+    }
+  }
+
+  @screen md {
+    .heading-responsive {
+      @apply text-4xl;
+    }
+  }
+}
