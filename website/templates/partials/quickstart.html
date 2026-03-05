@@ -1,7 +1,99 @@
-<!-- Quick Start Section Partial - Stub for Scenario 4 -->
+<!-- Quick Start Section Partial - Scenario 4 -->
 <section id="quickstart" class="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
     <div class="max-w-4xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Quick Start</h2>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-lg"><code>cargo install mirdb</code></pre>
+        <!-- Section Heading -->
+        <h2 data-testid="quickstart-heading" class="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">
+            Quick Start
+        </h2>
+
+        <!-- Prerequisites -->
+        <div data-testid="prerequisites" class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Prerequisites</h3>
+            <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                <li>
+                    <strong>Rust toolchain</strong> - Install via <a href="https://rustup.rs/" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" target="_blank" rel="noopener">rustup.rs</a>
+                    <div class="code-block-wrapper relative mt-2 ml-5" data-testid="code-block">
+                        <pre class="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto"><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</code></pre>
+                        <button data-testid="copy-button" class="copy-button absolute top-2 right-2 px-2 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs rounded transition-colors" onclick="navigator.clipboard.writeText('curl --proto \\'=https\\' --tlsv1.2 -sSf https://sh.rustup.rs | sh')">
+                            Copy
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Installation -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Installation</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Install MirDB using Cargo:</p>
+            <div data-testid="install-command" class="code-block-wrapper relative" data-testid="code-block">
+                <pre class="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto"><code>cargo install mirdb</code></pre>
+                <button data-testid="copy-button" class="copy-button absolute top-2 right-2 px-2 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs rounded transition-colors" onclick="navigator.clipboard.writeText('cargo install mirdb')">
+                    Copy
+                </button>
+            </div>
+        </div>
+
+        <!-- Running the Server -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Running the Server</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Start the MirDB server:</p>
+            <div data-testid="run-command" class="code-block-wrapper relative" data-testid="code-block">
+                <pre class="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto"><code>mirdb</code></pre>
+                <button data-testid="copy-button" class="copy-button absolute top-2 right-2 px-2 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs rounded transition-colors" onclick="navigator.clipboard.writeText('mirdb')">
+                    Copy
+                </button>
+            </div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">The server listens on port 11211 by default (standard Memcached port).</p>
+        </div>
+
+        <!-- Usage Examples -->
+        <div data-testid="usage-examples" class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Basic Usage</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                Connect using <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">telnet</code> or <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">nc</code> (netcat):
+            </p>
+
+            <!-- Connect Example -->
+            <div class="code-block-wrapper relative mb-4" data-testid="code-block">
+                <pre class="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto"><code>telnet localhost 11211</code></pre>
+                <button data-testid="copy-button" class="copy-button absolute top-2 right-2 px-2 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs rounded transition-colors" onclick="navigator.clipboard.writeText('telnet localhost 11211')">
+                    Copy
+                </button>
+            </div>
+
+            <!-- SET Example -->
+            <div class="mb-4">
+                <p class="text-gray-600 dark:text-gray-300 mb-2"><strong>SET</strong> a value:</p>
+                <div class="code-block-wrapper relative" data-testid="code-block">
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto"><code>set mykey 0 0 5
+hello
+STORED</code></pre>
+                    <button data-testid="copy-button" class="copy-button absolute top-2 right-2 px-2 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs rounded transition-colors" onclick="navigator.clipboard.writeText('set mykey 0 0 5\nhello')">
+                        Copy
+                    </button>
+                </div>
+            </div>
+
+            <!-- GET Example -->
+            <div class="mb-4">
+                <p class="text-gray-600 dark:text-gray-300 mb-2"><strong>GET</strong> a value:</p>
+                <div class="code-block-wrapper relative" data-testid="code-block">
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto"><code>get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+                    <button data-testid="copy-button" class="copy-button absolute top-2 right-2 px-2 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs rounded transition-colors" onclick="navigator.clipboard.writeText('get mykey')">
+                        Copy
+                    </button>
+                </div>
+            </div>
+
+            <!-- nc Alternative -->
+            <p class="text-gray-500 dark:text-gray-400 text-sm mt-4">
+                Alternatively, use <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">nc</code> (netcat):
+                <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">echo "get mykey" | nc localhost 11211</code>
+            </p>
+        </div>
     </div>
 </section>
