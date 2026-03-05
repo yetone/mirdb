@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Theme CSS Variables (Scenario 9) */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --border-color: #e5e7eb;
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+}
+
+.dark {
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --border-color: #374151;
+  --card-bg: #1f2937;
+  --card-border: #374151;
+  --accent-color: #60a5fa;
+  --accent-hover: #93c5fd;
+}
+
+/* Apply theme variables to base elements */
+@layer base {
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  }
+}
+
 /* Custom component styles */
 @layer components {
   .btn-primary {
@@ -10,6 +44,21 @@
 
   .section-container {
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Theme toggle button styles (Scenario 9) */
+  .theme-toggle-btn {
+    @apply p-2 rounded-lg transition-colors duration-200;
+    @apply text-gray-700 dark:text-gray-200;
+    @apply hover:bg-gray-100 dark:hover:bg-gray-800;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+  }
+
+  /* Navigation link styles with theme support */
+  .nav-link {
+    @apply text-gray-700 dark:text-gray-200;
+    @apply hover:text-primary-600 dark:hover:text-primary-400;
+    @apply transition-colors duration-200;
   }
 }
 
@@ -145,4 +194,16 @@ pre, code {
       @apply text-4xl;
     }
   }
+}
+
+/* Smooth theme transitions (Scenario 9) */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+
+/* Disable transitions on page load to prevent flash */
+html.theme-transition-disabled * {
+  transition: none !important;
 }

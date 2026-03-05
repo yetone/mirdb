@@ -26,21 +26,35 @@
     </script>
 
     <style>
+        /* Theme CSS Variables (Scenario 9) */
         :root {
             --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
             --text-primary: #1f2937;
-            --bg-card: #f9fafb;
+            --text-secondary: #4b5563;
             --border-color: #e5e7eb;
+            --card-bg: #ffffff;
+            --card-border: #e5e7eb;
         }
         .dark {
             --bg-primary: #111827;
+            --bg-secondary: #1f2937;
             --text-primary: #f9fafb;
-            --bg-card: #1f2937;
+            --text-secondary: #d1d5db;
             --border-color: #374151;
+            --card-bg: #1f2937;
+            --card-border: #374151;
         }
         body {
             background-color: var(--bg-primary);
             color: var(--text-primary);
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        /* Smooth theme transitions */
+        *, *::before, *::after {
+            transition-property: background-color, border-color, color;
+            transition-duration: 0.15s;
+            transition-timing-function: ease-in-out;
         }
     </style>
 </head>
@@ -64,9 +78,32 @@
                     <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                 </svg>
             </a>
+            <!-- Theme Toggle Button (Scenario 9) -->
+            <button type="button" id="theme-toggle" data-testid="theme-toggle" class="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors" aria-label="Toggle dark/light theme">
+                <!-- Moon icon (shown in light mode) -->
+                <svg data-testid="moon-icon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+                <!-- Sun icon (shown in dark mode) -->
+                <svg data-testid="sun-icon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+            </button>
         </div>
-        <!-- Mobile Menu Button -->
-        <div class="md:hidden">
+        <!-- Mobile Controls -->
+        <div class="flex items-center space-x-2 md:hidden">
+            <!-- Mobile Theme Toggle Button (Scenario 9) -->
+            <button type="button" id="theme-toggle-mobile" data-testid="theme-toggle" class="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors" aria-label="Toggle dark/light theme">
+                <!-- Moon icon (shown in light mode) -->
+                <svg data-testid="moon-icon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+                <!-- Sun icon (shown in dark mode) -->
+                <svg data-testid="sun-icon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+            </button>
+            <!-- Mobile Menu Button -->
             <button type="button" id="mobile-menu-button" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -650,25 +687,70 @@ END</code></pre>
     </div>
 </footer>
 
-<!-- Theme detection script -->
+<!-- Theme detection script (Scenario 9) -->
 <script>
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
-    }
+    // Apply saved theme or system preference on page load
+    (function() {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    })();
 </script>
 
 <script>
-    // Mobile menu toggle
-    const menuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
+    // Theme Toggle Functionality (Scenario 9)
+    (function() {
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
 
-    if (menuButton && mobileMenu) {
-        menuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            if (isDark) {
+                // Switch to light mode
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                // Switch to dark mode
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Add click handlers to all theme toggle buttons
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        if (themeToggleMobile) {
+            themeToggleMobile.addEventListener('click', toggleTheme);
+        }
+
+        // Listen for system preference changes when no user preference is set
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!('theme' in localStorage)) {
+                if (e.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
         });
-    }
+    })();
+
+    // Mobile menu toggle
+    (function() {
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    })();
 </script>
 </body>
 </html>
