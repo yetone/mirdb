@@ -46,21 +46,48 @@
 </head>
 <body class="min-h-screen">
 
-<!-- Header -->
-<header class="bg-white dark:bg-gray-900 shadow-sm">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="flex justify-between items-center">
-            <a href="#" class="flex items-center">
-                <img src="images/logo.gif" alt="MirDB Logo" class="h-8 w-auto">
-                <span class="ml-2 text-xl font-bold text-gray-900 dark:text-white">MirDB</span>
+<!-- Header Partial - Navigation and Branding (Scenario 1) -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16" aria-label="Main navigation">
+        <a href="/" class="flex items-center space-x-2">
+            <img src="images/logo.gif" alt="MirDB" class="h-10 w-auto" id="logo">
+            <span class="font-bold text-xl text-gray-900 dark:text-white hidden sm:block">MirDB</span>
+        </a>
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-8" id="desktop-nav">
+            <a href="#features" class="nav-link font-medium hover:text-primary-600 transition-colors">Features</a>
+            <a href="#quickstart" class="nav-link font-medium hover:text-primary-600 transition-colors">Quick Start</a>
+            <a href="#configuration" class="nav-link font-medium hover:text-primary-600 transition-colors">Configuration</a>
+            <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="nav-link font-medium hover:text-primary-600 transition-colors flex items-center">
+                <span>Code</span>
+                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
             </a>
-            <div class="hidden md:flex space-x-6">
-                <a href="#features" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Features</a>
-                <a href="#quickstart" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Quick Start</a>
-            </div>
+        </div>
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+            <button type="button" id="mobile-menu-button" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
         </div>
     </nav>
+    <!-- Mobile Navigation Menu -->
+    <div class="hidden md:hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-200 dark:border-gray-700">
+            <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium nav-link">Features</a>
+            <a href="#quickstart" class="block px-3 py-2 rounded-md text-base font-medium nav-link">Quick Start</a>
+            <a href="#configuration" class="block px-3 py-2 rounded-md text-base font-medium nav-link">Configuration</a>
+            <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="block px-3 py-2 rounded-md text-base font-medium nav-link">
+                Code (GitHub)
+            </a>
+        </div>
+    </div>
 </header>
+<!-- Spacer for fixed header -->
+<div class="h-16"></div>
 
 <main>
 
@@ -199,6 +226,18 @@
         document.documentElement.classList.add('dark');
     } else {
         document.documentElement.classList.remove('dark');
+    }
+</script>
+
+<script>
+    // Mobile menu toggle
+    const menuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (menuButton && mobileMenu) {
+        menuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
     }
 </script>
 </body>
