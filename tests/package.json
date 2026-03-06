@@ -5,6 +5,12 @@
   "scripts": {
     "test": "npx playwright test",
     "test:e2e": "npx playwright test --project=chromium",
+    "test:chromium": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:webkit": "npx playwright test --project=webkit",
+    "test:edge": "npx playwright test --project=edge",
+    "test:desktop": "npx playwright test --project=chromium --project=firefox --project=webkit --project=edge",
+    "test:browsers": "npx playwright test browser-compatibility.spec.ts",
     "test:headed": "npx playwright test --headed",
     "test:debug": "npx playwright test --debug",
     "test:report": "npx playwright show-report"
