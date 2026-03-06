@@ -110,8 +110,79 @@
     <!-- END SECTION: demo -->
 
     <!-- SECTION: status - Owner: Scenario 6 -->
-    <section id="status" class="status">
-      <!-- Status content will be added by Scenario 6 -->
+    <section id="status" class="status" aria-labelledby="status-title">
+      <div class="container status-container">
+        <h2 id="status-title" class="section-title">Project Status & Roadmap</h2>
+        <div class="status-grid">
+          <!-- Completed Features -->
+          <div class="status-column">
+            <h3 class="status-column-title">
+              <span class="status-icon status-icon-complete" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+              Implemented
+            </h3>
+            <ul class="status-list">
+              <li class="status-item completed" data-status="complete" data-testid="feature-tokio">
+                <span class="status-checkmark" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span class="status-text">Tokio async runtime with memcached protocol</span>
+              </li>
+              <li class="status-item completed" data-status="complete" data-testid="feature-skiplist">
+                <span class="status-checkmark" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span class="status-text">Skip list memtable for fast in-memory operations</span>
+              </li>
+              <li class="status-item completed" data-status="complete" data-testid="feature-minor-compaction">
+                <span class="status-checkmark" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span class="status-text">Minor compaction for memtable flush</span>
+              </li>
+              <li class="status-item completed" data-status="complete" data-testid="feature-major-compaction">
+                <span class="status-checkmark" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span class="status-text">Major compaction for SSTable merging</span>
+              </li>
+            </ul>
+          </div>
+          <!-- Planned Features -->
+          <div class="status-column">
+            <h3 class="status-column-title">
+              <span class="status-icon status-icon-planned" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </span>
+              Planned
+            </h3>
+            <ul class="status-list">
+              <li class="status-item planned" data-status="planned" data-testid="feature-raft">
+                <span class="status-marker" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                </span>
+                <span class="status-text">Raft consensus for distributed operations</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
     <!-- END SECTION: status -->
   </main>
