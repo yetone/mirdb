@@ -679,7 +679,253 @@ ul {
 }
 
 /* === SECTION: responsive (Scenario 9) === */
-/* Responsive styles will be added by Scenario 9 */
+
+/* Prevent horizontal overflow on all viewports */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Tablet and below (768px and under) */
+@media (max-width: 768px) {
+  :root {
+    --spacing-lg: 1rem;
+    --spacing-xl: 1.5rem;
+    --spacing-2xl: 2rem;
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .header-container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .section-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .hero-container {
+    max-width: 100%;
+    padding: 0 var(--spacing-sm);
+  }
+
+  .features {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .feature-cards {
+    gap: var(--spacing-lg);
+  }
+
+  .quick-start {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .code-block-wrapper {
+    max-width: 100%;
+    border-radius: var(--border-radius);
+  }
+
+  .code-block {
+    padding: var(--spacing-md);
+    font-size: 0.8125rem;
+  }
+
+  .status {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .status-container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .status-grid {
+    gap: var(--spacing-lg);
+  }
+}
+
+/* Mobile devices (375px and under) */
+@media (max-width: 480px) {
+  :root {
+    --header-height: 56px;
+  }
+
+  .header-container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  /* Mobile navigation - ensure touch targets meet 44x44px minimum */
+  .nav-list {
+    gap: var(--spacing-sm);
+  }
+
+  .nav-link {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-md) var(--spacing-sm);
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo {
+    height: 32px;
+    min-width: 48px;
+  }
+
+  /* Hero section mobile adjustments */
+  .hero {
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+
+  .hero-container {
+    padding: 0;
+  }
+
+  .hero-title {
+    font-size: clamp(1.75rem, 10vw, 2.5rem);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-xs);
+  }
+
+  .hero-cta {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    min-height: 48px;
+    min-width: 120px;
+  }
+
+  /* Features section mobile - single column */
+  .features {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .feature-cards {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .feature-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .feature-card h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Quick start section mobile */
+  .quick-start {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .quick-start-intro {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-xs);
+  }
+
+  .code-block-wrapper {
+    margin: 0 var(--spacing-xs);
+    border-radius: 6px;
+  }
+
+  .code-block {
+    padding: var(--spacing-sm);
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .code-copy-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Status section mobile - single column */
+  .status {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .status-container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .status-column {
+    padding: var(--spacing-lg);
+  }
+
+  .status-column-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .status-item {
+    padding: var(--spacing-sm);
+  }
+
+  /* Ensure all links have adequate touch targets on mobile */
+  a, button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Feature link specific touch target */
+  .feature-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--spacing-xs) 0;
+  }
+}
+
+/* Extra small devices (320px) */
+@media (max-width: 320px) {
+  .nav-list {
+    gap: 2px;
+  }
+
+  .nav-link {
+    font-size: 0.75rem;
+    padding: var(--spacing-sm) var(--spacing-xs);
+    min-height: 44px;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .code-block {
+    font-size: 0.6875rem;
+  }
+}
 
 /* === SECTION: dark-mode (Scenario 15) === */
 /* Dark mode styles will be added by Scenario 15 */
