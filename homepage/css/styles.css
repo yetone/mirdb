@@ -324,6 +324,24 @@ ul {
   line-height: 1.7;
 }
 
+/* === SECTION: external-links (Scenario 5) === */
+.feature-link {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-fast);
+}
+
+.feature-link:hover {
+  color: var(--color-primary-dark);
+}
+
+.feature-link:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* === SECTION: quick-start (Scenario 4) === */
 .quick-start {
   /* Quick start styles will be added by Scenario 4 */
