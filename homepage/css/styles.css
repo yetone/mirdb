@@ -927,5 +927,39 @@ html, body {
   }
 }
 
+/* === SECTION: accessibility (Scenario 11) === */
+/* Skip to content link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  z-index: 1000;
+  transition: top var(--transition-fast);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 2px;
+  color: #ffffff;
+}
+
+/* Ensure all interactive elements have visible focus indicators */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 /* === SECTION: dark-mode (Scenario 15) === */
 /* Dark mode styles will be added by Scenario 15 */
