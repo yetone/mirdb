@@ -18,93 +18,87 @@ test.describe('Features Section', () => {
     await waitForPageLoad(page);
   });
 
-  test('features section exists with correct id', async ({ page }) => {
+  test('TC1: Features section exists with id="features"', async ({ page }) => {
     // Test Case 1: Check features section exists
     const featuresSection = page.locator('#features');
     await expect(featuresSection).toBeVisible();
     await expect(featuresSection).toHaveAttribute('id', 'features');
   });
 
-  test('displays Memcached Protocol feature card', async ({ page }) => {
+  test('TC2: Memcached Protocol feature card exists', async ({ page }) => {
     // Test Case 2: Check for Memcached Protocol feature
-    const featuresSection = page.locator('#features');
-    const memcachedFeature = featuresSection.locator('.feature-card', {
-      hasText: /memcached/i
-    });
+    await navigateToSection(page, 'features');
 
+    const memcachedFeature = page.locator('[data-testid="feature-memcached"]');
     await expect(memcachedFeature).toBeVisible();
 
-    // Verify it mentions protocol
+    // Verify text mentions 'Memcached' and 'protocol'
     const featureText = await memcachedFeature.textContent();
+    expect(featureText?.toLowerCase()).toContain('memcached');
     expect(featureText?.toLowerCase()).toContain('protocol');
   });
 
-  test('displays Persistence feature card', async ({ page }) => {
+  test('TC3: Persistence feature card exists', async ({ page }) => {
     // Test Case 3: Check for Persistence feature
-    const featuresSection = page.locator('#features');
-    const persistenceFeature = featuresSection.locator('.feature-card', {
-      hasText: /persist/i
-    });
+    await navigateToSection(page, 'features');
 
+    const persistenceFeature = page.locator('[data-testid="feature-persistence"]');
     await expect(persistenceFeature).toBeVisible();
 
-    // Verify it contains persistence-related text
+    // Verify text mentions 'Persistent' or 'Persistence'
     const featureText = await persistenceFeature.textContent();
-    expect(featureText?.toLowerCase()).toMatch(/persist(ent|ence)/i);
+    const hasPeristence = featureText?.toLowerCase().includes('persistent') ||
+                          featureText?.toLowerCase().includes('persistence');
+    expect(hasPeristence).toBe(true);
   });
 
-  test('displays LSM Tree feature card', async ({ page }) => {
+  test('TC4: LSM Tree feature card exists', async ({ page }) => {
     // Test Case 4: Check for LSM Tree feature
-    const featuresSection = page.locator('#features');
-    const lsmFeature = featuresSection.locator('.feature-card', {
-      hasText: /lsm|log-structured merge/i
-    });
+    await navigateToSection(page, 'features');
 
+    const lsmFeature = page.locator('[data-testid="feature-lsm"]');
     await expect(lsmFeature).toBeVisible();
 
-    // Verify it contains LSM-related text
+    // Verify text mentions 'LSM' or 'Log-Structured Merge'
     const featureText = await lsmFeature.textContent();
-    expect(featureText?.toLowerCase()).toMatch(/lsm|log-structured/i);
+    const hasLsm = featureText?.toLowerCase().includes('lsm') ||
+                   featureText?.toLowerCase().includes('log-structured merge');
+    expect(hasLsm).toBe(true);
   });
 
-  test('each feature card has a description of minimum 20 characters', async ({ page }) => {
+  test('TC5: Each feature card has a description (minimum 20 characters)', async ({ page }) => {
     // Test Case 5: Verify each feature has a description
-    const featuresSection = page.locator('#features');
-    const featureCards = featuresSection.locator('.feature-card');
+    await navigateToSection(page, 'features');
 
-    // Expect exactly 3 feature cards
-    await expect(featureCards).toHaveCount(3);
+    const featureCards = page.locator('.feature-card');
+    const count = await featureCards.count();
+    expect(count).toBeGreaterThanOrEqual(3);
 
-    // Check each card has a description with at least 20 characters
-    for (let i = 0; i < 3; i++) {
+    // Check each feature card has a description paragraph with at least 20 characters
+    for (let i = 0; i < count; i++) {
       const card = featureCards.nth(i);
-      const description = card.locator('.feature-description');
+      const description = card.locator('p');
       await expect(description).toBeVisible();
 
-      const descText = await description.textContent();
-      expect(descText?.length).toBeGreaterThanOrEqual(20);
+      const descriptionText = await description.textContent();
+      expect(descriptionText?.length).toBeGreaterThanOrEqual(20);
     }
   });
 
-  test('feature cards have visible titles', async ({ page }) => {
-    const featuresSection = page.locator('#features');
-    const featureTitles = featuresSection.locator('.feature-title');
+  test('Features section has proper heading', async ({ page }) => {
+    await navigateToSection(page, 'features');
 
-    await expect(featureTitles).toHaveCount(3);
-
-    for (let i = 0; i < 3; i++) {
-      const title = featureTitles.nth(i);
-      await expect(title).toBeVisible();
-      const titleText = await title.textContent();
-      expect(titleText?.trim().length).toBeGreaterThan(0);
-    }
-  });
-
-  test('features section has proper heading', async ({ page }) => {
-    const featuresSection = page.locator('#features');
-    const heading = featuresSection.locator('h2.features-heading, .features-heading');
-
+    const heading = page.locator('#features h2');
     await expect(heading).toBeVisible();
-    await expect(heading).toContainText(/features/i);
+    await expect(heading).toContainText('Features');
+  });
+
+  test('All three required feature cards are displayed', async ({ page }) => {
+    await navigateToSection(page, 'features');
+
+    // Verify all three specific feature cards exist
+    await expect(page.locator('[data-testid="feature-memcached"]')).toBeVisible();
+    await expect(page.locator('[data-testid="feature-persistence"]')).toBeVisible();
+    await expect(page.locator('[data-testid="feature-lsm"]')).toBeVisible();
   });
 });

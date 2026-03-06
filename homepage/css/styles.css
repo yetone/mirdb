@@ -51,6 +51,7 @@
   /* Layout */
   --max-width: 1200px;
   --header-height: 64px;
+  --border-radius: 8px;
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -109,6 +110,21 @@ ul {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* === SECTION: layout (Shared) === */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.section-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+  color: var(--color-text);
 }
 
 /* === SECTION: header (Scenario 1) === */
@@ -196,24 +212,11 @@ ul {
 
 /* === SECTION: features (Scenario 3) === */
 .features {
-  padding: var(--spacing-2xl) var(--spacing-lg);
+  padding: var(--spacing-2xl) 0;
   background-color: var(--color-background-alt);
 }
 
-.features-container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-}
-
-.features-heading {
-  font-size: var(--font-size-3xl);
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
-  color: var(--color-text);
-}
-
-.features-grid {
+.feature-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--spacing-xl);
@@ -250,14 +253,14 @@ ul {
   height: 40px;
 }
 
-.feature-title {
+.feature-card h3 {
   font-size: var(--font-size-xl);
   font-weight: 600;
   margin-bottom: var(--spacing-md);
   color: var(--color-text);
 }
 
-.feature-description {
+.feature-card p {
   font-size: var(--font-size-base);
   color: var(--color-text-light);
   line-height: 1.7;
