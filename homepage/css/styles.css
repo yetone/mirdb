@@ -457,7 +457,33 @@ ul {
 
 /* === SECTION: demo (Scenario 7) === */
 .demo {
-  /* Demo styles will be added by Scenario 7 */
+  padding: var(--spacing-2xl) 0;
+  background-color: var(--color-background-alt);
+}
+
+.demo-description {
+  text-align: center;
+  font-size: var(--font-size-lg);
+  color: var(--color-text-light);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+  line-height: 1.6;
+}
+
+.demo-container {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+}
+
+.demo-gif {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* === SECTION: status (Scenario 6) === */
