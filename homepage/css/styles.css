@@ -962,4 +962,124 @@ textarea:focus {
 }
 
 /* === SECTION: dark-mode (Scenario 15) === */
-/* Dark mode styles will be added by Scenario 15 */
+/* Dark mode CSS variables */
+:root {
+  --dark-color-primary: #2563eb;
+  --dark-color-primary-dark: #3b82f6;
+  --dark-color-text: #f3f4f6;
+  --dark-color-text-light: #9ca3af;
+  --dark-color-background: #111827;
+  --dark-color-background-alt: #1f2937;
+  --dark-color-border: #374151;
+}
+
+/* Dark mode toggle button */
+.dark-mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.dark-mode-toggle:hover {
+  background-color: var(--color-background-alt);
+}
+
+.dark-mode-toggle:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.dark-mode-toggle svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text);
+  transition: color var(--transition-fast);
+}
+
+.dark-mode-toggle .icon-moon {
+  display: block;
+}
+
+.dark-mode-toggle .icon-sun {
+  display: none;
+}
+
+/* System preference: prefers-color-scheme dark */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-primary: var(--dark-color-primary);
+    --color-primary-dark: var(--dark-color-primary-dark);
+    --color-text: var(--dark-color-text);
+    --color-text-light: var(--dark-color-text-light);
+    --color-background: var(--dark-color-background);
+    --color-background-alt: var(--dark-color-background-alt);
+    --color-border: var(--dark-color-border);
+  }
+
+  :root:not([data-theme="light"]) .dark-mode-toggle .icon-moon {
+    display: none;
+  }
+
+  :root:not([data-theme="light"]) .dark-mode-toggle .icon-sun {
+    display: block;
+  }
+
+  :root:not([data-theme="light"]) .hero {
+    background: linear-gradient(135deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+  }
+
+  :root:not([data-theme="light"]) .hero-cta {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+  }
+
+  :root:not([data-theme="light"]) .feature-card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  :root:not([data-theme="light"]) .nav-link-external::after {
+    filter: invert(1);
+  }
+}
+
+/* Manual dark mode via data-theme attribute */
+[data-theme="dark"] {
+  --color-primary: var(--dark-color-primary);
+  --color-primary-dark: var(--dark-color-primary-dark);
+  --color-text: var(--dark-color-text);
+  --color-text-light: var(--dark-color-text-light);
+  --color-background: var(--dark-color-background);
+  --color-background-alt: var(--dark-color-background-alt);
+  --color-border: var(--dark-color-border);
+}
+
+[data-theme="dark"] .dark-mode-toggle .icon-moon {
+  display: none;
+}
+
+[data-theme="dark"] .dark-mode-toggle .icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+}
+
+[data-theme="dark"] .hero-cta {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+}
+
+[data-theme="dark"] .feature-card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .nav-link-external::after {
+  filter: invert(1);
+}
