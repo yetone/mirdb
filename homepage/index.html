@@ -66,7 +66,7 @@
               </svg>
             </div>
             <h3>Memcached Protocol</h3>
-            <p>Drop-in compatible with the Memcached protocol. Use your existing Memcached clients and libraries without any code changes.</p>
+            <p>Drop-in compatible with the <a href="https://github.com/memcached/memcached/blob/master/doc/protocol.txt" target="_blank" rel="noopener noreferrer" class="feature-link" data-testid="memcached-docs-link">Memcached protocol</a>. Use your existing Memcached clients and libraries without any code changes.</p>
           </article>
           <article class="feature-card" data-testid="feature-persistence">
             <div class="feature-icon" aria-hidden="true">
@@ -98,8 +98,66 @@
     <!-- END SECTION: features -->
 
     <!-- SECTION: quick-start - Owner: Scenario 4 -->
-    <section id="quick-start" class="quick-start">
-      <!-- Quick start content will be added by Scenario 4 -->
+    <section id="quick-start" class="quick-start" aria-labelledby="quick-start-title">
+      <div class="container">
+        <h2 id="quick-start-title" class="section-title">Quick Start</h2>
+        <p class="quick-start-intro">
+          MirDB is compatible with the Memcached protocol. Use your favorite Memcached client to connect and start storing data:
+        </p>
+        <div class="code-block-wrapper">
+          <div class="code-block-header">
+            <span class="code-block-lang">Shell</span>
+            <button class="code-copy-btn" type="button" aria-label="Copy code to clipboard" data-testid="copy-code-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <pre class="code-block" data-testid="code-block"><code class="code-highlight"># Connect to MirDB using telnet
+telnet localhost 11211
+
+# Store a value with SET command
+<span class="code-keyword">set</span> mykey 0 0 5
+hello
+STORED
+
+# Retrieve the value with GET command
+<span class="code-keyword">get</span> mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete a key
+<span class="code-keyword">delete</span> mykey
+DELETED</code></pre>
+        </div>
+        <p class="quick-start-note">
+          Or use any Memcached client library in your preferred language - Python, Node.js, Java, Go, and more!
+        </p>
+      </div>
+      <script>
+        // Copy code functionality for quick-start section
+        (function() {
+          const copyBtn = document.querySelector('.code-copy-btn');
+          const codeBlock = document.querySelector('.code-block code');
+          if (copyBtn && codeBlock) {
+            copyBtn.addEventListener('click', async function() {
+              const text = codeBlock.textContent;
+              try {
+                await navigator.clipboard.writeText(text);
+                copyBtn.querySelector('span').textContent = 'Copied!';
+                setTimeout(() => {
+                  copyBtn.querySelector('span').textContent = 'Copy';
+                }, 2000);
+              } catch (err) {
+                console.error('Failed to copy:', err);
+              }
+            });
+          }
+        })();
+      </script>
     </section>
     <!-- END SECTION: quick-start -->
 
