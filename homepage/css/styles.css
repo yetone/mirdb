@@ -344,7 +344,115 @@ ul {
 
 /* === SECTION: quick-start (Scenario 4) === */
 .quick-start {
-  /* Quick start styles will be added by Scenario 4 */
+  padding: var(--spacing-2xl) 0;
+  background-color: var(--color-background);
+}
+
+.quick-start-intro {
+  text-align: center;
+  font-size: var(--font-size-lg);
+  color: var(--color-text-light);
+  max-width: 700px;
+  margin: 0 auto var(--spacing-xl);
+  line-height: 1.6;
+}
+
+.code-block-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+}
+
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: #1e293b;
+  border-bottom: 1px solid #334155;
+}
+
+.code-block-lang {
+  font-size: var(--font-size-sm);
+  color: #94a3b8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.code-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  color: #94a3b8;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.code-copy-btn:hover {
+  background-color: #334155;
+  color: #e2e8f0;
+  border-color: #64748b;
+}
+
+.code-copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.code-copy-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.code-block {
+  margin: 0;
+  padding: var(--spacing-lg);
+  background-color: #0f172a;
+  overflow-x: auto;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.code-highlight {
+  color: #e2e8f0;
+  display: block;
+  white-space: pre;
+}
+
+.code-keyword {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.code-comment {
+  color: #64748b;
+  font-style: italic;
+}
+
+.code-string {
+  color: #34d399;
+}
+
+.code-number {
+  color: #f472b6;
+}
+
+.quick-start-note {
+  text-align: center;
+  font-size: var(--font-size-base);
+  color: var(--color-text-light);
+  margin-top: var(--spacing-xl);
 }
 
 /* === SECTION: demo (Scenario 7) === */
