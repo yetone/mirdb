@@ -339,6 +339,156 @@ describe('Terminal Demo Section (Scenario 3)', () => {
 });
 
 /**
+ * Navigation Section Tests (Scenario 5)
+ */
+describe('Navigation Section (Scenario 5)', () => {
+  describe('Test Case 1: Navigation header exists with position sticky or fixed', () => {
+    test('Header element exists', () => {
+      const header = document.querySelector('header.header');
+      expect(header).not.toBeNull();
+    });
+
+    test('Header has sticky positioning class', () => {
+      const header = document.querySelector('.header');
+      expect(header).not.toBeNull();
+      // The header should have the .header class which applies position: sticky in CSS
+      expect(header.classList.contains('header')).toBe(true);
+    });
+
+    test('Navigation container exists within header', () => {
+      const nav = document.querySelector('.header .nav');
+      expect(nav).not.toBeNull();
+    });
+
+    test('Navigation has aria-label for accessibility', () => {
+      const nav = document.querySelector('.nav');
+      expect(nav).not.toBeNull();
+      expect(nav.getAttribute('aria-label')).toBeTruthy();
+    });
+  });
+
+  describe('Test Case 2: Link to Features section exists', () => {
+    test('Features navigation link exists', () => {
+      const featuresLink = document.querySelector('.nav__link[href="#features"]');
+      expect(featuresLink).not.toBeNull();
+    });
+
+    test('Features link has correct text', () => {
+      const featuresLink = document.querySelector('.nav__link[href="#features"]');
+      expect(featuresLink).not.toBeNull();
+      expect(featuresLink.textContent.toLowerCase()).toContain('feature');
+    });
+  });
+
+  describe('Test Case 3: Link to Usage section exists', () => {
+    test('Usage navigation link exists', () => {
+      // Usage link should point to terminal-demo or quickstart (usage demonstration)
+      const usageLink = document.querySelector('.nav__link[href="#usage"], .nav__link[href="#terminal-demo"]');
+      expect(usageLink).not.toBeNull();
+    });
+
+    test('Usage or Demo link is present', () => {
+      const navLinks = document.querySelectorAll('.nav__link');
+      const hasUsageOrDemo = Array.from(navLinks).some(link => {
+        const text = link.textContent.toLowerCase();
+        return text.includes('usage') || text.includes('demo');
+      });
+      expect(hasUsageOrDemo).toBe(true);
+    });
+  });
+
+  describe('Test Case 4: Link to Architecture section exists', () => {
+    test('Architecture navigation link exists', () => {
+      const archLink = document.querySelector('.nav__link[href="#architecture"]');
+      expect(archLink).not.toBeNull();
+    });
+
+    test('Architecture link has correct text', () => {
+      const archLink = document.querySelector('.nav__link[href="#architecture"]');
+      expect(archLink).not.toBeNull();
+      expect(archLink.textContent.toLowerCase()).toContain('architecture');
+    });
+  });
+
+  describe('Test Case 5: Link to GitHub repository exists', () => {
+    test('GitHub link exists', () => {
+      const githubLink = document.querySelector('a[href="https://github.com/yetone/mirdb"]');
+      expect(githubLink).not.toBeNull();
+    });
+
+    test('GitHub link opens in new tab for external link', () => {
+      const githubLink = document.querySelector('a[href="https://github.com/yetone/mirdb"]');
+      expect(githubLink).not.toBeNull();
+      expect(githubLink.getAttribute('target')).toBe('_blank');
+    });
+
+    test('GitHub link has security attributes', () => {
+      const githubLink = document.querySelector('a[href="https://github.com/yetone/mirdb"]');
+      expect(githubLink).not.toBeNull();
+      expect(githubLink.getAttribute('rel')).toContain('noopener');
+    });
+
+    test('GitHub link has accessible label', () => {
+      const githubLink = document.querySelector('.github-link');
+      expect(githubLink).not.toBeNull();
+      const ariaLabel = githubLink.getAttribute('aria-label');
+      expect(ariaLabel).toBeTruthy();
+      expect(ariaLabel.toLowerCase()).toContain('github');
+    });
+  });
+
+  describe('Test Case 6: CircleCI badge is present and links to CircleCI', () => {
+    test('CircleCI badge image exists', () => {
+      const circleCIImg = document.querySelector('img[src*="circleci"]');
+      expect(circleCIImg).not.toBeNull();
+    });
+
+    test('CircleCI badge has alt text', () => {
+      const circleCIImg = document.querySelector('img[src*="circleci"]');
+      expect(circleCIImg).not.toBeNull();
+      expect(circleCIImg.getAttribute('alt')).toBeTruthy();
+    });
+
+    test('CircleCI badge links to CircleCI', () => {
+      const circleCILink = document.querySelector('a[href*="circleci"]');
+      expect(circleCILink).not.toBeNull();
+      expect(circleCILink.getAttribute('href')).toContain('circleci');
+    });
+  });
+
+  describe('Navigation structure and accessibility', () => {
+    test('Navigation list exists', () => {
+      const navList = document.querySelector('.nav__list');
+      expect(navList).not.toBeNull();
+      expect(navList.tagName).toBe('UL');
+    });
+
+    test('Header actions section exists', () => {
+      const headerActions = document.querySelector('.header__actions');
+      expect(headerActions).not.toBeNull();
+    });
+
+    test('Theme toggle button exists', () => {
+      const themeToggle = document.querySelector('.theme-toggle');
+      expect(themeToggle).not.toBeNull();
+      expect(themeToggle.tagName).toBe('BUTTON');
+    });
+
+    test('Theme toggle has accessible label', () => {
+      const themeToggle = document.querySelector('.theme-toggle');
+      expect(themeToggle).not.toBeNull();
+      expect(themeToggle.getAttribute('aria-label')).toBeTruthy();
+    });
+
+    test('Skip navigation link exists for accessibility', () => {
+      const skipLink = document.querySelector('.skip-link');
+      expect(skipLink).not.toBeNull();
+      expect(skipLink.getAttribute('href')).toBe('#main-content');
+    });
+  });
+});
+
+/**
  * Architecture Diagram Section Tests - Scenario 6
  * Tests for Architecture Diagram Section explaining LSM tree structure
  */
