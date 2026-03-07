@@ -297,10 +297,110 @@
   }
 }
 
-/* Tablet styles */
+/* Tablet styles (768px - 1023px) - Scenario 8 */
 @media (min-width: 768px) and (max-width: 1023px) {
+  /* Container */
   .container {
     padding: 0 var(--spacing-lg);
+  }
+
+  /* Section spacing */
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .section__title {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* Navigation - ensure visible at tablet */
+  .nav__list {
+    display: flex;
+    gap: var(--spacing-lg);
+  }
+
+  .nav__link {
+    font-size: 0.9rem;
+  }
+
+  /* Hero section adjustments */
+  .hero {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .hero__logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .hero__title {
+    font-size: 2.5rem;
+  }
+
+  .hero__tagline {
+    font-size: 1.25rem;
+  }
+
+  .hero__description {
+    font-size: 1rem;
+    max-width: 500px;
+  }
+
+  /* Features grid - 2 columns at tablet */
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card__icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .feature-card__icon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .feature-card__title {
+    font-size: 1.125rem;
+  }
+
+  .feature-card__description {
+    font-size: 0.9rem;
+  }
+
+  /* Terminal section */
+  .terminal {
+    max-width: 100%;
+  }
+
+  /* Architecture section */
+  .architecture__content {
+    max-width: 100%;
+  }
+
+  .architecture__image {
+    max-width: 100%;
+  }
+
+  .architecture__description {
+    font-size: 0.95rem;
+  }
+
+  /* Quick start section */
+  .quickstart__content {
+    max-width: 100%;
+  }
+
+  .code-block__code {
+    font-size: 0.85rem;
   }
 }
 

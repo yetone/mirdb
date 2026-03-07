@@ -16,11 +16,21 @@ const path = require('path');
 // Mobile viewport (320px width)
 const MOBILE_VIEWPORT = { width: 320, height: 568 };
 
+// Tablet viewport settings
+const TABLET_VIEWPORT = {
+  width: 768,
+  height: 1024
+};
+
 // Helper to get the file URL
 const getFileUrl = () => {
   const indexPath = path.resolve(__dirname, '../../index.html');
   return `file://${indexPath}`;
 };
+
+// ============================================================================
+// Scenario 7: Mobile Responsive Design (320px)
+// ============================================================================
 
 test.describe('Scenario 7: Mobile Responsive Design (320px)', () => {
   test.beforeEach(async ({ page }) => {
@@ -297,5 +307,228 @@ test.describe('Scenario 7: Mobile Responsive Design (320px)', () => {
       // Code blocks should allow horizontal scrolling for long lines
       expect(['auto', 'scroll']).toContain(overflow);
     }
+  });
+});
+
+// ============================================================================
+// Scenario 8: Tablet Responsive Design (768px)
+// ============================================================================
+
+test.describe('Responsive Design - Tablet (768px)', () => {
+  test.beforeEach(async ({ page }) => {
+    // Set tablet viewport
+    await page.setViewportSize(TABLET_VIEWPORT);
+
+    // Load the homepage
+    const htmlPath = path.join(__dirname, '../../index.html');
+    await page.goto(`file://${htmlPath}`);
+  });
+
+  test('Test Case 1: Page renders correctly at 768px viewport width', async ({ page }) => {
+    // Verify page loads without errors
+    const body = page.locator('body');
+    await expect(body).toBeVisible();
+
+    // Verify main content is visible
+    const mainContent = page.locator('#main-content');
+    await expect(mainContent).toBeVisible();
+
+    // Verify hero section is visible
+    const hero = page.locator('.hero');
+    await expect(hero).toBeVisible();
+
+    // Verify no horizontal scrollbar
+    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+    expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1); // +1 for rounding tolerance
+
+    // Verify viewport width is correct
+    const viewportWidth = await page.evaluate(() => window.innerWidth);
+    expect(viewportWidth).toBe(TABLET_VIEWPORT.width);
+  });
+
+  test('Test Case 2: Features grid displays in 2-column layout', async ({ page }) => {
+    // Find features grid
+    const featuresGrid = page.locator('.features__grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Get all feature cards
+    const featureCards = page.locator('.feature-card');
+    const cardCount = await featureCards.count();
+    expect(cardCount).toBe(4);
+
+    // Get computed grid styles
+    const gridStyle = await featuresGrid.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        display: computed.display,
+        gridTemplateColumns: computed.gridTemplateColumns
+      };
+    });
+
+    // Verify grid display
+    expect(gridStyle.display).toBe('grid');
+
+    // Parse grid template columns - should have 2 columns
+    const columns = gridStyle.gridTemplateColumns.split(' ').filter(col => col.trim() !== '');
+    expect(columns.length).toBe(2);
+
+    // Get positions of feature cards to verify 2-column layout
+    const cardPositions = await featureCards.evaluateAll((cards) => {
+      return cards.map(card => {
+        const rect = card.getBoundingClientRect();
+        return { left: rect.left, top: rect.top, width: rect.width };
+      });
+    });
+
+    // First two cards should be on the same row (similar top position)
+    expect(Math.abs(cardPositions[0].top - cardPositions[1].top)).toBeLessThan(5);
+
+    // Cards should be side by side (different left positions)
+    expect(cardPositions[1].left).toBeGreaterThan(cardPositions[0].left);
+
+    // Third and fourth cards should be on a different row
+    expect(cardPositions[2].top).toBeGreaterThan(cardPositions[0].top);
+  });
+
+  test('Test Case 3: Navigation is fully visible and functional at tablet size', async ({ page }) => {
+    // Verify navigation container is visible
+    const nav = page.locator('.nav');
+    await expect(nav).toBeVisible();
+
+    // Verify navigation list is visible (not hidden as in mobile)
+    const navList = page.locator('.nav__list');
+    await expect(navList).toBeVisible();
+
+    // Check that display is flex (visible)
+    const navListDisplay = await navList.evaluate((el) => {
+      return window.getComputedStyle(el).display;
+    });
+    expect(navListDisplay).toBe('flex');
+
+    // Verify all navigation links are visible
+    const navLinks = page.locator('.nav__link');
+    const linkCount = await navLinks.count();
+    expect(linkCount).toBeGreaterThan(0);
+
+    // Check each link is visible and clickable
+    for (let i = 0; i < linkCount; i++) {
+      const link = navLinks.nth(i);
+      await expect(link).toBeVisible();
+
+      // Verify link has href attribute
+      const href = await link.getAttribute('href');
+      expect(href).toBeTruthy();
+    }
+
+    // Verify navigation links have expected text
+    const linkTexts = await navLinks.allTextContents();
+    expect(linkTexts).toContain('Features');
+    expect(linkTexts).toContain('Quick Start');
+    expect(linkTexts).toContain('Architecture');
+
+    // Verify header actions (theme toggle, github link) are visible
+    const headerActions = page.locator('.header__actions');
+    await expect(headerActions).toBeVisible();
+
+    // Verify theme toggle button is functional
+    const themeToggle = page.locator('.theme-toggle');
+    await expect(themeToggle).toBeVisible();
+    await expect(themeToggle).toBeEnabled();
+
+    // Verify GitHub link is visible
+    const githubLink = page.locator('.github-link');
+    await expect(githubLink).toBeVisible();
+  });
+
+  test('Navigation links navigate to correct sections', async ({ page }) => {
+    // Click Features link and verify scroll
+    const featuresLink = page.locator('.nav__link[href="#features"]');
+    await featuresLink.click();
+
+    // Wait for scroll animation
+    await page.waitForTimeout(500);
+
+    // Verify features section is in view
+    const featuresSection = page.locator('#features');
+    const isInView = await featuresSection.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.top >= -100 && rect.top < window.innerHeight;
+    });
+    expect(isInView).toBe(true);
+  });
+
+  test('All sections render correctly at tablet width', async ({ page }) => {
+    // Verify each main section is visible
+    const sections = [
+      { selector: '.hero', name: 'Hero' },
+      { selector: '#features', name: 'Features' },
+      { selector: '#terminal-demo', name: 'Terminal Demo' },
+      { selector: '#quickstart', name: 'Quick Start' },
+      { selector: '#architecture', name: 'Architecture' }
+    ];
+
+    for (const section of sections) {
+      const element = page.locator(section.selector);
+      await expect(element, `${section.name} section should be visible`).toBeVisible();
+    }
+
+    // Verify footer is visible
+    const footer = page.locator('.footer');
+    await expect(footer).toBeVisible();
+  });
+
+  test('Content is readable and properly sized at tablet width', async ({ page }) => {
+    // Check hero title font size - should be readable (at least 24px)
+    const heroTitle = page.locator('.hero__title');
+    const titleFontSize = await heroTitle.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).fontSize);
+    });
+    // Hero title should be reasonably sized for tablet (between 32-60px)
+    expect(titleFontSize).toBeGreaterThanOrEqual(32);
+    expect(titleFontSize).toBeLessThanOrEqual(60);
+
+    // Check section title font size
+    const sectionTitle = page.locator('.section__title').first();
+    const sectionTitleFontSize = await sectionTitle.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).fontSize);
+    });
+    // Section title should be readable (between 24-40px for tablet)
+    expect(sectionTitleFontSize).toBeGreaterThanOrEqual(24);
+    expect(sectionTitleFontSize).toBeLessThanOrEqual(40);
+  });
+
+  test('Feature cards have correct styling at tablet size', async ({ page }) => {
+    const featureCard = page.locator('.feature-card').first();
+
+    // Get card styling
+    const cardStyles = await featureCard.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        padding: computed.padding,
+        backgroundColor: computed.backgroundColor
+      };
+    });
+
+    // Verify card has padding
+    expect(cardStyles.padding).toBeTruthy();
+
+    // Verify card icon exists and has reasonable size
+    const cardIcon = page.locator('.feature-card__icon').first();
+    await expect(cardIcon).toBeVisible();
+
+    const iconSize = await cardIcon.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        width: parseInt(computed.width),
+        height: parseInt(computed.height)
+      };
+    });
+
+    // Icons should be reasonably sized for tablet (50-100px)
+    expect(iconSize.width).toBeGreaterThanOrEqual(50);
+    expect(iconSize.width).toBeLessThanOrEqual(100);
+    expect(iconSize.height).toBeGreaterThanOrEqual(50);
+    expect(iconSize.height).toBeLessThanOrEqual(100);
   });
 });
