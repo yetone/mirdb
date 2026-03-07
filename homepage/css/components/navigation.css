@@ -1,0 +1,89 @@
+/**
+ * Navigation and Header Styles
+ * Owner: Scenario 5 - Navigation and External Links
+ */
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 100;
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.header__logo img {
+  width: 40px;
+  height: 40px;
+}
+
+.header__logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.nav__list {
+  display: flex;
+  gap: var(--spacing-xl);
+}
+
+.nav__link {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  transition: color var(--transition-speed);
+}
+
+.nav__link:hover {
+  color: var(--color-primary);
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.theme-toggle,
+.github-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius);
+  color: var(--color-text-secondary);
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+.theme-toggle:hover,
+.github-link:hover {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+}

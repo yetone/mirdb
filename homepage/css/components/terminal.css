@@ -1,0 +1,171 @@
+/**
+ * Terminal Demo Styles
+ * Owner: Scenario 3 - Interactive Terminal Demo
+ *
+ * Layout:
+ * - Dark-themed terminal window
+ * - Monospace font
+ * - Syntax highlighting for commands
+ *
+ * Elements:
+ * - .terminal-demo
+ * - .terminal
+ * - .terminal__header
+ * - .terminal__body
+ * - .terminal__line
+ * - .terminal__prompt
+ * - .terminal__command
+ * - .terminal__output
+ */
+
+.terminal-demo {
+  background-color: var(--color-surface);
+  padding: var(--spacing-3xl) var(--spacing-xl);
+}
+
+.terminal-demo__container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.terminal-demo__title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.terminal-demo__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* Terminal Window */
+.terminal {
+  max-width: 700px;
+  margin: 0 auto var(--spacing-xl);
+  background-color: var(--terminal-bg);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.terminal__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: #313244;
+}
+
+.terminal__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal__dot--red {
+  background-color: #f38ba8;
+}
+
+.terminal__dot--yellow {
+  background-color: #f9e2af;
+}
+
+.terminal__dot--green {
+  background-color: #a6e3a1;
+}
+
+.terminal__title {
+  flex: 1;
+  text-align: center;
+  color: var(--terminal-text);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-mono);
+}
+
+.terminal__body {
+  padding: var(--spacing-lg);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.8;
+  color: var(--terminal-text);
+  min-height: 300px;
+}
+
+.terminal__line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.terminal__prompt {
+  color: var(--terminal-prompt);
+  font-weight: 600;
+  user-select: none;
+}
+
+.terminal__command {
+  color: var(--terminal-command);
+}
+
+.terminal__keyword {
+  color: var(--terminal-keyword);
+  font-weight: 600;
+}
+
+.terminal__value {
+  color: var(--terminal-text);
+  padding-left: calc(var(--spacing-md) + 0.5em);
+}
+
+.terminal__output {
+  color: var(--terminal-output);
+  padding-left: calc(var(--spacing-md) + 0.5em);
+}
+
+.terminal__output--success {
+  color: var(--terminal-success);
+  font-weight: 600;
+}
+
+/* Usage GIF Section */
+.terminal-demo__gif {
+  text-align: center;
+  margin-top: var(--spacing-2xl);
+}
+
+.terminal-demo__gif-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+}
+
+.terminal-demo__usage-gif {
+  max-width: 100%;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  margin: 0 auto;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .terminal-demo {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .terminal-demo__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .terminal__body {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-xs);
+    min-height: 250px;
+  }
+}

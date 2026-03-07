@@ -1,0 +1,125 @@
+/**
+ * Architecture Diagram Section Styles
+ * Owner: Scenario 6 - Architecture Diagram Section
+ *
+ * Layout:
+ * - Diagram container with responsive sizing
+ * - Explanatory text with LSM tree details
+ * - Feature list for architecture components
+ *
+ * Elements:
+ * - .architecture
+ * - .architecture__title
+ * - .architecture__diagram
+ * - .architecture__image
+ * - .architecture__description
+ * - .architecture__subtitle
+ * - .architecture__features
+ */
+
+.architecture {
+  background-color: var(--color-background);
+}
+
+.architecture__content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.architecture__diagram {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  text-align: center;
+  overflow: hidden;
+}
+
+.architecture__image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  /* CSS variables for SVG theming */
+  --arch-bg: var(--color-surface);
+  --arch-text: var(--color-text);
+  --arch-text-muted: var(--color-text-secondary);
+  --arch-arrow: var(--color-text-secondary);
+  --arch-primary: var(--color-primary, #3b82f6);
+  --arch-primary-dark: var(--color-primary-dark, #2563eb);
+  --arch-wal: #fef3c7;
+  --arch-wal-border: #f59e0b;
+  --arch-memtable: #dcfce7;
+  --arch-memtable-border: #22c55e;
+  --arch-imm: #e0f2fe;
+  --arch-imm-border: #0ea5e9;
+  --arch-l0: #fae8ff;
+  --arch-l0-border: #d946ef;
+  --arch-l1: var(--color-surface-alt, #f1f5f9);
+  --arch-l1-border: var(--color-border, #94a3b8);
+  --arch-compact: #8b5cf6;
+  --arch-sst: #c084fc;
+  --arch-sst-sorted: #64748b;
+}
+
+/* Dark theme adjustments for SVG */
+[data-theme="dark"] .architecture__image {
+  --arch-bg: var(--color-surface);
+  --arch-text: var(--color-text);
+  --arch-text-muted: var(--color-text-secondary);
+  --arch-l1: var(--color-surface-alt, #1e293b);
+  --arch-l1-border: var(--color-border, #475569);
+}
+
+.architecture__description {
+  text-align: left;
+  color: var(--color-text);
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.architecture__subtitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+.architecture__description p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+}
+
+.architecture__description strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.architecture__features {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-lg) 0;
+}
+
+.architecture__features li {
+  position: relative;
+  padding-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-secondary);
+}
+
+.architecture__features li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary, #3b82f6);
+  border-radius: 50%;
+}
+
+.architecture__features li strong {
+  color: var(--color-text);
+}

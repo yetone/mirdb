@@ -1,0 +1,108 @@
+/**
+ * Quick-Start Section Styles
+ * Owner: Scenario 4 - Quick Start Installation Section
+ */
+
+.quickstart {
+  background-color: var(--color-surface);
+}
+
+.quickstart__content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.quickstart__subtitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+.quickstart__subtitle:first-of-type {
+  margin-top: 0;
+}
+
+.code-block {
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  background-color: #1e1e1e;
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.code-block:last-child {
+  margin-bottom: 0;
+}
+
+.code-block__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: #333;
+}
+
+.code-block__language {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.code-block__copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid #555;
+  border-radius: var(--border-radius-sm);
+  color: #888;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
+}
+
+.code-block__copy-btn:hover {
+  background-color: #444;
+  color: #fff;
+}
+
+.code-block__copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Copy button success state */
+.code-block__copy-btn--copied {
+  background-color: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+}
+
+.code-block__copy-btn--copied:hover {
+  background-color: #16a34a;
+  border-color: #16a34a;
+}
+
+.code-block__copy-icon,
+.code-block__check-icon {
+  flex-shrink: 0;
+}
+
+.code-block__code {
+  padding: var(--spacing-lg);
+  margin: 0;
+  font-family: var(--font-family-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #e5e5e5;
+  overflow-x: auto;
+}
+
+.code-block__code code {
+  display: block;
+  white-space: pre;
+}

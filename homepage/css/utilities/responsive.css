@@ -1,0 +1,446 @@
+/**
+ * Responsive Utilities and Media Queries
+ * Owner: Scenarios 7, 8, 9 - Responsive Design
+ *
+ * Breakpoints:
+ * - Mobile: 320px - 767px (Scenario 7)
+ * - Tablet: 768px - 1023px (Scenario 8)
+ * - Desktop: 1024px+ (Scenario 9)
+ *
+ * Mobile (Scenario 7) Requirements:
+ * - Single column layout
+ * - No horizontal scrolling
+ * - Minimum 44x44px touch targets
+ * - Readable text without zooming
+ */
+
+/* ============================================
+   MOBILE STYLES (320px - 767px) - Scenario 7
+   ============================================ */
+@media (max-width: 767px) {
+  /* Prevent horizontal overflow - aggressive approach */
+  html {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+  }
+
+  /* All major containers must not overflow */
+  .container,
+  .header__container,
+  .hero__container,
+  .terminal-demo__container,
+  .features__grid,
+  .architecture__content,
+  .quickstart__content,
+  .footer__container {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Container adjustments for mobile */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Section adjustments */
+  .section {
+    padding: var(--spacing-2xl) 0;
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  .section__title {
+    font-size: 1.5rem;
+    padding: 0 var(--spacing-sm);
+    word-wrap: break-word;
+  }
+
+  /* Navigation - hide on mobile with high specificity */
+  nav.nav .nav__list,
+  .nav .nav__list,
+  .nav__list {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Header adjustments for mobile */
+  .header__container {
+    height: 56px;
+  }
+
+  .header__logo img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .header__logo-text {
+    font-size: 1rem;
+  }
+
+  /* Header logo - ensure minimum 44px touch target */
+  .header__logo {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Touch targets - minimum 44x44px for mobile accessibility */
+  .theme-toggle,
+  .github-link {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .header__actions {
+    gap: var(--spacing-xs);
+  }
+
+  /* Hero section mobile adjustments */
+  .hero {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .hero__logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero__title {
+    font-size: 2rem;
+    word-wrap: break-word;
+  }
+
+  .hero__tagline {
+    font-size: 1rem;
+    padding: 0 var(--spacing-sm);
+    line-height: 1.4;
+  }
+
+  .hero__description {
+    font-size: 0.9375rem;
+    padding: 0 var(--spacing-sm);
+    line-height: 1.6;
+  }
+
+  .hero__badges {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Terminal demo mobile adjustments */
+  .terminal-demo {
+    padding: var(--spacing-xl) var(--spacing-sm);
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  .terminal-demo__title {
+    font-size: 1.5rem;
+  }
+
+  .terminal-demo__subtitle {
+    font-size: 0.9375rem;
+    padding: 0 var(--spacing-sm);
+  }
+
+  .terminal {
+    max-width: calc(100vw - 2 * var(--spacing-sm)) !important;
+    width: 100% !important;
+    border-radius: var(--border-radius);
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .terminal__body {
+    padding: var(--spacing-md);
+    font-size: 0.6875rem;
+    min-height: auto;
+    overflow-x: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .terminal__line {
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  .terminal-demo__usage-gif {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .terminal-demo__gif {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* Quick start mobile adjustments */
+  .quickstart__content {
+    padding: 0;
+  }
+
+  .quickstart__subtitle {
+    font-size: 1rem;
+  }
+
+  .code-block {
+    border-radius: var(--border-radius);
+    margin-left: calc(-1 * var(--spacing-md));
+    margin-right: calc(-1 * var(--spacing-md));
+    border-radius: 0;
+  }
+
+  .code-block__header {
+    padding: var(--spacing-sm);
+  }
+
+  /* Copy button - ensure 44x44px touch target */
+  .code-block__copy-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .code-block__copy-text {
+    display: none;
+  }
+
+  .code-block__code {
+    padding: var(--spacing-md);
+    font-size: 0.8125rem;
+    overflow-x: auto;
+  }
+
+  /* Architecture section mobile adjustments */
+  .architecture {
+    overflow-x: hidden !important;
+  }
+
+  .architecture__content {
+    flex-direction: column;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .architecture__diagram {
+    order: 1;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto;
+    box-sizing: border-box !important;
+  }
+
+  .architecture__image {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .architecture__description {
+    order: 2;
+    padding: var(--spacing-md) 0;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .architecture__subtitle {
+    font-size: 1.125rem;
+  }
+
+  .architecture__features {
+    padding-left: var(--spacing-lg);
+    font-size: 0.9375rem;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  .architecture__features li {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  /* Footer mobile adjustments */
+  .footer__container {
+    padding: var(--spacing-lg) var(--spacing-md);
+    text-align: center;
+  }
+
+  .footer__text {
+    font-size: 0.875rem;
+  }
+
+  /* Ensure images don't overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Skip link adjustments */
+  .skip-link {
+    padding: var(--spacing-md);
+    font-size: 1rem;
+  }
+}
+
+/* Tablet styles (768px - 1023px) - Scenario 8 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Container */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Section spacing */
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .section__title {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* Navigation - ensure visible at tablet */
+  .nav__list {
+    display: flex;
+    gap: var(--spacing-lg);
+  }
+
+  .nav__link {
+    font-size: 0.9rem;
+  }
+
+  /* Hero section adjustments */
+  .hero {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .hero__logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .hero__title {
+    font-size: 2.5rem;
+  }
+
+  .hero__tagline {
+    font-size: 1.25rem;
+  }
+
+  .hero__description {
+    font-size: 1rem;
+    max-width: 500px;
+  }
+
+  /* Features grid - 2 columns at tablet */
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card__icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .feature-card__icon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .feature-card__title {
+    font-size: 1.125rem;
+  }
+
+  .feature-card__description {
+    font-size: 0.9rem;
+  }
+
+  /* Terminal section */
+  .terminal {
+    max-width: 100%;
+  }
+
+  /* Architecture section */
+  .architecture__content {
+    max-width: 100%;
+  }
+
+  .architecture__image {
+    max-width: 100%;
+  }
+
+  .architecture__description {
+    font-size: 0.95rem;
+  }
+
+  /* Quick start section */
+  .quickstart__content {
+    max-width: 100%;
+  }
+
+  .code-block__code {
+    font-size: 0.85rem;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Ensure features grid displays 4 columns on desktop */
+  .features__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Desktop navigation - ensure visibility */
+  .nav__list {
+    display: flex;
+  }
+
+  /* Section spacing for desktop */
+  .section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .section__title {
+    font-size: 2.25rem;
+  }
+
+  /* Architecture section side-by-side layout on desktop */
+  .architecture__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    align-items: start;
+  }
+
+  /* Terminal demo section wider on desktop */
+  .terminal {
+    max-width: 700px;
+  }
+}
