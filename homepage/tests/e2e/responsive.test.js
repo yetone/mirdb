@@ -532,3 +532,157 @@ test.describe('Responsive Design - Tablet (768px)', () => {
     expect(iconSize.height).toBeLessThanOrEqual(100);
   });
 });
+
+// ============================================================================
+// Scenario 9: Desktop Responsive Design (1024px+)
+// ============================================================================
+
+// Desktop viewport settings
+const DESKTOP_VIEWPORT = { width: 1024, height: 768 };
+
+test.describe('Responsive Design - Desktop (Scenario 9)', () => {
+  test.beforeEach(async ({ page }) => {
+    // Set viewport to desktop width (1024px)
+    await page.setViewportSize(DESKTOP_VIEWPORT);
+    await page.goto(getFileUrl());
+  });
+
+  test('Test Case 1: Page renders with full desktop layout at 1024px viewport width', async ({ page }) => {
+    // Verify page is loaded
+    await expect(page.locator('body')).toBeVisible();
+
+    // Verify header is visible with navigation
+    const header = page.locator('.header');
+    await expect(header).toBeVisible();
+
+    // Verify navigation list is visible on desktop (not hidden)
+    const navList = page.locator('.nav__list');
+    await expect(navList).toBeVisible();
+
+    // Verify hero section is visible
+    const hero = page.locator('.hero');
+    await expect(hero).toBeVisible();
+
+    // Verify features section is visible
+    const features = page.locator('.features');
+    await expect(features).toBeVisible();
+
+    // Verify no horizontal scrolling
+    const body = page.locator('body');
+    const bodyBox = await body.boundingBox();
+    const viewportWidth = page.viewportSize().width;
+    expect(bodyBox.width).toBeLessThanOrEqual(viewportWidth + 1);
+  });
+
+  test('Test Case 2: Features display in 4-column layout at 1024px+', async ({ page }) => {
+    // Find the features grid
+    const featuresGrid = page.locator('.features__grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Get the computed grid-template-columns style
+    const gridStyles = await featuresGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        display: styles.display,
+        gridTemplateColumns: styles.gridTemplateColumns
+      };
+    });
+
+    // Verify grid display
+    expect(gridStyles.display).toBe('grid');
+
+    // Check for 4 columns - gridTemplateColumns will show actual pixel values
+    // For 4 columns, we expect 4 width values separated by spaces
+    const columnValues = gridStyles.gridTemplateColumns.split(' ').filter(v => v.trim() !== '');
+    expect(columnValues.length).toBe(4);
+
+    // Verify feature cards exist (should be 4)
+    const featureCards = page.locator('.feature-card');
+    await expect(featureCards).toHaveCount(4);
+
+    // Verify cards are arranged in a single row (all at roughly same Y position)
+    const cards = await featureCards.all();
+    const boundingBoxes = await Promise.all(cards.map(card => card.boundingBox()));
+
+    // All cards should have approximately the same Y position (same row)
+    const firstY = boundingBoxes[0].y;
+    for (const box of boundingBoxes) {
+      expect(Math.abs(box.y - firstY)).toBeLessThan(10);
+    }
+  });
+
+  test('Test Case 3: Content has reasonable max-width for readability', async ({ page }) => {
+    // Check container max-width at desktop size
+    const container = page.locator('.container').first();
+    await expect(container).toBeVisible();
+
+    const containerStyles = await container.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return {
+        maxWidth: styles.maxWidth,
+        width: styles.width,
+        actualWidth: rect.width,
+        left: rect.left,
+        right: window.innerWidth - rect.right
+      };
+    });
+
+    // Container should have max-width set for readability (1200px per scaffold)
+    // max-width can be a pixel value like '1200px' or 'none'
+    if (containerStyles.maxWidth !== 'none') {
+      const maxWidthPx = parseInt(containerStyles.maxWidth);
+      // Max width should be reasonable for readability (600-1400px range)
+      expect(maxWidthPx).toBeGreaterThanOrEqual(600);
+      expect(maxWidthPx).toBeLessThanOrEqual(1400);
+    }
+
+    // Container should be centered - left and right margins should be approximately equal
+    // This works even though computed margin shows as 0px (margin:auto computes to actual values)
+    const marginDiff = Math.abs(containerStyles.left - containerStyles.right);
+    // Allow small differences due to rounding (padding differences)
+    expect(marginDiff).toBeLessThan(50);
+  });
+
+  test('Desktop layout at larger viewport (1440px)', async ({ page }) => {
+    // Test at a wider viewport
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(getFileUrl());
+
+    // Features grid should still be 4 columns
+    const featuresGrid = page.locator('.features__grid');
+    await expect(featuresGrid).toBeVisible();
+
+    const gridStyles = await featuresGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return styles.gridTemplateColumns;
+    });
+
+    const columnValues = gridStyles.split(' ').filter(v => v.trim() !== '');
+    expect(columnValues.length).toBe(4);
+
+    // Container should still respect max-width
+    const container = page.locator('.container').first();
+    const containerBox = await container.boundingBox();
+
+    // Container width should be less than viewport (respecting max-width)
+    // or equal if max-width allows full width
+    expect(containerBox.width).toBeLessThanOrEqual(1440);
+  });
+
+  test('Desktop navigation is fully visible', async ({ page }) => {
+    // Navigation should be visible on desktop
+    const navList = page.locator('.nav__list');
+    await expect(navList).toBeVisible();
+
+    // Nav items should be visible
+    const navItems = page.locator('.nav__link');
+    const count = await navItems.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Each nav item should be visible
+    for (let i = 0; i < count; i++) {
+      await expect(navItems.nth(i)).toBeVisible();
+    }
+  });
+});

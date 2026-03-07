@@ -408,5 +408,39 @@
 @media (min-width: 1024px) {
   .container {
     max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Ensure features grid displays 4 columns on desktop */
+  .features__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Desktop navigation - ensure visibility */
+  .nav__list {
+    display: flex;
+  }
+
+  /* Section spacing for desktop */
+  .section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .section__title {
+    font-size: 2.25rem;
+  }
+
+  /* Architecture section side-by-side layout on desktop */
+  .architecture__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    align-items: start;
+  }
+
+  /* Terminal demo section wider on desktop */
+  .terminal {
+    max-width: 700px;
   }
 }
