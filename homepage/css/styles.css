@@ -43,3 +43,29 @@ body {
   margin-bottom: var(--spacing-2xl);
   color: var(--color-text);
 }
+
+/* Footer Styles */
+.footer {
+  background-color: var(--color-surface);
+  padding: var(--spacing-xl) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.footer__container {
+  text-align: center;
+}
+
+.footer__text {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+.footer a {
+  color: var(--color-primary);
+  transition: color var(--transition-speed) var(--transition-timing);
+}
+
+.footer a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
