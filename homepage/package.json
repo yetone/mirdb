@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Product Homepage",
+  "scripts": {
+    "test": "jest --testEnvironment=jsdom",
+    "test:unit": "jest tests/unit --testEnvironment=jsdom",
+    "test:integration": "jest tests/integration --testEnvironment=jsdom",
+    "test:e2e": "playwright test",
+    "validate:html": "html-validate index.html",
+    "validate:css": "stylelint css/**/*.css"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "@playwright/test": "^1.40.0",
+    "html-validate": "^8.0.0",
+    "stylelint": "^15.0.0",
+    "axe-core": "^4.8.0"
+  }
+}

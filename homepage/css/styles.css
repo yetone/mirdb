@@ -1,0 +1,45 @@
+/**
+ * Main Stylesheet for MirDB Homepage
+ *
+ * Imports all component and utility styles.
+ */
+
+/* Utilities */
+@import url('./utilities/reset.css');
+@import url('./utilities/variables.css');
+@import url('./utilities/responsive.css');
+
+/* Components */
+@import url('./components/navigation.css');
+@import url('./components/hero.css');
+@import url('./components/features.css');
+@import url('./components/terminal.css');
+@import url('./components/quickstart.css');
+@import url('./components/architecture.css');
+
+/* Base Styles */
+body {
+  font-family: var(--font-family-sans);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color var(--transition-speed) var(--transition-timing),
+              color var(--transition-speed) var(--transition-timing);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.section {
+  padding: var(--spacing-3xl) 0;
+}
+
+.section__title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  color: var(--color-text);
+}

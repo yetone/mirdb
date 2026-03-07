@@ -1,0 +1,32 @@
+/**
+ * Architecture Diagram Section Styles
+ * Owner: Scenario 6 - Architecture Diagram Section
+ */
+
+.architecture {
+  background-color: var(--color-background);
+}
+
+.architecture__content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.architecture__diagram {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-xl);
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  text-align: center;
+}
+
+.architecture__placeholder {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.architecture__description {
+  text-align: center;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+}

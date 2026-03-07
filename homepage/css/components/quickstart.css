@@ -1,0 +1,69 @@
+/**
+ * Quick-Start Section Styles
+ * Owner: Scenario 4 - Quick Start Installation Section
+ */
+
+.quickstart {
+  background-color: var(--color-surface);
+}
+
+.quickstart__content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.code-block {
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  background-color: #1e1e1e;
+  box-shadow: var(--shadow-md);
+}
+
+.code-block__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: #333;
+}
+
+.code-block__language {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.code-block__copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid #555;
+  border-radius: var(--border-radius-sm);
+  color: #888;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+.code-block__copy-btn:hover {
+  background-color: #444;
+  color: #fff;
+}
+
+.code-block__code {
+  padding: var(--spacing-lg);
+  margin: 0;
+  font-family: var(--font-family-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #e5e5e5;
+  overflow-x: auto;
+}
+
+.code-block__code code {
+  display: block;
+  white-space: pre;
+}

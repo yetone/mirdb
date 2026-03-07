@@ -1,0 +1,101 @@
+/**
+ * Features Grid Styles
+ * Owner: Scenario 2 - Features Grid Section
+ *
+ * Layout:
+ * - Card-based grid layout
+ * - Responsive columns (1/2/4 based on viewport)
+ *
+ * Elements:
+ * - .features
+ * - .features__grid
+ * - .feature-card
+ * - .feature-card__icon
+ * - .feature-card__title
+ * - .feature-card__description
+ */
+
+.features {
+  background-color: var(--color-surface);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-xl);
+}
+
+.feature-card {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: transform var(--transition-speed) var(--transition-timing),
+              box-shadow var(--transition-speed) var(--transition-timing),
+              border-color var(--transition-speed) var(--transition-timing);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.feature-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-lg);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border-radius: var(--border-radius-lg);
+  color: white;
+}
+
+.feature-card__icon svg {
+  width: 48px;
+  height: 48px;
+}
+
+.feature-card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.feature-card__description {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* Responsive: Tablet - 2 columns */
+@media (max-width: 1023px) {
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Responsive: Mobile - 1 column */
+@media (max-width: 767px) {
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card__icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .feature-card__icon svg {
+    width: 36px;
+    height: 36px;
+  }
+}

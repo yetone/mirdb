@@ -1,0 +1,42 @@
+/**
+ * Responsive Utilities and Media Queries
+ * Owner: Scenarios 7, 8, 9 - Responsive Design
+ *
+ * Breakpoints:
+ * - Mobile: 320px - 767px (Scenario 7)
+ * - Tablet: 768px - 1023px (Scenario 8)
+ * - Desktop: 1024px+ (Scenario 9)
+ */
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .section__title {
+    font-size: 1.5rem;
+  }
+
+  .nav__list {
+    display: none;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1200px;
+  }
+}

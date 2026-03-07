@@ -1,0 +1,55 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ */
+
+.hero {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  padding: var(--spacing-3xl) 0;
+  text-align: center;
+}
+
+.hero__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero__logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background: white;
+  padding: var(--spacing-sm);
+}
+
+.hero__title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: var(--spacing-sm);
+}
+
+.hero__tagline {
+  font-size: 1.5rem;
+  opacity: 0.9;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero__description {
+  max-width: 600px;
+  font-size: 1.125rem;
+  opacity: 0.85;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero__badges {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.hero__badges img {
+  height: 24px;
+}
