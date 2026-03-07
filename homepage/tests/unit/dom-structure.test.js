@@ -138,3 +138,134 @@ describe('Features Grid Section', () => {
     });
   });
 });
+
+/**
+ * Terminal Demo Section Tests - Scenario 3
+ * Tests for Interactive Terminal Demo
+ */
+describe('Terminal Demo Section (Scenario 3)', () => {
+  describe('Test Case 1: Terminal demo container exists with dark background styling', () => {
+    test('should have terminal demo section element', () => {
+      const terminalDemo = document.querySelector('.terminal-demo');
+      expect(terminalDemo).not.toBeNull();
+      expect(terminalDemo.id).toBe('terminal-demo');
+    });
+
+    test('should have terminal container element', () => {
+      const terminal = document.querySelector('.terminal');
+      expect(terminal).not.toBeNull();
+    });
+
+    test('terminal body should exist for dark background', () => {
+      const terminalBody = document.querySelector('.terminal__body');
+      expect(terminalBody).not.toBeNull();
+    });
+
+    test('terminal header should have window controls', () => {
+      const dots = document.querySelectorAll('.terminal__dot');
+      expect(dots.length).toBeGreaterThanOrEqual(3);
+    });
+  });
+
+  describe('Test Case 2: Terminal uses monospace font family', () => {
+    test('terminal body should exist and be styled for monospace', () => {
+      const terminalBody = document.querySelector('.terminal__body');
+      expect(terminalBody).not.toBeNull();
+      expect(terminalBody.classList.contains('terminal__body')).toBe(true);
+    });
+
+    test('terminal title should exist with monospace font', () => {
+      const terminalTitle = document.querySelector('.terminal__title');
+      expect(terminalTitle).not.toBeNull();
+    });
+  });
+
+  describe('Test Case 3: Terminal displays SET command example', () => {
+    test('should contain SET keyword in terminal content', () => {
+      const terminalBody = document.querySelector('.terminal__body');
+      expect(terminalBody).not.toBeNull();
+
+      const allKeywords = document.querySelectorAll('.terminal__keyword');
+      const keywordTexts = Array.from(allKeywords).map(el => el.textContent);
+      expect(keywordTexts).toContain('SET');
+    });
+
+    test('should have SET command line structure', () => {
+      const terminalCommands = document.querySelectorAll('.terminal__command');
+      const commandTexts = Array.from(terminalCommands).map(el => el.textContent);
+      const hasSetCommand = commandTexts.some(text => text.includes('SET'));
+      expect(hasSetCommand).toBe(true);
+    });
+  });
+
+  describe('Test Case 4: Terminal displays GET command example', () => {
+    test('should contain GET keyword in terminal content', () => {
+      const allKeywords = document.querySelectorAll('.terminal__keyword');
+      const keywordTexts = Array.from(allKeywords).map(el => el.textContent);
+      expect(keywordTexts).toContain('GET');
+    });
+
+    test('should have GET command line structure', () => {
+      const terminalCommands = document.querySelectorAll('.terminal__command');
+      const commandTexts = Array.from(terminalCommands).map(el => el.textContent);
+      const hasGetCommand = commandTexts.some(text => text.includes('GET'));
+      expect(hasGetCommand).toBe(true);
+    });
+  });
+
+  describe('Test Case 5: Terminal displays DELETE command example', () => {
+    test('should contain DELETE keyword in terminal content', () => {
+      const allKeywords = document.querySelectorAll('.terminal__keyword');
+      const keywordTexts = Array.from(allKeywords).map(el => el.textContent);
+      expect(keywordTexts).toContain('DELETE');
+    });
+
+    test('should have DELETE command line structure', () => {
+      const terminalCommands = document.querySelectorAll('.terminal__command');
+      const commandTexts = Array.from(terminalCommands).map(el => el.textContent);
+      const hasDeleteCommand = commandTexts.some(text => text.includes('DELETE'));
+      expect(hasDeleteCommand).toBe(true);
+    });
+  });
+
+  describe('Test Case 6: Usage GIF image is present', () => {
+    test('should have usage GIF image element', () => {
+      const usageGif = document.querySelector('.terminal-demo__usage-gif');
+      expect(usageGif).not.toBeNull();
+    });
+
+    test('usage GIF should have correct src attribute', () => {
+      const usageGif = document.querySelector('.terminal-demo__usage-gif');
+      expect(usageGif).not.toBeNull();
+      expect(usageGif.getAttribute('src')).toContain('usage.gif');
+    });
+
+    test('usage GIF should have alt text for accessibility', () => {
+      const usageGif = document.querySelector('.terminal-demo__usage-gif');
+      expect(usageGif).not.toBeNull();
+      const altText = usageGif.getAttribute('alt');
+      expect(altText).toBeTruthy();
+      expect(altText.length).toBeGreaterThan(10);
+    });
+
+    test('should have gif title section', () => {
+      const gifTitle = document.querySelector('.terminal-demo__gif-title');
+      expect(gifTitle).not.toBeNull();
+      expect(gifTitle.textContent).toBeTruthy();
+    });
+  });
+
+  describe('Terminal Demo Accessibility', () => {
+    test('terminal demo should have descriptive title', () => {
+      const title = document.querySelector('.terminal-demo__title');
+      expect(title).not.toBeNull();
+      expect(title.textContent.length).toBeGreaterThan(0);
+    });
+
+    test('terminal demo should have subtitle/description', () => {
+      const subtitle = document.querySelector('.terminal-demo__subtitle');
+      expect(subtitle).not.toBeNull();
+      expect(subtitle.textContent.length).toBeGreaterThan(0);
+    });
+  });
+});

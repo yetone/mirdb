@@ -21,7 +21,7 @@
       <nav class="nav" aria-label="Main navigation">
         <ul class="nav__list">
           <li><a href="#features" class="nav__link">Features</a></li>
-          <li><a href="#terminal" class="nav__link">Demo</a></li>
+          <li><a href="#terminal-demo" class="nav__link">Demo</a></li>
           <li><a href="#quickstart" class="nav__link">Quick Start</a></li>
           <li><a href="#architecture" class="nav__link">Architecture</a></li>
         </ul>
@@ -148,42 +148,61 @@
     </section>
 
     <!-- Terminal Demo Section (Scenario 3) -->
-    <section id="terminal" class="terminal-section section" aria-labelledby="terminal-title">
-      <div class="container">
-        <h2 id="terminal-title" class="section__title">See It In Action</h2>
+    <section id="terminal-demo" class="terminal-demo section" aria-labelledby="terminal-title">
+      <div class="container terminal-demo__container">
+        <h2 id="terminal-title" class="terminal-demo__title">See It In Action</h2>
+        <p class="terminal-demo__subtitle">MirDB uses the Memcached text protocol - connect with any Memcached client</p>
         <div class="terminal">
           <div class="terminal__header">
-            <span class="terminal__button terminal__button--red"></span>
-            <span class="terminal__button terminal__button--yellow"></span>
-            <span class="terminal__button terminal__button--green"></span>
+            <span class="terminal__dot terminal__dot--red"></span>
+            <span class="terminal__dot terminal__dot--yellow"></span>
+            <span class="terminal__dot terminal__dot--green"></span>
             <span class="terminal__title">mirdb-demo</span>
           </div>
           <div class="terminal__body">
             <div class="terminal__line">
               <span class="terminal__prompt">$</span>
-              <span class="terminal__command">echo "set hello 0 0 5\r\nworld\r" | nc localhost 12333</span>
+              <span class="terminal__command">telnet localhost 12333</span>
             </div>
             <div class="terminal__line">
-              <span class="terminal__output">STORED</span>
+              <span class="terminal__output">Connected to localhost.</span>
             </div>
             <div class="terminal__line">
-              <span class="terminal__prompt">$</span>
-              <span class="terminal__command">echo "get hello\r" | nc localhost 12333</span>
+              <span class="terminal__prompt">&gt;</span>
+              <span class="terminal__command"><span class="terminal__keyword">SET</span> mykey 0 0 5</span>
             </div>
             <div class="terminal__line">
-              <span class="terminal__output">VALUE hello 0 5</span>
+              <span class="terminal__value">hello</span>
             </div>
             <div class="terminal__line">
-              <span class="terminal__output">world</span>
+              <span class="terminal__output terminal__output--success">STORED</span>
+            </div>
+            <div class="terminal__line">
+              <span class="terminal__prompt">&gt;</span>
+              <span class="terminal__command"><span class="terminal__keyword">GET</span> mykey</span>
+            </div>
+            <div class="terminal__line">
+              <span class="terminal__output">VALUE mykey 0 5</span>
+            </div>
+            <div class="terminal__line">
+              <span class="terminal__output">hello</span>
             </div>
             <div class="terminal__line">
               <span class="terminal__output">END</span>
             </div>
+            <div class="terminal__line">
+              <span class="terminal__prompt">&gt;</span>
+              <span class="terminal__command"><span class="terminal__keyword">DELETE</span> mykey</span>
+            </div>
+            <div class="terminal__line">
+              <span class="terminal__output terminal__output--success">DELETED</span>
+            </div>
           </div>
         </div>
-        <p class="terminal-section__caption">
-          <img src="../assets/usage.gif" alt="MirDB terminal usage demonstration" class="terminal-section__gif">
-        </p>
+        <div class="terminal-demo__gif">
+          <h3 class="terminal-demo__gif-title">Live Demo</h3>
+          <img src="../assets/usage.gif" alt="MirDB terminal usage demonstration showing SET, GET, and DELETE commands" class="terminal-demo__usage-gif">
+        </div>
       </div>
     </section>
 
