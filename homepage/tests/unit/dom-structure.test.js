@@ -22,6 +22,74 @@ const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 document.documentElement.innerHTML = htmlContent;
 
 /**
+ * Hero Section Tests (Scenario 1)
+ */
+describe('Hero Section (Scenario 1)', () => {
+  describe('Test Case 1: H1 element contains MirDB text', () => {
+    test('H1 element exists and contains "MirDB"', () => {
+      const h1 = document.querySelector('h1');
+      expect(h1).not.toBeNull();
+      expect(h1.textContent).toContain('MirDB');
+    });
+
+    test('H1 has the correct class', () => {
+      const h1 = document.querySelector('.hero__title');
+      expect(h1).not.toBeNull();
+      expect(h1.tagName).toBe('H1');
+    });
+  });
+
+  describe('Test Case 2: Logo image is present', () => {
+    test('Logo image exists with correct src', () => {
+      const logo = document.querySelector('.hero__logo');
+      expect(logo).not.toBeNull();
+      expect(logo.tagName).toBe('IMG');
+      expect(logo.getAttribute('src')).toContain('logo.gif');
+    });
+
+    test('Logo has alt text for accessibility', () => {
+      const logo = document.querySelector('.hero__logo');
+      expect(logo).not.toBeNull();
+      expect(logo.getAttribute('alt')).toBeTruthy();
+      expect(logo.getAttribute('alt').toLowerCase()).toContain('logo');
+    });
+  });
+
+  describe('Test Case 3: Tagline is visible', () => {
+    test('Tagline text is present', () => {
+      const tagline = document.querySelector('.hero__tagline');
+      expect(tagline).not.toBeNull();
+      expect(tagline.textContent).toBe('A Persistent Key-Value Store with Memcached Protocol');
+    });
+  });
+
+  describe('Hero section structure', () => {
+    test('Hero section exists', () => {
+      const hero = document.querySelector('.hero');
+      expect(hero).not.toBeNull();
+      expect(hero.tagName).toBe('SECTION');
+    });
+
+    test('Hero has aria-labelledby for accessibility', () => {
+      const hero = document.querySelector('.hero');
+      expect(hero).not.toBeNull();
+      expect(hero.getAttribute('aria-labelledby')).toBeTruthy();
+    });
+
+    test('Hero container exists', () => {
+      const container = document.querySelector('.hero__container');
+      expect(container).not.toBeNull();
+    });
+
+    test('Hero description exists with value proposition', () => {
+      const description = document.querySelector('.hero__description');
+      expect(description).not.toBeNull();
+      expect(description.textContent.length).toBeGreaterThan(50);
+    });
+  });
+});
+
+/**
  * Features Grid Section Tests (Scenario 2)
  */
 describe('Features Grid Section', () => {
