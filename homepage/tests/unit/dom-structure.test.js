@@ -662,3 +662,185 @@ describe('Architecture Diagram Section (Scenario 6)', () => {
     });
   });
 });
+
+/**
+ * Quick-Start Section Tests (Scenario 4)
+ * Tests for Quick Start Installation Section
+ */
+describe('Quick-Start Section (Scenario 4)', () => {
+  let quickstartSection;
+
+  beforeAll(() => {
+    quickstartSection = document.getElementById('quickstart');
+  });
+
+  // Test Case 1: Quick-start section exists with installation heading
+  describe('Test Case 1: Quick-start section exists with installation heading', () => {
+    test('quickstart section element should exist', () => {
+      expect(quickstartSection).not.toBeNull();
+      expect(quickstartSection.tagName).toBe('SECTION');
+    });
+
+    test('quickstart section should have aria-labelledby for accessibility', () => {
+      expect(quickstartSection.getAttribute('aria-labelledby')).toBe('quickstart-title');
+    });
+
+    test('quickstart section should have Quick Start title', () => {
+      const title = quickstartSection.querySelector('#quickstart-title');
+      expect(title).not.toBeNull();
+      expect(title.textContent).toContain('Quick Start');
+    });
+
+    test('quickstart section should have installation subtitle', () => {
+      const subtitles = quickstartSection.querySelectorAll('.quickstart__subtitle');
+      const installationSubtitle = Array.from(subtitles).find(s =>
+        s.textContent.toLowerCase().includes('installation')
+      );
+      expect(installationSubtitle).not.toBeNull();
+    });
+  });
+
+  // Test Case 2: Code block contains cargo install or cargo run command
+  describe('Test Case 2: Code block contains cargo command', () => {
+    test('code block should contain cargo build command', () => {
+      const codeBlocks = quickstartSection.querySelectorAll('.code-block__code code');
+      const allCode = Array.from(codeBlocks).map(c => c.textContent).join(' ');
+      const hasCargoCommand = allCode.includes('cargo build') ||
+                              allCode.includes('cargo install') ||
+                              allCode.includes('cargo run');
+      expect(hasCargoCommand).toBe(true);
+    });
+
+    test('installation code block should have bash language label', () => {
+      const installationBlock = quickstartSection.querySelector('[data-code-block="installation"]');
+      expect(installationBlock).not.toBeNull();
+      const languageLabel = installationBlock.querySelector('.code-block__language');
+      expect(languageLabel).not.toBeNull();
+      expect(languageLabel.textContent.toLowerCase()).toBe('bash');
+    });
+  });
+
+  // Test Case 3: Copy button exists near code block
+  describe('Test Case 3: Copy button exists near code block', () => {
+    test('copy buttons should exist in code blocks', () => {
+      const codeBlocks = quickstartSection.querySelectorAll('.code-block');
+      expect(codeBlocks.length).toBeGreaterThan(0);
+
+      codeBlocks.forEach(block => {
+        const copyBtn = block.querySelector('.code-block__copy-btn');
+        expect(copyBtn).not.toBeNull();
+      });
+    });
+
+    test('copy button should be a button element', () => {
+      const copyBtn = quickstartSection.querySelector('.code-block__copy-btn');
+      expect(copyBtn).not.toBeNull();
+      expect(copyBtn.tagName).toBe('BUTTON');
+      expect(copyBtn.getAttribute('type')).toBe('button');
+    });
+
+    test('copy button should have aria-label for accessibility', () => {
+      const copyButtons = quickstartSection.querySelectorAll('.code-block__copy-btn');
+      copyButtons.forEach(btn => {
+        const ariaLabel = btn.getAttribute('aria-label');
+        expect(ariaLabel).toBeTruthy();
+        expect(ariaLabel.toLowerCase()).toContain('copy');
+      });
+    });
+
+    test('copy button should have Copy text', () => {
+      const copyBtn = quickstartSection.querySelector('.code-block__copy-btn');
+      const copyText = copyBtn.querySelector('.code-block__copy-text');
+      expect(copyText).not.toBeNull();
+      expect(copyText.textContent).toBe('Copy');
+    });
+
+    test('copy button should have copy and check icons', () => {
+      const copyBtn = quickstartSection.querySelector('.code-block__copy-btn');
+      const copyIcon = copyBtn.querySelector('.code-block__copy-icon');
+      const checkIcon = copyBtn.querySelector('.code-block__check-icon');
+      expect(copyIcon).not.toBeNull();
+      expect(checkIcon).not.toBeNull();
+    });
+  });
+
+  // Test Case 5: Basic usage example with Memcached commands is shown
+  describe('Test Case 5: Basic usage example with Memcached commands', () => {
+    test('should have a usage code block', () => {
+      const usageBlock = quickstartSection.querySelector('[data-code-block="usage"]');
+      expect(usageBlock).not.toBeNull();
+    });
+
+    test('usage example should contain SET command', () => {
+      const usageBlock = quickstartSection.querySelector('[data-code-block="usage"]');
+      expect(usageBlock).not.toBeNull();
+      const code = usageBlock.querySelector('code');
+      expect(code).not.toBeNull();
+      expect(code.textContent).toContain('SET');
+    });
+
+    test('usage example should contain GET command', () => {
+      const usageBlock = quickstartSection.querySelector('[data-code-block="usage"]');
+      expect(usageBlock).not.toBeNull();
+      const code = usageBlock.querySelector('code');
+      expect(code).not.toBeNull();
+      expect(code.textContent).toContain('GET');
+    });
+
+    test('usage example should contain DELETE command', () => {
+      const usageBlock = quickstartSection.querySelector('[data-code-block="usage"]');
+      expect(usageBlock).not.toBeNull();
+      const code = usageBlock.querySelector('code');
+      expect(code).not.toBeNull();
+      expect(code.textContent).toContain('DELETE');
+    });
+
+    test('usage example should show STORED response', () => {
+      const usageBlock = quickstartSection.querySelector('[data-code-block="usage"]');
+      const code = usageBlock.querySelector('code');
+      expect(code.textContent).toContain('STORED');
+    });
+
+    test('usage example should have memcached language label', () => {
+      const usageBlock = quickstartSection.querySelector('[data-code-block="usage"]');
+      expect(usageBlock).not.toBeNull();
+      const languageLabel = usageBlock.querySelector('.code-block__language');
+      expect(languageLabel).not.toBeNull();
+      expect(languageLabel.textContent.toLowerCase()).toBe('memcached');
+    });
+
+    test('usage example should have basic usage subtitle', () => {
+      const subtitles = quickstartSection.querySelectorAll('.quickstart__subtitle');
+      const usageSubtitle = Array.from(subtitles).find(s =>
+        s.textContent.toLowerCase().includes('usage')
+      );
+      expect(usageSubtitle).not.toBeNull();
+    });
+  });
+
+  // Additional structural tests
+  describe('Quick-Start Section Structure', () => {
+    test('quickstart should have quickstart class', () => {
+      expect(quickstartSection.classList.contains('quickstart')).toBe(true);
+    });
+
+    test('quickstart should have section class', () => {
+      expect(quickstartSection.classList.contains('section')).toBe(true);
+    });
+
+    test('quickstart should have container element', () => {
+      const container = quickstartSection.querySelector('.container');
+      expect(container).not.toBeNull();
+    });
+
+    test('quickstart should have content wrapper', () => {
+      const content = quickstartSection.querySelector('.quickstart__content');
+      expect(content).not.toBeNull();
+    });
+
+    test('quickstart should have at least 2 code blocks', () => {
+      const codeBlocks = quickstartSection.querySelectorAll('.code-block');
+      expect(codeBlocks.length).toBeGreaterThanOrEqual(2);
+    });
+  });
+});

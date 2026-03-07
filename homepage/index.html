@@ -211,15 +211,20 @@
       <div class="container">
         <h2 id="quickstart-title" class="section__title">Quick Start</h2>
         <div class="quickstart__content">
-          <div class="code-block">
+          <!-- Installation Code Block -->
+          <h3 class="quickstart__subtitle">Installation</h3>
+          <div class="code-block" data-code-block="installation">
             <div class="code-block__header">
               <span class="code-block__language">bash</span>
-              <button class="code-block__copy-btn" type="button" aria-label="Copy to clipboard">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <button class="code-block__copy-btn" type="button" aria-label="Copy installation commands to clipboard">
+                <svg class="code-block__copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
-                <span>Copy</span>
+                <svg class="code-block__check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
               </button>
             </div>
             <pre class="code-block__code"><code># Clone and build MirDB
@@ -228,10 +233,42 @@ cd mirdb
 cargo build --release
 
 # Run the server
-./target/release/mirdb-server
+./target/release/mirdb-server</code></pre>
+          </div>
 
-# Connect with any Memcached client
-echo "set mykey 0 0 5\r\nhello\r" | nc localhost 12333</code></pre>
+          <!-- Basic Usage Code Block -->
+          <h3 class="quickstart__subtitle">Basic Usage</h3>
+          <div class="code-block" data-code-block="usage">
+            <div class="code-block__header">
+              <span class="code-block__language">memcached</span>
+              <button class="code-block__copy-btn" type="button" aria-label="Copy usage commands to clipboard">
+                <svg class="code-block__copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="code-block__check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-block__code"><code># Connect to MirDB (default port: 12333)
+telnet localhost 12333
+
+# Store a value (SET key flags exptime bytes)
+SET mykey 0 0 5
+hello
+STORED
+
+# Retrieve the value
+GET mykey
+VALUE mykey 0 5
+hello
+END
+
+# Delete the key
+DELETE mykey
+DELETED</code></pre>
           </div>
         </div>
       </div>
@@ -285,6 +322,8 @@ echo "set mykey 0 0 5\r\nhello\r" | nc localhost 12333</code></pre>
     </div>
   </footer>
 
+  <script src="js/theme-toggle.js"></script>
+  <script src="js/copy-button.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
