@@ -243,16 +243,31 @@ echo "set mykey 0 0 5\r\nhello\r" | nc localhost 12333</code></pre>
         <h2 id="architecture-title" class="section__title">LSM Tree Architecture</h2>
         <div class="architecture__content">
           <div class="architecture__diagram">
-            <!-- Architecture diagram will be added by Scenario 6 -->
-            <div class="architecture__placeholder">
-              <p>Architecture diagram showing LSM tree structure</p>
-            </div>
+            <img
+              src="assets/images/architecture.svg"
+              alt="MirDB LSM Tree Architecture diagram showing data flow from Write Request through WAL, Memtable, Immutable Memtables, Level 0 SSTables, and Level 1+ SSTables with minor and major compaction processes"
+              class="architecture__image"
+              width="600"
+              height="500"
+              loading="lazy"
+            >
           </div>
           <div class="architecture__description">
+            <h3 class="architecture__subtitle">How LSM Trees Work</h3>
             <p>
-              MirDB uses a Log-Structured Merge-tree (LSM tree) architecture for optimal write performance
-              while maintaining efficient reads. Data flows from the in-memory skip-list memtable through
-              multiple levels of sorted string tables (SSTables) on disk.
+              MirDB uses a <strong>Log-Structured Merge-tree (LSM tree)</strong> architecture optimized for
+              write-heavy workloads while maintaining efficient reads.
+            </p>
+            <ul class="architecture__features">
+              <li><strong>Write-Ahead Log (WAL)</strong>: Ensures durability by logging every write before applying it</li>
+              <li><strong>Memtable</strong>: Fast in-memory skip-list for active writes with O(log n) operations</li>
+              <li><strong>Immutable Memtables</strong>: Frozen memtables queued for compaction to disk</li>
+              <li><strong>Level 0 SSTables</strong>: Recently flushed data, may have overlapping key ranges</li>
+              <li><strong>Level 1+ SSTables</strong>: Sorted, non-overlapping files for efficient range queries</li>
+            </ul>
+            <p>
+              <strong>Minor compaction</strong> flushes memtables to Level 0, while <strong>major compaction</strong>
+              merges and sorts data across levels for optimal read performance.
             </p>
           </div>
         </div>

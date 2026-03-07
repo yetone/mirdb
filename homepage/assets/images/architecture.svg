@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" width="600" height="500" role="img" aria-labelledby="arch-title arch-desc">
+  <title id="arch-title">MirDB LSM Tree Architecture</title>
+  <desc id="arch-desc">Diagram showing the Log-Structured Merge-tree architecture of MirDB, including Write-Ahead Log, Memtable, Immutable Memtables, and SSTable levels</desc>
+
+  <!-- Background -->
+  <rect width="600" height="500" fill="var(--arch-bg, #f8fafc)" rx="8"/>
+
+  <!-- Title -->
+  <text x="300" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="var(--arch-text, #1e293b)">LSM Tree Data Flow</text>
+
+  <!-- Write Request -->
+  <g transform="translate(250, 50)">
+    <rect x="0" y="0" width="100" height="36" rx="4" fill="var(--arch-primary, #3b82f6)" stroke="var(--arch-primary-dark, #2563eb)" stroke-width="2"/>
+    <text x="50" y="23" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="white">Write Request</text>
+  </g>
+
+  <!-- Arrow from Write to WAL -->
+  <path d="M300 86 L300 110" stroke="var(--arch-arrow, #64748b)" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- WAL (Write-Ahead Log) -->
+  <g transform="translate(200, 115)">
+    <rect x="0" y="0" width="200" height="44" rx="6" fill="var(--arch-wal, #fef3c7)" stroke="var(--arch-wal-border, #f59e0b)" stroke-width="2"/>
+    <text x="100" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="var(--arch-text, #1e293b)">WAL</text>
+    <text x="100" y="36" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="var(--arch-text-muted, #64748b)">Write-Ahead Log (Durability)</text>
+  </g>
+
+  <!-- Arrow from WAL to Memtable -->
+  <path d="M300 159 L300 185" stroke="var(--arch-arrow, #64748b)" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Active Memtable -->
+  <g transform="translate(185, 190)">
+    <rect x="0" y="0" width="230" height="50" rx="6" fill="var(--arch-memtable, #dcfce7)" stroke="var(--arch-memtable-border, #22c55e)" stroke-width="2"/>
+    <text x="115" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="var(--arch-text, #1e293b)">Memtable</text>
+    <text x="115" y="38" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="var(--arch-text-muted, #64748b)">In-Memory Skip-List (Active)</text>
+  </g>
+
+  <!-- Arrow from Memtable to Imm Memtables -->
+  <path d="M300 240 L300 260" stroke="var(--arch-arrow, #64748b)" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="320" y="253" font-family="system-ui, sans-serif" font-size="9" fill="var(--arch-text-muted, #64748b)">when full</text>
+
+  <!-- Immutable Memtables -->
+  <g transform="translate(185, 265)">
+    <rect x="0" y="0" width="230" height="44" rx="6" fill="var(--arch-imm, #e0f2fe)" stroke="var(--arch-imm-border, #0ea5e9)" stroke-width="2" stroke-dasharray="4,2"/>
+    <text x="115" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="var(--arch-text, #1e293b)">Immutable Memtables</text>
+    <text x="115" y="36" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="var(--arch-text-muted, #64748b)">Queue awaiting compaction</text>
+  </g>
+
+  <!-- Arrow from Imm to Level 0 -->
+  <path d="M300 309 L300 330" stroke="var(--arch-arrow, #64748b)" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="308" y="323" font-family="system-ui, sans-serif" font-size="9" fill="var(--arch-compact, #8b5cf6)">minor compaction</text>
+
+  <!-- Level 0 SSTables -->
+  <g transform="translate(100, 335)">
+    <rect x="0" y="0" width="400" height="50" rx="6" fill="var(--arch-l0, #fae8ff)" stroke="var(--arch-l0-border, #d946ef)" stroke-width="2"/>
+    <text x="200" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="var(--arch-text, #1e293b)">Level 0 SSTables</text>
+    <text x="200" y="36" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="var(--arch-text-muted, #64748b)">Recently flushed (may overlap)</text>
+    <!-- SST blocks -->
+    <g transform="translate(20, 8)">
+      <rect x="0" y="0" width="50" height="12" rx="2" fill="var(--arch-sst, #c084fc)" opacity="0.7"/>
+      <rect x="60" y="0" width="50" height="12" rx="2" fill="var(--arch-sst, #c084fc)" opacity="0.7"/>
+      <rect x="120" y="0" width="50" height="12" rx="2" fill="var(--arch-sst, #c084fc)" opacity="0.7"/>
+      <rect x="180" y="0" width="50" height="12" rx="2" fill="var(--arch-sst, #c084fc)" opacity="0.7"/>
+    </g>
+  </g>
+
+  <!-- Arrow from Level 0 to Level 1+ -->
+  <path d="M300 385 L300 410" stroke="var(--arch-arrow, #64748b)" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="308" y="401" font-family="system-ui, sans-serif" font-size="9" fill="var(--arch-compact, #8b5cf6)">major compaction</text>
+
+  <!-- Level 1+ SSTables -->
+  <g transform="translate(50, 415)">
+    <rect x="0" y="0" width="500" height="55" rx="6" fill="var(--arch-l1, #f1f5f9)" stroke="var(--arch-l1-border, #94a3b8)" stroke-width="2"/>
+    <text x="250" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="var(--arch-text, #1e293b)">Level 1+ SSTables</text>
+    <text x="250" y="36" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="var(--arch-text-muted, #64748b)">Sorted, non-overlapping within level (Persistent Storage)</text>
+    <!-- SST blocks representing sorted data -->
+    <g transform="translate(30, 8)">
+      <rect x="0" y="0" width="70" height="12" rx="2" fill="var(--arch-sst-sorted, #64748b)" opacity="0.5"/>
+      <rect x="80" y="0" width="70" height="12" rx="2" fill="var(--arch-sst-sorted, #64748b)" opacity="0.5"/>
+      <rect x="160" y="0" width="70" height="12" rx="2" fill="var(--arch-sst-sorted, #64748b)" opacity="0.5"/>
+      <rect x="240" y="0" width="70" height="12" rx="2" fill="var(--arch-sst-sorted, #64748b)" opacity="0.5"/>
+      <rect x="320" y="0" width="70" height="12" rx="2" fill="var(--arch-sst-sorted, #64748b)" opacity="0.5"/>
+    </g>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(30, 480)">
+    <rect x="0" y="0" width="10" height="10" rx="2" fill="var(--arch-memtable, #dcfce7)" stroke="var(--arch-memtable-border, #22c55e)"/>
+    <text x="15" y="9" font-family="system-ui, sans-serif" font-size="9" fill="var(--arch-text-muted, #64748b)">Memory</text>
+    <rect x="70" y="0" width="10" height="10" rx="2" fill="var(--arch-l0, #fae8ff)" stroke="var(--arch-l0-border, #d946ef)"/>
+    <text x="85" y="9" font-family="system-ui, sans-serif" font-size="9" fill="var(--arch-text-muted, #64748b)">Disk</text>
+  </g>
+
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--arch-arrow, #64748b)"/>
+    </marker>
+  </defs>
+</svg>

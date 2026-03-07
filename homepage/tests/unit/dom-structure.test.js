@@ -337,3 +337,178 @@ describe('Terminal Demo Section (Scenario 3)', () => {
     });
   });
 });
+
+/**
+ * Architecture Diagram Section Tests - Scenario 6
+ * Tests for Architecture Diagram Section explaining LSM tree structure
+ */
+describe('Architecture Diagram Section (Scenario 6)', () => {
+  let architectureSection;
+
+  beforeAll(() => {
+    architectureSection = document.getElementById('architecture');
+  });
+
+  // Test Case 1: Architecture section exists in DOM
+  describe('Test Case 1: Architecture section exists in DOM', () => {
+    test('should have architecture section element with correct ID', () => {
+      expect(architectureSection).not.toBeNull();
+      expect(architectureSection.tagName).toBe('SECTION');
+    });
+
+    test('should have architecture section with correct class', () => {
+      const section = document.querySelector('.architecture');
+      expect(section).not.toBeNull();
+      expect(section.id).toBe('architecture');
+    });
+
+    test('should have architecture content container', () => {
+      const content = document.querySelector('.architecture__content');
+      expect(content).not.toBeNull();
+    });
+
+    test('should have architecture title with correct heading level', () => {
+      const title = architectureSection.querySelector('h2');
+      expect(title).not.toBeNull();
+      expect(title.id).toBe('architecture-title');
+    });
+
+    test('should have aria-labelledby for accessibility', () => {
+      const ariaLabel = architectureSection.getAttribute('aria-labelledby');
+      expect(ariaLabel).toBe('architecture-title');
+    });
+  });
+
+  // Test Case 2: LSM tree terminology is mentioned
+  describe('Test Case 2: LSM tree terminology is mentioned', () => {
+    test('should mention "LSM" in the architecture section', () => {
+      const sectionText = architectureSection.textContent;
+      expect(sectionText).toMatch(/LSM/i);
+    });
+
+    test('should mention "Log-Structured Merge" in the description', () => {
+      const description = architectureSection.querySelector('.architecture__description');
+      expect(description).not.toBeNull();
+      expect(description.textContent).toMatch(/Log-Structured Merge/i);
+    });
+
+    test('should explain key LSM components', () => {
+      const sectionText = architectureSection.textContent;
+      expect(sectionText).toMatch(/memtable/i);
+      expect(sectionText).toMatch(/SSTable/i);
+    });
+
+    test('should mention compaction processes', () => {
+      const sectionText = architectureSection.textContent;
+      expect(sectionText).toMatch(/compaction/i);
+    });
+
+    test('should mention WAL (Write-Ahead Log)', () => {
+      const sectionText = architectureSection.textContent;
+      expect(sectionText).toMatch(/WAL|Write-Ahead Log/i);
+    });
+  });
+
+  // Test Case 3: Diagram visual element exists (img or svg)
+  describe('Test Case 3: Diagram visual element exists (img or svg)', () => {
+    test('should have architecture diagram container', () => {
+      const diagramContainer = architectureSection.querySelector('.architecture__diagram');
+      expect(diagramContainer).not.toBeNull();
+    });
+
+    test('should have diagram as img or svg element', () => {
+      const diagramContainer = architectureSection.querySelector('.architecture__diagram');
+      const img = diagramContainer.querySelector('img');
+      const svg = diagramContainer.querySelector('svg');
+
+      // Either img or svg should be present
+      const hasDiagram = img !== null || svg !== null;
+      expect(hasDiagram).toBe(true);
+    });
+
+    test('should have diagram image with correct class', () => {
+      const diagramImage = architectureSection.querySelector('.architecture__image');
+      expect(diagramImage).not.toBeNull();
+    });
+
+    test('diagram should reference architecture SVG', () => {
+      const img = architectureSection.querySelector('.architecture__image');
+      if (img && img.tagName === 'IMG') {
+        expect(img.getAttribute('src')).toMatch(/architecture\.svg/i);
+      }
+    });
+  });
+
+  // Test Case 4: Architecture diagram has descriptive alt text
+  describe('Test Case 4: Architecture diagram has descriptive alt text', () => {
+    test('should have alt attribute on diagram image', () => {
+      const img = architectureSection.querySelector('.architecture__image');
+      expect(img).not.toBeNull();
+      const altText = img.getAttribute('alt');
+      expect(altText).toBeTruthy();
+    });
+
+    test('alt text should be descriptive (more than 20 characters)', () => {
+      const img = architectureSection.querySelector('.architecture__image');
+      expect(img).not.toBeNull();
+      const altText = img.getAttribute('alt');
+      expect(altText.length).toBeGreaterThan(20);
+    });
+
+    test('alt text should mention LSM or architecture', () => {
+      const img = architectureSection.querySelector('.architecture__image');
+      expect(img).not.toBeNull();
+      const altText = img.getAttribute('alt').toLowerCase();
+      const mentionsLSM = altText.includes('lsm');
+      const mentionsArchitecture = altText.includes('architecture');
+      expect(mentionsLSM || mentionsArchitecture).toBe(true);
+    });
+
+    test('alt text should describe the diagram content', () => {
+      const img = architectureSection.querySelector('.architecture__image');
+      expect(img).not.toBeNull();
+      const altText = img.getAttribute('alt').toLowerCase();
+      // Should mention key components shown in the diagram
+      const mentionsDataFlow = altText.includes('data flow') || altText.includes('flow');
+      const mentionsComponents = altText.includes('memtable') || altText.includes('sstable');
+      expect(mentionsDataFlow || mentionsComponents).toBe(true);
+    });
+  });
+
+  // Additional architecture section structure tests
+  describe('Architecture Section Structure', () => {
+    test('should have description section', () => {
+      const description = architectureSection.querySelector('.architecture__description');
+      expect(description).not.toBeNull();
+    });
+
+    test('description should have substantial content', () => {
+      const description = architectureSection.querySelector('.architecture__description');
+      expect(description).not.toBeNull();
+      expect(description.textContent.length).toBeGreaterThan(100);
+    });
+
+    test('should have feature list explaining LSM components', () => {
+      const featureList = architectureSection.querySelector('.architecture__features');
+      expect(featureList).not.toBeNull();
+    });
+
+    test('feature list should have multiple items', () => {
+      const features = architectureSection.querySelectorAll('.architecture__features li');
+      expect(features.length).toBeGreaterThanOrEqual(3);
+    });
+
+    test('diagram image should have width and height attributes for layout stability', () => {
+      const img = architectureSection.querySelector('.architecture__image');
+      expect(img).not.toBeNull();
+      expect(img.getAttribute('width')).toBeTruthy();
+      expect(img.getAttribute('height')).toBeTruthy();
+    });
+
+    test('diagram image should have loading="lazy" for performance', () => {
+      const img = architectureSection.querySelector('.architecture__image');
+      expect(img).not.toBeNull();
+      expect(img.getAttribute('loading')).toBe('lazy');
+    });
+  });
+});
