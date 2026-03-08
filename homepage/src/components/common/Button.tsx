@@ -1,39 +1,45 @@
 import React from 'react'
 
-interface ButtonProps {
-  children: React.ReactNode
-  href?: string
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary'
-  className?: string
-  onClick?: () => void
+  size?: 'sm' | 'md' | 'lg'
+  href?: string
+  children: React.ReactNode
 }
 
 export const Button: React.FC<ButtonProps> = ({
-  children,
-  href,
   variant = 'primary',
+  size = 'md',
+  href,
+  children,
   className = '',
-  onClick,
+  ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900'
+  const baseStyles = 'font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900'
 
   const variantStyles = {
-    primary: 'bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500',
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500',
     secondary: 'bg-slate-700 hover:bg-slate-600 text-white focus:ring-slate-500',
   }
 
-  const combinedStyles = `${baseStyles} ${variantStyles[variant]} ${className}`
+  const sizeStyles = {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2 text-base',
+    lg: 'px-6 py-3 text-lg',
+  }
+
+  const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`
 
   if (href) {
     return (
-      <a href={href} className={combinedStyles}>
+      <a href={href} className={combinedClassName}>
         {children}
       </a>
     )
   }
 
   return (
-    <button onClick={onClick} className={combinedStyles}>
+    <button className={combinedClassName} {...props}>
       {children}
     </button>
   )
