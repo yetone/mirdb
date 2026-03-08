@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Database icon representing key-value store -->
+  <rect x="8" y="6" width="32" height="36" rx="4" fill="#0ea5e9" opacity="0.2"/>
+  <rect x="8" y="6" width="32" height="36" rx="4" stroke="#0ea5e9" stroke-width="2"/>
+
+  <!-- Top section - represents LSM levels -->
+  <rect x="12" y="10" width="24" height="8" rx="2" fill="#0ea5e9"/>
+
+  <!-- Middle section - key-value pairs -->
+  <rect x="12" y="22" width="10" height="4" rx="1" fill="#38bdf8"/>
+  <rect x="24" y="22" width="12" height="4" rx="1" fill="#7dd3fc"/>
+
+  <rect x="12" y="28" width="10" height="4" rx="1" fill="#38bdf8"/>
+  <rect x="24" y="28" width="12" height="4" rx="1" fill="#7dd3fc"/>
+
+  <!-- Bottom arrow - represents persistence -->
+  <path d="M24 34 L24 38 L20 38 L24 42 L28 38 L24 38" fill="#0ea5e9"/>
+</svg>
