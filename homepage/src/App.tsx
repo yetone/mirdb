@@ -2,6 +2,7 @@ import { Header } from './components/Header'
 import { SkipLink } from './components/common'
 import { Hero } from './components/Hero'
 import { Features } from './components/Features'
+import { UsageExample } from './components/UsageExample'
 import { GettingStarted } from './components/GettingStarted'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <main id="main-content">
         <Hero />
         <Features />
+        <UsageExample />
         <GettingStarted />
       </main>
     </div>
