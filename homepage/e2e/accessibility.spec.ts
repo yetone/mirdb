@@ -18,6 +18,7 @@
  */
 
 import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
 
 /**
  * Keyboard Navigation Tests (Scenario 12)
@@ -397,5 +398,259 @@ test.describe('Keyboard Navigation', () => {
 
       previousY = current.y
     }
+  })
+})
+
+/**
+ * Screen Reader Compatibility Tests (Scenario 13)
+ * Verifies homepage content is accessible to screen readers (NFR-2, US-7)
+ */
+test.describe('Screen Reader Compatibility', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+    await page.waitForLoadState('domcontentloaded')
+  })
+
+  // Test Case 1: Check for single h1 element
+  test('page has exactly one h1 element', async ({ page }) => {
+    const h1Elements = page.locator('h1')
+    const count = await h1Elements.count()
+
+    expect(count).toBe(1)
+
+    // Verify the h1 has meaningful content
+    const h1Text = await h1Elements.first().textContent()
+    expect(h1Text?.trim().length).toBeGreaterThan(0)
+  })
+
+  // Test Case 2: Validate heading hierarchy
+  test('heading hierarchy has no skipped levels', async ({ page }) => {
+    const headingLevels = await page.evaluate(() => {
+      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+      return Array.from(headings).map((h) => ({
+        level: parseInt(h.tagName.charAt(1), 10),
+        text: h.textContent?.trim().slice(0, 50),
+      }))
+    })
+
+    // Ensure we have headings
+    expect(headingLevels.length).toBeGreaterThan(0)
+
+    // Check for skipped levels
+    let lastLevel = 0
+    const skippedLevels: string[] = []
+
+    for (const heading of headingLevels) {
+      if (lastLevel > 0 && heading.level > lastLevel + 1) {
+        skippedLevels.push(`h${lastLevel} to h${heading.level} ("${heading.text}")`)
+      }
+      lastLevel = heading.level
+    }
+
+    // Expect no skipped levels
+    expect(skippedLevels).toEqual([])
+  })
+
+  // Test Case 3: Check main landmark
+  test('page has a main element or role="main"', async ({ page }) => {
+    const mainLandmark = page.locator('main, [role="main"]')
+    const count = await mainLandmark.count()
+
+    expect(count).toBeGreaterThanOrEqual(1)
+
+    // Verify main landmark is visible
+    await expect(mainLandmark.first()).toBeVisible()
+
+    // Check that main landmark has content
+    const mainContent = await mainLandmark.first().textContent()
+    expect(mainContent?.trim().length).toBeGreaterThan(0)
+  })
+
+  // Test Case 4: Check all images for alt attribute
+  test('all images have alt attributes', async ({ page }) => {
+    const imagesWithoutAlt = await page.evaluate(() => {
+      const images = document.querySelectorAll('img')
+      const missingAlt: string[] = []
+
+      images.forEach((img, index) => {
+        if (!img.hasAttribute('alt')) {
+          missingAlt.push(`Image ${index + 1}: ${img.src || 'no src'}`)
+        }
+      })
+
+      return {
+        total: images.length,
+        missingAlt,
+      }
+    })
+
+    // Expect all images to have alt attributes (even if empty for decorative images)
+    expect(imagesWithoutAlt.missingAlt).toEqual([])
+  })
+
+  // Test Case 5: Check icon buttons for labels
+  test('icon-only buttons have aria-label or accessible name', async ({ page }) => {
+    const buttonsWithoutLabels = await page.evaluate(() => {
+      const buttons = document.querySelectorAll('button')
+      const issues: string[] = []
+
+      buttons.forEach((button, index) => {
+        const hasTextContent = button.textContent?.trim()
+        const hasAriaLabel = button.getAttribute('aria-label')
+        const hasAriaLabelledBy = button.getAttribute('aria-labelledby')
+        const hasTitle = button.getAttribute('title')
+
+        // Check if button appears to be icon-only
+        const hasOnlySvg =
+          button.querySelector('svg') !== null && !hasTextContent
+        const hasOnlyImg =
+          button.querySelector('img') !== null && !hasTextContent
+
+        const isIconOnly = hasOnlySvg || hasOnlyImg
+
+        if (isIconOnly && !hasAriaLabel && !hasAriaLabelledBy && !hasTitle) {
+          issues.push(`Button ${index + 1}: Icon-only button without accessible name`)
+        }
+      })
+
+      return issues
+    })
+
+    // Expect all icon-only buttons to have accessible names
+    expect(buttonsWithoutLabels).toEqual([])
+  })
+
+  // Test Case 6: Run axe accessibility audit (screen reader focused)
+  // Note: Color contrast is excluded as it's Scenario 14's responsibility
+  test('no critical or serious accessibility violations', async ({ page }) => {
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      // Exclude color-contrast as it's tested by Scenario 14 (Color Contrast)
+      .disableRules(['color-contrast'])
+      .analyze()
+
+    // Filter for critical and serious violations only
+    const criticalViolations = accessibilityScanResults.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious'
+    )
+
+    // Log violations for debugging if any exist
+    if (criticalViolations.length > 0) {
+      console.log(
+        'Critical/Serious violations:',
+        JSON.stringify(
+          criticalViolations.map((v) => ({
+            id: v.id,
+            impact: v.impact,
+            description: v.description,
+            nodes: v.nodes.map((n) => n.html),
+          })),
+          null,
+          2
+        )
+      )
+    }
+
+    expect(criticalViolations).toEqual([])
+  })
+
+  // Additional test: Verify semantic HTML structure
+  test('page uses semantic HTML elements', async ({ page }) => {
+    const semanticStructure = await page.evaluate(() => {
+      return {
+        hasHeader: document.querySelector('header, [role="banner"]') !== null,
+        hasMain: document.querySelector('main, [role="main"]') !== null,
+        hasNav: document.querySelector('nav, [role="navigation"]') !== null,
+        hasSections: document.querySelectorAll('section').length > 0,
+        hasFooter: document.querySelector('footer, [role="contentinfo"]') !== null,
+      }
+    })
+
+    // Essential landmarks should be present
+    expect(semanticStructure.hasHeader).toBe(true)
+    expect(semanticStructure.hasMain).toBe(true)
+    expect(semanticStructure.hasNav).toBe(true)
+    expect(semanticStructure.hasSections).toBe(true)
+  })
+
+  // Additional test: Verify ARIA labels on interactive elements
+  test('interactive elements with icons have ARIA labels', async ({ page }) => {
+    // Check for links with icons that need accessible names
+    const linksWithIcons = await page.evaluate(() => {
+      const links = document.querySelectorAll('a')
+      const issues: string[] = []
+
+      links.forEach((link, index) => {
+        const hasOnlySvg =
+          link.querySelector('svg') !== null &&
+          !link.textContent?.trim()
+        const hasOnlyImg =
+          link.querySelector('img') !== null &&
+          !link.textContent?.trim()
+
+        const isIconOnly = hasOnlySvg || hasOnlyImg
+        const hasAriaLabel = link.getAttribute('aria-label')
+        const hasAriaLabelledBy = link.getAttribute('aria-labelledby')
+        const hasTitle = link.getAttribute('title')
+
+        if (isIconOnly && !hasAriaLabel && !hasAriaLabelledBy && !hasTitle) {
+          issues.push(`Link ${index + 1}: ${link.href || 'no href'} - icon-only without accessible name`)
+        }
+      })
+
+      return issues
+    })
+
+    expect(linksWithIcons).toEqual([])
+  })
+
+  // Additional test: Verify section headings have proper IDs for navigation
+  test('major sections have IDs for navigation', async ({ page }) => {
+    const sectionsWithIds = await page.evaluate(() => {
+      const sections = document.querySelectorAll('section')
+      const results: { hasId: boolean; heading: string | null }[] = []
+
+      sections.forEach((section) => {
+        const heading = section.querySelector('h2')
+        results.push({
+          hasId: section.id !== '',
+          heading: heading?.textContent?.trim() || null,
+        })
+      })
+
+      return results
+    })
+
+    // All major sections should have IDs
+    const sectionsWithoutIds = sectionsWithIds.filter(
+      (s) => !s.hasId && s.heading !== null
+    )
+    expect(sectionsWithoutIds.length).toBe(0)
+  })
+
+  // Additional test: Verify proper aria-labelledby connections
+  test('sections use aria-labelledby for proper labeling', async ({ page }) => {
+    const labelledSections = await page.evaluate(() => {
+      const sections = document.querySelectorAll('section[aria-labelledby]')
+      const results: { valid: boolean; sectionId: string; labelId: string }[] = []
+
+      sections.forEach((section) => {
+        const labelId = section.getAttribute('aria-labelledby')
+        if (labelId) {
+          const labelElement = document.getElementById(labelId)
+          results.push({
+            valid: labelElement !== null,
+            sectionId: section.id || 'unnamed',
+            labelId,
+          })
+        }
+      })
+
+      return results
+    })
+
+    // All aria-labelledby references should be valid
+    const invalidLabels = labelledSections.filter((s) => !s.valid)
+    expect(invalidLabels).toEqual([])
   })
 })
