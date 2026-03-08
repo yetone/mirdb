@@ -27,5 +27,5 @@ export interface RoadmapItem {
 export interface ExternalLink {
   label: string
   url: string
-  type: 'github' | 'docs' | 'external'
+  type: 'github' | 'docs' | 'external' | 'protocol' | 'other'
 }
