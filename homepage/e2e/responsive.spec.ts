@@ -409,3 +409,355 @@ test.describe('Tablet viewport', () => {
     }
   })
 })
+
+/**
+ * Mobile Viewport Tests (Scenario 11)
+ * Tests responsive design at mobile viewport size (375x667 - iPhone SE)
+ * Requirements:
+ * - Single-column layout (REQ-9, US-6)
+ * - Readable text without zooming
+ * - No horizontal scrolling
+ * - Code blocks scroll horizontally (not page overflow)
+ */
+test.describe('Mobile viewport', () => {
+  test.beforeEach(async ({ page }) => {
+    // Set mobile viewport (375x667 - iPhone SE dimensions)
+    await page.setViewportSize({ width: 375, height: 667 })
+    await page.goto('/')
+  })
+
+  // Test Case 1: Page renders with mobile single-column layout
+  test('page renders with mobile single-column layout', async ({ page }) => {
+    // Verify page loads successfully
+    await expect(page).toHaveTitle(/MirDB/i)
+
+    // Verify main sections are visible
+    const header = page.locator('header')
+    await expect(header).toBeVisible()
+
+    const hero = page.locator('#hero')
+    await expect(hero).toBeVisible()
+
+    const features = page.locator('#features')
+    await expect(features).toBeVisible()
+
+    const mainContent = page.locator('#main-content')
+    await expect(mainContent).toBeVisible()
+
+    // Verify content fits within mobile viewport
+    const heroBox = await hero.boundingBox()
+    expect(heroBox).toBeTruthy()
+    expect(heroBox!.width).toBeLessThanOrEqual(375)
+  })
+
+  // Test Case 2: Feature cards stack vertically in single column
+  test('feature cards stack vertically in single column', async ({ page }) => {
+    const featuresGrid = page.locator('[data-testid="features-grid"]')
+    await expect(featuresGrid).toBeVisible()
+
+    // Check that the grid has 1 column at mobile width (below md breakpoint)
+    // grid-cols-1 should be applied (default, before md:grid-cols-2)
+    const gridComputedStyle = await featuresGrid.evaluate((el) => {
+      const style = window.getComputedStyle(el)
+      return {
+        display: style.display,
+        gridTemplateColumns: style.gridTemplateColumns,
+      }
+    })
+
+    expect(gridComputedStyle.display).toBe('grid')
+
+    // Parse the grid-template-columns to count columns
+    // At 375px (below md breakpoint), should have 1 column
+    const columns = gridComputedStyle.gridTemplateColumns
+      .split(' ')
+      .filter((col) => col.trim() !== '')
+    expect(columns.length).toBe(1)
+
+    // Verify feature cards are stacked vertically (each card on its own row)
+    const featureCards = page.locator('[data-testid="features-grid"] > article')
+    const cardCount = await featureCards.count()
+    expect(cardCount).toBeGreaterThanOrEqual(3)
+
+    // Check first few cards are vertically stacked (different y positions)
+    if (cardCount >= 2) {
+      const box1 = await featureCards.nth(0).boundingBox()
+      const box2 = await featureCards.nth(1).boundingBox()
+
+      expect(box1).toBeTruthy()
+      expect(box2).toBeTruthy()
+
+      // Cards should be stacked vertically (second card below first)
+      expect(box2!.y).toBeGreaterThan(box1!.y)
+
+      // Both cards should have similar x positions (same column)
+      expect(Math.abs(box1!.x - box2!.x)).toBeLessThan(5)
+
+      // Each card should span most of the viewport width
+      expect(box1!.width).toBeGreaterThan(300)
+      expect(box2!.width).toBeGreaterThan(300)
+    }
+  })
+
+  // Test Case 3: Body text is at least 16px for readability
+  test('body text is at least 16px for readability', async ({ page }) => {
+    // Check paragraph text in hero section
+    const heroParagraph = page.locator('#hero p').first()
+    await expect(heroParagraph).toBeVisible()
+
+    const heroFontSize = await heroParagraph.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).fontSize)
+    })
+    expect(heroFontSize).toBeGreaterThanOrEqual(16)
+
+    // Check paragraph text in features section
+    const featuresDescription = page.locator('#features p').first()
+    if (await featuresDescription.isVisible()) {
+      const featuresFontSize = await featuresDescription.evaluate((el) => {
+        return parseFloat(window.getComputedStyle(el).fontSize)
+      })
+      expect(featuresFontSize).toBeGreaterThanOrEqual(16)
+    }
+
+    // Check paragraph text in getting started section
+    const gettingStartedSection = page.locator('#getting-started')
+    if (await gettingStartedSection.isVisible()) {
+      const gsParagraph = page.locator('#getting-started p').first()
+      if (await gsParagraph.isVisible()) {
+        const gsFontSize = await gsParagraph.evaluate((el) => {
+          return parseFloat(window.getComputedStyle(el).fontSize)
+        })
+        expect(gsFontSize).toBeGreaterThanOrEqual(16)
+      }
+    }
+
+    // Check main body text (general verification)
+    const bodyText = page.locator('body')
+    const baseFontSize = await bodyText.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).fontSize)
+    })
+    expect(baseFontSize).toBeGreaterThanOrEqual(16)
+  })
+
+  // Test Case 4: No horizontal overflow at mobile size
+  test('no horizontal overflow at mobile size', async ({ page }) => {
+    // Wait for page to fully load
+    await page.waitForLoadState('networkidle')
+
+    // Check that page doesn't have horizontal overflow
+    const hasHorizontalScroll = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > document.documentElement.clientWidth
+    })
+    expect(hasHorizontalScroll).toBe(false)
+
+    // Verify body doesn't have horizontal scrollbar
+    const bodyOverflow = await page.evaluate(() => {
+      const body = document.body
+      return body.scrollWidth > body.clientWidth
+    })
+    expect(bodyOverflow).toBe(false)
+
+    // Verify no element overflows the viewport (excluding scrollable containers and their children)
+    const overflowingElements = await page.evaluate(() => {
+      const viewportWidth = window.innerWidth
+      const elements = document.querySelectorAll('*')
+      const overflowing: string[] = []
+
+      // Helper function to check if element is inside a scrollable container
+      const isInsideScrollableContainer = (el: Element): boolean => {
+        let parent = el.parentElement
+        while (parent) {
+          const style = window.getComputedStyle(parent)
+          if (
+            style.overflowX === 'auto' ||
+            style.overflowX === 'scroll' ||
+            parent.tagName === 'PRE' ||
+            parent.tagName === 'CODE'
+          ) {
+            return true
+          }
+          parent = parent.parentElement
+        }
+        return false
+      }
+
+      elements.forEach((el) => {
+        const rect = el.getBoundingClientRect()
+        const style = window.getComputedStyle(el)
+
+        // Skip elements that are scrollable containers
+        const isScrollContainer =
+          style.overflowX === 'auto' ||
+          style.overflowX === 'scroll' ||
+          el.tagName === 'PRE' ||
+          el.tagName === 'CODE'
+
+        // Skip elements inside scrollable containers (like code block content)
+        if (isScrollContainer || isInsideScrollableContainer(el)) {
+          return
+        }
+
+        if (rect.right > viewportWidth + 1) {
+          overflowing.push(
+            `${el.tagName}.${el.className}: right=${rect.right}, viewport=${viewportWidth}`
+          )
+        }
+      })
+
+      return overflowing
+    })
+
+    expect(overflowingElements).toHaveLength(0)
+  })
+
+  // Test Case 5: Code blocks have horizontal scroll, not page overflow
+  test('code blocks have horizontal scroll, not page overflow', async ({ page }) => {
+    // Scroll to getting started section which contains code blocks
+    await page.locator('#getting-started').scrollIntoViewIfNeeded()
+
+    // Find code blocks
+    const codeBlocks = page.locator('[data-testid="code-block"] pre, [data-testid="usage-example-code"]')
+    const codeBlockCount = await codeBlocks.count()
+
+    // Ensure we have code blocks to test
+    expect(codeBlockCount).toBeGreaterThan(0)
+
+    // Check each code block has overflow-x: auto (allows horizontal scrolling)
+    for (let i = 0; i < codeBlockCount; i++) {
+      const codeBlock = codeBlocks.nth(i)
+      const isVisible = await codeBlock.isVisible()
+
+      if (isVisible) {
+        const overflowStyle = await codeBlock.evaluate((el) => {
+          const style = window.getComputedStyle(el)
+          return {
+            overflowX: style.overflowX,
+            overflowY: style.overflowY,
+          }
+        })
+
+        // Code blocks should have horizontal overflow set to auto or scroll
+        expect(['auto', 'scroll']).toContain(overflowStyle.overflowX)
+
+        // Verify the code block fits within viewport width
+        const box = await codeBlock.boundingBox()
+        if (box) {
+          expect(box.width).toBeLessThanOrEqual(375)
+          expect(box.x).toBeGreaterThanOrEqual(0)
+        }
+      }
+    }
+
+    // Verify page still has no horizontal scroll despite code blocks
+    const hasPageHorizontalScroll = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > document.documentElement.clientWidth
+    })
+    expect(hasPageHorizontalScroll).toBe(false)
+  })
+
+  // Additional mobile-specific tests
+
+  test('hero buttons stack vertically on mobile', async ({ page }) => {
+    // On mobile, CTA buttons should stack vertically
+    const buttonContainer = page.locator('#hero .flex.flex-col')
+    await expect(buttonContainer).toBeVisible()
+
+    const flexDirection = await buttonContainer.evaluate((el) => {
+      return window.getComputedStyle(el).flexDirection
+    })
+    // On mobile (below sm), flex-col keeps it as column
+    expect(flexDirection).toBe('column')
+
+    // Verify buttons are stacked (different y positions)
+    const buttons = buttonContainer.locator('a')
+    const count = await buttons.count()
+
+    if (count >= 2) {
+      const box1 = await buttons.nth(0).boundingBox()
+      const box2 = await buttons.nth(1).boundingBox()
+
+      expect(box1).toBeTruthy()
+      expect(box2).toBeTruthy()
+
+      // Second button should be below first button
+      expect(box2!.y).toBeGreaterThan(box1!.y)
+    }
+  })
+
+  test('touch targets have minimum 44px size', async ({ page }) => {
+    // Verify primary interactive elements meet touch target requirements
+    const ctaButtons = page.locator('#hero a[href]')
+    const buttonCount = await ctaButtons.count()
+
+    expect(buttonCount).toBeGreaterThan(0)
+
+    for (let i = 0; i < buttonCount; i++) {
+      const button = ctaButtons.nth(i)
+      const isVisible = await button.isVisible()
+
+      if (isVisible) {
+        const box = await button.boundingBox()
+        if (box && box.height > 0) {
+          // Touch targets should be at least 44px for accessibility
+          expect(box.height).toBeGreaterThanOrEqual(44)
+        }
+      }
+    }
+  })
+
+  test('header displays correctly on mobile', async ({ page }) => {
+    const header = page.locator('header')
+    await expect(header).toBeVisible()
+
+    // Logo should be visible
+    const logo = page.locator('header img[alt*="MirDB"]')
+    await expect(logo).toBeVisible()
+
+    // Title should be visible
+    const title = page.locator('header span', { hasText: 'MirDB' })
+    await expect(title).toBeVisible()
+
+    // Header should fit within viewport
+    const headerBox = await header.boundingBox()
+    expect(headerBox).toBeTruthy()
+    expect(headerBox!.width).toBeLessThanOrEqual(375)
+  })
+
+  test('sections have appropriate mobile padding', async ({ page }) => {
+    // Verify sections have mobile-appropriate padding (px-4 = 16px)
+    const featuresSection = page.locator('#features')
+    await expect(featuresSection).toBeVisible()
+
+    const paddingLeft = await featuresSection.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).paddingLeft)
+    })
+    const paddingRight = await featuresSection.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).paddingRight)
+    })
+
+    // px-4 is 16px on mobile
+    expect(paddingLeft).toBeGreaterThanOrEqual(16)
+    expect(paddingRight).toBeGreaterThanOrEqual(16)
+  })
+
+  test('text remains readable when scrolling', async ({ page }) => {
+    // Scroll through the page and verify text remains visible
+    const sections = ['#hero', '#features', '#getting-started']
+
+    for (const sectionId of sections) {
+      const section = page.locator(sectionId)
+      if (await section.isVisible()) {
+        await section.scrollIntoViewIfNeeded()
+
+        // Find heading in section
+        const heading = section.locator('h1, h2').first()
+        if (await heading.isVisible()) {
+          const headingBox = await heading.boundingBox()
+          expect(headingBox).toBeTruthy()
+          // Heading should fit within viewport
+          expect(headingBox!.width).toBeLessThanOrEqual(375)
+        }
+      }
+    }
+  })
+})
