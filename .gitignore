@@ -1,2 +1,9 @@
 /target
 **/*.rs.bk
+.something/
+
+# Homepage project
+homepage/node_modules/
+homepage/dist/
+homepage/test-results/
+homepage/playwright-report/
