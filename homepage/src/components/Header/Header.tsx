@@ -1,4 +1,5 @@
 import React from 'react'
+import type { StatusBadge } from '../../types'
 
 /**
  * Header component for MirDB homepage.
@@ -10,6 +11,15 @@ import React from 'react'
  * - Include navigation links
  * - Include status badges (shared with Scenario 7)
  */
+
+/** CircleCI build status badge configuration */
+const CIRCLECI_BADGE: StatusBadge = {
+  name: 'CircleCI',
+  imageUrl: 'https://circleci.com/gh/theseus-rs/mirdb.svg?style=svg',
+  linkUrl: 'https://circleci.com/gh/theseus-rs/mirdb',
+  altText: 'CircleCI build status',
+}
+
 export const Header: React.FC = () => {
   return (
     <header
@@ -72,8 +82,24 @@ export const Header: React.FC = () => {
           </a>
         </nav>
 
-        {/* Placeholder for status badges - Scenario 7 will add these */}
-        <div className="hidden" data-testid="badges-placeholder" />
+        {/* Status badges section - Scenario 7: Project Status Badges */}
+        <div className="flex items-center gap-2" data-testid="status-badges">
+          <a
+            href={CIRCLECI_BADGE.linkUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center hover:opacity-80 transition-opacity"
+            aria-label={`View ${CIRCLECI_BADGE.name} build status`}
+            data-testid="circleci-badge-link"
+          >
+            <img
+              src={CIRCLECI_BADGE.imageUrl}
+              alt={CIRCLECI_BADGE.altText}
+              className="h-5"
+              data-testid="circleci-badge-image"
+            />
+          </a>
+        </div>
       </div>
     </header>
   )
