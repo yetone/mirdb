@@ -29,3 +29,10 @@ export interface ExternalLink {
   url: string
   type: 'github' | 'docs' | 'external' | 'protocol' | 'other'
 }
+
+export interface StatusBadge {
+  name: string
+  imageUrl: string
+  linkUrl: string
+  altText: string
+}
