@@ -34,7 +34,7 @@
   --color-bg-tertiary: #21262d;
   --color-text-primary: #f0f6fc;
   --color-text-secondary: #8b949e;
-  --color-text-muted: #6e7681;
+  --color-text-muted: #8b949e;
   --color-accent-primary: #58a6ff;
   --color-accent-secondary: #1f6feb;
   --color-accent-green: #3fb950;
@@ -1025,7 +1025,7 @@ pre code {
 
 .btn-primary {
   background-color: var(--color-accent-secondary);
-  color: var(--color-text-primary);
+  color: #ffffff;
   border-color: var(--color-accent-secondary);
 }
 
