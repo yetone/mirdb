@@ -14,32 +14,15 @@
  * - Respects prefers-reduced-motion
  */
 
-(function() {
-    'use strict';
+// Placeholder - Full implementation by Scenario 17
+document.addEventListener('DOMContentLoaded', function() {
+  // Mobile menu toggle
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links');
 
-    // Copy to clipboard functionality
-    document.querySelectorAll('.copy-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            var codeBlock = this.closest('.code-block');
-            var code = codeBlock.querySelector('code');
-            if (code) {
-                navigator.clipboard.writeText(code.textContent).then(function() {
-                    btn.textContent = 'Copied!';
-                    setTimeout(function() {
-                        btn.textContent = 'Copy';
-                    }, 2000);
-                });
-            }
-        });
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', function() {
+      navLinks.classList.toggle('nav-open');
     });
-
-    // Mobile menu toggle
-    var hamburger = document.querySelector('.nav-hamburger');
-    var navLinks = document.querySelector('.nav-links');
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function() {
-            navLinks.classList.toggle('mobile-open');
-            this.classList.toggle('active');
-        });
-    }
-})();
+  }
+});

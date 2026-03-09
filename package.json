@@ -4,12 +4,12 @@
   "description": "MirDB Product Homepage",
   "scripts": {
     "test": "playwright test",
-    "test:e2e": "playwright test tests/e2e/",
-    "test:unit": "jest tests/unit/",
-    "serve": "npx http-server docs -p 8080"
+    "test:e2e": "playwright test tests/e2e",
+    "test:unit": "playwright test tests/unit",
+    "serve": "npx serve docs -l 3000"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
-    "http-server": "^14.1.1"
+    "serve": "^14.2.0"
   }
 }
