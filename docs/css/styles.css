@@ -89,6 +89,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -101,6 +102,7 @@ body {
   background-color: var(--color-bg-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -235,6 +237,35 @@ section {
   background-color: var(--color-text-primary);
   border-radius: 2px;
   transition: all var(--transition-fast);
+}
+
+/* Mobile Navigation Menu (open state) */
+.nav-links.nav-open {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-lg);
+  gap: var(--spacing-md);
+  z-index: 999;
+}
+
+.nav-links.nav-open li {
+  width: 100%;
+}
+
+.nav-links.nav-open a {
+  display: block;
+  padding: var(--spacing-md);
+  min-height: 44px;
+  line-height: 28px;
+  background-color: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  text-align: center;
 }
 
 /* ============================================
@@ -749,10 +780,18 @@ section {
 @media (max-width: 768px) {
   .config-table-wrapper {
     overflow-x: auto;
+    max-width: 100%;
   }
 
   .config-table {
-    min-width: 600px;
+    min-width: 500px;
+  }
+}
+
+/* Extra small screens - allow table to scroll within wrapper */
+@media (max-width: 480px) {
+  .config-table {
+    min-width: 450px;
   }
 }
 
@@ -1049,6 +1088,16 @@ pre code {
   .footer .container {
     flex-direction: column;
     text-align: center;
+  }
+
+  /* Responsive architecture components */
+  .architecture-components {
+    grid-template-columns: 1fr;
+  }
+
+  /* Performance notes grid */
+  .perf-notes-grid {
+    grid-template-columns: 1fr;
   }
 }
 
