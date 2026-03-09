@@ -270,7 +270,57 @@
       <div class="container">
         <h2>Quick Start</h2>
         <p class="section-description">Get up and running in minutes.</p>
-        <!-- Quick start content to be added by Scenario 4 -->
+
+        <!-- Installation Step -->
+        <div class="quickstart-step">
+          <h3>1. Build from Source</h3>
+          <p>Clone the repository and build with Cargo:</p>
+          <div class="code-container">
+            <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the release binary
+cargo build --release</code></pre>
+            <button class="copy-btn" data-copy aria-label="Copy to clipboard">Copy</button>
+          </div>
+        </div>
+
+        <!-- Run Server Step -->
+        <div class="quickstart-step">
+          <h3>2. Start the Server</h3>
+          <p>Run MirDB with the default configuration. The server listens on <code>0.0.0.0:12333</code> by default:</p>
+          <div class="code-container">
+            <pre><code># Start the server
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+            <button class="copy-btn" data-copy aria-label="Copy to clipboard">Copy</button>
+          </div>
+        </div>
+
+        <!-- Usage Examples Step -->
+        <div class="quickstart-step">
+          <h3>3. Connect and Use</h3>
+          <p>Connect using any memcached client or telnet on port 12333:</p>
+          <div class="code-container">
+            <pre><code># Connect to MirDB
+telnet localhost 12333
+
+# SET a key-value pair
+# Format: set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+set mykey 0 0 5
+hello
+STORED
+
+# GET the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+            <button class="copy-btn" data-copy aria-label="Copy to clipboard">Copy</button>
+          </div>
+        </div>
+
+        <p class="quickstart-note">MirDB is fully compatible with the memcached text protocol. Use your existing memcached client libraries without any code changes.</p>
       </div>
     </section>
 
