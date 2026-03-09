@@ -531,6 +531,115 @@ section {
   margin-right: auto;
 }
 
+/* Commands Grid Layout */
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* Command Category Card */
+.command-category {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.command-category h3 {
+  color: var(--color-accent-primary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Individual Command Items */
+.command-item {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.command-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.command-item h4 {
+  color: var(--color-accent-green);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-xs);
+}
+
+.command-item p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.command-item .command-example {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-style: italic;
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.command-item pre {
+  margin-bottom: var(--spacing-sm);
+}
+
+.command-item pre code {
+  color: var(--color-text-primary);
+}
+
+/* Response Codes Section */
+.response-codes {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.response-codes h3 {
+  color: var(--color-accent-purple);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.response-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.response-item {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-sm);
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.response-item code {
+  color: var(--color-accent-orange);
+  font-weight: 600;
+}
+
+/* Responsive adjustments for commands */
+@media (max-width: 768px) {
+  .commands-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .response-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ============================================
    10. Performance Section Styles
    ============================================ */
