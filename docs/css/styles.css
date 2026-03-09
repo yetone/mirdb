@@ -485,6 +485,105 @@ section {
   margin-right: auto;
 }
 
+/* Configuration Table */
+.config-table-wrapper {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.config-table-wrapper h3 {
+  color: var(--color-accent-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.config-table thead {
+  background-color: var(--color-bg-tertiary);
+}
+
+.config-table th,
+.config-table td {
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.config-table th {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.config-table td {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.config-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.config-table tbody tr:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+.config-table code {
+  background-color: var(--color-bg-primary);
+  color: var(--color-accent-primary);
+}
+
+/* Performance Notes */
+.performance-notes h3 {
+  color: var(--color-accent-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.perf-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.perf-note {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.perf-note h4 {
+  color: var(--color-accent-green);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+.perf-note p {
+  color: var(--color-text-secondary);
+  margin-bottom: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  .config-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .config-table {
+    min-width: 600px;
+  }
+}
+
 /* ============================================
    11. Roadmap Section Styles
    ============================================ */

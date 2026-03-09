@@ -26,6 +26,7 @@
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#quickstart">Quick Start</a></li>
         <li><a href="#commands">Commands</a></li>
+        <li><a href="#performance">Performance</a></li>
         <li><a href="#roadmap">Roadmap</a></li>
       </ul>
       <a href="https://github.com/yetone/mirdb" class="btn btn-primary" target="_blank" rel="noopener">View on GitHub</a>
@@ -287,7 +288,75 @@
       <div class="container">
         <h2>Performance</h2>
         <p class="section-description">Configuration and performance characteristics.</p>
-        <!-- Performance content to be added by Scenario 6 -->
+
+        <!-- Default Configuration Table -->
+        <div class="config-table-wrapper">
+          <h3>Default Configuration</h3>
+          <table class="config-table">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Default Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>addr</code></td>
+                <td><code>0.0.0.0:12333</code></td>
+                <td>Listen address and port for memcached protocol connections</td>
+              </tr>
+              <tr>
+                <td><code>max_level</code></td>
+                <td><code>7</code></td>
+                <td>Maximum LSM tree levels (each level 10x larger than previous)</td>
+              </tr>
+              <tr>
+                <td><code>sst_max_size</code></td>
+                <td><code>100MB</code></td>
+                <td>Maximum SSTable file size before splitting</td>
+              </tr>
+              <tr>
+                <td><code>mem_table_max_size</code></td>
+                <td><code>4MB</code></td>
+                <td>Maximum memtable size before flush to disk</td>
+              </tr>
+              <tr>
+                <td><code>block_size</code></td>
+                <td><code>4KB</code></td>
+                <td>Data block size for SSTable storage</td>
+              </tr>
+              <tr>
+                <td><code>work_dir</code></td>
+                <td><code>/tmp/mirdb</code></td>
+                <td>Default data directory path</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Performance Notes -->
+        <div class="performance-notes">
+          <h3>Performance Characteristics</h3>
+          <div class="perf-notes-grid">
+            <article class="perf-note">
+              <h4>Write-Through Durability</h4>
+              <p>All writes are immediately persisted to the Write-Ahead Log (WAL) before acknowledgment. This ensures data durability even in the event of crashes, while maintaining high write throughput through sequential I/O.</p>
+            </article>
+            <article class="perf-note">
+              <h4>Lazy Expiration</h4>
+              <p>Expired keys are cleaned up lazily during read operations and compaction. This approach reduces write amplification and maintains consistent performance without dedicated expiration threads.</p>
+            </article>
+            <article class="perf-note">
+              <h4>Background Compaction</h4>
+              <p>Compaction runs in background threads, minimizing impact on read/write latency. Level-based compaction ensures efficient space utilization across 7 LSM levels.</p>
+            </article>
+            <article class="perf-note">
+              <h4>Memory Efficiency</h4>
+              <p>The skip list memtable provides O(log n) operations with a configurable 4MB default size. Immutable memtables are queued for efficient batch flushing to SSTables.</p>
+            </article>
+          </div>
+        </div>
       </div>
     </section>
 
