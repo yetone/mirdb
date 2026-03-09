@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached protocol. Fast, reliable storage using LSM tree architecture.">
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A Persistent Key-Value Store with Memcached protocol support">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
+  <meta name="twitter:description" content="A Persistent Key-Value Store with Memcached protocol support">
+  <meta property="og:image" content="https://yetone.github.io/mirdb/assets/logo.gif">
+  <link rel="canonical" href="https://yetone.github.io/mirdb/">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navigation Header (Scenario 8) -->
+  <header class="navbar">
+    <nav class="container">
+      <a href="#" class="logo">
+        <img src="assets/logo.gif" alt="MirDB Logo" class="logo-img">
+        <span class="logo-text">MirDB</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#commands">Commands</a></li>
+        <li><a href="#performance">Performance</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+      </ul>
+      <a href="https://github.com/yetone/mirdb" class="btn btn-primary" target="_blank" rel="noopener">View on GitHub</a>
+      <button class="hamburger" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero">
+      <div class="container">
+        <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo">
+        <h1>MirDB</h1>
+        <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+        <div class="hero-cta">
+          <a href="#quickstart" class="btn btn-primary">Get Started</a>
+          <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2>Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-card" data-feature="memcached">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3>Memcached Protocol</h3>
+            <p>Full compatibility with the Memcached text protocol. Use your existing memcached clients and tools without any code changes.</p>
+          </article>
+
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <h3>Persistence</h3>
+            <p>Durable storage with write-ahead logging ensures your data survives restarts. Unlike memcached, your data is safely persisted to disk.</p>
+          </article>
+
+          <article class="feature-card" data-feature="lsm">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+              </svg>
+            </div>
+            <h3>LSM Tree Storage</h3>
+            <p>Log-Structured Merge tree architecture optimized for write-intensive workloads. Efficient storage with automatic level management across 7 levels.</p>
+          </article>
+
+          <article class="feature-card" data-feature="skiplist">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </div>
+            <h3>Skip List Memtable</h3>
+            <p>In-memory skip list data structure provides O(log n) operations. Fast reads and writes with efficient memory utilization for the active working set.</p>
+          </article>
+
+          <article class="feature-card" data-feature="compaction">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/>
+                <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/>
+              </svg>
+            </div>
+            <h3>Automatic Compaction</h3>
+            <p>Background compaction automatically merges and optimizes SSTables. Both minor (memtable flush) and major compaction maintain storage efficiency.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section (Scenario 3) -->
+    <section id="architecture" class="architecture">
+      <div class="container">
+        <h2>Architecture</h2>
+        <p class="section-intro">MirDB implements an LSM (Log-Structured Merge) tree storage engine designed for high write throughput with efficient reads.</p>
+
+        <!-- Architecture Diagram -->
+        <div class="architecture-diagram-wrapper">
+          <svg class="architecture-diagram" viewBox="0 0 800 600" role="img" aria-label="MirDB LSM Tree Architecture Diagram showing data flow from Write Request through WAL, Memtable, and SSTables">
+            <title>MirDB LSM Tree Architecture</title>
+            <desc>Data flow diagram showing: Write requests go to WAL for durability, then to Memtable (in-memory skip list). When memtable is full, data is flushed to immutable memtables, then compacted to Level 0 SSTables, and finally merged into higher level SSTables through major compaction.</desc>
+
+            <!-- Background -->
+            <rect x="0" y="0" width="800" height="600" fill="#0d1117"/>
+
+            <!-- Write Request -->
+            <g class="diagram-write-request">
+              <rect x="320" y="20" width="160" height="50" rx="8" fill="#238636" stroke="#3fb950" stroke-width="2"/>
+              <text x="400" y="50" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="bold">Write Request</text>
+            </g>
+
+            <!-- Arrow: Write to WAL -->
+            <line x1="400" y1="70" x2="400" y2="100" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- WAL Component -->
+            <g class="diagram-wal">
+              <rect x="280" y="100" width="240" height="70" rx="8" fill="#161b22" stroke="#f85149" stroke-width="2"/>
+              <text x="400" y="125" text-anchor="middle" fill="#f85149" font-size="14" font-weight="bold">WAL</text>
+              <text x="400" y="145" text-anchor="middle" fill="#8b949e" font-size="12">Write-Ahead Log</text>
+              <text x="400" y="162" text-anchor="middle" fill="#8b949e" font-size="11">(Durability)</text>
+            </g>
+
+            <!-- Arrow: WAL to Memtable -->
+            <line x1="400" y1="170" x2="400" y2="200" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- Memtable Component -->
+            <g class="diagram-memtable">
+              <rect x="280" y="200" width="240" height="70" rx="8" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+              <text x="400" y="225" text-anchor="middle" fill="#58a6ff" font-size="14" font-weight="bold">Memtable</text>
+              <text x="400" y="245" text-anchor="middle" fill="#8b949e" font-size="12">Active Skip List</text>
+              <text x="400" y="262" text-anchor="middle" fill="#8b949e" font-size="11">(In-Memory)</text>
+            </g>
+
+            <!-- Arrow: Memtable to Immutable -->
+            <line x1="400" y1="270" x2="400" y2="300" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="410" y="290" fill="#8b949e" font-size="10">when full</text>
+
+            <!-- Immutable Memtables -->
+            <g class="diagram-immutable">
+              <rect x="280" y="300" width="240" height="50" rx="8" fill="#161b22" stroke="#a371f7" stroke-width="2"/>
+              <text x="400" y="325" text-anchor="middle" fill="#a371f7" font-size="14" font-weight="bold">Immutable Memtables</text>
+              <text x="400" y="342" text-anchor="middle" fill="#8b949e" font-size="11">(Queue awaiting flush)</text>
+            </g>
+
+            <!-- Arrow: Immutable to Level 0 -->
+            <line x1="400" y1="350" x2="400" y2="380" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="475" y="370" fill="#ffa657" font-size="10">Minor Compaction</text>
+
+            <!-- Level 0 SSTables -->
+            <g class="diagram-sstables-l0">
+              <rect x="280" y="380" width="240" height="60" rx="8" fill="#161b22" stroke="#ffa657" stroke-width="2"/>
+              <text x="400" y="405" text-anchor="middle" fill="#ffa657" font-size="14" font-weight="bold">Level 0 SSTables</text>
+              <text x="400" y="425" text-anchor="middle" fill="#8b949e" font-size="11">(Recently flushed, may overlap)</text>
+            </g>
+
+            <!-- Arrow: Level 0 to Higher Levels -->
+            <line x1="400" y1="440" x2="400" y2="470" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="475" y="460" fill="#3fb950" font-size="10">Major Compaction</text>
+
+            <!-- Higher Level SSTables -->
+            <g class="diagram-sstables-ln">
+              <rect x="280" y="470" width="240" height="60" rx="8" fill="#161b22" stroke="#3fb950" stroke-width="2"/>
+              <text x="400" y="495" text-anchor="middle" fill="#3fb950" font-size="14" font-weight="bold">Level 1+ SSTables</text>
+              <text x="400" y="515" text-anchor="middle" fill="#8b949e" font-size="11">(Sorted, non-overlapping)</text>
+            </g>
+
+            <!-- Read Path Label -->
+            <g class="diagram-read-path">
+              <rect x="600" y="200" width="180" height="230" rx="8" fill="none" stroke="#8b949e" stroke-width="1" stroke-dasharray="5,5"/>
+              <text x="690" y="225" text-anchor="middle" fill="#8b949e" font-size="12" font-weight="bold">Read Path</text>
+              <text x="690" y="250" text-anchor="middle" fill="#58a6ff" font-size="11">1. Memtable</text>
+              <text x="690" y="285" text-anchor="middle" fill="#a371f7" font-size="11">2. Imm Memtables</text>
+              <text x="690" y="320" text-anchor="middle" fill="#ffa657" font-size="11">3. Level 0 SSTs</text>
+              <text x="690" y="355" text-anchor="middle" fill="#3fb950" font-size="11">4. Level 1+ SSTs</text>
+              <text x="690" y="400" text-anchor="middle" fill="#8b949e" font-size="10">(newest first)</text>
+            </g>
+
+            <!-- SSTable Structure Inset -->
+            <g class="diagram-sstable-structure">
+              <rect x="20" y="380" width="180" height="150" rx="8" fill="none" stroke="#8b949e" stroke-width="1" stroke-dasharray="5,5"/>
+              <text x="110" y="400" text-anchor="middle" fill="#8b949e" font-size="12" font-weight="bold">SSTable Format</text>
+              <rect x="40" y="415" width="140" height="20" rx="2" fill="#238636" opacity="0.3" stroke="#3fb950"/>
+              <text x="110" y="429" text-anchor="middle" fill="#8b949e" font-size="9">Data Blocks</text>
+              <rect x="40" y="440" width="140" height="20" rx="2" fill="#58a6ff" opacity="0.3" stroke="#58a6ff"/>
+              <text x="110" y="454" text-anchor="middle" fill="#8b949e" font-size="9">Meta Block</text>
+              <rect x="40" y="465" width="140" height="20" rx="2" fill="#a371f7" opacity="0.3" stroke="#a371f7"/>
+              <text x="110" y="479" text-anchor="middle" fill="#8b949e" font-size="9">Index Block</text>
+              <rect x="40" y="490" width="140" height="20" rx="2" fill="#ffa657" opacity="0.3" stroke="#ffa657"/>
+              <text x="110" y="504" text-anchor="middle" fill="#8b949e" font-size="9">Footer</text>
+            </g>
+
+            <!-- Arrowhead marker -->
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#58a6ff"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Component Descriptions -->
+        <div class="architecture-components">
+          <article class="arch-component" id="wal-description">
+            <h3>Write-Ahead Log (WAL)</h3>
+            <p>The WAL provides durability by persisting writes before acknowledging them. Each write is first appended to the WAL, ensuring data can be recovered after crashes. WAL segments are Snappy-compressed and aligned for efficient storage.</p>
+          </article>
+
+          <article class="arch-component" id="memtable-description">
+            <h3>Memtable</h3>
+            <p>The memtable is an in-memory skip list data structure that accepts all incoming writes. It provides O(log n) insert and lookup operations. When the memtable reaches 4MB, it becomes immutable and a new memtable is created.</p>
+          </article>
+
+          <article class="arch-component" id="sstable-description">
+            <h3>SSTable (Sorted String Table)</h3>
+            <p>SSTables are immutable on-disk files storing key-value pairs sorted by key. Each SSTable contains data blocks with prefix compression, a meta block with min/max keys and Cuckoo filter, an index block for efficient lookups, and a footer with checksums.</p>
+          </article>
+
+          <article class="arch-component" id="compaction-description">
+            <h3>Compaction</h3>
+            <p>MirDB runs two types of compaction in background threads:</p>
+            <ul>
+              <li><strong>Minor Compaction:</strong> Flushes immutable memtables to Level 0 SSTables</li>
+              <li><strong>Major Compaction:</strong> Merges SSTables between levels, removing duplicates and deleted keys</li>
+            </ul>
+            <p>The LSM tree supports up to 7 levels, with each level 10x larger than the previous.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start Section (Scenario 4) -->
+    <section id="quickstart" class="quickstart">
+      <div class="container">
+        <h2>Quick Start</h2>
+        <p class="section-description">Get up and running in minutes.</p>
+
+        <!-- Installation Step -->
+        <div class="quickstart-step">
+          <h3>1. Build from Source</h3>
+          <p>Clone the repository and build with Cargo:</p>
+          <div class="code-container">
+            <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the release binary
+cargo build --release</code></pre>
+            <button class="copy-btn" data-copy aria-label="Copy to clipboard">Copy</button>
+          </div>
+        </div>
+
+        <!-- Run Server Step -->
+        <div class="quickstart-step">
+          <h3>2. Start the Server</h3>
+          <p>Run MirDB with the default configuration. The server listens on <code>0.0.0.0:12333</code> by default:</p>
+          <div class="code-container">
+            <pre><code># Start the server
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+            <button class="copy-btn" data-copy aria-label="Copy to clipboard">Copy</button>
+          </div>
+        </div>
+
+        <!-- Usage Examples Step -->
+        <div class="quickstart-step">
+          <h3>3. Connect and Use</h3>
+          <p>Connect using any memcached client or telnet on port 12333:</p>
+          <div class="code-container">
+            <pre><code># Connect to MirDB
+telnet localhost 12333
+
+# SET a key-value pair
+# Format: set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+set mykey 0 0 5
+hello
+STORED
+
+# GET the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+            <button class="copy-btn" data-copy aria-label="Copy to clipboard">Copy</button>
+          </div>
+        </div>
+
+        <p class="quickstart-note">MirDB is fully compatible with the memcached text protocol. Use your existing memcached client libraries without any code changes.</p>
+      </div>
+    </section>
+
+    <!-- Supported Commands Section (Scenario 5) -->
+    <section id="commands" class="commands">
+      <div class="container">
+        <h2>Supported Commands</h2>
+        <p class="section-description">MirDB implements the Memcached text protocol, enabling compatibility with existing clients and tools.</p>
+
+        <div class="commands-grid">
+          <!-- Storage Commands -->
+          <article class="command-category" data-category="storage">
+            <h3>Storage Commands</h3>
+
+            <div class="command-item" data-command="set">
+              <h4>SET</h4>
+              <p>Store a key-value pair with optional expiration time.</p>
+              <pre tabindex="0"><code>set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n</code></pre>
+              <p class="command-example">Example:</p>
+              <pre><code>set mykey 0 3600 5
+hello
+STORED</code></pre>
+            </div>
+
+            <div class="command-item" data-command="add">
+              <h4>ADD</h4>
+              <p>Store a key-value pair only if the key does not already exist.</p>
+              <pre tabindex="0"><code>add &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n</code></pre>
+            </div>
+
+            <div class="command-item" data-command="replace">
+              <h4>REPLACE</h4>
+              <p>Store a key-value pair only if the key already exists.</p>
+              <pre tabindex="0"><code>replace &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n</code></pre>
+            </div>
+
+            <div class="command-item" data-command="append">
+              <h4>APPEND</h4>
+              <p>Append data to the end of an existing value.</p>
+              <pre tabindex="0"><code>append &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n</code></pre>
+            </div>
+
+            <div class="command-item" data-command="prepend">
+              <h4>PREPEND</h4>
+              <p>Prepend data to the beginning of an existing value.</p>
+              <pre tabindex="0"><code>prepend &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n</code></pre>
+            </div>
+          </article>
+
+          <!-- Retrieval Commands -->
+          <article class="command-category" data-category="retrieval">
+            <h3>Retrieval Commands</h3>
+
+            <div class="command-item" data-command="get">
+              <h4>GET</h4>
+              <p>Retrieve one or more keys from the store.</p>
+              <pre><code>get &lt;key&gt; [&lt;key2&gt; ...]</code></pre>
+              <p class="command-example">Example:</p>
+              <pre><code>get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+            </div>
+
+            <div class="command-item" data-command="gets">
+              <h4>GETS</h4>
+              <p>Retrieve keys with CAS (Check-And-Set) token.</p>
+              <pre><code>gets &lt;key&gt; [&lt;key2&gt; ...]</code></pre>
+            </div>
+          </article>
+
+          <!-- Deletion Commands -->
+          <article class="command-category" data-category="deletion">
+            <h3>Deletion Commands</h3>
+
+            <div class="command-item" data-command="delete">
+              <h4>DELETE</h4>
+              <p>Remove a key from the store.</p>
+              <pre><code>delete &lt;key&gt; [noreply]</code></pre>
+              <p class="command-example">Example:</p>
+              <pre><code>delete mykey
+DELETED</code></pre>
+            </div>
+          </article>
+
+          <!-- MirDB-Specific Commands -->
+          <article class="command-category" data-category="mirdb">
+            <h3>MirDB-Specific Commands</h3>
+
+            <div class="command-item" data-command="info">
+              <h4>INFO</h4>
+              <p>Display database status and level information.</p>
+              <pre><code>info</code></pre>
+            </div>
+
+            <div class="command-item" data-command="major_compaction">
+              <h4>MAJOR_COMPACTION</h4>
+              <p>Trigger manual compaction of SSTables.</p>
+              <pre><code>major_compaction</code></pre>
+            </div>
+          </article>
+        </div>
+
+        <!-- Response Codes -->
+        <div class="response-codes">
+          <h3>Response Codes</h3>
+          <div class="response-list">
+            <div class="response-item"><code>STORED</code> - Data stored successfully</div>
+            <div class="response-item"><code>NOT_STORED</code> - Data not stored (condition not met)</div>
+            <div class="response-item"><code>EXISTS</code> - CAS check failed</div>
+            <div class="response-item"><code>NOT_FOUND</code> - Key not found</div>
+            <div class="response-item"><code>DELETED</code> - Key deleted successfully</div>
+            <div class="response-item"><code>ERROR</code> - Unknown command</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Performance Section (Scenario 6) -->
+    <section id="performance" class="performance">
+      <div class="container">
+        <h2>Performance</h2>
+        <p class="section-description">Configuration and performance characteristics.</p>
+
+        <!-- Default Configuration Table -->
+        <div class="config-table-wrapper">
+          <h3>Default Configuration</h3>
+          <table class="config-table">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Default Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>addr</code></td>
+                <td><code>0.0.0.0:12333</code></td>
+                <td>Listen address and port for memcached protocol connections</td>
+              </tr>
+              <tr>
+                <td><code>max_level</code></td>
+                <td><code>7</code></td>
+                <td>Maximum LSM tree levels (each level 10x larger than previous)</td>
+              </tr>
+              <tr>
+                <td><code>sst_max_size</code></td>
+                <td><code>100MB</code></td>
+                <td>Maximum SSTable file size before splitting</td>
+              </tr>
+              <tr>
+                <td><code>mem_table_max_size</code></td>
+                <td><code>4MB</code></td>
+                <td>Maximum memtable size before flush to disk</td>
+              </tr>
+              <tr>
+                <td><code>block_size</code></td>
+                <td><code>4KB</code></td>
+                <td>Data block size for SSTable storage</td>
+              </tr>
+              <tr>
+                <td><code>work_dir</code></td>
+                <td><code>/tmp/mirdb</code></td>
+                <td>Default data directory path</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Performance Notes -->
+        <div class="performance-notes">
+          <h3>Performance Characteristics</h3>
+          <div class="perf-notes-grid">
+            <article class="perf-note">
+              <h4>Write-Through Durability</h4>
+              <p>All writes are immediately persisted to the Write-Ahead Log (WAL) before acknowledgment. This ensures data durability even in the event of crashes, while maintaining high write throughput through sequential I/O.</p>
+            </article>
+            <article class="perf-note">
+              <h4>Lazy Expiration</h4>
+              <p>Expired keys are cleaned up lazily during read operations and compaction. This approach reduces write amplification and maintains consistent performance without dedicated expiration threads.</p>
+            </article>
+            <article class="perf-note">
+              <h4>Background Compaction</h4>
+              <p>Compaction runs in background threads, minimizing impact on read/write latency. Level-based compaction ensures efficient space utilization across 7 LSM levels.</p>
+            </article>
+            <article class="perf-note">
+              <h4>Memory Efficiency</h4>
+              <p>The skip list memtable provides O(log n) operations with a configurable 4MB default size. Immutable memtables are queued for efficient batch flushing to SSTables.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap Section (Scenario 7) -->
+    <section id="roadmap" class="roadmap">
+      <div class="container">
+        <h2>Roadmap</h2>
+        <p class="section-description">Current progress and planned features.</p>
+
+        <!-- Roadmap Items Grid -->
+        <div class="roadmap-grid">
+          <!-- Implemented Features -->
+          <div class="roadmap-column">
+            <h3 class="roadmap-column-title implemented-title">Implemented</h3>
+            <ul class="roadmap-list">
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">Memcached Protocol Support</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">LSM Tree Storage Engine</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">Write-Ahead Logging (WAL)</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">Skip List Memtable</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">SSTable with Block Compression</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">Automatic Compaction</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="roadmap-column">
+            <h3 class="roadmap-column-title planned-title">Planned</h3>
+            <ul class="roadmap-list">
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Raft Consensus Protocol</span>
+              </li>
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Distributed Clustering</span>
+              </li>
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Binary Memcached Protocol</span>
+              </li>
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Bloom Filter Optimization</span>
+              </li>
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Metrics and Monitoring API</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Contribution CTA -->
+        <div class="roadmap-contribute">
+          <p>Want to help build the future of MirDB?</p>
+          <a href="https://github.com/yetone/mirdb/issues" class="btn btn-secondary" target="_blank" rel="noopener">View Open Issues</a>
+          <a href="https://github.com/yetone/mirdb/blob/master/CONTRIBUTING.md" class="btn btn-primary" target="_blank" rel="noopener">Contribute</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 8) -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 MirDB. Built with Rust.</p>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="https://docs.rs/mirdb" target="_blank" rel="noopener">Documentation</a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Issues</a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener">License</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
