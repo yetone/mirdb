@@ -1,0 +1,752 @@
+/**
+ * MirDB Homepage Styles
+ * Owner: Scenario 1 - Hero Section (structure)
+ * Co-owner: Scenario 16 - CSS Styling and Theme (validation)
+ *
+ * Color scheme: Dark theme with tech accent colors
+ * Typography: Monospace for code, sans-serif for body
+ */
+
+/* ==========================================================================
+   1. CSS Variables
+   ========================================================================== */
+:root {
+    /* Colors - GitHub dark theme inspired */
+    --color-bg-primary: #0d1117;
+    --color-bg-secondary: #161b22;
+    --color-bg-tertiary: #21262d;
+    --color-border: #30363d;
+
+    /* Text colors */
+    --color-text-primary: #f0f6fc;
+    --color-text-secondary: #8b949e;
+    --color-text-muted: #6e7681;
+
+    /* Accent colors */
+    --color-accent-blue: #58a6ff;
+    --color-accent-green: #3fb950;
+    --color-accent-red: #f85149;
+    --color-accent-purple: #a371f7;
+    --color-accent-orange: #ffa657;
+    --color-accent-yellow: #d29922;
+
+    /* Button colors */
+    --color-btn-primary-bg: #238636;
+    --color-btn-primary-hover: #2ea043;
+    --color-btn-secondary-bg: #21262d;
+    --color-btn-secondary-hover: #30363d;
+
+    /* Typography */
+    --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+    --font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+
+    /* Border radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+
+    /* Container width */
+    --container-max: 1200px;
+}
+
+/* ==========================================================================
+   2. Reset and Base Styles
+   ========================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-family-sans);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+a {
+    color: var(--color-accent-blue);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-accent-purple);
+    text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: var(--spacing-md);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.25rem; }
+
+p {
+    margin-bottom: var(--spacing-md);
+}
+
+ul, ol {
+    margin-left: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+
+code {
+    font-family: var(--font-family-mono);
+    background-color: var(--color-bg-tertiary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+}
+
+pre {
+    font-family: var(--font-family-mono);
+    background-color: var(--color-bg-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin-bottom: var(--spacing-md);
+}
+
+pre code {
+    background: none;
+    padding: 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ==========================================================================
+   3. Layout Utilities
+   ========================================================================== */
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+section {
+    padding: var(--spacing-3xl) 0;
+}
+
+.section-intro {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    max-width: 800px;
+    margin-bottom: var(--spacing-xl);
+}
+
+/* ==========================================================================
+   4. Navigation Styles
+   ========================================================================== */
+.nav-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.nav-logo:hover {
+    color: var(--color-accent-blue);
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-lg);
+    margin: 0;
+}
+
+.nav-links a {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: var(--color-text-primary);
+    text-decoration: none;
+}
+
+.nav-github-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-btn-secondary-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    transition: background-color 0.2s ease;
+}
+
+.nav-github-btn:hover {
+    background-color: var(--color-btn-secondary-hover);
+    text-decoration: none;
+}
+
+.nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-sm);
+}
+
+.nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--color-text-primary);
+    transition: transform 0.2s ease;
+}
+
+/* ==========================================================================
+   5. Hero Section Styles
+   ========================================================================== */
+.hero-section {
+    text-align: center;
+    padding: var(--spacing-3xl) 0;
+    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+}
+
+.hero-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: var(--spacing-lg);
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    margin-bottom: var(--spacing-md);
+    background: linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-tagline {
+    font-size: 1.5rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+.hero-cta {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   6. Button Styles
+   ========================================================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.btn-primary {
+    background-color: var(--color-btn-primary-bg);
+    color: var(--color-text-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-btn-primary-hover);
+    text-decoration: none;
+    color: var(--color-text-primary);
+}
+
+.btn-secondary {
+    background-color: var(--color-btn-secondary-bg);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-btn-secondary-hover);
+    text-decoration: none;
+    color: var(--color-text-primary);
+}
+
+/* ==========================================================================
+   7. Features Section Styles
+   ========================================================================== */
+.features-section {
+    background-color: var(--color-bg-primary);
+}
+
+.features-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.feature-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.feature-card:hover {
+    border-color: var(--color-accent-blue);
+    transform: translateY(-2px);
+}
+
+.feature-card h3 {
+    color: var(--color-accent-blue);
+    margin-bottom: var(--spacing-sm);
+}
+
+.feature-card p {
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+/* ==========================================================================
+   8. Architecture Section Styles
+   ========================================================================== */
+.architecture-section {
+    background-color: var(--color-bg-secondary);
+}
+
+.architecture-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.architecture-diagram-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto var(--spacing-2xl);
+    overflow: hidden;
+}
+
+.architecture-diagram {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.architecture-components {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.arch-component {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+}
+
+.arch-component h3 {
+    color: var(--color-accent-purple);
+    margin-bottom: var(--spacing-sm);
+}
+
+.arch-component p {
+    color: var(--color-text-secondary);
+}
+
+.arch-component ul {
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-sm);
+}
+
+.arch-component li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.arch-component strong {
+    color: var(--color-text-primary);
+}
+
+/* ==========================================================================
+   9. Quick Start Section Styles
+   ========================================================================== */
+.quickstart-section {
+    background-color: var(--color-bg-primary);
+}
+
+.quickstart-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.code-block {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+    overflow: hidden;
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-bg-tertiary);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.code-header span {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.copy-btn {
+    background-color: var(--color-btn-secondary-bg);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.copy-btn:hover {
+    background-color: var(--color-btn-secondary-hover);
+}
+
+.code-block pre {
+    margin: 0;
+    padding: var(--spacing-md);
+    border-radius: 0;
+}
+
+/* ==========================================================================
+   10. Commands Section Styles
+   ========================================================================== */
+.commands-section {
+    background-color: var(--color-bg-secondary);
+}
+
+.commands-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.command-item {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+.command-item code {
+    font-size: 1.25rem;
+    color: var(--color-accent-green);
+    background: none;
+    display: block;
+    margin-bottom: var(--spacing-sm);
+}
+
+.command-item p {
+    color: var(--color-text-secondary);
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   11. Performance Section Styles
+   ========================================================================== */
+.performance-section {
+    background-color: var(--color-bg-primary);
+}
+
+.performance-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.config-item {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+.config-label {
+    display: block;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.config-value {
+    display: block;
+    color: var(--color-accent-orange);
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: var(--font-family-mono);
+}
+
+/* ==========================================================================
+   12. Roadmap Section Styles
+   ========================================================================== */
+.roadmap-section {
+    background-color: var(--color-bg-secondary);
+    text-align: center;
+}
+
+.roadmap-section h2 {
+    margin-bottom: var(--spacing-xl);
+}
+
+.roadmap-list {
+    list-style: none;
+    margin: 0 auto var(--spacing-xl);
+    max-width: 400px;
+    text-align: left;
+}
+
+.roadmap-list li {
+    padding: var(--spacing-sm) 0;
+    padding-left: var(--spacing-xl);
+    position: relative;
+    color: var(--color-text-secondary);
+}
+
+.roadmap-list li::before {
+    position: absolute;
+    left: 0;
+    font-size: 1rem;
+}
+
+.roadmap-list li.implemented::before {
+    content: "\2713";
+    color: var(--color-accent-green);
+}
+
+.roadmap-list li.planned::before {
+    content: "\25CB";
+    color: var(--color-accent-yellow);
+}
+
+.roadmap-list li.implemented {
+    color: var(--color-text-primary);
+}
+
+/* ==========================================================================
+   13. Footer Styles
+   ========================================================================== */
+.site-footer {
+    background-color: var(--color-bg-primary);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-xl) 0;
+    text-align: center;
+}
+
+.site-footer p {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+}
+
+.footer-links a {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.footer-links a:hover {
+    color: var(--color-text-primary);
+}
+
+/* ==========================================================================
+   14. Responsive Breakpoints
+   ========================================================================== */
+
+/* Tablet */
+@media (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .nav-github-btn {
+        display: none;
+    }
+
+    .nav-hamburger {
+        display: flex;
+    }
+
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-tagline {
+        font-size: 1.25rem;
+    }
+
+    section {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .features-grid,
+    .architecture-components,
+    .commands-grid,
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .architecture-diagram-wrapper {
+        margin-bottom: var(--spacing-xl);
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .hero-tagline {
+        font-size: 1.125rem;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+}
+
+/* Ensure SVG diagram is responsive */
+@media (max-width: 600px) {
+    .architecture-diagram {
+        min-height: 400px;
+    }
+}
+
+/* Focus styles for accessibility */
+:focus {
+    outline: 2px solid var(--color-accent-blue);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-accent-blue);
+    outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
