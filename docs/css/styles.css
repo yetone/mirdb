@@ -1,0 +1,643 @@
+/**
+ * MirDB Homepage Styles
+ * Owner: Scenario 1 - Hero Section (structure)
+ * Co-owner: Scenario 16 - CSS Styling and Theme (validation)
+ *
+ * Structure:
+ * 1. CSS Variables (colors, typography, spacing)
+ * 2. Reset and base styles
+ * 3. Layout utilities (container, grid)
+ * 4. Navigation styles
+ * 5. Hero section styles
+ * 6. Features section styles
+ * 7. Architecture section styles
+ * 8. Quick start section styles
+ * 9. Commands section styles
+ * 10. Performance section styles
+ * 11. Roadmap section styles
+ * 12. Footer styles
+ * 13. Code block styles
+ * 14. Button styles
+ * 15. Responsive breakpoints
+ *
+ * Color scheme: Dark theme with tech accent colors
+ * Typography: Monospace for code, sans-serif for body
+ */
+
+/* ============================================
+   1. CSS Variables
+   ============================================ */
+:root {
+  /* Colors - Dark Theme */
+  --color-bg-primary: #0d1117;
+  --color-bg-secondary: #161b22;
+  --color-bg-tertiary: #21262d;
+  --color-text-primary: #f0f6fc;
+  --color-text-secondary: #8b949e;
+  --color-text-muted: #6e7681;
+  --color-accent-primary: #58a6ff;
+  --color-accent-secondary: #1f6feb;
+  --color-accent-green: #3fb950;
+  --color-accent-purple: #a371f7;
+  --color-accent-orange: #d29922;
+  --color-border: #30363d;
+  --color-border-light: #21262d;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   2. Reset and Base Styles
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-xl); }
+
+p {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+}
+
+a {
+  color: var(--color-accent-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ============================================
+   3. Layout Utilities
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+section {
+  padding: var(--spacing-3xl) 0;
+}
+
+.section-description {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  max-width: 700px;
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* ============================================
+   4. Navigation Styles
+   ============================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgba(13, 17, 23, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+}
+
+.logo:hover {
+  text-decoration: none;
+}
+
+.logo-img {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: var(--spacing-xl);
+}
+
+.nav-links a {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.nav-links a:hover {
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger span {
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-text-primary);
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+}
+
+/* ============================================
+   5. Hero Section Styles
+   ============================================ */
+.hero {
+  padding-top: calc(64px + var(--spacing-3xl));
+  padding-bottom: var(--spacing-3xl);
+  text-align: center;
+  background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+}
+
+.hero-logo {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero h1 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.tagline {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.hero-cta {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   6. Features Section Styles
+   ============================================ */
+.features {
+  background-color: var(--color-bg-primary);
+}
+
+.features h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.feature-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  transition: transform var(--transition-normal), border-color var(--transition-normal);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent-primary);
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.feature-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-accent-primary);
+}
+
+.feature-card h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+}
+
+.feature-card p {
+  color: var(--color-text-secondary);
+  margin-bottom: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+}
+
+/* Feature card accent colors on hover */
+.feature-card[data-feature="memcached"]:hover .feature-icon svg {
+  color: var(--color-accent-primary);
+}
+
+.feature-card[data-feature="persistence"]:hover .feature-icon svg {
+  color: var(--color-accent-green);
+}
+
+.feature-card[data-feature="lsm"]:hover .feature-icon svg {
+  color: var(--color-accent-purple);
+}
+
+.feature-card[data-feature="skiplist"]:hover .feature-icon svg {
+  color: var(--color-accent-orange);
+}
+
+.feature-card[data-feature="compaction"]:hover .feature-icon svg {
+  color: var(--color-accent-primary);
+}
+
+/* ============================================
+   7. Architecture Section Styles
+   ============================================ */
+.architecture {
+  background-color: var(--color-bg-secondary);
+}
+
+.architecture h2 {
+  text-align: center;
+}
+
+.architecture .section-description {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   8. Quick Start Section Styles
+   ============================================ */
+.quickstart {
+  background-color: var(--color-bg-primary);
+}
+
+.quickstart h2 {
+  text-align: center;
+}
+
+.quickstart .section-description {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   9. Commands Section Styles
+   ============================================ */
+.commands {
+  background-color: var(--color-bg-secondary);
+}
+
+.commands h2 {
+  text-align: center;
+}
+
+.commands .section-description {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   10. Performance Section Styles
+   ============================================ */
+.performance {
+  background-color: var(--color-bg-primary);
+}
+
+.performance h2 {
+  text-align: center;
+}
+
+.performance .section-description {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   11. Roadmap Section Styles
+   ============================================ */
+.roadmap {
+  background-color: var(--color-bg-secondary);
+}
+
+.roadmap h2 {
+  text-align: center;
+}
+
+.roadmap .section-description {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   12. Footer Styles
+   ============================================ */
+.footer {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-xl) 0;
+}
+
+.footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.footer p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.footer-links a {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.footer-links a:hover {
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   13. Code Block Styles
+   ============================================ */
+pre, code {
+  font-family: var(--font-mono);
+}
+
+code {
+  background-color: var(--color-bg-tertiary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+pre {
+  background-color: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-lg);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+/* ============================================
+   14. Button Styles
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--color-accent-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-accent-secondary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  color: var(--color-text-primary);
+}
+
+.btn-secondary {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   15. Responsive Breakpoints
+   ============================================ */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .navbar .btn {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .footer .container {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-4xl: 2rem;
+    --font-size-3xl: 1.5rem;
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* ============================================
+   16. Focus States for Accessibility
+   ============================================ */
+*:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.btn:focus-visible {
+  outline-offset: 4px;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  padding: var(--spacing-md);
+  background: var(--color-accent-primary);
+  color: var(--color-bg-primary);
+  z-index: 10000;
+}
+
+.skip-link:focus {
+  top: 0;
+}

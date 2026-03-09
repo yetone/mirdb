@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached protocol. Fast, reliable storage using LSM tree architecture.">
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A Persistent Key-Value Store with Memcached protocol support">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
+  <meta name="twitter:description" content="A Persistent Key-Value Store with Memcached protocol support">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navigation Header (Scenario 8) -->
+  <header class="navbar">
+    <nav class="container">
+      <a href="#" class="logo">
+        <img src="assets/logo.gif" alt="MirDB Logo" class="logo-img">
+        <span class="logo-text">MirDB</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#commands">Commands</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+      </ul>
+      <a href="https://github.com/yetone/mirdb" class="btn btn-primary" target="_blank" rel="noopener">View on GitHub</a>
+      <button class="hamburger" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero">
+      <div class="container">
+        <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo">
+        <h1>MirDB</h1>
+        <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+        <div class="hero-cta">
+          <a href="#quickstart" class="btn btn-primary">Get Started</a>
+          <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2>Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-card" data-feature="memcached">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3>Memcached Protocol</h3>
+            <p>Full compatibility with the Memcached text protocol. Use your existing memcached clients and tools without any code changes.</p>
+          </article>
+
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <h3>Persistence</h3>
+            <p>Durable storage with write-ahead logging ensures your data survives restarts. Unlike memcached, your data is safely persisted to disk.</p>
+          </article>
+
+          <article class="feature-card" data-feature="lsm">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+              </svg>
+            </div>
+            <h3>LSM Tree Storage</h3>
+            <p>Log-Structured Merge tree architecture optimized for write-intensive workloads. Efficient storage with automatic level management across 7 levels.</p>
+          </article>
+
+          <article class="feature-card" data-feature="skiplist">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </div>
+            <h3>Skip List Memtable</h3>
+            <p>In-memory skip list data structure provides O(log n) operations. Fast reads and writes with efficient memory utilization for the active working set.</p>
+          </article>
+
+          <article class="feature-card" data-feature="compaction">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/>
+                <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/>
+              </svg>
+            </div>
+            <h3>Automatic Compaction</h3>
+            <p>Background compaction automatically merges and optimizes SSTables. Both minor (memtable flush) and major compaction maintain storage efficiency.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section (Scenario 3) -->
+    <section id="architecture" class="architecture">
+      <div class="container">
+        <h2>Architecture</h2>
+        <p class="section-description">MirDB uses an LSM tree architecture for optimal write performance.</p>
+        <!-- Architecture diagram to be added by Scenario 3 -->
+      </div>
+    </section>
+
+    <!-- Quick Start Section (Scenario 4) -->
+    <section id="quickstart" class="quickstart">
+      <div class="container">
+        <h2>Quick Start</h2>
+        <p class="section-description">Get up and running in minutes.</p>
+        <!-- Quick start content to be added by Scenario 4 -->
+      </div>
+    </section>
+
+    <!-- Supported Commands Section (Scenario 5) -->
+    <section id="commands" class="commands">
+      <div class="container">
+        <h2>Supported Commands</h2>
+        <p class="section-description">Memcached-compatible commands.</p>
+        <!-- Commands content to be added by Scenario 5 -->
+      </div>
+    </section>
+
+    <!-- Performance Section (Scenario 6) -->
+    <section id="performance" class="performance">
+      <div class="container">
+        <h2>Performance</h2>
+        <p class="section-description">Configuration and performance characteristics.</p>
+        <!-- Performance content to be added by Scenario 6 -->
+      </div>
+    </section>
+
+    <!-- Roadmap Section (Scenario 7) -->
+    <section id="roadmap" class="roadmap">
+      <div class="container">
+        <h2>Roadmap</h2>
+        <p class="section-description">Current progress and planned features.</p>
+        <!-- Roadmap content to be added by Scenario 7 -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 8) -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 MirDB. Built with Rust.</p>
+      <nav class="footer-links">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener">Issues</a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener">License</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
