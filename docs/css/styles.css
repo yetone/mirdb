@@ -773,6 +773,127 @@ section {
   margin-right: auto;
 }
 
+/* Roadmap Grid Layout */
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.roadmap-column {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.roadmap-column-title {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.roadmap-column-title.implemented-title {
+  color: var(--color-accent-green);
+  border-bottom-color: var(--color-accent-green);
+}
+
+.roadmap-column-title.planned-title {
+  color: var(--color-accent-purple);
+  border-bottom-color: var(--color-accent-purple);
+}
+
+/* Roadmap List */
+.roadmap-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.roadmap-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--color-border-light);
+  transition: background-color var(--transition-fast);
+}
+
+.roadmap-item:last-child {
+  border-bottom: none;
+}
+
+.roadmap-item:hover {
+  background-color: var(--color-bg-tertiary);
+  margin: 0 calc(-1 * var(--spacing-md));
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  border-radius: var(--radius-sm);
+}
+
+/* Status Indicators */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.roadmap-item.implemented .status-indicator {
+  color: var(--color-accent-green);
+}
+
+.roadmap-item.planned .status-indicator {
+  color: var(--color-accent-purple);
+}
+
+.roadmap-item-text {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.roadmap-item.implemented .roadmap-item-text {
+  color: var(--color-text-primary);
+}
+
+/* Contribution CTA */
+.roadmap-contribute {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background-color: var(--color-bg-primary);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.roadmap-contribute p {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-lg);
+}
+
+.roadmap-contribute .btn {
+  margin: 0 var(--spacing-sm);
+}
+
+/* Responsive adjustments for roadmap */
+@media (max-width: 768px) {
+  .roadmap-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-contribute .btn {
+    display: block;
+    margin: var(--spacing-sm) auto;
+    max-width: 280px;
+  }
+}
+
 /* ============================================
    12. Footer Styles
    ============================================ */

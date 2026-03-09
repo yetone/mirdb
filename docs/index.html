@@ -526,7 +526,74 @@ DELETED</code></pre>
       <div class="container">
         <h2>Roadmap</h2>
         <p class="section-description">Current progress and planned features.</p>
-        <!-- Roadmap content to be added by Scenario 7 -->
+
+        <!-- Roadmap Items Grid -->
+        <div class="roadmap-grid">
+          <!-- Implemented Features -->
+          <div class="roadmap-column">
+            <h3 class="roadmap-column-title implemented-title">Implemented</h3>
+            <ul class="roadmap-list">
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">Memcached Protocol Support</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">LSM Tree Storage Engine</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">Write-Ahead Logging (WAL)</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">Skip List Memtable</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">SSTable with Block Compression</span>
+              </li>
+              <li class="roadmap-item implemented" data-status="implemented">
+                <span class="status-indicator" aria-label="Implemented">✓</span>
+                <span class="roadmap-item-text">Automatic Compaction</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="roadmap-column">
+            <h3 class="roadmap-column-title planned-title">Planned</h3>
+            <ul class="roadmap-list">
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Raft Consensus Protocol</span>
+              </li>
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Distributed Clustering</span>
+              </li>
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Binary Memcached Protocol</span>
+              </li>
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Bloom Filter Optimization</span>
+              </li>
+              <li class="roadmap-item planned" data-status="planned">
+                <span class="status-indicator" aria-label="Planned">○</span>
+                <span class="roadmap-item-text">Metrics and Monitoring API</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Contribution CTA -->
+        <div class="roadmap-contribute">
+          <p>Want to help build the future of MirDB?</p>
+          <a href="https://github.com/yetone/mirdb/issues" class="btn btn-secondary" target="_blank" rel="noopener">View Open Issues</a>
+          <a href="https://github.com/yetone/mirdb/blob/master/CONTRIBUTING.md" class="btn btn-primary" target="_blank" rel="noopener">Contribute</a>
+        </div>
       </div>
     </section>
   </main>
