@@ -17,6 +17,7 @@
  */
 
 import { Navbar } from '../components/Navbar';
+import { BackgroundEffect } from '../components/BackgroundEffect';
 import {
   HeroSection,
   FeaturesSection,
@@ -32,6 +33,9 @@ import {
 function Home() {
   return (
     <>
+      {/* Animated background effect */}
+      <BackgroundEffect />
+
       {/* Header landmark containing site navigation */}
       <header>
         <Navbar />
