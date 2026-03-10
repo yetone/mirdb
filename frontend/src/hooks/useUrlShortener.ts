@@ -7,7 +7,7 @@
 
 import { useState, useCallback } from 'react';
 import { shortenUrlAnonymous, parseApiError } from '../api';
-import { ShortenUrlResponse } from '../types/landing';
+import type { ShortenUrlResponse } from '../types/landing';
 
 export interface UseUrlShortenerReturn {
   shortenUrl: (url: string) => Promise<ShortenUrlResponse | null>;

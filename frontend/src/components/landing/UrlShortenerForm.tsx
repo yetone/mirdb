@@ -6,9 +6,10 @@
  * Handles input validation, loading states, and error display.
  */
 
-import { useState, FormEvent, KeyboardEvent } from 'react';
+import { useState } from 'react';
+import type { FormEvent, KeyboardEvent } from 'react';
 import { HERO_CONTENT } from '../../constants/landingContent';
-import { ShortenUrlResponse } from '../../types/landing';
+import type { ShortenUrlResponse } from '../../types/landing';
 
 export interface UrlShortenerFormProps {
   onSubmit: (url: string) => Promise<ShortenUrlResponse | null>;

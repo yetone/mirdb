@@ -5,7 +5,7 @@
  * Validation functions for URL input.
  */
 
-import { ValidationResult } from '../types/landing';
+import type { ValidationResult } from '../types/landing';
 import { ERROR_MESSAGES } from '../constants/landingContent';
 
 /**

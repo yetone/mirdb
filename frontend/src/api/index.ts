@@ -5,8 +5,9 @@
  * for interacting with the backend.
  */
 
-import axios, { AxiosError, AxiosInstance } from 'axios';
-import { ShortenUrlRequest, ShortenUrlResponse, ApiError } from '../types/landing';
+import axios, { AxiosError } from 'axios';
+import type { AxiosInstance } from 'axios';
+import type { ShortenUrlRequest, ShortenUrlResponse, ApiError } from '../types/landing';
 
 // API base URL - can be configured via environment variables
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
