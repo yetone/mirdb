@@ -12,6 +12,7 @@ import { HERO_CONTENT } from '../../constants/landingContent';
 import { useUrlShortener } from '../../hooks/useUrlShortener';
 import { UrlShortenerForm } from './UrlShortenerForm';
 import { ShortUrlResult } from './ShortUrlResult';
+import { RegistrationPrompt } from './RegistrationPrompt';
 
 /**
  * Main hero section component for the landing page
@@ -46,6 +47,7 @@ export function HeroSection() {
         {result && (
           <div className="animate-fade-in" data-testid="result-container">
             <ShortUrlResult shortUrl={result.short_url} />
+            <RegistrationPrompt />
           </div>
         )}
       </div>

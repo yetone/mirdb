@@ -6,8 +6,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { BrowserRouter } from 'react-router-dom';
 import { HeroSection } from '../../../src/components/landing/HeroSection';
 import { HERO_CONTENT } from '../../../src/constants/landingContent';
+
+// Wrapper component for router context (needed for RegistrationPrompt Link component)
+function renderWithRouter(ui: React.ReactElement) {
+  return render(<BrowserRouter>{ui}</BrowserRouter>);
+}
 
 // Mock clipboard API
 const mockClipboard = {
@@ -23,7 +29,7 @@ describe('HeroSection', () => {
 
   describe('Initial render', () => {
     it('should render headline and tagline', () => {
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
         HERO_CONTENT.headline
@@ -32,7 +38,7 @@ describe('HeroSection', () => {
     });
 
     it('should render URL input with proper placeholder and accessible attributes', () => {
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const input = screen.getByTestId('url-input');
       expect(input).toBeInTheDocument();
@@ -41,7 +47,7 @@ describe('HeroSection', () => {
     });
 
     it('should render shorten button', () => {
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const button = screen.getByTestId('shorten-button');
       expect(button).toBeInTheDocument();
@@ -49,7 +55,7 @@ describe('HeroSection', () => {
     });
 
     it('should not show result container initially', () => {
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       expect(screen.queryByTestId('result-container')).not.toBeInTheDocument();
     });
@@ -58,7 +64,7 @@ describe('HeroSection', () => {
   describe('Form submission', () => {
     it('should submit form and show short URL on success', async () => {
       const user = userEvent.setup();
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const input = screen.getByTestId('url-input');
       const button = screen.getByTestId('shorten-button');
@@ -77,7 +83,7 @@ describe('HeroSection', () => {
 
     it('should submit form when Enter key is pressed', async () => {
       const user = userEvent.setup();
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const input = screen.getByTestId('url-input');
 
@@ -90,7 +96,7 @@ describe('HeroSection', () => {
 
     it('should show loading state during submission', async () => {
       const user = userEvent.setup();
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const input = screen.getByTestId('url-input');
       const button = screen.getByTestId('shorten-button');
@@ -111,7 +117,7 @@ describe('HeroSection', () => {
 
     it('should show error when submitting empty URL', async () => {
       const user = userEvent.setup();
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const button = screen.getByTestId('shorten-button');
 
@@ -127,7 +133,7 @@ describe('HeroSection', () => {
   describe('Copy functionality', () => {
     it('should copy URL to clipboard when copy button is clicked', async () => {
       const user = userEvent.setup();
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const input = screen.getByTestId('url-input');
       const submitButton = screen.getByTestId('shorten-button');
@@ -162,7 +168,7 @@ describe('HeroSection', () => {
 
     it('should show visual confirmation after copying', async () => {
       const user = userEvent.setup();
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const input = screen.getByTestId('url-input');
       const submitButton = screen.getByTestId('shorten-button');
@@ -189,7 +195,7 @@ describe('HeroSection', () => {
 
   describe('Accessibility', () => {
     it('should have proper ARIA labels on interactive elements', () => {
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const input = screen.getByTestId('url-input');
       expect(input).toHaveAttribute('aria-label');
@@ -199,7 +205,7 @@ describe('HeroSection', () => {
     });
 
     it('should have proper section labeling', () => {
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       // Section is labeled by the headline via aria-labelledby
       const section = screen.getByRole('region', { name: /shorten urls/i });
@@ -208,7 +214,7 @@ describe('HeroSection', () => {
 
     it('should mark error state with aria-invalid', async () => {
       const user = userEvent.setup();
-      render(<HeroSection />);
+      renderWithRouter(<HeroSection />);
 
       const button = screen.getByTestId('shorten-button');
       await user.click(button);

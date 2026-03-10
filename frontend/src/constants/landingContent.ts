@@ -75,6 +75,11 @@ export const FOOTER_CONTENT = {
   ],
 };
 
+export const REGISTRATION_PROMPT_CONTENT = {
+  message: "Create an account to track clicks and view detailed analytics",
+  buttonText: "Sign Up",
+};
+
 export const ERROR_MESSAGES = {
   emptyUrl: "Please enter a URL",
   invalidUrl: "Please enter a valid URL",
