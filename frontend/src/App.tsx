@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
-import { HeroSection, HowItWorksSection } from './components/landing';
+import { HeroSection, FeaturesSection, HowItWorksSection } from './components/landing';
 import './index.css';
 
 function HomePage() {
   return (
     <main id="main-content" className="min-h-screen">
       <HeroSection />
+      <FeaturesSection />
       <HowItWorksSection />
       {/* Add more scrollable content for sticky test */}
       <div className="h-[200vh]" />
