@@ -5,7 +5,7 @@
  * Individual step card with number, icon, and description.
  */
 
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export interface StepCardProps {
   number: number;

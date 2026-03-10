@@ -1,16 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
+import { HeroSection, HowItWorksSection } from './components/landing';
 import './index.css';
 
 function HomePage() {
   return (
-    <main id="main-content" className="min-h-screen p-8">
-      <div className="container mx-auto">
-        <h1 className="text-4xl font-bold mb-4">URL Shortener</h1>
-        <p className="text-lg">Shorten URLs, Track Performance</p>
-        {/* Add more scrollable content for sticky test */}
-        <div className="h-[200vh]" />
-      </div>
+    <main id="main-content" className="min-h-screen">
+      <HeroSection />
+      <HowItWorksSection />
     </main>
   );
 }

@@ -10,6 +10,7 @@
  * - Vertical stack on mobile
  */
 
+import type { ReactNode } from 'react';
 import { HOW_IT_WORKS_CONTENT } from '../../constants/landingContent';
 import { StepCard } from './StepCard';
 
@@ -72,7 +73,7 @@ function ChartIcon() {
 }
 
 // Map step numbers to icons
-const stepIcons: Record<number, JSX.Element> = {
+const stepIcons: Record<number, ReactNode> = {
   1: <ClipboardIcon />,
   2: <LinkIcon />,
   3: <ChartIcon />,
