@@ -12,5 +12,5 @@ export { FeaturesSection } from './FeaturesSection';
 export { FeatureCard } from './FeatureCard';
 export { HowItWorksSection } from './HowItWorksSection';
 export { StepCard } from './StepCard';
-// export { CTASection } from './CTASection';
+export { CTASection } from './CTASection';
 // export { Footer } from './Footer';

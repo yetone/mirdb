@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
-import { HeroSection, FeaturesSection, HowItWorksSection } from './components/landing';
+import { HeroSection, FeaturesSection, HowItWorksSection, CTASection } from './components/landing';
 import './index.css';
 
 function HomePage() {
@@ -9,6 +9,7 @@ function HomePage() {
       <HeroSection />
       <FeaturesSection />
       <HowItWorksSection />
+      <CTASection />
       {/* Add more scrollable content for sticky test */}
       <div className="h-[200vh]" />
     </main>
