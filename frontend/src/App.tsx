@@ -8,6 +8,8 @@ function HomePage() {
     <main id="main-content" className="min-h-screen">
       <HeroSection />
       <HowItWorksSection />
+      {/* Add more scrollable content for sticky test */}
+      <div className="h-[200vh]" />
     </main>
   );
 }
