@@ -1,19 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
-import { HeroSection, FeaturesSection, HowItWorksSection, CTASection, Footer } from './components/landing';
+import Home from './pages/Home';
 import './index.css';
-
-function HomePage() {
-  return (
-    <main id="main-content" className="min-h-screen">
-      <HeroSection />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <CTASection />
-      <Footer />
-    </main>
-  );
-}
 
 function LoginPage() {
   return (
@@ -39,11 +27,28 @@ function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-base-100">
-        <Navbar />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          {/* Home page has its own semantic structure with header, main, footer */}
+          <Route path="/" element={<Home />} />
+          {/* Other pages use shared Navbar layout */}
+          <Route
+            path="/login"
+            element={
+              <>
+                <Navbar />
+                <LoginPage />
+              </>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <>
+                <Navbar />
+                <RegisterPage />
+              </>
+            }
+          />
         </Routes>
       </div>
     </BrowserRouter>
