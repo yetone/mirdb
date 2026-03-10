@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Navbar } from './components/Navbar';
+import './index.css';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function HomePage() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main id="main-content" className="min-h-screen p-8">
+      <div className="container mx-auto">
+        <h1 className="text-4xl font-bold mb-4">URL Shortener</h1>
+        <p className="text-lg">Shorten URLs, Track Performance</p>
+        {/* Add more scrollable content for sticky test */}
+        <div className="h-[200vh]" />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </main>
+  );
 }
 
-export default App
+function LoginPage() {
+  return (
+    <main className="min-h-screen p-8">
+      <div className="container mx-auto">
+        <h1 className="text-4xl font-bold">Login</h1>
+      </div>
+    </main>
+  );
+}
+
+function RegisterPage() {
+  return (
+    <main className="min-h-screen p-8">
+      <div className="container mx-auto">
+        <h1 className="text-4xl font-bold">Register</h1>
+      </div>
+    </main>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen bg-base-100">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
+  );
+}
+
+export default App;
