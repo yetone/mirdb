@@ -5,7 +5,9 @@
  * for clean imports throughout the application.
  */
 
-// export { HeroSection } from './HeroSection';
+export { HeroSection } from './HeroSection';
+export { UrlShortenerForm } from './UrlShortenerForm';
+export { ShortUrlResult } from './ShortUrlResult';
 // export { FeaturesSection } from './FeaturesSection';
 // export { HowItWorksSection } from './HowItWorksSection';
 // export { CTASection } from './CTASection';
