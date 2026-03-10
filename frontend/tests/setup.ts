@@ -17,6 +17,39 @@ Object.defineProperty(window, 'matchMedia', {
   }),
 });
 
+// Mock IntersectionObserver for Framer Motion viewport animations
+class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | Document | null = null;
+  readonly rootMargin: string = '';
+  readonly thresholds: readonly number[] = [];
+
+  constructor(callback: IntersectionObserverCallback) {
+    // Immediately call callback with all entries as intersecting
+    setTimeout(() => {
+      callback([], this);
+    }, 0);
+  }
+
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
+}
+
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: MockIntersectionObserver,
+});
+
+Object.defineProperty(global, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: MockIntersectionObserver,
+});
+
 // Start server before all tests
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 

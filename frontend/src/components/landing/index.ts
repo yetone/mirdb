@@ -8,7 +8,8 @@
 export { HeroSection } from './HeroSection';
 export { UrlShortenerForm } from './UrlShortenerForm';
 export { ShortUrlResult } from './ShortUrlResult';
-// export { FeaturesSection } from './FeaturesSection';
+export { FeaturesSection } from './FeaturesSection';
+export { FeatureCard } from './FeatureCard';
 export { HowItWorksSection } from './HowItWorksSection';
 export { StepCard } from './StepCard';
 // export { CTASection } from './CTASection';
