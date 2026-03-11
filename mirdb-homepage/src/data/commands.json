@@ -1,0 +1,79 @@
+{
+  "commands": [
+    {
+      "name": "SET",
+      "syntax": "set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\\r\\n&lt;data&gt;\\r\\n",
+      "description": "Store a key-value pair with optional expiration time and flags"
+    },
+    {
+      "name": "GET",
+      "syntax": "get &lt;key&gt;*\\r\\n",
+      "description": "Retrieve the value for one or more keys",
+      "response": "VALUE &lt;key&gt; &lt;flags&gt; &lt;bytes&gt;\\r\\n&lt;data&gt;\\r\\nEND\\r\\n"
+    },
+    {
+      "name": "DELETE",
+      "syntax": "delete &lt;key&gt; [noreply]\\r\\n",
+      "description": "Remove a key-value pair from the store"
+    },
+    {
+      "name": "ADD",
+      "syntax": "add &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\\r\\n&lt;data&gt;\\r\\n",
+      "description": "Store data only if the key does not already exist"
+    },
+    {
+      "name": "REPLACE",
+      "syntax": "replace &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\\r\\n&lt;data&gt;\\r\\n",
+      "description": "Store data only if the key already exists"
+    },
+    {
+      "name": "APPEND",
+      "syntax": "append &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\\r\\n&lt;data&gt;\\r\\n",
+      "description": "Append data to an existing key's value"
+    },
+    {
+      "name": "PREPEND",
+      "syntax": "prepend &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\\r\\n&lt;data&gt;\\r\\n",
+      "description": "Prepend data to an existing key's value"
+    },
+    {
+      "name": "GETS",
+      "syntax": "gets &lt;key&gt;*\\r\\n",
+      "description": "Retrieve values with CAS token for check-and-set operations"
+    }
+  ],
+  "responseCodes": [
+    {
+      "code": "STORED",
+      "description": "Data stored successfully"
+    },
+    {
+      "code": "NOT_STORED",
+      "description": "Data not stored (condition not met for add/replace)"
+    },
+    {
+      "code": "EXISTS",
+      "description": "CAS check failed, item has been modified"
+    },
+    {
+      "code": "NOT_FOUND",
+      "description": "Key not found (for delete, replace, append, prepend)"
+    },
+    {
+      "code": "ERROR",
+      "description": "Unknown command or syntax error"
+    },
+    {
+      "code": "DELETED",
+      "description": "Key was successfully deleted"
+    },
+    {
+      "code": "VALUE",
+      "description": "Response header for GET/GETS containing key data"
+    },
+    {
+      "code": "END",
+      "description": "End of GET/GETS response indicating no more data"
+    }
+  ]
+}
