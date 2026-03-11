@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="90" fill="url(#logoGradient)"/>
+  <path d="M60 70 L100 50 L140 70 L140 130 L100 150 L60 130 Z" fill="white" opacity="0.9"/>
+  <path d="M60 70 L100 90 L140 70" stroke="white" stroke-width="2" fill="none"/>
+  <path d="M100 90 L100 150" stroke="white" stroke-width="2" fill="none"/>
+  <text x="100" y="115" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1d4ed8" text-anchor="middle">DB</text>
+</svg>

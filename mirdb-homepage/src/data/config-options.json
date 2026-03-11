@@ -1,0 +1,42 @@
+[
+  {
+    "id": "memtable-max-size",
+    "name": "memtable_max_size",
+    "default": "4MB",
+    "description": "Maximum size of in-memory memtable before flush to disk",
+    "tuning": "Increase for better write performance and reduced flush frequency. Decrease for lower memory usage and faster recovery times.",
+    "impact": "write_performance"
+  },
+  {
+    "id": "sstable-max-size",
+    "name": "sstable_max_size",
+    "default": "100MB",
+    "description": "Maximum size of SSTable files on disk",
+    "tuning": "Larger SSTables reduce file count and improve read performance for large datasets. Smaller SSTables speed up compaction and recovery.",
+    "impact": "storage_efficiency"
+  },
+  {
+    "id": "max-levels",
+    "name": "max_levels",
+    "default": "7",
+    "description": "Maximum number of levels in the LSM tree",
+    "tuning": "More levels allow for larger datasets with efficient storage. Fewer levels reduce read amplification but increase compaction frequency.",
+    "impact": "read_write_balance"
+  },
+  {
+    "id": "block-size",
+    "name": "block_size",
+    "default": "4KB",
+    "description": "Size of data blocks within SSTable files",
+    "tuning": "Larger blocks improve sequential read performance. Smaller blocks reduce read amplification for point queries.",
+    "impact": "read_performance"
+  },
+  {
+    "id": "l0-compaction-trigger",
+    "name": "l0_compaction_trigger",
+    "default": "4",
+    "description": "Number of Level 0 files before triggering compaction",
+    "tuning": "Higher values allow more files before compaction, improving write throughput. Lower values reduce read amplification at the cost of more frequent compaction.",
+    "impact": "compaction_frequency"
+  }
+]
