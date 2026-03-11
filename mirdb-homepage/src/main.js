@@ -7,6 +7,7 @@ import { InteractiveDemo } from './components/InteractiveDemo.js'
 import { QuickStart } from './components/QuickStart.js'
 import { ProtocolDocs } from './components/ProtocolDocs.js'
 import { ArchitectureOverview } from './components/ArchitectureOverview.js'
+import { PerformanceInfo } from './components/PerformanceInfo.js'
 import { Footer } from './components/Footer.js'
 import { initCopyButtons } from './components/CopyButton.js'
 
@@ -46,6 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const architectureSection = document.getElementById('architecture')
   if (architectureSection) {
     architectureSection.innerHTML = ArchitectureOverview()
+  }
+
+  // Render Performance Information
+  const performanceSection = document.getElementById('performance')
+  if (performanceSection) {
+    performanceSection.innerHTML = PerformanceInfo()
   }
 
   // Render Footer
