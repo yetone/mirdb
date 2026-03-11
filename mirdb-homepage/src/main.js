@@ -4,9 +4,10 @@
 import { Hero } from './components/Hero.js'
 import { FeatureShowcase } from './components/FeatureShowcase.js'
 import { InteractiveDemo } from './components/InteractiveDemo.js'
+import { QuickStart } from './components/QuickStart.js'
 import { ProtocolDocs } from './components/ProtocolDocs.js'
-import { initCopyButtons } from './components/CopyButton.js'
 import { ArchitectureOverview } from './components/ArchitectureOverview.js'
+import { initCopyButtons } from './components/CopyButton.js'
 
 // Initialize components when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
@@ -26,6 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const demoSection = document.getElementById('demo')
   if (demoSection) {
     demoSection.innerHTML = InteractiveDemo()
+  }
+
+  // Render Quick Start Guide
+  const quickstartSection = document.getElementById('quickstart')
+  if (quickstartSection) {
+    quickstartSection.innerHTML = QuickStart()
   }
 
   // Render Protocol Documentation
