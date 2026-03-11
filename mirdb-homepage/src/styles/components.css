@@ -1,0 +1,36 @@
+/* Component-specific styles */
+
+/* Feature cards */
+.feature-card {
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6;
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  @apply w-12 h-12 text-primary-600 dark:text-primary-400 mb-4;
+}
+
+.feature-title {
+  @apply text-xl font-semibold text-gray-900 dark:text-white mb-2;
+}
+
+.feature-description {
+  @apply text-gray-600 dark:text-gray-300 text-sm leading-relaxed;
+}
+
+/* Code blocks */
+.code-block {
+  @apply bg-gray-900 text-gray-100 rounded-lg p-4 font-mono text-sm overflow-x-auto;
+}
+
+/* Section headers */
+.section-title {
+  @apply text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-4;
+}
+
+.section-subtitle {
+  @apply text-lg text-center text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto;
+}
