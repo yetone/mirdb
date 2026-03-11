@@ -1,0 +1,79 @@
+<svg
+  viewBox="0 0 800 600"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="LSM Tree Architecture Diagram showing data flow from Memtable through Immutable Memtable to SSTables across multiple levels"
+>
+  <title>LSM Tree Architecture</title>
+  <desc>A diagram showing the Log-Structured Merge Tree architecture used by MirDB. Data flows from the active Memtable (in-memory skip list) to Immutable Memtables, then to Level 0 SSTables, and finally compacted into Level N SSTables on disk.</desc>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="transparent"/>
+
+  <!-- Title -->
+  <text x="400" y="40" font-family="system-ui, sans-serif" font-size="24" font-weight="bold" fill="currentColor" text-anchor="middle">LSM Tree Architecture</text>
+
+  <!-- Write Request Arrow -->
+  <path d="M400 70 L400 95" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="400" y="65" font-family="system-ui, sans-serif" font-size="12" fill="currentColor" text-anchor="middle" opacity="0.8">Write Request</text>
+
+  <!-- Memtable Box -->
+  <rect x="275" y="100" width="250" height="70" rx="8" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="2"/>
+  <text x="400" y="130" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="currentColor" text-anchor="middle">Memtable</text>
+  <text x="400" y="152" font-family="system-ui, sans-serif" font-size="12" fill="currentColor" text-anchor="middle" opacity="0.8">(Active Skip List)</text>
+
+  <!-- Arrow to Immutable -->
+  <path d="M400 170 L400 205" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="470" y="192" font-family="system-ui, sans-serif" font-size="11" fill="currentColor" opacity="0.7">when full</text>
+
+  <!-- Immutable Memtable Box -->
+  <rect x="275" y="210" width="250" height="70" rx="8" fill="#8b5cf6" fill-opacity="0.2" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="400" y="240" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="currentColor" text-anchor="middle">Immutable Memtable</text>
+  <text x="400" y="262" font-family="system-ui, sans-serif" font-size="12" fill="currentColor" text-anchor="middle" opacity="0.8">(Read-only, awaiting flush)</text>
+
+  <!-- Arrow to Level 0 -->
+  <path d="M400 280 L400 315" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="470" y="302" font-family="system-ui, sans-serif" font-size="11" fill="currentColor" opacity="0.7">minor compaction</text>
+
+  <!-- Disk Storage Label -->
+  <rect x="80" y="320" width="640" height="250" rx="12" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="120" y="345" font-family="system-ui, sans-serif" font-size="12" fill="currentColor" opacity="0.6">On Disk (SSTables)</text>
+
+  <!-- Level 0 SSTables -->
+  <rect x="120" y="360" width="560" height="60" rx="6" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-width="2"/>
+  <text x="400" y="385" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="currentColor" text-anchor="middle">Level 0 SSTables</text>
+  <text x="400" y="405" font-family="system-ui, sans-serif" font-size="11" fill="currentColor" text-anchor="middle" opacity="0.8">(Recently flushed, may overlap)</text>
+
+  <!-- Level 0 SSTable blocks -->
+  <rect x="150" y="365" width="80" height="25" rx="4" fill="#10b981" fill-opacity="0.4" stroke="#10b981"/>
+  <rect x="250" y="365" width="80" height="25" rx="4" fill="#10b981" fill-opacity="0.4" stroke="#10b981"/>
+  <rect x="350" y="365" width="80" height="25" rx="4" fill="#10b981" fill-opacity="0.4" stroke="#10b981"/>
+  <rect x="450" y="365" width="80" height="25" rx="4" fill="#10b981" fill-opacity="0.4" stroke="#10b981"/>
+  <rect x="550" y="365" width="80" height="25" rx="4" fill="#10b981" fill-opacity="0.4" stroke="#10b981"/>
+
+  <!-- Arrow to Level 1 -->
+  <path d="M400 420 L400 450" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="470" y="440" font-family="system-ui, sans-serif" font-size="11" fill="currentColor" opacity="0.7">major compaction</text>
+
+  <!-- Level 1+ SSTables -->
+  <rect x="120" y="455" width="560" height="60" rx="6" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="2"/>
+  <text x="400" y="480" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="currentColor" text-anchor="middle">Level 1+ SSTables</text>
+  <text x="400" y="500" font-family="system-ui, sans-serif" font-size="11" fill="currentColor" text-anchor="middle" opacity="0.8">(Sorted, non-overlapping within level)</text>
+
+  <!-- Level 1 SSTable blocks -->
+  <rect x="130" y="460" width="160" height="25" rx="4" fill="#f59e0b" fill-opacity="0.4" stroke="#f59e0b"/>
+  <rect x="310" y="460" width="180" height="25" rx="4" fill="#f59e0b" fill-opacity="0.4" stroke="#f59e0b"/>
+  <rect x="510" y="460" width="160" height="25" rx="4" fill="#f59e0b" fill-opacity="0.4" stroke="#f59e0b"/>
+
+  <!-- Arrow to Level N -->
+  <path d="M400 515 L400 535" stroke="currentColor" stroke-width="2" stroke-dasharray="4 2"/>
+  <text x="400" y="555" font-family="system-ui, sans-serif" font-size="12" fill="currentColor" text-anchor="middle" opacity="0.6">... Level N ...</text>
+
+  <!-- Arrowhead marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="currentColor"/>
+    </marker>
+  </defs>
+</svg>
