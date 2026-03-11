@@ -1,0 +1,386 @@
+/**
+ * Dark Mode Styles
+ * Owner: Scenario 15 - Dark Mode Support
+ *
+ * Contents:
+ * - Dark mode color scheme overrides
+ * - prefers-color-scheme: dark media query styles
+ * - .dark class-based theme switching
+ * - Code block dark theme
+ * - Diagram dark mode adjustments
+ */
+
+/* ==========================================================================
+   CSS Custom Properties for Dark Mode
+   ========================================================================== */
+
+/* Light mode defaults are in globals.css, these are dark mode overrides */
+.dark {
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Automatic Dark Mode via Media Query
+   For users who prefer system preference without JavaScript
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --color-background: #111827;
+    --color-surface: #1f2937;
+    --color-text: #f9fafb;
+    --color-text-muted: #9ca3af;
+  }
+}
+
+/* ==========================================================================
+   Dark Mode Transitions
+   Smooth transitions when switching between themes
+   ========================================================================== */
+html {
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+html.dark body,
+html.dark main,
+html.dark section,
+html.dark header,
+html.dark footer,
+html.dark nav {
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* ==========================================================================
+   Code Block Dark Theme
+   Enhanced syntax highlighting for dark backgrounds
+   ========================================================================== */
+
+/* Code blocks already have dark background by default in components.css */
+/* These are additional enhancements for better dark mode compatibility */
+
+.dark .code-block {
+  @apply bg-gray-900 border border-gray-700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Syntax highlighting - optimized for dark mode readability */
+.dark .syntax-keyword {
+  @apply text-blue-400;
+}
+
+.dark .syntax-key {
+  @apply text-green-400;
+}
+
+.dark .syntax-number {
+  @apply text-yellow-400;
+}
+
+.dark .syntax-string {
+  @apply text-amber-300;
+}
+
+.dark .syntax-comment {
+  @apply text-gray-500 italic;
+}
+
+.dark .syntax-success {
+  @apply text-green-400;
+}
+
+.dark .syntax-error {
+  @apply text-red-400;
+}
+
+.dark .syntax-response {
+  @apply text-purple-400;
+}
+
+/* Inline code in dark mode */
+.dark code:not(pre code) {
+  @apply bg-gray-800 text-gray-200 border border-gray-700;
+}
+
+/* ==========================================================================
+   Diagram Dark Mode Adjustments
+   Ensures SVG diagrams are visible and readable in dark mode
+   ========================================================================== */
+
+/* LSM Tree diagram and other SVGs */
+.dark .diagram-container {
+  @apply bg-gray-800/50;
+}
+
+/* SVG diagrams should inherit text color */
+.dark svg[data-testid="lsm-tree-diagram"] {
+  color: #f9fafb;
+}
+
+/* Ensure diagram text is visible */
+.dark .diagram-container svg text {
+  fill: currentColor;
+}
+
+/* Diagram boxes with transparency */
+.dark .diagram-container svg rect[fill-opacity] {
+  /* Boxes with fill-opacity are already theme-agnostic */
+}
+
+/* Arrowheads in diagrams */
+.dark .diagram-container svg marker polygon {
+  fill: currentColor;
+}
+
+/* ==========================================================================
+   Card and Surface Dark Mode Styles
+   ========================================================================== */
+
+.dark .card {
+  @apply bg-gray-800 border border-gray-700;
+}
+
+.dark .feature-card {
+  @apply bg-gray-800 border border-gray-700;
+}
+
+.dark .explanation-card {
+  @apply bg-gray-800 border border-gray-700;
+}
+
+/* Card hover states in dark mode */
+.dark .card:hover,
+.dark .feature-card:hover {
+  @apply bg-gray-750 border-gray-600;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   Button Dark Mode Styles
+   ========================================================================== */
+
+/* Primary button dark mode */
+.dark .btn-primary {
+  @apply bg-primary-600 hover:bg-primary-500 text-white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.dark .btn-primary:hover {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Secondary button dark mode */
+.dark .btn-secondary {
+  @apply bg-gray-700 hover:bg-gray-600 text-white border-gray-600;
+}
+
+/* Copy button dark mode states */
+.dark .copy-button {
+  @apply text-gray-400 hover:text-gray-200;
+}
+
+.dark .copy-button.copy-success {
+  @apply text-green-400;
+}
+
+.dark .copy-button.copy-error {
+  @apply text-red-400;
+}
+
+/* ==========================================================================
+   Form Elements Dark Mode
+   ========================================================================== */
+
+.dark input,
+.dark select,
+.dark textarea {
+  @apply bg-gray-800 border-gray-600 text-white placeholder-gray-400;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  @apply border-primary-500 ring-primary-500/20;
+}
+
+/* ==========================================================================
+   Scrollbar Dark Mode
+   ========================================================================== */
+
+.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* ==========================================================================
+   Table Dark Mode Styles
+   ========================================================================== */
+
+.dark table {
+  @apply border-gray-700;
+}
+
+.dark th {
+  @apply bg-gray-800 text-gray-200 border-gray-700;
+}
+
+.dark td {
+  @apply border-gray-700 text-gray-300;
+}
+
+.dark tr:hover {
+  @apply bg-gray-800/50;
+}
+
+/* ==========================================================================
+   Selection Dark Mode
+   ========================================================================== */
+
+.dark ::selection {
+  background: rgba(59, 130, 246, 0.4);
+  color: #f9fafb;
+}
+
+/* ==========================================================================
+   Focus States Dark Mode
+   ========================================================================== */
+
+.dark *:focus-visible {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-gray-900;
+}
+
+/* ==========================================================================
+   Link Dark Mode Styles
+   ========================================================================== */
+
+.dark a:not(.btn-primary):not(.btn-secondary) {
+  @apply text-primary-400 hover:text-primary-300;
+}
+
+/* ==========================================================================
+   Divider/Border Dark Mode
+   ========================================================================== */
+
+.dark hr {
+  @apply border-gray-700;
+}
+
+.dark .border-t,
+.dark .border-b {
+  @apply border-gray-700;
+}
+
+/* ==========================================================================
+   Badge/Tag Dark Mode
+   ========================================================================== */
+
+.dark .badge {
+  @apply bg-gray-700 text-gray-200;
+}
+
+.dark .badge-primary {
+  @apply bg-primary-900/50 text-primary-300 border border-primary-700;
+}
+
+.dark .badge-success {
+  @apply bg-green-900/50 text-green-300 border border-green-700;
+}
+
+/* ==========================================================================
+   Icon Dark Mode Adjustments
+   ========================================================================== */
+
+.dark .feature-icon {
+  @apply text-primary-400;
+}
+
+/* Green check icons in hero */
+.dark svg.text-green-500 {
+  @apply text-green-400;
+}
+
+/* ==========================================================================
+   Navigation Dark Mode
+   ========================================================================== */
+
+.dark nav {
+  @apply bg-gray-900/95 backdrop-blur-sm border-gray-800;
+}
+
+.dark nav a {
+  @apply text-gray-300 hover:text-white;
+}
+
+.dark nav a.active {
+  @apply text-primary-400;
+}
+
+/* Mobile menu dark mode */
+.dark .mobile-menu {
+  @apply bg-gray-900 border-gray-700;
+}
+
+/* ==========================================================================
+   Footer Dark Mode
+   ========================================================================== */
+
+.dark footer {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark footer a {
+  @apply text-gray-400 hover:text-white;
+}
+
+/* ==========================================================================
+   Loading/Skeleton States Dark Mode
+   ========================================================================== */
+
+.dark .skeleton {
+  @apply bg-gray-700;
+  background: linear-gradient(
+    90deg,
+    #374151 25%,
+    #4b5563 50%,
+    #374151 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ==========================================================================
+   Utility: Force Light Mode
+   Apply .light class to override dark mode
+   ========================================================================== */
+
+.light,
+.light * {
+  color-scheme: light;
+}
+
+.light {
+  --color-background: #ffffff;
+  --color-surface: #f9fafb;
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+}
