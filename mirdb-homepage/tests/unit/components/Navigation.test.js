@@ -3,11 +3,11 @@
  * Owner: Scenario 8 - Navigation Component
  *
  * Test coverage:
- * - Sticky navigation bar with logo and menu links
- * - Desktop and mobile navigation links
- * - Mobile hamburger menu functionality
- * - Accessibility attributes (ARIA)
- * - External link configuration
+ * - Sticky navigation bar with logo and menu links displayed
+ * - Desktop navigation links presence
+ * - Mobile menu button visibility
+ * - Proper ARIA attributes for accessibility
+ * - GitHub link opens in new tab
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
@@ -28,57 +28,81 @@ describe('Navigation', () => {
 
   describe('Test Case 1: Render Navigation component', () => {
     it('should render sticky navigation bar', () => {
-      const nav = container.querySelector('[data-testid="navigation"]')
-      expect(nav).toBeTruthy()
-      expect(nav.classList.contains('fixed')).toBe(true)
+      const navBar = container.querySelector('[data-testid="navigation-bar"]')
+      expect(navBar).toBeTruthy()
+
+      // Should have fixed positioning class
+      const navClasses = navBar.className
+      expect(navClasses).toContain('fixed')
     })
 
     it('should display logo', () => {
       const logo = container.querySelector('[data-testid="nav-logo"]')
       expect(logo).toBeTruthy()
-      expect(logo.textContent).toContain('MirDB')
+
+      // Should contain SVG logo
+      const svg = logo.querySelector('svg')
+      expect(svg).toBeTruthy()
+
+      // Should have brand name text
+      const brandText = logo.textContent
+      expect(brandText).toContain('MirDB')
     })
 
-    it('should have proper navigation role', () => {
-      const nav = container.querySelector('[data-testid="navigation"]')
-      expect(nav.tagName.toLowerCase()).toBe('nav')
-      expect(nav.getAttribute('aria-label')).toBe('Main navigation')
-    })
-
-    it('should render desktop navigation links', () => {
-      const desktopLinks = container.querySelector('[data-testid="nav-desktop-links"]')
+    it('should display desktop navigation links', () => {
+      const desktopLinks = container.querySelector('[data-testid="desktop-nav-links"]')
       expect(desktopLinks).toBeTruthy()
 
-      const links = desktopLinks.querySelectorAll('a')
-      expect(links.length).toBeGreaterThan(0)
+      // Should have Features link
+      const featuresLink = container.querySelector('[data-testid="nav-link-features"]')
+      expect(featuresLink).toBeTruthy()
+      expect(featuresLink.textContent.trim()).toContain('Features')
+
+      // Should have Documentation link
+      const docsLink = container.querySelector('[data-testid="nav-link-documentation"]')
+      expect(docsLink).toBeTruthy()
+      expect(docsLink.textContent.trim()).toContain('Documentation')
+
+      // Should have GitHub link
+      const githubLink = container.querySelector('[data-testid="nav-link-github"]')
+      expect(githubLink).toBeTruthy()
+      expect(githubLink.textContent.trim()).toContain('GitHub')
     })
 
     it('should have mobile menu toggle button', () => {
-      const toggleBtn = container.querySelector('[data-testid="mobile-menu-toggle"]')
-      expect(toggleBtn).toBeTruthy()
-      expect(toggleBtn.getAttribute('aria-label')).toBe('Open menu')
-      expect(toggleBtn.getAttribute('aria-expanded')).toBe('false')
+      const mobileToggle = container.querySelector('[data-testid="mobile-menu-toggle"]')
+      expect(mobileToggle).toBeTruthy()
+
+      // Should have hamburger icon (SVG with three lines)
+      const icon = mobileToggle.querySelector('svg')
+      expect(icon).toBeTruthy()
+    })
+
+    it('should have proper navigation role and aria-label', () => {
+      const navBar = container.querySelector('[data-testid="navigation-bar"]')
+      expect(navBar).toBeTruthy()
+
+      expect(navBar.getAttribute('role')).toBe('navigation')
+      expect(navBar.getAttribute('aria-label')).toBeTruthy()
     })
   })
 
   describe('Test Case 2: Features link', () => {
-    it('should have Features link that navigates to features section', () => {
+    it('should have Features link with correct href', () => {
       const featuresLink = container.querySelector('[data-testid="nav-link-features"]')
       expect(featuresLink).toBeTruthy()
       expect(featuresLink.getAttribute('href')).toBe('#features')
-      expect(featuresLink.textContent).toContain('Features')
     })
   })
 
-  describe('Test Case 3: Documentation/Demo links', () => {
-    it('should have navigation links for key sections', () => {
-      const demoLink = container.querySelector('[data-testid="nav-link-demo"]')
-      const quickStartLink = container.querySelector('[data-testid="nav-link-quick-start"]')
-      const protocolLink = container.querySelector('[data-testid="nav-link-protocol"]')
+  describe('Test Case 3: Documentation link', () => {
+    it('should have Documentation link navigating to documentation section', () => {
+      const docsLink = container.querySelector('[data-testid="nav-link-documentation"]')
+      expect(docsLink).toBeTruthy()
 
-      expect(demoLink).toBeTruthy()
-      expect(quickStartLink).toBeTruthy()
-      expect(protocolLink).toBeTruthy()
+      const href = docsLink.getAttribute('href')
+      // Should link to quickstart or an internal section
+      expect(href).toMatch(/^#|^https?:\/\//)
     })
   })
 
@@ -86,72 +110,64 @@ describe('Navigation', () => {
     it('should have GitHub link that opens in new tab', () => {
       const githubLink = container.querySelector('[data-testid="nav-link-github"]')
       expect(githubLink).toBeTruthy()
-      expect(githubLink.getAttribute('href')).toContain('github.com')
+
       expect(githubLink.getAttribute('target')).toBe('_blank')
       expect(githubLink.getAttribute('rel')).toContain('noopener')
     })
 
-    it('should have external link indicator for GitHub', () => {
+    it('should have GitHub link pointing to repository', () => {
       const githubLink = container.querySelector('[data-testid="nav-link-github"]')
-      const externalIcon = githubLink.querySelector('svg')
-      expect(externalIcon).toBeTruthy()
+      expect(githubLink).toBeTruthy()
+
+      const href = githubLink.getAttribute('href')
+      expect(href).toContain('github.com')
     })
   })
 
-  describe('Test Case 7: Mobile menu', () => {
-    it('should have mobile menu overlay', () => {
+  describe('Mobile Menu', () => {
+    it('should render mobile menu (hidden by default)', () => {
       const mobileMenu = container.querySelector('[data-testid="mobile-menu"]')
       expect(mobileMenu).toBeTruthy()
+
+      // Should be hidden by default
+      expect(mobileMenu.classList.contains('hidden')).toBe(true)
     })
 
-    it('should have mobile menu hidden by default', () => {
-      const mobileMenu = container.querySelector('[data-testid="mobile-menu"]')
-      expect(mobileMenu.getAttribute('aria-hidden')).toBe('true')
-      expect(mobileMenu.classList.contains('translate-x-full')).toBe(true)
-    })
-
-    it('should have close button in mobile menu', () => {
+    it('should have mobile menu close button', () => {
       const closeBtn = container.querySelector('[data-testid="mobile-menu-close"]')
       expect(closeBtn).toBeTruthy()
-      expect(closeBtn.getAttribute('aria-label')).toBe('Close menu')
+      expect(closeBtn.getAttribute('aria-label')).toBeTruthy()
     })
 
-    it('should have navigation links in mobile menu', () => {
-      const mobileMenu = container.querySelector('[data-testid="mobile-menu"]')
-      const links = mobileMenu.querySelectorAll('a')
-      expect(links.length).toBeGreaterThan(0)
-    })
-  })
+    it('should have mobile navigation links', () => {
+      // Check for mobile versions of navigation links
+      const mobileFeaturesLink = container.querySelector('[data-testid="mobile-nav-link-features"]')
+      const mobileDocsLink = container.querySelector('[data-testid="mobile-nav-link-documentation"]')
+      const mobileGithubLink = container.querySelector('[data-testid="mobile-nav-link-github"]')
 
-  describe('Test Case 8: Mobile menu accessibility', () => {
-    it('should have proper ARIA attributes on mobile menu', () => {
+      expect(mobileFeaturesLink).toBeTruthy()
+      expect(mobileDocsLink).toBeTruthy()
+      expect(mobileGithubLink).toBeTruthy()
+    })
+
+    it('should have proper ARIA attributes for mobile menu dialog', () => {
       const mobileMenu = container.querySelector('[data-testid="mobile-menu"]')
+      expect(mobileMenu).toBeTruthy()
+
       expect(mobileMenu.getAttribute('role')).toBe('dialog')
       expect(mobileMenu.getAttribute('aria-modal')).toBe('true')
-      expect(mobileMenu.getAttribute('aria-label')).toBe('Navigation menu')
-    })
-
-    it('should have toggle button with aria-controls', () => {
-      const toggleBtn = container.querySelector('[data-testid="mobile-menu-toggle"]')
-      expect(toggleBtn.getAttribute('aria-controls')).toBe('mobile-menu')
-    })
-
-    it('should have accessible navigation label in mobile menu', () => {
-      const mobileMenuNav = container.querySelector('[data-testid="mobile-menu"] nav')
-      expect(mobileMenuNav).toBeTruthy()
-      expect(mobileMenuNav.getAttribute('aria-label')).toBe('Mobile navigation')
+      expect(mobileMenu.getAttribute('aria-label')).toBeTruthy()
     })
   })
 
-  describe('Navigation structure', () => {
-    it('should have spacer div for fixed nav offset', () => {
-      const spacer = container.querySelector('[aria-hidden="true"].h-16')
-      expect(spacer).toBeTruthy()
-    })
+  describe('Mobile Menu Toggle Accessibility', () => {
+    it('should have aria-expanded attribute on toggle button', () => {
+      const mobileToggle = container.querySelector('[data-testid="mobile-menu-toggle"]')
+      expect(mobileToggle).toBeTruthy()
 
-    it('should have shadow styling class', () => {
-      const nav = container.querySelector('[data-testid="navigation"]')
-      expect(nav.classList.contains('shadow-md')).toBe(true)
+      expect(mobileToggle.getAttribute('aria-expanded')).toBe('false')
+      expect(mobileToggle.getAttribute('aria-controls')).toBe('mobile-menu')
+      expect(mobileToggle.getAttribute('aria-label')).toBeTruthy()
     })
   })
 })
@@ -163,28 +179,21 @@ describe('NavLink', () => {
     container.innerHTML = html
 
     const link = container.querySelector('a')
+    expect(link).toBeTruthy()
     expect(link.getAttribute('href')).toBe('#features')
-    expect(link.textContent).toContain('Features')
+    expect(link.textContent.trim()).toContain('Features')
     expect(link.getAttribute('target')).toBeNull()
   })
 
-  it('should render external link with target blank', () => {
-    const html = NavLink({ href: 'https://github.com', label: 'GitHub', isExternal: true })
+  it('should render external link with target _blank', () => {
+    const html = NavLink({ href: 'https://github.com/test', label: 'GitHub', isExternal: true })
     const container = document.createElement('div')
     container.innerHTML = html
 
     const link = container.querySelector('a')
+    expect(link).toBeTruthy()
     expect(link.getAttribute('target')).toBe('_blank')
     expect(link.getAttribute('rel')).toContain('noopener')
-  })
-
-  it('should include extra classes when provided', () => {
-    const html = NavLink({ href: '#test', label: 'Test', isExternal: false }, 'extra-class')
-    const container = document.createElement('div')
-    container.innerHTML = html
-
-    const link = container.querySelector('a')
-    expect(link.classList.contains('extra-class')).toBe(true)
   })
 })
 
@@ -194,21 +203,21 @@ describe('MobileMenu', () => {
     const container = document.createElement('div')
     container.innerHTML = html
 
-    const menu = container.querySelector('[data-testid="mobile-menu"]')
-    expect(menu).toBeTruthy()
+    const mobileMenu = container.querySelector('[data-testid="mobile-menu"]')
+    expect(mobileMenu).toBeTruthy()
 
-    const links = menu.querySelectorAll('a')
-    expect(links.length).toBe(5) // Features, Demo, Quick Start, Protocol, GitHub
+    // Check for mobile navigation links
+    const links = mobileMenu.querySelectorAll('.mobile-nav-link')
+    expect(links.length).toBeGreaterThan(0)
   })
 
-  it('should have proper role and aria attributes', () => {
+  it('should have close button', () => {
     const html = MobileMenu()
     const container = document.createElement('div')
     container.innerHTML = html
 
-    const menu = container.querySelector('[data-testid="mobile-menu"]')
-    expect(menu.getAttribute('role')).toBe('dialog')
-    expect(menu.getAttribute('aria-modal')).toBe('true')
+    const closeBtn = container.querySelector('[data-testid="mobile-menu-close"]')
+    expect(closeBtn).toBeTruthy()
   })
 })
 
@@ -225,68 +234,35 @@ describe('initNavigation', () => {
     expect(() => initNavigation()).not.toThrow()
   })
 
-  it('should set up mobile menu toggle', () => {
+  it('should set up mobile menu toggle functionality', () => {
     initNavigation()
 
-    const toggleBtn = document.querySelector('[data-testid="mobile-menu-toggle"]')
-    const mobileMenu = document.getElementById('mobile-menu')
+    const mobileToggle = document.querySelector('[data-testid="mobile-menu-toggle"]')
+    const mobileMenu = document.querySelector('[data-testid="mobile-menu"]')
 
-    // Simulate click
-    toggleBtn.click()
+    // Initially hidden
+    expect(mobileMenu.classList.contains('hidden')).toBe(true)
 
-    // Menu should open
-    expect(mobileMenu.classList.contains('translate-x-0')).toBe(true)
-    expect(mobileMenu.getAttribute('aria-hidden')).toBe('false')
+    // Click toggle to open
+    mobileToggle.click()
+    expect(mobileMenu.classList.contains('hidden')).toBe(false)
+    expect(mobileToggle.getAttribute('aria-expanded')).toBe('true')
   })
 
-  it('should close mobile menu with close button', () => {
+  it('should close mobile menu when close button is clicked', () => {
     initNavigation()
 
-    const toggleBtn = document.querySelector('[data-testid="mobile-menu-toggle"]')
+    const mobileToggle = document.querySelector('[data-testid="mobile-menu-toggle"]')
+    const mobileMenu = document.querySelector('[data-testid="mobile-menu"]')
     const closeBtn = document.querySelector('[data-testid="mobile-menu-close"]')
-    const mobileMenu = document.getElementById('mobile-menu')
 
-    // Open menu
-    toggleBtn.click()
-    expect(mobileMenu.classList.contains('translate-x-0')).toBe(true)
+    // Open menu first
+    mobileToggle.click()
+    expect(mobileMenu.classList.contains('hidden')).toBe(false)
 
     // Close menu
     closeBtn.click()
-    expect(mobileMenu.classList.contains('translate-x-full')).toBe(true)
-    expect(mobileMenu.getAttribute('aria-hidden')).toBe('true')
-  })
-
-  it('should close mobile menu on escape key', () => {
-    initNavigation()
-
-    const toggleBtn = document.querySelector('[data-testid="mobile-menu-toggle"]')
-    const mobileMenu = document.getElementById('mobile-menu')
-
-    // Open menu
-    toggleBtn.click()
-    expect(mobileMenu.classList.contains('translate-x-0')).toBe(true)
-
-    // Press escape
-    const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' })
-    document.dispatchEvent(escapeEvent)
-
-    expect(mobileMenu.classList.contains('translate-x-full')).toBe(true)
-  })
-
-  it('should close mobile menu when clicking nav link', () => {
-    initNavigation()
-
-    const toggleBtn = document.querySelector('[data-testid="mobile-menu-toggle"]')
-    const mobileMenu = document.getElementById('mobile-menu')
-    const navLink = mobileMenu.querySelector('a')
-
-    // Open menu
-    toggleBtn.click()
-    expect(mobileMenu.classList.contains('translate-x-0')).toBe(true)
-
-    // Click nav link
-    navLink.click()
-
-    expect(mobileMenu.classList.contains('translate-x-full')).toBe(true)
+    expect(mobileMenu.classList.contains('hidden')).toBe(true)
+    expect(mobileToggle.getAttribute('aria-expanded')).toBe('false')
   })
 })

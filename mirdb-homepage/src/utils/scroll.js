@@ -2,63 +2,68 @@
  * Scroll Utilities
  * Owner: Scenario 8 - Navigation Component
  *
- * Provides smooth scrolling functionality with accessibility support,
- * fixed header offset handling, and reduced motion preference respect.
+ * Provides smooth scrolling functionality with support for fixed header offset
+ * and reduced motion preferences.
  */
 
 /**
- * Get the height of the fixed navigation bar for offset calculations
- * @returns {number} Height in pixels of the navigation bar
+ * Gets the height of the fixed navigation header for offset calculations
+ * @returns {number} The height of the navigation header in pixels
  */
-export function getNavbarHeight() {
-  const navbar = document.querySelector('[data-testid="navigation"]')
-  return navbar ? navbar.offsetHeight : 0
+export function getHeaderOffset() {
+  const nav = document.querySelector('[data-testid="navigation-bar"]')
+  if (nav) {
+    return nav.offsetHeight
+  }
+  return 0
 }
 
 /**
- * Smooth scroll to an element by ID
- * Respects reduced motion preference and handles fixed header offset
- * @param {string} elementId - The ID of the element to scroll to (without #)
- * @returns {boolean} True if scroll was initiated, false if element not found
+ * Checks if the user prefers reduced motion
+ * @returns {boolean} True if user prefers reduced motion
+ */
+export function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+/**
+ * Smooth scrolls to an element by its ID
+ * @param {string} elementId - The ID of the target element (without # prefix)
+ * @returns {void}
  */
 export function smoothScrollTo(elementId) {
-  const id = elementId.startsWith('#') ? elementId.slice(1) : elementId
-  const element = document.getElementById(id)
-
+  const element = document.getElementById(elementId)
   if (!element) {
-    return false
+    return
   }
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const navbarHeight = getNavbarHeight()
+  const headerOffset = getHeaderOffset()
   const elementPosition = element.getBoundingClientRect().top
-  const offsetPosition = elementPosition + window.scrollY - navbarHeight
+  const offsetPosition = elementPosition + window.scrollY - headerOffset
+
+  const behavior = prefersReducedMotion() ? 'auto' : 'smooth'
 
   window.scrollTo({
     top: offsetPosition,
-    behavior: prefersReducedMotion ? 'auto' : 'smooth'
+    behavior: behavior
   })
-
-  return true
 }
 
 /**
- * Get current scroll position
+ * Gets the current scroll position
  * @returns {number} Current vertical scroll position in pixels
  */
 export function getScrollPosition() {
-  return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0
+  return window.scrollY || document.documentElement.scrollTop || 0
 }
 
 /**
- * Check if an element is currently visible in the viewport
- * @param {string} elementId - The ID of the element to check (without #)
- * @returns {boolean} True if element is in view, false otherwise
+ * Checks if an element is currently visible in the viewport
+ * @param {string} elementId - The ID of the element to check
+ * @returns {boolean} True if the element is visible in the viewport
  */
 export function isElementInView(elementId) {
-  const id = elementId.startsWith('#') ? elementId.slice(1) : elementId
-  const element = document.getElementById(id)
-
+  const element = document.getElementById(elementId)
   if (!element) {
     return false
   }
@@ -66,39 +71,33 @@ export function isElementInView(elementId) {
   const rect = element.getBoundingClientRect()
   const windowHeight = window.innerHeight || document.documentElement.clientHeight
 
-  // Element is in view if any part of it is visible
+  // Element is considered in view if any part of it is visible
   return rect.top < windowHeight && rect.bottom > 0
 }
 
 /**
- * Initialize smooth scroll for anchor links
- * Attaches click handlers to all anchor links that point to page sections
+ * Handles navigation link clicks with smooth scrolling
+ * @param {Event} event - The click event
  */
-export function initSmoothScroll() {
-  document.addEventListener('click', (event) => {
-    const anchor = event.target.closest('a[href^="#"]')
-    if (!anchor) return
+export function handleNavLinkClick(event) {
+  const href = event.currentTarget.getAttribute('href')
 
-    const href = anchor.getAttribute('href')
-    if (!href || href === '#') return
+  // Only handle internal anchor links
+  if (href && href.startsWith('#')) {
+    event.preventDefault()
+    const targetId = href.substring(1)
+    smoothScrollTo(targetId)
 
-    const elementId = href.slice(1)
-    const element = document.getElementById(elementId)
-
-    if (element) {
-      event.preventDefault()
-      smoothScrollTo(elementId)
-
-      // Update URL hash without jumping
-      history.pushState(null, '', href)
-    }
-  })
+    // Update URL hash without triggering scroll
+    history.pushState(null, '', href)
+  }
 }
 
 export default {
   smoothScrollTo,
   getScrollPosition,
   isElementInView,
-  getNavbarHeight,
-  initSmoothScroll
+  getHeaderOffset,
+  prefersReducedMotion,
+  handleNavLinkClick
 }
