@@ -7,6 +7,7 @@ import { InteractiveDemo } from './components/InteractiveDemo.js'
 import { QuickStart } from './components/QuickStart.js'
 import { ProtocolDocs } from './components/ProtocolDocs.js'
 import { ArchitectureOverview } from './components/ArchitectureOverview.js'
+import { Footer } from './components/Footer.js'
 import { initCopyButtons } from './components/CopyButton.js'
 
 // Initialize components when DOM is ready
@@ -45,6 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const architectureSection = document.getElementById('architecture')
   if (architectureSection) {
     architectureSection.innerHTML = ArchitectureOverview()
+  }
+
+  // Render Footer
+  const footerSection = document.getElementById('footer')
+  if (footerSection) {
+    footerSection.innerHTML = Footer()
   }
 
   // Initialize copy button event handlers
