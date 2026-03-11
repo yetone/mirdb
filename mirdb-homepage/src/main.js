@@ -11,7 +11,6 @@ import { ArchitectureOverview } from './components/ArchitectureOverview.js'
 import { PerformanceInfo } from './components/PerformanceInfo.js'
 import { Footer } from './components/Footer.js'
 import { initCopyButtons } from './components/CopyButton.js'
-import { Navigation, initNavigation } from './components/Navigation.js'
 
 // Initialize components when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
