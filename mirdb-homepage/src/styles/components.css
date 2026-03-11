@@ -26,6 +26,40 @@
   @apply bg-gray-900 text-gray-100 rounded-lg p-4 font-mono text-sm overflow-x-auto;
 }
 
+/* Syntax highlighting */
+.syntax-keyword {
+  @apply text-blue-400 font-bold;
+}
+
+.syntax-key {
+  @apply text-green-400;
+}
+
+.syntax-number {
+  @apply text-yellow-400;
+}
+
+.syntax-newline {
+  @apply text-gray-400;
+}
+
+.syntax-success {
+  @apply text-green-400 font-bold;
+}
+
+.syntax-response {
+  @apply text-purple-400 font-bold;
+}
+
+/* Copy button states */
+.copy-button.copy-success {
+  @apply text-green-500;
+}
+
+.copy-button.copy-error {
+  @apply text-red-500;
+}
+
 /* Section headers */
 .section-title {
   @apply text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-4;
