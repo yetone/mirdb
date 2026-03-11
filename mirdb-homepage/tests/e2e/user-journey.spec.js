@@ -365,3 +365,349 @@ test.describe('User Journey - Product Discovery (Mobile)', () => {
     await expect(tagline).toBeVisible()
   })
 })
+
+test.describe('Scenario 17: User Journey - Getting Started', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+    // Wait for the page to fully load
+    await page.waitForSelector('[data-testid="navigation-bar"]')
+  })
+
+  test.describe('Test Case 1: Complete getting started journey', () => {
+    test('user can navigate to Quick Start, copy installation command, and understand basic usage within 1 minute', async ({ page }) => {
+      const startTime = Date.now()
+
+      // Step 1: Navigate to Quick Start section
+      // User should be able to find Quick Start via navigation or scrolling
+      const quickstartLink = page.locator('[data-testid="nav-link-documentation"]')
+      await expect(quickstartLink).toBeVisible()
+      await quickstartLink.click()
+
+      // Wait for smooth scroll to complete
+      await page.waitForTimeout(600)
+
+      // Verify Quick Start section is visible
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await expect(quickstartSection).toBeVisible()
+
+      // Step 2: Copy installation command
+      // User should be able to copy the installation command with one click
+      const installBlock = page.locator('[data-testid="code-block-install"]')
+      await installBlock.scrollIntoViewIfNeeded()
+      await installBlock.hover()
+
+      // Grant clipboard permissions
+      await page.context().grantPermissions(['clipboard-write', 'clipboard-read'])
+
+      // Find and click copy button
+      const copyButton = installBlock.locator('.copy-button')
+      await expect(copyButton).toBeVisible()
+      await copyButton.click()
+
+      // Verify clipboard content contains installation command
+      const clipboardContent = await page.evaluate(async () => {
+        return await navigator.clipboard.readText()
+      })
+      expect(clipboardContent).toContain('cargo install mirdb')
+
+      // Step 3: View usage examples - verify they are visible and clear
+      const usageSection = page.locator('[data-testid="quickstart-usage"]')
+      await expect(usageSection).toBeVisible()
+
+      // Check that usage section contains start server instructions
+      const usageText = await usageSection.textContent()
+      expect(usageText).toContain('mirdb')
+
+      // Step 4: Documentation link should be accessible
+      const docsLink = page.locator('[data-testid="quickstart-docs-link"]')
+      await expect(docsLink).toBeVisible()
+
+      // Verify total time is under 1 minute (60000ms)
+      const elapsedTime = Date.now() - startTime
+      expect(elapsedTime).toBeLessThan(60000)
+    })
+
+    test('user can navigate to Quick Start by scrolling', async ({ page }) => {
+      // Alternative path: scroll to quickstart section
+      await page.evaluate(() => {
+        const quickstartSection = document.querySelector('#quickstart')
+        if (quickstartSection) {
+          quickstartSection.scrollIntoView({ behavior: 'smooth' })
+        }
+      })
+
+      await page.waitForTimeout(600)
+
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await expect(quickstartSection).toBeInViewport()
+    })
+  })
+
+  test.describe('Test Case 2: Follow installation instructions', () => {
+    test('instructions are understandable without prior MirDB knowledge', async ({ page }) => {
+      // Navigate to Quick Start section
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      // Verify section has a clear heading
+      const heading = quickstartSection.locator('h2')
+      await expect(heading).toContainText('Quick Start')
+
+      // Verify installation section is clearly labeled
+      const installSection = page.locator('[data-testid="quickstart-install"]')
+      await expect(installSection).toBeVisible()
+
+      // Check for numbered steps
+      const stepIndicators = quickstartSection.locator('.rounded-full')
+      const stepCount = await stepIndicators.count()
+      expect(stepCount).toBeGreaterThanOrEqual(2) // At least Installation and Start Server steps
+
+      // Verify installation command is visible and clear
+      const installCode = page.locator('[data-testid="code-block-install"] code')
+      await expect(installCode).toBeVisible()
+      const installText = await installCode.textContent()
+      expect(installText).toContain('cargo install mirdb')
+
+      // Verify server start command is present
+      const serverStartCode = page.locator('[data-testid="code-block-server-start"] code')
+      await expect(serverStartCode).toBeVisible()
+
+      // Verify connection instructions are present
+      const connectCode = page.locator('[data-testid="code-block-connect"] code')
+      await expect(connectCode).toBeVisible()
+      const connectText = await connectCode.textContent()
+      expect(connectText).toContain('localhost')
+      expect(connectText).toContain('12333')
+    })
+
+    test('instructions include configuration file example', async ({ page }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      // Verify configuration file example is present
+      const configCode = page.locator('[data-testid="code-block-config"]')
+      await expect(configCode).toBeVisible()
+
+      const configText = await configCode.textContent()
+      expect(configText).toContain('mirdb.toml')
+      expect(configText).toContain('port')
+      expect(configText).toContain('data_dir')
+    })
+
+    test('instructions include basic usage example', async ({ page }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      // Verify basic usage (SET, GET, DELETE) is documented
+      const usageCode = page.locator('[data-testid="code-block-basic-usage"]')
+      await expect(usageCode).toBeVisible()
+
+      const usageText = await usageCode.textContent()
+      expect(usageText).toMatch(/set/i)
+      expect(usageText).toMatch(/get/i)
+      expect(usageText).toMatch(/delete/i)
+    })
+  })
+
+  test.describe('Test Case 3: Copy and verify installation command', () => {
+    test('copied command is complete and correct', async ({ page }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      const installBlock = page.locator('[data-testid="code-block-install"]')
+      await installBlock.hover()
+
+      // Grant clipboard permissions
+      await page.context().grantPermissions(['clipboard-write', 'clipboard-read'])
+
+      // Click copy button
+      const copyButton = installBlock.locator('.copy-button')
+      await copyButton.click()
+
+      // Verify clipboard content
+      const clipboardContent = await page.evaluate(async () => {
+        return await navigator.clipboard.readText()
+      })
+
+      // Command should be complete and correct for cargo install
+      expect(clipboardContent).toBe('cargo install mirdb')
+    })
+
+    test('visual feedback is shown when command is copied', async ({ page }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      const installBlock = page.locator('[data-testid="code-block-install"]')
+      await installBlock.hover()
+
+      await page.context().grantPermissions(['clipboard-write', 'clipboard-read'])
+
+      const copyButton = installBlock.locator('.copy-button')
+      await copyButton.click()
+
+      // Verify toast notification appears
+      const toast = page.locator('[data-testid="copy-toast"]')
+      await expect(toast).toBeVisible()
+      await expect(toast).toContainText('Copied')
+    })
+
+    test('all code blocks have copy functionality', async ({ page }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      await page.context().grantPermissions(['clipboard-write', 'clipboard-read'])
+
+      // Test copy for server start command
+      const serverBlock = page.locator('[data-testid="code-block-server-start"]')
+      await serverBlock.hover()
+      const serverCopy = serverBlock.locator('.copy-button')
+      await expect(serverCopy).toBeVisible()
+
+      // Test copy for connect command
+      const connectBlock = page.locator('[data-testid="code-block-connect"]')
+      await connectBlock.hover()
+      const connectCopy = connectBlock.locator('.copy-button')
+      await expect(connectCopy).toBeVisible()
+
+      // Test copy for config
+      const configBlock = page.locator('[data-testid="code-block-config"]')
+      await configBlock.hover()
+      const configCopy = configBlock.locator('.copy-button')
+      await expect(configCopy).toBeVisible()
+    })
+  })
+
+  test.describe('Test Case 4: Navigate to documentation', () => {
+    test('documentation link works and leads to detailed information', async ({ page, context }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      const docsLink = page.locator('[data-testid="quickstart-docs-link"]')
+      await expect(docsLink).toBeVisible()
+
+      // Verify link has descriptive text
+      const linkText = await docsLink.textContent()
+      expect(linkText.toLowerCase()).toMatch(/documentation|docs|read/)
+
+      // Verify link opens in new tab for safety
+      await expect(docsLink).toHaveAttribute('target', '_blank')
+      await expect(docsLink).toHaveAttribute('rel', /noopener/)
+
+      // Click and verify it opens GitHub/docs
+      const [newPage] = await Promise.all([
+        context.waitForEvent('page'),
+        docsLink.click()
+      ])
+
+      // Should navigate to GitHub README or docs site
+      const newPageUrl = newPage.url()
+      expect(newPageUrl).toMatch(/github\.com.*mirdb|mirdb.*docs/i)
+
+      await newPage.close()
+    })
+
+    test('documentation link is keyboard accessible', async ({ page }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      const docsLink = page.locator('[data-testid="quickstart-docs-link"]')
+
+      // Should be focusable
+      await docsLink.focus()
+      await expect(docsLink).toBeFocused()
+    })
+
+    test('documentation link has proper accessibility attributes', async ({ page }) => {
+      const docsLink = page.locator('[data-testid="quickstart-docs-link"]')
+
+      // External link should have proper attributes
+      await expect(docsLink).toHaveAttribute('href')
+      const href = await docsLink.getAttribute('href')
+      expect(href).toBeTruthy()
+      expect(href.length).toBeGreaterThan(0)
+    })
+  })
+
+  test.describe('Mobile User Journey', () => {
+    test.use({ viewport: { width: 375, height: 667 }, hasTouch: true })
+
+    test('getting started journey works on mobile', async ({ page }) => {
+      // Open mobile menu to navigate
+      const mobileToggle = page.locator('[data-testid="mobile-menu-toggle"]')
+      await expect(mobileToggle).toBeVisible()
+      await mobileToggle.click()
+
+      await page.waitForTimeout(300)
+
+      // Click documentation link in mobile menu
+      const mobileDocsLink = page.locator('[data-testid="mobile-nav-link-documentation"]')
+      await mobileDocsLink.click()
+
+      await page.waitForTimeout(600)
+
+      // Verify Quick Start section is visible
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await expect(quickstartSection).toBeInViewport()
+
+      // Verify install command is visible
+      const installBlock = page.locator('[data-testid="code-block-install"]')
+      await expect(installBlock).toBeVisible()
+    })
+
+    test('copy functionality works on mobile', async ({ page }) => {
+      // Scroll to quickstart section
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      const installBlock = page.locator('[data-testid="code-block-install"]')
+
+      // On mobile, copy button may always be visible or activated by tap
+      await installBlock.tap()
+
+      await page.context().grantPermissions(['clipboard-write', 'clipboard-read'])
+
+      const copyButton = installBlock.locator('.copy-button')
+      await copyButton.tap()
+
+      // Verify toast appears
+      const toast = page.locator('[data-testid="copy-toast"]')
+      await expect(toast).toBeVisible()
+    })
+  })
+
+  test.describe('Quick Start section accessibility', () => {
+    test('section has proper heading hierarchy', async ({ page }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      // h2 for main section heading
+      const mainHeading = quickstartSection.locator('h2')
+      await expect(mainHeading).toBeVisible()
+      await expect(mainHeading).toContainText('Quick Start')
+
+      // h3 for subsection headings
+      const subHeadings = quickstartSection.locator('h3')
+      const subHeadingCount = await subHeadings.count()
+      expect(subHeadingCount).toBeGreaterThanOrEqual(2)
+    })
+
+    test('section has proper ARIA labeling', async ({ page }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+
+      // Section should have aria-labelledby
+      await expect(quickstartSection).toHaveAttribute('aria-labelledby', 'quickstart-heading')
+    })
+
+    test('code blocks are readable and properly formatted', async ({ page }) => {
+      const quickstartSection = page.locator('[data-testid="quickstart-section"]')
+      await quickstartSection.scrollIntoViewIfNeeded()
+
+      // Code blocks should use monospace font
+      const codeElement = page.locator('[data-testid="code-block-install"] pre')
+      const fontFamily = await codeElement.evaluate(el =>
+        window.getComputedStyle(el).fontFamily
+      )
+      expect(fontFamily.toLowerCase()).toMatch(/mono|courier|consolas/)
+    })
+  })
+})
