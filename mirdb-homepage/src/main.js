@@ -4,6 +4,7 @@
 import { Hero } from './components/Hero.js'
 import { FeatureShowcase } from './components/FeatureShowcase.js'
 import { InteractiveDemo } from './components/InteractiveDemo.js'
+import { ProtocolDocs } from './components/ProtocolDocs.js'
 import { initCopyButtons } from './components/CopyButton.js'
 import { ArchitectureOverview } from './components/ArchitectureOverview.js'
 
@@ -25,6 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const demoSection = document.getElementById('demo')
   if (demoSection) {
     demoSection.innerHTML = InteractiveDemo()
+  }
+
+  // Render Protocol Documentation
+  const protocolSection = document.getElementById('protocol')
+  if (protocolSection) {
+    protocolSection.innerHTML = ProtocolDocs()
   }
 
   // Render Architecture Overview
