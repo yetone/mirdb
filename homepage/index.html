@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached protocol support, built in Rust">
+  <title>MirDB: A Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav" aria-label="Main navigation">
+      <div class="nav-brand">
+        <a href="/" class="nav-logo-link">
+          <span class="nav-title">MirDB</span>
+        </a>
+      </div>
+      <div class="nav-links">
+        <a href="https://github.com/yetone/mirdb#readme"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="nav-link"
+           data-testid="docs-link">
+          Documentation
+        </a>
+        <a href="https://github.com/yetone/mirdb"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="nav-link nav-link-primary"
+           data-testid="github-link">
+          GitHub
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main">
+    <!-- Hero Section (Scenario 1) -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <img src="../assets/logo.gif" alt="MirDB Logo - An animated logo for the MirDB key-value store" class="hero-logo">
+        <h1 id="hero-title">MirDB: A Persistent Key-Value Store</h1>
+        <p class="hero-tagline">High-performance persistent storage with Memcached protocol support, built in Rust</p>
+        <div class="hero-demo">
+          <img src="../assets/usage.gif" alt="MirDB usage demonstration showing memcached protocol commands being executed" class="hero-demo-image">
+        </div>
+        <div class="hero-cta">
+          <a href="https://github.com/yetone/mirdb#readme"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="btn btn-primary"
+             data-testid="get-started-btn">
+            Get Started
+          </a>
+          <a href="https://github.com/yetone/mirdb"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="btn btn-secondary"
+             data-testid="view-source-btn">
+            View Source Code
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section (Scenario 3) -->
+    <section class="about" aria-labelledby="about-title">
+      <div class="container">
+        <h2 id="about-title">About MirDB</h2>
+        <p>MirDB is a persistent key-value store implemented in Rust, featuring Memcached protocol compatibility. It provides reliable, high-performance data storage using an LSM-tree architecture with async I/O powered by Tokio.</p>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 3) -->
+    <section class="features" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title">Key Features</h2>
+        <ul class="feature-list">
+          <li class="feature-item">
+            <h3>Memcached Protocol</h3>
+            <p>Seamlessly integrate with existing memcached clients and tools</p>
+          </li>
+          <li class="feature-item">
+            <h3>Persistent Storage</h3>
+            <p>LSM-tree based storage engine ensures data durability</p>
+          </li>
+          <li class="feature-item">
+            <h3>Rust Implementation</h3>
+            <p>Memory safety and performance without compromise</p>
+          </li>
+          <li class="feature-item">
+            <h3>Async I/O</h3>
+            <p>High concurrency with Tokio runtime</p>
+          </li>
+          <li class="feature-item">
+            <h3>Skip-list Memtable</h3>
+            <p>Efficient in-memory data structure for fast writes</p>
+          </li>
+          <li class="feature-item">
+            <h3>SSTable Compaction</h3>
+            <p>Automatic background compaction for optimized reads</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Quick Start Section (Scenario 3) -->
+    <section class="quickstart" aria-labelledby="quickstart-title">
+      <div class="container">
+        <h2 id="quickstart-title">Quick Start</h2>
+        <pre class="code-block"><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build and run
+cargo build --release
+cargo run --release
+
+# Connect using any memcached client
+# Example with telnet:
+telnet localhost 11211</code></pre>
+      </div>
+    </section>
+
+    <!-- Status Badge Section (Scenario 4) -->
+    <section class="status" aria-labelledby="status-title">
+      <div class="container">
+        <h2 id="status-title">Build Status</h2>
+        <a href="https://circleci.com/gh/yetone/mirdb"
+           target="_blank"
+           rel="noopener noreferrer"
+           data-testid="ci-badge-link">
+          <img src="https://atompunk.yetone.fun/github/yetone/mirdb?v=2"
+               alt="CircleCI Build Status"
+               class="status-badge"
+               data-testid="ci-badge">
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/yetone/mirdb"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="footer-link"
+           data-testid="footer-github-link">
+          GitHub Repository
+        </a>
+        <span class="footer-separator" aria-hidden="true">•</span>
+        <a href="https://github.com/yetone/mirdb#readme"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="footer-link"
+           data-testid="footer-docs-link">
+          Documentation
+        </a>
+      </div>
+      <div class="footer-meta">
+        <p class="footer-license" data-testid="footer-license">
+          Released under the <a href="https://github.com/yetone/mirdb/blob/master/LICENSE"
+                                target="_blank"
+                                rel="noopener noreferrer">MIT License</a>
+        </p>
+        <p class="footer-copyright" data-testid="footer-copyright">
+          © 2026 MirDB Contributors
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
