@@ -31,7 +31,7 @@
   --color-bg-tertiary: #21262d;
   --color-text-primary: #f0f6fc;
   --color-text-secondary: #8b949e;
-  --color-text-muted: #6e7681;
+  --color-text-muted: #9198a1; /* Accessibility: Changed from #6e7681 for WCAG AA contrast ratio 4.5:1 */
   --color-accent: #58a6ff;
   --color-accent-hover: #79c0ff;
   --color-border: #30363d;
@@ -277,6 +277,29 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
 }
 
+/* Accessibility: Focus indicators for buttons (Scenario 6) */
+.btn:focus {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(88, 166, 255, 0.3);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(88, 166, 255, 0.3);
+}
+
+.btn-primary:focus {
+  outline-color: var(--color-text-primary);
+  box-shadow: 0 0 0 4px rgba(240, 246, 252, 0.3);
+}
+
+.btn-primary:focus-visible {
+  outline-color: var(--color-text-primary);
+  box-shadow: 0 0 0 4px rgba(240, 246, 252, 0.3);
+}
+
 /* Content Sections (Scenario 3) */
 .about,
 .features,
@@ -422,6 +445,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .footer-license a {
   color: var(--color-text-secondary);
+  text-decoration: underline; /* Accessibility: Distinguishable from surrounding text */
+}
+
+.footer-license a:hover {
+  color: var(--color-accent);
 }
 
 .footer-copyright {
