@@ -1,0 +1,16 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - Static landing page for MirDB key-value store",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e/",
+    "test:a11y": "playwright test tests/accessibility/",
+    "serve": "npx serve homepage -p 3000"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@axe-core/playwright": "^4.8.0",
+    "serve": "^14.2.0"
+  }
+}
