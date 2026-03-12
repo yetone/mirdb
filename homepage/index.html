@@ -36,7 +36,7 @@
 
   <main class="main">
     <!-- Hero Section (Scenario 1) -->
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero" aria-labelledby="hero-title" data-testid="hero-section">
       <div class="hero-content">
         <img src="../assets/logo.gif" alt="MirDB Logo - An animated logo for the MirDB key-value store" class="hero-logo">
         <h1 id="hero-title">MirDB: A Persistent Key-Value Store</h1>
@@ -64,66 +64,72 @@
     </section>
 
     <!-- About Section (Scenario 3) -->
-    <section class="about" aria-labelledby="about-title">
+    <section class="about" aria-labelledby="about-title" data-testid="about-section">
       <div class="container">
         <h2 id="about-title">About MirDB</h2>
-        <p>MirDB is a persistent key-value store implemented in Rust, featuring Memcached protocol compatibility. It provides reliable, high-performance data storage using an LSM-tree architecture with async I/O powered by Tokio.</p>
+        <p>MirDB is a persistent key-value store that speaks the Memcached protocol. Built from the ground up in Rust, it provides durability through LSM-tree storage while maintaining the simplicity and speed that developers expect from key-value stores.</p>
       </div>
     </section>
 
     <!-- Features Section (Scenario 3) -->
-    <section class="features" aria-labelledby="features-title">
+    <section class="features" aria-labelledby="features-title" data-testid="features-section">
       <div class="container">
         <h2 id="features-title">Key Features</h2>
-        <ul class="feature-list">
-          <li class="feature-item">
-            <h3>Memcached Protocol</h3>
-            <p>Seamlessly integrate with existing memcached clients and tools</p>
+        <ul class="feature-list" data-testid="feature-list">
+          <li class="feature-item" data-testid="feature-memcached">
+            <h3>Memcached Protocol Compatibility</h3>
+            <p>Drop-in replacement for Memcached with full protocol support for GET, SET, DELETE, and more.</p>
           </li>
-          <li class="feature-item">
-            <h3>Persistent Storage</h3>
-            <p>LSM-tree based storage engine ensures data durability</p>
+          <li class="feature-item" data-testid="feature-lsm">
+            <h3>Persistent Storage with LSM Tree</h3>
+            <p>Data is durably stored using a Log-Structured Merge tree with SSTables and compaction.</p>
           </li>
-          <li class="feature-item">
+          <li class="feature-item" data-testid="feature-rust">
             <h3>Rust Implementation</h3>
-            <p>Memory safety and performance without compromise</p>
+            <p>Written in Rust for memory safety, performance, and reliability without garbage collection overhead.</p>
           </li>
-          <li class="feature-item">
-            <h3>Async I/O</h3>
-            <p>High concurrency with Tokio runtime</p>
+          <li class="feature-item" data-testid="feature-async">
+            <h3>Async I/O with Tokio</h3>
+            <p>Leverages Tokio runtime for high-performance asynchronous I/O and concurrent request handling.</p>
           </li>
-          <li class="feature-item">
+          <li class="feature-item" data-testid="feature-skiplist">
             <h3>Skip-list Memtable</h3>
-            <p>Efficient in-memory data structure for fast writes</p>
+            <p>Efficient in-memory data structure for fast writes and range queries.</p>
           </li>
-          <li class="feature-item">
+          <li class="feature-item" data-testid="feature-compaction">
             <h3>SSTable Compaction</h3>
-            <p>Automatic background compaction for optimized reads</p>
+            <p>Automatic background compaction for optimized reads and storage efficiency.</p>
           </li>
         </ul>
       </div>
     </section>
 
     <!-- Quick Start Section (Scenario 3) -->
-    <section class="quickstart" aria-labelledby="quickstart-title">
+    <section class="quickstart" aria-labelledby="quickstart-title" data-testid="quickstart-section">
       <div class="container">
         <h2 id="quickstart-title">Quick Start</h2>
-        <pre class="code-block"><code># Clone the repository
-git clone https://github.com/yetone/mirdb.git
-cd mirdb
+        <p>Get up and running with MirDB in minutes:</p>
+        <pre class="code-block" data-testid="quickstart-code"><code># Install MirDB
+cargo install mirdb
 
-# Build and run
-cargo build --release
-cargo run --release
+# Start the MirDB server
+mirdb-server
 
-# Connect using any memcached client
+# Connect using any Memcached client
 # Example with telnet:
-telnet localhost 11211</code></pre>
+telnet localhost 11211
+set mykey 0 0 5
+hello
+STORED
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
       </div>
     </section>
 
     <!-- Status Badge Section (Scenario 4) -->
-    <section class="status" aria-labelledby="status-title">
+    <section class="status" aria-labelledby="status-title" data-testid="status-section">
       <div class="container">
         <h2 id="status-title">Build Status</h2>
         <a href="https://circleci.com/gh/yetone/mirdb"
@@ -139,7 +145,7 @@ telnet localhost 11211</code></pre>
     </section>
   </main>
 
-  <footer class="footer">
+  <footer class="footer" data-testid="footer-section">
     <div class="container footer-content">
       <div class="footer-links">
         <a href="https://github.com/yetone/mirdb"

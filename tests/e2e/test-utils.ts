@@ -7,6 +7,7 @@
  * - waitForPageLoad(): Helper to wait for full page load
  * - getByTestId(): Custom selector helper
  */
+
 import { Page } from '@playwright/test';
 
 export const BASE_URL = 'http://localhost:3000';
@@ -26,9 +27,16 @@ export async function waitForPageLoad(page: Page): Promise<void> {
 }
 
 /**
- * Get element by data-testid attribute
+ * Custom selector helper for data-testid attributes - returns selector string
  */
-export function getByTestId(page: Page, testId: string) {
+export function getByTestId(testId: string): string {
+  return `[data-testid="${testId}"]`;
+}
+
+/**
+ * Get element by data-testid attribute - returns Locator
+ */
+export function getTestIdLocator(page: Page, testId: string) {
   return page.locator(`[data-testid="${testId}"]`);
 }
 

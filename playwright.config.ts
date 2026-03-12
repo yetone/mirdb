@@ -7,6 +7,7 @@
  * - Viewport sizes for responsive testing
  * - Screenshot and video recording settings
  */
+
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
@@ -19,11 +20,20 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
   },
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
     },
   ],
   webServer: {
