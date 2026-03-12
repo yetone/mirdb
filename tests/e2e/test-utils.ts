@@ -49,3 +49,27 @@ export const GITHUB_URL = 'https://github.com/yetone/mirdb';
  * Documentation URL (README on GitHub)
  */
 export const DOCS_URL = 'https://github.com/yetone/mirdb#readme';
+
+/**
+ * Check if an image has loaded successfully
+ */
+export async function isImageLoaded(page: Page, selector: string): Promise<boolean> {
+  return page.evaluate((sel) => {
+    const img = document.querySelector(sel) as HTMLImageElement;
+    return img && img.complete && img.naturalHeight > 0;
+  }, selector);
+}
+
+/**
+ * Wait for an image to load
+ */
+export async function waitForImage(page: Page, selector: string, timeout = 10000): Promise<void> {
+  await page.waitForFunction(
+    (sel) => {
+      const img = document.querySelector(sel) as HTMLImageElement;
+      return img && img.complete && img.naturalHeight > 0;
+    },
+    selector,
+    { timeout }
+  );
+}
