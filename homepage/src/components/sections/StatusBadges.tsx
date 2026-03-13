@@ -27,6 +27,7 @@ export function StatusBadges() {
           <img
             src="https://circleci.com/gh/yetone/mirdb.svg?style=shield"
             alt="CircleCI Build Status"
+            loading="lazy"
           />
         </a>
       </div>
