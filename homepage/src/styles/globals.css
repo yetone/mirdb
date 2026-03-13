@@ -18,3 +18,19 @@ body {
 .dark {
   color-scheme: dark;
 }
+
+/* Theme transition for smooth dark/light mode switching */
+html {
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+html.dark {
+  background-color: #111827;
+}
+
+/* Apply transitions to common theme-aware elements */
+.transition-theme {
+  transition: background-color 0.3s ease-in-out,
+              color 0.3s ease-in-out,
+              border-color 0.3s ease-in-out;
+}
