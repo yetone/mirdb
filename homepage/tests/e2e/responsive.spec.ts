@@ -382,3 +382,325 @@ test.describe('Mobile Responsive Design (320px-767px)', () => {
     });
   });
 });
+
+/**
+ * Responsive Design E2E Tests - Tablet & Desktop
+ * Owner: Scenario 10 - Responsive Design - Tablet & Desktop
+ *
+ * Test viewports:
+ * - Tablet: 768px
+ * - Desktop: 1024px, 1366px, 1920px
+ *
+ * Tests verify:
+ * - Full navbar displays at tablet/desktop widths (not mobile menu)
+ * - Feature cards in 2-column grid at tablet width
+ * - Multi-column features at desktop widths
+ * - Content has max-width container (not full-bleed) at large screens
+ * - Hero section visible above-the-fold on laptop (1366x768)
+ */
+
+test.describe('Tablet Responsive Design (768px-1023px)', () => {
+  // Test Case 1: Full navbar displays at 768px (not mobile menu)
+  test.describe('768px Viewport - Tablet Width', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 });
+      await page.goto('/');
+    });
+
+    test('full navbar displays at 768px (not mobile menu)', async ({ page }) => {
+      // Wait for page to fully load
+      await page.waitForLoadState('networkidle');
+
+      // Mobile menu button should NOT be visible (hidden by md:hidden class)
+      const mobileMenuButton = page.getByTestId('mobile-menu-button');
+      await expect(mobileMenuButton).not.toBeVisible();
+
+      // Desktop navigation links should be visible
+      const navLinkGithub = page.getByTestId('nav-link-github');
+      await expect(navLinkGithub).toBeVisible();
+
+      const navLinkDocs = page.getByTestId('nav-link-documentation');
+      await expect(navLinkDocs).toBeVisible();
+
+      const navLinkApi = page.getByTestId('nav-link-api-reference');
+      await expect(navLinkApi).toBeVisible();
+
+      // Theme toggle should be visible in the desktop nav
+      const themeToggle = page.getByTestId('theme-toggle');
+      await expect(themeToggle).toBeVisible();
+    });
+
+    test('page renders without horizontal overflow at 768px', async ({ page }) => {
+      await page.waitForLoadState('networkidle');
+
+      const hasHorizontalScroll = await page.evaluate(() => {
+        return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+      });
+      expect(hasHorizontalScroll).toBe(false);
+    });
+
+    // Test Case 2: Feature cards display in 2-column grid at 768px
+    test('feature cards display in 2-column grid at 768px', async ({ page }) => {
+      const features = page.getByTestId('features');
+      await features.scrollIntoViewIfNeeded();
+
+      // Grid should be 2 columns at md breakpoint (md:grid-cols-2)
+      const gridContainer = features.locator('.grid');
+      await expect(gridContainer).toBeVisible();
+
+      const gridStyle = await gridContainer.evaluate((el) => {
+        const style = window.getComputedStyle(el);
+        return style.gridTemplateColumns;
+      });
+
+      // 2-column grid means two column track values
+      const columnCount = gridStyle.split(' ').filter(Boolean).length;
+      expect(columnCount).toBe(2);
+    });
+
+    test('all main sections are visible and properly laid out at 768px', async ({ page }) => {
+      // Navbar
+      await expect(page.getByTestId('navbar')).toBeVisible();
+
+      // Hero
+      const hero = page.getByTestId('hero');
+      await expect(hero).toBeVisible();
+      await expect(hero.getByRole('heading', { level: 1 })).toBeVisible();
+
+      // CTA buttons should be side-by-side at tablet (sm:flex-row)
+      const getStartedButton = hero.getByRole('link', { name: /get started/i });
+      const githubButton = hero.getByRole('link', { name: /github/i });
+
+      const getStartedBox = await getStartedButton.boundingBox();
+      const githubBox = await githubButton.boundingBox();
+
+      expect(getStartedBox).not.toBeNull();
+      expect(githubBox).not.toBeNull();
+
+      if (getStartedBox && githubBox) {
+        // At 768px with sm:flex-row, buttons should be on the same row
+        // Y positions should be similar (within a few pixels tolerance)
+        expect(Math.abs(getStartedBox.y - githubBox.y)).toBeLessThan(10);
+      }
+
+      // Features
+      const features = page.getByTestId('features');
+      await features.scrollIntoViewIfNeeded();
+      await expect(features).toBeVisible();
+
+      // Quick Start
+      const quickStart = page.getByTestId('quickstart');
+      await quickStart.scrollIntoViewIfNeeded();
+      await expect(quickStart).toBeVisible();
+
+      // Footer
+      const footer = page.getByTestId('footer');
+      await footer.scrollIntoViewIfNeeded();
+      await expect(footer).toBeVisible();
+    });
+  });
+});
+
+test.describe('Desktop Responsive Design (1024px+)', () => {
+  // Test Case 3: Desktop layout with multi-column features at 1024px
+  test.describe('1024px Viewport - Desktop Width', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await page.goto('/');
+    });
+
+    test('desktop layout with multi-column features at 1024px', async ({ page }) => {
+      await page.waitForLoadState('networkidle');
+
+      // Mobile menu button should NOT be visible
+      const mobileMenuButton = page.getByTestId('mobile-menu-button');
+      await expect(mobileMenuButton).not.toBeVisible();
+
+      // Desktop navigation should be visible
+      const navLinkGithub = page.getByTestId('nav-link-github');
+      await expect(navLinkGithub).toBeVisible();
+
+      // Features grid should have 3 columns at lg breakpoint (lg:grid-cols-3)
+      const features = page.getByTestId('features');
+      await features.scrollIntoViewIfNeeded();
+
+      const gridContainer = features.locator('.grid');
+      const gridStyle = await gridContainer.evaluate((el) => {
+        const style = window.getComputedStyle(el);
+        return style.gridTemplateColumns;
+      });
+
+      // 3-column grid at lg breakpoint
+      const columnCount = gridStyle.split(' ').filter(Boolean).length;
+      expect(columnCount).toBe(3);
+    });
+
+    test('page renders without horizontal overflow at 1024px', async ({ page }) => {
+      await page.waitForLoadState('networkidle');
+
+      const hasHorizontalScroll = await page.evaluate(() => {
+        return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+      });
+      expect(hasHorizontalScroll).toBe(false);
+    });
+  });
+
+  // Test Case 5: Hero section visible above-the-fold at 1366x768 (laptop)
+  test.describe('1366x768 Viewport - Laptop Screen', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 1366, height: 768 });
+      await page.goto('/');
+    });
+
+    test('hero section is fully visible above the fold at 1366x768', async ({ page }) => {
+      await page.waitForLoadState('networkidle');
+
+      const hero = page.getByTestId('hero');
+      await expect(hero).toBeVisible();
+
+      // Get hero bounding box
+      const heroBox = await hero.boundingBox();
+      expect(heroBox).not.toBeNull();
+
+      if (heroBox) {
+        // Hero should start at or near top of viewport (accounting for navbar)
+        expect(heroBox.y).toBeLessThan(100); // Navbar is ~64px
+
+        // Hero's bottom should be within viewport height (768px)
+        // This ensures the entire hero section is visible without scrolling
+        const heroBottom = heroBox.y + heroBox.height;
+        expect(heroBottom).toBeLessThanOrEqual(768);
+      }
+
+      // Verify key hero elements are visible
+      const headline = hero.getByRole('heading', { level: 1 });
+      await expect(headline).toBeVisible();
+      await expect(headline).toContainText('Persistent Key-Value Store');
+
+      const subtitle = hero.getByText(/with Memcached Protocol/i);
+      await expect(subtitle).toBeVisible();
+
+      // CTA buttons should be visible
+      const getStartedButton = hero.getByRole('link', { name: /get started/i });
+      await expect(getStartedButton).toBeVisible();
+
+      const githubButton = hero.getByRole('link', { name: /github/i });
+      await expect(githubButton).toBeVisible();
+    });
+
+    test('desktop navigation is fully functional at 1366px', async ({ page }) => {
+      // Mobile menu button should be hidden
+      const mobileMenuButton = page.getByTestId('mobile-menu-button');
+      await expect(mobileMenuButton).not.toBeVisible();
+
+      // All nav links should be visible
+      await expect(page.getByTestId('nav-link-github')).toBeVisible();
+      await expect(page.getByTestId('nav-link-documentation')).toBeVisible();
+      await expect(page.getByTestId('nav-link-api-reference')).toBeVisible();
+
+      // Theme toggle should work
+      const themeToggle = page.getByTestId('theme-toggle');
+      await expect(themeToggle).toBeVisible();
+    });
+  });
+
+  // Test Case 4: Content has max-width container at 1920px (not full-bleed)
+  test.describe('1920px Viewport - Large Desktop', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 1920, height: 1080 });
+      await page.goto('/');
+    });
+
+    test('content has max-width container at 1920px (not full-bleed)', async ({ page }) => {
+      await page.waitForLoadState('networkidle');
+
+      // Check that the navbar container has max-width (max-w-7xl = 1280px)
+      const navbarContainer = page.locator('[data-testid="navbar"] > div').first();
+      const navbarContainerWidth = await navbarContainer.evaluate((el) => {
+        const style = window.getComputedStyle(el);
+        return el.offsetWidth;
+      });
+
+      // Max-w-7xl is 1280px, container should not exceed this
+      expect(navbarContainerWidth).toBeLessThanOrEqual(1280);
+
+      // Check features section container
+      const features = page.getByTestId('features');
+      await features.scrollIntoViewIfNeeded();
+
+      const featuresContainer = features.locator('div.max-w-7xl').first();
+      const featuresContainerWidth = await featuresContainer.evaluate((el) => {
+        return el.offsetWidth;
+      });
+
+      // Features container should also respect max-width
+      expect(featuresContainerWidth).toBeLessThanOrEqual(1280);
+
+      // Verify content is centered (has equal margins on both sides)
+      const featuresBox = await featuresContainer.boundingBox();
+      expect(featuresBox).not.toBeNull();
+
+      if (featuresBox) {
+        // Content should be centered - left margin should be approximately equal to right margin
+        const leftMargin = featuresBox.x;
+        const rightMargin = 1920 - (featuresBox.x + featuresBox.width);
+        // Allow 50px tolerance for centering
+        expect(Math.abs(leftMargin - rightMargin)).toBeLessThan(50);
+      }
+    });
+
+    test('page renders without horizontal overflow at 1920px', async ({ page }) => {
+      await page.waitForLoadState('networkidle');
+
+      const hasHorizontalScroll = await page.evaluate(() => {
+        return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+      });
+      expect(hasHorizontalScroll).toBe(false);
+    });
+
+    test('all sections have proper max-width containers at 1920px', async ({ page }) => {
+      // Quick Start section
+      const quickStart = page.getByTestId('quickstart');
+      await quickStart.scrollIntoViewIfNeeded();
+
+      const quickStartContainer = quickStart.locator('div.max-w-7xl, div.max-w-4xl, div.max-w-3xl').first();
+      const quickStartContainerBox = await quickStartContainer.boundingBox();
+
+      expect(quickStartContainerBox).not.toBeNull();
+      if (quickStartContainerBox) {
+        // Container should not span the full 1920px width
+        expect(quickStartContainerBox.width).toBeLessThan(1920);
+      }
+
+      // Footer section
+      const footer = page.getByTestId('footer');
+      await footer.scrollIntoViewIfNeeded();
+
+      const footerContainer = footer.locator('div.max-w-7xl').first();
+      const footerContainerWidth = await footerContainer.evaluate((el) => {
+        return el.offsetWidth;
+      });
+
+      expect(footerContainerWidth).toBeLessThanOrEqual(1280);
+    });
+
+    test('hero section is properly styled at 1920px', async ({ page }) => {
+      const hero = page.getByTestId('hero');
+      await expect(hero).toBeVisible();
+
+      // Hero headline should use larger font size at lg breakpoint
+      const headline = hero.getByRole('heading', { level: 1 });
+      const headlineStyle = await headline.evaluate((el) => {
+        const style = window.getComputedStyle(el);
+        return {
+          fontSize: style.fontSize,
+          fontWeight: style.fontWeight,
+        };
+      });
+
+      // At lg breakpoint, should be text-6xl (60px) - verify it's at least that large
+      const fontSize = parseInt(headlineStyle.fontSize);
+      expect(fontSize).toBeGreaterThanOrEqual(48); // text-5xl or larger
+    });
+  });
+});
