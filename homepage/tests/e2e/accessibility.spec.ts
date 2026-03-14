@@ -359,8 +359,9 @@ test.describe('Accessibility Compliance', () => {
     const nav = page.locator('nav, [role="navigation"]')
     await expect(nav.first()).toBeVisible()
 
-    // Check for contentinfo (footer)
-    const footer = page.locator('[role="contentinfo"], footer')
+    // Check for contentinfo (footer) - using testid to get the main page footer
+    // (not testimonial card footers which also use <footer> elements)
+    const footer = page.getByTestId('footer')
     await expect(footer).toBeVisible()
   })
 

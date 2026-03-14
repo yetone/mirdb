@@ -229,9 +229,11 @@ export function LogoGrid({ logos }: LogoGridProps) {
               loading="lazy"
               onError={(e) => {
                 // Fallback to company name on error
+                // Using text-secondary-900 for WCAG 2.1 AA contrast compliance (4.5:1 ratio)
+                // since parent container has opacity-60 which reduces effective contrast
                 const target = e.target as HTMLImageElement
                 target.style.display = 'none'
-                target.parentElement!.innerHTML = `<span class="text-secondary-500 font-semibold text-sm">${logo.company}</span>`
+                target.parentElement!.innerHTML = `<span class="text-secondary-900 font-semibold text-sm">${logo.company}</span>`
               }}
             />
           </div>

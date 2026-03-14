@@ -8,9 +8,10 @@
  * - Contains all navigation links
  * - Close on link click or outside click
  * - Keyboard accessible (Escape to close)
+ * - Focus trap for WCAG 2.1 AA compliance (Scenario 8)
  */
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import type { NavLink, CTAButton } from '../../types'
 
 export interface MobileMenuProps {
@@ -26,6 +27,8 @@ export function MobileMenu({
   navLinks,
   ctaButton,
 }: MobileMenuProps) {
+  const menuRef = useRef<HTMLElement>(null)
+
   // Handle escape key press to close menu
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -56,6 +59,49 @@ export function MobileMenu({
     }
   }, [isOpen])
 
+  // Focus trap for WCAG 2.1 AA accessibility compliance
+  useEffect(() => {
+    if (!isOpen || !menuRef.current) return
+
+    const menu = menuRef.current
+    const focusableSelectors = [
+      'a[href]:not([tabindex="-1"])',
+      'button:not([disabled]):not([tabindex="-1"])',
+      'input:not([disabled]):not([tabindex="-1"])',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(', ')
+
+    const focusableElements = menu.querySelectorAll<HTMLElement>(focusableSelectors)
+    const firstFocusable = focusableElements[0]
+    const lastFocusable = focusableElements[focusableElements.length - 1]
+
+    // Focus first element when menu opens
+    firstFocusable?.focus()
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+
+      if (e.shiftKey) {
+        // Shift + Tab: if on first element, wrap to last
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault()
+          lastFocusable?.focus()
+        }
+      } else {
+        // Tab: if on last element, wrap to first
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault()
+          firstFocusable?.focus()
+        }
+      }
+    }
+
+    menu.addEventListener('keydown', handleTabKey)
+    return () => {
+      menu.removeEventListener('keydown', handleTabKey)
+    }
+  }, [isOpen])
+
   // Handle link click - close menu after navigation
   const handleLinkClick = () => {
     onClose()
@@ -77,6 +123,7 @@ export function MobileMenu({
 
       {/* Mobile menu panel */}
       <nav
+        ref={menuRef}
         id="mobile-menu"
         className="fixed top-16 left-0 right-0 bottom-0 z-50 bg-white md:hidden overflow-y-auto"
         role="navigation"
