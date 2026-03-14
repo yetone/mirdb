@@ -3,6 +3,7 @@ import { Header, Footer } from './components/layout'
 import { Features } from './components/sections/Features'
 import { SocialProof } from './components/sections/SocialProof'
 import { CTASection } from './components/sections/CTASection'
+import { Button } from './components/common/Button'
 import { NAV_LINKS, SOCIAL_LINKS, FOOTER_COLUMNS, LEGAL_LINKS } from './utils/constants'
 
 function App() {
@@ -35,11 +36,13 @@ function App() {
 
         {/* Learn More CTA after Features */}
         <div className="container-main py-8 text-center" id="learn-more-section">
-          <LearnMoreCTA
-            text="Learn More"
+          <Button
             href="#features"
-            variant="button"
-          />
+            variant="outline"
+            size="md"
+          >
+            Learn More
+          </Button>
         </div>
 
         <SocialProof />

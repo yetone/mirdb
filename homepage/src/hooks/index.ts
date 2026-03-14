@@ -10,3 +10,12 @@ export {
   useIsDesktop,
   useViewportSize,
 } from './useMediaQuery'
+
+export {
+  useSmoothScroll,
+  usePrefersReducedMotion,
+} from './useSmoothScroll'
+export type {
+  UseSmoothScrollOptions,
+  UseSmoothScrollReturn,
+} from './useSmoothScroll'
