@@ -1,5 +1,6 @@
 import { Hero } from './components/sections/Hero'
 import { Header } from './components/layout'
+import { Features } from './components/sections/Features'
 import { NAV_LINKS } from './utils/constants'
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
             size: "lg"
           }}
         />
+        <Features />
       </main>
     </>
   )
