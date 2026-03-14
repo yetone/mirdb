@@ -2,4 +2,7 @@
  * Layout component exports.
  */
 
-// Layout components will be exported here as they are created
+export { Header } from './Header'
+export type { HeaderProps } from './Header'
+export { MobileMenu } from './MobileMenu'
+export type { MobileMenuProps } from './MobileMenu'
