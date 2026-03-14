@@ -1,7 +1,7 @@
 import { Hero } from './components/sections/Hero'
-import { Header } from './components/layout'
+import { Header, Footer } from './components/layout'
 import { Features } from './components/sections/Features'
-import { NAV_LINKS } from './utils/constants'
+import { NAV_LINKS, SOCIAL_LINKS, FOOTER_COLUMNS, LEGAL_LINKS } from './utils/constants'
 
 function App() {
   return (
@@ -31,6 +31,12 @@ function App() {
         />
         <Features />
       </main>
+      <Footer
+        columns={FOOTER_COLUMNS}
+        socialLinks={SOCIAL_LINKS}
+        legalLinks={LEGAL_LINKS}
+        companyName="ProductName"
+      />
     </>
   )
 }
