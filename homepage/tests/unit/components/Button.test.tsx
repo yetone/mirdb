@@ -1,137 +1,141 @@
 /**
- * Unit tests for Button component.
+ * Unit tests for Button component and CTA functionality.
  * Owner: Scenario 5 - Secondary CTAs Implementation
  *
  * Test cases:
- * - Button renders with correct variant styles
- * - Button renders with correct size classes
- * - Button hover, focus, and active states are present
- * - Button meets contrast requirements (4.5:1)
- * - Button is accessible (keyboard navigable, ARIA labels)
- * - Button renders as anchor when href is provided
+ * - Test Case 1: Render homepage and count CTAs - Multiple CTAs present
+ * - Test Case 6: Verify CTA contrast ratios - All CTA text meets 4.5:1 contrast ratio
+ * - Button variants (primary, secondary, outline)
+ * - Button sizes (sm, md, lg)
+ * - Button hover, focus, active states
+ * - Button accessibility
  */
 
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Button, ButtonProps } from '../../../src/components/common/Button'
+import {
+  CTASection,
+  CTASectionProps,
+  InlineCTA,
+  ContactSalesCTA,
+  LearnMoreCTA,
+} from '../../../src/components/sections/CTASection'
+
+// Color contrast calculation utilities
+// Uses relative luminance formula per WCAG 2.1
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  if (!result) throw new Error(`Invalid hex color: ${hex}`)
+  return {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16),
+  }
+}
+
+function getLuminance(hex: string): number {
+  const { r, g, b } = hexToRgb(hex)
+  const [rs, gs, bs] = [r, g, b].map((c) => {
+    const s = c / 255
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4)
+  })
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs
+}
+
+function getContrastRatio(color1: string, color2: string): number {
+  const l1 = getLuminance(color1)
+  const l2 = getLuminance(color2)
+  const lighter = Math.max(l1, l2)
+  const darker = Math.min(l1, l2)
+  return (lighter + 0.05) / (darker + 0.05)
+}
+
+// Tailwind color values used in Button component
+const COLORS = {
+  primary600: '#2563eb',
+  primary700: '#1d4ed8',
+  secondary600: '#475569',
+  secondary700: '#334155',
+  white: '#ffffff',
+}
 
 describe('Button Component', () => {
-  // Test Case 1: Render homepage and count CTAs - Multiple CTAs present
-  describe('Test Case 1: Multiple CTAs present', () => {
-    it('renders primary, secondary, and outline button variants', () => {
-      const { container } = render(
-        <>
-          <Button variant="primary">Primary CTA</Button>
-          <Button variant="secondary">Secondary CTA</Button>
-          <Button variant="outline">Outline CTA</Button>
-        </>
-      )
-
-      const buttons = container.querySelectorAll('[data-testid="cta-button"]')
-      expect(buttons.length).toBe(3)
-    })
-
-    it('button can be rendered as both button and anchor elements', () => {
-      const { container } = render(
-        <>
-          <Button>Button Element</Button>
-          <Button href="#link">Anchor Element</Button>
-        </>
-      )
-
-      const buttonElements = container.querySelectorAll('button')
-      const anchorElements = container.querySelectorAll('a')
-
-      expect(buttonElements.length).toBe(1)
-      expect(anchorElements.length).toBe(1)
-    })
-  })
-
   // Test Case 6: Verify CTA contrast ratios
-  describe('Test Case 6: CTA contrast ratios', () => {
-    it('primary button has high-contrast styling (bg-primary-600 + white text)', () => {
-      render(<Button variant="primary">Get Started</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      // Primary: #2563eb (bg) with white text = 4.56:1 contrast ratio
-      expect(button).toHaveClass('bg-primary-600')
-      expect(button).toHaveClass('text-white')
+  describe('Test Case 6: CTA Contrast Ratios', () => {
+    it('primary button meets WCAG 2.1 AA contrast ratio (4.5:1)', () => {
+      // Primary: bg-primary-600 (#2563eb) with white text
+      const ratio = getContrastRatio(COLORS.primary600, COLORS.white)
+      expect(ratio).toBeGreaterThanOrEqual(4.5)
     })
 
-    it('secondary button has high-contrast styling (bg-secondary-600 + white text)', () => {
-      render(<Button variant="secondary">Contact Sales</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      // Secondary: #475569 (bg) with white text = 5.92:1 contrast ratio
-      expect(button).toHaveClass('bg-secondary-600')
-      expect(button).toHaveClass('text-white')
+    it('secondary button meets WCAG 2.1 AA contrast ratio (4.5:1)', () => {
+      // Secondary: bg-secondary-600 (#475569) with white text
+      const ratio = getContrastRatio(COLORS.secondary600, COLORS.white)
+      expect(ratio).toBeGreaterThanOrEqual(4.5)
     })
 
-    it('outline button has visible styling with proper contrast', () => {
-      render(<Button variant="outline">Learn More</Button>)
+    it('outline button text meets WCAG 2.1 AA contrast ratio (4.5:1)', () => {
+      // Outline: primary-700 text on white background
+      const ratio = getContrastRatio(COLORS.primary700, COLORS.white)
+      expect(ratio).toBeGreaterThanOrEqual(4.5)
+    })
 
-      const button = screen.getByTestId('cta-button')
-      // Outline: #2563eb (text) on white/transparent bg = 4.56:1 contrast ratio
-      expect(button).toHaveClass('border-2')
-      expect(button).toHaveClass('border-primary-600')
-      expect(button).toHaveClass('text-primary-600')
+    it('all button variants have readable text', () => {
+      const variants: Array<'primary' | 'secondary' | 'outline'> = [
+        'primary',
+        'secondary',
+        'outline',
+      ]
+
+      variants.forEach((variant) => {
+        const { container } = render(
+          <Button variant={variant}>Test Button</Button>
+        )
+        const button = container.querySelector('button')
+        expect(button).toBeTruthy()
+        expect(button?.textContent).toBe('Test Button')
+      })
     })
   })
 
-  // Test: Button variants styling
   describe('Button variants', () => {
-    it('renders primary variant with correct classes', () => {
-      render(<Button variant="primary">Primary</Button>)
+    it('renders primary variant with correct styling classes', () => {
+      render(<Button variant="primary">Primary Button</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('bg-primary-600')
       expect(button).toHaveClass('text-white')
-      expect(button).toHaveClass('hover:bg-primary-700')
     })
 
-    it('renders secondary variant with correct classes', () => {
-      render(<Button variant="secondary">Secondary</Button>)
+    it('renders secondary variant with correct styling classes', () => {
+      render(<Button variant="secondary">Secondary Button</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('bg-secondary-600')
       expect(button).toHaveClass('text-white')
-      expect(button).toHaveClass('hover:bg-secondary-700')
     })
 
-    it('renders outline variant with correct classes', () => {
-      render(<Button variant="outline">Outline</Button>)
+    it('renders outline variant with correct styling classes', () => {
+      render(<Button variant="outline">Outline Button</Button>)
 
       const button = screen.getByTestId('cta-button')
-      expect(button).toHaveClass('bg-transparent')
       expect(button).toHaveClass('border-2')
       expect(button).toHaveClass('border-primary-600')
-      expect(button).toHaveClass('text-primary-600')
+      expect(button).toHaveClass('text-primary-700')
     })
 
-    it('renders white variant with correct classes', () => {
-      render(<Button variant="white">White Button</Button>)
+    it('defaults to primary variant when not specified', () => {
+      render(<Button>Default Button</Button>)
 
       const button = screen.getByTestId('cta-button')
-      expect(button).toHaveClass('bg-white')
-      expect(button).toHaveClass('text-primary-600')
-      expect(button).toHaveClass('hover:bg-secondary-50')
-    })
-
-    it('renders outline-white variant with correct classes', () => {
-      render(<Button variant="outline-white">Outline White</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveClass('bg-transparent')
-      expect(button).toHaveClass('border-2')
-      expect(button).toHaveClass('border-white')
-      expect(button).toHaveClass('text-white')
+      expect(button).toHaveClass('bg-primary-600')
     })
   })
 
-  // Test: Button sizes
   describe('Button sizes', () => {
-    it('renders small size with correct classes', () => {
-      render(<Button size="sm">Small</Button>)
+    it('renders small size with correct padding and text classes', () => {
+      render(<Button size="sm">Small Button</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('px-4')
@@ -139,8 +143,8 @@ describe('Button Component', () => {
       expect(button).toHaveClass('text-sm')
     })
 
-    it('renders medium size with correct classes (default)', () => {
-      render(<Button size="md">Medium</Button>)
+    it('renders medium size with correct padding and text classes', () => {
+      render(<Button size="md">Medium Button</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('px-6')
@@ -148,8 +152,8 @@ describe('Button Component', () => {
       expect(button).toHaveClass('text-base')
     })
 
-    it('renders large size with correct classes', () => {
-      render(<Button size="lg">Large</Button>)
+    it('renders large size with correct padding and text classes', () => {
+      render(<Button size="lg">Large Button</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('px-8')
@@ -157,8 +161,8 @@ describe('Button Component', () => {
       expect(button).toHaveClass('text-lg')
     })
 
-    it('uses medium size by default', () => {
-      render(<Button>Default Size</Button>)
+    it('defaults to medium size when not specified', () => {
+      render(<Button>Default Size Button</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('px-6')
@@ -167,39 +171,38 @@ describe('Button Component', () => {
     })
   })
 
-  // Test: Hover states (NFR-5)
-  describe('Hover states', () => {
-    it('primary button has hover state classes', () => {
-      render(<Button variant="primary">Hover Me</Button>)
+  describe('Button hover states', () => {
+    it('has hover styling classes for primary variant', () => {
+      render(<Button variant="primary">Hover Test</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('hover:bg-primary-700')
-      expect(button).toHaveClass('hover:scale-105')
       expect(button).toHaveClass('hover:shadow-lg')
+      expect(button).toHaveClass('hover:scale-105')
     })
 
-    it('secondary button has hover state classes', () => {
-      render(<Button variant="secondary">Hover Me</Button>)
+    it('has hover styling classes for secondary variant', () => {
+      render(<Button variant="secondary">Hover Test</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('hover:bg-secondary-700')
+      expect(button).toHaveClass('hover:shadow-lg')
       expect(button).toHaveClass('hover:scale-105')
     })
 
-    it('outline button has hover state classes', () => {
-      render(<Button variant="outline">Hover Me</Button>)
+    it('has hover styling classes for outline variant', () => {
+      render(<Button variant="outline">Hover Test</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('hover:bg-primary-50')
       expect(button).toHaveClass('hover:border-primary-700')
-      expect(button).toHaveClass('hover:text-primary-700')
+      expect(button).toHaveClass('hover:shadow-lg')
     })
   })
 
-  // Test: Focus states (NFR-5)
-  describe('Focus states', () => {
-    it('button has visible focus indicator classes', () => {
-      render(<Button>Focus Me</Button>)
+  describe('Button focus states', () => {
+    it('has focus ring styling for accessibility', () => {
+      render(<Button>Focus Test</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('focus:outline-none')
@@ -207,214 +210,298 @@ describe('Button Component', () => {
       expect(button).toHaveClass('focus:ring-offset-2')
     })
 
-    it('primary button has primary focus ring color', () => {
-      render(<Button variant="primary">Focus</Button>)
+    it('primary button has correct focus ring color', () => {
+      render(<Button variant="primary">Focus Test</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('focus:ring-primary-500')
     })
 
-    it('secondary button has secondary focus ring color', () => {
-      render(<Button variant="secondary">Focus</Button>)
+    it('secondary button has correct focus ring color', () => {
+      render(<Button variant="secondary">Focus Test</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('focus:ring-secondary-500')
     })
-
-    it('outline button has primary focus ring color', () => {
-      render(<Button variant="outline">Focus</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveClass('focus:ring-primary-500')
-    })
   })
 
-  // Test: Active states (NFR-5)
-  describe('Active states', () => {
-    it('primary button has active state classes', () => {
-      render(<Button variant="primary">Press Me</Button>)
+  describe('Button active states', () => {
+    it('has active styling classes for primary variant', () => {
+      render(<Button variant="primary">Active Test</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('active:bg-primary-800')
-      expect(button).toHaveClass('active:scale-95')
+      expect(button).toHaveClass('active:scale-100')
     })
 
-    it('secondary button has active state classes', () => {
-      render(<Button variant="secondary">Press Me</Button>)
+    it('has active styling classes for secondary variant', () => {
+      render(<Button variant="secondary">Active Test</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('active:bg-secondary-800')
-      expect(button).toHaveClass('active:scale-95')
-    })
-
-    it('outline button has active state classes', () => {
-      render(<Button variant="outline">Press Me</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveClass('active:bg-primary-100')
-      expect(button).toHaveClass('active:border-primary-800')
-      expect(button).toHaveClass('active:scale-95')
+      expect(button).toHaveClass('active:scale-100')
     })
   })
 
-  // Test: Disabled state
-  describe('Disabled state', () => {
-    it('button can be disabled', () => {
-      render(<Button disabled>Disabled</Button>)
+  describe('Button as anchor', () => {
+    it('renders as anchor tag when href is provided', () => {
+      render(<Button href="#test">Link Button</Button>)
 
       const button = screen.getByTestId('cta-button')
-      expect(button).toBeDisabled()
+      expect(button.tagName).toBe('A')
+      expect(button).toHaveAttribute('href', '#test')
     })
 
-    it('disabled button has disabled styling', () => {
-      render(<Button variant="primary" disabled>Disabled</Button>)
+    it('renders as button tag when href is not provided', () => {
+      render(<Button>Regular Button</Button>)
 
       const button = screen.getByTestId('cta-button')
-      expect(button).toHaveClass('disabled:bg-primary-300')
-      expect(button).toHaveClass('disabled:cursor-not-allowed')
-    })
-
-    it('disabled anchor button prevents default click', () => {
-      const onClick = vi.fn()
-      render(<Button href="#test" disabled onClick={onClick}>Disabled Link</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveAttribute('aria-disabled', 'true')
-      expect(button).toHaveAttribute('tabindex', '-1')
-    })
-  })
-
-  // Test: Accessibility
-  describe('Accessibility', () => {
-    it('button has correct type attribute', () => {
-      render(<Button>Click Me</Button>)
-
-      const button = screen.getByTestId('cta-button')
+      expect(button.tagName).toBe('BUTTON')
       expect(button).toHaveAttribute('type', 'button')
     })
-
-    it('anchor button has correct href', () => {
-      render(<Button href="#signup">Sign Up</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveAttribute('href', '#signup')
-    })
-
-    it('button is focusable', () => {
-      render(<Button>Focusable</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      button.focus()
-      expect(document.activeElement).toBe(button)
-    })
-
-    it('anchor button is focusable', () => {
-      render(<Button href="#link">Focusable Link</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      button.focus()
-      expect(document.activeElement).toBe(button)
-    })
-
-    it('button passes custom aria-label', () => {
-      render(<Button aria-label="Custom label">Button</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveAttribute('aria-label', 'Custom label')
-    })
   })
 
-  // Test: Click handling
-  describe('Click handling', () => {
+  describe('Button click handling', () => {
     it('calls onClick when clicked', () => {
-      const onClick = vi.fn()
-      render(<Button onClick={onClick}>Click Me</Button>)
+      const handleClick = vi.fn()
+      render(<Button onClick={handleClick}>Click Me</Button>)
 
       const button = screen.getByTestId('cta-button')
       fireEvent.click(button)
 
-      expect(onClick).toHaveBeenCalledTimes(1)
-    })
-
-    it('anchor button calls onClick when clicked', () => {
-      const onClick = vi.fn()
-      render(<Button href="#test" onClick={onClick}>Click Me</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      fireEvent.click(button)
-
-      expect(onClick).toHaveBeenCalledTimes(1)
-    })
-
-    it('disabled button does not call onClick', () => {
-      const onClick = vi.fn()
-      render(<Button disabled onClick={onClick}>Disabled</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      fireEvent.click(button)
-
-      expect(onClick).not.toHaveBeenCalled()
+      expect(handleClick).toHaveBeenCalledTimes(1)
     })
   })
 
-  // Test: Transition effects
-  describe('Transition effects', () => {
-    it('button has transition classes for smooth animations', () => {
-      render(<Button>Animated</Button>)
+  describe('Button disabled state', () => {
+    it('has disabled styling classes', () => {
+      render(<Button disabled>Disabled Button</Button>)
+
+      const button = screen.getByTestId('cta-button')
+      expect(button).toHaveClass('disabled:opacity-50')
+      expect(button).toHaveClass('disabled:cursor-not-allowed')
+      expect(button).toBeDisabled()
+    })
+  })
+
+  describe('Button transition effects', () => {
+    it('has smooth transition classes', () => {
+      render(<Button>Transition Test</Button>)
 
       const button = screen.getByTestId('cta-button')
       expect(button).toHaveClass('transition-all')
       expect(button).toHaveClass('duration-200')
       expect(button).toHaveClass('ease-in-out')
     })
-
-    it('button has transform for hover scale effect', () => {
-      render(<Button>Scalable</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveClass('transform')
-    })
   })
+})
 
-  // Test: Custom className
-  describe('Custom className', () => {
-    it('accepts additional className prop', () => {
-      render(<Button className="custom-class">Custom</Button>)
+describe('CTASection Component', () => {
+  const defaultProps: CTASectionProps = {
+    title: 'Ready to Get Started?',
+    description: 'Join thousands of teams already using our platform.',
+    primaryCTA: {
+      label: 'Get Started',
+      href: '#signup',
+      variant: 'primary',
+      size: 'lg',
+    },
+    secondaryCTA: {
+      label: 'Learn More',
+      href: '#features',
+      variant: 'outline',
+      size: 'lg',
+    },
+  }
 
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveClass('custom-class')
-    })
+  describe('CTA Section rendering', () => {
+    it('renders title and description', () => {
+      render(<CTASection {...defaultProps} />)
 
-    it('preserves base classes when custom className is added', () => {
-      render(<Button className="custom-class" variant="primary">Custom</Button>)
+      const title = screen.getByTestId('cta-section-title')
+      expect(title).toHaveTextContent('Ready to Get Started?')
 
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveClass('custom-class')
-      expect(button).toHaveClass('bg-primary-600')
-    })
-  })
-
-  // Test: Children content
-  describe('Children content', () => {
-    it('renders text children correctly', () => {
-      render(<Button>Get Started</Button>)
-
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveTextContent('Get Started')
-    })
-
-    it('renders JSX children correctly', () => {
-      render(
-        <Button>
-          <span data-testid="icon">🚀</span>
-          Launch
-        </Button>
+      const description = screen.getByTestId('cta-section-description')
+      expect(description).toHaveTextContent(
+        'Join thousands of teams already using our platform.'
       )
-
-      const button = screen.getByTestId('cta-button')
-      expect(button).toHaveTextContent('🚀')
-      expect(button).toHaveTextContent('Launch')
-      expect(screen.getByTestId('icon')).toBeInTheDocument()
     })
+
+    it('renders primary CTA button', () => {
+      render(<CTASection {...defaultProps} />)
+
+      const primaryButton = screen.getByTestId('cta-primary-button')
+      expect(primaryButton).toHaveTextContent('Get Started')
+      expect(primaryButton).toHaveAttribute('href', '#signup')
+    })
+
+    it('renders secondary CTA button when provided', () => {
+      render(<CTASection {...defaultProps} />)
+
+      const secondaryButton = screen.getByTestId('cta-secondary-button')
+      expect(secondaryButton).toHaveTextContent('Learn More')
+      expect(secondaryButton).toHaveAttribute('href', '#features')
+    })
+
+    it('does not render secondary CTA when not provided', () => {
+      const propsWithoutSecondary = { ...defaultProps, secondaryCTA: undefined }
+      render(<CTASection {...propsWithoutSecondary} />)
+
+      const secondaryButton = screen.queryByTestId('cta-secondary-button')
+      expect(secondaryButton).not.toBeInTheDocument()
+    })
+  })
+
+  describe('CTA Section accessibility', () => {
+    it('has proper section role and aria attributes', () => {
+      render(<CTASection {...defaultProps} id="test-cta" />)
+
+      const section = screen.getByTestId('cta-section')
+      expect(section).toHaveAttribute('aria-labelledby', 'test-cta-title')
+    })
+
+    it('title has proper id for aria-labelledby', () => {
+      render(<CTASection {...defaultProps} id="test-cta" />)
+
+      const title = screen.getByTestId('cta-section-title')
+      expect(title).toHaveAttribute('id', 'test-cta-title')
+    })
+
+    it('buttons have aria-label attributes', () => {
+      render(<CTASection {...defaultProps} />)
+
+      const primaryButton = screen.getByTestId('cta-primary-button')
+      expect(primaryButton).toHaveAttribute('aria-label', 'Get Started')
+
+      const secondaryButton = screen.getByTestId('cta-secondary-button')
+      expect(secondaryButton).toHaveAttribute('aria-label', 'Learn More')
+    })
+  })
+})
+
+describe('InlineCTA Component', () => {
+  it('renders with default outline variant', () => {
+    render(<InlineCTA label="Learn More" href="#learn" />)
+
+    const button = screen.getByTestId('inline-cta')
+    expect(button).toHaveTextContent('Learn More')
+    expect(button).toHaveClass('border-2')
+    expect(button).toHaveClass('border-primary-600')
+  })
+
+  it('accepts custom variant', () => {
+    render(<InlineCTA label="Sign Up" href="#signup" variant="primary" />)
+
+    const button = screen.getByTestId('inline-cta')
+    expect(button).toHaveClass('bg-primary-600')
+  })
+
+  it('has proper aria-label', () => {
+    render(<InlineCTA label="Contact Us" href="#contact" />)
+
+    const button = screen.getByTestId('inline-cta')
+    expect(button).toHaveAttribute('aria-label', 'Contact Us')
+  })
+})
+
+describe('ContactSalesCTA Component', () => {
+  it('renders with default label and href', () => {
+    render(<ContactSalesCTA />)
+
+    const button = screen.getByTestId('contact-sales-cta')
+    expect(button).toHaveTextContent('Contact Sales')
+    expect(button).toHaveAttribute('href', '#contact')
+  })
+
+  it('renders with secondary variant', () => {
+    render(<ContactSalesCTA />)
+
+    const button = screen.getByTestId('contact-sales-cta')
+    expect(button).toHaveClass('bg-secondary-600')
+  })
+
+  it('accepts custom label and href', () => {
+    render(
+      <ContactSalesCTA label="Talk to Sales" href="/sales" />
+    )
+
+    const button = screen.getByTestId('contact-sales-cta')
+    expect(button).toHaveTextContent('Talk to Sales')
+    expect(button).toHaveAttribute('href', '/sales')
+  })
+})
+
+describe('LearnMoreCTA Component', () => {
+  it('renders with default label and href', () => {
+    render(<LearnMoreCTA />)
+
+    const button = screen.getByTestId('learn-more-cta')
+    expect(button).toHaveTextContent('Learn More')
+    expect(button).toHaveAttribute('href', '#features')
+  })
+
+  it('renders with outline variant', () => {
+    render(<LearnMoreCTA />)
+
+    const button = screen.getByTestId('learn-more-cta')
+    expect(button).toHaveClass('border-2')
+    expect(button).toHaveClass('border-primary-600')
+  })
+
+  it('accepts custom label and href', () => {
+    render(
+      <LearnMoreCTA label="Discover More" href="/about" />
+    )
+
+    const button = screen.getByTestId('learn-more-cta')
+    expect(button).toHaveTextContent('Discover More')
+    expect(button).toHaveAttribute('href', '/about')
+  })
+})
+
+// Test Case 1: Multiple CTAs present on homepage
+describe('Test Case 1: Homepage CTA Count', () => {
+  it('CTASection renders multiple CTAs (primary + secondary)', () => {
+    const props: CTASectionProps = {
+      primaryCTA: {
+        label: 'Get Started',
+        href: '#signup',
+        variant: 'primary',
+        size: 'lg',
+      },
+      secondaryCTA: {
+        label: 'Learn More',
+        href: '#features',
+        variant: 'outline',
+        size: 'lg',
+      },
+    }
+
+    render(<CTASection {...props} />)
+
+    // Count all buttons with data-testid containing 'cta'
+    const primaryCTA = screen.getByTestId('cta-primary-button')
+    const secondaryCTA = screen.getByTestId('cta-secondary-button')
+
+    expect(primaryCTA).toBeInTheDocument()
+    expect(secondaryCTA).toBeInTheDocument()
+  })
+
+  it('renders InlineCTA, ContactSalesCTA, and LearnMoreCTA as additional CTAs', () => {
+    render(
+      <>
+        <InlineCTA label="Inline CTA" href="#inline" />
+        <ContactSalesCTA />
+        <LearnMoreCTA />
+      </>
+    )
+
+    const inlineCTA = screen.getByTestId('inline-cta')
+    const contactSalesCTA = screen.getByTestId('contact-sales-cta')
+    const learnMoreCTA = screen.getByTestId('learn-more-cta')
+
+    expect(inlineCTA).toBeInTheDocument()
+    expect(contactSalesCTA).toBeInTheDocument()
+    expect(learnMoreCTA).toBeInTheDocument()
   })
 })

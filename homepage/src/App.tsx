@@ -1,9 +1,9 @@
 import { Hero } from './components/sections/Hero'
-import { Header } from './components/layout'
+import { Header, Footer } from './components/layout'
 import { Features } from './components/sections/Features'
 import { SocialProof } from './components/sections/SocialProof'
-import { CTASection, ContactSalesCTA, LearnMoreCTA } from './components/sections/CTASection'
-import { NAV_LINKS } from './utils/constants'
+import { CTASection } from './components/sections/CTASection'
+import { NAV_LINKS, SOCIAL_LINKS, FOOTER_COLUMNS, LEGAL_LINKS } from './utils/constants'
 
 function App() {
   return (
@@ -43,21 +43,9 @@ function App() {
         </div>
 
         <SocialProof />
-
-        {/* Contact Sales CTA after Social Proof */}
-        <div className="container-main py-12" id="contact-sales-section">
-          <ContactSalesCTA
-            title="Need a Custom Solution?"
-            description="Our sales team is here to help you find the perfect plan for your organization."
-            buttonText="Contact Sales"
-            href="#contact"
-          />
-        </div>
-
-        {/* Main CTA Section before footer */}
         <CTASection
-          title="Ready to Transform Your Workflow?"
-          description="Join thousands of teams already using our platform. Start your free trial today and experience the difference."
+          title="Ready to Get Started?"
+          description="Join thousands of teams already using our platform to transform their workflow. Start your free trial today."
           primaryCTA={{
             label: "Start Free Trial",
             href: "#signup",
@@ -65,14 +53,19 @@ function App() {
             size: "lg"
           }}
           secondaryCTA={{
-            label: "Schedule Demo",
-            href: "#demo",
+            label: "Learn More",
+            href: "#features",
             variant: "outline",
             size: "lg"
           }}
-          background="gradient"
         />
       </main>
+      <Footer
+        columns={FOOTER_COLUMNS}
+        socialLinks={SOCIAL_LINKS}
+        legalLinks={LEGAL_LINKS}
+        companyName="ProductName"
+      />
     </>
   )
 }
