@@ -2,4 +2,5 @@
  * Common component exports.
  */
 
-// Components will be exported here as they are created
+export { Button } from './Button'
+export type { ButtonProps, ButtonVariant, ButtonSize } from './Button'
