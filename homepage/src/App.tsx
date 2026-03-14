@@ -1,6 +1,7 @@
 import { Hero } from './components/sections/Hero'
 import { Header } from './components/layout'
 import { Features } from './components/sections/Features'
+import { SocialProof } from './components/sections/SocialProof'
 import { NAV_LINKS } from './utils/constants'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           }}
         />
         <Features />
+        <SocialProof />
       </main>
     </>
   )
