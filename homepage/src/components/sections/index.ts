@@ -1,0 +1,5 @@
+/**
+ * Section component exports.
+ */
+
+export { Hero } from './Hero'
