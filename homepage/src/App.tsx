@@ -2,6 +2,7 @@ import { Hero } from './components/sections/Hero'
 import { Header } from './components/layout'
 import { Features } from './components/sections/Features'
 import { SocialProof } from './components/sections/SocialProof'
+import { CTASection } from './components/sections/CTASection'
 import { NAV_LINKS } from './utils/constants'
 
 function App() {
@@ -32,6 +33,22 @@ function App() {
         />
         <Features />
         <SocialProof />
+        <CTASection
+          title="Ready to Get Started?"
+          description="Join thousands of teams already using our platform to transform their workflow. Start your free trial today."
+          primaryCTA={{
+            label: "Start Free Trial",
+            href: "#signup",
+            variant: "primary",
+            size: "lg"
+          }}
+          secondaryCTA={{
+            label: "Learn More",
+            href: "#features",
+            variant: "outline",
+            size: "lg"
+          }}
+        />
       </main>
     </>
   )
