@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans text-secondary-900 bg-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold leading-tight;
+  }
+
+  /* Base link styles with hover and active states */
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  a:hover {
+    @apply text-primary-600;
+  }
+
+  a:active {
+    @apply text-primary-800;
+  }
+
+  /* Base button styles with hover, focus, and active states */
+  button {
+    @apply transition-all duration-200;
+  }
+
+  button:hover:not(:disabled) {
+    @apply scale-[1.02];
+  }
+
+  button:active:not(:disabled) {
+    @apply scale-[0.98];
+  }
+
+  /* Ensure focus states are visible for accessibility */
+  a:focus-visible,
+  button:focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  }
+}
+
+@layer components {
+  .container-main {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Interactive card hover animation */
+  .interactive-card {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .interactive-card:hover {
+    @apply shadow-lg scale-[1.02] -translate-y-1;
+  }
+
+  /* Navigation link hover underline effect */
+  .nav-link {
+    @apply relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-300;
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+}
+
+@layer utilities {
+  /* GPU-accelerated transforms for smooth animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Animation for smooth fades */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Slide up animation */
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/**
+ * Reduced Motion Support
+ * Respects user's prefers-reduced-motion setting for accessibility
+ * WCAG 2.1 Success Criterion 2.3.3 (Animation from Interactions)
+ */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable smooth scrolling */
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable all transitions */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable transform effects */
+  button:hover:not(:disabled),
+  button:active:not(:disabled),
+  .interactive-card:hover {
+    transform: none !important;
+  }
+
+  /* Remove hover underline animation */
+  .nav-link::after {
+    transition-duration: 0.01ms !important;
+  }
+}
