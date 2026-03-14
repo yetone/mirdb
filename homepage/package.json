@@ -18,6 +18,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@heroicons/react": "^2.0.18",
     "@playwright/test": "^1.40.0",
     "@testing-library/jest-dom": "^6.1.5",
