@@ -8,10 +8,15 @@ import { Footer } from './components/layout/Footer'
 import { MobileNav } from './components/layout/MobileNav'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { ThemeToggle } from './components/ui/ThemeToggle'
+import { Head } from './components/seo/Head'
+import { StructuredData } from './components/seo/StructuredData'
 
 function App() {
   return (
     <ThemeProvider>
+      {/* SEO Components */}
+      <Head />
+      <StructuredData />
       <div className="min-h-screen bg-white dark:bg-gray-900">
         {/* Header with MobileNav for responsive navigation */}
         <div className="relative">
