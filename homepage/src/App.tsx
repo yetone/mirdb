@@ -2,6 +2,7 @@ import { Hero } from '@/components/sections/Hero'
 import Features from './components/sections/Features'
 import { QuickStart } from './components/sections/QuickStart'
 import { Architecture } from './components/sections/Architecture'
+import { Community } from './components/sections/Community'
 import { Header } from './components/layout/Header'
 import { Footer } from './components/layout/Footer'
 import { MobileNav } from './components/layout/MobileNav'
@@ -29,6 +30,7 @@ function App() {
           <Features />
           <QuickStart />
           <Architecture />
+          <Community />
         </main>
         <Footer />
       </div>
