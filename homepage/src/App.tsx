@@ -1,5 +1,6 @@
 import { Hero } from '@/components/sections/Hero'
 import Features from './components/sections/Features'
+import { QuickStart } from './components/sections/QuickStart'
 
 function App() {
   return (
@@ -7,6 +8,7 @@ function App() {
       <main>
         <Hero />
         <Features />
+        <QuickStart />
       </main>
     </div>
   )

@@ -30,3 +30,14 @@
     @apply mt-4 text-lg text-gray-600 dark:text-gray-300;
   }
 }
+
+/* Prism.js syntax highlighting overrides */
+code[class*="language-"],
+pre[class*="language-"] {
+  @apply text-sm font-mono;
+}
+
+.dark code[class*="language-"],
+.dark pre[class*="language-"] {
+  @apply bg-gray-800;
+}
