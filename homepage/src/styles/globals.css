@@ -8,11 +8,16 @@
   }
 
   body {
+    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100;
     @apply antialiased;
   }
 }
 
 @layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
   .section-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }

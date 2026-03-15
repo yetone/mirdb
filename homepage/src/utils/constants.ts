@@ -2,14 +2,15 @@
  * Application constants for the MirDB Homepage.
  */
 
-import type { NavLink, Feature } from '../types'
+import type { NavLink, Feature } from '@/types'
 
 export const GITHUB_URL = 'https://github.com/yetone/mirdb'
 export const GITHUB_ISSUES_URL = 'https://github.com/yetone/mirdb/issues'
 export const CIRCLECI_URL = 'https://circleci.com/gh/yetone/mirdb'
 
 export const PRODUCT_NAME = 'MirDB'
-export const TAGLINE = 'A persistent key-value store with Memcached protocol support'
+export const TAGLINE = 'A Persistent Key-Value Store with Memcached Protocol Support'
+export const VALUE_PROPOSITION = 'High-performance persistent storage powered by LSM tree architecture, skip-list memtable, and built with Rust for reliability and speed.'
 
 export const SECTIONS: NavLink[] = [
   { label: 'Features', href: '#features' },
@@ -17,6 +18,8 @@ export const SECTIONS: NavLink[] = [
   { label: 'Architecture', href: '#architecture' },
   { label: 'Community', href: '#community' },
 ]
+
+export const DOCS_URL = '#quick-start'
 
 export const FEATURES: Feature[] = [
   {
