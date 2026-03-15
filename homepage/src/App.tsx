@@ -2,17 +2,27 @@ import { Hero } from '@/components/sections/Hero'
 import Features from './components/sections/Features'
 import { QuickStart } from './components/sections/QuickStart'
 import { Architecture } from './components/sections/Architecture'
+import { Header } from './components/layout/Header'
+import { ThemeProvider } from './contexts/ThemeContext'
+import { ThemeToggle } from './components/ui/ThemeToggle'
 
 function App() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      <main>
-        <Hero />
-        <Features />
-        <QuickStart />
-        <Architecture />
-      </main>
-    </div>
+    <ThemeProvider>
+      <div className="min-h-screen bg-white dark:bg-gray-900">
+        <Header />
+        {/* Theme toggle positioned fixed in top-right corner */}
+        <div className="fixed top-4 right-4 z-50 md:top-3 md:right-20">
+          <ThemeToggle size="md" />
+        </div>
+        <main>
+          <Hero />
+          <Features />
+          <QuickStart />
+          <Architecture />
+        </main>
+      </div>
+    </ThemeProvider>
   )
 }
 
