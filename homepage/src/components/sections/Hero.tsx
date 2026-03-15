@@ -6,6 +6,7 @@
  * - Display product name (MirDB) and logo
  * - Show compelling tagline and value proposition
  * - Render prominent "Get Started" CTA button
+ * - Display CircleCI status badge (Scenario 15 integration)
  *
  * Requirements:
  * - REQ-1: Product name, tagline, value proposition
@@ -14,7 +15,7 @@
  */
 
 import { Button } from '@/components/ui/Button'
-import { PRODUCT_NAME, TAGLINE, VALUE_PROPOSITION, DOCS_URL } from '@/utils/constants'
+import { PRODUCT_NAME, TAGLINE, VALUE_PROPOSITION, DOCS_URL, CIRCLECI_URL, CIRCLECI_BADGE_URL } from '@/utils/constants'
 
 export function Hero() {
   return (
@@ -60,6 +61,23 @@ export function Hero() {
             >
               View on GitHub
             </Button>
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <a
+              href={CIRCLECI_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View CircleCI build status"
+              data-testid="circleci-badge-link"
+            >
+              <img
+                src={CIRCLECI_BADGE_URL}
+                alt="CircleCI Build Status"
+                className="h-5"
+                data-testid="circleci-badge-image"
+              />
+            </a>
           </div>
         </div>
       </div>

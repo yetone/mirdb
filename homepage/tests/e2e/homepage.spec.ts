@@ -37,6 +37,28 @@ test.describe('Homepage Hero Section', () => {
     const heroSection = page.getByRole('region', { name: /hero/i })
     await expect(heroSection).toBeVisible()
   })
+
+  // Scenario 15: CI/CD Status Badge Display - E2E Tests
+  test('CircleCI status badge is visible', async ({ page }) => {
+    const badgeImage = page.getByTestId('circleci-badge-image')
+    await expect(badgeImage).toBeVisible()
+    await expect(badgeImage).toHaveAttribute('alt', 'CircleCI Build Status')
+  })
+
+  test('CircleCI badge links to CircleCI project page', async ({ page, context }) => {
+    const badgeLink = page.getByTestId('circleci-badge-link')
+    await expect(badgeLink).toBeVisible()
+    await expect(badgeLink).toHaveAttribute('href', 'https://circleci.com/gh/yetone/mirdb')
+    await expect(badgeLink).toHaveAttribute('target', '_blank')
+  })
+
+  test('CircleCI badge image loads from valid endpoint', async ({ page }) => {
+    const badgeImage = page.getByTestId('circleci-badge-image')
+    const src = await badgeImage.getAttribute('src')
+
+    // Verify the badge URL points to CircleCI
+    expect(src).toMatch(/^https:\/\/circleci\.com\/gh\/yetone\/mirdb\.svg/)
+  })
 })
 
 /**

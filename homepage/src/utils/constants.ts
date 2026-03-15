@@ -7,6 +7,7 @@ import type { NavLink, Feature } from '@/types'
 export const GITHUB_URL = 'https://github.com/yetone/mirdb'
 export const GITHUB_ISSUES_URL = 'https://github.com/yetone/mirdb/issues'
 export const CIRCLECI_URL = 'https://circleci.com/gh/yetone/mirdb'
+export const CIRCLECI_BADGE_URL = 'https://circleci.com/gh/yetone/mirdb.svg?style=svg'
 
 export const PRODUCT_NAME = 'MirDB'
 export const TAGLINE = 'A Persistent Key-Value Store with Memcached Protocol Support'
