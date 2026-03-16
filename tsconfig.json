@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./tests",
-    "types": ["node"]
+    "resolveJsonModule": true,
+    "declaration": true
   },
-  "include": ["tests/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["tests/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

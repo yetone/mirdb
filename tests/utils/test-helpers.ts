@@ -9,10 +9,11 @@
  * - emulateDevice(page, device): Emulate mobile device
  * - disableJavaScript(page): Disable JS for progressive enhancement tests
  */
+
 import { Page, expect } from '@playwright/test';
 
 /**
- * Wait for the page to fully load
+ * Wait for page to fully load
  */
 export async function waitForPageLoad(page: Page): Promise<void> {
   await page.waitForLoadState('domcontentloaded');
@@ -20,41 +21,47 @@ export async function waitForPageLoad(page: Page): Promise<void> {
 }
 
 /**
- * Check if an element is visible and has content
+ * Check if element is visible and has text
  */
-export async function checkElementVisible(page: Page, selector: string): Promise<boolean> {
+export async function checkElementHasText(
+  page: Page,
+  selector: string,
+  expectedText: string
+): Promise<void> {
   const element = page.locator(selector);
-  return await element.isVisible();
+  await expect(element).toBeVisible();
+  await expect(element).toContainText(expectedText);
 }
 
 /**
- * Get text content of an element
+ * Check if element is visible and contains expected text (regex support)
  */
-export async function getElementText(page: Page, selector: string): Promise<string> {
+export async function checkElementWithText(
+  page: Page,
+  selector: string,
+  expectedText: string | RegExp
+): Promise<boolean> {
   const element = page.locator(selector);
-  return await element.textContent() || '';
+  await expect(element).toBeVisible();
+  await expect(element).toContainText(expectedText);
+  return true;
 }
 
 /**
- * Check if code block contains specific text
+ * Verify image loads correctly
  */
-export async function codeBlockContains(page: Page, text: string): Promise<boolean> {
-  const codeBlocks = page.locator('pre code, code');
-  const count = await codeBlocks.count();
-
-  for (let i = 0; i < count; i++) {
-    const content = await codeBlocks.nth(i).textContent();
-    if (content && content.includes(text)) {
-      return true;
-    }
-  }
-  return false;
+export async function checkImageLoads(
+  page: Page,
+  selector: string
+): Promise<void> {
+  const image = page.locator(selector);
+  await expect(image).toBeVisible();
 }
 
 /**
- * Test helper to scroll to an element
+ * Get all feature cards on the page
  */
-export async function scrollToElement(page: Page, selector: string): Promise<void> {
-  const element = page.locator(selector);
-  await element.scrollIntoViewIfNeeded();
+export async function getFeatureCards(page: Page): Promise<number> {
+  const cards = page.locator('.feature-card, .feature, [class*="feature"]');
+  return await cards.count();
 }

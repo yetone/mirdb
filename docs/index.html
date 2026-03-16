@@ -33,7 +33,52 @@
   <main>
     <!-- START: Features Section (Scenario 2) -->
     <section id="features" class="features">
-      <!-- Features content will be added by Scenario 2 -->
+      <div class="features-container">
+        <h2>Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🔌</div>
+            <h3>Memcached Protocol</h3>
+            <p>Full compatibility with the Memcached text protocol. Use familiar commands like SET, GET, DELETE with existing Memcached clients.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🌲</div>
+            <h3>LSM-tree Storage</h3>
+            <p>Log-Structured Merge-tree architecture optimized for high write throughput and efficient storage utilization.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">📋</div>
+            <h3>Skip-list Memtable</h3>
+            <p>In-memory skip-list data structure for fast reads and writes with O(log n) complexity.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">📝</div>
+            <h3>WAL Durability</h3>
+            <p>Write-Ahead Log ensures crash recovery and data durability. Never lose committed data.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">📦</div>
+            <h3>SSTable Storage</h3>
+            <p>Sorted String Tables provide efficient on-disk storage with fast sequential reads and bloom filters.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🔄</div>
+            <h3>Compaction</h3>
+            <p>Automatic minor and major compaction processes to merge SSTables, reclaim space, and optimize read performance.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">⏰</div>
+            <h3>TTL Support</h3>
+            <p>Time-to-live expiration for keys. Set automatic expiration times for cached data.</p>
+          </article>
+        </div>
+      </div>
     </section>
     <!-- END: Features Section (Scenario 2) -->
 

@@ -7,6 +7,6 @@ node_modules/
 package-lock.json
 
 # Playwright
-playwright-report/
 test-results/
-.playwright/
+playwright-report/
+playwright/.cache/

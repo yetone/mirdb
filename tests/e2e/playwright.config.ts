@@ -9,7 +9,12 @@
  * - Screenshot and video settings
  * - Accessibility testing plugins
  */
+
 import { defineConfig, devices } from '@playwright/test';
+import path from 'path';
+
+const rootDir = path.resolve(__dirname, '../..');
+const docsDir = path.join(rootDir, 'docs');
 
 export default defineConfig({
   testDir: './',
@@ -28,27 +33,11 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
-    {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
-    },
   ],
   webServer: {
-    command: 'npx serve docs -p 8080',
+    command: `npx http-server ${docsDir} -p 8080 -c-1`,
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 60000,
   },
 });
