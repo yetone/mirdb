@@ -1,0 +1,16 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A Persistent Key-Value Store with Memcached protocol",
+  "scripts": {
+    "dev": "npx http-server docs -p 8080 -c-1",
+    "test:e2e": "npx playwright test",
+    "test": "npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@axe-core/playwright": "^4.8.0",
+    "typescript": "^5.0.0",
+    "http-server": "^14.1.1"
+  }
+}

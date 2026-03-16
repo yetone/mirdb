@@ -1,0 +1,14 @@
+{
+  "product": {
+    "name": "MirDB",
+    "tagline": "A Persistent Key-Value Store with Memcached protocol",
+    "githubUrl": "https://github.com/yetone/mirdb",
+    "version": "0.0.1"
+  },
+  "hero": {
+    "ctaButtons": [
+      { "text": "Get Started", "href": "#getting-started" },
+      { "text": "View on GitHub", "href": "https://github.com/yetone/mirdb" }
+    ]
+  }
+}
