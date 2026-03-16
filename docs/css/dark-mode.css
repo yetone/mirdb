@@ -1,0 +1,38 @@
+/**
+ * MirDB Homepage - Dark Mode Styles
+ * Owner: Scenario 11 - Dark Mode Support
+ *
+ * This file contains:
+ * - Dark mode CSS custom property overrides
+ * - Media query for prefers-color-scheme: dark
+ * - [data-theme="dark"] selector for manual toggle
+ * - Dark theme color palette
+ */
+
+/* System preference dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-primary: #60a5fa;
+    --color-primary-dark: #3b82f6;
+    --color-background: #0f172a;
+    --color-surface: #1e293b;
+    --color-text: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-border: #334155;
+    --color-code-bg: #0f172a;
+    --color-code-text: #e2e8f0;
+  }
+}
+
+/* Manual dark mode toggle */
+[data-theme="dark"] {
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-text: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-code-bg: #0f172a;
+  --color-code-text: #e2e8f0;
+}

@@ -9,11 +9,10 @@
  * - emulateDevice(page, device): Emulate mobile device
  * - disableJavaScript(page): Disable JS for progressive enhancement tests
  */
-
 import { Page, expect } from '@playwright/test';
 
 /**
- * Wait for page to fully load
+ * Wait for the page to fully load
  */
 export async function waitForPageLoad(page: Page): Promise<void> {
   await page.waitForLoadState('domcontentloaded');
@@ -21,25 +20,41 @@ export async function waitForPageLoad(page: Page): Promise<void> {
 }
 
 /**
- * Check if element is visible and has text
+ * Check if an element is visible and has content
  */
-export async function checkElementHasText(
-  page: Page,
-  selector: string,
-  expectedText: string
-): Promise<void> {
+export async function checkElementVisible(page: Page, selector: string): Promise<boolean> {
   const element = page.locator(selector);
-  await expect(element).toBeVisible();
-  await expect(element).toContainText(expectedText);
+  return await element.isVisible();
 }
 
 /**
- * Verify image loads correctly
+ * Get text content of an element
  */
-export async function checkImageLoads(
-  page: Page,
-  selector: string
-): Promise<void> {
-  const image = page.locator(selector);
-  await expect(image).toBeVisible();
+export async function getElementText(page: Page, selector: string): Promise<string> {
+  const element = page.locator(selector);
+  return await element.textContent() || '';
+}
+
+/**
+ * Check if code block contains specific text
+ */
+export async function codeBlockContains(page: Page, text: string): Promise<boolean> {
+  const codeBlocks = page.locator('pre code, code');
+  const count = await codeBlocks.count();
+
+  for (let i = 0; i < count; i++) {
+    const content = await codeBlocks.nth(i).textContent();
+    if (content && content.includes(text)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Test helper to scroll to an element
+ */
+export async function scrollToElement(page: Page, selector: string): Promise<void> {
+  const element = page.locator(selector);
+  await element.scrollIntoViewIfNeeded();
 }

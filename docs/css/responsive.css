@@ -1,0 +1,98 @@
+/**
+ * MirDB Homepage - Responsive Styles
+ * Owner: Scenario 9 - Responsive Design - Mobile
+ *
+ * This file contains:
+ * - Mobile-first responsive breakpoints
+ * - Hamburger menu styles
+ * - Mobile navigation
+ * - Touch-friendly adjustments
+ * - Tablet and desktop breakpoint overrides
+ *
+ * Breakpoints:
+ * - 320px: Minimum mobile
+ * - 768px: Tablet
+ * - 1024px: Desktop
+ */
+
+/* Mobile styles (default) */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-background);
+    flex-direction: column;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+    gap: var(--spacing-md);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  section h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .code-block pre {
+    padding: var(--spacing-md);
+  }
+
+  .copy-button .copy-text {
+    display: none;
+  }
+}
+
+/* Tablet and up */
+@media (min-width: 769px) {
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+  }
+}
+
+/* Touch targets for mobile */
+@media (pointer: coarse) {
+  .copy-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .nav-links a {
+    padding: var(--spacing-sm) 0;
+    display: block;
+  }
+}

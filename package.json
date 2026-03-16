@@ -1,16 +1,25 @@
 {
   "name": "mirdb-homepage",
   "version": "1.0.0",
-  "description": "MirDB Homepage - A Persistent Key-Value Store with Memcached protocol",
+  "description": "MirDB Homepage - A Persistent Key-Value Store with Memcached Protocol",
   "scripts": {
-    "dev": "npx http-server docs -p 8080 -c-1",
+    "dev": "npx serve docs -p 8080",
+    "test": "npx playwright test",
     "test:e2e": "npx playwright test",
-    "test": "npm run test:e2e"
+    "test:headed": "npx playwright test --headed"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
     "@axe-core/playwright": "^4.8.0",
     "typescript": "^5.0.0",
-    "http-server": "^14.1.1"
-  }
+    "serve": "^14.2.0"
+  },
+  "keywords": [
+    "mirdb",
+    "key-value-store",
+    "memcached",
+    "database"
+  ],
+  "author": "yetone <yetoneful@gmail.com>",
+  "license": "MIT"
 }

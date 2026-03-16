@@ -6,6 +6,8 @@
   <title>MirDB - A Persistent Key-Value Store with Memcached protocol</title>
   <meta name="description" content="MirDB is a persistent key-value store that speaks the Memcached protocol. Built with LSM-tree storage engine for high performance.">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dark-mode.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
   <!-- START: Hero Section (Scenario 1) -->
@@ -37,7 +39,86 @@
 
     <!-- START: Getting Started Section (Scenario 3) -->
     <section id="getting-started" class="getting-started">
-      <!-- Getting Started content will be added by Scenario 3 -->
+      <div class="container">
+        <h2>Getting Started</h2>
+        <p class="section-intro">Connect to MirDB using the Memcached protocol. Here's a quick example using telnet:</p>
+
+        <div class="code-example">
+          <h3>Connect to MirDB</h3>
+          <div class="code-block">
+            <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-connect">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+            <pre><code id="code-connect">telnet localhost 11211</code></pre>
+          </div>
+        </div>
+
+        <div class="code-example">
+          <h3>Store a Value (SET Command)</h3>
+          <p class="code-description">Use the SET command to store a key-value pair. The syntax is: <code>set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></p>
+          <div class="code-block">
+            <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-set">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+            <pre><code id="code-set">set mykey 0 3600 5
+hello
+STORED</code></pre>
+          </div>
+        </div>
+
+        <div class="code-example">
+          <h3>Retrieve a Value (GET Command)</h3>
+          <p class="code-description">Use the GET command to retrieve stored values:</p>
+          <div class="code-block">
+            <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-get">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+            <pre><code id="code-get">get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+
+        <div class="code-example">
+          <h3>Complete Session Example</h3>
+          <p class="code-description">Here's a complete session demonstrating connection, set, and get operations:</p>
+          <div class="code-block">
+            <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-complete">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            </button>
+            <pre><code id="code-complete">$ telnet localhost 11211
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+
+set mykey 0 3600 5
+hello
+STORED
+
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+      </div>
     </section>
     <!-- END: Getting Started Section (Scenario 3) -->
 
@@ -61,5 +142,6 @@
   <!-- END: Footer Section (Scenario 8) -->
 
   <script src="js/main.js" defer></script>
+  <script src="js/copy-code.js" defer></script>
 </body>
 </html>
