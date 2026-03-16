@@ -474,6 +474,7 @@ section {
   border-radius: var(--radius-sm);
   font-family: 'SF Mono', 'Fira Code', Consolas, 'Courier New', monospace;
   font-size: var(--font-size-sm);
+  color: var(--color-text);
 }
 
 .code-block {
@@ -507,10 +508,10 @@ section {
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-sm);
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: var(--radius-sm);
-  color: #94a3b8;
+  color: #cbd5e1;
   font-size: var(--font-size-sm);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -588,7 +589,7 @@ section {
 }
 
 .version-badge-value {
-  background-color: #007ec6;
+  background-color: #0069a8;
   color: white;
   padding: 0.125rem 0.5rem;
 }
@@ -773,6 +774,7 @@ section {
   border-radius: var(--radius-sm);
   font-family: 'SF Mono', 'Fira Code', Consolas, 'Courier New', monospace;
   font-size: var(--font-size-sm);
+  color: var(--color-text);
 }
 
 /* Configuration Table */
@@ -995,12 +997,13 @@ section {
 
 .footer-credits a {
   color: var(--color-primary);
-  text-decoration: none;
+  text-decoration: underline;
   font-weight: 500;
 }
 
 .footer-credits a:hover {
   text-decoration: underline;
+  color: var(--color-primary-dark);
 }
 
 .footer-copyright {
@@ -1010,11 +1013,12 @@ section {
 
 .footer-copyright a {
   color: var(--color-primary);
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .footer-copyright a:hover {
   text-decoration: underline;
+  color: var(--color-primary-dark);
 }
 
 /* Footer responsive adjustments */
@@ -1033,4 +1037,104 @@ section {
   .footer-links {
     grid-template-columns: 1fr;
   }
+}
+
+/* Accessibility Styles - Scenario 10 */
+
+/* Skip-to-content Link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  z-index: 1000;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  border-radius: 0 0 var(--radius-md) 0;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 2px;
+}
+
+/* Enhanced Focus Indicators for all interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Button focus states */
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+.btn-primary:focus-visible {
+  outline-color: white;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.4);
+}
+
+/* Tab button focus */
+.tab-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* Nav link focus enhancements */
+.nav-links a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Badge link focus */
+.badge-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Footer link focus */
+.footer-section a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Copy button focus */
+.copy-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Feature card focus state when navigating with keyboard */
+.feature-card:focus-within {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Screen reader only utility class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
