@@ -368,7 +368,148 @@ volumes:
 
     <!-- START: Configuration Section (Scenario 7) -->
     <section id="configuration" class="configuration">
-      <!-- Configuration content will be added by Scenario 7 -->
+      <div class="container">
+        <h2>Configuration</h2>
+        <p class="section-intro">Configure MirDB using a TOML configuration file or command-line options.</p>
+
+        <div class="config-subsection">
+          <h3>Configuration File</h3>
+          <p class="config-description">MirDB uses TOML configuration files. Specify the config file path using the <code>-c</code> flag:</p>
+
+          <div class="code-example">
+            <h4>Example Configuration (mirdb.toml)</h4>
+            <div class="code-block">
+              <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-config-toml">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+              <pre><code id="code-config-toml"># Network configuration
+addr = "0.0.0.0:12333"
+
+# Storage configuration
+work_dir = "/var/lib/mirdb"
+max_level = 7
+
+# Memory table settings
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+
+# SSTable settings
+sst_max_size = "100M"
+block_size = "4K"
+block_restart_interval = 16
+
+# Compaction settings
+l0_compaction_trigger = 4
+thread_sleep_ms = 500</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="config-subsection">
+          <h3>Configuration Options</h3>
+          <div class="config-table-wrapper">
+            <table class="config-table" aria-label="MirDB configuration options">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>addr</code></td>
+                  <td>Server listen address and port</td>
+                  <td><code>0.0.0.0:12333</code></td>
+                </tr>
+                <tr>
+                  <td><code>work_dir</code></td>
+                  <td>Data directory for persistent storage</td>
+                  <td><code>/tmp/mirdb</code></td>
+                </tr>
+                <tr>
+                  <td><code>max_level</code></td>
+                  <td>Maximum LSM tree levels</td>
+                  <td><code>7</code></td>
+                </tr>
+                <tr>
+                  <td><code>mem_table_max_size</code></td>
+                  <td>Maximum memtable size before flush</td>
+                  <td><code>4M</code></td>
+                </tr>
+                <tr>
+                  <td><code>sst_max_size</code></td>
+                  <td>Maximum SSTable file size</td>
+                  <td><code>100M</code></td>
+                </tr>
+                <tr>
+                  <td><code>l0_compaction_trigger</code></td>
+                  <td>Level 0 files count to trigger compaction</td>
+                  <td><code>4</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="config-subsection">
+          <h3>CLI Options</h3>
+          <p class="config-description">MirDB supports the following command-line options:</p>
+
+          <div class="code-example">
+            <h4>Command Line Usage</h4>
+            <div class="code-block">
+              <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-cli-options">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+              <pre><code id="code-cli-options"># Start with a configuration file
+mirdb-server -c /path/to/mirdb.toml
+
+# Start with default configuration
+mirdb-server
+
+# Common options
+  -c, --config &lt;FILE&gt;    Path to configuration file
+  -h, --help             Display help information
+  -V, --version          Display version information</code></pre>
+            </div>
+          </div>
+
+          <div class="cli-options-list">
+            <h4>Available Flags</h4>
+            <dl class="options-definition">
+              <dt><code>-c, --config &lt;FILE&gt;</code></dt>
+              <dd>Specify the path to a TOML configuration file. If not provided, MirDB will use default settings.</dd>
+
+              <dt><code>-h, --help</code></dt>
+              <dd>Display help information and available command-line options.</dd>
+
+              <dt><code>-V, --version</code></dt>
+              <dd>Display the MirDB version number.</dd>
+            </dl>
+          </div>
+        </div>
+
+        <div class="config-subsection">
+          <h3>Size Units</h3>
+          <p class="config-description">Configuration values support the following size suffixes:</p>
+          <ul class="size-units-list">
+            <li><code>K</code> - Kilobytes (1,024 bytes)</li>
+            <li><code>M</code> - Megabytes (1,048,576 bytes)</li>
+            <li><code>G</code> - Gigabytes (1,073,741,824 bytes)</li>
+            <li><code>T</code> - Terabytes (1,099,511,627,776 bytes)</li>
+          </ul>
+        </div>
+      </div>
     </section>
     <!-- END: Configuration Section (Scenario 7) -->
   </main>
