@@ -1,0 +1,198 @@
+/**
+ * MirDB Homepage - Dark Mode Styles
+ * Owner: Scenario 11 - Dark Mode Support
+ *
+ * This file contains:
+ * - Dark mode CSS custom property overrides
+ * - Media query for prefers-color-scheme: dark
+ * - [data-theme="dark"] selector for manual toggle
+ * - Dark theme color palette
+ * - Smooth theme transitions
+ */
+
+/* Theme transition for smooth switching */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease !important;
+}
+
+/* System preference dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-primary: #60a5fa;
+    --color-primary-dark: #3b82f6;
+    --color-background: #0f172a;
+    --color-surface: #1e293b;
+    --color-text: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-border: #334155;
+    --color-code-bg: #0f172a;
+    --color-code-text: #e2e8f0;
+  }
+
+  :root:not([data-theme="light"]) .hero {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  }
+
+  :root:not([data-theme="light"]) .code-block {
+    background-color: #0c1425;
+    border: 1px solid #334155;
+  }
+
+  :root:not([data-theme="light"]) .config-table {
+    background-color: #1e293b;
+  }
+
+  :root:not([data-theme="light"]) .config-table th {
+    background-color: #0f172a;
+  }
+
+  :root:not([data-theme="light"]) .options-definition {
+    background-color: #1e293b;
+  }
+
+  :root:not([data-theme="light"]) .size-units-list li {
+    background-color: #1e293b;
+  }
+}
+
+/* Manual dark mode toggle */
+[data-theme="dark"] {
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-text: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-code-bg: #0f172a;
+  --color-code-text: #e2e8f0;
+}
+
+[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+[data-theme="dark"] .code-block {
+  background-color: #0c1425;
+  border: 1px solid #334155;
+}
+
+[data-theme="dark"] .code-block code {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .config-table {
+  background-color: #1e293b;
+}
+
+[data-theme="dark"] .config-table th {
+  background-color: #0f172a;
+}
+
+[data-theme="dark"] .config-table td code {
+  background-color: #334155;
+}
+
+[data-theme="dark"] .options-definition {
+  background-color: #1e293b;
+}
+
+[data-theme="dark"] .size-units-list li {
+  background-color: #1e293b;
+}
+
+[data-theme="dark"] .size-units-list li code {
+  background-color: #334155;
+}
+
+[data-theme="dark"] .config-description code,
+[data-theme="dark"] .code-example .code-description code {
+  background-color: #334155;
+}
+
+[data-theme="dark"] .version-badge-label {
+  background-color: #475569;
+}
+
+[data-theme="dark"] .version-badge-value {
+  background-color: #3b82f6;
+}
+
+/* Dark mode toggle button styles */
+.dark-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.dark-mode-toggle:hover {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.dark-mode-toggle:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.dark-mode-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Show/hide icons based on theme */
+.dark-mode-toggle .icon-moon {
+  display: block;
+}
+
+.dark-mode-toggle .icon-sun {
+  display: none;
+}
+
+[data-theme="dark"] .dark-mode-toggle .icon-moon {
+  display: none;
+}
+
+[data-theme="dark"] .dark-mode-toggle .icon-sun {
+  display: block;
+}
+
+/* System dark mode icon states */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .dark-mode-toggle .icon-moon {
+    display: none;
+  }
+
+  :root:not([data-theme="light"]) .dark-mode-toggle .icon-sun {
+    display: block;
+  }
+}
+
+/* Light mode explicit */
+[data-theme="light"] .dark-mode-toggle .icon-moon {
+  display: block;
+}
+
+[data-theme="light"] .dark-mode-toggle .icon-sun {
+  display: none;
+}

@@ -1,0 +1,494 @@
+/**
+ * MirDB Homepage - Responsive Styles
+ * Owner: Scenario 9 - Responsive Design - Mobile
+ *
+ * This file contains:
+ * - Mobile-first responsive breakpoints
+ * - Hamburger menu styles
+ * - Mobile navigation
+ * - Touch-friendly adjustments
+ * - Tablet and desktop breakpoint overrides
+ *
+ * Breakpoints:
+ * - 320px: Minimum mobile
+ * - 768px: Tablet
+ * - 1024px: Desktop
+ */
+
+/* ===========================================
+   MOBILE BASE STYLES (Default - Mobile First)
+   =========================================== */
+
+/* Prevent horizontal overflow on mobile */
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Ensure all containers respect viewport width */
+.hero-container,
+.features-container,
+.container {
+  max-width: 100%;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  box-sizing: border-box;
+}
+
+/* ===========================================
+   NAVIGATION - MOBILE
+   =========================================== */
+
+/* Mobile Navigation Toggle (Hamburger) */
+.nav-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: var(--spacing-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.nav-toggle-icon,
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-text);
+  transition: transform var(--transition-base), opacity var(--transition-base);
+}
+
+.nav-toggle-icon {
+  position: relative;
+}
+
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle-icon::before {
+  top: -7px;
+}
+
+.nav-toggle-icon::after {
+  top: 7px;
+}
+
+/* Hamburger animation when open */
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon {
+  background-color: transparent;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon::before {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon::after {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile Navigation Links - Hidden by default */
+.nav-links {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-background);
+  flex-direction: column;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  gap: 0;
+  z-index: 99;
+  box-shadow: var(--shadow-md);
+}
+
+/* Mobile Navigation Links - Open state */
+.nav-links.open {
+  display: flex;
+}
+
+/* Mobile Navigation Link Items - Touch friendly */
+.nav-links li {
+  margin: 0;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-height: 44px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  width: 100%;
+  justify-content: flex-start;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+  background-color: var(--color-surface);
+}
+
+/* ===========================================
+   HERO SECTION - MOBILE
+   =========================================== */
+
+.hero {
+  min-height: auto;
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.hero-container {
+  width: 100%;
+}
+
+.hero-logo {
+  width: 80px;
+  height: auto;
+}
+
+.hero-title {
+  font-size: 1.75rem; /* 28px - larger than h2 to maintain hierarchy */
+}
+
+.hero-tagline {
+  font-size: var(--font-size-base);
+  padding: 0 var(--spacing-sm);
+}
+
+.hero-cta {
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.hero-cta .btn {
+  width: 100%;
+  max-width: 280px;
+  min-height: 44px;
+}
+
+/* ===========================================
+   BADGES SECTION - MOBILE
+   =========================================== */
+
+.badges-section {
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+/* ===========================================
+   FEATURES SECTION - MOBILE
+   =========================================== */
+
+.features {
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+.features h2 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.features-grid {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+}
+
+.feature-card {
+  padding: var(--spacing-md);
+}
+
+.feature-card h3 {
+  font-size: var(--font-size-base);
+}
+
+.feature-card p {
+  font-size: var(--font-size-sm);
+}
+
+/* ===========================================
+   GETTING STARTED & CODE BLOCKS - MOBILE
+   =========================================== */
+
+.getting-started {
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+.getting-started h2 {
+  font-size: var(--font-size-2xl);
+}
+
+.getting-started .section-intro {
+  font-size: var(--font-size-base);
+  padding: 0 var(--spacing-sm);
+}
+
+/* Code blocks - horizontally scrollable */
+.code-block {
+  margin-left: calc(-1 * var(--spacing-md));
+  margin-right: calc(-1 * var(--spacing-md));
+  border-radius: 0;
+}
+
+.code-block pre {
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.code-block code {
+  font-size: var(--font-size-sm);
+  white-space: pre;
+  display: block;
+}
+
+/* Copy button - touch friendly */
+.copy-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--spacing-sm);
+}
+
+.copy-button .copy-text {
+  display: none;
+}
+
+.code-example h3 {
+  font-size: var(--font-size-lg);
+}
+
+.code-example h4 {
+  font-size: var(--font-size-base);
+}
+
+/* ===========================================
+   INSTALLATION SECTION - MOBILE
+   =========================================== */
+
+.installation {
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+.installation h2 {
+  font-size: var(--font-size-2xl);
+}
+
+.installation .section-intro {
+  font-size: var(--font-size-base);
+}
+
+.installation-tabs {
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.tab-button {
+  min-height: 44px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  flex: 1;
+  min-width: 100px;
+}
+
+/* ===========================================
+   FOOTER - MOBILE
+   =========================================== */
+
+.footer {
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+/* ===========================================
+   TOUCH TARGET STYLES
+   =========================================== */
+
+/* Ensure all interactive elements have minimum touch target size */
+@media (pointer: coarse) {
+  .btn,
+  .tab-button,
+  .nav-toggle,
+  .copy-button,
+  .badge-link {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .nav-links a {
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* ===========================================
+   TABLET STYLES (768px and up)
+   =========================================== */
+
+@media (min-width: 768px) {
+  /* Navigation - Desktop style */
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    padding: 0;
+    border-bottom: none;
+    gap: var(--spacing-lg);
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .nav-links a {
+    min-height: auto;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    width: auto;
+  }
+
+  /* Hero Section - Tablet */
+  .hero {
+    min-height: 70vh;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .hero-logo {
+    width: 100px;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+    padding: 0;
+  }
+
+  .hero-cta {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .hero-cta .btn {
+    width: auto;
+    max-width: none;
+  }
+
+  /* Features Section - Tablet */
+  .features {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .features h2 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Code blocks - Tablet */
+  .code-block {
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: var(--radius-lg);
+  }
+
+  .copy-button .copy-text {
+    display: inline;
+  }
+
+  /* Getting Started - Tablet */
+  .getting-started {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .getting-started h2 {
+    font-size: var(--font-size-3xl);
+  }
+
+  /* Installation - Tablet */
+  .installation {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .installation h2 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .tab-button {
+    flex: none;
+    min-width: auto;
+  }
+}
+
+/* ===========================================
+   DESKTOP STYLES (1024px and up)
+   =========================================== */
+
+@media (min-width: 1024px) {
+  /* Hero Section - Desktop */
+  .hero {
+    min-height: 80vh;
+  }
+
+  .hero-logo {
+    width: 120px;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Features Grid - Desktop */
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  /* Containers - Desktop */
+  .hero-container,
+  .features-container,
+  .container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}
+
+/* ===========================================
+   PRINT STYLES
+   =========================================== */
+
+@media print {
+  .nav-toggle,
+  .copy-button {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    position: static;
+    flex-direction: row;
+  }
+
+  .code-block {
+    page-break-inside: avoid;
+  }
+}
