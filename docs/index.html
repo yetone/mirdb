@@ -210,7 +210,159 @@ END</code></pre>
 
     <!-- START: Installation Section (Scenario 6) -->
     <section id="installation" class="installation">
-      <!-- Installation content will be added by Scenario 6 -->
+      <div class="container">
+        <h2>Installation</h2>
+        <p class="section-intro">Choose your preferred installation method to get MirDB up and running.</p>
+
+        <div class="installation-tabs" role="tablist" aria-label="Installation methods">
+          <button
+            class="tab-button active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="cargo-panel"
+            id="cargo-tab"
+            data-tab="cargo"
+          >
+            Cargo
+          </button>
+          <button
+            class="tab-button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="docker-panel"
+            id="docker-tab"
+            data-tab="docker"
+          >
+            Docker
+          </button>
+        </div>
+
+        <div class="tab-panels">
+          <div
+            class="tab-panel active"
+            role="tabpanel"
+            id="cargo-panel"
+            aria-labelledby="cargo-tab"
+          >
+            <h3>Install with Cargo</h3>
+            <p class="installation-description">Install MirDB using Rust's package manager. Requires Rust and Cargo installed on your system.</p>
+
+            <div class="code-example">
+              <h4>Install from crates.io</h4>
+              <div class="code-block">
+                <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-cargo-install">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+                <pre><code id="code-cargo-install">cargo install mirdb-server</code></pre>
+              </div>
+            </div>
+
+            <div class="code-example">
+              <h4>Build from Source</h4>
+              <p class="code-description">Clone the repository and build from source for the latest development version:</p>
+              <div class="code-block">
+                <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-cargo-build">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+                <pre><code id="code-cargo-build">git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+              </div>
+            </div>
+
+            <div class="code-example">
+              <h4>Run the Server</h4>
+              <p class="code-description">After building, start the MirDB server:</p>
+              <div class="code-block">
+                <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-cargo-run">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+                <pre><code id="code-cargo-run">./target/release/mirdb-server</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="tab-panel"
+            role="tabpanel"
+            id="docker-panel"
+            aria-labelledby="docker-tab"
+            hidden
+          >
+            <h3>Install with Docker</h3>
+            <p class="installation-description">Run MirDB in a container for easy deployment and isolation.</p>
+
+            <div class="code-example">
+              <h4>Pull the Docker Image</h4>
+              <div class="code-block">
+                <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-docker-pull">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+                <pre><code id="code-docker-pull">docker pull yetone/mirdb:latest</code></pre>
+              </div>
+            </div>
+
+            <div class="code-example">
+              <h4>Run the Container</h4>
+              <p class="code-description">Start a MirDB container with port mapping and persistent storage:</p>
+              <div class="code-block">
+                <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-docker-run">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+                <pre><code id="code-docker-run">docker run -d \
+  --name mirdb \
+  -p 11211:11211 \
+  -v mirdb-data:/data \
+  yetone/mirdb:latest</code></pre>
+              </div>
+            </div>
+
+            <div class="code-example">
+              <h4>Docker Compose</h4>
+              <p class="code-description">Use Docker Compose for more complex setups:</p>
+              <div class="code-block">
+                <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="code-docker-compose">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="copy-text">Copy</span>
+                </button>
+                <pre><code id="code-docker-compose">version: '3.8'
+services:
+  mirdb:
+    image: yetone/mirdb:latest
+    ports:
+      - "11211:11211"
+    volumes:
+      - mirdb-data:/data
+volumes:
+  mirdb-data:</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
     <!-- END: Installation Section (Scenario 6) -->
 
