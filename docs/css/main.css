@@ -375,6 +375,58 @@ section {
   font-weight: 500;
 }
 
+/* Badges Section - Scenario 5 */
+.badges-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xl);
+}
+
+.badge-link {
+  display: inline-flex;
+  align-items: center;
+  transition: opacity var(--transition-fast);
+}
+
+.badge-link:hover {
+  opacity: 0.8;
+}
+
+.badge-link:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.badge-image {
+  height: 20px;
+  width: auto;
+}
+
+.version-badge {
+  display: inline-flex;
+  font-family: 'SF Mono', 'Fira Code', Consolas, 'Courier New', monospace;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.version-badge-label {
+  background-color: #555;
+  color: white;
+  padding: 0.125rem 0.5rem;
+}
+
+.version-badge-value {
+  background-color: #007ec6;
+  color: white;
+  padding: 0.125rem 0.5rem;
+}
+
 /* Footer Placeholder */
 .footer {
   padding: var(--spacing-xl) var(--spacing-lg);
