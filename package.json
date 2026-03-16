@@ -9,9 +9,14 @@
     "test:debug": "npx playwright test --debug"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
     "@axe-core/playwright": "^4.8.0",
-    "typescript": "^5.0.0",
-    "http-server": "^14.1.1"
+    "@playwright/test": "^1.40.0",
+    "http-server": "^14.1.1",
+    "lighthouse": "^13.0.3",
+    "playwright-lighthouse": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
   }
 }
