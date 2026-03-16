@@ -31,6 +31,49 @@
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/dark-mode.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <!-- Progressive Enhancement: No-JS Fallback Styles (Scenario 14) -->
+  <noscript>
+    <style>
+      /* Show navigation links on mobile without JavaScript */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: flex !important;
+          position: static !important;
+          flex-direction: row !important;
+          flex-wrap: wrap !important;
+          border-bottom: none !important;
+          padding: 0 !important;
+          gap: var(--spacing-sm) !important;
+        }
+        .nav-toggle {
+          display: none !important;
+        }
+      }
+      /* Show all tab panels when JavaScript is disabled */
+      .tab-panel,
+      .tab-panel[hidden] {
+        display: block !important;
+      }
+      /* Hide tab buttons since all content is visible */
+      .installation-tabs {
+        display: none !important;
+      }
+      /* Add visual separator between installation methods */
+      .tab-panel + .tab-panel {
+        margin-top: var(--spacing-2xl);
+        padding-top: var(--spacing-2xl);
+        border-top: 1px solid var(--color-border);
+      }
+      /* Hide copy buttons since they require JavaScript */
+      .copy-button {
+        display: none !important;
+      }
+      /* Hide dark mode toggle since it requires JavaScript */
+      .dark-mode-toggle {
+        display: none !important;
+      }
+    </style>
+  </noscript>
 </head>
 <body>
   <!-- START: Skip-to-content Link (Scenario 10 - Accessibility) -->
