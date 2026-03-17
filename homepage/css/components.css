@@ -492,9 +492,9 @@
   top: var(--spacing-sm);
   right: var(--spacing-sm);
   padding: var(--spacing-xs) var(--spacing-sm);
-  background-color: var(--color-code-btn-bg, rgba(255, 255, 255, 0.1));
-  color: var(--color-code-btn-text, #a0a0a0);
-  border: 1px solid var(--color-code-btn-border, rgba(255, 255, 255, 0.2));
+  background-color: var(--color-code-btn-bg, rgba(255, 255, 255, 0.15));
+  color: var(--color-code-btn-text, #d0d0d0);
+  border: 1px solid var(--color-code-btn-border, rgba(255, 255, 255, 0.3));
   border-radius: var(--radius-sm);
   font-size: var(--font-size-xs);
   font-family: inherit;
@@ -549,5 +549,162 @@
   .copy-btn {
     padding: 0.125rem var(--spacing-xs);
     font-size: 10px;
+  }
+}
+
+/* =============================================
+   SCENARIO 10 - Accessibility Compliance
+   Owner: Scenario 10 - Accessibility Compliance
+
+   Includes:
+   - Skip to main content link
+   - Focus indicators for all interactive elements
+   - High contrast focus styles for WCAG 2.1 AA
+   ============================================= */
+
+/* Skip Link - Hidden until focused */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+  outline: 3px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* Focus Indicators - WCAG 2.1 AA Compliant
+   Focus outline must have a contrast ratio of at least 3:1
+   against adjacent colors and be at least 2px thick */
+
+/* Global focus styles for all focusable elements */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Remove default outline when using focus-visible for keyboard navigation */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+[tabindex]:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Restore focus styles for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Button focus styles */
+.btn:focus,
+.btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(228, 77, 38, 0.3);
+}
+
+.btn-primary:focus,
+.btn-primary:focus-visible {
+  outline-color: var(--color-text);
+}
+
+/* Header navigation link focus styles */
+.header__nav-link:focus,
+.header__nav-link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Theme toggle button focus styles */
+.theme-toggle:focus,
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+/* Mobile nav toggle focus styles */
+.mobile-nav-toggle:focus,
+.mobile-nav-toggle:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Footer link focus styles */
+.footer__link:focus,
+.footer__link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Code block copy button focus - already defined but ensuring consistency */
+.copy-btn:focus,
+.copy-btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Feature card focus for keyboard navigation (if made focusable) */
+.feature-card:focus,
+.feature-card:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 4px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .skip-link:focus {
+    outline: 4px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+/* Reduced motion preference support */
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+
+  a,
+  button,
+  .btn,
+  .feature-card,
+  .theme-toggle {
+    transition: none;
   }
 }

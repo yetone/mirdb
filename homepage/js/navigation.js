@@ -49,9 +49,14 @@
 
     if (!toggle || !nav) return;
 
-    // Set initial state
+    // Set initial state - only hide nav on mobile viewports
     toggle.setAttribute('aria-expanded', 'false');
-    nav.setAttribute('aria-hidden', 'true');
+    // Only set aria-hidden on mobile where the toggle is visible
+    if (window.innerWidth < 600) {
+      nav.setAttribute('aria-hidden', 'true');
+    } else {
+      nav.removeAttribute('aria-hidden');
+    }
 
     // Toggle button click handler
     toggle.addEventListener('click', toggleMobileNav);
@@ -81,8 +86,13 @@
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 600) {
         toggle.setAttribute('aria-expanded', 'false');
-        nav.setAttribute('aria-hidden', 'true');
+        // On desktop, nav is always visible - remove aria-hidden
+        nav.removeAttribute('aria-hidden');
         document.body.style.overflow = '';
+      } else {
+        // On mobile, hide nav when collapsed
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        nav.setAttribute('aria-hidden', String(!isExpanded));
       }
     });
   }

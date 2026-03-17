@@ -29,6 +29,13 @@
 </head>
 <body>
   <!-- =================================================================
+       SCENARIO 10: Skip to Main Content Link (Accessibility)
+       ================================================================= -->
+  <a href="#main-content" class="skip-link" data-testid="skip-link">
+    Skip to main content
+  </a>
+
+  <!-- =================================================================
        SCENARIO 1: Header/Navigation
        ================================================================= -->
   <header class="header" role="banner">
@@ -49,7 +56,7 @@
         <span class="mobile-nav-toggle__bar"></span>
         <span class="mobile-nav-toggle__bar"></span>
       </button>
-      <nav class="header__nav" id="main-nav" role="navigation" aria-label="Main navigation" aria-hidden="true">
+      <nav class="header__nav" id="main-nav" role="navigation" aria-label="Main navigation">
         <ul class="header__nav-list">
           <li><a href="#features" class="header__nav-link">Features</a></li>
           <li><a href="#demo" class="header__nav-link">Demo</a></li>
@@ -91,7 +98,7 @@
     </div>
   </header>
 
-  <main role="main">
+  <main id="main-content" role="main">
     <!-- =================================================================
          SCENARIO 2: Hero Section
          ================================================================= -->

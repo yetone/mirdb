@@ -21,5 +21,8 @@
     "sharp": "^0.34.5",
     "stylelint": "^16.0.0",
     "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.11.1"
   }
 }
