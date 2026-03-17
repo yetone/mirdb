@@ -2,6 +2,11 @@
  * Responsive Design Tests
  * Owner: Scenario 7 (Mobile), Scenario 8 (Tablet/Desktop)
  *
+ * Tests responsive design across different viewport sizes:
+ * - Mobile: max-width 599px (Scenario 7)
+ * - Tablet: 600px - 1023px (Scenario 8)
+ * - Desktop: min-width 1024px (Scenario 8)
+ *
  * Tests mobile responsive behavior including:
  * - No horizontal scrolling at 375px width
  * - Mobile navigation toggle (hamburger menu)
@@ -270,5 +275,264 @@ test.describe('Mobile Navigation Accessibility', () => {
 
     const expandedAfterClick = await mobileNavToggle.getAttribute('aria-expanded');
     expect(expandedAfterClick).toBe('true');
+  });
+});
+
+// =================================================================
+// SCENARIO 8: Tablet and Desktop Responsive Design Tests
+// =================================================================
+
+test.describe('Tablet Viewport (768px)', () => {
+  test.use({ viewport: { width: 768, height: 1024 } });
+
+  test('page renders correctly for tablet viewport', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify page loads successfully
+    await expect(page).toHaveTitle(/MirDB/);
+
+    // Verify main sections are visible
+    await expect(page.locator('header.header')).toBeVisible();
+    await expect(page.locator('#hero')).toBeVisible();
+    await expect(page.locator('#features')).toBeVisible();
+    await expect(page.locator('#demo')).toBeVisible();
+    await expect(page.locator('#getting-started')).toBeVisible();
+    await expect(page.locator('footer.footer')).toBeVisible();
+
+    // Verify no horizontal scrolling
+    const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
+    const viewportWidth = await page.evaluate(() => window.innerWidth);
+    expect(bodyWidth).toBeLessThanOrEqual(viewportWidth);
+  });
+
+  test('features grid displays in 2-column layout on tablet', async ({ page }) => {
+    await page.goto('/');
+
+    const featuresGrid = page.locator('.features-grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Verify grid has 2-column layout
+    const gridStyle = await featuresGrid.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return computed.gridTemplateColumns;
+    });
+
+    // Should have 2 columns (e.g., "352px 352px" or similar)
+    const columnCount = gridStyle.split(' ').filter(col => col !== '').length;
+    expect(columnCount).toBe(2);
+  });
+
+  test('navigation is visible on tablet viewport', async ({ page }) => {
+    await page.goto('/');
+
+    // Navigation should be visible
+    const nav = page.locator('nav.header__nav');
+    await expect(nav).toBeVisible();
+
+    // Nav links should be visible
+    const navLinks = page.locator('.header__nav-link');
+    const linkCount = await navLinks.count();
+    expect(linkCount).toBeGreaterThan(0);
+
+    // First nav link should be visible
+    await expect(navLinks.first()).toBeVisible();
+  });
+});
+
+test.describe('Desktop Viewport (1024px)', () => {
+  test.use({ viewport: { width: 1024, height: 768 } });
+
+  test('page renders correctly for desktop viewport', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify page loads successfully
+    await expect(page).toHaveTitle(/MirDB/);
+
+    // Verify main sections are visible
+    await expect(page.locator('header.header')).toBeVisible();
+    await expect(page.locator('#hero')).toBeVisible();
+    await expect(page.locator('#features')).toBeVisible();
+    await expect(page.locator('#demo')).toBeVisible();
+    await expect(page.locator('#getting-started')).toBeVisible();
+    await expect(page.locator('footer.footer')).toBeVisible();
+
+    // Verify no horizontal scrolling
+    const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
+    const viewportWidth = await page.evaluate(() => window.innerWidth);
+    expect(bodyWidth).toBeLessThanOrEqual(viewportWidth);
+  });
+
+  test('full navigation menu visible (not hamburger)', async ({ page }) => {
+    await page.goto('/');
+
+    // Navigation should be visible
+    const nav = page.locator('nav.header__nav');
+    await expect(nav).toBeVisible();
+
+    // All navigation links should be visible
+    const navList = page.locator('.header__nav-list');
+    await expect(navList).toBeVisible();
+
+    // Check individual nav links are visible (use specific selectors to avoid duplicates)
+    await expect(page.locator('.header__nav-link[href="#features"]')).toBeVisible();
+    await expect(page.locator('.header__nav-link[href="#demo"]')).toBeVisible();
+    await expect(page.locator('.header__nav-link[href="#getting-started"]')).toBeVisible();
+
+    // GitHub link should be visible
+    const githubLink = page.locator('.header__nav-link--github');
+    await expect(githubLink).toBeVisible();
+
+    // Hamburger menu should NOT be visible on desktop
+    const hamburger = page.locator('.hamburger, .mobile-menu-toggle, [aria-label="Toggle menu"]');
+    const hamburgerCount = await hamburger.count();
+    if (hamburgerCount > 0) {
+      await expect(hamburger.first()).not.toBeVisible();
+    }
+  });
+
+  test('features display in 2-column grid', async ({ page }) => {
+    await page.goto('/');
+
+    const featuresGrid = page.locator('.features-grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Verify grid layout
+    const gridStyle = await featuresGrid.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return computed.gridTemplateColumns;
+    });
+
+    // Should have 2 columns (or 4 columns for larger desktops)
+    const columnCount = gridStyle.split(' ').filter(col => col !== '').length;
+    expect(columnCount).toBeGreaterThanOrEqual(2);
+    expect(columnCount).toBeLessThanOrEqual(4);
+
+    // Verify all 4 feature cards are visible
+    const featureCards = page.locator('.feature-card');
+    await expect(featureCards).toHaveCount(4);
+
+    for (let i = 0; i < 4; i++) {
+      await expect(featureCards.nth(i)).toBeVisible();
+    }
+  });
+
+  test('hero section uses appropriate spacing and sizing for large screens', async ({ page }) => {
+    await page.goto('/');
+
+    const hero = page.locator('#hero.hero');
+    await expect(hero).toBeVisible();
+
+    // Hero should have adequate padding for desktop
+    const heroPadding = await hero.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        paddingTop: parseInt(computed.paddingTop),
+        paddingBottom: parseInt(computed.paddingBottom),
+      };
+    });
+
+    // Desktop should have larger padding than mobile (at least 48px)
+    expect(heroPadding.paddingTop).toBeGreaterThanOrEqual(48);
+
+    // Hero title should have appropriate font size
+    const heroTitle = page.locator('.hero__title');
+    await expect(heroTitle).toBeVisible();
+
+    const titleFontSize = await heroTitle.evaluate((el) => {
+      return parseInt(window.getComputedStyle(el).fontSize);
+    });
+
+    // Desktop title should be larger (at least 32px)
+    expect(titleFontSize).toBeGreaterThanOrEqual(32);
+
+    // CTA buttons should be side by side, not stacked
+    const ctaContainer = page.locator('.hero__cta');
+    const ctaFlexDirection = await ctaContainer.evaluate((el) => {
+      return window.getComputedStyle(el).flexDirection;
+    });
+    expect(ctaFlexDirection).toBe('row');
+  });
+
+  test('content has max-width to prevent over-stretching on wide screens', async ({ page }) => {
+    await page.goto('/');
+
+    // Container elements should have max-width constraints
+    const containers = page.locator('.container');
+    const containerCount = await containers.count();
+    expect(containerCount).toBeGreaterThan(0);
+
+    // Check that containers have max-width
+    for (let i = 0; i < Math.min(containerCount, 3); i++) {
+      const container = containers.nth(i);
+      const maxWidth = await container.evaluate((el) => {
+        const computed = window.getComputedStyle(el);
+        const maxWidthValue = computed.maxWidth;
+        // Return numeric value if it's a pixel value, or 'none'
+        if (maxWidthValue === 'none') return null;
+        return parseInt(maxWidthValue);
+      });
+
+      // Container should have a max-width set (typically 1200px or similar)
+      expect(maxWidth).not.toBeNull();
+      expect(maxWidth).toBeLessThanOrEqual(1400);
+    }
+
+    // Verify hero content has max-width constraint
+    const heroContent = page.locator('.hero__content');
+    const heroMaxWidth = await heroContent.evaluate((el) => {
+      return parseInt(window.getComputedStyle(el).maxWidth);
+    });
+    // Hero content should have a max-width set (typically 800px or 1200px for containers)
+    expect(heroMaxWidth).toBeLessThanOrEqual(1200);
+  });
+});
+
+test.describe('Large Desktop Viewport (1440px)', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('content remains centered and constrained on very wide screens', async ({ page }) => {
+    await page.goto('/');
+
+    // Header container should have max-width
+    const headerContainer = page.locator('.header__container');
+    const headerMaxWidth = await headerContainer.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return parseInt(computed.maxWidth);
+    });
+    expect(headerMaxWidth).toBeLessThanOrEqual(1400);
+
+    // Container should be centered (have auto margins)
+    const containerMargin = await headerContainer.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        marginLeft: computed.marginLeft,
+        marginRight: computed.marginRight,
+      };
+    });
+
+    // Margins should be auto (or equal positive values indicating centering)
+    const leftMargin = parseInt(containerMargin.marginLeft) || 0;
+    const rightMargin = parseInt(containerMargin.marginRight) || 0;
+
+    // On a 1440px viewport with a max-width container, we expect visible margins
+    // indicating the content is constrained
+    expect(Math.abs(leftMargin - rightMargin)).toBeLessThan(50);
+  });
+
+  test('features grid maintains readable card widths', async ({ page }) => {
+    await page.goto('/');
+
+    const featureCards = page.locator('.feature-card');
+    const firstCard = featureCards.first();
+
+    const cardWidth = await firstCard.evaluate((el) => {
+      return el.getBoundingClientRect().width;
+    });
+
+    // Cards should not be too wide (max around 500px for readability)
+    expect(cardWidth).toBeLessThanOrEqual(600);
+
+    // Cards should not be too narrow either
+    expect(cardWidth).toBeGreaterThanOrEqual(200);
   });
 });

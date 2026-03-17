@@ -173,9 +173,58 @@
    TABLET - 600px to 1023px
    ============================================= */
 @media (min-width: 600px) and (max-width: 1023px) {
+  /* Container adjustments */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Navigation */
+  .header__nav {
+    display: flex;
+  }
+
+  .header__nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+
+  /* Hero section */
+  .hero {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .hero__logo {
+    width: 150px;
+  }
+
+  .hero__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero__cta {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  /* Features grid - 2 columns on tablet */
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
+  }
+
+  /* Demo section */
+  .demo {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  /* Getting started section */
+  .getting-started {
+    padding: var(--spacing-3xl) var(--spacing-lg);
   }
 }
 
@@ -183,8 +232,131 @@
    DESKTOP - min-width 1024px
    ============================================= */
 @media (min-width: 1024px) {
+  /* Container adjustments for desktop */
+  .container {
+    max-width: 1200px;
+    padding: 0 var(--spacing-xl);
+  }
+
+  /* Header and navigation - full display */
+  .header__container {
+    max-width: 1200px;
+  }
+
+  .header__nav {
+    display: flex;
+  }
+
+  .header__nav-list {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+  }
+
+  .header__nav-link {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Hero section - larger spacing and sizing */
+  .hero {
+    min-height: 80vh;
+    padding: var(--spacing-4xl) var(--spacing-xl);
+  }
+
+  .hero__content {
+    max-width: 800px;
+  }
+
+  .hero__logo {
+    width: 180px;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .hero__title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .hero__cta {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .hero__cta .btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Features section - 2x2 grid */
+  .features {
+    padding: var(--spacing-4xl) 0;
+  }
+
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-xl);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    padding: var(--spacing-xl);
+  }
+
+  /* Demo section */
+  .demo {
+    padding: var(--spacing-4xl) var(--spacing-xl);
+  }
+
+  .demo__content {
+    max-width: 800px;
+  }
+
+  /* Getting started section */
+  .getting-started {
+    padding: var(--spacing-4xl) var(--spacing-xl);
+  }
+
+  .getting-started .container {
+    max-width: 800px;
+  }
+
+  /* Footer */
+  .footer__container {
+    max-width: 1200px;
+  }
+}
+
+/* =============================================
+   LARGE DESKTOP - min-width 1440px
+   ============================================= */
+@media (min-width: 1440px) {
+  /* Ensure content doesn't stretch too wide */
+  .container {
+    max-width: 1200px;
+  }
+
+  .header__container {
+    max-width: 1200px;
+  }
+
+  /* Hero stays centered */
+  .hero__content {
+    max-width: 800px;
+  }
+
+  /* Features grid stays constrained */
+  .features-grid {
+    max-width: 900px;
+  }
+
+  /* Keep code blocks readable */
+  .getting-started .container {
+    max-width: 800px;
   }
 }
