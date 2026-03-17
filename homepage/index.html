@@ -6,8 +6,39 @@
   <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
   <meta name="description" content="MirDB is a persistent key-value store with Memcached protocol support, built with Rust and powered by LSM Tree architecture.">
   <link rel="stylesheet" href="css/main.css">
+  <script src="js/navigation.js" defer></script>
 </head>
 <body>
+  <!-- =================================================================
+       SCENARIO 6: Header Navigation
+       ================================================================= -->
+  <header class="header" role="banner">
+    <div class="header__container">
+      <a href="#" class="header__logo" aria-label="MirDB Home">
+        <span class="header__logo-text">MirDB</span>
+      </a>
+      <nav class="nav" role="navigation" aria-label="Main navigation">
+        <ul class="nav__list">
+          <li class="nav__item">
+            <a href="#features" class="nav__link" data-nav-link>Features</a>
+          </li>
+          <li class="nav__item">
+            <a href="#getting-started" class="nav__link" data-nav-link>Getting Started</a>
+          </li>
+          <li class="nav__item">
+            <a href="https://github.com/yetone/mirdb" class="nav__link nav__link--github" target="_blank" rel="noopener noreferrer" aria-label="View MirDB on GitHub">
+              <svg class="nav__github-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+              <span class="nav__github-text">GitHub</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- END SCENARIO 6: Header Navigation -->
+
   <!-- =================================================================
        SCENARIO 2: Hero Section
        ================================================================= -->
@@ -81,5 +112,41 @@
     </div>
   </section>
   <!-- END SCENARIO 3 - Features Section -->
+
+  <!-- =================================================================
+       SCENARIO 5: Getting Started Section (placeholder for navigation)
+       ================================================================= -->
+  <section id="getting-started" class="getting-started" aria-labelledby="getting-started-heading">
+    <div class="container">
+      <h2 id="getting-started-heading">Getting Started</h2>
+      <!-- Content to be added by Scenario 5 -->
+    </div>
+  </section>
+  <!-- END SCENARIO 5: Getting Started Section -->
+
+  <!-- =================================================================
+       SCENARIO 6: Footer
+       ================================================================= -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__container">
+      <div class="footer__github">
+        <a href="https://github.com/yetone/mirdb" class="footer__github-link" target="_blank" rel="noopener noreferrer" aria-label="Star MirDB on GitHub">
+          <svg class="footer__github-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          <span class="footer__github-star">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/>
+            </svg>
+            Star on GitHub
+          </span>
+        </a>
+      </div>
+      <div class="footer__copyright">
+        <p>&copy; 2024 MirDB. Released under the MIT License.</p>
+      </div>
+    </div>
+  </footer>
+  <!-- END SCENARIO 6: Footer -->
 </body>
 </html>

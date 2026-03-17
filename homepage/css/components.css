@@ -195,3 +195,148 @@
   color: var(--color-text-muted);
   line-height: 1.6;
 }
+
+/* =============================================
+   SCENARIO 6 - Header/Navigation
+   Owner: Scenario 6 - Navigation and GitHub Links
+   ============================================= */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-md) 0;
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: var(--font-size-xl);
+}
+
+.header__logo-text {
+  color: var(--color-primary);
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text);
+  font-weight: 500;
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nav__link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+}
+
+.nav__link--github {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.nav__github-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.nav__github-text {
+  font-weight: 500;
+}
+
+/* =============================================
+   SCENARIO 6 - Footer
+   Owner: Scenario 6 - Navigation and GitHub Links
+   ============================================= */
+.footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.footer__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.footer__github {
+  margin-bottom: var(--spacing-md);
+}
+
+.footer__github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.footer__github-link:hover {
+  background-color: var(--color-surface);
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.footer__github-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.footer__github-star {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.footer__github-star svg {
+  color: #fbbf24;
+}
+
+.footer__copyright {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.footer__copyright a {
+  color: var(--color-primary);
+}
+
+.footer__copyright a:hover {
+  text-decoration: underline;
+}
