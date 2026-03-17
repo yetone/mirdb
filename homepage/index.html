@@ -19,7 +19,19 @@
         <img src="assets/images/logo.gif" alt="MirDB Logo" width="40" height="40">
         <span class="header__logo-text">MirDB</span>
       </a>
-      <nav class="header__nav" role="navigation" aria-label="Main navigation">
+      <!-- Mobile Navigation Toggle (Scenario 7) -->
+      <button
+        class="mobile-nav-toggle"
+        data-testid="mobile-nav-toggle"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="main-nav"
+      >
+        <span class="mobile-nav-toggle__bar"></span>
+        <span class="mobile-nav-toggle__bar"></span>
+        <span class="mobile-nav-toggle__bar"></span>
+      </button>
+      <nav class="header__nav" id="main-nav" role="navigation" aria-label="Main navigation" aria-hidden="true">
         <ul class="header__nav-list">
           <li><a href="#features" class="header__nav-link">Features</a></li>
           <li><a href="#demo" class="header__nav-link">Demo</a></li>

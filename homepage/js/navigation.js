@@ -1,18 +1,91 @@
 /**
  * Navigation Module
  * Owner: Scenario 6 - Navigation and GitHub Links
+ * Updated: Scenario 7 - Mobile Navigation Toggle
  *
  * Exports:
  * - initNavigation(): Set up smooth scroll and mobile nav
  * - scrollToSection(sectionId): Smooth scroll to section
+ * - toggleMobileNav(): Toggle mobile navigation menu
  *
  * Handles:
  * - Smooth scroll for anchor links
  * - Active nav highlighting
+ * - Mobile hamburger menu toggle (Scenario 7)
  */
 
 (function() {
   'use strict';
+
+  // =============================================
+  // SCENARIO 7 - Mobile Navigation Toggle
+  // =============================================
+
+  /**
+   * Toggle mobile navigation menu
+   */
+  function toggleMobileNav() {
+    const toggle = document.querySelector('[data-testid="mobile-nav-toggle"]');
+    const nav = document.querySelector('.header__nav');
+
+    if (!toggle || !nav) return;
+
+    const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+    const newExpandedState = !isExpanded;
+
+    toggle.setAttribute('aria-expanded', String(newExpandedState));
+    nav.setAttribute('aria-hidden', String(!newExpandedState));
+
+    // Prevent body scroll when menu is open
+    document.body.style.overflow = newExpandedState ? 'hidden' : '';
+  }
+
+  /**
+   * Initialize mobile navigation
+   */
+  function initMobileNav() {
+    const toggle = document.querySelector('[data-testid="mobile-nav-toggle"]');
+    const nav = document.querySelector('.header__nav');
+
+    if (!toggle || !nav) return;
+
+    // Set initial state
+    toggle.setAttribute('aria-expanded', 'false');
+    nav.setAttribute('aria-hidden', 'true');
+
+    // Toggle button click handler
+    toggle.addEventListener('click', toggleMobileNav);
+
+    // Close menu when a nav link is clicked
+    const navLinks = nav.querySelectorAll('.header__nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 600) {
+          toggleMobileNav();
+        }
+      });
+    });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        if (isExpanded) {
+          toggleMobileNav();
+          toggle.focus();
+        }
+      }
+    });
+
+    // Handle window resize - close mobile menu if viewport becomes larger
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 600) {
+        toggle.setAttribute('aria-expanded', 'false');
+        nav.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+    });
+  }
 
   /**
    * Smooth scroll to a section by ID
@@ -85,6 +158,9 @@
    * Initialize navigation functionality
    */
   function initNavigation() {
+    // Initialize mobile navigation (Scenario 7)
+    initMobileNav();
+
     // Attach click handlers for smooth scroll
     document.addEventListener('click', handleNavClick);
 
@@ -111,6 +187,7 @@
   // Expose functions globally for external use
   window.MirDBNavigation = {
     scrollToSection: scrollToSection,
-    initNavigation: initNavigation
+    initNavigation: initNavigation,
+    toggleMobileNav: toggleMobileNav
   };
 })();
