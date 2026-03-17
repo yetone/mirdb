@@ -174,3 +174,105 @@ test.describe('Navigation Smooth Scroll Functionality', () => {
     await expect(featuresSection).toBeInViewport();
   });
 });
+
+/**
+ * Footer Content and Links Tests
+ * Owner: Scenario 15 - Footer Content and Links
+ *
+ * Test Cases:
+ * 1. Footer element exists at bottom of page
+ * 2. GitHub link present in footer
+ * 3. License link exists in footer
+ * 4. Copyright notice with year is present
+ * 5. Copyright includes current year (2026)
+ * 6. License link navigates to license information
+ */
+test.describe('Footer Content and Links', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Footer element exists at bottom of page', async ({ page }) => {
+    const footer = page.locator('footer');
+
+    // Footer should exist
+    await expect(footer).toBeVisible();
+
+    // Footer should have role="contentinfo"
+    await expect(footer).toHaveAttribute('role', 'contentinfo');
+
+    // Footer should have the footer class
+    await expect(footer).toHaveClass(/footer/);
+  });
+
+  test('TC2: GitHub link present in footer', async ({ page }) => {
+    const footer = page.locator('footer');
+    // Use the specific class for the GitHub star link
+    const githubLink = footer.locator('a.footer__link--github');
+
+    await expect(githubLink).toBeVisible();
+
+    // Verify the link points to the GitHub repo
+    const href = await githubLink.getAttribute('href');
+    expect(href).toContain('github.com/yetone/mirdb');
+
+    // Check for target="_blank" and rel="noopener"
+    await expect(githubLink).toHaveAttribute('target', '_blank');
+    const rel = await githubLink.getAttribute('rel');
+    expect(rel).toContain('noopener');
+  });
+
+  test('TC3: License link exists in footer', async ({ page }) => {
+    const footer = page.locator('footer');
+    const licenseLink = footer.locator('a:has-text("License")');
+
+    await expect(licenseLink).toBeVisible();
+
+    // License link should point to LICENSE file
+    const href = await licenseLink.getAttribute('href');
+    expect(href).toContain('LICENSE');
+  });
+
+  test('TC4: Copyright notice with year is present', async ({ page }) => {
+    const footer = page.locator('footer');
+    const copyright = footer.locator('.footer__copyright');
+
+    await expect(copyright).toBeVisible();
+
+    // Copyright text should contain copyright symbol or word
+    const text = await copyright.textContent();
+    expect(text).toMatch(/©|copyright/i);
+
+    // Copyright should contain a year
+    expect(text).toMatch(/\d{4}/);
+  });
+
+  test('TC5: Copyright includes current year (2026)', async ({ page }) => {
+    const footer = page.locator('footer');
+    const copyright = footer.locator('.footer__copyright');
+
+    const text = await copyright.textContent();
+
+    // Copyright must include 2026
+    expect(text).toContain('2026');
+  });
+
+  test('TC6: License link navigates to license information', async ({ page }) => {
+    const footer = page.locator('footer');
+    const licenseLink = footer.locator('a:has-text("License")');
+
+    // Get the href attribute
+    const href = await licenseLink.getAttribute('href');
+
+    // License link should point to GitHub LICENSE file
+    expect(href).toContain('github.com/yetone/mirdb');
+    expect(href).toContain('LICENSE');
+
+    // Verify it opens in new tab
+    await expect(licenseLink).toHaveAttribute('target', '_blank');
+
+    // Verify noopener for security
+    const rel = await licenseLink.getAttribute('rel');
+    expect(rel).toContain('noopener');
+  });
+});
