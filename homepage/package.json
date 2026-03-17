@@ -1,0 +1,17 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - Landing page for the persistent key-value store",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:unit": "vitest run tests/unit",
+    "serve": "npx serve .",
+    "validate:html": "html-validate index.html",
+    "validate:css": "stylelint css/**/*.css"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "serve": "^14.0.0"
+  }
+}

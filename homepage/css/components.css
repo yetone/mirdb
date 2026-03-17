@@ -1,0 +1,100 @@
+/**
+ * Component Styles
+ * Owner: Multiple Scenarios
+ *
+ * Sections:
+ * - Header/Nav (Scenario 6)
+ * - Hero (Scenario 2)
+ * - Features (Scenario 3)
+ * - Demo (Scenario 4)
+ * - Getting Started / Code Blocks (Scenario 5)
+ * - Footer (Scenario 15)
+ * - Buttons (Shared)
+ *
+ * Each scenario appends their component styles here.
+ * Use clear comment headers to delineate sections.
+ */
+
+/* =============================================
+   SHARED COMPONENTS - Buttons
+   ============================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* =============================================
+   SCENARIO 3 - Features Section
+   Owner: Scenario 3 - Features Section Display
+   ============================================= */
+.features {
+  background-color: var(--color-surface);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon img,
+.feature-icon svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.feature-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.feature-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}

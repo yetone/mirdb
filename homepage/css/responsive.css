@@ -1,0 +1,53 @@
+/**
+ * Responsive Styles
+ * Owner: Scenario 7 (Mobile), Scenario 8 (Tablet/Desktop)
+ *
+ * Breakpoints:
+ * - Mobile: max-width 599px (Scenario 7)
+ * - Tablet: 600px - 1023px (Scenario 8)
+ * - Desktop: min-width 1024px (Scenario 8)
+ *
+ * Contains:
+ * - Mobile navigation (hamburger menu)
+ * - Grid adjustments per breakpoint
+ * - Touch target sizing
+ * - Font size adjustments
+ */
+
+/* =============================================
+   MOBILE - max-width 599px
+   ============================================= */
+@media (max-width: 599px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  h2 {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+/* =============================================
+   TABLET - 600px to 1023px
+   ============================================= */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+}
+
+/* =============================================
+   DESKTOP - min-width 1024px
+   ============================================= */
+@media (min-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+  }
+}

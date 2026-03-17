@@ -1,0 +1,80 @@
+/**
+ * Main Stylesheet
+ * Owner: Scenario 1 - Homepage Layout and Structure
+ *
+ * Imports:
+ * - variables.css (shared)
+ * - themes.css (Scenario 9)
+ * - components.css (various scenarios)
+ * - responsive.css (Scenarios 7, 8)
+ *
+ * Contains:
+ * - CSS reset/normalize
+ * - Base styles (body, typography)
+ * - Layout containers
+ * - Section spacing
+ */
+
+@import url('variables.css');
+@import url('components.css');
+@import url('responsive.css');
+
+/* CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Section spacing */
+section {
+  padding: var(--spacing-3xl) 0;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+}
