@@ -20,12 +20,15 @@
 @import url('responsive.css');
 
 /* CSS Reset */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* Base styles */
 html {
   scroll-behavior: smooth;
 }
@@ -40,6 +43,7 @@ body {
 
 /* Container */
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--spacing-md);
@@ -77,4 +81,18 @@ a:hover {
 img {
   max-width: 100%;
   height: auto;
+  display: block;
+}
+
+/* Utility classes */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

@@ -12,6 +12,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
-    "serve": "^14.0.0"
+    "vitest": "^1.0.0",
+    "serve": "^14.0.0",
+    "html-validate": "^8.0.0",
+    "stylelint": "^16.0.0",
+    "axe-playwright": "^1.2.0"
   }
 }
