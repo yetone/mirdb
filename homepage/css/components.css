@@ -337,7 +337,7 @@
 }
 
 /* =============================================
-   SCENARIO 6 - Footer
+   SCENARIO 6 - Footer (Base Styles)
    Owner: Scenario 6 - Navigation and GitHub Links
    ============================================= */
 .footer {
@@ -353,11 +353,37 @@
   padding: 0 var(--spacing-md);
 }
 
-.footer__github {
+/* =============================================
+   SCENARIO 15 - Footer Content and Links
+   Owner: Scenario 15 - Footer Content and Links
+   ============================================= */
+.footer__links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-lg);
   margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
 }
 
-.footer__github-link {
+.footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.footer__link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-background);
+}
+
+.footer__link--github {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-sm);
@@ -371,30 +397,27 @@
   transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
-.footer__github-link:hover {
+.footer__link--github:hover {
   background-color: var(--color-surface);
   border-color: var(--color-primary);
   color: var(--color-text);
 }
 
 .footer__github-icon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 }
 
-.footer__github-star {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.footer__github-star svg {
+.footer__star-icon {
+  width: 16px;
+  height: 16px;
   color: #fbbf24;
 }
 
 .footer__copyright {
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
+  margin: 0;
 }
 
 .footer__copyright a {
@@ -403,6 +426,25 @@
 
 .footer__copyright a:hover {
   text-decoration: underline;
+}
+
+/* Footer responsive adjustments */
+@media (max-width: 599px) {
+  .footer {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .footer__links {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .footer__link--github,
+  .footer__link {
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
+  }
 }
 
 /* =============================================
