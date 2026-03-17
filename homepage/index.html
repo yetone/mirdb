@@ -9,77 +9,190 @@
 </head>
 <body>
   <!-- =================================================================
-       SCENARIO 2: Hero Section
+       SCENARIO 1: Header/Navigation
        ================================================================= -->
-  <section id="hero" class="hero" aria-labelledby="hero-title">
-    <div class="hero__content">
-      <img
-        src="assets/images/logo.gif"
-        alt="MirDB Logo"
-        class="hero__logo"
-        width="180"
-        height="180"
-      >
-      <h1 id="hero-title" class="hero__title">
-        A Persistent Key-Value Store with Memcached Protocol
-      </h1>
-      <p class="hero__subtitle">
-        Built with Rust. Powered by LSM Trees. Memcached Compatible.
-      </p>
-      <div class="hero__cta">
-        <a href="#getting-started" class="btn btn-primary">
-          Get Started
-        </a>
-        <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+  <header class="header" role="banner">
+    <div class="container header__container">
+      <a href="#" class="header__logo" aria-label="MirDB Home">
+        <img src="assets/images/logo.gif" alt="MirDB Logo" width="40" height="40">
+        <span class="header__logo-text">MirDB</span>
+      </a>
+      <nav class="header__nav" role="navigation" aria-label="Main navigation">
+        <ul class="header__nav-list">
+          <li><a href="#features" class="header__nav-link">Features</a></li>
+          <li><a href="#demo" class="header__nav-link">Demo</a></li>
+          <li><a href="#getting-started" class="header__nav-link">Getting Started</a></li>
+          <li><a href="https://github.com/yetone/mirdb" class="header__nav-link header__nav-link--github" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main role="main">
+    <!-- =================================================================
+         SCENARIO 2: Hero Section
+         ================================================================= -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="container hero__content">
+        <img
+          src="assets/images/logo.gif"
+          alt="MirDB Logo"
+          class="hero__logo"
+          width="180"
+          height="180"
+        >
+        <h1 id="hero-title" class="hero__title">
+          A Persistent Key-Value Store with Memcached Protocol
+        </h1>
+        <p class="hero__subtitle">
+          Built with Rust. Powered by LSM Trees. Memcached Compatible.
+        </p>
+        <div class="hero__cta">
+          <a href="#getting-started" class="btn btn-primary">
+            Get Started
+          </a>
+          <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SCENARIO 3: Features Section
+         ================================================================= -->
+    <section id="features" class="features" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 id="features-heading">Features</h2>
+        <div class="features-grid">
+          <!-- Feature 1: Memcached Protocol -->
+          <article class="feature-card" data-testid="feature-card">
+            <div class="feature-icon">
+              <img src="assets/images/icons/memcached.svg" alt="Memcached Protocol icon" width="64" height="64">
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Drop-in replacement with full protocol compatibility. Use existing Memcached clients without any code changes.</p>
+          </article>
+
+          <!-- Feature 2: Durable Storage -->
+          <article class="feature-card" data-testid="feature-card">
+            <div class="feature-icon">
+              <img src="assets/images/icons/storage.svg" alt="Durable Storage icon" width="64" height="64">
+            </div>
+            <h3 class="feature-title">Durable Storage</h3>
+            <p class="feature-description">Persist data to disk with SSTable files. Your data survives restarts and system failures.</p>
+          </article>
+
+          <!-- Feature 3: LSM Tree Architecture -->
+          <article class="feature-card" data-testid="feature-card">
+            <div class="feature-icon">
+              <img src="assets/images/icons/lsm-tree.svg" alt="LSM Tree icon" width="64" height="64">
+            </div>
+            <h3 class="feature-title">LSM Tree</h3>
+            <p class="feature-description">Efficient write performance with automatic compaction. Optimized for write-intensive workloads.</p>
+          </article>
+
+          <!-- Feature 4: Rust Powered -->
+          <article class="feature-card" data-testid="feature-card">
+            <div class="feature-icon">
+              <img src="assets/images/icons/rust.svg" alt="Rust icon" width="64" height="64">
+            </div>
+            <h3 class="feature-title">Rust Powered</h3>
+            <p class="feature-description">Memory-safe, high-performance implementation. Zero-cost abstractions with compile-time safety guarantees.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- END SCENARIO 3 - Features Section -->
+
+    <!-- =================================================================
+         SCENARIO 4: Demo Section
+         ================================================================= -->
+    <section id="demo" class="demo" aria-labelledby="demo-heading">
+      <div class="container">
+        <h2 id="demo-heading">See MirDB in Action</h2>
+        <div class="demo__content">
+          <figure class="demo__figure">
+            <img
+              src="assets/images/usage.gif"
+              alt="MirDB usage demonstration showing terminal commands"
+              class="demo__image"
+              loading="lazy"
+            >
+            <figcaption class="demo__caption">
+              A quick demo showing MirDB in action with Memcached-compatible commands
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+    <!-- END SCENARIO 4 - Demo Section -->
+
+    <!-- =================================================================
+         SCENARIO 5: Getting Started Section
+         ================================================================= -->
+    <section id="getting-started" class="getting-started" aria-labelledby="getting-started-heading">
+      <div class="container">
+        <h2 id="getting-started-heading">Getting Started</h2>
+
+        <!-- Installation Subsection -->
+        <div class="getting-started__subsection" id="installation">
+          <h3 class="getting-started__subtitle">Installation</h3>
+          <p class="getting-started__text">Install MirDB using Cargo:</p>
+          <div class="code-block">
+            <pre><code># Clone the repository
+git clone https://github.com/yetone/mirdb.git
+cd mirdb
+
+# Build the project
+cargo build --release
+
+# Run MirDB
+cargo run --release</code></pre>
+          </div>
+        </div>
+
+        <!-- Quick Example Subsection -->
+        <div class="getting-started__subsection" id="example">
+          <h3 class="getting-started__subtitle">Quick Example</h3>
+          <p class="getting-started__text">Once MirDB is running, connect using any Memcached client:</p>
+          <div class="code-block">
+            <pre><code># Connect using telnet
+telnet localhost 11211
+
+# Store a value
+set mykey 0 3600 5
+hello
+
+# Retrieve the value
+get mykey
+
+# Delete the value
+delete mykey</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END SCENARIO 5 - Getting Started Section -->
+  </main>
+
+  <!-- =================================================================
+       SCENARIO 15: Footer
+       ================================================================= -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__container">
+      <div class="footer__links">
+        <a href="https://github.com/yetone/mirdb" class="footer__link footer__link--github" target="_blank" rel="noopener noreferrer">
           View on GitHub
         </a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" class="footer__link" target="_blank" rel="noopener noreferrer">
+          License
+        </a>
       </div>
+      <p class="footer__copyright">
+        &copy; 2024 MirDB. All rights reserved.
+      </p>
     </div>
-  </section>
-
-  <!-- SCENARIO 3 - Features Section -->
-  <section id="features" class="features" aria-labelledby="features-heading">
-    <div class="container">
-      <h2 id="features-heading">Features</h2>
-      <div class="features-grid">
-        <!-- Feature 1: Memcached Protocol -->
-        <article class="feature-card" data-testid="feature-card">
-          <div class="feature-icon">
-            <img src="assets/images/icons/memcached.svg" alt="Memcached Protocol icon" width="64" height="64">
-          </div>
-          <h3 class="feature-title">Memcached Protocol</h3>
-          <p class="feature-description">Drop-in replacement with full protocol compatibility. Use existing Memcached clients without any code changes.</p>
-        </article>
-
-        <!-- Feature 2: Durable Storage -->
-        <article class="feature-card" data-testid="feature-card">
-          <div class="feature-icon">
-            <img src="assets/images/icons/storage.svg" alt="Durable Storage icon" width="64" height="64">
-          </div>
-          <h3 class="feature-title">Durable Storage</h3>
-          <p class="feature-description">Persist data to disk with SSTable files. Your data survives restarts and system failures.</p>
-        </article>
-
-        <!-- Feature 3: LSM Tree Architecture -->
-        <article class="feature-card" data-testid="feature-card">
-          <div class="feature-icon">
-            <img src="assets/images/icons/lsm-tree.svg" alt="LSM Tree icon" width="64" height="64">
-          </div>
-          <h3 class="feature-title">LSM Tree</h3>
-          <p class="feature-description">Efficient write performance with automatic compaction. Optimized for write-intensive workloads.</p>
-        </article>
-
-        <!-- Feature 4: Rust Powered -->
-        <article class="feature-card" data-testid="feature-card">
-          <div class="feature-icon">
-            <img src="assets/images/icons/rust.svg" alt="Rust icon" width="64" height="64">
-          </div>
-          <h3 class="feature-title">Rust Powered</h3>
-          <p class="feature-description">Memory-safe, high-performance implementation. Zero-cost abstractions with compile-time safety guarantees.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-  <!-- END SCENARIO 3 - Features Section -->
+  </footer>
 </body>
 </html>
