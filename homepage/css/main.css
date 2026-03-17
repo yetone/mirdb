@@ -16,6 +16,7 @@
  */
 
 @import url('variables.css');
+@import url('themes.css');
 @import url('components.css');
 @import url('responsive.css');
 
