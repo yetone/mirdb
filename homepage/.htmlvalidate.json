@@ -1,0 +1,9 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "no-redundant-role": "off",
+    "no-implicit-button-type": "warn",
+    "hidden-focusable": "off",
+    "prefer-native-element": "off"
+  }
+}

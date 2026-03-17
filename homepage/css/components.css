@@ -1,0 +1,752 @@
+/**
+ * Component Styles
+ * Owner: Multiple Scenarios
+ *
+ * Sections:
+ * - Header/Nav (Scenario 6)
+ * - Hero (Scenario 2)
+ * - Features (Scenario 3)
+ * - Demo (Scenario 4)
+ * - Getting Started / Code Blocks (Scenario 5)
+ * - Footer (Scenario 15)
+ * - Buttons (Shared)
+ *
+ * Each scenario appends their component styles here.
+ * Use clear comment headers to delineate sections.
+ */
+
+/* =============================================
+   SHARED COMPONENTS - Buttons
+   ============================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 2px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary);
+  color: white;
+}
+
+/* =================================================================
+   SCENARIO 2: Hero Section
+   ================================================================= */
+.hero {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+}
+
+.hero__content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero__logo {
+  width: 180px;
+  height: auto;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.hero__title {
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+}
+
+.hero__subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-2xl);
+  line-height: 1.5;
+}
+
+.hero__cta {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero__cta .btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+}
+
+/* Responsive adjustments for hero */
+@media (max-width: 599px) {
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .hero__logo {
+    width: 120px;
+  }
+
+  .hero__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .hero__cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero__cta .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* =============================================
+   SCENARIO 3 - Features Section
+   Owner: Scenario 3 - Features Section Display
+   ============================================= */
+.features {
+  background-color: var(--color-surface);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon img,
+.feature-icon svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.feature-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.feature-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* =============================================
+   SCENARIO 4 - Demo Section
+   Owner: Scenario 4 - Demo Section with Usage GIF
+   ============================================= */
+.demo {
+  padding: var(--spacing-4xl) var(--spacing-md);
+  background-color: var(--color-background);
+}
+
+.demo .container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.demo__heading {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.demo__figure {
+  margin: 0;
+  padding: 0;
+}
+
+.demo__image {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+}
+
+.demo-caption {
+  margin-top: var(--spacing-lg);
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Responsive adjustments for demo section */
+@media (max-width: 599px) {
+  .demo {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .demo__heading {
+    font-size: var(--font-size-2xl);
+  }
+
+  .demo__image {
+    border-radius: var(--radius-md);
+  }
+
+  .demo-caption {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* =============================================
+   SCENARIO 6 - Header/Navigation
+   Owner: Scenario 6 - Navigation and GitHub Links
+   ============================================= */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-md) 0;
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: var(--font-size-xl);
+}
+
+.header__logo-text {
+  color: var(--color-primary);
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text);
+  font-weight: 500;
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nav__link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+}
+
+.nav__link--github {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.nav__github-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.nav__github-text {
+  font-weight: 500;
+}
+
+/* =============================================
+   SCENARIO 6 - Footer (Base Styles)
+   Owner: Scenario 6 - Navigation and GitHub Links
+   ============================================= */
+.footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.footer__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* =============================================
+   SCENARIO 15 - Footer Content and Links
+   Owner: Scenario 15 - Footer Content and Links
+   ============================================= */
+.footer__links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.footer__link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-background);
+}
+
+.footer__link--github {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.footer__link--github:hover {
+  background-color: var(--color-surface);
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.footer__github-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.footer__star-icon {
+  width: 16px;
+  height: 16px;
+  color: #fbbf24;
+}
+
+.footer__copyright {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.footer__copyright a {
+  color: var(--color-primary);
+}
+
+.footer__copyright a:hover {
+  text-decoration: underline;
+}
+
+/* Footer responsive adjustments */
+@media (max-width: 599px) {
+  .footer {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .footer__links {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .footer__link--github,
+  .footer__link {
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
+  }
+}
+
+/* =============================================
+   SCENARIO 5 - Getting Started Section
+   Owner: Scenario 5 - Getting Started Section
+   ============================================= */
+.getting-started {
+  padding: var(--spacing-4xl) var(--spacing-md);
+  background-color: var(--color-surface);
+}
+
+.getting-started .container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.getting-started h2 {
+  text-align: center;
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.getting-started__subsection {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.getting-started__subsection:last-child {
+  margin-bottom: 0;
+}
+
+.getting-started__subtitle {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+}
+
+.getting-started__text {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+}
+
+/* =============================================
+   SCENARIO 5 - Code Blocks with Copy Functionality
+   Owner: Scenario 5 - Getting Started Section
+   ============================================= */
+.code-block {
+  position: relative;
+  margin: var(--spacing-md) 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-code-bg, #1e1e1e);
+  border: 1px solid var(--color-border);
+}
+
+.code-block pre {
+  margin: 0;
+  padding: var(--spacing-lg);
+  padding-right: calc(var(--spacing-lg) + 70px); /* Space for copy button */
+  overflow-x: auto;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+.code-block code {
+  display: block;
+  color: var(--color-code-text, #e0e0e0);
+  background: transparent;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+}
+
+/* Syntax highlighting base class */
+.code-block code.syntax-highlight {
+  color: var(--color-code-text, #e0e0e0);
+}
+
+/* Copy button styles */
+.copy-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-code-btn-bg, rgba(255, 255, 255, 0.15));
+  color: var(--color-code-btn-text, #d0d0d0);
+  border: 1px solid var(--color-code-btn-border, rgba(255, 255, 255, 0.3));
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  z-index: 1;
+}
+
+.copy-btn:hover {
+  background-color: var(--color-code-btn-hover-bg, rgba(255, 255, 255, 0.2));
+  color: var(--color-code-btn-hover-text, #ffffff);
+  border-color: var(--color-code-btn-hover-border, rgba(255, 255, 255, 0.4));
+}
+
+.copy-btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.copy-btn--success {
+  background-color: var(--color-success, #22c55e);
+  color: white;
+  border-color: var(--color-success, #22c55e);
+}
+
+.copy-btn--error {
+  background-color: var(--color-error, #ef4444);
+  color: white;
+  border-color: var(--color-error, #ef4444);
+}
+
+/* Responsive adjustments for code blocks */
+@media (max-width: 599px) {
+  .getting-started {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .getting-started h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .getting-started__subtitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .code-block pre {
+    padding: var(--spacing-md);
+    padding-right: calc(var(--spacing-md) + 60px);
+    font-size: var(--font-size-xs);
+  }
+
+  .copy-btn {
+    padding: 0.125rem var(--spacing-xs);
+    font-size: 10px;
+  }
+}
+
+/* =============================================
+   SCENARIO 10 - Accessibility Compliance
+   Owner: Scenario 10 - Accessibility Compliance
+
+   Includes:
+   - Skip to main content link
+   - Focus indicators for all interactive elements
+   - High contrast focus styles for WCAG 2.1 AA
+   ============================================= */
+
+/* Skip Link - Hidden until focused */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+  outline: 3px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* Focus Indicators - WCAG 2.1 AA Compliant
+   Focus outline must have a contrast ratio of at least 3:1
+   against adjacent colors and be at least 2px thick */
+
+/* Global focus styles for all focusable elements */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Remove default outline when using focus-visible for keyboard navigation */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+[tabindex]:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Restore focus styles for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Button focus styles */
+.btn:focus,
+.btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(228, 77, 38, 0.3);
+}
+
+.btn-primary:focus,
+.btn-primary:focus-visible {
+  outline-color: var(--color-text);
+}
+
+/* Header navigation link focus styles */
+.header__nav-link:focus,
+.header__nav-link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Theme toggle button focus styles */
+.theme-toggle:focus,
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+/* Mobile nav toggle focus styles */
+.mobile-nav-toggle:focus,
+.mobile-nav-toggle:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Footer link focus styles */
+.footer__link:focus,
+.footer__link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Code block copy button focus - already defined but ensuring consistency */
+.copy-btn:focus,
+.copy-btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Feature card focus for keyboard navigation (if made focusable) */
+.feature-card:focus,
+.feature-card:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 4px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .skip-link:focus {
+    outline: 4px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+/* Reduced motion preference support */
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+
+  a,
+  button,
+  .btn,
+  .feature-card,
+  .theme-toggle {
+    transition: none;
+  }
+}

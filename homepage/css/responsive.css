@@ -1,0 +1,362 @@
+/**
+ * Responsive Styles
+ * Owner: Scenario 7 (Mobile), Scenario 8 (Tablet/Desktop)
+ *
+ * Breakpoints:
+ * - Mobile: max-width 599px (Scenario 7)
+ * - Tablet: 600px - 1023px (Scenario 8)
+ * - Desktop: min-width 1024px (Scenario 8)
+ *
+ * Contains:
+ * - Mobile navigation (hamburger menu)
+ * - Grid adjustments per breakpoint
+ * - Touch target sizing
+ * - Font size adjustments
+ */
+
+/* =============================================
+   SCENARIO 7 - MOBILE NAVIGATION TOGGLE (Hamburger)
+   ============================================= */
+
+/* Hide mobile nav toggle by default (show on mobile only) */
+.mobile-nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: var(--spacing-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  gap: 5px;
+  z-index: 200;
+}
+
+.mobile-nav-toggle__bar {
+  display: block;
+  width: 24px;
+  height: 3px;
+  background-color: var(--color-text);
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+}
+
+/* Animated hamburger to X transformation */
+.mobile-nav-toggle[aria-expanded="true"] .mobile-nav-toggle__bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.mobile-nav-toggle[aria-expanded="true"] .mobile-nav-toggle__bar:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-nav-toggle[aria-expanded="true"] .mobile-nav-toggle__bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* =============================================
+   MOBILE - max-width 599px
+   ============================================= */
+@media (max-width: 599px) {
+  /* Prevent horizontal overflow */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Show mobile nav toggle */
+  .mobile-nav-toggle {
+    display: flex;
+  }
+
+  /* Mobile Navigation - Hidden by default */
+  .header__nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-background);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 150;
+    padding: var(--spacing-2xl);
+  }
+
+  .header__nav[aria-hidden="false"] {
+    display: flex;
+  }
+
+  .header__nav-list {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+    width: 100%;
+  }
+
+  /* Touch-friendly navigation links - 44px minimum height */
+  .header__nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-lg);
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Touch-friendly buttons - 44px minimum height */
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .hero__cta .btn {
+    min-height: 48px;
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+
+  /* Features grid - single column on mobile */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  /* Typography adjustments for mobile */
+  h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  /* Ensure body font is readable */
+  body {
+    font-size: var(--font-size-base); /* 1rem = 16px */
+  }
+
+  /* Container padding for mobile */
+  .container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+
+  /* Images - ensure they scale properly */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Footer links - touch-friendly */
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .footer__links {
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+}
+
+/* =============================================
+   TABLET - 600px to 1023px
+   ============================================= */
+@media (min-width: 600px) and (max-width: 1023px) {
+  /* Container adjustments */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Navigation */
+  .header__nav {
+    display: flex;
+  }
+
+  .header__nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+
+  /* Hero section */
+  .hero {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .hero__logo {
+    width: 150px;
+  }
+
+  .hero__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero__cta {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  /* Features grid - 2 columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Demo section */
+  .demo {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  /* Getting started section */
+  .getting-started {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+}
+
+/* =============================================
+   DESKTOP - min-width 1024px
+   ============================================= */
+@media (min-width: 1024px) {
+  /* Container adjustments for desktop */
+  .container {
+    max-width: 1200px;
+    padding: 0 var(--spacing-xl);
+  }
+
+  /* Header and navigation - full display */
+  .header__container {
+    max-width: 1200px;
+  }
+
+  .header__nav {
+    display: flex;
+  }
+
+  .header__nav-list {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+  }
+
+  .header__nav-link {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Hero section - larger spacing and sizing */
+  .hero {
+    min-height: 80vh;
+    padding: var(--spacing-4xl) var(--spacing-xl);
+  }
+
+  .hero__content {
+    max-width: 800px;
+  }
+
+  .hero__logo {
+    width: 180px;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .hero__title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .hero__cta {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .hero__cta .btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Features section - 2x2 grid */
+  .features {
+    padding: var(--spacing-4xl) 0;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    padding: var(--spacing-xl);
+  }
+
+  /* Demo section */
+  .demo {
+    padding: var(--spacing-4xl) var(--spacing-xl);
+  }
+
+  .demo__content {
+    max-width: 800px;
+  }
+
+  /* Getting started section */
+  .getting-started {
+    padding: var(--spacing-4xl) var(--spacing-xl);
+  }
+
+  .getting-started .container {
+    max-width: 800px;
+  }
+
+  /* Footer */
+  .footer__container {
+    max-width: 1200px;
+  }
+}
+
+/* =============================================
+   LARGE DESKTOP - min-width 1440px
+   ============================================= */
+@media (min-width: 1440px) {
+  /* Ensure content doesn't stretch too wide */
+  .container {
+    max-width: 1200px;
+  }
+
+  .header__container {
+    max-width: 1200px;
+  }
+
+  /* Hero stays centered */
+  .hero__content {
+    max-width: 800px;
+  }
+
+  /* Features grid stays constrained */
+  .features-grid {
+    max-width: 900px;
+  }
+
+  /* Keep code blocks readable */
+  .getting-started .container {
+    max-width: 800px;
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - Landing page for the persistent key-value store",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:unit": "vitest run tests/unit",
+    "serve": "npx serve .",
+    "validate:html": "html-validate index.html",
+    "validate:css": "stylelint css/**/*.css"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "axe-playwright": "^1.2.0",
+    "html-validate": "^8.0.0",
+    "imagemin": "^9.0.1",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-webp": "^8.0.0",
+    "serve": "^14.0.0",
+    "sharp": "^0.34.5",
+    "stylelint": "^16.0.0",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.11.1"
+  }
+}
