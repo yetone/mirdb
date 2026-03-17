@@ -114,7 +114,7 @@ test.describe('Navigation and GitHub Links', () => {
     // Verify specific locations
     const navGithubLink = page.locator('nav a[href*="github.com"]');
     const heroGithubLink = page.locator('.hero a[href*="github.com"]');
-    const footerGithubLink = page.locator('footer a[href*="github.com"]');
+    const footerGithubLink = page.locator('footer a.footer__link--github');
 
     await expect(navGithubLink).toBeVisible();
     await expect(heroGithubLink).toBeVisible();
@@ -123,7 +123,7 @@ test.describe('Navigation and GitHub Links', () => {
 
   test('TC9: Footer contains GitHub link with star button or icon', async ({ page }) => {
     const footer = page.locator('footer');
-    const githubLink = footer.locator('a[href*="github.com"]');
+    const githubLink = footer.locator('a.footer__link--github');
 
     await expect(githubLink).toBeVisible();
 

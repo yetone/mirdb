@@ -156,6 +156,17 @@ img {
   color: var(--color-primary);
 }
 
+.header__nav-link--github {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.header__github-icon {
+  width: 20px;
+  height: 20px;
+}
+
 /* Demo Section */
 .demo {
   background-color: var(--color-background);
@@ -256,6 +267,23 @@ img {
 
 .footer__link:hover {
   color: white;
+}
+
+.footer__link--github {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.footer__github-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.footer__star-icon {
+  width: 16px;
+  height: 16px;
+  color: #fbbf24;
 }
 
 .footer__copyright {
