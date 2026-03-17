@@ -86,6 +86,7 @@
           class="hero__logo"
           width="180"
           height="180"
+          fetchpriority="high"
         >
         <h1 id="hero-title" class="hero__title">
           A Persistent Key-Value Store with Memcached Protocol
@@ -114,7 +115,7 @@
           <!-- Feature 1: Memcached Protocol -->
           <article class="feature-card" data-testid="feature-card">
             <div class="feature-icon">
-              <img src="assets/images/icons/memcached.svg" alt="Memcached Protocol icon" width="64" height="64">
+              <img src="assets/images/icons/memcached.svg" alt="Memcached Protocol icon" width="64" height="64" loading="lazy">
             </div>
             <h3 class="feature-title">Memcached Protocol</h3>
             <p class="feature-description">Drop-in replacement with full protocol compatibility. Use existing Memcached clients without any code changes.</p>
@@ -123,7 +124,7 @@
           <!-- Feature 2: Durable Storage -->
           <article class="feature-card" data-testid="feature-card">
             <div class="feature-icon">
-              <img src="assets/images/icons/storage.svg" alt="Durable Storage icon" width="64" height="64">
+              <img src="assets/images/icons/storage.svg" alt="Durable Storage icon" width="64" height="64" loading="lazy">
             </div>
             <h3 class="feature-title">Durable Storage</h3>
             <p class="feature-description">Persist data to disk with SSTable files. Your data survives restarts and system failures.</p>
@@ -132,7 +133,7 @@
           <!-- Feature 3: LSM Tree Architecture -->
           <article class="feature-card" data-testid="feature-card">
             <div class="feature-icon">
-              <img src="assets/images/icons/lsm-tree.svg" alt="LSM Tree icon" width="64" height="64">
+              <img src="assets/images/icons/lsm-tree.svg" alt="LSM Tree icon" width="64" height="64" loading="lazy">
             </div>
             <h3 class="feature-title">LSM Tree</h3>
             <p class="feature-description">Efficient write performance with automatic compaction. Optimized for write-intensive workloads.</p>
@@ -141,7 +142,7 @@
           <!-- Feature 4: Rust Powered -->
           <article class="feature-card" data-testid="feature-card">
             <div class="feature-icon">
-              <img src="assets/images/icons/rust.svg" alt="Rust icon" width="64" height="64">
+              <img src="assets/images/icons/rust.svg" alt="Rust icon" width="64" height="64" loading="lazy">
             </div>
             <h3 class="feature-title">Rust Powered</h3>
             <p class="feature-description">Memory-safe, high-performance implementation. Zero-cost abstractions with compile-time safety guarantees.</p>
@@ -160,9 +161,11 @@
         <div class="demo__content">
           <figure class="demo__figure">
             <img
-              src="assets/images/usage.gif"
+              src="assets/images/usage-poster.webp"
               alt="MirDB usage demonstration showing terminal commands"
               class="demo__image"
+              width="640"
+              height="400"
               loading="lazy"
             >
             <figcaption class="demo__caption">
