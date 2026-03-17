@@ -195,3 +195,67 @@
   color: var(--color-text-muted);
   line-height: 1.6;
 }
+
+/* =============================================
+   SCENARIO 4 - Demo Section
+   Owner: Scenario 4 - Demo Section with Usage GIF
+   ============================================= */
+.demo {
+  padding: var(--spacing-4xl) var(--spacing-md);
+  background-color: var(--color-background);
+}
+
+.demo .container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.demo__heading {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.demo__figure {
+  margin: 0;
+  padding: 0;
+}
+
+.demo__image {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+}
+
+.demo-caption {
+  margin-top: var(--spacing-lg);
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Responsive adjustments for demo section */
+@media (max-width: 599px) {
+  .demo {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .demo__heading {
+    font-size: var(--font-size-2xl);
+  }
+
+  .demo__image {
+    border-radius: var(--radius-md);
+  }
+
+  .demo-caption {
+    font-size: var(--font-size-sm);
+  }
+}
