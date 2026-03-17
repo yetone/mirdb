@@ -7,6 +7,7 @@
   <meta name="description" content="MirDB is a persistent key-value store with Memcached protocol support, built with Rust and powered by LSM Tree architecture.">
   <link rel="stylesheet" href="css/main.css">
   <script src="js/navigation.js" defer></script>
+  <script src="js/clipboard.js" defer></script>
 </head>
 <body>
   <!-- =================================================================
@@ -132,16 +133,16 @@
     <!-- =================================================================
          SCENARIO 5: Getting Started Section
          ================================================================= -->
-    <section id="getting-started" class="getting-started" aria-labelledby="getting-started-heading">
+    <section id="getting-started" class="getting-started" aria-labelledby="getting-started-heading" data-testid="getting-started-section">
       <div class="container">
         <h2 id="getting-started-heading">Getting Started</h2>
 
         <!-- Installation Subsection -->
-        <div class="getting-started__subsection" id="installation">
+        <div class="getting-started__subsection" id="installation" data-testid="installation-subsection">
           <h3 class="getting-started__subtitle">Installation</h3>
           <p class="getting-started__text">Install MirDB using Cargo:</p>
-          <div class="code-block">
-            <pre><code># Clone the repository
+          <div class="code-block" data-testid="installation-code-block">
+            <pre><code class="syntax-highlight language-bash"># Clone the repository
 git clone https://github.com/yetone/mirdb.git
 cd mirdb
 
@@ -154,22 +155,27 @@ cargo run --release</code></pre>
         </div>
 
         <!-- Quick Example Subsection -->
-        <div class="getting-started__subsection" id="example">
+        <div class="getting-started__subsection" id="example" data-testid="example-subsection">
           <h3 class="getting-started__subtitle">Quick Example</h3>
           <p class="getting-started__text">Once MirDB is running, connect using any Memcached client:</p>
-          <div class="code-block">
-            <pre><code># Connect using telnet
+          <div class="code-block" data-testid="example-code-block">
+            <pre><code class="syntax-highlight language-memcached"># Connect using telnet
 telnet localhost 11211
 
-# Store a value
+# Store a value (set command)
 set mykey 0 3600 5
 hello
+STORED
 
-# Retrieve the value
+# Retrieve the value (get command)
 get mykey
+VALUE mykey 0 5
+hello
+END
 
-# Delete the value
-delete mykey</code></pre>
+# Delete the value (delete command)
+delete mykey
+DELETED</code></pre>
           </div>
         </div>
       </div>
