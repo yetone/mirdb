@@ -20,3 +20,25 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const THEME_KEY = 'mirdb-theme';
+
+/**
+ * SEO Metadata Configuration.
+ * Used for meta tags and Open Graph properties.
+ */
+export interface SEOMetadata {
+  title: string;
+  description: string;
+  ogTitle: string;
+  ogDescription: string;
+  ogType: string;
+  ogImage: string;
+}
+
+export const SEO_METADATA: SEOMetadata = {
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  ogTitle: SITE_TITLE,
+  ogDescription: SITE_DESCRIPTION,
+  ogType: 'website',
+  ogImage: '/assets/logo.svg',
+};
