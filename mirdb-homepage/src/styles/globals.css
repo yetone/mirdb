@@ -22,4 +22,17 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Responsive design fixes */
+/* Prevent flex items from overflowing viewport */
+.flex-grow {
+  min-width: 0;
+}
+
+/* Ensure code blocks don't cause horizontal page scroll */
+#quickstart pre {
+  max-width: 100%;
+  overflow-x: auto;
 }
