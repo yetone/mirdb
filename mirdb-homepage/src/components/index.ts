@@ -4,6 +4,9 @@
 
 // Layout components
 export { Layout } from './layout/Layout';
+export { Header } from './layout/Header';
+export { Footer } from './layout/Footer';
+export { Navigation } from './layout/Navigation';
 
 // Section components
 export { Hero } from './sections/Hero';
