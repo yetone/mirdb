@@ -34,7 +34,7 @@ export function Footer({
             <p className="text-gray-400" data-testid="footer-copyright">
               &copy; {year} {author}. All rights reserved.
             </p>
-            <p className="text-gray-500 text-sm mt-1" data-testid="footer-license">
+            <p className="text-gray-400 text-sm mt-1" data-testid="footer-license">
               Released under the {license} License
             </p>
           </div>
@@ -68,7 +68,7 @@ export function Footer({
 
         {/* Open Source Badge */}
         <div className="mt-6 text-center">
-          <p className="text-gray-500 text-sm" data-testid="footer-open-source">
+          <p className="text-gray-400 text-sm" data-testid="footer-open-source">
             MirDB is Open Source software
           </p>
         </div>
