@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MirDB - Persistent Key-Value Store</title>
+    <meta name="description" content="A persistent key-value store with Memcached protocol support, built with Rust and Tokio" />
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store" />
+    <meta property="og:description" content="A persistent key-value store with Memcached protocol support, built with Rust and Tokio" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/assets/logo.svg" />
+    <!-- Theme initialization script - prevents flash of incorrect theme -->
+    <script>
+      (function() {
+        var theme = localStorage.getItem('mirdb-theme');
+        if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
