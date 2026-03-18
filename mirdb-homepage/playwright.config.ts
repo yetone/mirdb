@@ -15,7 +15,22 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: /build\.spec\.ts/,
+      testIgnore: [/build\.spec\.ts/, /cross-browser\.spec\.ts/],
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+      testMatch: /cross-browser\.spec\.ts/,
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+      testMatch: /cross-browser\.spec\.ts/,
+    },
+    {
+      name: 'chromium-cross-browser',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /cross-browser\.spec\.ts/,
     },
     {
       name: 'build-tests',
