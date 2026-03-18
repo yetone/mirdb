@@ -26,3 +26,9 @@ export interface NavItem {
   label: string;
   href: string;
 }
+
+export interface BadgeProps {
+  imageUrl: string;
+  linkUrl: string;
+  alt: string;
+}

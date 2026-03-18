@@ -9,8 +9,10 @@ export { Layout } from './layout/Layout';
 export { Hero } from './sections/Hero';
 export { UsageExamples } from './sections/UsageExamples';
 export { QuickStart } from './sections/QuickStart';
+export { StatusBadges } from './sections/StatusBadges';
 
 // UI components
 export { Button } from './ui/Button';
 export { CodeBlock } from './ui/CodeBlock';
 export { CopyButton } from './ui/CopyButton';
+export { Badge } from './ui/Badge';
