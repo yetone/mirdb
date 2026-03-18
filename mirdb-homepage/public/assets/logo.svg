@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <!-- Database cylinder shape -->
+  <ellipse cx="64" cy="32" rx="48" ry="16" fill="#0ea5e9"/>
+  <rect x="16" y="32" width="96" height="64" fill="#0ea5e9"/>
+  <ellipse cx="64" cy="96" rx="48" ry="16" fill="#0284c7"/>
+
+  <!-- Middle ellipse for 3D effect -->
+  <ellipse cx="64" cy="64" rx="48" ry="16" fill="#0284c7" opacity="0.5"/>
+
+  <!-- Highlight on top -->
+  <ellipse cx="64" cy="32" rx="40" ry="12" fill="#38bdf8" opacity="0.6"/>
+
+  <!-- Key icon in center -->
+  <g transform="translate(44, 44)">
+    <circle cx="12" cy="12" r="8" stroke="white" stroke-width="3" fill="none"/>
+    <rect x="18" y="10" width="20" height="4" rx="2" fill="white"/>
+    <rect x="32" y="10" width="4" height="10" rx="1" fill="white"/>
+    <rect x="26" y="10" width="4" height="8" rx="1" fill="white"/>
+  </g>
+</svg>

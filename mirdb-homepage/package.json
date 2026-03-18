@@ -1,0 +1,47 @@
+{
+  "name": "mirdb-homepage",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:unit": "vitest run --config vite.config.ts",
+    "test:e2e": "playwright test",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.2.1",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "prismjs": "^1.30.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.58.2",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^24.12.0",
+    "@types/prismjs": "^1.26.6",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.0",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "happy-dom": "^20.8.4",
+    "jsdom": "^29.0.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.56.1",
+    "vite": "^8.0.0",
+    "vitest": "^4.1.0"
+  }
+}
