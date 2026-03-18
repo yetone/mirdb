@@ -39,7 +39,7 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: #6b7280;
+  color: #9ca3af; /* Improved contrast ratio for WCAG AA compliance (4.5:1+) */
   font-style: italic;
 }
 
@@ -114,7 +114,7 @@ pre[class*="language-"] {
 }
 
 .language-bash .token.comment {
-  color: #6b7280;
+  color: #9ca3af; /* Improved contrast ratio for WCAG AA compliance (4.5:1+) */
 }
 
 /* Line highlighting */
