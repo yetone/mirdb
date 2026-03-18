@@ -9,6 +9,17 @@
     <meta property="og:title" content="MirDB - Persistent Key-Value Store" />
     <meta property="og:description" content="A persistent key-value store with Memcached protocol support, built with Rust and Tokio" />
     <meta property="og:type" content="website" />
+    <!-- Theme initialization script - prevents flash of incorrect theme -->
+    <script>
+      (function() {
+        var theme = localStorage.getItem('mirdb-theme');
+        if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

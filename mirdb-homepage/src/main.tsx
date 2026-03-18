@@ -7,8 +7,12 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles/globals.css';
 
-// Apply dark mode by default
-if (!localStorage.getItem('mirdb-theme')) {
+// Apply theme based on stored preference or default to dark mode
+const storedTheme = localStorage.getItem('mirdb-theme');
+if (storedTheme === 'light') {
+  document.documentElement.classList.remove('dark');
+} else {
+  // Default to dark mode if no preference or preference is 'dark'
   document.documentElement.classList.add('dark');
 }
 
