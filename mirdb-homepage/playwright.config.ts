@@ -15,11 +15,27 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: /build\.spec\.ts/,
+    },
+    {
+      name: 'build-tests',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:4173',
+      },
+      testMatch: /build\.spec\.ts/,
     },
   ],
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: [
+    {
+      command: 'npm run dev',
+      url: 'http://localhost:5173',
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: 'npm run preview',
+      url: 'http://localhost:4173',
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 });
