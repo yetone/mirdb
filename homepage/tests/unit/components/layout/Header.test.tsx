@@ -11,6 +11,11 @@ jest.mock('@/components/layout/Navigation', () => ({
   Navigation: () => <nav data-testid="navigation">Mocked Navigation</nav>,
 }));
 
+// Mock the ThemeToggle component to isolate Header tests
+jest.mock('@/components/ui/ThemeToggle', () => ({
+  ThemeToggle: () => <button data-testid="theme-toggle">Mocked ThemeToggle</button>,
+}));
+
 describe('Header', () => {
   it('renders the header element', () => {
     render(<Header />);

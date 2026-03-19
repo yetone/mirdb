@@ -6,6 +6,7 @@
 export { Button } from './ui/Button';
 export { Card } from './ui/Card';
 export { CodeBlock } from './ui/CodeBlock';
+export { ThemeToggle } from './ui/ThemeToggle';
 
 // Layout Components
 export { Header } from './layout/Header';

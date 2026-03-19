@@ -16,6 +16,7 @@
 
 import { Database } from 'lucide-react';
 import { Navigation } from './Navigation';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { cn } from '@/lib/utils';
 
 export interface HeaderProps {
@@ -48,8 +49,10 @@ export function Header({ className }: HeaderProps) {
           {/* Navigation */}
           <Navigation />
 
-          {/* Theme Toggle Placeholder - Will be implemented by Scenario 11 */}
-          <div className="hidden md:block w-10" aria-hidden="true" />
+          {/* Theme Toggle - Implemented by Scenario 11 */}
+          <div className="hidden md:flex items-center">
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </header>
