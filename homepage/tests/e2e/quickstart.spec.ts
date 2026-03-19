@@ -144,3 +144,185 @@ test.describe('Quick Start Section', () => {
     }
   });
 });
+
+// Scenario 16: Code Syntax Highlighting E2E Tests
+test.describe('Code Syntax Highlighting', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#quick-start').scrollIntoViewIfNeeded();
+  });
+
+  // Test Case 3: Syntax highlighting works in both light and dark themes
+  test('TC3: Syntax highlighting colors are visible in light mode', async ({ page }) => {
+    // Ensure light mode
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.evaluate(() => localStorage.removeItem('mirdb-theme'));
+    await page.reload();
+    await page.locator('#quick-start').scrollIntoViewIfNeeded();
+
+    // Find the first code block
+    const codeBlock = page.locator('[data-testid="code-block"]').first();
+    await expect(codeBlock).toBeVisible();
+
+    // Check code content exists
+    const codeContent = codeBlock.locator('[data-testid="code-content"]');
+    await expect(codeContent).toBeVisible();
+
+    // Verify syntax highlighting elements exist (command highlighting)
+    const highlightedElement = codeBlock.locator('.text-green-400').first();
+    await expect(highlightedElement).toBeVisible();
+
+    // Verify the highlighted element has visible color (not transparent)
+    const color = await highlightedElement.evaluate((el) =>
+      getComputedStyle(el).color
+    );
+    expect(color).not.toBe('rgba(0, 0, 0, 0)');
+    expect(color).not.toBe('transparent');
+  });
+
+  test('TC3: Syntax highlighting colors are visible in dark mode', async ({ page }) => {
+    // Enable dark mode via theme toggle
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    const themeToggle = page.getByTestId('theme-toggle');
+
+    // Check if we need to toggle to dark mode
+    const isDarkMode = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark')
+    );
+
+    if (!isDarkMode) {
+      await themeToggle.click();
+      await page.waitForTimeout(300);
+    }
+
+    // Verify dark mode is active
+    await expect(page.locator('html')).toHaveClass(/dark/);
+
+    // Scroll to Quick Start
+    await page.locator('#quick-start').scrollIntoViewIfNeeded();
+
+    // Find the first code block
+    const codeBlock = page.locator('[data-testid="code-block"]').first();
+    await expect(codeBlock).toBeVisible();
+
+    // Check code content exists
+    const codeContent = codeBlock.locator('[data-testid="code-content"]');
+    await expect(codeContent).toBeVisible();
+
+    // Verify syntax highlighting elements exist
+    const highlightedCommand = codeBlock.locator('.text-green-400').first();
+    await expect(highlightedCommand).toBeVisible();
+
+    // Verify the highlighted element has visible green color
+    const color = await highlightedCommand.evaluate((el) =>
+      getComputedStyle(el).color
+    );
+    // Green should have high G value
+    const rgbMatch = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    expect(rgbMatch).not.toBeNull();
+    if (rgbMatch) {
+      const g = parseInt(rgbMatch[2]);
+      expect(g).toBeGreaterThan(100); // Green component should be significant
+    }
+  });
+
+  test('Code blocks display correct syntax highlighting for git command', async ({ page }) => {
+    const codeBlock = page.locator('[data-testid="code-block"]').first();
+    await expect(codeBlock).toBeVisible();
+
+    // Verify 'git' command is highlighted (green)
+    const gitCommand = codeBlock.locator('.text-green-400');
+    await expect(gitCommand.first()).toBeVisible();
+
+    // Verify URL is highlighted (blue)
+    const urlHighlight = codeBlock.locator('.text-blue-400');
+    await expect(urlHighlight.first()).toBeVisible();
+  });
+
+  test('Code blocks display correct syntax highlighting for cargo command', async ({ page }) => {
+    // Find the code block with cargo command
+    const codeBlocks = page.locator('[data-testid="code-block"]');
+    const count = await codeBlocks.count();
+
+    let cargoBlockFound = false;
+    for (let i = 0; i < count; i++) {
+      const block = codeBlocks.nth(i);
+      const text = await block.textContent();
+      if (text?.includes('cargo')) {
+        cargoBlockFound = true;
+
+        // Verify 'cargo' command is highlighted (green)
+        const cargoCommand = block.locator('.text-green-400');
+        await expect(cargoCommand.first()).toBeVisible();
+
+        // Verify '--release' flag is highlighted (yellow)
+        const releaseFlag = block.locator('.text-yellow-400');
+        await expect(releaseFlag.first()).toBeVisible();
+        break;
+      }
+    }
+
+    expect(cargoBlockFound).toBe(true);
+  });
+
+  test('Language indicator is displayed above code block', async ({ page }) => {
+    const codeBlock = page.locator('[data-testid="code-block"]').first();
+    await expect(codeBlock).toBeVisible();
+
+    // Verify language indicator exists and shows 'bash'
+    const languageIndicator = codeBlock.locator('[data-testid="code-language"]');
+    await expect(languageIndicator).toBeVisible();
+    await expect(languageIndicator).toHaveText(/bash/i);
+  });
+
+  test('Syntax highlighting is consistent across multiple code blocks', async ({ page }) => {
+    const codeBlocks = page.locator('#quick-start [data-testid="code-block"]');
+    const count = await codeBlocks.count();
+
+    // Should have multiple code blocks
+    expect(count).toBeGreaterThanOrEqual(3);
+
+    // Each code block should have syntax highlighting
+    for (let i = 0; i < Math.min(count, 3); i++) {
+      const block = codeBlocks.nth(i);
+      await expect(block).toBeVisible();
+
+      // Each should have a language indicator
+      const languageIndicator = block.locator('[data-testid="code-language"]');
+      await expect(languageIndicator).toBeVisible();
+
+      // Each should have some highlighted content
+      const codeContent = block.locator('[data-testid="code-content"]');
+      await expect(codeContent).toBeVisible();
+    }
+  });
+
+  test('Code block maintains styling when switching themes', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await page.locator('#quick-start').scrollIntoViewIfNeeded();
+
+    const codeBlock = page.locator('[data-testid="code-block"]').first();
+    const highlightedElement = codeBlock.locator('.text-green-400').first();
+
+    // Get color in current theme
+    const initialColor = await highlightedElement.evaluate((el) =>
+      getComputedStyle(el).color
+    );
+
+    // Toggle theme
+    const themeToggle = page.getByTestId('theme-toggle');
+    await themeToggle.click();
+    await page.waitForTimeout(300);
+
+    // Get color after theme toggle
+    const newColor = await highlightedElement.evaluate((el) =>
+      getComputedStyle(el).color
+    );
+
+    // Syntax highlighting color should remain consistent (tailwind classes don't change)
+    expect(newColor).toBe(initialColor);
+  });
+});

@@ -218,5 +218,178 @@ describe('CodeBlock Component', () => {
 
       expect(screen.getByTestId('code-language')).toHaveTextContent('bash');
     });
+
+    it('should display rust language indicator', () => {
+      render(<CodeBlock code="fn main() {}" language="rust" />);
+
+      expect(screen.getByTestId('code-language')).toHaveTextContent('rust');
+    });
+
+    it('should display sh language indicator', () => {
+      render(<CodeBlock code="#!/bin/sh" language="sh" />);
+
+      expect(screen.getByTestId('code-language')).toHaveTextContent('sh');
+    });
+  });
+
+  // Scenario 16: Code Syntax Highlighting - Test Case 1
+  describe('Syntax Highlighting - Bash Commands', () => {
+    it('should apply syntax highlighting to bash commands', () => {
+      const bashCode = 'git clone https://github.com/yetone/mirdb.git';
+      render(<CodeBlock code={bashCode} language="bash" />);
+
+      const codeElement = screen.getByTestId('code-content');
+
+      // Command (git) should be highlighted with green
+      const commandSpan = codeElement.querySelector('.text-green-400');
+      expect(commandSpan).toBeInTheDocument();
+      expect(commandSpan?.textContent).toBe('git');
+    });
+
+    it('should highlight multiple bash commands', () => {
+      const bashCode = 'cd mirdb';
+      render(<CodeBlock code={bashCode} language="bash" />);
+
+      const codeElement = screen.getByTestId('code-content');
+
+      // cd command should be highlighted
+      const commandSpan = codeElement.querySelector('.text-green-400');
+      expect(commandSpan).toBeInTheDocument();
+      expect(commandSpan?.textContent).toBe('cd');
+    });
+
+    it('should highlight echo command', () => {
+      render(<CodeBlock code='echo "Hello World"' language="bash" />);
+
+      const codeElement = screen.getByTestId('code-content');
+      const commandSpan = codeElement.querySelector('.text-green-400');
+      expect(commandSpan).toBeInTheDocument();
+      expect(commandSpan?.textContent).toBe('echo');
+    });
+
+    it('should highlight telnet command', () => {
+      render(<CodeBlock code="telnet localhost 11211" language="bash" />);
+
+      const codeElement = screen.getByTestId('code-content');
+      const commandSpan = codeElement.querySelector('.text-green-400');
+      expect(commandSpan).toBeInTheDocument();
+      expect(commandSpan?.textContent).toBe('telnet');
+    });
+  });
+
+  // Scenario 16: Code Syntax Highlighting - Test Case 1 (continued)
+  describe('Syntax Highlighting - URLs', () => {
+    it('should highlight URLs with blue color', () => {
+      render(<CodeBlock code="git clone https://github.com/yetone/mirdb.git" language="bash" />);
+
+      const codeElement = screen.getByTestId('code-content');
+      const urlSpan = codeElement.querySelector('.text-blue-400');
+      expect(urlSpan).toBeInTheDocument();
+      expect(urlSpan?.textContent).toContain('https://github.com/yetone/mirdb.git');
+    });
+  });
+
+  // Scenario 16: Code Syntax Highlighting - Test Case 1 (continued)
+  describe('Syntax Highlighting - Flags', () => {
+    it('should highlight command flags with yellow color', () => {
+      render(<CodeBlock code="cargo run --release" language="bash" />);
+
+      const codeElement = screen.getByTestId('code-content');
+      const flagSpan = codeElement.querySelector('.text-yellow-400');
+      expect(flagSpan).toBeInTheDocument();
+      expect(flagSpan?.textContent).toBe('--release');
+    });
+
+    it('should highlight short flags', () => {
+      render(<CodeBlock code="ls -la" language="bash" />);
+
+      const codeElement = screen.getByTestId('code-content');
+      const flagSpan = codeElement.querySelector('.text-yellow-400');
+      expect(flagSpan).toBeInTheDocument();
+      expect(flagSpan?.textContent).toBe('-la');
+    });
+  });
+
+  // Scenario 16: Code Syntax Highlighting - Test Case 1 (continued)
+  describe('Syntax Highlighting - Strings', () => {
+    it('should highlight double-quoted strings with orange color', () => {
+      render(<CodeBlock code='echo "Hello World"' language="bash" />);
+
+      const codeElement = screen.getByTestId('code-content');
+      const stringSpan = codeElement.querySelector('.text-orange-400');
+      expect(stringSpan).toBeInTheDocument();
+      expect(stringSpan?.textContent).toBe('"Hello World"');
+    });
+
+    it('should highlight single-quoted strings', () => {
+      render(<CodeBlock code="echo 'Hello World'" language="bash" />);
+
+      const codeElement = screen.getByTestId('code-content');
+      const stringSpan = codeElement.querySelector('.text-orange-400');
+      expect(stringSpan).toBeInTheDocument();
+      expect(stringSpan?.textContent).toBe("'Hello World'");
+    });
+  });
+
+  // Scenario 16: Code Syntax Highlighting - Test Case 2
+  describe('Language Indicator Display', () => {
+    it('should display bash language label prominently', () => {
+      render(<CodeBlock code="npm install" language="bash" />);
+
+      const languageLabel = screen.getByTestId('code-language');
+      expect(languageLabel).toBeInTheDocument();
+      expect(languageLabel).toHaveTextContent('bash');
+      expect(languageLabel).toHaveClass('uppercase');
+    });
+
+    it('should display rust language label', () => {
+      render(<CodeBlock code="fn main() {}" language="rust" />);
+
+      const languageLabel = screen.getByTestId('code-language');
+      expect(languageLabel).toBeInTheDocument();
+      expect(languageLabel).toHaveTextContent('rust');
+    });
+
+    it('should display javascript language label', () => {
+      render(<CodeBlock code="const x = 1;" language="javascript" />);
+
+      const languageLabel = screen.getByTestId('code-language');
+      expect(languageLabel).toBeInTheDocument();
+      expect(languageLabel).toHaveTextContent('javascript');
+    });
+
+    it('should display python language label', () => {
+      render(<CodeBlock code="print('hello')" language="python" />);
+
+      const languageLabel = screen.getByTestId('code-language');
+      expect(languageLabel).toBeInTheDocument();
+      expect(languageLabel).toHaveTextContent('python');
+    });
+  });
+
+  // Theme styling tests (for dark mode code block appearance)
+  describe('Theme Styling', () => {
+    it('should have dark background styling for code blocks', () => {
+      render(<CodeBlock code="test code" language="bash" />);
+
+      const codeBlock = screen.getByTestId('code-block');
+      expect(codeBlock).toHaveClass('bg-slate-900');
+      expect(codeBlock).toHaveClass('dark:bg-slate-950');
+    });
+
+    it('should have appropriate header styling', () => {
+      render(<CodeBlock code="test code" language="bash" />);
+
+      const codeBlock = screen.getByTestId('code-block');
+      const header = codeBlock.querySelector('.bg-slate-800');
+      expect(header).toBeInTheDocument();
+    });
+
+    it('should have light text color for code content', () => {
+      render(<CodeBlock code="test code" language="bash" />);
+
+      const codeContent = screen.getByTestId('code-content');
+      expect(codeContent).toHaveClass('text-slate-200');
+    });
   });
 });
