@@ -2,6 +2,7 @@ import { Hero } from '@/components/sections/Hero';
 import { Features } from '@/components/sections/Features';
 import { HowItWorks } from '@/components/sections/HowItWorks';
 import { ProjectStatus } from '@/components/sections/ProjectStatus';
+import { Resources } from '@/components/sections/Resources';
 
 export default function Home() {
   return (
@@ -24,9 +25,7 @@ export default function Home() {
       </section>
 
       {/* Resources Section - Scenario 6 */}
-      <section id="resources" className="py-16 px-4 bg-gray-50 dark:bg-slate-800">
-        {/* Resources - Scenario 6 */}
-      </section>
+      <Resources />
     </main>
   );
 }

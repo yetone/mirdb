@@ -10,3 +10,4 @@ export { Card } from './ui/Card';
 export { Hero } from './sections/Hero';
 export { HowItWorks } from './sections/HowItWorks';
 export { Features } from './sections/Features';
+export { Resources } from './sections/Resources';
