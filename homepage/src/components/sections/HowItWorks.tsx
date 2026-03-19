@@ -64,6 +64,7 @@ export function HowItWorks() {
               className="max-w-full h-auto"
               width={600}
               height={400}
+              loading="lazy"
             />
           </div>
         </div>
