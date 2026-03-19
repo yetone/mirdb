@@ -13,3 +13,6 @@ export { HowItWorks } from './sections/HowItWorks';
 export { Features } from './sections/Features';
 export { QuickStart } from './sections/QuickStart';
 export { Resources } from './sections/Resources';
+
+// Layout Components
+export { Footer } from './layout/Footer';
