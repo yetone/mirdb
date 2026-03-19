@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Database icon shape -->
+  <ellipse cx="60" cy="30" rx="45" ry="15" fill="url(#logoGradient)"/>
+  <path d="M15 30 L15 85 C15 93.5 33 100 60 100 C87 100 105 93.5 105 85 L105 30" fill="url(#logoGradient)" stroke="none"/>
+  <ellipse cx="60" cy="85" rx="45" ry="15" fill="url(#logoGradient)"/>
+  <!-- Middle line -->
+  <ellipse cx="60" cy="55" rx="45" ry="12" fill="rgba(255,255,255,0.2)"/>
+  <!-- Key icon overlay -->
+  <circle cx="60" cy="55" r="12" fill="white" opacity="0.9"/>
+  <rect x="56" y="52" width="8" height="20" rx="2" fill="#4f46e5"/>
+  <rect x="52" y="62" width="16" height="4" rx="1" fill="#4f46e5"/>
+  <rect x="52" y="68" width="12" height="4" rx="1" fill="#4f46e5"/>
+</svg>
