@@ -1,3 +1,4 @@
+import { Hero } from '@/components/sections/Hero';
 import { Features } from '@/components/sections/Features';
 import { HowItWorks } from '@/components/sections/HowItWorks';
 
@@ -5,14 +6,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section - Scenario 1 */}
-      <section id="hero" className="py-20 px-4 text-center bg-gradient-to-b from-primary-50 to-white dark:from-slate-900 dark:to-slate-800">
-        <h1 className="text-4xl md:text-6xl font-bold text-primary-900 dark:text-white mb-4">
-          MirDB
-        </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          Persistent Key-Value Store with Memcached Compatibility
-        </p>
-      </section>
+      <Hero />
 
       {/* Features Section - Scenario 2 */}
       <Features />
