@@ -19,9 +19,9 @@ module.exports = {
         },
         accent: {
           400: '#fb923c',
-          500: '#f97316',
+          500: '#c2410c',  // Darkened for WCAG AA 4.5:1 contrast on white
           600: '#ea580c',
-          700: '#c2410c',
+          700: '#9a3412',
         },
       },
     },
