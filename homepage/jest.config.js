@@ -5,13 +5,18 @@ const createJestConfig = nextJest({
 });
 
 /** @type {import('jest').Config} */
-const customJestConfig = {
+const config = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  testMatch: ['**/tests/**/*.test.ts', '**/tests/**/*.test.tsx'],
   testPathIgnorePatterns: ['<rootDir>/tests/e2e/'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+  ],
 };
 
-module.exports = createJestConfig(customJestConfig);
+module.exports = createJestConfig(config);

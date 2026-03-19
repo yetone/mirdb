@@ -8,3 +8,4 @@ export { Card } from './ui/Card';
 
 // Section Components
 export { HowItWorks } from './sections/HowItWorks';
+export { Features } from './sections/Features';
