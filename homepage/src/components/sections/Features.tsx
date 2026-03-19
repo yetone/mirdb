@@ -17,7 +17,7 @@ import { Plug, Database, Zap } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { features } from '@/data/features';
 
-const iconMap: Record<string, React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>> = {
+const iconMap: Record<string, typeof Plug> = {
   Plug,
   Database,
   Zap,

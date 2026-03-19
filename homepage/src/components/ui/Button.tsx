@@ -5,12 +5,13 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   variant?: 'primary' | 'secondary' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   href?: string;
   external?: boolean;
   children: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
 }
 
 export function Button({
@@ -20,6 +21,7 @@ export function Button({
   external,
   className,
   children,
+  onClick,
   ...props
 }: ButtonProps) {
   const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
@@ -45,6 +47,7 @@ export function Button({
         className={combinedClassName}
         target={external ? '_blank' : undefined}
         rel={external ? 'noopener noreferrer' : undefined}
+        onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
       >
         {children}
       </a>
@@ -52,7 +55,11 @@ export function Button({
   }
 
   return (
-    <button className={combinedClassName} {...props}>
+    <button
+      className={combinedClassName}
+      onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
+      {...props}
+    >
       {children}
     </button>
   );

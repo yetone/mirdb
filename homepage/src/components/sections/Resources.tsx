@@ -20,7 +20,7 @@ import { BookOpen, Code, Folder, Users, Bug, Scale } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { resources } from '@/data/resources';
 
-const iconMap: Record<string, React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>> = {
+const iconMap: Record<string, typeof BookOpen> = {
   Documentation: BookOpen,
   'API Reference': Code,
   Examples: Folder,

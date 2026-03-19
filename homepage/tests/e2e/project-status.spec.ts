@@ -62,8 +62,8 @@ test.describe('Project Status Section', () => {
     // Wait for the new page to open
     const newPage = await pagePromise;
 
-    // Verify the new page URL is the CircleCI pipeline
-    expect(newPage.url()).toContain('circleci.com/gh/yetone/mirdb');
+    // Verify the new page URL is the CircleCI pipeline (handles redirect from circleci.com to app.circleci.com)
+    expect(newPage.url()).toMatch(/circleci\.com.*mirdb/);
   });
 
   test('CI badge link should have security attributes', async ({ page }) => {
