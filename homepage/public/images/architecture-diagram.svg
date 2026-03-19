@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6366f1"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="400" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="300" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="#1e293b">LSM Tree Data Flow</text>
+
+  <!-- Write Request Box -->
+  <rect x="240" y="50" width="120" height="40" rx="6" fill="#f97316" stroke="#c2410c" stroke-width="2"/>
+  <text x="300" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="white">Write Request</text>
+
+  <!-- Arrow to WAL -->
+  <line x1="300" y1="90" x2="300" y2="110" stroke="#6366f1" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- WAL Box -->
+  <rect x="220" y="115" width="160" height="45" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="300" y="138" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#92400e">Write-Ahead Log</text>
+  <text x="300" y="152" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#b45309">(Durability)</text>
+
+  <!-- Arrow to Memtable -->
+  <line x1="300" y1="160" x2="300" y2="180" stroke="#6366f1" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Memtable Box -->
+  <rect x="220" y="185" width="160" height="45" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="300" y="208" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#166534">Memtable</text>
+  <text x="300" y="222" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#15803d">(Active Skip List)</text>
+
+  <!-- Arrow to Immutable -->
+  <line x1="300" y1="230" x2="300" y2="250" stroke="#6366f1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="370" y="245" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" font-style="italic">when full</text>
+
+  <!-- Immutable Memtables Box -->
+  <rect x="200" y="255" width="200" height="45" rx="6" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+  <text x="300" y="278" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#3730a3">Immutable Memtables</text>
+  <text x="300" y="292" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#4f46e5">(Queue for Compaction)</text>
+
+  <!-- Arrow to SSTables -->
+  <line x1="300" y1="300" x2="300" y2="320" stroke="#6366f1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="370" y="315" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" font-style="italic">compaction</text>
+
+  <!-- SSTable Levels Box -->
+  <rect x="160" y="325" width="280" height="60" rx="6" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+  <text x="300" y="350" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#9d174d">SSTable Levels</text>
+  <text x="300" y="368" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#be185d">Level 0 → Level 1 → Level N (Sorted, Persistent)</text>
+
+  <!-- Side annotations -->
+  <text x="80" y="140" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Crash</text>
+  <text x="80" y="152" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Recovery</text>
+  <line x1="100" y1="145" x2="215" y2="145" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <text x="520" y="355" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">On-Disk</text>
+  <text x="520" y="367" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Storage</text>
+  <line x1="445" y1="360" x2="500" y2="360" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+</svg>
