@@ -1,6 +1,7 @@
 import { Hero } from '@/components/sections/Hero';
 import { Features } from '@/components/sections/Features';
 import { HowItWorks } from '@/components/sections/HowItWorks';
+import { ProjectStatus } from '@/components/sections/ProjectStatus';
 
 export default function Home() {
   return (
@@ -15,9 +16,7 @@ export default function Home() {
       <HowItWorks />
 
       {/* Status Section - Scenario 4 */}
-      <section id="status" className="py-16 px-4 bg-gray-50 dark:bg-slate-800">
-        {/* ProjectStatus - Scenario 4 */}
-      </section>
+      <ProjectStatus />
 
       {/* Quick Start Section - Scenario 5 */}
       <section id="quick-start" className="py-16 px-4">
