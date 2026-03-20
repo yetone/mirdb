@@ -78,18 +78,15 @@
     <!-- Hero Section (Scenario 1) -->
     <section id="hero" class="hero" aria-labelledby="hero-headline">
       <div class="hero__content">
-        <div class="hero__logo" aria-hidden="true">
-          <!-- Logo SVG placeholder -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-            <rect width="48" height="48" rx="8" fill="url(#logo-gradient)"/>
-            <path d="M14 34V14h4l6 12 6-12h4v20h-4V22l-4.5 9h-3L18 22v12h-4z" fill="white"/>
-            <defs>
-              <linearGradient id="logo-gradient" x1="0" y1="0" x2="48" y2="48">
-                <stop offset="0%" stop-color="#6366f1"/>
-                <stop offset="100%" stop-color="#4f46e5"/>
-              </linearGradient>
-            </defs>
-          </svg>
+        <div class="hero__logo" data-testid="hero-logo">
+          <img
+            src="assets/images/logo.svg"
+            alt="MirDB Logo"
+            class="hero__logo-image"
+            width="120"
+            height="120"
+            data-testid="mirdb-logo"
+          />
         </div>
 
         <h1 id="hero-headline" class="hero__headline">
@@ -623,8 +620,8 @@ block_size = "4K"</code></pre>
             </svg>
             <span class="footer__logo-text">MirDB</span>
           </a>
-          <p class="footer__description">
-            A persistent key-value store with Memcached protocol support. Built with Rust and Tokio for high-performance async I/O.
+          <p class="footer__description" data-testid="footer-tech-description">
+            A persistent key-value store with Memcached protocol support. Built with <strong>Rust</strong> (2018 edition, stable toolchain) and <strong>Tokio</strong> async runtime for high-performance async I/O.
           </p>
         </div>
 
@@ -665,12 +662,14 @@ block_size = "4K"</code></pre>
 
           <div class="footer__links-group">
             <h3 class="footer__links-title">Technology</h3>
-            <ul class="footer__links-list">
+            <ul class="footer__links-list" data-testid="tech-stack-list">
               <li class="footer__tech-item">
-                <span class="footer__tech-badge">Rust</span>
+                <span class="footer__tech-badge" data-testid="tech-rust">Rust 2018</span>
+                <span class="footer__tech-detail">Stable toolchain</span>
               </li>
               <li class="footer__tech-item">
-                <span class="footer__tech-badge">Tokio</span>
+                <span class="footer__tech-badge" data-testid="tech-tokio">Tokio</span>
+                <span class="footer__tech-detail">Async runtime</span>
               </li>
               <li class="footer__tech-item">
                 <span class="footer__tech-badge">Memcached Protocol</span>

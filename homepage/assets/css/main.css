@@ -626,6 +626,18 @@ body {
   color: var(--color-text-muted);
 }
 
+.footer__tech-detail {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-xs);
+  opacity: 0.8;
+}
+
+.footer__tech-item {
+  margin-bottom: var(--spacing-sm);
+}
+
 /* Footer Bottom */
 .footer__bottom {
   display: flex;
