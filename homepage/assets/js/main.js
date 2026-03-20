@@ -27,6 +27,44 @@ document.addEventListener('DOMContentLoaded', function() {
     initClipboard();
   }
 
+  // Initialize progressive disclosure (Scenario 16)
+  initProgressiveDisclosure();
+
   // Log initialization
   console.log('MirDB Homepage initialized');
 });
+
+/**
+ * Initialize Progressive Disclosure functionality (Scenario 16)
+ * Handles expand/collapse buttons for feature cards with additional details
+ */
+function initProgressiveDisclosure() {
+  const expandButtons = document.querySelectorAll('.feature-card__expand-btn');
+
+  expandButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      const targetId = button.getAttribute('aria-controls');
+      const detailsSection = document.getElementById(targetId);
+
+      if (!detailsSection) {
+        console.warn('Progressive disclosure: Target element not found:', targetId);
+        return;
+      }
+
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+      // Toggle state
+      button.setAttribute('aria-expanded', !isExpanded);
+      detailsSection.setAttribute('aria-hidden', isExpanded);
+
+      // Update button text
+      const textSpan = button.querySelector('.feature-card__expand-text');
+      if (textSpan) {
+        textSpan.textContent = isExpanded ? 'Learn more' : 'Show less';
+      }
+    });
+  });
+}
+
+// Expose for external access
+window.initProgressiveDisclosure = initProgressiveDisclosure;

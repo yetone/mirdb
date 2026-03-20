@@ -117,7 +117,7 @@
 
         <div class="features__grid" data-testid="features-grid">
           <!-- Feature 1: Memcached Protocol -->
-          <article class="feature-card" data-testid="feature-memcached">
+          <article class="feature-card feature-card--expandable" data-testid="feature-memcached">
             <div class="feature-card__icon" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
                 <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2" fill="none"/>
@@ -128,6 +128,24 @@
             <p class="feature-card__description">
               Full compatibility with Memcached text protocol. Use your existing clients and libraries without any code changes.
             </p>
+            <button class="feature-card__expand-btn" data-testid="expand-btn-memcached" aria-expanded="false" aria-controls="memcached-details">
+              <span class="feature-card__expand-text">Learn more</span>
+              <svg class="feature-card__expand-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div id="memcached-details" class="feature-card__details" data-testid="memcached-details" aria-hidden="true">
+              <div class="feature-card__details-content">
+                <h4>Supported Commands</h4>
+                <ul>
+                  <li><strong>SET:</strong> Store a key-value pair with flags, expiration, and byte count.</li>
+                  <li><strong>GET:</strong> Retrieve the value for one or more keys.</li>
+                  <li><strong>DELETE:</strong> Remove a key-value pair from storage.</li>
+                  <li><strong>STATS:</strong> Get server statistics and metrics.</li>
+                </ul>
+                <p>Compatible with all major Memcached client libraries including libmemcached, python-memcached, and more.</p>
+              </div>
+            </div>
           </article>
 
           <!-- Feature 2: Persistent Storage with SSTables -->
@@ -146,7 +164,7 @@
           </article>
 
           <!-- Feature 3: LSM Tree Architecture -->
-          <article class="feature-card" data-testid="feature-lsm-tree">
+          <article class="feature-card feature-card--expandable" data-testid="feature-lsm-tree">
             <div class="feature-card__icon" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
                 <circle cx="24" cy="10" r="4" stroke="currentColor" stroke-width="2" fill="none"/>
@@ -162,6 +180,23 @@
             <p class="feature-card__description">
               Log-Structured Merge Tree design provides optimal write performance while maintaining efficient reads.
             </p>
+            <button class="feature-card__expand-btn" data-testid="expand-btn-lsm" aria-expanded="false" aria-controls="lsm-details">
+              <span class="feature-card__expand-text">Learn more</span>
+              <svg class="feature-card__expand-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div id="lsm-details" class="feature-card__details" data-testid="lsm-details" aria-hidden="true">
+              <div class="feature-card__details-content">
+                <h4>Technical Details</h4>
+                <ul>
+                  <li><strong>Write Path:</strong> All writes go to an in-memory Memtable first, then flushed to disk as immutable SSTables.</li>
+                  <li><strong>Read Path:</strong> Reads check Memtable first, then L0 SSTables, then lower levels using bloom filters for efficiency.</li>
+                  <li><strong>Levels:</strong> MirDB supports up to 7 levels with configurable size ratios between levels.</li>
+                  <li><strong>Compaction:</strong> Background compaction merges overlapping SSTables to maintain read performance.</li>
+                </ul>
+              </div>
+            </div>
           </article>
 
           <!-- Feature 4: Skip List Memtable -->
