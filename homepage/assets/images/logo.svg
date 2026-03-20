@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <title>MirDB Logo</title>
+  <desc>MirDB - A persistent key-value store with Memcached protocol support</desc>
+
+  <!-- Background -->
+  <rect width="120" height="120" rx="20" fill="url(#mirdb-logo-gradient)"/>
+
+  <!-- M Letter -->
+  <path d="M30 90V30h12l18 36 18-36h12v60h-12V50l-13.5 27h-9L42 50v40H30z" fill="white"/>
+
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="mirdb-logo-gradient" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+</svg>

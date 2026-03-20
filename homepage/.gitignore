@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Test results
+test-results/
+playwright-report/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
