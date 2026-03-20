@@ -13,6 +13,7 @@
  * - Appropriate layout adaptation
  * - 2-column feature layout
  * - Demo fully functional
+ * - Navigation works appropriately
  */
 
 const { test, expect } = require('@playwright/test');
@@ -28,6 +29,10 @@ const TABLET_VIEWPORT = {
   width: 768,
   height: 1024,
 };
+
+// =================================================================
+// Scenario 9 - Mobile Responsive Tests (375px)
+// =================================================================
 
 test.describe('Scenario 9 - Responsive Design - Mobile (375px)', () => {
   test.beforeEach(async ({ page }) => {
@@ -345,43 +350,273 @@ test.describe('Scenario 9 - Responsive Design - Mobile (375px)', () => {
   });
 });
 
-// Tablet-specific tests (Scenario 10) - placeholder for shared test file
+// =================================================================
+// Scenario 10 - Tablet Responsive Tests (768px)
+// =================================================================
+
 test.describe('Scenario 10 - Responsive Design - Tablet (768px)', () => {
   test.beforeEach(async ({ page }) => {
+    // Set tablet viewport (768px width)
     await page.setViewportSize(TABLET_VIEWPORT);
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
   });
 
-  test('Features section shows 2-column layout on tablet', async ({ page }) => {
+  test('TC1: Page displays correctly at 768px without horizontal overflow', async ({ page }) => {
+    // Verify page loads successfully
+    await expect(page).toHaveTitle(/MirDB/);
+
+    // Check for horizontal overflow by comparing scroll width to viewport width
+    const hasHorizontalOverflow = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+    });
+    expect(hasHorizontalOverflow).toBe(false);
+
+    // Verify body width doesn't exceed viewport
+    const bodyWidth = await page.evaluate(() => {
+      return document.body.scrollWidth;
+    });
+    expect(bodyWidth).toBeLessThanOrEqual(768);
+
+    // Check that main content sections are visible
+    await expect(page.locator('#hero')).toBeVisible();
+    await expect(page.locator('#features')).toBeVisible();
+    await expect(page.locator('#demo')).toBeVisible();
+  });
+
+  test('TC2: Features section displays in 2-column layout on tablet', async ({ page }) => {
+    // Scroll to features section
     await page.locator('#features').scrollIntoViewIfNeeded();
 
+    // Verify features grid is visible
     const featuresGrid = page.locator('.features__grid');
     await expect(featuresGrid).toBeVisible();
 
-    // On tablet, should be 2 columns
-    const gridColumns = await featuresGrid.evaluate(el => {
-      return window.getComputedStyle(el).gridTemplateColumns;
+    // Count feature cards
+    const featureCards = page.locator('.feature-card');
+    const cardCount = await featureCards.count();
+    expect(cardCount).toBeGreaterThanOrEqual(4);
+    expect(cardCount).toBeLessThanOrEqual(6);
+
+    // Check grid layout - at 768px should be 2 columns
+    const gridColumns = await featuresGrid.evaluate((el) => {
+      const computedStyle = window.getComputedStyle(el);
+      return computedStyle.gridTemplateColumns;
     });
 
-    // Count number of column values (should be 2)
-    const columnCount = gridColumns.split(' ').filter(col => col !== '0px' && col !== '').length;
+    // Should have 2 columns (two 'px' or 'fr' values)
+    const columnCount = gridColumns.split(' ').filter(col => col.match(/\d/)).length;
     expect(columnCount).toBe(2);
+
+    // Verify cards are properly sized and don't overflow
+    const firstCard = featureCards.first();
+    const cardBox = await firstCard.boundingBox();
+    expect(cardBox.width).toBeLessThan(768 / 2 + 50); // Each card should be less than half viewport + padding
   });
 
-  test('Demo section is fully functional on tablet', async ({ page }) => {
+  test('TC3: Demo section is fully functional on tablet', async ({ page }) => {
+    // Scroll to demo section
     await page.locator('#demo').scrollIntoViewIfNeeded();
 
-    const terminal = page.locator('.demo__terminal');
-    await expect(terminal).toBeVisible();
+    // Verify demo terminal is visible
+    const demoTerminal = page.locator('.demo__terminal');
+    await expect(demoTerminal).toBeVisible();
 
-    // Input and submit should work
-    const input = page.locator('[data-testid="demo-input"]');
-    const submit = page.locator('[data-testid="demo-submit"]');
+    // Verify demo terminal fits within viewport
+    const terminalBox = await demoTerminal.boundingBox();
+    expect(terminalBox.width).toBeLessThanOrEqual(768);
 
-    await expect(input).toBeVisible();
-    await expect(submit).toBeVisible();
-    await expect(input).toBeEnabled();
-    await expect(submit).toBeEnabled();
+    // Verify input field is visible and interactive
+    const demoInput = page.locator('[data-testid="demo-input"]');
+    await expect(demoInput).toBeVisible();
+    await expect(demoInput).toBeEnabled();
+
+    // Verify submit button is visible
+    const submitButton = page.locator('[data-testid="demo-submit"]');
+    await expect(submitButton).toBeVisible();
+    await expect(submitButton).toBeEnabled();
+
+    // Verify example command buttons are visible
+    const exampleButtons = page.locator('.demo__example-btn');
+    const buttonCount = await exampleButtons.count();
+    expect(buttonCount).toBeGreaterThan(0);
+
+    // Verify first example button is clickable
+    const firstExampleBtn = exampleButtons.first();
+    await expect(firstExampleBtn).toBeVisible();
+
+    // Verify output area exists and is visible
+    const outputArea = page.locator('#demo-output');
+    await expect(outputArea).toBeVisible();
+  });
+
+  test('TC4: Navigation works appropriately for tablet size', async ({ page }) => {
+    // Verify header is visible
+    const header = page.locator('#header');
+    await expect(header).toBeVisible();
+
+    // At 768px, hamburger menu should be visible
+    const menuToggle = page.locator('#menu-toggle');
+    await expect(menuToggle).toBeVisible();
+
+    // Click the menu toggle to open navigation
+    await menuToggle.click();
+
+    // Verify navigation is now open/visible
+    const navPanel = page.locator('#main-nav');
+    await expect(navPanel).toBeVisible();
+
+    // Check that nav has the open class or is positioned correctly
+    const isNavOpen = await navPanel.evaluate((el) => {
+      const computedStyle = window.getComputedStyle(el);
+      // Check if nav is visible by position
+      return computedStyle.right === '0px' || el.classList.contains('header__nav--open');
+    });
+    expect(isNavOpen).toBe(true);
+
+    // Verify navigation links are visible in the open menu
+    const navLinks = page.locator('.header__nav-link');
+    const linkCount = await navLinks.count();
+    expect(linkCount).toBeGreaterThan(0);
+
+    // Verify first navigation link is clickable
+    const featuresLink = page.locator('[data-testid="nav-features"]');
+    await expect(featuresLink).toBeVisible();
+
+    // Click on Features link and verify navigation works
+    await featuresLink.click();
+
+    // Wait for scroll and verify we're at features section
+    await page.waitForTimeout(500); // Wait for smooth scroll
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeInViewport();
+  });
+
+  test('Hero section adapts correctly for tablet viewport', async ({ page }) => {
+    // Verify hero section is visible
+    const heroSection = page.locator('#hero');
+    await expect(heroSection).toBeVisible();
+
+    // Verify hero content doesn't overflow
+    const heroContent = page.locator('.hero__content');
+    const contentBox = await heroContent.boundingBox();
+    expect(contentBox.width).toBeLessThanOrEqual(768);
+
+    // Verify CTA buttons are visible and properly sized
+    const ctaButtons = page.locator('.hero__btn');
+    const buttonCount = await ctaButtons.count();
+    expect(buttonCount).toBe(2);
+
+    // Verify buttons have adequate touch target size (min 44px height)
+    const tryDemoBtn = page.locator('[data-testid="cta-try-demo"]');
+    const btnBox = await tryDemoBtn.boundingBox();
+    expect(btnBox.height).toBeGreaterThanOrEqual(40); // Allow some tolerance
+  });
+
+  test('Quick Start section displays correctly on tablet', async ({ page }) => {
+    // Scroll to quickstart section
+    await page.locator('#quickstart').scrollIntoViewIfNeeded();
+
+    // Verify section is visible
+    const quickstartSection = page.locator('#quickstart');
+    await expect(quickstartSection).toBeVisible();
+
+    // Verify steps are visible
+    const steps = page.locator('.quickstart__step');
+    const stepCount = await steps.count();
+    expect(stepCount).toBeGreaterThanOrEqual(3);
+
+    // Verify code blocks don't overflow
+    const codeBlocks = page.locator('.quickstart__code-block');
+    const firstCodeBlock = codeBlocks.first();
+    const codeBlockBox = await firstCodeBlock.boundingBox();
+    expect(codeBlockBox.width).toBeLessThanOrEqual(768);
+
+    // Verify copy buttons are visible
+    const copyButtons = page.locator('.quickstart__copy-btn');
+    const copyBtnCount = await copyButtons.count();
+    expect(copyBtnCount).toBeGreaterThan(0);
+  });
+
+  test('Status section displays correctly on tablet', async ({ page }) => {
+    // Scroll to status section
+    await page.locator('#status').scrollIntoViewIfNeeded();
+
+    // Verify section is visible
+    const statusSection = page.locator('#status');
+    await expect(statusSection).toBeVisible();
+
+    // Verify status content is visible
+    const statusContent = page.locator('[data-testid="status-list"]');
+    await expect(statusContent).toBeVisible();
+
+    // Verify status items are displayed
+    const implementedItems = page.locator('[data-testid="status-item-implemented"]');
+    const implementedCount = await implementedItems.count();
+    expect(implementedCount).toBeGreaterThan(0);
+
+    // Verify planned items are displayed
+    const plannedItems = page.locator('[data-testid="status-item-planned"]');
+    const plannedCount = await plannedItems.count();
+    expect(plannedCount).toBeGreaterThan(0);
+  });
+
+  test('Footer displays correctly on tablet', async ({ page }) => {
+    // Scroll to footer
+    await page.locator('#footer').scrollIntoViewIfNeeded();
+
+    // Verify footer is visible
+    const footer = page.locator('#footer');
+    await expect(footer).toBeVisible();
+
+    // Verify footer links are accessible
+    const footerLinks = page.locator('.footer__link');
+    const linkCount = await footerLinks.count();
+    expect(linkCount).toBeGreaterThan(0);
+
+    // Verify GitHub link is visible
+    const githubLink = page.locator('[data-testid="footer-github"]');
+    await expect(githubLink).toBeVisible();
+
+    // Verify footer doesn't overflow
+    const footerBox = await footer.boundingBox();
+    expect(footerBox.width).toBeLessThanOrEqual(768);
+  });
+
+  test('All interactive elements have adequate touch target sizes', async ({ page }) => {
+    // Check CTA buttons
+    const tryDemoBtn = page.locator('[data-testid="cta-try-demo"]');
+    await expect(tryDemoBtn).toBeVisible();
+    const ctaBtnBox = await tryDemoBtn.boundingBox();
+    expect(ctaBtnBox.height).toBeGreaterThanOrEqual(40);
+
+    // Scroll to demo and check demo submit button
+    await page.locator('#demo').scrollIntoViewIfNeeded();
+    const submitBtn = page.locator('[data-testid="demo-submit"]');
+    await expect(submitBtn).toBeVisible();
+    const submitBtnBox = await submitBtn.boundingBox();
+    expect(submitBtnBox.height).toBeGreaterThanOrEqual(40);
+  });
+
+  test('Code examples section displays correctly on tablet', async ({ page }) => {
+    // Scroll to examples section
+    await page.locator('#examples').scrollIntoViewIfNeeded();
+
+    // Verify section is visible
+    const examplesSection = page.locator('#examples');
+    await expect(examplesSection).toBeVisible();
+
+    // Verify code example cards are visible
+    const codeExamples = page.locator('.code-example');
+    const exampleCount = await codeExamples.count();
+    expect(exampleCount).toBeGreaterThanOrEqual(2);
+
+    // Verify code examples don't overflow
+    const firstExample = codeExamples.first();
+    const exampleBox = await firstExample.boundingBox();
+    expect(exampleBox.width).toBeLessThanOrEqual(768);
+
+    // Verify copy buttons are accessible
+    const copyBtn = page.locator('[data-testid="copy-btn-set"]');
+    await expect(copyBtn).toBeVisible();
   });
 });
