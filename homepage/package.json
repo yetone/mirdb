@@ -1,0 +1,17 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A static website for MirDB persistent key-value store",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "serve": "npx http-server . -p 8080",
+    "serve:test": "npx http-server . -p 3000 -s"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.0",
+    "http-server": "^14.1.1"
+  },
+  "keywords": ["mirdb", "memcached", "key-value", "database"],
+  "license": "MIT"
+}

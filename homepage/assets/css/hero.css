@@ -1,0 +1,182 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Expected styles:
+ * - Full-bleed hero background (gradient or image)
+ * - Hero headline typography (3-4 words max)
+ * - Subheadline styling (1 sentence)
+ * - CTA button styles (primary, secondary)
+ * - Logo placement within hero
+ * - Hover states for CTA buttons (Scenario 16)
+ */
+
+/* Hero Section - Full-bleed gradient background */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-bg-gradient-start) 0%, var(--color-bg-gradient-end) 50%, var(--color-primary-dark) 100%);
+  overflow: hidden;
+}
+
+/* Background decorative elements */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Hero content wrapper */
+.hero__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 900px;
+  padding: var(--spacing-xl);
+}
+
+/* Hero logo */
+.hero__logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(10px);
+}
+
+.hero__logo svg,
+.hero__logo img {
+  width: 48px;
+  height: 48px;
+}
+
+/* Hero headline */
+.hero__headline {
+  font-size: var(--font-size-6xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* Highlight text within headline */
+.hero__headline-highlight {
+  color: var(--color-secondary);
+  display: inline;
+}
+
+/* Hero subheadline / description */
+.hero__description {
+  font-size: var(--font-size-xl);
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: var(--spacing-2xl);
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* CTA buttons container */
+.hero__cta {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Base button styles */
+.hero__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-lg);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  min-width: 160px;
+}
+
+/* Primary CTA button */
+.hero__btn--primary {
+  background-color: var(--color-secondary);
+  color: var(--color-text-light);
+  border-color: var(--color-secondary);
+}
+
+.hero__btn--primary:hover,
+.hero__btn--primary:focus {
+  background-color: var(--color-secondary-dark);
+  border-color: var(--color-secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+}
+
+/* Secondary CTA button */
+.hero__btn--secondary {
+  background-color: transparent;
+  color: var(--color-text-light);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.hero__btn--secondary:hover,
+.hero__btn--secondary:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-text-light);
+  transform: translateY(-2px);
+}
+
+/* Focus states for accessibility */
+.hero__btn:focus-visible {
+  outline: 2px solid var(--color-text-light);
+  outline-offset: 4px;
+}
+
+/* Responsive adjustments for hero */
+@media (max-width: 768px) {
+  .hero__headline {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero__description {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero__cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero__btn {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 375px) {
+  .hero__headline {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__description {
+    font-size: var(--font-size-base);
+  }
+}

@@ -1,0 +1,17 @@
+/**
+ * Responsive Styles
+ * Owner: Scenario 9 (mobile), Scenario 10 (tablet)
+ *
+ * Breakpoints:
+ * - Mobile: max-width 375px
+ * - Tablet: 376px - 768px
+ * - Desktop: 769px+
+ *
+ * Expected responsive adjustments:
+ * - Feature cards: 3-col -> 2-col -> 1-col
+ * - Navigation: inline -> hamburger menu
+ * - Hero: adjust font sizes and CTA layout
+ * - Demo: full-width on mobile
+ */
+
+/* Stub file - to be implemented by Scenarios 9 and 10 */
