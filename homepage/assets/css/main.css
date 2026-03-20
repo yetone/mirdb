@@ -188,23 +188,57 @@ h3 {
 /* Skip Link for Accessibility */
 .skip-link {
   position: absolute;
-  top: -100%;
-  left: 0;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
   background: var(--color-primary);
   color: var(--color-text-light);
   padding: var(--spacing-sm) var(--spacing-md);
   z-index: 9999;
   transition: top var(--transition-fast);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
 }
 
-.skip-link:focus {
-  top: 0;
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 0 !important;
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
 }
 
 /* Focus States */
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+/* Ensure all interactive elements have focus styles */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:not([tabindex="-1"]):focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Links must be distinguishable from surrounding text */
+p a,
+li a:not(.header__nav-link):not(.footer__link),
+.footer__description a,
+.footer__copyright a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+p a:hover,
+li a:hover,
+.footer__description a:hover,
+.footer__copyright a:hover {
+  text-decoration-thickness: 2px;
 }
 
 /* Section Base */
@@ -277,6 +311,7 @@ section {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
+.code-example__copy-btn:focus,
 .code-example__copy-btn:focus-visible {
   outline: 2px solid var(--color-primary-light);
   outline-offset: 2px;
@@ -714,5 +749,78 @@ body {
 @media (max-width: 480px) {
   .footer__links {
     grid-template-columns: 1fr;
+  }
+}
+
+/* =================================================================
+   Accessibility Enhancements (Scenario 11)
+   WCAG 2.1 Level AA Compliance
+   ================================================================= */
+
+/* Color Contrast Fixes - using !important to override scenario-specific styles */
+
+/* Code comments need higher contrast (was #6b7280, now #9ca3af for 5.28:1 ratio on dark bg) */
+.code-comment {
+  color: #9ca3af !important;
+}
+
+/* Demo submit button - darken background for better contrast with white text (4.73:1) */
+.demo__submit {
+  background-color: #4f46e5 !important; /* Darker indigo for better contrast */
+}
+
+.demo__submit:hover {
+  background-color: #4338ca !important;
+}
+
+/* Status item detail text needs darker color for contrast on light background */
+/* Was #9ca3af on #f9fafb (2.42:1), now #6b7280 for 4.63:1 */
+.status-item__detail {
+  color: #6b7280 !important;
+}
+
+/* Planned status details also need better contrast */
+.status-item--planned .status-item__detail {
+  color: #6b7280 !important;
+}
+
+/* Demo input needs visible focus indicator */
+.demo__input:focus {
+  outline: 2px solid var(--color-primary-light) !important;
+  outline-offset: -2px;
+}
+
+/* Ensure all interactive elements have minimum touch target size */
+button,
+a,
+input[type="submit"],
+input[type="button"] {
+  min-height: 44px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-primary: #4338ca;
+    --color-text-secondary: #4b5563;
+  }
+
+  .code-comment {
+    color: #d1d5db !important;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 }
