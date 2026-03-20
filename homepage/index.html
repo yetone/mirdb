@@ -333,7 +333,89 @@ block_size = "4K"</code></pre>
 
     <!-- Project Status Section (Scenario 6) -->
     <section id="status" class="status" aria-labelledby="status-headline">
-      <!-- Status will be implemented by Scenario 6 -->
+      <div class="container">
+        <h2 id="status-headline" class="status__headline">Project Status</h2>
+        <p class="status__description">
+          Track the development progress of MirDB. See what's implemented and what's coming next.
+        </p>
+
+        <div class="status__content" data-testid="status-list">
+          <!-- Implemented Features -->
+          <div class="status__category">
+            <h3 class="status__category-title">
+              <span class="status__category-icon status__category-icon--completed" aria-hidden="true"></span>
+              Implemented Features
+            </h3>
+            <ul class="status__items">
+              <li class="status-item" data-testid="status-item-implemented">
+                <span class="status-item__indicator status-item__indicator--completed" data-completed="true" aria-label="Completed">
+                  <svg class="status-item__checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="status-item__text">
+                  <strong>Memcached Protocol Support</strong>
+                  <span class="status-item__detail">Tokio-based async networking compatible with standard memcached text protocol</span>
+                </span>
+              </li>
+              <li class="status-item" data-testid="status-item-implemented">
+                <span class="status-item__indicator status-item__indicator--completed" data-completed="true" aria-label="Completed">
+                  <svg class="status-item__checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="status-item__text">
+                  <strong>Memtable with Skip List</strong>
+                  <span class="status-item__detail">In-memory data structure for fast reads and writes</span>
+                </span>
+              </li>
+              <li class="status-item" data-testid="status-item-implemented">
+                <span class="status-item__indicator status-item__indicator--completed" data-completed="true" aria-label="Completed">
+                  <svg class="status-item__checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="status-item__text">
+                  <strong>Minor Compaction</strong>
+                  <span class="status-item__detail">Memtable flush to Level 0 SSTables for persistence</span>
+                </span>
+              </li>
+              <li class="status-item" data-testid="status-item-implemented">
+                <span class="status-item__indicator status-item__indicator--completed" data-completed="true" aria-label="Completed">
+                  <svg class="status-item__checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span class="status-item__text">
+                  <strong>Major Compaction</strong>
+                  <span class="status-item__detail">SSTable level compaction for optimized storage</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="status__category">
+            <h3 class="status__category-title">
+              <span class="status__category-icon status__category-icon--planned" aria-hidden="true"></span>
+              Planned Features
+            </h3>
+            <ul class="status__items">
+              <li class="status-item status-item--planned" data-testid="status-item-planned">
+                <span class="status-item__indicator status-item__indicator--planned" data-completed="false" aria-label="Planned">
+                  <svg class="status-item__circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                </span>
+                <span class="status-item__text">
+                  <strong>Raft Consensus</strong>
+                  <span class="status-item__detail">Distributed operation with consensus protocol for high availability</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
