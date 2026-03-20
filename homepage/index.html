@@ -181,7 +181,80 @@
 
     <!-- Code Examples Section (Scenario 4) -->
     <section id="examples" class="examples" aria-labelledby="examples-headline">
-      <!-- Code examples will be implemented by Scenario 4 -->
+      <div class="container">
+        <h2 id="examples-headline" class="examples__headline">Code Examples</h2>
+        <p class="examples__description">
+          MirDB uses the Memcached text protocol. Here are common commands to get you started.
+        </p>
+
+        <div class="examples__grid">
+          <!-- SET Command -->
+          <div class="code-example" data-testid="code-example-set">
+            <div class="code-example__header">
+              <span class="code-example__title">SET Command</span>
+              <button class="code-example__copy-btn" aria-label="Copy SET command to clipboard" data-testid="copy-btn-set">
+                <svg class="code-example__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="code-example__check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="code-example__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-example__code"><code class="language-memcached"><span class="code-keyword">SET</span> <span class="code-key">mykey</span> <span class="code-number">0</span> <span class="code-number">0</span> <span class="code-number">5</span>
+<span class="code-value">hello</span>
+
+<span class="code-comment"># Response:</span>
+<span class="code-response">STORED</span></code></pre>
+          </div>
+
+          <!-- GET Command -->
+          <div class="code-example" data-testid="code-example-get">
+            <div class="code-example__header">
+              <span class="code-example__title">GET Command</span>
+              <button class="code-example__copy-btn" aria-label="Copy GET command to clipboard" data-testid="copy-btn-get">
+                <svg class="code-example__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="code-example__check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="code-example__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-example__code"><code class="language-memcached"><span class="code-keyword">GET</span> <span class="code-key">mykey</span>
+
+<span class="code-comment"># Response:</span>
+<span class="code-response">VALUE mykey 0 5</span>
+<span class="code-value">hello</span>
+<span class="code-response">END</span></code></pre>
+          </div>
+
+          <!-- DELETE Command -->
+          <div class="code-example" data-testid="code-example-delete">
+            <div class="code-example__header">
+              <span class="code-example__title">DELETE Command</span>
+              <button class="code-example__copy-btn" aria-label="Copy DELETE command to clipboard" data-testid="copy-btn-delete">
+                <svg class="code-example__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="code-example__check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="code-example__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-example__code"><code class="language-memcached"><span class="code-keyword">DELETE</span> <span class="code-key">mykey</span>
+
+<span class="code-comment"># Response:</span>
+<span class="code-response">DELETED</span></code></pre>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Quick Start Section (Scenario 5) -->
