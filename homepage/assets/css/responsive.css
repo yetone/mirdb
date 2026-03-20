@@ -14,4 +14,785 @@
  * - Demo: full-width on mobile
  */
 
-/* Stub file - to be implemented by Scenarios 9 and 10 */
+/* =================================================================
+   Mobile Styles (max-width: 480px)
+   Scenario 9 - Responsive Design - Mobile
+   ================================================================= */
+
+@media (max-width: 480px) {
+  /* Base Mobile Adjustments */
+  :root {
+    --container-padding: 1rem;
+  }
+
+  body {
+    padding-top: 60px; /* Smaller header on mobile */
+  }
+
+  /* Container */
+  .container {
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+  }
+
+  /* Section Spacing */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  /* =================================================================
+     Header/Navigation - Mobile
+     ================================================================= */
+  .header__container {
+    padding: var(--spacing-sm) var(--container-padding);
+  }
+
+  .header__logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .header__logo-text {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Mobile Menu Improvements */
+  .header__nav {
+    width: 100%;
+    right: -100%;
+    padding-top: 70px;
+  }
+
+  .header__nav--open {
+    right: 0;
+  }
+
+  .header__nav-list {
+    padding: var(--spacing-md);
+  }
+
+  .header__nav-link {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-lg);
+    border-radius: var(--radius-md);
+  }
+
+  .header__nav-link:active {
+    background-color: rgba(99, 102, 241, 0.1);
+  }
+
+  /* Mobile Menu Toggle Button */
+  .header__menu-toggle {
+    padding: var(--spacing-sm);
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* =================================================================
+     Hero Section - Mobile
+     ================================================================= */
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .hero__content {
+    padding: var(--spacing-md);
+  }
+
+  .hero__logo {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero__logo svg,
+  .hero__logo img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .hero__headline {
+    font-size: var(--font-size-2xl);
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .hero__description {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.5;
+  }
+
+  .hero__cta {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    width: 100%;
+  }
+
+  .hero__btn {
+    width: 100%;
+    max-width: none;
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    min-width: auto;
+    min-height: 48px; /* Touch-friendly target size */
+  }
+
+  /* =================================================================
+     Features Section - Mobile
+     ================================================================= */
+  .features {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .features__headline {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .features__description {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-xl);
+    padding: 0 var(--spacing-sm);
+  }
+
+  .features__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card__icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .feature-card__title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .feature-card__description {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Disable hover effects on touch devices */
+  .feature-card:hover {
+    transform: none;
+  }
+
+  .feature-card:active {
+    transform: scale(0.98);
+  }
+
+  /* =================================================================
+     Demo Section - Mobile
+     ================================================================= */
+  .demo {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .demo__headline {
+    font-size: var(--font-size-2xl);
+  }
+
+  .demo__description {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .demo__terminal {
+    margin: 0 calc(var(--container-padding) * -1);
+    border-radius: 0;
+    width: calc(100% + (var(--container-padding) * 2));
+  }
+
+  .demo__terminal-header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .demo__terminal-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .demo__terminal-title {
+    font-size: var(--font-size-xs);
+  }
+
+  .demo__output {
+    min-height: 150px;
+    max-height: 200px;
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-sm);
+  }
+
+  .demo__input-form {
+    padding: var(--spacing-sm);
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .demo__prompt {
+    font-size: var(--font-size-sm);
+  }
+
+  .demo__input {
+    flex: 1;
+    min-width: 0;
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: var(--spacing-sm);
+  }
+
+  .demo__submit {
+    min-width: 50px;
+    padding: var(--spacing-sm);
+    min-height: 44px; /* Touch-friendly */
+  }
+
+  /* Example Commands */
+  .demo__examples {
+    padding: 0 var(--spacing-sm);
+    margin-top: var(--spacing-md);
+  }
+
+  .demo__examples-label {
+    font-size: var(--font-size-xs);
+  }
+
+  .demo__examples-list {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .demo__example-btn {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-xs);
+    min-height: 44px; /* Touch-friendly */
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* =================================================================
+     Code Examples Section - Mobile
+     ================================================================= */
+  .examples {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .examples__headline {
+    font-size: var(--font-size-2xl);
+  }
+
+  .examples__description {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .examples__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .code-example {
+    margin: 0 calc(var(--container-padding) * -0.5);
+  }
+
+  .code-example__header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .code-example__title {
+    font-size: var(--font-size-xs);
+  }
+
+  .code-example__copy-btn {
+    padding: var(--spacing-xs);
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .code-example__copy-text {
+    display: none; /* Hide text on mobile, show icon only */
+  }
+
+  .code-example__code {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-xs);
+  }
+
+  /* =================================================================
+     Quick Start Section - Mobile
+     ================================================================= */
+  .quickstart {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .quickstart__headline {
+    font-size: var(--font-size-2xl);
+  }
+
+  .quickstart__subtitle {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-xl);
+    padding: 0 var(--spacing-sm);
+  }
+
+  .quickstart__steps {
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .quickstart__step {
+    flex-direction: column;
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+
+  .quickstart__step-number {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: var(--font-size-base);
+  }
+
+  .quickstart__step-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .quickstart__code-block {
+    margin: 0 calc(var(--spacing-md) * -1);
+    border-radius: 0;
+  }
+
+  .quickstart__code-block pre {
+    padding: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+    padding-bottom: 3rem;
+    font-size: var(--font-size-xs);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .quickstart__copy-btn {
+    bottom: var(--spacing-xs);
+    right: var(--spacing-xs);
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .quickstart__copy-text {
+    display: none;
+  }
+
+  .quickstart__step-alt {
+    font-size: var(--font-size-xs);
+  }
+
+  .quickstart__step-note {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Configuration Section */
+  .quickstart__config {
+    padding: var(--spacing-md);
+  }
+
+  .quickstart__config-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .quickstart__config-intro {
+    font-size: var(--font-size-sm);
+  }
+
+  .quickstart__config-table-wrapper {
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .quickstart__config-table {
+    font-size: var(--font-size-xs);
+    min-width: 100%; /* Table contained within wrapper */
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .quickstart__config-table th,
+  .quickstart__config-table td {
+    padding: var(--spacing-xs);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .quickstart__config-table td:first-child {
+    max-width: 80px;
+  }
+
+  .quickstart__config-example-title {
+    font-size: var(--font-size-base);
+  }
+
+  /* =================================================================
+     Status Section - Mobile
+     ================================================================= */
+  .status {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .status__headline {
+    font-size: var(--font-size-2xl);
+  }
+
+  .status__description {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .status__content {
+    display: block !important; /* Override grid to prevent minmax overflow */
+  }
+
+  .status__category {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .status__category:last-child {
+    margin-bottom: 0;
+  }
+
+  .status__category {
+    padding: var(--spacing-md);
+  }
+
+  .status__category-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .status__items {
+    gap: var(--spacing-sm);
+  }
+
+  .status-item {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
+  }
+
+  .status-item__indicator {
+    width: 24px;
+    height: 24px;
+  }
+
+  .status-item__checkmark,
+  .status-item__circle {
+    width: 14px;
+    height: 14px;
+  }
+
+  .status-item__text strong {
+    font-size: var(--font-size-sm);
+  }
+
+  .status-item__detail {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Disable hover on touch */
+  .status-item:hover {
+    transform: none;
+  }
+
+  .status-item:active {
+    background-color: rgba(99, 102, 241, 0.05);
+  }
+
+  /* =================================================================
+     Footer - Mobile
+     ================================================================= */
+  .footer {
+    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+  }
+
+  .footer__main {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .footer__brand {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .footer__logo {
+    justify-content: center;
+  }
+
+  .footer__description {
+    text-align: center;
+  }
+
+  .footer__links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .footer__links-title {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .footer__link {
+    font-size: var(--font-size-xs);
+    min-height: 44px; /* Touch-friendly */
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .footer__tech-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+    padding-top: var(--spacing-lg);
+  }
+
+  .footer__copyright {
+    font-size: var(--font-size-xs);
+  }
+
+  .footer__social-link {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* =================================================================
+   Extra Small Mobile Styles (max-width: 375px)
+   Specific adjustments for iPhone SE and smaller devices
+   ================================================================= */
+
+@media (max-width: 375px) {
+  :root {
+    --container-padding: 0.75rem;
+  }
+
+  /* Typography Adjustments */
+  h1, .hero__headline {
+    font-size: var(--font-size-xl);
+  }
+
+  h2, .features__headline,
+  .demo__headline,
+  .examples__headline,
+  .quickstart__headline,
+  .status__headline {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Hero Specific */
+  .hero {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .hero__logo {
+    width: 56px;
+    height: 56px;
+  }
+
+  .hero__logo svg,
+  .hero__logo img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hero__headline {
+    font-size: 1.375rem; /* 22px */
+  }
+
+  .hero__description {
+    font-size: var(--font-size-sm);
+  }
+
+  .hero__btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Feature Cards */
+  .feature-card {
+    padding: var(--spacing-md);
+  }
+
+  .feature-card__icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .feature-card__title {
+    font-size: var(--font-size-base);
+  }
+
+  .feature-card__description {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Demo */
+  .demo__output {
+    min-height: 120px;
+    max-height: 160px;
+  }
+
+  .demo__input {
+    font-size: 16px; /* Critical: Prevents zoom on iOS */
+  }
+
+  /* Footer */
+  .footer__links {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer__links-group {
+    text-align: center;
+  }
+
+  .footer__link {
+    justify-content: center;
+  }
+}
+
+/* =================================================================
+   Touch-Friendly Enhancements
+   Ensures all interactive elements meet minimum touch target sizes
+   ================================================================= */
+
+@media (pointer: coarse) {
+  /* Minimum touch target sizes (44x44px as per Apple/Google guidelines) */
+  a, button, [role="button"], input[type="submit"], input[type="button"] {
+    min-height: 44px;
+  }
+
+  /* Navigation links in mobile menu */
+  .header__nav-link {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  /* Buttons get tap highlight */
+  .hero__btn:active,
+  .demo__example-btn:active,
+  .demo__submit:active,
+  .quickstart__copy-btn:active,
+  .code-example__copy-btn:active {
+    opacity: 0.8;
+  }
+
+  /* Remove hover effects on touch devices */
+  .feature-card:hover,
+  .status-item:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* =================================================================
+   Prevent Horizontal Overflow
+   Critical for mobile: ensures no horizontal scrolling occurs
+   ================================================================= */
+
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Ensure all sections respect viewport width */
+section,
+.container,
+.hero__content,
+.features__grid,
+.demo__terminal,
+.examples__grid,
+.quickstart__steps,
+.status__content,
+.footer__container {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix status section grid that can cause overflow */
+.status__content {
+  grid-template-columns: 1fr !important;
+}
+
+/* Handle pre/code overflow */
+pre, code {
+  overflow-x: auto;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Images should not exceed viewport */
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* All elements should respect viewport bounds (excluding positioned elements) */
+*:not(.header__nav):not(.skip-link) {
+  max-width: 100%;
+}
+
+/* Fixed/absolute elements that can extend beyond viewport */
+.header__nav {
+  /* This is intentionally positioned off-screen when closed */
+}
+
+/* Ensure container respects viewport on mobile */
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Quickstart table fixes */
+  .quickstart__config-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  table {
+    max-width: 100%;
+    display: block;
+    overflow-x: auto;
+  }
+}
