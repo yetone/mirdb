@@ -36,6 +36,7 @@ module.exports = defineConfig({
   },
 
   projects: [
+    // Desktop browsers (Scenario 13 - Cross-Browser Compatibility)
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
@@ -48,6 +49,14 @@ module.exports = defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    {
+      name: 'edge',
+      use: {
+        ...devices['Desktop Edge'],
+        channel: 'msedge',
+      },
+    },
+    // Mobile browsers
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },
