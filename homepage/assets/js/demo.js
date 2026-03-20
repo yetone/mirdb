@@ -32,6 +32,17 @@
   const USE_BACKEND = false; // Toggle for backend usage
   const SIMULATED_DELAY = 150; // Delay in ms for simulated responses
 
+  // Error Handling Configuration (Scenario 15)
+  const REQUEST_TIMEOUT = 5000; // 5 second timeout for backend requests
+  const MAX_COMMANDS_PER_MINUTE = 60; // Rate limit: commands per minute
+  const RATE_LIMIT_WINDOW = 60000; // 1 minute window
+
+  // Client-side state tracking
+  let commandHistory = []; // Timestamps of recent commands
+  let backendAvailable = true; // Track backend availability
+  let consecutiveFailures = 0; // Track consecutive backend failures
+  const MAX_CONSECUTIVE_FAILURES = 3; // Switch to fallback after this many failures
+
   /**
    * Initialize the demo terminal
    */
@@ -78,22 +89,115 @@
       return;
     }
 
+    // Check client-side rate limiting (Scenario 15)
+    const rateLimitResult = checkRateLimit();
+    if (!rateLimitResult.allowed) {
+      addOutput(`Rate limit exceeded. Please wait ${rateLimitResult.waitTime} seconds before sending more commands.`, 'error');
+      return;
+    }
+
     // Show command in output
     addOutput(command, 'command');
 
     // Show loading state
     showLoading(true);
 
+    // Record this command for rate limiting
+    recordCommand();
+
     try {
       const result = await executeCommand(command);
       displayOutput(result);
+
+      // Reset failure counter on success
+      if (backendAvailable) {
+        consecutiveFailures = 0;
+      }
     } catch (error) {
-      showError(error.message || 'An error occurred');
+      handleExecutionError(error);
     } finally {
       showLoading(false);
       inputEl.value = '';
       inputEl.focus();
     }
+  }
+
+  /**
+   * Handle execution errors with graceful degradation (Scenario 15)
+   * @param {Error} error - The error that occurred
+   */
+  function handleExecutionError(error) {
+    const message = error.message || 'An unexpected error occurred';
+
+    // Check for specific error types
+    if (message.toLowerCase().includes('timeout') || message.toLowerCase().includes('timed out')) {
+      showError('Request timed out. The server took too long to respond. Please try again.');
+      consecutiveFailures++;
+    } else if (message.toLowerCase().includes('rate limit')) {
+      showError('Rate limit exceeded. Please wait before sending more commands.');
+    } else if (
+      message.toLowerCase().includes('network') ||
+      message.toLowerCase().includes('unavailable') ||
+      message.toLowerCase().includes('failed to fetch') ||
+      message.toLowerCase().includes('connection')
+    ) {
+      consecutiveFailures++;
+      handleBackendUnavailable();
+    } else {
+      showError(message);
+      consecutiveFailures++;
+    }
+
+    // Switch to fallback mode after multiple failures
+    if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES && backendAvailable) {
+      switchToFallbackMode();
+    }
+  }
+
+  /**
+   * Handle backend unavailability (Scenario 15)
+   */
+  function handleBackendUnavailable() {
+    addOutput('Backend unavailable. Unable to connect to server.', 'error');
+    if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+      switchToFallbackMode();
+    }
+  }
+
+  /**
+   * Switch to fallback simulation mode (Scenario 15)
+   */
+  function switchToFallbackMode() {
+    backendAvailable = false;
+    showFallback();
+    addOutput('Commands will now use local simulation.', 'info');
+  }
+
+  /**
+   * Check if request is within rate limits (Scenario 15)
+   * @returns {{allowed: boolean, waitTime: number}}
+   */
+  function checkRateLimit() {
+    const now = Date.now();
+
+    // Clean old entries outside the window
+    commandHistory = commandHistory.filter(ts => now - ts < RATE_LIMIT_WINDOW);
+
+    // Check if limit exceeded
+    if (commandHistory.length >= MAX_COMMANDS_PER_MINUTE) {
+      const oldestCommand = Math.min(...commandHistory);
+      const waitTime = Math.ceil((RATE_LIMIT_WINDOW - (now - oldestCommand)) / 1000);
+      return { allowed: false, waitTime };
+    }
+
+    return { allowed: true, waitTime: 0 };
+  }
+
+  /**
+   * Record a command for rate limiting tracking (Scenario 15)
+   */
+  function recordCommand() {
+    commandHistory.push(Date.now());
   }
 
   /**
@@ -124,35 +228,76 @@
 
   /**
    * Execute a command against the backend or simulation
+   * Uses fallback when backend is unavailable (Scenario 15)
    * @param {string} command - The Memcached command
    * @returns {Promise<{output: string, success: boolean}>}
    */
   async function executeCommand(command) {
-    if (USE_BACKEND) {
-      return executeViaBackend(command);
+    // Use simulation if backend is configured off or marked unavailable
+    if (!USE_BACKEND || !backendAvailable) {
+      return executeSimulated(command);
     }
-    return executeSimulated(command);
+
+    // Try backend with fallback to simulation
+    try {
+      return await executeViaBackend(command);
+    } catch (error) {
+      // If backend fails, check if we should fall back to simulation
+      if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES - 1) {
+        // Will switch to fallback after this failure
+        throw error;
+      }
+      // For first few failures, still throw to show error
+      throw error;
+    }
   }
 
   /**
-   * Execute command via backend API
+   * Execute command via backend API with timeout handling (Scenario 15)
    * @param {string} command - The command to execute
    * @returns {Promise<{output: string, success: boolean}>}
    */
   async function executeViaBackend(command) {
-    const response = await fetch(API_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ command }),
-    });
+    // Create abort controller for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
-    if (!response.ok) {
-      throw new Error(`Server error: ${response.status}`);
+    try {
+      const response = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ command }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        // Check for rate limit response from backend
+        if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please wait before sending more commands.');
+        }
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      // Handle abort (timeout)
+      if (error.name === 'AbortError') {
+        throw new Error('Request timed out. The server took too long to respond.');
+      }
+
+      // Handle network errors
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        throw new Error('Backend unavailable. Unable to connect to server.');
+      }
+
+      throw error;
     }
-
-    return response.json();
   }
 
   /**
@@ -349,10 +494,40 @@
   }
 
   /**
-   * Show fallback static example when backend unavailable
+   * Show fallback static example when backend unavailable (Scenario 15)
+   * Informs user that demo is using local simulation
    */
   function showFallback() {
     addOutput('Backend unavailable. Using local simulation.', 'info');
+    addOutput('You can still try commands - they will work with local data.', 'info');
+  }
+
+  /**
+   * Reset backend availability status (Scenario 15)
+   * Call this to retry connecting to backend
+   */
+  function resetBackendStatus() {
+    backendAvailable = true;
+    consecutiveFailures = 0;
+    addOutput('Backend status reset. Will try to reconnect on next command.', 'info');
+  }
+
+  /**
+   * Get current rate limit status (Scenario 15)
+   * @returns {{remaining: number, total: number, resetTime: number}}
+   */
+  function getRateLimitStatus() {
+    const now = Date.now();
+    commandHistory = commandHistory.filter(ts => now - ts < RATE_LIMIT_WINDOW);
+    const remaining = Math.max(0, MAX_COMMANDS_PER_MINUTE - commandHistory.length);
+    const oldestCommand = commandHistory.length > 0 ? Math.min(...commandHistory) : now;
+    const resetTime = Math.max(0, Math.ceil((RATE_LIMIT_WINDOW - (now - oldestCommand)) / 1000));
+
+    return {
+      remaining,
+      total: MAX_COMMANDS_PER_MINUTE,
+      resetTime: remaining === MAX_COMMANDS_PER_MINUTE ? 0 : resetTime,
+    };
   }
 
   /**
@@ -382,5 +557,10 @@
     showFallback,
     clearOutput,
     addOutput,
+    // Scenario 15: Error handling and graceful degradation
+    checkRateLimit,
+    getRateLimitStatus,
+    resetBackendStatus,
+    recordCommand,
   };
 })();
