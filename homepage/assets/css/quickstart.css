@@ -9,4 +9,274 @@
  * - Configuration options display
  */
 
-/* Stub file - to be implemented by Scenario 5 */
+/* Quick Start Section Container */
+.quickstart {
+  background-color: var(--color-bg-secondary);
+  padding: var(--spacing-4xl) 0;
+}
+
+.quickstart__headline {
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+}
+
+.quickstart__subtitle {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-3xl);
+}
+
+/* Steps Container */
+.quickstart__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-3xl);
+}
+
+/* Individual Step */
+.quickstart__step {
+  display: flex;
+  gap: var(--spacing-lg);
+  background-color: var(--color-bg-primary);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.quickstart__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-text-light);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-full);
+}
+
+.quickstart__step-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.quickstart__step-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.quickstart__step-alt {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin: var(--spacing-md) 0;
+}
+
+.quickstart__step-note {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.quickstart__step-note code {
+  background-color: var(--color-bg-secondary);
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-dark);
+}
+
+/* Code Block */
+.quickstart__code-block {
+  position: relative;
+  background-color: var(--color-bg-dark);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.quickstart__code-block pre {
+  padding: var(--spacing-md) var(--spacing-lg);
+  padding-right: 4rem;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.quickstart__code-block code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: #e2e8f0;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+/* Copy Button */
+.quickstart__copy-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  transition: all var(--transition-fast);
+}
+
+.quickstart__copy-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-light);
+}
+
+.quickstart__copy-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.quickstart__copy-btn.copied {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text-light);
+}
+
+.quickstart__copy-text {
+  display: inline;
+}
+
+/* Configuration Section */
+.quickstart__config {
+  background-color: var(--color-bg-primary);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.quickstart__config-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.quickstart__config-intro {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Configuration Table */
+.quickstart__config-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: var(--spacing-xl);
+}
+
+.quickstart__config-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.quickstart__config-table th,
+.quickstart__config-table td {
+  text-align: left;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.quickstart__config-table th {
+  background-color: var(--color-bg-secondary);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.quickstart__config-table td {
+  color: var(--color-text-secondary);
+}
+
+.quickstart__config-table code {
+  background-color: var(--color-bg-secondary);
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-dark);
+}
+
+.quickstart__config-table tbody tr:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Configuration Example */
+.quickstart__config-example {
+  margin-top: var(--spacing-lg);
+}
+
+.quickstart__config-example-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Responsive Styles for Quick Start */
+@media (max-width: 768px) {
+  .quickstart__step {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .quickstart__step-number {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    font-size: var(--font-size-lg);
+  }
+
+  .quickstart__code-block pre {
+    padding-right: var(--spacing-lg);
+    padding-bottom: 3rem;
+  }
+
+  .quickstart__copy-btn {
+    top: auto;
+    bottom: var(--spacing-sm);
+    right: var(--spacing-sm);
+  }
+
+  .quickstart__config-table {
+    font-size: var(--font-size-xs);
+  }
+
+  .quickstart__config-table th,
+  .quickstart__config-table td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+@media (max-width: 375px) {
+  .quickstart {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .quickstart__headline {
+    font-size: var(--font-size-3xl);
+  }
+
+  .quickstart__step {
+    padding: var(--spacing-md);
+  }
+
+  .quickstart__config {
+    padding: var(--spacing-md);
+  }
+}

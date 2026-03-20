@@ -186,7 +186,149 @@
 
     <!-- Quick Start Section (Scenario 5) -->
     <section id="quickstart" class="quickstart" aria-labelledby="quickstart-headline">
-      <!-- Quick start will be implemented by Scenario 5 -->
+      <div class="container">
+        <h2 id="quickstart-headline" class="quickstart__headline">Quick Start</h2>
+        <p class="quickstart__subtitle">Get MirDB running in minutes with these simple steps</p>
+
+        <div class="quickstart__steps">
+          <!-- Step 1: Clone/Install -->
+          <div class="quickstart__step" data-testid="quickstart-step-1">
+            <div class="quickstart__step-number">1</div>
+            <div class="quickstart__step-content">
+              <h3 class="quickstart__step-title">Clone the Repository</h3>
+              <div class="quickstart__code-block" data-testid="code-block-clone">
+                <pre><code>git clone https://github.com/example/mirdb.git
+cd mirdb</code></pre>
+                <button class="quickstart__copy-btn" aria-label="Copy clone command" data-copy-target="clone">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="quickstart__copy-text">Copy</span>
+                </button>
+              </div>
+              <p class="quickstart__step-alt">Or install via Cargo:</p>
+              <div class="quickstart__code-block" data-testid="code-block-cargo">
+                <pre><code>cargo install mirdb</code></pre>
+                <button class="quickstart__copy-btn" aria-label="Copy cargo install command" data-copy-target="cargo">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="quickstart__copy-text">Copy</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Build -->
+          <div class="quickstart__step" data-testid="quickstart-step-2">
+            <div class="quickstart__step-number">2</div>
+            <div class="quickstart__step-content">
+              <h3 class="quickstart__step-title">Build MirDB</h3>
+              <div class="quickstart__code-block" data-testid="code-block-build">
+                <pre><code>cargo build --release</code></pre>
+                <button class="quickstart__copy-btn" aria-label="Copy build command" data-copy-target="build">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="quickstart__copy-text">Copy</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Run -->
+          <div class="quickstart__step" data-testid="quickstart-step-3">
+            <div class="quickstart__step-number">3</div>
+            <div class="quickstart__step-content">
+              <h3 class="quickstart__step-title">Run MirDB</h3>
+              <div class="quickstart__code-block" data-testid="code-block-run">
+                <pre><code>./target/release/mirdb -c etc/mirdb.toml</code></pre>
+                <button class="quickstart__copy-btn" aria-label="Copy run command" data-copy-target="run">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="quickstart__copy-text">Copy</span>
+                </button>
+              </div>
+              <p class="quickstart__step-note">MirDB will start listening on <code>0.0.0.0:12333</code> by default.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuration Options -->
+        <div class="quickstart__config" data-testid="quickstart-config">
+          <h3 class="quickstart__config-title">Configuration Options</h3>
+          <p class="quickstart__config-intro">Customize MirDB with these configuration parameters in your TOML file:</p>
+
+          <div class="quickstart__config-table-wrapper">
+            <table class="quickstart__config-table" data-testid="config-table">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>addr</code></td>
+                  <td>Listen address and port</td>
+                  <td><code>0.0.0.0:12333</code></td>
+                </tr>
+                <tr>
+                  <td><code>work_dir</code></td>
+                  <td>Data directory path</td>
+                  <td><code>/tmp/mirdb</code></td>
+                </tr>
+                <tr>
+                  <td><code>max_level</code></td>
+                  <td>Maximum LSM tree levels</td>
+                  <td><code>7</code></td>
+                </tr>
+                <tr>
+                  <td><code>mem_table_max_size</code></td>
+                  <td>Max memtable size before flush</td>
+                  <td><code>4M</code></td>
+                </tr>
+                <tr>
+                  <td><code>sst_max_size</code></td>
+                  <td>Max SSTable file size</td>
+                  <td><code>100M</code></td>
+                </tr>
+                <tr>
+                  <td><code>block_size</code></td>
+                  <td>Data block size</td>
+                  <td><code>4K</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="quickstart__config-example">
+            <h4 class="quickstart__config-example-title">Example Configuration</h4>
+            <div class="quickstart__code-block" data-testid="code-block-config">
+              <pre><code># etc/mirdb.toml
+addr = "0.0.0.0:12333"
+work_dir = "/var/lib/mirdb"
+max_level = 7
+mem_table_max_size = "4M"
+sst_max_size = "100M"
+block_size = "4K"</code></pre>
+              <button class="quickstart__copy-btn" aria-label="Copy configuration example" data-copy-target="config">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="quickstart__copy-text">Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Project Status Section (Scenario 6) -->
