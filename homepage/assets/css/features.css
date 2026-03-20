@@ -2,7 +2,7 @@
  * Features Section Styles
  * Owner: Scenario 2 - Features Section Display
  *
- * Expected styles:
+ * Styles for:
  * - 3-column card layout (desktop)
  * - Feature card styles with icons
  * - Feature descriptions typography
@@ -10,4 +10,92 @@
  * - Responsive adjustments defined in responsive.css
  */
 
-/* Stub file - to be implemented by Scenario 2 */
+/* Features Section */
+.features {
+  background-color: var(--color-bg-secondary);
+}
+
+.features__headline {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+.features__description {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto var(--spacing-3xl);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+/* Features Grid - 3 Column Layout */
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+}
+
+/* Feature Card */
+.feature-card {
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Feature Card Icon */
+.feature-card__icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-primary);
+}
+
+.feature-card__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Feature Card Title */
+.feature-card__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Feature Card Description */
+.feature-card__description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* Responsive Adjustments - Tablet */
+@media (max-width: 992px) {
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Responsive Adjustments - Mobile */
+@media (max-width: 576px) {
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .features__description {
+    font-size: var(--font-size-base);
+  }
+}
