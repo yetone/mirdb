@@ -176,7 +176,70 @@
 
     <!-- Interactive Demo Section (Scenario 3) -->
     <section id="demo" class="demo" aria-labelledby="demo-headline">
-      <!-- Demo will be implemented by Scenario 3 -->
+      <div class="container">
+        <h2 id="demo-headline" class="demo__headline">Try MirDB Live</h2>
+        <p class="demo__description">
+          Execute Memcached commands in real-time and see the results instantly.
+        </p>
+
+        <div class="demo__terminal" role="application" aria-label="Interactive MirDB demo terminal">
+          <!-- Terminal Header -->
+          <div class="demo__terminal-header">
+            <span class="demo__terminal-dot demo__terminal-dot--red"></span>
+            <span class="demo__terminal-dot demo__terminal-dot--yellow"></span>
+            <span class="demo__terminal-dot demo__terminal-dot--green"></span>
+            <span class="demo__terminal-title">MirDB Demo</span>
+          </div>
+
+          <!-- Terminal Output -->
+          <div class="demo__output" id="demo-output" role="log" aria-live="polite" aria-label="Command output">
+            <div class="demo__output-line demo__output-line--info">
+              Welcome to MirDB Demo! Try commands like SET, GET, DELETE.
+            </div>
+          </div>
+
+          <!-- Command Input -->
+          <form class="demo__input-form" id="demo-form" aria-label="Command input form">
+            <label for="demo-input" class="visually-hidden">Enter Memcached command</label>
+            <span class="demo__prompt" aria-hidden="true">&gt;</span>
+            <input
+              type="text"
+              id="demo-input"
+              class="demo__input"
+              placeholder="Enter a command (e.g., SET mykey 0 0 5)"
+              autocomplete="off"
+              spellcheck="false"
+              aria-describedby="demo-instructions"
+              data-testid="demo-input"
+            />
+            <button type="submit" class="demo__submit" aria-label="Execute command" data-testid="demo-submit">
+              <span class="demo__submit-text">Run</span>
+              <span class="demo__loading" aria-hidden="true" data-testid="demo-loading"></span>
+            </button>
+          </form>
+
+          <!-- Help Text -->
+          <p id="demo-instructions" class="visually-hidden">
+            Enter Memcached commands like SET key flags exptime bytes value, GET key, or DELETE key.
+          </p>
+        </div>
+
+        <!-- Example Commands -->
+        <div class="demo__examples" aria-label="Example commands">
+          <p class="demo__examples-label">Try these examples:</p>
+          <div class="demo__examples-list">
+            <button class="demo__example-btn" data-command="SET mykey 0 0 5" data-value="hello" data-testid="example-set">
+              SET mykey 0 0 5 (hello)
+            </button>
+            <button class="demo__example-btn" data-command="GET mykey" data-testid="example-get">
+              GET mykey
+            </button>
+            <button class="demo__example-btn" data-command="DELETE mykey" data-testid="example-delete">
+              DELETE mykey
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Code Examples Section (Scenario 4) -->
