@@ -11,5 +11,7 @@
   "devDependencies": {
     "@playwright/test": "^1.40.0",
     "serve": "^14.2.0"
-  }
+  },
+  "keywords": ["mirdb", "key-value", "memcached", "homepage"],
+  "license": "MIT"
 }

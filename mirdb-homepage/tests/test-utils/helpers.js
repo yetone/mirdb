@@ -82,8 +82,29 @@ async function simulateNetwork(page, condition) {
   });
 }
 
+/**
+ * Check if an element is visible in the viewport
+ * @param {import('@playwright/test').Page} page
+ * @param {string} selector
+ * @returns {Promise<boolean>}
+ */
+async function isInViewport(page, selector) {
+  return page.evaluate((sel) => {
+    const element = document.querySelector(sel);
+    if (!element) return false;
+    const rect = element.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= window.innerHeight &&
+      rect.right <= window.innerWidth
+    );
+  }, selector);
+}
+
 module.exports = {
   waitForPageLoad,
   getContrastRatio,
   simulateNetwork,
+  isInViewport,
 };

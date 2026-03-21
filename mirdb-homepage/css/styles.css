@@ -38,6 +38,8 @@
   --font-size-xl: 24px;
   --font-size-2xl: 32px;
   --font-size-3xl: 48px;
+  --font-size-4xl: 40px;
+  --font-size-5xl: 56px;
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -52,6 +54,15 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
 }
 
 /* === Base Styles (Shared) === */
@@ -59,6 +70,8 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -66,8 +79,6 @@ html {
 }
 
 body {
-  margin: 0;
-  padding: 0;
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   line-height: 1.6;
@@ -78,6 +89,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: var(--spacing-md);
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -96,17 +108,26 @@ h3 {
 a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 a:hover {
   color: var(--color-primary-hover);
-  text-decoration: underline;
+}
+
+a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* === Layout === */
+main {
+  min-height: 100vh;
 }
 
 .container {
@@ -117,6 +138,102 @@ img {
 
 section {
   padding: var(--spacing-3xl) 0;
+}
+
+/* === Hero Section (Scenario 1) === */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-secondary) 100%);
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+.hero__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero__title {
+  font-size: var(--font-size-5xl);
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+}
+
+.hero__tagline {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  font-weight: 500;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero__description {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-2xl);
+  line-height: 1.7;
+}
+
+.hero__cta-group {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  min-width: 150px;
+}
+
+.hero__cta--primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.hero__cta--primary:hover {
+  background-color: var(--color-primary-hover);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.hero__cta--primary:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  color: #ffffff;
+}
+
+.hero__cta--secondary {
+  background-color: transparent;
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+}
+
+.hero__cta--secondary:hover {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-text-secondary);
+  color: var(--color-text);
+  transform: translateY(-2px);
+}
+
+.hero__cta--secondary:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  color: var(--color-text);
 }
 
 /* === Quick Start Section Styles (Scenario 3) === */
@@ -223,4 +340,40 @@ section {
 .external-link-icon {
   width: 14px;
   height: 14px;
+}
+
+/* === Placeholder Sections (Other scenarios will fill these) === */
+.features,
+.usage,
+.status {
+  min-height: 200px;
+}
+
+/* === Responsive - Hero Section === */
+@media (max-width: 767px) {
+  .hero {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .hero__title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero__description {
+    font-size: var(--font-size-base);
+  }
+
+  .hero__cta-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero__cta {
+    width: 100%;
+    max-width: 280px;
+  }
 }

@@ -8,6 +8,7 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
   <!-- Prism.js for syntax highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
@@ -21,18 +22,29 @@
   </header>
 
   <main>
-    <!-- Hero Section - Scenario 1 -->
-    <section id="hero">
-      <!-- Hero content - owned by Scenario 1 -->
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero">
+      <div class="hero__container">
+        <h1 class="hero__title">MirDB</h1>
+        <p class="hero__tagline">A Persistent Key-Value Store with Memcached protocol</p>
+        <p class="hero__description">
+          Lightning-fast key-value storage with the familiar Memcached interface.
+          Built for durability with LSM tree storage and automatic compaction.
+        </p>
+        <div class="hero__cta-group">
+          <a href="#quick-start" class="hero__cta hero__cta--primary">Get Started</a>
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="hero__cta hero__cta--secondary">View Source</a>
+        </div>
+      </div>
     </section>
 
     <!-- Features Section - Scenario 2 -->
-    <section id="features">
+    <section id="features" class="features">
       <!-- Feature cards - owned by Scenario 2 -->
     </section>
 
     <!-- Quick Start Section - Scenario 3 -->
-    <section id="quick-start">
+    <section id="quick-start" class="quickstart">
       <div class="container">
         <h2 class="quickstart-title">Quick Start</h2>
         <p class="quickstart-description">
@@ -67,12 +79,12 @@
     </section>
 
     <!-- Usage Section - Scenario 4 -->
-    <section id="usage">
+    <section id="usage" class="usage">
       <!-- Usage examples - owned by Scenario 4 -->
     </section>
 
     <!-- Status Section - Scenario 5 -->
-    <section id="status">
+    <section id="status" class="status">
       <!-- Status badges - owned by Scenario 5 -->
     </section>
   </main>
