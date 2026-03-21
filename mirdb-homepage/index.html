@@ -176,7 +176,93 @@
 
     <!-- Status Section - Scenario 5 -->
     <section id="status" class="status">
-      <!-- Status badges - owned by Scenario 5 -->
+      <div class="container">
+        <h2>Project Status</h2>
+
+        <!-- Build Status Badge -->
+        <div class="status-badges">
+          <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="View build status on CircleCI">
+            <img
+              src="https://circleci.com/gh/yetone/mirdb.svg?style=svg"
+              alt="CircleCI Build Status"
+              class="status-badge"
+            />
+          </a>
+        </div>
+
+        <!-- Feature Checklist -->
+        <div class="status-checklist-container">
+          <h3>Feature Checklist</h3>
+          <ul class="status-checklist">
+            <!-- Implemented Features -->
+            <li class="status-feature status-feature--implemented" data-status="implemented">
+              <span class="status-feature__icon" aria-label="Implemented">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="checkmark">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span class="status-feature__text">Memcached Protocol Support</span>
+            </li>
+            <li class="status-feature status-feature--implemented" data-status="implemented">
+              <span class="status-feature__icon" aria-label="Implemented">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="checkmark">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span class="status-feature__text">Persistent Storage</span>
+            </li>
+            <li class="status-feature status-feature--implemented" data-status="implemented">
+              <span class="status-feature__icon" aria-label="Implemented">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="checkmark">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span class="status-feature__text">LSM Tree Storage Engine</span>
+            </li>
+            <li class="status-feature status-feature--implemented" data-status="implemented">
+              <span class="status-feature__icon" aria-label="Implemented">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="checkmark">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span class="status-feature__text">Skip List Memtable</span>
+            </li>
+            <li class="status-feature status-feature--implemented" data-status="implemented">
+              <span class="status-feature__icon" aria-label="Implemented">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="checkmark">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span class="status-feature__text">SSTable Compaction</span>
+            </li>
+            <!-- Planned Features -->
+            <li class="status-feature status-feature--planned" data-status="planned">
+              <span class="status-feature__icon" aria-label="Planned">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="planned-icon">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </span>
+              <span class="status-feature__text">Raft Consensus</span>
+            </li>
+            <li class="status-feature status-feature--planned" data-status="planned">
+              <span class="status-feature__icon" aria-label="Planned">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="planned-icon">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </span>
+              <span class="status-feature__text">Distributed Mode</span>
+            </li>
+            <li class="status-feature status-feature--planned" data-status="planned">
+              <span class="status-feature__icon" aria-label="Planned">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="planned-icon">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </span>
+              <span class="status-feature__text">Cluster Management</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </section>
   </main>
 
