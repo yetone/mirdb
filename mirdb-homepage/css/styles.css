@@ -507,6 +507,111 @@ section {
 .status {
   text-align: center;
   min-height: 200px;
+  padding: var(--spacing-3xl) var(--spacing-xl);
+}
+
+.status h2 {
+  margin-bottom: var(--spacing-xl);
+}
+
+.status-badges {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.status-badges a {
+  display: inline-block;
+  transition: transform var(--transition-fast);
+}
+
+.status-badges a:hover {
+  transform: scale(1.05);
+}
+
+.status-badges a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.status-badge {
+  height: 24px;
+  vertical-align: middle;
+}
+
+.status-checklist-container {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.status-checklist-container h3 {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.status-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.status-feature {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.status-feature:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.status-feature__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-feature__text {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+/* Implemented features */
+.status-feature--implemented .status-feature__icon {
+  color: var(--color-success);
+}
+
+.status-feature--implemented .status-feature__text {
+  color: var(--color-text);
+}
+
+/* Planned features */
+.status-feature--planned .status-feature__icon {
+  color: var(--color-text-muted);
+}
+
+.status-feature--planned .status-feature__text {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.status-feature--planned .planned-icon {
+  opacity: 0.6;
+}
+
+/* Checkmark and planned icons */
+.status-feature .checkmark,
+.status-feature .planned-icon {
+  width: 20px;
+  height: 20px;
 }
 
 /* === Footer (Scenario 11) === */
