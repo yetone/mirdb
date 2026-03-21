@@ -18,20 +18,42 @@ test.describe('HTML Structure Validation', () => {
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('TC5: Hero uses semantic HTML with proper heading hierarchy (h1 for MirDB)', async ({ page }) => {
+  test('TC5: Page uses semantic HTML structure (header, nav, main, section, footer)', async ({ page }) => {
     // Verify the document has proper semantic structure
     const header = page.locator('header');
+    const nav = page.locator('nav');
     const main = page.locator('main');
     const footer = page.locator('footer');
 
     await expect(header).toBeAttached();
+    await expect(nav).toBeAttached();
     await expect(main).toBeAttached();
     await expect(footer).toBeAttached();
 
-    // Verify hero section uses proper section element
+    // Verify all content sections use semantic section element
     const heroSection = page.locator('section#hero');
-    await expect(heroSection).toBeAttached();
+    const featuresSection = page.locator('section#features');
+    const quickStartSection = page.locator('section#quick-start');
+    const usageSection = page.locator('section#usage');
+    const statusSection = page.locator('section#status');
 
+    await expect(heroSection).toBeAttached();
+    await expect(featuresSection).toBeAttached();
+    await expect(quickStartSection).toBeAttached();
+    await expect(usageSection).toBeAttached();
+    await expect(statusSection).toBeAttached();
+
+    // Verify nav is inside header
+    const headerNav = page.locator('header nav');
+    await expect(headerNav).toBeAttached();
+
+    // Verify sections are inside main
+    const mainSections = page.locator('main section');
+    const sectionCount = await mainSections.count();
+    expect(sectionCount).toBeGreaterThanOrEqual(5);
+  });
+
+  test('TC6: Headings follow logical order (h1 > h2 > h3) without skipping levels', async ({ page }) => {
     // Verify h1 is used for the main page title (MirDB)
     const h1 = page.locator('h1');
     await expect(h1).toHaveCount(1);
@@ -41,17 +63,124 @@ test.describe('HTML Structure Validation', () => {
     const heroH1 = page.locator('#hero h1');
     await expect(heroH1).toHaveText('MirDB');
 
-    // Verify there's no heading level skipping (e.g., h1 followed by h3 without h2)
-    const h1Count = await page.locator('h1').count();
-    const h2Count = await page.locator('h2').count();
-    const h3Count = await page.locator('h3').count();
+    // Get all headings in document order
+    const allHeadings = await page.evaluate(() => {
+      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      return Array.from(headings).map(h => ({
+        level: parseInt(h.tagName.substring(1)),
+        text: h.textContent.trim()
+      }));
+    });
 
     // At minimum, we should have h1
-    expect(h1Count).toBe(1);
+    expect(allHeadings.length).toBeGreaterThan(0);
+    expect(allHeadings[0].level).toBe(1);
 
-    // If we have h3, we should have h2 (no skipping)
-    if (h3Count > 0) {
-      expect(h2Count).toBeGreaterThan(0);
+    // Verify no heading level is skipped
+    for (let i = 1; i < allHeadings.length; i++) {
+      const currentLevel = allHeadings[i].level;
+      const previousLevel = allHeadings[i - 1].level;
+
+      // A heading can go to same level, one level deeper, or any level shallower
+      // It should NOT skip levels going deeper (e.g., h1 -> h3 is invalid)
+      if (currentLevel > previousLevel) {
+        expect(currentLevel - previousLevel).toBeLessThanOrEqual(1);
+      }
+    }
+
+    // Verify we have h2s for main sections
+    const h2Count = await page.locator('h2').count();
+    expect(h2Count).toBeGreaterThanOrEqual(4); // Features, Quick Start, Usage, Status
+
+    // Verify we have h3s for feature cards
+    const h3Count = await page.locator('h3').count();
+    expect(h3Count).toBeGreaterThanOrEqual(6); // 6 feature cards
+  });
+
+  test('TC7: All images have appropriate alt text describing their content', async ({ page }) => {
+    // Get all images
+    const images = page.locator('img');
+    const imageCount = await images.count();
+
+    // All images should have alt attribute
+    for (let i = 0; i < imageCount; i++) {
+      const img = images.nth(i);
+      const alt = await img.getAttribute('alt');
+
+      // Alt text must exist and be non-empty
+      expect(alt).toBeTruthy();
+      expect(alt.trim().length).toBeGreaterThan(0);
+
+      // Alt text should be descriptive (not just "image" or filename)
+      expect(alt.toLowerCase()).not.toMatch(/^image$|^img$|^photo$|\.jpg$|\.png$|\.gif$/i);
+    }
+
+    // Specifically check usage demo GIF has meaningful alt text
+    const usageGif = page.locator('.usage__gif');
+    if (await usageGif.count() > 0) {
+      const usageAlt = await usageGif.getAttribute('alt');
+      expect(usageAlt).toBeTruthy();
+      expect(usageAlt.toLowerCase()).toMatch(/usage|demo|mirdb|terminal|command/i);
+    }
+
+    // Check CircleCI badge has appropriate alt
+    const statusBadge = page.locator('.status-badge');
+    if (await statusBadge.count() > 0) {
+      const badgeAlt = await statusBadge.getAttribute('alt');
+      expect(badgeAlt).toBeTruthy();
+      expect(badgeAlt.toLowerCase()).toMatch(/circleci|build|status/i);
+    }
+  });
+
+  test('TC8: Link text is descriptive (no "click here" or bare URLs)', async ({ page }) => {
+    // Get all links
+    const links = page.locator('a[href]');
+    const linkCount = await links.count();
+
+    // Bad link text patterns
+    const badPatterns = [
+      /^click here$/i,
+      /^click$/i,
+      /^here$/i,
+      /^link$/i,
+      /^read more$/i,
+      /^learn more$/i,
+      /^https?:\/\//i, // Bare URLs
+      /^www\./i
+    ];
+
+    for (let i = 0; i < linkCount; i++) {
+      const link = links.nth(i);
+      const linkText = await link.textContent();
+      const trimmedText = linkText.trim();
+
+      // Link must have text (or aria-label)
+      const ariaLabel = await link.getAttribute('aria-label');
+      const hasAccessibleName = trimmedText.length > 0 || (ariaLabel && ariaLabel.length > 0);
+      expect(hasAccessibleName).toBe(true);
+
+      // If link has visible text, check it's not a bad pattern
+      if (trimmedText.length > 0) {
+        for (const pattern of badPatterns) {
+          expect(trimmedText).not.toMatch(pattern);
+        }
+      }
+    }
+
+    // Verify specific important links have good text
+    const getStartedLink = page.locator('.hero__cta--primary');
+    const getStartedText = await getStartedLink.textContent();
+    expect(getStartedText.trim()).toBe('Get Started');
+
+    const viewSourceLink = page.locator('.hero__cta--secondary');
+    const viewSourceText = await viewSourceLink.textContent();
+    expect(viewSourceText.trim()).toBe('View Source');
+
+    // Documentation link should be descriptive
+    const docsLink = page.locator('.quickstart-docs-link a');
+    if (await docsLink.count() > 0) {
+      const docsText = await docsLink.textContent();
+      expect(docsText.toLowerCase()).toMatch(/documentation|docs|readme/i);
     }
   });
 
@@ -75,27 +204,16 @@ test.describe('HTML Structure Validation', () => {
     expect(description.toLowerCase()).toMatch(/mirdb|key-value|memcached/i);
   });
 
-  test('Hero section links have descriptive text', async ({ page }) => {
-    // Get Started link should be clear
-    const getStartedLink = page.locator('.hero__cta--primary');
-    const getStartedText = await getStartedLink.textContent();
-    expect(getStartedText.trim()).toBe('Get Started');
-
-    // View Source link should be clear
-    const viewSourceLink = page.locator('.hero__cta--secondary');
-    const viewSourceText = await viewSourceLink.textContent();
-    expect(viewSourceText.trim()).toBe('View Source');
-  });
-
   test('External links have proper security attributes', async ({ page }) => {
-    // View Source link opens in new tab with proper rel attribute
-    const viewSourceLink = page.locator('.hero__cta--secondary');
+    // All target="_blank" links should have rel="noopener"
+    const externalLinks = page.locator('a[target="_blank"]');
+    const linkCount = await externalLinks.count();
 
-    const target = await viewSourceLink.getAttribute('target');
-    expect(target).toBe('_blank');
-
-    const rel = await viewSourceLink.getAttribute('rel');
-    expect(rel).toContain('noopener');
+    for (let i = 0; i < linkCount; i++) {
+      const link = externalLinks.nth(i);
+      const rel = await link.getAttribute('rel');
+      expect(rel).toContain('noopener');
+    }
   });
 
   test('Main sections have proper IDs for navigation', async ({ page }) => {
@@ -106,5 +224,29 @@ test.describe('HTML Structure Validation', () => {
       const section = page.locator(`#${sectionId}`);
       await expect(section).toBeAttached();
     }
+  });
+
+  test('Feature cards use article elements for proper semantics', async ({ page }) => {
+    const featureCards = page.locator('.feature-card');
+    const cardCount = await featureCards.count();
+
+    expect(cardCount).toBeGreaterThanOrEqual(6);
+
+    for (let i = 0; i < cardCount; i++) {
+      const card = featureCards.nth(i);
+      const tagName = await card.evaluate(el => el.tagName.toLowerCase());
+      expect(tagName).toBe('article');
+    }
+  });
+
+  test('Navigation uses proper list structure', async ({ page }) => {
+    const navMenu = page.locator('.nav-menu');
+    const tagName = await navMenu.evaluate(el => el.tagName.toLowerCase());
+    expect(tagName).toBe('ul');
+
+    // Nav items should be list items
+    const navItems = page.locator('.nav-menu li');
+    const itemCount = await navItems.count();
+    expect(itemCount).toBeGreaterThanOrEqual(4);
   });
 });

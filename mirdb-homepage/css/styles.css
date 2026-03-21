@@ -422,8 +422,8 @@ section {
 }
 
 .hero__cta--primary:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary), 0 0 0 5px var(--color-bg);
   color: #ffffff;
 }
 
@@ -441,8 +441,8 @@ section {
 }
 
 .hero__cta--secondary:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary), 0 0 0 5px var(--color-bg);
   color: var(--color-text);
 }
 
@@ -574,8 +574,8 @@ section {
 }
 
 .copy-button:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary);
 }
 
 .copy-button.copied {
@@ -710,6 +710,122 @@ section {
 
   .usage__code-block code {
     font-size: 12px;
+  }
+}
+
+/* === Focus States (Scenario 9 - Accessibility Compliance) === */
+/*
+ * WCAG AA requires visible focus indicators for all interactive elements.
+ * Using a consistent 2px solid outline with offset for visibility.
+ * Note: We always show focus for accessibility, not using :focus-visible
+ * to ensure all users can see focus indicators regardless of input method.
+ */
+
+/* Global focus styles - ensure all focusable elements have visible focus */
+/* Using outline for most elements, box-shadow for buttons/CTAs for better browser compatibility */
+:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Specific focus styles for CTA buttons - use box-shadow for better browser compatibility */
+.hero__cta:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary), 0 0 0 5px var(--color-bg);
+}
+
+.hero__cta--primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary), 0 0 0 5px var(--color-bg);
+}
+
+.hero__cta--secondary:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary), 0 0 0 5px var(--color-bg);
+}
+
+/* Skip link for screen reader users */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--color-primary);
+  color: #ffffff;
+  padding: var(--spacing-md);
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Logo focus state */
+.logo:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.logo:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+/* Status badge link focus */
+.status-badges a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+/* External link icon focus (inside quickstart docs link) */
+.quickstart-docs-link a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Feature card focus (when tabbed to via link inside) */
+.feature-card:focus-within {
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+/* Status feature item focus enhancement */
+.status-feature:focus-within {
+  background-color: var(--color-bg-secondary);
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :focus,
+  :focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .hero__cta--primary:focus,
+  .hero__cta--primary:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+  }
+}
+
+/* Reduced motion support - disable smooth scroll for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
