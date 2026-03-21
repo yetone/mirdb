@@ -20,14 +20,18 @@
   /* Colors */
   --color-bg: #ffffff;
   --color-bg-secondary: #f8f9fa;
+  --color-bg-alt: #f8f9fa;
   --color-text: #333333;
   --color-text-secondary: #666666;
+  --color-text-muted: #6c757d;
   --color-primary: #0066cc;
   --color-primary-hover: #0052a3;
   --color-border: #e0e0e0;
   --color-code-bg: #282c34;
   --color-code-text: #abb2bf;
   --color-success: #28a745;
+  --color-card-bg: #ffffff;
+  --color-card-shadow: rgba(0, 0, 0, 0.1);
 
   /* Typography */
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -54,6 +58,8 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -63,6 +69,7 @@
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-base: 300ms ease;
+  --transition-normal: 250ms ease;
 }
 
 /* === Base Styles (Shared) === */
@@ -99,6 +106,7 @@ h1 {
 
 h2 {
   font-size: var(--font-size-2xl);
+  text-align: center;
 }
 
 h3 {
@@ -134,6 +142,34 @@ main {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--spacing-md);
+}
+
+/* === Header / Navigation (Scenario 6) === */
+header {
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/* === Main Content === */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl);
 }
 
 section {
@@ -234,6 +270,63 @@ section {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   color: var(--color-text);
+}
+
+/* === Features Section (Scenario 2) === */
+#features,
+.features {
+  background-color: var(--color-bg-secondary);
+  margin: 0 calc(-1 * var(--spacing-xl));
+  padding: var(--spacing-3xl) var(--spacing-xl);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px var(--color-card-shadow);
+}
+
+.feature-card--future {
+  opacity: 0.85;
+  border-style: dashed;
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary);
+}
+
+.feature-card h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.feature-card p {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 /* === Quick Start Section Styles (Scenario 3) === */
@@ -342,11 +435,43 @@ section {
   height: 14px;
 }
 
-/* === Placeholder Sections (Other scenarios will fill these) === */
-.features,
-.usage,
-.status {
+/* === Usage Section (Scenario 4) === */
+#usage,
+.usage {
+  background-color: var(--color-bg-secondary);
+  margin: 0 calc(-1 * var(--spacing-xl));
+  padding: var(--spacing-3xl) var(--spacing-xl);
   min-height: 200px;
+}
+
+/* === Status Section (Scenario 5) === */
+#status,
+.status {
+  text-align: center;
+  min-height: 200px;
+}
+
+/* === Footer (Scenario 11) === */
+footer {
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+/* === Responsive (Scenario 8 owns media queries) === */
+@media (max-width: 768px) {
+  h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* === Responsive - Hero Section === */

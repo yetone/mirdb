@@ -6,7 +6,8 @@
     "test": "npx playwright test",
     "test:e2e": "npx playwright test tests/e2e/",
     "test:unit": "npx playwright test tests/unit/",
-    "serve": "npx serve -l 3000"
+    "serve": "npx serve -l 3000",
+    "install:playwright": "npx playwright install chromium"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",

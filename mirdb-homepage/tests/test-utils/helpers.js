@@ -5,6 +5,8 @@
  * - waitForPageLoad() - Wait for page to fully load
  * - getContrastRatio() - Calculate color contrast
  * - simulateNetwork() - Simulate network conditions
+ * - getComputedStyle() - Get computed style property value
+ * - isInViewport() - Check if element is visible in viewport
  * - checkAccessibility() - Run accessibility checks
  *
  * These utilities can be used by any test file.
@@ -102,9 +104,25 @@ async function isInViewport(page, selector) {
   }, selector);
 }
 
+/**
+ * Get computed style property value
+ * @param {import('@playwright/test').Page} page
+ * @param {string} selector
+ * @param {string} property
+ * @returns {Promise<string>}
+ */
+async function getComputedStyle(page, selector, property) {
+  return await page.evaluate(([sel, prop]) => {
+    const element = document.querySelector(sel);
+    if (!element) return '';
+    return window.getComputedStyle(element).getPropertyValue(prop);
+  }, [selector, property]);
+}
+
 module.exports = {
   waitForPageLoad,
   getContrastRatio,
   simulateNetwork,
   isInViewport,
+  getComputedStyle,
 };

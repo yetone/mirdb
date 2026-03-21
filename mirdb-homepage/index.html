@@ -14,9 +14,27 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
+  <!--
+    MirDB Homepage
+    Owner: Scenario 1 (Hero Section) creates base structure
+
+    Structure:
+    - header with nav (Scenario 6)
+    - main containing:
+      - section#hero (Scenario 1)
+      - section#features (Scenario 2)
+      - section#quick-start (Scenario 3)
+      - section#usage (Scenario 4)
+      - section#status (Scenario 5)
+    - footer (Scenario 11)
+
+    Each scenario should only modify their assigned section.
+  -->
+
   <!-- Header/Navigation - Scenario 6 -->
   <header>
     <nav id="main-nav">
+      <a href="#" class="logo">MirDB</a>
       <!-- Navigation menu - owned by Scenario 6 -->
     </nav>
   </header>
@@ -40,7 +58,80 @@
 
     <!-- Features Section - Scenario 2 -->
     <section id="features" class="features">
-      <!-- Feature cards - owned by Scenario 2 -->
+      <h2>Features</h2>
+      <div class="features-grid">
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <h3>Memcached Protocol</h3>
+          <p>Compatible with standard memcached clients for familiar, painless usage. Drop-in replacement for your existing infrastructure.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3>Persistence</h3>
+          <p>Your data survives restarts. Unlike traditional memcached, MirDB persists data to disk using SSTables for durability.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <h3>LSM Tree</h3>
+          <p>Log-Structured Merge-tree provides efficient storage with excellent write performance and automatic data organization.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+          </div>
+          <h3>Skip List Memtable</h3>
+          <p>Fast in-memory operations with skip list data structure for O(log n) lookups, insertions, and deletions.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 16 12 12 8 16"></polyline>
+              <line x1="12" y1="12" x2="12" y2="21"></line>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+              <polyline points="16 16 12 12 8 16"></polyline>
+            </svg>
+          </div>
+          <h3>Compaction</h3>
+          <p>Automatic data optimization through multi-level SSTable compaction. Background processes keep storage efficient.</p>
+        </article>
+
+        <article class="feature-card feature-card--future">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>Raft (Future)</h3>
+          <p>Planned distributed consensus support for high availability and fault tolerance across multiple nodes.</p>
+        </article>
+      </div>
     </section>
 
     <!-- Quick Start Section - Scenario 3 -->
