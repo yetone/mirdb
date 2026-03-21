@@ -72,6 +72,44 @@
   --transition-normal: 250ms ease;
 }
 
+/* === Dark Mode Variables (Scenario 7) === */
+.dark-mode {
+  --color-bg: #1a1a2e;
+  --color-bg-secondary: #16213e;
+  --color-bg-alt: #16213e;
+  --color-text: #e8e8e8;
+  --color-text-secondary: #b8b8b8;
+  --color-text-muted: #888888;
+  --color-primary: #4da8da;
+  --color-primary-hover: #7ec8e3;
+  --color-border: #3a3a5c;
+  --color-code-bg: #0f0f1a;
+  --color-code-text: #d4d4d4;
+  --color-success: #4caf50;
+  --color-card-bg: #1e1e3f;
+  --color-card-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* System preference detection - CSS fallback for no-JS (Scenario 7) */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-mode) {
+    --color-bg: #1a1a2e;
+    --color-bg-secondary: #16213e;
+    --color-bg-alt: #16213e;
+    --color-text: #e8e8e8;
+    --color-text-secondary: #b8b8b8;
+    --color-text-muted: #888888;
+    --color-primary: #4da8da;
+    --color-primary-hover: #7ec8e3;
+    --color-border: #3a3a5c;
+    --color-code-bg: #0f0f1a;
+    --color-code-text: #d4d4d4;
+    --color-success: #4caf50;
+    --color-card-bg: #1e1e3f;
+    --color-card-shadow: rgba(0, 0, 0, 0.3);
+  }
+}
+
 /* === Base Styles (Shared) === */
 *,
 *::before,
@@ -207,6 +245,71 @@ nav {
   outline-offset: 2px;
 }
 
+/* === Theme Toggle Button (Scenario 7) === */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+  margin-left: var(--spacing-md);
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-text-secondary);
+  transform: scale(1.05);
+}
+
+.theme-toggle:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle__icon {
+  width: 20px;
+  height: 20px;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+/* Show sun icon in dark mode, moon icon in light mode */
+.theme-toggle__icon--sun {
+  display: none;
+}
+
+.theme-toggle__icon--moon {
+  display: block;
+}
+
+.dark-mode .theme-toggle__icon--sun {
+  display: block;
+}
+
+.dark-mode .theme-toggle__icon--moon {
+  display: none;
+}
+
+/* System preference dark mode icon visibility */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-mode) .theme-toggle__icon--sun {
+    display: block;
+  }
+  :root:not(.light-mode) .theme-toggle__icon--moon {
+    display: none;
+  }
+}
+
 /* Responsive navigation */
 @media (max-width: 767px) {
   header {
@@ -220,6 +323,17 @@ nav {
   .nav-link {
     font-size: var(--font-size-sm);
     padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    margin-left: var(--spacing-sm);
+  }
+
+  .theme-toggle__icon {
+    width: 18px;
+    height: 18px;
   }
 }
 
