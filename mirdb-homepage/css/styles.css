@@ -496,10 +496,105 @@ section {
 /* === Usage Section (Scenario 4) === */
 #usage,
 .usage {
-  background-color: var(--color-bg-secondary);
+  background-color: var(--color-bg);
   margin: 0 calc(-1 * var(--spacing-xl));
   padding: var(--spacing-3xl) var(--spacing-xl);
   min-height: 200px;
+}
+
+.usage__container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.usage__title {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.usage__description {
+  text-align: center;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-2xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: var(--font-size-lg);
+}
+
+.usage__demo {
+  margin-bottom: var(--spacing-2xl);
+  text-align: center;
+}
+
+.usage__gif {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+}
+
+.usage__code-example {
+  margin-bottom: var(--spacing-xl);
+}
+
+.usage__code-title {
+  text-align: center;
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+.usage__code-block {
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  overflow-x: auto;
+}
+
+.usage__code-block pre {
+  margin: 0;
+  padding: 0;
+}
+
+.usage__code-block code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-code-text);
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.usage__note {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.usage__note code {
+  background-color: var(--color-bg-secondary);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+}
+
+/* Usage Section Responsive Styles */
+@media (max-width: 767px) {
+  .usage__description {
+    font-size: var(--font-size-base);
+  }
+
+  .usage__code-block {
+    padding: var(--spacing-md);
+  }
+
+  .usage__code-block code {
+    font-size: 12px;
+  }
 }
 
 /* === Status Section (Scenario 5) === */

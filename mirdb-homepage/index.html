@@ -176,7 +176,44 @@
 
     <!-- Usage Section - Scenario 4 -->
     <section id="usage" class="usage">
-      <!-- Usage examples - owned by Scenario 4 -->
+      <div class="usage__container">
+        <h2 class="usage__title">Usage</h2>
+        <p class="usage__description">
+          Connect to MirDB using any standard memcached client. Here's a simple example using telnet:
+        </p>
+
+        <div class="usage__demo">
+          <img
+            src="images/usage-demo.gif"
+            alt="MirDB usage demonstration showing terminal commands for setting and getting key-value pairs"
+            class="usage__gif"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="usage__code-example">
+          <h3 class="usage__code-title">Quick Example</h3>
+          <div class="usage__code-block">
+            <pre><code class="language-bash"># Connect to MirDB server
+telnet localhost 11211
+
+# Set a key-value pair
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+
+        <p class="usage__note">
+          MirDB supports all standard memcached commands including <code>set</code>, <code>get</code>, <code>delete</code>, and more.
+        </p>
+      </div>
     </section>
 
     <!-- Status Section - Scenario 5 -->
