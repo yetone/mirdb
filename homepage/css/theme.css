@@ -1,0 +1,50 @@
+/**
+ * MirDB Homepage - Theme Variables
+ * Owner: Scenario 18 - Theme Toggle
+ *
+ * Contents:
+ * - :root CSS variables for light theme
+ * - .dark-theme CSS variables for dark theme
+ * - prefers-color-scheme media query defaults
+ */
+
+:root {
+    --color-background: #ffffff;
+    --color-text: #1a1a2e;
+    --color-text-secondary: #4a4a6a;
+    --color-primary: #6366f1;
+    --color-primary-hover: #4f46e5;
+    --color-accent: #06b6d4;
+    --color-border: #e5e7eb;
+    --color-code-bg: #f3f4f6;
+    --color-hero-bg: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+    --color-hero-text: #ffffff;
+}
+
+.dark-theme {
+    --color-background: #1a1a2e;
+    --color-text: #f8fafc;
+    --color-text-secondary: #94a3b8;
+    --color-primary: #818cf8;
+    --color-primary-hover: #6366f1;
+    --color-accent: #22d3ee;
+    --color-border: #334155;
+    --color-code-bg: #0f172a;
+    --color-hero-bg: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+    --color-hero-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not(.light-theme) {
+        --color-background: #1a1a2e;
+        --color-text: #f8fafc;
+        --color-text-secondary: #94a3b8;
+        --color-primary: #818cf8;
+        --color-primary-hover: #6366f1;
+        --color-accent: #22d3ee;
+        --color-border: #334155;
+        --color-code-bg: #0f172a;
+        --color-hero-bg: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+        --color-hero-text: #ffffff;
+    }
+}
