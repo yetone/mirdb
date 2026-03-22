@@ -38,6 +38,15 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    {
+      name: 'edge',
+      use: {
+        ...devices['Desktop Chrome'],
+        // Microsoft Edge uses the Chromium engine, so we test with Chromium
+        // using Edge-specific user agent to verify Edge-specific behavior
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+      },
+    },
   ],
   webServer: {
     command: 'npx http-server .. -p 8080 -c-1',

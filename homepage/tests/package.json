@@ -13,5 +13,8 @@
     "lighthouse": "^13.0.3",
     "playwright-lighthouse": "^4.0.0",
     "serve": "^14.2.0"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
   }
 }
