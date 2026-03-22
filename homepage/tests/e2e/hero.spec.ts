@@ -228,3 +228,250 @@ test.describe('Status Badges Display (Scenario 2)', () => {
     }
   });
 });
+
+test.describe('Theme Toggle - Dark/Light Mode (Scenario 18)', () => {
+  test.beforeEach(async ({ page }) => {
+    // Clear localStorage before each test
+    await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    await waitForLoad(page);
+  });
+
+  test('TC1: Theme toggle button exists and is visible', async ({ page }) => {
+    // Test Case 1: Locate theme toggle button on page
+    // Expected: Theme toggle control exists and is visible
+
+    const themeToggle = page.locator('#theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Verify it's a button
+    const tagName = await themeToggle.evaluate(el => el.tagName.toLowerCase());
+    expect(tagName).toBe('button');
+
+    // Verify it has an accessible label
+    const ariaLabel = await themeToggle.getAttribute('aria-label');
+    expect(ariaLabel).toBeTruthy();
+    expect(ariaLabel).toMatch(/switch to (dark|light) mode/i);
+  });
+
+  test('TC2: Click theme toggle and check background color change', async ({ page }) => {
+    // Test Case 2: Click theme toggle and check background color change
+    // Expected: Background color changes between dark and light values
+
+    const themeToggle = page.locator('#theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Get initial background color
+    const initialBgColor = await page.evaluate(() => {
+      return window.getComputedStyle(document.body).backgroundColor;
+    });
+
+    // Click the toggle
+    await themeToggle.click();
+
+    // Wait for transition
+    await page.waitForTimeout(400);
+
+    // Get new background color
+    const newBgColor = await page.evaluate(() => {
+      return window.getComputedStyle(document.body).backgroundColor;
+    });
+
+    // Background color should have changed
+    expect(newBgColor).not.toBe(initialBgColor);
+
+    // Verify the theme class was applied
+    const hasThemeClass = await page.evaluate(() => {
+      return document.documentElement.classList.contains('dark-theme') ||
+             document.documentElement.classList.contains('light-theme');
+    });
+    expect(hasThemeClass).toBe(true);
+  });
+
+  test('TC2-extended: Toggle changes aria-label appropriately', async ({ page }) => {
+    const themeToggle = page.locator('#theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Get initial aria-label
+    const initialAriaLabel = await themeToggle.getAttribute('aria-label');
+
+    // Click the toggle
+    await themeToggle.click();
+    await page.waitForTimeout(100);
+
+    // Get new aria-label
+    const newAriaLabel = await themeToggle.getAttribute('aria-label');
+
+    // Aria-label should have changed to indicate the opposite action
+    expect(newAriaLabel).not.toBe(initialAriaLabel);
+    expect(newAriaLabel).toMatch(/switch to (dark|light) mode/i);
+  });
+
+  test('TC3: Toggle theme, reload page, check persisted theme', async ({ page }) => {
+    // Test Case 3: Toggle theme, reload page, check persisted theme
+    // Expected: Theme preference persists after page reload
+
+    const themeToggle = page.locator('#theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Get initial theme state
+    const initialHasDarkTheme = await page.evaluate(() => {
+      return document.documentElement.classList.contains('dark-theme');
+    });
+
+    // Click the toggle to change theme
+    await themeToggle.click();
+    await page.waitForTimeout(400);
+
+    // Verify theme changed
+    const afterToggleHasDarkTheme = await page.evaluate(() => {
+      return document.documentElement.classList.contains('dark-theme');
+    });
+    expect(afterToggleHasDarkTheme).not.toBe(initialHasDarkTheme);
+
+    // Verify localStorage was updated
+    const savedTheme = await page.evaluate(() => {
+      return localStorage.getItem('mirdb-theme');
+    });
+    expect(savedTheme).toBeTruthy();
+    expect(['dark', 'light']).toContain(savedTheme);
+
+    // Reload the page
+    await page.reload();
+    await waitForLoad(page);
+
+    // Verify theme persisted after reload
+    const afterReloadHasDarkTheme = await page.evaluate(() => {
+      return document.documentElement.classList.contains('dark-theme');
+    });
+    expect(afterReloadHasDarkTheme).toBe(afterToggleHasDarkTheme);
+
+    // Verify aria-label matches the persisted theme
+    const themeToggleAfterReload = page.locator('#theme-toggle');
+    const ariaLabel = await themeToggleAfterReload.getAttribute('aria-label');
+    if (afterReloadHasDarkTheme) {
+      expect(ariaLabel).toMatch(/switch to light mode/i);
+    } else {
+      expect(ariaLabel).toMatch(/switch to dark mode/i);
+    }
+  });
+
+  test('TC4: Check system preference detection', async ({ page }) => {
+    // Test Case 4: Check system preference detection
+    // Expected: Page respects prefers-color-scheme media query on initial load
+
+    // First, ensure no saved preference
+    await page.evaluate(() => localStorage.clear());
+
+    // Emulate dark color scheme preference
+    await page.emulateMedia({ colorScheme: 'dark' });
+
+    // Reload to apply the emulated preference
+    await page.reload();
+    await waitForLoad(page);
+
+    // Verify dark theme is applied (either via class or CSS variables)
+    const hasDarkStyles = await page.evaluate(() => {
+      const root = document.documentElement;
+      const bgColor = window.getComputedStyle(document.body).backgroundColor;
+      // Dark background should have low RGB values
+      const rgb = bgColor.match(/\d+/g);
+      if (rgb && rgb.length >= 3) {
+        const [r, g, b] = rgb.map(Number);
+        // Dark colors typically have low luminance
+        return (r + g + b) / 3 < 128;
+      }
+      // Fallback: check if dark-theme class is applied
+      return root.classList.contains('dark-theme');
+    });
+    expect(hasDarkStyles).toBe(true);
+
+    // Now emulate light color scheme preference
+    await page.evaluate(() => localStorage.clear());
+    await page.emulateMedia({ colorScheme: 'light' });
+
+    // Reload to apply the emulated preference
+    await page.reload();
+    await waitForLoad(page);
+
+    // Verify light theme is applied
+    const hasLightStyles = await page.evaluate(() => {
+      const root = document.documentElement;
+      const bgColor = window.getComputedStyle(document.body).backgroundColor;
+      // Light background should have high RGB values
+      const rgb = bgColor.match(/\d+/g);
+      if (rgb && rgb.length >= 3) {
+        const [r, g, b] = rgb.map(Number);
+        // Light colors typically have high luminance
+        return (r + g + b) / 3 >= 128;
+      }
+      // Fallback: check if light-theme class is applied
+      return root.classList.contains('light-theme');
+    });
+    expect(hasLightStyles).toBe(true);
+  });
+
+  test('Theme toggle is keyboard accessible', async ({ page }) => {
+    const themeToggle = page.locator('#theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Tab to the toggle (it should be focusable)
+    await themeToggle.focus();
+
+    // Verify it received focus
+    const isFocused = await page.evaluate(() => {
+      return document.activeElement?.id === 'theme-toggle';
+    });
+    expect(isFocused).toBe(true);
+
+    // Get initial theme state
+    const initialHasDarkTheme = await page.evaluate(() => {
+      return document.documentElement.classList.contains('dark-theme');
+    });
+
+    // Press Enter to toggle
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(100);
+
+    // Verify theme changed
+    const afterEnterHasDarkTheme = await page.evaluate(() => {
+      return document.documentElement.classList.contains('dark-theme');
+    });
+    expect(afterEnterHasDarkTheme).not.toBe(initialHasDarkTheme);
+
+    // Press Space to toggle back
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(100);
+
+    // Verify theme changed back
+    const afterSpaceHasDarkTheme = await page.evaluate(() => {
+      return document.documentElement.classList.contains('dark-theme');
+    });
+    expect(afterSpaceHasDarkTheme).toBe(initialHasDarkTheme);
+  });
+
+  test('Theme toggle icons update correctly', async ({ page }) => {
+    const themeToggle = page.locator('#theme-toggle');
+    const sunIcon = page.locator('.theme-icon-sun');
+    const moonIcon = page.locator('.theme-icon-moon');
+
+    await expect(themeToggle).toBeVisible();
+
+    // Get initial icon visibility
+    const initialSunDisplay = await sunIcon.evaluate(el => window.getComputedStyle(el).display);
+    const initialMoonDisplay = await moonIcon.evaluate(el => window.getComputedStyle(el).display);
+
+    // Click to toggle theme
+    await themeToggle.click();
+    await page.waitForTimeout(100);
+
+    // Get new icon visibility
+    const newSunDisplay = await sunIcon.evaluate(el => window.getComputedStyle(el).display);
+    const newMoonDisplay = await moonIcon.evaluate(el => window.getComputedStyle(el).display);
+
+    // Icons should have swapped visibility
+    expect(newSunDisplay).not.toBe(initialSunDisplay);
+    expect(newMoonDisplay).not.toBe(initialMoonDisplay);
+  });
+});
