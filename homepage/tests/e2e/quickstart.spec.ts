@@ -182,3 +182,125 @@ test.describe('Quick Start Guide (Scenario 5)', () => {
     }
   });
 });
+
+test.describe('Roadmap/TODO Section (Scenario 6)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForLoad(page);
+  });
+
+  test('should have a roadmap section with appropriate heading', async ({ page }) => {
+    // Test Case 1: Locate roadmap/TODO section by heading
+    await scrollToSection(page, '#roadmap');
+
+    const roadmapSection = page.locator('#roadmap');
+    await expect(roadmapSection).toBeVisible();
+
+    // Check for heading with 'Roadmap', 'TODO', or 'Features in Development'
+    const heading = roadmapSection.locator('h2');
+    await expect(heading).toBeVisible();
+
+    const headingText = await heading.textContent();
+    const validHeadings = ['roadmap', 'todo', 'features in development'];
+    const hasValidHeading = validHeadings.some((term) =>
+      headingText?.toLowerCase().includes(term)
+    );
+    expect(hasValidHeading).toBeTruthy();
+  });
+
+  test('should have visual indicators distinguishing completed from pending items', async ({
+    page,
+  }) => {
+    // Test Case 2: Check for visual indicators of completion status
+    await scrollToSection(page, '#roadmap');
+
+    // Check completed items have checkmarks
+    const completedItems = page.locator('.roadmap-item-completed');
+    await expect(completedItems.first()).toBeVisible();
+
+    const completedCount = await completedItems.count();
+    expect(completedCount).toBeGreaterThan(0);
+
+    // Check for checkmark indicators on completed items
+    const checkmarks = page.locator('.roadmap-checkmark');
+    const checkmarkCount = await checkmarks.count();
+    expect(checkmarkCount).toBeGreaterThan(0);
+
+    // Check in-progress items have different visual indicator
+    const inProgressItems = page.locator('.roadmap-item-in-progress');
+    const inProgressCount = await inProgressItems.count();
+    expect(inProgressCount).toBeGreaterThan(0);
+
+    // Verify visual distinction with data-status attribute
+    const completedStatus = await completedItems.first().getAttribute('data-status');
+    expect(completedStatus).toBe('completed');
+
+    const inProgressStatus = await inProgressItems.first().getAttribute('data-status');
+    expect(inProgressStatus).toBe('in-progress');
+  });
+
+  test('should show Raft feature as in-progress/planned', async ({ page }) => {
+    // Test Case 3: Verify Raft feature is listed as in-progress
+    await scrollToSection(page, '#roadmap');
+
+    // Find item containing 'Raft'
+    const raftItem = page.locator('.roadmap-item', { hasText: /raft/i });
+    await expect(raftItem).toBeVisible();
+
+    // Verify it has in-progress status
+    const raftStatus = await raftItem.getAttribute('data-status');
+    expect(raftStatus).toBe('in-progress');
+
+    // Check for 'In Development' badge
+    const badge = raftItem.locator('.roadmap-badge');
+    await expect(badge).toBeVisible();
+
+    const badgeText = await badge.textContent();
+    expect(badgeText?.toLowerCase()).toContain('development');
+  });
+
+  test('should display completed features: tokio, memtable, compaction', async ({
+    page,
+  }) => {
+    // Additional test: Verify all required completed features are present
+    await scrollToSection(page, '#roadmap');
+
+    // Check for tokio
+    const tokioItem = page.locator('.roadmap-item-completed', { hasText: /tokio/i });
+    await expect(tokioItem).toBeVisible();
+
+    // Check for memtable
+    const memtableItem = page.locator('.roadmap-item-completed', {
+      hasText: /memtable/i,
+    });
+    await expect(memtableItem).toBeVisible();
+
+    // Check for minor compaction
+    const minorCompaction = page.locator('.roadmap-item-completed', {
+      hasText: /minor.*compaction/i,
+    });
+    await expect(minorCompaction).toBeVisible();
+
+    // Check for major compaction
+    const majorCompaction = page.locator('.roadmap-item-completed', {
+      hasText: /major.*compaction/i,
+    });
+    await expect(majorCompaction).toBeVisible();
+  });
+
+  test('should have proper ARIA labels for accessibility', async ({ page }) => {
+    // Accessibility check for roadmap section
+    await scrollToSection(page, '#roadmap');
+
+    const roadmapSection = page.locator('#roadmap');
+    const ariaLabelledBy = await roadmapSection.getAttribute('aria-labelledby');
+    expect(ariaLabelledBy).toBe('roadmap-heading');
+
+    // Check that lists have aria-label
+    const completedList = page.locator('.roadmap-list[aria-label*="Completed"]');
+    await expect(completedList).toBeVisible();
+
+    const progressList = page.locator('.roadmap-list[aria-label*="progress"]');
+    await expect(progressList).toBeVisible();
+  });
+});
