@@ -10,6 +10,7 @@
 
 :root {
     --color-background: #ffffff;
+    --color-background-alt: #f8fafc;
     --color-text: #1a1a2e;
     --color-text-secondary: #4a4a6a;
     --color-primary: #6366f1;
@@ -23,6 +24,7 @@
 
 .dark-theme {
     --color-background: #1a1a2e;
+    --color-background-alt: #252542;
     --color-text: #f8fafc;
     --color-text-secondary: #94a3b8;
     --color-primary: #818cf8;
@@ -37,6 +39,7 @@
 @media (prefers-color-scheme: dark) {
     :root:not(.light-theme) {
         --color-background: #1a1a2e;
+        --color-background-alt: #252542;
         --color-text: #f8fafc;
         --color-text-secondary: #94a3b8;
         --color-primary: #818cf8;
