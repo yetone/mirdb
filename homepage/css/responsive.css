@@ -17,10 +17,36 @@
 
 /* Base styles with mobile-first approach */
 
+/* Mobile: max-width 479px (Scenario 8) */
+@media (max-width: 479px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .hero-logo {
+        max-width: 150px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
 /* Tablet and up (480px+) */
 @media (min-width: 480px) {
     .hero-headline {
         font-size: 2.75rem;
+    }
+}
+
+/* Tablet: 480px - 1023px (Scenario 9) */
+@media (min-width: 480px) and (max-width: 1023px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -32,5 +58,13 @@
 
     .hero {
         min-height: 90vh;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .container {
+        max-width: 1200px;
     }
 }

@@ -32,8 +32,28 @@
     <!-- END: Badges Section (Scenario 2) -->
 
     <!-- BEGIN: Features Section (Scenario 3) -->
-    <section class="features" id="features">
-        <!-- Features grid to be implemented by Scenario 3 -->
+    <section id="features" class="features-section" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 id="features-heading">Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-item">
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Full Memcached protocol compatibility allows seamless integration with existing clients and tools. Use your favorite Memcached libraries.</p>
+          </article>
+          <article class="feature-item">
+            <h3 class="feature-title">Persistent Storage</h3>
+            <p class="feature-description">Data persistence ensures durability across restarts. Your data is safely stored on disk with reliable write-ahead logging.</p>
+          </article>
+          <article class="feature-item">
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">Log-Structured Merge-tree provides excellent write performance and efficient storage utilization with background compaction.</p>
+          </article>
+          <article class="feature-item">
+            <h3 class="feature-title">Automatic Compaction</h3>
+            <p class="feature-description">Both minor and major compaction run automatically to optimize storage and maintain query performance over time.</p>
+          </article>
+        </div>
+      </div>
     </section>
     <!-- END: Features Section (Scenario 3) -->
 

@@ -143,6 +143,45 @@ section {
     padding: 4rem 1.5rem;
 }
 
+/* Features Section Styles (Scenario 3) */
+.features-section {
+    background-color: var(--color-background-alt, #f8fafc);
+    text-align: center;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.feature-item {
+    background-color: var(--color-background, #ffffff);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feature-title {
+    color: var(--color-text, #1a1a2e);
+    margin-bottom: 0.75rem;
+}
+
+.feature-description {
+    color: var(--color-text-secondary, #4a4a5a);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {
