@@ -192,3 +192,95 @@ test.describe('SEO - Semantic HTML Structure (Scenario 17)', () => {
     }
   });
 });
+
+test.describe('Static Hosting Compatibility (Scenario 24)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForLoad(page);
+  });
+
+  test('Test Case 1: index.html exists at expected location', async ({ page }) => {
+    // The page should load successfully, indicating index.html exists at root
+    const response = await page.goto('/');
+    expect(response).not.toBeNull();
+    expect(response!.status()).toBe(200);
+
+    // Verify the page contains expected content (not a 404 page)
+    const title = await page.title();
+    expect(title).toContain('MirDB');
+
+    // Also verify direct access to index.html works
+    const indexResponse = await page.goto('/index.html');
+    expect(indexResponse).not.toBeNull();
+    expect(indexResponse!.status()).toBe(200);
+  });
+
+  test('Test Case 2: All CSS and JS src paths are relative', async ({ page }) => {
+    // Get all stylesheet links
+    const stylesheets = await page.locator('link[rel="stylesheet"]').all();
+    for (const stylesheet of stylesheets) {
+      const href = await stylesheet.getAttribute('href');
+      expect(href).toBeTruthy();
+
+      // Paths should be relative (not starting with / or http)
+      // They should start with ./ or ../ or be a simple relative path like 'css/styles.css'
+      const isRelative = !href!.startsWith('/') && !href!.startsWith('http://') && !href!.startsWith('https://');
+      expect(isRelative, `Stylesheet path "${href}" should be relative`).toBe(true);
+    }
+
+    // Get all script tags with src attribute
+    const scripts = await page.locator('script[src]').all();
+    for (const script of scripts) {
+      const src = await script.getAttribute('src');
+      expect(src).toBeTruthy();
+
+      // Paths should be relative
+      const isRelative = !src!.startsWith('/') && !src!.startsWith('http://') && !src!.startsWith('https://');
+      expect(isRelative, `Script path "${src}" should be relative`).toBe(true);
+    }
+
+    // Verify we have at least the expected stylesheets
+    expect(stylesheets.length).toBeGreaterThanOrEqual(3); // theme.css, styles.css, responsive.css
+
+    // Verify we have at least one script
+    expect(scripts.length).toBeGreaterThanOrEqual(1); // theme-toggle.js
+  });
+
+  test('Test Case 3: All local image src paths are relative', async ({ page }) => {
+    // Get all images on the page
+    const images = await page.locator('img').all();
+
+    for (const image of images) {
+      const src = await image.getAttribute('src');
+      expect(src).toBeTruthy();
+
+      // External images (like shields.io badges) are allowed to have absolute URLs
+      // Local images should use relative paths
+      const isExternal = src!.startsWith('http://') || src!.startsWith('https://');
+      const isAbsoluteLocal = src!.startsWith('/') && !src!.startsWith('//');
+
+      if (!isExternal) {
+        // Local images should not use absolute paths (starting with /)
+        expect(isAbsoluteLocal, `Local image path "${src}" should not start with /`).toBe(false);
+
+        // Verify the path is truly relative (either starts with ./ or ../ or is a simple path)
+        const isRelative = !src!.startsWith('/');
+        expect(isRelative, `Local image path "${src}" should be relative`).toBe(true);
+      }
+    }
+
+    // Verify the favicon link uses relative path
+    const favicon = page.locator('link[rel="icon"], link[rel="shortcut icon"]');
+    const faviconCount = await favicon.count();
+    if (faviconCount > 0) {
+      const faviconHref = await favicon.first().getAttribute('href');
+      expect(faviconHref).toBeTruthy();
+      const isRelative = !faviconHref!.startsWith('/') && !faviconHref!.startsWith('http');
+      expect(isRelative, `Favicon path "${faviconHref}" should be relative`).toBe(true);
+    }
+
+    // Verify at least 2 local images exist (logo and usage)
+    const localImages = await page.locator('img[src^="assets/"]').all();
+    expect(localImages.length).toBeGreaterThanOrEqual(2);
+  });
+});
