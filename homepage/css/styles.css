@@ -1,0 +1,683 @@
+/**
+ * MirDB Homepage - Base Styles
+ * Owner: First builder
+ *
+ * Contents:
+ * - CSS reset/normalize
+ * - Typography (font families, sizes, weights)
+ * - Layout utilities (container, grid, flex)
+ * - Component styles (buttons, cards, code blocks)
+ * - Animation definitions
+ *
+ * Dependencies:
+ * - theme.css for color variables
+ * - responsive.css for breakpoints
+ */
+
+/* CSS Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Typography */
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Oxygen, Ubuntu, sans-serif;
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+/* Hero Section Styles (Scenario 1) */
+.hero {
+    background: var(--color-hero-bg);
+    color: var(--color-hero-text);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.hero-content {
+    max-width: 800px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.hero-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 2rem;
+}
+
+.hero-headline {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-hero-text);
+}
+
+.hero-subheadline {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2rem;
+}
+
+.hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Badges Section Styles (Scenario 2) */
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    background-color: var(--color-background);
+}
+
+.badges a {
+    display: inline-block;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.badges a:hover {
+    transform: scale(1.05);
+}
+
+.badges a:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.badges img {
+    height: 20px;
+    display: block;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-hero-text);
+    border: 2px solid var(--color-hero-text);
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Layout Utilities */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+section {
+    padding: 4rem 1.5rem;
+}
+
+/* Features Section Styles (Scenario 3) */
+.features-section {
+    background-color: var(--color-background-alt, #f8fafc);
+    text-align: center;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.feature-item {
+    background-color: var(--color-background, #ffffff);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feature-title {
+    color: var(--color-text, #1a1a2e);
+    margin-bottom: 0.75rem;
+}
+
+.feature-description {
+    color: var(--color-text-secondary, #4a4a5a);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Usage Section Styles (Scenario 4) */
+.usage-section {
+    background-color: var(--color-background);
+    text-align: center;
+}
+
+.usage-section h2 {
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.usage-intro {
+    color: var(--color-text-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 2.5rem;
+}
+
+.usage-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.usage-gif-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.usage-gif {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.usage-code-container {
+    text-align: left;
+}
+
+.usage-code-container h3 {
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.usage-code {
+    background-color: var(--color-code-bg, #1e293b);
+    color: var(--color-code-text, #e2e8f0);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    overflow-x: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    text-align: left;
+    white-space: pre;
+}
+
+.usage-code code {
+    font-family: inherit;
+    color: inherit;
+}
+
+/* Quick Start Section Styles (Scenario 5) */
+.quickstart {
+    background-color: var(--color-background-alt, #f8fafc);
+    text-align: center;
+}
+
+.quickstart h2 {
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+}
+
+.quickstart-intro {
+    color: var(--color-text-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 3rem;
+}
+
+.quickstart-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quickstart-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    background-color: var(--color-background, #ffffff);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quickstart-step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    background-color: var(--color-primary, #4f46e5);
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 50%;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    color: var(--color-text, #1a1a2e);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.step-description {
+    color: var(--color-text-secondary, #4a4a5a);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.step-code {
+    background-color: var(--color-code-bg, #1e293b);
+    color: var(--color-code-text, #e2e8f0);
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    white-space: pre;
+}
+
+.step-code code {
+    font-family: inherit;
+    color: inherit;
+}
+
+/* Roadmap Section Styles (Scenario 6) */
+.roadmap {
+    background-color: var(--color-background, #ffffff);
+    text-align: center;
+}
+
+.roadmap h2 {
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+}
+
+.roadmap-intro {
+    color: var(--color-text-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 2.5rem;
+}
+
+.roadmap-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    text-align: left;
+}
+
+.roadmap-column {
+    background-color: var(--color-background-alt, #f8fafc);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.roadmap-column-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.status-icon {
+    font-size: 1rem;
+}
+
+.status-completed {
+    color: #10b981;
+}
+
+.status-in-progress {
+    color: #f59e0b;
+}
+
+.roadmap-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.roadmap-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.roadmap-item:last-child {
+    border-bottom: none;
+}
+
+.roadmap-checkmark {
+    color: #10b981;
+    font-weight: bold;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.roadmap-progress-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.roadmap-item-text {
+    flex: 1;
+    color: var(--color-text);
+}
+
+.roadmap-item-completed .roadmap-item-text {
+    color: var(--color-text);
+}
+
+.roadmap-item-in-progress .roadmap-item-text {
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+.roadmap-badge {
+    background-color: #fef3c7;
+    color: #92400e;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+/* Footer Section Styles (Scenario 7) */
+.footer {
+    background-color: var(--color-background-alt);
+    border-top: 1px solid var(--color-border);
+    padding: 3rem 1.5rem 2rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-links {
+    margin-bottom: 2rem;
+}
+
+.footer-heading {
+    font-size: 1.125rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.footer-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: var(--color-primary);
+}
+
+.footer-link:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-copyright {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.footer-copyright p {
+    margin-bottom: 0.5rem;
+}
+
+.footer-tagline {
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* Theme Toggle Button Styles (Scenario 18) */
+.theme-toggle {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-background);
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle:hover {
+    background-color: var(--color-background-alt);
+    transform: scale(1.05);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-icon {
+    color: var(--color-text);
+    transition: color 0.3s ease;
+}
+
+/* Responsive adjustments for theme toggle */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 1rem;
+        right: 1rem;
+        width: 44px;
+        height: 44px;
+    }
+
+    .theme-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Accessibility - Keyboard Navigation (Scenario 12) */
+
+/* Skip to content link - visually hidden until focused */
+.skip-to-content {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background-color: var(--color-primary, #4f46e5);
+    color: #ffffff;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: top 0.3s ease;
+}
+
+.skip-to-content:focus {
+    top: 0;
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(79, 70, 229, 0.5);
+}
+
+/* Global focus styles for keyboard navigation */
+*:focus-visible {
+    outline: 3px solid var(--color-accent, #60a5fa);
+    outline-offset: 2px;
+}
+
+/* Remove default outline and use focus-visible for better UX */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Enhanced focus styles for interactive elements */
+a:focus-visible {
+    outline: 3px solid var(--color-accent, #60a5fa);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Button focus styles - enhanced for visibility */
+.btn:focus-visible {
+    outline: 3px solid var(--color-accent, #60a5fa);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(96, 165, 250, 0.25);
+}
+
+/* Theme toggle button focus styles */
+.theme-toggle:focus-visible {
+    outline: 3px solid var(--color-accent, #60a5fa);
+    outline-offset: 2px;
+    border-radius: 50%;
+}
+
+/* Feature items keyboard focus */
+.feature-item:focus-within {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 3px var(--color-accent, #60a5fa);
+}
+
+/* Code blocks keyboard focus */
+.step-code:focus-within,
+.usage-code:focus-within {
+    outline: 2px solid var(--color-accent, #60a5fa);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    *:focus-visible {
+        outline: 3px solid currentColor;
+        outline-offset: 3px;
+    }
+
+    .skip-to-content:focus {
+        outline: 3px solid #ffffff;
+    }
+}
+
+/* Reduced motion preference support */
+@media (prefers-reduced-motion: reduce) {
+    .skip-to-content {
+        transition: none;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

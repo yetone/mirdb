@@ -1,0 +1,20 @@
+{
+  "name": "mirdb-homepage-tests",
+  "version": "1.0.0",
+  "description": "E2E tests for MirDB homepage",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.40.0",
+    "lighthouse": "^13.0.3",
+    "playwright-lighthouse": "^4.0.0",
+    "serve": "^14.2.0"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}

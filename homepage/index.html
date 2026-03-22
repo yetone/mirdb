@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility">
+    <meta name="keywords" content="MirDB, key-value store, persistent, Memcached, database, Rust">
+    <!-- BEGIN: SEO Meta Tags (Scenario 16) -->
+    <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+    <meta property="og:description" content="MirDB - A persistent key-value store with Memcached protocol compatibility. Fast, reliable, and Rust-powered.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <!-- END: SEO Meta Tags (Scenario 16) -->
+    <title>MirDB - Persistent Key-Value Store</title>
+    <!-- Preconnect to external domains for faster resource loading -->
+    <link rel="preconnect" href="https://img.shields.io" crossorigin>
+    <link rel="dns-prefetch" href="https://img.shields.io">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- BEGIN: No JavaScript Fallback (Scenario 22) -->
+    <noscript>
+        <style>
+            /* Hide theme toggle button when JavaScript is disabled */
+            .theme-toggle {
+                display: none !important;
+            }
+        </style>
+    </noscript>
+    <!-- END: No JavaScript Fallback (Scenario 22) -->
+</head>
+<body>
+    <!-- Skip to Content Link (Scenario 12 - Accessibility) -->
+    <a href="#features" class="skip-to-content" id="skip-to-content">Skip to main content</a>
+
+    <!-- BEGIN: Theme Toggle (Scenario 18) -->
+    <button
+        type="button"
+        id="theme-toggle"
+        class="theme-toggle"
+        aria-label="Switch to dark mode"
+        title="Toggle dark/light mode"
+    >
+        <svg class="theme-icon theme-icon-sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon theme-icon-moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+    <!-- END: Theme Toggle (Scenario 18) -->
+
+    <!-- BEGIN: Hero Section (Scenario 1) -->
+    <header class="hero" id="hero">
+        <div class="hero-content">
+            <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo" id="hero-logo" width="200" height="200">
+            <h1 class="hero-headline" id="hero-headline">MirDB: A persistent key-value store with Memcached protocol.</h1>
+            <p class="hero-subheadline">Fast, reliable, and Rust-powered storage engine for your applications.</p>
+            <div class="hero-cta">
+                <a href="https://github.com/yetone/mirdb" class="btn btn-primary" id="primary-cta" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                <a href="#quickstart" class="btn btn-secondary">Get Started</a>
+            </div>
+        </div>
+    </header>
+    <!-- END: Hero Section (Scenario 1) -->
+
+    <!-- BEGIN: Main Content (Scenario 11 - Accessibility) -->
+    <main id="main-content" role="main">
+    <!-- END: Main Content Opening (Scenario 11) -->
+
+    <!-- BEGIN: Badges Section (Scenario 2) -->
+    <section class="badges" id="badges" aria-label="Project status badges">
+        <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="CircleCI build status">
+            <img src="https://img.shields.io/circleci/build/github/yetone/mirdb/master?label=build" alt="CircleCI Build Status" loading="lazy" width="90" height="20" decoding="async">
+        </a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="MIT License">
+            <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" loading="lazy" width="78" height="20" decoding="async">
+        </a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
+            <img src="https://img.shields.io/github/stars/yetone/mirdb?style=social" alt="GitHub Stars" loading="lazy" width="80" height="20" decoding="async">
+        </a>
+    </section>
+    <!-- END: Badges Section (Scenario 2) -->
+
+    <!-- BEGIN: Features Section (Scenario 3) -->
+    <section id="features" class="features-section" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 id="features-heading">Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-item">
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Full Memcached protocol compatibility allows seamless integration with existing clients and tools. Use your favorite Memcached libraries.</p>
+          </article>
+          <article class="feature-item">
+            <h3 class="feature-title">Persistent Storage</h3>
+            <p class="feature-description">Data persistence ensures durability across restarts. Your data is safely stored on disk with reliable write-ahead logging.</p>
+          </article>
+          <article class="feature-item">
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">Log-Structured Merge-tree provides excellent write performance and efficient storage utilization with background compaction.</p>
+          </article>
+          <article class="feature-item">
+            <h3 class="feature-title">Automatic Compaction</h3>
+            <p class="feature-description">Both minor and major compaction run automatically to optimize storage and maintain query performance over time.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- END: Features Section (Scenario 3) -->
+
+    <!-- BEGIN: Usage Section (Scenario 4) -->
+    <section class="usage-section" id="usage" aria-labelledby="usage-heading">
+        <div class="container">
+            <h2 id="usage-heading">Usage Example</h2>
+            <p class="usage-intro">MirDB supports standard Memcached protocol commands. Here's how to interact with it:</p>
+
+            <div class="usage-content">
+                <div class="usage-gif-container">
+                    <img src="assets/usage.gif" alt="MirDB usage demonstration showing Memcached commands in action" class="usage-gif" id="usage-gif" width="600" height="400" loading="lazy" fetchpriority="low">
+                </div>
+
+                <div class="usage-code-container">
+                    <h3>Example Commands</h3>
+                    <pre class="usage-code"><code id="usage-code-snippet"># Connect to MirDB using telnet or any Memcached client
+telnet localhost 11211
+
+# SET a value
+set mykey 0 0 5
+hello
+STORED
+
+# GET a value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# DELETE a value
+delete mykey
+DELETED
+
+# SET with expiration (60 seconds)
+set tempkey 0 60 5
+world
+STORED</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: Usage Section (Scenario 4) -->
+
+    <!-- BEGIN: Quick Start Section (Scenario 5) -->
+    <section class="quickstart" id="quickstart" aria-labelledby="quickstart-heading">
+        <div class="container">
+            <h2 id="quickstart-heading">Get Started</h2>
+            <p class="quickstart-intro">Get MirDB running in just 3 simple steps.</p>
+
+            <div class="quickstart-steps">
+                <!-- Step 1: Clone and Build -->
+                <div class="quickstart-step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h3 class="step-title">Clone and Build</h3>
+                        <p class="step-description">Clone the repository and build the project using Cargo.</p>
+                        <pre class="step-code"><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+                    </div>
+                </div>
+
+                <!-- Step 2: Run the Server -->
+                <div class="quickstart-step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h3 class="step-title">Run the Server</h3>
+                        <p class="step-description">Start the MirDB server on the default port.</p>
+                        <pre class="step-code"><code>./target/release/mirdb-server</code></pre>
+                    </div>
+                </div>
+
+                <!-- Step 3: Connect and Use -->
+                <div class="quickstart-step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h3 class="step-title">Connect and Use</h3>
+                        <p class="step-description">Connect using any Memcached client or telnet.</p>
+                        <pre class="step-code"><code>telnet localhost 11211
+set hello 0 0 5
+world
+get hello</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: Quick Start Section (Scenario 5) -->
+
+    <!-- BEGIN: Roadmap Section (Scenario 6) -->
+    <section class="roadmap" id="roadmap" aria-labelledby="roadmap-heading">
+        <div class="container">
+            <h2 id="roadmap-heading">Features in Development</h2>
+            <p class="roadmap-intro">Track our progress and see what's coming next.</p>
+
+            <div class="roadmap-content">
+                <div class="roadmap-column">
+                    <h3 class="roadmap-column-title">
+                        <span class="status-icon status-completed" aria-hidden="true">✓</span>
+                        Completed
+                    </h3>
+                    <ul class="roadmap-list" aria-label="Completed features">
+                        <li class="roadmap-item roadmap-item-completed" data-status="completed">
+                            <span class="roadmap-checkmark" aria-hidden="true">✓</span>
+                            <span class="roadmap-item-text">Tokio with Memcached Protocol</span>
+                        </li>
+                        <li class="roadmap-item roadmap-item-completed" data-status="completed">
+                            <span class="roadmap-checkmark" aria-hidden="true">✓</span>
+                            <span class="roadmap-item-text">Memtable with Skiplist</span>
+                        </li>
+                        <li class="roadmap-item roadmap-item-completed" data-status="completed">
+                            <span class="roadmap-checkmark" aria-hidden="true">✓</span>
+                            <span class="roadmap-item-text">Minor Compaction</span>
+                        </li>
+                        <li class="roadmap-item roadmap-item-completed" data-status="completed">
+                            <span class="roadmap-checkmark" aria-hidden="true">✓</span>
+                            <span class="roadmap-item-text">Major Compaction</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-column">
+                    <h3 class="roadmap-column-title">
+                        <span class="status-icon status-in-progress" aria-hidden="true">⏳</span>
+                        In Progress
+                    </h3>
+                    <ul class="roadmap-list" aria-label="Features in progress">
+                        <li class="roadmap-item roadmap-item-in-progress" data-status="in-progress">
+                            <span class="roadmap-progress-icon" aria-hidden="true">⏳</span>
+                            <span class="roadmap-item-text">Raft Consensus</span>
+                            <span class="roadmap-badge">In Development</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: Roadmap Section (Scenario 6) -->
+
+    <!-- BEGIN: Main Content Closing (Scenario 11 - Accessibility) -->
+    </main>
+    <!-- END: Main Content (Scenario 11) -->
+
+    <!-- BEGIN: Footer Section (Scenario 7) -->
+    <footer class="footer" id="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <h3 class="footer-heading">Resources</h3>
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="footer-link">
+                        GitHub
+                    </a>
+                    <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer" class="footer-link">
+                        Documentation
+                    </a>
+                    <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer" class="footer-link">
+                        Issues
+                    </a>
+                </nav>
+            </div>
+            <div class="footer-copyright">
+                <p>© 2026 MirDB. Licensed under MIT.</p>
+                <p class="footer-tagline">Built with Rust. Powered by passion.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- END: Footer Section (Scenario 7) -->
+
+    <script src="js/theme-toggle.js" defer></script>
+</body>
+</html>
