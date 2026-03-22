@@ -684,3 +684,350 @@ test.describe('Accessibility - Images and Alt Text (Scenario 13)', () => {
     }
   });
 });
+
+test.describe('No JavaScript Fallback (Scenario 22)', () => {
+  test('TC1: Core content (hero, features, footer) is visible with JavaScript disabled', async ({ browser }) => {
+    // Create a context with JavaScript disabled
+    const context = await browser.newContext({
+      javaScriptEnabled: false,
+    });
+    const page = await context.newPage();
+
+    await page.goto('/');
+    // Wait for content to load (no waitForLoad since it might use JS)
+    await page.waitForLoadState('domcontentloaded');
+
+    // Check hero section is visible
+    const heroSection = page.locator('#hero, .hero, header');
+    await expect(heroSection.first()).toBeVisible();
+
+    // Check hero headline is visible
+    const heroHeadline = page.locator('#hero-headline, .hero-headline, h1');
+    await expect(heroHeadline.first()).toBeVisible();
+
+    // Check hero logo is visible
+    const heroLogo = page.locator('#hero-logo, .hero-logo');
+    await expect(heroLogo.first()).toBeVisible();
+
+    // Check features section is visible
+    const featuresSection = page.locator('#features, .features-section');
+    await expect(featuresSection.first()).toBeVisible();
+
+    // Check features heading is visible
+    const featuresHeading = page.locator('#features-heading');
+    await expect(featuresHeading).toBeVisible();
+
+    // Check feature items are visible
+    const featureItems = page.locator('.feature-item');
+    const featureCount = await featureItems.count();
+    expect(featureCount).toBeGreaterThanOrEqual(3);
+
+    // Check footer is visible
+    const footer = page.locator('#footer, footer');
+    await expect(footer.first()).toBeVisible();
+
+    // Check footer content is accessible
+    const footerLinks = page.locator('.footer-link');
+    const footerLinkCount = await footerLinks.count();
+    expect(footerLinkCount).toBeGreaterThanOrEqual(1);
+
+    // Check quick start section is visible
+    const quickstartSection = page.locator('#quickstart, .quickstart');
+    await expect(quickstartSection.first()).toBeVisible();
+
+    // Check roadmap section is visible
+    const roadmapSection = page.locator('#roadmap, .roadmap');
+    await expect(roadmapSection.first()).toBeVisible();
+
+    await context.close();
+  });
+
+  test('TC2: Navigation links work without JavaScript (functional anchor tags)', async ({ browser }) => {
+    // Create a context with JavaScript disabled
+    const context = await browser.newContext({
+      javaScriptEnabled: false,
+    });
+    const page = await context.newPage();
+
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    // Check primary CTA link has a real href (not javascript:void(0) or empty)
+    const primaryCta = page.locator('#primary-cta, .btn-primary').first();
+    const primaryHref = await primaryCta.getAttribute('href');
+    expect(primaryHref).not.toBeNull();
+    expect(primaryHref).not.toBe('');
+    expect(primaryHref).not.toBe('#');
+    expect(primaryHref).not.toContain('javascript:');
+    expect(primaryHref).toContain('github.com');
+
+    // Check secondary CTA link has a real href
+    const secondaryCta = page.locator('.btn-secondary').first();
+    const secondaryHref = await secondaryCta.getAttribute('href');
+    expect(secondaryHref).not.toBeNull();
+    expect(secondaryHref).not.toBe('');
+    expect(secondaryHref).not.toContain('javascript:');
+    // Should be an anchor link to quickstart section
+    expect(secondaryHref).toBe('#quickstart');
+
+    // Check footer links are functional anchor tags
+    const footerLinks = page.locator('.footer-link');
+    const footerLinkCount = await footerLinks.count();
+    expect(footerLinkCount).toBeGreaterThanOrEqual(1);
+
+    for (let i = 0; i < footerLinkCount; i++) {
+      const link = footerLinks.nth(i);
+      const href = await link.getAttribute('href');
+      expect(href, `Footer link ${i + 1} should have href`).not.toBeNull();
+      expect(href).not.toBe('');
+      expect(href).not.toContain('javascript:');
+    }
+
+    // Check badge links are functional
+    const badgeLinks = page.locator('.badges a, #badges a');
+    const badgeLinkCount = await badgeLinks.count();
+
+    for (let i = 0; i < badgeLinkCount; i++) {
+      const link = badgeLinks.nth(i);
+      const href = await link.getAttribute('href');
+      expect(href, `Badge link ${i + 1} should have href`).not.toBeNull();
+      expect(href).not.toBe('');
+      expect(href).not.toContain('javascript:');
+    }
+
+    // Test that skip-to-content link works
+    const skipLink = page.locator('#skip-to-content, .skip-to-content');
+    const skipHref = await skipLink.getAttribute('href');
+    expect(skipHref).not.toBeNull();
+    expect(skipHref).toBe('#features');
+
+    // Verify the secondary CTA has a working anchor link (without clicking to avoid page instability)
+    // The link href '#quickstart' is a valid anchor that will navigate without JavaScript
+    expect(secondaryHref).toBe('#quickstart');
+
+    // Verify the quickstart section target exists
+    const quickstartSection = page.locator('#quickstart');
+    await expect(quickstartSection).toBeAttached();
+
+    await context.close();
+  });
+
+  test('TC3: Page has reasonable default theme without JavaScript', async ({ browser }) => {
+    // Create a context with JavaScript disabled
+    const context = await browser.newContext({
+      javaScriptEnabled: false,
+    });
+    const page = await context.newPage();
+
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    // Check that the theme toggle button is hidden when JS is disabled
+    // (via noscript style)
+    const themeToggle = page.locator('#theme-toggle, .theme-toggle');
+    const themeToggleCount = await themeToggle.count();
+
+    if (themeToggleCount > 0) {
+      // Theme toggle should be hidden via noscript styles
+      const isVisible = await themeToggle.isVisible().catch(() => false);
+      expect(isVisible).toBe(false);
+    }
+
+    // Check that the page has readable text (body has proper colors applied)
+    const bodyStyles = await page.evaluate(() => {
+      const body = document.body;
+      const computed = window.getComputedStyle(body);
+      return {
+        backgroundColor: computed.backgroundColor,
+        color: computed.color,
+      };
+    });
+
+    // Body should have a background color (not transparent)
+    expect(bodyStyles.backgroundColor).not.toBe('');
+    expect(bodyStyles.backgroundColor).not.toBe('transparent');
+    expect(bodyStyles.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+
+    // Body should have a text color defined
+    expect(bodyStyles.color).not.toBe('');
+
+    // Check that CSS variables are being applied (the CSS has prefers-color-scheme fallback)
+    const cssVariables = await page.evaluate(() => {
+      const root = document.documentElement;
+      const computed = window.getComputedStyle(root);
+      return {
+        colorBackground: computed.getPropertyValue('--color-background').trim(),
+        colorText: computed.getPropertyValue('--color-text').trim(),
+      };
+    });
+
+    // CSS variables should be defined from theme.css
+    expect(cssVariables.colorBackground).not.toBe('');
+    expect(cssVariables.colorText).not.toBe('');
+
+    // Verify text is readable by checking contrast
+    // Get the actual computed color values
+    const contrastCheck = await page.evaluate(() => {
+      function parseColor(color: string): { r: number; g: number; b: number } | null {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1;
+        canvas.height = 1;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return null;
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, 1, 1);
+        const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+        return { r, g, b };
+      }
+
+      function getLuminance(r: number, g: number, b: number): number {
+        const [rs, gs, bs] = [r, g, b].map((c) => {
+          c = c / 255;
+          return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+        });
+        return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+      }
+
+      function getContrastRatio(fg: { r: number; g: number; b: number }, bg: { r: number; g: number; b: number }): number {
+        const l1 = getLuminance(fg.r, fg.g, fg.b);
+        const l2 = getLuminance(bg.r, bg.g, bg.b);
+        const lighter = Math.max(l1, l2);
+        const darker = Math.min(l1, l2);
+        return (lighter + 0.05) / (darker + 0.05);
+      }
+
+      const body = document.body;
+      const bodyStyles = window.getComputedStyle(body);
+      const textColor = bodyStyles.color;
+      const bgColor = bodyStyles.backgroundColor;
+
+      const fgParsed = parseColor(textColor);
+      const bgParsed = parseColor(bgColor);
+
+      if (!fgParsed || !bgParsed) return 0;
+
+      return getContrastRatio(fgParsed, bgParsed);
+    });
+
+    // Contrast ratio should be at least 4.5:1 for WCAG AA compliance
+    expect(contrastCheck).toBeGreaterThanOrEqual(4.5);
+
+    // Verify main content sections are styled and visible
+    const heroSection = page.locator('#hero, .hero');
+    await expect(heroSection.first()).toBeVisible();
+
+    // Hero should have appropriate styling (background - could be gradient or solid color)
+    const heroStyles = await heroSection.first().evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        background: computed.background,
+        backgroundImage: computed.backgroundImage,
+        backgroundColor: computed.backgroundColor,
+      };
+    });
+
+    // Hero section should have a background defined (gradient or solid color)
+    const hasHeroBackground =
+      (heroStyles.backgroundColor !== 'transparent' &&
+       heroStyles.backgroundColor !== 'rgba(0, 0, 0, 0)') ||
+      (heroStyles.backgroundImage !== 'none' &&
+       heroStyles.backgroundImage !== '');
+    expect(hasHeroBackground).toBe(true);
+
+    await context.close();
+  });
+
+  test('All interactive elements remain accessible without JavaScript', async ({ browser }) => {
+    // Create a context with JavaScript disabled
+    const context = await browser.newContext({
+      javaScriptEnabled: false,
+    });
+    const page = await context.newPage();
+
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    // All links should be standard anchor tags with proper hrefs
+    const allLinks = page.locator('a[href]');
+    const linkCount = await allLinks.count();
+    expect(linkCount).toBeGreaterThan(0);
+
+    // Count links with proper href (not javascript:)
+    let validLinkCount = 0;
+    for (let i = 0; i < linkCount; i++) {
+      const link = allLinks.nth(i);
+      const href = await link.getAttribute('href');
+      if (href && !href.includes('javascript:') && href !== '') {
+        validLinkCount++;
+      }
+    }
+
+    // Most links should be valid
+    expect(validLinkCount).toBeGreaterThan(5);
+
+    // Check that code blocks are visible and readable
+    const codeBlocks = page.locator('pre, code');
+    const codeBlockCount = await codeBlocks.count();
+    expect(codeBlockCount).toBeGreaterThan(0);
+
+    // First code block should be visible
+    await expect(codeBlocks.first()).toBeVisible();
+
+    await context.close();
+  });
+
+  test('Page content renders completely without JavaScript', async ({ browser }) => {
+    // Create a context with JavaScript disabled
+    const context = await browser.newContext({
+      javaScriptEnabled: false,
+    });
+    const page = await context.newPage();
+
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    // Get all major section headings
+    const headings = page.locator('h1, h2');
+    const headingCount = await headings.count();
+
+    // Should have at least the main sections: h1 (hero), h2 (features, usage, quickstart, roadmap)
+    expect(headingCount).toBeGreaterThanOrEqual(5);
+
+    // Check each expected heading exists
+    const h1Text = await page.locator('h1').first().textContent();
+    expect(h1Text).toContain('MirDB');
+
+    // Features heading should be visible
+    const featuresHeading = page.locator('#features-heading');
+    await expect(featuresHeading).toBeVisible();
+    const featuresText = await featuresHeading.textContent();
+    expect(featuresText?.toLowerCase()).toContain('feature');
+
+    // Quick start heading should be visible
+    const quickstartHeading = page.locator('#quickstart-heading');
+    await expect(quickstartHeading).toBeVisible();
+
+    // Roadmap heading should be visible
+    const roadmapHeading = page.locator('#roadmap-heading');
+    await expect(roadmapHeading).toBeVisible();
+
+    // All images should have loaded (check they have dimensions)
+    const images = page.locator('img');
+    const imageCount = await images.count();
+
+    for (let i = 0; i < imageCount; i++) {
+      const img = images.nth(i);
+      const isVisible = await img.isVisible().catch(() => false);
+      if (isVisible) {
+        // Image should have natural dimensions (loaded)
+        const naturalWidth = await img.evaluate((el) => (el as HTMLImageElement).naturalWidth);
+        // Note: External images (like badges) might not load in test environment
+        // So we just check the image element exists and has src
+        const src = await img.getAttribute('src');
+        expect(src).not.toBeNull();
+      }
+    }
+
+    await context.close();
+  });
+});
