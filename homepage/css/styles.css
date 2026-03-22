@@ -259,8 +259,8 @@ section {
 }
 
 .usage-code {
-    background-color: var(--color-code-bg, #1e1e2e);
-    color: var(--color-code-text, #cdd6f4);
+    background-color: var(--color-code-bg, #1e293b);
+    color: var(--color-code-text, #e2e8f0);
     padding: 1.5rem;
     border-radius: 0.75rem;
     overflow-x: auto;
@@ -349,8 +349,8 @@ section {
 }
 
 .step-code {
-    background-color: var(--color-code-bg, #1e1e2e);
-    color: var(--color-code-text, #cdd6f4);
+    background-color: var(--color-code-bg, #1e293b);
+    color: var(--color-code-text, #e2e8f0);
     padding: 1rem 1.25rem;
     border-radius: 0.5rem;
     overflow-x: auto;
