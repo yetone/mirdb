@@ -12,7 +12,7 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { VIEWPORTS, waitForLoad } from './utils';
+import { VIEWPORTS, waitForLoad, getComputedStyle } from './utils';
 
 // Scenario 8: Responsive Design - Mobile
 test.describe('Responsive Design - Mobile (Scenario 8)', () => {
@@ -388,5 +388,198 @@ test.describe('Tablet Responsive Design (768px-1024px)', () => {
     for (let i = 0; i < columnCount; i++) {
       await expect(roadmapColumns.nth(i)).toBeVisible();
     }
+  });
+});
+
+/**
+ * Scenario 10: Desktop Responsive Design Tests
+ * Verifies homepage displays correctly on desktop screens (1024px+ width)
+ */
+test.describe('Desktop Responsive Design (Scenario 10)', () => {
+  test.describe.configure({ mode: 'serial' });
+
+  test.beforeEach(async ({ page }) => {
+    // Set desktop viewport
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto('/');
+    await waitForLoad(page);
+  });
+
+  /**
+   * Test Case 1: Page renders with full desktop layout at 1280px
+   */
+  test('should render full desktop layout at 1280px viewport', async ({ page }) => {
+    // Verify page loads successfully
+    await expect(page).toHaveTitle(/MirDB/);
+
+    // Verify hero section is visible and properly sized
+    const hero = page.locator('#hero');
+    await expect(hero).toBeVisible();
+
+    // On desktop, hero should have generous min-height (90vh from responsive.css)
+    const heroMinHeight = await getComputedStyle(page, '.hero', 'min-height');
+    // 90vh at 720px height = 648px
+    expect(parseFloat(heroMinHeight)).toBeGreaterThanOrEqual(600);
+
+    // Verify all main sections are visible
+    const sections = ['#badges', '#features', '#usage', '#quickstart', '#roadmap', '#footer'];
+    for (const selector of sections) {
+      await expect(page.locator(selector)).toBeVisible();
+    }
+
+    // Verify no horizontal scroll (content fits within viewport)
+    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+    expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1); // +1 for rounding tolerance
+  });
+
+  /**
+   * Test Case 2: Features display in 3-4 column grid at desktop viewport
+   */
+  test('should display features in 3-4 column grid', async ({ page }) => {
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await featuresSection.scrollIntoViewIfNeeded();
+
+    // Get the features grid
+    const featuresGrid = page.locator('.features-grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Verify grid layout - should show 4 columns at 1280px (per responsive.css)
+    const gridColumns = await getComputedStyle(page, '.features-grid', 'grid-template-columns');
+
+    // Count the number of column values (space-separated pixel values)
+    const columnCount = gridColumns.trim().split(/\s+/).filter(v => v.length > 0).length;
+
+    // At desktop (1024px+), features-grid uses repeat(4, 1fr) = 4 columns
+    expect(columnCount).toBeGreaterThanOrEqual(3);
+    expect(columnCount).toBeLessThanOrEqual(4);
+
+    // Verify all 4 feature items are visible
+    const featureItems = page.locator('.feature-item');
+    await expect(featureItems).toHaveCount(4);
+
+    // All items should be visible simultaneously on desktop
+    for (let i = 0; i < 4; i++) {
+      await expect(featureItems.nth(i)).toBeVisible();
+    }
+  });
+
+  /**
+   * Test Case 3: Main content container has max-width and is centered
+   */
+  test('should have max-width constraint and centered content', async ({ page }) => {
+    // Check container max-width
+    const containerMaxWidth = await getComputedStyle(page, '.container', 'max-width');
+
+    // At desktop, container should have max-width of 1200px (per responsive.css)
+    expect(parseFloat(containerMaxWidth)).toBeLessThanOrEqual(1200);
+    expect(parseFloat(containerMaxWidth)).toBeGreaterThan(0);
+
+    // Check that containers are centered using margin auto
+    const containerMarginLeft = await getComputedStyle(page, '.container', 'margin-left');
+    const containerMarginRight = await getComputedStyle(page, '.container', 'margin-right');
+
+    // Both margins should be 'auto' or equal pixel values (centered)
+    // When max-width is less than viewport, margin-left and margin-right will be equal positive values
+    const leftMargin = parseFloat(containerMarginLeft) || 0;
+    const rightMargin = parseFloat(containerMarginRight) || 0;
+
+    // At 1280px viewport with 1200px container, margins should be ~40px each
+    // Just verify they're roughly equal (within 2px tolerance for rounding)
+    expect(Math.abs(leftMargin - rightMargin)).toBeLessThan(2);
+
+    // Verify content doesn't stretch edge-to-edge
+    const featuresContainer = page.locator('#features .container');
+    const boundingBox = await featuresContainer.boundingBox();
+
+    if (boundingBox) {
+      // Container should have margins on both sides (not stretching to full 1280px)
+      expect(boundingBox.width).toBeLessThanOrEqual(1200);
+      expect(boundingBox.x).toBeGreaterThan(0); // Left margin exists
+    }
+  });
+
+  /**
+   * Test Case 4: Layout remains centered at ultra-wide 1920px viewport
+   */
+  test('should remain centered with appropriate margins at 1920px ultra-wide viewport', async ({ page }) => {
+    // Set ultra-wide viewport
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto('/');
+    await waitForLoad(page);
+
+    // Verify page still renders correctly
+    await expect(page).toHaveTitle(/MirDB/);
+    await expect(page.locator('#hero')).toBeVisible();
+
+    // Get features container for measurement
+    const featuresContainer = page.locator('#features .container');
+    await featuresContainer.scrollIntoViewIfNeeded();
+    const boundingBox = await featuresContainer.boundingBox();
+
+    if (boundingBox) {
+      // Container should still be max 1200px wide
+      expect(boundingBox.width).toBeLessThanOrEqual(1200);
+
+      // With 1920px viewport and 1200px container, there should be ~360px margin on each side
+      const expectedMinMargin = (1920 - 1200) / 2 - 50; // 310px minimum (with tolerance)
+      expect(boundingBox.x).toBeGreaterThanOrEqual(expectedMinMargin);
+
+      // Content should be roughly centered
+      const centerX = boundingBox.x + boundingBox.width / 2;
+      const viewportCenter = 1920 / 2;
+      expect(Math.abs(centerX - viewportCenter)).toBeLessThan(50); // Within 50px of center
+    }
+
+    // Features grid should still show 4 columns
+    const gridColumns = await getComputedStyle(page, '.features-grid', 'grid-template-columns');
+    const columnCount = gridColumns.trim().split(/\s+/).filter(v => v.length > 0).length;
+    expect(columnCount).toBe(4);
+
+    // Verify no horizontal scroll
+    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+    expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1);
+  });
+
+  /**
+   * Additional desktop-specific tests
+   */
+  test('should show generous whitespace and proper spacing', async ({ page }) => {
+    // Check features section padding (should have substantial padding on desktop)
+    // Using .features-section as it has standard section padding: 4rem 1.5rem = 64px top/bottom
+    const sectionPadding = await getComputedStyle(page, '.features-section', 'padding-top');
+    const paddingValue = parseFloat(sectionPadding);
+
+    // Desktop should have generous padding (4rem = 64px from styles.css)
+    expect(paddingValue).toBeGreaterThanOrEqual(48);
+
+    // Check hero section has proper centered content
+    const heroCTA = page.locator('.hero-cta');
+    await expect(heroCTA).toBeVisible();
+
+    // CTA buttons should be visible and properly spaced
+    const buttons = heroCTA.locator('.btn');
+    await expect(buttons).toHaveCount(2);
+
+    // Both buttons should be on the same row (not stacked) on desktop
+    const btn1Box = await buttons.nth(0).boundingBox();
+    const btn2Box = await buttons.nth(1).boundingBox();
+
+    if (btn1Box && btn2Box) {
+      // Y positions should be roughly equal (same row)
+      expect(Math.abs(btn1Box.y - btn2Box.y)).toBeLessThan(10);
+    }
+  });
+
+  test('should render typography at desktop font sizes', async ({ page }) => {
+    // Hero headline should be 3rem (48px) at desktop per responsive.css
+    const heroHeadlineFontSize = await getComputedStyle(page, '.hero-headline', 'font-size');
+    const fontSize = parseFloat(heroHeadlineFontSize);
+
+    // At desktop (1024px+), hero-headline is 3rem = 48px
+    expect(fontSize).toBeGreaterThanOrEqual(40); // Allow some variance
+    expect(fontSize).toBeLessThanOrEqual(52);
   });
 });
