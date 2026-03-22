@@ -43,6 +43,16 @@
         grid-template-columns: 1fr;
         gap: 1rem;
     }
+
+    /* Usage section mobile (Scenario 4) */
+    .usage-content {
+        grid-template-columns: 1fr;
+    }
+
+    .usage-code {
+        font-size: 0.75rem;
+        padding: 1rem;
+    }
 }
 
 /* Tablet and up (480px+) */
@@ -60,6 +70,12 @@
 @media (min-width: 480px) and (max-width: 1023px) {
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Usage section tablet (Scenario 4) */
+    .usage-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 }
 

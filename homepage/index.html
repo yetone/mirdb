@@ -66,8 +66,43 @@
     <!-- END: Features Section (Scenario 3) -->
 
     <!-- BEGIN: Usage Section (Scenario 4) -->
-    <section class="usage" id="usage">
-        <!-- Usage example to be implemented by Scenario 4 -->
+    <section class="usage-section" id="usage" aria-labelledby="usage-heading">
+        <div class="container">
+            <h2 id="usage-heading">Usage Example</h2>
+            <p class="usage-intro">MirDB supports standard Memcached protocol commands. Here's how to interact with it:</p>
+
+            <div class="usage-content">
+                <div class="usage-gif-container">
+                    <img src="assets/usage.gif" alt="MirDB usage demonstration showing Memcached commands in action" class="usage-gif" id="usage-gif" loading="lazy">
+                </div>
+
+                <div class="usage-code-container">
+                    <h3>Example Commands</h3>
+                    <pre class="usage-code"><code id="usage-code-snippet"># Connect to MirDB using telnet or any Memcached client
+telnet localhost 11211
+
+# SET a value
+set mykey 0 0 5
+hello
+STORED
+
+# GET a value
+get mykey
+VALUE mykey 0 5
+hello
+END
+
+# DELETE a value
+delete mykey
+DELETED
+
+# SET with expiration (60 seconds)
+set tempkey 0 60 5
+world
+STORED</code></pre>
+                </div>
+            </div>
+        </div>
     </section>
     <!-- END: Usage Section (Scenario 4) -->
 

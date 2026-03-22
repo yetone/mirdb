@@ -104,3 +104,103 @@ test.describe('Features Section Display', () => {
     await expect(featuresGrid).toBeVisible();
   });
 });
+
+test.describe('Usage Example Display (Scenario 4)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  // Test Case 1: Locate usage example section and check for GIF or code block
+  // Expected: Section contains either an img element (GIF) or code/pre element with example commands
+  test('usage section contains GIF or code block', async ({ page }) => {
+    const usageSection = page.locator('#usage');
+    await expect(usageSection).toBeVisible();
+    await scrollToSection(page, '#usage');
+
+    // Check for either GIF or code block
+    const usageGif = usageSection.locator('img.usage-gif, img[id="usage-gif"]');
+    const usageCode = usageSection.locator('pre.usage-code, code#usage-code-snippet');
+
+    const hasGif = await usageGif.count() > 0;
+    const hasCode = await usageCode.count() > 0;
+
+    // At least one should be present
+    expect(hasGif || hasCode).toBeTruthy();
+  });
+
+  // Test Case 2: If GIF present, verify src attribute
+  // Expected: GIF source points to usage.gif asset and loads successfully
+  test('usage GIF src points to usage.gif asset', async ({ page }) => {
+    await scrollToSection(page, '#usage');
+    const usageGif = page.locator('#usage-gif');
+
+    // GIF should be present
+    await expect(usageGif).toBeVisible();
+
+    // Check src attribute contains usage.gif
+    const src = await usageGif.getAttribute('src');
+    expect(src).toBeTruthy();
+    expect(src).toContain('usage.gif');
+  });
+
+  // Test Case 3: If code snippet present, extract content
+  // Expected: Code contains Memcached-style commands (get, set, etc.)
+  test('code snippet contains Memcached-style commands', async ({ page }) => {
+    await scrollToSection(page, '#usage');
+    const codeSnippet = page.locator('#usage-code-snippet');
+
+    // Code snippet should be present
+    await expect(codeSnippet).toBeVisible();
+
+    // Extract text content
+    const codeText = await codeSnippet.textContent();
+    expect(codeText).toBeTruthy();
+
+    const lowerCode = codeText!.toLowerCase();
+
+    // Should contain Memcached-style commands
+    const hasSet = lowerCode.includes('set');
+    const hasGet = lowerCode.includes('get');
+    const hasDelete = lowerCode.includes('delete');
+
+    expect(hasSet).toBeTruthy();
+    expect(hasGet).toBeTruthy();
+    expect(hasDelete).toBeTruthy();
+  });
+
+  // Additional test: Usage section has proper heading
+  test('usage section has proper heading', async ({ page }) => {
+    await scrollToSection(page, '#usage');
+    const usageHeading = page.locator('#usage-heading');
+
+    await expect(usageHeading).toBeVisible();
+
+    const headingText = await usageHeading.textContent();
+    expect(headingText).toBeTruthy();
+    expect(headingText!.toLowerCase()).toContain('usage');
+  });
+
+  // Additional test: Usage GIF has alt text for accessibility
+  test('usage GIF has descriptive alt text', async ({ page }) => {
+    await scrollToSection(page, '#usage');
+    const usageGif = page.locator('#usage-gif');
+
+    await expect(usageGif).toBeVisible();
+
+    const altText = await usageGif.getAttribute('alt');
+    expect(altText).toBeTruthy();
+    expect(altText!.length).toBeGreaterThan(10); // Should be descriptive
+  });
+
+  // Additional test: Usage GIF loads successfully
+  test('usage GIF loads successfully', async ({ page }) => {
+    await scrollToSection(page, '#usage');
+    const usageGif = page.locator('#usage-gif');
+
+    await expect(usageGif).toBeVisible();
+
+    // Check if image loaded (naturalWidth > 0)
+    const naturalWidth = await usageGif.evaluate((img: HTMLImageElement) => img.naturalWidth);
+    expect(naturalWidth).toBeGreaterThan(0);
+  });
+});

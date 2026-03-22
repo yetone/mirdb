@@ -212,6 +212,70 @@ section {
     margin-bottom: 0;
 }
 
+/* Usage Section Styles (Scenario 4) */
+.usage-section {
+    background-color: var(--color-background);
+    text-align: center;
+}
+
+.usage-section h2 {
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.usage-intro {
+    color: var(--color-text-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 2.5rem;
+}
+
+.usage-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.usage-gif-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.usage-gif {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.usage-code-container {
+    text-align: left;
+}
+
+.usage-code-container h3 {
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.usage-code {
+    background-color: var(--color-code-bg, #1e1e2e);
+    color: var(--color-code-text, #cdd6f4);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    overflow-x: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    text-align: left;
+    white-space: pre;
+}
+
+.usage-code code {
+    font-family: inherit;
+    color: inherit;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {
