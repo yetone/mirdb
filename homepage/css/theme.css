@@ -1,0 +1,50 @@
+/**
+ * MirDB Homepage - Theme Variables
+ * Owner: Scenario 18 - Theme Toggle
+ */
+
+/* Light Theme (default for system preference) */
+:root {
+  --color-background: #0d1117;
+  --color-text: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-primary: #58a6ff;
+  --color-accent: #79c0ff;
+  --color-border: #30363d;
+  --color-code-bg: #161b22;
+}
+
+/* Dark Theme Class */
+.dark-theme {
+  --color-background: #0d1117;
+  --color-text: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-primary: #58a6ff;
+  --color-accent: #79c0ff;
+  --color-border: #30363d;
+  --color-code-bg: #161b22;
+}
+
+/* Light Theme Class */
+.light-theme {
+  --color-background: #ffffff;
+  --color-text: #24292f;
+  --color-text-secondary: #57606a;
+  --color-primary: #0969da;
+  --color-accent: #0550ae;
+  --color-border: #d0d7de;
+  --color-code-bg: #f6f8fa;
+}
+
+/* Respect system preference */
+@media (prefers-color-scheme: light) {
+  :root:not(.dark-theme) {
+    --color-background: #ffffff;
+    --color-text: #24292f;
+    --color-text-secondary: #57606a;
+    --color-primary: #0969da;
+    --color-accent: #0550ae;
+    --color-border: #d0d7de;
+    --color-code-bg: #f6f8fa;
+  }
+}
