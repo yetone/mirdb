@@ -1,48 +1,56 @@
 /**
  * MirDB Homepage - Responsive Breakpoints
  * Owner: Scenarios 8, 9, 10 (Responsive Design)
+ *
+ * Breakpoints:
+ * - Mobile: max-width 479px (Scenario 8)
+ * - Tablet: 480px - 1023px (Scenario 9)
+ * - Desktop: 1024px+ (Scenario 10)
+ *
+ * Adjustments per breakpoint:
+ * - Container max-width
+ * - Grid columns (features, cards)
+ * - Typography scaling
+ * - Navigation layout
+ * - Spacing/padding
  */
+
+/* Base styles with mobile-first approach */
 
 /* Mobile: max-width 479px */
 @media (max-width: 479px) {
-  .container {
-    padding: 0 1rem;
-  }
+    .badges {
+        gap: 0.5rem;
+        padding: 1rem;
+    }
 
-  h1 { font-size: 1.75rem; }
-  h2 { font-size: 1.5rem; }
-
-  section {
-    padding: 2rem 0;
-  }
-
-  .badges {
-    gap: 0.25rem;
-  }
+    .badges img {
+        height: 18px;
+    }
 }
 
-/* Tablet: 480px - 1023px */
-@media (min-width: 480px) and (max-width: 1023px) {
-  .container {
-    padding: 0 1.25rem;
-  }
+/* Tablet and up (480px+) */
+@media (min-width: 480px) {
+    .hero-headline {
+        font-size: 2.75rem;
+    }
 
-  h1 { font-size: 2rem; }
-
-  section {
-    padding: 3rem 0;
-  }
+    .badges {
+        gap: 0.75rem;
+    }
 }
 
-/* Desktop: 1024px+ */
+/* Desktop (1024px+) */
 @media (min-width: 1024px) {
-  .container {
-    max-width: 1200px;
-  }
+    .hero-headline {
+        font-size: 3rem;
+    }
 
-  h1 { font-size: 2.5rem; }
+    .hero {
+        min-height: 90vh;
+    }
 
-  section {
-    padding: 4rem 0;
-  }
+    .badges {
+        gap: 1rem;
+    }
 }

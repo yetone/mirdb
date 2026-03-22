@@ -1,7 +1,16 @@
 /**
  * Playwright Configuration for MirDB Homepage
  * Owner: First test builder
+ *
+ * Configuration:
+ * - Base URL for local dev server
+ * - Browser projects (Chrome, Firefox, Safari, Edge)
+ * - Viewport sizes for responsive tests
+ * - Test timeout settings
+ * - Reporter configuration
+ * - Web server config for serving static files
  */
+
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
@@ -19,6 +28,14 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
     },
   ],
   webServer: {
