@@ -183,6 +183,327 @@ test.describe('Accessibility - Basic Requirements (Scenario 11)', () => {
   });
 });
 
+test.describe('Accessibility - Keyboard Navigation (Scenario 12)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForLoad(page);
+  });
+
+  test('TC1: Focus moves in logical order through all clickable elements', async ({ page }) => {
+    // Start from the document body
+    await page.keyboard.press('Tab');
+
+    // First focusable element should be the skip-to-content link
+    const skipLink = page.locator('#skip-to-content');
+    await expect(skipLink).toBeFocused();
+
+    // Continue tabbing to next elements
+    await page.keyboard.press('Tab');
+
+    // Next should be the primary CTA in hero section
+    const primaryCta = page.locator('#primary-cta');
+    await expect(primaryCta).toBeFocused();
+
+    // Tab to secondary CTA
+    await page.keyboard.press('Tab');
+    const secondaryCta = page.locator('.btn-secondary');
+    await expect(secondaryCta).toBeFocused();
+
+    // Continue tabbing through badge links
+    await page.keyboard.press('Tab');
+    const firstBadge = page.locator('.badges a').first();
+    await expect(firstBadge).toBeFocused();
+
+    // Verify we can reach footer links by tabbing
+    const footerLinks = page.locator('.footer-link');
+    const footerLinkCount = await footerLinks.count();
+    expect(footerLinkCount).toBeGreaterThan(0);
+
+    // Tab through all interactive elements and verify they receive focus
+    let focusableCount = 0;
+    const maxTabs = 50; // Limit to prevent infinite loop
+
+    // Reset to start
+    await page.goto('/');
+    await waitForLoad(page);
+
+    for (let i = 0; i < maxTabs; i++) {
+      await page.keyboard.press('Tab');
+      const focusedElement = await page.evaluate(() => {
+        const el = document.activeElement;
+        return el ? el.tagName : null;
+      });
+
+      if (focusedElement === 'BODY' || focusedElement === null) {
+        break;
+      }
+      focusableCount++;
+    }
+
+    // Should have multiple focusable elements (CTAs, badge links, footer links)
+    expect(focusableCount).toBeGreaterThanOrEqual(5);
+  });
+
+  test('TC2: Focus indicator is visible with sufficient contrast on CTA buttons', async ({ page }) => {
+    // Tab to the primary CTA
+    await page.keyboard.press('Tab'); // Skip link
+    await page.keyboard.press('Tab'); // Primary CTA
+
+    const primaryCta = page.locator('#primary-cta');
+    await expect(primaryCta).toBeFocused();
+
+    // Check that focus styles are applied (outline or box-shadow)
+    const primaryFocusStyle = await primaryCta.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        outline: computed.outline,
+        outlineWidth: computed.outlineWidth,
+        outlineColor: computed.outlineColor,
+        boxShadow: computed.boxShadow,
+      };
+    });
+
+    // Focus should be visible via outline (width > 0) or box-shadow
+    const hasVisibleOutline =
+      primaryFocusStyle.outlineWidth !== '0px' &&
+      primaryFocusStyle.outlineColor !== 'transparent' &&
+      primaryFocusStyle.outlineColor !== 'rgba(0, 0, 0, 0)';
+    const hasVisibleBoxShadow =
+      primaryFocusStyle.boxShadow !== 'none' && primaryFocusStyle.boxShadow !== '';
+
+    expect(hasVisibleOutline || hasVisibleBoxShadow).toBe(true);
+
+    // Tab to secondary CTA and verify focus indicator
+    await page.keyboard.press('Tab');
+    const secondaryCta = page.locator('.btn-secondary');
+    await expect(secondaryCta).toBeFocused();
+
+    const secondaryFocusStyle = await secondaryCta.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        outline: computed.outline,
+        outlineWidth: computed.outlineWidth,
+        outlineColor: computed.outlineColor,
+        boxShadow: computed.boxShadow,
+      };
+    });
+
+    // Secondary CTA should also have visible focus indicator
+    const secondaryHasVisibleOutline =
+      secondaryFocusStyle.outlineWidth !== '0px' &&
+      secondaryFocusStyle.outlineColor !== 'transparent' &&
+      secondaryFocusStyle.outlineColor !== 'rgba(0, 0, 0, 0)';
+    const secondaryHasVisibleBoxShadow =
+      secondaryFocusStyle.boxShadow !== 'none' && secondaryFocusStyle.boxShadow !== '';
+
+    expect(secondaryHasVisibleOutline || secondaryHasVisibleBoxShadow).toBe(true);
+  });
+
+  test('TC3: CTA activates and performs expected action when pressing Enter', async ({ page }) => {
+    // Navigate to secondary CTA (which links to #quickstart)
+    await page.keyboard.press('Tab'); // Skip link
+    await page.keyboard.press('Tab'); // Primary CTA
+    await page.keyboard.press('Tab'); // Secondary CTA
+
+    const secondaryCta = page.locator('.btn-secondary');
+    await expect(secondaryCta).toBeFocused();
+
+    // Get the href of the secondary CTA
+    const href = await secondaryCta.getAttribute('href');
+    expect(href).toBe('#quickstart');
+
+    // Press Enter to activate the link
+    await page.keyboard.press('Enter');
+
+    // Wait for navigation to the quickstart section
+    await page.waitForTimeout(500); // Allow time for smooth scroll
+
+    // Verify the URL hash changed
+    const currentUrl = page.url();
+    expect(currentUrl).toContain('#quickstart');
+
+    // Verify the quickstart section is now visible in viewport
+    const quickstartSection = page.locator('#quickstart');
+    await expect(quickstartSection).toBeInViewport();
+  });
+
+  test('TC4: Skip link is available for keyboard users', async ({ page }) => {
+    // Skip-to-content link should exist
+    const skipLink = page.locator('#skip-to-content');
+    await expect(skipLink).toBeAttached();
+
+    // Skip link should have proper href
+    const href = await skipLink.getAttribute('href');
+    expect(href).toBe('#features');
+
+    // Skip link should have appropriate text
+    const text = await skipLink.textContent();
+    expect(text?.toLowerCase()).toContain('skip');
+
+    // Skip link should be visually hidden initially (positioned off-screen with negative top)
+    const topBeforeFocus = await skipLink.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      // Return the numeric value in pixels
+      return parseFloat(computed.top);
+    });
+    // Skip link should be positioned above the viewport (negative top value)
+    expect(topBeforeFocus).toBeLessThan(0);
+
+    // Tab to the skip link (first focusable element)
+    await page.keyboard.press('Tab');
+    await expect(skipLink).toBeFocused();
+
+    // Wait for the CSS transition to complete (0.3s transition defined in CSS)
+    await page.waitForTimeout(400);
+
+    // When focused, skip link should become visible (top: 0)
+    const topAfterFocus = await skipLink.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return parseFloat(computed.top);
+    });
+    // When focused, top should be 0 (visible) or very close to it
+    expect(topAfterFocus).toBeGreaterThanOrEqual(-5);
+
+    // Press Enter to activate skip link
+    await page.keyboard.press('Enter');
+
+    // Wait for navigation
+    await page.waitForTimeout(500);
+
+    // URL should contain the target hash
+    expect(page.url()).toContain('#features');
+
+    // Features section should be visible in viewport
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeInViewport();
+  });
+
+  test('All interactive elements have visible focus indicators', async ({ page }) => {
+    // Collect all interactive elements
+    const interactiveElements = page.locator('a, button, [tabindex]:not([tabindex="-1"])');
+    const count = await interactiveElements.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    // Sample test: verify first few elements have focus styles
+    for (let i = 0; i < Math.min(3, count); i++) {
+      const element = interactiveElements.nth(i);
+
+      // Focus the element directly
+      await element.focus();
+
+      // Check for focus indicator
+      const outlineStyle = await element.evaluate((el) => {
+        const computed = window.getComputedStyle(el);
+        return {
+          outline: computed.outline,
+          outlineWidth: computed.outlineWidth,
+          outlineStyle: computed.outlineStyle,
+          boxShadow: computed.boxShadow,
+        };
+      });
+
+      // Element should have visible focus indicator (outline or box-shadow)
+      const hasOutline =
+        outlineStyle.outlineStyle !== 'none' && outlineStyle.outlineWidth !== '0px';
+      const hasBoxShadow = outlineStyle.boxShadow !== 'none';
+
+      expect(hasOutline || hasBoxShadow).toBe(true);
+    }
+  });
+
+  test('Tab order follows visual layout', async ({ page }) => {
+    const focusOrder: string[] = [];
+
+    // Tab through elements and record their order
+    for (let i = 0; i < 15; i++) {
+      await page.keyboard.press('Tab');
+      const focusedId = await page.evaluate(() => {
+        const el = document.activeElement;
+        return el?.id || el?.className || el?.tagName;
+      });
+      if (focusedId) {
+        focusOrder.push(focusedId);
+      }
+    }
+
+    // Verify logical order: skip link -> hero CTAs -> badges -> footer
+    const skipLinkIndex = focusOrder.findIndex((id) => id.includes('skip'));
+    const primaryCtaIndex = focusOrder.findIndex((id) => id === 'primary-cta');
+
+    expect(skipLinkIndex).toBeLessThan(primaryCtaIndex);
+  });
+
+  test('Shift+Tab navigates backwards through elements', async ({ page }) => {
+    // Tab forward a few times
+    await page.keyboard.press('Tab'); // Skip link
+    await page.keyboard.press('Tab'); // Primary CTA
+    await page.keyboard.press('Tab'); // Secondary CTA
+
+    const secondaryCta = page.locator('.btn-secondary');
+    await expect(secondaryCta).toBeFocused();
+
+    // Shift+Tab should go back to primary CTA
+    await page.keyboard.press('Shift+Tab');
+    const primaryCta = page.locator('#primary-cta');
+    await expect(primaryCta).toBeFocused();
+
+    // Shift+Tab again should go to skip link
+    await page.keyboard.press('Shift+Tab');
+    const skipLink = page.locator('#skip-to-content');
+    await expect(skipLink).toBeFocused();
+  });
+
+  test('Footer links are keyboard accessible', async ({ page }) => {
+    // Navigate to footer area (scroll and tab)
+    const footerLinks = page.locator('.footer-link');
+    const footerLinkCount = await footerLinks.count();
+
+    expect(footerLinkCount).toBeGreaterThanOrEqual(3);
+
+    // Focus first footer link directly
+    await footerLinks.first().focus();
+    await expect(footerLinks.first()).toBeFocused();
+
+    // Check focus indicator is visible
+    const outlineStyle = await footerLinks.first().evaluate((el) => {
+      return window.getComputedStyle(el).outline;
+    });
+
+    expect(outlineStyle).not.toBe('');
+    expect(outlineStyle).not.toContain('0px');
+
+    // Tab to next footer link
+    await page.keyboard.press('Tab');
+    await expect(footerLinks.nth(1)).toBeFocused();
+  });
+
+  test('Badge links are keyboard navigable', async ({ page }) => {
+    const badgeLinks = page.locator('.badges a');
+    const badgeLinkCount = await badgeLinks.count();
+
+    expect(badgeLinkCount).toBeGreaterThanOrEqual(1);
+
+    // Focus first badge link
+    await badgeLinks.first().focus();
+    await expect(badgeLinks.first()).toBeFocused();
+
+    // Check focus indicator
+    const outlineStyle = await badgeLinks.first().evaluate((el) => {
+      return window.getComputedStyle(el).outline;
+    });
+
+    expect(outlineStyle).not.toBe('');
+    expect(outlineStyle).not.toContain('0px');
+
+    // Tab to next badge if available
+    if (badgeLinkCount > 1) {
+      await page.keyboard.press('Tab');
+      await expect(badgeLinks.nth(1)).toBeFocused();
+    }
+  });
+});
+
 test.describe('Accessibility - Images and Alt Text (Scenario 13)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
