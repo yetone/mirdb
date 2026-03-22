@@ -11,8 +11,25 @@
  * - Resource loading behavior
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
+import { playAudit } from 'playwright-lighthouse';
 
+// Lighthouse thresholds configuration
+const LIGHTHOUSE_THRESHOLDS = {
+  performance: 90,
+  accessibility: 90,
+  'best-practices': 80,
+  seo: 80,
+};
+
+// Core Web Vitals thresholds
+const CORE_WEB_VITALS = {
+  lcp: 2500, // 2.5 seconds in ms
+  cls: 0.1,
+  fid: 100, // 100ms
+};
+
+// Scenario 14: Page Load Time Tests
 test.describe('Performance - Page Load Time', () => {
   test('TC1: DOMContentLoaded fires in under 1500ms', async ({ page }) => {
     // Navigate to the page first
@@ -242,5 +259,212 @@ test.describe('Performance - Resource Loading', () => {
     }
 
     console.log('Script loading info:', scriptInfo);
+  });
+});
+
+// Scenario 15: Lighthouse Performance Audit Tests
+test.describe('Lighthouse Performance Audit (Scenario 15)', () => {
+  test('should achieve performance score of 90 or higher (desktop)', async () => {
+    // Launch browser with remote debugging for Lighthouse
+    const browser = await chromium.launch({
+      args: ['--remote-debugging-port=9222'],
+    });
+
+    const page = await browser.newPage();
+
+    // Navigate to homepage
+    await page.goto('http://localhost:8080');
+    await page.waitForLoadState('networkidle');
+
+    // Run Lighthouse audit
+    const results = await playAudit({
+      page,
+      port: 9222,
+      thresholds: {
+        performance: LIGHTHOUSE_THRESHOLDS.performance,
+      },
+      config: {
+        extends: 'lighthouse:default',
+        settings: {
+          formFactor: 'desktop',
+          screenEmulation: {
+            mobile: false,
+            width: 1350,
+            height: 940,
+            deviceScaleFactor: 1,
+            disabled: false,
+          },
+          throttling: {
+            rttMs: 40,
+            throughputKbps: 10240,
+            cpuSlowdownMultiplier: 1,
+          },
+        },
+      },
+    });
+
+    // Verify performance score
+    const performanceScore = results.lhr.categories.performance.score * 100;
+    console.log(`Desktop Performance Score: ${performanceScore}`);
+
+    expect(performanceScore).toBeGreaterThanOrEqual(90);
+
+    await browser.close();
+  });
+
+  test('should have LCP under 2.5 seconds', async () => {
+    const browser = await chromium.launch({
+      args: ['--remote-debugging-port=9223'],
+    });
+
+    const page = await browser.newPage();
+    await page.goto('http://localhost:8080');
+    await page.waitForLoadState('networkidle');
+
+    const results = await playAudit({
+      page,
+      port: 9223,
+      thresholds: {
+        performance: 0, // Set to 0 to prevent threshold failure, we just want metrics
+      },
+      config: {
+        extends: 'lighthouse:default',
+        settings: {
+          formFactor: 'desktop',
+          screenEmulation: {
+            mobile: false,
+            width: 1350,
+            height: 940,
+            deviceScaleFactor: 1,
+            disabled: false,
+          },
+          throttling: {
+            rttMs: 40,
+            throughputKbps: 10240,
+            cpuSlowdownMultiplier: 1,
+          },
+        },
+      },
+    });
+
+    // Get LCP metric
+    const lcpAudit = results.lhr.audits['largest-contentful-paint'];
+    const lcpValue = lcpAudit.numericValue;
+    console.log(`LCP Value: ${lcpValue}ms`);
+
+    expect(lcpValue).toBeLessThan(CORE_WEB_VITALS.lcp);
+
+    await browser.close();
+  });
+
+  test('should have CLS under 0.1', async () => {
+    const browser = await chromium.launch({
+      args: ['--remote-debugging-port=9224'],
+    });
+
+    const page = await browser.newPage();
+    await page.goto('http://localhost:8080');
+    await page.waitForLoadState('networkidle');
+
+    const results = await playAudit({
+      page,
+      port: 9224,
+      thresholds: {
+        performance: 0, // Set to 0 to prevent threshold failure, we just want metrics
+      },
+      config: {
+        extends: 'lighthouse:default',
+        settings: {
+          formFactor: 'desktop',
+          screenEmulation: {
+            mobile: false,
+            width: 1350,
+            height: 940,
+            deviceScaleFactor: 1,
+            disabled: false,
+          },
+          throttling: {
+            rttMs: 40,
+            throughputKbps: 10240,
+            cpuSlowdownMultiplier: 1,
+          },
+        },
+      },
+    });
+
+    // Get CLS metric
+    const clsAudit = results.lhr.audits['cumulative-layout-shift'];
+    const clsValue = clsAudit.numericValue;
+    console.log(`CLS Value: ${clsValue}`);
+
+    expect(clsValue).toBeLessThan(CORE_WEB_VITALS.cls);
+
+    await browser.close();
+  });
+
+  test('should achieve accessibility score of 90 or higher', async () => {
+    const browser = await chromium.launch({
+      args: ['--remote-debugging-port=9225'],
+    });
+
+    const page = await browser.newPage();
+    await page.goto('http://localhost:8080');
+    await page.waitForLoadState('networkidle');
+
+    const results = await playAudit({
+      page,
+      port: 9225,
+      thresholds: {
+        accessibility: LIGHTHOUSE_THRESHOLDS.accessibility,
+      },
+      config: {
+        extends: 'lighthouse:default',
+        settings: {
+          formFactor: 'desktop',
+          screenEmulation: {
+            mobile: false,
+            width: 1350,
+            height: 940,
+            deviceScaleFactor: 1,
+            disabled: false,
+          },
+          throttling: {
+            rttMs: 40,
+            throughputKbps: 10240,
+            cpuSlowdownMultiplier: 1,
+          },
+        },
+      },
+    });
+
+    // Verify accessibility score
+    const accessibilityScore = results.lhr.categories.accessibility.score * 100;
+    console.log(`Accessibility Score: ${accessibilityScore}`);
+
+    expect(accessibilityScore).toBeGreaterThanOrEqual(90);
+
+    await browser.close();
+  });
+});
+
+// Scenario 21: Image Lazy Loading Tests
+test.describe('Image Lazy Loading (Scenario 21)', () => {
+  test('should have lazy loading attributes on below-fold images', async ({ page }) => {
+    await page.goto('http://localhost:8080');
+
+    // Check that non-hero images have loading="lazy"
+    const lazyImages = await page.locator('img[loading="lazy"]').count();
+    expect(lazyImages).toBeGreaterThan(0);
+
+    // Verify usage.gif has lazy loading
+    const usageGif = page.locator('img.usage-gif');
+    await expect(usageGif).toHaveAttribute('loading', 'lazy');
+
+    // Verify badge images have lazy loading
+    const badgeImages = page.locator('.badges img');
+    const badgeCount = await badgeImages.count();
+    for (let i = 0; i < badgeCount; i++) {
+      await expect(badgeImages.nth(i)).toHaveAttribute('loading', 'lazy');
+    }
   });
 });

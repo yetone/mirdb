@@ -12,6 +12,9 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <!-- END: SEO Meta Tags (Scenario 16) -->
     <title>MirDB - Persistent Key-Value Store</title>
+    <!-- Preconnect to external domains for faster resource loading -->
+    <link rel="preconnect" href="https://img.shields.io" crossorigin>
+    <link rel="dns-prefetch" href="https://img.shields.io">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -23,7 +26,7 @@
     <!-- BEGIN: Hero Section (Scenario 1) -->
     <header class="hero" id="hero">
         <div class="hero-content">
-            <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo" id="hero-logo">
+            <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo" id="hero-logo" width="200" height="200">
             <h1 class="hero-headline" id="hero-headline">MirDB: A persistent key-value store with Memcached protocol.</h1>
             <p class="hero-subheadline">Fast, reliable, and Rust-powered storage engine for your applications.</p>
             <div class="hero-cta">
@@ -41,13 +44,13 @@
     <!-- BEGIN: Badges Section (Scenario 2) -->
     <section class="badges" id="badges" aria-label="Project status badges">
         <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="CircleCI build status">
-            <img src="https://img.shields.io/circleci/build/github/yetone/mirdb/master?label=build" alt="CircleCI Build Status" loading="lazy">
+            <img src="https://img.shields.io/circleci/build/github/yetone/mirdb/master?label=build" alt="CircleCI Build Status" loading="lazy" width="90" height="20" decoding="async">
         </a>
         <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer" aria-label="MIT License">
-            <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" loading="lazy">
+            <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" loading="lazy" width="78" height="20" decoding="async">
         </a>
         <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
-            <img src="https://img.shields.io/github/stars/yetone/mirdb?style=social" alt="GitHub Stars" loading="lazy">
+            <img src="https://img.shields.io/github/stars/yetone/mirdb?style=social" alt="GitHub Stars" loading="lazy" width="80" height="20" decoding="async">
         </a>
     </section>
     <!-- END: Badges Section (Scenario 2) -->
@@ -86,7 +89,7 @@
 
             <div class="usage-content">
                 <div class="usage-gif-container">
-                    <img src="assets/usage.gif" alt="MirDB usage demonstration showing Memcached commands in action" class="usage-gif" id="usage-gif" loading="lazy">
+                    <img src="assets/usage.gif" alt="MirDB usage demonstration showing Memcached commands in action" class="usage-gif" id="usage-gif" width="600" height="400" loading="lazy" fetchpriority="low">
                 </div>
 
                 <div class="usage-code-container">
