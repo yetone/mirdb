@@ -276,6 +276,95 @@ section {
     color: inherit;
 }
 
+/* Quick Start Section Styles (Scenario 5) */
+.quickstart {
+    background-color: var(--color-background-alt, #f8fafc);
+    text-align: center;
+}
+
+.quickstart h2 {
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+}
+
+.quickstart-intro {
+    color: var(--color-text-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 3rem;
+}
+
+.quickstart-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quickstart-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    background-color: var(--color-background, #ffffff);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quickstart-step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    background-color: var(--color-primary, #4f46e5);
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 50%;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    color: var(--color-text, #1a1a2e);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.step-description {
+    color: var(--color-text-secondary, #4a4a5a);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.step-code {
+    background-color: var(--color-code-bg, #1e1e2e);
+    color: var(--color-code-text, #cdd6f4);
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    white-space: pre;
+}
+
+.step-code code {
+    font-family: inherit;
+    color: inherit;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {

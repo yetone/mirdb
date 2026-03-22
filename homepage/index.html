@@ -107,8 +107,48 @@ STORED</code></pre>
     <!-- END: Usage Section (Scenario 4) -->
 
     <!-- BEGIN: Quick Start Section (Scenario 5) -->
-    <section class="quickstart" id="quickstart">
-        <!-- Quick start guide to be implemented by Scenario 5 -->
+    <section class="quickstart" id="quickstart" aria-labelledby="quickstart-heading">
+        <div class="container">
+            <h2 id="quickstart-heading">Get Started</h2>
+            <p class="quickstart-intro">Get MirDB running in just 3 simple steps.</p>
+
+            <div class="quickstart-steps">
+                <!-- Step 1: Clone and Build -->
+                <div class="quickstart-step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h3 class="step-title">Clone and Build</h3>
+                        <p class="step-description">Clone the repository and build the project using Cargo.</p>
+                        <pre class="step-code"><code>git clone https://github.com/yetone/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+                    </div>
+                </div>
+
+                <!-- Step 2: Run the Server -->
+                <div class="quickstart-step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h3 class="step-title">Run the Server</h3>
+                        <p class="step-description">Start the MirDB server on the default port.</p>
+                        <pre class="step-code"><code>./target/release/mirdb-server</code></pre>
+                    </div>
+                </div>
+
+                <!-- Step 3: Connect and Use -->
+                <div class="quickstart-step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h3 class="step-title">Connect and Use</h3>
+                        <p class="step-description">Connect using any Memcached client or telnet.</p>
+                        <pre class="step-code"><code>telnet localhost 11211
+set hello 0 0 5
+world
+get hello</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
     <!-- END: Quick Start Section (Scenario 5) -->
 
