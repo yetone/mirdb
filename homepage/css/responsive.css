@@ -260,14 +260,107 @@
 
 /* Tablet: 480px - 1023px (Scenario 9) */
 @media (min-width: 480px) and (max-width: 1023px) {
+    /* Container adjustments for tablet */
+    .container {
+        max-width: 720px;
+        padding: 0 1.5rem;
+    }
+
+    /* Hero section tablet styling */
+    .hero {
+        min-height: 70vh;
+        padding: 3rem 2rem;
+    }
+
+    .hero-logo {
+        max-width: 180px;
+    }
+
+    .hero-headline {
+        font-size: 2.25rem;
+    }
+
+    .hero-cta {
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    /* Features grid - 2 columns for tablet */
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .feature-item {
+        padding: 1.5rem;
     }
 
     /* Usage section tablet (Scenario 4) */
     .usage-content {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+    }
+
+    .usage-code {
+        font-size: 0.8rem;
+        padding: 1.25rem;
+    }
+
+    /* Quick start section tablet */
+    .quickstart-steps {
+        max-width: 100%;
+    }
+
+    .quickstart-step {
+        padding: 1.5rem;
+        gap: 1.25rem;
+    }
+
+    .step-number {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        font-size: 1.25rem;
+    }
+
+    /* Roadmap section tablet */
+    .roadmap-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .roadmap-column {
+        padding: 1.25rem;
+    }
+
+    /* Footer tablet styling */
+    .footer-nav {
+        gap: 1.5rem;
+    }
+
+    /* Navigation buttons tablet sizing */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        min-height: 44px;
+    }
+
+    /* Badges tablet styling */
+    .badges {
+        padding: 1.25rem;
+        gap: 0.75rem;
+    }
+
+    .badges img {
+        height: 20px;
+    }
+
+    /* Typography adjustments for tablet */
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
     }
 }
 
