@@ -450,88 +450,101 @@ test.describe('Lighthouse Performance Audit (Scenario 15)', () => {
 // Scenario 21: Image Lazy Loading Tests
 test.describe('Image Lazy Loading (Scenario 21)', () => {
   // TC1: Check usage.gif img element for loading attribute
-  test('TC1: usage.gif should have loading="lazy" attribute', async ({ page }) => {
+  test('TC1: Usage GIF has loading="lazy" attribute', async ({ page }) => {
     await page.goto('http://localhost:8080');
 
     // Verify usage.gif has lazy loading attribute
     const usageGif = page.locator('#usage-gif');
+    await expect(usageGif).toBeVisible();
     await expect(usageGif).toHaveAttribute('loading', 'lazy');
 
-    // Also verify the class matches
+    // Also verify it has fetchpriority="low" for extra performance optimization
+    const fetchPriority = await usageGif.getAttribute('fetchpriority');
+    expect(fetchPriority).toBe('low');
+
+    // Verify the class matches
     await expect(usageGif).toHaveClass(/usage-gif/);
 
-    console.log('Usage GIF lazy loading verified');
+    console.log('TC1 PASS: usage.gif has loading="lazy" attribute');
   });
 
   // TC2: Check logo img element loading behavior
-  test('TC2: logo should load eagerly (no lazy loading attribute)', async ({ page }) => {
+  test('TC2: Logo loads eagerly (no lazy loading or explicitly eager)', async ({ page }) => {
     await page.goto('http://localhost:8080');
 
-    // Get the hero logo
+    // Verify the hero logo exists
     const heroLogo = page.locator('#hero-logo');
     await expect(heroLogo).toBeVisible();
 
-    // Verify the logo does NOT have loading="lazy" (should load eagerly)
-    // Eager loading is either: no loading attribute OR explicitly loading="eager"
+    // Logo should NOT have loading="lazy" - it should load eagerly
+    // Either no loading attribute (defaults to eager) or loading="eager"
     const loadingAttr = await heroLogo.getAttribute('loading');
 
-    // Logo should either have no loading attribute (null) or be set to 'eager'
-    const loadsEagerly = loadingAttr === null || loadingAttr === 'eager';
-    expect(loadsEagerly).toBe(true);
+    // Eager loading means either no 'loading' attribute or 'eager' value
+    const isEagerLoading = loadingAttr === null || loadingAttr === 'eager';
+    expect(isEagerLoading).toBe(true);
 
-    console.log(`Logo loading attribute: ${loadingAttr ?? 'not set (default eager)'}`);
+    // Verify it's above the fold (in initial viewport)
+    const boundingBox = await heroLogo.boundingBox();
+    expect(boundingBox).not.toBeNull();
+
+    // The logo should be visible in the initial viewport
+    const viewportHeight = page.viewportSize()?.height || 720;
+    expect(boundingBox!.y).toBeLessThan(viewportHeight);
+
+    console.log('TC2 PASS: Logo loads eagerly (loading attr:', loadingAttr || 'not set', ')');
   });
 
-  // TC3: Monitor network requests while scrolling
-  test('TC3: below-fold images should load only when scrolled into view', async ({ page }) => {
+  // TC3: Monitor network requests while scrolling - below-fold images load only when scrolled
+  test('TC3: Below-fold images load only when scrolled into view', async ({ page }) => {
     // Track image requests
-    const imageRequests: string[] = [];
+    const imageRequests: { url: string; timestamp: number }[] = [];
 
     page.on('request', (request) => {
       const url = request.url();
       if (url.includes('usage.gif')) {
-        imageRequests.push(url);
+        imageRequests.push({
+          url: url.split('/').pop() || url,
+          timestamp: Date.now(),
+        });
       }
     });
 
-    // Navigate without waiting for network idle to catch lazy loading behavior
+    // Navigate to page but don't scroll initially
     await page.goto('http://localhost:8080', { waitUntil: 'domcontentloaded' });
 
     // Wait a moment for initial page render
     await page.waitForTimeout(500);
 
-    // Check if usage.gif is below the fold
+    // Check if usage section is below the fold
+    const usageSection = page.locator('#usage');
+    const usageSectionBox = await usageSection.boundingBox();
+    const viewportHeight = page.viewportSize()?.height || 720;
+
+    // Usage section should be below the initial viewport
+    const isBelowFold = usageSectionBox ? usageSectionBox.y > viewportHeight : false;
+    console.log('Usage section position:', usageSectionBox?.y, 'Viewport height:', viewportHeight);
+    console.log('Is below fold:', isBelowFold);
+
+    // Verify the lazy loading attribute is set
     const usageGif = page.locator('#usage-gif');
-    const isAboveFold = await usageGif.evaluate((el) => {
-      const rect = el.getBoundingClientRect();
-      return rect.top < window.innerHeight;
+    const hasLazyAttr = await usageGif.getAttribute('loading');
+    expect(hasLazyAttr).toBe('lazy');
+
+    // Now scroll the usage section into view
+    await usageSection.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1000);
+
+    // Verify the image is now loaded after scrolling
+    const usageGifLoaded = await usageGif.evaluate((img: HTMLImageElement) => {
+      return img.complete && img.naturalHeight > 0;
     });
 
-    // Clear request tracking for scroll test
-    const requestsBeforeScroll = imageRequests.length;
-    console.log(`Initial image requests: ${requestsBeforeScroll}`);
-    console.log(`Usage GIF above fold: ${isAboveFold}`);
-
-    // If usage.gif is below fold, scrolling should trigger loading
-    if (!isAboveFold) {
-      // Scroll the usage section into view
-      await usageGif.scrollIntoViewIfNeeded();
-
-      // Wait for the image to start loading
-      await page.waitForTimeout(1000);
-
-      // The image should have been requested after scrolling
-      const requestsAfterScroll = imageRequests.length;
-      console.log(`Image requests after scroll: ${requestsAfterScroll}`);
-
-      // Verify at least one request was made for the lazy-loaded image
-      expect(requestsAfterScroll).toBeGreaterThan(0);
-    } else {
-      // If above fold, image loads immediately which is fine
-      console.log('Usage GIF is above fold on this viewport - lazy loading not applicable');
-    }
+    expect(usageGifLoaded).toBe(true);
+    console.log('TC3 PASS: Usage GIF loaded after scrolling into view');
   });
 
+  // Additional test: Verify all lazy loading attributes are set correctly
   test('should have lazy loading attributes on all below-fold images', async ({ page }) => {
     await page.goto('http://localhost:8080');
 
@@ -539,15 +552,13 @@ test.describe('Image Lazy Loading (Scenario 21)', () => {
     const lazyImages = await page.locator('img[loading="lazy"]').count();
     expect(lazyImages).toBeGreaterThan(0);
 
-    // Verify usage.gif has lazy loading
-    const usageGif = page.locator('img.usage-gif');
-    await expect(usageGif).toHaveAttribute('loading', 'lazy');
-
     // Verify badge images have lazy loading
     const badgeImages = page.locator('.badges img');
     const badgeCount = await badgeImages.count();
     for (let i = 0; i < badgeCount; i++) {
       await expect(badgeImages.nth(i)).toHaveAttribute('loading', 'lazy');
     }
+
+    console.log(`Verified ${lazyImages} images have lazy loading attribute`);
   });
 });
