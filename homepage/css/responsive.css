@@ -13,14 +13,85 @@
  * - Desktop: 1280px+
  */
 
-/* Tablet styles */
-@media (max-width: 1279px) {
+/* Tablet styles (768px - 1279px) */
+@media (min-width: 768px) and (max-width: 1279px) {
   .hero-title {
     font-size: var(--font-size-5xl);
   }
 
   .container {
     padding: 0 var(--spacing-4);
+  }
+
+  /* Navigation stays horizontal on tablet */
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: var(--spacing-4);
+  }
+
+  /* Features grid: 2 columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-6);
+  }
+
+  .feature-card {
+    padding: var(--spacing-6);
+  }
+
+  /* Section spacing adjustments */
+  .section {
+    padding: var(--spacing-20) 0;
+  }
+
+  .section-title {
+    margin-bottom: var(--spacing-12);
+  }
+
+  /* Hero adjustments for tablet */
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-content {
+    padding: var(--spacing-12) var(--spacing-4);
+  }
+
+  /* CTA button adjustments */
+  .hero-cta {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-3);
+  }
+
+  /* Code blocks - ensure scrollability */
+  .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Quick start steps */
+  .quickstart-steps {
+    max-width: 100%;
+  }
+
+  .step {
+    gap: var(--spacing-4);
+  }
+
+  .step-content {
+    min-width: 0; /* Allow flex item to shrink */
+  }
+
+  /* Footer adjustments */
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-4);
   }
 }
 
