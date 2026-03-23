@@ -68,7 +68,64 @@
   <section id="features" class="features">
     <div class="features__container">
       <h2>Key Features</h2>
-      <!-- Feature cards to be implemented by Scenario 2 -->
+      <div class="features__grid">
+        <!-- Memcached Protocol Feature -->
+        <article class="features__card">
+          <div class="features__card-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <h3 class="features__card-title">Memcached Protocol</h3>
+          <p class="features__card-description">
+            Full compatibility with the Memcached text protocol. Supports essential commands including SET, GET, and DELETE operations, allowing seamless integration with existing Memcached clients and tools.
+          </p>
+        </article>
+
+        <!-- Disk Persistence Feature -->
+        <article class="features__card">
+          <div class="features__card-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="features__card-title">Disk Persistence</h3>
+          <p class="features__card-description">
+            Unlike pure Memcached, MirDB persists data to disk ensuring durability. Your data survives server restarts and crashes, combining the speed of in-memory caching with the reliability of persistent storage.
+          </p>
+        </article>
+
+        <!-- LSM Tree Architecture Feature -->
+        <article class="features__card">
+          <div class="features__card-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="features__card-title">LSM Tree Architecture</h3>
+          <p class="features__card-description">
+            Built on a Log-Structured Merge tree design with WAL (Write-Ahead Log) for crash recovery, an in-memory Memtable for fast writes, and SSTables for efficient disk storage and retrieval.
+          </p>
+        </article>
+
+        <!-- Rust Implementation Feature -->
+        <article class="features__card">
+          <div class="features__card-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="features__card-title">Built with Rust</h3>
+          <p class="features__card-description">
+            Written in Rust for memory safety and high performance. Powered by Tokio for async I/O, delivering excellent throughput while preventing common memory-related bugs and data races.
+          </p>
+        </article>
+      </div>
     </div>
   </section>
 

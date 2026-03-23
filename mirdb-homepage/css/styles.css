@@ -212,6 +212,57 @@ section {
   margin: 0 auto;
 }
 
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.features__card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.features__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.features__card-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+.features__card-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.features__card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.75rem;
+}
+
+.features__card-description {
+  color: #4a4a68;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* ===== Getting Started Section (Scenario 3) ===== */
 .getting-started {
   background: #ffffff;
