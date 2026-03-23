@@ -882,4 +882,273 @@ section {
 }
 
 /* ===== Media Queries (Scenario 7) ===== */
-/* Mobile-first responsive design to be enhanced by Scenario 7 */
+/* Responsive breakpoints:
+   - Mobile: up to 480px
+   - Tablet: 481px to 1024px
+   - Desktop: 1025px and above
+*/
+
+/* Mobile styles (max-width: 480px) */
+@media (max-width: 480px) {
+  /* Navigation - stack vertically on mobile */
+  .nav__container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .nav__links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+  }
+
+  .nav__links li a {
+    display: inline-block;
+    padding: 0.5rem;
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hero section adjustments */
+  .hero {
+    padding: 3rem 1rem;
+    min-height: auto;
+  }
+
+  .hero__title {
+    font-size: 2.5rem;
+  }
+
+  .hero__tagline {
+    font-size: 1.1rem;
+  }
+
+  .hero__differentiators {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .hero__badge {
+    width: 100%;
+    max-width: 200px;
+    text-align: center;
+  }
+
+  .hero__cta {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .hero__btn {
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Features section - single column */
+  .features__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .features__card {
+    padding: 1.5rem;
+  }
+
+  /* Getting started section */
+  .getting-started__container {
+    padding: 0 0.5rem;
+  }
+
+  .getting-started__step h3 {
+    font-size: 1.25rem;
+  }
+
+  .getting-started__code-block pre {
+    padding: 1rem;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .getting-started__code-block code {
+    font-size: 0.8rem;
+    white-space: pre;
+  }
+
+  /* Architecture section */
+  .architecture__explanations {
+    grid-template-columns: 1fr;
+  }
+
+  .architecture__component {
+    max-width: 100%;
+  }
+
+  .architecture__diagram-container {
+    padding: 1rem;
+  }
+
+  /* Section padding */
+  section {
+    padding: 2.5rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Small mobile (max-width: 375px) */
+@media (max-width: 375px) {
+  .hero__title {
+    font-size: 2rem;
+  }
+
+  .hero__tagline {
+    font-size: 1rem;
+  }
+
+  .nav__links {
+    gap: 0.25rem 0.75rem;
+  }
+
+  .features__card-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Tablet styles (481px to 1024px) */
+@media (min-width: 481px) and (max-width: 1024px) {
+  .nav__container {
+    padding: 1rem;
+  }
+
+  .nav__links {
+    gap: 1.5rem;
+  }
+
+  .nav__links li a {
+    padding: 0.5rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero {
+    padding: 4rem 1.5rem;
+    min-height: 60vh;
+  }
+
+  .hero__title {
+    font-size: 3rem;
+  }
+
+  .hero__btn {
+    min-height: 48px;
+    padding: 0.875rem 1.5rem;
+  }
+
+  /* 2-column grid for features on tablet */
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  /* 2-column grid for architecture explanations */
+  .architecture__explanations {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  section {
+    padding: 3rem 1.5rem;
+  }
+}
+
+/* Tablet portrait (768px) specific adjustments */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .hero__container {
+    max-width: 700px;
+  }
+
+  .getting-started__container {
+    max-width: 700px;
+  }
+}
+
+/* Desktop styles (1025px and above) */
+@media (min-width: 1025px) {
+  .nav__links li a {
+    padding: 0.5rem 0.75rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero {
+    padding: 6rem 2rem;
+    min-height: 80vh;
+  }
+
+  .hero__title {
+    font-size: 4rem;
+  }
+
+  .hero__btn {
+    min-height: 52px;
+  }
+
+  /* Multi-column grid for features on desktop */
+  .features__grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  /* 3-column grid for architecture explanations */
+  .architecture__explanations {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  section {
+    padding: 4rem 2rem;
+  }
+}
+
+/* Large desktop (1440px and above) */
+@media (min-width: 1440px) {
+  .hero__container {
+    max-width: 900px;
+  }
+
+  .features__container {
+    max-width: 1200px;
+  }
+
+  .getting-started__container {
+    max-width: 900px;
+  }
+
+  .architecture__container {
+    max-width: 1100px;
+  }
+}
+
+/* Touch target sizes - ensure minimum 44x44px for all interactive elements */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch devices */
+  .hero__btn,
+  .nav__links a,
+  a {
+    min-height: 44px;
+  }
+
+  .nav__links li a {
+    padding: 0.75rem;
+  }
+}
