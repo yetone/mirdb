@@ -273,6 +273,100 @@ section {
   margin: 0 auto;
 }
 
+.getting-started__intro {
+  text-align: center;
+  color: #4a4a68;
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+}
+
+.getting-started__step {
+  margin-bottom: 2.5rem;
+}
+
+.getting-started__step h3 {
+  font-size: 1.5rem;
+  color: #1a1a2e;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #4361ee;
+  display: inline-block;
+}
+
+.getting-started__step h4 {
+  font-size: 1.15rem;
+  color: #1a1a2e;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.getting-started__step p {
+  color: #4a4a68;
+  margin-bottom: 1rem;
+}
+
+.getting-started__note {
+  font-size: 0.9rem;
+  color: #666;
+  background: #f8f9fa;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid #4361ee;
+}
+
+.getting-started__note code {
+  background: #e9ecef;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9em;
+  color: #1a1a2e;
+}
+
+/* Code Blocks with Syntax Highlighting */
+.getting-started__code-block {
+  position: relative;
+  margin: 1rem 0;
+}
+
+.getting-started__code-block pre {
+  background: #1a1a2e;
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.getting-started__code-block code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+  display: block;
+  white-space: pre;
+  tab-size: 2;
+}
+
+/* Syntax Highlighting for Bash/Shell */
+.getting-started__code-block code.language-bash {
+  color: #e0e0e0;
+}
+
+/* Highlight comments in code blocks */
+.getting-started__code-block code.language-bash::before {
+  content: '';
+}
+
+/* Style inline code elements */
+.getting-started__step code:not(.language-bash) {
+  background: #f1f3f5;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9em;
+  color: #d63384;
+}
+
 /* ===== Architecture Section (Scenario 4) ===== */
 .architecture {
   background: #f8f9fa;

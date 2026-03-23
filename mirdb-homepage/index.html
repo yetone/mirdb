@@ -133,7 +133,65 @@
   <section id="getting-started" class="getting-started">
     <div class="getting-started__container">
       <h2>Getting Started</h2>
-      <!-- Build instructions and code examples to be implemented by Scenario 3 -->
+      <p class="getting-started__intro">Get MirDB up and running in minutes. Follow these steps to clone, build, and start using MirDB locally.</p>
+
+      <!-- Step 1: Clone -->
+      <div class="getting-started__step">
+        <h3>1. Clone the Repository</h3>
+        <p>First, clone the MirDB repository from GitHub:</p>
+        <div class="getting-started__code-block">
+          <pre><code class="language-bash">git clone https://github.com/mirdb/mirdb.git
+cd mirdb</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 2: Build -->
+      <div class="getting-started__step">
+        <h3>2. Build the Project</h3>
+        <p>Build MirDB using Cargo (Rust's package manager):</p>
+        <div class="getting-started__code-block">
+          <pre><code class="language-bash">cargo build --release</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 3: Run -->
+      <div class="getting-started__step">
+        <h3>3. Start the Server</h3>
+        <p>Run MirDB to start the server on the default port (12333):</p>
+        <div class="getting-started__code-block">
+          <pre><code class="language-bash">cargo run --release</code></pre>
+        </div>
+        <p class="getting-started__note">You can also run the binary directly: <code>./target/release/mirdb</code></p>
+      </div>
+
+      <!-- Step 4: Usage Examples -->
+      <div class="getting-started__step">
+        <h3>4. Basic Operations</h3>
+        <p>Once the server is running, you can interact with it using netcat or any Memcached client. Here are examples using netcat:</p>
+
+        <!-- SET Example -->
+        <h4>SET Operation - Store a Value</h4>
+        <p>Store a key-value pair in MirDB:</p>
+        <div class="getting-started__code-block">
+          <pre><code class="language-bash"># Connect to MirDB and store a value
+echo -e "set mykey 0 0 5\r\nhello\r" | nc localhost 12333
+
+# Expected response: STORED</code></pre>
+        </div>
+
+        <!-- GET Example -->
+        <h4>GET Operation - Retrieve a Value</h4>
+        <p>Retrieve the stored value from MirDB:</p>
+        <div class="getting-started__code-block">
+          <pre><code class="language-bash"># Connect to MirDB and retrieve the value
+echo -e "get mykey\r" | nc localhost 12333
+
+# Expected response:
+# VALUE mykey 0 5
+# hello
+# END</code></pre>
+        </div>
+      </div>
     </div>
   </section>
 
