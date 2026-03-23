@@ -364,14 +364,101 @@ echo -e "get mykey\r" | nc localhost 12333
   <section id="status" class="status">
     <div class="status__container">
       <h2>Project Status</h2>
-      <!-- Status lists to be implemented by Scenario 6 -->
+      <p class="status__intro">MirDB is actively developed. Here's what's currently available and what's coming next.</p>
+
+      <div class="status__grid">
+        <!-- Implemented Features -->
+        <div class="status__implemented">
+          <h3 class="status__category-title">
+            <span class="status__icon status__icon--implemented" aria-hidden="true">&#10003;</span>
+            Implemented
+          </h3>
+          <ul class="status__list">
+            <li class="status__item">
+              <span class="status__feature">Tokio-based async networking with memcached protocol</span>
+              <span class="status__description">High-performance async I/O for handling client connections</span>
+            </li>
+            <li class="status__item">
+              <span class="status__feature">Memtable with skip list data structure</span>
+              <span class="status__description">Efficient in-memory storage for fast writes and lookups</span>
+            </li>
+            <li class="status__item">
+              <span class="status__feature">Minor compaction (memtable to SSTable)</span>
+              <span class="status__description">Automatic flushing of memtable data to disk</span>
+            </li>
+            <li class="status__item">
+              <span class="status__feature">Major compaction (SSTable level compaction)</span>
+              <span class="status__description">Background merging and optimization of disk storage</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Planned Features -->
+        <div class="status__planned">
+          <h3 class="status__category-title">
+            <span class="status__icon status__icon--planned" aria-hidden="true">&#9679;</span>
+            Planned
+          </h3>
+          <ul class="status__list">
+            <li class="status__item">
+              <span class="status__feature">Raft consensus for distributed operation</span>
+              <span class="status__description">Enable multi-node deployment with automatic leader election and data replication</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Footer (Scenario 6) -->
   <footer class="footer">
     <div class="footer__container">
-      <!-- Footer links to be implemented by Scenario 6 -->
+      <div class="footer__content">
+        <div class="footer__brand">
+          <span class="footer__logo">MirDB</span>
+          <p class="footer__tagline">A persistent key-value store with Memcached protocol compatibility</p>
+        </div>
+
+        <nav class="footer__links" aria-label="Footer navigation">
+          <div class="footer__link-group">
+            <h4 class="footer__link-title">Resources</h4>
+            <ul class="footer__link-list">
+              <li>
+                <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer" class="footer__link">
+                  GitHub Repository
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/mirdb/mirdb#readme" target="_blank" rel="noopener noreferrer" class="footer__link">
+                  Documentation
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer__link-group">
+            <h4 class="footer__link-title">Community</h4>
+            <ul class="footer__link-list">
+              <li>
+                <a href="https://github.com/mirdb/mirdb/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="footer__link">
+                  Contributing Guidelines
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/mirdb/mirdb/issues" target="_blank" rel="noopener noreferrer" class="footer__link">
+                  Report Issues
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copyright">
+          MirDB is open source software licensed under the MIT License.
+        </p>
+      </div>
     </div>
   </footer>
 </body>
