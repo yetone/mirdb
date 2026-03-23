@@ -186,6 +186,7 @@ a:focus-visible {
   text-decoration: none;
 }
 
+.btn:focus,
 .btn:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
@@ -205,6 +206,12 @@ a:focus-visible {
   background-color: transparent;
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
+}
+
+.btn-secondary:focus,
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .btn-secondary:hover {

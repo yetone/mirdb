@@ -22,10 +22,10 @@
   --color-secondary: #0f172a;
   --color-accent: #10b981;
 
-  /* Text colors */
+  /* Text colors - WCAG AA compliant (4.5:1 minimum contrast) */
   --color-text-primary: #1e293b;
-  --color-text-secondary: #475569;
-  --color-text-muted: #64748b;
+  --color-text-secondary: #334155;  /* Darkened for WCAG AA contrast against light backgrounds */
+  --color-text-muted: #475569;
   --color-text-inverse: #ffffff;
 
   /* Background colors */

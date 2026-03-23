@@ -4,9 +4,9 @@
   "description": "MirDB Homepage - Persistent Key-Value Store",
   "scripts": {
     "dev": "npx http-server . -p 8080 -c-1",
-    "test": "npx playwright test",
-    "test:e2e": "npx playwright test tests/e2e/",
-    "test:unit": "npx vitest run tests/unit/"
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:e2e": "npx playwright test --config=tests/playwright.config.ts --project=chromium",
+    "test:unit": "npx vitest run --config=tests/vitest.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.42.0",
