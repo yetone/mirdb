@@ -1,0 +1,238 @@
+/**
+ * Responsive Design Styles
+ * Owner: Scenarios 6, 7, 8 (Responsive Design)
+ *
+ * Contains:
+ * - Desktop styles (1280px+)
+ * - Tablet styles (768px - 1279px)
+ * - Mobile styles (<768px)
+ *
+ * Breakpoints:
+ * - Mobile: max-width 767px
+ * - Tablet: 768px - 1279px
+ * - Desktop: 1280px+
+ */
+
+/* Tablet styles (768px - 1279px) */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .hero-title {
+    font-size: var(--font-size-5xl);
+  }
+
+  .container {
+    padding: 0 var(--spacing-4);
+  }
+
+  /* Navigation stays horizontal on tablet */
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: var(--spacing-4);
+  }
+
+  /* Features grid: 2 columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-6);
+  }
+
+  .feature-card {
+    padding: var(--spacing-6);
+  }
+
+  /* Section spacing adjustments */
+  .section {
+    padding: var(--spacing-20) 0;
+  }
+
+  .section-title {
+    margin-bottom: var(--spacing-12);
+  }
+
+  /* Hero adjustments for tablet */
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-content {
+    padding: var(--spacing-12) var(--spacing-4);
+  }
+
+  /* CTA button adjustments */
+  .hero-cta {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-3);
+  }
+
+  /* Code blocks - ensure scrollability */
+  .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Quick start steps */
+  .quickstart-steps {
+    max-width: 100%;
+  }
+
+  .step {
+    gap: var(--spacing-4);
+  }
+
+  .step-content {
+    min-width: 0; /* Allow flex item to shrink */
+  }
+
+  /* Footer adjustments */
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-4);
+  }
+}
+
+/* Mobile styles (<768px) */
+@media (max-width: 767px) {
+  /* Navigation - hamburger menu */
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-4);
+    gap: var(--spacing-2);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  /* Hamburger toggle button - 44px minimum touch target */
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--spacing-2);
+  }
+
+  /* Mobile nav links - 44px minimum touch target height */
+  .nav-links .nav-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--spacing-3) var(--spacing-4);
+    width: 100%;
+  }
+
+  /* Hero section mobile adjustments */
+  .hero-title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-content {
+    padding: var(--spacing-8) var(--spacing-4);
+  }
+
+  /* CTA buttons - 44px minimum touch target */
+  .hero-cta {
+    flex-direction: column;
+    gap: var(--spacing-3);
+    width: 100%;
+  }
+
+  .hero-cta .btn {
+    min-height: 44px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-lg {
+    min-height: 48px;
+    padding: var(--spacing-3) var(--spacing-6);
+  }
+
+  /* Section spacing */
+  .section {
+    padding: var(--spacing-16) 0;
+  }
+
+  .section-heading {
+    font-size: var(--font-size-2xl);
+  }
+
+  .section-title {
+    margin-bottom: var(--spacing-8);
+  }
+
+  /* Features grid - single column on mobile */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+
+  .feature-card {
+    padding: var(--spacing-6);
+  }
+
+  /* Quick start steps - vertical layout */
+  .step {
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .step-content {
+    min-width: 0;
+  }
+
+  /* Code blocks - scrollable on mobile */
+  .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: var(--spacing-4);
+  }
+
+  .code-block pre {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Footer - stacked links with touch targets */
+  .footer-links {
+    flex-direction: column;
+    gap: var(--spacing-2);
+    align-items: center;
+  }
+
+  .footer-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Footer links - 44px minimum touch target height */
+  .footer-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: var(--spacing-2) var(--spacing-4);
+    width: 100%;
+  }
+
+  /* Container padding */
+  .container {
+    padding: 0 var(--spacing-4);
+  }
+}
