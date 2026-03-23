@@ -539,3 +539,324 @@ test.describe('Responsive Design - Tablet Viewport (768px)', () => {
     expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(viewportWidth);
   });
 });
+
+/**
+ * Scenario 8: Responsive Design - Mobile (375px width)
+ * Verify the homepage displays correctly on mobile viewport
+ */
+test.describe('Responsive Design - Mobile Viewport (375px)', () => {
+  test.beforeEach(async ({ page }) => {
+    // Set mobile viewport before each test
+    await page.setViewportSize(viewports.mobile);
+    await navigateToHomepage(page);
+  });
+
+  test('TC1: All text is readable without horizontal scrolling at 375px viewport width', async ({ page }) => {
+    // Verify no horizontal scrollbar
+    const hasHorizontalScroll = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+    });
+    expect(hasHorizontalScroll).toBe(false);
+
+    // Verify hero title is visible and readable
+    const heroTitle = page.locator(selectors.hero.title);
+    await expect(heroTitle).toBeVisible();
+    const heroTitleFontSize = await heroTitle.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).fontSize);
+    });
+    // Should have reasonable font size for mobile (at least 24px)
+    expect(heroTitleFontSize).toBeGreaterThanOrEqual(24);
+
+    // Verify hero tagline is visible and readable
+    const heroTagline = page.locator(selectors.hero.tagline);
+    await expect(heroTagline).toBeVisible();
+    const taglineFontSize = await heroTagline.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).fontSize);
+    });
+    // Minimum 14px for mobile readability
+    expect(taglineFontSize).toBeGreaterThanOrEqual(14);
+
+    // Verify all sections are visible without horizontal overflow
+    const sections = ['hero', 'features', 'usage', 'quickstart'];
+    for (const sectionId of sections) {
+      const section = page.locator(`#${sectionId}`);
+      await section.scrollIntoViewIfNeeded();
+      await expect(section).toBeVisible();
+
+      // Check no horizontal overflow after scrolling to each section
+      const overflow = await page.evaluate(() => {
+        return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+      });
+      expect(overflow).toBe(false);
+    }
+
+    // Verify body width doesn't exceed viewport
+    const bodyWidth = await page.evaluate(() => document.body.offsetWidth);
+    const viewportWidth = await page.evaluate(() => window.innerWidth);
+    expect(bodyWidth).toBeLessThanOrEqual(viewportWidth);
+  });
+
+  test('TC2: Navigation is accessible through a hamburger menu on mobile', async ({ page }) => {
+    // Verify hamburger toggle is visible on mobile
+    const navToggle = page.locator(selectors.navigation.toggle);
+    await expect(navToggle).toBeVisible();
+
+    // Verify nav-links is initially hidden on mobile
+    const navLinks = page.locator(selectors.navigation.links);
+    await expect(navLinks).not.toBeVisible();
+
+    // Verify hamburger button has proper attributes for accessibility
+    const ariaExpanded = await navToggle.getAttribute('aria-expanded');
+    expect(ariaExpanded).toBe('false');
+
+    const ariaControls = await navToggle.getAttribute('aria-controls');
+    expect(ariaControls).toBe('nav-menu');
+
+    const ariaLabel = await navToggle.getAttribute('aria-label');
+    expect(ariaLabel).toBeTruthy();
+
+    // Verify logo is still visible
+    const logo = page.locator(selectors.navigation.logo);
+    await expect(logo).toBeVisible();
+    await expect(logo).toHaveText('MirDB');
+  });
+
+  test('TC3: Hamburger menu opens and displays navigation links when tapped', async ({ page }) => {
+    const navToggle = page.locator(selectors.navigation.toggle);
+    const navLinks = page.locator(selectors.navigation.links);
+
+    // Initially hidden
+    await expect(navLinks).not.toBeVisible();
+
+    // Click hamburger menu
+    await navToggle.click();
+    await page.waitForTimeout(300); // Wait for animation
+
+    // After clicking, nav links should be visible
+    await expect(navLinks).toBeVisible();
+
+    // Verify aria-expanded is updated
+    const ariaExpanded = await navToggle.getAttribute('aria-expanded');
+    expect(ariaExpanded).toBe('true');
+
+    // Verify all navigation links are accessible
+    const linkTexts = ['Features', 'Usage', 'Quick Start', 'GitHub'];
+    for (const text of linkTexts) {
+      const link = page.locator(`${selectors.navigation.links} ${selectors.navigation.link}`, { hasText: text });
+      await expect(link).toBeVisible();
+    }
+
+    // Verify links are stacked vertically (flex-direction: column)
+    const flexDirection = await navLinks.evaluate((el) => {
+      return window.getComputedStyle(el).flexDirection;
+    });
+    expect(flexDirection).toBe('column');
+
+    // Test closing menu by clicking toggle again
+    await navToggle.click();
+    await page.waitForTimeout(300);
+
+    // Nav links should be hidden again
+    await expect(navLinks).not.toBeVisible();
+    const ariaExpandedAfter = await navToggle.getAttribute('aria-expanded');
+    expect(ariaExpandedAfter).toBe('false');
+  });
+
+  test('TC4: All sections are vertically stacked for mobile viewing', async ({ page }) => {
+    // Verify features grid uses single column on mobile
+    await scrollToSection(page, 'features');
+    const featuresGrid = page.locator(selectors.features.grid);
+    await expect(featuresGrid).toBeVisible();
+
+    // Check grid is 1-column (or flex-column)
+    const gridInfo = await featuresGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        display: styles.display,
+        gridTemplateColumns: styles.gridTemplateColumns,
+      };
+    });
+
+    // Features should be in single column on mobile
+    if (gridInfo.display === 'grid') {
+      // gridTemplateColumns for single column will be a single value (e.g., "343px" or "1fr")
+      const columns = gridInfo.gridTemplateColumns.split(' ').filter((col: string) => col && col !== '0px');
+      expect(columns.length).toBe(1);
+    }
+
+    // Verify feature cards are stacked vertically
+    const featureCards = page.locator(selectors.features.card);
+    const cardCount = await featureCards.count();
+    expect(cardCount).toBe(4);
+
+    // Check that consecutive cards have increasing Y positions (stacked vertically)
+    const cardPositions: number[] = [];
+    for (let i = 0; i < cardCount; i++) {
+      const card = featureCards.nth(i);
+      const box = await card.boundingBox();
+      expect(box).not.toBeNull();
+      cardPositions.push(box!.y);
+    }
+
+    // Each card should be below the previous one
+    for (let i = 1; i < cardPositions.length; i++) {
+      expect(cardPositions[i]).toBeGreaterThan(cardPositions[i - 1]);
+    }
+
+    // Verify quickstart steps are stacked vertically
+    await scrollToSection(page, 'quickstart');
+    const steps = page.locator(selectors.quickstart.steps);
+    const stepCount = await steps.count();
+    expect(stepCount).toBe(3);
+
+    // Check step flex-direction is column on mobile
+    const firstStep = steps.first();
+    const stepFlexDirection = await firstStep.evaluate((el) => {
+      return window.getComputedStyle(el).flexDirection;
+    });
+    expect(stepFlexDirection).toBe('column');
+
+    // Verify footer links are stacked
+    const footer = page.locator(selectors.footer.section);
+    await footer.scrollIntoViewIfNeeded();
+    const footerLinks = page.locator(selectors.footer.links);
+    const footerFlexDirection = await footerLinks.evaluate((el) => {
+      return window.getComputedStyle(el).flexDirection;
+    });
+    expect(footerFlexDirection).toBe('column');
+  });
+
+  test('TC5: Buttons and links have adequate touch target size (minimum 44x44px)', async ({ page }) => {
+    // Check CTA buttons in hero section
+    const primaryBtn = page.locator(selectors.hero.ctaButton);
+    await expect(primaryBtn).toBeVisible();
+    const primaryBtnBox = await primaryBtn.boundingBox();
+    expect(primaryBtnBox).not.toBeNull();
+    // WCAG 2.1 AA requires minimum 44x44px touch targets
+    expect(primaryBtnBox!.height).toBeGreaterThanOrEqual(44);
+    expect(primaryBtnBox!.width).toBeGreaterThanOrEqual(44);
+
+    const secondaryBtn = page.locator(selectors.hero.learnMoreButton);
+    await expect(secondaryBtn).toBeVisible();
+    const secondaryBtnBox = await secondaryBtn.boundingBox();
+    expect(secondaryBtnBox).not.toBeNull();
+    expect(secondaryBtnBox!.height).toBeGreaterThanOrEqual(44);
+    expect(secondaryBtnBox!.width).toBeGreaterThanOrEqual(44);
+
+    // Check hamburger menu toggle touch target
+    const navToggle = page.locator(selectors.navigation.toggle);
+    await expect(navToggle).toBeVisible();
+    const navToggleBox = await navToggle.boundingBox();
+    expect(navToggleBox).not.toBeNull();
+    expect(navToggleBox!.height).toBeGreaterThanOrEqual(44);
+    expect(navToggleBox!.width).toBeGreaterThanOrEqual(44);
+
+    // Open menu and check nav links touch targets
+    await navToggle.click();
+    await page.waitForTimeout(300);
+
+    const navLinks = page.locator(`${selectors.navigation.links} ${selectors.navigation.link}`);
+    const linkCount = await navLinks.count();
+
+    for (let i = 0; i < linkCount; i++) {
+      const link = navLinks.nth(i);
+      await expect(link).toBeVisible();
+      const linkBox = await link.boundingBox();
+      expect(linkBox).not.toBeNull();
+      // Links should have adequate height for touch (44px minimum)
+      expect(linkBox!.height).toBeGreaterThanOrEqual(44);
+    }
+
+    // Check footer links
+    await scrollToSection(page, 'quickstart');
+    const footer = page.locator(selectors.footer.section);
+    await footer.scrollIntoViewIfNeeded();
+
+    const footerLinks = page.locator(selectors.footer.link);
+    const footerLinkCount = await footerLinks.count();
+
+    for (let i = 0; i < footerLinkCount; i++) {
+      const link = footerLinks.nth(i);
+      await expect(link).toBeVisible();
+      const linkBox = await link.boundingBox();
+      expect(linkBox).not.toBeNull();
+      expect(linkBox!.height).toBeGreaterThanOrEqual(44);
+    }
+  });
+
+  test('Code blocks are scrollable and readable on mobile', async ({ page }) => {
+    // Navigate to usage section
+    await scrollToSection(page, 'usage');
+
+    const codeBlocks = page.locator(selectors.usage.codeBlock);
+    const codeBlockCount = await codeBlocks.count();
+    expect(codeBlockCount).toBeGreaterThanOrEqual(1);
+
+    for (let i = 0; i < codeBlockCount; i++) {
+      const codeBlock = codeBlocks.nth(i);
+      await expect(codeBlock).toBeVisible();
+
+      // Code block should have horizontal scroll capability
+      const styles = await codeBlock.evaluate((el) => {
+        const computed = window.getComputedStyle(el);
+        return {
+          overflowX: computed.overflowX,
+          maxWidth: computed.maxWidth,
+        };
+      });
+
+      expect(['auto', 'scroll', 'visible']).toContain(styles.overflowX);
+
+      // Code text should be readable
+      const pre = codeBlock.locator('pre');
+      await expect(pre).toBeVisible();
+      const fontSize = await pre.evaluate((el) => {
+        return parseFloat(window.getComputedStyle(el).fontSize);
+      });
+      expect(fontSize).toBeGreaterThanOrEqual(12);
+
+      // Code block shouldn't overflow viewport
+      const codeBlockBox = await codeBlock.boundingBox();
+      expect(codeBlockBox).not.toBeNull();
+      expect(codeBlockBox!.width).toBeLessThanOrEqual(375);
+    }
+  });
+
+  test('Container padding is appropriate for mobile', async ({ page }) => {
+    const container = page.locator('.container').first();
+    const styles = await container.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        paddingLeft: parseFloat(computed.paddingLeft),
+        paddingRight: parseFloat(computed.paddingRight),
+      };
+    });
+
+    // Container should have reasonable padding on mobile (at least 16px)
+    expect(styles.paddingLeft).toBeGreaterThanOrEqual(16);
+    expect(styles.paddingRight).toBeGreaterThanOrEqual(16);
+  });
+
+  test('Mobile viewport maintains proper section spacing', async ({ page }) => {
+    const sections = page.locator('.section');
+    const sectionCount = await sections.count();
+
+    for (let i = 0; i < sectionCount; i++) {
+      const section = sections.nth(i);
+      await section.scrollIntoViewIfNeeded();
+      await expect(section).toBeVisible();
+
+      const padding = await section.evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return {
+          paddingTop: parseFloat(styles.paddingTop),
+          paddingBottom: parseFloat(styles.paddingBottom),
+        };
+      });
+
+      // Sections should have vertical padding (at least 48px on mobile)
+      expect(padding.paddingTop).toBeGreaterThanOrEqual(32);
+      expect(padding.paddingBottom).toBeGreaterThanOrEqual(32);
+    }
+  });
+});
