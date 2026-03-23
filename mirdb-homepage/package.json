@@ -10,7 +10,8 @@
     "serve": "npx serve . -p 3000"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.8.0",
     "@playwright/test": "^1.41.0",
-    "@axe-core/playwright": "^4.8.0"
+    "serve": "^14.2.6"
   }
 }
