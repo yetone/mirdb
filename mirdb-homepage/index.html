@@ -304,7 +304,51 @@ echo -e "get mykey\r" | nc localhost 12333
   <section id="configuration" class="configuration">
     <div class="config__container">
       <h2>Configuration</h2>
-      <!-- Configuration table to be implemented by Scenario 5 -->
+      <p class="config__intro">MirDB provides sensible defaults that work well for most use cases. Customize these settings to tune performance for your specific workload.</p>
+
+      <div class="config__table-wrapper">
+        <table class="config__table">
+          <thead>
+            <tr>
+              <th scope="col">Setting</th>
+              <th scope="col">Default Value</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="config__setting-name">Listen Address</td>
+              <td class="config__setting-value"><code>0.0.0.0:12333</code></td>
+              <td class="config__setting-desc">Network interface and port for accepting Memcached client connections</td>
+            </tr>
+            <tr>
+              <td class="config__setting-name">Max LSM Levels</td>
+              <td class="config__setting-value"><code>7</code></td>
+              <td class="config__setting-desc">Number of SSTable levels in the LSM tree structure</td>
+            </tr>
+            <tr>
+              <td class="config__setting-name">Work Directory</td>
+              <td class="config__setting-value"><code>/tmp/mirdb</code></td>
+              <td class="config__setting-desc">Storage path for data files, WAL, and SSTables</td>
+            </tr>
+            <tr>
+              <td class="config__setting-name">SSTable Max Size</td>
+              <td class="config__setting-value"><code>100MB</code></td>
+              <td class="config__setting-desc">Maximum size per SSTable file before triggering compaction</td>
+            </tr>
+            <tr>
+              <td class="config__setting-name">Memtable Max Size</td>
+              <td class="config__setting-value"><code>4MB</code></td>
+              <td class="config__setting-desc">Memory limit for the active memtable before flushing to disk</td>
+            </tr>
+            <tr>
+              <td class="config__setting-name">Block Size</td>
+              <td class="config__setting-value"><code>4KB</code></td>
+              <td class="config__setting-desc">SSTable block size for efficient disk I/O operations</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 

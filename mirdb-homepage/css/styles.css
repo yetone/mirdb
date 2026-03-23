@@ -560,6 +560,88 @@ section {
   margin: 0 auto;
 }
 
+.config__intro {
+  text-align: center;
+  color: #4a4a68;
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.config__table-wrapper {
+  overflow-x: auto;
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+
+.config__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.config__table thead {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #ffffff;
+}
+
+.config__table th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.config__table tbody tr {
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+}
+
+.config__table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.config__table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.config__table td {
+  padding: 1rem 1.5rem;
+  vertical-align: top;
+}
+
+.config__setting-name {
+  font-weight: 600;
+  color: #1a1a2e;
+  white-space: nowrap;
+}
+
+.config__setting-value {
+  white-space: nowrap;
+}
+
+.config__setting-value code {
+  background: #f1f3f5;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9rem;
+  color: #d63384;
+}
+
+.config__setting-desc {
+  color: #4a4a68;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 /* ===== Commands Section (Scenario 12) ===== */
 .commands {
   background: #f8f9fa;
