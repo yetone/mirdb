@@ -1,0 +1,79 @@
+/**
+ * Responsive Design Styles
+ * Owner: Scenarios 6, 7, 8 (Responsive Design)
+ *
+ * Contains:
+ * - Desktop styles (1280px+)
+ * - Tablet styles (768px - 1279px)
+ * - Mobile styles (<768px)
+ *
+ * Breakpoints:
+ * - Mobile: max-width 767px
+ * - Tablet: 768px - 1279px
+ * - Desktop: 1280px+
+ */
+
+/* Tablet styles */
+@media (max-width: 1279px) {
+  .hero-title {
+    font-size: var(--font-size-5xl);
+  }
+
+  .container {
+    padding: 0 var(--spacing-4);
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-4);
+    gap: var(--spacing-4);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .section {
+    padding: var(--spacing-16) 0;
+  }
+
+  .section-heading {
+    font-size: var(--font-size-2xl);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .step {
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+}

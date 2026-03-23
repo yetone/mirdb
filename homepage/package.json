@@ -1,0 +1,17 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - Persistent Key-Value Store",
+  "scripts": {
+    "dev": "npx http-server . -p 8080 -c-1",
+    "test": "npx playwright test",
+    "test:e2e": "npx playwright test tests/e2e/",
+    "test:unit": "npx vitest run tests/unit/"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.0",
+    "http-server": "^14.1.1",
+    "vitest": "^1.4.0",
+    "jsdom": "^24.0.0"
+  }
+}
