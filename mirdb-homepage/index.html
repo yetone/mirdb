@@ -199,7 +199,104 @@ echo -e "get mykey\r" | nc localhost 12333
   <section id="architecture" class="architecture">
     <div class="architecture__container">
       <h2>Architecture</h2>
-      <!-- LSM tree diagram to be implemented by Scenario 4 -->
+      <p class="architecture__intro">MirDB uses a Log-Structured Merge (LSM) tree architecture optimized for write-heavy workloads while maintaining efficient reads.</p>
+
+      <!-- CSS-based Architecture Diagram -->
+      <figure class="architecture__diagram" role="img" aria-label="LSM Tree Architecture Diagram showing data flow from Write operations through WAL, Memtable, and SSTables">
+        <div class="architecture__diagram-container">
+          <!-- Write Entry Point -->
+          <div class="architecture__component architecture__component--write">
+            <div class="architecture__component-icon" aria-hidden="true">✍️</div>
+            <span class="architecture__component-label">Write</span>
+          </div>
+
+          <!-- Arrow: Write to WAL -->
+          <div class="architecture__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 60" class="architecture__arrow-svg">
+              <path d="M12 0 L12 50 M6 44 L12 56 L18 44" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+
+          <!-- WAL Component -->
+          <div class="architecture__component architecture__component--wal" data-component="wal">
+            <div class="architecture__component-box">
+              <div class="architecture__component-icon" aria-hidden="true">📝</div>
+              <h3 class="architecture__component-title">Write-Ahead Log (WAL)</h3>
+            </div>
+          </div>
+
+          <!-- Arrow: WAL to Memtable -->
+          <div class="architecture__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 60" class="architecture__arrow-svg">
+              <path d="M12 0 L12 50 M6 44 L12 56 L18 44" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+
+          <!-- Memtable Component -->
+          <div class="architecture__component architecture__component--memtable" data-component="memtable">
+            <div class="architecture__component-box">
+              <div class="architecture__component-icon" aria-hidden="true">🧠</div>
+              <h3 class="architecture__component-title">Memtable</h3>
+            </div>
+          </div>
+
+          <!-- Arrow: Memtable to SSTables -->
+          <div class="architecture__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 60" class="architecture__arrow-svg">
+              <path d="M12 0 L12 50 M6 44 L12 56 L18 44" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+
+          <!-- SSTables Component -->
+          <div class="architecture__component architecture__component--sstables" data-component="sstables">
+            <div class="architecture__component-box">
+              <div class="architecture__component-icon" aria-hidden="true">💾</div>
+              <h3 class="architecture__component-title">SSTables</h3>
+              <div class="architecture__sstable-levels">
+                <span class="architecture__level">Level 0</span>
+                <span class="architecture__level">Level 1</span>
+                <span class="architecture__level">Level N</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption class="visually-hidden">
+          Data flow diagram showing: Write operations first go to the Write-Ahead Log for durability, then to the Memtable for fast in-memory access, and finally are flushed to SSTables on disk across multiple levels.
+        </figcaption>
+      </figure>
+
+      <!-- Component Explanations -->
+      <div class="architecture__explanations">
+        <article class="architecture__explanation" id="wal-explanation">
+          <h3 class="architecture__explanation-title">
+            <span class="architecture__explanation-icon" aria-hidden="true">📝</span>
+            Write-Ahead Log (WAL)
+          </h3>
+          <p class="architecture__explanation-text">
+            The WAL ensures <strong>durability</strong> by persisting every write operation to disk before acknowledging it. In case of a crash, MirDB can recover all committed writes by replaying the WAL. Records are Snappy-compressed and aligned for efficient I/O.
+          </p>
+        </article>
+
+        <article class="architecture__explanation" id="memtable-explanation">
+          <h3 class="architecture__explanation-title">
+            <span class="architecture__explanation-icon" aria-hidden="true">🧠</span>
+            Memtable
+          </h3>
+          <p class="architecture__explanation-text">
+            The Memtable provides <strong>fast in-memory storage</strong> using a skip list data structure. Writes are first applied to the active memtable for low-latency operations. When the memtable reaches its size limit (default 4MB), it becomes immutable and is scheduled for flushing to disk.
+          </p>
+        </article>
+
+        <article class="architecture__explanation" id="sstables-explanation">
+          <h3 class="architecture__explanation-title">
+            <span class="architecture__explanation-icon" aria-hidden="true">💾</span>
+            SSTables (Sorted String Tables)
+          </h3>
+          <p class="architecture__explanation-text">
+            SSTables provide <strong>persistent, sorted storage</strong> organized across multiple levels. Level 0 contains recently flushed data that may overlap. Higher levels (1 to N) are sorted and non-overlapping within each level. Background compaction merges and organizes data for efficient reads.
+          </p>
+        </article>
+      </div>
     </div>
   </section>
 

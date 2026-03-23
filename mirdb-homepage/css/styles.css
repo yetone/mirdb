@@ -377,6 +377,179 @@ section {
   margin: 0 auto;
 }
 
+.architecture__intro {
+  text-align: center;
+  color: #4a4a68;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Architecture Diagram */
+.architecture__diagram {
+  margin: 2rem 0 3rem;
+}
+
+.architecture__diagram-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Diagram Components */
+.architecture__component {
+  text-align: center;
+  width: 100%;
+  max-width: 280px;
+}
+
+.architecture__component--write {
+  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.architecture__component-label {
+  font-size: 1.1rem;
+}
+
+.architecture__component-box {
+  background: #ffffff;
+  border: 2px solid #4361ee;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.architecture__component-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+}
+
+.architecture__component--wal .architecture__component-box {
+  border-color: #f72585;
+  box-shadow: 0 2px 8px rgba(247, 37, 133, 0.15);
+}
+
+.architecture__component--wal .architecture__component-box:hover {
+  box-shadow: 0 4px 12px rgba(247, 37, 133, 0.25);
+}
+
+.architecture__component--memtable .architecture__component-box {
+  border-color: #7209b7;
+  box-shadow: 0 2px 8px rgba(114, 9, 183, 0.15);
+}
+
+.architecture__component--memtable .architecture__component-box:hover {
+  box-shadow: 0 4px 12px rgba(114, 9, 183, 0.25);
+}
+
+.architecture__component--sstables .architecture__component-box {
+  border-color: #3a0ca3;
+  box-shadow: 0 2px 8px rgba(58, 12, 163, 0.15);
+}
+
+.architecture__component--sstables .architecture__component-box:hover {
+  box-shadow: 0 4px 12px rgba(58, 12, 163, 0.25);
+}
+
+.architecture__component-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.architecture__component-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.architecture__sstable-levels {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.architecture__level {
+  background: #f0f0f5;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  color: #4a4a68;
+}
+
+/* Flow Arrows */
+.architecture__arrow {
+  height: 50px;
+  width: 24px;
+  color: #4361ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.architecture__arrow-svg {
+  width: 24px;
+  height: 50px;
+}
+
+/* Component Explanations */
+.architecture__explanations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.architecture__explanation {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.architecture__explanation-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.75rem;
+}
+
+.architecture__explanation-icon {
+  font-size: 1.25rem;
+}
+
+.architecture__explanation-text {
+  color: #4a4a68;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.architecture__explanation-text strong {
+  color: #1a1a2e;
+}
+
 /* ===== Configuration Section (Scenario 5) ===== */
 .configuration {
   background: #ffffff;
