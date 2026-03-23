@@ -652,6 +652,177 @@ section {
   margin: 0 auto;
 }
 
+.commands__intro {
+  text-align: center;
+  color: #4a4a68;
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.commands__table-wrapper {
+  overflow-x: auto;
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+
+.commands__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.commands__table thead {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #ffffff;
+}
+
+.commands__table th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.commands__table tbody tr {
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+}
+
+.commands__table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.commands__table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.commands__table td {
+  padding: 1rem 1.5rem;
+  vertical-align: top;
+}
+
+.commands__name {
+  font-weight: 600;
+  color: #1a1a2e;
+  white-space: nowrap;
+}
+
+.commands__name code {
+  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+  color: #ffffff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.commands__syntax {
+  white-space: nowrap;
+}
+
+.commands__syntax code {
+  background: #f1f3f5;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.85rem;
+  color: #a61e4d;
+}
+
+.commands__desc {
+  color: #4a4a68;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.commands__desc code {
+  background: #e9ecef;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.85rem;
+  color: #862a48;
+}
+
+.commands__notes {
+  margin-top: 2.5rem;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.commands__notes h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+}
+
+.commands__notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.commands__notes-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #4a4a68;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.commands__notes-list li:last-child {
+  margin-bottom: 0;
+}
+
+.commands__notes-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #4361ee;
+  font-weight: 700;
+}
+
+.commands__notes-list code {
+  background: #f1f3f5;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.85rem;
+  color: #a61e4d;
+}
+
+/* Commands section responsive styles */
+@media (max-width: 768px) {
+  .commands__table th,
+  .commands__table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .commands__syntax code {
+    font-size: 0.75rem;
+    white-space: normal;
+    word-break: break-all;
+  }
+
+  .commands__notes {
+    padding: 1rem 1.5rem;
+  }
+}
+
 /* ===== Status Section (Scenario 6) ===== */
 .status {
   background: #ffffff;

@@ -357,7 +357,51 @@ echo -e "get mykey\r" | nc localhost 12333
   <section id="commands" class="commands">
     <div class="commands__container">
       <h2>Memcached Commands</h2>
-      <!-- Commands table to be implemented by Scenario 12 -->
+      <p class="commands__intro">MirDB implements the Memcached text protocol for compatibility with existing clients and tools. Here are the supported commands:</p>
+
+      <div class="commands__table-wrapper">
+        <table class="commands__table">
+          <thead>
+            <tr>
+              <th scope="col">Command</th>
+              <th scope="col">Syntax</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="commands__name"><code>SET</code></td>
+              <td class="commands__syntax"><code>set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+              <td class="commands__desc">Store a key-value pair. The data block follows on the next line. Returns <code>STORED</code> on success.</td>
+            </tr>
+            <tr>
+              <td class="commands__name"><code>GET</code></td>
+              <td class="commands__syntax"><code>get &lt;key&gt;</code></td>
+              <td class="commands__desc">Retrieve the value for a given key. Returns <code>VALUE &lt;key&gt; &lt;flags&gt; &lt;bytes&gt;</code> followed by the data, or <code>END</code> if not found.</td>
+            </tr>
+            <tr>
+              <td class="commands__name"><code>DELETE</code></td>
+              <td class="commands__syntax"><code>delete &lt;key&gt;</code></td>
+              <td class="commands__desc">Remove a key from the store. Returns <code>DELETED</code> on success or <code>NOT_FOUND</code> if the key doesn't exist.</td>
+            </tr>
+            <tr>
+              <td class="commands__name"><code>QUIT</code></td>
+              <td class="commands__syntax"><code>quit</code></td>
+              <td class="commands__desc">Close the connection to the server. The server will terminate the session gracefully.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="commands__notes">
+        <h3>Usage Notes</h3>
+        <ul class="commands__notes-list">
+          <li>All commands are terminated with <code>\r\n</code> (CRLF)</li>
+          <li>The <code>&lt;flags&gt;</code> parameter is a 32-bit integer stored alongside the data</li>
+          <li>The <code>&lt;exptime&gt;</code> parameter is the TTL in seconds (0 means no expiration)</li>
+          <li>The <code>&lt;bytes&gt;</code> parameter specifies the length of the data block</li>
+        </ul>
+      </div>
     </div>
   </section>
 
