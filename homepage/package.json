@@ -7,7 +7,7 @@
     "dev": "npx serve src -l 8080",
     "serve": "npx http-server src -p 8080 -c-1",
     "test": "npx playwright test",
-    "test:unit": "jest",
+    "test:unit": "jest --config tests/unit/jest.config.cjs",
     "build": "cp -r src dist"
   },
   "devDependencies": {

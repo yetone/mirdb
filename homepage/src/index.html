@@ -246,10 +246,54 @@ hello
     <!-- ARCHITECTURE SECTION END -->
 
     <!-- CONFIG SECTION START (Scenario 6) -->
-    <section class="config" id="config">
+    <section class="config" id="config" aria-labelledby="config-title">
       <div class="container">
-        <h2>Configuration</h2>
-        <p>Coming soon...</p>
+        <h2 id="config-title" class="section-title">Configuration Reference</h2>
+        <p class="config-intro">MirDB can be configured with the following parameters. Below are the default values and descriptions for each tunable option.</p>
+
+        <div class="config-table-wrapper">
+          <table class="config-table" role="table" aria-label="Configuration parameters">
+            <thead>
+              <tr>
+                <th scope="col">Parameter</th>
+                <th scope="col">Default Value</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Parameter"><code>listen_address</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="listen-address">0.0.0.0:12333</code></td>
+                <td data-label="Description">The address and port on which MirDB listens for incoming connections</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>max_lsm_levels</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="max-lsm-levels">7</code></td>
+                <td data-label="Description">Maximum number of levels in the LSM-tree structure</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>work_directory</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="work-directory">/tmp/mirdb</code></td>
+                <td data-label="Description">Directory where MirDB stores data files and SSTables</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>sstable_max_size</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="sstable-max-size">100MB</code></td>
+                <td data-label="Description">Maximum size of each SSTable file before compaction</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>memtable_max_size</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="memtable-max-size">4MB</code></td>
+                <td data-label="Description">Maximum size of the in-memory memtable before flushing to disk</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>block_size</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="block-size">4KB</code></td>
+                <td data-label="Description">Size of data blocks within SSTables</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
     <!-- CONFIG SECTION END -->

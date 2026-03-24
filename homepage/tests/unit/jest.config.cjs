@@ -8,16 +8,18 @@
  * - Coverage settings
  */
 
-export default {
-  testEnvironment: 'jsdom',
+module.exports = {
+  testEnvironment: 'node',
   rootDir: '../../',
-  testMatch: ['<rootDir>/tests/unit/**/*.test.js'],
+  testRegex: 'tests/unit/.*\\.test\\.cjs$',
+  testPathIgnorePatterns: ['/node_modules/', '/tests/e2e/'],
   moduleDirectories: ['node_modules', 'src'],
-  moduleFileExtensions: ['js', 'json'],
+  moduleFileExtensions: ['js', 'json', 'cjs'],
   collectCoverageFrom: [
     'src/js/**/*.js',
     '!src/js/main.js',
   ],
   coverageDirectory: '<rootDir>/coverage',
   verbose: true,
+  transform: {},
 };
