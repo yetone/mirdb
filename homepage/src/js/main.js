@@ -12,7 +12,7 @@
 import { initMobileNav } from './mobile-nav.js';
 import { initTheme } from './theme-toggle.js';
 // import { initCopyButtons } from './copy-code.js';
-// import { initSmoothScroll } from './smooth-scroll.js';
+import { initSmoothScroll } from './smooth-scroll.js';
 
 // Initialize modules when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,5 +33,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // initCopyButtons();
 
   // Initialize smooth scroll (Scenario 13)
-  // initSmoothScroll();
+  initSmoothScroll();
 });
