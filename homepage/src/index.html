@@ -199,10 +199,48 @@ hello
     <!-- QUICKSTART SECTION END -->
 
     <!-- ARCHITECTURE SECTION START (Scenario 5) -->
-    <section class="architecture" id="architecture">
+    <section class="architecture" id="architecture" aria-labelledby="architecture-title">
       <div class="container">
-        <h2>Architecture</h2>
-        <p>Coming soon...</p>
+        <h2 class="section-title" id="architecture-title">LSM-Tree Architecture</h2>
+        <p class="section-subtitle">Understanding how MirDB stores and manages data using Log-Structured Merge-Tree architecture.</p>
+
+        <div class="architecture-diagram-container">
+          <figure class="architecture-diagram" role="figure" aria-label="LSM-tree architecture diagram showing memtable, SSTables, and compaction">
+            <img
+              src="assets/images/architecture.svg"
+              alt="LSM-tree architecture diagram showing the write path from memtable with skip list to SSTable levels, the compaction process that merges and optimizes data, and the read path that checks memtable first then SSTables"
+              width="800"
+              height="500"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+
+        <div class="architecture-components">
+          <article class="architecture-component" id="memtable-desc">
+            <h3>
+              <span class="component-icon component-icon--memtable" aria-hidden="true">M</span>
+              Memtable
+            </h3>
+            <p>In-memory data structure using a skip list for fast writes and sorted key lookups. When full, it's flushed to disk as an immutable SSTable.</p>
+          </article>
+
+          <article class="architecture-component" id="sstable-desc">
+            <h3>
+              <span class="component-icon component-icon--sstable" aria-hidden="true">S</span>
+              SSTable
+            </h3>
+            <p>Sorted String Tables store data on disk in sorted order. Organized in levels (L0, L1, L2...) with increasing size, enabling efficient range queries and lookups.</p>
+          </article>
+
+          <article class="architecture-component" id="compaction-desc">
+            <h3>
+              <span class="component-icon component-icon--compaction" aria-hidden="true">C</span>
+              Compaction
+            </h3>
+            <p>Background process that merges overlapping SSTables, removes deleted keys, and maintains sorted order. Minor compaction flushes memtable; major compaction merges SSTable levels.</p>
+          </article>
+        </div>
       </div>
     </section>
     <!-- ARCHITECTURE SECTION END -->
