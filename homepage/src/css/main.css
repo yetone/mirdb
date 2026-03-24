@@ -15,7 +15,7 @@
 @import url('./base.css');
 
 /* Layout utilities - Scenario 9 */
-/* @import url('./layout.css'); */
+@import url('./layout.css');
 
 /* Component styles */
 @import url('./components/header.css');

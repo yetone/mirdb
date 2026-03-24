@@ -1,0 +1,488 @@
+/**
+ * Layout Utilities
+ * Owner: Scenario 9 - Responsive Design
+ *
+ * Expected styles:
+ * - Container/wrapper classes
+ * - Grid utilities
+ * - Flexbox utilities
+ * - Media query breakpoints
+ * - Responsive utilities (show/hide)
+ */
+
+/* ==========================================================================
+   Container and Wrapper Utilities
+   ========================================================================== */
+
+.container {
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  width: 100%;
+}
+
+.container--narrow {
+  max-width: 800px;
+}
+
+.container--wide {
+  max-width: 1400px;
+}
+
+.container--fluid {
+  max-width: none;
+}
+
+/* ==========================================================================
+   Section Spacing
+   ========================================================================== */
+
+.section {
+  padding-top: var(--spacing-4xl);
+  padding-bottom: var(--spacing-4xl);
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
+  }
+}
+
+/* ==========================================================================
+   Flexbox Utilities
+   ========================================================================== */
+
+.flex {
+  display: flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.gap-md {
+  gap: var(--spacing-md);
+}
+
+.gap-lg {
+  gap: var(--spacing-lg);
+}
+
+.gap-xl {
+  gap: var(--spacing-xl);
+}
+
+/* ==========================================================================
+   Grid Utilities
+   ========================================================================== */
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ==========================================================================
+   Responsive Show/Hide Utilities
+   ========================================================================== */
+
+/* Mobile-first: show only on mobile (up to 767px) */
+.mobile-only {
+  display: block;
+}
+
+/* Desktop only: show only on desktop (768px+) */
+.desktop-only {
+  display: none;
+}
+
+/* Tablet only: show only on tablet (768px - 1023px) */
+.tablet-only {
+  display: none;
+}
+
+/* Large desktop only: show only on large screens (1024px+) */
+.lg-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+
+  .desktop-only {
+    display: block;
+  }
+
+  .tablet-only {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tablet-only {
+    display: none;
+  }
+
+  .lg-only {
+    display: block;
+  }
+}
+
+/* Hide at specific breakpoints */
+.hide-mobile {
+  display: block;
+}
+
+.hide-tablet {
+  display: block;
+}
+
+.hide-desktop {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hide-tablet {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hide-desktop {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Responsive Grid Adjustments
+   ========================================================================== */
+
+/* Mobile: Single column */
+@media (max-width: 767px) {
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet: Two columns max */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Touch Target Size
+   ========================================================================== */
+
+/* Ensure all interactive elements meet minimum touch target size */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Apply touch target sizing to buttons and links at mobile breakpoints */
+@media (max-width: 768px) {
+  button:not(.header__hamburger):not(.header__theme-toggle):not(.copy-btn),
+  .btn,
+  a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Ensure nav links in mobile menu have adequate touch targets */
+  .header__nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Ensure status items have adequate touch area */
+  .status-item {
+    min-height: 44px;
+  }
+
+  /* Ensure footer links have adequate touch targets */
+  .footer__link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* ==========================================================================
+   Prevent Horizontal Scroll
+   ========================================================================== */
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Ensure content doesn't overflow */
+main,
+section,
+article {
+  overflow-x: hidden;
+}
+
+/* Allow horizontal scroll only for code blocks */
+.code-block,
+.code-block pre,
+pre,
+.config-table-wrapper {
+  overflow-x: auto;
+}
+
+/* ==========================================================================
+   Responsive Typography
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .section-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  h3 {
+    font-size: var(--font-size-xl);
+  }
+
+  h4 {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: var(--font-size-xl);
+  }
+
+  h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* ==========================================================================
+   Spacing Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  :root {
+    --container-padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --container-padding: 0.75rem;
+  }
+}
+
+/* ==========================================================================
+   Responsive Image and Media
+   ========================================================================== */
+
+img,
+video,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* SVG responsiveness */
+svg {
+  max-width: 100%;
+}
+
+/* Architecture diagram responsive sizing */
+.architecture-diagram img,
+.architecture-diagram svg {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .architecture-diagram img,
+  .architecture-diagram svg {
+    max-height: 350px;
+  }
+}
+
+/* ==========================================================================
+   Multi-column Responsive Layouts
+   ========================================================================== */
+
+/* Desktop: Multi-column layouts */
+@media (min-width: 1024px) {
+  /* Features grid - 3 columns on desktop */
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Quick start - 2 columns on desktop */
+  .quickstart-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Status grid - 2 columns on desktop */
+  .status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Architecture components - 3 columns on large screens */
+  .architecture-components {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+}
+
+/* Tablet: Intermediate layouts */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quickstart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .architecture-components {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+}
+
+/* Mobile: Single column stacking */
+@media (max-width: 767px) {
+  .features-grid,
+  .quickstart-grid,
+  .status-grid,
+  .architecture-components {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+}
+
+/* ==========================================================================
+   Width Utilities
+   ========================================================================== */
+
+.w-full {
+  width: 100%;
+}
+
+.max-w-full {
+  max-width: 100%;
+}
+
+/* ==========================================================================
+   Text Alignment Responsive
+   ========================================================================== */
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+@media (max-width: 767px) {
+  .mobile-text-center {
+    text-align: center;
+  }
+
+  .mobile-text-left {
+    text-align: left;
+  }
+}
