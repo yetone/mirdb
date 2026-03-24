@@ -1,2 +1,6 @@
 /target
 **/*.rs.bk
+.something/
+homepage/node_modules/
+homepage/test-results/
+homepage/playwright-report/
