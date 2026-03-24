@@ -12,11 +12,12 @@ export default {
   testEnvironment: 'jsdom',
   rootDir: '../../',
   testMatch: ['<rootDir>/tests/unit/**/*.test.js'],
+  moduleDirectories: ['node_modules', 'src'],
   moduleFileExtensions: ['js', 'json'],
   collectCoverageFrom: [
     'src/js/**/*.js',
     '!src/js/main.js',
   ],
-  coverageDirectory: 'coverage',
+  coverageDirectory: '<rootDir>/coverage',
   verbose: true,
 };

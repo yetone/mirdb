@@ -16,7 +16,9 @@ import { initMobileNav } from './mobile-nav.js';
 
 // Initialize modules when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize mobile navigation
+  console.log('MirDB Homepage initialized');
+
+  // Initialize mobile navigation (Scenario 1)
   initMobileNav();
 
   // Initialize theme (Scenario 10)

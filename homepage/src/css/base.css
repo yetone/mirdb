@@ -11,20 +11,17 @@
  * Owner: First scenario builder
  */
 
-/* Box-sizing reset */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Remove default margin and padding */
 * {
   margin: 0;
   padding: 0;
 }
 
-/* Prevent font size inflation */
 html {
   -moz-text-size-adjust: none;
   -webkit-text-size-adjust: none;
@@ -32,22 +29,20 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Body defaults */
 body {
   min-height: 100vh;
-  line-height: var(--line-height-normal);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
   color: var(--color-text);
   background-color: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography */
 h1, h2, h3, h4, h5, h6 {
-  line-height: var(--line-height-tight);
   font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
   text-wrap: balance;
 }
 
@@ -59,10 +54,10 @@ h5 { font-size: var(--font-size-lg); }
 h6 { font-size: var(--font-size-base); }
 
 p {
+  margin-bottom: var(--spacing-md);
   text-wrap: pretty;
 }
 
-/* Links */
 a {
   color: var(--color-primary);
   text-decoration: none;
@@ -78,23 +73,22 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* Images */
 img, picture, video, canvas, svg {
   display: block;
   max-width: 100%;
   height: auto;
 }
 
-/* Form elements */
 input, button, textarea, select {
   font: inherit;
 }
 
-/* Button reset */
 button {
+  font-family: inherit;
+  font-size: inherit;
   cursor: pointer;
-  background: none;
   border: none;
+  background: none;
   color: inherit;
 }
 
@@ -103,24 +97,21 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
-/* List reset */
 ul, ol {
   list-style: none;
 }
 
-/* Code elements */
-code, pre {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-}
-
 code {
+  font-family: var(--font-family-mono);
+  font-size: 0.875em;
   background-color: var(--color-code-bg);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: 0.125em 0.25em;
   border-radius: var(--radius-sm);
 }
 
 pre {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
   background-color: var(--color-code-bg);
   padding: var(--spacing-md);
   border-radius: var(--radius-md);
@@ -132,7 +123,7 @@ pre code {
   padding: 0;
 }
 
-/* Skip link for accessibility */
+/* Accessibility: Skip link */
 .skip-link {
   position: absolute;
   top: -40px;

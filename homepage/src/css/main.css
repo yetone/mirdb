@@ -11,22 +11,22 @@
  * Owner: First scenario builder
  */
 
-@import 'variables.css';
-@import 'base.css';
+@import url('./variables.css');
+@import url('./base.css');
 
 /* Layout utilities - Scenario 9 */
-/* @import 'layout.css'; */
+/* @import url('./layout.css'); */
 
 /* Component styles */
-@import 'components/header.css';
-/* @import 'components/hero.css'; */
-/* @import 'components/features.css'; */
-/* @import 'components/quickstart.css'; */
-/* @import 'components/architecture.css'; */
-/* @import 'components/config.css'; */
-/* @import 'components/status.css'; */
-/* @import 'components/footer.css'; */
+@import url('./components/header.css');
+@import url('./components/hero.css');
+/* @import url('./components/features.css'); */
+/* @import url('./components/quickstart.css'); */
+/* @import url('./components/architecture.css'); */
+/* @import url('./components/config.css'); */
+/* @import url('./components/status.css'); */
+/* @import url('./components/footer.css'); */
 
 /* Theme overrides - Scenario 10 */
-/* @import 'themes/light.css'; */
-/* @import 'themes/dark.css'; */
+/* @import url('./themes/light.css'); */
+/* @import url('./themes/dark.css'); */
