@@ -299,10 +299,52 @@ hello
     <!-- CONFIG SECTION END -->
 
     <!-- STATUS SECTION START (Scenario 7) -->
-    <section class="status" id="status">
+    <section class="status" id="status" aria-labelledby="status-title">
       <div class="container">
-        <h2>Project Status</h2>
-        <p>Coming soon...</p>
+        <h2 class="section-title" id="status-title">Project Status</h2>
+        <p class="status-intro">Track the development progress of MirDB features and upcoming roadmap.</p>
+
+        <div class="status-grid">
+          <!-- Implemented Features Column -->
+          <div class="status-column status-column--implemented">
+            <h3 class="status-column-title">
+              <span class="status-icon status-icon--check" aria-hidden="true">✓</span>
+              Implemented Features
+            </h3>
+            <ul class="status-list" aria-label="Implemented features">
+              <li class="status-item status-item--implemented">
+                <span class="status-item-icon" aria-hidden="true">✓</span>
+                <span class="status-item-text">Tokio async networking</span>
+              </li>
+              <li class="status-item status-item--implemented">
+                <span class="status-item-icon" aria-hidden="true">✓</span>
+                <span class="status-item-text">Memtable with skip list</span>
+              </li>
+              <li class="status-item status-item--implemented">
+                <span class="status-item-icon" aria-hidden="true">✓</span>
+                <span class="status-item-text">Minor compaction</span>
+              </li>
+              <li class="status-item status-item--implemented">
+                <span class="status-item-icon" aria-hidden="true">✓</span>
+                <span class="status-item-text">Major compaction</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features Column -->
+          <div class="status-column status-column--planned">
+            <h3 class="status-column-title">
+              <span class="status-icon status-icon--roadmap" aria-hidden="true">🗺</span>
+              Roadmap
+            </h3>
+            <ul class="status-list" aria-label="Planned features">
+              <li class="status-item status-item--planned">
+                <span class="status-item-icon status-item-icon--roadmap" aria-hidden="true">◎</span>
+                <span class="status-item-text">Raft consensus</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
     <!-- STATUS SECTION END -->
