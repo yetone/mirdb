@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. Drop-in replacement with disk persistence and LSM-tree architecture.">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <!-- Skip link for accessibility -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- HEADER SECTION START (Scenario 1) -->
+  <header class="header" role="banner">
+    <div class="header__container">
+      <a href="/" class="header__logo" aria-label="MirDB Home">
+        <img src="assets/images/logo.gif" alt="MirDB Logo" class="header__logo-img">
+        <span class="header__logo-text">MirDB</span>
+      </a>
+
+      <nav class="header__nav" role="navigation" aria-label="Main navigation">
+        <ul class="header__nav-list" id="nav-list">
+          <li class="header__nav-item">
+            <a href="https://github.com/yetone/mirdb" class="header__nav-link" target="_blank" rel="noopener noreferrer">
+              <svg class="header__nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              <span>GitHub</span>
+            </a>
+          </li>
+          <li class="header__nav-item">
+            <a href="https://github.com/yetone/mirdb#readme" class="header__nav-link" target="_blank" rel="noopener noreferrer">
+              <span>Documentation</span>
+            </a>
+          </li>
+          <li class="header__nav-item">
+            <a href="#about" class="header__nav-link">
+              <span>About</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <button
+          class="header__theme-toggle"
+          id="theme-toggle"
+          type="button"
+          aria-label="Toggle dark/light theme"
+          title="Toggle theme"
+        >
+          <svg class="header__theme-icon header__theme-icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="header__theme-icon header__theme-icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <button
+          class="header__hamburger"
+          id="hamburger-btn"
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+          aria-controls="nav-list"
+        >
+          <span class="header__hamburger-line"></span>
+          <span class="header__hamburger-line"></span>
+          <span class="header__hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <!-- Theme toggle logic handled by theme-toggle.js (Scenario 10) -->
+  <!-- HEADER SECTION END -->
+
+  <main id="main">
+    <!-- HERO SECTION START (Scenario 2) -->
+    <section class="hero" id="hero">
+      <div class="hero-container">
+        <div class="hero-content">
+          <h1 class="hero-title">MirDB</h1>
+          <p class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+          <p class="hero-description">
+            High-performance, disk-backed key-value storage built with Rust.
+            Drop-in replacement for Memcached with durability guarantees.
+          </p>
+          <div class="hero-badges">
+            <span class="badge">Drop-in Memcached Replacement</span>
+            <span class="badge">Disk Persistence</span>
+            <span class="badge">LSM-Tree</span>
+            <a href="https://github.com/yetone/mirdb/actions" class="badge-link ci-badge-link" target="_blank" rel="noopener noreferrer" aria-label="View CI build status">
+              <img src="https://atompunk.yetone.fun/github/yetone/mirdb?v=2" alt="CI Build Status" class="ci-badge" loading="lazy">
+            </a>
+          </div>
+          <div class="hero-cta">
+            <a href="#quickstart" class="btn btn-primary">Get Started</a>
+            <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- HERO SECTION END -->
+
+    <!-- FEATURES SECTION START (Scenario 3) -->
+    <section class="features" id="features">
+      <div class="container">
+        <h2 class="section-title">Features</h2>
+        <div class="features-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🔌</div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Drop-in replacement for memcached with full protocol compatibility. Use your existing memcached clients without any code changes.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">💾</div>
+            <h3 class="feature-title">Disk Persistence</h3>
+            <p class="feature-description">Unlike traditional memcached, MirDB persists data to disk. Your data survives restarts and power failures.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🌳</div>
+            <h3 class="feature-title">LSM-Tree Architecture</h3>
+            <p class="feature-description">Built on log-structured merge-tree architecture with skip list memtable, SSTables, and automatic compaction for optimal performance.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">⚡</div>
+            <h3 class="feature-title">Async by Default</h3>
+            <p class="feature-description">Powered by Tokio for high-performance async I/O. Handles thousands of concurrent connections efficiently.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🦀</div>
+            <h3 class="feature-title">Rust Performance</h3>
+            <p class="feature-description">Written in Rust for memory safety and blazing-fast performance without garbage collection overhead.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- FEATURES SECTION END -->
+
+    <!-- QUICKSTART SECTION START (Scenario 4) -->
+    <section class="quickstart" id="quickstart">
+      <div class="container">
+        <h2 class="section-title">Quick Start</h2>
+        <div class="quickstart-grid">
+          <!-- Installation Column -->
+          <div class="quickstart-column">
+            <h3>Installation</h3>
+            <p>Clone and build MirDB from source using Cargo:</p>
+            <div class="code-block" data-language="shell">
+              <pre><code><span class="token-comment"># Clone the repository</span>
+<span class="token-prompt">$ </span><span class="token-command">git clone</span> https://github.com/yetone/mirdb.git
+<span class="token-prompt">$ </span><span class="token-command">cd</span> mirdb
+
+<span class="token-comment"># Build and run</span>
+<span class="token-prompt">$ </span><span class="token-command">cargo run</span> <span class="token-variable">--release</span></code></pre>
+            </div>
+            <p>The server will start listening on port <strong>12333</strong> by default.</p>
+          </div>
+
+          <!-- Usage Column -->
+          <div class="quickstart-column">
+            <h3>Usage</h3>
+            <p>Connect using any memcached client or via telnet/nc:</p>
+            <div class="code-block" data-language="protocol">
+              <pre><code><span class="token-comment"># Connect to MirDB</span>
+<span class="token-prompt">$ </span><span class="token-command">nc</span> localhost <span class="token-number">12333</span>
+
+<span class="token-comment"># Store a value</span>
+<span class="token-keyword">SET</span> <span class="token-variable">mykey</span> <span class="token-number">0 0 5</span>
+hello
+<span class="token-success">STORED</span>
+
+<span class="token-comment"># Retrieve the value</span>
+<span class="token-keyword">GET</span> <span class="token-variable">mykey</span>
+<span class="token-output">VALUE mykey 0 5</span>
+<span class="token-value">hello</span>
+<span class="token-output">END</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- QUICKSTART SECTION END -->
+
+    <!-- ARCHITECTURE SECTION START (Scenario 5) -->
+    <section class="architecture" id="architecture" aria-labelledby="architecture-title">
+      <div class="container">
+        <h2 class="section-title" id="architecture-title">LSM-Tree Architecture</h2>
+        <p class="section-subtitle">Understanding how MirDB stores and manages data using Log-Structured Merge-Tree architecture.</p>
+
+        <div class="architecture-diagram-container">
+          <figure class="architecture-diagram" role="figure" aria-label="LSM-tree architecture diagram showing memtable, SSTables, and compaction">
+            <img
+              src="assets/images/architecture.svg"
+              alt="LSM-tree architecture diagram showing the write path from memtable with skip list to SSTable levels, the compaction process that merges and optimizes data, and the read path that checks memtable first then SSTables"
+              width="800"
+              height="500"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+
+        <div class="architecture-components">
+          <article class="architecture-component" id="memtable-desc">
+            <h3>
+              <span class="component-icon component-icon--memtable" aria-hidden="true">M</span>
+              Memtable
+            </h3>
+            <p>In-memory data structure using a skip list for fast writes and sorted key lookups. When full, it's flushed to disk as an immutable SSTable.</p>
+          </article>
+
+          <article class="architecture-component" id="sstable-desc">
+            <h3>
+              <span class="component-icon component-icon--sstable" aria-hidden="true">S</span>
+              SSTable
+            </h3>
+            <p>Sorted String Tables store data on disk in sorted order. Organized in levels (L0, L1, L2...) with increasing size, enabling efficient range queries and lookups.</p>
+          </article>
+
+          <article class="architecture-component" id="compaction-desc">
+            <h3>
+              <span class="component-icon component-icon--compaction" aria-hidden="true">C</span>
+              Compaction
+            </h3>
+            <p>Background process that merges overlapping SSTables, removes deleted keys, and maintains sorted order. Minor compaction flushes memtable; major compaction merges SSTable levels.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- ARCHITECTURE SECTION END -->
+
+    <!-- CONFIG SECTION START (Scenario 6) -->
+    <section class="config" id="config" aria-labelledby="config-title">
+      <div class="container">
+        <h2 id="config-title" class="section-title">Configuration Reference</h2>
+        <p class="config-intro">MirDB can be configured with the following parameters. Below are the default values and descriptions for each tunable option.</p>
+
+        <div class="config-table-wrapper">
+          <table class="config-table" role="table" aria-label="Configuration parameters">
+            <thead>
+              <tr>
+                <th scope="col">Parameter</th>
+                <th scope="col">Default Value</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Parameter"><code>listen_address</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="listen-address">0.0.0.0:12333</code></td>
+                <td data-label="Description">The address and port on which MirDB listens for incoming connections</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>max_lsm_levels</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="max-lsm-levels">7</code></td>
+                <td data-label="Description">Maximum number of levels in the LSM-tree structure</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>work_directory</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="work-directory">/tmp/mirdb</code></td>
+                <td data-label="Description">Directory where MirDB stores data files and SSTables</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>sstable_max_size</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="sstable-max-size">100MB</code></td>
+                <td data-label="Description">Maximum size of each SSTable file before compaction</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>memtable_max_size</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="memtable-max-size">4MB</code></td>
+                <td data-label="Description">Maximum size of the in-memory memtable before flushing to disk</td>
+              </tr>
+              <tr>
+                <td data-label="Parameter"><code>block_size</code></td>
+                <td data-label="Default Value"><code class="config-value" data-config="block-size">4KB</code></td>
+                <td data-label="Description">Size of data blocks within SSTables</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <!-- CONFIG SECTION END -->
+
+    <!-- STATUS SECTION START (Scenario 7) -->
+    <section class="status" id="status" aria-labelledby="status-title">
+      <div class="container">
+        <h2 class="section-title" id="status-title">Project Status</h2>
+        <p class="status-intro">Track the development progress of MirDB features and upcoming roadmap.</p>
+
+        <div class="status-grid">
+          <!-- Implemented Features Column -->
+          <div class="status-column status-column--implemented">
+            <h3 class="status-column-title">
+              <span class="status-icon status-icon--check" aria-hidden="true">✓</span>
+              Implemented Features
+            </h3>
+            <ul class="status-list" aria-label="Implemented features">
+              <li class="status-item status-item--implemented">
+                <span class="status-item-icon" aria-hidden="true">✓</span>
+                <span class="status-item-text">Tokio async networking</span>
+              </li>
+              <li class="status-item status-item--implemented">
+                <span class="status-item-icon" aria-hidden="true">✓</span>
+                <span class="status-item-text">Memtable with skip list</span>
+              </li>
+              <li class="status-item status-item--implemented">
+                <span class="status-item-icon" aria-hidden="true">✓</span>
+                <span class="status-item-text">Minor compaction</span>
+              </li>
+              <li class="status-item status-item--implemented">
+                <span class="status-item-icon" aria-hidden="true">✓</span>
+                <span class="status-item-text">Major compaction</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features Column -->
+          <div class="status-column status-column--planned">
+            <h3 class="status-column-title">
+              <span class="status-icon status-icon--roadmap" aria-hidden="true">🗺</span>
+              Roadmap
+            </h3>
+            <ul class="status-list" aria-label="Planned features">
+              <li class="status-item status-item--planned">
+                <span class="status-item-icon status-item-icon--roadmap" aria-hidden="true">◎</span>
+                <span class="status-item-text">Raft consensus</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- STATUS SECTION END -->
+
+    <!-- ABOUT SECTION -->
+    <section class="about" id="about">
+      <div class="container">
+        <h2>About MirDB</h2>
+        <p>MirDB is a persistent key-value store that implements the Memcached protocol, providing disk persistence with LSM-tree architecture.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER SECTION START (Scenario 8) -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__container">
+      <div class="footer__info">
+        <p class="footer__copyright">&copy; 2026 MirDB. All rights reserved.</p>
+        <p class="footer__license">
+          Released under the <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" class="footer__license-link" target="_blank" rel="noopener noreferrer">MIT License</a>
+        </p>
+      </div>
+
+      <hr class="footer__divider" aria-hidden="true">
+
+      <nav aria-label="Footer navigation">
+        <ul class="footer__links">
+          <li>
+            <a href="https://github.com/yetone/mirdb" class="footer__link" target="_blank" rel="noopener noreferrer">
+              <svg class="footer__link-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              <span>GitHub</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/yetone/mirdb#readme" class="footer__link" target="_blank" rel="noopener noreferrer">
+              <svg class="footer__link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              <span>Documentation</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/yetone/mirdb/issues" class="footer__link" target="_blank" rel="noopener noreferrer">
+              <svg class="footer__link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span>Report Issue</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+  <!-- FOOTER SECTION END -->
+
+  <script src="js/copy-code.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

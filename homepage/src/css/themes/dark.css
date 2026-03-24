@@ -1,0 +1,67 @@
+/**
+ * Dark Theme Variables
+ * Owner: Scenario 10 - Dark Theme Support
+ *
+ * Dark theme CSS custom properties with developer-tool aesthetic.
+ * Designed to match the look of modern IDEs and terminal applications.
+ */
+
+[data-theme="dark"] {
+  /* Background colors - Dark IDE-like aesthetic */
+  --color-bg: #0d1117;
+  --color-bg-secondary: #161b22;
+  --color-bg-tertiary: #21262d;
+
+  /* Text colors - High contrast for readability */
+  --color-text: #e6edf3;
+  --color-text-secondary: #8b949e;
+  --color-text-muted: #6e7681;
+
+  /* Primary colors - Bright blue for dark backgrounds */
+  --color-primary: #58a6ff;
+  --color-primary-hover: #79c0ff;
+  --color-primary-light: #388bfd;
+
+  /* Accent colors - Bright green for success states */
+  --color-accent: #3fb950;
+  --color-accent-hover: #56d364;
+
+  /* Border colors - Subtle separation */
+  --color-border: #30363d;
+  --color-border-light: #21262d;
+
+  /* Code block colors - Terminal-like syntax theme */
+  --color-code-bg: #161b22;
+  --color-code-text: #e6edf3;
+  --color-code-comment: #8b949e;
+  --color-code-keyword: #ff7b72;
+  --color-code-string: #a5d6ff;
+  --color-code-number: #79c0ff;
+  --color-code-function: #d2a8ff;
+  --color-code-variable: #ffa657;
+  --color-code-prompt: #8b949e;
+  --color-code-command: #79c0ff;
+  --color-code-success: #3fb950;
+  --color-code-output: #8b949e;
+
+  /* Shadows - Darker, more subtle */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+
+  /* Focus ring - Visible on dark background */
+  --color-focus-ring: rgba(88, 166, 255, 0.5);
+}
+
+/* Transition for theme switching */
+html {
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Ensure smooth color transitions on all elements */
+[data-theme="dark"] * {
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}

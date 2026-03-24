@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="arch-title arch-desc">
+  <title id="arch-title">MirDB LSM-Tree Architecture Diagram</title>
+  <desc id="arch-desc">A diagram showing the LSM-tree architecture with memtable using skip list data structure, SSTables organized in levels, and compaction process that merges data between levels.</desc>
+
+  <defs>
+    <linearGradient id="memtableGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="sstableGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#34d399;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="compactionGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="none" />
+
+  <!-- Write Path Label -->
+  <text x="80" y="30" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#64748b" role="heading" aria-level="2">Write Path</text>
+
+  <!-- Memtable Section -->
+  <g id="memtable-component" role="group" aria-label="Memtable component with skip list data structure">
+    <!-- Memtable Container -->
+    <rect x="50" y="50" width="200" height="140" rx="8" fill="url(#memtableGrad)" opacity="0.9"/>
+    <text x="150" y="80" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="white" text-anchor="middle">Memtable</text>
+
+    <!-- Skip List Visualization -->
+    <g id="skip-list" aria-label="Skip list data structure">
+      <text x="150" y="100" font-family="system-ui, sans-serif" font-size="11" fill="white" text-anchor="middle" opacity="0.9">(Skip List)</text>
+
+      <!-- Skip list nodes -->
+      <rect x="70" y="115" width="30" height="20" rx="3" fill="white" opacity="0.9"/>
+      <text x="85" y="129" font-family="monospace" font-size="10" fill="#3b82f6" text-anchor="middle">k1</text>
+
+      <rect x="110" y="115" width="30" height="20" rx="3" fill="white" opacity="0.9"/>
+      <text x="125" y="129" font-family="monospace" font-size="10" fill="#3b82f6" text-anchor="middle">k2</text>
+
+      <rect x="150" y="115" width="30" height="20" rx="3" fill="white" opacity="0.9"/>
+      <text x="165" y="129" font-family="monospace" font-size="10" fill="#3b82f6" text-anchor="middle">k3</text>
+
+      <rect x="190" y="115" width="30" height="20" rx="3" fill="white" opacity="0.9"/>
+      <text x="205" y="129" font-family="monospace" font-size="10" fill="#3b82f6" text-anchor="middle">k4</text>
+
+      <!-- Skip list level indicators -->
+      <line x1="85" y1="150" x2="125" y2="150" stroke="white" stroke-width="1.5" opacity="0.7"/>
+      <line x1="125" y1="150" x2="165" y2="150" stroke="white" stroke-width="1.5" opacity="0.7"/>
+      <line x1="165" y1="150" x2="205" y2="150" stroke="white" stroke-width="1.5" opacity="0.7"/>
+
+      <line x1="85" y1="160" x2="165" y2="160" stroke="white" stroke-width="1.5" opacity="0.5"/>
+      <line x1="85" y1="170" x2="205" y2="170" stroke="white" stroke-width="1.5" opacity="0.3"/>
+    </g>
+  </g>
+
+  <!-- Minor Compaction Arrow -->
+  <g id="minor-compaction" role="group" aria-label="Minor compaction: memtable flushes to Level 0 SSTable">
+    <line x1="150" y1="195" x2="150" y2="240" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="220" y="220" font-family="system-ui, sans-serif" font-size="12" fill="#f59e0b" font-weight="500">Minor Compaction</text>
+    <text x="220" y="235" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">(Flush to disk)</text>
+  </g>
+
+  <!-- SSTable Levels -->
+  <g id="sstables-component" role="group" aria-label="SSTable levels with sorted string tables">
+    <!-- Level 0 -->
+    <g role="group" aria-label="Level 0 SSTables">
+      <rect x="50" y="250" width="200" height="50" rx="6" fill="url(#sstableGrad)" opacity="0.85"/>
+      <text x="70" y="280" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="white">L0</text>
+      <rect x="95" y="262" width="45" height="26" rx="3" fill="white" opacity="0.9"/>
+      <text x="117" y="280" font-family="monospace" font-size="9" fill="#10b981" text-anchor="middle">SST</text>
+      <rect x="145" y="262" width="45" height="26" rx="3" fill="white" opacity="0.9"/>
+      <text x="167" y="280" font-family="monospace" font-size="9" fill="#10b981" text-anchor="middle">SST</text>
+      <rect x="195" y="262" width="45" height="26" rx="3" fill="white" opacity="0.9"/>
+      <text x="217" y="280" font-family="monospace" font-size="9" fill="#10b981" text-anchor="middle">SST</text>
+    </g>
+
+    <!-- Major Compaction Arrow L0 to L1 -->
+    <g id="major-compaction-l0-l1" role="group" aria-label="Major compaction from Level 0 to Level 1">
+      <line x1="150" y1="305" x2="150" y2="330" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+
+    <!-- Level 1 -->
+    <g role="group" aria-label="Level 1 SSTables">
+      <rect x="50" y="340" width="200" height="50" rx="6" fill="url(#sstableGrad)" opacity="0.75"/>
+      <text x="70" y="370" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="white">L1</text>
+      <rect x="95" y="352" width="65" height="26" rx="3" fill="white" opacity="0.9"/>
+      <text x="127" y="370" font-family="monospace" font-size="9" fill="#10b981" text-anchor="middle">SSTable</text>
+      <rect x="165" y="352" width="65" height="26" rx="3" fill="white" opacity="0.9"/>
+      <text x="197" y="370" font-family="monospace" font-size="9" fill="#10b981" text-anchor="middle">SSTable</text>
+    </g>
+
+    <!-- Major Compaction Arrow L1 to L2 -->
+    <g id="major-compaction-l1-l2" role="group" aria-label="Major compaction from Level 1 to Level 2">
+      <line x1="150" y1="395" x2="150" y2="420" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+
+    <!-- Level 2+ -->
+    <g role="group" aria-label="Level 2 and deeper SSTables">
+      <rect x="50" y="430" width="200" height="50" rx="6" fill="url(#sstableGrad)" opacity="0.65"/>
+      <text x="70" y="460" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="white">L2+</text>
+      <rect x="95" y="442" width="140" height="26" rx="3" fill="white" opacity="0.9"/>
+      <text x="165" y="460" font-family="monospace" font-size="9" fill="#10b981" text-anchor="middle">Larger SSTables</text>
+    </g>
+  </g>
+
+  <!-- Compaction Process Explanation -->
+  <g id="compaction-component" role="group" aria-label="Compaction process explanation">
+    <rect x="320" y="280" width="220" height="120" rx="8" fill="url(#compactionGrad)" opacity="0.9"/>
+    <text x="430" y="310" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="white" text-anchor="middle">Major Compaction</text>
+
+    <text x="340" y="335" font-family="system-ui, sans-serif" font-size="11" fill="white" opacity="0.95">• Merges overlapping SSTables</text>
+    <text x="340" y="355" font-family="system-ui, sans-serif" font-size="11" fill="white" opacity="0.95">• Removes deleted keys</text>
+    <text x="340" y="375" font-family="system-ui, sans-serif" font-size="11" fill="white" opacity="0.95">• Maintains sorted order</text>
+    <text x="340" y="395" font-family="system-ui, sans-serif" font-size="11" fill="white" opacity="0.95">• Optimizes read performance</text>
+  </g>
+
+  <!-- Arrow connecting to compaction -->
+  <line x1="255" y1="340" x2="315" y2="340" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Read Path -->
+  <g id="read-path" role="group" aria-label="Read path through LSM-tree">
+    <text x="600" y="30" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#64748b">Read Path</text>
+
+    <!-- Read flow -->
+    <rect x="580" y="50" width="180" height="180" rx="8" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="2"/>
+
+    <text x="670" y="80" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#334155" text-anchor="middle">Query: GET key</text>
+
+    <circle cx="670" cy="110" r="8" fill="#3b82f6"/>
+    <text x="695" y="115" font-family="system-ui, sans-serif" font-size="11" fill="#475569">1. Check Memtable</text>
+
+    <line x1="670" y1="120" x2="670" y2="135" stroke="#94a3b8" stroke-width="1.5"/>
+
+    <circle cx="670" cy="145" r="8" fill="#10b981"/>
+    <text x="695" y="150" font-family="system-ui, sans-serif" font-size="11" fill="#475569">2. Check L0 SSTables</text>
+
+    <line x1="670" y1="155" x2="670" y2="170" stroke="#94a3b8" stroke-width="1.5"/>
+
+    <circle cx="670" cy="180" r="8" fill="#10b981" opacity="0.7"/>
+    <text x="695" y="185" font-family="system-ui, sans-serif" font-size="11" fill="#475569">3. Check L1, L2...</text>
+
+    <text x="670" y="220" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle" font-style="italic">Bloom filters optimize lookups</text>
+  </g>
+
+  <!-- Legend -->
+  <g id="legend" role="group" aria-label="Diagram legend">
+    <rect x="580" y="280" width="180" height="130" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="670" y="305" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#334155" text-anchor="middle">Legend</text>
+
+    <rect x="600" y="320" width="20" height="14" rx="2" fill="url(#memtableGrad)"/>
+    <text x="630" y="332" font-family="system-ui, sans-serif" font-size="11" fill="#475569">Memtable (in-memory)</text>
+
+    <rect x="600" y="345" width="20" height="14" rx="2" fill="url(#sstableGrad)"/>
+    <text x="630" y="357" font-family="system-ui, sans-serif" font-size="11" fill="#475569">SSTable (on-disk)</text>
+
+    <rect x="600" y="370" width="20" height="14" rx="2" fill="url(#compactionGrad)"/>
+    <text x="630" y="382" font-family="system-ui, sans-serif" font-size="11" fill="#475569">Compaction process</text>
+
+    <line x1="600" y1="400" x2="620" y2="400" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="630" y="404" font-family="system-ui, sans-serif" font-size="11" fill="#475569">Data flow</text>
+  </g>
+</svg>
