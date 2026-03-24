@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. Drop-in replacement with disk persistence and LSM-tree architecture.">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <!-- Skip link for accessibility -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- HEADER SECTION START (Scenario 1) -->
+  <header class="header" role="banner">
+    <div class="header__container">
+      <a href="/" class="header__logo" aria-label="MirDB Home">
+        <img src="assets/images/logo.gif" alt="MirDB Logo" class="header__logo-img">
+        <span class="header__logo-text">MirDB</span>
+      </a>
+
+      <nav class="header__nav" role="navigation" aria-label="Main navigation">
+        <ul class="header__nav-list" id="nav-list">
+          <li class="header__nav-item">
+            <a href="https://github.com/yetone/mirdb" class="header__nav-link" target="_blank" rel="noopener noreferrer">
+              <svg class="header__nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              <span>GitHub</span>
+            </a>
+          </li>
+          <li class="header__nav-item">
+            <a href="https://github.com/yetone/mirdb#readme" class="header__nav-link" target="_blank" rel="noopener noreferrer">
+              <span>Documentation</span>
+            </a>
+          </li>
+          <li class="header__nav-item">
+            <a href="#about" class="header__nav-link">
+              <span>About</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <button
+          class="header__theme-toggle"
+          id="theme-toggle"
+          type="button"
+          aria-label="Toggle dark/light theme"
+          title="Toggle theme"
+        >
+          <svg class="header__theme-icon header__theme-icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="header__theme-icon header__theme-icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <button
+          class="header__hamburger"
+          id="hamburger-btn"
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+          aria-controls="nav-list"
+        >
+          <span class="header__hamburger-line"></span>
+          <span class="header__hamburger-line"></span>
+          <span class="header__hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <!-- Basic theme toggle for header (Scenario 10 will enhance with localStorage/system preference) -->
+  <script>
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+    });
+  </script>
+  <!-- HEADER SECTION END -->
+
+  <main id="main">
+    <!-- HERO SECTION START (Scenario 2) -->
+    <section class="hero" id="hero">
+      <h1>MirDB</h1>
+      <p>A Persistent Key-Value Store with Memcached Protocol</p>
+    </section>
+    <!-- HERO SECTION END -->
+
+    <!-- FEATURES SECTION START (Scenario 3) -->
+    <section class="features" id="features">
+      <h2>Features</h2>
+    </section>
+    <!-- FEATURES SECTION END -->
+
+    <!-- QUICKSTART SECTION START (Scenario 4) -->
+    <section class="quickstart" id="quickstart">
+      <h2>Quick Start</h2>
+    </section>
+    <!-- QUICKSTART SECTION END -->
+
+    <!-- ARCHITECTURE SECTION START (Scenario 5) -->
+    <section class="architecture" id="architecture">
+      <h2>Architecture</h2>
+    </section>
+    <!-- ARCHITECTURE SECTION END -->
+
+    <!-- CONFIG SECTION START (Scenario 6) -->
+    <section class="config" id="config">
+      <h2>Configuration</h2>
+    </section>
+    <!-- CONFIG SECTION END -->
+
+    <!-- STATUS SECTION START (Scenario 7) -->
+    <section class="status" id="status">
+      <h2>Project Status</h2>
+    </section>
+    <!-- STATUS SECTION END -->
+
+    <!-- ABOUT SECTION -->
+    <section class="about" id="about">
+      <h2>About MirDB</h2>
+      <p>MirDB is a persistent key-value store that implements the Memcached protocol, providing disk persistence with LSM-tree architecture.</p>
+    </section>
+  </main>
+
+  <!-- FOOTER SECTION START (Scenario 8) -->
+  <footer class="footer" role="contentinfo">
+    <p>&copy; 2024 MirDB. MIT License.</p>
+  </footer>
+  <!-- FOOTER SECTION END -->
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB - A Persistent Key-Value Store with Memcached Protocol",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve src -l 8080",
+    "test": "playwright test",
+    "test:unit": "jest"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.0",
+    "@types/node": "^20.11.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "serve": "^14.2.0",
+    "typescript": "^5.3.0"
+  }
+}
