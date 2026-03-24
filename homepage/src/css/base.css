@@ -15,9 +15,6 @@
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-* {
   margin: 0;
   padding: 0;
 }
@@ -41,8 +38,8 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-bold);
   text-wrap: balance;
 }
 
@@ -61,7 +58,7 @@ p {
 a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color 0.2s ease;
 }
 
 a:hover {
@@ -79,8 +76,8 @@ img, picture, video, canvas, svg {
   height: auto;
 }
 
-input, button, textarea, select {
-  font: inherit;
+ul, ol {
+  list-style: none;
 }
 
 button {
@@ -88,7 +85,7 @@ button {
   font-size: inherit;
   cursor: pointer;
   border: none;
-  background: none;
+  background: transparent;
   color: inherit;
 }
 
@@ -97,12 +94,11 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
-ul, ol {
-  list-style: none;
+pre, code {
+  font-family: var(--font-family-mono);
 }
 
 code {
-  font-family: var(--font-family-mono);
   font-size: 0.875em;
   background-color: var(--color-code-bg);
   padding: 0.125em 0.25em;
@@ -110,7 +106,6 @@ code {
 }
 
 pre {
-  font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   background-color: var(--color-code-bg);
   padding: var(--spacing-md);
@@ -121,6 +116,50 @@ pre {
 pre code {
   background: none;
   padding: 0;
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.section-title {
+  font-size: var(--font-size-3xl);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  font-weight: var(--font-weight-medium);
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: white;
 }
 
 /* Accessibility: Skip link */
