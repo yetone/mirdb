@@ -28,5 +28,5 @@
 @import url('./components/footer.css');
 
 /* Theme overrides - Scenario 10 */
-/* @import url('./themes/light.css'); */
-/* @import url('./themes/dark.css'); */
+@import url('./themes/light.css');
+@import url('./themes/dark.css');

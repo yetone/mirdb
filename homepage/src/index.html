@@ -82,15 +82,7 @@
       </div>
     </div>
   </header>
-  <!-- Basic theme toggle for header (Scenario 10 will enhance with localStorage/system preference) -->
-  <script>
-    document.getElementById('theme-toggle').addEventListener('click', function() {
-      const html = document.documentElement;
-      const currentTheme = html.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', newTheme);
-    });
-  </script>
+  <!-- Theme toggle logic handled by theme-toggle.js (Scenario 10) -->
   <!-- HEADER SECTION END -->
 
   <main id="main">

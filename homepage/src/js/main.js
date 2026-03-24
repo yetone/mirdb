@@ -10,7 +10,7 @@
  */
 
 import { initMobileNav } from './mobile-nav.js';
-// import { initTheme } from './theme-toggle.js';
+import { initTheme } from './theme-toggle.js';
 // import { initCopyButtons } from './copy-code.js';
 // import { initSmoothScroll } from './smooth-scroll.js';
 
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
 
   // Initialize theme (Scenario 10)
-  // initTheme();
+  initTheme();
 
   // Initialize copy buttons (Scenario 4)
   // initCopyButtons();
