@@ -25,7 +25,7 @@
 @import url('./components/architecture.css');
 @import url('./components/config.css');
 @import url('./components/status.css');
-/* @import url('./components/footer.css'); */
+@import url('./components/footer.css');
 
 /* Theme overrides - Scenario 10 */
 /* @import url('./themes/light.css'); */
