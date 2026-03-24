@@ -18,6 +18,11 @@ import { initMobileNav } from './mobile-nav.js';
 document.addEventListener('DOMContentLoaded', () => {
   console.log('MirDB Homepage initialized');
 
+  // Initialize copy buttons (Scenario 4) - loaded via global script
+  if (window.CopyCode && typeof window.CopyCode.initCopyButtons === 'function') {
+    window.CopyCode.initCopyButtons();
+  }
+
   // Initialize mobile navigation (Scenario 1)
   initMobileNav();
 

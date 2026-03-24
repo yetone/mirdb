@@ -156,8 +156,44 @@
     <!-- QUICKSTART SECTION START (Scenario 4) -->
     <section class="quickstart" id="quickstart">
       <div class="container">
-        <h2>Quick Start</h2>
-        <p>Coming soon...</p>
+        <h2 class="section-title">Quick Start</h2>
+        <div class="quickstart-grid">
+          <!-- Installation Column -->
+          <div class="quickstart-column">
+            <h3>Installation</h3>
+            <p>Clone and build MirDB from source using Cargo:</p>
+            <div class="code-block" data-language="shell">
+              <pre><code><span class="token-comment"># Clone the repository</span>
+<span class="token-prompt">$ </span><span class="token-command">git clone</span> https://github.com/yetone/mirdb.git
+<span class="token-prompt">$ </span><span class="token-command">cd</span> mirdb
+
+<span class="token-comment"># Build and run</span>
+<span class="token-prompt">$ </span><span class="token-command">cargo run</span> <span class="token-variable">--release</span></code></pre>
+            </div>
+            <p>The server will start listening on port <strong>12333</strong> by default.</p>
+          </div>
+
+          <!-- Usage Column -->
+          <div class="quickstart-column">
+            <h3>Usage</h3>
+            <p>Connect using any memcached client or via telnet/nc:</p>
+            <div class="code-block" data-language="protocol">
+              <pre><code><span class="token-comment"># Connect to MirDB</span>
+<span class="token-prompt">$ </span><span class="token-command">nc</span> localhost <span class="token-number">12333</span>
+
+<span class="token-comment"># Store a value</span>
+<span class="token-keyword">SET</span> <span class="token-variable">mykey</span> <span class="token-number">0 0 5</span>
+hello
+<span class="token-success">STORED</span>
+
+<span class="token-comment"># Retrieve the value</span>
+<span class="token-keyword">GET</span> <span class="token-variable">mykey</span>
+<span class="token-output">VALUE mykey 0 5</span>
+<span class="token-value">hello</span>
+<span class="token-output">END</span></code></pre>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <!-- QUICKSTART SECTION END -->
@@ -206,6 +242,7 @@
   </footer>
   <!-- FOOTER SECTION END -->
 
+  <script src="js/copy-code.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
