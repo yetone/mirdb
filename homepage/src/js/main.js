@@ -9,8 +9,21 @@
  * - Mobile navigation
  */
 
-// Initialize modules when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-  // Modules will be initialized here by their respective scenario owners
-  console.log('MirDB Homepage initialized');
+    // Initialize modules when they are available
+    if (typeof initTheme === 'function') {
+        initTheme();
+    }
+
+    if (typeof initCopyButtons === 'function') {
+        initCopyButtons();
+    }
+
+    if (typeof initSmoothScroll === 'function') {
+        initSmoothScroll();
+    }
+
+    if (typeof initMobileNav === 'function') {
+        initMobileNav();
+    }
 });

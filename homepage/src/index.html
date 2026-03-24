@@ -53,8 +53,34 @@
     <!-- FEATURES SECTION START (Scenario 3) -->
     <section class="features" id="features">
       <div class="container">
-        <h2>Features</h2>
-        <p>Coming soon...</p>
+        <h2 class="section-title">Features</h2>
+        <div class="features-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🔌</div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Drop-in replacement for memcached with full protocol compatibility. Use your existing memcached clients without any code changes.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">💾</div>
+            <h3 class="feature-title">Disk Persistence</h3>
+            <p class="feature-description">Unlike traditional memcached, MirDB persists data to disk. Your data survives restarts and power failures.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🌳</div>
+            <h3 class="feature-title">LSM-Tree Architecture</h3>
+            <p class="feature-description">Built on log-structured merge-tree architecture with skip list memtable, SSTables, and automatic compaction for optimal performance.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">⚡</div>
+            <h3 class="feature-title">Async by Default</h3>
+            <p class="feature-description">Powered by Tokio for high-performance async I/O. Handles thousands of concurrent connections efficiently.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🦀</div>
+            <h3 class="feature-title">Rust Performance</h3>
+            <p class="feature-description">Written in Rust for memory safety and blazing-fast performance without garbage collection overhead.</p>
+          </article>
+        </div>
       </div>
     </section>
     <!-- FEATURES SECTION END -->

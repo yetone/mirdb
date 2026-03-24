@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "MirDB Homepage - A Persistent Key-Value Store with Memcached Protocol",
   "scripts": {
-    "serve": "npx http-server src -p 8080 -c-1",
+    "dev": "npx live-server src --port=8080",
     "test": "npx playwright test",
-    "test:e2e": "npx playwright test",
-    "test:unit": "npx jest --config tests/unit/jest.config.js"
+    "test:unit": "jest",
+    "build": "cp -r src dist"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
@@ -16,8 +16,8 @@
   },
   "keywords": [
     "mirdb",
-    "key-value-store",
     "memcached",
+    "key-value-store",
     "lsm-tree"
   ],
   "license": "MIT"

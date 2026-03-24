@@ -9,14 +9,14 @@
  */
 
 module.exports = {
-  testEnvironment: 'jsdom',
-  rootDir: '../../',
-  testMatch: ['<rootDir>/tests/unit/**/*.test.js'],
-  moduleDirectories: ['node_modules', 'src'],
-  collectCoverageFrom: [
-    'src/js/**/*.js',
-    '!src/js/main.js',
-  ],
-  coverageDirectory: '<rootDir>/coverage',
-  verbose: true,
+    testEnvironment: 'jsdom',
+    roots: ['<rootDir>'],
+    testMatch: ['**/*.test.js'],
+    moduleFileExtensions: ['js', 'json'],
+    collectCoverageFrom: [
+        '../../src/js/**/*.js',
+        '!**/node_modules/**',
+    ],
+    coverageDirectory: '<rootDir>/coverage',
+    verbose: true,
 };
