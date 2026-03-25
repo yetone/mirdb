@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* DaisyUI theme variables */
+[data-theme="light"] {
+  --b1: oklch(100% 0 0);
+  --b2: oklch(96% 0 0);
+  --b3: oklch(92% 0 0);
+  --bc: oklch(20% 0 0);
+  --p: oklch(65% 0.25 260);
+  --pc: oklch(100% 0 0);
+  --s: oklch(70% 0.15 290);
+  --sc: oklch(100% 0 0);
+  --a: oklch(75% 0.18 75);
+  --ac: oklch(20% 0 0);
+  --n: oklch(40% 0 0);
+  --nc: oklch(100% 0 0);
+  --in: oklch(70% 0.15 220);
+  --su: oklch(70% 0.2 145);
+  --wa: oklch(80% 0.15 85);
+  --er: oklch(60% 0.2 25);
+}
+
+[data-theme="dark"] {
+  --b1: oklch(25% 0 0);
+  --b2: oklch(20% 0 0);
+  --b3: oklch(15% 0 0);
+  --bc: oklch(90% 0 0);
+  --p: oklch(65% 0.25 260);
+  --pc: oklch(100% 0 0);
+  --s: oklch(70% 0.15 290);
+  --sc: oklch(100% 0 0);
+  --a: oklch(75% 0.18 75);
+  --ac: oklch(20% 0 0);
+  --n: oklch(50% 0 0);
+  --nc: oklch(100% 0 0);
+}
+
+/* Base theme classes */
+.bg-base-100 { background-color: oklch(var(--b1)); }
+.bg-base-200 { background-color: oklch(var(--b2)); }
+.bg-base-300 { background-color: oklch(var(--b3)); }
+.text-base-content { color: oklch(var(--bc)); }
+.text-primary { color: oklch(var(--p)); }
+.text-secondary { color: oklch(var(--s)); }
+.bg-primary { background-color: oklch(var(--p)); }
+.text-primary-content { color: oklch(var(--pc)); }
+
+/* Navbar styling */
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+/* Button styling */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: oklch(var(--p));
+  color: oklch(var(--pc));
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-ghost {
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  background: oklch(var(--b2));
+}
+
+.btn-outline {
+  border: 1px solid currentColor;
+  background: transparent;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Shadow */
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
