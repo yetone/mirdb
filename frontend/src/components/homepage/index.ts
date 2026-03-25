@@ -8,7 +8,7 @@
 export { HeroSection } from './HeroSection';
 export { FeaturesSection } from './FeaturesSection';
 export { HowItWorksSection } from './HowItWorksSection';
-// export { AnalyticsPreview } from './AnalyticsPreview';
+export { AnalyticsPreview } from './AnalyticsPreview';
 // export { StatsSection } from './StatsSection';
 // export { CTASection } from './CTASection';
 // export { Footer } from './Footer';
