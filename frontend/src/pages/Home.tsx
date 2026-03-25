@@ -9,6 +9,7 @@
 import React from 'react';
 import { Navbar } from '../components/Navbar';
 import { HeroSection } from '../components/homepage/HeroSection';
+import { FeaturesSection } from '../components/homepage/FeaturesSection';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Home() {
@@ -19,8 +20,8 @@ export function Home() {
       <Navbar />
       <main>
         <HeroSection isAuthenticated={isAuthenticated} />
+        <FeaturesSection />
         {/* Additional sections will be added by their respective scenarios */}
-        {/* <FeaturesSection /> */}
         {/* <HowItWorksSection /> */}
         {/* <AnalyticsPreview /> */}
         {/* <StatsSection /> */}
