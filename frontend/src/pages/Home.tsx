@@ -10,6 +10,7 @@ import React from 'react';
 import { Navbar } from '../components/Navbar';
 import { HeroSection } from '../components/homepage/HeroSection';
 import { FeaturesSection } from '../components/homepage/FeaturesSection';
+import { HowItWorksSection } from '../components/homepage/HowItWorksSection';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Home() {
@@ -21,8 +22,8 @@ export function Home() {
       <main>
         <HeroSection isAuthenticated={isAuthenticated} />
         <FeaturesSection />
+        <HowItWorksSection />
         {/* Additional sections will be added by their respective scenarios */}
-        {/* <HowItWorksSection /> */}
         {/* <AnalyticsPreview /> */}
         {/* <StatsSection /> */}
         {/* <CTASection isAuthenticated={isAuthenticated} /> */}
