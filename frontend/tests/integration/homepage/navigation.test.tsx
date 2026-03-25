@@ -126,10 +126,11 @@ describe('Scenario 2: Get Started CTA Navigation', () => {
         useMemoryRouter: true,
       });
 
-      // Should be findable by role and name
-      const getStartedLink = screen.getByRole('link', { name: /get started/i });
-      expect(getStartedLink).toBeInTheDocument();
-      expect(getStartedLink).toBeVisible();
+      // Should be findable by role and name (multiple Get Started links exist - navbar and hero)
+      const getStartedLinks = screen.getAllByRole('link', { name: /get started/i });
+      expect(getStartedLinks.length).toBeGreaterThan(0);
+      expect(getStartedLinks[0]).toBeInTheDocument();
+      expect(getStartedLinks[0]).toBeVisible();
     });
 
     it('should be keyboard focusable', () => {
