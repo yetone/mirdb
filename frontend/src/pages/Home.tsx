@@ -13,6 +13,7 @@ import { FeaturesSection } from '../components/homepage/FeaturesSection';
 import { HowItWorksSection } from '../components/homepage/HowItWorksSection';
 import { AnalyticsPreview } from '../components/homepage/AnalyticsPreview';
 import { Footer } from '../components/homepage/Footer';
+import { StatsSection } from '../components/homepage/StatsSection';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Home() {
@@ -26,8 +27,8 @@ export function Home() {
         <FeaturesSection />
         <HowItWorksSection />
         <AnalyticsPreview />
+        <StatsSection />
         {/* Additional sections will be added by their respective scenarios */}
-        {/* <StatsSection /> */}
         {/* <CTASection isAuthenticated={isAuthenticated} /> */}
         <Footer />
       </main>
