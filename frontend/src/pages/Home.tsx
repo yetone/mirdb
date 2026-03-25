@@ -11,6 +11,7 @@ import { Navbar } from '../components/Navbar';
 import { HeroSection } from '../components/homepage/HeroSection';
 import { FeaturesSection } from '../components/homepage/FeaturesSection';
 import { HowItWorksSection } from '../components/homepage/HowItWorksSection';
+import { AnalyticsPreview } from '../components/homepage/AnalyticsPreview';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Home() {
@@ -23,8 +24,8 @@ export function Home() {
         <HeroSection isAuthenticated={isAuthenticated} />
         <FeaturesSection />
         <HowItWorksSection />
+        <AnalyticsPreview />
         {/* Additional sections will be added by their respective scenarios */}
-        {/* <AnalyticsPreview /> */}
         {/* <StatsSection /> */}
         {/* <CTASection isAuthenticated={isAuthenticated} /> */}
         {/* <Footer /> */}
