@@ -12,6 +12,7 @@ import { HeroSection } from '../components/homepage/HeroSection';
 import { FeaturesSection } from '../components/homepage/FeaturesSection';
 import { HowItWorksSection } from '../components/homepage/HowItWorksSection';
 import { AnalyticsPreview } from '../components/homepage/AnalyticsPreview';
+import { Footer } from '../components/homepage/Footer';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Home() {
@@ -28,7 +29,7 @@ export function Home() {
         {/* Additional sections will be added by their respective scenarios */}
         {/* <StatsSection /> */}
         {/* <CTASection isAuthenticated={isAuthenticated} /> */}
-        {/* <Footer /> */}
+        <Footer />
       </main>
     </div>
   );

@@ -386,7 +386,7 @@ describe('Scenario 9: Navigation Links', () => {
         useMemoryRouter: true,
       });
 
-      const navbar = screen.getByRole('navigation');
+      const navbar = screen.getByRole('navigation', { name: /main navigation/i });
       expect(navbar).toHaveAttribute('aria-label', 'Main navigation');
     });
 
