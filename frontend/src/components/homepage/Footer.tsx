@@ -49,7 +49,7 @@ export function Footer() {
             </Link>
           </nav>
           <p
-            className="text-base-content/50 text-sm"
+            className="text-base-content/70 text-sm"
             data-testid="footer-copyright"
           >
             &copy; {currentYear} URL Shortener. All rights reserved.

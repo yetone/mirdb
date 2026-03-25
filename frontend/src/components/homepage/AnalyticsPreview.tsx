@@ -80,13 +80,13 @@ function MetricCard({ testId, icon, label, value, growth }: MetricCardProps) {
         {icon}
       </div>
       <div className="flex-1">
-        <p className="text-sm text-base-content/60">{label}</p>
+        <p className="text-sm text-base-content/80">{label}</p>
         <p className="text-2xl font-bold text-base-content">{value}</p>
       </div>
       <div
         data-testid={`growth-indicator-${testId}`}
-        className={`flex items-center gap-1 text-sm font-medium ${
-          isPositive ? 'text-success' : 'text-error'
+        className={`flex items-center gap-1 text-sm font-semibold ${
+          isPositive ? 'text-green-800 dark:text-green-400' : 'text-red-800 dark:text-red-400'
         }`}
       >
         <TrendingUp
@@ -160,7 +160,7 @@ export function AnalyticsPreview() {
                           isHovered={hoveredBar === index}
                         />
                       </div>
-                      <span className="mt-2 text-xs text-base-content/60 font-medium">
+                      <span className="mt-2 text-xs text-base-content/80 font-medium">
                         {data.day}
                       </span>
                     </div>
@@ -211,7 +211,7 @@ export function AnalyticsPreview() {
               />
             </div>
 
-            <p className="mt-6 text-sm text-base-content/50 text-center">
+            <p className="mt-6 text-sm text-base-content/70 text-center">
               Sample data for demonstration purposes
             </p>
           </div>
