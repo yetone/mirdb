@@ -14,7 +14,7 @@ interface ThemeProviderProps {
   initialTheme?: Theme;
 }
 
-export function ThemeProvider({ children, initialTheme = 'dark' }: ThemeProviderProps) {
+export function ThemeProvider({ children, initialTheme = 'light' }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(initialTheme);
 
   return (
@@ -24,7 +24,7 @@ export function ThemeProvider({ children, initialTheme = 'dark' }: ThemeProvider
   );
 }
 
-export function useTheme(): ThemeContextValue {
+export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider');
@@ -33,3 +33,4 @@ export function useTheme(): ThemeContextValue {
 }
 
 export { ThemeContext };
+export type { Theme };

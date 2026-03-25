@@ -1,20 +1,20 @@
 /**
  * Navigation Integration Tests
- * Owner: Scenario 2 - Get Started CTA Navigation (partial)
- *        Scenario 3 - Sign In CTA Navigation (partial)
+ * Tests for CTA navigation flows on the homepage
  *
- * Tests CTA button navigation from homepage to registration/login pages.
+ * Scenario 2: Get Started CTA Navigation - /register navigation
+ * Scenario 3: Sign In CTA Navigation - /login navigation
  */
+
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from '../../../src/contexts/AuthContext';
-import { ThemeProvider } from '../../../src/contexts/ThemeContext';
-import Home from '../../../src/pages/Home';
+import { renderWithProviders } from '../../unit/homepage/test-utils';
+import { Home } from '../../../src/pages/Home';
+import { Navbar } from '../../../src/components/Navbar';
 import { HeroSection } from '../../../src/components/homepage/HeroSection';
 
-// Mock navigate function
+// Mock react-router-dom's useNavigate
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -24,217 +24,255 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-interface TestWrapperProps {
-  children: React.ReactNode;
-  isAuthenticated?: boolean;
-  initialRoute?: string;
-}
-
-const TestWrapper: React.FC<TestWrapperProps> = ({
-  children,
-  isAuthenticated = false,
-  initialRoute = '/',
-}) => {
-  return (
-    <MemoryRouter initialEntries={[initialRoute]}>
-      <AuthProvider initialAuth={isAuthenticated}>
-        <ThemeProvider initialTheme="dark">
-          {children}
-        </ThemeProvider>
-      </AuthProvider>
-    </MemoryRouter>
-  );
-};
-
 describe('Scenario 2: Get Started CTA Navigation', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
   });
 
   describe('Test Case 1: Get Started button visibility', () => {
-    it('renders Get Started button in hero section for unauthenticated users', () => {
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <Home />
-        </TestWrapper>
-      );
+    it('should display Get Started button when user is unauthenticated', () => {
+      renderWithProviders(<Home />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
+      // Check for Get Started button in hero section
+      const getStartedButton = screen.getByTestId('hero-get-started-button');
       expect(getStartedButton).toBeInTheDocument();
-      expect(getStartedButton).toBeVisible();
+      expect(getStartedButton).toHaveTextContent(/Get Started/i);
     });
 
-    it('displays Get Started button prominently in hero section', () => {
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <HeroSection isAuthenticated={false} />
-        </TestWrapper>
-      );
+    it('should not display Get Started button when user is authenticated', () => {
+      renderWithProviders(<Home />, {
+        authOptions: {
+          isAuthenticated: true,
+          user: { id: '1', username: 'testuser', email: 'test@example.com' },
+        },
+        useMemoryRouter: true,
+      });
 
-      // Hero section is labeled by the heading
-      const heroSection = screen.getByRole('region', { name: /shorten your urls/i });
-      expect(heroSection).toBeInTheDocument();
+      // Get Started button should not be present for authenticated users
+      expect(screen.queryByTestId('hero-get-started-button')).not.toBeInTheDocument();
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
-      expect(heroSection).toContainElement(getStartedButton);
+      // Dashboard button should be present instead
+      expect(screen.getByTestId('hero-dashboard-button')).toBeInTheDocument();
     });
   });
 
   describe('Test Case 2: Navigation to /register', () => {
-    it('navigates to /register when Get Started button is clicked', async () => {
+    it('should navigate to /register when clicking Get Started', async () => {
       const user = userEvent.setup();
 
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <Home />
-        </TestWrapper>
-      );
+      renderWithProviders(<Home />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+        initialRoute: '/',
+      });
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
+      const getStartedButton = screen.getByTestId('hero-get-started-button');
+      expect(getStartedButton).toHaveAttribute('href', '/register');
+
       await user.click(getStartedButton);
 
-      expect(mockNavigate).toHaveBeenCalledWith('/register');
+      // Verify the link points to /register
+      expect(getStartedButton.closest('a')).toHaveAttribute('href', '/register');
     });
 
-    it('triggers navigation on click event', () => {
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <HeroSection isAuthenticated={false} />
-        </TestWrapper>
-      );
+    it('should have correct href attribute for /register', () => {
+      renderWithProviders(<HeroSection isAuthenticated={false} />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
-      fireEvent.click(getStartedButton);
-
-      expect(mockNavigate).toHaveBeenCalledTimes(1);
-      expect(mockNavigate).toHaveBeenCalledWith('/register');
+      const getStartedButton = screen.getByTestId('hero-get-started-button');
+      expect(getStartedButton).toHaveAttribute('href', '/register');
     });
   });
 
   describe('Test Case 3: FuturisticButton component usage', () => {
-    it('renders CTA button with proper styling classes', () => {
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <HeroSection isAuthenticated={false} />
-        </TestWrapper>
-      );
+    it('should render Get Started with FuturisticButton styling', () => {
+      renderWithProviders(<HeroSection isAuthenticated={false} />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
+      const getStartedButton = screen.getByTestId('hero-get-started-button');
 
-      // Check for FuturisticButton styling characteristics
-      expect(getStartedButton).toHaveClass('bg-gradient-to-r');
+      // Verify it's a link element (FuturisticButton renders as Link when 'to' prop is provided)
+      expect(getStartedButton.tagName).toBe('A');
+
+      // Verify it has FuturisticButton styling classes
       expect(getStartedButton).toHaveClass('rounded-lg');
       expect(getStartedButton).toHaveClass('font-semibold');
     });
 
-    it('has hover effect transition classes', () => {
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <HeroSection isAuthenticated={false} />
-        </TestWrapper>
-      );
+    it('should have proper visual styling for primary CTA', () => {
+      renderWithProviders(<HeroSection isAuthenticated={false} />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
+      const getStartedButton = screen.getByTestId('hero-get-started-button');
 
-      // FuturisticButton should have transition and transform classes
-      expect(getStartedButton).toHaveClass('transition-all');
-      expect(getStartedButton).toHaveClass('hover:scale-105');
+      // Primary variant should have shadow and hover effects
+      expect(getStartedButton).toHaveClass('shadow-lg');
     });
   });
 
   describe('Test Case 4: Accessibility', () => {
-    it('has proper ARIA attributes', () => {
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <HeroSection isAuthenticated={false} />
-        </TestWrapper>
-      );
+    it('should be accessible with proper text content', () => {
+      renderWithProviders(<Home />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
-
-      // Button should have accessible name via aria-label
-      expect(getStartedButton).toHaveAttribute('aria-label');
-      expect(getStartedButton.getAttribute('aria-label')).toContain('Get started');
+      // Should be findable by role and name
+      const getStartedLink = screen.getByRole('link', { name: /get started/i });
+      expect(getStartedLink).toBeInTheDocument();
+      expect(getStartedLink).toBeVisible();
     });
 
-    it('is keyboard accessible with proper focus styling', () => {
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <HeroSection isAuthenticated={false} />
-        </TestWrapper>
-      );
+    it('should be keyboard focusable', () => {
+      renderWithProviders(<HeroSection isAuthenticated={false} />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
+      const getStartedButton = screen.getByTestId('hero-get-started-button');
 
-      // Button should be focusable
+      // Link should be focusable
       getStartedButton.focus();
       expect(getStartedButton).toHaveFocus();
-
-      // Should have focus ring classes
-      expect(getStartedButton).toHaveClass('focus:outline-none');
-      expect(getStartedButton).toHaveClass('focus:ring-2');
     });
 
-    it('can be activated via keyboard Enter key', async () => {
+    it('should be keyboard accessible via Tab navigation', async () => {
       const user = userEvent.setup();
 
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <HeroSection isAuthenticated={false} />
-        </TestWrapper>
-      );
+      renderWithProviders(<HeroSection isAuthenticated={false} />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
+      // Tab should be able to focus the Get Started button
+      await user.tab();
 
-      getStartedButton.focus();
-      await user.keyboard('{Enter}');
+      // The Get Started button should be focusable in the tab order
+      const getStartedButton = screen.getByTestId('hero-get-started-button');
+      expect(document.activeElement).toBe(getStartedButton);
+    });
+  });
+});
 
-      expect(mockNavigate).toHaveBeenCalledWith('/register');
+describe('Sign In CTA Navigation', () => {
+  beforeEach(() => {
+    mockNavigate.mockClear();
+  });
+
+  describe('Test Case 1: Sign In button/link visibility', () => {
+    it('should display Sign In button/link when user is unauthenticated', () => {
+      renderWithProviders(<Home />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
+
+      // Check for Sign In link in navbar
+      const navbarSignIn = screen.getByTestId('sign-in-link');
+      expect(navbarSignIn).toBeInTheDocument();
+      expect(navbarSignIn).toHaveTextContent('Sign In');
+
+      // Check for Sign In link in hero section
+      const heroSignIn = screen.getByTestId('hero-sign-in-link');
+      expect(heroSignIn).toBeInTheDocument();
+      expect(heroSignIn).toHaveTextContent('Sign In');
     });
 
-    it('can be activated via keyboard Space key', async () => {
-      const user = userEvent.setup();
+    it('should not display Sign In when user is authenticated', () => {
+      renderWithProviders(<Home />, {
+        authOptions: {
+          isAuthenticated: true,
+          user: { id: '1', username: 'testuser', email: 'test@example.com' },
+        },
+        useMemoryRouter: true,
+      });
 
-      render(
-        <TestWrapper isAuthenticated={false}>
-          <HeroSection isAuthenticated={false} />
-        </TestWrapper>
-      );
+      // Sign In links should not be present for authenticated users
+      expect(screen.queryByTestId('sign-in-link')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('hero-sign-in-link')).not.toBeInTheDocument();
 
-      const getStartedButton = screen.getByRole('button', { name: /get started/i });
-
-      getStartedButton.focus();
-      await user.keyboard(' ');
-
-      expect(mockNavigate).toHaveBeenCalledWith('/register');
+      // Dashboard link should be present instead
+      expect(screen.getByTestId('dashboard-link')).toBeInTheDocument();
     });
   });
 
-  describe('Authenticated user experience', () => {
-    it('shows Go to Dashboard instead of Get Started for authenticated users', () => {
-      render(
-        <TestWrapper isAuthenticated={true}>
-          <Home />
-        </TestWrapper>
-      );
-
-      expect(screen.queryByRole('button', { name: /get started/i })).not.toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /go to your dashboard/i })).toBeInTheDocument();
-    });
-
-    it('navigates to /dashboard when authenticated user clicks CTA', async () => {
+  describe('Test Case 2: Sign In navigation to /login', () => {
+    it('should navigate to /login when clicking Sign In in navbar', async () => {
       const user = userEvent.setup();
 
-      render(
-        <TestWrapper isAuthenticated={true}>
-          <HeroSection isAuthenticated={true} />
-        </TestWrapper>
-      );
+      renderWithProviders(<Home />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+        initialRoute: '/',
+      });
 
-      const dashboardButton = screen.getByRole('button', { name: /go to your dashboard/i });
-      await user.click(dashboardButton);
+      const signInLink = screen.getByTestId('sign-in-link');
+      expect(signInLink).toHaveAttribute('href', '/login');
 
-      expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
+      await user.click(signInLink);
+
+      // Verify the link points to /login
+      expect(signInLink.closest('a')).toHaveAttribute('href', '/login');
+    });
+
+    it('should navigate to /login when clicking Sign In in hero section', async () => {
+      const user = userEvent.setup();
+
+      renderWithProviders(<Home />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+        initialRoute: '/',
+      });
+
+      const heroSignInLink = screen.getByTestId('hero-sign-in-link');
+      expect(heroSignInLink).toHaveAttribute('href', '/login');
+
+      await user.click(heroSignInLink);
+
+      // Verify the link points to /login
+      expect(heroSignInLink).toHaveAttribute('href', '/login');
+    });
+  });
+
+  describe('Test Case 3: Navbar Sign In link styling', () => {
+    it('should render Sign In link in navbar with proper styling', () => {
+      renderWithProviders(<Navbar />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
+
+      const signInLink = screen.getByTestId('sign-in-link');
+
+      // Verify it's a link element
+      expect(signInLink.tagName).toBe('A');
+
+      // Verify proper href
+      expect(signInLink).toHaveAttribute('href', '/login');
+
+      // Verify it has button styling classes
+      expect(signInLink).toHaveClass('btn');
+
+      // Verify accessibility
+      expect(signInLink).toHaveAttribute('aria-label', 'Sign in to your account');
+    });
+
+    it('should render Sign In link with accessible text content', () => {
+      renderWithProviders(<Navbar />, {
+        authOptions: { isAuthenticated: false },
+        useMemoryRouter: true,
+      });
+
+      const signInLink = screen.getByRole('link', { name: /sign in/i });
+      expect(signInLink).toBeInTheDocument();
+      expect(signInLink).toBeVisible();
     });
   });
 });

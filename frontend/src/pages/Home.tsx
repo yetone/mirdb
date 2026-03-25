@@ -5,26 +5,30 @@
  * This is the main entry point for the homepage at route '/'.
  * Composes all homepage sections and integrates with existing contexts.
  */
-import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { HeroSection } from '../components/homepage';
 
-const Home: React.FC = () => {
+import React from 'react';
+import { Navbar } from '../components/Navbar';
+import { HeroSection } from '../components/homepage/HeroSection';
+import { useAuth } from '../contexts/AuthContext';
+
+export function Home() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <main className="min-h-screen bg-gray-900">
-      <HeroSection isAuthenticated={isAuthenticated} />
-      {/* Future sections to be added by other scenarios:
-       * - FeaturesSection (Scenario 4)
-       * - HowItWorksSection (Scenario 5)
-       * - AnalyticsPreview (Scenario 6)
-       * - StatsSection (Scenario 11)
-       * - CTASection (Scenario 15)
-       * - Footer (Scenario 10)
-       */}
-    </main>
+    <div className="min-h-screen bg-base-200" data-testid="home-page">
+      <Navbar />
+      <main>
+        <HeroSection isAuthenticated={isAuthenticated} />
+        {/* Additional sections will be added by their respective scenarios */}
+        {/* <FeaturesSection /> */}
+        {/* <HowItWorksSection /> */}
+        {/* <AnalyticsPreview /> */}
+        {/* <StatsSection /> */}
+        {/* <CTASection isAuthenticated={isAuthenticated} /> */}
+        {/* <Footer /> */}
+      </main>
+    </div>
   );
-};
+}
 
 export default Home;

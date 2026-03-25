@@ -5,79 +5,53 @@
  * Displays the main hero area with:
  * - Product headline and tagline
  * - Primary CTA (Get Started / Go to Dashboard)
- * - Secondary CTA (Learn More)
+ * - Secondary CTA (Sign In)
  * - BackgroundEffect animation
  */
+
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import FuturisticButton from '../FuturisticButton';
-import BackgroundEffect from '../BackgroundEffect';
-import type { HeroSectionProps } from '../../types/homepage';
+import { Link } from 'react-router-dom';
+import { BackgroundEffect } from '../BackgroundEffect';
+import { FuturisticButton } from '../FuturisticButton';
+import { HeroSectionProps } from '../../types/homepage';
 
-const HeroSection: React.FC<HeroSectionProps> = ({ isAuthenticated = false }) => {
-  const navigate = useNavigate();
-
-  const handleGetStarted = () => {
-    navigate('/register');
-  };
-
-  const handleGoToDashboard = () => {
-    navigate('/dashboard');
-  };
-
+export function HeroSection({ isAuthenticated = false }: HeroSectionProps) {
   return (
     <section
       className="relative min-h-[80vh] flex items-center justify-center px-4"
-      aria-labelledby="hero-heading"
+      aria-label="Hero section"
     >
-      <BackgroundEffect />
-
+      <BackgroundEffect variant="hero" />
       <div className="relative z-10 text-center max-w-4xl mx-auto">
-        <h1
-          id="hero-heading"
-          className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent mb-6"
-        >
-          Shorten Your URLs, Amplify Your Reach
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Shorten URLs, Amplify Reach
         </h1>
-
-        <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-          Transform long URLs into powerful, trackable short links.
-          Get detailed analytics and insights on every click.
+        <p className="text-lg md:text-xl text-base-content/70 mb-8 max-w-2xl mx-auto">
+          Transform long, unwieldy URLs into concise, trackable links. Get powerful analytics
+          to understand your audience and optimize your campaigns.
         </p>
-
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           {isAuthenticated ? (
-            <FuturisticButton
-              variant="primary"
-              size="lg"
-              onClick={handleGoToDashboard}
-              aria-label="Go to your dashboard"
-            >
+            <FuturisticButton to="/dashboard" variant="primary" size="lg" data-testid="hero-dashboard-button">
               Go to Dashboard
             </FuturisticButton>
           ) : (
-            <FuturisticButton
-              variant="primary"
-              size="lg"
-              onClick={handleGetStarted}
-              aria-label="Get started with URL shortening"
-            >
-              Get Started
-            </FuturisticButton>
+            <>
+              <FuturisticButton to="/register" variant="primary" size="lg" data-testid="hero-get-started-button">
+                Get Started Free
+              </FuturisticButton>
+              <Link
+                to="/login"
+                className="text-primary hover:text-primary-focus underline underline-offset-4 transition-colors"
+                data-testid="hero-sign-in-link"
+                aria-label="Sign in to your existing account"
+              >
+                Sign In
+              </Link>
+            </>
           )}
-
-          <FuturisticButton
-            variant="outline"
-            size="lg"
-            aria-label="Learn more about our features"
-          >
-            Learn More
-          </FuturisticButton>
         </div>
       </div>
     </section>
   );
-};
-
-export { HeroSection };
-export default HeroSection;
+}

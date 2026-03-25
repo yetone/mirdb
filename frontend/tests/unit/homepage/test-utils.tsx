@@ -2,82 +2,75 @@
  * Test Utilities for Homepage Tests
  * Owner: First builder (Scenario 1)
  *
- * Provides render wrappers with required providers:
- * - AuthContext provider (mock authenticated/unauthenticated)
- * - ThemeContext provider (mock theme selection)
- * - BrowserRouter for navigation testing
+ * Provides render wrappers with required providers.
  */
-import React, { ReactElement } from 'react';
+
+import React, { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { AuthProvider } from '../../../src/contexts/AuthContext';
-import { ThemeProvider } from '../../../src/contexts/ThemeContext';
+import { ThemeProvider, Theme } from '../../../src/contexts/ThemeContext';
 
-interface ProviderOptions {
+interface MockAuthOptions {
   isAuthenticated?: boolean;
-  user?: { username: string; email: string; is_admin: boolean } | null;
-  theme?: 'light' | 'dark' | 'system' | 'cyberpunk' | 'synthwave' | 'retro' | 'valentine' | 'night';
+  user?: { id: string; username: string; email: string } | null;
+}
+
+interface MockThemeOptions {
+  theme?: Theme;
+}
+
+interface RenderWithProvidersOptions extends Omit<RenderOptions, 'wrapper'> {
+  authOptions?: MockAuthOptions;
+  themeOptions?: MockThemeOptions;
   initialRoute?: string;
   useMemoryRouter?: boolean;
 }
 
-interface ProvidersProps {
-  children: React.ReactNode;
-  options?: ProviderOptions;
-}
-
-const AllProviders: React.FC<ProvidersProps> = ({ children, options = {} }) => {
+function createWrapper(options: RenderWithProvidersOptions = {}) {
   const {
-    isAuthenticated = false,
-    user = null,
-    theme = 'dark',
+    authOptions = {},
+    themeOptions = {},
     initialRoute = '/',
     useMemoryRouter = false,
   } = options;
 
-  const RouterComponent = useMemoryRouter
-    ? ({ children }: { children: React.ReactNode }) => (
-        <MemoryRouter initialEntries={[initialRoute]}>{children}</MemoryRouter>
-      )
-    : BrowserRouter;
+  const authState = {
+    isAuthenticated: authOptions.isAuthenticated ?? false,
+    user: authOptions.user ?? null,
+  };
 
-  return (
-    <RouterComponent>
-      <AuthProvider initialAuth={isAuthenticated} initialUser={user}>
-        <ThemeProvider initialTheme={theme}>
-          {children}
-        </ThemeProvider>
-      </AuthProvider>
-    </RouterComponent>
-  );
-};
+  return function Wrapper({ children }: { children: ReactNode }) {
+    const RouterComponent = useMemoryRouter ? MemoryRouter : BrowserRouter;
+    const routerProps = useMemoryRouter ? { initialEntries: [initialRoute] } : {};
+
+    return (
+      <RouterComponent {...routerProps}>
+        <AuthProvider initialState={authState}>
+          <ThemeProvider initialTheme={themeOptions.theme ?? 'light'}>
+            {children}
+          </ThemeProvider>
+        </AuthProvider>
+      </RouterComponent>
+    );
+  };
+}
 
 export function renderWithProviders(
   ui: ReactElement,
-  options?: ProviderOptions,
-  renderOptions?: Omit<RenderOptions, 'wrapper'>
+  options: RenderWithProvidersOptions = {}
 ): RenderResult {
-  const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <AllProviders options={options}>{children}</AllProviders>
-  );
-
-  return render(ui, { wrapper: Wrapper, ...renderOptions });
+  const Wrapper = createWrapper(options);
+  return render(ui, { wrapper: Wrapper, ...options });
 }
 
 export function mockAuthContext(isAuthenticated: boolean) {
   return {
     isAuthenticated,
-    user: isAuthenticated
-      ? { username: 'testuser', email: 'test@example.com', is_admin: false }
-      : null,
-    login: vi.fn(),
-    logout: vi.fn(),
+    user: isAuthenticated ? { id: '1', username: 'testuser', email: 'test@example.com' } : null,
   };
 }
 
-export function mockThemeContext(theme: string = 'dark') {
-  return {
-    theme,
-    setTheme: vi.fn(),
-  };
+export function mockThemeContext(theme: Theme) {
+  return { theme };
 }
