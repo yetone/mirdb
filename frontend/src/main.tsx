@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Home } from './pages/Home';
-import './index.css';
 
 function App() {
   return (
@@ -13,9 +12,9 @@ function App() {
         <ThemeProvider>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<div className="p-8 text-center"><h1 className="text-2xl font-bold">Login Page</h1><p>Sign in to your account</p></div>} />
-            <Route path="/register" element={<div className="p-8 text-center"><h1 className="text-2xl font-bold">Register Page</h1><p>Create your account</p></div>} />
-            <Route path="/dashboard" element={<div className="p-8 text-center"><h1 className="text-2xl font-bold">Dashboard</h1><p>Your dashboard</p></div>} />
+            <Route path="/register" element={<div className="min-h-screen bg-base-200 flex items-center justify-center"><h1 className="text-3xl">Register Page</h1></div>} />
+            <Route path="/login" element={<div className="min-h-screen bg-base-200 flex items-center justify-center"><h1 className="text-3xl">Login Page</h1></div>} />
+            <Route path="/dashboard" element={<div className="min-h-screen bg-base-200 flex items-center justify-center"><h1 className="text-3xl">Dashboard</h1></div>} />
           </Routes>
         </ThemeProvider>
       </AuthProvider>
