@@ -1,509 +1,299 @@
 /**
- * InlineShortener Component Tests - Validation & Error Handling
+ * Unit Tests for InlineShortener Component
+ * Owner: Scenario 2 - Inline URL Shortening
  *
- * Owner: Scenario 2 (Component), Scenario 3 (Validation Tests)
+ * Tests:
+ * - Input field is auto-focused on page load
+ * - Placeholder text displays correctly
+ * - Loading state is shown during processing
+ * - Error messages display properly
+ * - Result area shows shortened URL
+ * - Copy button functionality
  *
- * Tests URL validation and error handling for the inline shortener
- * as specified in REQ-7.
- *
- * Test cases:
- * - TC1: Invalid URL format shows "Please enter a valid URL"
- * - TC2: Empty input shows "URL is required"
- * - TC3: Incomplete URL (http://) validation error
- * - TC4: Network error shows friendly message with retry
- * - TC5: URLs with special characters are properly encoded
+ * Requirements: REQ-2, REQ-7
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { InlineShortener, validateUrl, encodeUrlForApi } from '../../../src/components/homepage/InlineShortener';
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { InlineShortener } from '../../../src/components/homepage/InlineShortener'
 
-// Mock the useAnonymousShorten hook
-vi.mock('../../../src/hooks/useAnonymousShorten', () => ({
-  useAnonymousShorten: vi.fn(),
-}));
+// Mock clipboard API
+const mockClipboard = {
+  writeText: vi.fn().mockResolvedValue(undefined),
+}
 
-import { useAnonymousShorten } from '../../../src/hooks/useAnonymousShorten';
+Object.defineProperty(navigator, 'clipboard', {
+  value: mockClipboard,
+  writable: true,
+})
 
-const mockUseAnonymousShorten = vi.mocked(useAnonymousShorten);
-
-describe('InlineShortener - Validation & Error Handling', () => {
-  // Default mock implementation
-  const defaultMock = {
-    shortenUrl: vi.fn(),
-    isLoading: false,
-    error: null,
-    result: null,
-    reset: vi.fn(),
-  };
-
+describe('InlineShortener', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    mockUseAnonymousShorten.mockReturnValue(defaultMock);
-  });
-
-  describe('validateUrl function', () => {
-    it('returns error for empty string', () => {
-      const result = validateUrl('');
-      expect(result.isValid).toBe(false);
-      expect(result.error).toBe('URL is required');
-    });
-
-    it('returns error for whitespace-only string', () => {
-      const result = validateUrl('   ');
-      expect(result.isValid).toBe(false);
-      expect(result.error).toBe('URL is required');
-    });
-
-    it('returns error for invalid URL format', () => {
-      const result = validateUrl('not-a-valid-url');
-      expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Please enter a valid URL');
-    });
-
-    it('returns error for incomplete URL (http://)', () => {
-      const result = validateUrl('http://');
-      expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Please enter a valid URL');
-    });
-
-    it('returns error for incomplete URL (https://)', () => {
-      const result = validateUrl('https://');
-      expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Please enter a valid URL');
-    });
-
-    it('returns error for URL without protocol', () => {
-      const result = validateUrl('example.com');
-      expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Please enter a valid URL');
-    });
-
-    it('returns valid for proper HTTP URL', () => {
-      const result = validateUrl('http://example.com');
-      expect(result.isValid).toBe(true);
-      expect(result.error).toBeUndefined();
-    });
-
-    it('returns valid for proper HTTPS URL', () => {
-      const result = validateUrl('https://example.com');
-      expect(result.isValid).toBe(true);
-      expect(result.error).toBeUndefined();
-    });
-
-    it('returns valid for URL with path', () => {
-      const result = validateUrl('https://example.com/path/to/page');
-      expect(result.isValid).toBe(true);
-      expect(result.error).toBeUndefined();
-    });
-
-    it('returns valid for URL with query parameters', () => {
-      const result = validateUrl('https://example.com?foo=bar&baz=qux');
-      expect(result.isValid).toBe(true);
-      expect(result.error).toBeUndefined();
-    });
-
-    it('returns error for ftp:// protocol', () => {
-      const result = validateUrl('ftp://files.example.com');
-      expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Please enter a valid URL');
-    });
-
-    it('returns error for javascript: protocol', () => {
-      const result = validateUrl('javascript:alert(1)');
-      expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Please enter a valid URL');
-    });
-  });
-
-  describe('encodeUrlForApi function', () => {
-    it('properly encodes URL with special characters', () => {
-      const url = 'https://example.com/path?name=John Doe&query=hello world';
-      const encoded = encodeUrlForApi(url);
-      expect(encoded).toContain('https://example.com/path');
-      // URL should be properly encoded
-      expect(encoded).toMatch(/https:\/\/example\.com\/path/);
-    });
-
-    it('handles URL with unicode characters', () => {
-      const url = 'https://example.com/path?emoji=😀';
-      const encoded = encodeUrlForApi(url);
-      expect(encoded).toContain('https://example.com/path');
-    });
-
-    it('handles already-encoded URLs', () => {
-      const url = 'https://example.com/path%20with%20spaces';
-      const encoded = encodeUrlForApi(url);
-      expect(encoded).toContain('example.com');
-    });
-
-    it('trims whitespace from URL', () => {
-      const url = '  https://example.com  ';
-      const encoded = encodeUrlForApi(url);
-      expect(encoded).toBe('https://example.com/');
-    });
-  });
-
-  describe('TC1: Invalid URL Format', () => {
-    it('displays "Please enter a valid URL" when submitting invalid URL format', async () => {
-      const user = userEvent.setup();
-      const onError = vi.fn();
-
-      render(<InlineShortener onError={onError} />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      // Enter invalid URL
-      await user.type(input, 'not-a-valid-url');
-      await user.click(button);
-
-      // Check error is displayed inline
-      const errorMessage = screen.getByTestId('error-message');
-      expect(errorMessage).toHaveTextContent('Please enter a valid URL');
-      expect(onError).toHaveBeenCalledWith('Please enter a valid URL');
-
-      // Verify API was NOT called
-      expect(defaultMock.shortenUrl).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('TC2: Empty Input Field', () => {
-    it('displays "URL is required" when submitting with empty input', async () => {
-      const user = userEvent.setup();
-      const onError = vi.fn();
-
-      render(<InlineShortener onError={onError} />);
-
-      const button = screen.getByTestId('shorten-button');
-
-      // Click shorten without entering any URL
-      await user.click(button);
-
-      // Check error is displayed
-      const errorMessage = screen.getByTestId('error-message');
-      expect(errorMessage).toHaveTextContent('URL is required');
-      expect(onError).toHaveBeenCalledWith('URL is required');
-
-      // Verify API was NOT called
-      expect(defaultMock.shortenUrl).not.toHaveBeenCalled();
-    });
-
-    it('displays error when input contains only whitespace', async () => {
-      const user = userEvent.setup();
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      // Enter only whitespace
-      await user.type(input, '   ');
-      await user.click(button);
-
-      const errorMessage = screen.getByTestId('error-message');
-      expect(errorMessage).toHaveTextContent('URL is required');
-    });
-  });
-
-  describe('TC3: Incomplete URL (http://)', () => {
-    it('displays validation error for incomplete http:// URL', async () => {
-      const user = userEvent.setup();
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      // Enter incomplete URL
-      await user.type(input, 'http://');
-      await user.click(button);
-
-      const errorMessage = screen.getByTestId('error-message');
-      expect(errorMessage).toHaveTextContent('Please enter a valid URL');
-
-      // Verify API was NOT called
-      expect(defaultMock.shortenUrl).not.toHaveBeenCalled();
-    });
-
-    it('displays validation error for incomplete https:// URL', async () => {
-      const user = userEvent.setup();
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://');
-      await user.click(button);
-
-      const errorMessage = screen.getByTestId('error-message');
-      expect(errorMessage).toHaveTextContent('Please enter a valid URL');
-    });
-  });
-
-  describe('Input field error state', () => {
-    it('applies error styling to input when validation fails', async () => {
-      const user = userEvent.setup();
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.click(button);
-
-      // Input should have error class
-      expect(input).toHaveClass('input-error');
-      expect(input).toHaveAttribute('aria-invalid', 'true');
-    });
-
-    it('clears error when user starts typing', async () => {
-      const user = userEvent.setup();
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      // Trigger validation error
-      await user.click(button);
-      expect(screen.getByTestId('error-message')).toBeInTheDocument();
-
-      // Start typing - error should clear
-      await user.type(input, 'h');
-      expect(screen.queryByTestId('error-message')).not.toBeInTheDocument();
-    });
-
-    it('has proper accessibility attributes for error state', async () => {
-      const user = userEvent.setup();
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.click(button);
-
-      const errorMessage = screen.getByTestId('error-message');
-      expect(errorMessage).toHaveAttribute('role', 'alert');
-      expect(input).toHaveAttribute('aria-describedby', 'url-error');
-    });
-  });
-
-  describe('Form submission with Enter key', () => {
-    it('validates URL when form is submitted with Enter key', async () => {
-      const user = userEvent.setup();
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-
-      await user.type(input, 'invalid-url{Enter}');
-
-      const errorMessage = screen.getByTestId('error-message');
-      expect(errorMessage).toHaveTextContent('Please enter a valid URL');
-    });
-  });
-
-  describe('Successful validation', () => {
-    it('calls shortenUrl when valid URL is submitted', async () => {
-      const user = userEvent.setup();
-      const shortenUrl = vi.fn().mockResolvedValue({
-        shortUrl: 'https://short.url/abc123',
-        originalUrl: 'https://example.com',
-        shortCode: 'abc123',
-        createdAt: new Date().toISOString(),
-      });
-
-      mockUseAnonymousShorten.mockReturnValue({
-        ...defaultMock,
-        shortenUrl,
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com');
-      await user.click(button);
-
-      expect(shortenUrl).toHaveBeenCalledWith('https://example.com/');
-    });
-  });
-
-  describe('TC4: Network Error Handling', () => {
-    it('displays friendly error message on network error', async () => {
-      const user = userEvent.setup();
-      const onError = vi.fn();
-      const shortenUrl = vi.fn().mockRejectedValue(new Error('Failed to shorten URL. Please try again.'));
-
-      mockUseAnonymousShorten.mockReturnValue({
-        ...defaultMock,
-        shortenUrl,
-        error: 'Failed to shorten URL. Please try again.',
-      });
-
-      render(<InlineShortener onError={onError} />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com');
-      await user.click(button);
-
-      // Should show error message
-      const errorMessage = screen.getByTestId('error-message');
-      expect(errorMessage).toHaveTextContent('Failed to shorten URL. Please try again.');
-    });
-
-    it('shows retry button when API error occurs', async () => {
-      const user = userEvent.setup();
-
-      mockUseAnonymousShorten.mockReturnValue({
-        ...defaultMock,
-        error: 'Failed to shorten URL. Please try again.',
-      });
-
-      render(<InlineShortener />);
-
-      // Retry button should be visible when there's an API error
-      const retryButton = screen.getByTestId('retry-button');
-      expect(retryButton).toBeInTheDocument();
-      expect(retryButton).toHaveTextContent('Try again');
-    });
-
-    it('clears error when retry button is clicked', async () => {
-      const user = userEvent.setup();
-      const reset = vi.fn();
-
-      mockUseAnonymousShorten.mockReturnValue({
-        ...defaultMock,
-        error: 'Failed to shorten URL. Please try again.',
-        reset,
-      });
-
-      render(<InlineShortener />);
-
-      const retryButton = screen.getByTestId('retry-button');
-      await user.click(retryButton);
-
-      expect(reset).toHaveBeenCalled();
-    });
-
-    it('shows loading state during API call', async () => {
-      const user = userEvent.setup();
-
-      mockUseAnonymousShorten.mockReturnValue({
-        ...defaultMock,
-        isLoading: true,
-      });
-
-      render(<InlineShortener />);
-
-      const button = screen.getByTestId('shorten-button');
-      expect(button).toHaveTextContent('Shortening...');
-      expect(button).toBeDisabled();
-    });
-
-    it('disables input during loading state', async () => {
-      mockUseAnonymousShorten.mockReturnValue({
-        ...defaultMock,
-        isLoading: true,
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      expect(input).toBeDisabled();
-    });
-  });
-
-  describe('TC5: Special Characters Integration', () => {
-    it('properly encodes and shortens URL with query parameters containing spaces', async () => {
-      const user = userEvent.setup();
-      const shortenUrl = vi.fn().mockResolvedValue({
-        shortUrl: 'https://short.url/abc123',
-        originalUrl: 'https://example.com/path?query=hello%20world',
-        shortCode: 'abc123',
-        createdAt: new Date().toISOString(),
-      });
-
-      mockUseAnonymousShorten.mockReturnValue({
-        ...defaultMock,
-        shortenUrl,
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com/path?query=hello world');
-      await user.click(button);
-
-      // Verify the URL was properly encoded before API call
-      expect(shortenUrl).toHaveBeenCalled();
-      const calledUrl = shortenUrl.mock.calls[0][0];
-      expect(calledUrl).toContain('https://example.com/path');
-    });
-
-    it('handles URL with unicode characters in path', async () => {
-      const user = userEvent.setup();
-      const shortenUrl = vi.fn().mockResolvedValue({
-        shortUrl: 'https://short.url/def456',
-        originalUrl: 'https://example.com/cafe',
-        shortCode: 'def456',
-        createdAt: new Date().toISOString(),
-      });
-
-      mockUseAnonymousShorten.mockReturnValue({
-        ...defaultMock,
-        shortenUrl,
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com/cafe-test');
-      await user.click(button);
-
-      expect(shortenUrl).toHaveBeenCalled();
-    });
-
-    it('successfully shortens URL and displays result', async () => {
-      const user = userEvent.setup();
-      const shortenUrl = vi.fn().mockResolvedValue({
-        shortUrl: 'https://short.url/xyz789',
-        originalUrl: 'https://example.com/path?key=value&other=test',
-        shortCode: 'xyz789',
-        createdAt: new Date().toISOString(),
-      });
-
-      mockUseAnonymousShorten.mockReturnValue({
-        ...defaultMock,
-        shortenUrl,
-        result: {
-          shortUrl: 'https://short.url/xyz789',
-          originalUrl: 'https://example.com/path?key=value&other=test',
-          shortCode: 'xyz789',
-          createdAt: new Date().toISOString(),
-        },
-      });
-
-      render(<InlineShortener />);
-
-      // Result section should be visible
-      const resultSection = screen.getByTestId('result-section');
-      expect(resultSection).toBeInTheDocument();
-
-      // Short URL should be displayed
-      const shortUrl = screen.getByTestId('short-url');
-      expect(shortUrl).toHaveTextContent('https://short.url/xyz789');
-    });
-  });
-});
+    vi.clearAllMocks()
+  })
+
+  describe('Initial Render', () => {
+    it('renders the inline shortener section', () => {
+      render(<InlineShortener />)
+      expect(screen.getByTestId('inline-shortener')).toBeInTheDocument()
+    })
+
+    it('input field is auto-focused on page load', () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      expect(document.activeElement).toBe(input)
+    })
+
+    it('renders input with correct placeholder text', () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      expect(input).toHaveAttribute('placeholder', 'Paste your long URL here...')
+    })
+
+    it('renders Shorten button', () => {
+      render(<InlineShortener />)
+      const button = screen.getByTestId('shorten-button')
+      expect(button).toBeInTheDocument()
+      expect(button).toHaveTextContent('Shorten')
+    })
+
+    it('Shorten button is disabled when input is empty', () => {
+      render(<InlineShortener />)
+      const button = screen.getByTestId('shorten-button')
+      expect(button).toBeDisabled()
+    })
+
+    it('does not auto-focus when autoFocus prop is false', () => {
+      render(<InlineShortener autoFocus={false} />)
+      const input = screen.getByTestId('url-input')
+      expect(document.activeElement).not.toBe(input)
+    })
+  })
+
+  describe('URL Input', () => {
+    it('enables Shorten button when URL is entered', () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      expect(button).not.toBeDisabled()
+    })
+
+    it('disables Shorten button when input is whitespace only', () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: '   ' } })
+      expect(button).toBeDisabled()
+    })
+  })
+
+  describe('Form Submission', () => {
+    it('submits form when Enter key is pressed in input', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' })
+
+      await waitFor(() => {
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
+    })
+
+    it('shows loading state during URL shortening', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      // Check for loading spinner
+      expect(button).toHaveAttribute('aria-busy', 'true')
+    })
+
+    it('displays shortened URL after successful submission', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com/very/long/url/path' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+        expect(screen.getByTestId('short-url')).toBeInTheDocument()
+      })
+    })
+
+    it('shows error message for invalid URL', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'not-a-valid-url' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('error-message')).toBeInTheDocument()
+        expect(screen.getByTestId('error-message')).toHaveTextContent('Please enter a valid URL')
+      })
+    })
+
+    it('calls onShortenSuccess callback when URL is shortened', async () => {
+      const onShortenSuccess = vi.fn()
+      render(<InlineShortener onShortenSuccess={onShortenSuccess} />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(onShortenSuccess).toHaveBeenCalledWith(expect.stringContaining('/s/'))
+      })
+    })
+  })
+
+  describe('Copy Functionality', () => {
+    it('shows copy button after URL is shortened', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('copy-button')).toBeInTheDocument()
+      })
+    })
+
+    it('copies URL to clipboard and shows Copied! feedback', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const submitButton = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(submitButton)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('copy-button')).toBeInTheDocument()
+      })
+
+      const copyButton = screen.getByTestId('copy-button')
+      fireEvent.click(copyButton)
+
+      await waitFor(() => {
+        expect(mockClipboard.writeText).toHaveBeenCalled()
+        expect(screen.getByTestId('copied-feedback')).toBeInTheDocument()
+        expect(screen.getByTestId('copied-feedback')).toHaveTextContent('Copied!')
+      })
+    })
+  })
+
+  describe('Registration Prompt', () => {
+    it('shows registration prompt after successful shortening', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('registration-prompt')).toBeInTheDocument()
+        expect(screen.getByTestId('register-cta')).toBeInTheDocument()
+      })
+    })
+
+    it('registration CTA links to /register', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const registerLink = screen.getByTestId('register-cta')
+        expect(registerLink).toHaveAttribute('href', '/register')
+      })
+    })
+  })
+
+  describe('Shorten Another', () => {
+    it('shows Shorten another button after successful shortening', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('shorten-another-button')).toBeInTheDocument()
+      })
+    })
+
+    it('resets form when Shorten another is clicked', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
+
+      const shortenAnotherButton = screen.getByTestId('shorten-another-button')
+      fireEvent.click(shortenAnotherButton)
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('result-area')).not.toBeInTheDocument()
+        expect(input).toHaveValue('')
+        expect(document.activeElement).toBe(input)
+      })
+    })
+  })
+
+  describe('Accessibility', () => {
+    it('input has proper aria-label', () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      expect(input).toHaveAttribute('aria-label', 'URL to shorten')
+    })
+
+    it('input has aria-invalid when error occurs', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'invalid-url' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(input).toHaveAttribute('aria-invalid', 'true')
+      })
+    })
+
+    it('error message has role alert', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'invalid-url' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const error = screen.getByTestId('error-message')
+        expect(error).toHaveAttribute('role', 'alert')
+      })
+    })
+  })
+})

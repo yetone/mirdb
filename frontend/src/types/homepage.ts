@@ -11,7 +11,7 @@
 export interface ShortenedUrlResult {
   shortUrl: string
   originalUrl: string
-  shortCode: string
+  shortCode?: string
   createdAt: string
 }
 
@@ -52,7 +52,7 @@ export interface UrlValidationResult {
  * Hook return type for useAnonymousShorten
  */
 export interface UseAnonymousShortenReturn {
-  shortenUrl: (url: string) => Promise<ShortenedUrlResult>
+  shortenUrl: (url: string) => Promise<ShortenedUrlResult | null>
   isLoading: boolean
   error: string | null
   result: ShortenedUrlResult | null
