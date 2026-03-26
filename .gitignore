@@ -1,2 +1,10 @@
 /target
 **/*.rs.bk
+.something/
+node_modules/
+dist/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/test-results/
