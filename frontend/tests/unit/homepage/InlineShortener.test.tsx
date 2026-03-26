@@ -506,4 +506,179 @@ describe('InlineShortener - Validation & Error Handling', () => {
       expect(shortUrl).toHaveTextContent('https://short.url/xyz789');
     });
   });
+
+  /**
+   * Scenario 2 - Happy Path Test Cases
+   * Tests for anonymous URL shortening as specified in REQ-2 and REQ-7
+   */
+  describe('Scenario 2: Inline URL Shortening - Happy Path', () => {
+    describe('TC5: Input field auto-focus on page load', () => {
+      it('auto-focuses the URL input field on page load', () => {
+        render(<InlineShortener />);
+
+        const input = screen.getByTestId('url-input');
+        expect(input).toHaveFocus();
+      });
+
+      it('input field has correct placeholder text', () => {
+        render(<InlineShortener />);
+
+        const input = screen.getByPlaceholderText('Paste your long URL here...');
+        expect(input).toBeInTheDocument();
+      });
+    });
+
+    describe('TC3: Copy to clipboard functionality', () => {
+      it('shows copy button when URL is shortened', () => {
+        mockUseAnonymousShorten.mockReturnValue({
+          ...defaultMock,
+          result: {
+            shortUrl: 'https://short.url/abc123',
+            originalUrl: 'https://example.com/very/long/url/path',
+            shortCode: 'abc123',
+            createdAt: new Date().toISOString(),
+          },
+        });
+
+        render(<InlineShortener />);
+
+        const copyButton = screen.getByTestId('copy-button');
+        expect(copyButton).toBeInTheDocument();
+        expect(copyButton).toHaveTextContent('Copy');
+      });
+
+      it('displays "Copied!" feedback after clicking copy button', async () => {
+        const user = userEvent.setup();
+
+        mockUseAnonymousShorten.mockReturnValue({
+          ...defaultMock,
+          result: {
+            shortUrl: 'https://short.url/abc123',
+            originalUrl: 'https://example.com/very/long/url/path',
+            shortCode: 'abc123',
+            createdAt: new Date().toISOString(),
+          },
+        });
+
+        render(<InlineShortener />);
+
+        const copyButton = screen.getByTestId('copy-button');
+        await user.click(copyButton);
+
+        expect(copyButton).toHaveTextContent('Copied!');
+      });
+
+      it('short URL is copied to clipboard when copy button is clicked', async () => {
+        const user = userEvent.setup();
+        const writeTextMock = vi.fn().mockResolvedValue(undefined);
+
+        Object.defineProperty(navigator, 'clipboard', {
+          value: { writeText: writeTextMock },
+          writable: true,
+          configurable: true,
+        });
+
+        mockUseAnonymousShorten.mockReturnValue({
+          ...defaultMock,
+          result: {
+            shortUrl: 'https://short.url/abc123',
+            originalUrl: 'https://example.com/very/long/url/path',
+            shortCode: 'abc123',
+            createdAt: new Date().toISOString(),
+          },
+        });
+
+        render(<InlineShortener />);
+
+        const copyButton = screen.getByTestId('copy-button');
+        await user.click(copyButton);
+
+        expect(writeTextMock).toHaveBeenCalledWith('https://short.url/abc123');
+      });
+    });
+
+    describe('TC4: Keyboard navigation - Enter key submission', () => {
+      it('submits form and shortens URL when Enter key is pressed with valid URL', async () => {
+        const user = userEvent.setup();
+        const shortenUrl = vi.fn().mockResolvedValue({
+          shortUrl: 'https://short.url/enter123',
+          originalUrl: 'https://example.com/very/long/url/path',
+          shortCode: 'enter123',
+          createdAt: new Date().toISOString(),
+        });
+
+        mockUseAnonymousShorten.mockReturnValue({
+          ...defaultMock,
+          shortenUrl,
+        });
+
+        render(<InlineShortener />);
+
+        const input = screen.getByTestId('url-input');
+        await user.type(input, 'https://example.com/very/long/url/path{Enter}');
+
+        expect(shortenUrl).toHaveBeenCalledWith('https://example.com/very/long/url/path');
+      });
+
+      it('focuses input on page load allowing immediate keyboard entry', () => {
+        render(<InlineShortener />);
+
+        const input = screen.getByTestId('url-input');
+        expect(input).toHaveFocus();
+        expect(input).not.toBeDisabled();
+      });
+    });
+
+    describe('TC1: URL shortening happy path', () => {
+      it('generates and displays short URL when valid URL is submitted', async () => {
+        const user = userEvent.setup();
+        const onSuccess = vi.fn();
+        const shortenUrl = vi.fn().mockResolvedValue({
+          shortUrl: 'https://short.url/happypath',
+          originalUrl: 'https://example.com/very/long/url/path',
+          shortCode: 'happypath',
+          createdAt: new Date().toISOString(),
+        });
+
+        mockUseAnonymousShorten.mockReturnValue({
+          ...defaultMock,
+          shortenUrl,
+          result: {
+            shortUrl: 'https://short.url/happypath',
+            originalUrl: 'https://example.com/very/long/url/path',
+            shortCode: 'happypath',
+            createdAt: new Date().toISOString(),
+          },
+        });
+
+        render(<InlineShortener onSuccess={onSuccess} />);
+
+        // Result should be displayed
+        const resultSection = screen.getByTestId('result-section');
+        expect(resultSection).toBeInTheDocument();
+
+        const shortUrl = screen.getByTestId('short-url');
+        expect(shortUrl).toHaveTextContent('https://short.url/happypath');
+      });
+
+      it('displays short URL with full domain after shortening', async () => {
+        mockUseAnonymousShorten.mockReturnValue({
+          ...defaultMock,
+          result: {
+            shortUrl: 'https://short.url/abc123',
+            originalUrl: 'https://example.com/very/long/url/path',
+            shortCode: 'abc123',
+            createdAt: new Date().toISOString(),
+          },
+        });
+
+        render(<InlineShortener />);
+
+        const shortUrl = screen.getByTestId('short-url');
+        // Verify full URL with domain is displayed
+        expect(shortUrl).toHaveTextContent('https://short.url/abc123');
+        expect(shortUrl).toHaveAttribute('href', 'https://short.url/abc123');
+      });
+    });
+  });
 });

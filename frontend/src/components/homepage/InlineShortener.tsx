@@ -169,6 +169,8 @@ export function InlineShortener({ onSuccess, onError }: InlineShortenerProps) {
             aria-describedby={displayError ? 'url-error' : undefined}
             aria-invalid={!!displayError}
             disabled={isLoading}
+            autoFocus
+            data-testid="url-input"
           />
           {displayError && (
             <p

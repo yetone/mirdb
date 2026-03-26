@@ -28,6 +28,160 @@ describe('InlineShortener - Integration Tests', () => {
     global.fetch = originalFetch;
   });
 
+  /**
+   * Scenario 2: Inline URL Shortening - Happy Path
+   * Integration tests for TC1 and TC2 as specified in REQ-2 and REQ-7
+   */
+  describe('Scenario 2 - Happy Path Integration Tests', () => {
+    describe('TC1: Short URL generated and displayed within 1 second', () => {
+      it('generates and displays short URL within 1 second for valid input', async () => {
+        const user = userEvent.setup();
+        const startTime = Date.now();
+
+        global.fetch = vi.fn().mockResolvedValue({
+          ok: true,
+          json: () => Promise.resolve({
+            shortUrl: 'https://short.url/tc1test',
+            originalUrl: 'https://example.com/very/long/url/path',
+            shortCode: 'tc1test',
+            createdAt: new Date().toISOString(),
+          }),
+        });
+
+        render(<InlineShortener />);
+
+        const input = screen.getByPlaceholderText('Paste your long URL here...');
+        const button = screen.getByTestId('shorten-button');
+
+        await user.type(input, 'https://example.com/very/long/url/path');
+        await user.click(button);
+
+        await waitFor(() => {
+          expect(screen.getByTestId('result-section')).toBeInTheDocument();
+        }, { timeout: 1000 });
+
+        const endTime = Date.now();
+        const elapsedTime = endTime - startTime;
+
+        // Verify short URL is displayed
+        const shortUrl = screen.getByTestId('short-url');
+        expect(shortUrl).toHaveTextContent('https://short.url/tc1test');
+
+        // Verify completion within 1 second (1000ms)
+        expect(elapsedTime).toBeLessThan(1000);
+      });
+
+      it('displays the full short URL with domain after submission', async () => {
+        const user = userEvent.setup();
+
+        global.fetch = vi.fn().mockResolvedValue({
+          ok: true,
+          json: () => Promise.resolve({
+            shortUrl: 'https://short.url/fulldom',
+            originalUrl: 'https://example.com/very/long/url/path',
+            shortCode: 'fulldom',
+            createdAt: new Date().toISOString(),
+          }),
+        });
+
+        render(<InlineShortener />);
+
+        const input = screen.getByPlaceholderText('Paste your long URL here...');
+        const button = screen.getByTestId('shorten-button');
+
+        await user.type(input, 'https://example.com/very/long/url/path');
+        await user.click(button);
+
+        await waitFor(() => {
+          const shortUrl = screen.getByTestId('short-url');
+          expect(shortUrl).toHaveTextContent('https://short.url/fulldom');
+          expect(shortUrl).toHaveAttribute('href', 'https://short.url/fulldom');
+        });
+      });
+    });
+
+    describe('TC2: Response time under 500ms (NFR-5)', () => {
+      it('completes URL shortening within 500ms response time', async () => {
+        const user = userEvent.setup();
+
+        // Mock fetch with a small delay to simulate fast API response
+        global.fetch = vi.fn().mockImplementation(() => {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              resolve({
+                ok: true,
+                json: () => Promise.resolve({
+                  shortUrl: 'https://short.url/fast500',
+                  originalUrl: 'https://example.com/long/url',
+                  shortCode: 'fast500',
+                  createdAt: new Date().toISOString(),
+                }),
+              });
+            }, 100); // 100ms simulated API response
+          });
+        });
+
+        render(<InlineShortener />);
+
+        const input = screen.getByPlaceholderText('Paste your long URL here...');
+        const button = screen.getByTestId('shorten-button');
+
+        await user.type(input, 'https://example.com/long/url');
+
+        const startTime = Date.now();
+        await user.click(button);
+
+        await waitFor(() => {
+          expect(screen.getByTestId('result-section')).toBeInTheDocument();
+        }, { timeout: 500 });
+
+        const endTime = Date.now();
+        const responseTime = endTime - startTime;
+
+        // NFR-5: Response time should be under 500ms
+        expect(responseTime).toBeLessThan(500);
+      });
+
+      it('shows loading state during fast API response', async () => {
+        const user = userEvent.setup();
+
+        // Mock fetch with slight delay to capture loading state
+        global.fetch = vi.fn().mockImplementation(() => {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              resolve({
+                ok: true,
+                json: () => Promise.resolve({
+                  shortUrl: 'https://short.url/loading',
+                  originalUrl: 'https://example.com',
+                  shortCode: 'loading',
+                  createdAt: new Date().toISOString(),
+                }),
+              });
+            }, 50);
+          });
+        });
+
+        render(<InlineShortener />);
+
+        const input = screen.getByPlaceholderText('Paste your long URL here...');
+        const button = screen.getByTestId('shorten-button');
+
+        await user.type(input, 'https://example.com');
+        await user.click(button);
+
+        // Verify loading state was displayed
+        expect(button).toHaveTextContent('Shortening...');
+        expect(button).toBeDisabled();
+
+        // Wait for completion
+        await waitFor(() => {
+          expect(screen.getByTestId('result-section')).toBeInTheDocument();
+        });
+      });
+    });
+  });
+
   describe('TC4: Network Error Handling', () => {
     it('displays friendly error message when network request fails', async () => {
       const user = userEvent.setup();
