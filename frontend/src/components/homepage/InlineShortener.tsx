@@ -1,6 +1,6 @@
 /**
  * Inline URL Shortener Component
- * Owner: Scenario 2 - Inline URL Shortening
+ * Owner: Scenario 2 - Inline URL Shortening, Scenario 3 - Validation
  *
  * Provides anonymous URL shortening functionality:
  * - URL input field with placeholder
@@ -8,13 +8,21 @@
  * - Result display with copy button
  * - Registration prompt after success
  * - Loading states and error handling
+ * - URL validation
  *
  * Requirements: REQ-2, REQ-7
  */
 
-import { useState, useCallback, FormEvent } from 'react';
-import { useAnonymousShorten } from '../../hooks/useAnonymousShorten';
-import type { InlineShortenerProps, UrlValidationResult } from '../../types/homepage';
+import { useState, useRef, useEffect, useCallback, FormEvent, KeyboardEvent } from 'react'
+import { useAnonymousShorten } from '../../hooks/useAnonymousShorten'
+import type { UrlValidationResult, ShortenedUrlResult } from '../../types/homepage'
+
+export interface InlineShortenerProps {
+  onShortenSuccess?: (shortUrl: string) => void
+  onSuccess?: (result: ShortenedUrlResult) => void
+  onError?: (error: string) => void
+  autoFocus?: boolean
+}
 
 /**
  * Validates a URL string for proper format
@@ -27,29 +35,29 @@ export function validateUrl(url: string): UrlValidationResult {
     return {
       isValid: false,
       error: 'URL is required',
-    };
+    }
   }
 
-  const trimmedUrl = url.trim();
+  const trimmedUrl = url.trim()
 
   // Check for incomplete URLs (just protocol)
   if (/^https?:\/\/?$/i.test(trimmedUrl)) {
     return {
       isValid: false,
       error: 'Please enter a valid URL',
-    };
+    }
   }
 
   // Try to parse the URL
   try {
-    const parsedUrl = new URL(trimmedUrl);
+    const parsedUrl = new URL(trimmedUrl)
 
     // Ensure the URL has a valid protocol
     if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
       return {
         isValid: false,
         error: 'Please enter a valid URL',
-      };
+      }
     }
 
     // Ensure the URL has a hostname
@@ -57,16 +65,16 @@ export function validateUrl(url: string): UrlValidationResult {
       return {
         isValid: false,
         error: 'Please enter a valid URL',
-      };
+      }
     }
 
-    return { isValid: true };
+    return { isValid: true }
   } catch {
     // URL constructor threw an error - invalid URL
     return {
       isValid: false,
       error: 'Please enter a valid URL',
-    };
+    }
   }
 }
 
@@ -78,172 +86,286 @@ export function validateUrl(url: string): UrlValidationResult {
 export function encodeUrlForApi(url: string): string {
   try {
     // Parse and reconstruct to ensure proper encoding
-    const parsed = new URL(url.trim());
-    return parsed.href;
+    const parsed = new URL(url.trim())
+    return parsed.href
   } catch {
     // If parsing fails, return the original (validation should catch this)
-    return url.trim();
+    return url.trim()
   }
 }
 
-export function InlineShortener({ onSuccess, onError }: InlineShortenerProps) {
-  const [inputUrl, setInputUrl] = useState('');
-  const [validationError, setValidationError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-
-  const { shortenUrl, isLoading, error: apiError, result, reset } = useAnonymousShorten();
+export function InlineShortener({
+  onShortenSuccess,
+  onSuccess,
+  onError,
+  autoFocus = true,
+}: InlineShortenerProps) {
+  const [inputUrl, setInputUrl] = useState('')
+  const [validationError, setValidationError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { shortenUrl, isLoading, error: apiError, result, reset } = useAnonymousShorten()
 
   // Combined error from validation or API
-  const displayError = validationError || apiError;
+  const displayError = validationError || apiError
+
+  // Auto-focus input on mount
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [autoFocus])
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     // Clear previous errors
-    setValidationError(null);
-    setCopied(false);
-    reset();
+    setValidationError(null)
+    setCopied(false)
+    reset()
 
     // Validate URL
-    const validation = validateUrl(inputUrl);
+    const validation = validateUrl(inputUrl)
     if (!validation.isValid) {
-      setValidationError(validation.error || 'Please enter a valid URL');
-      onError?.(validation.error || 'Please enter a valid URL');
-      return;
+      setValidationError(validation.error || 'Please enter a valid URL')
+      onError?.(validation.error || 'Please enter a valid URL')
+      return
     }
 
     // Encode URL for API
-    const encodedUrl = encodeUrlForApi(inputUrl);
+    const encodedUrl = encodeUrlForApi(inputUrl)
 
     try {
-      const result = await shortenUrl(encodedUrl);
-      onSuccess?.(result);
+      const shortenedResult = await shortenUrl(encodedUrl)
+      if (shortenedResult) {
+        onShortenSuccess?.(shortenedResult.shortUrl)
+        onSuccess?.(shortenedResult)
+      }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to shorten URL. Please try again.';
-      onError?.(errorMessage);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to shorten URL. Please try again.'
+      onError?.(errorMessage)
     }
-  }, [inputUrl, shortenUrl, onSuccess, onError, reset]);
+  }, [inputUrl, shortenUrl, onShortenSuccess, onSuccess, onError, reset])
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !isLoading) {
+      handleSubmit(e as unknown as FormEvent)
+    }
+  }
 
   const handleCopy = useCallback(async () => {
     if (result?.shortUrl) {
       try {
-        await navigator.clipboard.writeText(result.shortUrl);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        await navigator.clipboard.writeText(result.shortUrl)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
       } catch {
         // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = result.shortUrl;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        const textArea = document.createElement('textarea')
+        textArea.value = result.shortUrl
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
       }
     }
-  }, [result]);
+  }, [result])
 
   const handleRetry = useCallback(() => {
-    setValidationError(null);
-    reset();
-  }, [reset]);
+    setValidationError(null)
+    reset()
+  }, [reset])
+
+  const handleReset = () => {
+    setInputUrl('')
+    setCopied(false)
+    reset()
+    inputRef.current?.focus()
+  }
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-        <div className="flex-1">
-          <label htmlFor="url-input" className="sr-only">
-            Enter URL to shorten
-          </label>
+    <section
+      data-testid="inline-shortener"
+      className="w-full max-w-2xl mx-auto px-4 py-8"
+    >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="join w-full flex flex-col sm:flex-row gap-2 sm:gap-0">
           <input
-            id="url-input"
+            ref={inputRef}
             type="text"
+            data-testid="url-input"
+            className={`input input-bordered join-item w-full sm:flex-1 ${displayError ? 'input-error' : ''}`}
+            placeholder="Paste your long URL here..."
             value={inputUrl}
             onChange={(e) => {
-              setInputUrl(e.target.value);
-              if (validationError) setValidationError(null);
+              setInputUrl(e.target.value)
+              if (validationError) setValidationError(null)
             }}
-            placeholder="Paste your long URL here..."
-            className={`input input-bordered w-full ${displayError ? 'input-error' : ''}`}
-            aria-describedby={displayError ? 'url-error' : undefined}
-            aria-invalid={!!displayError}
+            onKeyDown={handleKeyDown}
             disabled={isLoading}
-            autoFocus
-            data-testid="url-input"
+            aria-label="URL to shorten"
+            aria-invalid={displayError ? 'true' : 'false'}
+            aria-describedby={displayError ? 'url-error' : undefined}
           />
-          {displayError && (
-            <p
-              id="url-error"
-              className="text-error text-sm mt-1"
-              role="alert"
-              data-testid="error-message"
-            >
-              {displayError}
-            </p>
-          )}
-        </div>
-        <button
-          type="submit"
-          className="btn btn-primary"
-          disabled={isLoading}
-          data-testid="shorten-button"
-        >
-          {isLoading ? (
-            <>
-              <span className="loading loading-spinner loading-sm"></span>
-              Shortening...
-            </>
-          ) : (
-            'Shorten'
-          )}
-        </button>
-      </form>
-
-      {result && (
-        <div className="mt-4 p-4 bg-base-200 rounded-lg" data-testid="result-section">
-          <div className="flex items-center gap-3">
-            <a
-              href={result.shortUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link link-primary flex-1 truncate"
-              data-testid="short-url"
-            >
-              {result.shortUrl}
-            </a>
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="btn btn-sm btn-outline"
-              data-testid="copy-button"
-            >
-              {copied ? 'Copied!' : 'Copy'}
-            </button>
-          </div>
-          <p className="text-sm text-base-content/70 mt-2">
-            <a href="/register" className="link link-secondary">
-              Create an account
-            </a>
-            {' '}to track analytics for your links.
-          </p>
-        </div>
-      )}
-
-      {apiError && !validationError && (
-        <div className="mt-4">
           <button
-            type="button"
-            onClick={handleRetry}
-            className="btn btn-sm btn-ghost"
-            data-testid="retry-button"
+            type="submit"
+            data-testid="shorten-button"
+            className="btn btn-primary join-item"
+            disabled={isLoading || !inputUrl.trim()}
+            aria-busy={isLoading}
           >
-            Try again
+            {isLoading ? (
+              <>
+                <span className="loading loading-spinner loading-sm" aria-hidden="true"></span>
+                <span className="sr-only">Shortening...</span>
+              </>
+            ) : (
+              'Shorten'
+            )}
           </button>
         </div>
-      )}
-    </div>
-  );
+
+        {/* Error display */}
+        {displayError && (
+          <div
+            id="url-error"
+            data-testid="error-message"
+            className="alert alert-error"
+            role="alert"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{displayError}</span>
+          </div>
+        )}
+
+        {/* Retry button for API errors */}
+        {apiError && !validationError && (
+          <div>
+            <button
+              type="button"
+              onClick={handleRetry}
+              className="btn btn-sm btn-ghost"
+              data-testid="retry-button"
+            >
+              Try again
+            </button>
+          </div>
+        )}
+
+        {/* Result display */}
+        {result && (
+          <div
+            data-testid="result-area"
+            className="bg-base-200 rounded-lg p-4 flex flex-col gap-4"
+          >
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-sm text-base-content/70">Your short URL:</span>
+              <a
+                href={result.shortUrl}
+                data-testid="short-url"
+                className="link link-primary font-mono break-all"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {result.shortUrl}
+              </a>
+            </div>
+
+            <div className="flex gap-2 flex-wrap">
+              <button
+                type="button"
+                data-testid="copy-button"
+                className={`btn btn-sm ${copied ? 'btn-success' : 'btn-outline'}`}
+                onClick={handleCopy}
+                aria-label={copied ? 'Copied to clipboard' : 'Copy short URL to clipboard'}
+              >
+                {copied ? (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span data-testid="copied-feedback">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                      />
+                    </svg>
+                    Copy
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                data-testid="shorten-another-button"
+                className="btn btn-sm btn-ghost"
+                onClick={handleReset}
+              >
+                Shorten another
+              </button>
+            </div>
+
+            {/* Registration prompt after success */}
+            <div
+              data-testid="registration-prompt"
+              className="border-t border-base-300 pt-4 mt-2"
+            >
+              <p className="text-sm text-base-content/70 mb-2">
+                Want to track analytics for your links?
+              </p>
+              <a
+                href="/register"
+                className="btn btn-secondary btn-sm"
+                data-testid="register-cta"
+              >
+                Create account to track analytics
+              </a>
+            </div>
+          </div>
+        )}
+      </form>
+    </section>
+  )
 }
 
-export default InlineShortener;
+export default InlineShortener
