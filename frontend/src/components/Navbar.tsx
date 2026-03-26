@@ -12,7 +12,7 @@
  * Requirements: REQ-5, US-4
  */
 
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export interface NavbarProps {
   onFeaturesClick?: () => void
@@ -20,7 +20,6 @@ export interface NavbarProps {
 
 export function Navbar({ onFeaturesClick }: NavbarProps) {
   const navigate = useNavigate()
-  const location = useLocation()
 
   const handleFeaturesClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -48,6 +47,8 @@ export function Navbar({ onFeaturesClick }: NavbarProps) {
     <nav
       data-testid="navbar"
       className="navbar bg-base-100/95 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 shadow-sm"
+      role="navigation"
+      aria-label="Main navigation"
     >
       <div className="container mx-auto px-4">
         {/* Logo - Left aligned */}
@@ -56,6 +57,7 @@ export function Navbar({ onFeaturesClick }: NavbarProps) {
             to="/"
             data-testid="navbar-logo"
             className="btn btn-ghost text-xl font-bold normal-case"
+            aria-label="Go to homepage"
           >
             LinkShort
           </Link>
@@ -76,7 +78,7 @@ export function Navbar({ onFeaturesClick }: NavbarProps) {
             </li>
             <li>
               <button
-                data-testid="navbar-login-btn"
+                data-testid="navbar-login-button"
                 onClick={handleLoginClick}
                 className="btn btn-ghost"
               >
@@ -85,7 +87,7 @@ export function Navbar({ onFeaturesClick }: NavbarProps) {
             </li>
             <li>
               <button
-                data-testid="navbar-signup-btn"
+                data-testid="navbar-signup-button"
                 onClick={handleSignUpClick}
                 className="btn btn-primary"
               >

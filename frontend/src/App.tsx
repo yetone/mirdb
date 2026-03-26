@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
+import { Navbar } from './components/Navbar'
 
 // Placeholder Login Page for navigation testing
 function LoginPage() {
@@ -21,11 +22,16 @@ function RegisterPage() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-    </Routes>
+    <>
+      <Navbar />
+      <div className="pt-16"> {/* Padding to account for fixed navbar */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </div>
+    </>
   )
 }
 
