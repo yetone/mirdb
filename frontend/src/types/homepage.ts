@@ -11,6 +11,7 @@
 export interface ShortenedUrlResult {
   shortUrl: string
   originalUrl: string
+  shortCode: string
   createdAt: string
 }
 
@@ -35,8 +36,8 @@ export interface HeroProps {
  * Inline shortener component props
  */
 export interface InlineShortenerProps {
-  onShortenSuccess?: (result: ShortenedUrlResult) => void
-  onRegisterClick?: () => void
+  onSuccess?: (result: ShortenedUrlResult) => void
+  onError?: (error: string) => void
 }
 
 /**
@@ -48,13 +49,12 @@ export interface UrlValidationResult {
 }
 
 /**
- * Hook return type for anonymous URL shortening
+ * Hook return type for useAnonymousShorten
  */
 export interface UseAnonymousShortenReturn {
-  shortenUrl: (url: string) => Promise<ShortenedUrlResult | null>
+  shortenUrl: (url: string) => Promise<ShortenedUrlResult>
   isLoading: boolean
   error: string | null
   result: ShortenedUrlResult | null
-  clearError: () => void
-  clearResult: () => void
+  reset: () => void
 }
