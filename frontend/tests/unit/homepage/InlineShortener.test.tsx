@@ -262,6 +262,180 @@ describe('InlineShortener', () => {
     })
   })
 
+  describe('Loading States and Visual Feedback (Scenario 14)', () => {
+    it('Test Case 1: loading spinner appears during API call', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      // Immediately after click, loading spinner should be visible
+      const loadingSpinner = button.querySelector('.loading-spinner')
+      expect(loadingSpinner).toBeInTheDocument()
+
+      // Wait for completion
+      await waitFor(() => {
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
+    })
+
+    it('Test Case 2: Shorten button is disabled during operation', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+
+      // Button should be enabled before click
+      expect(button).not.toBeDisabled()
+
+      fireEvent.click(button)
+
+      // Button should be disabled during loading
+      expect(button).toBeDisabled()
+      expect(button).toHaveAttribute('aria-busy', 'true')
+
+      // Wait for completion
+      await waitFor(() => {
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
+    })
+
+    it('Test Case 3: copy button shows Copied! feedback', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const submitButton = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(submitButton)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('copy-button')).toBeInTheDocument()
+      })
+
+      const copyButton = screen.getByTestId('copy-button')
+
+      // Initially should not show "Copied!"
+      expect(screen.queryByTestId('copied-feedback')).not.toBeInTheDocument()
+
+      fireEvent.click(copyButton)
+
+      await waitFor(() => {
+        // Should show "Copied!" feedback
+        const feedback = screen.getByTestId('copied-feedback')
+        expect(feedback).toBeInTheDocument()
+        expect(feedback).toHaveTextContent('Copied!')
+      })
+
+      // Button should have success styling
+      expect(copyButton).toHaveClass('btn-success')
+    })
+
+    it('button shows loading text accessible to screen readers', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      // Screen reader text should be present during loading
+      const srText = button.querySelector('.sr-only')
+      expect(srText).toBeInTheDocument()
+      expect(srText).toHaveTextContent('Shortening')
+
+      await waitFor(() => {
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
+    })
+
+    it('input is disabled during loading to prevent edits', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      // Input should be disabled during loading
+      expect(input).toBeDisabled()
+
+      await waitFor(() => {
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
+    })
+
+    it('loading state clears previous errors', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      // First, trigger an error
+      fireEvent.change(input, { target: { value: 'invalid-url' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('error-message')).toBeInTheDocument()
+      })
+
+      // Now enter valid URL and submit
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      // Error should be cleared immediately on new submission
+      await waitFor(() => {
+        expect(screen.queryByTestId('error-message')).not.toBeInTheDocument()
+      })
+    })
+
+    it('copy button checkmark icon appears after copying', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const submitButton = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(submitButton)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('copy-button')).toBeInTheDocument()
+      })
+
+      const copyButton = screen.getByTestId('copy-button')
+      fireEvent.click(copyButton)
+
+      await waitFor(() => {
+        // Check for checkmark SVG path (the d attribute contains the checkmark path)
+        const svg = copyButton.querySelector('svg')
+        expect(svg).toBeInTheDocument()
+        const path = svg?.querySelector('path')
+        expect(path?.getAttribute('d')).toContain('M5 13l4 4L19 7')
+      })
+    })
+
+    it('prevents double submission during loading', async () => {
+      const onSuccess = vi.fn()
+      render(<InlineShortener onSuccess={onSuccess} />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+
+      // Click multiple times rapidly
+      fireEvent.click(button)
+      fireEvent.click(button)
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
+
+      // onSuccess should only be called once
+      expect(onSuccess).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('Accessibility', () => {
     it('input has proper aria-label', () => {
       render(<InlineShortener />)
