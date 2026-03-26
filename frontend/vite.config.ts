@@ -1,13 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
+  },
   test: {
     globals: true,
-    environment: 'happy-dom',
-    setupFiles: ['./tests/setup/homepage.setup.ts'],
-    include: ['tests/**/*.{test,spec}.{ts,tsx}'],
+    environment: 'jsdom',
+    setupFiles: ['./tests/setup.ts', './tests/setup/homepage.setup.ts'],
+    include: ['tests/**/*.test.{ts,tsx}'],
+    exclude: ['tests/e2e/**'],
   },
 })
