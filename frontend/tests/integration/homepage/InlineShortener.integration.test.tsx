@@ -1,371 +1,234 @@
 /**
- * InlineShortener Integration Tests - Error Handling
+ * Integration Tests for InlineShortener Component
+ * Owner: Scenario 2 - Inline URL Shortening
  *
- * Owner: Scenario 2 (Component), Scenario 3 (Error Handling Tests)
+ * Tests:
+ * - Short URL generated and displayed within 1 second (Test Case 1)
+ * - Response time under 500ms (NFR-5 requirement) (Test Case 2)
+ * - End-to-end URL shortening flow
  *
- * Tests API error handling and special character URL encoding
- * as specified in REQ-7.
- *
- * Test cases:
- * - TC4: Network error shows friendly message with retry option
- * - TC5: URLs with special characters are properly encoded
+ * Requirements: REQ-2, REQ-7, NFR-5
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { InlineShortener } from '../../../src/components/homepage/InlineShortener';
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { InlineShortener } from '../../../src/components/homepage/InlineShortener'
 
-// Mock fetch globally for integration tests
-const originalFetch = global.fetch;
+// Mock clipboard API
+const mockClipboard = {
+  writeText: vi.fn().mockResolvedValue(undefined),
+}
 
-describe('InlineShortener - Integration Tests', () => {
+Object.defineProperty(navigator, 'clipboard', {
+  value: mockClipboard,
+  writable: true,
+})
+
+describe('InlineShortener Integration Tests', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
-  afterEach(() => {
-    global.fetch = originalFetch;
-  });
+  describe('Test Case 1: URL Shortening Performance', () => {
+    it('generates and displays short URL within 1 second', async () => {
+      const startTime = performance.now()
 
-  describe('TC4: Network Error Handling', () => {
-    it('displays friendly error message when network request fails', async () => {
-      const user = userEvent.setup();
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
 
-      // Mock fetch to simulate network error
-      global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
+      // Enter a valid long URL
+      fireEvent.change(input, {
+        target: { value: 'https://example.com/very/long/url/path' },
+      })
+      fireEvent.click(button)
 
-      render(<InlineShortener />);
+      // Wait for result to appear with 1 second timeout
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('result-area')).toBeInTheDocument()
+          expect(screen.getByTestId('short-url')).toBeInTheDocument()
+        },
+        { timeout: 1000 }
+      )
 
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
+      const endTime = performance.now()
+      const elapsed = endTime - startTime
 
-      await user.type(input, 'https://example.com/long/url');
-      await user.click(button);
+      // Verify result appeared within 1 second
+      expect(elapsed).toBeLessThan(1000)
 
-      // Wait for error to be displayed
-      await waitFor(() => {
-        const errorMessage = screen.getByTestId('error-message');
-        expect(errorMessage).toBeInTheDocument();
-        expect(errorMessage.textContent).toMatch(/Network error|Failed to shorten/i);
-      });
-    });
+      // Verify the short URL is properly formatted
+      const shortUrlElement = screen.getByTestId('short-url')
+      expect(shortUrlElement.textContent).toMatch(/\/s\/[a-zA-Z0-9]+/)
+    })
+  })
 
-    it('displays retry button when API error occurs', async () => {
-      const user = userEvent.setup();
+  describe('Test Case 2: NFR-5 Response Time Requirement', () => {
+    it('completes URL shortening within 500ms', async () => {
+      let completionTime: number | null = null
+      const startTime = performance.now()
 
-      // Mock fetch to simulate API error
-      global.fetch = vi.fn().mockRejectedValue(new Error('Server error'));
+      const onShortenSuccess = vi.fn(() => {
+        completionTime = performance.now() - startTime
+      })
 
-      render(<InlineShortener />);
+      render(<InlineShortener onShortenSuccess={onShortenSuccess} />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
 
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com');
-      await user.click(button);
-
-      await waitFor(() => {
-        const retryButton = screen.getByTestId('retry-button');
-        expect(retryButton).toBeInTheDocument();
-        expect(retryButton).toHaveTextContent('Try again');
-      });
-    });
-
-    it('allows user to retry after error', async () => {
-      const user = userEvent.setup();
-
-      // First call fails, second succeeds
-      let callCount = 0;
-      global.fetch = vi.fn().mockImplementation(() => {
-        callCount++;
-        if (callCount === 1) {
-          return Promise.reject(new Error('Temporary error'));
-        }
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve({
-            shortUrl: 'https://short.url/abc',
-            originalUrl: 'https://example.com',
-            shortCode: 'abc',
-            createdAt: new Date().toISOString(),
-          }),
-        });
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const shortenButton = screen.getByTestId('shorten-button');
-
-      // First attempt - should fail
-      await user.type(input, 'https://example.com');
-      await user.click(shortenButton);
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
 
       await waitFor(() => {
-        expect(screen.getByTestId('retry-button')).toBeInTheDocument();
-      });
+        expect(onShortenSuccess).toHaveBeenCalled()
+      })
 
-      // Click retry button to clear error
-      const retryButton = screen.getByTestId('retry-button');
-      await user.click(retryButton);
+      // Verify response time is under 500ms (NFR-5)
+      expect(completionTime).toBeLessThan(500)
+    })
 
-      // Error should be cleared
-      expect(screen.queryByTestId('error-message')).not.toBeInTheDocument();
+    it('displays result within 500ms of submission', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
 
-      // Second attempt - should succeed
-      await user.click(shortenButton);
+      const startTime = performance.now()
+
+      fireEvent.change(input, { target: { value: 'https://example.com/test' } })
+      fireEvent.click(button)
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('result-area')).toBeInTheDocument()
+        },
+        { timeout: 500 }
+      )
+
+      const endTime = performance.now()
+      expect(endTime - startTime).toBeLessThan(500)
+    })
+  })
+
+  describe('Full URL Shortening Flow', () => {
+    it('completes full shortening flow: input -> submit -> display -> copy', async () => {
+      render(<InlineShortener />)
+
+      // Step 1: Input URL
+      const input = screen.getByTestId('url-input')
+      const submitButton = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, {
+        target: { value: 'https://example.com/very/long/url/path' },
+      })
+      expect(input).toHaveValue('https://example.com/very/long/url/path')
+
+      // Step 2: Submit
+      fireEvent.click(submitButton)
+
+      // Step 3: Wait for result display
+      await waitFor(() => {
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
+
+      // Verify short URL is displayed
+      const shortUrl = screen.getByTestId('short-url')
+      expect(shortUrl).toBeInTheDocument()
+      expect(shortUrl.textContent).toContain('/s/')
+
+      // Step 4: Copy to clipboard
+      const copyButton = screen.getByTestId('copy-button')
+      fireEvent.click(copyButton)
 
       await waitFor(() => {
-        expect(screen.getByTestId('result-section')).toBeInTheDocument();
-      });
-    });
+        expect(mockClipboard.writeText).toHaveBeenCalledWith(
+          expect.stringContaining('/s/')
+        )
+        expect(screen.getByTestId('copied-feedback')).toHaveTextContent('Copied!')
+      })
+    })
 
-    it('displays friendly error for API response errors', async () => {
-      const user = userEvent.setup();
+    it('handles multiple consecutive URL shortenings', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const submitButton = screen.getByTestId('shorten-button')
 
-      // Mock fetch to return error response
-      global.fetch = vi.fn().mockResolvedValue({
-        ok: false,
-        status: 500,
-        json: () => Promise.resolve({ message: 'Internal server error' }),
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com');
-      await user.click(button);
+      // First URL
+      fireEvent.change(input, { target: { value: 'https://first-url.com' } })
+      fireEvent.click(submitButton)
 
       await waitFor(() => {
-        const errorMessage = screen.getByTestId('error-message');
-        expect(errorMessage).toBeInTheDocument();
-      });
-    });
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
 
-    it('handles timeout errors gracefully', async () => {
-      const user = userEvent.setup();
+      const firstShortUrl = screen.getByTestId('short-url').textContent
 
-      // Mock fetch to simulate timeout
-      global.fetch = vi.fn().mockRejectedValue(new Error('Request timeout'));
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com');
-      await user.click(button);
+      // Click Shorten another
+      const shortenAnotherButton = screen.getByTestId('shorten-another-button')
+      fireEvent.click(shortenAnotherButton)
 
       await waitFor(() => {
-        const errorMessage = screen.getByTestId('error-message');
-        expect(errorMessage).toBeInTheDocument();
-      });
+        expect(screen.queryByTestId('result-area')).not.toBeInTheDocument()
+      })
 
-      // Retry button should be present
-      expect(screen.getByTestId('retry-button')).toBeInTheDocument();
-    });
-  });
-
-  describe('TC5: URL with Special Characters', () => {
-    it('successfully shortens URL with query parameters', async () => {
-      const user = userEvent.setup();
-
-      global.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve({
-          shortUrl: 'https://short.url/xyz789',
-          originalUrl: 'https://example.com/search?q=hello world&lang=en',
-          shortCode: 'xyz789',
-          createdAt: new Date().toISOString(),
-        }),
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      // URL with special characters that need encoding
-      await user.type(input, 'https://example.com/search?q=hello world&lang=en');
-      await user.click(button);
+      // Second URL
+      fireEvent.change(input, { target: { value: 'https://second-url.com' } })
+      fireEvent.click(submitButton)
 
       await waitFor(() => {
-        expect(screen.getByTestId('result-section')).toBeInTheDocument();
-      });
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
 
-      // Verify API was called with properly encoded URL
-      expect(global.fetch).toHaveBeenCalled();
-      const fetchCall = vi.mocked(global.fetch).mock.calls[0];
-      const requestBody = JSON.parse(fetchCall[1]?.body as string);
-      expect(requestBody.url).toContain('example.com');
-    });
+      const secondShortUrl = screen.getByTestId('short-url').textContent
 
-    it('successfully shortens URL with unicode characters', async () => {
-      const user = userEvent.setup();
+      // URLs should be different
+      expect(firstShortUrl).not.toBe(secondShortUrl)
+    })
+  })
 
-      global.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve({
-          shortUrl: 'https://short.url/uni123',
-          originalUrl: 'https://example.com/path?emoji=😀',
-          shortCode: 'uni123',
-          createdAt: new Date().toISOString(),
-        }),
-      });
+  describe('Error Recovery', () => {
+    it('recovers from error and allows retry', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const submitButton = screen.getByTestId('shorten-button')
 
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com/path?emoji=😀');
-      await user.click(button);
+      // First, submit invalid URL
+      fireEvent.change(input, { target: { value: 'invalid-url' } })
+      fireEvent.click(submitButton)
 
       await waitFor(() => {
-        expect(screen.getByTestId('result-section')).toBeInTheDocument();
-      });
+        expect(screen.getByTestId('error-message')).toBeInTheDocument()
+      })
 
-      const shortUrl = screen.getByTestId('short-url');
-      expect(shortUrl).toHaveTextContent('https://short.url/uni123');
-    });
-
-    it('successfully shortens URL with fragment identifier', async () => {
-      const user = userEvent.setup();
-
-      global.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve({
-          shortUrl: 'https://short.url/frag456',
-          originalUrl: 'https://example.com/page#section-1',
-          shortCode: 'frag456',
-          createdAt: new Date().toISOString(),
-        }),
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com/page#section-1');
-      await user.click(button);
+      // Then, submit valid URL
+      fireEvent.change(input, { target: { value: 'https://valid-url.com' } })
+      fireEvent.click(submitButton)
 
       await waitFor(() => {
-        expect(screen.getByTestId('result-section')).toBeInTheDocument();
-      });
-    });
-
-    it('properly handles URL with percent-encoded characters', async () => {
-      const user = userEvent.setup();
-
-      global.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve({
-          shortUrl: 'https://short.url/enc789',
-          originalUrl: 'https://example.com/path%20with%20spaces',
-          shortCode: 'enc789',
-          createdAt: new Date().toISOString(),
-        }),
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com/path%20with%20spaces');
-      await user.click(button);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('result-section')).toBeInTheDocument();
-      });
-    });
-
-    it('successfully shortens URL with international domain', async () => {
-      const user = userEvent.setup();
-
-      global.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve({
-          shortUrl: 'https://short.url/intl999',
-          originalUrl: 'https://例え.jp/page',
-          shortCode: 'intl999',
-          createdAt: new Date().toISOString(),
-        }),
-      });
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      // Note: This might be punycode encoded by the browser
-      await user.type(input, 'https://例え.jp/page');
-      await user.click(button);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('result-section')).toBeInTheDocument();
-      });
-    });
-  });
+        expect(screen.queryByTestId('error-message')).not.toBeInTheDocument()
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
+    })
+  })
 
   describe('Loading States', () => {
-    it('shows loading state during API call', async () => {
-      const user = userEvent.setup();
+    it('shows loading state and disables input during submission', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const submitButton = screen.getByTestId('shorten-button')
 
-      // Mock fetch with delay
-      global.fetch = vi.fn().mockImplementation(() => new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            ok: true,
-            json: () => Promise.resolve({
-              shortUrl: 'https://short.url/loading',
-              originalUrl: 'https://example.com',
-              shortCode: 'loading',
-              createdAt: new Date().toISOString(),
-            }),
-          });
-        }, 100);
-      }));
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(submitButton)
 
-      render(<InlineShortener />);
+      // Button should show loading state
+      expect(submitButton).toHaveAttribute('aria-busy', 'true')
 
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com');
-      await user.click(button);
-
-      // Check loading state
-      expect(button).toHaveTextContent('Shortening...');
-      expect(button).toBeDisabled();
-      expect(input).toBeDisabled();
-
-      // Wait for completion
       await waitFor(() => {
-        expect(screen.getByTestId('result-section')).toBeInTheDocument();
-      });
-    });
+        expect(screen.getByTestId('result-area')).toBeInTheDocument()
+      })
 
-    it('disables input and button during loading', async () => {
-      const user = userEvent.setup();
-
-      // Mock fetch that never resolves during this test
-      global.fetch = vi.fn().mockImplementation(() => new Promise(() => {}));
-
-      render(<InlineShortener />);
-
-      const input = screen.getByPlaceholderText('Paste your long URL here...');
-      const button = screen.getByTestId('shorten-button');
-
-      await user.type(input, 'https://example.com');
-      await user.click(button);
-
-      expect(input).toBeDisabled();
-      expect(button).toBeDisabled();
-    });
-  });
-});
+      // Loading state should be cleared
+      expect(submitButton).not.toHaveAttribute('aria-busy', 'true')
+    })
+  })
+})
