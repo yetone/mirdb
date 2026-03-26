@@ -11,11 +11,13 @@
  */
 
 import { HeroSection } from '../components/homepage/HeroSection'
+import { InlineShortener } from '../components/homepage/InlineShortener'
 
 export function Home() {
   const handlePrimaryClick = () => {
-    // Scroll to shortener section or focus input (future implementation)
-    console.log('Primary CTA clicked')
+    // Scroll to shortener section
+    const shortener = document.getElementById('inline-shortener')
+    shortener?.scrollIntoView({ behavior: 'smooth' })
   }
 
   const handleSecondaryClick = () => {
@@ -29,6 +31,9 @@ export function Home() {
         onPrimaryClick={handlePrimaryClick}
         onSecondaryClick={handleSecondaryClick}
       />
+      <section id="inline-shortener" className="py-12 bg-base-100">
+        <InlineShortener />
+      </section>
     </main>
   )
 }
