@@ -295,5 +295,96 @@ describe('InlineShortener', () => {
         expect(error).toHaveAttribute('role', 'alert')
       })
     })
+
+    it('URL input has associated label element or aria-label (Test Case 3)', () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+
+      // Check for aria-label attribute
+      const ariaLabel = input.getAttribute('aria-label')
+
+      // Verify aria-label exists and is meaningful
+      expect(ariaLabel).toBeTruthy()
+      expect(ariaLabel?.length).toBeGreaterThan(0)
+    })
+
+    it('all SVG icons have aria-hidden attribute (Test Case 4)', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      // Trigger error to show error icon
+      fireEvent.change(input, { target: { value: 'invalid-url' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        // Error icon SVG should have aria-hidden
+        const svgs = document.querySelectorAll('svg')
+        svgs.forEach((svg) => {
+          const ariaHidden = svg.getAttribute('aria-hidden')
+          expect(ariaHidden).toBe('true')
+        })
+      })
+    })
+
+    it('copy button has accessible aria-label', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const copyButton = screen.getByTestId('copy-button')
+        const ariaLabel = copyButton.getAttribute('aria-label')
+        expect(ariaLabel).toBeTruthy()
+        expect(ariaLabel).toContain('clipboard')
+      })
+    })
+
+    it('error message is associated with input via aria-describedby', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'invalid-url' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const ariaDescribedBy = input.getAttribute('aria-describedby')
+        expect(ariaDescribedBy).toBe('url-error')
+
+        // Verify the referenced error element exists
+        const errorElement = document.getElementById('url-error')
+        expect(errorElement).toBeInTheDocument()
+      })
+    })
+
+    it('loading state has aria-busy attribute', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      // During loading, button should have aria-busy
+      expect(button).toHaveAttribute('aria-busy', 'true')
+    })
+
+    it('loading spinner has sr-only text for screen readers', async () => {
+      render(<InlineShortener />)
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      // Look for screen reader only text during loading
+      const srOnlyText = button.querySelector('.sr-only')
+      expect(srOnlyText).toBeInTheDocument()
+      expect(srOnlyText?.textContent).toContain('Shortening')
+    })
   })
 })
