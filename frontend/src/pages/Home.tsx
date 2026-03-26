@@ -13,6 +13,7 @@
 import { useRef } from 'react'
 import { HeroSection } from '../components/homepage/HeroSection'
 import { InlineShortener } from '../components/homepage/InlineShortener'
+import { FeaturesSection } from '../components/homepage/FeaturesSection'
 
 export function Home() {
   const shortenerRef = useRef<HTMLDivElement>(null)
@@ -36,17 +37,7 @@ export function Home() {
       <div ref={shortenerRef}>
         <InlineShortener />
       </div>
-      {/* Features section placeholder for anchor link */}
-      <section
-        id="features-section"
-        data-testid="features-section"
-        className="min-h-[50vh] py-16 bg-base-200"
-      >
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-8">Features</h2>
-          <p className="text-base-content/70">Feature cards coming soon...</p>
-        </div>
-      </section>
+      <FeaturesSection />
     </main>
   )
 }
