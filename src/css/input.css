@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Tailwind CSS Input File
+ * Owner: Scenarios 10-12 - Responsive Design
+ *
+ * Contains:
+ * - Tailwind base, components, utilities imports
+ * - Custom component classes
+ * - Focus styles for accessibility (Scenario 13-15)
+ * - Code block styling (Scenario 3)
+ */
+
+@layer base {
+  /* Prevent horizontal overflow on mobile (Scenario 10) */
+  html, body {
+    @apply overflow-x-hidden;
+    max-width: 100vw;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  /* Code block styling for Quick Start section (Scenario 3) */
+  .code-block {
+    @apply relative bg-gray-900 rounded-lg;
+    overflow: visible;
+    max-width: 100%;
+  }
+
+  .code-block pre {
+    @apply p-4 text-sm leading-relaxed;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+
+  .code-block code {
+    @apply font-mono text-gray-100;
+  }
+
+  .code-block .copy-btn {
+    @apply absolute top-2 right-2 text-xs font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mirdb-accent;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+  }
+
+  .code-block .copy-btn.copied {
+    @apply bg-green-600 text-white;
+  }
+
+  /* Syntax highlighting classes */
+  .code-block .keyword {
+    @apply text-purple-400;
+  }
+
+  .code-block .command {
+    @apply text-cyan-400;
+  }
+
+  .code-block .string {
+    @apply text-green-400;
+  }
+
+  .code-block .comment {
+    @apply text-gray-500;
+  }
+
+  .code-block .number {
+    @apply text-orange-400;
+  }
+}
+
+/* Mobile responsive styles (Scenario 10 - Mobile) */
+@layer utilities {
+  /* Ensure touch targets are at least 44x44px on mobile */
+  @media (max-width: 767px) {
+    /* Mobile navigation button touch target */
+    #mobile-menu-btn {
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    /* Mobile menu links touch targets */
+    #mobile-menu a {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+    }
+
+    /* Hero CTA buttons touch targets */
+    #hero a {
+      min-height: 44px;
+    }
+
+    /* Feature cards - ensure proper stacking */
+    .grid {
+      gap: 1rem;
+    }
+
+    /* Ensure all sections fit within viewport */
+    section {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    /* Prevent any element from causing horizontal overflow */
+    img, video, iframe, object {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  /* Very narrow screens */
+  @media (max-width: 375px) {
+    .max-w-7xl,
+    .max-w-4xl {
+      max-width: 100%;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+  /* Tablet responsive styles (Scenario 11 - Tablet: 768px) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    /* Ensure proper grid layouts on tablet */
+    #features .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #commands .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #architecture .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Architecture diagram scrolls if needed on tablet */
+    .architecture-diagram {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Comparison table adapts for tablet */
+    .comparison-table {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .comparison-table table {
+      min-width: 600px;
+    }
+
+    /* Footer flex layout on tablet */
+    #footer .flex {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Hero CTA buttons side by side on tablet */
+    #hero .flex-col {
+      flex-direction: row;
+    }
+
+    /* Navigation links spacing on tablet */
+    header nav .md\\:flex {
+      gap: 1.5rem;
+    }
+
+    /* Code blocks proper width on tablet */
+    .code-block {
+      max-width: 100%;
+    }
+
+    .code-block pre {
+      max-width: 100%;
+    }
+  }
+}
+
+/**
+ * Accessibility Focus Styles (Scenario 13-15)
+ * Owner: Scenarios 13-15 - Accessibility
+ *
+ * Contains:
+ * - Skip link styles for keyboard navigation
+ * - Visible focus indicators for all interactive elements
+ * - Focus ring styling consistent with design system
+ */
+
+/* Skip Link - visually hidden until focused */
+.skip-link {
+  @apply absolute z-50 px-4 py-2 bg-mirdb-primary text-white font-medium rounded-md;
+  @apply focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-mirdb-primary;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  transition: transform 0.2s ease-in-out;
+}
+
+.skip-link:focus {
+  transform: translateX(-50%) translateY(0.5rem);
+}
+
+/* Global Focus Styles - visible focus indicators for accessibility */
+@layer utilities {
+  /* Focus ring for links and buttons */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-accent ring-offset-2;
+  }
+
+  /* Focus styles for header navigation links */
+  header a:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2 rounded-md;
+  }
+
+  /* Focus styles for mobile menu button */
+  #mobile-menu-btn:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2 rounded-md;
+  }
+
+  /* Focus styles for hero CTA buttons */
+  #hero a:focus-visible {
+    @apply outline-none ring-2 ring-white ring-offset-2 ring-offset-gray-800 rounded-lg;
+  }
+
+  /* Focus styles for footer links */
+  footer a:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-accent ring-offset-2 ring-offset-gray-900 rounded-sm;
+  }
+
+  /* Focus styles for feature cards and interactive elements */
+  .feature-card:focus-visible,
+  .commands-card:focus-visible,
+  .architecture-component:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2;
+  }
+
+  /* Focus styles for status badges */
+  .status-badge:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2 rounded-md;
+  }
+
+  /* Focus styles for comparison table rows (for keyboard navigation) */
+  .comparison-row:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2;
+  }
+
+  /* Ensure interactive elements have visible focus on dark backgrounds */
+  .bg-gray-900 a:focus-visible,
+  .bg-gray-800 a:focus-visible {
+    @apply ring-mirdb-accent ring-offset-gray-900;
+  }
+
+  /* Code block copy button focus styles (inherits from line 48) */
+  .code-block .copy-btn:focus-visible {
+    @apply ring-2 ring-mirdb-accent ring-offset-2 ring-offset-gray-900;
+  }
+}

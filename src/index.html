@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with memcached protocol compatibility">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased">
+  <!-- Skip Link for Keyboard Navigation (Scenario 13-15) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!--
+    MirDB Homepage
+    Owner: Scenario 1 - Hero Section and Branding
+
+    Sections (added by respective scenarios):
+    - Header/Navigation (Scenario 5)
+    - Hero (Scenario 1)
+    - Usage Demo (Scenario 4)
+    - Features (Scenario 2)
+    - Quick Start (Scenario 3)
+    - Architecture (Scenario 8)
+    - Comparison (Scenario 9)
+    - Commands (Scenario 7)
+    - Status/Badges (Scenario 6)
+    - Footer (Scenario 16)
+
+    This file uses semantic HTML5 elements and Tailwind CSS classes.
+    All interactive elements must be keyboard accessible.
+  -->
+
+  <!-- Header/Navigation (Scenario 5) -->
+  <header id="header" class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between">
+        <a href="#" class="flex items-center space-x-2">
+          <img src="assets/logo.gif" alt="MirDB Logo" class="h-8 w-auto">
+          <span class="text-xl font-bold text-gray-900">MirDB</span>
+        </a>
+        <div class="hidden md:flex items-center space-x-6">
+          <a href="#features" class="text-gray-600 hover:text-mirdb-primary transition-colors">Features</a>
+          <a href="#quick-start" class="text-gray-600 hover:text-mirdb-primary transition-colors">Quick Start</a>
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors">
+            View on GitHub
+          </a>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden p-2" aria-label="Toggle menu" aria-expanded="false">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t pt-4">
+        <a href="#features" class="block py-2 text-gray-600">Features</a>
+        <a href="#quick-start" class="block py-2 text-gray-600">Quick Start</a>
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="block py-2 text-mirdb-primary">View on GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-20 lg:py-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          MirDB
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+          A persistent key-value store with memcached protocol compatibility.
+          Drop-in replacement for memcached that persists your data.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a href="#quick-start" class="inline-flex items-center justify-center px-6 py-3 bg-mirdb-primary text-white rounded-lg hover:bg-mirdb-secondary transition-colors font-medium">
+            Get Started
+          </a>
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Usage Demo (Scenario 4) -->
+    <section id="demo" class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold mb-8">See It In Action</h2>
+        <div class="rounded-lg overflow-hidden shadow-xl inline-block">
+          <img src="assets/usage.gif" alt="MirDB usage demonstration showing get and set operations" class="max-w-full h-auto">
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="py-16 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-3">Persistent Storage</h3>
+            <p class="text-gray-600">Unlike memcached, MirDB persists data to disk using SSTables, ensuring your data survives restarts.</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-3">Memcached Protocol</h3>
+            <p class="text-gray-600">Compatible with standard memcached text protocol. Use your existing memcached clients seamlessly.</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-3">LSM Tree Architecture</h3>
+            <p class="text-gray-600">Log-Structured Merge-tree approach with memtables and multi-level SSTable compaction for optimal performance.</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-3">Skip-List Memtable</h3>
+            <p class="text-gray-600">Efficient in-memory data structure providing O(log n) operations for fast reads and writes.</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-3">Automatic Compaction</h3>
+            <p class="text-gray-600">Background minor and major compaction keeps the database optimized without manual intervention.</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-3">Async I/O with Tokio</h3>
+            <p class="text-gray-600">Built on Tokio for high-performance async networking, handling thousands of concurrent connections.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start Section (Scenario 3) -->
+    <section id="quick-start" class="py-16 bg-white" aria-labelledby="quick-start-heading">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="quick-start-heading" class="text-3xl font-bold text-center mb-4">Quick Start</h2>
+        <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          Get MirDB running in minutes. Follow these simple steps to start storing your data persistently.
+        </p>
+
+        <!-- Step 1: Build and Start Server -->
+        <div class="mb-10">
+          <h3 class="text-xl font-semibold mb-4 flex items-center">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-mirdb-primary text-white text-sm font-bold mr-3">1</span>
+            Build and Start the Server
+          </h3>
+          <div class="code-block" role="region" aria-label="Server start command">
+            <button type="button" class="copy-btn" aria-label="Copy server start command to clipboard">Copy</button>
+            <pre><code><span class="comment"># Clone the repository</span>
+<span class="command">git clone</span> https://github.com/yetone/mirdb.git
+<span class="command">cd</span> mirdb
+
+<span class="comment"># Build and run with Cargo</span>
+<span class="command">cargo run</span> <span class="keyword">--release</span>
+
+<span class="comment"># Server starts on port 12333</span></code></pre>
+          </div>
+        </div>
+
+        <!-- Step 2: Store Data (SET) -->
+        <div class="mb-10">
+          <h3 class="text-xl font-semibold mb-4 flex items-center">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-mirdb-primary text-white text-sm font-bold mr-3">2</span>
+            Store Data with SET
+          </h3>
+          <div class="code-block" role="region" aria-label="SET command example">
+            <button type="button" class="copy-btn" aria-label="Copy SET command to clipboard">Copy</button>
+            <pre><code><span class="comment"># Connect using telnet or any memcached client</span>
+<span class="command">telnet</span> localhost <span class="number">12333</span>
+
+<span class="comment"># SET command format: set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;</span>
+<span class="command">set</span> <span class="string">mykey</span> <span class="number">0</span> <span class="number">0</span> <span class="number">5</span>
+<span class="string">hello</span>
+<span class="keyword">STORED</span></code></pre>
+          </div>
+        </div>
+
+        <!-- Step 3: Retrieve Data (GET) -->
+        <div class="mb-10">
+          <h3 class="text-xl font-semibold mb-4 flex items-center">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-mirdb-primary text-white text-sm font-bold mr-3">3</span>
+            Retrieve Data with GET
+          </h3>
+          <div class="code-block" role="region" aria-label="GET command example">
+            <button type="button" class="copy-btn" aria-label="Copy GET command to clipboard">Copy</button>
+            <pre><code><span class="comment"># GET command retrieves stored values</span>
+<span class="command">get</span> <span class="string">mykey</span>
+<span class="keyword">VALUE</span> mykey <span class="number">0</span> <span class="number">5</span>
+<span class="string">hello</span>
+<span class="keyword">END</span></code></pre>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="bg-gray-50 rounded-lg p-6 mt-8">
+          <h3 class="text-lg font-semibold mb-3">Other Commands</h3>
+          <p class="text-gray-600 mb-4">MirDB supports standard memcached commands:</p>
+          <ul class="grid sm:grid-cols-2 gap-2 text-sm text-gray-700">
+            <li><code class="bg-gray-200 px-2 py-1 rounded">add</code> - Add if key doesn't exist</li>
+            <li><code class="bg-gray-200 px-2 py-1 rounded">replace</code> - Replace existing key</li>
+            <li><code class="bg-gray-200 px-2 py-1 rounded">delete</code> - Delete a key</li>
+            <li><code class="bg-gray-200 px-2 py-1 rounded">append</code> - Append to value</li>
+            <li><code class="bg-gray-200 px-2 py-1 rounded">prepend</code> - Prepend to value</li>
+            <li><code class="bg-gray-200 px-2 py-1 rounded">info</code> - Database status</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section (Scenario 8) -->
+    <section id="architecture" class="py-16 bg-gray-50" aria-labelledby="architecture-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="architecture-heading" class="text-3xl font-bold text-center mb-4">Architecture</h2>
+        <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+          MirDB uses a Log-Structured Merge-tree (LSM tree) architecture, combining fast in-memory writes with efficient disk-based persistence.
+        </p>
+
+        <!-- Architecture Diagram -->
+        <div class="architecture-diagram bg-white rounded-lg shadow-lg p-6 mb-12 overflow-x-auto" role="img" aria-label="MirDB LSM tree architecture data flow diagram">
+          <pre class="text-xs sm:text-sm font-mono text-gray-800 leading-relaxed whitespace-pre"><code>                        ┌─────────────────────────────────────────────────────┐
+                        │                   WRITE REQUEST                       │
+                        └─────────────────────────┬───────────────────────────────┘
+                                                  │
+                                                  ▼
+                        ┌─────────────────────────────────────────────────────┐
+                        │                  WRITE-AHEAD LOG (WAL)              │
+                        │   Durability guarantee - survives crashes            │
+                        └─────────────────────────┬───────────────────────────────┘
+                                                  │
+                                                  ▼
+                        ┌─────────────────────────────────────────────────────┐
+                        │                     MEMTABLE                        │
+                        │   In-memory skip list - fast O(log n) operations    │
+                        └─────────────────────────┬───────────────────────────────┘
+                                                  │ (when full)
+                                                  ▼
+                        ┌─────────────────────────────────────────────────────┐
+                        │               IMMUTABLE MEMTABLES                   │
+                        │   Queue of memtables awaiting flush to disk          │
+                        └─────────────────────────┬───────────────────────────────┘
+                                                  │ (minor compaction)
+                                                  ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    SSTABLE LEVELS (DISK)                                    │
+├─────────────────────────────────────────────────────────────────────────────────────────────┤
+│  Level 0   │  Recently flushed SSTables - may have overlapping key ranges                   │
+├────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│  Level 1+  │  Sorted, non-overlapping SSTables - optimized for reads                        │
+└────────────┴────────────────────────────────────────────────────────────────────────────────┘
+                                                  ▲
+                                                  │ (major compaction)
+                              Merges and reorganizes SSTables between levels</code></pre>
+        </div>
+
+        <!-- Component Explanations -->
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- LSM Tree -->
+          <div class="architecture-component bg-white p-6 rounded-lg shadow-md" data-component="lsm-tree">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-mirdb-primary rounded-lg flex items-center justify-center mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold">LSM Tree</h3>
+            </div>
+            <p class="text-gray-600" data-content="lsm-tree-explanation">
+              The Log-Structured Merge-tree is a data structure optimized for high write throughput.
+              It buffers writes in memory and periodically flushes them to disk in sorted batches,
+              avoiding random I/O. MirDB uses this approach to combine memcached-like speed with
+              persistent storage, making it ideal for write-heavy workloads.
+            </p>
+          </div>
+
+          <!-- Memtable -->
+          <div class="architecture-component bg-white p-6 rounded-lg shadow-md" data-component="memtable">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold">Memtable</h3>
+            </div>
+            <p class="text-gray-600" data-content="memtable-explanation">
+              The memtable is an in-memory write buffer implemented as a skip list.
+              All incoming writes are first stored here, providing O(log n) insert and lookup operations.
+              When the memtable reaches capacity (default 4MB), it becomes immutable and a new
+              memtable takes over. This design allows for fast writes without blocking.
+            </p>
+          </div>
+
+          <!-- SSTable -->
+          <div class="architecture-component bg-white p-6 rounded-lg shadow-md" data-component="sstable">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold">SSTable</h3>
+            </div>
+            <p class="text-gray-600" data-content="sstable-explanation">
+              Sorted String Tables (SSTables) are immutable, sorted files that store key-value pairs on disk.
+              Data is organized into blocks with prefix compression and includes a cuckoo filter for
+              efficient negative lookups. SSTables are organized in levels, with Level 0 containing
+              recently flushed data and higher levels containing merged, non-overlapping data.
+            </p>
+          </div>
+
+          <!-- WAL -->
+          <div class="architecture-component bg-white p-6 rounded-lg shadow-md" data-component="wal">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold">Write-Ahead Log (WAL)</h3>
+            </div>
+            <p class="text-gray-600" data-content="wal-explanation">
+              The Write-Ahead Log ensures data durability by persisting every write to disk before
+              acknowledging it. If MirDB crashes, the WAL is replayed during recovery to restore
+              any data not yet flushed to SSTables. WAL entries are Snappy-compressed and
+              aligned for efficient I/O.
+            </p>
+          </div>
+        </div>
+
+        <!-- Read/Write Paths Summary -->
+        <div class="mt-12 bg-white rounded-lg shadow-lg p-6">
+          <h3 class="text-xl font-semibold mb-4 text-center">Data Paths</h3>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="border-l-4 border-green-500 pl-4">
+              <h4 class="font-semibold text-green-700 mb-2">Write Path</h4>
+              <ol class="text-sm text-gray-600 list-decimal list-inside space-y-1">
+                <li>Write to WAL for durability</li>
+                <li>Insert into active memtable</li>
+                <li>Acknowledge to client</li>
+                <li>Background: flush to SSTable when full</li>
+              </ol>
+            </div>
+            <div class="border-l-4 border-blue-500 pl-4">
+              <h4 class="font-semibold text-blue-700 mb-2">Read Path</h4>
+              <ol class="text-sm text-gray-600 list-decimal list-inside space-y-1">
+                <li>Check active memtable</li>
+                <li>Check immutable memtables</li>
+                <li>Search Level 0 SSTables</li>
+                <li>Binary search higher levels</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Section (Scenario 9) -->
+    <section id="comparison" class="py-16 bg-white" aria-labelledby="comparison-heading">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="comparison-heading" class="text-3xl font-bold text-center mb-4">MirDB vs Memcached</h2>
+        <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          MirDB provides the same protocol compatibility as memcached while adding critical persistence features.
+        </p>
+
+        <!-- Comparison Table -->
+        <div class="comparison-table overflow-x-auto">
+          <table class="w-full border-collapse bg-white rounded-lg shadow-md overflow-hidden" role="table" aria-label="Feature comparison between MirDB and Memcached">
+            <thead>
+              <tr class="bg-gray-100">
+                <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">Feature</th>
+                <th scope="col" class="px-6 py-4 text-center text-sm font-semibold text-gray-700 border-b">
+                  <span class="text-mirdb-primary">MirDB</span>
+                </th>
+                <th scope="col" class="px-6 py-4 text-center text-sm font-semibold text-gray-700 border-b">Memcached</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="persistence">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Data Persistence</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600" aria-label="MirDB has persistence">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-no inline-flex items-center text-red-500" aria-label="Memcached does not have persistence">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    No
+                  </span>
+                </td>
+              </tr>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="protocol">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Memcached Protocol</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600" aria-label="MirDB supports memcached protocol">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600" aria-label="Memcached supports memcached protocol">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+              </tr>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="lsm-tree">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">LSM Tree Storage</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-no inline-flex items-center text-red-500">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    No
+                  </span>
+                </td>
+              </tr>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="drop-in">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Drop-in Replacement</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="text-gray-500">—</span>
+                </td>
+              </tr>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="survives-restart">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Data Survives Restart</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-no inline-flex items-center text-red-500">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    No
+                  </span>
+                </td>
+              </tr>
+              <tr class="comparison-row hover:bg-gray-50" data-feature="async-io">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Async I/O (Tokio)</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="text-gray-500">libevent</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Key Differentiator Callout -->
+        <div class="mt-10 bg-gradient-to-r from-mirdb-primary/10 to-mirdb-secondary/10 rounded-lg p-6 border border-mirdb-primary/20">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <svg class="w-6 h-6 text-mirdb-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">Key Differentiator: Persistence</h3>
+              <p class="text-gray-600">
+                While memcached is an in-memory cache that loses data on restart, MirDB persists your data to disk using SSTables and Write-Ahead Logging (WAL).
+                This means your data survives server restarts, making MirDB ideal for use cases where cache durability matters.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Protocol Compatibility Note -->
+        <div class="mt-6 text-center text-sm text-gray-500">
+          <p>MirDB uses the same text protocol as memcached, allowing you to use existing memcached clients without modification.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Commands Section (Scenario 7) -->
+    <section id="commands" class="py-16 bg-gray-50" aria-labelledby="commands-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="commands-heading" class="text-3xl font-bold text-center mb-4">Supported Commands</h2>
+        <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          MirDB implements the memcached text protocol. Use your existing memcached clients with these commands.
+        </p>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- GET Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="get">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">GET</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Retrieve Values</h3>
+            <p class="text-gray-600 text-sm mb-3">Retrieves the value associated with the key. Supports multiple keys in a single request.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>get &lt;key&gt; [&lt;key2&gt; ...]</code></pre>
+          </div>
+
+          <!-- GETS Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="gets">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">GETS</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Get with CAS Token</h3>
+            <p class="text-gray-600 text-sm mb-3">Like GET but also returns a CAS token for check-and-set operations.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>gets &lt;key&gt; [&lt;key2&gt; ...]</code></pre>
+          </div>
+
+          <!-- SET Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="set">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">SET</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Store Data</h3>
+            <p class="text-gray-600 text-sm mb-3">Stores data, overwriting any existing value for the key.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- ADD Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="add">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">ADD</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Add if Not Exists</h3>
+            <p class="text-gray-600 text-sm mb-3">Stores data only if the key does not already exist.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>add &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- REPLACE Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="replace">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">REPLACE</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Replace Existing</h3>
+            <p class="text-gray-600 text-sm mb-3">Stores data only if the key already exists.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>replace &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- DELETE Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="delete">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">DELETE</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Delete Key</h3>
+            <p class="text-gray-600 text-sm mb-3">Removes the key and its associated value from the store.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>delete &lt;key&gt; [noreply]</code></pre>
+          </div>
+
+          <!-- APPEND Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="append">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">APPEND</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Append to Value</h3>
+            <p class="text-gray-600 text-sm mb-3">Appends data to the end of an existing value.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>append &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- PREPEND Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="prepend">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">PREPEND</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Prepend to Value</h3>
+            <p class="text-gray-600 text-sm mb-3">Prepends data to the beginning of an existing value.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>prepend &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- INFO Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="info">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-gray-700 text-white px-3 py-1 rounded text-sm font-mono font-bold">INFO</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Database Status</h3>
+            <p class="text-gray-600 text-sm mb-3">Returns information about the database status and statistics.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>info</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Status/Badges Section (Scenario 6) -->
+    <section id="status" class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold mb-8">Project Status</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="status-badge" aria-label="View CircleCI build status">
+            <img src="https://circleci.com/gh/yetone/mirdb.svg?style=shield" alt="Build Status" class="h-5">
+          </a>
+        </div>
+        <p class="text-gray-500 text-sm mt-6">Click badges to view detailed pipeline status</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 16) -->
+  <footer id="footer" class="bg-gray-900 text-gray-300 py-12" role="contentinfo">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        <!-- About -->
+        <div>
+          <h3 class="text-white font-semibold mb-4">MirDB</h3>
+          <p class="text-sm text-gray-400">A persistent key-value store with memcached protocol compatibility.</p>
+          <p class="text-sm text-gray-500 mt-2">Created by <a href="https://github.com/yetone" target="_blank" rel="noopener noreferrer" class="text-mirdb-primary hover:text-white transition-colors" data-author="yetone">yetone</a></p>
+        </div>
+        <!-- Community -->
+        <div>
+          <h3 class="text-white font-semibold mb-4">Community</h3>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" data-community-link="github">
+                GitHub Repository
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" data-community-link="issues">
+                Report Issues
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/yetone/mirdb/pulls" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" data-community-link="contributing">
+                Contribute
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- Legal -->
+        <div>
+          <h3 class="text-white font-semibold mb-4">Legal</h3>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" data-license-link="true">
+                MIT License
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Copyright -->
+      <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+        <p>&copy; 2024 MirDB. Open source under the <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">MIT License</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
