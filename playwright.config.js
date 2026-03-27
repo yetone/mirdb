@@ -28,9 +28,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npx http-server src -p 8080 -c-1 --silent',
+    command: 'npm run build && npx http-server docs -p 8080 -c-1 --silent',
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
-    timeout: 60000,
+    timeout: 120000,
   },
 });

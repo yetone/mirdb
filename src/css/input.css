@@ -13,14 +13,31 @@
  * - Code block styling (Scenario 3)
  */
 
+@layer base {
+  /* Prevent horizontal overflow on mobile (Scenario 10) */
+  html, body {
+    @apply overflow-x-hidden;
+    max-width: 100vw;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
 @layer components {
   /* Code block styling for Quick Start section (Scenario 3) */
   .code-block {
-    @apply relative bg-gray-900 rounded-lg overflow-hidden;
+    @apply relative bg-gray-900 rounded-lg;
+    overflow: visible;
+    max-width: 100%;
   }
 
   .code-block pre {
-    @apply p-4 overflow-x-auto text-sm leading-relaxed;
+    @apply p-4 text-sm leading-relaxed;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
   }
 
   .code-block code {
@@ -28,7 +45,13 @@
   }
 
   .code-block .copy-btn {
-    @apply absolute top-2 right-2 px-3 py-1.5 text-xs font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mirdb-accent;
+    @apply absolute top-2 right-2 text-xs font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mirdb-accent;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
   }
 
   .code-block .copy-btn.copied {
@@ -54,5 +77,61 @@
 
   .code-block .number {
     @apply text-orange-400;
+  }
+}
+
+/* Mobile responsive styles (Scenario 10 - Mobile) */
+@layer utilities {
+  /* Ensure touch targets are at least 44x44px on mobile */
+  @media (max-width: 767px) {
+    /* Mobile navigation button touch target */
+    #mobile-menu-btn {
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    /* Mobile menu links touch targets */
+    #mobile-menu a {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+    }
+
+    /* Hero CTA buttons touch targets */
+    #hero a {
+      min-height: 44px;
+    }
+
+    /* Feature cards - ensure proper stacking */
+    .grid {
+      gap: 1rem;
+    }
+
+    /* Ensure all sections fit within viewport */
+    section {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    /* Prevent any element from causing horizontal overflow */
+    img, video, iframe, object {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  /* Very narrow screens */
+  @media (max-width: 375px) {
+    .max-w-7xl,
+    .max-w-4xl {
+      max-width: 100%;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 }
