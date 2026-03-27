@@ -483,12 +483,12 @@ test.describe('Responsive Design - Tablet (768px)', () => {
     const footerText = footer.locator('p').first();
     await expect(footerText).toBeVisible();
 
-    // Footer should use flex layout on tablet (md: breakpoint)
-    const footerContainer = footer.locator('.flex.flex-col.md\\:flex-row');
-    await expect(footerContainer).toBeVisible();
+    // Footer should use grid layout on tablet (md:grid-cols-3)
+    const footerGrid = footer.locator('.grid.md\\:grid-cols-3');
+    await expect(footerGrid).toBeVisible();
 
-    // GitHub link should be accessible
-    const githubLink = footer.locator('a[href*="github.com"]');
+    // GitHub link should be accessible (use first one since there are multiple)
+    const githubLink = footer.locator('a[href*="github.com"]').first();
     await expect(githubLink).toBeVisible();
   });
 
