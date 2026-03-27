@@ -208,10 +208,156 @@
     </section>
 
     <!-- Comparison Section (Scenario 9) -->
-    <section id="comparison" class="py-16 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-center mb-8">MirDB vs Memcached</h2>
-        <p class="text-gray-600 text-center">Comparison coming soon.</p>
+    <section id="comparison" class="py-16 bg-white" aria-labelledby="comparison-heading">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="comparison-heading" class="text-3xl font-bold text-center mb-4">MirDB vs Memcached</h2>
+        <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          MirDB provides the same protocol compatibility as memcached while adding critical persistence features.
+        </p>
+
+        <!-- Comparison Table -->
+        <div class="comparison-table overflow-x-auto">
+          <table class="w-full border-collapse bg-white rounded-lg shadow-md overflow-hidden" role="table" aria-label="Feature comparison between MirDB and Memcached">
+            <thead>
+              <tr class="bg-gray-100">
+                <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">Feature</th>
+                <th scope="col" class="px-6 py-4 text-center text-sm font-semibold text-gray-700 border-b">
+                  <span class="text-mirdb-primary">MirDB</span>
+                </th>
+                <th scope="col" class="px-6 py-4 text-center text-sm font-semibold text-gray-700 border-b">Memcached</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="persistence">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Data Persistence</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600" aria-label="MirDB has persistence">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-no inline-flex items-center text-red-500" aria-label="Memcached does not have persistence">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    No
+                  </span>
+                </td>
+              </tr>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="protocol">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Memcached Protocol</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600" aria-label="MirDB supports memcached protocol">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600" aria-label="Memcached supports memcached protocol">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+              </tr>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="lsm-tree">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">LSM Tree Storage</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-no inline-flex items-center text-red-500">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    No
+                  </span>
+                </td>
+              </tr>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="drop-in">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Drop-in Replacement</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="text-gray-500">—</span>
+                </td>
+              </tr>
+              <tr class="comparison-row border-b hover:bg-gray-50" data-feature="survives-restart">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Data Survives Restart</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-no inline-flex items-center text-red-500">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    No
+                  </span>
+                </td>
+              </tr>
+              <tr class="comparison-row hover:bg-gray-50" data-feature="async-io">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Async I/O (Tokio)</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="comparison-yes inline-flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Yes
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="text-gray-500">libevent</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Key Differentiator Callout -->
+        <div class="mt-10 bg-gradient-to-r from-mirdb-primary/10 to-mirdb-secondary/10 rounded-lg p-6 border border-mirdb-primary/20">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <svg class="w-6 h-6 text-mirdb-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">Key Differentiator: Persistence</h3>
+              <p class="text-gray-600">
+                While memcached is an in-memory cache that loses data on restart, MirDB persists your data to disk using SSTables and Write-Ahead Logging (WAL).
+                This means your data survives server restarts, making MirDB ideal for use cases where cache durability matters.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Protocol Compatibility Note -->
+        <div class="mt-6 text-center text-sm text-gray-500">
+          <p>MirDB uses the same text protocol as memcached, allowing you to use existing memcached clients without modification.</p>
+        </div>
       </div>
     </section>
 
