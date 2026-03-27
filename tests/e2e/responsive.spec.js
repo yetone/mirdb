@@ -513,3 +513,236 @@ test.describe('Responsive Design - Tablet (768px)', () => {
     expect(cardBox.width).toBeLessThanOrEqual(TABLET_VIEWPORT.width);
   });
 });
+
+// Desktop viewport (Standard desktop width)
+const DESKTOP_VIEWPORT = { width: 1280, height: 800 };
+
+test.describe('Responsive Design - Desktop (1280px)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(DESKTOP_VIEWPORT);
+    await page.goto('/');
+  });
+
+  test('content is centered with appropriate max-width container', async ({ page }) => {
+    await page.waitForLoadState('domcontentloaded');
+
+    // Check that main content containers use max-width and are centered
+    const mainContainer = page.locator('.max-w-7xl').first();
+    await expect(mainContainer).toBeVisible();
+
+    // Get the container's bounding box
+    const containerBox = await mainContainer.boundingBox();
+    expect(containerBox).not.toBeNull();
+
+    // Container should be centered (left margin should roughly equal right margin)
+    // The max-w-7xl is 80rem (1280px), so on a 1280px viewport it should be nearly full width
+    // but with some padding, and centered
+    const viewportWidth = DESKTOP_VIEWPORT.width;
+    const leftMargin = containerBox.x;
+    const rightMargin = viewportWidth - (containerBox.x + containerBox.width);
+
+    // Margins should be roughly equal (allowing for small differences due to padding)
+    expect(Math.abs(leftMargin - rightMargin)).toBeLessThan(50);
+
+    // Container should not exceed viewport width
+    expect(containerBox.width).toBeLessThanOrEqual(viewportWidth);
+
+    // Verify the container has appropriate max-width applied
+    const maxWidth = await mainContainer.evaluate((el) => {
+      return window.getComputedStyle(el).maxWidth;
+    });
+
+    // max-w-7xl should be 80rem = 1280px
+    expect(maxWidth).toBeTruthy();
+    expect(maxWidth).not.toBe('none');
+  });
+
+  test('features display in 3+ column grid on desktop', async ({ page }) => {
+    await page.goto('/#features');
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(300);
+
+    const featuresGrid = page.locator('#features .grid');
+    await expect(featuresGrid).toBeVisible();
+
+    const featureCards = featuresGrid.locator('> div');
+    const cardCount = await featureCards.count();
+
+    // Should have multiple feature cards
+    expect(cardCount).toBeGreaterThanOrEqual(3);
+
+    // Get positions of first three cards to verify they're in different columns
+    const firstCard = featureCards.nth(0);
+    const secondCard = featureCards.nth(1);
+    const thirdCard = featureCards.nth(2);
+
+    const firstCardBox = await firstCard.boundingBox();
+    const secondCardBox = await secondCard.boundingBox();
+    const thirdCardBox = await thirdCard.boundingBox();
+
+    // On desktop with lg:grid-cols-3, first three cards should be on the same row
+    // They should have approximately the same Y position
+    expect(Math.abs(firstCardBox.y - secondCardBox.y)).toBeLessThan(10);
+    expect(Math.abs(secondCardBox.y - thirdCardBox.y)).toBeLessThan(10);
+
+    // Cards should have different X positions (different columns)
+    expect(secondCardBox.x).toBeGreaterThan(firstCardBox.x);
+    expect(thirdCardBox.x).toBeGreaterThan(secondCardBox.x);
+
+    // Verify we have at least 3 columns by checking that cards fit side by side
+    const totalCardsWidth = thirdCardBox.x + thirdCardBox.width - firstCardBox.x;
+    expect(totalCardsWidth).toBeLessThanOrEqual(DESKTOP_VIEWPORT.width);
+  });
+
+  test('all navigation links are visible without hamburger menu', async ({ page }) => {
+    await page.waitForLoadState('domcontentloaded');
+
+    // Desktop navigation links should be visible (md:flex)
+    const desktopNav = page.locator('header .hidden.md\\:flex');
+    await expect(desktopNav).toBeVisible();
+
+    // Features link should be visible
+    const featuresLink = desktopNav.locator('a[href="#features"]');
+    await expect(featuresLink).toBeVisible();
+
+    // Quick Start link should be visible
+    const quickStartLink = desktopNav.locator('a[href="#quick-start"]');
+    await expect(quickStartLink).toBeVisible();
+
+    // GitHub link should be visible
+    const githubLink = desktopNav.locator('a[href*="github.com"]');
+    await expect(githubLink).toBeVisible();
+
+    // Mobile hamburger menu button should be hidden on desktop
+    const mobileMenuBtn = page.locator('#mobile-menu-btn');
+    await expect(mobileMenuBtn).toBeHidden();
+
+    // Mobile menu should also be hidden
+    const mobileMenu = page.locator('#mobile-menu');
+    await expect(mobileMenu).toBeHidden();
+  });
+
+  test('hero section displays full width with centered content', async ({ page }) => {
+    const hero = page.locator('#hero');
+    await expect(hero).toBeVisible();
+
+    // Hero should span full viewport width
+    const heroBox = await hero.boundingBox();
+    expect(heroBox.width).toBe(DESKTOP_VIEWPORT.width);
+
+    // Hero content container should be centered
+    const heroContent = hero.locator('.max-w-7xl');
+    const contentBox = await heroContent.boundingBox();
+
+    // Content should be centered within hero
+    const leftMargin = contentBox.x;
+    const rightMargin = heroBox.width - (contentBox.x + contentBox.width);
+    expect(Math.abs(leftMargin - rightMargin)).toBeLessThan(50);
+
+    // Title should be visible and readable
+    const title = hero.locator('h1');
+    await expect(title).toBeVisible();
+    await expect(title).toContainText('MirDB');
+  });
+
+  test('footer displays in horizontal layout on desktop', async ({ page }) => {
+    await page.goto('/#footer');
+    await page.waitForTimeout(300);
+
+    const footer = page.locator('#footer');
+    await expect(footer).toBeVisible();
+
+    // Footer content should use flex row layout on desktop (md:flex-row)
+    // Use more specific selector for the main flex container
+    const footerFlex = footer.locator('.flex.flex-col.md\\:flex-row');
+    const flexDirection = await footerFlex.evaluate((el) => {
+      return window.getComputedStyle(el).flexDirection;
+    });
+
+    // On desktop, should be row layout
+    expect(flexDirection).toBe('row');
+
+    // Footer items should be on same horizontal line
+    const leftContent = footer.locator('p').first();
+    const rightContent = footer.locator('a[href*="github.com"]');
+
+    const leftBox = await leftContent.boundingBox();
+    const rightBox = await rightContent.boundingBox();
+
+    // Both should have similar Y position (same row)
+    expect(Math.abs(leftBox.y - rightBox.y)).toBeLessThan(30);
+  });
+
+  test('architecture section grid displays in 2 columns on desktop', async ({ page }) => {
+    await page.goto('/#architecture');
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(300);
+
+    const architectureGrid = page.locator('#architecture .grid');
+    const isVisible = await architectureGrid.isVisible().catch(() => false);
+
+    if (isVisible) {
+      const gridItems = architectureGrid.locator('> div');
+      const itemCount = await gridItems.count();
+
+      if (itemCount >= 2) {
+        const firstItem = gridItems.nth(0);
+        const secondItem = gridItems.nth(1);
+
+        const firstBox = await firstItem.boundingBox();
+        const secondBox = await secondItem.boundingBox();
+
+        // On desktop with md:grid-cols-2, items should be side by side
+        expect(Math.abs(firstBox.y - secondBox.y)).toBeLessThan(10);
+        expect(secondBox.x).toBeGreaterThan(firstBox.x);
+      }
+    }
+  });
+
+  test('commands section displays in 3 column grid on desktop', async ({ page }) => {
+    await page.goto('/#commands');
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(300);
+
+    const commandsGrid = page.locator('#commands .grid');
+    await expect(commandsGrid).toBeVisible();
+
+    const commandCards = commandsGrid.locator('> div');
+    const cardCount = await commandCards.count();
+
+    expect(cardCount).toBeGreaterThanOrEqual(3);
+
+    // Get first three command cards
+    const firstCard = commandCards.nth(0);
+    const secondCard = commandCards.nth(1);
+    const thirdCard = commandCards.nth(2);
+
+    const firstBox = await firstCard.boundingBox();
+    const secondBox = await secondCard.boundingBox();
+    const thirdBox = await thirdCard.boundingBox();
+
+    // On desktop with lg:grid-cols-3, first three should be on same row
+    expect(Math.abs(firstBox.y - secondBox.y)).toBeLessThan(10);
+    expect(Math.abs(secondBox.y - thirdBox.y)).toBeLessThan(10);
+
+    // And in different columns
+    expect(secondBox.x).toBeGreaterThan(firstBox.x);
+    expect(thirdBox.x).toBeGreaterThan(secondBox.x);
+  });
+
+  test('no horizontal overflow at 1280px viewport width', async ({ page }) => {
+    await page.waitForLoadState('domcontentloaded');
+
+    // Check that there's no horizontal scrollbar
+    const hasHorizontalScroll = await page.evaluate(() => {
+      const docWidth = Math.max(
+        document.documentElement.scrollWidth,
+        document.body.scrollWidth
+      );
+      const viewportWidth = window.innerWidth;
+      return docWidth > viewportWidth + 5;
+    });
+
+    expect(hasHorizontalScroll).toBe(false);
+  });
+});
