@@ -12,7 +12,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Hero Section and Branding', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/index.html');
+    await page.goto('index.html');
   });
 
   test('TC1: Logo image is visible with correct alt text', async ({ page }) => {
