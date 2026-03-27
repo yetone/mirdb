@@ -216,10 +216,109 @@
     </section>
 
     <!-- Commands Section (Scenario 7) -->
-    <section id="commands" class="py-16 bg-gray-50">
+    <section id="commands" class="py-16 bg-gray-50" aria-labelledby="commands-heading">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-center mb-8">Supported Commands</h2>
-        <p class="text-gray-600 text-center">Full command reference coming soon.</p>
+        <h2 id="commands-heading" class="text-3xl font-bold text-center mb-4">Supported Commands</h2>
+        <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          MirDB implements the memcached text protocol. Use your existing memcached clients with these commands.
+        </p>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- GET Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="get">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">GET</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Retrieve Values</h3>
+            <p class="text-gray-600 text-sm mb-3">Retrieves the value associated with the key. Supports multiple keys in a single request.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>get &lt;key&gt; [&lt;key2&gt; ...]</code></pre>
+          </div>
+
+          <!-- GETS Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="gets">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">GETS</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Get with CAS Token</h3>
+            <p class="text-gray-600 text-sm mb-3">Like GET but also returns a CAS token for check-and-set operations.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>gets &lt;key&gt; [&lt;key2&gt; ...]</code></pre>
+          </div>
+
+          <!-- SET Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="set">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">SET</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Store Data</h3>
+            <p class="text-gray-600 text-sm mb-3">Stores data, overwriting any existing value for the key.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- ADD Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="add">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">ADD</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Add if Not Exists</h3>
+            <p class="text-gray-600 text-sm mb-3">Stores data only if the key does not already exist.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>add &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- REPLACE Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="replace">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">REPLACE</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Replace Existing</h3>
+            <p class="text-gray-600 text-sm mb-3">Stores data only if the key already exists.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>replace &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- DELETE Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="delete">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">DELETE</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Delete Key</h3>
+            <p class="text-gray-600 text-sm mb-3">Removes the key and its associated value from the store.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>delete &lt;key&gt; [noreply]</code></pre>
+          </div>
+
+          <!-- APPEND Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="append">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">APPEND</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Append to Value</h3>
+            <p class="text-gray-600 text-sm mb-3">Appends data to the end of an existing value.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>append &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- PREPEND Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="prepend">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-mirdb-primary text-white px-3 py-1 rounded text-sm font-mono font-bold">PREPEND</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Prepend to Value</h3>
+            <p class="text-gray-600 text-sm mb-3">Prepends data to the beginning of an existing value.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>prepend &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;
+&lt;data&gt;</code></pre>
+          </div>
+
+          <!-- INFO Command -->
+          <div class="commands-card bg-white p-6 rounded-lg shadow-md" data-command="info">
+            <div class="flex items-center mb-3">
+              <code class="commands-code bg-gray-700 text-white px-3 py-1 rounded text-sm font-mono font-bold">INFO</code>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Database Status</h3>
+            <p class="text-gray-600 text-sm mb-3">Returns information about the database status and statistics.</p>
+            <pre class="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto"><code>info</code></pre>
+          </div>
+        </div>
       </div>
     </section>
 
