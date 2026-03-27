@@ -102,3 +102,64 @@ describe('Hero Section and Branding', () => {
     expect(title).toContain('MirDB');
   });
 });
+
+/**
+ * Navigation Unit Tests
+ * Owner: Scenario 5 - Navigation and GitHub Link
+ *
+ * Unit tests for navigation elements and link attributes
+ */
+describe('Navigation and GitHub Link (Unit)', () => {
+  let document;
+
+  beforeAll(() => {
+    const htmlPath = resolve(process.cwd(), 'src/index.html');
+    const html = readFileSync(htmlPath, 'utf-8');
+    const dom = new JSDOM(html);
+    document = dom.window.document;
+  });
+
+  it('TC2: GitHub link has target=_blank and rel=noopener noreferrer', () => {
+    // Find GitHub link in header
+    const header = document.querySelector('header');
+    expect(header).not.toBeNull();
+
+    const githubLink = header.querySelector('a[href*="github.com"]');
+    expect(githubLink).not.toBeNull();
+
+    // Verify target="_blank" attribute
+    const target = githubLink.getAttribute('target');
+    expect(target).toBe('_blank');
+
+    // Verify rel="noopener noreferrer" for security
+    const rel = githubLink.getAttribute('rel');
+    expect(rel).toContain('noopener');
+    expect(rel).toContain('noreferrer');
+  });
+
+  it('Navigation links have correct href attributes', () => {
+    const header = document.querySelector('header');
+    expect(header).not.toBeNull();
+
+    // Check features link
+    const featuresLink = header.querySelector('a[href="#features"]');
+    expect(featuresLink).not.toBeNull();
+
+    // Check quick-start link
+    const quickStartLink = header.querySelector('a[href="#quick-start"]');
+    expect(quickStartLink).not.toBeNull();
+  });
+
+  it('Mobile menu button has accessibility attributes', () => {
+    const mobileMenuBtn = document.querySelector('#mobile-menu-btn');
+    expect(mobileMenuBtn).not.toBeNull();
+
+    // Verify aria-label
+    const ariaLabel = mobileMenuBtn.getAttribute('aria-label');
+    expect(ariaLabel).toBeTruthy();
+
+    // Verify aria-expanded
+    const ariaExpanded = mobileMenuBtn.getAttribute('aria-expanded');
+    expect(ariaExpanded).toBe('false');
+  });
+});
