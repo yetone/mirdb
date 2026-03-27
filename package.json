@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A persistent key-value store with memcached protocol",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/css/input.css -o ./docs/css/styles.css --watch",
+    "build": "npx tailwindcss -i ./src/css/input.css -o ./docs/css/styles.css --minify && cp src/index.html docs/index.html && cp -r assets docs/",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run tests/unit/",
+    "test:e2e": "playwright test",
+    "test:links": "vitest run tests/integration/"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "@playwright/test": "^1.40.0",
+    "vitest": "^1.0.0",
+    "jsdom": "^23.0.0"
+  }
+}
