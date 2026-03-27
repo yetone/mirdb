@@ -652,25 +652,40 @@ test.describe('Responsive Design - Desktop (1280px)', () => {
     const footer = page.locator('#footer');
     await expect(footer).toBeVisible();
 
-    // Footer content should use flex row layout on desktop (md:flex-row)
-    // Use more specific selector for the main flex container
-    const footerFlex = footer.locator('.flex.flex-col.md\\:flex-row');
-    const flexDirection = await footerFlex.evaluate((el) => {
-      return window.getComputedStyle(el).flexDirection;
+    // Footer uses grid layout on desktop (md:grid-cols-3)
+    // Check for the grid container
+    const footerGrid = footer.locator('.grid.md\\:grid-cols-3');
+    await expect(footerGrid).toBeVisible();
+
+    // Verify grid layout is applied on desktop
+    const gridTemplateColumns = await footerGrid.evaluate((el) => {
+      return window.getComputedStyle(el).gridTemplateColumns;
     });
 
-    // On desktop, should be row layout
-    expect(flexDirection).toBe('row');
+    // On desktop with md:grid-cols-3, should have 3 columns
+    // The gridTemplateColumns will be something like "300px 300px 300px" or similar
+    expect(gridTemplateColumns).not.toBe('none');
 
-    // Footer items should be on same horizontal line
-    const leftContent = footer.locator('p').first();
-    const rightContent = footer.locator('a[href*="github.com"]');
+    // Grid columns should be non-trivial (more than 1 column)
+    const columns = gridTemplateColumns.split(' ').filter(c => c.trim() !== '' && c !== 'none');
+    expect(columns.length).toBeGreaterThanOrEqual(2);
 
-    const leftBox = await leftContent.boundingBox();
-    const rightBox = await rightContent.boundingBox();
+    // Footer sections should be on same horizontal line
+    const gridChildren = footerGrid.locator('> div');
+    const childCount = await gridChildren.count();
+    expect(childCount).toBeGreaterThanOrEqual(2);
+
+    // First two children should be side by side
+    const firstChild = gridChildren.nth(0);
+    const secondChild = gridChildren.nth(1);
+
+    const firstBox = await firstChild.boundingBox();
+    const secondBox = await secondChild.boundingBox();
 
     // Both should have similar Y position (same row)
-    expect(Math.abs(leftBox.y - rightBox.y)).toBeLessThan(30);
+    expect(Math.abs(firstBox.y - secondBox.y)).toBeLessThan(30);
+    // And second should be to the right of first
+    expect(secondBox.x).toBeGreaterThan(firstBox.x);
   });
 
   test('architecture section grid displays in 2 columns on desktop', async ({ page }) => {
