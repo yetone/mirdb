@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Tailwind CSS Input File
+ * Owner: Scenarios 10-12 - Responsive Design
+ *
+ * Contains:
+ * - Tailwind base, components, utilities imports
+ * - Custom component classes
+ * - Focus styles for accessibility (Scenario 13-15)
+ * - Code block styling (Scenario 3)
+ */
+
+@layer components {
+  /* Code block styling for Quick Start section (Scenario 3) */
+  .code-block {
+    @apply relative bg-gray-900 rounded-lg overflow-hidden;
+  }
+
+  .code-block pre {
+    @apply p-4 overflow-x-auto text-sm leading-relaxed;
+  }
+
+  .code-block code {
+    @apply font-mono text-gray-100;
+  }
+
+  .code-block .copy-btn {
+    @apply absolute top-2 right-2 px-3 py-1.5 text-xs font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mirdb-accent;
+  }
+
+  .code-block .copy-btn.copied {
+    @apply bg-green-600 text-white;
+  }
+
+  /* Syntax highlighting classes */
+  .code-block .keyword {
+    @apply text-purple-400;
+  }
+
+  .code-block .command {
+    @apply text-cyan-400;
+  }
+
+  .code-block .string {
+    @apply text-green-400;
+  }
+
+  .code-block .comment {
+    @apply text-gray-500;
+  }
+
+  .code-block .number {
+    @apply text-orange-400;
+  }
+}
