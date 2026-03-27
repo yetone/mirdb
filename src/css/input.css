@@ -193,3 +193,84 @@
     }
   }
 }
+
+/**
+ * Accessibility Focus Styles (Scenario 13-15)
+ * Owner: Scenarios 13-15 - Accessibility
+ *
+ * Contains:
+ * - Skip link styles for keyboard navigation
+ * - Visible focus indicators for all interactive elements
+ * - Focus ring styling consistent with design system
+ */
+
+/* Skip Link - visually hidden until focused */
+.skip-link {
+  @apply absolute z-50 px-4 py-2 bg-mirdb-primary text-white font-medium rounded-md;
+  @apply focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-mirdb-primary;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  transition: transform 0.2s ease-in-out;
+}
+
+.skip-link:focus {
+  transform: translateX(-50%) translateY(0.5rem);
+}
+
+/* Global Focus Styles - visible focus indicators for accessibility */
+@layer utilities {
+  /* Focus ring for links and buttons */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-accent ring-offset-2;
+  }
+
+  /* Focus styles for header navigation links */
+  header a:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2 rounded-md;
+  }
+
+  /* Focus styles for mobile menu button */
+  #mobile-menu-btn:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2 rounded-md;
+  }
+
+  /* Focus styles for hero CTA buttons */
+  #hero a:focus-visible {
+    @apply outline-none ring-2 ring-white ring-offset-2 ring-offset-gray-800 rounded-lg;
+  }
+
+  /* Focus styles for footer links */
+  footer a:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-accent ring-offset-2 ring-offset-gray-900 rounded-sm;
+  }
+
+  /* Focus styles for feature cards and interactive elements */
+  .feature-card:focus-visible,
+  .commands-card:focus-visible,
+  .architecture-component:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2;
+  }
+
+  /* Focus styles for status badges */
+  .status-badge:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2 rounded-md;
+  }
+
+  /* Focus styles for comparison table rows (for keyboard navigation) */
+  .comparison-row:focus-visible {
+    @apply outline-none ring-2 ring-mirdb-primary ring-offset-2;
+  }
+
+  /* Ensure interactive elements have visible focus on dark backgrounds */
+  .bg-gray-900 a:focus-visible,
+  .bg-gray-800 a:focus-visible {
+    @apply ring-mirdb-accent ring-offset-gray-900;
+  }
+
+  /* Code block copy button focus styles (inherits from line 48) */
+  .code-block .copy-btn:focus-visible {
+    @apply ring-2 ring-mirdb-accent ring-offset-2 ring-offset-gray-900;
+  }
+}
