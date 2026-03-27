@@ -200,10 +200,149 @@
     </section>
 
     <!-- Architecture Section (Scenario 8) -->
-    <section id="architecture" class="py-16 bg-gray-50">
+    <section id="architecture" class="py-16 bg-gray-50" aria-labelledby="architecture-heading">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-center mb-8">Architecture</h2>
-        <p class="text-gray-600 text-center">Architecture overview coming soon.</p>
+        <h2 id="architecture-heading" class="text-3xl font-bold text-center mb-4">Architecture</h2>
+        <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+          MirDB uses a Log-Structured Merge-tree (LSM tree) architecture, combining fast in-memory writes with efficient disk-based persistence.
+        </p>
+
+        <!-- Architecture Diagram -->
+        <div class="architecture-diagram bg-white rounded-lg shadow-lg p-6 mb-12 overflow-x-auto" role="img" aria-label="MirDB LSM tree architecture data flow diagram">
+          <pre class="text-xs sm:text-sm font-mono text-gray-800 leading-relaxed whitespace-pre"><code>                        ┌─────────────────────────────────────────────────────┐
+                        │                   WRITE REQUEST                       │
+                        └─────────────────────────┬───────────────────────────────┘
+                                                  │
+                                                  ▼
+                        ┌─────────────────────────────────────────────────────┐
+                        │                  WRITE-AHEAD LOG (WAL)              │
+                        │   Durability guarantee - survives crashes            │
+                        └─────────────────────────┬───────────────────────────────┘
+                                                  │
+                                                  ▼
+                        ┌─────────────────────────────────────────────────────┐
+                        │                     MEMTABLE                        │
+                        │   In-memory skip list - fast O(log n) operations    │
+                        └─────────────────────────┬───────────────────────────────┘
+                                                  │ (when full)
+                                                  ▼
+                        ┌─────────────────────────────────────────────────────┐
+                        │               IMMUTABLE MEMTABLES                   │
+                        │   Queue of memtables awaiting flush to disk          │
+                        └─────────────────────────┬───────────────────────────────┘
+                                                  │ (minor compaction)
+                                                  ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    SSTABLE LEVELS (DISK)                                    │
+├─────────────────────────────────────────────────────────────────────────────────────────────┤
+│  Level 0   │  Recently flushed SSTables - may have overlapping key ranges                   │
+├────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│  Level 1+  │  Sorted, non-overlapping SSTables - optimized for reads                        │
+└────────────┴────────────────────────────────────────────────────────────────────────────────┘
+                                                  ▲
+                                                  │ (major compaction)
+                              Merges and reorganizes SSTables between levels</code></pre>
+        </div>
+
+        <!-- Component Explanations -->
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- LSM Tree -->
+          <div class="architecture-component bg-white p-6 rounded-lg shadow-md" data-component="lsm-tree">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-mirdb-primary rounded-lg flex items-center justify-center mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold">LSM Tree</h3>
+            </div>
+            <p class="text-gray-600" data-content="lsm-tree-explanation">
+              The Log-Structured Merge-tree is a data structure optimized for high write throughput.
+              It buffers writes in memory and periodically flushes them to disk in sorted batches,
+              avoiding random I/O. MirDB uses this approach to combine memcached-like speed with
+              persistent storage, making it ideal for write-heavy workloads.
+            </p>
+          </div>
+
+          <!-- Memtable -->
+          <div class="architecture-component bg-white p-6 rounded-lg shadow-md" data-component="memtable">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold">Memtable</h3>
+            </div>
+            <p class="text-gray-600" data-content="memtable-explanation">
+              The memtable is an in-memory write buffer implemented as a skip list.
+              All incoming writes are first stored here, providing O(log n) insert and lookup operations.
+              When the memtable reaches capacity (default 4MB), it becomes immutable and a new
+              memtable takes over. This design allows for fast writes without blocking.
+            </p>
+          </div>
+
+          <!-- SSTable -->
+          <div class="architecture-component bg-white p-6 rounded-lg shadow-md" data-component="sstable">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold">SSTable</h3>
+            </div>
+            <p class="text-gray-600" data-content="sstable-explanation">
+              Sorted String Tables (SSTables) are immutable, sorted files that store key-value pairs on disk.
+              Data is organized into blocks with prefix compression and includes a cuckoo filter for
+              efficient negative lookups. SSTables are organized in levels, with Level 0 containing
+              recently flushed data and higher levels containing merged, non-overlapping data.
+            </p>
+          </div>
+
+          <!-- WAL -->
+          <div class="architecture-component bg-white p-6 rounded-lg shadow-md" data-component="wal">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold">Write-Ahead Log (WAL)</h3>
+            </div>
+            <p class="text-gray-600" data-content="wal-explanation">
+              The Write-Ahead Log ensures data durability by persisting every write to disk before
+              acknowledging it. If MirDB crashes, the WAL is replayed during recovery to restore
+              any data not yet flushed to SSTables. WAL entries are Snappy-compressed and
+              aligned for efficient I/O.
+            </p>
+          </div>
+        </div>
+
+        <!-- Read/Write Paths Summary -->
+        <div class="mt-12 bg-white rounded-lg shadow-lg p-6">
+          <h3 class="text-xl font-semibold mb-4 text-center">Data Paths</h3>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="border-l-4 border-green-500 pl-4">
+              <h4 class="font-semibold text-green-700 mb-2">Write Path</h4>
+              <ol class="text-sm text-gray-600 list-decimal list-inside space-y-1">
+                <li>Write to WAL for durability</li>
+                <li>Insert into active memtable</li>
+                <li>Acknowledge to client</li>
+                <li>Background: flush to SSTable when full</li>
+              </ol>
+            </div>
+            <div class="border-l-4 border-blue-500 pl-4">
+              <h4 class="font-semibold text-blue-700 mb-2">Read Path</h4>
+              <ol class="text-sm text-gray-600 list-decimal list-inside space-y-1">
+                <li>Check active memtable</li>
+                <li>Check immutable memtables</li>
+                <li>Search Level 0 SSTables</li>
+                <li>Binary search higher levels</li>
+              </ol>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
