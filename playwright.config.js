@@ -18,8 +18,14 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'file://' + process.cwd() + '/src/',
+    baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',
+  },
+  webServer: {
+    command: 'npx http-server src -p 8080 -c-1 --silent',
+    url: 'http://localhost:8080',
+    reuseExistingServer: !process.env.CI,
+    timeout: 60000,
   },
   projects: [
     {

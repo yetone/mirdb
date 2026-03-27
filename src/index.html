@@ -38,8 +38,41 @@
         </section>
 
         <!-- Features (Scenario 2) -->
-        <section id="features">
-            <!-- Features will be added by Scenario 2 -->
+        <section id="features" class="py-16 px-4 bg-white">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Features</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Persistence Feature -->
+                    <div class="feature-card p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow" data-feature="persistence">
+                        <h3 class="text-xl font-semibold mb-3">Persistent Storage</h3>
+                        <p class="text-gray-600">All data is persisted to disk, ensuring durability across restarts. Your key-value pairs survive server crashes and power failures.</p>
+                    </div>
+
+                    <!-- Memcached Protocol Feature -->
+                    <div class="feature-card p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow" data-feature="memcached">
+                        <h3 class="text-xl font-semibold mb-3">Memcached Protocol</h3>
+                        <p class="text-gray-600">Full compatibility with the memcached text protocol. Use existing memcached clients and tools without any modifications.</p>
+                    </div>
+
+                    <!-- LSM Tree Feature -->
+                    <div class="feature-card p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow" data-feature="lsm-tree">
+                        <h3 class="text-xl font-semibold mb-3">LSM Tree Architecture</h3>
+                        <p class="text-gray-600">Built on a Log-Structured Merge-tree for optimal write performance. Efficiently handles high-throughput workloads with sequential disk writes.</p>
+                    </div>
+
+                    <!-- Skip-List Memtable Feature -->
+                    <div class="feature-card p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow" data-feature="skip-list">
+                        <h3 class="text-xl font-semibold mb-3">Skip-List Memtable</h3>
+                        <p class="text-gray-600">Uses a skip-list based memtable for fast in-memory operations. Provides O(log n) insertions and lookups with low memory overhead.</p>
+                    </div>
+
+                    <!-- Compaction Feature -->
+                    <div class="feature-card p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow" data-feature="compaction">
+                        <h3 class="text-xl font-semibold mb-3">Intelligent Compaction</h3>
+                        <p class="text-gray-600">Supports both minor and major compaction strategies. Automatically merges and optimizes SSTables to reclaim space and improve read performance.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Quick Start (Scenario 3) -->
