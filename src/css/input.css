@@ -134,4 +134,62 @@
       padding-right: 1rem;
     }
   }
+
+  /* Tablet responsive styles (Scenario 11 - Tablet: 768px) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    /* Ensure proper grid layouts on tablet */
+    #features .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #commands .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #architecture .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Architecture diagram scrolls if needed on tablet */
+    .architecture-diagram {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Comparison table adapts for tablet */
+    .comparison-table {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .comparison-table table {
+      min-width: 600px;
+    }
+
+    /* Footer flex layout on tablet */
+    #footer .flex {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Hero CTA buttons side by side on tablet */
+    #hero .flex-col {
+      flex-direction: row;
+    }
+
+    /* Navigation links spacing on tablet */
+    header nav .md\\:flex {
+      gap: 1.5rem;
+    }
+
+    /* Code blocks proper width on tablet */
+    .code-block {
+      max-width: 100%;
+    }
+
+    .code-block pre {
+      max-width: 100%;
+    }
+  }
 }
