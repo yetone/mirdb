@@ -17,6 +17,7 @@
     "react-router-dom": "^6.26.0",
     "@tanstack/react-query": "^5.51.21",
     "axios": "^1.7.3",
+    "lucide-react": "^0.400.0",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
