@@ -6,7 +6,7 @@
  * - HeroSection (Scenario 1)
  * - FeaturesSection (Scenario 2) - placeholder
  * - HowItWorksSection (Scenario 3)
- * - StatsSection (Scenario 4) - placeholder
+ * - StatsSection (Scenario 4)
  * - Footer (Scenario 6)
  */
 
@@ -15,6 +15,7 @@ import { HeroSection } from '../components/homepage/HeroSection'
 import HowItWorksSection from '../components/homepage/HowItWorksSection'
 import { Footer } from '../components/homepage/Footer'
 import Navbar from '../components/Navbar'
+import { StatsSection } from '../components/homepage/StatsSection'
 
 const Home: React.FC = () => {
   return (
@@ -49,6 +50,8 @@ const Home: React.FC = () => {
       </section>
 
       <HowItWorksSection />
+
+      <StatsSection />
 
       <Footer />
     </main>
