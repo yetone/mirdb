@@ -28,7 +28,7 @@ const StatCard: React.FC<StatCardProps> = ({ icon, value, label, testId }) => {
       data-testid={testId}
     >
       <div className="card-body items-center text-center">
-        <div className="text-primary mb-2">{icon}</div>
+        <div className="text-primary mb-2" aria-hidden="true">{icon}</div>
         <h3 className="text-4xl font-bold text-base-content" data-testid={`${testId}-value`}>
           {typeof value === 'number' ? value.toLocaleString() : value}
         </h3>

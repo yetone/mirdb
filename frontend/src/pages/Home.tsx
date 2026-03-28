@@ -20,8 +20,17 @@ import { StatsSection } from '../components/homepage/StatsSection'
 const Home: React.FC = () => {
   return (
     <main className="min-h-screen bg-base-100" data-testid="home-page">
+      {/* Skip link for keyboard users - WCAG 2.1 AA requirement */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary focus:text-primary-content focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none"
+        data-testid="skip-link"
+      >
+        Skip to main content
+      </a>
       <Navbar />
-      <HeroSection />
+      <div id="main-content">
+        <HeroSection />
 
       <section className="py-16 px-4 bg-base-100">
         <div className="container mx-auto">
@@ -52,6 +61,7 @@ const Home: React.FC = () => {
       <HowItWorksSection />
 
       <StatsSection />
+      </div>
 
       <Footer />
     </main>

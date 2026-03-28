@@ -41,7 +41,6 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
-            aria-label="Arrow pointing to next step"
           >
             <path
               strokeLinecap="round"

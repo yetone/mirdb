@@ -76,18 +76,18 @@ const Navbar: React.FC = () => {
 
       {/* Desktop Menu - Center (visible at tablet and above) */}
       <div className="navbar-center hidden md:flex">
-        <ul className="menu menu-horizontal gap-2" role="menubar">
-          <li role="none">
+        <ul className="menu menu-horizontal gap-2">
+          <li>
             <NavLink to="/features" testId="nav-features">
               Features
             </NavLink>
           </li>
-          <li role="none">
+          <li>
             <NavLink to="/pricing" testId="nav-pricing">
               Pricing
             </NavLink>
           </li>
-          <li role="none">
+          <li>
             <NavLink to="/about" testId="nav-about">
               About
             </NavLink>
@@ -192,26 +192,26 @@ const Navbar: React.FC = () => {
           className="absolute top-full left-0 right-0 bg-base-100 shadow-lg md:hidden z-50"
           data-testid="mobile-menu"
         >
-          <ul className="menu p-4" role="menu">
-            <li role="none">
+          <ul className="menu p-4">
+            <li>
               <NavLink to="/features" onClick={closeMobileMenu} testId="mobile-nav-features">
                 Features
               </NavLink>
             </li>
-            <li role="none">
+            <li>
               <NavLink to="/pricing" onClick={closeMobileMenu} testId="mobile-nav-pricing">
                 Pricing
               </NavLink>
             </li>
-            <li role="none">
+            <li>
               <NavLink to="/about" onClick={closeMobileMenu} testId="mobile-nav-about">
                 About
               </NavLink>
             </li>
-            <li className="divider my-2" role="separator"></li>
+            <li className="divider my-2" aria-hidden="true"></li>
             {!isAuthenticated && (
               <>
-                <li role="none">
+                <li>
                   <Link
                     to="/login"
                     onClick={closeMobileMenu}
@@ -221,7 +221,7 @@ const Navbar: React.FC = () => {
                     Login
                   </Link>
                 </li>
-                <li role="none" className="mt-2">
+                <li className="mt-2">
                   <Link
                     to="/register"
                     onClick={closeMobileMenu}
@@ -234,7 +234,7 @@ const Navbar: React.FC = () => {
               </>
             )}
             {isAuthenticated && (
-              <li role="none">
+              <li>
                 <Link
                   to="/dashboard"
                   onClick={closeMobileMenu}
