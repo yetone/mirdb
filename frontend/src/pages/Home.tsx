@@ -1,20 +1,23 @@
+/**
+ * Homepage component.
+ * Owner: Scenario 1 - Hero Section (primary assembler)
+ *
+ * This component assembles all homepage sections:
+ * - HeroSection (Scenario 1)
+ * - FeaturesSection (Scenario 2) - placeholder
+ * - HowItWorksSection (Scenario 3)
+ * - StatsSection (Scenario 4) - placeholder
+ * - Footer (Scenario 6) - placeholder
+ */
+
 import React from 'react'
+import { HeroSection } from '../components/homepage/HeroSection'
 import HowItWorksSection from '../components/homepage/HowItWorksSection'
 
 const Home: React.FC = () => {
   return (
-    <main className="min-h-screen bg-base-100">
-      <section className="hero min-h-[60vh] bg-base-200">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h1 className="text-5xl font-bold">URL Shortener</h1>
-            <p className="py-6">
-              Shorten your URLs, track clicks, and analyze performance with our powerful link management platform.
-            </p>
-            <button className="btn btn-primary">Get Started</button>
-          </div>
-        </div>
-      </section>
+    <main className="min-h-screen bg-base-100" data-testid="home-page">
+      <HeroSection />
 
       <section className="py-16 px-4 bg-base-100">
         <div className="container mx-auto">

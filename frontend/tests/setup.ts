@@ -1,9 +1,20 @@
+// Mock localStorage for JSDOM
+const localStorageMock = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
+  clear: () => {},
+}
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+})
+
 import '@testing-library/jest-dom'
 import { cleanup } from '@testing-library/react'
 import { afterEach } from 'vitest'
 import React from 'react'
 import { render, RenderOptions } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 
 afterEach(() => {
@@ -16,7 +27,7 @@ interface AllTheProvidersProps {
 
 const AllTheProviders = ({ children }: AllTheProvidersProps) => {
   return React.createElement(
-    BrowserRouter,
+    MemoryRouter,
     null,
     React.createElement(ThemeProvider, null, children)
   )

@@ -27,3 +27,12 @@ export interface FooterLink {
   label: string
   href: string
 }
+
+export interface HeroProps {
+  headline?: string
+  subheading?: string
+  primaryCtaText?: string
+  primaryCtaLink?: string
+  secondaryCtaText?: string
+  secondaryCtaLink?: string
+}
