@@ -14,8 +14,9 @@ import { cleanup } from '@testing-library/react'
 import { afterEach } from 'vitest'
 import React from 'react'
 import { render, RenderOptions } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, MemoryRouterProps } from 'react-router-dom'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 afterEach(() => {
   cleanup()
@@ -23,20 +24,42 @@ afterEach(() => {
 
 interface AllTheProvidersProps {
   children: React.ReactNode
+  initialEntries?: MemoryRouterProps['initialEntries']
 }
 
-const AllTheProviders = ({ children }: AllTheProvidersProps) => {
+const AllTheProviders = ({ children, initialEntries = ['/'] }: AllTheProvidersProps) => {
   return React.createElement(
     MemoryRouter,
-    null,
-    React.createElement(ThemeProvider, null, children)
+    { initialEntries },
+    React.createElement(
+      ThemeProvider,
+      null,
+      React.createElement(AuthProvider, null, children)
+    )
   )
+}
+
+interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  initialEntries?: MemoryRouterProps['initialEntries']
 }
 
 const customRender = (
   ui: React.ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>
-) => render(ui, { wrapper: AllTheProviders, ...options })
+  { initialEntries, ...options }: CustomRenderOptions = {}
+) => {
+  const wrapper = ({ children }: { children: React.ReactNode }) =>
+    React.createElement(
+      MemoryRouter,
+      { initialEntries: initialEntries || ['/'] },
+      React.createElement(
+        ThemeProvider,
+        null,
+        React.createElement(AuthProvider, null, children)
+      )
+    )
+
+  return render(ui, { wrapper, ...options })
+}
 
 export * from '@testing-library/react'
 export { customRender as render }

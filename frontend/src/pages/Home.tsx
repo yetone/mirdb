@@ -14,10 +14,12 @@ import React from 'react'
 import { HeroSection } from '../components/homepage/HeroSection'
 import HowItWorksSection from '../components/homepage/HowItWorksSection'
 import { Footer } from '../components/homepage/Footer'
+import Navbar from '../components/Navbar'
 
 const Home: React.FC = () => {
   return (
     <main className="min-h-screen bg-base-100" data-testid="home-page">
+      <Navbar />
       <HeroSection />
 
       <section className="py-16 px-4 bg-base-100">
