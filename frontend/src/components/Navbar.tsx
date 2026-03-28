@@ -74,8 +74,8 @@ const Navbar: React.FC = () => {
         </a>
       </div>
 
-      {/* Desktop Menu - Center */}
-      <div className="navbar-center hidden lg:flex">
+      {/* Desktop Menu - Center (visible at tablet and above) */}
+      <div className="navbar-center hidden md:flex">
         <ul className="menu menu-horizontal gap-2" role="menubar">
           <li role="none">
             <NavLink to="/features" testId="nav-features">
@@ -95,8 +95,8 @@ const Navbar: React.FC = () => {
         </ul>
       </div>
 
-      {/* Desktop Auth Links - Right */}
-      <div className="navbar-end hidden lg:flex items-center gap-4">
+      {/* Desktop Auth Links - Right (visible at tablet and above) */}
+      <div className="navbar-end hidden md:flex items-center gap-4">
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
@@ -169,8 +169,8 @@ const Navbar: React.FC = () => {
         )}
       </div>
 
-      {/* Mobile Menu Button */}
-      <div className="navbar-end lg:hidden">
+      {/* Mobile Menu Button (visible below tablet) */}
+      <div className="navbar-end md:hidden">
         <button
           onClick={toggleMobileMenu}
           className="btn btn-ghost btn-square"
@@ -189,7 +189,7 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
         <div
-          className="absolute top-full left-0 right-0 bg-base-100 shadow-lg lg:hidden z-50"
+          className="absolute top-full left-0 right-0 bg-base-100 shadow-lg md:hidden z-50"
           data-testid="mobile-menu"
         >
           <ul className="menu p-4" role="menu">

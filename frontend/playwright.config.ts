@@ -2,7 +2,7 @@
  * Playwright configuration for E2E tests.
  *
  * Configures browser settings, viewport sizes, and test directory
- * for end-to-end testing of the homepage.
+ * for end-to-end testing of the homepage across mobile, tablet, and desktop viewports.
  */
 
 import { defineConfig, devices } from '@playwright/test'
@@ -15,7 +15,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -27,8 +27,12 @@ export default defineConfig({
         browserName: 'chromium',
       },
     },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
   ],
-  webServer: {
+  webServer: process.env.SKIP_WEBSERVER ? undefined : {
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: true,
