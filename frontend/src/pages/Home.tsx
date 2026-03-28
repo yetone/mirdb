@@ -7,12 +7,13 @@
  * - FeaturesSection (Scenario 2) - placeholder
  * - HowItWorksSection (Scenario 3)
  * - StatsSection (Scenario 4) - placeholder
- * - Footer (Scenario 6) - placeholder
+ * - Footer (Scenario 6)
  */
 
 import React from 'react'
 import { HeroSection } from '../components/homepage/HeroSection'
 import HowItWorksSection from '../components/homepage/HowItWorksSection'
+import { Footer } from '../components/homepage/Footer'
 
 const Home: React.FC = () => {
   return (
@@ -47,11 +48,7 @@ const Home: React.FC = () => {
 
       <HowItWorksSection />
 
-      <footer className="footer footer-center p-10 bg-base-200 text-base-content">
-        <div>
-          <p>Copyright 2024 - URL Shortener</p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }
