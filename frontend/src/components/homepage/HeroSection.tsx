@@ -1,6 +1,7 @@
 /**
  * Hero Section Component
  * Owner: Scenario 1 - Hero Section Content and Value Proposition
+ * CTA functionality: Scenario 3 - Primary CTA Redirect to Registration
  *
  * Displays the main value proposition with:
  * - Product name/logo

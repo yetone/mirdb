@@ -1,17 +1,19 @@
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 
-function Register() {
+// Placeholder for registration page
+function RegisterPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" data-testid="register-page">
       <h1 className="text-2xl font-bold">Registration Page</h1>
     </div>
   );
 }
 
-function Demo() {
+// Placeholder for demo page
+function DemoPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" data-testid="demo-page">
       <h1 className="text-2xl font-bold">Demo Page</h1>
     </div>
   );
@@ -19,11 +21,13 @@ function Demo() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/demo" element={<Demo />} />
-    </Routes>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/demo" element={<DemoPage />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -14,6 +14,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { HeroSection } from '../../../src/components/homepage/HeroSection';
+import { Home } from '../../../src/pages/Home';
 
 // Test wrapper with router context
 function renderWithRouter(ui: React.ReactElement, { route = '/' } = {}) {
@@ -120,6 +121,22 @@ describe('HeroSection CTA Tests', () => {
     // Check that no submit buttons exist
     const submitButtons = screen.queryAllByRole('button', { name: /submit|sign up|register/i });
     expect(submitButtons).toHaveLength(0);
+  });
+
+  /**
+   * Test Case 5 (additional): No form inputs on full homepage
+   */
+  it('should not have any form input fields on homepage', () => {
+    renderWithRouter(<Home />);
+
+    // Check no input fields exist on the entire homepage
+    const textInputs = screen.queryAllByRole('textbox');
+    const passwordInputs = document.querySelectorAll('input[type="password"]');
+    const emailInputs = document.querySelectorAll('input[type="email"]');
+
+    expect(textInputs).toHaveLength(0);
+    expect(passwordInputs).toHaveLength(0);
+    expect(emailInputs).toHaveLength(0);
   });
 
   /**
