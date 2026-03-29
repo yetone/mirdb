@@ -167,3 +167,105 @@ describe('HeroSection CTA Tests', () => {
     expect(secondaryCTA).toBeInTheDocument();
   });
 });
+
+/**
+ * HeroSection Content and Value Proposition Tests
+ * Owner: Scenario 1 - Hero Section Content and Value Proposition
+ *
+ * Tests for content and value proposition:
+ * - Headline displays value proposition text
+ * - Subheadline explains product key benefit
+ * - Product name/logo is visible
+ *
+ * Requirements: REQ-1, US-1
+ */
+describe('HeroSection Content and Value Proposition', () => {
+  /**
+   * Test Case 1: Hero section contains headline with value proposition text
+   * Input: Render HomePage component
+   * Expected: Hero section contains headline with value proposition text
+   */
+  it('should render hero section with headline containing value proposition text', () => {
+    renderWithRouter(<HeroSection />);
+
+    const heroSection = screen.getByTestId('hero-section');
+    expect(heroSection).toBeInTheDocument();
+
+    const headline = screen.getByTestId('hero-headline');
+    expect(headline).toBeInTheDocument();
+    expect(headline).toHaveTextContent(/Shorten Links/i);
+    expect(headline).toHaveTextContent(/Track Clicks/i);
+    expect(headline).toHaveTextContent(/Grow Your Reach/i);
+  });
+
+  it('should render headline as H1 for proper visual hierarchy', () => {
+    renderWithRouter(<HeroSection />);
+
+    const headline = screen.getByTestId('hero-headline');
+    expect(headline.tagName).toBe('H1');
+  });
+
+  /**
+   * Test Case 2: Hero section contains subheadline explaining the product's key benefit
+   * Input: Render HomePage component
+   * Expected: Hero section contains subheadline explaining the product's key benefit
+   */
+  it('should render subheadline explaining the product key benefit', () => {
+    renderWithRouter(<HeroSection />);
+
+    const subheadline = screen.getByTestId('hero-subheadline');
+    expect(subheadline).toBeInTheDocument();
+    expect(subheadline).toHaveTextContent(/Create short, memorable links/i);
+    expect(subheadline).toHaveTextContent(/real-time analytics/i);
+  });
+
+  it('should provide clear explanation of product benefit in subheadline', () => {
+    renderWithRouter(<HeroSection />);
+
+    const subheadline = screen.getByTestId('hero-subheadline');
+    // Verify it explains the benefit of the service
+    expect(subheadline.textContent).toMatch(/link|analytics|dashboard/i);
+  });
+
+  /**
+   * Test Case 3: Product name/logo is visible in the hero or header area
+   * Input: Render HomePage component
+   * Expected: Product name/logo is visible in the hero or header area
+   */
+  it('should display product name/logo in the hero section', () => {
+    renderWithRouter(<HeroSection />);
+
+    const branding = screen.getByTestId('product-branding');
+    expect(branding).toBeInTheDocument();
+
+    const productName = screen.getByTestId('product-name');
+    expect(productName).toBeInTheDocument();
+    expect(productName).toHaveTextContent(/ShortLink/i);
+  });
+
+  it('should have product branding within the hero section', () => {
+    renderWithRouter(<HeroSection />);
+
+    const heroSection = screen.getByTestId('hero-section');
+    const productBranding = screen.getByTestId('product-branding');
+
+    expect(heroSection).toContainElement(productBranding);
+  });
+
+  /**
+   * Additional tests for semantic structure and accessibility
+   */
+  it('should render hero section as a section element', () => {
+    renderWithRouter(<HeroSection />);
+
+    const heroSection = screen.getByTestId('hero-section');
+    expect(heroSection.tagName).toBe('SECTION');
+  });
+
+  it('should have id for anchor navigation', () => {
+    renderWithRouter(<HeroSection />);
+
+    const heroSection = screen.getByTestId('hero-section');
+    expect(heroSection).toHaveAttribute('id', 'hero');
+  });
+});
