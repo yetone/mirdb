@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 
 // Placeholder for registration page
@@ -21,13 +21,11 @@ function DemoPage() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/demo" element={<DemoPage />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/demo" element={<DemoPage />} />
+    </Routes>
   );
 }
 
