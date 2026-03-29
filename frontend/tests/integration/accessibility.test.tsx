@@ -1,12 +1,14 @@
 /**
  * Accessibility Integration Tests
  * Owner: Scenario 8 - Keyboard Navigation Accessibility
+ * Owner: Scenario 14 - Image Alt Text and Decorative Elements
  *
  * Tests keyboard navigation, focus indicators, and accessibility compliance:
  * - Tab navigation through interactive elements
  * - Visible focus indicators
  * - Enter/Space key activation
  * - No focus traps
+ * - Image alt text and decorative element accessibility
  *
  * Requirements: NFR-2, US-5
  */
@@ -16,6 +18,8 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { Home } from '../../src/pages/Home';
 import { HeroSection } from '../../src/components/homepage/HeroSection';
+import { FeaturesSection } from '../../src/components/homepage/FeaturesSection';
+import { SocialProofSection } from '../../src/components/homepage/SocialProofSection';
 import { Footer } from '../../src/components/homepage/Footer';
 
 // Helper to render components with router
@@ -400,6 +404,227 @@ describe('Keyboard Navigation Accessibility', () => {
 
       // Should have expected number of links (15 nav links + 3 social)
       expect(links.length).toBeGreaterThanOrEqual(15);
+    });
+  });
+});
+
+/**
+ * Image Alt Text and Decorative Elements Tests
+ * Owner: Scenario 14
+ *
+ * Validates that all images have appropriate alt text or are marked as decorative
+ * as per accessibility requirements in NFR-2.
+ *
+ * Requirements: NFR-2
+ */
+describe('Image Alt Text and Decorative Elements', () => {
+  describe('All Images Have Alt Attributes', () => {
+    it('should have alt attribute on every img element in HomePage', () => {
+      renderWithRouter(<Home />);
+
+      // Query all img elements
+      const images = document.querySelectorAll('img');
+
+      // Every img element should have an alt attribute
+      images.forEach((img) => {
+        expect(img).toHaveAttribute('alt');
+      });
+    });
+
+    it('should have alt attribute on every img element in HeroSection', () => {
+      renderWithRouter(<HeroSection />);
+
+      const images = document.querySelectorAll('img');
+
+      images.forEach((img) => {
+        expect(img).toHaveAttribute('alt');
+      });
+    });
+
+    it('should have alt attribute on every img element in FeaturesSection', () => {
+      renderWithRouter(<FeaturesSection />);
+
+      const images = document.querySelectorAll('img');
+
+      images.forEach((img) => {
+        expect(img).toHaveAttribute('alt');
+      });
+    });
+
+    it('should have alt attribute on every img element in Footer', () => {
+      renderWithRouter(<Footer />);
+
+      const images = document.querySelectorAll('img');
+
+      images.forEach((img) => {
+        expect(img).toHaveAttribute('alt');
+      });
+    });
+  });
+
+  describe('Feature Card Icons Accessibility', () => {
+    it('should have feature icons marked as decorative with aria-hidden', () => {
+      renderWithRouter(<FeaturesSection />);
+
+      // Get all feature icon containers
+      const featureIcons = screen.getAllByTestId('feature-icon');
+
+      featureIcons.forEach((iconContainer) => {
+        // The SVG inside should be aria-hidden since the feature title provides context
+        const svg = iconContainer.querySelector('svg');
+        expect(svg).toBeInTheDocument();
+        expect(svg).toHaveAttribute('aria-hidden', 'true');
+      });
+    });
+
+    it('should have feature cards with descriptive titles alongside icons', () => {
+      renderWithRouter(<FeaturesSection />);
+
+      // Each feature card should have both an icon and a descriptive title
+      const featureTitles = screen.getAllByTestId('feature-title');
+
+      expect(featureTitles.length).toBe(3);
+
+      // Verify each title has meaningful text
+      const expectedTitles = ['Smart Shortening', 'Real-time Analytics', 'Link Dashboard'];
+      featureTitles.forEach((title, index) => {
+        expect(title).toHaveTextContent(expectedTitles[index]);
+      });
+    });
+
+    it('should have statistics icons marked as decorative', () => {
+      renderWithRouter(<SocialProofSection />);
+
+      // Get statistics items
+      const statisticItems = screen.getAllByTestId('statistic-item');
+
+      statisticItems.forEach((item) => {
+        const svg = item.querySelector('svg');
+        if (svg) {
+          // Icons accompanying statistics should be decorative
+          expect(svg).toHaveAttribute('aria-hidden', 'true');
+        }
+      });
+    });
+  });
+
+  describe('Logo Image Accessibility', () => {
+    it('should have hero logo icon marked as decorative with product name in text', () => {
+      renderWithRouter(<HeroSection />);
+
+      const productBranding = screen.getByTestId('product-branding');
+      const productName = screen.getByTestId('product-name');
+
+      // Product name should contain the brand name
+      expect(productName).toHaveTextContent('ShortLink');
+
+      // The SVG icon should be decorative since text provides the name
+      const svg = productBranding.querySelector('svg');
+      expect(svg).toHaveAttribute('aria-hidden', 'true');
+    });
+
+    it('should have footer logo icon marked as decorative with product name in text', () => {
+      renderWithRouter(<Footer />);
+
+      const footerBranding = screen.getByTestId('footer-branding');
+      const footerLogo = screen.getByTestId('footer-logo');
+
+      // Footer should have the product name in text
+      expect(footerLogo).toHaveTextContent('ShortLink');
+
+      // The SVG icon should be decorative
+      const svg = footerBranding.querySelector('svg');
+      expect(svg).toHaveAttribute('aria-hidden', 'true');
+    });
+  });
+
+  describe('Hero Visual Element Accessibility', () => {
+    it('should have hero visual/icon properly marked as decorative', () => {
+      renderWithRouter(<HeroSection />);
+
+      const heroSection = screen.getByTestId('hero-section');
+
+      // All SVG icons in hero should be decorative
+      const svgs = heroSection.querySelectorAll('svg');
+
+      svgs.forEach((svg) => {
+        expect(svg).toHaveAttribute('aria-hidden', 'true');
+      });
+    });
+
+    it('should provide contextual information through text, not images', () => {
+      renderWithRouter(<HeroSection />);
+
+      // Hero should have accessible text content
+      const headline = screen.getByTestId('hero-headline');
+      const subheadline = screen.getByTestId('hero-subheadline');
+
+      expect(headline).toHaveTextContent(/shorten links/i);
+      expect(subheadline).toHaveTextContent(/create short, memorable links/i);
+    });
+  });
+
+  describe('Social Media Icons Accessibility', () => {
+    it('should have social media SVG icons marked as decorative with aria-labels on links', () => {
+      renderWithRouter(<Footer />);
+
+      // Social links should have aria-labels
+      const twitterLink = screen.getByTestId('social-twitter');
+      const githubLink = screen.getByTestId('social-github');
+      const linkedinLink = screen.getByTestId('social-linkedin');
+
+      // Links have aria-labels
+      expect(twitterLink).toHaveAttribute('aria-label', 'Twitter');
+      expect(githubLink).toHaveAttribute('aria-label', 'GitHub');
+      expect(linkedinLink).toHaveAttribute('aria-label', 'LinkedIn');
+
+      // SVGs inside should be decorative
+      [twitterLink, githubLink, linkedinLink].forEach((link) => {
+        const svg = link.querySelector('svg');
+        expect(svg).toHaveAttribute('aria-hidden', 'true');
+      });
+    });
+  });
+
+  describe('Decorative Elements with role="presentation"', () => {
+    it('should not use role="img" on decorative SVGs without accessible name', () => {
+      renderWithRouter(<Home />);
+
+      // Query all SVGs
+      const svgs = document.querySelectorAll('svg');
+
+      svgs.forEach((svg) => {
+        // If SVG has role="img", it must have an accessible name
+        if (svg.getAttribute('role') === 'img') {
+          const hasAriaLabel = svg.hasAttribute('aria-label');
+          const hasAriaLabelledBy = svg.hasAttribute('aria-labelledby');
+          const hasTitle = svg.querySelector('title');
+
+          expect(hasAriaLabel || hasAriaLabelledBy || hasTitle).toBe(true);
+        }
+      });
+    });
+
+    it('should have decorative icons properly hidden from assistive technology', () => {
+      renderWithRouter(<Home />);
+
+      // All SVG icons that are purely decorative should have aria-hidden
+      const allSvgs = document.querySelectorAll('svg');
+
+      allSvgs.forEach((svg) => {
+        // Decorative SVGs should have aria-hidden="true"
+        // or be contained in an element with aria-hidden
+        const hasAriaHidden = svg.getAttribute('aria-hidden') === 'true';
+        const parentHasAriaHidden = svg.closest('[aria-hidden="true"]') !== null;
+        const hasAccessibleName = svg.hasAttribute('aria-label') ||
+          svg.hasAttribute('aria-labelledby') ||
+          svg.querySelector('title') !== null;
+
+        // If no accessible name, must be hidden
+        if (!hasAccessibleName) {
+          expect(hasAriaHidden || parentHasAriaHidden).toBe(true);
+        }
+      });
     });
   });
 });
