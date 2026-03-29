@@ -10,6 +10,7 @@
  */
 import { HeroSection } from '../components/homepage/HeroSection';
 import { FeaturesSection } from '../components/homepage/FeaturesSection';
+import { Footer } from '../components/homepage/Footer';
 
 export function Home() {
   return (
@@ -22,7 +23,8 @@ export function Home() {
 
       {/* Social Proof Section - to be added by Scenario 7 */}
 
-      {/* Footer - to be added by Scenario 6 */}
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
