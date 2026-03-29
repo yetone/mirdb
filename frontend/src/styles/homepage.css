@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Homepage-specific styles */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure minimum touch target size for accessibility */
+.btn {
+  min-height: 44px;
+  min-width: 44px;
+}
