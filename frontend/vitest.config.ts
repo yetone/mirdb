@@ -20,6 +20,9 @@ export default defineConfig({
     setupFiles: ['./tests/setup.ts'],
     include: ['tests/**/*.{test,spec}.{ts,tsx}'],
     exclude: ['tests/e2e/**/*'],
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+    },
   },
   resolve: {
     alias: {

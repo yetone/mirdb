@@ -9,12 +9,20 @@
  * - Footer
  */
 import { HeroSection } from '../components/homepage/HeroSection';
+import { FeaturesSection } from '../components/homepage/FeaturesSection';
 
-export default function Home() {
+export function Home() {
   return (
-    <main className="min-h-screen">
+    <div className="min-h-screen bg-base-100" data-testid="homepage">
+      {/* Hero Section */}
       <HeroSection />
-      {/* Other sections will be added by their respective scenario owners */}
-    </main>
+
+      {/* Features Section */}
+      <FeaturesSection />
+
+      {/* Social Proof Section - to be added by Scenario 7 */}
+
+      {/* Footer - to be added by Scenario 6 */}
+    </div>
   );
 }

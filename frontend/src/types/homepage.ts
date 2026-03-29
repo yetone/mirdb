@@ -6,7 +6,7 @@
  */
 
 export interface Feature {
-  icon: string;
+  icon: React.ReactNode;
   title: string;
   description: string;
   link?: string;
