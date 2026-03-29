@@ -10,6 +10,7 @@
  */
 import { HeroSection } from '../components/homepage/HeroSection';
 import { FeaturesSection } from '../components/homepage/FeaturesSection';
+import { SocialProofSection } from '../components/homepage/SocialProofSection';
 import { Footer } from '../components/homepage/Footer';
 
 export function Home() {
@@ -21,7 +22,8 @@ export function Home() {
       {/* Features Section */}
       <FeaturesSection />
 
-      {/* Social Proof Section - to be added by Scenario 7 */}
+      {/* Social Proof Section */}
+      <SocialProofSection />
 
       {/* Footer */}
       <Footer />
