@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Homepage-specific styles */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure minimum touch target size for accessibility (REQ-4, US-3) */
+.btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Prevent horizontal overflow on mobile viewports */
+body {
+  overflow-x: hidden;
+}
+
+/* Ensure all containers respect viewport width */
+.homepage-container {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Responsive typography - ensure minimum 16px base font size */
+@layer base {
+  html {
+    font-size: 16px;
+  }
+
+  /* Prevent text from being too small on any viewport */
+  p, span, a, li {
+    min-font-size: 16px;
+  }
+}
+
+/* Mobile-first responsive breakpoints for layout */
+@layer components {
+  /* Mobile touch-friendly link styles */
+  .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Ensure cards stack properly on mobile */
+  .feature-card {
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .feature-card {
+      width: auto;
+    }
+  }
+}
+
+/* Ensure footer links are tappable on mobile */
+@layer utilities {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
