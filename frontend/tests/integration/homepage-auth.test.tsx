@@ -16,6 +16,7 @@ import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom'
 import React, { createContext, useContext, ReactNode } from 'react'
 import Navbar from '@/components/Navbar'
 import Home from '@/pages/Home'
+import BackgroundEffect from '@/components/BackgroundEffect'
 import { HeroSection } from '@/components/homepage'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 
@@ -462,6 +463,277 @@ describe('Homepage Authentication Integration Tests', () => {
 
       // Get Started should be hidden for authenticated users
       expect(screen.queryByRole('link', { name: /get started/i })).not.toBeInTheDocument()
+    })
+  })
+})
+
+/**
+ * Component Integration with Existing System Tests
+ * Owner: Scenario 18 - Component Integration with Existing System
+ *
+ * Tests that verify homepage integrates correctly with:
+ * - AuthContext for user state
+ * - ThemeContext for theming
+ * - React Router for routing
+ * - Shared components (Navbar, BackgroundEffect)
+ */
+describe('Component Integration with Existing System (Scenario 18)', () => {
+  beforeEach(() => {
+    localStorage.clear()
+    vi.clearAllMocks()
+  })
+
+  describe('Test Case 1: Render Homepage with mocked AuthContext', () => {
+    it('should render homepage without errors when AuthContext is provided', () => {
+      renderWithAuth(<Home />, {
+        user: null,
+        isAuthenticated: false,
+      })
+
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+    })
+
+    it('should consume auth state correctly when user is authenticated', () => {
+      renderWithAuth(<Home />, {
+        user: testUser,
+        isAuthenticated: true,
+      })
+
+      // Homepage should render
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+
+      // Get Started button should NOT be visible for authenticated users
+      const getStartedLink = screen.queryByRole('link', { name: /get started/i })
+      expect(getStartedLink).not.toBeInTheDocument()
+    })
+
+    it('should consume auth state correctly when user is not authenticated', () => {
+      renderWithAuth(<Home />, {
+        user: null,
+        isAuthenticated: false,
+      })
+
+      // Homepage should render
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+
+      // Get Started button SHOULD be visible for unauthenticated users
+      const getStartedLink = screen.getByRole('link', { name: /get started/i })
+      expect(getStartedLink).toBeInTheDocument()
+    })
+
+    it('should access isAuthenticated from AuthContext without errors', () => {
+      // Should not throw when rendering with different auth states
+      expect(() => {
+        renderWithAuth(<Home />, { user: null, isAuthenticated: false })
+      }).not.toThrow()
+    })
+  })
+
+  describe('Test Case 2: Render Homepage with mocked ThemeContext', () => {
+    it('should render homepage without errors when ThemeContext is provided', () => {
+      renderWithAuth(<Home />, {
+        user: null,
+        isAuthenticated: false,
+      })
+
+      // ThemeProvider is included in renderWithAuth
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+    })
+
+    it('should render with dark theme applied correctly', () => {
+      // Clear any existing theme
+      vi.mocked(localStorage.getItem).mockReturnValue(null)
+
+      renderWithAuth(<Home />, {
+        user: null,
+        isAuthenticated: false,
+      })
+
+      // Theme should be applied to document
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+    })
+
+    it('should render with cyberpunk theme applied correctly', () => {
+      vi.mocked(localStorage.getItem).mockReturnValue('cyberpunk')
+
+      renderWithAuth(<Home />, {
+        user: null,
+        isAuthenticated: false,
+      })
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+    })
+
+    it('should render with synthwave theme applied correctly', () => {
+      vi.mocked(localStorage.getItem).mockReturnValue('synthwave')
+
+      renderWithAuth(<Home />, {
+        user: null,
+        isAuthenticated: false,
+      })
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave')
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 3: Navigate to / in Router', () => {
+    it('should render Homepage component at root path', () => {
+      renderWithAuth(<Home />, {
+        initialEntries: ['/'],
+        user: null,
+        isAuthenticated: false,
+      })
+
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+    })
+
+    it('should verify location display shows root path', () => {
+      const { getCurrentLocation } = renderWithAuth(<Home />, {
+        initialEntries: ['/'],
+        user: null,
+        isAuthenticated: false,
+      })
+
+      expect(getCurrentLocation()).toBe('/')
+    })
+
+    it('should render all homepage sections at root path', () => {
+      renderWithAuth(<Home />, {
+        initialEntries: ['/'],
+        user: null,
+        isAuthenticated: false,
+      })
+
+      // Hero section should be present
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+
+      // Features section should be present (via id)
+      expect(document.getElementById('features')).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 4: Check Homepage component imports (Navbar)', () => {
+    it('should render Navbar component when rendering with full App structure', () => {
+      renderWithAuth(<Navbar />, {
+        user: null,
+        isAuthenticated: false,
+      })
+
+      expect(screen.getByTestId('navbar')).toBeInTheDocument()
+    })
+
+    it('should show Navbar with correct navigation links', () => {
+      renderWithAuth(<Navbar />, {
+        user: null,
+        isAuthenticated: false,
+      })
+
+      // Check for Login and Sign Up links in navbar
+      expect(screen.getByRole('link', { name: /login/i })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: /sign up/i })).toBeInTheDocument()
+    })
+
+    it('should integrate Navbar with Homepage correctly', () => {
+      renderWithAuth(
+        <>
+          <Navbar />
+          <Home />
+        </>,
+        {
+          user: null,
+          isAuthenticated: false,
+        }
+      )
+
+      // Both Navbar and Homepage should render
+      expect(screen.getByTestId('navbar')).toBeInTheDocument()
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+    })
+
+    it('should have Navbar that links back to home route', () => {
+      renderWithAuth(<Navbar />, {
+        user: null,
+        isAuthenticated: false,
+      })
+
+      const homeLink = screen.getByRole('link', { name: /url shortener/i })
+      expect(homeLink).toHaveAttribute('href', '/')
+    })
+  })
+
+  describe('Test Case 5: Render Homepage and check for BackgroundEffect', () => {
+    it('should render BackgroundEffect component for visual consistency', () => {
+      renderWithAuth(
+        <>
+          <BackgroundEffect />
+          <Home />
+        </>,
+        {
+          user: null,
+          isAuthenticated: false,
+        }
+      )
+
+      // BackgroundEffect renders a fixed positioned div
+      const backgroundElement = document.querySelector('.fixed.inset-0.-z-10')
+      expect(backgroundElement).toBeInTheDocument()
+    })
+
+    it('should render BackgroundEffect with gradient background', () => {
+      renderWithAuth(
+        <>
+          <BackgroundEffect />
+          <Home />
+        </>,
+        {
+          user: null,
+          isAuthenticated: false,
+        }
+      )
+
+      // Check for gradient background
+      const gradientElement = document.querySelector('.bg-gradient-to-br')
+      expect(gradientElement).toBeInTheDocument()
+    })
+
+    it('should render BackgroundEffect with animated pulse elements', () => {
+      renderWithAuth(
+        <>
+          <BackgroundEffect />
+          <Home />
+        </>,
+        {
+          user: null,
+          isAuthenticated: false,
+        }
+      )
+
+      // Check for pulse animation elements
+      const pulseElements = document.querySelectorAll('.animate-pulse')
+      expect(pulseElements.length).toBeGreaterThan(0)
+    })
+
+    it('should maintain visual consistency when Homepage is rendered with BackgroundEffect', () => {
+      renderWithAuth(
+        <>
+          <BackgroundEffect />
+          <Navbar />
+          <Home />
+        </>,
+        {
+          user: null,
+          isAuthenticated: false,
+        }
+      )
+
+      // All components should render without conflicts
+      expect(screen.getByTestId('navbar')).toBeInTheDocument()
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+      expect(document.querySelector('.fixed.inset-0.-z-10')).toBeInTheDocument()
     })
   })
 })
