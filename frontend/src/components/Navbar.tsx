@@ -25,6 +25,11 @@ const Navbar: React.FC = () => {
             <Link to="/dashboard" className="btn btn-ghost">
               Dashboard
             </Link>
+            {user?.is_admin && (
+              <Link to="/settings" className="btn btn-ghost">
+                Settings
+              </Link>
+            )}
             <button onClick={logout} className="btn btn-ghost">
               Logout
             </button>
