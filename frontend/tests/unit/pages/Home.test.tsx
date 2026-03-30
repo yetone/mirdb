@@ -1,12 +1,71 @@
 /**
  * Unit tests for Home page component
- * Tests that verify FeaturesSection is rendered on the homepage
+ * Scenario 1: Homepage Public Access and Value Proposition Display
+ *
+ * Tests:
+ * - Hero section headline contains value proposition
+ * - Sub-headline with service benefits description
+ * - Features section is rendered
  */
 
 import { describe, it, expect } from 'vitest'
 import { screen } from '@testing-library/react'
 import { renderWithProviders } from '../../test-utils'
 import Home from '@/pages/Home'
+
+describe('Home Page - Value Proposition Display (Scenario 1)', () => {
+  it('renders hero section headline with value proposition text', () => {
+    renderWithProviders(<Home />)
+
+    // Check that hero section exists
+    const heroSection = screen.getByTestId('hero-section')
+    expect(heroSection).toBeInTheDocument()
+
+    // Check headline contains value proposition about URL shortening
+    const headline = screen.getByRole('heading', { level: 1 })
+    expect(headline).toBeInTheDocument()
+    expect(headline.textContent).toMatch(/shorten\s*url|short.*link|track\s*insight/i)
+  })
+
+  it('renders sub-headline with service benefits description', () => {
+    renderWithProviders(<Home />)
+
+    // Check that sub-headline paragraph exists with descriptive text
+    const heroSection = screen.getByTestId('hero-section')
+    const subHeadline = heroSection.querySelector('p')
+    expect(subHeadline).toBeInTheDocument()
+
+    // Sub-headline should describe service benefits (analytics, tracking, etc.)
+    const subHeadlineText = subHeadline?.textContent || ''
+    expect(subHeadlineText).toMatch(/transform|track|analyz|performance|click|reach/i)
+  })
+
+  it('renders homepage without requiring authentication', () => {
+    // Render homepage without any auth token
+    renderWithProviders(<Home />)
+
+    // Homepage should render successfully
+    const homepage = screen.getByTestId('homepage')
+    expect(homepage).toBeInTheDocument()
+
+    // Should show unauthenticated user headline (not personalized)
+    const headline = screen.getByRole('heading', { level: 1 })
+    expect(headline.textContent).not.toMatch(/welcome back/i)
+  })
+
+  it('displays call-to-action buttons for registration and learning more', () => {
+    renderWithProviders(<Home />)
+
+    // Check for registration CTA
+    const getStartedLink = screen.getByRole('link', { name: /get started/i })
+    expect(getStartedLink).toBeInTheDocument()
+    expect(getStartedLink).toHaveAttribute('href', '/register')
+
+    // Check for Learn More CTA
+    const learnMoreLink = screen.getByRole('link', { name: /learn more/i })
+    expect(learnMoreLink).toBeInTheDocument()
+  })
+})
 
 describe('Home Page - Features Section Display', () => {
   it('renders the homepage with features section', () => {
