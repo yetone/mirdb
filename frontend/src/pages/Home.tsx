@@ -10,37 +10,34 @@
  */
 
 import React from 'react'
-import { FeaturesSection } from '@/components/homepage'
+import { FeaturesSection, HeroSection } from '@/components/homepage'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const Home: React.FC = () => {
   const { isAuthenticated, user } = useAuth()
+  const navigate = useNavigate()
+
+  const handleUrlSubmit = async (url: string) => {
+    // Store URL for later use after auth
+    localStorage.setItem('pendingUrl', url)
+
+    if (isAuthenticated) {
+      // Redirect to dashboard with URL to shorten
+      navigate('/dashboard', { state: { urlToShorten: url } })
+    } else {
+      // Redirect to register with URL preserved
+      navigate('/register', { state: { urlToShorten: url } })
+    }
+  }
 
   return (
     <div className="min-h-screen" data-testid="homepage">
-      {/* Hero Section Placeholder - to be implemented by Scenario 2 */}
-      <section className="py-20 px-4 text-center" data-testid="hero-section">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            {isAuthenticated
-              ? `Welcome back, ${user?.username || 'User'}!`
-              : 'Shorten URLs, Track Insights'}
-          </h1>
-          <p className="text-xl text-base-content/70 mb-8">
-            Transform long URLs into short, memorable links. Track clicks,
-            analyze performance, and grow your reach.
-          </p>
-          {/* URL Input will be added by Scenario 2 */}
-          <div className="flex justify-center gap-4">
-            <a href="/register" className="btn btn-primary btn-lg">
-              Get Started
-            </a>
-            <a href="#features" className="btn btn-ghost btn-lg">
-              Learn More
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* Hero Section with URL Input */}
+      <HeroSection
+        onUrlSubmit={handleUrlSubmit}
+        isAuthenticated={isAuthenticated}
+      />
 
       {/* Features Section */}
       <div id="features">

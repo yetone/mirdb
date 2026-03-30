@@ -72,7 +72,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           {!isAuthenticated && (
             <Link to="/register">
               <FuturisticButton variant="secondary" size="lg">
-                Sign Up Free
+                Get Started
               </FuturisticButton>
             </Link>
           )}

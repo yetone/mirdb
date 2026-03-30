@@ -132,18 +132,18 @@ describe('HeroSection', () => {
       expect(learnMore).toBeInTheDocument()
     })
 
-    it('shows Sign Up button for non-authenticated users', () => {
+    it('shows Get Started button for non-authenticated users', () => {
       render(<HeroSection isAuthenticated={false} />)
 
-      const signUp = screen.getByRole('button', { name: /sign up free/i })
-      expect(signUp).toBeInTheDocument()
+      const getStarted = screen.getByRole('button', { name: /get started/i })
+      expect(getStarted).toBeInTheDocument()
     })
 
-    it('hides Sign Up button for authenticated users', () => {
+    it('hides Get Started button for authenticated users', () => {
       render(<HeroSection isAuthenticated={true} />)
 
-      const signUp = screen.queryByRole('button', { name: /sign up free/i })
-      expect(signUp).not.toBeInTheDocument()
+      const getStarted = screen.queryByRole('button', { name: /get started/i })
+      expect(getStarted).not.toBeInTheDocument()
     })
   })
 
