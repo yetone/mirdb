@@ -12,7 +12,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [
-    // Desktop viewports
+    // Desktop viewports (Scenario 9)
     {
       name: 'Desktop Chrome',
       use: { ...devices['Desktop Chrome'] },
@@ -24,7 +24,7 @@ export default defineConfig({
         viewport: { width: 1440, height: 900 },
       },
     },
-    // Tablet viewport
+    // Tablet viewport (Scenario 9)
     {
       name: 'Tablet',
       use: {
@@ -32,10 +32,19 @@ export default defineConfig({
         userAgent: 'Mozilla/5.0 (iPad; CPU OS 14_0 like Mac OS X)',
       },
     },
-    // Mobile viewport (for scenario 8)
+    // Mobile viewports (Scenario 8)
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 12'] },
+    },
+    // Default chromium for quick runs
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
   ],
   webServer: {
