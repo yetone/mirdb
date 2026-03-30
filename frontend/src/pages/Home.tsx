@@ -11,6 +11,7 @@
 
 import React from 'react'
 import { FeaturesSection, HeroSection } from '@/components/homepage'
+import { Footer } from '@/components/common'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -44,10 +45,8 @@ const Home: React.FC = () => {
         <FeaturesSection />
       </div>
 
-      {/* Footer Placeholder - to be implemented by Scenario 10 */}
-      <footer className="py-8 text-center text-base-content/50" data-testid="footer">
-        <p>&copy; {new Date().getFullYear()} URL Shortener. All rights reserved.</p>
-      </footer>
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }
