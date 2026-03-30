@@ -425,6 +425,288 @@ test.describe('Performance - Lazy Loading', () => {
   })
 })
 
+/**
+ * Browser Compatibility E2E tests for Homepage
+ * Owner: Scenario 16 - Browser Compatibility
+ *
+ * Tests:
+ * - Verify homepage functionality across Chrome, Firefox, Safari (WebKit), and Edge
+ * - NFR-3: Homepage must support browser compatibility with latest Chrome, Firefox, Safari, and Edge
+ */
+test.describe('Browser Compatibility', () => {
+  test('Test Case 1: Homepage renders and functions correctly', async ({
+    page,
+    browserName,
+  }) => {
+    // Navigate to homepage
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    // Log browser being tested
+    console.log(`Testing homepage on browser: ${browserName}`)
+
+    // Verify main homepage container is visible
+    await expect(page.locator('[data-testid="homepage"]')).toBeVisible()
+
+    // Verify hero section renders correctly
+    const heroSection = page.locator('[data-testid="hero-section"]')
+    await expect(heroSection).toBeVisible()
+
+    // Verify headline text is present
+    const headline = heroSection.locator('h1')
+    await expect(headline).toBeVisible()
+    await expect(headline).toHaveText(/shorten|url/i)
+
+    // Verify URL input is visible and functional
+    const urlInput = page.locator('[data-testid="url-input"]')
+    await expect(urlInput).toBeVisible()
+    await expect(urlInput).toBeEnabled()
+
+    // Test URL input interaction
+    await urlInput.fill('https://example.com/test-browser-compatibility')
+    await expect(urlInput).toHaveValue('https://example.com/test-browser-compatibility')
+
+    // Verify features section renders
+    const featuresSection = page.locator('[data-testid="features-section"]')
+    await expect(featuresSection).toBeVisible()
+
+    // Verify feature cards are present
+    const featureCards = page.locator('[data-testid^="feature-card"]')
+    const cardCount = await featureCards.count()
+    expect(cardCount).toBeGreaterThanOrEqual(3)
+
+    // Verify footer renders
+    const footer = page.locator('[data-testid="footer"]')
+    await expect(footer).toBeVisible()
+
+    // Check for console errors
+    const consoleErrors: string[] = []
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') {
+        consoleErrors.push(msg.text())
+      }
+    })
+
+    // Navigate again to capture any console errors
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    // Wait a moment for any delayed errors
+    await page.waitForTimeout(500)
+
+    // Filter out expected errors (e.g., network-related in test environment)
+    const criticalErrors = consoleErrors.filter(
+      (err) =>
+        !err.includes('Failed to load resource') &&
+        !err.includes('favicon') &&
+        !err.includes('net::')
+    )
+
+    // Verify no critical console errors
+    expect(criticalErrors).toHaveLength(0)
+  })
+
+  test('Verify navigation links work correctly', async ({
+    page,
+    browserName,
+  }) => {
+    console.log(`Testing navigation on browser: ${browserName}`)
+
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    // Verify main navbar is present (using specific testid)
+    const navbar = page.locator('[data-testid="navbar"]')
+    await expect(navbar).toBeVisible()
+
+    // Check for login link
+    const loginLink = page.locator('a[href*="login"], button:has-text("Login"), a:has-text("Login")')
+    if (await loginLink.count() > 0) {
+      await expect(loginLink.first()).toBeVisible()
+    }
+
+    // Check for register link
+    const registerLink = page.locator('a[href*="register"], button:has-text("Register"), a:has-text("Register"), button:has-text("Sign Up"), a:has-text("Sign Up")')
+    if (await registerLink.count() > 0) {
+      await expect(registerLink.first()).toBeVisible()
+    }
+  })
+
+  test('Verify CSS renders consistently', async ({ page, browserName }) => {
+    console.log(`Testing CSS rendering on browser: ${browserName}`)
+
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    // Get computed styles to verify CSS is working
+    const heroSection = page.locator('[data-testid="hero-section"]')
+    await expect(heroSection).toBeVisible()
+
+    // Verify glassmorphism or styling effects are applied
+    const heroStyles = await heroSection.evaluate((el) => {
+      const styles = window.getComputedStyle(el)
+      return {
+        display: styles.display,
+        visibility: styles.visibility,
+        opacity: styles.opacity,
+      }
+    })
+
+    expect(heroStyles.visibility).toBe('visible')
+    expect(parseFloat(heroStyles.opacity)).toBeGreaterThan(0)
+
+    // Verify URL input has proper styling
+    const urlInput = page.locator('[data-testid="url-input"]')
+    const inputStyles = await urlInput.evaluate((el) => {
+      const styles = window.getComputedStyle(el)
+      return {
+        display: styles.display,
+        width: parseFloat(styles.width),
+        height: parseFloat(styles.height),
+      }
+    })
+
+    // Input should have reasonable dimensions
+    expect(inputStyles.width).toBeGreaterThan(100)
+    expect(inputStyles.height).toBeGreaterThan(20)
+  })
+
+  test('Verify JavaScript functionality works', async ({
+    page,
+    browserName,
+  }) => {
+    console.log(`Testing JavaScript functionality on browser: ${browserName}`)
+
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    // Test theme toggle functionality (if present)
+    const themeToggle = page.locator(
+      '[data-testid="theme-toggle"], button[aria-label*="theme"], .theme-toggle'
+    )
+
+    if ((await themeToggle.count()) > 0) {
+      // Get initial theme
+      const initialTheme = await page.evaluate(() => {
+        return (
+          document.documentElement.getAttribute('data-theme') ||
+          document.body.className
+        )
+      })
+
+      // Click theme toggle
+      await themeToggle.first().click()
+
+      // Wait for theme change
+      await page.waitForTimeout(300)
+
+      // Verify theme changed or stayed stable (no errors)
+      const newTheme = await page.evaluate(() => {
+        return (
+          document.documentElement.getAttribute('data-theme') ||
+          document.body.className
+        )
+      })
+
+      // Theme should exist and be valid
+      expect(newTheme).toBeTruthy()
+    }
+
+    // Test URL input form submission behavior
+    const urlInput = page.locator('[data-testid="url-input"]')
+    await urlInput.fill('https://test.com')
+
+    const submitButton = page.locator(
+      '[data-testid="shorten-button"], button[type="submit"], button:has-text("Shorten")'
+    )
+
+    if ((await submitButton.count()) > 0) {
+      // Verify button is clickable
+      await expect(submitButton.first()).toBeEnabled()
+    }
+  })
+
+  test('Verify responsive behavior', async ({ page, browserName }) => {
+    console.log(`Testing responsive behavior on browser: ${browserName}`)
+
+    // Test desktop viewport
+    await page.setViewportSize({ width: 1280, height: 720 })
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    const homepage = page.locator('[data-testid="homepage"]')
+    await expect(homepage).toBeVisible()
+
+    // Verify layout at desktop size
+    const desktopFeatures = page.locator('[data-testid="features-section"]')
+    await expect(desktopFeatures).toBeVisible()
+
+    // Test tablet viewport
+    await page.setViewportSize({ width: 768, height: 1024 })
+    await page.waitForTimeout(300)
+    await expect(homepage).toBeVisible()
+
+    // Test mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 })
+    await page.waitForTimeout(300)
+    await expect(homepage).toBeVisible()
+
+    // Verify content is still accessible on mobile
+    const urlInput = page.locator('[data-testid="url-input"]')
+    await expect(urlInput).toBeVisible()
+  })
+
+  test('Verify no JavaScript errors on page load', async ({
+    page,
+    browserName,
+  }) => {
+    console.log(`Testing for JavaScript errors on browser: ${browserName}`)
+
+    const jsErrors: string[] = []
+
+    // Listen for page errors
+    page.on('pageerror', (error) => {
+      jsErrors.push(error.message)
+    })
+
+    // Navigate to homepage
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    // Wait for any async operations
+    await page.waitForTimeout(1000)
+
+    // Verify no JavaScript errors occurred
+    expect(jsErrors).toHaveLength(0)
+  })
+
+  test('Verify form elements work correctly', async ({ page, browserName }) => {
+    console.log(`Testing form elements on browser: ${browserName}`)
+
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    // Test URL input interactions
+    const urlInput = page.locator('[data-testid="url-input"]')
+    await expect(urlInput).toBeVisible()
+
+    // Test focus
+    await urlInput.focus()
+    await expect(urlInput).toBeFocused()
+
+    // Test typing
+    await urlInput.fill('')
+    await urlInput.type('https://example.com', { delay: 50 })
+    await expect(urlInput).toHaveValue('https://example.com')
+
+    // Test clear and refill
+    await urlInput.clear()
+    await expect(urlInput).toHaveValue('')
+
+    await urlInput.fill('https://another-test.com')
+    await expect(urlInput).toHaveValue('https://another-test.com')
+
+    // Test Enter key (if form supports it)
+    await urlInput.press('Enter')
+
+    // Page should not crash after Enter (may navigate or show validation)
+    await page.waitForTimeout(500)
+    await expect(page.locator('body')).toBeVisible()
+  })
+})
+
 test.describe('Performance - Bundle Size', () => {
   test('Test Case 4: Homepage chunk size is optimized', async ({ page }) => {
     // In development, we can't easily measure gzipped bundle size

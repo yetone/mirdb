@@ -46,6 +46,23 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    // Browser Compatibility (Scenario 16) - Cross-browser testing
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'edge',
+      use: {
+        // Edge uses Chromium engine, so we test with Chromium as a proxy
+        // msedge channel requires Edge to be installed locally
+        ...devices['Desktop Chrome'],
+      },
+    },
   ],
   webServer: {
     command: 'npm run dev',
