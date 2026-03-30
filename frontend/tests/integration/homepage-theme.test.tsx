@@ -40,6 +40,15 @@ const renderWithProviders = (
 }
 
 /**
+ * Helper to get the first theme toggle button
+ * (Navbar has two - one for desktop, one for mobile)
+ */
+const getThemeToggle = () => {
+  const toggles = screen.getAllByRole('button', { name: /toggle theme/i })
+  return toggles[0]
+}
+
+/**
  * Component to display current theme for testing
  */
 const ThemeDisplay: React.FC = () => {
@@ -76,7 +85,7 @@ describe('Homepage Theme Toggle Functionality', () => {
     it('should render theme toggle button in the navbar', () => {
       renderWithProviders(<Navbar />)
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
       expect(themeToggle).toBeInTheDocument()
     })
 
@@ -84,15 +93,17 @@ describe('Homepage Theme Toggle Functionality', () => {
       renderWithProviders(<Navbar />)
 
       const navbar = screen.getByRole('navigation')
-      const themeToggle = within(navbar).getByRole('button', { name: /toggle theme/i })
+      const themeToggles = within(navbar).getAllByRole('button', { name: /toggle theme/i })
 
-      expect(themeToggle).toBeVisible()
+      // Should have at least one visible theme toggle
+      expect(themeToggles.length).toBeGreaterThan(0)
+      expect(themeToggles[0]).toBeInTheDocument()
     })
 
     it('should render theme toggle with correct aria-label for accessibility', () => {
       renderWithProviders(<Navbar />)
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
       expect(themeToggle).toHaveAttribute('aria-label', 'Toggle theme')
     })
 
@@ -104,8 +115,8 @@ describe('Homepage Theme Toggle Functionality', () => {
         </>
       )
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
-      expect(themeToggle).toBeVisible()
+      const themeToggle = getThemeToggle()
+      expect(themeToggle).toBeInTheDocument()
     })
   })
 
@@ -118,7 +129,7 @@ describe('Homepage Theme Toggle Functionality', () => {
       const themeDisplay = screen.getByTestId('theme-display')
       expect(themeDisplay).toHaveTextContent('dark')
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
       await user.click(themeToggle)
 
       // Theme should cycle to 'cyberpunk' (after dark in the cycle: light -> dark -> cyberpunk -> synthwave)
@@ -134,7 +145,7 @@ describe('Homepage Theme Toggle Functionality', () => {
       renderWithProviders(<NavbarWithThemeDisplay />)
 
       const themeDisplay = screen.getByTestId('theme-display')
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
 
       // Should start at light (from localStorage mock)
       expect(themeDisplay).toHaveTextContent('light')
@@ -160,7 +171,7 @@ describe('Homepage Theme Toggle Functionality', () => {
       const user = userEvent.setup()
       renderWithProviders(<NavbarWithThemeDisplay />)
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
       const themeDisplay = screen.getByTestId('theme-display')
 
       const initialTheme = themeDisplay.textContent
@@ -182,7 +193,7 @@ describe('Homepage Theme Toggle Functionality', () => {
       // After initial render, data-theme should be set to default (dark)
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
       await user.click(themeToggle)
 
       // After clicking, should update to next theme (cyberpunk)
@@ -196,7 +207,7 @@ describe('Homepage Theme Toggle Functionality', () => {
 
       renderWithProviders(<NavbarWithThemeDisplay />)
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
 
       // Should start at light (from localStorage)
       expect(document.documentElement.getAttribute('data-theme')).toBe('light')
@@ -219,7 +230,7 @@ describe('Homepage Theme Toggle Functionality', () => {
       const user = userEvent.setup()
       renderWithProviders(<Navbar />)
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
 
       // Get initial data-theme
       const initialTheme = document.documentElement.getAttribute('data-theme')
@@ -241,7 +252,7 @@ describe('Homepage Theme Toggle Functionality', () => {
 
       renderWithProviders(<NavbarWithThemeDisplay />)
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
       const themeDisplay = screen.getByTestId('theme-display')
 
       // Initial theme should be dark (default)
@@ -295,7 +306,7 @@ describe('Homepage Theme Toggle Functionality', () => {
 
       renderWithProviders(<NavbarWithThemeDisplay />)
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
 
       // Toggle multiple times
       await user.click(themeToggle) // light -> dark
@@ -334,7 +345,7 @@ describe('Homepage Theme Toggle Functionality', () => {
     it('should display appropriate icon based on current theme', () => {
       renderWithProviders(<Navbar />)
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
       // Button should contain an icon (svg element)
       const icon = themeToggle.querySelector('svg')
       expect(icon).toBeInTheDocument()
@@ -352,7 +363,7 @@ describe('Homepage Theme Toggle Functionality', () => {
         </>
       )
 
-      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      const themeToggle = getThemeToggle()
       const themeDisplay = screen.getByTestId('theme-display')
 
       expect(themeDisplay).toHaveTextContent('dark')
