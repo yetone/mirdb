@@ -19,28 +19,28 @@ import { Feature } from '@/types/homepage'
 const features: Feature[] = [
   {
     id: 'url-shortening',
-    icon: <Link2 className="w-8 h-8" />,
+    icon: <Link2 className="w-8 h-8" aria-hidden="true" />,
     title: 'URL Shortening',
     description:
       'Transform long, unwieldy URLs into short, memorable links in seconds. Share them anywhere with ease and track their performance over time.',
   },
   {
     id: 'analytics-dashboard',
-    icon: <BarChart3 className="w-8 h-8" />,
+    icon: <BarChart3 className="w-8 h-8" aria-hidden="true" />,
     title: 'Analytics Dashboard',
     description:
       'Gain deep insights into your link performance with our comprehensive analytics dashboard. View detailed statistics, geographic data, and referral sources.',
   },
   {
     id: 'click-tracking',
-    icon: <MousePointerClick className="w-8 h-8" />,
+    icon: <MousePointerClick className="w-8 h-8" aria-hidden="true" />,
     title: 'Click Tracking',
     description:
       'Monitor every click on your shortened links in real-time. Understand when and where your audience is engaging with your content.',
   },
   {
     id: 'secure-reliable',
-    icon: <Shield className="w-8 h-8" />,
+    icon: <Shield className="w-8 h-8" aria-hidden="true" />,
     title: 'Secure & Reliable',
     description:
       'Your links are protected with enterprise-grade security. Our infrastructure ensures 99.9% uptime so your links are always accessible.',
@@ -59,7 +59,7 @@ const FeaturesSection: React.FC = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Powerful Features
           </h2>
-          <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
+          <p className="text-lg text-base-content/80 max-w-2xl mx-auto">
             Everything you need to shorten, share, and track your links effectively.
           </p>
         </div>

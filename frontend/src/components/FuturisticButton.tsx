@@ -17,7 +17,7 @@ const FuturisticButton: React.FC<FuturisticButtonProps> = ({
   className = '',
   ...props
 }) => {
-  const baseClasses = 'btn transition-all duration-300 hover:scale-105'
+  const baseClasses = 'btn transition-all duration-300 hover:scale-105 font-semibold'
 
   const variantClasses = {
     primary: 'btn-primary',

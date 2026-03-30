@@ -51,7 +51,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           Shorten URLs, Track Insights
         </h1>
         <p
-          className="text-xl text-base-content/70 mb-8"
+          className="text-xl text-base-content/80 mb-8"
           data-testid="hero-subheadline"
         >
           Transform long URLs into short, memorable links. Track clicks,
@@ -71,13 +71,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="flex justify-center gap-4 flex-wrap">
           {!isAuthenticated && (
             <Link to="/register">
-              <FuturisticButton variant="secondary" size="lg">
+              <FuturisticButton variant="secondary" size="lg" className="!text-black">
                 Get Started
               </FuturisticButton>
             </Link>
           )}
           <a href="#features">
-            <FuturisticButton variant="ghost" size="lg">
+            <FuturisticButton variant="ghost" size="lg" className="!text-white">
               Learn More
             </FuturisticButton>
           </a>

@@ -12,11 +12,11 @@ const ThemeToggle: React.FC = () => {
   const getIcon = () => {
     switch (theme) {
       case 'light':
-        return <Sun className="w-5 h-5" />
+        return <Sun className="w-5 h-5" aria-hidden="true" />
       case 'dark':
-        return <Moon className="w-5 h-5" />
+        return <Moon className="w-5 h-5" aria-hidden="true" />
       default:
-        return <Palette className="w-5 h-5" />
+        return <Palette className="w-5 h-5" aria-hidden="true" />
     }
   }
 

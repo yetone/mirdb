@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
 
   return (
     <footer
-      className="py-8 text-center text-base-content/60 border-t border-base-300"
+      className="py-8 text-center text-base-content/80 border-t border-base-300"
       data-testid="footer"
     >
       <div className="container mx-auto px-4">
@@ -26,14 +26,14 @@ export const Footer: React.FC = () => {
         <nav className="flex justify-center gap-6" aria-label="Footer navigation">
           <Link
             to="/terms"
-            className="hover:text-primary transition-colors"
+            className="!text-white hover:text-primary transition-colors"
             data-testid="terms-link"
           >
             Terms of Service
           </Link>
           <Link
             to="/privacy"
-            className="hover:text-primary transition-colors"
+            className="!text-white hover:text-primary transition-colors"
             data-testid="privacy-link"
           >
             Privacy Policy

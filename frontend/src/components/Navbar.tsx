@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar bg-base-100/80 backdrop-blur-md fixed top-0 z-50 shadow-lg" data-testid="navbar">
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl min-h-[44px] min-w-[44px]">
+        <Link to="/" className="btn btn-ghost text-xl min-h-[44px] min-w-[44px] !text-white">
           URL Shortener
         </Link>
       </div>
@@ -48,10 +48,10 @@ const Navbar: React.FC = () => {
           </>
         ) : (
           <>
-            <Link to="/login" className="btn btn-ghost min-h-[44px] min-w-[44px]" data-testid="desktop-login">
+            <Link to="/login" className="btn btn-ghost min-h-[44px] min-w-[44px] !text-white" data-testid="desktop-login">
               Login
             </Link>
-            <Link to="/register" className="btn btn-primary min-h-[44px] min-w-[44px]" data-testid="desktop-register">
+            <Link to="/register" className="btn !bg-yellow-400 hover:!bg-yellow-500 min-h-[44px] min-w-[44px] !text-black border-none" data-testid="desktop-register">
               Sign Up
             </Link>
           </>
@@ -69,9 +69,9 @@ const Navbar: React.FC = () => {
           data-testid="hamburger-menu"
         >
           {isMobileMenuOpen ? (
-            <X className="w-6 h-6" />
+            <X className="w-6 h-6" aria-hidden="true" />
           ) : (
-            <Menu className="w-6 h-6" />
+            <Menu className="w-6 h-6" aria-hidden="true" />
           )}
         </button>
       </div>

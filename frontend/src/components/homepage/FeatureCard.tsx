@@ -18,7 +18,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
           {icon}
         </div>
         <h3 className="text-xl font-bold text-base-content">{title}</h3>
-        <p className="text-base-content/70 leading-relaxed">{description}</p>
+        <p className="text-base-content/80 leading-relaxed">{description}</p>
       </div>
     </GlassMorphismCard>
   )
