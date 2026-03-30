@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
         <ThemeToggle />
         <button
           onClick={toggleMobileMenu}
-          className="btn btn-ghost w-11 h-11 min-w-11 min-h-11 p-2"
+          className="btn btn-ghost w-12 h-12 min-w-12 min-h-12 p-2"
           aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isMobileMenuOpen}
           data-testid="hamburger-menu"
