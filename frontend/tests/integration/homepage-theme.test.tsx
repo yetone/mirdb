@@ -375,3 +375,333 @@ describe('Homepage Theme Toggle Functionality', () => {
     })
   })
 })
+
+/**
+ * Scenario 17: Design Consistency with Application Theme System
+ *
+ * Tests design token usage and theme variant support:
+ * - Components use existing patterns (GlassMorphismCard, FuturisticButton)
+ * - All theme variants (light, dark, cyberpunk, synthwave) render correctly
+ * - Design tokens from DaisyUI/Tailwind are consistently applied
+ */
+describe('Design Consistency with Application Theme System (Scenario 17)', () => {
+  beforeEach(() => {
+    localStorage.clear()
+    vi.clearAllMocks()
+    document.documentElement.removeAttribute('data-theme')
+  })
+
+  afterEach(() => {
+    cleanup()
+  })
+
+  describe('Test Case 1: Homepage CSS classes use existing component patterns', () => {
+    it('should render homepage with correct structural elements', () => {
+      renderWithProviders(<Home />)
+
+      // Homepage should have core sections
+      const homepage = screen.getByTestId('homepage')
+      expect(homepage).toBeInTheDocument()
+      expect(homepage).toHaveClass('min-h-screen')
+
+      const heroSection = screen.getByTestId('hero-section')
+      expect(heroSection).toBeInTheDocument()
+
+      const featuresSection = screen.getByTestId('features-section')
+      expect(featuresSection).toBeInTheDocument()
+
+      const footer = screen.getByTestId('footer')
+      expect(footer).toBeInTheDocument()
+    })
+
+    it('should use FuturisticButton for CTA buttons in hero section', () => {
+      renderWithProviders(<Home />)
+
+      // Check that buttons have DaisyUI btn classes from FuturisticButton
+      const shortenButton = screen.getByTestId('shorten-button')
+      expect(shortenButton).toHaveClass('btn')
+      expect(shortenButton).toHaveClass('btn-primary')
+      expect(shortenButton).toHaveClass('btn-lg')
+    })
+
+    it('should use GlassMorphismCard styling in feature cards', () => {
+      renderWithProviders(<Home />)
+
+      // Feature cards should exist within GlassMorphismCard wrapper
+      const featureCards = screen.getAllByTestId(/^feature-card-/)
+      expect(featureCards.length).toBe(4)
+
+      // Each feature card should be wrapped with glassmorphism styling
+      featureCards.forEach((card) => {
+        // GlassMorphismCard applies backdrop-blur-lg, bg-base-100/30, etc.
+        const glassWrapper = card.querySelector('.backdrop-blur-lg')
+        expect(glassWrapper).toBeInTheDocument()
+      })
+    })
+
+    it('should use DaisyUI semantic color classes for text', () => {
+      renderWithProviders(<Home />)
+
+      // Check hero subheadline uses base-content semantic color
+      const subheadline = screen.getByTestId('hero-subheadline')
+      expect(subheadline).toHaveClass('text-base-content/70')
+
+      // Check footer uses semantic color classes
+      const footer = screen.getByTestId('footer')
+      expect(footer).toHaveClass('text-base-content/60')
+      expect(footer).toHaveClass('border-base-300')
+    })
+
+    it('should use DaisyUI input classes for URL input', () => {
+      renderWithProviders(<Home />)
+
+      const urlInput = screen.getByTestId('url-input')
+      expect(urlInput).toHaveClass('input')
+      expect(urlInput).toHaveClass('input-bordered')
+      expect(urlInput).toHaveClass('input-lg')
+    })
+  })
+
+  describe('Test Case 2: Light theme renders correctly', () => {
+    beforeEach(() => {
+      vi.mocked(localStorage.getItem).mockReturnValue('light')
+    })
+
+    it('should set data-theme to light when light theme is active', () => {
+      renderWithProviders(<Home />)
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    })
+
+    it('should render homepage elements correctly in light theme', () => {
+      renderWithProviders(<Home />)
+
+      // Verify homepage renders without errors
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('footer')).toBeInTheDocument()
+    })
+
+    it('should display hero headline correctly in light theme', () => {
+      renderWithProviders(<Home />)
+
+      const headline = screen.getByTestId('hero-headline')
+      expect(headline).toBeInTheDocument()
+      expect(headline).toHaveTextContent('Shorten URLs, Track Insights')
+    })
+
+    it('should display all feature cards in light theme', () => {
+      renderWithProviders(<Home />)
+
+      const featureCards = screen.getAllByTestId(/^feature-card-/)
+      expect(featureCards.length).toBe(4)
+
+      // Verify all feature titles are visible
+      expect(screen.getByText('URL Shortening')).toBeInTheDocument()
+      expect(screen.getByText('Analytics Dashboard')).toBeInTheDocument()
+      expect(screen.getByText('Click Tracking')).toBeInTheDocument()
+      expect(screen.getByText('Secure & Reliable')).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 3: Dark theme renders correctly with proper contrast', () => {
+    beforeEach(() => {
+      vi.mocked(localStorage.getItem).mockReturnValue('dark')
+    })
+
+    it('should set data-theme to dark when dark theme is active', () => {
+      renderWithProviders(<Home />)
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+    })
+
+    it('should render homepage elements correctly in dark theme', () => {
+      renderWithProviders(<Home />)
+
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('footer')).toBeInTheDocument()
+    })
+
+    it('should display URL input with proper styling in dark theme', () => {
+      renderWithProviders(<Home />)
+
+      const urlInput = screen.getByTestId('url-input')
+      expect(urlInput).toBeInTheDocument()
+      // Input should have bordered style for visibility
+      expect(urlInput).toHaveClass('input-bordered')
+    })
+
+    it('should display feature cards with glassmorphism effect in dark theme', () => {
+      renderWithProviders(<Home />)
+
+      const featureCards = screen.getAllByTestId(/^feature-card-/)
+      featureCards.forEach((card) => {
+        const glassWrapper = card.querySelector('.backdrop-blur-lg')
+        expect(glassWrapper).toBeInTheDocument()
+        // bg-base-100/30 provides semi-transparent background for contrast
+        expect(glassWrapper).toHaveClass('bg-base-100/30')
+      })
+    })
+
+    it('should maintain text readability with semantic color classes in dark theme', () => {
+      renderWithProviders(<Home />)
+
+      // Semantic classes adapt to theme automatically
+      const subheadline = screen.getByTestId('hero-subheadline')
+      expect(subheadline).toHaveClass('text-base-content/70')
+    })
+  })
+
+  describe('Test Case 4: Cyberpunk theme styling applied correctly', () => {
+    beforeEach(() => {
+      vi.mocked(localStorage.getItem).mockReturnValue('cyberpunk')
+    })
+
+    it('should set data-theme to cyberpunk when cyberpunk theme is active', () => {
+      renderWithProviders(<Home />)
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk')
+    })
+
+    it('should render homepage elements correctly in cyberpunk theme', () => {
+      renderWithProviders(<Home />)
+
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('footer')).toBeInTheDocument()
+    })
+
+    it('should display primary buttons with cyberpunk theme colors', () => {
+      renderWithProviders(<Home />)
+
+      const shortenButton = screen.getByTestId('shorten-button')
+      // btn-primary class will use cyberpunk's primary color
+      expect(shortenButton).toHaveClass('btn-primary')
+    })
+
+    it('should display feature cards with theme-aware styling', () => {
+      renderWithProviders(<Home />)
+
+      const featureCards = screen.getAllByTestId(/^feature-card-/)
+      expect(featureCards.length).toBe(4)
+
+      // Each card should still use glassmorphism which adapts to theme
+      featureCards.forEach((card) => {
+        const glassWrapper = card.querySelector('.border-base-content\\/10')
+        expect(glassWrapper).toBeInTheDocument()
+      })
+    })
+
+    it('should maintain all interactive elements in cyberpunk theme', () => {
+      renderWithProviders(<Home />)
+
+      const urlInput = screen.getByTestId('url-input')
+      expect(urlInput).toBeInTheDocument()
+      expect(urlInput).not.toBeDisabled()
+
+      const shortenButton = screen.getByTestId('shorten-button')
+      expect(shortenButton).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 5: Synthwave theme styling applied correctly', () => {
+    beforeEach(() => {
+      vi.mocked(localStorage.getItem).mockReturnValue('synthwave')
+    })
+
+    it('should set data-theme to synthwave when synthwave theme is active', () => {
+      renderWithProviders(<Home />)
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave')
+    })
+
+    it('should render homepage elements correctly in synthwave theme', () => {
+      renderWithProviders(<Home />)
+
+      expect(screen.getByTestId('homepage')).toBeInTheDocument()
+      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+      expect(screen.getByTestId('features-section')).toBeInTheDocument()
+      expect(screen.getByTestId('footer')).toBeInTheDocument()
+    })
+
+    it('should display headline with correct typography in synthwave theme', () => {
+      renderWithProviders(<Home />)
+
+      const headline = screen.getByTestId('hero-headline')
+      expect(headline).toHaveClass('font-bold')
+      expect(headline).toHaveClass('text-4xl')
+    })
+
+    it('should display secondary CTA buttons with synthwave styling', () => {
+      renderWithProviders(<Home />)
+
+      // Get Started button uses secondary variant
+      const getStartedButton = screen.getByRole('button', { name: /get started/i })
+      expect(getStartedButton).toHaveClass('btn-secondary')
+    })
+
+    it('should display footer with theme-aware border in synthwave theme', () => {
+      renderWithProviders(<Home />)
+
+      const footer = screen.getByTestId('footer')
+      // border-base-300 adapts to synthwave's color scheme
+      expect(footer).toHaveClass('border-base-300')
+    })
+
+    it('should display all feature cards in synthwave theme', () => {
+      renderWithProviders(<Home />)
+
+      // All four features should be visible
+      expect(screen.getByText('URL Shortening')).toBeInTheDocument()
+      expect(screen.getByText('Analytics Dashboard')).toBeInTheDocument()
+      expect(screen.getByText('Click Tracking')).toBeInTheDocument()
+      expect(screen.getByText('Secure & Reliable')).toBeInTheDocument()
+    })
+  })
+
+  describe('Design token consistency across all themes', () => {
+    const themes = ['light', 'dark', 'cyberpunk', 'synthwave'] as const
+
+    themes.forEach((themeName) => {
+      describe(`${themeName} theme`, () => {
+        beforeEach(() => {
+          vi.mocked(localStorage.getItem).mockReturnValue(themeName)
+        })
+
+        it(`should apply ${themeName} theme to document`, () => {
+          renderWithProviders(<Home />)
+          expect(document.documentElement.getAttribute('data-theme')).toBe(themeName)
+        })
+
+        it(`should render all homepage sections in ${themeName} theme`, () => {
+          renderWithProviders(<Home />)
+
+          expect(screen.getByTestId('homepage')).toBeInTheDocument()
+          expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+          expect(screen.getByTestId('features-section')).toBeInTheDocument()
+          expect(screen.getByTestId('footer')).toBeInTheDocument()
+        })
+
+        it(`should have functional URL input in ${themeName} theme`, () => {
+          renderWithProviders(<Home />)
+
+          const urlInput = screen.getByTestId('url-input')
+          expect(urlInput).toBeInTheDocument()
+          expect(urlInput).toHaveAttribute('type', 'url')
+        })
+
+        it(`should display shorten button in ${themeName} theme`, () => {
+          renderWithProviders(<Home />)
+
+          const button = screen.getByTestId('shorten-button')
+          expect(button).toBeInTheDocument()
+          expect(button).toHaveTextContent('Shorten URL')
+        })
+      })
+    })
+  })
+})
