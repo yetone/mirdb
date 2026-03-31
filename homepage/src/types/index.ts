@@ -7,9 +7,12 @@
 
 export type FeatureStatus = 'implemented' | 'planned';
 
+export type Theme = 'light' | 'dark';
+
 export interface Feature {
   id: string;
   name: string;
+  title?: string;
   description: string;
   status: FeatureStatus;
   icon?: string;
@@ -21,12 +24,17 @@ export interface NavItem {
   href: string;
 }
 
-export type Theme = 'light' | 'dark';
-
 export interface RoadmapItem {
   id: string;
   title: string;
   description: string;
   status: 'completed' | 'in-progress' | 'planned';
   quarter?: string;
+}
+
+export interface CodeBlockProps {
+  code: string;
+  language?: 'bash' | 'rust' | 'json' | 'text';
+  showCopyButton?: boolean;
+  title?: string;
 }
