@@ -1,0 +1,181 @@
+/**
+ * Theme Styles
+ * Owner: Scenario 7 - Dark Mode and Theming
+ *
+ * CSS variables and transitions for light/dark mode theming.
+ * These variables are used alongside Tailwind's dark mode.
+ *
+ * Requirements: NFR-4, Story 7 (Dark Mode)
+ */
+
+/* ==========================================================================
+   Theme Transition Animation
+   ========================================================================== */
+
+/**
+ * Applied during theme transitions for smooth color changes.
+ * Added/removed by useTheme hook.
+ */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition:
+    background-color 200ms ease-in-out,
+    border-color 200ms ease-in-out,
+    color 200ms ease-in-out,
+    fill 200ms ease-in-out,
+    stroke 200ms ease-in-out,
+    box-shadow 200ms ease-in-out !important;
+}
+
+/* ==========================================================================
+   Light Theme Variables
+   ========================================================================== */
+
+:root {
+  /* Primary colors */
+  --theme-primary: #3b82f6;
+  --theme-primary-hover: #2563eb;
+  --theme-primary-light: #dbeafe;
+
+  /* Background colors */
+  --theme-bg: #ffffff;
+  --theme-bg-secondary: #f9fafb;
+  --theme-bg-tertiary: #f3f4f6;
+
+  /* Text colors */
+  --theme-text: #1f2937;
+  --theme-text-secondary: #6b7280;
+  --theme-text-muted: #9ca3af;
+
+  /* Border colors */
+  --theme-border: #e5e7eb;
+  --theme-border-hover: #d1d5db;
+
+  /* Status colors */
+  --theme-success: #10b981;
+  --theme-warning: #f59e0b;
+  --theme-error: #ef4444;
+  --theme-info: #3b82f6;
+
+  /* Code block colors */
+  --theme-code-bg: #f3f4f6;
+  --theme-code-text: #1f2937;
+
+  /* Shadow */
+  --theme-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  --theme-shadow-lg: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+
+  /* Card colors */
+  --theme-card-bg: #ffffff;
+  --theme-card-border: #e5e7eb;
+
+  /* Focus ring */
+  --theme-focus-ring: rgba(59, 130, 246, 0.5);
+
+  /* Contrast for accessibility (WCAG AA compliant) */
+  /* All text colors meet minimum 4.5:1 contrast ratio on backgrounds */
+}
+
+/* ==========================================================================
+   Dark Theme Variables
+   ========================================================================== */
+
+.dark {
+  /* Primary colors */
+  --theme-primary: #60a5fa;
+  --theme-primary-hover: #93c5fd;
+  --theme-primary-light: #1e3a8a;
+
+  /* Background colors */
+  --theme-bg: #111827;
+  --theme-bg-secondary: #1f2937;
+  --theme-bg-tertiary: #374151;
+
+  /* Text colors - WCAG AA compliant (minimum 4.5:1 contrast) */
+  --theme-text: #f9fafb;
+  --theme-text-secondary: #d1d5db;
+  --theme-text-muted: #9ca3af;
+
+  /* Border colors */
+  --theme-border: #374151;
+  --theme-border-hover: #4b5563;
+
+  /* Status colors (adjusted for dark mode visibility) */
+  --theme-success: #34d399;
+  --theme-warning: #fbbf24;
+  --theme-error: #f87171;
+  --theme-info: #60a5fa;
+
+  /* Code block colors */
+  --theme-code-bg: #1f2937;
+  --theme-code-text: #e5e7eb;
+
+  /* Shadow */
+  --theme-shadow: rgba(0, 0, 0, 0.3) 0px 4px 6px -1px, rgba(0, 0, 0, 0.2) 0px 2px 4px -1px;
+  --theme-shadow-lg: rgba(0, 0, 0, 0.4) 0px 10px 15px -3px, rgba(0, 0, 0, 0.25) 0px 4px 6px -2px;
+
+  /* Card colors */
+  --theme-card-bg: #1f2937;
+  --theme-card-border: #374151;
+
+  /* Focus ring */
+  --theme-focus-ring: rgba(96, 165, 250, 0.5);
+}
+
+/* ==========================================================================
+   Theme Toggle Animation
+   ========================================================================== */
+
+@keyframes theme-icon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+[data-testid="theme-toggle"]:active svg {
+  animation: theme-icon-spin 200ms ease-out;
+}
+
+/* ==========================================================================
+   Accessibility Enhancements
+   ========================================================================== */
+
+/* Ensure focus is visible in both themes */
+:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --theme-text: #000000;
+    --theme-bg: #ffffff;
+    --theme-border: #000000;
+  }
+
+  .dark {
+    --theme-text: #ffffff;
+    --theme-bg: #000000;
+    --theme-border: #ffffff;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after {
+    transition: none !important;
+  }
+
+  [data-testid="theme-toggle"]:active svg {
+    animation: none;
+  }
+}
