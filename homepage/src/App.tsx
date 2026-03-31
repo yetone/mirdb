@@ -1,6 +1,7 @@
 import { HeroSection } from './components/sections/HeroSection';
 import { FeaturesSection } from './components/sections/FeaturesSection';
 import { QuickStartSection } from './components/sections/QuickStartSection';
+import { DemoSection } from './components/sections/DemoSection';
 import { features } from './constants/features';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
         <HeroSection />
         <FeaturesSection features={features} />
         <QuickStartSection />
+        <DemoSection />
       </main>
     </div>
   );
