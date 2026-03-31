@@ -12,8 +12,10 @@ export { CodeBlock } from './ui/CodeBlock';
 // Section Components
 export { FeaturesSection } from './sections/FeaturesSection';
 export { HeroSection } from './sections/HeroSection';
+export { ResourcesSection } from './sections/ResourcesSection';
 
 // Layout Components
 export { Header } from './layout/Header';
 export { Navigation } from './layout/Navigation';
 export { MobileMenu } from './layout/MobileMenu';
+export { Footer } from './layout/Footer';
