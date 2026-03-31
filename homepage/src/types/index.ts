@@ -9,6 +9,8 @@ export type FeatureStatus = 'implemented' | 'planned';
 
 export type Theme = 'light' | 'dark';
 
+export type Breakpoint = 'mobile' | 'tablet' | 'desktop';
+
 export interface Feature {
   id: string;
   name: string;
