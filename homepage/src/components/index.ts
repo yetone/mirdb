@@ -9,3 +9,4 @@ export { Badge } from './ui/Badge';
 
 // Section Components
 export { FeaturesSection } from './sections/FeaturesSection';
+export { HeroSection } from './sections/HeroSection';
