@@ -14,7 +14,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { Features } from '../../src/components/Features'
 import { Hero } from '../../src/components/Hero'
 import { Navigation } from '../../src/components/Navigation'
@@ -363,6 +363,242 @@ describe('Tablet Responsive Design (768px-1023px)', () => {
       const heroSection = document.querySelector('section')
       expect(heroSection!.className).toContain('items-center')
       expect(heroSection!.className).toContain('justify-center')
+    })
+  })
+})
+
+/**
+ * Mobile Responsive Design Tests (Scenario 9)
+ *
+ * Tests for mobile viewport (<768px) behavior:
+ * - Single-column stacked layout
+ * - Touch targets minimum 44x44px
+ * - No horizontal overflow
+ * - Body text at least 16px for readability
+ */
+describe('Mobile Responsive Design (<768px)', () => {
+  describe('TC1: All content renders without horizontal scrollbar at 375px', () => {
+    it('should have appropriate container constraints to prevent overflow', () => {
+      render(<Features />)
+
+      // Verify the features section has container with proper width constraints
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      expect(featuresSection).toBeInTheDocument()
+
+      // Check for max-w-7xl and mx-auto classes which constrain width
+      const container = featuresSection.querySelector('.max-w-7xl')
+      expect(container).not.toBeNull()
+      expect(container!.className).toContain('mx-auto')
+    })
+
+    it('should have proper padding that scales on mobile (px-4)', () => {
+      render(<Features />)
+
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      // px-4 provides 16px padding which is appropriate for mobile
+      expect(featuresSection.className).toContain('px-4')
+    })
+
+    it('should have hero section with overflow-hidden behavior', () => {
+      render(<Hero />)
+
+      const heroSection = document.querySelector('section')
+      expect(heroSection).not.toBeNull()
+      // px-4 ensures content doesn't overflow on small screens
+      expect(heroSection!.className).toContain('px-4')
+    })
+
+    it('should have navigation with constrained width', () => {
+      render(<Navigation />)
+
+      const nav = screen.getByRole('navigation')
+      expect(nav).toBeInTheDocument()
+
+      // Navigation container should have max-width and padding
+      const navContainer = nav.querySelector('.max-w-6xl')
+      expect(navContainer).not.toBeNull()
+      expect(navContainer!.className).toContain('px-4')
+    })
+  })
+
+  describe('TC2: Features section displays in single-column stacked layout at 375px', () => {
+    it('should have grid-cols-1 class for mobile single-column layout', () => {
+      render(<Features />)
+
+      const featuresGrid = screen.getByTestId('features-grid')
+      expect(featuresGrid).toBeInTheDocument()
+
+      // grid-cols-1 provides single column layout on mobile
+      // The breakpoint classes (md:grid-cols-2, lg:grid-cols-3) only activate at larger widths
+      expect(featuresGrid.className).toContain('grid')
+      expect(featuresGrid.className).toContain('grid-cols-1')
+    })
+
+    it('should have gap spacing for stacked cards', () => {
+      render(<Features />)
+
+      const featuresGrid = screen.getByTestId('features-grid')
+      // gap-6 provides consistent vertical spacing between stacked cards
+      expect(featuresGrid.className).toContain('gap-6')
+    })
+
+    it('should render all feature cards in a vertical stack', () => {
+      render(<Features />)
+
+      const featuresGrid = screen.getByTestId('features-grid')
+      // Verify cards exist and grid is properly configured for stacking
+      const cards = featuresGrid.children
+      expect(cards.length).toBeGreaterThanOrEqual(1)
+    })
+  })
+
+  describe('TC3: All buttons and interactive elements have minimum 44x44px touch targets', () => {
+    it('should have hamburger menu button with adequate touch target size', () => {
+      render(<Navigation />)
+
+      const hamburgerButton = screen.getByRole('button', { name: /menu/i })
+      expect(hamburgerButton).toBeInTheDocument()
+
+      // p-2 = 8px padding + w-6 h-6 icon (24x24) = 40x40, but with min dimensions it should be 44x44
+      // Check for touch target classes: min-w-[44px] min-h-[44px] or equivalent
+      expect(hamburgerButton.className).toContain('min-w-[44px]')
+      expect(hamburgerButton.className).toContain('min-h-[44px]')
+    })
+
+    it('should have CTA button with adequate touch target size', () => {
+      render(<Hero />)
+
+      // Find the CTA link/button
+      const ctaButton = screen.getByRole('link', { name: /get started/i })
+      expect(ctaButton).toBeInTheDocument()
+
+      // py-3 = 12px vertical padding, with text-lg this exceeds 44px height
+      // px-8 = 32px horizontal padding, which provides adequate width
+      expect(ctaButton.className).toContain('py-3')
+      expect(ctaButton.className).toContain('px-8')
+    })
+
+    it('should have mobile navigation links with adequate touch target size', () => {
+      render(<Navigation />)
+
+      // Open mobile menu to reveal mobile nav links
+      const hamburgerButton = screen.getByRole('button', { name: /menu/i })
+      fireEvent.click(hamburgerButton)
+
+      // Find the mobile navigation container (appears after clicking hamburger)
+      // The mobile menu has py-4 class and contains the navigation links
+      const mobileMenuContainer = document.querySelector('div.py-4')
+      expect(mobileMenuContainer).not.toBeNull()
+
+      // Find mobile navigation links within the mobile menu
+      const mobileNavLinks = mobileMenuContainer!.querySelectorAll('a')
+      expect(mobileNavLinks.length).toBeGreaterThan(0)
+
+      // Each mobile nav link should have min-h-[44px] for touch accessibility
+      mobileNavLinks.forEach((link) => {
+        expect(link.className).toContain('min-h-[44px]')
+      })
+    })
+  })
+
+  describe('TC4: No horizontal overflow at mobile width', () => {
+    it('should have all text constrained to not overflow', () => {
+      render(<Hero />)
+
+      // Verify tagline has max-width constraint
+      const tagline = screen.getByRole('heading', { level: 2 })
+      expect(tagline.className).toContain('max-w-2xl')
+    })
+
+    it('should have features description constrained', () => {
+      render(<Features />)
+
+      // Verify description text has max-width
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      const description = featuresSection.querySelector('.max-w-2xl')
+      expect(description).not.toBeNull()
+    })
+
+    it('should not have elements that exceed container width', () => {
+      render(<Features />)
+
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      // Verify no fixed large widths that would cause overflow
+      const container = featuresSection.querySelector('.max-w-7xl')
+      expect(container).not.toBeNull()
+
+      // Container should have w-full behavior by default with max-width constraint
+      expect(container!.className).toContain('mx-auto')
+    })
+  })
+
+  describe('TC5: Body text is at least 16px for readability', () => {
+    it('should have default base text size (Tailwind base is 16px)', () => {
+      render(<Features />)
+
+      // Feature descriptions should use default text size (text-base = 16px)
+      // or explicit sizing that's at least 16px
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      const description = featuresSection.querySelector('.text-gray-600')
+      expect(description).not.toBeNull()
+
+      // Verify no text-sm or text-xs classes which would make text smaller
+      // The description should not have small text classes
+      expect(description!.className).not.toContain('text-xs')
+      expect(description!.className).not.toContain('text-sm')
+    })
+
+    it('should have readable paragraph text in hero section', () => {
+      render(<Hero />)
+
+      const tagline = screen.getByRole('heading', { level: 2 })
+      // text-xl = 20px which is above 16px minimum
+      expect(tagline.className).toContain('text-xl')
+    })
+
+    it('should have readable link text in navigation', () => {
+      render(<Navigation />)
+
+      const nav = screen.getByRole('navigation')
+      // Navigation links should not use small text classes
+      const links = nav.querySelectorAll('a')
+      links.forEach((link) => {
+        expect(link.className).not.toContain('text-xs')
+      })
+    })
+  })
+
+  describe('Mobile-specific navigation behavior', () => {
+    it('should show hamburger menu on mobile (md:hidden class)', () => {
+      render(<Navigation />)
+
+      const hamburgerButton = screen.getByRole('button', { name: /menu/i })
+      // md:hidden means visible on mobile, hidden at md+ (768px+)
+      expect(hamburgerButton.className).toContain('md:hidden')
+    })
+
+    it('should hide desktop navigation on mobile (hidden md:flex)', () => {
+      render(<Navigation />)
+
+      const nav = screen.getByRole('navigation')
+      // Desktop nav container uses hidden md:flex - hidden on mobile
+      const desktopNavContainer = nav.querySelector('.hidden.md\\:flex')
+      expect(desktopNavContainer).not.toBeNull()
+    })
+
+    it('should toggle mobile menu visibility when hamburger is clicked', () => {
+      render(<Navigation />)
+
+      // Initially mobile menu is closed - no py-4 container visible
+      expect(document.querySelector('div.py-4')).toBeNull()
+
+      // Click hamburger to open menu
+      const hamburgerButton = screen.getByRole('button', { name: /menu/i })
+      fireEvent.click(hamburgerButton)
+
+      // Mobile menu should now be visible (has py-4 and border-t classes)
+      const mobileNav = document.querySelector('div.py-4.border-t')
+      expect(mobileNav).not.toBeNull()
     })
   })
 })
