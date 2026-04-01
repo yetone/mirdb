@@ -1,9 +1,11 @@
 import { Features } from './components/Features'
+import { Roadmap } from './components/Roadmap'
 
 function App() {
   return (
     <main className="min-h-screen bg-white dark:bg-gray-900">
       <Features />
+      <Roadmap />
     </main>
   )
 }
