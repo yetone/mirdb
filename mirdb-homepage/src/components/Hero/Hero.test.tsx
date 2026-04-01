@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { Hero } from './Hero'
 import { GITHUB_REPO_URL } from '../../utils/constants'
 
@@ -94,6 +94,78 @@ describe('Hero Component', () => {
       render(<Hero />)
       const section = document.querySelector('section')
       expect(section).toHaveClass('flex', 'flex-col', 'items-center', 'justify-center')
+    })
+  })
+
+  // Error Handling Tests (Scenario 16)
+  describe('Error Handling - Logo Load Failure', () => {
+    it('shows fallback when logo image fails to load', () => {
+      render(<Hero />)
+
+      const logoImage = screen.getByTestId('hero-logo')
+
+      // Simulate image load error
+      fireEvent.error(logoImage)
+
+      // Fallback should now be visible
+      const fallback = screen.getByTestId('logo-fallback')
+      expect(fallback).toBeInTheDocument()
+    })
+
+    it('fallback displays M letter as placeholder', () => {
+      render(<Hero />)
+
+      const logoImage = screen.getByTestId('hero-logo')
+      fireEvent.error(logoImage)
+
+      const fallback = screen.getByTestId('logo-fallback')
+      expect(fallback).toHaveTextContent('M')
+    })
+
+    it('fallback has proper aria-label for accessibility', () => {
+      render(<Hero />)
+
+      const logoImage = screen.getByTestId('hero-logo')
+      fireEvent.error(logoImage)
+
+      const fallback = screen.getByTestId('logo-fallback')
+      expect(fallback).toHaveAttribute('aria-label', 'MirDB Logo')
+      expect(fallback).toHaveAttribute('role', 'img')
+    })
+
+    it('fallback maintains minimum dimensions', () => {
+      render(<Hero />)
+
+      const logoImage = screen.getByTestId('hero-logo')
+      fireEvent.error(logoImage)
+
+      const fallback = screen.getByTestId('logo-fallback')
+      expect(fallback).toHaveStyle({ minWidth: '120px', minHeight: '120px' })
+    })
+
+    it('page content remains visible when logo fails', () => {
+      render(<Hero />)
+
+      const logoImage = screen.getByTestId('hero-logo')
+      fireEvent.error(logoImage)
+
+      // Heading should still be visible
+      const heading = screen.getByRole('heading', { level: 1 })
+      expect(heading).toHaveTextContent('MirDB')
+
+      // CTA should still be visible
+      const cta = screen.getByRole('link', { name: /get started/i })
+      expect(cta).toBeInTheDocument()
+    })
+
+    it('hides original image when error occurs', () => {
+      render(<Hero />)
+
+      const logoImage = screen.getByTestId('hero-logo')
+      fireEvent.error(logoImage)
+
+      // Original image should no longer be in DOM
+      expect(screen.queryByTestId('hero-logo')).not.toBeInTheDocument()
     })
   })
 })

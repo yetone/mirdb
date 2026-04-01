@@ -126,4 +126,43 @@ describe('StatusBadges', () => {
       expect(container).toHaveClass('custom-class')
     })
   })
+
+  // Error Handling Tests (Scenario 16)
+  describe('Error Handling - Badge Load Failure', () => {
+    it('shows fallback text when badge image fails to load', () => {
+      render(<StatusBadges />)
+
+      const badgeImage = screen.getByTestId('circleci-badge-image')
+
+      // Simulate image load error
+      fireEvent.error(badgeImage)
+
+      // Fallback should now be visible
+      const fallback = screen.getByTestId('circleci-badge-fallback')
+      expect(fallback).toBeInTheDocument()
+      expect(fallback).toHaveTextContent('Build Status')
+    })
+
+    it('keeps link functional when badge shows fallback', () => {
+      render(<StatusBadges />)
+
+      const badgeImage = screen.getByTestId('circleci-badge-image')
+      fireEvent.error(badgeImage)
+
+      // Link should still work
+      const badgeLink = screen.getByTestId('circleci-badge-link')
+      expect(badgeLink).toHaveAttribute('href', CIRCLECI_STATUS_URL)
+      expect(badgeLink).toHaveAttribute('target', '_blank')
+    })
+
+    it('hides original image when error occurs', () => {
+      render(<StatusBadges />)
+
+      const badgeImage = screen.getByTestId('circleci-badge-image')
+      fireEvent.error(badgeImage)
+
+      // Original image should no longer be in DOM
+      expect(screen.queryByTestId('circleci-badge-image')).not.toBeInTheDocument()
+    })
+  })
 })
