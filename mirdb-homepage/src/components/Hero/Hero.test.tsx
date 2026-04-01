@@ -4,6 +4,103 @@ import { Hero } from './Hero'
 import { GITHUB_REPO_URL } from '../../utils/constants'
 
 describe('Hero Component', () => {
+  // ==============================================
+  // Scenario 17: Component Isolation and Props
+  // Test Case 1: Render Hero with custom tagline prop
+  // Test Case 5: Test component with missing optional props
+  // ==============================================
+
+  describe('Component Isolation - Custom Props (Test Case 1)', () => {
+    it('displays the provided custom tagline text', () => {
+      const customTagline = 'A custom tagline for testing isolation'
+      render(<Hero tagline={customTagline} />)
+
+      const subtitle = screen.getByRole('heading', { level: 2 })
+      expect(subtitle).toHaveTextContent(customTagline)
+    })
+
+    it('renders custom tagline with special characters', () => {
+      const specialTagline = 'Store <key, value> pairs efficiently!'
+      render(<Hero tagline={specialTagline} />)
+
+      const subtitle = screen.getByRole('heading', { level: 2 })
+      expect(subtitle).toHaveTextContent(specialTagline)
+    })
+
+    it('renders with all custom props simultaneously', () => {
+      render(
+        <Hero
+          logoSrc="/custom-logo.png"
+          tagline="Custom Tagline"
+          ctaText="Custom CTA"
+          ctaHref="https://custom.example.com"
+        />
+      )
+
+      const logo = screen.getByAltText('MirDB')
+      const subtitle = screen.getByRole('heading', { level: 2 })
+      const cta = screen.getByRole('link', { name: /custom cta/i })
+
+      expect(logo).toHaveAttribute('src', '/custom-logo.png')
+      expect(subtitle).toHaveTextContent('Custom Tagline')
+      expect(cta).toHaveAttribute('href', 'https://custom.example.com')
+    })
+  })
+
+  describe('Component Isolation - Default Props (Test Case 5)', () => {
+    it('renders without errors when no props are provided', () => {
+      const { container } = render(<Hero />)
+      expect(container).toBeInTheDocument()
+    })
+
+    it('uses default logo source when logoSrc prop is missing', () => {
+      render(<Hero />)
+      const logo = screen.getByAltText('MirDB')
+      expect(logo).toHaveAttribute('src', '/logo.svg')
+    })
+
+    it('uses default tagline when tagline prop is missing', () => {
+      render(<Hero />)
+      const subtitle = screen.getByRole('heading', { level: 2 })
+      expect(subtitle).toHaveTextContent('A Persistent Key-Value Store with Memcached Protocol')
+    })
+
+    it('uses default CTA text when ctaText prop is missing', () => {
+      render(<Hero />)
+      const cta = screen.getByRole('link', { name: /get started/i })
+      expect(cta).toBeInTheDocument()
+    })
+
+    it('uses default CTA href (GitHub URL) when ctaHref prop is missing', () => {
+      render(<Hero />)
+      const cta = screen.getByRole('link', { name: /get started/i })
+      expect(cta).toHaveAttribute('href', GITHUB_REPO_URL)
+    })
+
+    it('handles partial props - only logoSrc provided', () => {
+      render(<Hero logoSrc="/partial-test.svg" />)
+
+      const logo = screen.getByAltText('MirDB')
+      expect(logo).toHaveAttribute('src', '/partial-test.svg')
+
+      // Other defaults should still work
+      const subtitle = screen.getByRole('heading', { level: 2 })
+      expect(subtitle.textContent?.toLowerCase()).toContain('persistent')
+      expect(screen.getByRole('link', { name: /get started/i })).toBeInTheDocument()
+    })
+
+    it('handles partial props - only tagline provided', () => {
+      render(<Hero tagline="Partial Test Tagline" />)
+
+      const subtitle = screen.getByRole('heading', { level: 2 })
+      expect(subtitle).toHaveTextContent('Partial Test Tagline')
+
+      // Other defaults should still work
+      const logo = screen.getByAltText('MirDB')
+      expect(logo).toHaveAttribute('src', '/logo.svg')
+    })
+  })
+
   describe('Test Case 1: Logo presence and dimensions', () => {
     it('renders logo image with alt text "MirDB" and minimum 120x120px dimensions', () => {
       render(<Hero />)
