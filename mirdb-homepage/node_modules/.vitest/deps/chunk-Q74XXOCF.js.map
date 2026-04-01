@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["vite:cjs-external-facade:react"],
+  "sourcesContent": ["import * as m from \"vite-cjs-external-facade:react\";module.exports = m;"],
+  "mappings": ";;;;;;AAAA,YAAY,OAAO;AAAnB;AAAA;AAAoD,WAAO,UAAU;AAAA;AAAA;",
+  "names": []
+}
