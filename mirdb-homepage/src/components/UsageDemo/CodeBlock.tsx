@@ -105,7 +105,7 @@ export function CodeBlock({ code, language = 'shell', showCopyButton = true }: C
     if (line.startsWith('$ ')) {
       return (
         <>
-          <span className="text-gray-500">$</span>
+          <span className="text-gray-400">$</span>
           <span className="text-blue-400">{line.slice(1)}</span>
         </>
       )
@@ -113,7 +113,7 @@ export function CodeBlock({ code, language = 'shell', showCopyButton = true }: C
 
     // Highlight connection messages
     if (line.startsWith('Trying ') || line.startsWith('Connected ')) {
-      return <span className="text-gray-500">{line}</span>
+      return <span className="text-gray-400">{line}</span>
     }
 
     return <span>{line}</span>

@@ -72,14 +72,14 @@ export function Footer() {
           </nav>
 
           {/* License Section */}
-          <div className="text-gray-500 dark:text-gray-400 text-sm text-center md:text-right">
+          <div className="text-gray-600 dark:text-gray-400 text-sm text-center md:text-right">
             <p data-testid="license-info">
               Released under the{' '}
               <a
                 href={`${GITHUB_REPO_URL}/blob/master/LICENSE`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 dark:text-blue-400 hover:underline"
+                className="text-blue-600 dark:text-blue-400 underline hover:no-underline"
               >
                 MIT License
               </a>
