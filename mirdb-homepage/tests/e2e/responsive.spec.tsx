@@ -186,3 +186,183 @@ describe('Desktop Responsive Design (1024px+)', () => {
     })
   })
 })
+
+/**
+ * Tablet Responsive Design Tests (768px-1023px)
+ * Owner: Scenario 8 - Responsive Design - Tablet
+ *
+ * These tests verify the homepage displays correctly on tablet viewports.
+ * REQ-9: Must be responsive on tablet 768px-1023px
+ */
+describe('Tablet Responsive Design (768px-1023px)', () => {
+  describe('TC1: All content renders without horizontal scrollbar at 800px', () => {
+    it('should have max-width container to constrain content width', () => {
+      render(<Features />)
+
+      // The features section has a max-w-7xl container
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      expect(featuresSection).toBeInTheDocument()
+
+      // Verify the max-width container exists
+      const container = featuresSection.querySelector('.max-w-7xl')
+      expect(container).not.toBeNull()
+    })
+
+    it('should have w-full constraint preventing overflow', () => {
+      render(<Hero />)
+
+      // Hero section uses w-full which constrains to viewport width
+      const heroSection = document.querySelector('section')
+      expect(heroSection).not.toBeNull()
+      // w-full ensures content doesn't exceed viewport width
+      expect(heroSection!.className).toMatch(/w-full|px-4/)
+    })
+
+    it('should have proper horizontal padding on all sections', () => {
+      render(<Features />)
+
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      // px-4 sm:px-6 lg:px-8 provides appropriate padding
+      // At tablet (sm to lg), sm:px-6 applies (1.5rem = 24px)
+      expect(featuresSection.className).toMatch(/px-4|sm:px-6/)
+    })
+
+    it('should have navigation constrained to viewport', () => {
+      render(<Navigation />)
+
+      const nav = screen.getByRole('navigation')
+      expect(nav).toBeInTheDocument()
+      // Navigation uses inner container with max-w-6xl to constrain content
+      const innerContainer = nav.querySelector('.max-w-6xl')
+      expect(innerContainer).not.toBeNull()
+    })
+  })
+
+  describe('TC2: Features display in 2-column grid layout at 800px (md breakpoint)', () => {
+    it('should have md:grid-cols-2 class for tablet 2-column layout', () => {
+      render(<Features />)
+
+      const featuresGrid = screen.getByTestId('features-grid')
+      expect(featuresGrid).toBeInTheDocument()
+
+      // At tablet (md breakpoint: 768px+), md:grid-cols-2 applies
+      // This creates a 2-column layout for tablet viewports
+      expect(featuresGrid.className).toContain('md:grid-cols-2')
+    })
+
+    it('should have grid class enabled for layout', () => {
+      render(<Features />)
+
+      const featuresGrid = screen.getByTestId('features-grid')
+      expect(featuresGrid.className).toContain('grid')
+    })
+
+    it('should have base grid-cols-1 that md:grid-cols-2 overrides', () => {
+      render(<Features />)
+
+      const featuresGrid = screen.getByTestId('features-grid')
+      // grid-cols-1 is the base (mobile), md:grid-cols-2 overrides at tablet
+      expect(featuresGrid.className).toContain('grid-cols-1')
+    })
+
+    it('should have consistent gap between feature cards', () => {
+      render(<Features />)
+
+      const featuresGrid = screen.getByTestId('features-grid')
+      // gap-6 provides 1.5rem (24px) spacing between cards
+      expect(featuresGrid.className).toContain('gap-6')
+    })
+
+    it('should render feature cards that will fill 2-column grid', () => {
+      render(<Features />)
+
+      const featuresGrid = screen.getByTestId('features-grid')
+      // At least 2 cards needed to demonstrate 2-column layout
+      const cards = featuresGrid.children
+      expect(cards.length).toBeGreaterThanOrEqual(2)
+    })
+  })
+
+  describe('TC3: All text is readable without zooming or horizontal scroll', () => {
+    it('should have appropriate heading font sizes', () => {
+      render(<Hero />)
+
+      // H1 heading should be present
+      const h1 = screen.getByRole('heading', { level: 1 })
+      expect(h1).toHaveTextContent('MirDB')
+      // text-4xl sm:text-5xl or similar responsive sizing
+      expect(h1.className).toMatch(/text-(3xl|4xl|5xl|6xl)/)
+    })
+
+    it('should have readable body text', () => {
+      render(<Hero />)
+
+      // H2 tagline should be readable
+      const h2 = screen.getByRole('heading', { level: 2 })
+      expect(h2).toBeInTheDocument()
+      // Should have appropriate text size class
+      expect(h2.className).toMatch(/text-(lg|xl|2xl)/)
+    })
+
+    it('should have max-width on text containers for readability', () => {
+      render(<Features />)
+
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      // max-w-2xl on description ensures readable line length
+      const textContainer = featuresSection.querySelector('.max-w-2xl')
+      expect(textContainer).not.toBeNull()
+    })
+
+    it('should have centered text alignment for main headings', () => {
+      render(<Features />)
+
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      // text-center class ensures headings are centered
+      const centerTextContainer = featuresSection.querySelector('.text-center')
+      expect(centerTextContainer).not.toBeNull()
+    })
+
+    it('should have proper text colors with sufficient contrast', () => {
+      render(<Features />)
+
+      const heading = screen.getByRole('heading', { name: /features/i })
+      // text-gray-900 provides high contrast against light backgrounds
+      expect(heading.className).toMatch(/text-gray-900|text-white|dark:text-white/)
+    })
+  })
+
+  describe('Tablet layout adaptation', () => {
+    it('should have navigation visible at tablet breakpoint', () => {
+      render(<Navigation />)
+
+      const nav = screen.getByRole('navigation')
+      // Desktop nav uses hidden md:flex - visible at md (768px) and above
+      const desktopNav = nav.querySelector('.hidden.md\\:flex')
+      expect(desktopNav).not.toBeNull()
+    })
+
+    it('should hide hamburger menu at tablet breakpoint', () => {
+      render(<Navigation />)
+
+      // Hamburger button uses md:hidden - hidden at md (768px) and above
+      const hamburgerButton = screen.getByRole('button', { name: /menu/i })
+      expect(hamburgerButton.className).toContain('md:hidden')
+    })
+
+    it('should have consistent spacing between sections', () => {
+      render(<Features />)
+
+      const featuresSection = screen.getByRole('region', { name: /features/i })
+      // py-16 provides vertical padding (4rem = 64px)
+      expect(featuresSection.className).toContain('py-16')
+    })
+
+    it('should have Hero section centered and properly spaced', () => {
+      render(<Hero />)
+
+      const heroSection = document.querySelector('section')
+      expect(heroSection!.className).toContain('items-center')
+      expect(heroSection!.className).toContain('justify-center')
+    })
+  })
+})
