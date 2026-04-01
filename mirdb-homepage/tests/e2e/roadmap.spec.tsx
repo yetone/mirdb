@@ -14,10 +14,15 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import App from '../../src/App'
+import { ThemeProvider } from '../../src/context'
 
 describe('E2E: Roadmap Section', () => {
   beforeEach(() => {
-    render(<App />)
+    render(
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    )
   })
 
   // Test Case 5: Navigate to roadmap section and verify visibility
