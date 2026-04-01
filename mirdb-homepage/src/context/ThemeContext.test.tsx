@@ -5,7 +5,7 @@
  */
 import React from 'react'
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { ThemeProvider, useThemeContext } from './ThemeContext'
 import { THEME_STORAGE_KEY } from '../utils/constants'
 

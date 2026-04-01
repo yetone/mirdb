@@ -2,7 +2,7 @@
  * Theme Toggle Component Tests.
  * Owner: Scenario 10 - Dark Mode Theme Toggle
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ThemeToggle } from './ThemeToggle'
 import { ThemeProvider } from '../../context/ThemeContext'

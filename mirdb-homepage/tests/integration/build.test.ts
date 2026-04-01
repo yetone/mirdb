@@ -11,7 +11,7 @@
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { execSync } from 'child_process'
-import { existsSync, readdirSync, readFileSync, statSync, rmSync } from 'fs'
+import { existsSync, readdirSync, readFileSync, rmSync } from 'fs'
 import { resolve, join, extname } from 'path'
 import { gzipSync } from 'zlib'
 
@@ -240,15 +240,6 @@ describe('Performance - Build and Bundle', () => {
       const cssFile = cssFiles[0]
       const filePath = join(ASSETS_DIR, cssFile)
       const cssContent = readFileSync(filePath, 'utf-8')
-
-      // Check that unusual utilities are NOT present (e.g., rarely used classes)
-      // The presence of only used classes indicates purging is working
-      // We check that specific responsive variants for unused components are absent
-      const unusedPatterns = [
-        '.2xl\\:', // 2xl breakpoint - unlikely to be used
-        '.aspect-', // Aspect ratio utilities
-        '.backdrop-', // Backdrop utilities
-      ]
 
       // These patterns should either be absent or only present in minimal quantities
       // This is a heuristic check - if CSS is small, purging is working
