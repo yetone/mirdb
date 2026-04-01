@@ -3,16 +3,22 @@ import { Features } from './components/Features'
 import { UsageDemo } from './components/UsageDemo'
 import { Roadmap } from './components/Roadmap'
 import { StatusBadges } from './components/StatusBadges'
+import { Navigation } from './components/Navigation'
+import { Footer } from './components/Footer'
 
 function App() {
   return (
-    <main className="min-h-screen bg-white dark:bg-gray-900">
-      <Hero />
-      <StatusBadges className="flex justify-center py-4" />
-      <UsageDemo />
-      <Features />
-      <Roadmap />
-    </main>
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <Navigation />
+      <main>
+        <Hero />
+        <StatusBadges className="flex justify-center py-4" />
+        <UsageDemo />
+        <Features />
+        <Roadmap />
+      </main>
+      <Footer />
+    </div>
   )
 }
 
