@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { Hero } from '@/components/sections/Hero';
 import { Navbar } from '@/components/layout/Navbar';
 import { Features } from '@/components/sections/Features';
+import { Performance } from '@/components/sections/Performance';
 import { SITE_TITLE, SITE_DESCRIPTION } from '@/utils/constants';
 
 export default function Home() {
@@ -33,12 +34,7 @@ export default function Home() {
         </section>
 
         {/* Performance section - Scenario 5 */}
-        <section id="performance">
-          <div className="container">
-            <h2 className="section-heading">Performance</h2>
-            <p className="text-center">Coming soon...</p>
-          </div>
-        </section>
+        <Performance />
 
         {/* Comparison section - Scenario 6 */}
         <section id="comparison">
