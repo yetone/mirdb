@@ -30,6 +30,8 @@ export function Hero({
         {/* Logo/Branding */}
         <div
           data-testid="hero-logo"
+          role="img"
+          aria-label="MirDB Logo - Persistent Key-Value Store"
           className="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-blue-600 text-white text-3xl font-bold shadow-lg"
         >
           M

@@ -34,7 +34,7 @@ export function PerformanceChart({ metrics, title }: PerformanceChartProps) {
                   {metric.value.toLocaleString()} {metric.unit}
                 </span>
               </div>
-              <div className={styles.barContainer} role="progressbar" aria-valuenow={metric.value} aria-valuemin={0} aria-valuemax={metric.maxValue}>
+              <div className={styles.barContainer} role="progressbar" aria-valuenow={metric.value} aria-valuemin={0} aria-valuemax={metric.maxValue} aria-label={`${metric.label}: ${metric.value.toLocaleString()} ${metric.unit}`}>
                 <div
                   className={styles.bar}
                   style={{ width: `${percentage}%` }}

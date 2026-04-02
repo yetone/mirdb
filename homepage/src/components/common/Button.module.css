@@ -19,12 +19,12 @@
 
 /* Variants */
 .primary {
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-dark, #2563eb);
   color: white;
 }
 
 .primary:hover {
-  background-color: var(--color-primary-dark);
+  background-color: #1d4ed8;
 }
 
 .secondary {

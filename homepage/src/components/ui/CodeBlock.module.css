@@ -73,11 +73,13 @@
   font-family: var(--font-mono);
   font-size: var(--font-size-sm);
   line-height: 1.6;
+  background-color: var(--color-code-bg, #1e1e1e);
 }
 
 .code {
   font-family: var(--font-mono);
   color: var(--color-code-text, #d4d4d4);
+  background-color: var(--color-code-bg, #1e1e1e);
 }
 
 .copiedFeedback {

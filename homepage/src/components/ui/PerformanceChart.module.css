@@ -45,7 +45,12 @@
 .metricValue {
   font-size: var(--font-size-sm);
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-primary-dark, #2563eb);
+}
+
+/* Dark mode: use lighter primary for better contrast against dark surface */
+[data-theme='dark'] .metricValue {
+  color: var(--color-primary, #60a5fa);
 }
 
 .barContainer {

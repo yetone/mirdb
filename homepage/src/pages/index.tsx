@@ -9,6 +9,7 @@ import { Features } from '@/components/sections/Features';
 import { QuickStart } from '@/components/sections/QuickStart';
 import { Performance } from '@/components/sections/Performance';
 import { Comparison } from '@/components/sections/Comparison';
+import { SkipLink } from '@/components/common/SkipLink';
 import { SITE_TITLE, SITE_DESCRIPTION } from '@/utils/constants';
 
 export default function Home() {
@@ -20,8 +21,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <SkipLink />
       <Navbar />
-      <main style={{ paddingTop: 'var(--navbar-height)' }}>
+      <main id="main-content" tabIndex={-1} style={{ paddingTop: 'var(--navbar-height)' }}>
         {/* Hero section - Scenario 1 */}
         <Hero />
 

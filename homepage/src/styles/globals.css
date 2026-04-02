@@ -63,7 +63,7 @@ code {
   border-radius: var(--radius-sm);
 }
 
-pre {
+pre:not([class*="CodeBlock"]) {
   font-family: var(--font-family-mono);
   background-color: var(--color-surface);
   padding: var(--spacing-lg);
