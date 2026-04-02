@@ -244,3 +244,179 @@ test.describe('Mobile Responsive Design (@mobile)', () => {
     expect(taglineFontSize).toBeGreaterThanOrEqual(16);
   });
 });
+
+/**
+ * Scenario 9: Tablet Responsive Design Tests
+ * Owner: Scenario 9 - Responsive Design - Tablet
+ * Tests that the homepage displays correctly on tablet devices (768px - 1024px)
+ */
+test.describe('Tablet Responsive Design (768px - 1024px)', () => {
+  test.beforeEach(async ({ page }) => {
+    // Set viewport to tablet size (768px width)
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.goto('/');
+    // Wait for page to be fully loaded
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('page renders with tablet-optimized layout at 768px viewport', async ({ page }) => {
+    // Verify the page is visible and rendered
+    await expect(page).toHaveTitle(/MirDB/i);
+
+    // Verify main sections are visible
+    const hero = page.locator('section').first();
+    await expect(hero).toBeVisible();
+
+    // Verify body is visible and page content is rendered
+    const body = page.locator('body');
+    await expect(body).toBeVisible();
+
+    // Verify no horizontal scroll at tablet width
+    const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
+    const viewportWidth = await page.evaluate(() => window.innerWidth);
+    expect(bodyWidth).toBeLessThanOrEqual(viewportWidth + 1); // +1 for rounding tolerance
+  });
+
+  test('navigation shows full menu on tablet (768px+)', async ({ page }) => {
+    // At 768px, the navigation should show the full menu (not hamburger)
+    const navList = page.locator('[role="menubar"]');
+    await expect(navList).toBeVisible();
+
+    // Verify navigation links are visible
+    const homeLink = page.getByTestId('nav-link-home');
+    const featuresLink = page.getByTestId('nav-link-features');
+    const docsLink = page.getByTestId('nav-link-docs');
+    const githubLink = page.getByTestId('nav-link-github');
+
+    await expect(homeLink).toBeVisible();
+    await expect(featuresLink).toBeVisible();
+    await expect(docsLink).toBeVisible();
+    await expect(githubLink).toBeVisible();
+
+    // Mobile menu button should be hidden at tablet size
+    const mobileMenuButton = page.getByTestId('mobile-menu-button');
+    await expect(mobileMenuButton).not.toBeVisible();
+  });
+
+  test('feature cards display in 2-column grid on tablet', async ({ page }) => {
+    // Set viewport to 800px - a proper tablet width (above the 768px breakpoint)
+    // CSS uses max-width: 768px for 1 column, so we need > 768px for 2 columns
+    await page.setViewportSize({ width: 800, height: 1024 });
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    // Scroll to features section
+    const featuresSection = page.locator('#features');
+    await featuresSection.scrollIntoViewIfNeeded();
+    await expect(featuresSection).toBeVisible();
+
+    // Get the features grid
+    const grid = page.getByTestId('features-grid');
+    await expect(grid).toBeVisible();
+
+    // Check that grid uses 2 columns at tablet size
+    const gridStyle = await grid.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return {
+        display: computed.display,
+        gridTemplateColumns: computed.gridTemplateColumns
+      };
+    });
+
+    expect(gridStyle.display).toBe('grid');
+    // At tablet (769px-1024px), CSS has grid-template-columns: repeat(2, 1fr)
+    // This results in 2 column tracks
+    const columnCount = gridStyle.gridTemplateColumns.split(' ').length;
+    expect(columnCount).toBe(2);
+  });
+
+  test('comparison table is readable without horizontal scroll on tablet', async ({ page }) => {
+    // Scroll to comparison section
+    const comparisonSection = page.locator('#comparison');
+    await comparisonSection.scrollIntoViewIfNeeded();
+    await expect(comparisonSection).toBeVisible();
+
+    // Get the comparison table wrapper
+    const tableWrapper = page.getByTestId('comparison-table');
+    await expect(tableWrapper).toBeVisible();
+
+    // Check that the table fits within the viewport (no horizontal scroll needed)
+    const tableInfo = await tableWrapper.evaluate((wrapper) => {
+      const table = wrapper.querySelector('table');
+      if (!table) return null;
+
+      return {
+        wrapperScrollWidth: wrapper.scrollWidth,
+        wrapperClientWidth: wrapper.clientWidth,
+        tableWidth: table.offsetWidth,
+        wrapperWidth: wrapper.offsetWidth,
+        hasHorizontalScroll: wrapper.scrollWidth > wrapper.clientWidth
+      };
+    });
+
+    expect(tableInfo).not.toBeNull();
+
+    // At 768px viewport, the table should fit without requiring horizontal scroll
+    // Table has min-width: 600px which is less than 768px
+    // Allow for some tolerance due to padding
+    expect(tableInfo!.hasHorizontalScroll).toBe(false);
+  });
+
+  test('all major sections are accessible on tablet', async ({ page }) => {
+    // Verify all major sections mentioned in REQ-9 are visible and accessible
+
+    // Hero section
+    const hero = page.locator('section').first();
+    await expect(hero).toBeVisible();
+
+    // Features section
+    const features = page.locator('#features');
+    await features.scrollIntoViewIfNeeded();
+    await expect(features).toBeVisible();
+
+    // Quick Start section
+    const quickstart = page.locator('#quickstart');
+    await quickstart.scrollIntoViewIfNeeded();
+    await expect(quickstart).toBeVisible();
+
+    // Performance section
+    const performance = page.locator('#performance');
+    await performance.scrollIntoViewIfNeeded();
+    await expect(performance).toBeVisible();
+
+    // Comparison section
+    const comparison = page.locator('#comparison');
+    await comparison.scrollIntoViewIfNeeded();
+    await expect(comparison).toBeVisible();
+
+    // Footer
+    const footer = page.locator('footer');
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeVisible();
+  });
+
+  test('tablet layout at 1024px (upper tablet boundary)', async ({ page }) => {
+    // Test at upper tablet boundary (1024px)
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    // Navigation should still show full menu
+    const navList = page.locator('[role="menubar"]');
+    await expect(navList).toBeVisible();
+
+    // Features grid should have 2 columns at exactly 1024px (max-width: 1024px applies)
+    const featuresSection = page.locator('#features');
+    await featuresSection.scrollIntoViewIfNeeded();
+
+    const grid = page.getByTestId('features-grid');
+    const gridStyle = await grid.evaluate((el) => {
+      const computed = window.getComputedStyle(el);
+      return computed.gridTemplateColumns;
+    });
+
+    // At exactly 1024px, the max-width: 1024px media query applies
+    const columnCount = gridStyle.split(' ').length;
+    expect(columnCount).toBe(2);
+  });
+});
