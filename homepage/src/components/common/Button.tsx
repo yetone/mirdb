@@ -10,6 +10,7 @@ export function Button({
   onClick,
   external,
   className,
+  'data-testid': dataTestId,
 }: ButtonProps) {
   const classNames = [
     styles.button,
@@ -25,6 +26,7 @@ export function Button({
         className={classNames}
         target={external ? '_blank' : undefined}
         rel={external ? 'noopener noreferrer' : undefined}
+        data-testid={dataTestId}
       >
         {children}
       </a>
@@ -32,7 +34,7 @@ export function Button({
   }
 
   return (
-    <button className={classNames} onClick={onClick} type="button">
+    <button className={classNames} onClick={onClick} type="button" data-testid={dataTestId}>
       {children}
     </button>
   );

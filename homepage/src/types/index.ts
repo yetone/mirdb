@@ -35,4 +35,18 @@ export interface ButtonProps {
   onClick?: () => void;
   external?: boolean;
   className?: string;
+  'data-testid'?: string;
+}
+
+export interface HeroProps {
+  title?: string;
+  tagline?: string;
+  ctaText?: string;
+  ctaHref?: string;
+}
+
+export interface FeatureCardProps {
+  icon: string;
+  title: string;
+  description: string;
 }

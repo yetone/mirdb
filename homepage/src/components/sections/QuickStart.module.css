@@ -1,0 +1,58 @@
+/**
+ * QuickStart section styles.
+ * Owner: Scenario 4 - Quick Start Section with Code Examples
+ */
+
+.section {
+  padding: var(--spacing-section) 0;
+  background-color: var(--color-background);
+}
+
+.heading {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.description {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-2xl);
+  line-height: 1.6;
+}
+
+.examplesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.exampleWrapper {
+  min-width: 0; /* Prevent overflow in grid */
+}
+
+/* Mobile: single column */
+@media (max-width: 768px) {
+  .examplesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heading {
+    font-size: var(--font-size-2xl);
+  }
+
+  .description {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Tablet: 2 columns maintained */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .examplesGrid {
+    gap: var(--spacing-md);
+  }
+}

@@ -1,0 +1,180 @@
+/**
+ * CodeBlock styles.
+ * Owner: Scenario 4 - Quick Start Section with Code Examples
+ */
+
+.codeBlock {
+  position: relative;
+  background-color: var(--color-code-bg, #1e1e1e);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-code-header, #2d2d2d);
+  border-bottom: 1px solid var(--color-code-border, #3d3d3d);
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-code-title, #a0a0a0);
+  font-family: var(--font-mono);
+}
+
+.copyButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid var(--color-code-border, #3d3d3d);
+  border-radius: var(--radius-sm);
+  color: var(--color-code-text, #d4d4d4);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.copyButton:hover {
+  background-color: var(--color-code-hover, #3d3d3d);
+  border-color: var(--color-code-text, #d4d4d4);
+}
+
+.copyButton:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.copyIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.copiedIcon {
+  color: var(--color-success, #22c55e);
+  font-weight: bold;
+}
+
+.copyText {
+  font-family: var(--font-mono);
+}
+
+.pre {
+  margin: 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+.code {
+  font-family: var(--font-mono);
+  color: var(--color-code-text, #d4d4d4);
+}
+
+.copiedFeedback {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-success, #22c55e);
+  color: white;
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-sm);
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* Prism.js syntax highlighting theme adjustments - scoped to code block */
+.code :global(.token.comment),
+.code :global(.token.prolog),
+.code :global(.token.doctype),
+.code :global(.token.cdata) {
+  color: #6a9955;
+}
+
+.code :global(.token.punctuation) {
+  color: #d4d4d4;
+}
+
+.code :global(.token.property),
+.code :global(.token.tag),
+.code :global(.token.boolean),
+.code :global(.token.number),
+.code :global(.token.constant),
+.code :global(.token.symbol) {
+  color: #b5cea8;
+}
+
+.code :global(.token.selector),
+.code :global(.token.attr-name),
+.code :global(.token.string),
+.code :global(.token.char),
+.code :global(.token.builtin) {
+  color: #ce9178;
+}
+
+.code :global(.token.operator),
+.code :global(.token.entity),
+.code :global(.token.url) {
+  color: #d4d4d4;
+}
+
+.code :global(.token.atrule),
+.code :global(.token.attr-value),
+.code :global(.token.keyword) {
+  color: #569cd6;
+}
+
+.code :global(.token.function),
+.code :global(.token.class-name) {
+  color: #dcdcaa;
+}
+
+.code :global(.token.regex),
+.code :global(.token.important),
+.code :global(.token.variable) {
+  color: #d16969;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .pre {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-xs);
+  }
+
+  .copyText {
+    display: none;
+  }
+}
