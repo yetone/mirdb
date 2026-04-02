@@ -50,3 +50,16 @@ export interface FeatureCardProps {
   title: string;
   description: string;
 }
+
+export interface PerformanceMetric {
+  label: string;
+  value: number;
+  unit: string;
+  maxValue: number;
+}
+
+export interface PerformanceContext {
+  hardware: string;
+  methodology: string;
+  note?: string;
+}
