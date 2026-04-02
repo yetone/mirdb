@@ -67,6 +67,16 @@
   opacity: 0.6;
 }
 
+.themeToggle {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .themeToggle {
+    display: flex;
+  }
+}
+
 .menuButton {
   display: flex;
   align-items: center;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container } from '@/components/common/Container';
 import { MobileMenu } from './MobileMenu';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { NAV_ITEMS, GITHUB_URL } from '@/utils/constants';
 import styles from './Navbar.module.css';
 
@@ -78,6 +79,8 @@ export function Navbar() {
               </li>
             ))}
           </ul>
+
+          <ThemeToggle className={styles.themeToggle} />
 
           <button
             className={styles.menuButton}
