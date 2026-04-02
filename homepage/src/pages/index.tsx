@@ -10,7 +10,7 @@ import { QuickStart } from '@/components/sections/QuickStart';
 import { Performance } from '@/components/sections/Performance';
 import { Comparison } from '@/components/sections/Comparison';
 import { SkipLink } from '@/components/common/SkipLink';
-import { SITE_TITLE, SITE_DESCRIPTION } from '@/utils/constants';
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, OG_IMAGE } from '@/utils/constants';
 
 export default function Home() {
   return (
@@ -20,6 +20,14 @@ export default function Home() {
         <meta name="description" content={SITE_DESCRIPTION} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href={SITE_URL} />
+
+        {/* Open Graph / Social Media Meta Tags */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:title" content={SITE_TITLE} />
+        <meta property="og:description" content={SITE_DESCRIPTION} />
+        <meta property="og:image" content={`${SITE_URL}${OG_IMAGE}`} />
       </Head>
       <SkipLink />
       <Navbar />

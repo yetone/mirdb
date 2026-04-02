@@ -6,7 +6,9 @@ export const GITHUB_URL = 'https://github.com/yetone/mirdb';
 export const DOCS_URL = 'https://github.com/yetone/mirdb#readme';
 
 export const SITE_TITLE = 'MirDB - Persistent Key-Value Store';
-export const SITE_DESCRIPTION = 'MirDB: A persistent key-value store with Memcached protocol support and LSM Tree architecture';
+export const SITE_DESCRIPTION = 'MirDB is a high-performance persistent key-value store with Memcached protocol support. Built on LSM Tree architecture for reliable disk persistence.';
+export const SITE_URL = 'https://mirdb.io';
+export const OG_IMAGE = '/og-image.png';
 
 export const BREAKPOINTS = {
   mobile: 640,
