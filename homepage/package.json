@@ -6,11 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "serve": "serve out -l 3000",
     "lint": "next lint",
     "test": "jest",
     "test:unit": "jest --testPathPattern=tests/unit",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:prod": "npm run build && playwright test"
   },
   "dependencies": {
     "@types/prismjs": "^1.26.6",
@@ -32,6 +34,7 @@
     "autoprefixer": "^10.4.27",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "serve": "^14.2.6",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.3.0"
   }
