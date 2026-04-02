@@ -4,6 +4,7 @@
 import Head from 'next/head';
 import { Hero } from '@/components/sections/Hero';
 import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 import { Features } from '@/components/sections/Features';
 import { QuickStart } from '@/components/sections/QuickStart';
 import { Performance } from '@/components/sections/Performance';
@@ -36,6 +37,8 @@ export default function Home() {
         {/* Comparison section - Scenario 6 */}
         <Comparison />
       </main>
+      {/* Footer section - Scenario 7 */}
+      <Footer />
     </>
   );
 }
