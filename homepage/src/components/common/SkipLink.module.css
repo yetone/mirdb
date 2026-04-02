@@ -1,0 +1,23 @@
+/**
+ * Skip Link styles
+ * Owner: Scenario 12 - Accessibility Compliance
+ */
+.skipLink {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  z-index: 9999;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 var(--radius-md) 0;
+  transition: top var(--transition-fast);
+}
+
+.skipLink:focus {
+  top: 0;
+  outline: 2px solid white;
+  outline-offset: 2px;
+}

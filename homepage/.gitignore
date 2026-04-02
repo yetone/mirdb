@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Next.js build
+.next/
+out/
+
+# Production
+build/
+
+# Testing
+test-results/
+playwright-report/
+coverage/
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+
+# Local env files
+.env*.local

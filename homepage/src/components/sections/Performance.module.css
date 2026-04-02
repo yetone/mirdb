@@ -1,0 +1,107 @@
+/**
+ * Performance section styles.
+ * Owner: Scenario 5 - Performance Section Display
+ */
+
+.section {
+  background-color: var(--color-background-alt, var(--color-background));
+  padding: var(--spacing-3xl) 0;
+}
+
+.heading {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  font-size: var(--font-size-lg);
+  text-align: center;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-2xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+  align-items: start;
+}
+
+.chartWrapper {
+  width: 100%;
+}
+
+.contextBox {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.contextHeading {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.contextList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.contextItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.contextLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.contextValue {
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.note {
+  margin-top: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted, var(--color-text-secondary));
+  font-style: italic;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+}
+
+@media (max-width: 1024px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: var(--font-size-2xl);
+  }
+
+  .subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .contextBox {
+    padding: var(--spacing-lg);
+  }
+}

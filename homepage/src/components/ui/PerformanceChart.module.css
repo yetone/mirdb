@@ -1,0 +1,80 @@
+/**
+ * PerformanceChart component styles.
+ * Owner: Scenario 5 - Performance Section Display
+ */
+
+.chart {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.chartTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.metricsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.metricHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metricLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.metricValue {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary-dark, #2563eb);
+}
+
+/* Dark mode: use lighter primary for better contrast against dark surface */
+[data-theme='dark'] .metricValue {
+  color: var(--color-primary, #60a5fa);
+}
+
+.barContainer {
+  height: 12px;
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light, var(--color-primary)));
+  border-radius: var(--border-radius-sm);
+  transition: width 0.5s ease-out;
+}
+
+@media (max-width: 768px) {
+  .chart {
+    padding: var(--spacing-lg);
+  }
+
+  .metricHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2xs);
+  }
+}
