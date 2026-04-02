@@ -420,3 +420,225 @@ test.describe('Tablet Responsive Design (768px - 1024px)', () => {
     expect(columnCount).toBe(2);
   });
 });
+
+// Desktop viewport dimensions (typical desktop)
+const DESKTOP_VIEWPORT = { width: 1280, height: 800 };
+
+/**
+ * Scenario 10: Desktop Responsive Design Tests
+ * Owner: Scenario 10 - Responsive Design - Desktop
+ */
+test.describe('Desktop Responsive Design (@desktop)', () => {
+  test.beforeEach(async ({ page }) => {
+    // Set desktop viewport before each test
+    await page.setViewportSize(DESKTOP_VIEWPORT);
+    await page.goto('/');
+    // Wait for page to fully load
+    await page.waitForLoadState('domcontentloaded');
+  });
+
+  test('TC1: Page renders with desktop layout and maximum content width', async ({ page }) => {
+    // Verify page renders at 1280px viewport width
+    const viewportWidth = await page.evaluate(() => window.innerWidth);
+    expect(viewportWidth).toBe(DESKTOP_VIEWPORT.width);
+
+    // Verify page has appropriate content width (not excessively wide)
+    const container = page.locator('.container, [class*="container"]').first();
+    const containerBox = await container.boundingBox();
+    expect(containerBox).not.toBeNull();
+
+    if (containerBox) {
+      // Container should have a reasonable max-width for readability
+      // Typically max-width is 1280px or less for content
+      expect(containerBox.width).toBeLessThanOrEqual(DESKTOP_VIEWPORT.width);
+      expect(containerBox.width).toBeGreaterThan(768); // Should utilize desktop space
+    }
+
+    // Verify no horizontal scrollbar on body
+    const hasHorizontalScroll = await page.evaluate(() => {
+      return document.body.scrollWidth > document.body.clientWidth;
+    });
+    expect(hasHorizontalScroll).toBe(false);
+  });
+
+  test('TC2: Full navigation bar visible with all links on desktop', async ({ page }) => {
+    // Desktop nav list should be visible
+    const navList = page.locator('header nav ul[role="menubar"]');
+    await expect(navList).toBeVisible();
+
+    // Verify all navigation links are visible
+    const homeLink = page.getByTestId('nav-link-home');
+    const featuresLink = page.getByTestId('nav-link-features');
+    const docsLink = page.getByTestId('nav-link-docs');
+    const githubLink = page.getByTestId('nav-link-github');
+
+    await expect(homeLink).toBeVisible();
+    await expect(featuresLink).toBeVisible();
+    await expect(docsLink).toBeVisible();
+    await expect(githubLink).toBeVisible();
+
+    // Hamburger menu button should be hidden on desktop
+    const hamburgerButton = page.getByTestId('mobile-menu-button');
+    await expect(hamburgerButton).toBeHidden();
+
+    // Verify nav links are horizontally aligned (not stacked)
+    const homeBox = await homeLink.boundingBox();
+    const featuresBox = await featuresLink.boundingBox();
+
+    expect(homeBox).not.toBeNull();
+    expect(featuresBox).not.toBeNull();
+
+    if (homeBox && featuresBox) {
+      // Links should be on the same row (similar Y position)
+      expect(Math.abs(homeBox.y - featuresBox.y)).toBeLessThan(10);
+      // Features link should be to the right of Home link
+      expect(featuresBox.x).toBeGreaterThan(homeBox.x);
+    }
+  });
+
+  test('TC3: Feature cards display in 3-column grid on desktop', async ({ page }) => {
+    // Scroll to Features section
+    await page.locator('#features').scrollIntoViewIfNeeded();
+
+    // Get the features grid
+    const featuresGrid = page.getByTestId('features-grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Check grid template columns - should be 3 columns on desktop (>1024px)
+    const gridColumns = await featuresGrid.evaluate((el) => {
+      return window.getComputedStyle(el).gridTemplateColumns;
+    });
+
+    // gridTemplateColumns will be like "400px 400px 400px" for 3 columns
+    const columnCount = gridColumns.split(' ').length;
+    expect(columnCount).toBe(3);
+
+    // Verify feature cards are arranged in rows (3 per row)
+    const featureCards = featuresGrid.locator('[data-testid="feature-card"]');
+    const cardCount = await featureCards.count();
+
+    // Should have at least 3 cards for a meaningful grid test
+    expect(cardCount).toBeGreaterThanOrEqual(3);
+
+    // Get positions of first three cards
+    const firstCardBox = await featureCards.nth(0).boundingBox();
+    const secondCardBox = await featureCards.nth(1).boundingBox();
+    const thirdCardBox = await featureCards.nth(2).boundingBox();
+
+    expect(firstCardBox).not.toBeNull();
+    expect(secondCardBox).not.toBeNull();
+    expect(thirdCardBox).not.toBeNull();
+
+    if (firstCardBox && secondCardBox && thirdCardBox) {
+      // All three cards should be on the same row (similar Y position)
+      expect(Math.abs(firstCardBox.y - secondCardBox.y)).toBeLessThan(5);
+      expect(Math.abs(secondCardBox.y - thirdCardBox.y)).toBeLessThan(5);
+
+      // Cards should be horizontally arranged
+      expect(secondCardBox.x).toBeGreaterThan(firstCardBox.x);
+      expect(thirdCardBox.x).toBeGreaterThan(secondCardBox.x);
+    }
+  });
+
+  test('TC4: Hero section uses full width with centered content', async ({ page }) => {
+    // Hero section should be visible
+    const heroSection = page.getByTestId('hero-section');
+    await expect(heroSection).toBeVisible();
+
+    // Get hero section dimensions
+    const heroBox = await heroSection.boundingBox();
+    expect(heroBox).not.toBeNull();
+
+    if (heroBox) {
+      // Hero should span full viewport width
+      expect(heroBox.width).toBeGreaterThanOrEqual(DESKTOP_VIEWPORT.width - 1);
+    }
+
+    // Verify content is centered
+    const heroHeadline = page.getByTestId('hero-headline');
+    const heroHeadlineBox = await heroHeadline.boundingBox();
+    expect(heroHeadlineBox).not.toBeNull();
+
+    if (heroHeadlineBox && heroBox) {
+      // Calculate center position of headline relative to viewport
+      const headlineCenter = heroHeadlineBox.x + heroHeadlineBox.width / 2;
+      const viewportCenter = DESKTOP_VIEWPORT.width / 2;
+
+      // Headline center should be close to viewport center (within 50px tolerance)
+      expect(Math.abs(headlineCenter - viewportCenter)).toBeLessThan(50);
+    }
+
+    // Verify tagline is also centered
+    const heroTagline = page.getByTestId('hero-tagline');
+    const heroTaglineBox = await heroTagline.boundingBox();
+    expect(heroTaglineBox).not.toBeNull();
+
+    if (heroTaglineBox) {
+      const taglineCenter = heroTaglineBox.x + heroTaglineBox.width / 2;
+      const viewportCenter = DESKTOP_VIEWPORT.width / 2;
+      expect(Math.abs(taglineCenter - viewportCenter)).toBeLessThan(50);
+    }
+
+    // Verify CTA button is visible and centered
+    const ctaButton = page.getByTestId('hero-cta');
+    await expect(ctaButton).toBeVisible();
+    const ctaBox = await ctaButton.boundingBox();
+    expect(ctaBox).not.toBeNull();
+
+    if (ctaBox) {
+      const ctaCenter = ctaBox.x + ctaBox.width / 2;
+      const viewportCenter = DESKTOP_VIEWPORT.width / 2;
+      expect(Math.abs(ctaCenter - viewportCenter)).toBeLessThan(50);
+    }
+  });
+
+  test('All sections utilize full desktop width appropriately', async ({ page }) => {
+    // Verify all main sections are present and properly displayed on desktop
+    const sections = [
+      { id: 'hero', testId: 'hero-section' },
+      { id: 'features', selector: '#features' },
+      { id: 'quickstart', selector: '#quickstart' },
+      { id: 'performance', selector: '#performance' },
+      { id: 'comparison', selector: '#comparison' },
+    ];
+
+    for (const section of sections) {
+      const sectionElement = section.testId
+        ? page.getByTestId(section.testId)
+        : page.locator(section.selector!);
+
+      await sectionElement.scrollIntoViewIfNeeded();
+      await expect(sectionElement).toBeVisible();
+
+      // Verify section spans appropriate width
+      const sectionBox = await sectionElement.boundingBox();
+      expect(sectionBox).not.toBeNull();
+
+      if (sectionBox) {
+        // Section should utilize most of the viewport width
+        expect(sectionBox.width).toBeGreaterThanOrEqual(DESKTOP_VIEWPORT.width * 0.9);
+      }
+    }
+  });
+
+  test('Desktop typography scales appropriately', async ({ page }) => {
+    // Check that text elements have appropriate font sizes on desktop
+    const headline = page.getByTestId('hero-headline');
+    const headlineFontSize = await headline.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).fontSize);
+    });
+
+    // Headline should be at least 32px on desktop for readability
+    // (larger than mobile minimum of 24px)
+    expect(headlineFontSize).toBeGreaterThanOrEqual(32);
+
+    // Check tagline font size
+    const tagline = page.getByTestId('hero-tagline');
+    const taglineFontSize = await tagline.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).fontSize);
+    });
+
+    // Tagline should be at least 16px on desktop for readability
+    expect(taglineFontSize).toBeGreaterThanOrEqual(16);
+  });
+});
