@@ -7,6 +7,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Features } from '@/components/sections/Features';
 import { QuickStart } from '@/components/sections/QuickStart';
 import { Performance } from '@/components/sections/Performance';
+import { Comparison } from '@/components/sections/Comparison';
 import { SITE_TITLE, SITE_DESCRIPTION } from '@/utils/constants';
 
 export default function Home() {
@@ -33,12 +34,7 @@ export default function Home() {
         <Performance />
 
         {/* Comparison section - Scenario 6 */}
-        <section id="comparison">
-          <div className="container">
-            <h2 className="section-heading">Comparison</h2>
-            <p className="text-center">Coming soon...</p>
-          </div>
-        </section>
+        <Comparison />
       </main>
     </>
   );

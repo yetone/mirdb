@@ -1,0 +1,64 @@
+/**
+ * Styles for Comparison section.
+ * Owner: Scenario 6 - Comparison Section
+ */
+
+.section {
+  padding: 4rem 0;
+  background: var(--bg-primary, #ffffff);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+  margin: 0 0 1rem 0;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary, #495057);
+  margin: 0 0 0.5rem 0;
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--text-muted, #6c757d);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.tableContainer {
+  margin-top: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .section {
+    padding: 3rem 0;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+  }
+}

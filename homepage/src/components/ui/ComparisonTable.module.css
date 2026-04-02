@@ -1,0 +1,111 @@
+/**
+ * Styles for ComparisonTable component.
+ * Owner: Scenario 6 - Comparison Section
+ */
+
+.tableWrapper {
+  overflow-x: auto;
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+  background: var(--bg-secondary, #f8f9fa);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.headerRow {
+  background: var(--bg-tertiary, #e9ecef);
+}
+
+.headerCell {
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary, #212529);
+  border-bottom: 2px solid var(--border-color, #dee2e6);
+}
+
+.headerCell:first-child {
+  text-align: left;
+  padding-left: 1.5rem;
+}
+
+.highlightedHeader {
+  background: var(--primary-color, #0066cc);
+  color: white;
+}
+
+.featureRow {
+  border-bottom: 1px solid var(--border-color, #dee2e6);
+  transition: background-color 0.2s ease;
+}
+
+.featureRow:hover {
+  background: var(--bg-hover, #f1f3f4);
+}
+
+.featureRow:last-child {
+  border-bottom: none;
+}
+
+.featureCell {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-secondary, #495057);
+}
+
+.featureCell:first-child {
+  text-align: left;
+  padding-left: 1.5rem;
+  font-weight: 500;
+  color: var(--text-primary, #212529);
+}
+
+.highlightedCell {
+  background: rgba(0, 102, 204, 0.05);
+}
+
+.featureIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.check {
+  color: #28a745;
+}
+
+.cross {
+  color: #dc3545;
+}
+
+.text {
+  font-size: 0.85rem;
+  color: var(--text-muted, #6c757d);
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .table {
+    font-size: 0.875rem;
+  }
+
+  .headerCell,
+  .featureCell {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .featureCell:first-child,
+  .headerCell:first-child {
+    padding-left: 0.75rem;
+  }
+}
