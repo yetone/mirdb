@@ -1,0 +1,39 @@
+/**
+ * Features section styles.
+ * Owner: Scenario 3 - Features Section Display
+ */
+
+.section {
+  background-color: var(--color-background);
+  padding: var(--spacing-3xl) 0;
+}
+
+.heading {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  color: var(--color-text-primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .heading {
+    font-size: var(--font-size-2xl);
+  }
+}

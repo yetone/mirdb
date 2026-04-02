@@ -49,3 +49,9 @@ export interface HeroProps {
   ctaText?: string;
   ctaHref?: string;
 }
+
+export interface FeatureCardProps {
+  icon: string;
+  title: string;
+  description: string;
+}

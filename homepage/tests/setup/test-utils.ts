@@ -2,6 +2,7 @@
  * Test utilities and custom render functions.
  * Owner: First Builder (Shared)
  */
+import '@testing-library/jest-dom';
 import React, { ReactElement } from 'react';
 import { render, RenderOptions, screen, fireEvent, waitFor } from '@testing-library/react';
 

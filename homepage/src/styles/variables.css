@@ -1,15 +1,14 @@
-/**
- * CSS custom properties for colors, spacing, typography.
- */
-
 :root {
   /* Colors - Light Theme */
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
-  --color-secondary: #4b5563;
+  --color-primary-dark: #2563eb;
+  --color-secondary: #6366f1;
   --color-background: #ffffff;
   --color-surface: #f9fafb;
   --color-text: #111827;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
   --color-text-muted: #6b7280;
   --color-border: #e5e7eb;
 
@@ -25,6 +24,8 @@
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, monospace;
 
   /* Font Sizes */
   --text-xs: 0.75rem;
@@ -36,6 +37,14 @@
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
   --text-5xl: 3rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
 
   /* Border Radius */
   --radius-sm: 0.25rem;
@@ -48,16 +57,34 @@
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow: 300ms ease;
+
+  /* Container */
+  --container-max-width: 1200px;
+  --container-padding: 1rem;
 }
 
 /* Dark Theme */
 [data-theme='dark'] {
   --color-primary: #3b82f6;
   --color-primary-hover: #60a5fa;
+  --color-primary-dark: #3b82f6;
   --color-secondary: #9ca3af;
   --color-background: #111827;
   --color-surface: #1f2937;
   --color-text: #f9fafb;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
   --color-text-muted: #9ca3af;
   --color-border: #374151;
 }
