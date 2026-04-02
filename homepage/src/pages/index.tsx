@@ -3,6 +3,7 @@
  */
 import Head from 'next/head';
 import { Hero } from '@/components/sections/Hero';
+import { Navbar } from '@/components/layout/Navbar';
 import { Features } from '@/components/sections/Features';
 import { SITE_TITLE, SITE_DESCRIPTION } from '@/utils/constants';
 
@@ -15,8 +16,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main>
+      <Navbar />
+      <main style={{ paddingTop: 'var(--navbar-height)' }}>
         {/* Hero section - Scenario 1 */}
         <Hero />
 

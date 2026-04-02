@@ -30,8 +30,8 @@ export const HERO_CONTENT = {
 } as const;
 
 export const NAV_ITEMS = [
-  { label: 'Home', href: '#hero' },
-  { label: 'Features', href: '#features' },
-  { label: 'Quick Start', href: '#quickstart' },
+  { label: 'Home', href: '#', external: false },
+  { label: 'Features', href: '#features', external: false },
+  { label: 'Docs', href: '#quickstart', external: false },
   { label: 'GitHub', href: GITHUB_URL, external: true },
 ];

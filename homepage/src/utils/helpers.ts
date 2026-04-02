@@ -9,6 +9,9 @@ export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
+// Alias for cn
+export const classNames = cn;
+
 /**
  * Determines if a URL is external (absolute URL).
  */
