@@ -1123,10 +1123,106 @@ END</span></code></pre>
     </section>
 
     <!-- Performance Section (Scenario 8) -->
-    <section id="performance">
+    <section id="performance" class="performance" aria-labelledby="performance-title">
       <div class="container">
-        <h2 class="section-title">Performance</h2>
-        <!-- Performance content placeholder - to be implemented by Scenario 8 -->
+        <div class="section-header">
+          <h2 id="performance-title" class="section-title">Performance</h2>
+          <p class="section-subtitle">MirDB is designed for high-throughput write workloads while maintaining efficient reads through its LSM Tree architecture.</p>
+        </div>
+
+        <!-- Performance Benchmarks Grid -->
+        <div class="performance-benchmarks benchmark-grid">
+          <!-- Write Throughput -->
+          <article class="benchmark-metric performance-card metric-card" data-metric="write-throughput">
+            <div class="metric-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                <polyline points="16 7 22 7 22 13"/>
+              </svg>
+            </div>
+            <h3 class="metric-title">High Write Throughput</h3>
+            <p class="metric-value">Sequential Writes</p>
+            <p class="metric-description">
+              LSM Tree architecture optimizes for write-heavy workloads. All writes go to the in-memory memtable first, then batch-flush to disk via compaction.
+            </p>
+          </article>
+
+          <!-- Read Latency -->
+          <article class="benchmark-metric performance-card metric-card" data-metric="read-latency">
+            <div class="metric-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <h3 class="metric-title">Low Read Latency</h3>
+            <p class="metric-value">In-Memory + Bloom Filter</p>
+            <p class="metric-description">
+              Hot data served from memtable. Cuckoo filters provide fast negative lookups, minimizing unnecessary disk reads for missing keys.
+            </p>
+          </article>
+
+          <!-- Durability -->
+          <article class="benchmark-metric performance-card metric-card" data-metric="durability">
+            <div class="metric-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3 class="metric-title">Durability</h3>
+            <p class="metric-value">Write-Ahead Log</p>
+            <p class="metric-description">
+              Every write is recorded to the Write-Ahead Log before acknowledgment, ensuring data survives crashes and power failures.
+            </p>
+          </article>
+
+          <!-- Space Efficiency -->
+          <article class="benchmark-metric performance-card metric-card" data-metric="space-efficiency">
+            <div class="metric-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </div>
+            <h3 class="metric-title">Space Efficient</h3>
+            <p class="metric-value">Compaction + Compression</p>
+            <p class="metric-description">
+              Background compaction reclaims deleted keys and merges files. Snappy compression reduces storage footprint without sacrificing speed.
+            </p>
+          </article>
+        </div>
+
+        <!-- Performance Characteristics -->
+        <div class="performance-characteristics">
+          <h3 class="performance-subsection-title">Performance Characteristics</h3>
+          <div class="characteristics-grid">
+            <div class="characteristic-item">
+              <span class="characteristic-label">Write Pattern</span>
+              <span class="characteristic-value">Optimized for sequential writes</span>
+            </div>
+            <div class="characteristic-item">
+              <span class="characteristic-label">Read Pattern</span>
+              <span class="characteristic-value">Fast point lookups via bloom filters</span>
+            </div>
+            <div class="characteristic-item">
+              <span class="characteristic-label">Memory Usage</span>
+              <span class="characteristic-value">Configurable memtable size (default 4MB)</span>
+            </div>
+            <div class="characteristic-item">
+              <span class="characteristic-label">Compression</span>
+              <span class="characteristic-value">Snappy compression for SSTables and WAL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance Note -->
+        <div class="performance-note">
+          <p>
+            <strong>Note:</strong> Actual performance varies based on hardware, configuration, and workload characteristics.
+            Use the <code>INFO</code> command to monitor real-time database metrics and SSTable levels.
+          </p>
+        </div>
       </div>
     </section>
 

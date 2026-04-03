@@ -703,8 +703,91 @@ test.describe('Configuration Section (Scenario 7)', () => {
 });
 
 test.describe('Performance Section (Scenario 8)', () => {
-  test.skip('Performance section displays benchmarks', async ({ page }) => {
-    // To be implemented by Scenario 8
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Performance section exists with clear heading', async ({ page }) => {
+    // Navigate to Performance section
+    const performanceSection = page.locator('#performance');
+    await expect(performanceSection).toBeVisible();
+
+    // Check for clear heading
+    const heading = performanceSection.locator('h2.section-title');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText('Performance');
+  });
+
+  test('TC2: Verify performance content exists', async ({ page }) => {
+    const performanceSection = page.locator('#performance');
+    await expect(performanceSection).toBeVisible();
+
+    // Section should contain performance information, benchmarks, or placeholder
+    // Check for either benchmark data or placeholder text
+    const sectionText = await performanceSection.textContent();
+
+    // Should have meaningful content about performance
+    const hasPerformanceContent =
+      sectionText.toLowerCase().includes('benchmark') ||
+      sectionText.toLowerCase().includes('throughput') ||
+      sectionText.toLowerCase().includes('latency') ||
+      sectionText.toLowerCase().includes('operations') ||
+      sectionText.toLowerCase().includes('performance');
+
+    expect(hasPerformanceContent).toBe(true);
+  });
+
+  test('TC3: Check for comparison charts if present', async ({ page }) => {
+    const performanceSection = page.locator('#performance');
+    await expect(performanceSection).toBeVisible();
+
+    // If benchmarks exist, they should be presented clearly
+    // Check for benchmark metrics container or chart elements
+    const benchmarkContainer = performanceSection.locator('.performance-benchmarks, .benchmark-grid, .performance-metrics');
+
+    // Check if benchmarks are present
+    const benchmarksExist = await benchmarkContainer.count() > 0;
+
+    if (benchmarksExist) {
+      // Verify benchmarks are presented with context
+      await expect(benchmarkContainer).toBeVisible();
+
+      // Should have metric cards or chart elements
+      const metricCards = performanceSection.locator('.benchmark-metric, .performance-card, .metric-card');
+      const metricCount = await metricCards.count();
+
+      // If we have a benchmark container, it should have metrics
+      expect(metricCount).toBeGreaterThan(0);
+    } else {
+      // If no explicit benchmarks, check for placeholder or informational content
+      const sectionContent = await performanceSection.textContent();
+      expect(sectionContent.length).toBeGreaterThan(50); // Should have meaningful content
+    }
+  });
+
+  test('Performance section is accessible via navigation or scrolling', async ({ page }) => {
+    // Scroll to performance section
+    const performanceSection = page.locator('#performance');
+    await performanceSection.scrollIntoViewIfNeeded();
+
+    // Wait for scroll
+    await page.waitForTimeout(300);
+
+    // Verify section is visible
+    await expect(performanceSection).toBeInViewport();
+  });
+
+  test('Performance section has proper styling', async ({ page }) => {
+    const performanceSection = page.locator('#performance');
+    await expect(performanceSection).toBeVisible();
+
+    // Check that section has a container for content
+    const container = performanceSection.locator('.container');
+    await expect(container).toBeVisible();
+
+    // Verify section has proper padding/spacing (visual check)
+    const sectionBox = await performanceSection.boundingBox();
+    expect(sectionBox.height).toBeGreaterThan(100); // Meaningful height
   });
 });
 
