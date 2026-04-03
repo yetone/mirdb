@@ -1,0 +1,16 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - Static site for persistent key-value store documentation",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:unit": "npx jest tests/unit",
+    "test:e2e": "npx playwright test tests/e2e",
+    "serve": "npx serve ."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "jest": "^29.0.0",
+    "jsdom": "^22.0.0"
+  }
+}

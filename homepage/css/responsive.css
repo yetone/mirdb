@@ -1,0 +1,42 @@
+/**
+ * Responsive Styles for MirDB Homepage
+ * Owner: Scenario 11 - Responsive Design
+ *
+ * Expected breakpoints:
+ * - Mobile: max-width 480px
+ * - Tablet: max-width 768px
+ * - Laptop: max-width 1024px
+ * - Desktop: min-width 1025px
+ *
+ * Placeholder - to be implemented by Scenario 11
+ */
+
+/* Mobile navigation - base styles needed for Scenario 1 */
+@media (max-width: 768px) {
+  .nav__list {
+    display: none;
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .nav__list.active {
+    display: flex;
+  }
+
+  .nav__link {
+    padding: var(--spacing-md);
+    width: 100%;
+    text-align: center;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+  }
+}

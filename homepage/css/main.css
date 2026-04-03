@@ -1,0 +1,385 @@
+/**
+ * Main Stylesheet for MirDB Homepage
+ *
+ * Imports: variables.css
+ *
+ * Sections (in order):
+ * - Reset/Base styles
+ * - Header and Navigation
+ * - Hero Section
+ * - Features Section
+ * - Quick Start Section
+ * - Architecture Section
+ * - API Reference Section
+ * - Configuration Section
+ * - Performance Section
+ * - Contributing Section
+ * - Footer Section
+ * - Code Block Styles
+ * - Utility Classes
+ */
+
+@import url('variables.css');
+
+/* ==========================================================================
+   Reset/Base Styles
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+section {
+  padding: var(--spacing-3xl) 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+
+/* ==========================================================================
+   Header and Navigation (Scenario 1)
+   ========================================================================== */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background-color: var(--color-bg-primary);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 1000;
+  transition: background-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.header.scrolled {
+  box-shadow: var(--shadow-md);
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.header__logo {
+  height: 40px;
+  width: auto;
+}
+
+.header__title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.nav__link {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  padding: var(--spacing-sm) 0;
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.nav__link:hover,
+.nav__link.active {
+  color: var(--color-primary);
+}
+
+.nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+  transform: scaleX(0);
+  transition: transform var(--transition-fast);
+}
+
+.nav__link:hover::after,
+.nav__link.active::after {
+  transform: scaleX(1);
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  transition: background-color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+.theme-toggle__icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile menu toggle button */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  gap: 5px;
+}
+
+.mobile-menu-toggle__bar {
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-text-primary);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.mobile-menu-toggle.active .mobile-menu-toggle__bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active .mobile-menu-toggle__bar:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.active .mobile-menu-toggle__bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ==========================================================================
+   Hero Section (Scenario 2)
+   ========================================================================== */
+
+.hero {
+  padding-top: calc(var(--header-height) + var(--spacing-3xl));
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-secondary);
+}
+
+/* Hero placeholder - to be implemented by Scenario 2 */
+
+/* ==========================================================================
+   Features Section (Scenario 3)
+   ========================================================================== */
+
+#features {
+  background-color: var(--color-bg-primary);
+}
+
+/* Features placeholder - to be implemented by Scenario 3 */
+
+/* ==========================================================================
+   Quick Start Section (Scenario 4)
+   ========================================================================== */
+
+#quick-start {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Quick Start placeholder - to be implemented by Scenario 4 */
+
+/* ==========================================================================
+   Architecture Section (Scenario 5)
+   ========================================================================== */
+
+#architecture {
+  background-color: var(--color-bg-primary);
+}
+
+/* Architecture placeholder - to be implemented by Scenario 5 */
+
+/* ==========================================================================
+   API Reference Section (Scenario 6)
+   ========================================================================== */
+
+#api-reference {
+  background-color: var(--color-bg-secondary);
+}
+
+/* API Reference placeholder - to be implemented by Scenario 6 */
+
+/* ==========================================================================
+   Configuration Section (Scenario 7)
+   ========================================================================== */
+
+#configuration {
+  background-color: var(--color-bg-primary);
+}
+
+/* Configuration placeholder - to be implemented by Scenario 7 */
+
+/* ==========================================================================
+   Performance Section (Scenario 8)
+   ========================================================================== */
+
+#performance {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Performance placeholder - to be implemented by Scenario 8 */
+
+/* ==========================================================================
+   Contributing Section (Scenario 9)
+   ========================================================================== */
+
+#contributing {
+  background-color: var(--color-bg-primary);
+}
+
+/* Contributing placeholder - to be implemented by Scenario 9 */
+
+/* ==========================================================================
+   Footer Section (Scenario 10)
+   ========================================================================== */
+
+.footer {
+  background-color: var(--color-bg-tertiary);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-xl) 0;
+}
+
+/* Footer placeholder - to be implemented by Scenario 10 */
+
+/* ==========================================================================
+   Code Block Styles (Scenario 17)
+   ========================================================================== */
+
+pre, code {
+  font-family: var(--font-family-mono);
+}
+
+code {
+  background-color: var(--color-bg-tertiary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+pre {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.section-title {
+  margin-bottom: var(--spacing-xl);
+}
