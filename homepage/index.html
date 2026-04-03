@@ -94,10 +94,81 @@
     </section>
 
     <!-- Features Section (Scenario 3) -->
-    <section id="features">
+    <section id="features" class="features" aria-labelledby="features-title">
       <div class="container">
-        <h2 class="section-title">Features</h2>
-        <!-- Features content placeholder - to be implemented by Scenario 3 -->
+        <div class="section-header">
+          <h2 id="features-title" class="section-title">Key Features</h2>
+          <p class="section-subtitle">MirDB combines the simplicity of Memcached with the durability of persistent storage.</p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Feature 1: Memcached Protocol -->
+          <article class="feature-card" data-feature="memcached-protocol">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">
+              Full compatibility with the standard memcached text protocol. Use your existing memcached clients and tools seamlessly - no code changes required. Supports SET, GET, DELETE, and more.
+            </p>
+          </article>
+
+          <!-- Feature 2: Persistence -->
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Persistence</h3>
+            <p class="feature-description">
+              Unlike traditional memcached, MirDB persists your data to disk using SSTables (Sorted String Tables). Your data survives restarts and crashes with write-ahead logging for durability.
+            </p>
+          </article>
+
+          <!-- Feature 3: LSM Tree Architecture -->
+          <article class="feature-card" data-feature="lsm-tree">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">
+              Built on a Log-Structured Merge-tree design with in-memory memtables and tiered SSTable levels. Optimized for write-heavy workloads while maintaining efficient reads through level organization.
+            </p>
+          </article>
+
+          <!-- Feature 4: Compaction -->
+          <article class="feature-card" data-feature="compaction">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Compaction</h3>
+            <p class="feature-description">
+              Automatic background compaction maintains optimal performance. Minor compaction flushes memtables to Level 0, while major compaction merges SSTables across levels to reclaim space.
+            </p>
+          </article>
+        </div>
+
+        <!-- Usage Demo -->
+        <div class="features-demo">
+          <h3 class="features-demo-title">See it in Action</h3>
+          <div class="usage-gif-container">
+            <img src="assets/usage.gif" alt="MirDB usage demonstration showing key-value operations" class="usage-gif" id="usage-gif">
+          </div>
+        </div>
       </div>
     </section>
 

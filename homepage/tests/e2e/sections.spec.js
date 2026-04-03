@@ -2,7 +2,7 @@
  * Content Sections E2E Tests
  * Owner: Scenarios 2-9, 19 - All content sections
  *
- * Expected tests:
+ * Tests:
  * - Hero section content and CTA
  * - Features section cards and usage.gif
  * - Quick Start code blocks
@@ -15,6 +15,10 @@
  */
 
 const { test, expect } = require('@playwright/test');
+
+// ============================================================================
+// Hero Section Tests (Scenario 2)
+// ============================================================================
 
 test.describe('Hero Section (Scenario 2)', () => {
   test.beforeEach(async ({ page }) => {
@@ -101,12 +105,164 @@ test.describe('Hero Section (Scenario 2)', () => {
   });
 });
 
-// Placeholder tests for other sections (to be implemented by respective scenarios)
+// ============================================================================
+// Features Section Tests (Scenario 3)
+// ============================================================================
+
 test.describe('Features Section (Scenario 3)', () => {
-  test.skip('Features section displays capability cards', async ({ page }) => {
-    // To be implemented by Scenario 3
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('should have features section visible', async ({ page }) => {
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+  });
+
+  test('should have at least 4 feature cards covering key capabilities', async ({ page }) => {
+    const featureCards = page.locator('.feature-card');
+    const count = await featureCards.count();
+
+    // Test Case 1: At least 4 feature cards present
+    expect(count).toBeGreaterThanOrEqual(4);
+
+    // Verify the 4 key features are present
+    const memcachedCard = page.locator('.feature-card[data-feature="memcached-protocol"]');
+    const persistenceCard = page.locator('.feature-card[data-feature="persistence"]');
+    const lsmTreeCard = page.locator('.feature-card[data-feature="lsm-tree"]');
+    const compactionCard = page.locator('.feature-card[data-feature="compaction"]');
+
+    await expect(memcachedCard).toBeVisible();
+    await expect(persistenceCard).toBeVisible();
+    await expect(lsmTreeCard).toBeVisible();
+    await expect(compactionCard).toBeVisible();
+  });
+
+  test('should have Memcached Protocol feature with correct content', async ({ page }) => {
+    // Test Case 2: Verify Memcached Protocol feature content
+    const memcachedCard = page.locator('.feature-card[data-feature="memcached-protocol"]');
+    await expect(memcachedCard).toBeVisible();
+
+    // Check title
+    const title = memcachedCard.locator('.feature-title');
+    await expect(title).toContainText('Memcached Protocol');
+
+    // Check description mentions memcached text protocol compatibility
+    const description = memcachedCard.locator('.feature-description');
+    const descriptionText = await description.textContent();
+    expect(descriptionText.toLowerCase()).toContain('memcached');
+    expect(descriptionText.toLowerCase()).toMatch(/protocol|compatibility|compatible/);
+  });
+
+  test('should have Persistence feature with correct content', async ({ page }) => {
+    // Test Case 3: Verify Persistence feature content
+    const persistenceCard = page.locator('.feature-card[data-feature="persistence"]');
+    await expect(persistenceCard).toBeVisible();
+
+    // Check title
+    const title = persistenceCard.locator('.feature-title');
+    await expect(title).toContainText('Persistence');
+
+    // Check description mentions disk persistence and SSTables
+    const description = persistenceCard.locator('.feature-description');
+    const descriptionText = await description.textContent();
+    expect(descriptionText.toLowerCase()).toMatch(/disk|persist/);
+    expect(descriptionText.toLowerCase()).toContain('sstable');
+  });
+
+  test('should have LSM Tree feature with correct content', async ({ page }) => {
+    // Test Case 4: Verify LSM Tree feature content
+    const lsmTreeCard = page.locator('.feature-card[data-feature="lsm-tree"]');
+    await expect(lsmTreeCard).toBeVisible();
+
+    // Check title
+    const title = lsmTreeCard.locator('.feature-title');
+    await expect(title).toContainText('LSM Tree');
+
+    // Check description mentions Log-Structured Merge-tree, memtables, and SSTable levels
+    const description = lsmTreeCard.locator('.feature-description');
+    const descriptionText = await description.textContent();
+    expect(descriptionText.toLowerCase()).toMatch(/log-structured|merge-tree|lsm/);
+    expect(descriptionText.toLowerCase()).toContain('memtable');
+    expect(descriptionText.toLowerCase()).toMatch(/sstable|level/);
+  });
+
+  test('should have usage.gif loaded and visible in Features section', async ({ page }) => {
+    // Test Case 5: Check usage.gif presence
+    const usageGif = page.locator('#usage-gif');
+    await expect(usageGif).toBeVisible();
+
+    // Verify the image source contains usage.gif
+    const src = await usageGif.getAttribute('src');
+    expect(src).toContain('usage.gif');
+
+    // Wait for the image to load (it's a large GIF ~6MB)
+    await page.waitForFunction(() => {
+      const img = document.getElementById('usage-gif');
+      return img && img.complete && img.naturalWidth > 0;
+    }, { timeout: 30000 });
+
+    // Verify the image is properly loaded (naturalWidth > 0)
+    const isLoaded = await usageGif.evaluate((img) => {
+      return img.complete && img.naturalWidth > 0;
+    });
+    expect(isLoaded).toBe(true);
+  });
+
+  test('should have icons/visual elements on each feature card', async ({ page }) => {
+    // Test Case 6: Verify feature cards have icons
+    const featureCards = page.locator('.feature-card');
+    const count = await featureCards.count();
+
+    for (let i = 0; i < count; i++) {
+      const card = featureCards.nth(i);
+      const icon = card.locator('.feature-icon');
+
+      // Each card should have an icon container
+      await expect(icon).toBeVisible();
+
+      // The icon should contain an SVG element
+      const svg = icon.locator('svg');
+      await expect(svg).toBeVisible();
+    }
+  });
+
+  test('should navigate to features section from anchor link', async ({ page }) => {
+    // Click the Features link in navigation
+    await page.locator('a[href="#features"]').first().click();
+
+    // Wait for scroll to complete
+    await page.waitForTimeout(500);
+
+    // Verify the features section is in view
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeInViewport();
+  });
+
+  test('should have proper section header', async ({ page }) => {
+    const featuresSection = page.locator('#features');
+    const sectionTitle = featuresSection.locator('.section-title');
+    const sectionSubtitle = featuresSection.locator('.section-subtitle');
+
+    await expect(sectionTitle).toContainText('Features');
+    await expect(sectionSubtitle).toBeVisible();
+  });
+
+  test('should have usage demo section', async ({ page }) => {
+    const demoSection = page.locator('.features-demo');
+    await expect(demoSection).toBeVisible();
+
+    const demoTitle = demoSection.locator('.features-demo-title');
+    await expect(demoTitle).toContainText('See it in Action');
+
+    const gifContainer = demoSection.locator('.usage-gif-container');
+    await expect(gifContainer).toBeVisible();
   });
 });
+
+// ============================================================================
+// Placeholder tests for other sections
+// ============================================================================
 
 test.describe('Quick Start Section (Scenario 4)', () => {
   test.skip('Quick Start section shows installation commands', async ({ page }) => {
