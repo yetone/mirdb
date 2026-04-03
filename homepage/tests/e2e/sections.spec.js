@@ -378,8 +378,120 @@ test.describe('API Reference Section (Scenario 6)', () => {
 });
 
 test.describe('Configuration Section (Scenario 7)', () => {
-  test.skip('Configuration section shows parameters', async ({ page }) => {
-    // To be implemented by Scenario 7
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Configuration section exists with clear heading', async ({ page }) => {
+    // Navigate to Configuration section
+    const configSection = page.locator('#configuration');
+    await expect(configSection).toBeVisible();
+
+    // Check for clear heading
+    const heading = configSection.locator('h2.section-title');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText('Configuration');
+  });
+
+  test('TC2: Network parameters documented with addr default', async ({ page }) => {
+    const configSection = page.locator('#configuration');
+
+    // Check for network parameters table
+    const networkTable = configSection.locator('.config-table--network').first();
+    await expect(networkTable).toBeVisible();
+
+    // Verify addr parameter is documented
+    const addrRow = configSection.locator('tr:has-text("addr")').first();
+    await expect(addrRow).toBeVisible();
+
+    // Verify default value 0.0.0.0:12333
+    const configText = await configSection.textContent();
+    expect(configText).toContain('addr');
+    expect(configText).toContain('0.0.0.0:12333');
+  });
+
+  test('TC3: Storage parameters documented with work_dir and max_level', async ({ page }) => {
+    const configSection = page.locator('#configuration');
+
+    // Verify storage parameters are documented
+    const configText = await configSection.textContent();
+
+    // Check work_dir parameter
+    expect(configText).toContain('work_dir');
+
+    // Check max_level parameter
+    expect(configText).toContain('max_level');
+
+    // Check defaults are mentioned
+    expect(configText.toLowerCase()).toMatch(/\/tmp\/mirdb|work_dir/i);
+    expect(configText).toMatch(/7|max_level/);
+  });
+
+  test('TC4: Memtable parameters documented with mem_table_max_size 4MB default', async ({ page }) => {
+    const configSection = page.locator('#configuration');
+
+    // Verify memtable parameters are documented
+    const configText = await configSection.textContent();
+
+    // Check mem_table_max_size parameter
+    expect(configText).toContain('mem_table_max_size');
+
+    // Check 4MB default
+    expect(configText).toMatch(/4\s*M|4MB/i);
+  });
+
+  test('TC5: SSTable parameters documented with sst_max_size 100MB and block_size 4KB', async ({ page }) => {
+    const configSection = page.locator('#configuration');
+
+    // Verify SSTable parameters are documented
+    const configText = await configSection.textContent();
+
+    // Check sst_max_size parameter with 100MB default
+    expect(configText).toContain('sst_max_size');
+    expect(configText).toMatch(/100\s*M|100MB/i);
+
+    // Check block_size parameter with 4KB default
+    expect(configText).toContain('block_size');
+    expect(configText).toMatch(/4\s*K|4KB/i);
+  });
+
+  test('TC6: Example TOML configuration is displayed in code block', async ({ page }) => {
+    const configSection = page.locator('#configuration');
+
+    // Check for code block with TOML configuration
+    const tomlCodeBlock = configSection.locator('.code-block[data-language="toml"]').first();
+    await expect(tomlCodeBlock).toBeVisible();
+
+    // Verify it contains TOML-style configuration
+    const codeContent = await tomlCodeBlock.textContent();
+    expect(codeContent).toContain('addr');
+    expect(codeContent).toContain('work_dir');
+    expect(codeContent).toContain('=');
+  });
+
+  test('TC7: Size units (K, M, G, T) are documented', async ({ page }) => {
+    const configSection = page.locator('#configuration');
+
+    // Verify size units are explained
+    const configText = await configSection.textContent();
+
+    // Check that size units are documented
+    expect(configText).toMatch(/K.*kilobyte|kilobyte.*K/i);
+    expect(configText).toMatch(/M.*megabyte|megabyte.*M/i);
+    expect(configText).toMatch(/G.*gigabyte|gigabyte.*G/i);
+    expect(configText).toMatch(/T.*terabyte|terabyte.*T/i);
+  });
+
+  test('Configuration section is accessible via navigation', async ({ page }) => {
+    // Click navigation link to Configuration
+    await page.locator('a[href="#configuration"]').first().click();
+
+    // Wait for scroll
+    await page.waitForTimeout(500);
+
+    // Verify section is in viewport
+    const configSection = page.locator('#configuration');
+    await expect(configSection).toBeInViewport();
   });
 });
 

@@ -887,11 +887,160 @@ h4 { font-size: var(--font-size-xl); }
    Configuration Section (Scenario 7)
    ========================================================================== */
 
-#configuration {
+#configuration,
+.configuration {
   background-color: var(--color-bg-primary);
 }
 
-/* Configuration placeholder - to be implemented by Scenario 7 */
+/* Configuration Tables */
+.config-tables {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.config-category {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+}
+
+.config-category-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-primary);
+  display: inline-block;
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-base);
+}
+
+.config-table thead {
+  background-color: var(--color-bg-tertiary);
+}
+
+.config-table th {
+  text-align: left;
+  padding: var(--spacing-md);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.config-table th:first-child {
+  border-radius: var(--radius-sm) 0 0 0;
+}
+
+.config-table th:last-child {
+  border-radius: 0 var(--radius-sm) 0 0;
+}
+
+.config-table td {
+  padding: var(--spacing-md);
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.config-table tr:last-child td {
+  border-bottom: none;
+}
+
+.config-table tr:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+.config-table code {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+/* Size Units Section */
+.config-size-units {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.config-subsection-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.config-subsection-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.config-subsection-description code {
+  background-color: var(--color-bg-tertiary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+.size-units-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.size-units-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-bg-tertiary);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.size-units-list code {
+  background-color: var(--color-primary);
+  color: white;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Example Configuration */
+.config-example,
+.config-cli {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-xl);
+}
+
+.config-example:last-child,
+.config-cli:last-child {
+  margin-bottom: 0;
+}
 
 /* ==========================================================================
    Performance Section (Scenario 8)

@@ -520,10 +520,231 @@ hello
     </section>
 
     <!-- Configuration Section (Scenario 7) -->
-    <section id="configuration">
+    <section id="configuration" class="configuration" aria-labelledby="configuration-title">
       <div class="container">
-        <h2 class="section-title">Configuration</h2>
-        <!-- Configuration content placeholder - to be implemented by Scenario 7 -->
+        <div class="section-header">
+          <h2 id="configuration-title" class="section-title">Configuration</h2>
+          <p class="section-subtitle">Customize MirDB behavior with these tunable parameters. Configuration uses TOML format.</p>
+        </div>
+
+        <!-- Configuration Tables -->
+        <div class="config-tables">
+          <!-- Network Configuration -->
+          <div class="config-category" data-config="network">
+            <h3 class="config-category-title">Network</h3>
+            <table class="config-table config-table--network">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>addr</code></td>
+                  <td>Listen address and port for memcached connections</td>
+                  <td><code>0.0.0.0:12333</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Storage Configuration -->
+          <div class="config-category" data-config="storage">
+            <h3 class="config-category-title">Storage</h3>
+            <table class="config-table config-table--storage">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>work_dir</code></td>
+                  <td>Directory path for data files (SSTables, WAL)</td>
+                  <td><code>/tmp/mirdb</code></td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>max_level</code></td>
+                  <td>Maximum number of LSM tree levels</td>
+                  <td><code>7</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Memory Tables Configuration -->
+          <div class="config-category" data-config="memtable">
+            <h3 class="config-category-title">Memory Tables</h3>
+            <table class="config-table config-table--memtable">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>mem_table_max_size</code></td>
+                  <td>Maximum memtable size before flush to disk</td>
+                  <td><code>4M</code> (4MB)</td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>mem_table_max_height</code></td>
+                  <td>Skip list maximum height</td>
+                  <td><code>32</code></td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>imm_mem_table_max_count</code></td>
+                  <td>Maximum queued immutable memtables</td>
+                  <td><code>16</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- SSTable Configuration -->
+          <div class="config-category" data-config="sstable">
+            <h3 class="config-category-title">SSTables</h3>
+            <table class="config-table config-table--sstable">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>sst_max_size</code></td>
+                  <td>Maximum SSTable file size</td>
+                  <td><code>100M</code> (100MB)</td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>block_size</code></td>
+                  <td>Data block size within SSTables</td>
+                  <td><code>4K</code> (4KB)</td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>block_restart_interval</code></td>
+                  <td>Key prefix restart interval</td>
+                  <td><code>16</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Compaction Configuration -->
+          <div class="config-category" data-config="compaction">
+            <h3 class="config-category-title">Compaction</h3>
+            <table class="config-table config-table--compaction">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>l0_compaction_trigger</code></td>
+                  <td>Number of Level 0 files before compaction triggers</td>
+                  <td><code>4</code></td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>thread_sleep_ms</code></td>
+                  <td>Background thread sleep interval</td>
+                  <td><code>500</code> (ms)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Size Units Documentation -->
+        <div class="config-size-units">
+          <h3 class="config-subsection-title">Size Units</h3>
+          <p class="config-subsection-description">
+            Configuration parameters that specify sizes support the following suffixes:
+          </p>
+          <ul class="size-units-list">
+            <li><code>K</code> - Kilobytes (1,024 bytes)</li>
+            <li><code>M</code> - Megabytes (1,024 KB)</li>
+            <li><code>G</code> - Gigabytes (1,024 MB)</li>
+            <li><code>T</code> - Terabytes (1,024 GB)</li>
+          </ul>
+        </div>
+
+        <!-- Example Configuration -->
+        <div class="config-example">
+          <h3 class="config-subsection-title">Example Configuration</h3>
+          <p class="config-subsection-description">
+            Create a <code>config.toml</code> file with your desired settings:
+          </p>
+          <div class="code-block" data-language="toml">
+            <div class="code-block__header">
+              <span class="code-block__language">toml</span>
+              <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-toml"><span class="token comment"># MirDB Configuration File</span>
+
+<span class="token comment"># Network Settings</span>
+<span class="token key">addr</span> <span class="token punctuation">=</span> <span class="token string">"0.0.0.0:12333"</span>
+
+<span class="token comment"># Storage Settings</span>
+<span class="token key">work_dir</span> <span class="token punctuation">=</span> <span class="token string">"/var/lib/mirdb"</span>
+<span class="token key">max_level</span> <span class="token punctuation">=</span> <span class="token number">7</span>
+
+<span class="token comment"># Memory Table Settings</span>
+<span class="token key">mem_table_max_size</span> <span class="token punctuation">=</span> <span class="token string">"4M"</span>
+<span class="token key">mem_table_max_height</span> <span class="token punctuation">=</span> <span class="token number">32</span>
+<span class="token key">imm_mem_table_max_count</span> <span class="token punctuation">=</span> <span class="token number">16</span>
+
+<span class="token comment"># SSTable Settings</span>
+<span class="token key">sst_max_size</span> <span class="token punctuation">=</span> <span class="token string">"100M"</span>
+<span class="token key">block_size</span> <span class="token punctuation">=</span> <span class="token string">"4K"</span>
+<span class="token key">block_restart_interval</span> <span class="token punctuation">=</span> <span class="token number">16</span>
+
+<span class="token comment"># Compaction Settings</span>
+<span class="token key">l0_compaction_trigger</span> <span class="token punctuation">=</span> <span class="token number">4</span>
+<span class="token key">thread_sleep_ms</span> <span class="token punctuation">=</span> <span class="token number">500</span></code></pre>
+          </div>
+        </div>
+
+        <!-- Command Line Usage -->
+        <div class="config-cli">
+          <h3 class="config-subsection-title">Command Line Usage</h3>
+          <p class="config-subsection-description">
+            Start MirDB with a configuration file using the <code>-c</code> flag:
+          </p>
+          <div class="code-block" data-language="bash">
+            <div class="code-block__header">
+              <span class="code-block__language">bash</span>
+              <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-bash"><span class="token comment"># Start with custom configuration</span>
+<span class="token function">mirdb</span> -c /path/to/config.toml
+
+<span class="token comment"># Or use the bundled example config</span>
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+          </div>
+        </div>
       </div>
     </section>
 
