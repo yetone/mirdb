@@ -20,7 +20,7 @@
   <header class="header" role="banner">
     <div class="header__container">
       <a href="#" class="header__brand">
-        <img src="../assets/logo.gif" alt="MirDB Logo" class="header__logo">
+        <img src="assets/logo.gif" alt="MirDB Logo" class="header__logo">
         <span class="header__title">MirDB</span>
       </a>
 
@@ -63,11 +63,33 @@
   <!-- Main Content -->
   <main id="main-content">
     <!-- Hero Section (Scenario 2) -->
-    <section id="hero" class="hero">
+    <section id="hero" class="hero" aria-labelledby="hero-title">
       <div class="container">
-        <h1>MirDB</h1>
-        <p>Persistent Key-Value Store with Memcached Protocol Support</p>
-        <!-- Hero content placeholder - to be implemented by Scenario 2 -->
+        <div class="hero__content">
+          <img src="assets/logo.gif" alt="MirDB animated logo" class="hero__logo" id="hero-logo">
+          <h1 id="hero-title" class="hero__title">MirDB</h1>
+          <p class="hero__tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+          <p class="hero__description">
+            Drop-in replacement for Memcached with persistence. Built on LSM Tree architecture
+            for high-performance storage that survives restarts.
+          </p>
+          <a href="#quick-start" class="hero__cta" id="hero-cta">
+            Quick Start
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator" aria-hidden="true">
+        <span class="scroll-indicator__text">Scroll</span>
+        <svg class="scroll-indicator__arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
       </div>
     </section>
 
