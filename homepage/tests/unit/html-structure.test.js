@@ -2,6 +2,8 @@
  * HTML Structure Unit Tests
  * Owner: Scenario 18 - Static Site Requirements
  *
+ * Also includes Asset Path Validation Tests for Scenario 19 - Asset Integration
+ *
  * Tests:
  * - Valid HTML5 document structure
  * - All required sections present
@@ -293,6 +295,114 @@ describe('Static Site Requirements', () => {
       codeBlocks.forEach(block => {
         const codeContent = block.textContent;
         expect(codeContent.length).toBeGreaterThan(0);
+      });
+    });
+  });
+});
+
+// ============================================================================
+// Asset Integration Tests (Scenario 19)
+// ============================================================================
+
+describe('Asset Path Validation (Scenario 19)', () => {
+  let dom;
+  let document;
+
+  const homepagePath = path.resolve(__dirname, '../../');
+
+  beforeAll(() => {
+    const htmlPath = path.join(homepagePath, 'index.html');
+    const htmlContent = fs.readFileSync(htmlPath, 'utf8');
+    dom = new JSDOM(htmlContent);
+    document = dom.window.document;
+  });
+
+  describe('logo.gif Path Tests', () => {
+    test('TC1: Header logo references assets/logo.gif with correct relative path', () => {
+      const headerLogo = document.querySelector('.header__logo');
+      expect(headerLogo).not.toBeNull();
+      expect(headerLogo.getAttribute('src')).toBe('assets/logo.gif');
+    });
+
+    test('TC1: Hero logo references assets/logo.gif with correct relative path', () => {
+      const heroLogo = document.querySelector('.hero__logo');
+      expect(heroLogo).not.toBeNull();
+      expect(heroLogo.getAttribute('src')).toBe('assets/logo.gif');
+    });
+
+    test('TC1: Footer logo references assets/logo.gif with correct relative path', () => {
+      const footerLogo = document.querySelector('.footer__logo');
+      expect(footerLogo).not.toBeNull();
+      expect(footerLogo.getAttribute('src')).toBe('assets/logo.gif');
+    });
+
+    test('TC1: Open Graph image references assets/logo.gif with correct path', () => {
+      const ogImage = document.querySelector('meta[property="og:image"]');
+      expect(ogImage).not.toBeNull();
+      expect(ogImage.getAttribute('content')).toBe('assets/logo.gif');
+    });
+
+    test('Logo.gif file exists in assets directory', () => {
+      const assetPath = path.join(homepagePath, 'assets/logo.gif');
+      expect(fs.existsSync(assetPath)).toBe(true);
+    });
+
+    test('Logo images have appropriate alt text', () => {
+      const headerLogo = document.querySelector('.header__logo');
+      const heroLogo = document.querySelector('.hero__logo');
+      const footerLogo = document.querySelector('.footer__logo');
+
+      expect(headerLogo.getAttribute('alt')).toBeTruthy();
+      expect(heroLogo.getAttribute('alt')).toBeTruthy();
+      expect(footerLogo.getAttribute('alt')).toBeTruthy();
+    });
+  });
+
+  describe('usage.gif Path Tests', () => {
+    test('TC4: Usage demo image references assets/usage.gif with correct relative path', () => {
+      const usageGif = document.querySelector('#usage-gif, .usage-gif');
+      expect(usageGif).not.toBeNull();
+      expect(usageGif.getAttribute('src')).toBe('assets/usage.gif');
+    });
+
+    test('Usage.gif file exists in assets directory', () => {
+      const assetPath = path.join(homepagePath, 'assets/usage.gif');
+      expect(fs.existsSync(assetPath)).toBe(true);
+    });
+
+    test('Usage.gif has appropriate alt text describing the demo', () => {
+      const usageGif = document.querySelector('#usage-gif, .usage-gif');
+      expect(usageGif).not.toBeNull();
+      const alt = usageGif.getAttribute('alt');
+      expect(alt).toBeTruthy();
+      expect(alt.toLowerCase()).toMatch(/usage|demo|mirdb/);
+    });
+
+    test('Usage.gif has lazy loading attribute for performance', () => {
+      const usageGif = document.querySelector('#usage-gif, .usage-gif');
+      expect(usageGif).not.toBeNull();
+      expect(usageGif.getAttribute('loading')).toBe('lazy');
+    });
+  });
+
+  describe('Asset Integration Consistency', () => {
+    test('All logo.gif references use the same relative path', () => {
+      const images = document.querySelectorAll('img[src*="logo.gif"]');
+      const sources = Array.from(images).map(img => img.getAttribute('src'));
+
+      expect(sources.length).toBeGreaterThanOrEqual(1);
+      sources.forEach(src => {
+        expect(src).toBe('assets/logo.gif');
+      });
+    });
+
+    test('All asset paths are relative (no absolute URLs)', () => {
+      const assetImages = document.querySelectorAll('img[src*=".gif"]');
+      const sources = Array.from(assetImages).map(img => img.getAttribute('src'));
+
+      sources.forEach(src => {
+        expect(src).not.toMatch(/^https?:\/\//);
+        expect(src).not.toMatch(/^\//);
       });
     });
   });

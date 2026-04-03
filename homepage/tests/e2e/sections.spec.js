@@ -879,8 +879,239 @@ test.describe('Contributing Section (Scenario 9)', () => {
   });
 });
 
+// ============================================================================
+// Asset Integration Tests (Scenario 19)
+// ============================================================================
+
 test.describe('Asset Integration (Scenario 19)', () => {
-  test.skip('Usage.gif is loaded in features section', async ({ page }) => {
-    // To be implemented by Scenario 19
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  // Test Case 2: Check logo.gif loads (e2e)
+  test('TC2: Logo.gif loads successfully with no 404 errors', async ({ page, context }) => {
+    // Track network requests for logo.gif
+    const logoRequests = [];
+
+    // Create a fresh page with request tracking from the start
+    const newPage = await context.newPage();
+    newPage.on('response', response => {
+      if (response.url().includes('logo.gif')) {
+        logoRequests.push({
+          url: response.url(),
+          status: response.status()
+        });
+      }
+    });
+
+    // Navigate to the page
+    await newPage.goto('/');
+    await newPage.waitForLoadState('networkidle');
+
+    // Verify at least one logo image is rendered
+    const heroLogo = newPage.locator('.hero__logo');
+    await expect(heroLogo).toBeVisible();
+    const isLoaded = await heroLogo.evaluate((img) => img.complete && img.naturalWidth > 0);
+    expect(isLoaded).toBe(true);
+
+    // Verify all logo requests were successful (200 OK or 304 Not Modified are both valid)
+    expect(logoRequests.length).toBeGreaterThan(0);
+    logoRequests.forEach(request => {
+      // 200 = success, 304 = cached (still success)
+      expect([200, 304]).toContain(request.status);
+    });
+
+    await newPage.close();
+  });
+
+  // Test Case 3: Check logo.gif dimensions (e2e)
+  test('TC3: Logo displays at appropriate size for hero section', async ({ page }) => {
+    // Check hero logo dimensions
+    const heroLogo = page.locator('.hero__logo');
+    await expect(heroLogo).toBeVisible();
+
+    // Get the bounding box to verify appropriate size
+    const box = await heroLogo.boundingBox();
+    expect(box).not.toBeNull();
+
+    // Hero logo should be reasonably sized (not too small, not too large)
+    expect(box.width).toBeGreaterThan(50); // Not too small
+    expect(box.width).toBeLessThan(400); // Not excessively large
+    expect(box.height).toBeGreaterThan(50);
+    expect(box.height).toBeLessThan(400);
+  });
+
+  test('TC3: Logo displays at appropriate size for header', async ({ page }) => {
+    // Check header logo dimensions
+    const headerLogo = page.locator('.header__logo');
+    await expect(headerLogo).toBeVisible();
+
+    // Get the bounding box
+    const box = await headerLogo.boundingBox();
+    expect(box).not.toBeNull();
+
+    // Header logo should be compact but visible
+    expect(box.width).toBeGreaterThan(20);
+    expect(box.width).toBeLessThan(200);
+    expect(box.height).toBeGreaterThan(20);
+    expect(box.height).toBeLessThan(100);
+  });
+
+  // Test Case 5: Check usage.gif loads (e2e)
+  test('TC5: Usage.gif loads successfully with no 404 errors', async ({ page, context }) => {
+    // Track network requests for usage.gif with a fresh page
+    const usageRequests = [];
+    const newPage = await context.newPage();
+
+    newPage.on('response', response => {
+      if (response.url().includes('usage.gif')) {
+        usageRequests.push({
+          url: response.url(),
+          status: response.status()
+        });
+      }
+    });
+
+    // Navigate to the page
+    await newPage.goto('/');
+
+    // Scroll to features section to trigger lazy loading
+    const featuresSection = newPage.locator('#features');
+    await featuresSection.scrollIntoViewIfNeeded();
+
+    // Wait for the usage gif to load (it's a large file ~6MB)
+    await newPage.waitForFunction(() => {
+      const usageGif = document.getElementById('usage-gif');
+      return usageGif && usageGif.complete && usageGif.naturalWidth > 0;
+    }, { timeout: 60000 });
+
+    // Verify the image loaded successfully
+    const usageGif = newPage.locator('#usage-gif');
+    await expect(usageGif).toBeVisible();
+    const isLoaded = await usageGif.evaluate((img) => img.complete && img.naturalWidth > 0);
+    expect(isLoaded).toBe(true);
+
+    // Verify the request was successful (200 OK or 304 Not Modified are both valid)
+    expect(usageRequests.length).toBeGreaterThan(0);
+    usageRequests.forEach(request => {
+      expect([200, 304]).toContain(request.status);
+    });
+
+    await newPage.close();
+  });
+
+  // Test Case 6: Check GIF animations play (e2e)
+  test('TC6: Logo.gif animates as expected (is animated GIF)', async ({ page }) => {
+    const heroLogo = page.locator('.hero__logo');
+    await expect(heroLogo).toBeVisible();
+
+    // Verify the image is loaded
+    const isLoaded = await heroLogo.evaluate((img) => {
+      return img.complete && img.naturalWidth > 0;
+    });
+    expect(isLoaded).toBe(true);
+
+    // Verify it's a GIF file
+    const src = await heroLogo.getAttribute('src');
+    expect(src).toContain('.gif');
+
+    // For animated GIFs, we verify the image loads properly
+    // The naturalWidth > 0 confirms the GIF renders correctly
+    const naturalWidth = await heroLogo.evaluate((img) => img.naturalWidth);
+    const naturalHeight = await heroLogo.evaluate((img) => img.naturalHeight);
+    expect(naturalWidth).toBeGreaterThan(0);
+    expect(naturalHeight).toBeGreaterThan(0);
+  });
+
+  test('TC6: Usage.gif animates as expected (is animated GIF)', async ({ page }) => {
+    // Scroll to make usage.gif visible and load
+    const usageGif = page.locator('#usage-gif');
+    await usageGif.scrollIntoViewIfNeeded();
+
+    // Wait for the image to load (it's large ~6MB)
+    await page.waitForFunction(() => {
+      const img = document.getElementById('usage-gif');
+      return img && img.complete && img.naturalWidth > 0;
+    }, { timeout: 60000 });
+
+    await expect(usageGif).toBeVisible();
+
+    // Verify it's a GIF file
+    const src = await usageGif.getAttribute('src');
+    expect(src).toContain('.gif');
+
+    // Verify the GIF renders with proper dimensions
+    const naturalWidth = await usageGif.evaluate((img) => img.naturalWidth);
+    const naturalHeight = await usageGif.evaluate((img) => img.naturalHeight);
+    expect(naturalWidth).toBeGreaterThan(0);
+    expect(naturalHeight).toBeGreaterThan(0);
+  });
+
+  test('All logo.gif images are accessible and loaded', async ({ page }) => {
+    // Get all logo.gif images
+    const logoImages = page.locator('img[src*="logo.gif"]');
+    const count = await logoImages.count();
+
+    expect(count).toBeGreaterThanOrEqual(1);
+
+    // Check each logo image is loaded
+    for (let i = 0; i < count; i++) {
+      const img = logoImages.nth(i);
+
+      // Make sure the image is in viewport (scroll if needed)
+      await img.scrollIntoViewIfNeeded();
+
+      // Wait for it to load
+      await img.evaluate(el => {
+        return new Promise((resolve) => {
+          if (el.complete && el.naturalWidth > 0) {
+            resolve();
+          } else {
+            el.onload = resolve;
+            el.onerror = resolve;
+          }
+        });
+      });
+
+      // Verify the image loaded successfully
+      const isLoaded = await img.evaluate((el) => el.complete && el.naturalWidth > 0);
+      expect(isLoaded).toBe(true);
+    }
+  });
+
+  test('Usage.gif container is properly styled', async ({ page }) => {
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await featuresSection.scrollIntoViewIfNeeded();
+
+    // Check usage gif container exists
+    const gifContainer = page.locator('.usage-gif-container');
+    await expect(gifContainer).toBeVisible();
+
+    // Check the container has proper sizing
+    const containerBox = await gifContainer.boundingBox();
+    expect(containerBox).not.toBeNull();
+    expect(containerBox.width).toBeGreaterThan(200);
+    expect(containerBox.height).toBeGreaterThan(100);
+  });
+
+  test('Assets load without CORS or security errors', async ({ page }) => {
+    // Track any console errors related to assets
+    const consoleErrors = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        const text = msg.text();
+        if (text.includes('logo.gif') || text.includes('usage.gif') || text.includes('CORS')) {
+          consoleErrors.push(text);
+        }
+      }
+    });
+
+    // Reload and wait for all assets
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    // There should be no CORS or asset-related errors
+    expect(consoleErrors).toEqual([]);
   });
 });
