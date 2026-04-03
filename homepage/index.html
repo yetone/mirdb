@@ -21,10 +21,99 @@
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Accessibility Enhancements (Scenario 13) -->
+  <style>
+    /* Skip link visible on focus for keyboard users */
+    a.skip-link:focus {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: auto;
+      height: auto;
+      padding: var(--spacing-md) var(--spacing-lg);
+      background-color: var(--color-primary);
+      color: white;
+      font-weight: 600;
+      font-size: var(--font-size-base);
+      z-index: 10000;
+      clip: auto;
+      overflow: visible;
+      white-space: nowrap;
+      text-decoration: none;
+      border-radius: 0 0 var(--radius-md) 0;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Enhanced focus indicators for all interactive elements */
+    a:focus-visible,
+    button:focus-visible,
+    [role="button"]:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for nav links */
+    .nav__link:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 4px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Focus indicator for theme toggle */
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for mobile menu toggle */
+    .mobile-menu-toggle:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for copy buttons */
+    .code-block__copy:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for CTA button */
+    .hero__cta:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 4px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Focus indicator for footer links */
+    .footer__link:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for contributing CTA button */
+    .contributing-cta-button:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 4px;
+    }
+
+    /* Ensure reduced motion preference is respected */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Skip Link for Accessibility -->
-  <a href="#main-content" class="visually-hidden">Skip to main content</a>
+  <a href="#main-content" class="visually-hidden skip-link">Skip to main content</a>
 
   <!-- Header (Scenario 1) -->
   <header class="header" role="banner">
