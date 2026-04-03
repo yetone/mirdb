@@ -24,7 +24,7 @@ test.describe('Header and Navigation', () => {
     // Check logo is present
     const logo = page.locator('.header__logo');
     await expect(logo).toBeVisible();
-    await expect(logo).toHaveAttribute('src', '../assets/logo.gif');
+    await expect(logo).toHaveAttribute('src', 'assets/logo.gif');
     await expect(logo).toHaveAttribute('alt', 'MirDB Logo');
 
     // Check project name is displayed
