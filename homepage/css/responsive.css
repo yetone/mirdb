@@ -1,0 +1,815 @@
+/**
+ * Responsive Styles for MirDB Homepage
+ * Owner: Scenario 11 - Responsive Design
+ *
+ * Breakpoints:
+ * - Mobile small: max-width 480px
+ * - Mobile: max-width 768px
+ * - Tablet: max-width 1024px
+ * - Desktop: min-width 1025px
+ *
+ * Contents:
+ * - Mobile navigation (hamburger menu)
+ * - Responsive typography
+ * - Flexible grid layouts
+ * - Image sizing for different viewports
+ * - Code block horizontal scrolling
+ */
+
+/* ==========================================================================
+   Tablet and Below (max-width: 1024px)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  /* Container adjustments */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Section spacing */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  /* Typography scaling */
+  h1 { font-size: var(--font-size-3xl); }
+  h2 { font-size: var(--font-size-2xl); }
+  h3 { font-size: var(--font-size-xl); }
+
+  /* Features grid - 2 columns */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Architecture components - 2 columns */
+  .architecture-components {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Architecture diagram SVG scaling */
+  .architecture-diagram {
+    padding: var(--spacing-lg);
+  }
+
+  .lsm-diagram {
+    max-width: 100%;
+  }
+
+  /* Performance benchmarks - 2 columns */
+  .performance-benchmarks,
+  .benchmark-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Contributing grid - 2 columns */
+  .contributing-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Response codes grid - 2 columns */
+  .response-codes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Configuration tables */
+  .config-tables {
+    gap: var(--spacing-xl);
+  }
+
+  /* Footer content */
+  .footer__content {
+    gap: var(--spacing-xl);
+  }
+
+  .footer__links {
+    gap: var(--spacing-xl);
+  }
+}
+
+/* ==========================================================================
+   Tablet Portrait and Below (max-width: 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Mobile Navigation */
+  .nav__list {
+    display: none;
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+    box-shadow: var(--shadow-lg);
+    z-index: 999;
+  }
+
+  .nav__list.active {
+    display: flex;
+  }
+
+  .nav__link {
+    padding: var(--spacing-md);
+    width: 100%;
+    text-align: center;
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+  }
+
+  .nav__link:hover {
+    background-color: var(--color-bg-secondary);
+  }
+
+  /* Show mobile menu toggle */
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  /* Header adjustments */
+  .header__container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .header__nav {
+    gap: var(--spacing-md);
+  }
+
+  /* Hero Section responsive */
+  .hero {
+    padding-top: calc(var(--header-height) + var(--spacing-2xl));
+    min-height: auto;
+    padding-bottom: var(--spacing-3xl);
+  }
+
+  .hero__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-xl);
+  }
+
+  .hero__description {
+    font-size: var(--font-size-base);
+  }
+
+  .hero__logo {
+    width: 150px;
+  }
+
+  .hero__cta {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-base);
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    display: none;
+  }
+
+  /* Features grid - single column */
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Usage GIF container */
+  .usage-gif-container {
+    border-radius: var(--radius-md);
+  }
+
+  /* Quick Start section */
+  .quick-start__steps {
+    gap: var(--spacing-xl);
+  }
+
+  .quick-start__step {
+    padding: var(--spacing-lg);
+  }
+
+  .quick-start__step-header {
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .quick-start__step-title {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Architecture section */
+  .architecture-components {
+    grid-template-columns: 1fr;
+  }
+
+  .architecture-diagram {
+    padding: var(--spacing-md);
+    overflow-x: auto;
+  }
+
+  /* Make diagram scrollable on small screens */
+  .lsm-diagram {
+    min-width: 700px;
+  }
+
+  /* Architecture read path */
+  .architecture-read-path {
+    padding: var(--spacing-lg);
+  }
+
+  /* API Reference section */
+  .api-command {
+    padding: var(--spacing-lg);
+  }
+
+  .api-command__header {
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .api-command__name {
+    font-size: var(--font-size-lg);
+  }
+
+  .api-syntax__code {
+    font-size: var(--font-size-sm);
+    word-break: break-all;
+  }
+
+  /* Response codes grid - single column */
+  .response-codes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Configuration section */
+  .config-category {
+    padding: var(--spacing-lg);
+  }
+
+  .config-table {
+    font-size: var(--font-size-sm);
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: var(--spacing-sm);
+  }
+
+  /* Make configuration tables horizontally scrollable */
+  .config-category {
+    overflow-x: auto;
+  }
+
+  .config-table {
+    min-width: 500px;
+  }
+
+  /* Size units list */
+  .size-units-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Performance section */
+  .performance-benchmarks,
+  .benchmark-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .characteristics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .performance-characteristics {
+    padding: var(--spacing-lg);
+  }
+
+  /* Contributing section */
+  .contributing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contributing-card {
+    padding: var(--spacing-lg);
+  }
+
+  .contributing-cta {
+    padding: var(--spacing-xl);
+  }
+
+  /* Footer section */
+  .footer {
+    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+  }
+
+  .footer__content {
+    flex-direction: column;
+    gap: var(--spacing-xl);
+  }
+
+  .footer__brand {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .footer__logo-link {
+    justify-content: center;
+  }
+
+  .footer__links {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xl);
+    text-align: center;
+  }
+
+  .footer__links-group {
+    min-width: auto;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* Back to top button */
+  .back-to-top {
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Code blocks - ensure horizontal scroll */
+  .code-block {
+    border-radius: var(--radius-sm);
+  }
+
+  .code-block pre {
+    padding: var(--spacing-md);
+  }
+
+  .code-block code {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Ensure code blocks are scrollable */
+  pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ==========================================================================
+   Mobile Small (max-width: 480px)
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  /* Container */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Section spacing */
+  section {
+    padding: var(--spacing-xl) 0;
+  }
+
+  /* Typography */
+  h1 { font-size: var(--font-size-2xl); }
+  h2 { font-size: var(--font-size-xl); }
+  h3 { font-size: var(--font-size-lg); }
+  h4 { font-size: var(--font-size-base); }
+
+  .section-subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  /* Header */
+  .header__logo {
+    height: 32px;
+  }
+
+  .header__title {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Hero Section */
+  .hero__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero__description {
+    font-size: var(--font-size-base);
+  }
+
+  .hero__cta {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero__logo {
+    width: 120px;
+  }
+
+  /* Feature cards */
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .feature-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .feature-description {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Usage GIF */
+  .features-demo-title {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Quick Start */
+  .quick-start__step {
+    padding: var(--spacing-md);
+  }
+
+  .quick-start__step-number {
+    width: 28px;
+    height: 28px;
+    font-size: var(--font-size-xs);
+  }
+
+  .quick-start__step-title {
+    font-size: var(--font-size-base);
+  }
+
+  .quick-start__step-description {
+    font-size: var(--font-size-sm);
+  }
+
+  .quick-start__config {
+    padding: var(--spacing-md);
+  }
+
+  .quick-start__config-title {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Code blocks */
+  .code-block__header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .code-block__copy {
+    padding: var(--spacing-xs);
+  }
+
+  .code-block__copy-text {
+    display: none;
+  }
+
+  .code-block pre {
+    padding: var(--spacing-sm);
+  }
+
+  /* Architecture */
+  .architecture-component {
+    padding: var(--spacing-lg);
+  }
+
+  .arch-component-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .arch-component-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .arch-component-description {
+    font-size: var(--font-size-sm);
+  }
+
+  .arch-component-details li {
+    font-size: var(--font-size-xs);
+  }
+
+  .architecture-read-path {
+    padding: var(--spacing-md);
+  }
+
+  .arch-subsection-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .arch-subsection-description {
+    font-size: var(--font-size-sm);
+  }
+
+  /* API Reference */
+  .api-category__title {
+    font-size: var(--font-size-xl);
+  }
+
+  .api-command {
+    padding: var(--spacing-md);
+  }
+
+  .api-command__name {
+    font-size: var(--font-size-base);
+  }
+
+  .api-command__description {
+    font-size: var(--font-size-sm);
+  }
+
+  .api-syntax__code {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .response-code {
+    padding: var(--spacing-md);
+  }
+
+  /* Configuration */
+  .config-category {
+    padding: var(--spacing-md);
+  }
+
+  .config-category-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .config-table {
+    font-size: var(--font-size-xs);
+  }
+
+  .config-size-units {
+    padding: var(--spacing-md);
+  }
+
+  .size-units-list {
+    grid-template-columns: 1fr;
+  }
+
+  .config-example,
+  .config-cli {
+    padding: var(--spacing-md);
+  }
+
+  .config-subsection-title {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Performance */
+  .metric-card {
+    padding: var(--spacing-lg);
+  }
+
+  .metric-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .metric-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .metric-description {
+    font-size: var(--font-size-sm);
+  }
+
+  .performance-characteristics {
+    padding: var(--spacing-md);
+  }
+
+  .performance-subsection-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .characteristic-item {
+    padding: var(--spacing-sm);
+  }
+
+  .characteristic-label {
+    font-size: var(--font-size-xs);
+  }
+
+  .characteristic-value {
+    font-size: var(--font-size-sm);
+  }
+
+  .performance-note {
+    padding: var(--spacing-md);
+  }
+
+  .performance-note p {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Contributing */
+  .contributing-card {
+    padding: var(--spacing-md);
+  }
+
+  .contributing-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .contributing-card-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .contributing-card-description {
+    font-size: var(--font-size-sm);
+  }
+
+  .contributing-steps li {
+    padding-left: var(--spacing-xl);
+    font-size: var(--font-size-xs);
+  }
+
+  .contributing-steps li::before {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  .contributing-list li {
+    font-size: var(--font-size-xs);
+  }
+
+  .contributing-cta {
+    padding: var(--spacing-lg);
+  }
+
+  .contributing-cta-text {
+    font-size: var(--font-size-base);
+  }
+
+  .contributing-cta-button {
+    width: 100%;
+    justify-content: center;
+    padding: var(--spacing-md);
+  }
+
+  /* Footer */
+  .footer {
+    padding: var(--spacing-xl) 0 var(--spacing-md);
+  }
+
+  .footer__logo {
+    height: 28px;
+  }
+
+  .footer__title {
+    font-size: var(--font-size-lg);
+  }
+
+  .footer__tagline {
+    font-size: var(--font-size-xs);
+  }
+
+  .footer__links-title {
+    font-size: var(--font-size-xs);
+  }
+
+  .footer__link {
+    font-size: var(--font-size-xs);
+  }
+
+  .footer__license-text,
+  .footer__copyright {
+    font-size: var(--font-size-xs);
+  }
+
+  .back-to-top {
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-to-top svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ==========================================================================
+   Touch-Friendly Styles for Mobile
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Increase touch target sizes */
+  .nav__link,
+  .theme-toggle,
+  .mobile-menu-toggle,
+  .code-block__copy,
+  .hero__cta,
+  .contributing-cta-button,
+  .back-to-top,
+  .footer__link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Touch-friendly buttons */
+  button,
+  .hero__cta,
+  .contributing-cta-button {
+    touch-action: manipulation;
+  }
+
+  /* Improve tap feedback */
+  a:active,
+  button:active {
+    opacity: 0.7;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .header,
+  .mobile-menu-toggle,
+  .theme-toggle,
+  .scroll-indicator,
+  .back-to-top,
+  .code-block__copy {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
+
+  section {
+    page-break-inside: avoid;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 0;
+  }
+}
+
+/* ==========================================================================
+   Ensure No Horizontal Scrolling
+   ========================================================================== */
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Code blocks should be the only scrollable elements */
+.code-block pre,
+.architecture-diagram,
+.config-category {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* Custom scrollbar for code blocks */
+.code-block pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block pre::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}

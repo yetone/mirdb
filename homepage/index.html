@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value storage solution with Memcached protocol support and LSM Tree architecture">
+  <meta name="keywords" content="MirDB, key-value store, Memcached, LSM Tree, persistent storage">
+  <title>MirDB - Persistent Key-Value Store</title>
+
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A persistent key-value storage solution with Memcached protocol support and LSM Tree architecture. Drop-in replacement for Memcached with persistence.">
+  <meta property="og:image" content="assets/logo.gif">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://github.com/yetone/mirdb">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://github.com/yetone/mirdb">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Accessibility Enhancements (Scenario 13) -->
+  <style>
+    /* Skip link visible on focus for keyboard users */
+    a.skip-link:focus {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: auto;
+      height: auto;
+      padding: var(--spacing-md) var(--spacing-lg);
+      background-color: var(--color-primary);
+      color: white;
+      font-weight: 600;
+      font-size: var(--font-size-base);
+      z-index: 10000;
+      clip: auto;
+      overflow: visible;
+      white-space: nowrap;
+      text-decoration: none;
+      border-radius: 0 0 var(--radius-md) 0;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Enhanced focus indicators for all interactive elements */
+    a:focus-visible,
+    button:focus-visible,
+    [role="button"]:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for nav links */
+    .nav__link:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 4px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Focus indicator for theme toggle */
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for mobile menu toggle */
+    .mobile-menu-toggle:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for copy buttons */
+    .code-block__copy:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for CTA button */
+    .hero__cta:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 4px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Focus indicator for footer links */
+    .footer__link:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus indicator for contributing CTA button */
+    .contributing-cta-button:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 4px;
+    }
+
+    /* Ensure reduced motion preference is respected */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="visually-hidden skip-link">Skip to main content</a>
+
+  <!-- Header (Scenario 1) -->
+  <header class="header" role="banner">
+    <div class="header__container">
+      <a href="#" class="header__brand">
+        <img src="assets/logo.gif" alt="MirDB Logo" class="header__logo">
+        <span class="header__title">MirDB</span>
+      </a>
+
+      <nav class="header__nav" role="navigation" aria-label="Main navigation">
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="mobile-menu-toggle__bar"></span>
+          <span class="mobile-menu-toggle__bar"></span>
+          <span class="mobile-menu-toggle__bar"></span>
+        </button>
+
+        <ul class="nav__list">
+          <li><a href="#features" class="nav__link">Features</a></li>
+          <li><a href="#quick-start" class="nav__link">Quick Start</a></li>
+          <li><a href="#architecture" class="nav__link">Architecture</a></li>
+          <li><a href="#api-reference" class="nav__link">API Reference</a></li>
+          <li><a href="#configuration" class="nav__link">Configuration</a></li>
+          <li><a href="#contributing" class="nav__link">Contributing</a></li>
+        </ul>
+
+        <button class="theme-toggle" aria-label="Toggle dark mode">
+          <svg class="theme-toggle__icon theme-toggle__icon--light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="theme-toggle__icon theme-toggle__icon--dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Hero Section (Scenario 2) -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero__content">
+          <img src="assets/logo.gif" alt="MirDB animated logo" class="hero__logo" id="hero-logo">
+          <h1 id="hero-title" class="hero__title">MirDB</h1>
+          <p class="hero__tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+          <p class="hero__description">
+            Drop-in replacement for Memcached with persistence. Built on LSM Tree architecture
+            for high-performance storage that survives restarts.
+          </p>
+          <a href="#quick-start" class="hero__cta" id="hero-cta">
+            Quick Start
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator" aria-hidden="true">
+        <span class="scroll-indicator__text">Scroll</span>
+        <svg class="scroll-indicator__arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 3) -->
+    <section id="features" class="features" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="features-title" class="section-title">Key Features</h2>
+          <p class="section-subtitle">MirDB combines the simplicity of Memcached with the durability of persistent storage.</p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Feature 1: Memcached Protocol -->
+          <article class="feature-card" data-feature="memcached-protocol">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">
+              Full compatibility with the standard memcached text protocol. Use your existing memcached clients and tools seamlessly - no code changes required. Supports SET, GET, DELETE, and more.
+            </p>
+          </article>
+
+          <!-- Feature 2: Persistence -->
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Persistence</h3>
+            <p class="feature-description">
+              Unlike traditional memcached, MirDB persists your data to disk using SSTables (Sorted String Tables). Your data survives restarts and crashes with write-ahead logging for durability.
+            </p>
+          </article>
+
+          <!-- Feature 3: LSM Tree Architecture -->
+          <article class="feature-card" data-feature="lsm-tree">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">
+              Built on a Log-Structured Merge-tree design with in-memory memtables and tiered SSTable levels. Optimized for write-heavy workloads while maintaining efficient reads through level organization.
+            </p>
+          </article>
+
+          <!-- Feature 4: Compaction -->
+          <article class="feature-card" data-feature="compaction">
+            <div class="feature-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Compaction</h3>
+            <p class="feature-description">
+              Automatic background compaction maintains optimal performance. Minor compaction flushes memtables to Level 0, while major compaction merges SSTables across levels to reclaim space.
+            </p>
+          </article>
+        </div>
+
+        <!-- Usage Demo -->
+        <div class="features-demo">
+          <h3 class="features-demo-title">See it in Action</h3>
+          <div class="usage-gif-container">
+            <img src="assets/usage.gif" alt="MirDB usage demonstration showing key-value operations" class="usage-gif" id="usage-gif" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start Section (Scenario 4) -->
+    <section id="quick-start" class="quick-start" aria-labelledby="quick-start-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="quick-start-title" class="section-title">Quick Start</h2>
+          <p class="section-subtitle">Get MirDB up and running in minutes with these simple steps.</p>
+        </div>
+
+        <div class="quick-start__steps">
+          <!-- Step 1: Installation -->
+          <div class="quick-start__step">
+            <div class="quick-start__step-header">
+              <span class="quick-start__step-number">1</span>
+              <h3 class="quick-start__step-title">Install MirDB</h3>
+            </div>
+            <p class="quick-start__step-description">
+              Clone the repository and build from source using Cargo, Rust's package manager.
+            </p>
+            <div class="code-block" data-language="bash">
+              <div class="code-block__header">
+                <span class="code-block__language">bash</span>
+                <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                  <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="code-block__copy-text">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-bash"><span class="token comment"># Clone the repository</span>
+<span class="token function">git</span> clone https://github.com/example/mirdb.git
+<span class="token builtin">cd</span> mirdb
+
+<span class="token comment"># Build with Cargo</span>
+<span class="token function">cargo</span> build --release</code></pre>
+            </div>
+          </div>
+
+          <!-- Step 2: Start the Server -->
+          <div class="quick-start__step">
+            <div class="quick-start__step-header">
+              <span class="quick-start__step-number">2</span>
+              <h3 class="quick-start__step-title">Start the Server</h3>
+            </div>
+            <p class="quick-start__step-description">
+              Launch MirDB with a configuration file. The server listens on port 12333 by default.
+            </p>
+            <div class="code-block" data-language="bash">
+              <div class="code-block__header">
+                <span class="code-block__language">bash</span>
+                <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                  <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="code-block__copy-text">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-bash"><span class="token comment"># Start MirDB with config file</span>
+<span class="token function">mirdb</span> -c config.toml
+
+<span class="token comment"># Or use the default configuration</span>
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+            </div>
+          </div>
+
+          <!-- Step 3: Connect and Use -->
+          <div class="quick-start__step">
+            <div class="quick-start__step-header">
+              <span class="quick-start__step-number">3</span>
+              <h3 class="quick-start__step-title">Connect and Use</h3>
+            </div>
+            <p class="quick-start__step-description">
+              Use any Memcached client or telnet to connect. MirDB supports standard SET and GET commands.
+            </p>
+            <div class="code-block" data-language="bash">
+              <div class="code-block__header">
+                <span class="code-block__language">bash</span>
+                <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                  <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="code-block__copy-text">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-bash"><span class="token comment"># Connect using telnet</span>
+<span class="token function">telnet</span> localhost 12333
+
+<span class="token comment"># Store a value (SET key flags ttl bytes)</span>
+<span class="token keyword">set</span> mykey 0 0 5
+hello
+<span class="token comment"># Response: STORED</span>
+
+<span class="token comment"># Retrieve the value</span>
+<span class="token keyword">get</span> mykey
+<span class="token comment"># Response: VALUE mykey 0 5</span>
+<span class="token comment">#           hello</span>
+<span class="token comment">#           END</span></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuration Example -->
+        <div class="quick-start__config">
+          <h3 class="quick-start__config-title">Sample Configuration</h3>
+          <p class="quick-start__config-description">
+            Create a <code>config.toml</code> file to customize MirDB settings:
+          </p>
+          <div class="code-block" data-language="toml">
+            <div class="code-block__header">
+              <span class="code-block__language">toml</span>
+              <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-toml"><span class="token comment"># MirDB Configuration</span>
+<span class="token key">addr</span> <span class="token punctuation">=</span> <span class="token string">"0.0.0.0:12333"</span>
+<span class="token key">work_dir</span> <span class="token punctuation">=</span> <span class="token string">"/var/lib/mirdb"</span>
+<span class="token key">max_level</span> <span class="token punctuation">=</span> <span class="token number">7</span>
+
+<span class="token comment"># Memory settings</span>
+<span class="token key">mem_table_max_size</span> <span class="token punctuation">=</span> <span class="token string">"4M"</span>
+<span class="token key">sst_max_size</span> <span class="token punctuation">=</span> <span class="token string">"100M"</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section (Scenario 5) -->
+    <section id="architecture" class="architecture" aria-labelledby="architecture-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="architecture-title" class="section-title">Architecture</h2>
+          <p class="section-subtitle">MirDB is built on a Log-Structured Merge-tree (LSM Tree) storage engine, optimized for write-heavy workloads while maintaining efficient reads.</p>
+        </div>
+
+        <!-- LSM Tree Architecture Diagram -->
+        <div class="architecture-diagram lsm-tree-visual" aria-label="LSM Tree Architecture Diagram">
+          <svg class="lsm-diagram" viewBox="0 0 800 400" role="img" aria-labelledby="lsm-diagram-title lsm-diagram-desc">
+            <title id="lsm-diagram-title">LSM Tree Data Flow Diagram</title>
+            <desc id="lsm-diagram-desc">Diagram showing how data flows through the LSM Tree: from write requests through WAL and Memtable, then to SSTables via compaction</desc>
+
+            <!-- Write Request -->
+            <g class="arch-box" data-flow="write-request">
+              <rect x="50" y="30" width="120" height="50" rx="8" class="flow-box flow-box--input"/>
+              <text x="110" y="60" class="flow-text">Write Request</text>
+            </g>
+
+            <!-- Arrow to WAL -->
+            <g class="flow-arrow">
+              <line x1="170" y1="55" x2="220" y2="55" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+            </g>
+
+            <!-- WAL Box -->
+            <g class="arch-box" data-flow="wal">
+              <rect x="230" y="30" width="140" height="50" rx="8" class="flow-box flow-box--wal"/>
+              <text x="300" y="60" class="flow-text">WAL</text>
+            </g>
+
+            <!-- Arrow to Memtable -->
+            <g class="flow-arrow">
+              <line x1="370" y1="55" x2="420" y2="55" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+            </g>
+
+            <!-- Memtable Box -->
+            <g class="arch-box" data-flow="memtable">
+              <rect x="430" y="30" width="160" height="50" rx="8" class="flow-box flow-box--memtable"/>
+              <text x="510" y="55" class="flow-text">Memtable</text>
+              <text x="510" y="70" class="flow-subtext">(Skip List)</text>
+            </g>
+
+            <!-- Arrow down to Immutable -->
+            <g class="flow-arrow">
+              <line x1="510" y1="80" x2="510" y2="120" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+              <text x="520" y="105" class="flow-label">when full</text>
+            </g>
+
+            <!-- Immutable Memtables -->
+            <g class="arch-box" data-flow="immutable">
+              <rect x="430" y="130" width="160" height="50" rx="8" class="flow-box flow-box--immutable"/>
+              <text x="510" y="155" class="flow-text">Imm Memtables</text>
+              <text x="510" y="170" class="flow-subtext">(Queue)</text>
+            </g>
+
+            <!-- Arrow to Level 0 -->
+            <g class="flow-arrow">
+              <line x1="510" y1="180" x2="510" y2="220" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+              <text x="520" y="205" class="flow-label">minor compaction</text>
+            </g>
+
+            <!-- Level 0 SSTables -->
+            <g class="arch-box" data-flow="level0">
+              <rect x="430" y="230" width="160" height="50" rx="8" class="flow-box flow-box--sstable"/>
+              <text x="510" y="255" class="flow-text">Level 0 SSTs</text>
+              <text x="510" y="270" class="flow-subtext">(may overlap)</text>
+            </g>
+
+            <!-- Arrow to Level 1+ -->
+            <g class="flow-arrow">
+              <line x1="510" y1="280" x2="510" y2="320" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+              <text x="520" y="305" class="flow-label">major compaction</text>
+            </g>
+
+            <!-- Level 1+ SSTables -->
+            <g class="arch-box" data-flow="level1plus">
+              <rect x="430" y="330" width="160" height="50" rx="8" class="flow-box flow-box--sstable-deep"/>
+              <text x="510" y="355" class="flow-text">Level 1+ SSTs</text>
+              <text x="510" y="370" class="flow-subtext">(sorted, non-overlapping)</text>
+            </g>
+
+            <!-- Side annotations -->
+            <g class="diagram-annotation">
+              <text x="680" y="55" class="annotation-text">Durability</text>
+              <text x="680" y="155" class="annotation-text">In-Memory</text>
+              <text x="680" y="300" class="annotation-text">On-Disk</text>
+            </g>
+
+            <!-- Arrowhead marker definition -->
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="currentColor"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Architecture Components Grid -->
+        <div class="architecture-components">
+          <!-- Memtable Component -->
+          <article class="architecture-component arch-component--memtable" data-component="memtable">
+            <div class="arch-component-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="9" y1="21" x2="9" y2="9"/>
+              </svg>
+            </div>
+            <h3 class="arch-component-title">Memtable</h3>
+            <p class="arch-component-description">
+              The <strong>memtable</strong> is an in-memory write buffer implemented as a <strong>skip list</strong> data structure.
+              All incoming writes are first recorded here, providing O(log n) insert and lookup performance.
+              When the memtable reaches its configured size threshold (default 4MB), it becomes immutable and is queued for flushing to disk.
+            </p>
+            <ul class="arch-component-details">
+              <li>In-memory skip list for fast writes</li>
+              <li>Configurable size threshold</li>
+              <li>Supports concurrent read access</li>
+            </ul>
+          </article>
+
+          <!-- SSTable Component -->
+          <article class="architecture-component arch-component--sstable" data-component="sstable">
+            <div class="arch-component-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <h3 class="arch-component-title">SSTable</h3>
+            <p class="arch-component-description">
+              <strong>SSTable (Sorted String Table)</strong> is the persistent on-disk storage format used by MirDB.
+              Data is organized into sorted, immutable files with block-based structure for efficient random access.
+              Each SSTable includes a cuckoo filter for fast negative lookups and supports Snappy compression.
+            </p>
+            <ul class="arch-component-details">
+              <li>Sorted String Table for disk persistence</li>
+              <li>Block-based format with index</li>
+              <li>Cuckoo filter for bloom-like lookups</li>
+              <li>Snappy compression support</li>
+            </ul>
+          </article>
+
+          <!-- WAL Component -->
+          <article class="architecture-component arch-component--wal" data-component="wal">
+            <div class="arch-component-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+            </div>
+            <h3 class="arch-component-title">Write-Ahead Log (WAL)</h3>
+            <p class="arch-component-description">
+              The <strong>Write-Ahead Log (WAL)</strong> ensures <strong>durability</strong> by persisting every write to disk before acknowledging it.
+              In the event of a crash, the WAL enables complete <strong>crash recovery</strong> by replaying uncommitted operations.
+              WAL segments correspond to memtables and are cleaned up after successful compaction.
+            </p>
+            <ul class="arch-component-details">
+              <li>Write-ahead logging for durability</li>
+              <li>Crash recovery via log replay</li>
+              <li>Snappy-compressed records</li>
+              <li>Automatic segment cleanup</li>
+            </ul>
+          </article>
+
+          <!-- Compaction Component -->
+          <article class="architecture-component arch-component--compaction" data-component="compaction">
+            <div class="arch-component-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </div>
+            <h3 class="arch-component-title">Compaction</h3>
+            <p class="arch-component-description">
+              MirDB uses a two-phase compaction strategy to maintain optimal performance.
+              <strong>Minor compaction</strong> flushes immutable memtables to Level 0 SSTables.
+              <strong>Major compaction</strong> (level compaction) merges SSTables across levels, eliminating duplicates and maintaining sorted order within each level.
+            </p>
+            <ul class="arch-component-details">
+              <li>Minor compaction: memtable to Level 0 SSTable</li>
+              <li>Major compaction: level-based merging</li>
+              <li>Background threads for non-blocking operation</li>
+              <li>Configurable triggers and thresholds</li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- Read Path Explanation -->
+        <div class="architecture-read-path">
+          <h3 class="arch-subsection-title">Read Path</h3>
+          <p class="arch-subsection-description">
+            When reading a key, MirDB searches in order of recency: first the active memtable, then immutable memtables (newest first),
+            and finally SSTable levels starting from Level 0. Level 0 uses linear search (files may overlap),
+            while Level 1+ uses binary search within sorted, non-overlapping files.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- API Reference Section (Scenario 6) -->
+    <section id="api-reference" class="api-reference" aria-labelledby="api-reference-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="api-reference-title" class="section-title">API Reference</h2>
+          <p class="section-subtitle">MirDB implements the Memcached text protocol. Use any standard Memcached client to interact with MirDB.</p>
+        </div>
+
+        <!-- Storage Commands -->
+        <div class="api-category" data-category="storage">
+          <h3 class="api-category__title">Storage Commands</h3>
+          <p class="api-category__description">Commands for storing data in the database.</p>
+
+          <!-- SET Command -->
+          <article class="api-command" data-command="set">
+            <div class="api-command__header">
+              <h4 class="api-command__name">SET</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Store a key-value pair. Overwrites any existing value for the key.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">set</span> mykey 0 3600 5
+hello
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- ADD Command -->
+          <article class="api-command" data-command="add">
+            <div class="api-command__header">
+              <h4 class="api-command__name">ADD</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Store a key-value pair only if the key does not already exist.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">add &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">add</span> newkey 0 0 5
+world
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- REPLACE Command -->
+          <article class="api-command" data-command="replace">
+            <div class="api-command__header">
+              <h4 class="api-command__name">REPLACE</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Store a key-value pair only if the key already exists.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">replace &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">replace</span> mykey 0 3600 6
+world!
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- APPEND Command -->
+          <article class="api-command" data-command="append">
+            <div class="api-command__header">
+              <h4 class="api-command__name">APPEND</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Append data to an existing value.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">append &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">append</span> mykey 0 0 6
+_added
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- PREPEND Command -->
+          <article class="api-command" data-command="prepend">
+            <div class="api-command__header">
+              <h4 class="api-command__name">PREPEND</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Prepend data to an existing value.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">prepend &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">prepend</span> mykey 0 0 7
+prefix_
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Retrieval Commands -->
+        <div class="api-category" data-category="retrieval">
+          <h3 class="api-category__title">Retrieval Commands</h3>
+          <p class="api-category__description">Commands for retrieving data from the database.</p>
+
+          <!-- GET Command -->
+          <article class="api-command" data-command="get">
+            <div class="api-command__header">
+              <h4 class="api-command__name">GET</h4>
+              <span class="api-command__badge api-command__badge--retrieval">Retrieval</span>
+            </div>
+            <p class="api-command__description">Retrieve one or more keys from the database.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">get &lt;key1&gt; [&lt;key2&gt; ...]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">get</span> mykey
+<span class="token response">VALUE mykey 0 5</span>
+hello
+<span class="token response">END</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- GETS Command -->
+          <article class="api-command" data-command="gets">
+            <div class="api-command__header">
+              <h4 class="api-command__name">GETS</h4>
+              <span class="api-command__badge api-command__badge--retrieval">Retrieval</span>
+            </div>
+            <p class="api-command__description">Retrieve keys with CAS (Check-And-Set) token. In MirDB, this behaves identically to GET.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">gets &lt;key1&gt; [&lt;key2&gt; ...]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">gets</span> mykey otherkey
+<span class="token response">VALUE mykey 0 5</span>
+hello
+<span class="token response">VALUE otherkey 0 5</span>
+world
+<span class="token response">END</span></code></pre>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Deletion Commands -->
+        <div class="api-category" data-category="deletion">
+          <h3 class="api-category__title">Deletion Commands</h3>
+          <p class="api-category__description">Commands for removing data from the database.</p>
+
+          <!-- DELETE Command -->
+          <article class="api-command" data-command="delete">
+            <div class="api-command__header">
+              <h4 class="api-command__name">DELETE</h4>
+              <span class="api-command__badge api-command__badge--deletion">Deletion</span>
+            </div>
+            <p class="api-command__description">Remove a key from the database.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">delete &lt;key&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">delete</span> mykey
+<span class="token response">DELETED</span></code></pre>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- MirDB-Specific Commands -->
+        <div class="api-category" data-category="mirdb-specific">
+          <h3 class="api-category__title">MirDB-Specific Commands</h3>
+          <p class="api-category__description">Extended commands unique to MirDB for database management.</p>
+
+          <!-- INFO Command -->
+          <article class="api-command" data-command="info">
+            <div class="api-command__header">
+              <h4 class="api-command__name">INFO</h4>
+              <span class="api-command__badge api-command__badge--mirdb">MirDB</span>
+            </div>
+            <p class="api-command__description">Display database status and level information. This command is specific to MirDB and provides insights into the LSM tree structure.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">info</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">info</span>
+<span class="token response">MirDB Status:
+Level 0: 2 SSTables
+Level 1: 5 SSTables
+Memtable size: 2.1MB
+END</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- MAJOR_COMPACTION Command -->
+          <article class="api-command" data-command="major_compaction">
+            <div class="api-command__header">
+              <h4 class="api-command__name">MAJOR_COMPACTION</h4>
+              <span class="api-command__badge api-command__badge--mirdb">MirDB</span>
+            </div>
+            <p class="api-command__description">Trigger a manual major compaction. This merges SSTables across levels to reclaim space and improve read performance.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">major_compaction</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">major_compaction</span>
+<span class="token response">OK</span></code></pre>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Response Codes -->
+        <div class="api-category api-response-codes" data-category="response-codes">
+          <h3 class="api-category__title">Response Codes</h3>
+          <p class="api-category__description">Standard response codes returned by MirDB commands.</p>
+
+          <div class="response-codes-grid">
+            <div class="response-code" data-response="stored">
+              <code class="response-code__name">STORED</code>
+              <p class="response-code__description">Data stored successfully</p>
+            </div>
+            <div class="response-code" data-response="not_stored">
+              <code class="response-code__name">NOT_STORED</code>
+              <p class="response-code__description">Data not stored (condition not met for add/replace)</p>
+            </div>
+            <div class="response-code" data-response="exists">
+              <code class="response-code__name">EXISTS</code>
+              <p class="response-code__description">CAS check failed (item has been modified)</p>
+            </div>
+            <div class="response-code" data-response="not_found">
+              <code class="response-code__name">NOT_FOUND</code>
+              <p class="response-code__description">Key not found (for delete/replace operations)</p>
+            </div>
+            <div class="response-code" data-response="deleted">
+              <code class="response-code__name">DELETED</code>
+              <p class="response-code__description">Key deleted successfully</p>
+            </div>
+            <div class="response-code" data-response="error">
+              <code class="response-code__name">ERROR</code>
+              <p class="response-code__description">Unknown command or syntax error</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Configuration Section (Scenario 7) -->
+    <section id="configuration" class="configuration" aria-labelledby="configuration-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="configuration-title" class="section-title">Configuration</h2>
+          <p class="section-subtitle">Customize MirDB behavior with these tunable parameters. Configuration uses TOML format.</p>
+        </div>
+
+        <!-- Configuration Tables -->
+        <div class="config-tables">
+          <!-- Network Configuration -->
+          <div class="config-category" data-config="network">
+            <h3 class="config-category-title">Network</h3>
+            <table class="config-table config-table--network">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>addr</code></td>
+                  <td>Listen address and port for memcached connections</td>
+                  <td><code>0.0.0.0:12333</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Storage Configuration -->
+          <div class="config-category" data-config="storage">
+            <h3 class="config-category-title">Storage</h3>
+            <table class="config-table config-table--storage">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>work_dir</code></td>
+                  <td>Directory path for data files (SSTables, WAL)</td>
+                  <td><code>/tmp/mirdb</code></td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>max_level</code></td>
+                  <td>Maximum number of LSM tree levels</td>
+                  <td><code>7</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Memory Tables Configuration -->
+          <div class="config-category" data-config="memtable">
+            <h3 class="config-category-title">Memory Tables</h3>
+            <table class="config-table config-table--memtable">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>mem_table_max_size</code></td>
+                  <td>Maximum memtable size before flush to disk</td>
+                  <td><code>4M</code> (4MB)</td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>mem_table_max_height</code></td>
+                  <td>Skip list maximum height</td>
+                  <td><code>32</code></td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>imm_mem_table_max_count</code></td>
+                  <td>Maximum queued immutable memtables</td>
+                  <td><code>16</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- SSTable Configuration -->
+          <div class="config-category" data-config="sstable">
+            <h3 class="config-category-title">SSTables</h3>
+            <table class="config-table config-table--sstable">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>sst_max_size</code></td>
+                  <td>Maximum SSTable file size</td>
+                  <td><code>100M</code> (100MB)</td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>block_size</code></td>
+                  <td>Data block size within SSTables</td>
+                  <td><code>4K</code> (4KB)</td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>block_restart_interval</code></td>
+                  <td>Key prefix restart interval</td>
+                  <td><code>16</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Compaction Configuration -->
+          <div class="config-category" data-config="compaction">
+            <h3 class="config-category-title">Compaction</h3>
+            <table class="config-table config-table--compaction">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="config-param">
+                  <td><code>l0_compaction_trigger</code></td>
+                  <td>Number of Level 0 files before compaction triggers</td>
+                  <td><code>4</code></td>
+                </tr>
+                <tr class="config-param">
+                  <td><code>thread_sleep_ms</code></td>
+                  <td>Background thread sleep interval</td>
+                  <td><code>500</code> (ms)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Size Units Documentation -->
+        <div class="config-size-units">
+          <h3 class="config-subsection-title">Size Units</h3>
+          <p class="config-subsection-description">
+            Configuration parameters that specify sizes support the following suffixes:
+          </p>
+          <ul class="size-units-list">
+            <li><code>K</code> - Kilobytes (1,024 bytes)</li>
+            <li><code>M</code> - Megabytes (1,024 KB)</li>
+            <li><code>G</code> - Gigabytes (1,024 MB)</li>
+            <li><code>T</code> - Terabytes (1,024 GB)</li>
+          </ul>
+        </div>
+
+        <!-- Example Configuration -->
+        <div class="config-example">
+          <h3 class="config-subsection-title">Example Configuration</h3>
+          <p class="config-subsection-description">
+            Create a <code>config.toml</code> file with your desired settings:
+          </p>
+          <div class="code-block" data-language="toml">
+            <div class="code-block__header">
+              <span class="code-block__language">toml</span>
+              <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-toml"><span class="token comment"># MirDB Configuration File</span>
+
+<span class="token comment"># Network Settings</span>
+<span class="token key">addr</span> <span class="token punctuation">=</span> <span class="token string">"0.0.0.0:12333"</span>
+
+<span class="token comment"># Storage Settings</span>
+<span class="token key">work_dir</span> <span class="token punctuation">=</span> <span class="token string">"/var/lib/mirdb"</span>
+<span class="token key">max_level</span> <span class="token punctuation">=</span> <span class="token number">7</span>
+
+<span class="token comment"># Memory Table Settings</span>
+<span class="token key">mem_table_max_size</span> <span class="token punctuation">=</span> <span class="token string">"4M"</span>
+<span class="token key">mem_table_max_height</span> <span class="token punctuation">=</span> <span class="token number">32</span>
+<span class="token key">imm_mem_table_max_count</span> <span class="token punctuation">=</span> <span class="token number">16</span>
+
+<span class="token comment"># SSTable Settings</span>
+<span class="token key">sst_max_size</span> <span class="token punctuation">=</span> <span class="token string">"100M"</span>
+<span class="token key">block_size</span> <span class="token punctuation">=</span> <span class="token string">"4K"</span>
+<span class="token key">block_restart_interval</span> <span class="token punctuation">=</span> <span class="token number">16</span>
+
+<span class="token comment"># Compaction Settings</span>
+<span class="token key">l0_compaction_trigger</span> <span class="token punctuation">=</span> <span class="token number">4</span>
+<span class="token key">thread_sleep_ms</span> <span class="token punctuation">=</span> <span class="token number">500</span></code></pre>
+          </div>
+        </div>
+
+        <!-- Command Line Usage -->
+        <div class="config-cli">
+          <h3 class="config-subsection-title">Command Line Usage</h3>
+          <p class="config-subsection-description">
+            Start MirDB with a configuration file using the <code>-c</code> flag:
+          </p>
+          <div class="code-block" data-language="bash">
+            <div class="code-block__header">
+              <span class="code-block__language">bash</span>
+              <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-bash"><span class="token comment"># Start with custom configuration</span>
+<span class="token function">mirdb</span> -c /path/to/config.toml
+
+<span class="token comment"># Or use the bundled example config</span>
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Performance Section (Scenario 8) -->
+    <section id="performance" class="performance" aria-labelledby="performance-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="performance-title" class="section-title">Performance</h2>
+          <p class="section-subtitle">MirDB is designed for high-throughput write workloads while maintaining efficient reads through its LSM Tree architecture.</p>
+        </div>
+
+        <!-- Performance Benchmarks Grid -->
+        <div class="performance-benchmarks benchmark-grid">
+          <!-- Write Throughput -->
+          <article class="benchmark-metric performance-card metric-card" data-metric="write-throughput">
+            <div class="metric-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                <polyline points="16 7 22 7 22 13"/>
+              </svg>
+            </div>
+            <h3 class="metric-title">High Write Throughput</h3>
+            <p class="metric-value">Sequential Writes</p>
+            <p class="metric-description">
+              LSM Tree architecture optimizes for write-heavy workloads. All writes go to the in-memory memtable first, then batch-flush to disk via compaction.
+            </p>
+          </article>
+
+          <!-- Read Latency -->
+          <article class="benchmark-metric performance-card metric-card" data-metric="read-latency">
+            <div class="metric-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <h3 class="metric-title">Low Read Latency</h3>
+            <p class="metric-value">In-Memory + Bloom Filter</p>
+            <p class="metric-description">
+              Hot data served from memtable. Cuckoo filters provide fast negative lookups, minimizing unnecessary disk reads for missing keys.
+            </p>
+          </article>
+
+          <!-- Durability -->
+          <article class="benchmark-metric performance-card metric-card" data-metric="durability">
+            <div class="metric-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3 class="metric-title">Durability</h3>
+            <p class="metric-value">Write-Ahead Log</p>
+            <p class="metric-description">
+              Every write is recorded to the Write-Ahead Log before acknowledgment, ensuring data survives crashes and power failures.
+            </p>
+          </article>
+
+          <!-- Space Efficiency -->
+          <article class="benchmark-metric performance-card metric-card" data-metric="space-efficiency">
+            <div class="metric-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </div>
+            <h3 class="metric-title">Space Efficient</h3>
+            <p class="metric-value">Compaction + Compression</p>
+            <p class="metric-description">
+              Background compaction reclaims deleted keys and merges files. Snappy compression reduces storage footprint without sacrificing speed.
+            </p>
+          </article>
+        </div>
+
+        <!-- Performance Characteristics -->
+        <div class="performance-characteristics">
+          <h3 class="performance-subsection-title">Performance Characteristics</h3>
+          <div class="characteristics-grid">
+            <div class="characteristic-item">
+              <span class="characteristic-label">Write Pattern</span>
+              <span class="characteristic-value">Optimized for sequential writes</span>
+            </div>
+            <div class="characteristic-item">
+              <span class="characteristic-label">Read Pattern</span>
+              <span class="characteristic-value">Fast point lookups via bloom filters</span>
+            </div>
+            <div class="characteristic-item">
+              <span class="characteristic-label">Memory Usage</span>
+              <span class="characteristic-value">Configurable memtable size (default 4MB)</span>
+            </div>
+            <div class="characteristic-item">
+              <span class="characteristic-label">Compression</span>
+              <span class="characteristic-value">Snappy compression for SSTables and WAL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance Note -->
+        <div class="performance-note">
+          <p>
+            <strong>Note:</strong> Actual performance varies based on hardware, configuration, and workload characteristics.
+            Use the <code>INFO</code> command to monitor real-time database metrics and SSTable levels.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contributing Section (Scenario 9) -->
+    <section id="contributing" class="contributing" aria-labelledby="contributing-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="contributing-title" class="section-title">Contributing</h2>
+          <p class="section-subtitle">We welcome contributions from the community. Here's how you can get involved and help improve MirDB.</p>
+        </div>
+
+        <!-- Contributing Guidelines Grid -->
+        <div class="contributing-grid contributing-guidelines">
+          <!-- Development Setup -->
+          <article class="contributing-card contributing-setup" data-contributing="setup">
+            <div class="contributing-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </div>
+            <h3 class="contributing-card-title">Development Setup</h3>
+            <p class="contributing-card-description">
+              Get your development environment ready to contribute to MirDB.
+            </p>
+            <ol class="contributing-steps">
+              <li><strong>Install Rust:</strong> MirDB requires Rust toolchain. Install via <code>rustup</code></li>
+              <li><strong>Clone the repository:</strong> <code>git clone https://github.com/example/mirdb.git</code></li>
+              <li><strong>Build the project:</strong> <code>cargo build</code></li>
+              <li><strong>Run tests:</strong> <code>cargo test</code> to ensure everything works</li>
+            </ol>
+          </article>
+
+          <!-- Contribution Process -->
+          <article class="contributing-card contributing-process" data-contributing="process">
+            <div class="contributing-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"/>
+                <line x1="1.05" y1="12" x2="7" y2="12"/>
+                <line x1="17.01" y1="12" x2="22.96" y2="12"/>
+              </svg>
+            </div>
+            <h3 class="contributing-card-title">How to Contribute</h3>
+            <p class="contributing-card-description">
+              Follow these steps to submit your contributions via Pull Requests.
+            </p>
+            <ol class="contributing-steps">
+              <li><strong>Fork the repository</strong> to your GitHub account</li>
+              <li><strong>Create a feature branch:</strong> <code>git checkout -b feature/your-feature</code></li>
+              <li><strong>Make your changes</strong> and commit with clear messages</li>
+              <li><strong>Submit a Pull Request</strong> with a description of your changes</li>
+            </ol>
+          </article>
+
+          <!-- Reporting Issues -->
+          <article class="contributing-card contributing-issues" data-contributing="issues">
+            <div class="contributing-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
+            <h3 class="contributing-card-title">Reporting Issues</h3>
+            <p class="contributing-card-description">
+              Found a bug or have a feature request? Let us know!
+            </p>
+            <ul class="contributing-list">
+              <li>Check existing issues to avoid duplicates</li>
+              <li>Provide clear steps to reproduce bugs</li>
+              <li>Include MirDB version and environment details</li>
+              <li>Use descriptive titles for feature requests</li>
+            </ul>
+          </article>
+
+          <!-- Code Guidelines -->
+          <article class="contributing-card contributing-guidelines-card" data-contributing="guidelines">
+            <div class="contributing-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <h3 class="contributing-card-title">Code Style Guidelines</h3>
+            <p class="contributing-card-description">
+              Maintain code quality by following these guidelines.
+            </p>
+            <ul class="contributing-list">
+              <li>Run <code>cargo fmt</code> before committing</li>
+              <li>Ensure <code>cargo clippy</code> passes without warnings</li>
+              <li>Write tests for new features and bug fixes</li>
+              <li>Keep commits focused and atomic</li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- GitHub CTA -->
+        <div class="contributing-cta">
+          <p class="contributing-cta-text">Ready to contribute? Check out our repository and get started!</p>
+          <a href="https://github.com/example/mirdb" class="contributing-cta-button" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 10) -->
+  <footer class="footer" id="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__content">
+        <!-- Footer Brand -->
+        <div class="footer__brand">
+          <a href="#" class="footer__logo-link">
+            <img src="assets/logo.gif" alt="MirDB Logo" class="footer__logo" loading="lazy">
+            <span class="footer__title">MirDB</span>
+          </a>
+          <p class="footer__tagline">A persistent key-value store with Memcached protocol support.</p>
+        </div>
+
+        <!-- Footer Links -->
+        <div class="footer__links">
+          <div class="footer__links-group">
+            <h3 class="footer__links-title">Resources</h3>
+            <ul class="footer__links-list">
+              <li><a href="#features" class="footer__link">Features</a></li>
+              <li><a href="#quick-start" class="footer__link">Quick Start</a></li>
+              <li><a href="#api-reference" class="footer__link">API Reference</a></li>
+              <li><a href="#configuration" class="footer__link">Configuration</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__links-group">
+            <h3 class="footer__links-title">Project</h3>
+            <ul class="footer__links-list">
+              <li>
+                <a href="https://github.com/yetone/mirdb" class="footer__link footer__github-link" target="_blank" rel="noopener noreferrer">
+                  <svg class="footer__link-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  GitHub Repository
+                </a>
+              </li>
+              <li><a href="#contributing" class="footer__link">Contributing</a></li>
+              <li><a href="https://github.com/yetone/mirdb/issues" class="footer__link" target="_blank" rel="noopener noreferrer">Report Issues</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer__bottom">
+        <div class="footer__license">
+          <span class="footer__license-text">Released under the MIT License</span>
+        </div>
+        <p class="footer__copyright">&copy; 2024 MirDB. All rights reserved.</p>
+      </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="back-to-top" aria-label="Back to top" title="Back to top">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="19" x2="12" y2="5"></line>
+        <polyline points="5 12 12 5 19 12"></polyline>
+      </svg>
+    </button>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/copy-code.js"></script>
+</body>
+</html>
