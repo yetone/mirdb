@@ -76,6 +76,29 @@
     window.addEventListener('scroll', handleScroll, { passive: true });
   }
 
+  // Back to Top Button
+  const backToTopButton = document.getElementById('back-to-top');
+
+  function handleBackToTopVisibility() {
+    if (window.pageYOffset > 300) {
+      backToTopButton.classList.add('visible');
+    } else {
+      backToTopButton.classList.remove('visible');
+    }
+  }
+
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  if (backToTopButton) {
+    window.addEventListener('scroll', handleBackToTopVisibility, { passive: true });
+    backToTopButton.addEventListener('click', scrollToTop);
+  }
+
   // Initialize
   initTheme();
 })();

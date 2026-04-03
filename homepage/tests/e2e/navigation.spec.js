@@ -162,3 +162,155 @@ test.describe('Navigation Interactions', () => {
     }
   });
 });
+
+// Footer Section Tests (Scenario 10)
+test.describe('Footer Section', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Footer section exists at bottom of page', async ({ page }) => {
+    // Check footer exists
+    const footer = page.locator('.footer');
+    await expect(footer).toBeVisible();
+
+    // Verify footer has proper role
+    await expect(footer).toHaveAttribute('role', 'contentinfo');
+
+    // Scroll to footer to ensure it's at the bottom
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeInViewport();
+
+    // Verify footer is positioned at the bottom (after main content)
+    const main = page.locator('main');
+    const mainBox = await main.boundingBox();
+    const footerBox = await footer.boundingBox();
+    expect(footerBox.y).toBeGreaterThan(mainBox.y + mainBox.height - 10);
+  });
+
+  test('TC2: GitHub repository link is present and clickable', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.locator('.footer');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Check GitHub link exists
+    const githubLink = page.locator('.footer__github-link');
+    await expect(githubLink).toBeVisible();
+
+    // Verify link URL
+    await expect(githubLink).toHaveAttribute('href', 'https://github.com/yetone/mirdb');
+
+    // Verify link opens in new tab
+    await expect(githubLink).toHaveAttribute('target', '_blank');
+    await expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
+
+    // Verify link text
+    await expect(githubLink).toContainText('GitHub Repository');
+
+    // Verify it's clickable (not disabled)
+    const isEnabled = await githubLink.isEnabled();
+    expect(isEnabled).toBe(true);
+  });
+
+  test('TC3: License information is displayed in footer', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.locator('.footer');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Check license information exists
+    const license = page.locator('.footer__license');
+    await expect(license).toBeVisible();
+
+    // Verify license text
+    const licenseText = page.locator('.footer__license-text');
+    await expect(licenseText).toBeVisible();
+    await expect(licenseText).toContainText('MIT License');
+  });
+
+  test('TC4: Copyright notice is present', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.locator('.footer');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Check copyright notice exists
+    const copyright = page.locator('.footer__copyright');
+    await expect(copyright).toBeVisible();
+
+    // Verify copyright text contains expected elements
+    const copyrightText = await copyright.textContent();
+    expect(copyrightText).toMatch(/©.*\d{4}.*MirDB/);
+    expect(copyrightText).toContain('All rights reserved');
+  });
+
+  test('TC5: Back-to-top button exists and scrolls to page top when clicked', async ({ page }) => {
+    // Scroll down first to make the back-to-top button visible
+    await page.evaluate(() => window.scrollTo(0, 1000));
+    await page.waitForTimeout(300);
+
+    // Check back-to-top button exists
+    const backToTop = page.locator('#back-to-top');
+    await expect(backToTop).toBeVisible();
+
+    // Verify accessible label
+    await expect(backToTop).toHaveAttribute('aria-label', 'Back to top');
+
+    // Verify it's a button
+    const tagName = await backToTop.evaluate(el => el.tagName.toLowerCase());
+    expect(tagName).toBe('button');
+
+    // Get current scroll position
+    const scrollBefore = await page.evaluate(() => window.scrollY);
+    expect(scrollBefore).toBeGreaterThan(0);
+
+    // Click the back-to-top button
+    await backToTop.click();
+
+    // Wait for smooth scroll
+    await page.waitForTimeout(800);
+
+    // Verify page scrolled to top (allow small tolerance for rounding)
+    const scrollAfter = await page.evaluate(() => window.scrollY);
+    expect(scrollAfter).toBeLessThanOrEqual(10);
+  });
+
+  test('Footer contains navigation links', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.locator('.footer');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Check footer links exist
+    const footerLinks = footer.locator('.footer__link');
+    const count = await footerLinks.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Verify some key links are present
+    const featuresLink = footer.locator('.footer__link[href="#features"]');
+    await expect(featuresLink).toBeVisible();
+
+    const quickStartLink = footer.locator('.footer__link[href="#quick-start"]');
+    await expect(quickStartLink).toBeVisible();
+  });
+
+  test('Footer brand section is present', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.locator('.footer');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Check footer brand exists
+    const brand = footer.locator('.footer__brand');
+    await expect(brand).toBeVisible();
+
+    // Check logo is present
+    const logo = footer.locator('.footer__logo');
+    await expect(logo).toBeVisible();
+
+    // Check title is present
+    const title = footer.locator('.footer__title');
+    await expect(title).toBeVisible();
+    await expect(title).toHaveText('MirDB');
+
+    // Check tagline is present
+    const tagline = footer.locator('.footer__tagline');
+    await expect(tagline).toBeVisible();
+  });
+});
