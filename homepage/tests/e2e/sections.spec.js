@@ -709,8 +709,90 @@ test.describe('Performance Section (Scenario 8)', () => {
 });
 
 test.describe('Contributing Section (Scenario 9)', () => {
-  test.skip('Contributing section shows guidelines', async ({ page }) => {
-    // To be implemented by Scenario 9
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Contributing section exists with clear heading', async ({ page }) => {
+    // Navigate to Contributing section
+    const contributingSection = page.locator('#contributing');
+    await expect(contributingSection).toBeVisible();
+
+    // Check for clear heading
+    const heading = contributingSection.locator('h2.section-title');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText('Contributing');
+  });
+
+  test('TC2: Development setup instructions are provided', async ({ page }) => {
+    const contributingSection = page.locator('#contributing');
+    await expect(contributingSection).toBeVisible();
+
+    // Check for development setup section
+    const setupSection = contributingSection.locator('.contributing-setup, [data-contributing="setup"]');
+    await expect(setupSection).toBeVisible();
+
+    // Verify setup instructions content
+    const sectionText = await contributingSection.textContent();
+    expect(sectionText.toLowerCase()).toMatch(/development|setup|install|clone|build/);
+    expect(sectionText.toLowerCase()).toMatch(/cargo|rust|environment/);
+  });
+
+  test('TC3: Contribution process is documented (PRs and issues)', async ({ page }) => {
+    const contributingSection = page.locator('#contributing');
+    await expect(contributingSection).toBeVisible();
+
+    // Check for contribution process section
+    const processSection = contributingSection.locator('.contributing-process, [data-contributing="process"]');
+    await expect(processSection).toBeVisible();
+
+    // Verify contribution process content mentions PRs and issues
+    const sectionText = await contributingSection.textContent();
+    expect(sectionText.toLowerCase()).toMatch(/pull request|pr/);
+    expect(sectionText.toLowerCase()).toMatch(/issue|bug|feature/);
+  });
+
+  test('TC4: Link to GitHub repository for contributions exists', async ({ page }) => {
+    const contributingSection = page.locator('#contributing');
+    await expect(contributingSection).toBeVisible();
+
+    // Check for GitHub link
+    const githubLink = contributingSection.locator('a[href*="github"]');
+    await expect(githubLink).toBeVisible();
+
+    // Verify it links to GitHub
+    const href = await githubLink.first().getAttribute('href');
+    expect(href).toContain('github');
+  });
+
+  test('Contributing section is accessible via navigation', async ({ page }) => {
+    // Click navigation link to Contributing
+    await page.locator('a[href="#contributing"]').first().click();
+
+    // Wait for scroll
+    await page.waitForTimeout(500);
+
+    // Verify section is in viewport
+    const contributingSection = page.locator('#contributing');
+    await expect(contributingSection).toBeInViewport();
+  });
+
+  test('Contributing section has proper structure with guidelines grid', async ({ page }) => {
+    const contributingSection = page.locator('#contributing');
+    await expect(contributingSection).toBeVisible();
+
+    // Check for contributing guidelines structure
+    const guidelinesGrid = contributingSection.locator('.contributing-grid, .contributing-guidelines');
+    await expect(guidelinesGrid).toBeVisible();
+  });
+
+  test('Contributing section contains code style guidelines', async ({ page }) => {
+    const contributingSection = page.locator('#contributing');
+    await expect(contributingSection).toBeVisible();
+
+    // Check for code style guidelines
+    const sectionText = await contributingSection.textContent();
+    expect(sectionText.toLowerCase()).toMatch(/code|style|format|lint|test/);
   });
 });
 
