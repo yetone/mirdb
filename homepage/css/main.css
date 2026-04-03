@@ -467,11 +467,196 @@ h4 { font-size: var(--font-size-xl); }
    Quick Start Section (Scenario 4)
    ========================================================================== */
 
-#quick-start {
+#quick-start,
+.quick-start {
   background-color: var(--color-bg-secondary);
 }
 
-/* Quick Start placeholder - to be implemented by Scenario 4 */
+.quick-start__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.quick-start__step {
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+}
+
+.quick-start__step-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.quick-start__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.quick-start__step-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.quick-start__step-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+/* Code Block Styles */
+.code-block {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border-dark);
+}
+
+.code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-block__language {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.code-block__copy {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.code-block__copy:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-code-text);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.code-block__copy[data-copy-state="copied"] {
+  background-color: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #10b981;
+}
+
+.code-block__copy-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.code-block__copy-text {
+  font-weight: 500;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: var(--spacing-lg);
+  overflow-x: auto;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.code-block code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+  color: var(--color-code-text);
+  background: none;
+  padding: 0;
+}
+
+/* Syntax Highlighting Tokens */
+.code-block .token.comment {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.code-block .token.function,
+.code-block .token.builtin {
+  color: #60a5fa;
+}
+
+.code-block .token.keyword {
+  color: #c084fc;
+}
+
+.code-block .token.string {
+  color: #34d399;
+}
+
+.code-block .token.number {
+  color: #fbbf24;
+}
+
+.code-block .token.punctuation {
+  color: #9ca3af;
+}
+
+.code-block .token.key {
+  color: #f472b6;
+}
+
+/* Configuration Section within Quick Start */
+.quick-start__config {
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+}
+
+.quick-start__config-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.quick-start__config-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.quick-start__config-description code {
+  background-color: var(--color-bg-tertiary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
 
 /* ==========================================================================
    Architecture Section (Scenario 5)

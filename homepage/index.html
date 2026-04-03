@@ -173,10 +173,135 @@
     </section>
 
     <!-- Quick Start Section (Scenario 4) -->
-    <section id="quick-start">
+    <section id="quick-start" class="quick-start" aria-labelledby="quick-start-title">
       <div class="container">
-        <h2 class="section-title">Quick Start</h2>
-        <!-- Quick Start content placeholder - to be implemented by Scenario 4 -->
+        <div class="section-header">
+          <h2 id="quick-start-title" class="section-title">Quick Start</h2>
+          <p class="section-subtitle">Get MirDB up and running in minutes with these simple steps.</p>
+        </div>
+
+        <div class="quick-start__steps">
+          <!-- Step 1: Installation -->
+          <div class="quick-start__step">
+            <div class="quick-start__step-header">
+              <span class="quick-start__step-number">1</span>
+              <h3 class="quick-start__step-title">Install MirDB</h3>
+            </div>
+            <p class="quick-start__step-description">
+              Clone the repository and build from source using Cargo, Rust's package manager.
+            </p>
+            <div class="code-block" data-language="bash">
+              <div class="code-block__header">
+                <span class="code-block__language">bash</span>
+                <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                  <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="code-block__copy-text">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-bash"><span class="token comment"># Clone the repository</span>
+<span class="token function">git</span> clone https://github.com/example/mirdb.git
+<span class="token builtin">cd</span> mirdb
+
+<span class="token comment"># Build with Cargo</span>
+<span class="token function">cargo</span> build --release</code></pre>
+            </div>
+          </div>
+
+          <!-- Step 2: Start the Server -->
+          <div class="quick-start__step">
+            <div class="quick-start__step-header">
+              <span class="quick-start__step-number">2</span>
+              <h3 class="quick-start__step-title">Start the Server</h3>
+            </div>
+            <p class="quick-start__step-description">
+              Launch MirDB with a configuration file. The server listens on port 12333 by default.
+            </p>
+            <div class="code-block" data-language="bash">
+              <div class="code-block__header">
+                <span class="code-block__language">bash</span>
+                <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                  <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="code-block__copy-text">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-bash"><span class="token comment"># Start MirDB with config file</span>
+<span class="token function">mirdb</span> -c config.toml
+
+<span class="token comment"># Or use the default configuration</span>
+./target/release/mirdb-server -c etc/mirdb.toml</code></pre>
+            </div>
+          </div>
+
+          <!-- Step 3: Connect and Use -->
+          <div class="quick-start__step">
+            <div class="quick-start__step-header">
+              <span class="quick-start__step-number">3</span>
+              <h3 class="quick-start__step-title">Connect and Use</h3>
+            </div>
+            <p class="quick-start__step-description">
+              Use any Memcached client or telnet to connect. MirDB supports standard SET and GET commands.
+            </p>
+            <div class="code-block" data-language="bash">
+              <div class="code-block__header">
+                <span class="code-block__language">bash</span>
+                <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                  <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="code-block__copy-text">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-bash"><span class="token comment"># Connect using telnet</span>
+<span class="token function">telnet</span> localhost 12333
+
+<span class="token comment"># Store a value (SET key flags ttl bytes)</span>
+<span class="token keyword">set</span> mykey 0 0 5
+hello
+<span class="token comment"># Response: STORED</span>
+
+<span class="token comment"># Retrieve the value</span>
+<span class="token keyword">get</span> mykey
+<span class="token comment"># Response: VALUE mykey 0 5</span>
+<span class="token comment">#           hello</span>
+<span class="token comment">#           END</span></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuration Example -->
+        <div class="quick-start__config">
+          <h3 class="quick-start__config-title">Sample Configuration</h3>
+          <p class="quick-start__config-description">
+            Create a <code>config.toml</code> file to customize MirDB settings:
+          </p>
+          <div class="code-block" data-language="toml">
+            <div class="code-block__header">
+              <span class="code-block__language">toml</span>
+              <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-toml"><span class="token comment"># MirDB Configuration</span>
+<span class="token key">addr</span> <span class="token punctuation">=</span> <span class="token string">"0.0.0.0:12333"</span>
+<span class="token key">work_dir</span> <span class="token punctuation">=</span> <span class="token string">"/var/lib/mirdb"</span>
+<span class="token key">max_level</span> <span class="token punctuation">=</span> <span class="token number">7</span>
+
+<span class="token comment"># Memory settings</span>
+<span class="token key">mem_table_max_size</span> <span class="token punctuation">=</span> <span class="token string">"4M"</span>
+<span class="token key">sst_max_size</span> <span class="token punctuation">=</span> <span class="token string">"100M"</span></code></pre>
+          </div>
+        </div>
       </div>
     </section>
 
