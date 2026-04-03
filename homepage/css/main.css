@@ -477,11 +477,216 @@ h4 { font-size: var(--font-size-xl); }
    Architecture Section (Scenario 5)
    ========================================================================== */
 
-#architecture {
+#architecture,
+.architecture {
   background-color: var(--color-bg-primary);
 }
 
-/* Architecture placeholder - to be implemented by Scenario 5 */
+/* Architecture Diagram */
+.architecture-diagram {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-2xl);
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+}
+
+.lsm-diagram {
+  width: 100%;
+  height: auto;
+  color: var(--color-text-primary);
+}
+
+.flow-box {
+  fill: var(--color-bg-tertiary);
+  stroke: var(--color-border);
+  stroke-width: 2;
+  transition: fill var(--transition-fast);
+}
+
+.flow-box--input {
+  fill: rgba(37, 99, 235, 0.1);
+  stroke: var(--color-primary);
+}
+
+.flow-box--wal {
+  fill: rgba(245, 158, 11, 0.1);
+  stroke: #f59e0b;
+}
+
+.flow-box--memtable {
+  fill: rgba(16, 185, 129, 0.1);
+  stroke: #10b981;
+}
+
+.flow-box--immutable {
+  fill: rgba(139, 92, 246, 0.1);
+  stroke: #8b5cf6;
+}
+
+.flow-box--sstable {
+  fill: rgba(59, 130, 246, 0.1);
+  stroke: #3b82f6;
+}
+
+.flow-box--sstable-deep {
+  fill: rgba(99, 102, 241, 0.1);
+  stroke: #6366f1;
+}
+
+.flow-text {
+  fill: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.flow-subtext {
+  fill: var(--color-text-secondary);
+  font-size: 11px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.flow-label {
+  fill: var(--color-text-muted);
+  font-size: 10px;
+  font-style: italic;
+}
+
+.annotation-text {
+  fill: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-anchor: start;
+}
+
+.flow-arrow line {
+  stroke: var(--color-text-muted);
+}
+
+.flow-arrow polygon {
+  fill: var(--color-text-muted);
+}
+
+/* Architecture Components Grid */
+.architecture-components {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.architecture-component {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.architecture-component:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.arch-component-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.arch-component--memtable .arch-component-icon {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.arch-component--sstable .arch-component-icon {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.arch-component--wal .arch-component-icon {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.arch-component--compaction .arch-component-icon {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.arch-component-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.arch-component-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-md);
+}
+
+.arch-component-description strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.arch-component-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.arch-component-details li {
+  position: relative;
+  padding-left: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xs);
+}
+
+.arch-component-details li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+}
+
+/* Read Path Section */
+.architecture-read-path {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+}
+
+.arch-subsection-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.arch-subsection-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
 
 /* ==========================================================================
    API Reference Section (Scenario 6)

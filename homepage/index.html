@@ -181,10 +181,208 @@
     </section>
 
     <!-- Architecture Section (Scenario 5) -->
-    <section id="architecture">
+    <section id="architecture" class="architecture" aria-labelledby="architecture-title">
       <div class="container">
-        <h2 class="section-title">Architecture</h2>
-        <!-- Architecture content placeholder - to be implemented by Scenario 5 -->
+        <div class="section-header">
+          <h2 id="architecture-title" class="section-title">Architecture</h2>
+          <p class="section-subtitle">MirDB is built on a Log-Structured Merge-tree (LSM Tree) storage engine, optimized for write-heavy workloads while maintaining efficient reads.</p>
+        </div>
+
+        <!-- LSM Tree Architecture Diagram -->
+        <div class="architecture-diagram lsm-tree-visual" aria-label="LSM Tree Architecture Diagram">
+          <svg class="lsm-diagram" viewBox="0 0 800 400" role="img" aria-labelledby="lsm-diagram-title lsm-diagram-desc">
+            <title id="lsm-diagram-title">LSM Tree Data Flow Diagram</title>
+            <desc id="lsm-diagram-desc">Diagram showing how data flows through the LSM Tree: from write requests through WAL and Memtable, then to SSTables via compaction</desc>
+
+            <!-- Write Request -->
+            <g class="arch-box" data-flow="write-request">
+              <rect x="50" y="30" width="120" height="50" rx="8" class="flow-box flow-box--input"/>
+              <text x="110" y="60" class="flow-text">Write Request</text>
+            </g>
+
+            <!-- Arrow to WAL -->
+            <g class="flow-arrow">
+              <line x1="170" y1="55" x2="220" y2="55" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+            </g>
+
+            <!-- WAL Box -->
+            <g class="arch-box" data-flow="wal">
+              <rect x="230" y="30" width="140" height="50" rx="8" class="flow-box flow-box--wal"/>
+              <text x="300" y="60" class="flow-text">WAL</text>
+            </g>
+
+            <!-- Arrow to Memtable -->
+            <g class="flow-arrow">
+              <line x1="370" y1="55" x2="420" y2="55" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+            </g>
+
+            <!-- Memtable Box -->
+            <g class="arch-box" data-flow="memtable">
+              <rect x="430" y="30" width="160" height="50" rx="8" class="flow-box flow-box--memtable"/>
+              <text x="510" y="55" class="flow-text">Memtable</text>
+              <text x="510" y="70" class="flow-subtext">(Skip List)</text>
+            </g>
+
+            <!-- Arrow down to Immutable -->
+            <g class="flow-arrow">
+              <line x1="510" y1="80" x2="510" y2="120" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+              <text x="520" y="105" class="flow-label">when full</text>
+            </g>
+
+            <!-- Immutable Memtables -->
+            <g class="arch-box" data-flow="immutable">
+              <rect x="430" y="130" width="160" height="50" rx="8" class="flow-box flow-box--immutable"/>
+              <text x="510" y="155" class="flow-text">Imm Memtables</text>
+              <text x="510" y="170" class="flow-subtext">(Queue)</text>
+            </g>
+
+            <!-- Arrow to Level 0 -->
+            <g class="flow-arrow">
+              <line x1="510" y1="180" x2="510" y2="220" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+              <text x="520" y="205" class="flow-label">minor compaction</text>
+            </g>
+
+            <!-- Level 0 SSTables -->
+            <g class="arch-box" data-flow="level0">
+              <rect x="430" y="230" width="160" height="50" rx="8" class="flow-box flow-box--sstable"/>
+              <text x="510" y="255" class="flow-text">Level 0 SSTs</text>
+              <text x="510" y="270" class="flow-subtext">(may overlap)</text>
+            </g>
+
+            <!-- Arrow to Level 1+ -->
+            <g class="flow-arrow">
+              <line x1="510" y1="280" x2="510" y2="320" stroke="currentColor" stroke-width="2" marker-end="url(#arrowhead)"/>
+              <text x="520" y="305" class="flow-label">major compaction</text>
+            </g>
+
+            <!-- Level 1+ SSTables -->
+            <g class="arch-box" data-flow="level1plus">
+              <rect x="430" y="330" width="160" height="50" rx="8" class="flow-box flow-box--sstable-deep"/>
+              <text x="510" y="355" class="flow-text">Level 1+ SSTs</text>
+              <text x="510" y="370" class="flow-subtext">(sorted, non-overlapping)</text>
+            </g>
+
+            <!-- Side annotations -->
+            <g class="diagram-annotation">
+              <text x="680" y="55" class="annotation-text">Durability</text>
+              <text x="680" y="155" class="annotation-text">In-Memory</text>
+              <text x="680" y="300" class="annotation-text">On-Disk</text>
+            </g>
+
+            <!-- Arrowhead marker definition -->
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="currentColor"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Architecture Components Grid -->
+        <div class="architecture-components">
+          <!-- Memtable Component -->
+          <article class="architecture-component arch-component--memtable" data-component="memtable">
+            <div class="arch-component-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="9" y1="21" x2="9" y2="9"/>
+              </svg>
+            </div>
+            <h3 class="arch-component-title">Memtable</h3>
+            <p class="arch-component-description">
+              The <strong>memtable</strong> is an in-memory write buffer implemented as a <strong>skip list</strong> data structure.
+              All incoming writes are first recorded here, providing O(log n) insert and lookup performance.
+              When the memtable reaches its configured size threshold (default 4MB), it becomes immutable and is queued for flushing to disk.
+            </p>
+            <ul class="arch-component-details">
+              <li>In-memory skip list for fast writes</li>
+              <li>Configurable size threshold</li>
+              <li>Supports concurrent read access</li>
+            </ul>
+          </article>
+
+          <!-- SSTable Component -->
+          <article class="architecture-component arch-component--sstable" data-component="sstable">
+            <div class="arch-component-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <h3 class="arch-component-title">SSTable</h3>
+            <p class="arch-component-description">
+              <strong>SSTable (Sorted String Table)</strong> is the persistent on-disk storage format used by MirDB.
+              Data is organized into sorted, immutable files with block-based structure for efficient random access.
+              Each SSTable includes a cuckoo filter for fast negative lookups and supports Snappy compression.
+            </p>
+            <ul class="arch-component-details">
+              <li>Sorted String Table for disk persistence</li>
+              <li>Block-based format with index</li>
+              <li>Cuckoo filter for bloom-like lookups</li>
+              <li>Snappy compression support</li>
+            </ul>
+          </article>
+
+          <!-- WAL Component -->
+          <article class="architecture-component arch-component--wal" data-component="wal">
+            <div class="arch-component-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+            </div>
+            <h3 class="arch-component-title">Write-Ahead Log (WAL)</h3>
+            <p class="arch-component-description">
+              The <strong>Write-Ahead Log (WAL)</strong> ensures <strong>durability</strong> by persisting every write to disk before acknowledging it.
+              In the event of a crash, the WAL enables complete <strong>crash recovery</strong> by replaying uncommitted operations.
+              WAL segments correspond to memtables and are cleaned up after successful compaction.
+            </p>
+            <ul class="arch-component-details">
+              <li>Write-ahead logging for durability</li>
+              <li>Crash recovery via log replay</li>
+              <li>Snappy-compressed records</li>
+              <li>Automatic segment cleanup</li>
+            </ul>
+          </article>
+
+          <!-- Compaction Component -->
+          <article class="architecture-component arch-component--compaction" data-component="compaction">
+            <div class="arch-component-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </div>
+            <h3 class="arch-component-title">Compaction</h3>
+            <p class="arch-component-description">
+              MirDB uses a two-phase compaction strategy to maintain optimal performance.
+              <strong>Minor compaction</strong> flushes immutable memtables to Level 0 SSTables.
+              <strong>Major compaction</strong> (level compaction) merges SSTables across levels, eliminating duplicates and maintaining sorted order within each level.
+            </p>
+            <ul class="arch-component-details">
+              <li>Minor compaction: memtable to Level 0 SSTable</li>
+              <li>Major compaction: level-based merging</li>
+              <li>Background threads for non-blocking operation</li>
+              <li>Configurable triggers and thresholds</li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- Read Path Explanation -->
+        <div class="architecture-read-path">
+          <h3 class="arch-subsection-title">Read Path</h3>
+          <p class="arch-subsection-description">
+            When reading a key, MirDB searches in order of recency: first the active memtable, then immutable memtables (newest first),
+            and finally SSTable levels starting from Level 0. Level 0 uses linear search (files may overlap),
+            while Level 1+ uses binary search within sorted, non-overlapping files.
+          </p>
+        </div>
       </div>
     </section>
 

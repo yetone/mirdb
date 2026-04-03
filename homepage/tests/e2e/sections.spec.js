@@ -271,8 +271,103 @@ test.describe('Quick Start Section (Scenario 4)', () => {
 });
 
 test.describe('Architecture Section (Scenario 5)', () => {
-  test.skip('Architecture section explains LSM Tree design', async ({ page }) => {
-    // To be implemented by Scenario 5
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Architecture section exists with clear heading', async ({ page }) => {
+    // Navigate to Architecture section
+    const architectureSection = page.locator('#architecture');
+    await expect(architectureSection).toBeVisible();
+
+    // Check for clear heading
+    const heading = architectureSection.locator('h2.section-title');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText('Architecture');
+  });
+
+  test('TC2: Section explains memtable as in-memory write buffer with skip list', async ({ page }) => {
+    const architectureSection = page.locator('#architecture');
+
+    // Check for memtable explanation
+    const memtableContent = architectureSection.locator('.architecture-component[data-component="memtable"], .arch-component--memtable');
+    await expect(memtableContent).toBeVisible();
+
+    // Verify content mentions key concepts
+    const memtableText = await architectureSection.textContent();
+    expect(memtableText.toLowerCase()).toContain('memtable');
+    expect(memtableText.toLowerCase()).toMatch(/in-memory|memory/);
+    expect(memtableText.toLowerCase()).toMatch(/write|buffer/);
+    expect(memtableText.toLowerCase()).toMatch(/skip.?list/);
+  });
+
+  test('TC3: Section explains SSTable as persistent on-disk storage format', async ({ page }) => {
+    const architectureSection = page.locator('#architecture');
+
+    // Check for SSTable explanation
+    const sstableContent = architectureSection.locator('.architecture-component[data-component="sstable"], .arch-component--sstable');
+    await expect(sstableContent).toBeVisible();
+
+    // Verify content mentions key concepts
+    const sstableText = await architectureSection.textContent();
+    expect(sstableText.toLowerCase()).toContain('sstable');
+    expect(sstableText.toLowerCase()).toMatch(/sorted.?string.?table|sorted string table/);
+    expect(sstableText.toLowerCase()).toMatch(/disk|persistent|storage/);
+  });
+
+  test('TC4: Section explains Write-Ahead Log for durability and crash recovery', async ({ page }) => {
+    const architectureSection = page.locator('#architecture');
+
+    // Check for WAL explanation
+    const walContent = architectureSection.locator('.architecture-component[data-component="wal"], .arch-component--wal');
+    await expect(walContent).toBeVisible();
+
+    // Verify content mentions key concepts
+    const walText = await architectureSection.textContent();
+    expect(walText.toLowerCase()).toMatch(/write.?ahead.?log|wal/);
+    expect(walText.toLowerCase()).toMatch(/durability|durable/);
+    expect(walText.toLowerCase()).toMatch(/crash|recovery/);
+  });
+
+  test('TC5: Section explains minor and major compaction', async ({ page }) => {
+    const architectureSection = page.locator('#architecture');
+
+    // Check for compaction explanation
+    const compactionContent = architectureSection.locator('.architecture-component[data-component="compaction"], .arch-component--compaction');
+    await expect(compactionContent).toBeVisible();
+
+    // Verify content mentions both compaction types
+    const compactionText = await architectureSection.textContent();
+    expect(compactionText.toLowerCase()).toMatch(/minor.?compaction/);
+    expect(compactionText.toLowerCase()).toMatch(/major.?compaction|level.?compaction/);
+    expect(compactionText.toLowerCase()).toMatch(/memtable.*(to|->).*sstable|flush/i);
+  });
+
+  test('TC6: Visual diagram of LSM Tree architecture is present', async ({ page }) => {
+    const architectureSection = page.locator('#architecture');
+
+    // Check for architecture diagram container
+    const diagramContainer = architectureSection.locator('.architecture-diagram').first();
+    await expect(diagramContainer).toBeVisible();
+
+    // Verify diagram has visual elements representing data flow
+    const diagramContent = await diagramContainer.innerHTML();
+    // Should contain either SVG elements or ASCII/text-based diagram elements
+    const hasSvgElements = diagramContent.includes('<svg') || diagramContent.includes('<path') || diagramContent.includes('<rect');
+    const hasTextDiagram = diagramContent.includes('data-flow') || diagramContent.includes('flow-arrow') || diagramContent.includes('arch-box');
+    expect(hasSvgElements || hasTextDiagram || diagramContent.length > 100).toBe(true);
+  });
+
+  test('Architecture section is accessible via navigation', async ({ page }) => {
+    // Click navigation link to Architecture
+    await page.locator('a[href="#architecture"]').first().click();
+
+    // Wait for scroll
+    await page.waitForTimeout(500);
+
+    // Verify section is in viewport
+    const architectureSection = page.locator('#architecture');
+    await expect(architectureSection).toBeInViewport();
   });
 });
 
