@@ -512,10 +512,384 @@ hello
     </section>
 
     <!-- API Reference Section (Scenario 6) -->
-    <section id="api-reference">
+    <section id="api-reference" class="api-reference" aria-labelledby="api-reference-title">
       <div class="container">
-        <h2 class="section-title">API Reference</h2>
-        <!-- API Reference content placeholder - to be implemented by Scenario 6 -->
+        <div class="section-header">
+          <h2 id="api-reference-title" class="section-title">API Reference</h2>
+          <p class="section-subtitle">MirDB implements the Memcached text protocol. Use any standard Memcached client to interact with MirDB.</p>
+        </div>
+
+        <!-- Storage Commands -->
+        <div class="api-category" data-category="storage">
+          <h3 class="api-category__title">Storage Commands</h3>
+          <p class="api-category__description">Commands for storing data in the database.</p>
+
+          <!-- SET Command -->
+          <article class="api-command" data-command="set">
+            <div class="api-command__header">
+              <h4 class="api-command__name">SET</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Store a key-value pair. Overwrites any existing value for the key.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">set</span> mykey 0 3600 5
+hello
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- ADD Command -->
+          <article class="api-command" data-command="add">
+            <div class="api-command__header">
+              <h4 class="api-command__name">ADD</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Store a key-value pair only if the key does not already exist.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">add &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">add</span> newkey 0 0 5
+world
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- REPLACE Command -->
+          <article class="api-command" data-command="replace">
+            <div class="api-command__header">
+              <h4 class="api-command__name">REPLACE</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Store a key-value pair only if the key already exists.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">replace &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">replace</span> mykey 0 3600 6
+world!
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- APPEND Command -->
+          <article class="api-command" data-command="append">
+            <div class="api-command__header">
+              <h4 class="api-command__name">APPEND</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Append data to an existing value.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">append &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">append</span> mykey 0 0 6
+_added
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- PREPEND Command -->
+          <article class="api-command" data-command="prepend">
+            <div class="api-command__header">
+              <h4 class="api-command__name">PREPEND</h4>
+              <span class="api-command__badge">Storage</span>
+            </div>
+            <p class="api-command__description">Prepend data to an existing value.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">prepend &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">prepend</span> mykey 0 0 7
+prefix_
+<span class="token response">STORED</span></code></pre>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Retrieval Commands -->
+        <div class="api-category" data-category="retrieval">
+          <h3 class="api-category__title">Retrieval Commands</h3>
+          <p class="api-category__description">Commands for retrieving data from the database.</p>
+
+          <!-- GET Command -->
+          <article class="api-command" data-command="get">
+            <div class="api-command__header">
+              <h4 class="api-command__name">GET</h4>
+              <span class="api-command__badge api-command__badge--retrieval">Retrieval</span>
+            </div>
+            <p class="api-command__description">Retrieve one or more keys from the database.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">get &lt;key1&gt; [&lt;key2&gt; ...]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">get</span> mykey
+<span class="token response">VALUE mykey 0 5</span>
+hello
+<span class="token response">END</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- GETS Command -->
+          <article class="api-command" data-command="gets">
+            <div class="api-command__header">
+              <h4 class="api-command__name">GETS</h4>
+              <span class="api-command__badge api-command__badge--retrieval">Retrieval</span>
+            </div>
+            <p class="api-command__description">Retrieve keys with CAS (Check-And-Set) token. In MirDB, this behaves identically to GET.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">gets &lt;key1&gt; [&lt;key2&gt; ...]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">gets</span> mykey otherkey
+<span class="token response">VALUE mykey 0 5</span>
+hello
+<span class="token response">VALUE otherkey 0 5</span>
+world
+<span class="token response">END</span></code></pre>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Deletion Commands -->
+        <div class="api-category" data-category="deletion">
+          <h3 class="api-category__title">Deletion Commands</h3>
+          <p class="api-category__description">Commands for removing data from the database.</p>
+
+          <!-- DELETE Command -->
+          <article class="api-command" data-command="delete">
+            <div class="api-command__header">
+              <h4 class="api-command__name">DELETE</h4>
+              <span class="api-command__badge api-command__badge--deletion">Deletion</span>
+            </div>
+            <p class="api-command__description">Remove a key from the database.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">delete &lt;key&gt; [noreply]</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">delete</span> mykey
+<span class="token response">DELETED</span></code></pre>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- MirDB-Specific Commands -->
+        <div class="api-category" data-category="mirdb-specific">
+          <h3 class="api-category__title">MirDB-Specific Commands</h3>
+          <p class="api-category__description">Extended commands unique to MirDB for database management.</p>
+
+          <!-- INFO Command -->
+          <article class="api-command" data-command="info">
+            <div class="api-command__header">
+              <h4 class="api-command__name">INFO</h4>
+              <span class="api-command__badge api-command__badge--mirdb">MirDB</span>
+            </div>
+            <p class="api-command__description">Display database status and level information. This command is specific to MirDB and provides insights into the LSM tree structure.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">info</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">info</span>
+<span class="token response">MirDB Status:
+Level 0: 2 SSTables
+Level 1: 5 SSTables
+Memtable size: 2.1MB
+END</span></code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- MAJOR_COMPACTION Command -->
+          <article class="api-command" data-command="major_compaction">
+            <div class="api-command__header">
+              <h4 class="api-command__name">MAJOR_COMPACTION</h4>
+              <span class="api-command__badge api-command__badge--mirdb">MirDB</span>
+            </div>
+            <p class="api-command__description">Trigger a manual major compaction. This merges SSTables across levels to reclaim space and improve read performance.</p>
+            <div class="api-command__syntax">
+              <h5 class="api-syntax__label">Syntax</h5>
+              <code class="api-syntax__code">major_compaction</code>
+            </div>
+            <div class="api-command__example">
+              <h5 class="api-example__label">Example</h5>
+              <div class="code-block" data-language="text">
+                <div class="code-block__header">
+                  <span class="code-block__language">memcached</span>
+                  <button class="code-block__copy" aria-label="Copy code to clipboard" data-copy-state="idle">
+                    <svg class="code-block__copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="code-block__copy-text">Copy</span>
+                  </button>
+                </div>
+                <pre><code><span class="token command">major_compaction</span>
+<span class="token response">OK</span></code></pre>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Response Codes -->
+        <div class="api-category api-response-codes" data-category="response-codes">
+          <h3 class="api-category__title">Response Codes</h3>
+          <p class="api-category__description">Standard response codes returned by MirDB commands.</p>
+
+          <div class="response-codes-grid">
+            <div class="response-code" data-response="stored">
+              <code class="response-code__name">STORED</code>
+              <p class="response-code__description">Data stored successfully</p>
+            </div>
+            <div class="response-code" data-response="not_stored">
+              <code class="response-code__name">NOT_STORED</code>
+              <p class="response-code__description">Data not stored (condition not met for add/replace)</p>
+            </div>
+            <div class="response-code" data-response="exists">
+              <code class="response-code__name">EXISTS</code>
+              <p class="response-code__description">CAS check failed (item has been modified)</p>
+            </div>
+            <div class="response-code" data-response="not_found">
+              <code class="response-code__name">NOT_FOUND</code>
+              <p class="response-code__description">Key not found (for delete/replace operations)</p>
+            </div>
+            <div class="response-code" data-response="deleted">
+              <code class="response-code__name">DELETED</code>
+              <p class="response-code__description">Key deleted successfully</p>
+            </div>
+            <div class="response-code" data-response="error">
+              <code class="response-code__name">ERROR</code>
+              <p class="response-code__description">Unknown command or syntax error</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 

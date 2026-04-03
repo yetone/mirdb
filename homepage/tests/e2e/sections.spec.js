@@ -372,8 +372,215 @@ test.describe('Architecture Section (Scenario 5)', () => {
 });
 
 test.describe('API Reference Section (Scenario 6)', () => {
-  test.skip('API section documents Memcached commands', async ({ page }) => {
-    // To be implemented by Scenario 6
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: API Reference section exists with clear heading', async ({ page }) => {
+    // Navigate to API Reference section
+    const apiSection = page.locator('#api-reference');
+    await expect(apiSection).toBeVisible();
+
+    // Check for clear heading
+    const heading = apiSection.locator('h2.section-title');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText('API Reference');
+  });
+
+  test('TC2: SET command documented with correct syntax', async ({ page }) => {
+    const apiSection = page.locator('#api-reference');
+
+    // Find SET command
+    const setCommand = apiSection.locator('.api-command[data-command="set"]');
+    await expect(setCommand).toBeVisible();
+
+    // Check command name
+    const commandName = setCommand.locator('.api-command__name');
+    await expect(commandName).toContainText('SET');
+
+    // Check syntax includes correct format: set <key> <flags> <ttl> <bytes> [noreply]
+    const syntax = setCommand.locator('.api-syntax__code');
+    await expect(syntax).toBeVisible();
+    const syntaxText = await syntax.textContent();
+    expect(syntaxText).toContain('set');
+    expect(syntaxText).toContain('<key>');
+    expect(syntaxText).toContain('<flags>');
+    expect(syntaxText).toContain('<ttl>');
+    expect(syntaxText).toContain('<bytes>');
+    expect(syntaxText).toContain('[noreply]');
+  });
+
+  test('TC3: GET command documented with correct syntax', async ({ page }) => {
+    const apiSection = page.locator('#api-reference');
+
+    // Find GET command
+    const getCommand = apiSection.locator('.api-command[data-command="get"]');
+    await expect(getCommand).toBeVisible();
+
+    // Check command name
+    const commandName = getCommand.locator('.api-command__name');
+    await expect(commandName).toContainText('GET');
+
+    // Check syntax includes correct format: get <key1> [<key2> ...]
+    const syntax = getCommand.locator('.api-syntax__code');
+    await expect(syntax).toBeVisible();
+    const syntaxText = await syntax.textContent();
+    expect(syntaxText).toContain('get');
+    expect(syntaxText).toMatch(/<key1>.*\[.*<key2>.*\.\.\.\]/);
+  });
+
+  test('TC4: DELETE command documented with correct syntax', async ({ page }) => {
+    const apiSection = page.locator('#api-reference');
+
+    // Find DELETE command
+    const deleteCommand = apiSection.locator('.api-command[data-command="delete"]');
+    await expect(deleteCommand).toBeVisible();
+
+    // Check command name
+    const commandName = deleteCommand.locator('.api-command__name');
+    await expect(commandName).toContainText('DELETE');
+
+    // Check syntax includes correct format: delete <key> [noreply]
+    const syntax = deleteCommand.locator('.api-syntax__code');
+    await expect(syntax).toBeVisible();
+    const syntaxText = await syntax.textContent();
+    expect(syntaxText).toContain('delete');
+    expect(syntaxText).toContain('<key>');
+    expect(syntaxText).toContain('[noreply]');
+  });
+
+  test('TC5: INFO command documented as MirDB-specific for database status', async ({ page }) => {
+    const apiSection = page.locator('#api-reference');
+
+    // Find INFO command in MirDB-specific category
+    const mirdbCategory = apiSection.locator('.api-category[data-category="mirdb-specific"]');
+    await expect(mirdbCategory).toBeVisible();
+
+    const infoCommand = apiSection.locator('.api-command[data-command="info"]');
+    await expect(infoCommand).toBeVisible();
+
+    // Check command name
+    const commandName = infoCommand.locator('.api-command__name');
+    await expect(commandName).toContainText('INFO');
+
+    // Check it has MirDB badge
+    const badge = infoCommand.locator('.api-command__badge');
+    await expect(badge).toContainText('MirDB');
+
+    // Check description mentions database status
+    const description = infoCommand.locator('.api-command__description');
+    const descriptionText = await description.textContent();
+    expect(descriptionText.toLowerCase()).toMatch(/database.*status|status.*database/);
+  });
+
+  test('TC6: Response codes documented: STORED, NOT_STORED, EXISTS, NOT_FOUND, DELETED, ERROR', async ({ page }) => {
+    const apiSection = page.locator('#api-reference');
+
+    // Find response codes section
+    const responseCodesSection = apiSection.locator('.api-category[data-category="response-codes"]');
+    await expect(responseCodesSection).toBeVisible();
+
+    // Check each response code is documented
+    const storedCode = responseCodesSection.locator('.response-code[data-response="stored"]');
+    await expect(storedCode).toBeVisible();
+    await expect(storedCode.locator('.response-code__name')).toContainText('STORED');
+
+    const notStoredCode = responseCodesSection.locator('.response-code[data-response="not_stored"]');
+    await expect(notStoredCode).toBeVisible();
+    await expect(notStoredCode.locator('.response-code__name')).toContainText('NOT_STORED');
+
+    const existsCode = responseCodesSection.locator('.response-code[data-response="exists"]');
+    await expect(existsCode).toBeVisible();
+    await expect(existsCode.locator('.response-code__name')).toContainText('EXISTS');
+
+    const notFoundCode = responseCodesSection.locator('.response-code[data-response="not_found"]');
+    await expect(notFoundCode).toBeVisible();
+    await expect(notFoundCode.locator('.response-code__name')).toContainText('NOT_FOUND');
+
+    const deletedCode = responseCodesSection.locator('.response-code[data-response="deleted"]');
+    await expect(deletedCode).toBeVisible();
+    await expect(deletedCode.locator('.response-code__name')).toContainText('DELETED');
+
+    const errorCode = responseCodesSection.locator('.response-code[data-response="error"]');
+    await expect(errorCode).toBeVisible();
+    await expect(errorCode.locator('.response-code__name')).toContainText('ERROR');
+  });
+
+  test('TC7: Each command has at least one code example with expected output', async ({ page }) => {
+    const apiSection = page.locator('#api-reference');
+
+    // Check all main commands have examples
+    const commands = ['set', 'add', 'replace', 'append', 'prepend', 'get', 'gets', 'delete', 'info', 'major_compaction'];
+
+    for (const cmd of commands) {
+      const command = apiSection.locator(`.api-command[data-command="${cmd}"]`);
+      await expect(command).toBeVisible();
+
+      // Check for example section
+      const example = command.locator('.api-command__example');
+      await expect(example).toBeVisible();
+
+      // Check for code block within example
+      const codeBlock = example.locator('.code-block');
+      await expect(codeBlock).toBeVisible();
+
+      // Verify the code block contains the command and a response
+      const codeContent = await codeBlock.locator('pre code').textContent();
+      expect(codeContent.length).toBeGreaterThan(0);
+    }
+  });
+
+  test('All storage commands are documented (SET, ADD, REPLACE, APPEND, PREPEND)', async ({ page }) => {
+    const apiSection = page.locator('#api-reference');
+    const storageCategory = apiSection.locator('.api-category[data-category="storage"]');
+    await expect(storageCategory).toBeVisible();
+
+    // Check all storage commands exist
+    const storageCommands = ['set', 'add', 'replace', 'append', 'prepend'];
+    for (const cmd of storageCommands) {
+      const command = storageCategory.locator(`.api-command[data-command="${cmd}"]`);
+      await expect(command).toBeVisible();
+    }
+  });
+
+  test('All retrieval commands are documented (GET, GETS)', async ({ page }) => {
+    const apiSection = page.locator('#api-reference');
+    const retrievalCategory = apiSection.locator('.api-category[data-category="retrieval"]');
+    await expect(retrievalCategory).toBeVisible();
+
+    // Check GET command
+    const getCommand = retrievalCategory.locator('.api-command[data-command="get"]');
+    await expect(getCommand).toBeVisible();
+
+    // Check GETS command
+    const getsCommand = retrievalCategory.locator('.api-command[data-command="gets"]');
+    await expect(getsCommand).toBeVisible();
+  });
+
+  test('MAJOR_COMPACTION command is documented', async ({ page }) => {
+    const apiSection = page.locator('#api-reference');
+
+    const majorCompactionCommand = apiSection.locator('.api-command[data-command="major_compaction"]');
+    await expect(majorCompactionCommand).toBeVisible();
+
+    const commandName = majorCompactionCommand.locator('.api-command__name');
+    await expect(commandName).toContainText('MAJOR_COMPACTION');
+
+    // Check it has MirDB badge
+    const badge = majorCompactionCommand.locator('.api-command__badge');
+    await expect(badge).toContainText('MirDB');
+  });
+
+  test('API Reference section is accessible via navigation', async ({ page }) => {
+    // Click navigation link to API Reference
+    await page.locator('a[href="#api-reference"]').first().click();
+
+    // Wait for scroll
+    await page.waitForTimeout(500);
+
+    // Verify section is in viewport
+    const apiSection = page.locator('#api-reference');
+    await expect(apiSection).toBeInViewport();
   });
 });
 
