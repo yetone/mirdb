@@ -1,52 +1,70 @@
 /**
  * Shared Test Utilities
- * Owner: First builder scenario
- *
- * Contains common selectors, helper functions, viewport presets,
- * and accessibility testing utilities
+ * Common selectors, helpers, and viewport presets for E2E tests
  */
 
 // Common selectors for MirDB homepage
-const selectors = {
-    // Hero section
+const SELECTORS = {
+    // Navigation
+    header: '.header',
+    nav: '.nav',
+    navLogo: '.nav-logo',
+    navLinks: '.nav-links',
+    navLink: '.nav-links a',
+
+    // Hero Section
     hero: '#hero',
-    heroTitle: '.hero-title',
     heroLogo: '.hero-logo',
+    heroTitle: '.hero-title',
     heroTagline: '.hero-tagline',
+    heroCtaPrimary: '.hero-cta .btn-primary',
+    heroCtaSecondary: '.hero-cta .btn-secondary',
     heroCta: '.hero-cta',
     getStartedBtn: '.hero-cta .btn-primary',
     githubBtn: '.hero-cta .btn-secondary',
 
-    // Navigation
-    header: '.header',
-    nav: '.nav',
-    navLink: '.nav-link',
+    // Badges
+    badges: '.badges',
+    badge: '.badge',
 
-    // Features section
+    // Features Section
     features: '#features',
+    featuresHeading: '#features-heading',
     featuresGrid: '.features-grid',
     featureCard: '.feature-card',
+    featureIcon: '.feature-icon',
+    featureTitle: '.feature-title',
+    featureDescription: '.feature-description',
 
-    // Quick Start section
+    // Quick Start Section
     quickstart: '#quickstart',
+    quickstartHeading: '#quickstart-heading',
     codeBlock: '.code-block',
 
     // Footer
     footer: '.footer',
+    footerLicense: '.footer-license',
+    footerCopyright: '.footer-copyright',
+    footerLink: '.footer-link',
     footerContent: '.footer-content',
-
-    // Badges
-    badge: '.badge',
-    circleciBadge: '.badge-circleci',
 };
 
 // Viewport presets
-const viewports = {
+const VIEWPORTS = {
     desktop: { width: 1920, height: 1080 },
     laptop: { width: 1366, height: 768 },
     tablet: { width: 768, height: 1024 },
     mobile: { width: 375, height: 667 },
+    mobileSmall: { width: 320, height: 568 },
 };
+
+// Feature titles expected on the page
+const FEATURE_TITLES = [
+    'Memcached Protocol Compatible',
+    'Persistent Storage',
+    'LSM Tree Architecture',
+    'Async/Tokio Networking',
+];
 
 // GitHub repository URL
 const GITHUB_URL = 'https://github.com/yetone/mirdb';
@@ -58,6 +76,32 @@ const GITHUB_URL = 'https://github.com/yetone/mirdb';
 async function gotoHomepage(page) {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
+}
+
+/**
+ * Navigate to a section by clicking its nav link
+ */
+async function navigateToSection(page, sectionId) {
+    await page.click(`a[href="#${sectionId}"]`);
+    await page.waitForSelector(`#${sectionId}`, { state: 'visible' });
+}
+
+/**
+ * Check if an element is visible in the viewport
+ */
+async function isVisibleInViewport(page, selector) {
+    const element = await page.$(selector);
+    if (!element) return false;
+
+    const boundingBox = await element.boundingBox();
+    const viewportSize = page.viewportSize();
+
+    if (!boundingBox || !viewportSize) return false;
+
+    return (
+        boundingBox.y >= 0 &&
+        boundingBox.y + boundingBox.height <= viewportSize.height
+    );
 }
 
 /**
@@ -86,16 +130,22 @@ async function getText(page, selector) {
  * @param {'desktop' | 'laptop' | 'tablet' | 'mobile'} preset
  */
 async function setViewport(page, preset) {
-    const viewport = viewports[preset] || viewports.desktop;
+    const viewport = VIEWPORTS[preset] || VIEWPORTS.desktop;
     await page.setViewportSize(viewport);
 }
 
 module.exports = {
-    selectors,
-    viewports,
+    SELECTORS,
+    VIEWPORTS,
+    FEATURE_TITLES,
     GITHUB_URL,
     gotoHomepage,
+    navigateToSection,
+    isVisibleInViewport,
     isVisible,
     getText,
     setViewport,
+    // Aliases for backward compatibility
+    selectors: SELECTORS,
+    viewports: VIEWPORTS,
 };

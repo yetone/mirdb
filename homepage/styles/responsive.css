@@ -1,18 +1,40 @@
 /**
  * MirDB Homepage - Responsive Styles
- * Owner: Scenario 7 - Responsive Design
- *
- * Contains media queries for different viewports
+ * Contains media queries for tablet, mobile, and large desktop
  */
 
-/* Tablet (768px and below) */
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 2.5rem;
+/* Large Desktop (1200px+) */
+@media (min-width: 1200px) {
+    .features-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Tablet (768px - 1199px) */
+@media (max-width: 1199px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile (below 768px) */
+@media (max-width: 767px) {
+    :root {
+        --font-size-4xl: 2rem;
+        --font-size-3xl: 1.5rem;
     }
 
-    .hero-tagline {
-        font-size: var(--font-size-lg);
+    .nav-links {
+        gap: var(--spacing-md);
+    }
+
+    .hero {
+        padding-top: 100px;
+        min-height: auto;
+    }
+
+    .hero-logo {
+        width: 80px;
     }
 
     .hero-cta {
@@ -20,24 +42,32 @@
         align-items: center;
     }
 
-    .btn {
+    .hero-cta .btn {
         width: 100%;
-        max-width: 300px;
+        max-width: 280px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-card {
+        padding: var(--spacing-lg);
+    }
+
+    .code-block pre {
+        padding: var(--spacing-md);
     }
 }
 
-/* Mobile (480px and below) */
-@media (max-width: 480px) {
-    .hero-title {
-        font-size: 2rem;
-    }
-
+/* Small Mobile (below 480px) */
+@media (max-width: 479px) {
     .nav {
-        gap: var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-md);
     }
 
-    .nav-link {
-        font-size: 0.875rem;
-        padding: var(--spacing-xs) var(--spacing-sm);
+    .nav-links {
+        gap: var(--spacing-sm);
+        font-size: var(--font-size-sm);
     }
 }

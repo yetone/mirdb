@@ -1,12 +1,6 @@
 /**
  * Playwright Configuration
- * Owner: First builder scenario
- *
- * Configuration for E2E testing including:
- * - Base URL for local server
- * - Browser configurations
- * - Viewport settings for responsive tests
- * - Screenshot and video on failure
+ * E2E testing configuration for MirDB Homepage
  */
 
 const { defineConfig, devices } = require('@playwright/test');
@@ -18,14 +12,12 @@ module.exports = defineConfig({
     retries: process.env.CI ? 2 : 0,
     workers: process.env.CI ? 1 : undefined,
     reporter: 'html',
-
     use: {
-        baseURL: 'http://localhost:8080',
+        baseURL: 'http://localhost:3000',
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
-        video: 'retain-on-failure',
+        video: 'on-first-retry',
     },
-
     projects: [
         {
             name: 'chromium',
@@ -44,15 +36,16 @@ module.exports = defineConfig({
             use: { ...devices['Pixel 5'] },
         },
         {
-            name: 'mobile-safari',
-            use: { ...devices['iPhone 12'] },
+            name: 'tablet',
+            use: {
+                viewport: { width: 768, height: 1024 },
+            },
         },
     ],
-
     webServer: {
-        command: 'npx serve ../../homepage -p 8080',
-        url: 'http://localhost:8080',
-        reuseExistingServer: !process.env.CI,
-        timeout: 30 * 1000,
+        command: 'npx serve homepage -l 3000',
+        url: 'http://localhost:3000',
+        reuseExistingServer: true,
+        timeout: 120 * 1000,
     },
 });
