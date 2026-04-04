@@ -9,6 +9,7 @@
   "scripts": {
     "test": "npx playwright test --config=tests/e2e/playwright.config.js",
     "test:features": "npx playwright test --config=tests/e2e/playwright.config.js features.spec.js",
+    "test:unit": "cd tests/unit && node --test html-validation.spec.js",
     "serve": "npx serve homepage -l 3000"
   },
   "repository": {
