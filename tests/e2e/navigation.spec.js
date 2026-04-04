@@ -116,3 +116,186 @@ test.describe('Navigation Menu Functionality', () => {
         await expect(nav).toHaveAttribute('aria-label', 'Main navigation');
     });
 });
+
+/**
+ * Scenario 11: Smooth Scroll and Interactive Elements
+ * Tests for smooth scroll behavior and hover states
+ */
+test.describe('Smooth Scroll and Interactive Elements', () => {
+    test.beforeEach(async ({ page }) => {
+        await gotoHomepage(page);
+    });
+
+    // Test Case 1: Check CSS scroll-behavior property
+    test('HTML or body has scroll-behavior: smooth applied', async ({ page }) => {
+        // Check scroll-behavior on html element
+        const htmlScrollBehavior = await page.evaluate(() => {
+            return getComputedStyle(document.documentElement).scrollBehavior;
+        });
+
+        // Check scroll-behavior on body element as fallback
+        const bodyScrollBehavior = await page.evaluate(() => {
+            return getComputedStyle(document.body).scrollBehavior;
+        });
+
+        // Either html or body should have smooth scroll behavior
+        const hasSmooth = htmlScrollBehavior === 'smooth' || bodyScrollBehavior === 'smooth';
+        expect(hasSmooth).toBe(true);
+    });
+
+    // Test Case 2: Check button hover states
+    test('buttons change appearance on hover (color, shadow, or transform)', async ({ page }) => {
+        // Test primary button (Get Started)
+        const primaryBtn = page.locator(SELECTORS.heroCtaPrimary);
+        await expect(primaryBtn).toBeVisible();
+
+        // Get initial button styles
+        const initialPrimaryStyles = await primaryBtn.evaluate((el) => {
+            const styles = getComputedStyle(el);
+            return {
+                backgroundColor: styles.backgroundColor,
+                boxShadow: styles.boxShadow,
+                transform: styles.transform
+            };
+        });
+
+        // Hover over the button and wait for transition
+        await primaryBtn.hover();
+        await page.waitForTimeout(200);
+
+        // Get styles after hover
+        const hoverPrimaryStyles = await primaryBtn.evaluate((el) => {
+            const styles = getComputedStyle(el);
+            return {
+                backgroundColor: styles.backgroundColor,
+                boxShadow: styles.boxShadow,
+                transform: styles.transform
+            };
+        });
+
+        // Check that at least one style property changed on hover
+        const primaryStyleChanged =
+            initialPrimaryStyles.backgroundColor !== hoverPrimaryStyles.backgroundColor ||
+            initialPrimaryStyles.boxShadow !== hoverPrimaryStyles.boxShadow ||
+            initialPrimaryStyles.transform !== hoverPrimaryStyles.transform;
+
+        expect(primaryStyleChanged).toBe(true);
+
+        // Test secondary button (View on GitHub)
+        const secondaryBtn = page.locator(SELECTORS.heroCtaSecondary);
+        await expect(secondaryBtn).toBeVisible();
+
+        // Get initial button styles
+        const initialSecondaryStyles = await secondaryBtn.evaluate((el) => {
+            const styles = getComputedStyle(el);
+            return {
+                backgroundColor: styles.backgroundColor,
+                boxShadow: styles.boxShadow,
+                transform: styles.transform,
+                color: styles.color
+            };
+        });
+
+        // Hover over the button and wait for transition
+        await secondaryBtn.hover();
+        await page.waitForTimeout(200);
+
+        // Get styles after hover
+        const hoverSecondaryStyles = await secondaryBtn.evaluate((el) => {
+            const styles = getComputedStyle(el);
+            return {
+                backgroundColor: styles.backgroundColor,
+                boxShadow: styles.boxShadow,
+                transform: styles.transform,
+                color: styles.color
+            };
+        });
+
+        // Check that at least one style property changed on hover
+        const secondaryStyleChanged =
+            initialSecondaryStyles.backgroundColor !== hoverSecondaryStyles.backgroundColor ||
+            initialSecondaryStyles.boxShadow !== hoverSecondaryStyles.boxShadow ||
+            initialSecondaryStyles.transform !== hoverSecondaryStyles.transform ||
+            initialSecondaryStyles.color !== hoverSecondaryStyles.color;
+
+        expect(secondaryStyleChanged).toBe(true);
+    });
+
+    // Test Case 3: Check link hover states
+    test('links have visual hover indication (underline, color change)', async ({ page }) => {
+        // Test navigation links
+        const navLinks = page.locator(`${SELECTORS.navLinks} a`).first();
+        await expect(navLinks).toBeVisible();
+
+        // Get initial link styles
+        const initialNavStyles = await navLinks.evaluate((el) => {
+            const styles = getComputedStyle(el);
+            return {
+                color: styles.color,
+                textDecoration: styles.textDecoration,
+                textDecorationLine: styles.textDecorationLine
+            };
+        });
+
+        // Hover over the link and wait for transition
+        await navLinks.hover();
+        await page.waitForTimeout(200);
+
+        // Get styles after hover
+        const hoverNavStyles = await navLinks.evaluate((el) => {
+            const styles = getComputedStyle(el);
+            return {
+                color: styles.color,
+                textDecoration: styles.textDecoration,
+                textDecorationLine: styles.textDecorationLine
+            };
+        });
+
+        // Check that color or text-decoration changed
+        const navStyleChanged =
+            initialNavStyles.color !== hoverNavStyles.color ||
+            initialNavStyles.textDecoration !== hoverNavStyles.textDecoration ||
+            initialNavStyles.textDecorationLine !== hoverNavStyles.textDecorationLine;
+
+        expect(navStyleChanged).toBe(true);
+
+        // Test footer link
+        const footerLink = page.locator(SELECTORS.footerLink);
+
+        // Scroll to footer to ensure it's visible
+        await footerLink.scrollIntoViewIfNeeded();
+        await expect(footerLink).toBeVisible();
+
+        // Get initial footer link styles
+        const initialFooterStyles = await footerLink.evaluate((el) => {
+            const styles = getComputedStyle(el);
+            return {
+                color: styles.color,
+                textDecoration: styles.textDecoration,
+                textDecorationLine: styles.textDecorationLine
+            };
+        });
+
+        // Hover over the footer link and wait for transition
+        await footerLink.hover();
+        await page.waitForTimeout(200);
+
+        // Get styles after hover
+        const hoverFooterStyles = await footerLink.evaluate((el) => {
+            const styles = getComputedStyle(el);
+            return {
+                color: styles.color,
+                textDecoration: styles.textDecoration,
+                textDecorationLine: styles.textDecorationLine
+            };
+        });
+
+        // Check that color or text-decoration changed
+        const footerStyleChanged =
+            initialFooterStyles.color !== hoverFooterStyles.color ||
+            initialFooterStyles.textDecoration !== hoverFooterStyles.textDecoration ||
+            initialFooterStyles.textDecorationLine !== hoverFooterStyles.textDecorationLine;
+
+        expect(footerStyleChanged).toBe(true);
+    });
+});
