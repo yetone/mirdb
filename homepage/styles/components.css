@@ -1,0 +1,174 @@
+/**
+ * MirDB Homepage - Component Styles
+ * Styles for hero, features, navigation, buttons, and other components
+ */
+
+/* Header & Navigation */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background-color: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid var(--color-border);
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    gap: var(--spacing-xl);
+}
+
+.nav-link {
+    color: var(--color-text);
+    font-weight: 500;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-link:hover {
+    background-color: var(--color-background-alt);
+    color: var(--color-primary);
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    padding-top: calc(var(--header-height) + var(--spacing-3xl));
+    background: linear-gradient(180deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero-logo {
+    width: 120px;
+    height: auto;
+    margin: 0 auto var(--spacing-xl);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+}
+
+.hero-tagline {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-2xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-cta {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-xl);
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    min-width: 140px;
+}
+
+.btn:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-secondary-hover);
+    color: white;
+}
+
+/* Features Section (placeholder styles for Scenario 2) */
+.features {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    background-color: var(--color-background);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+/* Quick Start Section (placeholder styles for Scenario 3) */
+.quickstart {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    background-color: var(--color-background-alt);
+}
+
+.quickstart-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+/* Footer */
+.footer {
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--color-secondary);
+    color: white;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.footer-content p {
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer-content a {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-content a:hover {
+    color: white;
+}
