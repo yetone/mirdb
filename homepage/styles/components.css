@@ -155,6 +155,7 @@
     line-height: 1.6;
 }
 
+
 /* Quick Start Section */
 .quickstart {
     padding: var(--spacing-3xl) var(--spacing-lg);
@@ -194,6 +195,37 @@
     font-size: var(--font-size-sm);
     line-height: 1.7;
     color: var(--color-text);
+}
+
+/* Syntax Highlighting Classes */
+.syntax-highlighted .code-comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+.syntax-highlighted .code-command {
+    color: #dcdcaa;
+}
+
+.syntax-highlighted .code-keyword {
+    color: #569cd6;
+    font-weight: bold;
+}
+
+.syntax-highlighted .code-variable {
+    color: #9cdcfe;
+}
+
+.syntax-highlighted .code-number {
+    color: #b5cea8;
+}
+
+.syntax-highlighted .code-string {
+    color: #ce9178;
+}
+
+.syntax-highlighted .code-output {
+    color: #808080;
 }
 
 /* Footer */
