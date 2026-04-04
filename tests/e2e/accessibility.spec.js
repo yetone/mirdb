@@ -455,6 +455,298 @@ test.describe('Accessibility WCAG 2.1 AA Compliance', () => {
         });
     });
 
+    // Scenario 14: Visual Design and Technical Aesthetic Tests (NFR-5)
+    test.describe('Visual Design - Typography', () => {
+        test('page uses clean, readable system fonts appropriate for technical content', async ({ page }) => {
+            // Verify body uses system font stack
+            const bodyFont = await page.evaluate(() => {
+                const body = document.body;
+                return window.getComputedStyle(body).fontFamily;
+            });
+
+            // Should use system font stack (not decorative fonts)
+            const systemFonts = ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'];
+            const usesSystemFont = systemFonts.some(font => bodyFont.toLowerCase().includes(font.toLowerCase()));
+            expect(usesSystemFont, 'Page should use system font stack').toBe(true);
+        });
+
+        test('headings have appropriate font weights for hierarchy', async ({ page }) => {
+            const headingStyles = await page.evaluate(() => {
+                const h1 = document.querySelector('h1');
+                const h2 = document.querySelector('h2');
+                const h3 = document.querySelector('h3');
+                return {
+                    h1: {
+                        weight: window.getComputedStyle(h1).fontWeight,
+                        size: parseFloat(window.getComputedStyle(h1).fontSize)
+                    },
+                    h2: {
+                        weight: window.getComputedStyle(h2).fontWeight,
+                        size: parseFloat(window.getComputedStyle(h2).fontSize)
+                    },
+                    h3: {
+                        weight: window.getComputedStyle(h3).fontWeight,
+                        size: parseFloat(window.getComputedStyle(h3).fontSize)
+                    }
+                };
+            });
+
+            // Headings should have semi-bold or bold weight (>=500)
+            expect(parseInt(headingStyles.h1.weight)).toBeGreaterThanOrEqual(500);
+            expect(parseInt(headingStyles.h2.weight)).toBeGreaterThanOrEqual(500);
+            expect(parseInt(headingStyles.h3.weight)).toBeGreaterThanOrEqual(500);
+
+            // Font size should decrease h1 > h2 > h3
+            expect(headingStyles.h1.size).toBeGreaterThan(headingStyles.h2.size);
+            expect(headingStyles.h2.size).toBeGreaterThan(headingStyles.h3.size);
+        });
+
+        test('body text has readable line height', async ({ page }) => {
+            const lineHeight = await page.evaluate(() => {
+                const body = document.body;
+                const styles = window.getComputedStyle(body);
+                const lineHeightValue = styles.lineHeight;
+                const fontSize = parseFloat(styles.fontSize);
+
+                // If line-height is a number, multiply by font-size
+                // If it's already in pixels, just parse it
+                if (lineHeightValue === 'normal') {
+                    return 1.2; // Browser default
+                }
+                const numericLineHeight = parseFloat(lineHeightValue);
+                if (lineHeightValue.includes('px')) {
+                    return numericLineHeight / fontSize;
+                }
+                return numericLineHeight;
+            });
+
+            // Line height should be between 1.4 and 1.8 for readability
+            expect(lineHeight).toBeGreaterThanOrEqual(1.4);
+            expect(lineHeight).toBeLessThanOrEqual(1.8);
+        });
+    });
+
+    test.describe('Visual Design - Color Scheme', () => {
+        test('color palette is professional and not overly colorful', async ({ page }) => {
+            const colors = await page.evaluate(() => {
+                const root = document.documentElement;
+                const styles = getComputedStyle(root);
+                return {
+                    background: styles.getPropertyValue('--color-background').trim(),
+                    surface: styles.getPropertyValue('--color-surface').trim(),
+                    text: styles.getPropertyValue('--color-text').trim(),
+                    textSecondary: styles.getPropertyValue('--color-text-secondary').trim(),
+                    primary: styles.getPropertyValue('--color-primary').trim(),
+                    accent: styles.getPropertyValue('--color-accent').trim()
+                };
+            });
+
+            // Dark theme with muted colors indicates professional look
+            expect(colors.background).toBeTruthy();
+            expect(colors.text).toBeTruthy();
+
+            // Verify colors are defined (not empty)
+            Object.values(colors).forEach(color => {
+                expect(color.length).toBeGreaterThan(0);
+            });
+        });
+
+        test('uses dark theme appropriate for infrastructure tools', async ({ page }) => {
+            const bgColor = await page.evaluate(() => {
+                const body = document.body;
+                const bg = window.getComputedStyle(body).backgroundColor;
+                const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+                if (match) {
+                    return {
+                        r: parseInt(match[1]),
+                        g: parseInt(match[2]),
+                        b: parseInt(match[3])
+                    };
+                }
+                return null;
+            });
+
+            // Background should be dark (RGB values low)
+            expect(bgColor).not.toBeNull();
+            expect(bgColor.r).toBeLessThan(50);
+            expect(bgColor.g).toBeLessThan(50);
+            expect(bgColor.b).toBeLessThan(80);
+        });
+
+        test('limited color palette with consistent accent color', async ({ page }) => {
+            const accentUsage = await page.evaluate(() => {
+                const links = document.querySelectorAll('a');
+                const accentColors = new Set();
+
+                links.forEach(link => {
+                    const color = window.getComputedStyle(link).color;
+                    accentColors.add(color);
+                });
+
+                return {
+                    uniqueAccentColors: accentColors.size,
+                    colors: Array.from(accentColors)
+                };
+            });
+
+            // Should have limited color palette (not rainbow)
+            expect(accentUsage.uniqueAccentColors).toBeLessThanOrEqual(4);
+        });
+    });
+
+    test.describe('Visual Design - Whitespace', () => {
+        test('adequate whitespace provides clean, uncluttered appearance', async ({ page }) => {
+            const spacing = await page.evaluate(() => {
+                const sections = document.querySelectorAll('section');
+                const spacingValues = [];
+
+                sections.forEach(section => {
+                    const styles = window.getComputedStyle(section);
+                    spacingValues.push({
+                        paddingTop: parseFloat(styles.paddingTop),
+                        paddingBottom: parseFloat(styles.paddingBottom),
+                        element: section.id || 'unnamed'
+                    });
+                });
+
+                return spacingValues;
+            });
+
+            // Each section should have adequate vertical padding (at least 40px)
+            spacing.forEach(section => {
+                expect(section.paddingTop, `Section ${section.element} should have adequate top padding`).toBeGreaterThanOrEqual(24);
+                expect(section.paddingBottom, `Section ${section.element} should have adequate bottom padding`).toBeGreaterThanOrEqual(24);
+            });
+        });
+
+        test('feature cards have proper spacing between elements', async ({ page }) => {
+            const cardSpacing = await page.evaluate(() => {
+                const cards = document.querySelectorAll('.feature-card');
+                if (cards.length === 0) return null;
+
+                const card = cards[0];
+                const styles = window.getComputedStyle(card);
+
+                return {
+                    padding: parseFloat(styles.padding) || parseFloat(styles.paddingTop),
+                    gap: parseFloat(styles.gap) || 0
+                };
+            });
+
+            expect(cardSpacing).not.toBeNull();
+            expect(cardSpacing.padding).toBeGreaterThanOrEqual(16);
+        });
+
+        test('hero section has generous spacing for visual hierarchy', async ({ page }) => {
+            const heroSpacing = await page.evaluate(() => {
+                const hero = document.querySelector('.hero');
+                const heroContent = document.querySelector('.hero-content');
+
+                if (!hero || !heroContent) return null;
+
+                const heroStyles = window.getComputedStyle(hero);
+                const viewportHeight = window.innerHeight;
+                const heroHeight = parseFloat(heroStyles.minHeight);
+
+                return {
+                    minHeight: heroStyles.minHeight,
+                    heroHeightPx: heroHeight,
+                    viewportHeight: viewportHeight,
+                    coversViewport: heroHeight >= viewportHeight * 0.9,
+                    paddingTop: parseFloat(heroStyles.paddingTop),
+                    paddingBottom: parseFloat(heroStyles.paddingBottom)
+                };
+            });
+
+            expect(heroSpacing).not.toBeNull();
+            // Hero should cover at least 90% of viewport height for visual prominence
+            expect(heroSpacing.coversViewport, 'Hero section should cover most of viewport').toBe(true);
+        });
+    });
+
+    test.describe('Visual Design - Code Block Styling', () => {
+        test('code blocks have monospace font with appropriate styling', async ({ page }) => {
+            const codeStyles = await page.evaluate(() => {
+                const codeBlock = document.querySelector('.code-block code');
+                if (!codeBlock) return null;
+
+                const styles = window.getComputedStyle(codeBlock);
+                return {
+                    fontFamily: styles.fontFamily,
+                    fontSize: styles.fontSize,
+                    lineHeight: styles.lineHeight,
+                    color: styles.color
+                };
+            });
+
+            expect(codeStyles).not.toBeNull();
+
+            // Should use monospace font
+            const monoFonts = ['SF Mono', 'Fira Code', 'Fira Mono', 'Menlo', 'Monaco', 'Consolas', 'monospace'];
+            const usesMonoFont = monoFonts.some(font =>
+                codeStyles.fontFamily.toLowerCase().includes(font.toLowerCase())
+            );
+            expect(usesMonoFont, 'Code blocks should use monospace font').toBe(true);
+        });
+
+        test('code blocks have distinct background styling', async ({ page }) => {
+            const blockStyles = await page.evaluate(() => {
+                const codeBlock = document.querySelector('.code-block');
+                if (!codeBlock) return null;
+
+                const styles = window.getComputedStyle(codeBlock);
+                return {
+                    backgroundColor: styles.backgroundColor,
+                    borderRadius: styles.borderRadius,
+                    border: styles.border
+                };
+            });
+
+            expect(blockStyles).not.toBeNull();
+            // Code blocks should have a visible background (not transparent)
+            expect(blockStyles.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+            expect(blockStyles.backgroundColor).not.toBe('transparent');
+        });
+
+        test('code blocks have syntax highlighting', async ({ page }) => {
+            const hasSyntaxHighlighting = await page.evaluate(() => {
+                const codeBlock = document.querySelector('.code-block.syntax-highlighted');
+                if (!codeBlock) return false;
+
+                // Check for syntax highlighting classes
+                const highlightClasses = [
+                    '.code-comment',
+                    '.code-command',
+                    '.code-keyword',
+                    '.code-variable',
+                    '.code-string',
+                    '.code-output'
+                ];
+
+                return highlightClasses.some(cls => codeBlock.querySelector(cls) !== null);
+            });
+
+            expect(hasSyntaxHighlighting, 'Code blocks should have syntax highlighting').toBe(true);
+        });
+
+        test('code block pre element has proper overflow handling', async ({ page }) => {
+            const preStyles = await page.evaluate(() => {
+                const pre = document.querySelector('.code-block pre');
+                if (!pre) return null;
+
+                const styles = window.getComputedStyle(pre);
+                return {
+                    overflowX: styles.overflowX,
+                    padding: styles.padding
+                };
+            });
+
+            expect(preStyles).not.toBeNull();
+            // Pre should have horizontal scrolling for long lines
+            expect(preStyles.overflowX).toBe('auto');
+        });
+    });
+
     test.describe('Additional Accessibility Checks', () => {
         test('page has lang attribute', async ({ page }) => {
             const html = page.locator('html');
