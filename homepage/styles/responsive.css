@@ -28,6 +28,14 @@
         gap: var(--spacing-md);
     }
 
+    .nav-links a {
+        /* Improved touch target for mobile accessibility */
+        display: inline-block;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        min-height: 24px;
+        line-height: 1.5;
+    }
+
     .hero {
         padding-top: 100px;
         min-height: auto;
