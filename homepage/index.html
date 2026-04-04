@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility">
+    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="header" role="banner">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <a href="#" class="nav-logo" aria-label="MirDB Home">MirDB</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#quickstart">Quick Start</a></li>
+                <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero" role="region" aria-label="Hero">
+        <div class="hero-content">
+            <img src="images/logo.gif" alt="MirDB Logo" class="hero-logo">
+            <h1 class="hero-title">MirDB</h1>
+            <p class="hero-tagline">Persistent Key-Value Store with Memcached Protocol</p>
+
+            <!-- Status Badges -->
+            <div class="badges">
+                <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="CircleCI build status">
+                    <img src="https://circleci.com/gh/yetone/mirdb.svg?style=shield" alt="CircleCI Build Status" class="badge">
+                </a>
+            </div>
+
+            <div class="hero-cta">
+                <a href="#quickstart" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/yetone/mirdb" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features" role="region" aria-labelledby="features-heading">
+        <h2 id="features-heading" class="section-title">Features</h2>
+        <div class="features-grid">
+            <!-- Memcached Protocol Compatible -->
+            <article class="feature-card" data-testid="feature-card">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48" role="img" aria-label="Protocol icon">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Memcached Protocol Compatible</h3>
+                <p class="feature-description">Drop-in replacement for memcached. Use your existing client libraries and tools without any code changes.</p>
+            </article>
+
+            <!-- Persistent Storage -->
+            <article class="feature-card" data-testid="feature-card">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48" role="img" aria-label="Storage icon">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Persistent Storage</h3>
+                <p class="feature-description">Data survives restarts with durable SSTables. Never lose your cached data again with built-in persistence.</p>
+            </article>
+
+            <!-- LSM Tree Architecture -->
+            <article class="feature-card" data-testid="feature-card">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48" role="img" aria-label="Tree icon">
+                        <line x1="12" y1="2" x2="12" y2="22"></line>
+                        <path d="M17 7l-5-5-5 5"></path>
+                        <path d="M17 12H7"></path>
+                        <path d="M17 17l-5 5-5-5"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">LSM Tree Architecture</h3>
+                <p class="feature-description">Built on a Log-Structured Merge Tree for optimal write performance and efficient storage compaction.</p>
+            </article>
+
+            <!-- Async/Tokio Networking -->
+            <article class="feature-card" data-testid="feature-card">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48" role="img" aria-label="Network icon">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Async/Tokio Networking</h3>
+                <p class="feature-description">High-performance async networking powered by Tokio for maximum concurrency and throughput.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quickstart" class="quickstart" role="region" aria-labelledby="quickstart-heading">
+        <h2 id="quickstart-heading" class="section-title">Quick Start</h2>
+        <div class="quickstart-content">
+            <div class="code-block syntax-highlighted">
+                <div class="code-header">
+                    <span class="code-lang">bash</span>
+                </div>
+                <pre><code><span class="code-comment"># Installation</span>
+<span class="code-command">cargo install mirdb</span>
+
+<span class="code-comment"># Start the server</span>
+<span class="code-command">mirdb</span>
+
+<span class="code-comment"># Connect and use (same as memcached)</span>
+<span class="code-command">telnet localhost 12333</span>
+<span class="code-keyword">SET</span> <span class="code-variable">key</span> <span class="code-number">0 0 5</span>
+<span class="code-string">hello</span>
+<span class="code-output">STORED</span>
+<span class="code-keyword">GET</span> <span class="code-variable">key</span>
+<span class="code-output">VALUE key 0 5</span>
+<span class="code-string">hello</span>
+<span class="code-output">END</span></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <p class="footer-license">Released under the MIT License</p>
+            <p class="footer-copyright">&copy; 2024 MirDB Contributors</p>
+            <a href="https://github.com/yetone/mirdb" class="footer-link" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+</body>
+</html>
