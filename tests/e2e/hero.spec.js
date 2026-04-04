@@ -116,3 +116,112 @@ test.describe('Hero Section Display and Content', () => {
         await expect(secondaryBtn).toBeVisible();
     });
 });
+
+/**
+ * GitHub Link Functionality Tests
+ * Owner: Scenario 10 - GitHub Repository Link Functionality
+ *
+ * Tests REQ-5: Homepage shall link to GitHub repository for source code access
+ * Validates all GitHub links point to correct repository with proper attributes
+ */
+test.describe('GitHub Link Functionality', () => {
+    test.beforeEach(async ({ page }) => {
+        await gotoHomepage(page);
+    });
+
+    // Test Case 1: Query all anchor elements with GitHub URLs
+    // All GitHub links point to https://github.com/yetone/mirdb
+    test('should have all GitHub links pointing to correct repository', async ({ page }) => {
+        // Find all anchor elements with GitHub repository URL
+        const githubLinks = page.locator(`a[href="${GITHUB_URL}"]`);
+
+        // Should have multiple GitHub links (nav, hero CTA, footer)
+        const count = await githubLinks.count();
+        expect(count).toBeGreaterThanOrEqual(3);
+
+        // Verify each link has the correct href
+        for (let i = 0; i < count; i++) {
+            const href = await githubLinks.nth(i).getAttribute('href');
+            expect(href).toBe(GITHUB_URL);
+        }
+    });
+
+    // Test Case 2: Check View on GitHub button href
+    // Hero CTA links to https://github.com/yetone/mirdb
+    test('should have View on GitHub button in hero linking to correct repository', async ({ page }) => {
+        const githubBtn = page.locator(selectors.githubBtn);
+
+        await expect(githubBtn).toBeVisible();
+        await expect(githubBtn).toHaveText('View on GitHub');
+
+        // Verify href points to correct repository
+        const href = await githubBtn.getAttribute('href');
+        expect(href).toBe(GITHUB_URL);
+    });
+
+    // Test Case 3: Verify links open in new tab
+    // External GitHub links have target='_blank' and rel='noopener'
+    test('should have all external GitHub links with proper security attributes', async ({ page }) => {
+        // Find all links to GitHub repository
+        const githubLinks = page.locator(`a[href="${GITHUB_URL}"]`);
+        const count = await githubLinks.count();
+
+        expect(count).toBeGreaterThanOrEqual(1);
+
+        // Each GitHub link should open in new tab with security attributes
+        for (let i = 0; i < count; i++) {
+            const link = githubLinks.nth(i);
+
+            // Verify target="_blank" for new tab
+            const target = await link.getAttribute('target');
+            expect(target).toBe('_blank');
+
+            // Verify rel contains "noopener" for security
+            const rel = await link.getAttribute('rel');
+            expect(rel).toBeTruthy();
+            expect(rel).toContain('noopener');
+        }
+    });
+
+    // Additional test: Navigation GitHub link
+    test('should have GitHub link in navigation menu', async ({ page }) => {
+        const navGithubLink = page.locator('.nav-links a[href*="github.com"]');
+
+        await expect(navGithubLink).toBeVisible();
+
+        // Check text content
+        const text = await navGithubLink.textContent();
+        expect(text).toBe('GitHub');
+
+        // Verify it links to correct repo
+        const href = await navGithubLink.getAttribute('href');
+        expect(href).toBe(GITHUB_URL);
+
+        // Verify security attributes
+        const target = await navGithubLink.getAttribute('target');
+        const rel = await navGithubLink.getAttribute('rel');
+        expect(target).toBe('_blank');
+        expect(rel).toContain('noopener');
+    });
+
+    // Additional test: Footer GitHub link
+    test('should have GitHub link in footer', async ({ page }) => {
+        const footerGithubLink = page.locator(selectors.footerLink);
+
+        await expect(footerGithubLink).toBeVisible();
+
+        // Verify it links to correct repo
+        const href = await footerGithubLink.getAttribute('href');
+        expect(href).toBe(GITHUB_URL);
+
+        // Verify text content
+        const text = await footerGithubLink.textContent();
+        expect(text).toBe('View on GitHub');
+
+        // Verify security attributes
+        const target = await footerGithubLink.getAttribute('target');
+        const rel = await footerGithubLink.getAttribute('rel');
+        expect(target).toBe('_blank');
+        expect(rel).toContain('noopener');
+    });
+});
