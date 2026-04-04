@@ -278,6 +278,284 @@ test.describe('Responsive Design - Mobile Viewport (375x667)', () => {
     });
 });
 
+// ============================================================================
+// Cross-Browser Compatibility Tests (Scenario 12)
+// Tests CSS compatibility and consistent rendering across browser engines
+// ============================================================================
+
+test.describe('Cross-Browser Compatibility - Chromium/Firefox/WebKit', () => {
+    test.beforeEach(async ({ page }) => {
+        await gotoHomepage(page);
+    });
+
+    test('TC-CB1: Page renders correctly with proper styling and layout', async ({ page, browserName }) => {
+        // This test runs across all configured browsers (chromium, firefox, webkit)
+        // Verify all major sections are visible and properly styled
+
+        // Check header renders correctly
+        const header = page.locator(SELECTORS.header);
+        await expect(header).toBeVisible();
+        const headerStyles = await header.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                position: style.position,
+                display: style.display,
+                backgroundColor: style.backgroundColor
+            };
+        });
+        expect(['fixed', 'sticky', 'relative', 'static']).toContain(headerStyles.position);
+
+        // Check hero section renders
+        const hero = page.locator(SELECTORS.hero);
+        await expect(hero).toBeVisible();
+
+        // Check hero title is styled correctly
+        const heroTitle = page.locator(SELECTORS.heroTitle);
+        await expect(heroTitle).toBeVisible();
+        const titleStyles = await heroTitle.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                fontFamily: style.fontFamily,
+                fontSize: style.fontSize,
+                color: style.color
+            };
+        });
+        // Font size should be set (not empty or 0)
+        expect(parseFloat(titleStyles.fontSize)).toBeGreaterThan(0);
+
+        // Check features section renders with grid
+        const featuresGrid = page.locator(SELECTORS.featuresGrid);
+        await expect(featuresGrid).toBeVisible();
+
+        // Check feature cards render
+        const featureCards = page.locator(SELECTORS.featureCard);
+        const cardCount = await featureCards.count();
+        expect(cardCount).toBe(4);
+
+        // Check footer renders
+        const footer = page.locator(SELECTORS.footer);
+        await expect(footer).toBeVisible();
+
+        // Verify buttons are styled
+        const primaryBtn = page.locator(SELECTORS.heroCtaPrimary);
+        await expect(primaryBtn).toBeVisible();
+        const btnStyles = await primaryBtn.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                display: style.display,
+                backgroundColor: style.backgroundColor,
+                padding: style.padding,
+                borderRadius: style.borderRadius
+            };
+        });
+        // Accept both 'flex' and 'inline-flex' as valid (browser differences in computed style)
+        expect(['flex', 'inline-flex']).toContain(btnStyles.display);
+    });
+
+    test('TC-CB2: CSS custom properties (variables) work correctly', async ({ page }) => {
+        // Test that CSS custom properties are properly resolved
+        const body = page.locator('body');
+
+        const computedStyles = await body.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            const root = document.documentElement;
+            const rootStyle = window.getComputedStyle(root);
+
+            return {
+                backgroundColor: style.backgroundColor,
+                fontFamily: style.fontFamily,
+                color: style.color,
+                // Check if CSS variables are defined (not empty)
+                hasPrimaryVar: rootStyle.getPropertyValue('--color-primary').trim() !== '',
+                hasTextVar: rootStyle.getPropertyValue('--color-text').trim() !== '',
+                hasBgVar: rootStyle.getPropertyValue('--color-background').trim() !== ''
+            };
+        });
+
+        // Background should be set (not transparent or default)
+        expect(computedStyles.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+        expect(computedStyles.hasPrimaryVar).toBeTruthy();
+        expect(computedStyles.hasTextVar).toBeTruthy();
+        expect(computedStyles.hasBgVar).toBeTruthy();
+    });
+
+    test('TC-CB3: CSS Grid layout works correctly across browsers', async ({ page }) => {
+        // Verify CSS Grid is properly applied to features section
+        const featuresGrid = page.locator(SELECTORS.featuresGrid);
+        await expect(featuresGrid).toBeVisible();
+
+        const gridStyles = await featuresGrid.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                display: style.display,
+                gridTemplateColumns: style.gridTemplateColumns,
+                gap: style.gap || style.gridGap
+            };
+        });
+
+        // Grid should be applied
+        expect(gridStyles.display).toBe('grid');
+        // Should have grid template columns defined (not 'none')
+        expect(gridStyles.gridTemplateColumns).not.toBe('none');
+        // Gap should be set
+        expect(gridStyles.gap).toBeTruthy();
+    });
+
+    test('TC-CB4: Flexbox layout works correctly across browsers', async ({ page }) => {
+        // Verify flexbox is properly applied to various elements
+
+        // Hero CTA buttons should use flexbox
+        const heroCta = page.locator(SELECTORS.heroCta);
+        await expect(heroCta).toBeVisible();
+
+        const ctaStyles = await heroCta.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                display: style.display,
+                flexWrap: style.flexWrap,
+                justifyContent: style.justifyContent,
+                alignItems: style.alignItems,
+                gap: style.gap
+            };
+        });
+
+        expect(ctaStyles.display).toBe('flex');
+
+        // Check button uses flexbox (inline-flex or flex depending on browser)
+        const btn = page.locator(SELECTORS.heroCtaPrimary);
+        const btnStyles = await btn.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                display: style.display,
+                alignItems: style.alignItems,
+                justifyContent: style.justifyContent
+            };
+        });
+
+        // Accept both 'flex' and 'inline-flex' - browsers may report differently
+        expect(['flex', 'inline-flex']).toContain(btnStyles.display);
+        expect(btnStyles.alignItems).toBe('center');
+        expect(btnStyles.justifyContent).toBe('center');
+    });
+
+    test('TC-CB5: No horizontal overflow across browsers', async ({ page, browserName }) => {
+        // Check that there's no unintended horizontal scrollbar
+        const bodyScrollWidth = await page.evaluate(() => {
+            return {
+                bodyWidth: document.body.scrollWidth,
+                viewportWidth: window.innerWidth,
+                hasOverflow: document.body.scrollWidth > window.innerWidth
+            };
+        });
+
+        // Body should not exceed viewport width (accounting for small rounding)
+        expect(bodyScrollWidth.bodyWidth).toBeLessThanOrEqual(bodyScrollWidth.viewportWidth + 10);
+    });
+
+    test('TC-CB6: Typography renders consistently', async ({ page }) => {
+        // Check that typography is applied correctly
+        const heroTitle = page.locator(SELECTORS.heroTitle);
+        const heroTagline = page.locator(SELECTORS.heroTagline);
+
+        await expect(heroTitle).toBeVisible();
+        await expect(heroTagline).toBeVisible();
+
+        const titleStyles = await heroTitle.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                fontWeight: style.fontWeight,
+                lineHeight: style.lineHeight,
+                fontSize: style.fontSize
+            };
+        });
+
+        // Font weight should be bold (600 or higher, or 'bold')
+        const fontWeight = parseInt(titleStyles.fontWeight) || (titleStyles.fontWeight === 'bold' ? 700 : 400);
+        expect(fontWeight).toBeGreaterThanOrEqual(600);
+
+        // Line height should be set
+        expect(titleStyles.lineHeight).not.toBe('normal');
+    });
+
+    test('TC-CB7: Transitions and hover states work correctly', async ({ page }) => {
+        // Check that CSS transitions are defined
+        const primaryBtn = page.locator(SELECTORS.heroCtaPrimary);
+
+        const btnStyles = await primaryBtn.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                transition: style.transition,
+                cursor: style.cursor
+            };
+        });
+
+        // Transition should be defined
+        expect(btnStyles.transition).not.toBe('all 0s ease 0s');
+        expect(btnStyles.cursor).toBe('pointer');
+    });
+
+    test('TC-CB8: Images load correctly across browsers', async ({ page }) => {
+        // Check logo loads correctly
+        const logo = page.locator(SELECTORS.heroLogo);
+        await expect(logo).toBeVisible();
+
+        // Verify image has proper dimensions
+        const logoBox = await logo.boundingBox();
+        expect(logoBox).not.toBeNull();
+        expect(logoBox.width).toBeGreaterThan(0);
+        expect(logoBox.height).toBeGreaterThan(0);
+
+        // Check that max-width: 100% is applied
+        const logoStyles = await logo.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                maxWidth: style.maxWidth,
+                height: style.height,
+                display: style.display
+            };
+        });
+
+        expect(logoStyles.display).toBe('block');
+    });
+
+    test('TC-CB9: SVG icons render correctly', async ({ page }) => {
+        // Check feature icons (SVGs) render
+        const featureIcons = page.locator(`${SELECTORS.featureIcon} svg`);
+        const iconCount = await featureIcons.count();
+        expect(iconCount).toBe(4);
+
+        // Verify each icon is visible and has proper dimensions
+        for (let i = 0; i < iconCount; i++) {
+            await expect(featureIcons.nth(i)).toBeVisible();
+            const iconBox = await featureIcons.nth(i).boundingBox();
+            expect(iconBox.width).toBeGreaterThan(0);
+            expect(iconBox.height).toBeGreaterThan(0);
+        }
+    });
+
+    test('TC-CB10: Focus indicators work across browsers', async ({ page }) => {
+        // Check that focus indicators are visible (accessibility)
+        const primaryBtn = page.locator(SELECTORS.heroCtaPrimary);
+
+        // Focus the button
+        await primaryBtn.focus();
+
+        // Get focus styles
+        const focusStyles = await primaryBtn.evaluate((el) => {
+            const style = window.getComputedStyle(el);
+            return {
+                outline: style.outline,
+                outlineOffset: style.outlineOffset,
+                outlineWidth: style.outlineWidth,
+                outlineStyle: style.outlineStyle
+            };
+        });
+
+        // Focus indicator should be visible (outline set)
+        expect(focusStyles.outlineWidth).not.toBe('0px');
+    });
+});
+
 test.describe('Responsive Design - Cross-Breakpoint Tests', () => {
     test('Layout transitions smoothly between viewports', async ({ page }) => {
         await gotoHomepage(page);
