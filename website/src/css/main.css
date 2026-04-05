@@ -4,10 +4,9 @@
  * Imports all component and utility styles
  */
 
-/* Utilities */
+/* Utilities - Base */
 @import './utilities/reset.css';
 @import './utilities/variables.css';
-@import './utilities/responsive.css';
 
 /* Components */
 @import './components/navigation.css';
@@ -17,6 +16,9 @@
 @import './components/comparison.css';
 @import './components/specs.css';
 @import './components/footer.css';
+
+/* Responsive - Last to override component styles */
+@import './utilities/responsive.css';
 
 /* Base styles */
 body {
