@@ -157,8 +157,91 @@ hello
 
     <!-- Comparison Section - Scenario 4 -->
     <section id="comparison" class="comparison" aria-label="Comparison section">
-      <div class="container">
-        <!-- Comparison content added by Scenario 4 -->
+      <div class="comparison__container">
+        <h2 class="comparison__title">MirDB vs In-Memory Memcached</h2>
+        <p class="comparison__subtitle">See how MirDB compares to traditional in-memory caching solutions</p>
+
+        <div class="comparison__table-wrapper">
+          <table class="comparison__table">
+            <thead>
+              <tr>
+                <th class="comparison__header comparison__header--feature">Feature</th>
+                <th class="comparison__header comparison__header--mirdb">MirDB</th>
+                <th class="comparison__header comparison__header--memcached">Memcached</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-feature="persistence">
+                <td class="comparison__feature-name">Data Persistence</td>
+                <td class="comparison__cell comparison__cell--mirdb comparison__cell--highlight">
+                  <span class="comparison__check" aria-label="Yes">✓</span>
+                  <span class="comparison__yes">Yes</span>
+                </td>
+                <td class="comparison__cell comparison__cell--memcached">
+                  <span class="comparison__cross" aria-label="No">✗</span>
+                  <span class="comparison__no">No</span>
+                </td>
+              </tr>
+              <tr data-feature="crash-recovery">
+                <td class="comparison__feature-name">Crash Recovery</td>
+                <td class="comparison__cell comparison__cell--mirdb comparison__cell--highlight">
+                  <span class="comparison__check" aria-label="Yes">✓</span>
+                  <span class="comparison__yes">Yes</span>
+                </td>
+                <td class="comparison__cell comparison__cell--memcached">
+                  <span class="comparison__cross" aria-label="No">✗</span>
+                  <span class="comparison__no">No</span>
+                </td>
+              </tr>
+              <tr data-feature="protocol">
+                <td class="comparison__feature-name">Memcached Protocol</td>
+                <td class="comparison__cell comparison__cell--mirdb">
+                  <span class="comparison__check" aria-label="Yes">✓</span>
+                  <span class="comparison__yes">Yes</span>
+                </td>
+                <td class="comparison__cell comparison__cell--memcached">
+                  <span class="comparison__check" aria-label="Yes">✓</span>
+                  <span class="comparison__yes">Yes</span>
+                </td>
+              </tr>
+              <tr data-feature="storage">
+                <td class="comparison__feature-name">Storage Engine</td>
+                <td class="comparison__cell comparison__cell--mirdb">
+                  <span class="comparison__value">LSM Tree</span>
+                </td>
+                <td class="comparison__cell comparison__cell--memcached">
+                  <span class="comparison__value">In-Memory Only</span>
+                </td>
+              </tr>
+              <tr data-feature="restart">
+                <td class="comparison__feature-name">Data After Restart</td>
+                <td class="comparison__cell comparison__cell--mirdb comparison__cell--highlight">
+                  <span class="comparison__check" aria-label="Preserved">✓</span>
+                  <span class="comparison__yes">Preserved</span>
+                </td>
+                <td class="comparison__cell comparison__cell--memcached">
+                  <span class="comparison__cross" aria-label="Lost">✗</span>
+                  <span class="comparison__no">Lost</span>
+                </td>
+              </tr>
+              <tr data-feature="wal">
+                <td class="comparison__feature-name">Write-Ahead Log</td>
+                <td class="comparison__cell comparison__cell--mirdb comparison__cell--highlight">
+                  <span class="comparison__check" aria-label="Yes">✓</span>
+                  <span class="comparison__yes">Yes</span>
+                </td>
+                <td class="comparison__cell comparison__cell--memcached">
+                  <span class="comparison__cross" aria-label="No">✗</span>
+                  <span class="comparison__no">No</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="comparison__note">
+          <strong>Key Advantage:</strong> MirDB provides the speed of memcached with the reliability of persistent storage.
+        </p>
       </div>
     </section>
 
