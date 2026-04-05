@@ -164,8 +164,80 @@ hello
 
     <!-- Technical Specs Section - Scenario 5 -->
     <section id="specs" class="specs" aria-label="Technical specifications section">
-      <div class="container">
-        <!-- Specs content added by Scenario 5 -->
+      <div class="specs__container">
+        <h2 class="specs__title">Technical Specifications</h2>
+        <p class="specs__subtitle">Default configuration and system requirements</p>
+
+        <div class="specs__grid">
+          <!-- Default Configuration -->
+          <div class="specs__card">
+            <h3 class="specs__card-title">Default Configuration</h3>
+            <dl class="specs__config-list">
+              <div class="specs__config-item">
+                <dt class="specs__config-key">Listen Address</dt>
+                <dd class="specs__config-value" data-config="port"><code>0.0.0.0:12333</code></dd>
+              </div>
+              <div class="specs__config-item">
+                <dt class="specs__config-key">Work Directory</dt>
+                <dd class="specs__config-value"><code>/tmp/mirdb</code></dd>
+              </div>
+              <div class="specs__config-item">
+                <dt class="specs__config-key">Memtable Size</dt>
+                <dd class="specs__config-value"><code>4MB</code></dd>
+              </div>
+              <div class="specs__config-item">
+                <dt class="specs__config-key">SSTable Max Size</dt>
+                <dd class="specs__config-value"><code>100MB</code></dd>
+              </div>
+              <div class="specs__config-item">
+                <dt class="specs__config-key">Max LSM Levels</dt>
+                <dd class="specs__config-value"><code>7</code></dd>
+              </div>
+              <div class="specs__config-item">
+                <dt class="specs__config-key">Block Size</dt>
+                <dd class="specs__config-value"><code>4KB</code></dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Supported Operations -->
+          <div class="specs__card">
+            <h3 class="specs__card-title specs__operations-title">Supported Operations</h3>
+            <p class="specs__card-description">MirDB implements the memcached text protocol</p>
+            <ul class="specs__operations-list">
+              <li class="specs__operation">
+                <code class="specs__operation-name">GET</code>
+                <span class="specs__operation-desc">Retrieve one or more keys</span>
+              </li>
+              <li class="specs__operation">
+                <code class="specs__operation-name">SET</code>
+                <span class="specs__operation-desc">Store a key-value pair</span>
+              </li>
+              <li class="specs__operation">
+                <code class="specs__operation-name">ADD</code>
+                <span class="specs__operation-desc">Store only if key doesn't exist</span>
+              </li>
+              <li class="specs__operation">
+                <code class="specs__operation-name">REPLACE</code>
+                <span class="specs__operation-desc">Store only if key exists</span>
+              </li>
+              <li class="specs__operation">
+                <code class="specs__operation-name">DELETE</code>
+                <span class="specs__operation-desc">Remove a key</span>
+              </li>
+              <li class="specs__operation">
+                <code class="specs__operation-name">APPEND</code>
+                <span class="specs__operation-desc">Append data to existing value</span>
+              </li>
+              <li class="specs__operation">
+                <code class="specs__operation-name">PREPEND</code>
+                <span class="specs__operation-desc">Prepend data to existing value</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="specs__note">Configure via <code>mirdb.toml</code> or command-line flags. See documentation for all options.</p>
       </div>
     </section>
   </main>
