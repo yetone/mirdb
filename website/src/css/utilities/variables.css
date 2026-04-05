@@ -14,6 +14,8 @@
   --color-background: #ffffff;
   --color-background-alt: #f8fafc;
   --color-border: #e2e8f0;
+  --color-code-bg: #1e293b;
+  --color-code-text: #e2e8f0;
 
   /* Typography */
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

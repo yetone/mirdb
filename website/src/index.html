@@ -46,7 +46,70 @@
     <!-- Quick Start Section - Scenario 3 -->
     <section id="quickstart" class="quickstart" aria-label="Quick start section">
       <div class="container">
-        <!-- Quick start content added by Scenario 3 -->
+        <h2 class="quickstart__title">Quick Start</h2>
+        <p class="quickstart__subtitle">Get up and running with MirDB in minutes</p>
+
+        <!-- Installation Code Block -->
+        <div class="quickstart__block">
+          <div class="quickstart__header">
+            <span class="quickstart__label">Installation</span>
+            <button class="quickstart__copy-btn" data-clipboard-target="install-code" aria-label="Copy installation commands">
+              <svg class="quickstart__copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="quickstart__copy-text">Copy</span>
+            </button>
+          </div>
+          <pre class="quickstart__code"><code id="install-code" class="quickstart__code-content"><span class="token-comment"># Clone the repository</span>
+<span class="token-command">git clone</span> https://github.com/mirdb/mirdb.git
+<span class="token-command">cd</span> mirdb
+
+<span class="token-comment"># Build with Cargo</span>
+<span class="token-command">cargo build</span> --release
+
+<span class="token-comment"># Run MirDB server</span>
+<span class="token-command">./target/release/mirdb</span> -c etc/mirdb.toml</code></pre>
+        </div>
+
+        <!-- Usage Code Block -->
+        <div class="quickstart__block">
+          <div class="quickstart__header">
+            <span class="quickstart__label">Basic Usage</span>
+            <button class="quickstart__copy-btn" data-clipboard-target="usage-code" aria-label="Copy usage commands">
+              <svg class="quickstart__copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="quickstart__copy-text">Copy</span>
+            </button>
+          </div>
+          <pre class="quickstart__code"><code id="usage-code" class="quickstart__code-content"><span class="token-comment"># Connect using any memcached client</span>
+<span class="token-comment"># Default port: 12333</span>
+
+<span class="token-comment"># Using telnet</span>
+<span class="token-command">telnet</span> localhost 12333
+
+<span class="token-comment"># Set a value</span>
+<span class="token-keyword">set</span> mykey 0 0 5
+hello
+
+<span class="token-comment"># Get a value</span>
+<span class="token-keyword">get</span> mykey</code></pre>
+        </div>
+
+        <!-- Configuration Notes -->
+        <div class="quickstart__notes" data-testid="config-notes">
+          <h3 class="quickstart__notes-title">Default Configuration</h3>
+          <ul class="quickstart__notes-list">
+            <li><strong>Listen Address:</strong> <code>0.0.0.0:12333</code></li>
+            <li><strong>Work Directory:</strong> <code>/tmp/mirdb</code></li>
+            <li><strong>Memtable Size:</strong> <code>4MB</code></li>
+            <li><strong>SSTable Max Size:</strong> <code>100MB</code></li>
+            <li><strong>Max LSM Levels:</strong> <code>7</code></li>
+          </ul>
+          <p class="quickstart__notes-hint">Configure via <code>mirdb.toml</code> or command-line flags.</p>
+        </div>
       </div>
     </section>
 
