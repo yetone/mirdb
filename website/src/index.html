@@ -12,7 +12,24 @@
   <!-- Navigation - Scenario 12 -->
   <header role="banner">
     <nav class="nav" role="navigation" aria-label="Main navigation">
-      <!-- Navigation content added by Scenario 12 -->
+      <a href="#hero" class="nav__logo">MirDB</a>
+      <div class="nav__links">
+        <a href="#features">Features</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="#comparison">Compare</a>
+        <a href="#specs">Specs</a>
+      </div>
+      <button class="nav__hamburger" aria-label="Toggle navigation menu" aria-expanded="false" data-nav-toggle>
+        <span class="nav__hamburger-line"></span>
+        <span class="nav__hamburger-line"></span>
+        <span class="nav__hamburger-line"></span>
+      </button>
+      <div class="nav__mobile-menu" data-nav-menu>
+        <a href="#features" class="nav__mobile-link">Features</a>
+        <a href="#quickstart" class="nav__mobile-link">Quick Start</a>
+        <a href="#comparison" class="nav__mobile-link">Compare</a>
+        <a href="#specs" class="nav__mobile-link">Specs</a>
+      </div>
     </nav>
   </header>
 
@@ -367,5 +384,28 @@ hello
   </footer>
 
   <script type="module" src="./js/main.js"></script>
+  <script>
+    // Mobile navigation toggle - minimal implementation for responsive design
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('[data-nav-toggle]');
+      const mobileMenu = document.querySelector('[data-nav-menu]');
+
+      if (hamburger && mobileMenu) {
+        hamburger.addEventListener('click', function() {
+          const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+          hamburger.setAttribute('aria-expanded', !isExpanded);
+          mobileMenu.classList.toggle('nav__mobile-menu--open');
+        });
+
+        // Close menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(function(link) {
+          link.addEventListener('click', function() {
+            hamburger.setAttribute('aria-expanded', 'false');
+            mobileMenu.classList.remove('nav__mobile-menu--open');
+          });
+        });
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,8 +1,6 @@
 /**
- * Responsive Design E2E Tests - Tablet
- * Owner: Scenario 8 - Responsive Design - Tablet
- *
- * Tests tablet viewport (768px - 1023px) responsive behavior
+ * Responsive Design E2E Tests
+ * Tests both mobile (< 768px) and tablet (768px - 1023px) responsive behavior
  */
 import { test, expect } from '@playwright/test';
 
@@ -278,5 +276,186 @@ test.describe('Responsive Design - Tablet', () => {
     const btnCount = await copyButtons.count();
     expect(btnCount).toBeGreaterThanOrEqual(1);
     await expect(copyButtons.first()).toBeVisible();
+  });
+});
+
+test.describe('Responsive Design - Mobile', () => {
+  // Use mobile viewport for all tests
+  test.use({ viewport: { width: 375, height: 667 } });
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Page content fits within 375px viewport width without horizontal overflow', async ({ page }) => {
+    // Wait for page to fully load
+    await page.waitForLoadState('networkidle');
+
+    // Check that there's no horizontal overflow (allowing small rounding differences)
+    const hasHorizontalOverflow = await page.evaluate(() => {
+      // Allow up to 5px tolerance for scrollbar/browser rounding
+      return document.documentElement.scrollWidth > document.documentElement.clientWidth + 5;
+    });
+    expect(hasHorizontalOverflow).toBe(false);
+
+    // Verify body doesn't significantly exceed viewport width (allow small tolerance)
+    const bodyWidth = await page.evaluate(() => {
+      return document.body.scrollWidth;
+    });
+    // Allow 5px tolerance for browser scrollbar/rounding differences
+    expect(bodyWidth).toBeLessThanOrEqual(380);
+
+    // Scroll through all sections and verify content fits reasonably
+    const sections = ['#hero', '#features', '#quickstart', '#comparison', '#specs', '#footer'];
+    for (const sectionId of sections) {
+      const section = page.locator(sectionId);
+      if (await section.count() > 0) {
+        await expect(section).toBeVisible();
+      }
+    }
+  });
+
+  test('TC2: Hero content stacks vertically and remains readable on mobile', async ({ page }) => {
+    const heroSection = page.locator('#hero');
+    await expect(heroSection).toBeVisible();
+
+    // Verify hero content is visible
+    const heroContent = page.locator('.hero__content');
+    await expect(heroContent).toBeVisible();
+
+    // Check that hero content uses flexbox column layout (vertical stacking)
+    const contentFlexDirection = await heroContent.evaluate((el) => {
+      return window.getComputedStyle(el).flexDirection;
+    });
+    expect(contentFlexDirection).toBe('column');
+
+    // Verify logo is visible and reasonable size for mobile
+    const logo = page.locator('.hero__logo');
+    await expect(logo).toBeVisible();
+    const logoBox = await logo.boundingBox();
+    expect(logoBox).not.toBeNull();
+    if (logoBox) {
+      // On mobile, logo should be smaller than desktop (120px default)
+      expect(logoBox.width).toBeLessThanOrEqual(80);
+    }
+
+    // Verify title is visible and readable
+    const title = page.locator('.hero__title');
+    await expect(title).toBeVisible();
+    await expect(title).toHaveText('MirDB');
+
+    // Verify tagline is visible
+    const tagline = page.locator('.hero__tagline');
+    await expect(tagline).toBeVisible();
+
+    // Verify CTA buttons are stacked vertically
+    const ctaContainer = page.locator('.hero__actions');
+    if (await ctaContainer.count() > 0) {
+      const ctaFlexDirection = await ctaContainer.evaluate((el) => {
+        return window.getComputedStyle(el).flexDirection;
+      });
+      expect(ctaFlexDirection).toBe('column');
+    }
+  });
+
+  test('TC3: Feature cards stack vertically on mobile viewport', async ({ page }) => {
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Scroll to features section
+    await featuresSection.scrollIntoViewIfNeeded();
+
+    // Check that features grid uses column layout
+    const featuresGrid = page.locator('.features__grid');
+    await expect(featuresGrid).toBeVisible();
+
+    const gridFlexDirection = await featuresGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      // Check if using flex column or single-column grid
+      return styles.flexDirection || styles.gridTemplateColumns;
+    });
+
+    // Should be column layout (either flexbox column or single-column grid)
+    const isVertical = gridFlexDirection === 'column' || gridFlexDirection === '1fr';
+    expect(isVertical).toBe(true);
+
+    // Verify all feature cards are visible
+    const featureCards = page.locator('.features__card');
+    const cardCount = await featureCards.count();
+    expect(cardCount).toBe(3);
+
+    // Check cards fit within viewport width
+    for (let i = 0; i < cardCount; i++) {
+      const card = featureCards.nth(i);
+      await expect(card).toBeVisible();
+      const cardBox = await card.boundingBox();
+      if (cardBox) {
+        expect(cardBox.width).toBeLessThanOrEqual(375);
+      }
+    }
+  });
+
+  test('TC4: Hamburger menu icon is visible at mobile breakpoint', async ({ page }) => {
+    // Verify hamburger button is visible on mobile
+    const hamburgerBtn = page.locator('.nav__hamburger');
+    await expect(hamburgerBtn).toBeVisible();
+
+    // Verify it has proper accessibility attributes
+    await expect(hamburgerBtn).toHaveAttribute('aria-label', 'Toggle navigation menu');
+    await expect(hamburgerBtn).toHaveAttribute('aria-expanded', 'false');
+
+    // Verify hamburger has three lines
+    const hamburgerLines = page.locator('.nav__hamburger-line');
+    const lineCount = await hamburgerLines.count();
+    expect(lineCount).toBe(3);
+
+    // Verify desktop nav links are hidden
+    const desktopNavLinks = page.locator('.nav__links');
+    const isDesktopNavHidden = await desktopNavLinks.evaluate((el) => {
+      return window.getComputedStyle(el).display === 'none';
+    });
+    expect(isDesktopNavHidden).toBe(true);
+  });
+
+  test('TC5: Clicking hamburger opens navigation menu with all nav links', async ({ page }) => {
+    const hamburgerBtn = page.locator('.nav__hamburger');
+    const mobileMenu = page.locator('.nav__mobile-menu');
+
+    // Verify menu is initially hidden
+    const isInitiallyHidden = await mobileMenu.evaluate((el) => {
+      return window.getComputedStyle(el).display === 'none';
+    });
+    expect(isInitiallyHidden).toBe(true);
+
+    // Click hamburger to open menu
+    await hamburgerBtn.click();
+
+    // Verify aria-expanded is now true
+    await expect(hamburgerBtn).toHaveAttribute('aria-expanded', 'true');
+
+    // Verify mobile menu is now visible
+    await expect(mobileMenu).toBeVisible();
+
+    // Verify all navigation links are present in mobile menu
+    const mobileLinks = page.locator('.nav__mobile-link');
+    const linkCount = await mobileLinks.count();
+    expect(linkCount).toBeGreaterThanOrEqual(4);
+
+    // Check each link is visible and has proper href
+    const expectedLinks = ['#features', '#quickstart', '#comparison', '#specs'];
+    for (const expectedHref of expectedLinks) {
+      const link = mobileMenu.locator(`a[href="${expectedHref}"]`);
+      await expect(link).toBeVisible();
+    }
+
+    // Click hamburger again to close menu
+    await hamburgerBtn.click();
+
+    // Verify menu is closed
+    await expect(hamburgerBtn).toHaveAttribute('aria-expanded', 'false');
+    const isClosedAfterClick = await mobileMenu.evaluate((el) => {
+      return window.getComputedStyle(el).display === 'none';
+    });
+    expect(isClosedAfterClick).toBe(true);
   });
 });
