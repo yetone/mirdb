@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test": "playwright test",
     "test:e2e": "playwright test tests/e2e/",
+    "test:integration": "playwright test tests/integration/",
     "test:unit": "vitest run",
     "test:watch": "vitest"
   },
