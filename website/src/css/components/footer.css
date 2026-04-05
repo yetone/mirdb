@@ -1,0 +1,157 @@
+/**
+ * Footer Styles
+ * Owner: Scenario 6 - Footer Navigation and Links
+ *
+ * Provides styling for the footer section including:
+ * - Footer container with dark background
+ * - Brand section with logo and description
+ * - Navigation links (GitHub, Community, License)
+ * - Copyright information
+ * - Responsive layout for mobile devices
+ */
+
+.footer {
+  padding: var(--spacing-xl) 0;
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  margin-top: auto;
+}
+
+.footer__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+/* Brand Section */
+.footer__brand {
+  text-align: center;
+}
+
+.footer__logo {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-primary-light);
+  display: block;
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer__description {
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: var(--line-height-base);
+}
+
+/* Navigation Links */
+.footer__links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-code-text);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.footer__link:hover,
+.footer__link:focus {
+  color: var(--color-primary-light);
+  background-color: rgba(255, 255, 255, 0.05);
+  outline: none;
+}
+
+.footer__link:focus-visible {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+.footer__icon {
+  flex-shrink: 0;
+}
+
+/* Bottom Section */
+.footer__bottom {
+  text-align: center;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer__copyright {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+  margin: 0;
+}
+
+.footer__copyright a {
+  color: var(--color-code-text);
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+
+.footer__copyright a:hover,
+.footer__copyright a:focus {
+  color: var(--color-primary-light);
+}
+
+/* Responsive Styles */
+@media (min-width: 768px) {
+  .footer__container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .footer__brand {
+    text-align: left;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .footer__description {
+    margin: 0;
+  }
+
+  .footer__links {
+    justify-content: flex-end;
+    flex: 1;
+  }
+
+  .footer__bottom {
+    width: 100%;
+    text-align: center;
+    margin-top: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .footer__links {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .footer__link {
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
+  }
+}

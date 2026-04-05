@@ -1,8 +1,6 @@
-/target
-**/*.rs.bk
-.something/
 node_modules/
+dist/
 test-results/
 playwright-report/
 .vite/
-dist/
+*.log

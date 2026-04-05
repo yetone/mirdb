@@ -1,0 +1,118 @@
+/**
+ * Navigation Styles
+ * Owner: Scenario 12 - Navigation and Smooth Scrolling
+ *
+ * Provides styling for the fixed navigation header,
+ * nav links with hover states, and mobile hamburger menu.
+ */
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav__logo {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.nav__logo:hover {
+  color: var(--color-primary-dark);
+}
+
+.nav__links {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.nav__links a {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+}
+
+.nav__links a:hover {
+  color: var(--color-primary);
+}
+
+.nav__links a.nav__link--active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Hamburger button - hidden on desktop */
+.nav__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--spacing-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nav__hamburger-line {
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-text);
+  transition: all var(--transition-fast);
+}
+
+.nav__hamburger:hover .nav__hamburger-line {
+  background-color: var(--color-primary);
+}
+
+/* Mobile menu - hidden on desktop */
+.nav__mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  flex-direction: column;
+  gap: var(--spacing-md);
+  box-shadow: var(--shadow-md);
+}
+
+.nav__mobile-menu--open {
+  display: flex;
+}
+
+.nav__mobile-link {
+  color: var(--color-text);
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  border-radius: var(--border-radius-sm);
+}
+
+.nav__mobile-link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-background-alt);
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .nav__links {
+    display: none;
+  }
+
+  .nav__hamburger {
+    display: flex;
+  }
+}

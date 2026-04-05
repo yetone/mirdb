@@ -1,0 +1,189 @@
+/**
+ * Comparison Table Styles
+ * Owner: Scenario 4 - Comparison Table Section
+ */
+
+.comparison {
+  padding: var(--section-padding) var(--spacing-xl);
+  background-color: var(--color-background-alt);
+}
+
+.comparison__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.comparison__title {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+.comparison__subtitle {
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--font-size-lg);
+}
+
+/* Table wrapper for responsive horizontal scroll on mobile */
+.comparison__table-wrapper {
+  overflow-x: auto;
+  margin-bottom: var(--spacing-xl);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+}
+
+/* Main comparison table */
+.comparison__table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-background);
+  min-width: 500px;
+}
+
+/* Table headers */
+.comparison__header {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.comparison__header--feature {
+  text-align: left;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.comparison__header--mirdb {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.comparison__header--memcached {
+  background-color: var(--color-secondary);
+  color: white;
+}
+
+/* Table rows */
+.comparison__table tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-fast);
+}
+
+.comparison__table tbody tr:hover {
+  background-color: var(--color-background-alt);
+}
+
+.comparison__table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* Feature name column */
+.comparison__feature-name {
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: left;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+/* Comparison cells */
+.comparison__cell {
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.comparison__cell--mirdb {
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+.comparison__cell--memcached {
+  background-color: rgba(100, 116, 139, 0.05);
+}
+
+/* Highlighted advantage cells */
+.comparison__cell--highlight {
+  background-color: rgba(16, 185, 129, 0.1);
+  position: relative;
+}
+
+.comparison__cell--highlight::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--color-accent);
+}
+
+/* Check and cross indicators */
+.comparison__check {
+  color: var(--color-accent);
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  margin-right: var(--spacing-xs);
+}
+
+.comparison__cross {
+  color: #ef4444;
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  margin-right: var(--spacing-xs);
+}
+
+.comparison__yes {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.comparison__no {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.comparison__value {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* Note at the bottom */
+.comparison__note {
+  color: var(--color-text-light);
+  font-size: var(--font-size-base);
+  padding: var(--spacing-md);
+  background-color: var(--color-background);
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--color-primary);
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.comparison__note strong {
+  color: var(--color-primary);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 767px) {
+  .comparison {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .comparison__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .comparison__subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .comparison__header,
+  .comparison__feature-name,
+  .comparison__cell {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+}
