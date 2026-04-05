@@ -13,6 +13,7 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.40.0",
     "vite": "^5.0.0",
     "vitest": "^1.0.0"
