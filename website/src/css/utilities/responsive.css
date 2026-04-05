@@ -1,18 +1,213 @@
 /**
  * Responsive Design Utilities
  * Owner: Scenario 7 (Mobile) and Scenario 8 (Tablet)
- * Placeholder - will be populated by respective scenarios
+ *
+ * Breakpoints:
+ * - Mobile: < 768px (Scenario 7)
+ * - Tablet: 768px - 1023px (Scenario 8)
+ * - Desktop: >= 1024px (default styles in component files)
  */
 
 /* Desktop defaults (>= 1024px) */
 /* Components define their desktop layout by default */
 
-/* Tablet styles (768px - 1023px) - Scenario 8 */
+/* ============================================
+   Tablet styles (768px - 1023px) - Scenario 8
+   ============================================ */
 @media (min-width: 768px) and (max-width: 1023px) {
-  /* Tablet-specific styles added by Scenario 8 */
+  /* Container adjustments for tablet */
+  .container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+
+  /* Hero section tablet adjustments */
+  .hero {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    min-height: 45vh;
+  }
+
+  .hero__content {
+    max-width: 90%;
+  }
+
+  .hero__logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .hero__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero__actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  /* Features section - 2 column layout for tablet */
+  .features {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-lg);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .features__card:nth-child(3) {
+    /* Third card spans full width or centers on tablet */
+    grid-column: 1 / -1;
+    max-width: 50%;
+    justify-self: center;
+  }
+
+  .features__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .features__icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .features__icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Quickstart section tablet adjustments */
+  .quickstart {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .quickstart__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .quickstart__block {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .quickstart__code {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-md);
+    overflow-x: auto;
+  }
+
+  .quickstart__notes {
+    padding: var(--spacing-lg);
+  }
+
+  /* Comparison section tablet adjustments */
+  .comparison {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .comparison__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .comparison__table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .comparison__table {
+    min-width: 100%;
+  }
+
+  .comparison__header,
+  .comparison__feature-name,
+  .comparison__cell {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Specs section - keep 2-column layout for tablet */
+  .specs {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .specs__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .specs__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .specs__card {
+    padding: var(--spacing-lg);
+  }
+
+  .specs__config-item {
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+
+  .specs__operation {
+    gap: var(--spacing-sm);
+  }
+
+  /* Footer tablet adjustments */
+  .footer {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .footer__container {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    text-align: center;
+  }
+
+  .footer__links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .footer__brand {
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* Navigation tablet adjustments */
+  .nav {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .nav__links {
+    gap: var(--spacing-md);
+  }
+
+  .nav__links a {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Button adjustments for tablet */
+  .btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Section title consistency */
+  section h2 {
+    font-size: var(--font-size-2xl);
+  }
 }
 
-/* Mobile styles (< 768px) - Scenario 7 */
+/* ============================================
+   Mobile styles (< 768px) - Scenario 7
+   ============================================ */
 @media (max-width: 767px) {
   /* Mobile-specific styles added by Scenario 7 */
 }
