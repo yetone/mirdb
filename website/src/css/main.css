@@ -1,0 +1,70 @@
+/**
+ * Main CSS Entry Point
+ * Owner: First builder
+ *
+ * Imports all component and utility stylesheets
+ */
+
+/* Utilities */
+@import './utilities/reset.css';
+@import './utilities/variables.css';
+@import './utilities/responsive.css';
+
+/* Components */
+@import './components/hero.css';
+@import './components/features.css';
+@import './components/quickstart.css';
+@import './components/comparison.css';
+@import './components/specs.css';
+@import './components/footer.css';
+@import './components/navigation.css';
+
+/* Base styles */
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+/* Button base styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.btn--primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn--primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+}
+
+.btn--secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
