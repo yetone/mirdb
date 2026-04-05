@@ -1,5 +1,9 @@
+/**
+ * Vite Build Configuration
+ * Owner: Scenario 13 - Static Site Deployment
+ * Basic setup created by first builder
+ */
 import { defineConfig } from 'vite';
-import { resolve } from 'path';
 
 export default defineConfig({
   root: 'src',
@@ -9,7 +13,7 @@ export default defineConfig({
     emptyOutDir: true
   },
   server: {
-    port: 3000,
+    port: 5173,
     open: false
   }
 });

@@ -1,4 +1,33 @@
 /**
  * Footer Styles
  * Owner: Scenario 6 - Footer Navigation and Links
+ * Placeholder created by first builder
  */
+
+.footer {
+  padding: var(--spacing-xl);
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+}
+
+.footer__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer__links {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.footer__links a {
+  color: var(--color-code-text);
+  transition: color var(--transition-fast);
+}
+
+.footer__links a:hover {
+  color: var(--color-primary-light);
+}

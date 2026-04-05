@@ -1,4 +1,21 @@
 /**
  * Technical Specifications Styles
  * Owner: Scenario 5 - Technical Specifications Display
+ * Placeholder created by first builder
  */
+
+.specs {
+  padding: var(--section-padding) var(--spacing-xl);
+  background-color: var(--color-background);
+}
+
+.specs__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.specs__title {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-xl);
+}

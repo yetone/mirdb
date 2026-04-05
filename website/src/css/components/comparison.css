@@ -1,4 +1,26 @@
 /**
  * Comparison Table Styles
  * Owner: Scenario 4 - Comparison Table Section
+ * Placeholder created by first builder
  */
+
+.comparison {
+  padding: var(--section-padding) var(--spacing-xl);
+  background-color: var(--color-background-alt);
+}
+
+.comparison__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.comparison__title {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-md);
+}
+
+.comparison__subtitle {
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-xl);
+}

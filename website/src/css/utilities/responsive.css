@@ -1,11 +1,18 @@
 /**
  * Responsive Design Utilities
  * Owner: Scenario 7 (Mobile) and Scenario 8 (Tablet)
- *
- * Breakpoints:
- * - Mobile: < 768px
- * - Tablet: 768px - 1023px
- * - Desktop: >= 1024px
+ * Placeholder - will be populated by respective scenarios
  */
 
-/* Placeholder for responsive styles - to be implemented by Scenarios 7 & 8 */
+/* Desktop defaults (>= 1024px) */
+/* Components define their desktop layout by default */
+
+/* Tablet styles (768px - 1023px) - Scenario 8 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific styles added by Scenario 8 */
+}
+
+/* Mobile styles (< 768px) - Scenario 7 */
+@media (max-width: 767px) {
+  /* Mobile-specific styles added by Scenario 7 */
+}

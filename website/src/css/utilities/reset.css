@@ -1,8 +1,6 @@
 /**
  * CSS Reset / Normalize
  * Owner: First builder
- *
- * Purpose: Normalize browser defaults for consistent styling
  */
 
 *, *::before, *::after {
@@ -20,7 +18,6 @@ html {
 
 body {
   min-height: 100vh;
-  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 

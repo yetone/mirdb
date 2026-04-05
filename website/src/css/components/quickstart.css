@@ -1,179 +1,40 @@
 /**
  * Quick Start Section Styles
  * Owner: Scenario 3 - Quick Start Section
+ * Placeholder created by first builder
  */
 
 .quickstart {
-  background-color: var(--color-background-alt);
-  padding: var(--spacing-16) 0;
+  padding: var(--section-padding) var(--spacing-xl);
+  background-color: var(--color-background);
+}
+
+.quickstart__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  text-align: center;
 }
 
 .quickstart__title {
   font-size: var(--font-size-3xl);
-  font-weight: 700;
-  margin-bottom: var(--spacing-4);
-  color: var(--color-text);
-  text-align: center;
+  margin-bottom: var(--spacing-md);
 }
 
 .quickstart__subtitle {
-  font-size: var(--font-size-lg);
   color: var(--color-text-light);
-  margin-bottom: var(--spacing-8);
-  text-align: center;
+  margin-bottom: var(--spacing-xl);
 }
 
-.quickstart__block {
+.quickstart__code-block {
   background-color: var(--color-code-bg);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--spacing-6);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-}
-
-.quickstart__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-2) var(--spacing-4);
-  background-color: rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.quickstart__label {
-  color: var(--color-code-text);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-}
-
-.quickstart__copy-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-1);
-  padding: var(--spacing-1) var(--spacing-2);
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--color-code-text);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  transition: all var(--transition-fast);
-  cursor: pointer;
-  border: none;
-}
-
-.quickstart__copy-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.quickstart__copy-btn.copied {
-  background-color: var(--color-accent);
-  color: white;
-}
-
-.quickstart__copy-icon {
-  flex-shrink: 0;
-}
-
-.quickstart__copy-text {
-  min-width: 40px;
-  text-align: center;
-}
-
-.quickstart__code {
-  margin: 0;
-  padding: var(--spacing-6);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  text-align: left;
   overflow-x: auto;
-  background-color: var(--color-code-bg);
 }
 
-.quickstart__code-content {
+.quickstart__code-block code {
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-  line-height: 1.75;
   color: var(--color-code-text);
-  white-space: pre;
-  display: block;
-}
-
-/* Syntax Highlighting */
-.token-comment {
-  color: #6b7280;
-  font-style: italic;
-}
-
-.token-command {
-  color: #60a5fa;
-  font-weight: 500;
-}
-
-.token-keyword {
-  color: #f472b6;
-  font-weight: 500;
-}
-
-.token-string {
-  color: #34d399;
-}
-
-.token-variable {
-  color: #fbbf24;
-}
-
-/* Configuration Notes */
-.quickstart__notes {
-  background-color: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-6);
-  margin-top: var(--spacing-8);
-}
-
-.quickstart__notes-title {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  margin-bottom: var(--spacing-4);
-  color: var(--color-text);
-}
-
-.quickstart__notes-list {
-  display: grid;
-  gap: var(--spacing-2);
-  margin-bottom: var(--spacing-4);
-}
-
-.quickstart__notes-list li {
   font-size: var(--font-size-sm);
-  color: var(--color-text);
-}
-
-.quickstart__notes-list code {
-  background-color: var(--color-background-alt);
-  padding: 0.125rem 0.375rem;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-primary);
-}
-
-.quickstart__notes-hint {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-light);
-}
-
-.quickstart__notes-hint code {
-  background-color: var(--color-background-alt);
-  padding: 0.125rem 0.375rem;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-xs);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .quickstart__code {
-    padding: var(--spacing-4);
-  }
-
-  .quickstart__notes-list {
-    grid-template-columns: 1fr;
-  }
 }
