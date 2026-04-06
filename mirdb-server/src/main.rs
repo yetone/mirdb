@@ -53,6 +53,7 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+mod http;
 
 pub struct Server {
     store: Arc<Store>,
@@ -108,6 +109,10 @@ fn main() -> MyResult<()> {
     let conf_path = matches.value_of("config").unwrap_or("default.conf");
     let conf = config::from_path(conf_path)?;
 
+    // Scenario 8: Validate port configuration before starting servers
+    // Test Case 4: Detect port conflict between HTTP and Memcached
+    conf.validate_port_conflict()?;
+
     let addr = conf.addr.parse().unwrap();
     let opt = conf.to_options()?;
 
@@ -127,6 +132,18 @@ Welcome to MirDB!
         .trim_matches('\n')
     );
 
+    // Scenario 8: HTTP Server Port Configuration
+    // NFR-1: HTTP server must run on a separate port from Memcached protocol (configurable)
+    // Test Case 3: HTTP server does not start when http.enable = false
+    if opt.http.enable {
+        let http_port = opt.http.port;
+        println!("HTTP server enabled on port {}", http_port);
+        http::server::start_http_server(http_port, store.clone());
+    } else {
+        println!("HTTP server disabled");
+    }
+
+    println!("Memcached server starting on {}", addr);
     serve(addr, move || Ok(Server::new(store.clone())));
 
     Ok(())

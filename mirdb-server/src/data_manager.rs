@@ -1,5 +1,6 @@
 use log::info;
 use std::borrow::Borrow;
+use std::collections::BTreeSet;
 use std::fmt::Debug;
 use std::path::Path;
 use std::sync::atomic::AtomicUsize;
@@ -107,6 +108,43 @@ impl DataManager {
     pub fn info(&self) -> String {
         let readers = read_lock(&self.readers_);
         readers.manifest_builder().to_string()
+    }
+
+    /// Get statistics about the database
+    /// Returns (total_keys, memory_usage, storage_size)
+    pub fn get_stats(&self) -> (u64, u64, u64) {
+        let mut total_keys: u64 = 0;
+        let mut storage_size: u64 = 0;
+
+        // Count keys in mutable memtable
+        {
+            let muttable = read_lock(&self.mut_);
+            total_keys += muttable.length() as u64;
+        }
+
+        // Count keys in immutable memtables
+        {
+            let immuttable = read_lock(&self.imm_);
+            total_keys += immuttable.total_keys() as u64;
+        }
+
+        // Get storage size from SST files
+        // Note: We can't easily count keys in SST files without iterating,
+        // so we only track in-memory keys. SST files are included in storage_size.
+        {
+            let readers = read_lock(&self.readers_);
+            for level in 0..self.opt_.max_level {
+                let level_readers = readers.get_readers(level);
+                for reader in level_readers {
+                    storage_size += reader.size() as u64;
+                }
+            }
+        }
+
+        // Estimate memory usage (memtable size * 2 for mutable + immutable)
+        let memory_usage = (self.opt_.mem_table_max_size * 2) as u64;
+
+        (total_keys, memory_usage, storage_size)
     }
 
     pub fn redo(&mut self) -> MyResult<()> {
@@ -235,6 +273,72 @@ impl DataManager {
             self.insert_with_option(k.borrow().clone(), None)?;
         }
         Ok(r)
+    }
+
+    /// List keys with pagination support (Scenario 3: Key Browser with Pagination)
+    ///
+    /// Returns a tuple of (keys, total_count) where keys is a subset based on offset/limit
+    pub fn list_keys(&self, offset: usize, limit: usize) -> MyResult<(Vec<Slice>, usize)> {
+        // Collect all unique keys from all sources
+        let mut all_keys: BTreeSet<Slice> = BTreeSet::new();
+
+        // 1. Collect keys from active memtable
+        {
+            let muttable = read_lock(&self.mut_);
+            for (k, _) in muttable.iter() {
+                all_keys.insert(k.clone());
+            }
+        }
+
+        // 2. Collect keys from immutable memtables
+        {
+            let immuttable = read_lock(&self.imm_);
+            for table in immuttable.tables_iter() {
+                for (k, _) in table.iter() {
+                    all_keys.insert(k.clone());
+                }
+            }
+        }
+
+        // 3. Collect keys from SSTable readers
+        {
+            let readers = read_lock(&self.readers_);
+            for level in 0..self.opt_.max_level {
+                for reader in readers.get_readers(level) {
+                    let mut iter = reader.iter();
+                    while let Some((k, _)) = iter.next() {
+                        all_keys.insert(Slice::from(k));
+                    }
+                }
+            }
+        }
+
+        // 4. Filter out deleted keys (those with None value)
+        let mut valid_keys: Vec<Slice> = Vec::new();
+        for key in all_keys {
+            if let Ok(Some(payload)) = self.get(&key) {
+                if !payload.is_expired() {
+                    valid_keys.push(key);
+                }
+            }
+        }
+
+        let total = valid_keys.len();
+
+        // 5. Apply pagination
+        let paginated: Vec<Slice> = valid_keys
+            .into_iter()
+            .skip(offset)
+            .take(limit)
+            .collect();
+
+        Ok((paginated, total))
+    }
+
+    /// Count total number of valid keys
+    pub fn count_keys(&self) -> MyResult<usize> {
+        let (_, total) = self.list_keys(0, 0)?;
+        Ok(total)
     }
 
     fn minor_compaction(&self) -> MyResult<()> {
@@ -571,6 +675,145 @@ mod test {
             let r = dm.get(k)?;
             assert_eq!(Some(v.clone()), r);
         }
+
+        Ok(())
+    }
+
+    // =========================================================================
+    // Scenario 3: Key Browser with Pagination Tests
+    // =========================================================================
+
+    #[test]
+    fn test_list_keys_empty_store() -> MyResult<()> {
+        let opt = get_test_opt();
+        let dm = DataManager::new(opt)?;
+
+        let (keys, total) = dm.list_keys(0, 20)?;
+
+        assert_eq!(keys.len(), 0);
+        assert_eq!(total, 0);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_list_keys_with_data() -> MyResult<()> {
+        let opt = get_test_opt();
+        let dm = DataManager::new(opt)?;
+
+        // Insert test keys
+        for i in 0..10 {
+            let key = make_key(format!("key_{:03}", i).into_bytes());
+            let payload = make_payload(format!("value_{}", i).into_bytes());
+            dm.insert(key, payload)?;
+        }
+
+        let (keys, total) = dm.list_keys(0, 20)?;
+
+        assert_eq!(total, 10);
+        assert_eq!(keys.len(), 10);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_list_keys_pagination_offset() -> MyResult<()> {
+        let opt = get_test_opt();
+        let dm = DataManager::new(opt)?;
+
+        // Insert test keys
+        for i in 0..50 {
+            let key = make_key(format!("key_{:03}", i).into_bytes());
+            let payload = make_payload(format!("value_{}", i).into_bytes());
+            dm.insert(key, payload)?;
+        }
+
+        // Get first page
+        let (keys1, total1) = dm.list_keys(0, 10)?;
+        assert_eq!(total1, 50);
+        assert_eq!(keys1.len(), 10);
+
+        // Get second page
+        let (keys2, total2) = dm.list_keys(10, 10)?;
+        assert_eq!(total2, 50);
+        assert_eq!(keys2.len(), 10);
+
+        // Verify no overlap between pages
+        for k1 in &keys1 {
+            for k2 in &keys2 {
+                assert_ne!(k1, k2, "Pages should not overlap");
+            }
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_list_keys_offset_exceeds_total() -> MyResult<()> {
+        let opt = get_test_opt();
+        let dm = DataManager::new(opt)?;
+
+        // Insert test keys
+        for i in 0..10 {
+            let key = make_key(format!("key_{:03}", i).into_bytes());
+            let payload = make_payload(format!("value_{}", i).into_bytes());
+            dm.insert(key, payload)?;
+        }
+
+        // Request with offset exceeding total
+        let (keys, total) = dm.list_keys(100, 20)?;
+
+        assert_eq!(total, 10); // Total should still reflect actual count
+        assert_eq!(keys.len(), 0); // But no keys returned
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_list_keys_deleted_keys_not_included() -> MyResult<()> {
+        let opt = get_test_opt();
+        let dm = DataManager::new(opt)?;
+
+        // Insert test keys
+        for i in 0..10 {
+            let key = make_key(format!("key_{:03}", i).into_bytes());
+            let payload = make_payload(format!("value_{}", i).into_bytes());
+            dm.insert(key, payload)?;
+        }
+
+        // Delete some keys
+        dm.remove(&make_key(b"key_003".to_vec()))?;
+        dm.remove(&make_key(b"key_007".to_vec()))?;
+
+        let (keys, total) = dm.list_keys(0, 20)?;
+
+        assert_eq!(total, 8); // Should exclude deleted keys
+        assert_eq!(keys.len(), 8);
+
+        // Verify deleted keys are not in the list
+        for key in &keys {
+            let key_str = to_str(key);
+            assert!(!key_str.contains("key_003"), "Deleted key should not be in list");
+            assert!(!key_str.contains("key_007"), "Deleted key should not be in list");
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_count_keys() -> MyResult<()> {
+        let opt = get_test_opt();
+        let dm = DataManager::new(opt)?;
+
+        // Insert test keys
+        for i in 0..25 {
+            let key = make_key(format!("key_{:03}", i).into_bytes());
+            let payload = make_payload(format!("value_{}", i).into_bytes());
+            dm.insert(key, payload)?;
+        }
+
+        let count = dm.count_keys()?;
+        assert_eq!(count, 25);
 
         Ok(())
     }

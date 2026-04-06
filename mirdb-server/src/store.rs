@@ -74,6 +74,11 @@ impl Store {
         Ok(Store { data: dm, opt })
     }
 
+    /// Get database statistics (total_keys, memory_usage, storage_size)
+    pub fn get_stats(&self) -> (u64, u64, u64) {
+        self.data.get_stats()
+    }
+
     pub fn apply(&self, request: Request) -> MyResult<Response> {
         match request {
             Request::Getter { getter, keys } => {
@@ -183,6 +188,16 @@ impl Store {
                 Ok(Response::Ok)
             }
         }
+    }
+
+    /// List keys with pagination support (Scenario 3: Key Browser with Pagination)
+    pub fn list_keys(&self, offset: usize, limit: usize) -> MyResult<(Vec<Slice>, usize)> {
+        self.data.list_keys(offset, limit)
+    }
+
+    /// Count total number of valid keys
+    pub fn count_keys(&self) -> MyResult<usize> {
+        self.data.count_keys()
     }
 }
 
