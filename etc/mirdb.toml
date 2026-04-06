@@ -15,3 +15,11 @@ block_restart_interval = 16
 l0_compaction_trigger = 4
 
 thread_sleep_ms = 500
+
+# HTTP Server Configuration (Scenario 8)
+# NFR-1: HTTP server must run on a separate port from Memcached protocol (configurable)
+[http]
+enable = true
+port = 8080
+host = "0.0.0.0"
+stats_cache_ttl_seconds = 5
